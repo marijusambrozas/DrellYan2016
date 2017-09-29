@@ -1,3 +1,9 @@
+# local files
+Local/
+
+# python
+*.pyc
+
 # Prerequisites
 *.d
 

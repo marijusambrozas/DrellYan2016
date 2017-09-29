@@ -1,0 +1,216 @@
+{
+	"Sample": [
+	{
+		"Tag": "DYPowheg_M50to120",
+		"IsMC": 1,
+		"CrossSection": 1975,
+		"SumWeights": 2976526.0,
+		"Description": "(no comments is allowed in JSON file: That's why Description is added as one of the format) Cross section: from McM",
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M50to120"]
+	},
+
+	{
+		"Tag": "DYPowheg_M120to200",
+		"IsMC": 1,
+		"CrossSection": 19.32,
+		"SumWeights": 99998.0,
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M120to200"]
+	},
+
+	{
+		"Tag": "DYPowheg_M200to400",
+		"IsMC": 1,
+		"CrossSection": 2.731,
+		"SumWeights": 99999.0,
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M200to400"]
+	},
+
+	{
+		"Tag": "DYPowheg_M400to800",
+		"IsMC": 1,
+		"CrossSection": 0.241,
+		"SumWeights": 98999.0,
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M400to800"]
+	},
+
+	{
+		"Tag": "DYPowheg_M800to1400",
+		"IsMC": 1,
+		"CrossSection": 0.01678,
+		"SumWeights": 96398.0,
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M800to1400"]
+	},
+
+	{
+		"Tag": "DYPowheg_M1400to2300",
+		"IsMC": 1,
+		"CrossSection": 0.00139,
+		"SumWeights": 99998.0,
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M1400to2300"]
+	},
+
+	{
+		"Tag": "DYPowheg_M2300to3500",
+		"IsMC": 1,
+		"CrossSection": 0.00008948,
+		"SumWeights": 100000.0,
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M2300to3500"]
+	},
+
+	{
+		"Tag": "DYPowheg_M3500to4500",
+		"IsMC": 1,
+		"CrossSection": 0.000004135,
+		"SumWeights": 99000.0,
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M3500to4500"]
+	},
+
+	{
+		"Tag": "DYPowheg_M4500to6000",
+		"IsMC": 1,
+		"CrossSection": 4.56E-07,
+		"SumWeights": 100000.0,
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M4500to6000"]
+	},
+
+	{
+		"Tag": "DYPowheg_M6000toInf",
+		"IsMC": 1,
+		"CrossSection": 2.066E-08,
+		"SumWeights": 100000.0,
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M6000toInf"]
+	},
+
+
+	{
+		"Tag": "ZZ",
+		"IsMC": 1,
+		"CrossSection": 16.523,
+		"SumWeights": 998034,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_ZZ"]
+	},
+
+	{
+		"Tag": "ZZTo4L",
+		"IsMC": 1,
+		"CrossSection": 1.256,
+		"SumWeights": -1.0,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_ZZto4L"]
+	},
+
+	{
+		"Tag": "WW",
+		"IsMC": 1,
+		"CrossSection": 118.7,
+		"SumWeights": 6987123.0,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_WW"]
+	},
+
+	{
+		"Tag": "WWTo2L2Nu",
+		"IsMC": 1,
+		"CrossSection": 12.178,
+		"SumWeights": 1999000.0,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_WWTo2L2Nu"]
+	},
+
+	{
+		"Tag": "WZ",
+		"IsMC": 1,
+		"CrossSection": 47.13,
+		"SumWeights": 2995828.0,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_WZ"]
+	},
+
+	{
+		"Tag": "WZTo3LNu",
+		"IsMC": 1,
+		"CrossSection": -1.0,
+		"SumWeights": -1.0,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_WZTo3LNu"]
+	},
+		
+	{
+		"Tag": "ttbar",
+		"IsMC": 1,
+		"CrossSection": 831.76,
+		"SumWeights": 153405228,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_ttbar",
+			"DYntuple_v20170127_80XMoriond17_AddZprimeVar_ttbarBackup"]
+	},
+
+	{
+		"Tag": "ttbarTo2L2Nu",
+		"IsMC": 1,
+		"CrossSection": 87.31,
+		"SumWeights": 79092391,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_ttbarTo2L2Nu"]
+	},
+
+	{
+		"Tag": "tW",
+		"IsMC": 1,
+		"CrossSection": 35.6,
+		"SumWeights": 6952830.0,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_ST_tW"]
+	},
+
+	{
+		"Tag": "tbarW",
+		"IsMC": 1,
+		"CrossSection": 35.6,
+		"SumWeights": 6933093.0,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_ST_tbarW"]
+	},
+
+	{
+		"Tag": "Data",
+		"IsMC": 0,
+		"CrossSection": -1.0,
+		"SumWeights": -1.0,
+		"List_Dir": ["DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016B_v3_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016C_v1_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016D_v1_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016E_v1_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016F_v1_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016G_v1_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016H_v2_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016H_v3_GoldenJSON_271036_to_284044"
+		]
+	},
+
+	{
+		"Tag": "Data_RunBtoF",
+		"IsMC": 0,
+		"CrossSection": -1.0,
+		"SumWeights": -1.0,
+		"List_Dir": ["DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016B_v3_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016C_v1_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016D_v1_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016E_v1_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016F_v1_GoldenJSON_271036_to_284044"
+		]
+	},
+
+	{
+		"Tag": "Data_RunGtoH",
+		"IsMC": 0,
+		"CrossSection": -1.0,
+		"SumWeights": -1.0,
+		"List_Dir": [
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016G_v1_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016H_v2_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016H_v3_GoldenJSON_271036_to_284044"
+		]
+	},
+
+	{
+		"Tag": "Dummy_Last",
+		"IsMC": 0,
+		"CrossSection": -1,
+		"SumWeights": -1,
+		"List_Dir": ["Dummy"]
+	}
+]
+
+}

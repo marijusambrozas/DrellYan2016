@@ -1,0 +1,147 @@
+{
+	"CodeName": "MakeHist_Example.cxx",
+	"Lumi": 35867.060,
+	"Queue": "bigq",
+
+	"List_JobType": [
+		{
+			"Tag": "DYPowheg_M50to120",
+			"nJob": 5
+		},
+
+		{
+			"Tag": "DYPowheg_M120to200",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYPowheg_M200to400",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYPowheg_M400to800",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYPowheg_M800to1400",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYPowheg_M1400to2300",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYPowheg_M2300to3500",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYPowheg_M3500to4500",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYPowheg_M4500to6000",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYPowheg_M6000toInf",
+			"nJob": 1
+		}
+	],
+
+	"List_AllJobType":[
+		{
+			"Tag": "Data",
+			"nJob": 20
+		},
+
+
+		{
+			"Tag": "DYPowheg_M50to120",
+			"nJob": 5
+		},
+
+		{
+			"Tag": "DYPowheg_M120to200",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYPowheg_M200to400",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYPowheg_M400to800",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYPowheg_M800to1400",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYPowheg_M1400to2300",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYPowheg_M2300to3500",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYPowheg_M3500to4500",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYPowheg_M4500to6000",
+			"nJob": 1
+		},
+		
+		{
+			"Tag": "DYPowheg_M6000toInf",
+			"nJob": 1
+		},
+
+
+
+		{
+			"Tag": "ttbarTo2L2Nu",
+			"nJob": 10
+		},
+
+		{
+			"Tag": "tW",
+			"nJob": 2
+		},
+
+		{
+			"Tag": "tbarW",
+			"nJob": 2
+		},
+
+		{
+			"Tag": "WWTo2L2Nu",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "WZ",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "ZZ",
+			"nJob": 1
+		}
+	]
+}
