@@ -14,6 +14,30 @@
 
 #include <vector>
 
+enum DYColor
+{
+	// -- used in official plot -- // 
+	kDYSignal = kOrange-2,
+	kDYSignalLine = kOrange+3,
+	kTop = kRed+2,
+	kTopLine = kRed+4,
+	kEWK = kOrange+10,
+	kEWKLine = kOrange+3,
+	kDijet = kViolet-5,
+	kDijetLine = kOrange+3,
+
+	// -- colors for internal uses -- //
+	kttbar = kTop,
+	ktW = kRed+1,
+	kDYtautau = kBlue-9,
+	kVV = kGreen,
+	kWW = kGreen,
+	kWZ = kGreen,
+	kZZ = kGreen,
+	kWjets = kBlue,
+	kQCD = kDijet
+};
+
 
 class BaseInfo
 {
