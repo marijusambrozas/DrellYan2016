@@ -44,6 +44,14 @@ def MakeScript_GetOutput(_OutDir, _List_JobType, _TIME):
 	f.write( "\n\n" )
 
 	f.write( 'cd ${cwd2}\n' )
+
+	IncludePath = os.getenv("KP_INCLUDE_PATH")
+	MergeFileName = "MergeROOTFiles.py"
+	f.write( 'cp %s/%s ./\n' % (IncludePath, MergeFileName) )
+
+	OutputFileName = "ROOTFile_%s.root" % BatchJobInfo["CodeName"].split('.cxx')[0]
+	f.write( 'python %s %s\n' % (MergeFileName, OutputFileName) )
+	
 	f.write( 'echo "finished"\n' )
 	f.close()
 

@@ -143,7 +143,7 @@ private:
 		Int_t IsMC = 0;
 		this->NormFactor = 0;
 
-		this->h_mass = new TH1D("h_mass_"+this->Tag, "", 10000, 0, 10000);
+		this->h_mass = new TH1D("h_mass", "", 10000, 0, 10000);
 	}
 };
 
