@@ -88,7 +88,7 @@ public:
 	////////////////////////////
 	// -- Event Selections -- //
 	////////////////////////////
-	Bool_t Flag_PassAcc_Dilepton( Double_t LeadPt, Double_t LeadEta, Double_t SubPt, Double_t SubEta, Bool_t Exclude_ECALGAP )
+	Bool_t Flag_PassAcc_Dilepton( Double_t LeadPt, Double_t LeadEta, Double_t SubPt, Double_t SubEta, Bool_t Exclude_ECALGAP );
 
 	// -- muon channel -- //
 	Bool_t IsGoodMuPair( MuPair &pair, NtupleHandle *ntuple );
@@ -99,7 +99,7 @@ public:
 	// Bool_t EventSelection_ElectronChannel(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection); // -- output: 2 electrons passing event selection conditions -- //
 
 	// -- dressed lepton functions -- //
-	GenLepton DYAnalyzer::DressingLepton(NtupleHandle *ntuple, GenLepton &genlep_postFSR, Double_t dRCut, vector< GenOthers >* GenPhotonCollection);
+	GenLepton DressingLepton(NtupleHandle *ntuple, GenLepton &genlep_postFSR, Double_t dRCut, vector< GenOthers >* GenPhotonCollection);
 };
 
 Bool_t DYAnalyzer::IsGoodMuPair( MuPair &pair, NtupleHandle *ntuple )
@@ -1003,7 +1003,7 @@ Bool_t DYAnalyzer::CheckTriggerMatching( Muon &mu, NtupleHandle *ntuple )
 
 MuPair DYAnalyzer::EventSelection_MuonChannel(vector< Muon > MuonCollection, NtupleHandle *ntuple)
 {
-	MuPair MuPair_Dummy();
+	MuPair MuPair_Dummy;
 
 	// -- Collect qualified single muons -- //
 	vector< Muon > QMuonCollection;
@@ -1030,7 +1030,7 @@ MuPair DYAnalyzer::EventSelection_MuonChannel(vector< Muon > MuonCollection, Ntu
 		for(Int_t i_mu=0; i_mu<nQMuon; i_mu++)
 		{
 			Muon Mu_ith = QMuonCollection[i_mu];
-			for(Int_t j_mu=i_mu+1, j_mu<nQMuon; j_mu++)
+			for(Int_t j_mu=i_mu+1; j_mu<nQMuon; j_mu++)
 			{
 				Muon Mu_jth = QMuonCollection[j_mu];
 
@@ -1100,7 +1100,7 @@ GenLepton DYAnalyzer::DressingLepton(NtupleHandle *ntuple, GenLepton &genlep_pos
 {
 	GenLepton genlep_dressed = genlep_postFSR; // -- will be returned. initialization -- //
 
-	TLorentzVector LVecP_postFSR = genlep_postFSR->Momentum;
+	TLorentzVector LVecP_postFSR = genlep_postFSR.Momentum;
 
 	TLorentzVector SumLVecP_Photon;
 	SumLVecP_Photon.SetPxPyPzE(0,0,0,0);
@@ -1125,14 +1125,16 @@ GenLepton DYAnalyzer::DressingLepton(NtupleHandle *ntuple, GenLepton &genlep_pos
 	}
 
 	// -- Momentum(pre-FSR) = Momentum(post-FSR) + Sum of all Photon's momentum near the post-FSR muon -- //
-	genlep_dressed->Momentum = LVecP_postFSR + SumLVecP_Photon;
-	genlep_dressed->Et = genlep_dressed->Momentum.Et();
-	genlep_dressed->Pt = genlep_dressed->Momentum.Pt();
-	genlep_dressed->eta = genlep_dressed->Momentum.Eta();
-	genlep_dressed->phi = genlep_dressed->Momentum.Phi();
-	genlep_dressed->Px = genlep_dressed->Momentum.Px();
-	genlep_dressed->Py = genlep_dressed->Momentum.Py();
-	genlep_dressed->Pz = genlep_dressed->Momentum.Pz();
+	genlep_dressed.Momentum = LVecP_postFSR + SumLVecP_Photon;
+	genlep_dressed.Et = genlep_dressed.Momentum.Et();
+	genlep_dressed.Pt = genlep_dressed.Momentum.Pt();
+	genlep_dressed.eta = genlep_dressed.Momentum.Eta();
+	genlep_dressed.phi = genlep_dressed.Momentum.Phi();
+	genlep_dressed.Px = genlep_dressed.Momentum.Px();
+	genlep_dressed.Py = genlep_dressed.Momentum.Py();
+	genlep_dressed.Pz = genlep_dressed.Momentum.Pz();
+
+	return genlep_dressed;
 }
 
 static inline void loadBar(int x, int n, int r, int w)

@@ -58,6 +58,9 @@ OutDir = "Local/v%s_%s" % (TIME, BatchJobInfo["CodeName"].split('.cxx')[0] )
 # OutDir = os.path.expanduser( OutDir )
 os.makedirs( OutDir ) # -- make recursively -- #
 
+# -- convert path for output directory to absolute path -- #
+OutDirAbsPath = os.path.abspath( OutDir )
+
 # -- convert path for code to absolute path -- #
 CodeAbsPath = os.path.abspath( BatchJobInfo["CodeName"] )
 
@@ -77,8 +80,12 @@ for JobType in BatchJobInfo["List_JobType"]:
 	opts['--sample'] = SampleName
 	opts['--njob'] = nJob
 	opts['--lumi'] = (float)(BatchJobInfo["Lumi"])
-	opts['--outdir'] = OutDir
+	opts['--outdir'] = OutDirAbsPath
 	opts['--queue'] = BatchJobInfo["Queue"]
 
 	split = SplitJobs( opts )
 	split.CreateWorkSpace()
+
+print "+"*100
+print "[Job submission] cd %s; source script_qsub_ALL.sh" % OutDir
+print "+"*100

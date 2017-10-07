@@ -26,6 +26,7 @@ public:
 	TString FileName_ROOTFileList;
 	TString Tag;
 	Int_t IsMC;
+	Double_t NormFactor;
 
 	TH1D* h_mass;
 
@@ -46,7 +47,7 @@ public:
 		this->NormFactor = _value;
 
 		printf("===============[HistogramProducer]===============\n");
-		printf("[isMC = %d] Tag = %s, NormFactor = %lf\n", this->IsMC, this->Tag.Data(), this->NormFactor);
+		printf("[IsMC = %d] Tag = %s, NormFactor = %e\n", this->IsMC, this->Tag.Data(), this->NormFactor);
 		printf("=================================================\n");
 	}
 
@@ -78,7 +79,7 @@ public:
 		// -- turn-on ntuple -- //		
 		NtupleHandle *ntuple = new NtupleHandle( chain );
 		ntuple->TurnOnBranches_Muon();
-		if( this->isMC )
+		if( this->IsMC )
 			ntuple->TurnOnBranches_GenLepton();
 		ntuple->Ready();
 
@@ -87,7 +88,7 @@ public:
 
 		for(Int_t i=0; i<nEvent; i++)
 		{
-			this->loadBar(i+1, nEvent, 100, 100);
+			loadBar(i+1, nEvent, 100, 100);
 			
 			ntuple->GetEvent(i);
 
@@ -115,7 +116,7 @@ public:
 						MuonCollection.push_back( mu );
 					}
 
-					MuPair SelectedPair = analyzer->EventSelection( MuonCollection, ntuple );
+					MuPair SelectedPair = analyzer->EventSelection_MuonChannel( MuonCollection, ntuple );
 
 					if( SelectedPair.Flag_IsNonNull )
 					{
@@ -140,10 +141,11 @@ private:
 		this->FileName_ROOTFileList = "";
 		this->Tag = "";
 		Int_t IsMC = 0;
+		this->NormFactor = 0;
 
 		this->h_mass = new TH1D("h_mass_"+this->Tag, "", 10000, 0, 10000);
 	}
-}
+};
 
 void MakeHist_Example( TString FileName_ROOTFileList, TString Tag, Int_t IsMC, Double_t NormFactor )
 {
