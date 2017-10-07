@@ -23,8 +23,12 @@
          * script\_qsub\_ALL.sh: submit all jobs (qsub)
          * script\_GetOutput.sh: after finishing all jobs, get output root files & merge them into one root file
 
-
-
-
-
-
+## Details
+   * Include/SampleInfo_Latest.json: contain all sample information (data, MC)
+      * sample name, x-section, sum(weights), directory, and so on
+      * New sample should be included in this json file
+   * Include/Split_BatchJobs.py: split jobs for one sample
+      * take "SampleInfo_Latest.json" as an argument
+      * It is used by "Run.py"
+   * Include/MergeROOTFiles.py: merge root file into one root file
+      * It is used by "script\__GetOutput.sh"
