@@ -17,7 +17,7 @@
       * all .cxx file should take (.txt file name, sample name(tag), isMC, normalization factor) as arguments
    * BatchJobInfo.json: contain batch job information
       * code name, luminosity, queue name, list of samples & # jobs to be run
-   * Run.py: make workspace for batch job & generate shell scripts for job submission & get outputs
+   * Run.py: make workspace for batch job & generate shell scripts for job submission & getting outputs
       * take "BatchJobInfo.json" as an argument
       * Generated shell script
          * script\_qsub\_ALL.sh: submit all jobs (qsub)
