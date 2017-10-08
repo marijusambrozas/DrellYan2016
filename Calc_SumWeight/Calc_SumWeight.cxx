@@ -96,7 +96,7 @@ public:
 
 		} // -- end of event iteration -- //
 
-		this->h_SumWeight->SetBinContent(1, GenWeight);
+		this->h_SumWeight->SetBinContent(1, SumWeight);
 		this->h_SumWeight->SetBinError(1, 0);
 	}
 
