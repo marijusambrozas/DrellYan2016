@@ -107,6 +107,119 @@
 		"List_Dir": ["DYntuple_v20170929_DYLL_M2000to3000"]
 	},
 
+
+
+
+	{
+		"Tag": "DYEE_M10to50",
+		"IsMC": 1,
+		"CrossSection": 6203.33333,
+		"SumWeights": 1.0,
+		"List_Dir": ["DYntuple_v20170929_DYLL_M10to50"]
+	},
+
+	{
+		"Tag": "DYEE_M50toInf",
+		"IsMC": 1,
+		"CrossSection": 2034.66666,
+		"SumWeights": 1.0,
+		"Comment": "x-section = 6104/3",
+		"List_Dir": ["DYntuple_v20170929_DYLL_M50toInf"]
+	},
+
+	{
+		"Tag": "DYEE_M50to100",
+		"IsMC": 1,
+		"CrossSection": 1956.52782,
+		"SumWeights": 1.0,
+		"Comment": "x-section = 5869.58346/3.0",
+		"List_Dir": ["DYntuple_v20170929_DYLL_M50toInf"]
+	},
+
+	{
+		"Tag": "DYEE_M100to200",
+		"IsMC": 1,
+		"CrossSection": 75.33333,
+		"SumWeights": 1.0,
+		"Comment": "x-section = 226/3.0",
+		"List_Dir": ["DYntuple_v20170929_DYLL_M100to200"]
+	},
+
+	{
+		"Tag": "DYEE_M200to400",
+		"IsMC": 1,
+		"CrossSection": 2.55666,
+		"SumWeights": 1.0,
+		"Comment": "x-section = 7.67/3.0",
+		"List_Dir": ["DYntuple_v20170929_DYLL_M200to400"]
+	},
+
+	{
+		"Tag": "DYEE_M400to500",
+		"IsMC": 1,
+		"CrossSection": 0.141,
+		"SumWeights": 1.0,
+		"Comment": "x-section = 0.423/3.0",
+		"List_Dir": ["DYntuple_v20170929_DYLL_M400to500"]
+	},
+
+	{
+		"Tag": "DYEE_M500to700",
+		"IsMC": 1,
+		"CrossSection": 0.08,
+		"SumWeights": 1.0,
+		"Comment": "x-section = 0.24/3.0",
+		"List_Dir": ["DYntuple_v20170929_DYLL_M500to700"]
+	},
+
+	{
+		"Tag": "DYEE_M700to800",
+		"IsMC": 1,
+		"CrossSection": 0.011666666,
+		"SumWeights": 1.0,
+		"Comment": "x-section = 0.035/3.0",
+		"List_Dir": ["DYntuple_v20170929_DYLL_M700to800"]
+	},
+
+	{
+		"Tag": "DYEE_M800to1000",
+		"IsMC": 1,
+		"CrossSection": 0.01,
+		"SumWeights": 1.0,
+		"Comment": "x-section = 0.03/3.0",
+		"List_Dir": ["DYntuple_v20170929_DYLL_M800to1000"]
+	},
+
+	{
+		"Tag": "DYEE_M1000to1500",
+		"IsMC": 1,
+		"CrossSection": 0.0053333333,
+		"SumWeights": 1.0,
+		"Comment": "x-section = 0.016/3.0",
+		"List_Dir": ["DYntuple_v20170929_DYLL_M1000to1500"]
+	},
+
+	{
+		"Tag": "DYEE_M1500to2000",
+		"IsMC": 1,
+		"CrossSection": 0.00066666666,
+		"SumWeights": 1.0,
+		"Comment": "x-section = 0.002/3.0",
+		"List_Dir": ["DYntuple_v20170929_DYLL_M1500to2000"]
+	},
+
+	{
+		"Tag": "DYEE_M2000to3000",
+		"IsMC": 1,
+		"CrossSection": 0.00018,
+		"SumWeights": 1.0,
+		"Comment": "x-section = 0.00054/3.0",
+		"List_Dir": ["DYntuple_v20170929_DYLL_M2000to3000"]
+	},
+
+
+
+
 	{
 		"Tag": "DYPowheg_M50to120",
 		"IsMC": 1,
