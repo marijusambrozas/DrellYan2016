@@ -20,7 +20,7 @@
 
 #include <Include/DYAnalyzer.h>
 
-class HistogramProducer
+class HistProducer
 {
 public:
 	TString FileName_ROOTFileList;
@@ -30,12 +30,12 @@ public:
 
 	TH1D* h_mass;
 
-	HistogramProducer()
+	HistProducer()
 	{
 		this->Init();
 	}
 
-	HistogramProducer( TString _FileName_ROOTFileList, TString _Tag, Int_t _IsMC ): HistogramProducer()
+	HistProducer( TString _FileName_ROOTFileList, TString _Tag, Int_t _IsMC ): HistProducer()
 	{
 		this->FileName_ROOTFileList = _FileName_ROOTFileList;
 		this->Tag = _Tag;
@@ -46,7 +46,7 @@ public:
 	{
 		this->NormFactor = _value;
 
-		printf("===============[HistogramProducer]===============\n");
+		printf("===============[HistProducer]===============\n");
 		printf("[IsMC = %d] Tag = %s, NormFactor = %e\n", this->IsMC, this->Tag.Data(), this->NormFactor);
 		printf("=================================================\n");
 	}
@@ -149,7 +149,7 @@ private:
 
 void MakeHist_Example( TString FileName_ROOTFileList, TString Tag, Int_t IsMC, Double_t NormFactor )
 {
-	HistogramProducer *producer = new HistogramProducer( FileName_ROOTFileList, Tag, IsMC );
+	HistProducer *producer = new HistProducer( FileName_ROOTFileList, Tag, IsMC );
 	producer->Set_NormFactor( NormFactor );
 	producer->Produce();
 
