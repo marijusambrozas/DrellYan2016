@@ -53,6 +53,16 @@ public:
 	Int_t fromHardProcessDecayed;
 	Int_t fromHardProcessFinalState;
 
+	GenLepton()
+	{
+
+	}
+
+	GenLepton( NtupleHandle *ntuple, Int_t index )
+	{
+		this->FillFromNtuple( ntuple, index );
+	}
+
 	void FillFromNtuple(NtupleHandle *ntuple, Int_t index)
 	{
 		Pt 		= ntuple->GenLepton_pT[index];
@@ -116,6 +126,72 @@ public:
 			isZ = kTRUE;
 
 		return isZ;
+	}
+
+};
+
+class GenPair
+{
+public:
+	GenLepton First;
+	GenLepton Second;
+
+	TLorentzVector LVec_P;
+	Double_t M;
+	Double_t Pt;
+	Double_t Rap;
+
+	GenPair()
+	{
+
+	}
+
+	GenPair( GenLepton genlep1, GenLepton genlep2 )
+	{
+		this->Set(genlep1, genlep2);
+	}
+
+	void Set( GenLepton genlep1, GenLepton genlep2 )
+	{
+		if( genlep1.Pt > genlep2.Pt )
+		{
+			this->First = genlep1;
+			this->Second = genlep2;
+		}
+		else
+		{
+			this->First = genlep2;
+			this->Second = genlep1;
+		}
+
+		this->Calc_Var();
+	}
+
+	// -- opposite sign -- //
+	void IsOS()
+	{
+		Bool_t isOS = kFALSE;
+		if( this->First.charage == (-1)*this->Second.charge ) isOS = kTRUE;
+
+		return isOS;
+	}
+
+	// -- opposite sign, same flavor -- //
+	void IsOSSF()
+	{
+		Bool_t isOSSF = kFALSE;
+		if( abs(this->First.ID) == abs(this->Second.ID) && this->IsOS() ) isOSSF = kTRUE;
+
+		return isOSSF;
+	}
+
+private:
+	void Calc_Var()
+	{
+		this->LVec_P = this->First.Momentum + this->Second.Momentum;
+		this->M = LVec_P.M();
+		this->Pt = LVec_P.Pt();
+		this->Rap = LVec_P.Rapidity();
 	}
 
 };
@@ -1066,7 +1142,13 @@ public:
 
 	MuPair( Muon mu1, Muon mu2 ): MuPair()
 	{
+		this->Set( mu1, mu2 );
+	}
+
+	void Set( Muon mu1, Muon mu2 )
+	{
 		this->Flag_IsNonNull = kTRUE;
+		
 		// -- first: leading muon, secound: sub-leading muon -- //
 		if( mu1.Pt > mu2.Pt )
 		{
