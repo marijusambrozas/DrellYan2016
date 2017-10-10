@@ -93,6 +93,7 @@ public:
 	// -- muon channel -- //
 	Bool_t IsGoodMuPair( MuPair &pair, NtupleHandle *ntuple );
 	MuPair EventSelection_MuonChannel(vector< Muon > MuonCollection, NtupleHandle *ntuple);
+	Bool_t EventSelection_MuonChannel( vector< Muon > MuonCollection, NtupleHandle *ntuple, MuPair &mupair );
 	Bool_t CheckTriggerMatching( Muon &mu, NtupleHandle *ntuple );
 
 	// -- electron channel - //
@@ -1052,6 +1053,61 @@ MuPair DYAnalyzer::EventSelection_MuonChannel(vector< Muon > MuonCollection, Ntu
 	} // -- end of if( nQMuon > 2 ) -- //
 
 	return MuPair_Dummy;
+}
+
+Bool_t DYAnalyzer::EventSelection_MuonChannel(vector< Muon > MuonCollection, NtupleHandle *ntuple, MuPair &mupair)
+{
+	Bool_t Flag_EventSelection = kFALSE;
+
+	// -- Collect qualified single muons -- //
+	vector< Muon > QMuonCollection;
+	for(Int_t j=0; j<(int)MuonCollection.size(); j++)
+	{
+	    if( MuonCollection[j].isHighPtMuon_minus_dzVTX() && MuonCollection[j].trkiso < 0.10)
+	        QMuonCollection.push_back( MuonCollection[j] );
+	}
+
+	Int_t nQMuon = (Int_t)QMuonCollection.size();
+	if( nQMuon == 2 )
+	{
+		MuPair pair_temp(QMuonCollection[0], QMuonCollection[1]);
+		Bool_t Flag_GoodPair = this->IsGoodMuPair( pair_temp, ntuple );
+
+		if( Flag_GoodPair )
+		{
+			Flag_EventSelection = kTRUE;
+			mupair.Set( pair_temp.First, pair_temp.Second );
+		}
+	}
+	else if( nQMuon > 2 )
+	{
+		vector< MuPair > vec_GoodMuPair;
+
+		// -- make all possible pair & check whether each of them is good pair or not -- //
+		for(Int_t i_mu=0; i_mu<nQMuon; i_mu++)
+		{
+			Muon Mu_ith = QMuonCollection[i_mu];
+			for(Int_t j_mu=i_mu+1; j_mu<nQMuon; j_mu++)
+			{
+				Muon Mu_jth = QMuonCollection[j_mu];
+
+				MuPair pair_temp(Mu_ith, Mu_jth);
+				if( this->IsGoodMuPair( pair_temp, ntuple ) )
+					vec_GoodMuPair.push_back( pair_temp );
+			}
+		}
+
+		Int_t nGoodPair = (Int_t)vec_GoodMuPair.size();
+		if( nGoodPair > 0 ) // -- at least 1 pair -- //
+		{
+			Flag_EventSelection = kTRUE;
+			std::sort( vec_GoodMuPair.begin(), vec_GoodMuPair.end(), Compare_MuPair_SmallVtxChi2);
+			mupair.Set( vec_GoodMuPair[0].First, vec_GoodMuPair[0].Second );
+		}
+
+	} // -- end of if( nQMuon > 2 ) -- //
+
+	return Flag_EventSelection;
 }
 
 // // -- Event selecton for the electron channel (2016.02.11) -- //
