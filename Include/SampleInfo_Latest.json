@@ -194,7 +194,7 @@
 		"Tag": "DYEE_M1000to1500",
 		"IsMC": 1,
 		"CrossSection": 0.0053333333,
-		"SumWeights": 1.0,
+		"SumWeights": 39712.0,
 		"Comment": "x-section = 0.016/3.0",
 		"List_Dir": ["DYntuple_v20170929_DYLL_M1000to1500"]
 	},
@@ -203,7 +203,7 @@
 		"Tag": "DYEE_M1500to2000",
 		"IsMC": 1,
 		"CrossSection": 0.00066666666,
-		"SumWeights": 39712.0,
+		"SumWeights": 37287.0,
 		"Comment": "x-section = 0.002/3.0",
 		"List_Dir": ["DYntuple_v20170929_DYLL_M1500to2000"]
 	},
