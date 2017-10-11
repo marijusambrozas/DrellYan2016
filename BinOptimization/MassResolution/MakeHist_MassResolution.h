@@ -33,7 +33,12 @@ const Int_t MassBinEdges[nBin+1] =
 class HistContainer
 {
 public:
+	vector<TH1D*> vec_Hist;
+	TH1D* h_mass_Gen_preFSR;
+	TH1D* h_mass_Gen_postFSR;
+	TH1D* h_mass_Reco;
 	TH1D* h_RelDiff_All;
+
 	vector<TH1D*> vec_Hist_MassBinned;
 
 	HistContainer()
@@ -41,21 +46,22 @@ public:
 		this->Init();
 	}
 
-	void Fill()
+	void Fill(GenPair genpair_preFSR, GenPair genpair_postFSR, Double_t M_Reco, Double_t weight)
 	{
+		Double_t M_preFSR = genpair_preFSR.M;
+		Double_t M_postFSR = genpair_postFSR.M;
+		Double_t RelDiff = (M_Reco - M_postFSR) / M_postFSR;
 
-	}
+		h_mass_Gen_preFSR->Fill( M_preFSR, weight );
+		h_mass_Gen_postFSR->Fill( M_postFSR, weight );
+		h_mass_Reco->Fill( M_Reco, weight );
 
-private:
-	void Init()
-	{
-		this->h_RelDiff_All = new TH1D("h_RelDiff_All", "", 10000, -5, 5);
-
+		// -- rel. diff, no weights -- //
+		h_RelDiff_All->Fill( RelDiff );
 		for(Int_t i=0; i<nBin; i++)
 		{
-			TString TStr_MassRange = TString::Format("M%dto%d", MassBinEdges[i], MassBinEdges[i+1]);
-			TH1D* h_temp = new TH1D("h_RelDiff_"+TStr_MassRange, "", 10000, -5, 5);
-			this->vec_Hist_MassBinned.push_bacK( h_temp );
+			if( M_postFSR > MassBinEdges[i] && M_postFSR < MassBinEdges[i+1] )
+				vec_Hist_MassBinned[i]->Fill( RelDiff );
 		}
 	}
 
@@ -63,9 +69,34 @@ private:
 	{
 		f_output->cd();
 
-		h_RelDiff_All->Write();
+		for(const auto& h : vec_Hist )
+			h->Write();
+
 		for(const auto& h : vec_Hist_MassBinned )
 			h->Write();
+	}
+
+private:
+	void Init()
+	{
+		this->h_mass_Gen_preFSR = new TH1D("h_mass_Gen_preFSR", "", 10000, 0, 10000);
+		vec_Hist.push_back( this->h_mass_Gen_preFSR );
+
+		this->h_mass_Gen_postFSR = new TH1D("h_mass_Gen_postFSR", "", 10000, 0, 10000);
+		vec_Hist.push_back( this->h_mass_Gen_postFSR );
+
+		this->h_mass_Reco = new TH1D("h_mass_Reco", "", 10000, 0, 10000);
+		vec_Hist.push_back( this->h_mass_Reco );
+
+		this->h_RelDiff_All = new TH1D("h_RelDiff_All", "", 10000, -5, 5);
+		vec_Hist.push_back( this->h_RelDiff_All );
+
+		for(Int_t i=0; i<nBin; i++)
+		{
+			TString TStr_MassRange = TString::Format("M%dto%d", MassBinEdges[i], MassBinEdges[i+1]);
+			TH1D* h_temp = new TH1D("h_RelDiff_"+TStr_MassRange, "", 10000, -5, 5);
+			this->vec_Hist_MassBinned.push_back( h_temp );
+		}
 	}
 };
 
@@ -82,6 +113,8 @@ public:
 	Bool_t Exclude_ECALGAP;
 	Int_t LeptonID;
 
+	HistContainer* Hists;
+
 
 	HistProducer()
 	{
@@ -93,6 +126,9 @@ public:
 		this->FileName_ROOTFileList = _FileName_ROOTFileList;
 		this->Tag = _Tag;
 		this->IsMC = _IsMC;
+
+		// -- histograms -- //
+		this->Hists = new HistContainer();
 	}
 
 	void Set_NormFactor( Double_t _value )
@@ -112,7 +148,7 @@ public:
 
 	void Save( TFile *f_output )
 	{
-		f_output->cd();
+		this->Hists->Save( f_output );
 	}
 
 	void Produce()
@@ -165,10 +201,10 @@ public:
 
 					if( fabs(genlep.ID) == this->LeptonID )
 					{
-						if( GenLepton.isHardProcess )
+						if( genlep.isHardProcess )
 							vec_GenLepton_HP.push_back( genlep );
 
-						if( GenLepton.fromHardProcessFinalState )
+						if( genlep.fromHardProcessFinalState )
 							vec_GenLepton_HPFS.push_back( genlep );
 					}
 				}
@@ -206,15 +242,20 @@ public:
 
 							if( Flag_Matched )
 							{
-								PrintOutDoubleMuInfo( mupair.First, mupair.Second );
-								// Hists->Fill( genpair_HP, genpair_HPFS, mupair );
+								// genpair_HPFS.Print();
+								// mupair.Print();
+								Hists->Fill( genpair_HP, genpair_HPFS, mupair.M, TotWeight );
 							}
 						}
 						else if( this->ChannelType == "EE" )
 						{
-							// ElecPair elecpair;
-							// Bool_t Flag_Matched = this->GenRecoMatching_ElecPair( ntuple, analyzer, genpair_HPFS, elecpair );
-							// Hists->Fill( genpair_HP, genpair_HPFS, elecpair );
+							ElecPair elecpair;
+							Bool_t Flag_Matched = this->GenRecoMatching_ElecPair( ntuple, analyzer, genpair_HPFS, elecpair );
+
+							if( Flag_Matched )
+							{
+								Hists->Fill( genpair_HP, genpair_HPFS, elecpair.M, TotWeight );
+							}
 						}
 
 					} // -- end of if( ntuple->isTriggered( analyzer->HLT ) ) -- //
@@ -229,7 +270,6 @@ public:
 		cout << "\tTotal RunTime(" << this->Tag << "): " << TotalRunTime << " seconds\n" << endl;
 
 		printf("============================\nProducer() is finished\n============================\n\n");
-
 	}
 
 private:
@@ -318,7 +358,65 @@ private:
 
 	Bool_t GenRecoMatching_ElecPair( NtupleHandle* ntuple, DYAnalyzer *analyzer, GenPair genpair, ElecPair &elecpair )
 	{
+		Bool_t Flag_Pass = kFALSE;
 
+		vector< GenLepton > vec_GenLepton;
+		vec_GenLepton.push_back( genpair.First );
+		vec_GenLepton.push_back( genpair.Second );
+
+		vector< Electron > vec_MatchedRecoLepton;
+		// -- for each gen-lepton, find reco lepton that has smallest dR -- //
+		for( const auto& genlep : vec_GenLepton )
+		{
+			Double_t dR_Smallest = 999;
+			Electron Lepton_SmallestdR;
+
+			for(Int_t i_reco=0; i_reco<ntuple->Nelectrons; i_reco++)
+			{
+				Electron lepton(ntuple, i_reco);
+				Double_t dR = genlep.Momentum.DeltaR( lepton.Momentum );
+
+				if( dR < dR_Smallest )
+				{
+					dR_Smallest = dR;
+					Lepton_SmallestdR = lepton;
+				}
+
+			} // -- iteration over all leptons -- //
+
+			// -- at least this dR should be less than 0.3 -- //
+			if( dR_Smallest < 0.3 )
+				vec_MatchedRecoLepton.push_back( Lepton_SmallestdR );
+		}
+
+		// -- all matched leptons are found -- //
+		if( vec_MatchedRecoLepton.size() == 2 )
+		{
+			Double_t LeadPt, LeadEta, SubPt, SubEta;
+			if( vec_MatchedRecoLepton[0].Pt > vec_MatchedRecoLepton[1].Pt )
+			{
+				LeadPt = vec_MatchedRecoLepton[0].Pt;
+				LeadEta = vec_MatchedRecoLepton[0].eta;
+				SubPt = vec_MatchedRecoLepton[1].Pt;
+				SubEta = vec_MatchedRecoLepton[1].eta;
+			}
+			else
+			{
+				LeadPt = vec_MatchedRecoLepton[1].Pt;
+				LeadEta = vec_MatchedRecoLepton[1].eta;
+				SubPt = vec_MatchedRecoLepton[0].Pt;
+				SubEta = vec_MatchedRecoLepton[0].eta;
+			}
+			Bool_t Flag_PassAcc = analyzer->Flag_PassAcc_Dilepton( LeadPt, LeadEta, SubPt, SubEta, this->Exclude_ECALGAP );
+
+			if( Flag_PassAcc )
+			{
+				Flag_Pass = kTRUE;
+				elecpair.Set( vec_MatchedRecoLepton[0], vec_MatchedRecoLepton[1] );
+			}
+		}
+
+		return Flag_Pass;
 	}
 
 };
