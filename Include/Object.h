@@ -167,17 +167,24 @@ public:
 		this->Calc_Var();
 	}
 
+	void Print()
+	{
+		printf("\t[GenLepton1] (pT, eta, phi, charge, ID, status) = (%10.5lf, %10.5lf, %10.5lf, %.1f, %.0d, %.0d)\n", this->First.Pt, this->First.eta, this->First.phi, this->First.charge, this->First.ID, this->First.Status);
+		printf("\t[GenLepton2] (pT, eta, phi, charge, ID, status) = (%10.5lf, %10.5lf, %10.5lf, %.1f, %.0d, %.0d)\n", this->Second.Pt, this->Second.eta, this->Second.phi, this->Second.charge, this->Second.ID, this->Second.Status);
+		printf("\t\tDilepton (Mass, pT, rapidity) = (%10.5lf, %10.5lf, %10.5lf)\n", this->M, this->Pt, this->Rap);
+	}
+
 	// -- opposite sign -- //
-	void IsOS()
+	Bool_t IsOS()
 	{
 		Bool_t isOS = kFALSE;
-		if( this->First.charage == (-1)*this->Second.charge ) isOS = kTRUE;
+		if( this->First.charge == (-1)*this->Second.charge ) isOS = kTRUE;
 
 		return isOS;
 	}
 
 	// -- opposite sign, same flavor -- //
-	void IsOSSF()
+	Bool_t IsOSSF()
 	{
 		Bool_t isOSSF = kFALSE;
 		if( abs(this->First.ID) == abs(this->Second.ID) && this->IsOS() ) isOSSF = kTRUE;
@@ -306,6 +313,16 @@ public:
 	Double_t r9;
 	Int_t ecalDriven;
 	Int_t passConvVeto;
+
+	Electron()
+	{
+
+	}
+
+	Electron( NtupleHandle *ntuple, Int_t index )
+	{
+		this->FillFromNtuple( ntuple, index );
+	}
 
 	void FillFromNtuple(NtupleHandle *ntuple, Int_t index)
 	{
@@ -1126,7 +1143,7 @@ public:
 	Muon Second;
 
 	Double_t M;
-	Double_t Rapidity;
+	Double_t Rap;
 	Double_t VtxProb;
 	Double_t NormVtxChi2;
 	Double_t Angle3D;
@@ -1164,13 +1181,20 @@ public:
 		this->Fill_DimuonVar();
 	}
 
+	void Print()
+	{
+		printf("\t[Leading muon]     (pT, eta, phi, charge) = (%10.5lf, %10.5lf, %10.5lf, %.1d)\n", this->First.Pt, this->First.eta, this->First.phi, this->First.charge);
+		printf("\t[Sub-leading muon] (pT, eta, phi, charge) = (%10.5lf, %10.5lf, %10.5lf, %.1d)\n", this->Second.Pt, this->Second.eta, this->Second.phi, this->Second.charge);
+		printf("\t\tDimuon (Mass, pT, rapidity) = (%10.5lf, %10.5lf, %10.5lf)\n", this->M, this->Pt, this->Rap);
+	}
+
 	void Fill_DimuonVar()
 	{
 		this->Momentum = First.Momentum + Second.Momentum;
 
 		this->M = this->Momentum.M();
 		this->Pt = this->Momentum.Pt();
-		this->Rapidity = this->Momentum.Rapidity();
+		this->Rap = this->Momentum.Rapidity();
 
 		this->Angle3D = First.Momentum.Angle( Second.Momentum.Vect() );
 		this->Angle3D_Inner = First.Momentum_Inner.Angle( Second.Momentum_Inner.Vect() );
@@ -1264,7 +1288,7 @@ private:
 		this->Flag_IsNonNull = kFALSE;
 
 		this->M = -999;
-		this->Rapidity = -999;
+		this->Rap = -999;
 		this->VtxProb = -999;
 		this->NormVtxChi2 = -999;
 		this->Angle3D = -999;
@@ -1275,13 +1299,96 @@ private:
 	}
 };
 
+Bool_t CompareMuPair_VtxChi2( MuPair pair1, MuPair pair2 )
+{
+	// -- the pair with "smallest" vertex chi2 will be the first element -- //
+	return pair1.NormVtxChi2 < pair2.NormVtxChi2; 
+}
+
+Bool_t CompareMuPair_DileptonPt( MuPair pair1, MuPair pair2 )
+{
+	// -- the pair with "largest" dimuon pT will be the first element -- //
+	return pair1.Pt > pair2.Pt; 
+}
+
+// -- for backward-compatibility -- //
 Bool_t ComparePair_VtxChi2( MuPair pair1, MuPair pair2 )
 {
 	// -- the pair with "smallest" vertex chi2 will be the first element -- //
 	return pair1.NormVtxChi2 < pair2.NormVtxChi2; 
 }
 
+// -- for backward-compatibility -- //
 Bool_t ComparePair_DimuonPt( MuPair pair1, MuPair pair2 )
+{
+	// -- the pair with "largest" dimuon pT will be the first element -- //
+	return pair1.Pt > pair2.Pt; 
+}
+
+
+class ElecPair : public Object
+{
+public:
+	Electron First;
+	Electron Second;
+
+	Double_t M;
+	Double_t Rap;
+	Bool_t isOS;
+
+	// -- default contructor -- //
+	ElecPair()
+	{
+
+	}
+
+	ElecPair( Electron elec1, Electron elec2 ): ElecPair()
+	{
+		this->Set( elec1, elec2 );
+	}
+
+	void Set( Electron elec1, Electron elec2 )
+	{
+		// -- first: leading electron, secound: sub-leading electron -- //
+		if( elec1.Pt > elec2.Pt )
+		{
+			First = elec1;
+			Second = elec2;
+		}
+		else
+		{
+			First = elec2;
+			Second = elec1;
+		}
+
+		this->Calc_Var();
+	}
+
+	void Print()
+	{
+		printf("\t[Leading electron]     (pT, eta, phi, charge) = (%10.5lf, %10.5lf, %10.5lf, %.1d)\n", this->First.Pt, this->First.eta, this->First.phi, this->First.charge);
+		printf("\t[Sub-leading electron] (pT, eta, phi, charge) = (%10.5lf, %10.5lf, %10.5lf, %.1d)\n", this->Second.Pt, this->Second.eta, this->Second.phi, this->Second.charge);
+		printf("\t\tDimuon (Mass, pT, rapidity) = (%10.5lf, %10.5lf, %10.5lf)\n", this->M, this->Pt, this->Rap);
+	}
+
+private:
+	void Calc_Var()
+	{
+		this->Momentum = First.Momentum + Second.Momentum;
+
+		this->M = this->Momentum.M();
+		this->Pt = this->Momentum.Pt();
+		this->Rap = this->Momentum.Rapidity();
+		this->isOS = First.charge != Second.charge ? kTRUE : kFALSE;
+
+		// // -- actually, these values are almost meaningless ... -- //
+		// this->eta = this->Momentum.Eta();
+		// this->phi = this->Momentum.Phi();
+		// this->Et = this->Momentum.Et();
+	}
+};
+
+Bool_t CompareElecPair_DileptonPt( ElecPair pair1, ElecPair pair2 )
 {
 	// -- the pair with "largest" dimuon pT will be the first element -- //
 	return pair1.Pt > pair2.Pt; 

@@ -22,7 +22,8 @@ Bool_t Compare_MuPair_SmallVtxChi2( MuPair pair1, MuPair pair2 )
 	return pair1.NormVtxChi2 < pair2.NormVtxChi2;
 }
 
-void PrintOutDoubleMuInfo( Muon mu1, Muon mu2 )
+
+void Print_DoubleRecoMuInfo( Muon mu1, Muon mu2 )
 {
 	printf("\t[Muon1] (pT, eta, phi, charge) = (%10.5lf, %10.5lf, %10.5lf, %.1d)\n", mu1.Pt, mu1.eta, mu1.phi, mu1.charge);
 	printf("\t[Muon2] (pT, eta, phi, charge) = (%10.5lf, %10.5lf, %10.5lf, %.1d)\n", mu2.Pt, mu2.eta, mu2.phi, mu2.charge);
