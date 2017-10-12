@@ -169,8 +169,8 @@ public:
 
 	void Print()
 	{
-		printf("\t[GenLepton1] (pT, eta, phi, charge, ID, status) = (%10.5lf, %10.5lf, %10.5lf, %.1f, %.0d, %.0d)\n", this->First.Pt, this->First.eta, this->First.phi, this->First.charge, this->First.ID, this->First.Status);
-		printf("\t[GenLepton2] (pT, eta, phi, charge, ID, status) = (%10.5lf, %10.5lf, %10.5lf, %.1f, %.0d, %.0d)\n", this->Second.Pt, this->Second.eta, this->Second.phi, this->Second.charge, this->Second.ID, this->Second.Status);
+		printf("\t[GenLepton1] (pT, eta, phi, charge) = (%10.5lf, %10.5lf, %10.5lf, %.1f), (ID, status) = (%.0d, %.0d)\n", this->First.Pt, this->First.eta, this->First.phi, this->First.charge, this->First.ID, this->First.Status);
+		printf("\t[GenLepton2] (pT, eta, phi, charge) = (%10.5lf, %10.5lf, %10.5lf, %.1f), (ID, status) = (%.0d, %.0d)\n", this->Second.Pt, this->Second.eta, this->Second.phi, this->Second.charge, this->Second.ID, this->Second.Status);
 		printf("\t\tDilepton (Mass, pT, rapidity) = (%10.5lf, %10.5lf, %10.5lf)\n", this->M, this->Pt, this->Rap);
 	}
 
@@ -314,6 +314,13 @@ public:
 	Int_t ecalDriven;
 	Int_t passConvVeto;
 
+	Bool_t passLooseID;
+	Bool_t passMediumID;
+	Bool_t passTightID;
+	Bool_t passMVAID_WP80;
+	Bool_t passMVAID_WP90;
+	Bool_t passHEEPID;
+
 	Electron()
 	{
 
@@ -372,6 +379,13 @@ public:
 		r9 = ntuple->Electron_r9[index];
 		ecalDriven = ntuple->Electron_ecalDriven[index];
 		passConvVeto = ntuple->Electron_passConvVeto[index];
+
+		passLooseID = ntuple->Electron_passLooseID[index];
+		passMediumID = ntuple->Electron_passMediumID[index];
+		passTightID = ntuple->Electron_passTightID[index];
+		passMVAID_WP80 = ntuple->Electron_passMVAID_WP80[index];
+		passMVAID_WP90 = ntuple->Electron_passMVAID_WP90[index];
+		passHEEPID = ntuple->Electron_passHEEPID[index];
 
 		TLorentzVector v;
 		v.SetPtEtaPhiM(Pt, eta, phi, M_Elec);
@@ -1368,7 +1382,7 @@ public:
 	{
 		printf("\t[Leading electron]     (pT, eta, phi, charge) = (%10.5lf, %10.5lf, %10.5lf, %.1d)\n", this->First.Pt, this->First.eta, this->First.phi, this->First.charge);
 		printf("\t[Sub-leading electron] (pT, eta, phi, charge) = (%10.5lf, %10.5lf, %10.5lf, %.1d)\n", this->Second.Pt, this->Second.eta, this->Second.phi, this->Second.charge);
-		printf("\t\tDimuon (Mass, pT, rapidity) = (%10.5lf, %10.5lf, %10.5lf)\n", this->M, this->Pt, this->Rap);
+		printf("\t\tDielectron (Mass, pT, rapidity) = (%10.5lf, %10.5lf, %10.5lf)\n", this->M, this->Pt, this->Rap);
 	}
 
 private:

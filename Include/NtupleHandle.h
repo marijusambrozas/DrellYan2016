@@ -134,6 +134,13 @@ public:
     Int_t Electron_ecalDriven[MaxN];
     Int_t Electron_passConvVeto[MaxN];
 
+    Bool_t Electron_passLooseID[MaxN];
+    Bool_t Electron_passMediumID[MaxN];
+    Bool_t Electron_passTightID[MaxN];
+    Bool_t Electron_passMVAID_WP80[MaxN];
+    Bool_t Electron_passMVAID_WP90[MaxN];
+    Bool_t Electron_passHEEPID[MaxN];
+
     //////////////////////////
     // -- Muon Variables -- //
     //////////////////////////
@@ -883,6 +890,13 @@ public:
         chain->SetBranchStatus("Electron_ecalDriven", 1);
         chain->SetBranchStatus("Electron_passConvVeto", 1);
 
+        chain->SetBranchStatus("Electron_passLooseID", 1);
+        chain->SetBranchStatus("Electron_passMediumID", 1);
+        chain->SetBranchStatus("Electron_passTightID", 1);
+        chain->SetBranchStatus("Electron_passMVAID_WP80", 1);
+        chain->SetBranchStatus("Electron_passMVAID_WP90", 1);
+        chain->SetBranchStatus("Electron_passHEEPID", 1);
+
     	chain->SetBranchAddress("Nelectrons", &Nelectrons);
     	chain->SetBranchAddress("Electron_Energy", &Electron_Energy);
     	chain->SetBranchAddress("Electron_pT", &Electron_pT);
@@ -931,6 +945,13 @@ public:
     	chain->SetBranchAddress("Electron_r9", &Electron_r9);
     	chain->SetBranchAddress("Electron_ecalDriven", &Electron_ecalDriven);
         chain->SetBranchAddress("Electron_passConvVeto", &Electron_passConvVeto);
+
+        chain->SetBranchAddress("Electron_passLooseID", &Electron_passLooseID);
+        chain->SetBranchAddress("Electron_passMediumID", &Electron_passMediumID);
+        chain->SetBranchAddress("Electron_passTightID", &Electron_passTightID);
+        chain->SetBranchAddress("Electron_passMVAID_WP80", &Electron_passMVAID_WP80);
+        chain->SetBranchAddress("Electron_passMVAID_WP90", &Electron_passMVAID_WP90);
+        chain->SetBranchAddress("Electron_passHEEPID", &Electron_passHEEPID);
 
         chain->AddBranchToCache("Nelectrons", 1);
         chain->AddBranchToCache("Electron_Energy", 1);
@@ -981,6 +1002,12 @@ public:
         chain->AddBranchToCache("Electron_ecalDriven", 1);
         chain->AddBranchToCache("Electron_passConvVeto", 1);
 
+        chain->AddBranchToCache("Electron_passLooseID", 1);
+        chain->AddBranchToCache("Electron_passMediumID", 1);
+        chain->AddBranchToCache("Electron_passTightID", 1);
+        chain->AddBranchToCache("Electron_passMVAID_WP80", 1);
+        chain->AddBranchToCache("Electron_passMVAID_WP90", 1);
+        chain->AddBranchToCache("Electron_passHEEPID", 1);
     }
 
     void TurnOnBranches_Jet()
