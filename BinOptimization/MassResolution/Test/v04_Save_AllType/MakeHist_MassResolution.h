@@ -108,14 +108,23 @@ private:
 		this->h_mass_Gen_preFSR = new TH1D("h_mass_Gen_preFSR", "", 10000, 0, 10000);
 		vec_Hist.push_back( this->h_mass_Gen_preFSR );
 
+		this->h_mass_Gen_dressed = new TH1D("h_mass_Gen_dressed", "", 10000, 0, 10000);
+		vec_Hist.push_back( this->h_mass_Gen_dressed );
+
 		this->h_mass_Gen_postFSR = new TH1D("h_mass_Gen_postFSR", "", 10000, 0, 10000);
 		vec_Hist.push_back( this->h_mass_Gen_postFSR );
 
 		this->h_mass_Reco = new TH1D("h_mass_Reco", "", 10000, 0, 10000);
 		vec_Hist.push_back( this->h_mass_Reco );
 
-		this->h_RelDiff_All = new TH1D("h_RelDiff_All", "", 10000, -5, 5);
-		vec_Hist.push_back( this->h_RelDiff_All );
+		this->h_RelDiff_preFSR_All = new TH1D("h_RelDiff_preFSR_All", "", 10000, -5, 5);
+		vec_Hist.push_back( this->h_RelDiff_preFSR_All );
+
+		this->h_RelDiff_dressed_All = new TH1D("h_RelDiff_dressed_All", "", 10000, -5, 5);
+		vec_Hist.push_back( this->h_RelDiff_dressed_All );
+
+		this->h_RelDiff_postFSR_All = new TH1D("h_RelDiff_postFSR_All", "", 10000, -5, 5);
+		vec_Hist.push_back( this->h_RelDiff_postFSR_All );
 
 		for(Int_t i=0; i<nBin; i++)
 		{
