@@ -1,0 +1,62 @@
+{
+	"CodeName": "MakeHist_MassResolution_MuMu.cxx",
+	"Lumi": 35867.060,
+	"Queue": "bigq",
+
+	"List_JobType": [
+		{
+			"Tag": "DYMuMu_M10to50",
+			"nJob": 5
+		},
+
+		{
+			"Tag": "DYMuMu_M50to100",
+			"nJob": 5
+		},
+
+		{
+			"Tag": "DYMuMu_M100to200",
+			"nJob": 2
+		},
+
+		{
+			"Tag": "DYMuMu_M200to400",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYMuMu_M400to500",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYMuMu_M500to700",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYMuMu_M700to800",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYMuMu_M800to1000",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYMuMu_M1000to1500",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYMuMu_M1500to2000",
+			"nJob": 1
+		},
+
+		{
+			"Tag": "DYMuMu_M2000to3000",
+			"nJob": 1
+		}
+	]
+}
