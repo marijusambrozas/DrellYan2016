@@ -65,6 +65,31 @@ public:
 		}
 	}
 
+	void Test( GenPair genpair_preFSR, GenPair genpair_postFSR, ElecPair elecpair, NtupleHandle* ntuple )
+	{
+		Double_t M_preFSR = genpair_preFSR.M;
+		Double_t M_postFSR = genpair_postFSR.M;
+		Double_t M_Reco = elecpair.M;
+		Double_t RelDiff = (M_Reco - M_postFSR) / M_postFSR;
+		Double_t RelDiff_preFSR = (M_Reco - M_preFSR) / M_preFSR;
+
+		if( RelDiff > 0.2 && M_postFSR > 70 && M_postFSR < 75 )
+		{
+			cout << "+++++++++++++++++++++++++++++++++++++++++++++" << endl;
+			genpair_preFSR.Print();
+			genpair_postFSR.Print();
+			elecpair.Print();
+			cout << "RelDiff: " << RelDiff << ", RelDiff(preFSR): " << RelDiff_preFSR << endl;
+			cout << "All reco-lepton list" << endl;
+			for(Int_t i_reco=0; i_reco<ntuple->Nelectrons; i_reco++)
+			{
+				Electron lepton(ntuple, i_reco);
+				printf("\t[%d electron]     (pT, eta, phi, charge) = (%10.5lf, %10.5lf, %10.5lf, %.1d), (passMediumID = %d)\n", i_reco, lepton.Pt, lepton.eta, lepton.phi, lepton.charge, lepton.passMediumID);
+			}
+			cout << "+++++++++++++++++++++++++++++++++++++++++++++\n" << endl;
+		}
+	}
+
 	void Save( TFile *f_output )
 	{
 		f_output->cd();
@@ -254,7 +279,11 @@ public:
 
 							if( Flag_Matched )
 							{
-								Hists->Fill( genpair_HP, genpair_HPFS, elecpair.M, TotWeight );
+								// genpair_HPFS.Print();
+								// elecpair.Print();
+								// cout << endl;
+								// Hists->Fill( genpair_HP, genpair_HPFS, elecpair.M, TotWeight );
+								Hists->Test( genpair_HP, genpair_HPFS, elecpair, ntuple );
 							}
 						}
 
