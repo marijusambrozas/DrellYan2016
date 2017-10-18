@@ -31,6 +31,10 @@ public:
 	TH1D* h_mass_postFSR;
 	TH1D* h_mass_reco;
 
+	// TH1D* h_diag_preFSR_reco;
+	// TH1D* h_diag_dressed_reco;
+	// TH1D* h_diag_postFSR_reco;
+
 	vector< TH2D* > vec_2DHist;
 	TH2D* h2D_preFSR_reco;
 	TH2D* h2D_dressed_reco;
@@ -43,7 +47,7 @@ public:
 
 	HistUnit( Int_t _binSize )
 	{
-		this->SetBinSize();
+		this->SetBinSize( _binSize );
 		this->Init();
 	}
 
@@ -54,9 +58,15 @@ public:
 
 	void Save( TFile *f_output )
 	{
+		// this->SetDiagonalHist( this->h_diag_preFSR_reco, this->h2D_preFSR_reco );
+		// this->SetDiagonalHist( this->h_diag_dressed_reco, this->h2D_dressed_reco );
+		// this->SetDiagonalHist( this->h_diag_postFSR_reco, this->h2D_postFSR_reco );
+
 		f_output->cd();
 		for( const auto& h : this->vec_Hist )
 			h->Write();
+
+		// -- too large to save -- //
 		for( const auto& h : this->vec_2DHist )
 			h->Write();
 	}
@@ -78,10 +88,22 @@ public:
 	}
 
 private:
+	// void SetDiagonalHist( TH1D* h_diag, TH2D* h2D)
+	// {
+	// 	Int_t nBin = h2D->GetNbinsX();
+	// 	for(Int_t i=0; i<nBin; i++)
+	// 	{
+	// 		Int_t i_bin = i+1;
+	// 		Double_t diag = h2D->GetBinContent(i_bin, i_bin);
+	// 		Double_t err_diag = h2D->GetBinError(i_bin, i_bin);
+	// 		h_diag->SetBinContent(i_bin, diag);
+	// 		h_diag->SetBinError(i_bin, err_diag);
+	// 	}
+	// }
 	void Init()
 	{
 		TString Type = TString::Format("%dGeV", this->binSize);
-		Int_t nBin = (Int_t)(3000.0 / nBin );
+		Int_t nBin = (Int_t)(3000.0 / this->binSize);
 		cout << "nBin: " << nBin << endl;
 
 		this->h_mass_preFSR = new TH1D("h_mass_preFSR_"+Type, "", nBin, 10, 3010 );
@@ -95,6 +117,15 @@ private:
 
 		this->h_mass_reco = new TH1D("h_mass_reco_"+Type, "", nBin, 10, 3010 );
 		this->vec_Hist.push_back( this->h_mass_reco );
+
+		// this->h_diag_preFSR_reco = new TH1D("h_diag_preFSR_reco_"+Type, "", nBin, 10, 3010 );
+		// this->vec_Hist.push_back( this->h_diag_preFSR_reco );
+
+		// this->h_diag_dressed_reco = new TH1D("h_diag_dressed_reco_"+Type, "", nBin, 10, 3010 );
+		// this->vec_Hist.push_back( this->h_diag_dressed_reco );
+
+		// this->h_diag_postFSR_reco = new TH1D("h_diag_postFSR_reco_"+Type, "", nBin, 10, 3010 );
+		// this->vec_Hist.push_back( this->h_diag_postFSR_reco );
 
 		// -- 2D hists -- //
 		this->h2D_preFSR_reco = new TH2D("h2D_preFSR_reco_"+Type, "", nBin, 10, 3010, nBin, 10, 3010 );
@@ -333,7 +364,7 @@ public:
 					// 	genpair_HPFS.Second.Pt, genpair_HPFS.Second.eta, this->Exclude_ECALGAP );
 
 					// -- finally fill the histograms -- //
-					Hist->Fill( genpair_HP, genpair_dressed, genpair_HPFS, M_reco, TotWeight );
+					Hists->Fill( genpair_HP, genpair_dressed, genpair_HPFS, M_reco, TotWeight );
 
 				} // -- end of if( flag_PassSel ) -- //
 				
