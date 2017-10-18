@@ -98,7 +98,7 @@ public:
 	Bool_t CheckTriggerMatching( Muon &mu, NtupleHandle *ntuple );
 
 	// -- electron channel - //
-	// Bool_t EventSelection_ElectronChannel(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection); // -- output: 2 electrons passing event selection conditions -- //
+	Bool_t EventSelection_ElectronChannel(vector< Electron > ElectronCollection, NtupleHandle *ntuple, ElecPair &elecPair); // -- output: 2 electrons passing event selection conditions -- //
 
 	// -- dressed lepton functions -- //
 	GenLepton DressingLepton(NtupleHandle *ntuple, GenLepton &genlep_postFSR, Double_t dRCut, vector< GenOthers >* GenPhotonCollection);
@@ -1110,6 +1110,38 @@ Bool_t DYAnalyzer::EventSelection_MuonChannel(vector< Muon > MuonCollection, Ntu
 
 	return Flag_EventSelection;
 }
+
+Bool_t DYAnalyzer::EventSelection_ElectronChannel(vector< Electron > ElectronCollection, NtupleHandle *ntuple, ElecPair &elecPair)
+{
+	Bool_t flag_passSel = kFALSE;
+
+	vector< Electron > vec_GoodElectron;
+	for(Int_t i_reco=0; i_reco<(Int_t)ElectronCollection.size(); i_reco++)
+	{
+		if( ElectronCollection[i_reco].passMediumID )
+			vec_GoodElectron.push_back( ElectronCollection[i_reco] );
+	}
+
+	Int_t nGoodElec = (Int_t)vec_GoodElectron.size();
+	// -- take events with only 2 qualified electrons -- //
+	if( nGoodElec == 2 )
+	{
+		ElecPair elecPair_temp( vec_GoodElectron[0], vec_GoodElectron[1] );
+		Bool_t flag_PassAcc = this->Flag_PassAcc_Dilepton( 
+			elecPair_temp.First.Pt, elecPair_temp.First.eta, 
+			elecPair_temp.Second.Pt, elecPair_temp.Second.eta, 1);
+
+		// -- should trigger matching condition be added here? -- //
+		if( flag_PassAcc )
+		{
+			elecPair.Set( vec_GoodElectron[0], vec_GoodElectron[1] );
+			flag_passSel = kTRUE;
+		}
+	}
+
+	return flag_passSel;
+}
+
 
 // // -- Event selecton for the electron channel (2016.02.11) -- //
 // Bool_t DYAnalyzer::EventSelection_ElectronChannel(vector< Electron > ElectronCollection, NtupleHandle *ntuple, // -- input: All electrons in a event & NtupleHandle -- //
