@@ -151,6 +151,8 @@ class SplitJobs:
 
 		cmd_cd = "cd ${cwd}/%s" % (DirName)
 		cmd_sub = "qsub -V -q %s %s" % (self.queue, BatchFileName)
+		if self.queue == "NoBatch":
+			cmd_sub = "source %s >&log.txt&" % BatchFileName
 		List_cmd_qsub.append( [cmd_cd, cmd_sub] )
 
 		cmd_hadd = "${cwd}/%s/*.root \\" % (DirName)
