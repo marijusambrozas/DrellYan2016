@@ -36,7 +36,7 @@ then
 elif [ $HOSTNAME == "cms.snu.ac.kr" ]; then
 	KP_DATA_PATH=""
 
-elif [ $muon == "muon" ]; then
+elif [ $HOSTNAME == "muon" ]; then
 	KP_DATA_PATH="/scratch/kplee/DrellYan2016"
 	echo "Muon server: please set [scl enable devtoolset-2 bash] to use ROOT6"
 fi
