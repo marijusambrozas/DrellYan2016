@@ -35,6 +35,9 @@ then
 		
 elif [ $HOSTNAME == "cms.snu.ac.kr" ]; then
 	KP_DATA_PATH=""
+
+elif [ $muon == "muon" ]; then
+	KP_DATA_PATH="/scratch/kplee/DrellYan2016"
 fi
 
 echo "================ environment ================"
