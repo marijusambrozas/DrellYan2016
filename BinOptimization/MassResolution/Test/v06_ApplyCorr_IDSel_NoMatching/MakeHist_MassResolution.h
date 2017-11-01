@@ -207,7 +207,7 @@ public:
 		TRandom *r2 = new TRandom();
 		TString IncludePath = gSystem->Getenv("KP_INCLUDE_PATH");
 		TString MomCorrPath = TString::Format("%s/RoccoR/rcdata.2016.v3", IncludePath.Data());
-		RoccoR rc(MomCorrPath);
+		RoccoR rc( MomCorrPath.Data() );
 
 		// -- make chain -- //
 		TChain *chain = new TChain("recoTree/DYTree");
@@ -317,12 +317,12 @@ public:
 								double SF = 0; int s; int m;
 									
 								if( !this->IsMC )
-									SF = rc.kScaleDT(mu.charge, mu.pT, mu.eta, mu.phi, s=0, m=0);
+									SF = rc.kScaleDT(mu.charge, mu.Pt, mu.eta, mu.phi, s=0, m=0);
 								else
-									SF = rc.kScaleAndSmearMC(mu.charge, mu.pT, mu.eta, mu.phi, mu.trackerLayers, u1, u2, s=0, m=0);
+									SF = rc.kScaleAndSmearMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, u1, u2, s=0, m=0);
 
 								// -- Change Muon momentum with updated(corrected) one -- //
-								mu.UpdateKinematicVariable_UsingNewPt( SF*mu.pT );
+								mu.UpdateKinematicVariable_UsingNewPt( SF*mu.Pt );
 								vec_Muon.push_back( mu );
 							}
 

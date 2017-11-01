@@ -225,7 +225,7 @@ source $VO_CMS_SW_DIR/cmsset_default.sh
 cd /cvmfs/cms.cern.ch/slc6_amd64_gcc530/cms/cmssw/CMSSW_8_0_26
 cmsenv
 
-cd ${{cwd}}
+cd ${cwd}
 """)
 		# -- common part -- #
 		f.write(
