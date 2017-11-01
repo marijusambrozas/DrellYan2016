@@ -193,7 +193,11 @@ class SplitJobs:
 	def CreateBatchJobScript( self, iter, _DirName, cmd_execute ):
 		BatchFileName = "%s_%d.sh" % (self.SampleInfo["Tag"], iter)
 		f = open("./"+self.SampleInfo["Tag"]+"/"+_DirName+"/"+BatchFileName, "w")
-		f.write(
+		f.write("#!/bin/bash\n")
+
+		# -- only for batch job -- #
+		if self.queue != "NoBatch":
+			f.write(
 """#!/bin/bash
 
 #########################################################
@@ -222,7 +226,10 @@ cd /cvmfs/cms.cern.ch/slc6_amd64_gcc530/cms/cmssw/CMSSW_8_0_26
 cmsenv
 
 cd ${{cwd}}
-
+""")
+		# -- common part -- #
+		f.write(
+"""
 {_cmd_execute}
 
 echo "job is completed"
@@ -256,6 +263,8 @@ echo "job is completed"
 			print "Path: ", List_FullPath
 			sys.exit()
 
+		List_ROOTFiles.sort()
+		
 		return List_ROOTFiles
 
 if __name__ == "__main__":
