@@ -697,6 +697,17 @@ public:
 		nMatchesRPCLayers = ntuple->Muon_nMatchesRPCLayers[index];
 	}
 
+	void UpdateKinematicVariable_UsingNewPt( Double_t NewPt )
+	{
+		this->Pt = NewPt;
+		this->Default_Pt = NewPt;
+
+		this->Momentum.SetPtEtaPhiM( this->Pt, this->eta, this->phi, M_Mu );
+		this->Default_Px = Momentum.Px();
+		this->Default_Py = Momentum.Py();
+		this->Default_Pz = Momentum.Pz();
+	}
+
 	void ConvertMomentum_TuneP()
 	{
 		this->Pt = this->TuneP_pT;

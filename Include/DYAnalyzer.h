@@ -15,7 +15,7 @@
 #define Lumi_BeforeL2Fix 656.977 // -- integrated luminosity before Run 274094 -- //
 #define Lumi_RunG 7554.454 // -- integrated luminosity for Run2016G -- //
 #define nMassBin 43
-#define nPUBin 50
+#define nPUBin 75
 
 Bool_t Compare_MuPair_SmallVtxChi2( MuPair pair1, MuPair pair2 )
 {
@@ -502,7 +502,7 @@ Bool_t DYAnalyzer::SeparateDYLLSample_isHardProcess(TString Tag, NtupleHandle *n
 	return GenFlag;
 }
 
-void DYAnalyzer::SetupPileUpReWeighting( Bool_t isMC, TString FileName )
+void DYAnalyzer::SetupPileUpReWeighting( Bool_t isMC, TString FileName = "ROOTFile_PUReWeight_80X_v20170817_64mb.root" )
 {
 	if( isMC == kFALSE ) // -- for data -- //
 	{
@@ -513,12 +513,13 @@ void DYAnalyzer::SetupPileUpReWeighting( Bool_t isMC, TString FileName )
 	}
 	
 	// -- Only for the MC -- //
-	TString FilePath = "~/Physics/ZprimeAnalysis_80X/CommonCodes/Pileup/" + FileName;
+	TString IncludePath = gSystem->Getenv("KP_INCLUDE_PATH");
+	TString FilePath = TString::Format("%s/PUCorr/%s", IncludePath.Data(), FileName.Data());
 	printf( "[Setup the pileup reweighting values from: %s]\n", FilePath.Data() );
 
-	TFile *f = new TFile("~/Physics/ZprimeAnalysis_80X/CommonCodes/Pileup/" + FileName);
+	TFile *f = new TFile(FilePath);
 	f->cd();
-	TH1D *h_weight = (TH1D*)f->Get("h_PUReWeights");
+	TH1D *h_weight = (TH1D*)f->Get("h_PUReWeights")->Clone();
 	if( h_weight == NULL )
 	{
 		cout << "ERROR! ... No Weight histogram!"<< endl;
@@ -534,7 +535,7 @@ void DYAnalyzer::SetupPileUpReWeighting( Bool_t isMC, TString FileName )
 
 Double_t DYAnalyzer::PileUpWeightValue(Int_t PileUp_MC)
 {
-	if( PileUp_MC < 0 || PileUp_MC > 50 )
+	if( PileUp_MC < 0 || PileUp_MC > nPUBin-1 )
 	{
 		cout << "[PileUp_MC = " << PileUp_MC << "]: NO CORRESPONDING PU Weight! ... it returns 0" << endl;
 		return 0;
