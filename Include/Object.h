@@ -700,7 +700,7 @@ public:
 	void UpdateKinematicVariable_UsingNewPt( Double_t NewPt )
 	{
 		this->Pt = NewPt;
-		this->Default_Pt = NewPt;
+		this->Default_pT = NewPt;
 
 		this->Momentum.SetPtEtaPhiM( this->Pt, this->eta, this->phi, M_Mu );
 		this->Default_Px = Momentum.Px();
