@@ -43,6 +43,11 @@ public:
     Int_t GenLepton_status[MaxN];
     Int_t GenLepton_ID[MaxN];
     Double_t GENEvt_weight;
+    Double_t GENEvt_QScale;
+    Double_t GENEvt_x1;
+    Double_t GENEvt_x2;
+    Double_t GENEvt_alphaQCD;
+    Double_t GENEvt_alphaQED;
     Int_t GenLepton_isPrompt[MaxN];
     Int_t GenLepton_isPromptFinalState[MaxN];
     Int_t GenLepton_isTauDecayProduct[MaxN];
@@ -368,6 +373,11 @@ public:
     	//Generator level information
     	chain->SetBranchStatus("GENnPair", 1);
     	chain->SetBranchStatus("GENEvt_weight", 1);
+        chain->SetBranchStatus("GENEvt_QScale", 1);
+        chain->SetBranchStatus("GENEvt_x1", 1);
+        chain->SetBranchStatus("GENEvt_x2", 1);
+        chain->SetBranchStatus("GENEvt_alphaQCD", 1);
+        chain->SetBranchStatus("GENEvt_alphaQED", 1);
         chain->SetBranchStatus("GENLepton_Px", 1);
         chain->SetBranchStatus("GENLepton_Py", 1);
         chain->SetBranchStatus("GENLepton_Pz", 1);
@@ -404,6 +414,12 @@ public:
     	chain->SetBranchAddress("GENLepton_status", &GenLepton_status);
     	chain->SetBranchAddress("GENLepton_ID", &GenLepton_ID);
     	chain->SetBranchAddress("GENEvt_weight", &GENEvt_weight);
+        chain->SetBranchAddress("GENEvt_QScale", &GENEvt_QScale);
+        chain->SetBranchAddress("GENEvt_x1", &GENEvt_x1);
+        chain->SetBranchAddress("GENEvt_x2", &GENEvt_x2);
+        chain->SetBranchAddress("GENEvt_alphaQCD", &GENEvt_alphaQCD);
+        chain->SetBranchAddress("GENEvt_alphaQED", &GENEvt_alphaQED);
+
     	chain->SetBranchAddress("GENLepton_isPrompt", &GenLepton_isPrompt);
     	chain->SetBranchAddress("GENLepton_isPromptFinalState", &GenLepton_isPromptFinalState);
     	chain->SetBranchAddress("GENLepton_isTauDecayProduct", &GenLepton_isTauDecayProduct);
@@ -420,6 +436,11 @@ public:
 
         chain->AddBranchToCache("GENnPair", 1);
         chain->AddBranchToCache("GENEvt_weight", 1);
+        chain->AddBranchToCache("GENEvt_QScale", 1);
+        chain->AddBranchToCache("GENEvt_x1", 1);
+        chain->AddBranchToCache("GENEvt_x2", 1);
+        chain->AddBranchToCache("GENEvt_alphaQCD", 1);
+        chain->AddBranchToCache("GENEvt_alphaQED", 1);
         chain->AddBranchToCache("GENLepton_Px", 1);
         chain->AddBranchToCache("GENLepton_Py", 1);
         chain->AddBranchToCache("GENLepton_Pz", 1);
