@@ -14,547 +14,47 @@
 
 #include <vector>
 
-enum DYColor
+
+TH1D* Get_Hist(TString FileName, TString HistName, TString HistName_New = "" )
 {
-	// -- used in official plot -- // 
-	kDYSignal = kOrange-2,
-	kDYSignalLine = kOrange+3,
-	kTop = kRed+2,
-	kTopLine = kRed+4,
-	kEWK = kOrange+10,
-	kEWKLine = kOrange+3,
-	kDijet = kViolet-5,
-	kDijetLine = kOrange+3,
+	TH1::AddDirectory(kFALSE);
 
-	// -- colors for internal uses -- //
-	kttbar = kTop,
-	ktW = kRed+1,
-	kDYtautau = kBlue-9,
-	kVV = kGreen,
-	kWW = kGreen,
-	kWZ = kGreen,
-	kZZ = kGreen,
-	kWjets = kBlue,
-	kQCD = kDijet
-};
+	TFile *f_input = TFile::Open( FileName );
+	TH1D* h_temp = (TH1D*)f_input->Get(HistName)->Clone();
+	if( HistName_New != "" )
+		h_temp->SetName( HistName_New );
 
+	f_input->Close();
+	// delete f_input;
 
-class BaseInfo
-{
-public:
-	TString FileName; // -- including path -- //
-	TString ObjectName;
-	TString LegendName;
-	Int_t Color;
-
-	BaseInfo()
-	{
-		this->Init();
-	}
-
-	BaseInfo( Int_t _Color, TString _LegendName ): BaseInfo()
-	{
-		this->LegendName = _LegendName;
-		this->Color = _Color;
-	}
-
-	void Init()
-	{
-		this->FileName = "";
-		this->ObjectName = "";
-		this->LegendName = "";
-		this->Color = 0;
-	}
-
-	void Set_FileName_ObjectName( TString _FileName, TString _ObjectName )
-	{
-		this->FileName = _FileName;
-		this->ObjectName = _ObjectName;
-	}
-
-	void Set_Color( Int_t _Color )
-	{
-		this->Color = _Color;
-	}
-
-	void Set_LegendName( TString _LegendName )
-	{
-		this->LegendName = _LegendName;
-	}
-};
-
-class HistInfo: public BaseInfo
-{
-public:
-	TH1D* h;
-	TH1D* h_ratio;
-
-	HistInfo()
-	{
-		TH1::AddDirectory( kFALSE );
-
-		this->h = NULL;
-		this->h_ratio = NULL;
-	}
-
-	HistInfo( Int_t _Color, TString _LegendName ): BaseInfo( _Color, _LegendName )
-	{
-		HistInfo();
-		// TH1::AddDirectory( kFALSE );
-
-		// this->h = NULL;
-		// this->h_ratio = NULL;
-	}
-
-	HistInfo( Int_t _Color, TString _LegendName, TH1D* _h ): HistInfo( _Color, _LegendName )
-	{
-		this->Set_Histogram( _h );
-		this->Set();
-	}
-
-	void Set()
-	{
-		if( h == NULL )
-			this->Get_Histogram();
-		
-		this->Set_Attributes();
-	}
-
-	void Draw( TString DrawOp )
-	{
-		this->h->Draw( DrawOp );
-	}
-
-	void DrawRatio( TString DrawOp )
-	{
-		this->h_ratio->Draw( DrawOp );
-	}
-
-	void AddToLegend( TLegend *legend )
-	{
-		legend->AddEntry( this->h, this->LegendName );
-	}
-
-	void Set_Histogram( TH1D* _h )
-	{
-		this->h = (TH1D*)_h->Clone();
-	}
-
-	void Calc_RatioHist( TH1D* h_Denom )
-	{
-		if( h == NULL )
-		{
-			cout << "Histogram is not assigned yet!" << endl;
-			return;
-		}
-
-		h->Sumw2();
-		h_Denom->Sumw2();
-
-		this->h_ratio = (TH1D*)this->h->Clone();
-		h_ratio->Divide( this->h, h_Denom );
-	}
-
-	// -- shorter name -- //
-	void CalcRatio_DEN( TH1D* h_Denom )
-	{
-		this->Calc_RatioHist_Denominator( h_Denom );
-	}
-
-	// -- shorter name -- //
-	void CalcRatio_NUM( TH1D* h_Num )
-	{
-		this->Calc_RatioHist_Numerator( h_Num );
-	}
-
-	// -- outdated, just for backward compatibility -- //
-	// -- same with "Calc_RatioHist" -- //
-	void Calc_RatioHist_Denominator( TH1D* h_Denom )
-	{
-		if( h == NULL )
-		{
-			cout << "Histogram is not assigned yet!" << endl;
-			return;
-		}
-
-		h->Sumw2();
-		h_Denom->Sumw2();
-
-		this->h_ratio = (TH1D*)this->h->Clone();
-		h_ratio->Divide( this->h, h_Denom );
-	}
-
-	// -- outdated, just for backward compatibility -- //
-	void Calc_RatioHist_Numerator( TH1D* h_Num )
-	{
-		if( h == NULL )
-		{
-			cout << "Histogram is not assigned yet!" << endl;
-			return;
-		}
-
-		h->Sumw2();
-		h_Num->Sumw2();
-
-		this->h_ratio = (TH1D*)this->h->Clone();
-		h_ratio->Divide( h_Num, this->h );
-	}
-
-protected:
-	void Get_Histogram()
-	{
-		if( this->FileName == "" || this->ObjectName == "" )
-		{
-			printf( "[FileName, ObjectName] = [%s, %s] ... at least one of them is not set yet\n", this->FileName.Data(), this->ObjectName.Data() );
-			return;
-		}
-
-		TFile *f_input = TFile::Open( this->FileName );
-		f_input->cd();
-
-		this->h = (TH1D*)f_input->Get( this->ObjectName )->Clone();
-
-		f_input->Close();
-	}
-
-	void Set_Attributes()
-	{
-		this->h->SetTitle("");
-		this->h->SetStats(kFALSE);
-
-		this->h->SetLineColor( this->Color );
-		this->h->SetFillColorAlpha( kWhite, 0 );
-		this->h->SetMarkerStyle( 20 );
-		this->h->SetMarkerColor( this->Color );
-	}
-
-};
-
-class GraphInfo: public BaseInfo
-{
-public:
-	TGraphAsymmErrors* g;
-	TGraphAsymmErrors* g_ratio;
-
-	GraphInfo()
-	{
-		this->g = NULL;
-		this->g_ratio = NULL;
-	}
-
-	GraphInfo( Int_t _Color, TString _LegendName ): BaseInfo( _Color, _LegendName )
-	{
-		this->g = NULL;
-		this->g_ratio = NULL;
-	}
-
-	GraphInfo( Int_t _Color, TString _LegendName, TGraphAsymmErrors* _g ): GraphInfo( _Color, _LegendName )
-	{
-		this->Set_Graph( _g );
-	}
-
-	void Set()
-	{
-		if( g == NULL )
-			this->Get_Graph();
-		// this->Set_Attributes(); // -- Attributes for Graph shuold be set after drawing it -- //
-	}
-
-	void Set_Graph( TGraphAsymmErrors* _g )
-	{
-		this->g = (TGraphAsymmErrors*)_g->Clone();
-	}
-
-	// -- outdated, backward compatibility -- //
-	void DrawGraph( TString DrawOp )
-	{
-		this->g->Draw( DrawOp );
-		this->Set_Attributes();
-	}
-
-	// -- same with DrawGraph -- //
-	void Draw( TString DrawOp )
-	{
-		this->DrawGraph( DrawOp );
-	}
-
-	void DrawRatio( TString DrawOp )
-	{
-		this->g_ratio->Draw( DrawOp );
-	}
-
-	void AddToLegend( TLegend *legend )
-	{
-		legend->AddEntry( this->g, this->LegendName );
-	}
-
-	void Set_Attributes()
-	{
-		this->g->SetTitle( "" );
-
-		this->g->SetLineColor( this->Color );
-		this->g->SetLineWidth( 1 );
-		this->g->SetMarkerStyle( 20 );
-		this->g->SetMarkerSize( 1.3 );
-		this->g->SetMarkerColor( this->Color );
-		this->g->SetFillColorAlpha( kWhite, 0 );
-		this->g->GetXaxis()->SetTitleFont(42);
-		this->g->GetYaxis()->SetTitleFont(42);
-		this->g->GetXaxis()->SetLabelFont(42);
-		this->g->GetYaxis()->SetLabelFont(42);
-		this->g->GetXaxis()->SetLabelSize(0.04);
-		this->g->GetYaxis()->SetLabelSize(0.04);
-
-		if( g_ratio != NULL )
-		{
-			this->g_ratio->SetTitle( "" );
-
-			this->g_ratio->SetLineColor( this->Color );
-			this->g_ratio->SetMarkerStyle( 20 );
-			this->g_ratio->SetMarkerColor( this->Color );
-			this->g_ratio->SetFillColorAlpha( kWhite, 0 );
-		}
-	}
-
-	void Calc_RatioGraph( TGraphAsymmErrors* g_Denom )
-	{
-		if( g == NULL )
-		{
-			cout << "Graph is not assigned yet!" << endl;
-			return;
-		}
-
-		this->g_ratio = this->MakeRatioGraph( g, g_Denom );
-	}
-
-	// -- shorter name -- //
-	void CalcRatio_DEN( TGraphAsymmErrors* g_Denom )
-	{
-		this->Calc_RatioGraph_Denominator( g_Denom );
-	}
-
-	// -- shorter name -- //
-	void CalcRatio_NUM( TGraphAsymmErrors* g_Num )
-	{
-		this->Calc_RatioGraph_Numerator( g_Num );
-	}
-
-	// -- outdated, just for backward compatibility -- //
-	// -- same with Calc_RatioGraph -- //
-	void Calc_RatioGraph_Denominator( TGraphAsymmErrors* g_Denom )
-	{
-		if( g == NULL )
-		{
-			cout << "Graph is not assigned yet!" << endl;
-			return;
-		}
-
-		this->g_ratio = this->MakeRatioGraph( g, g_Denom );
-	}
-
-	// -- outdated, just for backward compatibility -- //
-	void Calc_RatioGraph_Numerator( TGraphAsymmErrors* g_Num )
-	{
-		if( g == NULL )
-		{
-			cout << "Graph is not assigned yet!" << endl;
-			return;
-		}
-
-		this->g_ratio = this->MakeRatioGraph( g_Num, g );
-	}
-
-protected:
-	void Get_Graph()
-	{
-		if( this->FileName == "" || this->ObjectName == "" )
-		{
-			printf( "[FileName, ObjectName] = [%s, %s] ... at least one of them is not set yet", this->FileName.Data(), this->ObjectName.Data() );
-			return;
-		}
-
-		TFile *f_input = TFile::Open( this->FileName );
-		f_input->cd();
-
-		this->g = (TGraphAsymmErrors*)f_input->Get( this->ObjectName )->Clone();
-
-		f_input->Close();
-	}
-
-	TGraphAsymmErrors* MakeRatioGraph(TGraphAsymmErrors *g_Type1, TGraphAsymmErrors *g_Type2)
-	{
-		g_ratio = (TGraphAsymmErrors*)g_Type2->Clone();
-		g_ratio->Set(0); // --Remove all points (reset) -- //
-
-		Int_t nPoint = g_Type1->GetN();
-		Int_t nPoint_2 = g_Type2->GetN();
-		if( nPoint != nPoint_2 )
-			printf("# points is different bewteen two graph...be careful for the ratio plot\n");
-
-		for(Int_t i_p=0; i_p<nPoint; i_p++)
-		{
-			// cout << i_p << "th Point" << endl;
-			//Get Type1 point
-			Double_t x_Type1, y_Type1;
-			g_Type1->GetPoint(i_p, x_Type1, y_Type1);
-			Double_t error_Type1 = this->ReturnLargerValue( g_Type1->GetErrorYhigh(i_p), g_Type1->GetErrorYlow(i_p) );
-			// cout << "x_Type1: " << x_Type1 << " y_Type1: " << y_Type1 << " error_Type1: " << error_Type1 << " g_Type1->GetErrorYhigh: " << g_Type1->GetErrorYhigh(i_p) << " g_Type1->GetErrorYlow: " << g_Type1->GetErrorYlow(i_p) << endl;
-
-			//Get Type2 point
-			Double_t x_Type2, y_Type2;
-			g_Type2->GetPoint(i_p, x_Type2, y_Type2);
-			Double_t error_Type2 = this->ReturnLargerValue( g_Type2->GetErrorYhigh(i_p), g_Type2->GetErrorYlow(i_p) );
-			// cout << "x_Type2: " << x_Type2 << " y_Type2: " << y_Type2 << " error_Type2: " << error_Type2 << " g_Type2->GetErrorYhigh: " << g_Type2->GetErrorYhigh(i_p) << " g_Type2->GetErrorYlow: " << g_Type2->GetErrorYlow(i_p) << endl;
-
-			Double_t ratio;
-			Double_t ratio_error;
-			if( (nPoint != nPoint_2) && i_p >= nPoint_2)
-			{
-				ratio = 0;
-				ratio_error = 0;
-			}
-			// else if(y_Type1 != 0 && error_Type1 != 0 && y_Type2 != 0 && error_Type2 != 0)
-			else if(y_Type2 != 0)
-			{
-				ratio = y_Type1 / y_Type2;
-				ratio_error = this->Error_PropagatedAoverB(y_Type1, error_Type1, y_Type2, error_Type2);
-				//calculate Scale Factor(Type1/Type2) & error
-
-				// cout << "ratio: " << ratio << " ratio_error: " << ratio_error << endl;
-			}
-			else
-			{
-				cout << "Denominator is 0! ... ratio and its error are set as 0" << endl;
-				ratio = 0;
-				ratio_error = 0;
-			}
-
-			//Set Central value
-			g_ratio->SetPoint(i_p, x_Type1, ratio);
-
-			//Set the error
-			Double_t error_XLow = g_Type1->GetErrorXlow(i_p);
-			Double_t error_Xhigh = g_Type1->GetErrorXhigh(i_p);
-			g_ratio->SetPointError(i_p, error_XLow, error_Xhigh, ratio_error, ratio_error);
-
-			// cout << endl;
-		}
-
-		return g_ratio;
-	}
-
-	Double_t Error_PropagatedAoverB(Double_t A, Double_t sigma_A, Double_t B, Double_t sigma_B)
-	{
-		Double_t ratio_A = (sigma_A) / A;
-		Double_t ratio_B = (sigma_B) / B;
-
-		Double_t errorSquare = ratio_A * ratio_A + ratio_B * ratio_B;
-
-		return (A/B) * sqrt(errorSquare);
-	}
-
-	Double_t ReturnLargerValue(Double_t a, Double_t b)
-	{
-		if( a > b )
-			return a;
-		else
-			return b;
-	}
-};
-
-void SetCanvas_Square( TCanvas*& c, TString CanvasName, Bool_t isLogx = kFALSE, Bool_t isLogy = kFALSE, Double_t SizeX = 800, Double_t SizeY = 800 )
-{
-	c = new TCanvas(CanvasName, "", SizeX, SizeY);
-	c->cd();
-	
-	c->SetTopMargin(0.05);
-	c->SetLeftMargin(0.13);
-	c->SetRightMargin(0.045);
-	c->SetBottomMargin(0.13);
-
-	if( isLogx )
-		c->SetLogx();
-	if( isLogy )
-		c->SetLogy();
+	return h_temp;
 }
 
-void SetCanvas_Ratio( TCanvas*& c, TString CanvasName, TPad*& TopPad, TPad*& BottomPad, Bool_t isLogx = kFALSE, Bool_t isLogy = kFALSE )
+TH2D* Get_Hist_2D(TString FileName, TString HistName, TString HistName_New = "" )
 {
-	c = new TCanvas(CanvasName, "", 800, 800);
-	c->cd();
+	TH1::AddDirectory(kFALSE);
 
-	TopPad = new TPad("TopPad","TopPad", 0.01, 0.01, 0.99, 0.99 );
-	TopPad->Draw();
-	TopPad->cd();
+	TFile *f_input = TFile::Open( FileName );
+	TH2D* h_temp = (TH2D*)f_input->Get(HistName)->Clone();
+	if( HistName_New != "" )
+		h_temp->SetName( HistName_New );
 
-	TopPad->SetTopMargin(0.05);
-	TopPad->SetLeftMargin(0.13);
-	TopPad->SetRightMargin(0.045);
-	TopPad->SetBottomMargin(0.3);
+	f_input->Close();
+	// delete f_input;
 
-	if( isLogx )
-		TopPad->SetLogx();
-	if( isLogy )
-		TopPad->SetLogy();
-
-	c->cd();
-	BottomPad = new TPad( "BottomPad", "BottomPad", 0.01, 0.01, 0.99, 0.29 );
-	BottomPad->Draw();
-	BottomPad->cd();
-	BottomPad->SetGridx();
-	BottomPad->SetGridy();
-	BottomPad->SetTopMargin(0.05);
-	BottomPad->SetBottomMargin(0.4);
-	BottomPad->SetRightMargin(0.045);
-	BottomPad->SetLeftMargin(0.13);
-
-	if( isLogx )
-		BottomPad->SetLogx();
-}
-// -- http://igotit.tistory.com/entry/C-함수-인자로-포인터-전달하고-함수내에서-동적-메모리-할당-받기-2가지-방식 -- //
-void DrawLine( TF1*& f_line, Int_t color = kRed )
-{
-	f_line = new TF1("f_line", "1", -10000, 10000);
-	f_line->SetLineColor(color);
-	f_line->SetLineWidth(1);
-	f_line->Draw("PSAME");
+	return h_temp;
 }
 
-void Latex_Preliminary_NoDataInfo( TLatex &latex )
+TGraphAsymmErrors* Get_Graph(TString FileName, TString GraphName, TString GraphName_New = "" )
 {
-	// latex.DrawLatexNDC(0.69, 0.96, "#font[42]{#scale[0.8]{"+TString::Format("%.1lf fb^{-1} (%d TeV)", lumi, E_CM)+"}}");
-	latex.DrawLatexNDC(0.13, 0.96, "#font[62]{CMS}");
-	latex.DrawLatexNDC(0.24, 0.96, "#font[42]{#it{#scale[0.8]{Preliminary}}}");
-}
+	TFile *f_input = TFile::Open( FileName );
+	TGraphAsymmErrors* g_temp = (TGraphAsymmErrors*)f_input->Get(GraphName)->Clone();
+	if( GraphName_New != "" )
+		g_temp->SetName( GraphName_New );
 
-void Latex_Preliminary( TLatex &latex, Double_t lumi  )
-{
-	Latex_Preliminary_NoDataInfo( latex );
-	latex.DrawLatexNDC(0.70, 0.96, "#font[42]{#scale[0.8]{"+TString::Format("%.2lf", lumi)+" fb^{-1} (13 TeV)}}");
-	// latex.DrawLatexNDC(0.13, 0.96, "#font[62]{CMS}");
-	// latex.DrawLatexNDC(0.24, 0.96, "#font[42]{#it{#scale[0.8]{Preliminary}}}");
-}
+	f_input->Close();
 
-void Latex_Preliminary( TLatex &latex, Double_t lumi, Int_t E_CM  )
-{
-	Latex_Preliminary_NoDataInfo( latex );
-	latex.DrawLatexNDC(0.69, 0.96, "#font[42]{#scale[0.8]{"+TString::Format("%.1lf fb^{-1} (%d TeV)", lumi, E_CM)+"}}");
-	// latex.DrawLatexNDC(0.13, 0.96, "#font[62]{CMS}");
-	// latex.DrawLatexNDC(0.24, 0.96, "#font[42]{#it{#scale[0.8]{Preliminary}}}");
-}
-
-void Latex_Simulation( TLatex &latex )
-{
-	latex.DrawLatexNDC(0.82, 0.96, "#font[42]{#scale[0.8]{13 TeV}}");
-	latex.DrawLatexNDC(0.13, 0.96, "#font[62]{CMS}");
-	latex.DrawLatexNDC(0.25, 0.96, "#font[42]{#it{#scale[0.8]{Simulation}}}");
-}
-
-void Latex_Preliminary_EffPlotStyle( TLatex &latex, Int_t year, Int_t E_CM = 13 )
-{
-	latex.DrawLatexNDC(0.70, 0.96, "#font[42]{#scale[0.8]{"+TString::Format("%d, %d TeV", year, E_CM)+"}}");
-	latex.DrawLatexNDC(0.13, 0.96, "#font[62]{CMS}");
-	latex.DrawLatexNDC(0.24, 0.96, "#font[42]{#it{#scale[0.8]{Preliminary}}}");
+	return g_temp;
 }
 
 void SetAxis_SinglePad( TAxis *X_axis, TAxis *Y_axis, TString XTitle, TString YTitle )
@@ -606,126 +106,75 @@ void SetAxis_BottomPad( TAxis *X_axis, TAxis *Y_axis, TString XTitle, TString YT
 	Y_axis->SetLabelSize( 0.10 );
 }
 
-
-void SetHistFormat_SinglePad( TH1D* h_format, TString XTitle, TString YTitle )
+void SetAxis_2D( TAxis *X_axis, TAxis *Y_axis, TString XTitle, TString YTitle )
 {
-	SetAxis_SinglePad( h_format->GetXaxis(), h_format->GetYaxis(), XTitle, YTitle );
+	X_axis->SetTitle( XTitle );
+	X_axis->SetLabelSize(0.03);
+	X_axis->SetTitleOffset(1.35);
+	X_axis->SetTitleSize(0.04);
+	X_axis->SetNoExponent();
+	X_axis->SetMoreLogLabels();
+
+	Y_axis->SetTitle( YTitle );
+	Y_axis->SetTitleSize(0.04);
+	Y_axis->SetTitleOffset(1.5);
+	Y_axis->SetLabelSize(0.03);
 }
 
-void SetHistFormat_TopPad( TH1D* h_format, TString YTitle )
+void SetCanvas_Square( TCanvas*& c, TString CanvasName, Bool_t isLogx = kFALSE, Bool_t isLogy = kFALSE, Double_t SizeX = 800, Double_t SizeY = 800 )
 {
-	SetAxis_TopPad( h_format->GetXaxis(), h_format->GetYaxis(), YTitle );
+	c = new TCanvas(CanvasName, "", SizeX, SizeY);
+	c->cd();
+	
+	c->SetTopMargin(0.05);
+	c->SetLeftMargin(0.13);
+	c->SetRightMargin(0.045);
+	c->SetBottomMargin(0.13);
+
+	if( isLogx )
+		c->SetLogx();
+	if( isLogy )
+		c->SetLogy();
 }
 
-void SetHistFormat_BottomPad( TH1D* h_format, TString XTitle, TString YTitle, Double_t yMin = 0.51, Double_t yMax = 1.49 )
+void SetCanvas_Square2D( TCanvas*& c, TString CanvasName, Bool_t isLogx = kFALSE, Bool_t isLogy = kFALSE, Double_t SizeX = 800, Double_t SizeY = 800 )
 {
-	SetAxis_BottomPad( h_format->GetXaxis(), h_format->GetYaxis(), XTitle, YTitle, yMin, yMax );
+	SetCanvas_Square( c, CanvasName, isLogx, isLogy, SizeX, SizeY );
+	c->SetRightMargin(0.12);
 }
 
-void SetGraphFormat_SinglePad( TGraphAsymmErrors* g_format, TString XTitle, TString YTitle )
+void SetCanvas_Ratio( TCanvas*& c, TString CanvasName, TPad*& TopPad, TPad*& BottomPad, Bool_t isLogx = kFALSE, Bool_t isLogy = kFALSE )
 {
-	SetAxis_SinglePad( g_format->GetXaxis(), g_format->GetYaxis(), XTitle, YTitle );
-}
+	c = new TCanvas(CanvasName, "", 800, 800);
+	c->cd();
 
-void SetGraphFormat_TopPad( TGraphAsymmErrors* g_format, TString YTitle )
-{
-	SetAxis_TopPad( g_format->GetXaxis(), g_format->GetYaxis(), YTitle );
-}
+	TopPad = new TPad("TopPad","TopPad", 0.01, 0.01, 0.99, 0.99 );
+	TopPad->Draw();
+	TopPad->cd();
 
-void SetGraphFormat_BottomPad( TGraphAsymmErrors* g_format, TString XTitle, TString YTitle, Double_t yMin = 0.51, Double_t yMax = 1.49 )
-{
-	SetAxis_BottomPad( g_format->GetXaxis(), g_format->GetYaxis(), XTitle, YTitle, yMin, yMax );
-}
+	TopPad->SetTopMargin(0.05);
+	TopPad->SetLeftMargin(0.13);
+	TopPad->SetRightMargin(0.045);
+	TopPad->SetBottomMargin(0.3);
 
-void SetHist_Color( TH1D* h, Int_t color, Bool_t isFill = kFALSE )
-{
-	h->SetTitle("");
-	h->SetStats(kFALSE);
-	h->SetLineColor( color );
-	h->SetMarkerStyle( 20 );
-	h->SetMarkerColor( color );
+	if( isLogx )
+		TopPad->SetLogx();
+	if( isLogy )
+		TopPad->SetLogy();
 
-	if( isFill )
-		h->SetFillColor( color );
-	else
-		h->SetFillColorAlpha( kWhite, 0 );
-}
+	c->cd();
+	BottomPad = new TPad( "BottomPad", "BottomPad", 0.01, 0.01, 0.99, 0.29 );
+	BottomPad->Draw();
+	BottomPad->cd();
+	BottomPad->SetGridx();
+	BottomPad->SetGridy();
+	BottomPad->SetTopMargin(0.05);
+	BottomPad->SetBottomMargin(0.4);
+	BottomPad->SetRightMargin(0.045);
+	BottomPad->SetLeftMargin(0.13);
 
-void Print_Histogram( TH1D* h, Bool_t NegativeCheck = kFALSE )
-{
-	h->Print();
-
-	// -- underflow -- //
-	Double_t value_uf = h->GetBinContent(0);
-	Double_t errorAbs_uf = h->GetBinError(0);
-	Double_t errorRel_uf = value_uf == 0 ? 0 : errorAbs_uf / value_uf;
-
-	printf( "Underflow: (value, error) = (%lf, %lf (%7.3lf %%))\n", 
-		     value_uf, errorAbs_uf, errorRel_uf*100 );
-
-	if( NegativeCheck && value_uf < 0 )
-		printf("################## NEGATIVE BIN ##################");
-
-	Int_t nBin = h->GetNbinsX();
-	for(Int_t i=0; i<nBin; i++)
-	{
-		Int_t i_bin = i+1;
-		Double_t LowerEdge = h->GetBinLowEdge(i_bin);
-		Double_t UpperEdge = h->GetBinLowEdge(i_bin+1);
-
-		Double_t value = h->GetBinContent(i_bin);
-		Double_t errorAbs = h->GetBinError(i_bin);
-		Double_t errorRel;
-		if( value != 0 )
-			errorRel = errorAbs / value;
-		else
-			errorRel = 0;
-
-		printf( "%02d bin: [%6.1lf, %6.1lf] (value, error) = (%lf, %lf (%7.3lf %%))\n", 
-			     i_bin, LowerEdge, UpperEdge, value, errorAbs, errorRel*100 );
-		
-		if( NegativeCheck && value < 0 )
-			printf("################## NEGATIVE BIN ##################");
-	}
-
-	// -- overflow -- //
-	Double_t value_of = h->GetBinContent(nBin+1);
-	Double_t errorAbs_of = h->GetBinError(nBin+1);
-	Double_t errorRel_of = value_of == 0 ? 0 : errorAbs_of / value_of;
-
-	printf( "Overflow: (value, error) = (%lf, %lf (%7.3lf %%))\n", 
-		     value_of, errorAbs_of, errorRel_of*100 );
-
-	if( NegativeCheck && value_of < 0 )
-		printf("################## NEGATIVE BIN ##################");
-
-	printf("\n\n");
-}
-
-void Print_Graph( TGraphAsymmErrors* g )
-{
-	TString GraphName = g->GetName();
-	printf("[GraphName: %s]\n", GraphName.Data());
-	Int_t nPoint = g->GetN();
-	for(Int_t i=0; i<nPoint; i++)
-	{
-		Double_t x, y;
-		g->GetPoint(i, x, y);
-
-		Double_t xErrLow = g->GetErrorXlow(i);
-		Double_t xErrHigh = g->GetErrorXhigh(i);
-		Double_t LowerEdge = x - xErrLow;
-		Double_t UpperEdge = x + xErrHigh;
-
-		Double_t yErrLow = g->GetErrorYlow(i);
-		Double_t yRelErrLow = yErrLow / y;
-		Double_t yErrHigh = g->GetErrorYhigh(i);
-		Double_t yRelErrHigh = yErrHigh / y;
-
-		printf( "%02d point: [%6.1lf, %6.1lf] (value, errorLow, errorHigh) = (%lf, %lf (%7.3lf %%), %lf (%7.3lf %%))\n", 
-			     i, LowerEdge, UpperEdge, y, yErrLow, yRelErrLow*100, yErrHigh, yRelErrHigh*100 );
-	}
-	printf("\n\n");
+	if( isLogx )
+		BottomPad->SetLogx();
 }
 
 void SetLegend( TLegend *& legend, Double_t xMin = 0.75, Double_t yMin = 0.75, Double_t xMax = 0.95, Double_t yMax = 0.95 )
@@ -734,48 +183,6 @@ void SetLegend( TLegend *& legend, Double_t xMin = 0.75, Double_t yMin = 0.75, D
 	legend->SetFillStyle(0);
 	legend->SetBorderSize(0);
 	legend->SetTextFont( 62 );
-}
-
-TH1D* Get_Hist(TString FileName, TString HistName, TString HistName_New = "" )
-{
-	TH1::AddDirectory(kFALSE);
-
-	TFile *f_input = TFile::Open( FileName );
-	TH1D* h_temp = (TH1D*)f_input->Get(HistName)->Clone();
-	if( HistName_New != "" )
-		h_temp->SetName( HistName_New );
-
-	f_input->Close();
-	// delete f_input;
-
-	return h_temp;
-}
-
-TH2D* Get_Hist_2D(TString FileName, TString HistName, TString HistName_New = "" )
-{
-	TH1::AddDirectory(kFALSE);
-
-	TFile *f_input = TFile::Open( FileName );
-	TH2D* h_temp = (TH2D*)f_input->Get(HistName)->Clone();
-	if( HistName_New != "" )
-		h_temp->SetName( HistName_New );
-
-	f_input->Close();
-	// delete f_input;
-
-	return h_temp;
-}
-
-TGraphAsymmErrors* Get_Graph(TString FileName, TString GraphName, TString GraphName_New = "" )
-{
-	TFile *f_input = TFile::Open( FileName );
-	TGraphAsymmErrors* g_temp = (TGraphAsymmErrors*)f_input->Get(GraphName)->Clone();
-	if( GraphName_New != "" )
-		g_temp->SetName( GraphName_New );
-
-	f_input->Close();
-
-	return g_temp;
 }
 
 TH1D* QuadSum_NoError( TH1D* h1, TH1D* h2 )
@@ -945,15 +352,6 @@ TH1D* ConvertHist_AbsToRel( TH1D* h_CenV, TH1D* h_AbsUnc, Bool_t ConvertToPercen
 	return h_RelUnc;
 }
 
-// void SaveAsTVector( Double_t var, TString Name, TFile *f_output )
-// {
-// 	TVectorD *Vec = new TVectorD(1);
-// 	Vec[0] = var;
-
-// 	f_output->cd();
-// 	Vec->Write( Name );
-// }
-
 TH1D* DivideEachBin_ByBinWidth( TH1D* h, TString HistName = "" )
 {
 	TH1D* h_return = (TH1D*)h->Clone();
@@ -1002,18 +400,6 @@ TH1D* MultiplyEachBin_byBinWidth( TH1D* h, TString HistName = "" )
 	return h_return;
 }
 
-TGraphAsymmErrors* MakeGraph_Ratio( TGraphAsymmErrors* g_NUM, TGraphAsymmErrors *g_DEN, TString GraphName = "" )
-{
-	GraphInfo *Graph = new GraphInfo( kBlack, "temp" );
-	Graph->Set_Graph( g_NUM );
-	Graph->CalcRatio_DEN( g_DEN );
-
-	if( GraphName != "" )
-		Graph->g_ratio->SetName(GraphName);
-
-	return Graph->g_ratio;
-}
-
 void SaveAsHist_OneContent( Double_t content, TString HistName, TFile *f_output )
 {
 	TH1D *h = new TH1D(HistName, "", 1, 0, 1);
@@ -1044,203 +430,714 @@ Double_t GetContent_OneBinHist( TString FileName, TString HistName )
 	return h_temp->GetBinContent(1);
 }
 
-class DrawCanvas_TwoHistRatio
+void Print_Histogram( TH1D* h, Bool_t NegativeCheck = kFALSE )
+{
+	h->Print();
+
+	// -- underflow -- //
+	Double_t value_uf = h->GetBinContent(0);
+	Double_t errorAbs_uf = h->GetBinError(0);
+	Double_t errorRel_uf = value_uf == 0 ? 0 : errorAbs_uf / value_uf;
+
+	printf( "Underflow: (value, error) = (%lf, %lf (%7.3lf %%))\n", 
+		     value_uf, errorAbs_uf, errorRel_uf*100 );
+
+	if( NegativeCheck && value_uf < 0 )
+		printf("################## NEGATIVE BIN ##################");
+
+	Int_t nBin = h->GetNbinsX();
+	for(Int_t i=0; i<nBin; i++)
+	{
+		Int_t i_bin = i+1;
+		Double_t LowerEdge = h->GetBinLowEdge(i_bin);
+		Double_t UpperEdge = h->GetBinLowEdge(i_bin+1);
+
+		Double_t value = h->GetBinContent(i_bin);
+		Double_t errorAbs = h->GetBinError(i_bin);
+		Double_t errorRel;
+		if( value != 0 )
+			errorRel = errorAbs / value;
+		else
+			errorRel = 0;
+
+		printf( "%02d bin: [%6.1lf, %6.1lf] (value, error) = (%lf, %lf (%7.3lf %%))\n", 
+			     i_bin, LowerEdge, UpperEdge, value, errorAbs, errorRel*100 );
+		
+		if( NegativeCheck && value < 0 )
+			printf("################## NEGATIVE BIN ##################");
+	}
+
+	// -- overflow -- //
+	Double_t value_of = h->GetBinContent(nBin+1);
+	Double_t errorAbs_of = h->GetBinError(nBin+1);
+	Double_t errorRel_of = value_of == 0 ? 0 : errorAbs_of / value_of;
+
+	printf( "Overflow: (value, error) = (%lf, %lf (%7.3lf %%))\n", 
+		     value_of, errorAbs_of, errorRel_of*100 );
+
+	if( NegativeCheck && value_of < 0 )
+		printf("################## NEGATIVE BIN ##################");
+
+	printf("\n\n");
+}
+
+void Print_Graph( TGraphAsymmErrors* g )
+{
+	TString GraphName = g->GetName();
+	printf("[GraphName: %s]\n", GraphName.Data());
+	Int_t nPoint = g->GetN();
+	for(Int_t i=0; i<nPoint; i++)
+	{
+		Double_t x, y;
+		g->GetPoint(i, x, y);
+
+		Double_t xErrLow = g->GetErrorXlow(i);
+		Double_t xErrHigh = g->GetErrorXhigh(i);
+		Double_t LowerEdge = x - xErrLow;
+		Double_t UpperEdge = x + xErrHigh;
+
+		Double_t yErrLow = g->GetErrorYlow(i);
+		Double_t yRelErrLow = yErrLow / y;
+		Double_t yErrHigh = g->GetErrorYhigh(i);
+		Double_t yRelErrHigh = yErrHigh / y;
+
+		printf( "%02d point: [%6.1lf, %6.1lf] (value, errorLow, errorHigh) = (%lf, %lf (%7.3lf %%), %lf (%7.3lf %%))\n", 
+			     i, LowerEdge, UpperEdge, y, yErrLow, yRelErrLow*100, yErrHigh, yRelErrHigh*100 );
+	}
+	printf("\n\n");
+}
+
+// -- http://igotit.tistory.com/entry/C-함수-인자로-포인터-전달하고-함수내에서-동적-메모리-할당-받기-2가지-방식 -- //
+void DrawLine( TF1*& f_line, Int_t color = kRed )
+{
+	f_line = new TF1("f_line", "1", -10000, 10000);
+	f_line->SetLineColor(color);
+	f_line->SetLineWidth(1);
+	f_line->Draw("PSAME");
+}
+
+void Latex_Preliminary_NoDataInfo( TLatex &latex )
+{
+	// latex.DrawLatexNDC(0.69, 0.96, "#font[42]{#scale[0.8]{"+TString::Format("%.1lf fb^{-1} (%d TeV)", lumi, E_CM)+"}}");
+	latex.DrawLatexNDC(0.13, 0.96, "#font[62]{CMS}");
+	latex.DrawLatexNDC(0.24, 0.96, "#font[42]{#it{#scale[0.8]{Preliminary}}}");
+}
+
+void Latex_Preliminary( TLatex &latex, Double_t lumi  )
+{
+	Latex_Preliminary_NoDataInfo( latex );
+	latex.DrawLatexNDC(0.70, 0.96, "#font[42]{#scale[0.8]{"+TString::Format("%.2lf", lumi)+" fb^{-1} (13 TeV)}}");
+	// latex.DrawLatexNDC(0.13, 0.96, "#font[62]{CMS}");
+	// latex.DrawLatexNDC(0.24, 0.96, "#font[42]{#it{#scale[0.8]{Preliminary}}}");
+}
+
+void Latex_Preliminary( TLatex &latex, Double_t lumi, Int_t E_CM  )
+{
+	Latex_Preliminary_NoDataInfo( latex );
+	latex.DrawLatexNDC(0.69, 0.96, "#font[42]{#scale[0.8]{"+TString::Format("%.1lf fb^{-1} (%d TeV)", lumi, E_CM)+"}}");
+	// latex.DrawLatexNDC(0.13, 0.96, "#font[62]{CMS}");
+	// latex.DrawLatexNDC(0.24, 0.96, "#font[42]{#it{#scale[0.8]{Preliminary}}}");
+}
+
+void Latex_Simulation( TLatex &latex )
+{
+	latex.DrawLatexNDC(0.82, 0.96, "#font[42]{#scale[0.8]{13 TeV}}");
+	latex.DrawLatexNDC(0.13, 0.96, "#font[62]{CMS}");
+	latex.DrawLatexNDC(0.25, 0.96, "#font[42]{#it{#scale[0.8]{Simulation}}}");
+}
+
+void Latex_Preliminary_EffPlotStyle( TLatex &latex, Int_t year, Int_t E_CM = 13 )
+{
+	latex.DrawLatexNDC(0.70, 0.96, "#font[42]{#scale[0.8]{"+TString::Format("%d, %d TeV", year, E_CM)+"}}");
+	latex.DrawLatexNDC(0.13, 0.96, "#font[62]{CMS}");
+	latex.DrawLatexNDC(0.24, 0.96, "#font[42]{#it{#scale[0.8]{Preliminary}}}");
+}
+
+
+class SampleInfo
 {
 public:
-	TString CanvasName;
-	HistInfo *Hist_1st;
-	HistInfo *Hist_2nd;
+	TString name; // -- short name for the convenience in the code: ex> DYMuMu_M50 -- //
+	TString fullName; // -- for legend: ex> DY #rightarrow Z/#gamma* -- //
 
-	TString DrawOp;
+	Bool_t isRealData;
+	TString fileName;
+	Int_t color;
 
-	TString XTitle;
-	TString YTitle;
-	TString RatioTitle;
+	Double_t xSec;
+	Double_t sumWeight; // -- same with # events for the samples without negative weights -- //
+	Double_t normFactor;
 
-	TCanvas *c;
-	TPad *TopPad;
-	TPad *BottomPad;
-
-	Bool_t Flag_SetXRange;
-	Double_t xMin;
-	Double_t xMax;
-
-	Bool_t Flag_SetYRange;
-	Double_t yMin;
-	Double_t yMax;
-
-	Bool_t Flag_SetRatioRange;
-	Double_t ratioMin;
-	Double_t ratioMax;
-
-	Bool_t Flag_SetLegendPosition;
-	Double_t legend_xMin;
-	Double_t legend_xMax;
-	Double_t legend_yMin;
-	Double_t legend_yMax;
-
-	TLatex latex;
-	TString LatexType;
-	Double_t lumi;
-	Double_t E_CM;
-
-	DrawCanvas_TwoHistRatio()
+	SampleInfo()
 	{
-		// -- initialization -- //
-		this->DrawOp = "EPSAME";
-		this->Flag_SetXRange = kFALSE;
-		this->xMin = 0;
-		this->xMax = 0;
-
-		this->Flag_SetYRange = kFALSE;
-		this->yMin = 0;
-		this->yMax = 0;
-
-		this->Flag_SetRatioRange = kFALSE;
-		this->ratioMin = 0;
-		this->ratioMax = 0;
-
-		this->legend_xMin = 0;
-		this->legend_xMax = 0;
-		this->legend_yMin = 0;
-		this->legend_yMax = 0;
-
-		this->lumi = 0;
-		this->E_CM = 0;
+		this->Init();
 	}
 
-	DrawCanvas_TwoHistRatio(TString _CanvasName, HistInfo *_Hist_1st, HistInfo *_Hist_2nd): DrawCanvas_TwoHistRatio()
+	SampleInfo( TString _isRealData, TString _name, TString _fullName )
 	{
-		this->CanvasName = _CanvasName;
-		this->Hist_1st = _Hist_1st;
-		this->Hist_2nd = _Hist_2nd;
+		this->isRealData = _isRealData;
+		this->SetName( _name, _fullName );
 	}
 
-	void SetTitle( TString _XTitle, TString _YTitle, TString _RatioTitle)
+	void SetName( TString _name, TString _fullName )
 	{
-		this->XTitle = _XTitle;
-		this->YTitle = _YTitle;
-		this->RatioTitle = _RatioTitle;
+		this->name = _name;
+		this->fullName = _fullName;
 	}
 
-	void SetXRange( Double_t _xMin, Double_t _xMax )
+	void SetFileName( TString _name )
 	{
-		this->Flag_SetXRange = kTRUE;
-		this->xMin = _xMin;
-		this->xMax = _xMax;
+		this->fileName = _name;
+	}
+	
+	void SetColor( Int_t _color )
+	{
+		this->color = _color;
 	}
 
-	void SetYRange( Double_t _yMin, Double_t _yMax )
+	void SetNormFactor( Double_t lumi, Double_t _xSec, Double_t _sumWeight )
 	{
-		this->Flag_SetYRange = kTRUE;
-		this->yMin = _yMin;
-		this->yMax = _yMax;
+		if( this->isRealData )
+		{
+			cout << "[SetNormFactor] This is real data! ... something goes wrong" << endl;
+			return;
+		}
+
+		this->xSec = _xSec;
+		this->sumWeight = _sumWeight;
+		this->normFactor = (lumi * this->xSec) / this->sumWeight;
+		printf("[SetNormFactor] Sample: %s\n", name.Data() );
+		printf("\tNormalization factor = (%.3lf * %.3e) / (%.1lf) = %.3e\n", lumi, this->xSec, this->sumWeight, this->normFactor);
 	}
 
-	void SetRatioRange( Double_t _ratioMin, Double_t _ratioMax )
+private:
+	void Init()
 	{
-		this->Flag_SetRatioRange = kTRUE;
-		this->ratioMin = _ratioMin;
-		this->ratioMax = _ratioMax;
+		this->name = "";
+		this->fullName = "";
+
+		this->isRealData = kFALSE;
+		this->fileName = "";
+		this->color = 0;
+
+		this->xSec = -999;
+		this->sumWeight = -999;
+		this->normFactor = -999;
+	}
+};
+
+
+class HistInfo
+{
+public:
+	TString name;
+	TString titleX;
+	TString titleY;
+
+	Bool_t hasXRange;
+	Double_t minX;
+	Double_t maxX;
+
+	Bool_t hasYRange;
+	Double_t minY;
+	Double_t maxY;
+
+	Bool_t hasZRange;
+	Double_t minZ;
+	Double_t maxZ;
+
+	Double_t hasRebinX;
+	Double_t nRebinX;
+
+	Double_t hasRebinY;
+	Double_t nRebinY;
+
+	Bool_t isFilled;
+
+	// -- log axis: property of canvases, not histograms -- //
+	// Bool_t isLogX;
+	// Bool_t isLogY;
+
+	HistInfo()
+	{
+		this->Init();
 	}
 
-	void SetLegendPosition( Double_t _xMin, Double_t _yMin, Double_t _xMax, Double_t _yMax )
+	HistInfo( TString _name ): HistInfo()
 	{
-		this->Flag_SetLegendPosition = kTRUE;
-		this->legend_xMin = _xMin;
-		this->legend_xMax = _xMax;
-		this->legend_yMin = _yMin;
-		this->legend_yMax = _yMax;
+		this->name = _name;
 	}
 
-	void SetLegendXRange( Double_t _xMin, Double_t _xMax )
+	HistInfo( TString _name, TString _titleX, TString _titleY ): HistInfo()
 	{
-		this->Flag_SetLegendPosition = kTRUE;
-		this->legend_xMin = _xMin;
-		this->legend_xMax = _xMax;
+		this->name = _name;
+		this->SetTitle( _titleX, _titleY );
 	}
 
-	void SetLegendYRange( Double_t _yMin, Double_t _yMax )
+	void SetTitle( TString X, TString Y )
 	{
-		this->Flag_SetLegendPosition = kTRUE;
-		this->legend_yMin = _yMin;
-		this->legend_yMax = _yMax;
+		this->titleX = X;
+		this->titleY = Y;
 	}
 
-	void SetLatex(TString _LatexType, Double_t _lumi = 0, Double_t _E_CM = 0)
+	// void SetLogAxis( Bool_t X, Bool_t Y )
+	// {
+	// 	this->isLogX = X;
+	// 	this->isLogY = Y;
+	// }
+
+	void SetXRange( Double_t min, Double_t max )
 	{
-		// -- LatexType: Simulation, Preliminary, NoDataInfo -- //
-		this->LatexType = _LatexType;
-		this->lumi = _lumi;
-		this->E_CM = _E_CM;
+		this->hasXRange = kTRUE;
+		this->minX = min;
+		this->maxX = max;
 	}
 
-	void SetDrawOption( TString _DrawOp )
+	void SetYRange( Double_t min, Double_t max )
 	{
-		this->DrawOp = _DrawOp;
+		this->hasYRange = kTRUE;
+		this->minY = min;
+		this->maxY = max;
 	}
 
-	void Draw(Bool_t isLogX = 0, Bool_t isLogY = 0)
+	void SetZRange( Double_t min, Double_t max )
 	{
-		// -- calc. ratio: 1st / 2nd -- //
-		this->Hist_1st->CalcRatio_DEN( this->Hist_2nd->h );
+		this->hasZRange = kTRUE;
+		this->minZ = min;
+		this->maxZ = max;
+	}
 
-		SetCanvas_Ratio(c, this->CanvasName, this->TopPad, this->BottomPad, isLogX, isLogY );
+	void SetRebinX( Int_t _nRebin )
+	{
+		this->hasRebinX = kTRUE;
+		this->nRebinX = _nRebin;
+	}
 
-		///////////////////
-		// -- top pad -- //
-		///////////////////
-		c->cd();
-		TopPad->cd();
+	void SetRebinY( Int_t _nRebin )
+	{
+		this->hasRebinY = kTRUE;
+		this->nRebinY = _nRebin;
+	}
 
-		this->Hist_1st->Draw(this->DrawOp);
-		this->Hist_2nd->Draw(this->DrawOp);
-		SetHistFormat_TopPad( this->Hist_1st->h, this->YTitle );
+	void IsFilled( Bool_t _isFilled = kTRUE )
+	{
+		this->isFilled = _isFilled;
+	}
 
-		if( this->Flag_SetXRange )
-			Hist_1st->h->GetXaxis()->SetRangeUser( this->xMin, this->xMax );
+private:
+	void Init()
+	{
+		this->name = "";
+		this->titleX = "";
+		this->titleY = "";
 
-		if( this->Flag_SetYRange )
-			Hist_1st->h->GetYaxis()->SetRangeUser( this->yMin, this->yMax );
+		this->hasXRange = kFALSE;
+		this->minX = -999;
+		this->maxX = -999;
 
-		// -- legend setting -- //
-		TLegend *legend;
-		if( this->Flag_SetLegendPosition )
-			SetLegend( legend, this->legend_xMin, this->legend_yMin, this->legend_xMax, this->legend_yMax );
+		this->hasYRange = kFALSE;
+		this->minY = -999;
+		this->maxY = -999;
+
+		this->hasZRange = kFALSE;
+		this->minZ = -999;
+		this->maxZ = -999;
+
+		this->hasRebinX = kFALSE;
+		this->nRebinX = 1;
+
+		this->hasRebinY = kFALSE;
+		this->nRebinY = 1;
+
+		// this->isLogX = kFALSE;
+		// this->isLogY = kFALSE;
+	}
+
+};
+
+// -- TH1 extension -- //
+class TH1Ext
+{
+public:
+	TH1D* h;
+
+	Bool_t hasRatio;
+	TH1D* h_ratio;
+
+	SampleInfo* sampleInfo;
+	HistInfo* histInfo;
+
+	TH1Ext()
+	{
+		TH1::AddDirectory( kFALSE );
+
+		this->h = NULL;
+
+		this->hasRatio = kFALSE;
+		this->h_ratio = NULL;
+	}
+
+	TH1Ext( SampleInfo* _sampleInfo, HistInfo* _histInfo, TString histName = "" ): TH1Ext()
+	{
+		this->sampleInfo = _sampleInfo;
+		this->histInfo = _histInfo;
+
+		if( histName == "" )
+			this->h = Get_Hist( this->sampleInfo->fileName, this->histInfo->name );
 		else
-			SetLegend( legend );
+			this->h = Get_Hist( this->sampleInfo->fileName, histName );
 
-		this->Hist_1st->AddToLegend( legend );
-		this->Hist_2nd->AddToLegend( legend );
-		legend->Draw();
+		// -- it should be done earlier: to be consistent with the ratio calculation -- //
+		if( this->histInfo->hasRebinX )
+			h->Rebin( this->histInfo->nRebinX );
+	}
 
-		// -- latex -- //
-		if( this->LatexType == "Simulation" )
-			Latex_Simulation( this->latex );
-		else if( this->LatexType == "Preliminary" )
-			Latex_Preliminary( this->latex, this->lumi, this->E_CM );
-		else if( this->LatexType == "NoDataInfo" )
-			Latex_Preliminary_NoDataInfo( this->latex );
+	void DrawAndSet( TString drawOp )
+	{
+		this->h->Draw( drawOp );
+		this->SetAttributes(); // -- setting after drawing: to be consistent with TGraphExt case -- //
+	}
 
+	void DrawRatioAndSet( TString DrawOp, TString ratioTitle, Double_t minRatio = 0.5, Double_t maxRatio = 1.5 )
+	{
+		this->h_ratio->Draw( DrawOp );
+		this->SetAttributesRatio(ratioTitle, minRatio, maxRatio);
+	}
 
-		//////////////////////
-		// -- bottom pad -- //
-		//////////////////////
-		c->cd();
-		BottomPad->cd();
+	void AddToLegend( TLegend *legend )
+	{
+		legend->AddEntry( this->h, this->sampleInfo->fullName );
+	}
 
-		Hist_1st->DrawRatio(this->DrawOp);
-		if( this->Flag_SetRatioRange )
-			SetHistFormat_BottomPad( Hist_1st->h_ratio, this->XTitle, this->RatioTitle, this->ratioMin, this->ratioMax );
+	void CalcRatio_DEN( TH1D* h_DEN )
+	{
+		this->hasRatio = kTRUE;
+
+		if( h == NULL )
+		{
+			cout << "Histogram is not assigned yet!" << endl;
+			return;
+		}
+
+		h->Sumw2();
+		h_DEN->Sumw2();
+
+		this->h_ratio = (TH1D*)this->h->Clone();
+		h_ratio->Divide( this->h, h_DEN );
+	}
+
+	void CalcRatio_NUM( TH1D* h_NUM )
+	{
+		this->hasRatio = kTRUE;
+
+		if( h == NULL )
+		{
+			cout << "Histogram is not assigned yet!" << endl;
+			return;
+		}
+
+		h->Sumw2();
+		h_NUM->Sumw2();
+
+		this->h_ratio = (TH1D*)this->h->Clone();
+		h_ratio->Divide( h_NUM, this->h );
+	}
+
+protected:
+	void SetAttributes()
+	{
+		this->h->SetTitle("");
+		this->h->SetStats(kFALSE);
+
+		this->h->SetLineColor( this->sampleInfo->color );
+		this->h->SetFillColorAlpha( kWhite, 0 );
+		this->h->SetMarkerStyle( 20 );
+		this->h->SetMarkerColor( this->sampleInfo->color );
+		if( this->histInfo->isFilled )
+		{
+			this->h->SetLineColorAlpha( kWhite, 0 );
+			this->h->SetMarkerColorAlpha( kWhite, 0 );
+			this->h->SetFillColorAlpha( this->sampleInfo->color, 1 );
+		}
+
+		if( this->histInfo->hasXRange )
+			h->GetXaxis()->SetRangeUser( this->histInfo->minX, this->histInfo->maxX );
+
+		if( this->histInfo->hasYRange )
+			h->GetYaxis()->SetRangeUser( this->histInfo->minY, this->histInfo->maxY );
+
+		if( this->histInfo->hasZRange )
+			h->GetZaxis()->SetRangeUser( this->histInfo->minZ, this->histInfo->maxZ );
+
+		if( this->hasRatio )
+			SetAxis_TopPad( this->h->GetXaxis(), this->h->GetYaxis(), this->histInfo->titleY );
 		else
-			SetHistFormat_BottomPad( Hist_1st->h_ratio, this->XTitle, this->RatioTitle);
+			SetAxis_SinglePad( this->h->GetXaxis(), this->h->GetYaxis(), this->histInfo->titleX, this->histInfo->titleY );
+	}
 
-		if( this->Flag_SetXRange )
-			Hist_1st->h_ratio->GetXaxis()->SetRangeUser( this->xMin, this->xMax );
+	void SetAttributesRatio(TString ratioTitle, Double_t minRatio, Double_t maxRatio)
+	{
+		if( this->h_ratio == NULL ) return;
 
-		TF1 *f_line;
-		DrawLine( f_line );
+		this->h_ratio->SetTitle("");
+		this->h_ratio->SetStats(kFALSE);
 
-		this->c->SaveAs(".pdf");
+		this->h_ratio->SetLineColor( this->sampleInfo->color );
+		this->h_ratio->SetFillColorAlpha( kWhite, 0 );
+		this->h_ratio->SetMarkerStyle( 20 );
+		this->h_ratio->SetMarkerColor( this->sampleInfo->color );
+
+		SetAxis_BottomPad( this->h_ratio->GetXaxis(), this->h_ratio->GetYaxis(), this->histInfo->titleX, ratioTitle, minRatio, maxRatio );
+	}
+};
+
+// -- TH2 extension -- //
+class TH2Ext
+{
+public:
+	TH2D* h;
+
+	SampleInfo* sampleInfo;
+	HistInfo* histInfo;
+
+	TH2Ext()
+	{
+		TH1::AddDirectory( kFALSE );
+
+		this->h = NULL;
+	}
+
+	TH2Ext( SampleInfo* _sampleInfo, HistInfo* _histInfo, TString histName = "" ): TH2Ext()
+	{
+		this->sampleInfo = _sampleInfo;
+		this->histInfo = _histInfo;
+
+		if( histName == "" )
+			this->h = Get_Hist_2D( this->sampleInfo->fileName, this->histInfo->name );
+		else
+			this->h = Get_Hist_2D( this->sampleInfo->fileName, histName );
+	}
+
+	void DrawAndSet( TString drawOp )
+	{
+		this->h->Draw( drawOp );
+		this->SetAttributes( drawOp ); // -- setting after drawing: to be consistent with TGraphExt case -- //
+	}
+
+	void AddToLegend( TLegend *legend )
+	{
+		legend->AddEntry( this->h, this->sampleInfo->fullName );
+	}
+
+protected:
+	void SetAttributes( TString drawOp )
+	{
+		this->h->SetTitle("");
+		this->h->SetStats(kFALSE);
+
+		if( drawOp.Contains("SCAT") )
+		{
+			this->h->SetMarkerStyle( 20 );
+			this->h->SetLineColorAlpha( kWhite, 0 );
+			this->h->SetMarkerColor( this->sampleInfo->color );
+		}
+
+		if( this->histInfo->hasXRange )
+			h->GetXaxis()->SetRangeUser( this->histInfo->minX, this->histInfo->maxX );
+
+		if( this->histInfo->hasYRange )
+			h->GetYaxis()->SetRangeUser( this->histInfo->minY, this->histInfo->maxY );
+
+		if( this->histInfo->hasZRange )
+			h->GetZaxis()->SetRangeUser( this->histInfo->minZ, this->histInfo->maxZ );
+
+		if( this->histInfo->hasRebinX )
+			h->RebinX( this->histInfo->nRebinX );
+
+		if( this->histInfo->hasRebinY )
+			h->RebinY( this->histInfo->nRebinY );
+
+		SetAxis_2D( this->h->GetXaxis(), this->h->GetYaxis(), this->histInfo->titleX, this->histInfo->titleY );
+	}
+};
+
+class TGraphExt
+{
+public:
+	TGraphAsymmErrors* g;
+
+	Bool_t hasRatio;
+	TGraphAsymmErrors* g_ratio;
+
+	SampleInfo* sampleInfo;
+	HistInfo* histInfo;
+
+	TGraphExt()
+	{
+		this->g = NULL;
+
+		this->hasRatio = kFALSE;
+		this->g_ratio = NULL;
+	}
+
+	TGraphExt( SampleInfo* _sampleInfo, HistInfo* _histInfo, TString graphName = "" ): TGraphExt()
+	{
+		this->sampleInfo = _sampleInfo;
+		this->histInfo = _histInfo;
+
+		if( graphName == "" )
+			this->g = Get_Graph( this->sampleInfo->fileName, this->histInfo->name );
+		else
+			this->g = Get_Graph( this->sampleInfo->fileName, graphName );
+	}
+
+	void DrawAndSet( TString drawOp )
+	{
+		this->g->Draw( drawOp );
+		this->SetAttributes();
+	}
+
+	void CalcRatio_DEN( TGraphAsymmErrors* g_DEN )
+	{
+		this->g_ratio = this->MakeRatioGraph( g, g_DEN );
+	}
+
+	void CalcRatio_NUM( TGraphAsymmErrors* g_NUM )
+	{
+		this->g_ratio = this->MakeRatioGraph( g_NUM, g );
+	}
+
+	void DrawRatioAndSet( TString DrawOp, TString ratioTitle, Double_t minRatio = 0.5, Double_t maxRatio = 1.5 )
+	{
+		this->g_ratio->Draw( DrawOp );
+		this->SetAttributesRatio(ratioTitle, minRatio, maxRatio);
+	}
+
+	void AddToLegend( TLegend *legend )
+	{
+		legend->AddEntry( this->g, this->sampleInfo->fullName );
+	}
+
+protected:
+	void SetAttributes()
+	{
+		this->g->SetTitle("");
+		this->g->SetLineColor( this->sampleInfo->color );
+		this->g->SetLineWidth( 1 );
+		this->g->SetMarkerStyle( 20 );
+		this->g->SetMarkerSize( 1.3 );
+		this->g->SetMarkerColor( this->sampleInfo->color );
+		this->g->SetFillColorAlpha( kWhite, 0 );
+		this->g->GetXaxis()->SetTitleFont(42);
+		this->g->GetYaxis()->SetTitleFont(42);
+		this->g->GetXaxis()->SetLabelFont(42);
+		this->g->GetYaxis()->SetLabelFont(42);
+		this->g->GetXaxis()->SetLabelSize(0.04);
+		this->g->GetYaxis()->SetLabelSize(0.04);
+
+		if( this->histInfo->hasXRange )
+			g->GetXaxis()->SetRangeUser( this->histInfo->minX, this->histInfo->maxX );
+
+		if( this->histInfo->hasYRange )
+			g->GetYaxis()->SetRangeUser( this->histInfo->minY, this->histInfo->maxY );
+
+		if( this->hasRatio )
+			SetAxis_TopPad( this->g->GetXaxis(), this->g->GetYaxis(), this->histInfo->titleY );
+		else
+			SetAxis_SinglePad( this->g->GetXaxis(), this->g->GetYaxis(), this->histInfo->titleX, this->histInfo->titleY );
+	}
+
+	void SetAttributesRatio(TString ratioTitle, Double_t minRatio, Double_t maxRatio)
+	{
+		if( this->g_ratio == NULL ) return;
+
+		this->g_ratio->SetTitle( "" );
+
+		this->g_ratio->SetLineColor( this->sampleInfo->color );
+		this->g_ratio->SetMarkerStyle( 20 );
+		this->g_ratio->SetMarkerColor( this->sampleInfo->color );
+		this->g_ratio->SetFillColorAlpha( kWhite, 0 );
+
+		SetAxis_BottomPad( this->g_ratio->GetXaxis(), this->g_ratio->GetYaxis(), this->histInfo->titleX, ratioTitle, minRatio, maxRatio );
+	}
+
+	TGraphAsymmErrors* MakeRatioGraph(TGraphAsymmErrors *g_Type1, TGraphAsymmErrors *g_Type2)
+	{
+		g_ratio = (TGraphAsymmErrors*)g_Type2->Clone();
+		g_ratio->Set(0); // --Remove all points (reset) -- //
+
+		Int_t nPoint = g_Type1->GetN();
+		Int_t nPoint_2 = g_Type2->GetN();
+		if( nPoint != nPoint_2 )
+			printf("# points is different bewteen two graph...be careful for the ratio plot\n");
+
+		for(Int_t i_p=0; i_p<nPoint; i_p++)
+		{
+			// cout << i_p << "th Point" << endl;
+			//Get Type1 point
+			Double_t x_Type1, y_Type1;
+			g_Type1->GetPoint(i_p, x_Type1, y_Type1);
+			Double_t error_Type1 = this->ReturnLargerValue( g_Type1->GetErrorYhigh(i_p), g_Type1->GetErrorYlow(i_p) );
+			// cout << "x_Type1: " << x_Type1 << " y_Type1: " << y_Type1 << " error_Type1: " << error_Type1 << " g_Type1->GetErrorYhigh: " << g_Type1->GetErrorYhigh(i_p) << " g_Type1->GetErrorYlow: " << g_Type1->GetErrorYlow(i_p) << endl;
+
+			//Get Type2 point
+			Double_t x_Type2, y_Type2;
+			g_Type2->GetPoint(i_p, x_Type2, y_Type2);
+			Double_t error_Type2 = this->ReturnLargerValue( g_Type2->GetErrorYhigh(i_p), g_Type2->GetErrorYlow(i_p) );
+			// cout << "x_Type2: " << x_Type2 << " y_Type2: " << y_Type2 << " error_Type2: " << error_Type2 << " g_Type2->GetErrorYhigh: " << g_Type2->GetErrorYhigh(i_p) << " g_Type2->GetErrorYlow: " << g_Type2->GetErrorYlow(i_p) << endl;
+
+			Double_t ratio;
+			Double_t ratio_error;
+			if( (nPoint != nPoint_2) && i_p >= nPoint_2)
+			{
+				ratio = 0;
+				ratio_error = 0;
+			}
+			// else if(y_Type1 != 0 && error_Type1 != 0 && y_Type2 != 0 && error_Type2 != 0)
+			else if(y_Type2 != 0)
+			{
+				ratio = y_Type1 / y_Type2;
+				ratio_error = this->Error_PropagatedAoverB(y_Type1, error_Type1, y_Type2, error_Type2);
+				//calculate Scale Factor(Type1/Type2) & error
+
+				// cout << "ratio: " << ratio << " ratio_error: " << ratio_error << endl;
+			}
+			else
+			{
+				cout << "Denominator is 0! ... ratio and its error are set as 0" << endl;
+				ratio = 0;
+				ratio_error = 0;
+			}
+
+			//Set Central value
+			g_ratio->SetPoint(i_p, x_Type1, ratio);
+
+			//Set the error
+			Double_t error_XLow = g_Type1->GetErrorXlow(i_p);
+			Double_t error_Xhigh = g_Type1->GetErrorXhigh(i_p);
+			g_ratio->SetPointError(i_p, error_XLow, error_Xhigh, ratio_error, ratio_error);
+
+			// cout << endl;
+		}
+
+		return g_ratio;
+	}
+
+	Double_t Error_PropagatedAoverB(Double_t A, Double_t sigma_A, Double_t B, Double_t sigma_B)
+	{
+		Double_t ratio_A = (sigma_A) / A;
+		Double_t ratio_B = (sigma_B) / B;
+
+		Double_t errorSquare = ratio_A * ratio_A + ratio_B * ratio_B;
+
+		return (A/B) * sqrt(errorSquare);
+	}
+
+	Double_t ReturnLargerValue(Double_t a, Double_t b)
+	{
+		if( a > b )
+			return a;
+		else
+			return b;
 	}
 };
