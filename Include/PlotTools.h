@@ -573,7 +573,7 @@ public:
 		this->Init();
 	}
 
-	SampleInfo( TString _isRealData, TString _name, TString _fullName )
+	SampleInfo( Bool_t _isRealData, TString _name, TString _fullName )
 	{
 		this->isRealData = _isRealData;
 		this->SetName( _name, _fullName );
@@ -916,6 +916,14 @@ public:
 			this->h = Get_Hist_2D( this->sampleInfo->fileName, this->histInfo->name );
 		else
 			this->h = Get_Hist_2D( this->sampleInfo->fileName, histName );
+	}
+
+	// -- when the histogram already exists -- //
+	TH2Ext( SampleInfo* _sampleInfo, HistInfo* _histInfo, TH2D* _h ): TH2Ext()
+	{
+		this->sampleInfo = _sampleInfo;
+		this->histInfo = _histInfo;
+		this->h = (TH2D*)_h->Clone();
 	}
 
 	void DrawAndSet( TString drawOp )
