@@ -112,8 +112,8 @@ void SetAxis_2D( TAxis *X_axis, TAxis *Y_axis, TString XTitle, TString YTitle )
 	X_axis->SetLabelSize(0.03);
 	X_axis->SetTitleOffset(1.35);
 	X_axis->SetTitleSize(0.04);
-	X_axis->SetNoExponent();
-	X_axis->SetMoreLogLabels();
+	// X_axis->SetNoExponent();
+	// X_axis->SetMoreLogLabels();
 
 	Y_axis->SetTitle( YTitle );
 	Y_axis->SetTitleSize(0.04);
