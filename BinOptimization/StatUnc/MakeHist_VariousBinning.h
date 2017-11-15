@@ -104,39 +104,58 @@ private:
 	void Init()
 	{
 		TString Type = TString::Format("%dGeV", this->binSize);
-		Int_t nBin = (Int_t)(3000.0 / this->binSize);
-		cout << "nBin: " << nBin << endl;
+		Int_t nBin = 0;
+		Double_t massMax = 0;
+		this->CalcMaximum( nBin, massMax );
+		// cout << "nBin: " << nBin << endl;
 
-		this->h_mass_preFSR = new TH1D("h_mass_preFSR_"+Type, "", nBin, 15, 3015 );
+		this->h_mass_preFSR = new TH1D("h_mass_preFSR_"+Type, "", nBin, 15, massMax );
 		this->vec_Hist.push_back( this->h_mass_preFSR );
 
-		this->h_mass_dressed = new TH1D("h_mass_dressed_"+Type, "", nBin, 15, 3015 );
+		this->h_mass_dressed = new TH1D("h_mass_dressed_"+Type, "", nBin, 15, massMax );
 		this->vec_Hist.push_back( this->h_mass_dressed );
 
-		this->h_mass_postFSR = new TH1D("h_mass_postFSR_"+Type, "", nBin, 15, 3015 );
+		this->h_mass_postFSR = new TH1D("h_mass_postFSR_"+Type, "", nBin, 15, massMax );
 		this->vec_Hist.push_back( this->h_mass_postFSR );
 
-		this->h_mass_reco = new TH1D("h_mass_reco_"+Type, "", nBin, 15, 3015 );
+		this->h_mass_reco = new TH1D("h_mass_reco_"+Type, "", nBin, 15, massMax );
 		this->vec_Hist.push_back( this->h_mass_reco );
 
-		// this->h_diag_preFSR_reco = new TH1D("h_diag_preFSR_reco_"+Type, "", nBin, 15, 3015 );
+		// this->h_diag_preFSR_reco = new TH1D("h_diag_preFSR_reco_"+Type, "", nBin, 15, massMax );
 		// this->vec_Hist.push_back( this->h_diag_preFSR_reco );
 
-		// this->h_diag_dressed_reco = new TH1D("h_diag_dressed_reco_"+Type, "", nBin, 15, 3015 );
+		// this->h_diag_dressed_reco = new TH1D("h_diag_dressed_reco_"+Type, "", nBin, 15, massMax );
 		// this->vec_Hist.push_back( this->h_diag_dressed_reco );
 
-		// this->h_diag_postFSR_reco = new TH1D("h_diag_postFSR_reco_"+Type, "", nBin, 15, 3015 );
+		// this->h_diag_postFSR_reco = new TH1D("h_diag_postFSR_reco_"+Type, "", nBin, 15, massMax );
 		// this->vec_Hist.push_back( this->h_diag_postFSR_reco );
 
 		// -- 2D hists -- //
-		this->h2D_preFSR_reco = new TH2D("h2D_preFSR_reco_"+Type, "", nBin, 15, 3015, nBin, 15, 3015 );
+		this->h2D_preFSR_reco = new TH2D("h2D_preFSR_reco_"+Type, "", nBin, 15, massMax, nBin, 15, massMax );
 		this->vec_2DHist.push_back( this->h2D_preFSR_reco );
 
-		this->h2D_dressed_reco = new TH2D("h2D_dressed_reco_"+Type, "", nBin, 15, 3015, nBin, 15, 3015 );
+		this->h2D_dressed_reco = new TH2D("h2D_dressed_reco_"+Type, "", nBin, 15, massMax, nBin, 15, massMax );
 		this->vec_2DHist.push_back( this->h2D_dressed_reco );
 
-		this->h2D_postFSR_reco = new TH2D("h2D_postFSR_reco_"+Type, "", nBin, 15, 3015, nBin, 15, 3015 );
+		this->h2D_postFSR_reco = new TH2D("h2D_postFSR_reco_"+Type, "", nBin, 15, massMax, nBin, 15, massMax );
 		this->vec_2DHist.push_back( this->h2D_postFSR_reco );
+	}
+
+	void CalcMaximum( Int_t& nBin, Double_t& massMax )
+	{
+		Double_t start = 15; // -- starts at 15 GeV -- //
+		Double_t currentBinEdge = start;
+		for(Int_t i=1; i<10000; i++)
+		{
+			currentBinEdge += this->binSize;
+			if( currentBinEdge >= 3000 )
+			{
+				nBin = i;
+				massMax = currentBinEdge;
+				printf("[bin size = %d GeV] (nBin, massMax) = (%d, %.0lf)", this->binSize, nBin, massMax);
+				break;
+			}
+		}
 	}
 };
 
