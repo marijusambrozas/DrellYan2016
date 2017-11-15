@@ -152,7 +152,7 @@ private:
 			{
 				nBin = i;
 				massMax = currentBinEdge;
-				printf("[bin size = %d GeV] (nBin, massMax) = (%d, %.0lf)", this->binSize, nBin, massMax);
+				printf("[bin size = %d GeV] (nBin, massMax) = (%d, %.0lf)\n", this->binSize, nBin, massMax);
 				break;
 			}
 		}
