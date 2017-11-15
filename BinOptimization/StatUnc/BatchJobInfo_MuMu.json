@@ -1,7 +1,7 @@
 {
 	"CodeName": "MakeHist_VariousBinning_MuMu.cxx",
 	"Lumi": 35867.060,
-	"Queue": "NoBatch",
+	"Queue": "bigq",
 
 	"List_JobType": [
 		{
