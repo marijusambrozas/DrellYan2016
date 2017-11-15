@@ -518,32 +518,25 @@ void DrawLine( TF1*& f_line, Int_t color = kRed )
 
 void Latex_Preliminary_NoDataInfo( TLatex &latex )
 {
-	// latex.DrawLatexNDC(0.69, 0.96, "#font[42]{#scale[0.8]{"+TString::Format("%.1lf fb^{-1} (%d TeV)", lumi, E_CM)+"}}");
-	latex.DrawLatexNDC(0.13, 0.96, "#font[62]{CMS}");
-	latex.DrawLatexNDC(0.24, 0.96, "#font[42]{#it{#scale[0.8]{Preliminary}}}");
+	latex.DrawLatexNDC(0.13, 0.96, "#font[62]{CMS}#font[42]{#it{#scale[0.8]{ Preliminary}}}");
 }
 
 void Latex_Preliminary( TLatex &latex, Double_t lumi  )
 {
 	Latex_Preliminary_NoDataInfo( latex );
 	latex.DrawLatexNDC(0.70, 0.96, "#font[42]{#scale[0.8]{"+TString::Format("%.2lf", lumi)+" fb^{-1} (13 TeV)}}");
-	// latex.DrawLatexNDC(0.13, 0.96, "#font[62]{CMS}");
-	// latex.DrawLatexNDC(0.24, 0.96, "#font[42]{#it{#scale[0.8]{Preliminary}}}");
 }
 
 void Latex_Preliminary( TLatex &latex, Double_t lumi, Int_t E_CM  )
 {
 	Latex_Preliminary_NoDataInfo( latex );
 	latex.DrawLatexNDC(0.69, 0.96, "#font[42]{#scale[0.8]{"+TString::Format("%.1lf fb^{-1} (%d TeV)", lumi, E_CM)+"}}");
-	// latex.DrawLatexNDC(0.13, 0.96, "#font[62]{CMS}");
-	// latex.DrawLatexNDC(0.24, 0.96, "#font[42]{#it{#scale[0.8]{Preliminary}}}");
 }
 
 void Latex_Simulation( TLatex &latex )
 {
 	latex.DrawLatexNDC(0.82, 0.96, "#font[42]{#scale[0.8]{13 TeV}}");
-	latex.DrawLatexNDC(0.13, 0.96, "#font[62]{CMS}");
-	latex.DrawLatexNDC(0.25, 0.96, "#font[42]{#it{#scale[0.8]{Simulation}}}");
+	latex.DrawLatexNDC(0.13, 0.96, "#font[62]{CMS}#font[42]{#it{#scale[0.8]{ Simulation}}}");
 }
 
 void Latex_Preliminary_EffPlotStyle( TLatex &latex, Int_t year, Int_t E_CM = 13 )
@@ -674,6 +667,11 @@ public:
 		this->SetTitle( _titleX, _titleY );
 	}
 
+	HistInfo( TString _titleX, TString _titleY ): HistInfo()
+	{
+		this->SetTitle( _titleX, _titleY );
+	}
+
 	void SetTitle( TString X, TString Y )
 	{
 		this->titleX = X;
@@ -749,6 +747,8 @@ private:
 		this->hasRebinY = kFALSE;
 		this->nRebinY = 1;
 
+		this->isFilled = kFALSE;
+
 		// this->isLogX = kFALSE;
 		// this->isLogY = kFALSE;
 	}
@@ -786,6 +786,18 @@ public:
 			this->h = Get_Hist( this->sampleInfo->fileName, this->histInfo->name );
 		else
 			this->h = Get_Hist( this->sampleInfo->fileName, histName );
+
+		// -- it should be done earlier: to be consistent with the ratio calculation -- //
+		if( this->histInfo->hasRebinX )
+			h->Rebin( this->histInfo->nRebinX );
+	}
+
+	TH1Ext( SampleInfo* _sampleInfo, HistInfo* _histInfo, TH1D* _h ): TH1Ext()
+	{
+		this->sampleInfo = _sampleInfo;
+		this->histInfo = _histInfo;
+
+		this->h = (TH1D*)_h->Clone();
 
 		// -- it should be done earlier: to be consistent with the ratio calculation -- //
 		if( this->histInfo->hasRebinX )
