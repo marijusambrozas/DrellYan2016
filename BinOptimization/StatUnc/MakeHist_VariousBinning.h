@@ -187,11 +187,8 @@ public:
 private:
 	void Init()
 	{
-		this->vec_BinSize.push_back( 1 );
-		this->vec_BinSize.push_back( 2 );
-		this->vec_BinSize.push_back( 3 );
-		this->vec_BinSize.push_back( 4 );
-		this->vec_BinSize.push_back( 5 );
+		for(Int_t i_binSize=1; i_binSize<21; i_binSize++)
+			this->vec_BinSize.push_back( i_binSize );
 
 		for( const auto& BinSize : this->vec_BinSize )
 		{
