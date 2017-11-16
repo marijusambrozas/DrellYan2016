@@ -33,8 +33,6 @@ Double_t arr_MassBinEdge[nMassBinTest+1] =
 class HistContainer
 {
 public:
-	Int_t binSize;
-
 	vector< TH1D* > vec_Hist;
 	TH1D* h_mass_preFSR;
 	TH1D* h_mass_dressed;
