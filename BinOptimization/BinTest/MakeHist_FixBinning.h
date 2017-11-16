@@ -21,9 +21,9 @@
 #include <Include/DYAnalyzer.h>
 #include <Include/RoccoR/RoccoR.cc>
 
-#define nMassBin 28
+#define nMassBinTest 28
 
-Double_t arr_MassBinEdge[nMassBin+1] = 
+Double_t arr_MassBinEdge[nMassBinTest+1] = 
 {
 	15, 17, 19, 21, 24, 27, 31, 35, 40, 45, 
 	51, 58, 65, 73, 82, 91, 100, 112, 124, 137, 
@@ -81,26 +81,26 @@ public:
 private:
 	void Init()
 	{
-		this->h_mass_preFSR = new TH1D("h_mass_preFSR", "", nMassBin, arr_MassBinEdge );
+		this->h_mass_preFSR = new TH1D("h_mass_preFSR", "", nMassBinTest, arr_MassBinEdge );
 		this->vec_Hist.push_back( this->h_mass_preFSR );
 
-		this->h_mass_dressed = new TH1D("h_mass_dressed", "", nMassBin, arr_MassBinEdge );
+		this->h_mass_dressed = new TH1D("h_mass_dressed", "", nMassBinTest, arr_MassBinEdge );
 		this->vec_Hist.push_back( this->h_mass_dressed );
 
-		this->h_mass_postFSR = new TH1D("h_mass_postFSR", "", nMassBin, arr_MassBinEdge );
+		this->h_mass_postFSR = new TH1D("h_mass_postFSR", "", nMassBinTest, arr_MassBinEdge );
 		this->vec_Hist.push_back( this->h_mass_postFSR );
 
-		this->h_mass_reco = new TH1D("h_mass_reco", "", nMassBin, arr_MassBinEdge );
+		this->h_mass_reco = new TH1D("h_mass_reco", "", nMassBinTest, arr_MassBinEdge );
 		this->vec_Hist.push_back( this->h_mass_reco );
 
 		// -- 2D hists -- //
-		this->h2D_preFSR_reco = new TH2D("h2D_preFSR_reco", "", nMassBin, arr_MassBinEdge, nMassBin, arr_MassBinEdge );
+		this->h2D_preFSR_reco = new TH2D("h2D_preFSR_reco", "", nMassBinTest, arr_MassBinEdge, nMassBinTest, arr_MassBinEdge );
 		this->vec_2DHist.push_back( this->h2D_preFSR_reco );
 
-		this->h2D_dressed_reco = new TH2D("h2D_dressed_reco", "", nMassBin, arr_MassBinEdge, nMassBin, arr_MassBinEdge );
+		this->h2D_dressed_reco = new TH2D("h2D_dressed_reco", "", nMassBinTest, arr_MassBinEdge, nMassBinTest, arr_MassBinEdge );
 		this->vec_2DHist.push_back( this->h2D_dressed_reco );
 
-		this->h2D_postFSR_reco = new TH2D("h2D_postFSR_reco", "", nMassBin, arr_MassBinEdge, nMassBin, arr_MassBinEdge );
+		this->h2D_postFSR_reco = new TH2D("h2D_postFSR_reco", "", nMassBinTest, arr_MassBinEdge, nMassBinTest, arr_MassBinEdge );
 		this->vec_2DHist.push_back( this->h2D_postFSR_reco );
 	}
 };
