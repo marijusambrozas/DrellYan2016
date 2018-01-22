@@ -855,7 +855,6 @@ public:
 		h_ratio->Divide( h_NUM, this->h );
 	}
 
-protected:
 	void SetAttributes()
 	{
 		this->h->SetTitle("");
