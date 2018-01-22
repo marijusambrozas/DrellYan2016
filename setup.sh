@@ -20,7 +20,8 @@ export KP_PLOT_PATH=$KP_ANALYZER_PATH/Local/Plots
 export KP_DATA_PATH=""
 if [ $HOSTNAME == "tamsa2.snu.ac.kr" ]; # -- 147.47.242.67 -- # 
 then 
-	KP_DATA_PATH="/data5/DrellYan2016"
+	# KP_DATA_PATH="/data5/DrellYan2016"
+	KP_DATA_PATH="/data5/DYntuple/v2.0"
 
 	echo "cmsenv under CMSSW_8_0_26 (for ROOT6 setup) ..."
 
