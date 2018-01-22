@@ -1,0 +1,17 @@
+{
+	"CodeName": "MakeHist_GenLevel_MuMu.cxx",
+	"Lumi": 35867.060,
+	"Queue": "bigq",
+
+	"List_JobType": [
+		{
+			"Tag": "DYMuMu_M10to50",
+			"nJob": 10
+		},
+
+		{
+			"Tag": "DYMuMu_M50toInf",
+			"nJob": 10
+		}
+	]
+}

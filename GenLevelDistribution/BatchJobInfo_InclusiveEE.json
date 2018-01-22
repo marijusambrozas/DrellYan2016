@@ -1,0 +1,17 @@
+{
+	"CodeName": "MakeHist_GenLevel_EE.cxx",
+	"Lumi": 35867.060,
+	"Queue": "bigq",
+
+	"List_JobType": [
+		{
+			"Tag": "DYEE_M10to50",
+			"nJob": 10
+		},
+
+		{
+			"Tag": "DYEE_M50toInf",
+			"nJob": 10
+		}
+	]
+}
