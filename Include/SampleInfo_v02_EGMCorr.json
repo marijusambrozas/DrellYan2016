@@ -1,0 +1,436 @@
+{
+	"Sample": [
+	{
+		"Tag": "DYMuMu_M10to50",
+		"IsMC": 1,
+		"CrossSection": 6203.33333,
+		"SumWeights": 33278866.0,
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M10to50_ext_v1", "DYntuple_v20171022_EGMCorr_DYLL_M10to50_v1", "DYntuple_v20171022_EGMCorr_DYLL_M10to50_v2"]
+	},
+
+	{
+		"Tag": "DYMuMu_M50toInf",
+		"IsMC": 1,
+		"CrossSection": 2034.66666,
+		"SumWeights": 27257791.0,
+		"Comment": "x-section = 6104/3",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M50toInf"]
+	},
+
+	{
+		"Tag": "DYMuMu_M50to100",
+		"IsMC": 1,
+		"CrossSection": 1956.52782,
+		"SumWeights": 26175605.0,
+		"Comment": "x-section = 5869.58346/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M50toInf"]
+	},
+
+	{
+		"Tag": "DYMuMu_M100to200",
+		"IsMC": 1,
+		"CrossSection": 75.33333,
+		"SumWeights": 233822.0,
+		"Comment": "x-section = 226/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M100to200"]
+	},
+
+	{
+		"Tag": "DYMuMu_M200to400",
+		"IsMC": 1,
+		"CrossSection": 2.55666,
+		"SumWeights": 56340.0,
+		"Comment": "x-section = 7.67/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M200to400"]
+	},
+
+	{
+		"Tag": "DYMuMu_M400to500",
+		"IsMC": 1,
+		"CrossSection": 0.141,
+		"SumWeights": 50136.0,
+		"Comment": "x-section = 0.423/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M400to500"]
+	},
+
+	{
+		"Tag": "DYMuMu_M500to700",
+		"IsMC": 1,
+		"CrossSection": 0.08,
+		"SumWeights": 48188.0,
+		"Comment": "x-section = 0.24/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M500to700"]
+	},
+
+	{
+		"Tag": "DYMuMu_M700to800",
+		"IsMC": 1,
+		"CrossSection": 0.011666666,
+		"SumWeights": 44984.0,
+		"Comment": "x-section = 0.035/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M700to800"]
+	},
+
+	{
+		"Tag": "DYMuMu_M800to1000",
+		"IsMC": 1,
+		"CrossSection": 0.01,
+		"SumWeights": 43496.0,
+		"Comment": "x-section = 0.03/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M800to1000"]
+	},
+
+	{
+		"Tag": "DYMuMu_M1000to1500",
+		"IsMC": 1,
+		"CrossSection": 0.0053333333,
+		"SumWeights": 40110.0,
+		"Comment": "x-section = 0.016/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M1000to1500"]
+	},
+
+	{
+		"Tag": "DYMuMu_M1500to2000",
+		"IsMC": 1,
+		"CrossSection": 0.00066666666,
+		"SumWeights": 37176.0,
+		"Comment": "x-section = 0.002/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M1500to2000"]
+	},
+
+	{
+		"Tag": "DYMuMu_M2000to3000",
+		"IsMC": 1,
+		"CrossSection": 0.00018,
+		"SumWeights": 33360.0,
+		"Comment": "x-section = 0.00054/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M2000to3000"]
+	},
+
+
+
+
+	{
+		"Tag": "DYEE_M10to50",
+		"IsMC": 1,
+		"CrossSection": 6203.33333,
+		"SumWeights": 33275218.0,
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M10to50_ext_v1", "DYntuple_v20171022_EGMCorr_DYLL_M10to50_v1", "DYntuple_v20171022_EGMCorr_DYLL_M10to50_v2"]
+	},
+
+	{
+		"Tag": "DYEE_M50toInf",
+		"IsMC": 1,
+		"CrossSection": 2034.66666,
+		"SumWeights": 27245327.0,
+		"Comment": "x-section = 6104/3",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M50toInf"]
+	},
+
+	{
+		"Tag": "DYEE_M50to100",
+		"IsMC": 1,
+		"CrossSection": 1956.52782,
+		"SumWeights": 26166194.0,
+		"Comment": "x-section = 5869.58346/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M50toInf"]
+	},
+
+	{
+		"Tag": "DYEE_M100to200",
+		"IsMC": 1,
+		"CrossSection": 75.33333,
+		"SumWeights": 234322.0,
+		"Comment": "x-section = 226/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M100to200"]
+	},
+
+	{
+		"Tag": "DYEE_M200to400",
+		"IsMC": 1,
+		"CrossSection": 2.55666,
+		"SumWeights": 56144.0,
+		"Comment": "x-section = 7.67/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M200to400"]
+	},
+
+	{
+		"Tag": "DYEE_M400to500",
+		"IsMC": 1,
+		"CrossSection": 0.141,
+		"SumWeights": 50420.0,
+		"Comment": "x-section = 0.423/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M400to500"]
+	},
+
+	{
+		"Tag": "DYEE_M500to700",
+		"IsMC": 1,
+		"CrossSection": 0.08,
+		"SumWeights": 48039.0,
+		"Comment": "x-section = 0.24/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M500to700"]
+	},
+
+	{
+		"Tag": "DYEE_M700to800",
+		"IsMC": 1,
+		"CrossSection": 0.011666666,
+		"SumWeights": 46114.0,
+		"Comment": "x-section = 0.035/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M700to800"]
+	},
+
+	{
+		"Tag": "DYEE_M800to1000",
+		"IsMC": 1,
+		"CrossSection": 0.01,
+		"SumWeights": 44256.0,
+		"Comment": "x-section = 0.03/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M800to1000"]
+	},
+
+	{
+		"Tag": "DYEE_M1000to1500",
+		"IsMC": 1,
+		"CrossSection": 0.0053333333,
+		"SumWeights": 39712.0,
+		"Comment": "x-section = 0.016/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M1000to1500"]
+	},
+
+	{
+		"Tag": "DYEE_M1500to2000",
+		"IsMC": 1,
+		"CrossSection": 0.00066666666,
+		"SumWeights": 37287.0,
+		"Comment": "x-section = 0.002/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M1500to2000"]
+	},
+
+	{
+		"Tag": "DYEE_M2000to3000",
+		"IsMC": 1,
+		"CrossSection": 0.00018,
+		"SumWeights": 34031.0,
+		"Comment": "x-section = 0.00054/3.0",
+		"List_Dir": ["DYntuple_v20171022_EGMCorr_DYLL_M2000to3000"]
+	},
+
+
+
+
+	{
+		"Tag": "DYPowheg_M50to120",
+		"IsMC": 1,
+		"CrossSection": 1975,
+		"SumWeights": 2976526.0,
+		"Comment": "(no comment is allowed in JSON file: That's why comment is added as one of the format) Cross section: from McM",
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M50to120"]
+	},
+
+	{
+		"Tag": "DYPowheg_M120to200",
+		"IsMC": 1,
+		"CrossSection": 19.32,
+		"SumWeights": 99998.0,
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M120to200"]
+	},
+
+	{
+		"Tag": "DYPowheg_M200to400",
+		"IsMC": 1,
+		"CrossSection": 2.731,
+		"SumWeights": 99999.0,
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M200to400"]
+	},
+
+	{
+		"Tag": "DYPowheg_M400to800",
+		"IsMC": 1,
+		"CrossSection": 0.241,
+		"SumWeights": 98999.0,
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M400to800"]
+	},
+
+	{
+		"Tag": "DYPowheg_M800to1400",
+		"IsMC": 1,
+		"CrossSection": 0.01678,
+		"SumWeights": 96398.0,
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M800to1400"]
+	},
+
+	{
+		"Tag": "DYPowheg_M1400to2300",
+		"IsMC": 1,
+		"CrossSection": 0.00139,
+		"SumWeights": 99998.0,
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M1400to2300"]
+	},
+
+	{
+		"Tag": "DYPowheg_M2300to3500",
+		"IsMC": 1,
+		"CrossSection": 0.00008948,
+		"SumWeights": 100000.0,
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M2300to3500"]
+	},
+
+	{
+		"Tag": "DYPowheg_M3500to4500",
+		"IsMC": 1,
+		"CrossSection": 0.000004135,
+		"SumWeights": 99000.0,
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M3500to4500"]
+	},
+
+	{
+		"Tag": "DYPowheg_M4500to6000",
+		"IsMC": 1,
+		"CrossSection": 4.56E-07,
+		"SumWeights": 100000.0,
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M4500to6000"]
+	},
+
+	{
+		"Tag": "DYPowheg_M6000toInf",
+		"IsMC": 1,
+		"CrossSection": 2.066E-08,
+		"SumWeights": 100000.0,
+		"List_Dir": ["DYntuple_v20170207_80XMoriond17_AddZprimeVar_ZMuMuPowheg_M6000toInf"]
+	},
+
+
+	{
+		"Tag": "ZZ",
+		"IsMC": 1,
+		"CrossSection": 16.523,
+		"SumWeights": 998034,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_ZZ"]
+	},
+
+	{
+		"Tag": "ZZTo4L",
+		"IsMC": 1,
+		"CrossSection": 1.256,
+		"SumWeights": -1.0,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_ZZto4L"]
+	},
+
+	{
+		"Tag": "WW",
+		"IsMC": 1,
+		"CrossSection": 118.7,
+		"SumWeights": 6987123.0,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_WW"]
+	},
+
+	{
+		"Tag": "WWTo2L2Nu",
+		"IsMC": 1,
+		"CrossSection": 12.178,
+		"SumWeights": 1999000.0,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_WWTo2L2Nu"]
+	},
+
+	{
+		"Tag": "WZ",
+		"IsMC": 1,
+		"CrossSection": 47.13,
+		"SumWeights": 2995828.0,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_WZ"]
+	},
+
+	{
+		"Tag": "WZTo3LNu",
+		"IsMC": 1,
+		"CrossSection": -1.0,
+		"SumWeights": -1.0,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_WZTo3LNu"]
+	},
+		
+	{
+		"Tag": "ttbar",
+		"IsMC": 1,
+		"CrossSection": 831.76,
+		"SumWeights": 153405228,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_ttbar",
+			"DYntuple_v20170127_80XMoriond17_AddZprimeVar_ttbarBackup"]
+	},
+
+	{
+		"Tag": "ttbarTo2L2Nu",
+		"IsMC": 1,
+		"CrossSection": 87.31,
+		"SumWeights": 79092391,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_ttbarTo2L2Nu"]
+	},
+
+	{
+		"Tag": "tW",
+		"IsMC": 1,
+		"CrossSection": 35.6,
+		"SumWeights": 6952830.0,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_ST_tW"]
+	},
+
+	{
+		"Tag": "tbarW",
+		"IsMC": 1,
+		"CrossSection": 35.6,
+		"SumWeights": 6933093.0,
+		"List_Dir": ["DYntuple_v20170127_80XMoriond17_AddZprimeVar_ST_tbarW"]
+	},
+
+	{
+		"Tag": "Data",
+		"IsMC": 0,
+		"CrossSection": -1.0,
+		"SumWeights": -1.0,
+		"List_Dir": ["DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016B_v3_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016C_v1_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016D_v1_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016E_v1_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016F_v1_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016G_v1_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016H_v2_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016H_v3_GoldenJSON_271036_to_284044"
+		]
+	},
+
+	{
+		"Tag": "Data_RunBtoF",
+		"IsMC": 0,
+		"CrossSection": -1.0,
+		"SumWeights": -1.0,
+		"List_Dir": ["DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016B_v3_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016C_v1_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016D_v1_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016E_v1_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016F_v1_GoldenJSON_271036_to_284044"
+		]
+	},
+
+	{
+		"Tag": "Data_RunGtoH",
+		"IsMC": 0,
+		"CrossSection": -1.0,
+		"SumWeights": -1.0,
+		"List_Dir": [
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016G_v1_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016H_v2_GoldenJSON_271036_to_284044",
+			"DYntuple_v20170316_80XReMiniAOD_SingleMuon_Run2016H_v3_GoldenJSON_271036_to_284044"
+		]
+	},
+
+	{
+		"Tag": "Dummy_Last",
+		"IsMC": 0,
+		"CrossSection": -1,
+		"SumWeights": -1,
+		"List_Dir": ["Dummy"]
+	}
+]
+
+}
