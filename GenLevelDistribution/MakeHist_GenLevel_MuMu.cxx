@@ -1,6 +1,6 @@
 #include <GenLevelDistribution/MakeHist_GenLevel.h>
 
-void MakeHist_GenLevel_EE( TString FileName_ROOTFileList, TString Tag, Int_t IsMC, Double_t NormFactor )
+void MakeHist_GenLevel_MuMu( TString FileName_ROOTFileList, TString Tag, Int_t IsMC, Double_t NormFactor )
 {
 	TString channelType = "MuMu";
 	HistProducer *producer = new HistProducer( FileName_ROOTFileList, Tag, IsMC );
