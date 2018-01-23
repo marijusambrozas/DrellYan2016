@@ -624,6 +624,7 @@ class HistInfo
 {
 public:
 	TString name;
+	TString fullName;
 	TString titleX;
 	TString titleY;
 
@@ -670,6 +671,11 @@ public:
 	HistInfo( TString _titleX, TString _titleY ): HistInfo()
 	{
 		this->SetTitle( _titleX, _titleY );
+	}
+
+	void SetFullName( TString _value )
+	{
+		this->fullName = _value;
 	}
 
 	void SetTitle( TString X, TString Y )
@@ -726,6 +732,7 @@ private:
 	void Init()
 	{
 		this->name = "";
+		this->fullName = "";
 		this->titleX = "";
 		this->titleY = "";
 
@@ -897,6 +904,15 @@ public:
 		this->h_ratio->SetFillColorAlpha( kWhite, 0 );
 		this->h_ratio->SetMarkerStyle( 20 );
 		this->h_ratio->SetMarkerColor( this->sampleInfo->color );
+
+		if( this->histInfo->hasXRange )
+			h_ratio->GetXaxis()->SetRangeUser( this->histInfo->minX, this->histInfo->maxX );
+
+		if( this->histInfo->hasYRange )
+			h_ratio->GetYaxis()->SetRangeUser( this->histInfo->minY, this->histInfo->maxY );
+
+		if( this->histInfo->hasZRange )
+			h_ratio->GetZaxis()->SetRangeUser( this->histInfo->minZ, this->histInfo->maxZ );
 
 		SetAxis_BottomPad( this->h_ratio->GetXaxis(), this->h_ratio->GetYaxis(), this->histInfo->titleX, ratioTitle, minRatio, maxRatio );
 	}
