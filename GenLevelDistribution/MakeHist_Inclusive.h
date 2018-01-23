@@ -143,7 +143,7 @@ public:
 
 	void Fill( const GenPair& genpair_preFSR, Double_t weight )
 	{
-		Double_t mass = genpair_preFSR.M();
+		Double_t mass = genpair_preFSR.M;
 
 		for(Int_t i=0; i<nBin; i++)
 		{
@@ -172,10 +172,10 @@ private:
 			Double_t upperEdge = arr_MassBinEdge[i+1];
 
 			HistContainerMassBin *temp = new HistContainerMassBin( lowerEdge, upperEdge );
-			this->vec_Hist.push_back( HistContainerMassBin );
+			this->vec_Hist.push_back( temp );
 		}
 	}
-}
+};
 
 class HistProducer
 {
