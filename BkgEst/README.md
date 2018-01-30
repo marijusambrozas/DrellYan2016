@@ -13,8 +13,9 @@
 	root -l -b -q 'EMuSelection.C++(type)' >&log&
 
    * For type you can choose in each event selection, please see:
-      * Dilepton case: http...
-      * e-mu case: http....
+      * Dimuon case     : https://github.com/DalminPai/DrellYan2016/blob/master/BkgEst/EventSelection/MuMuSelection.C#L48-L92
+      * Dielectron case : https://github.com/DalminPai/DrellYan2016/blob/master/BkgEst/EventSelection/EESelection.C#L42-L86
+      * e-mu case       : https://github.com/DalminPai/DrellYan2016/blob/master/BkgEst/EventSelection/EMuSelection.C#L48-L85
 
 ## Background estimation using emu method
 	# -- Check e-mu distributions -- #
