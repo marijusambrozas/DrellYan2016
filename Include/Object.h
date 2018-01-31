@@ -1556,6 +1556,7 @@ public:
 
 class LHEParticle : public Object
 {
+public:
 	Double_t Px;
 	Double_t Py;
 	Double_t Pz;

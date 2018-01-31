@@ -175,7 +175,7 @@ public:
 		this->Init();
 	}
 
-	void Fill( const GenPair& genpair_preFSR, Double_t weight )
+	void Fill( const GenPair& genpair_preFSR, NtupleHandle* ntuple, Double_t weight )
 	{
 		Double_t mass = genpair_preFSR.M;
 
@@ -183,7 +183,7 @@ public:
 		{
 			if( mass > arr_MassBinEdge[i] && mass < arr_MassBinEdge[i+1] )
 			{
-				vec_Hist[i]->Fill( genpair_preFSR, weight );
+				vec_Hist[i]->Fill( genpair_preFSR, ntuple, weight );
 				break;
 			}
 		}
