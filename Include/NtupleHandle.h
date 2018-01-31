@@ -1137,20 +1137,20 @@ public:
     void TurnOnBranches_LHE()
     {
         chain->SetBranchStatus("nLHEParticle", 1);
-        chain->SetBranchStatus("LHELepton_ID", 1);
-        chain->SetBranchStatus("LHELepton_Px", 1);
-        chain->SetBranchStatus("LHELepton_Py", 1);
-        chain->SetBranchStatus("LHELepton_Pz", 1);
-        chain->SetBranchStatus("LHELepton_E", 1);
-        chain->SetBranchStatus("LHELepton_status", 1);
+        chain->SetBranchStatus("LHEParticle_ID", 1);
+        chain->SetBranchStatus("LHEParticle_Px", 1);
+        chain->SetBranchStatus("LHEParticle_Py", 1);
+        chain->SetBranchStatus("LHEParticle_Pz", 1);
+        chain->SetBranchStatus("LHEParticle_E", 1);
+        chain->SetBranchStatus("LHEParticle_status", 1);
 
         chain->SetBranchAddress("nLHEParticle", &nLHEParticle);
-        chain->SetBranchAddress("LHELepton_ID", &LHEParticle_ID);
-        chain->SetBranchAddress("LHELepton_Px", &LHEParticle_Px);
-        chain->SetBranchAddress("LHELepton_Py", &LHEParticle_Py);
-        chain->SetBranchAddress("LHELepton_Pz", &LHEParticle_Pz);
-        chain->SetBranchAddress("LHELepton_E", &LHEParticle_E);
-        chain->SetBranchAddress("LHELepton_status", &LHEParticle_status);
+        chain->SetBranchAddress("LHEParticle_ID", &LHEParticle_ID);
+        chain->SetBranchAddress("LHEParticle_Px", &LHEParticle_Px);
+        chain->SetBranchAddress("LHEParticle_Py", &LHEParticle_Py);
+        chain->SetBranchAddress("LHEParticle_Pz", &LHEParticle_Pz);
+        chain->SetBranchAddress("LHEParticle_E", &LHEParticle_E);
+        chain->SetBranchAddress("LHEParticle_status", &LHEParticle_status);
     }
 
     void GetEvent(Int_t i)
