@@ -5,7 +5,7 @@
 		"IsMC": 1,
 		"CrossSection": 6203.33333,
 		"SumWeights": 33344559.0,
-		"List_Dir": ["../v2.3/DYLL_M10to50_ext1v1", "../v2.3/DYLL_M10to50_v1", "../v2.3/DYLL_M10to50_v2"]
+		"List_Dir": ["DYLL_M10to50_ext1v1", "DYLL_M10to50_v1", "DYLL_M10to50_v2"]
 	},
 
 	{
@@ -14,7 +14,7 @@
 		"CrossSection": 2034.66666,
 		"SumWeights": 27257791.0,
 		"Comment": "x-section = 6104/3",
-		"List_Dir": ["../v2.3/DYLL_M50toInf"]
+		"List_Dir": ["DYLL_M50toInf"]
 	},
 
 	{
@@ -23,7 +23,7 @@
 		"CrossSection": 1956.52782,
 		"SumWeights": 26175605.0,
 		"Comment": "x-section = 5869.58346/3.0",
-		"List_Dir": ["../v2.3/DYLL_M50toInf"]
+		"List_Dir": ["DYLL_M50toInf"]
 	},
 
 	{
@@ -32,7 +32,7 @@
 		"CrossSection": 75.33333,
 		"SumWeights": 3433295.0,
 		"Comment": "x-section = 226/3.0",
-		"List_Dir": ["../v2.3/DYLL_M100to200", "../v2.3/DYLL_M100to200_ext"]
+		"List_Dir": ["DYLL_M100to200", "DYLL_M100to200_ext"]
 	},
 
 	{
@@ -41,7 +41,7 @@
 		"CrossSection": 2.55666,
 		"SumWeights": 56340.0,
 		"Comment": "x-section = 7.67/3.0",
-		"List_Dir": ["../v2.3/DYLL_M200to400"]
+		"List_Dir": ["DYLL_M200to400"]
 	},
 
 	{
@@ -50,7 +50,7 @@
 		"CrossSection": 0.141,
 		"SumWeights": 50136.0,
 		"Comment": "x-section = 0.423/3.0",
-		"List_Dir": ["../v2.3/DYLL_M400to500"]
+		"List_Dir": ["DYLL_M400to500"]
 	},
 
 	{
@@ -59,7 +59,7 @@
 		"CrossSection": 0.08,
 		"SumWeights": 48188.0,
 		"Comment": "x-section = 0.24/3.0",
-		"List_Dir": ["../v2.3/DYLL_M500to700"]
+		"List_Dir": ["DYLL_M500to700"]
 	},
 
 	{
@@ -68,7 +68,7 @@
 		"CrossSection": 0.011666666,
 		"SumWeights": 44984.0,
 		"Comment": "x-section = 0.035/3.0",
-		"List_Dir": ["../v2.3/DYLL_M700to800"]
+		"List_Dir": ["DYLL_M700to800"]
 	},
 
 	{
@@ -77,7 +77,7 @@
 		"CrossSection": 0.01,
 		"SumWeights": 43496.0,
 		"Comment": "x-section = 0.03/3.0",
-		"List_Dir": ["../v2.3/DYLL_M800to1000"]
+		"List_Dir": ["DYLL_M800to1000"]
 	},
 
 	{
@@ -86,7 +86,7 @@
 		"CrossSection": 0.0053333333,
 		"SumWeights": 40110.0,
 		"Comment": "x-section = 0.016/3.0",
-		"List_Dir": ["../v2.3/DYLL_M1000to1500"]
+		"List_Dir": ["DYLL_M1000to1500"]
 	},
 
 	{
@@ -95,7 +95,7 @@
 		"CrossSection": 0.00066666666,
 		"SumWeights": 37176.0,
 		"Comment": "x-section = 0.002/3.0",
-		"List_Dir": ["../v2.3/DYLL_M1500to2000"]
+		"List_Dir": ["DYLL_M1500to2000"]
 	},
 
 	{
@@ -104,7 +104,7 @@
 		"CrossSection": 0.00018,
 		"SumWeights": 33360.0,
 		"Comment": "x-section = 0.00054/3.0",
-		"List_Dir": ["../v2.3/DYLL_M2000to3000"]
+		"List_Dir": ["DYLL_M2000to3000"]
 	},
 
 
@@ -115,7 +115,7 @@
 		"IsMC": 1,
 		"CrossSection": 6203.33333,
 		"SumWeights": 33340851.0,
-		"List_Dir": ["../v2.3/DYLL_M10to50_ext1v1", "../v2.3/DYLL_M10to50_v1", "../v2.3/DYLL_M10to50_v2"]
+		"List_Dir": ["DYLL_M10to50_ext1v1", "DYLL_M10to50_v1", "DYLL_M10to50_v2"]
 	},
 
 	{
@@ -124,7 +124,7 @@
 		"CrossSection": 2034.66666,
 		"SumWeights": 27245327.0,
 		"Comment": "x-section = 6104/3",
-		"List_Dir": ["../v2.3/DYLL_M50toInf"]
+		"List_Dir": ["DYLL_M50toInf"]
 	},
 
 	{
@@ -133,7 +133,7 @@
 		"CrossSection": 1956.52782,
 		"SumWeights": 26166194.0,
 		"Comment": "x-section = 5869.58346/3.0",
-		"List_Dir": ["../v2.3/DYLL_M50toInf"]
+		"List_Dir": ["DYLL_M50toInf"]
 	},
 
 	{
@@ -142,7 +142,7 @@
 		"CrossSection": 75.33333,
 		"SumWeights": 3437885.0,
 		"Comment": "x-section = 226/3.0",
-		"List_Dir": ["../v2.3/DYLL_M100to200", "../v2.3/DYLL_M100to200_ext"]
+		"List_Dir": ["DYLL_M100to200", "DYLL_M100to200_ext"]
 	},
 
 	{
@@ -151,7 +151,7 @@
 		"CrossSection": 2.55666,
 		"SumWeights": 56144.0,
 		"Comment": "x-section = 7.67/3.0",
-		"List_Dir": ["../v2.3/DYLL_M200to400"]
+		"List_Dir": ["DYLL_M200to400"]
 	},
 
 	{
@@ -160,7 +160,7 @@
 		"CrossSection": 0.141,
 		"SumWeights": 50420.0,
 		"Comment": "x-section = 0.423/3.0",
-		"List_Dir": ["../v2.3/DYLL_M400to500"]
+		"List_Dir": ["DYLL_M400to500"]
 	},
 
 	{
@@ -169,7 +169,7 @@
 		"CrossSection": 0.08,
 		"SumWeights": 48039.0,
 		"Comment": "x-section = 0.24/3.0",
-		"List_Dir": ["../v2.3/DYLL_M500to700"]
+		"List_Dir": ["DYLL_M500to700"]
 	},
 
 	{
@@ -178,7 +178,7 @@
 		"CrossSection": 0.011666666,
 		"SumWeights": 46114.0,
 		"Comment": "x-section = 0.035/3.0",
-		"List_Dir": ["../v2.3/DYLL_M700to800"]
+		"List_Dir": ["DYLL_M700to800"]
 	},
 
 	{
@@ -187,7 +187,7 @@
 		"CrossSection": 0.01,
 		"SumWeights": 44256.0,
 		"Comment": "x-section = 0.03/3.0",
-		"List_Dir": ["../v2.3/DYLL_M800to1000"]
+		"List_Dir": ["DYLL_M800to1000"]
 	},
 
 	{
@@ -196,7 +196,7 @@
 		"CrossSection": 0.0053333333,
 		"SumWeights": 39712.0,
 		"Comment": "x-section = 0.016/3.0",
-		"List_Dir": ["../v2.3/DYLL_M1000to1500"]
+		"List_Dir": ["DYLL_M1000to1500"]
 	},
 
 	{
@@ -205,7 +205,7 @@
 		"CrossSection": 0.00066666666,
 		"SumWeights": 37287.0,
 		"Comment": "x-section = 0.002/3.0",
-		"List_Dir": ["../v2.3/DYLL_M1500to2000"]
+		"List_Dir": ["DYLL_M1500to2000"]
 	},
 
 	{
@@ -214,7 +214,7 @@
 		"CrossSection": 0.00018,
 		"SumWeights": 34031.0,
 		"Comment": "x-section = 0.00054/3.0",
-		"List_Dir": ["../v2.3/DYLL_M2000to3000"]
+		"List_Dir": ["DYLL_M2000to3000"]
 	},
 
 
