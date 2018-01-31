@@ -60,7 +60,7 @@ public:
 		this->Init();
 	}
 
-	void Fill(const GenPair& genpair_preFSR, const NtupleHandle* ntuple, const Double_t weight)
+	void Fill(const GenPair& genpair_preFSR, NtupleHandle* ntuple, Double_t weight)
 	{
 		this->h_pt_preFSR->Fill( genpair_preFSR.First.Pt, weight );
 		this->h_eta_preFSR->Fill( genpair_preFSR.First.eta, weight );
@@ -320,7 +320,7 @@ public:
 				}
 
 				GenPair genpair_HP( vec_GenLepton_HP[0], vec_GenLepton_HP[1] );
-				this->Hists->Fill( genpair_HP, TotWeight );
+				this->Hists->Fill( genpair_HP, ntuple, TotWeight );
 				
 			} // -- end of if( GenFlag == kTRUE ) -- //
 
