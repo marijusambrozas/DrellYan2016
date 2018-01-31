@@ -308,11 +308,11 @@ public:
 
     // -- LHE information -- //
     Int_t nLHEParticle;
-    Double_t LHEParticle_ID[MaxN];
     Double_t LHEParticle_Px[MaxN];
     Double_t LHEParticle_Py[MaxN];
     Double_t LHEParticle_Pz[MaxN];
     Double_t LHEParticle_E[MaxN];
+    Int_t LHEParticle_ID[MaxN];
     Int_t LHEParticle_status[MaxN];
 
     // -- Constructor -- //
