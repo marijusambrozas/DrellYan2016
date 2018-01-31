@@ -270,7 +270,7 @@ public:
 				}
 
 				GenPair genpair_HP( vec_GenLepton_HP[0], vec_GenLepton_HP[1] );
-				this->Hists->Fill( genpair_HP, TotWeight );
+				this->Hists->Fill( genpair_HP, ntuple, TotWeight );
 				
 			} // -- end of if( GenFlag == kTRUE ) -- //
 
