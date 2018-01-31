@@ -1559,6 +1559,7 @@ class LHEParticle : public Object
 	Double_t Px;
 	Double_t Py;
 	Double_t Pz;
+	Double_t E;
 
 	Int_t ID;
 	Int_t status;
