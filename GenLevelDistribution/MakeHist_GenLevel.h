@@ -89,7 +89,7 @@ public:
 			}
 		}
 
-		Int_t nJet = nParton-2;
+		Int_t nJet = nParton;
 		if( nJet == 0 ) this->h_diPt_0jet_preFSR->Fill( genpair_preFSR.Pt, weight );
 		if( nJet == 1 ) this->h_diPt_1jet_preFSR->Fill( genpair_preFSR.Pt, weight );
 		if( nJet == 2 ) this->h_diPt_2jet_preFSR->Fill( genpair_preFSR.Pt, weight );
@@ -226,7 +226,10 @@ public:
 		ntuple->TurnOnBranches_Muon();
 		ntuple->TurnOnBranches_Electron();
 		if( this->IsMC )
+		{
 			ntuple->TurnOnBranches_GenLepton();
+			ntuple->TurnOnBranches_LHE();
+		}
 		ntuple->Ready();
 
 		Int_t nEvent = chain->GetEntries();
