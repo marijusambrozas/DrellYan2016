@@ -91,14 +91,14 @@ public:
 				if( fabs(lheParticle.ID) <= 6 || lheParticle.ID == 21 )
 				{
 					nParton++;
-					printf("[px, py, pz, E, ID, status] = [%.3e, %.3e, %.3e, %.3e, %d, %d]\n",
-						lheParticle.Px, lheParticle.Py, lheParticle.Pz, lheParticle.E, lheParticle.ID, lheParticle.status );
+					// printf("[px, py, pz, E, ID, status] = [%.3e, %.3e, %.3e, %.3e, %d, %d]\n",
+					// 	lheParticle.Px, lheParticle.Py, lheParticle.Pz, lheParticle.E, lheParticle.ID, lheParticle.status );
 				}
 			}
 		}
 
 		Int_t nJet = nParton;
-		cout << "nJet: " << nJet << endl;
+		// cout << "nJet: " << nJet << endl;
 		if( nJet == 0 ) this->h_diPt_0jet_preFSR->Fill( genpair_preFSR.Pt, weight );
 		if( nJet == 1 ) this->h_diPt_1jet_preFSR->Fill( genpair_preFSR.Pt, weight );
 		if( nJet == 2 ) this->h_diPt_2jet_preFSR->Fill( genpair_preFSR.Pt, weight );
