@@ -47,13 +47,17 @@ public:
 	TH1D* h_mass_preFSR;
 	TH1D* h_diPt_preFSR;
 	TH1D* h_diRap_preFSR;
+	TH1D* h_diPt_0jet_preFSR;
+	TH1D* h_diPt_1jet_preFSR;
+	TH1D* h_diPt_2jet_preFSR;
+	TH1D* h_diPt_3jet_preFSR;
 
 	HistContainer()
 	{
 		this->Init();
 	}
 
-	void Fill(const GenPair& genpair_preFSR, Double_t weight)
+	void Fill(const GenPair& genpair_preFSR, NtupleHandle* ntuple, Double_t weight)
 	{
 		this->h_pt_preFSR->Fill( genpair_preFSR.First.Pt, weight );
 		this->h_eta_preFSR->Fill( genpair_preFSR.First.eta, weight );
@@ -73,6 +77,24 @@ public:
 		this->h_mass_preFSR->Fill( genpair_preFSR.M, weight );
 		this->h_diPt_preFSR->Fill( genpair_preFSR.Pt, weight );
 		this->h_diRap_preFSR->Fill( genpair_preFSR.Rap, weight );
+
+		Int_t nLHEParticle = ntuple->nLHEParticle;
+		Int_t nParton = 0;
+		for(Int_t i_lhe=0; i_lhe<nLHEParticle; i_lhe++)
+		{
+			LHEParticle lheParticle( ntuple, i_lhe );
+			if( lheParticle.status == 1 )
+			{
+				if( fabs(lheParticle.ID) <= 6 || lheParticle.ID == 21 ) nParton++;
+			}
+		}
+
+		Int_t nJet = nParton-2;
+		if( nJet == 0 ) this->h_diPt_0jet_preFSR->Fill( genpair_preFSR.Pt, weight );
+		if( nJet == 1 ) this->h_diPt_1jet_preFSR->Fill( genpair_preFSR.Pt, weight );
+		if( nJet == 2 ) this->h_diPt_2jet_preFSR->Fill( genpair_preFSR.Pt, weight );
+		if( nJet == 3 ) this->h_diPt_3jet_preFSR->Fill( genpair_preFSR.Pt, weight );
+		if( nJet >= 4 ) cout << "nJet: " << nJet << endl;
 	}
 
 	void Save( TFile *f_output )
@@ -121,6 +143,19 @@ private:
 
 		this->h_diRap_preFSR = new TH1D("h_diRap_preFSR", "", 4000, -20, 20);
 		vec_Hist.push_back( this->h_diRap_preFSR );
+
+		this->h_diPt_0jet_preFSR = new TH1D("h_diPt_0jet_preFSR", "", 10000, 0, 10000);
+		vec_Hist.push_back( this->h_diPt_0jet_preFSR );
+
+		this->h_diPt_1jet_preFSR = new TH1D("h_diPt_1jet_preFSR", "", 10000, 0, 10000);
+		vec_Hist.push_back( this->h_diPt_1jet_preFSR );
+
+		this->h_diPt_2jet_preFSR = new TH1D("h_diPt_2jet_preFSR", "", 10000, 0, 10000);
+		vec_Hist.push_back( this->h_diPt_2jet_preFSR );
+
+		this->h_diPt_3jet_preFSR = new TH1D("h_diPt_3jet_preFSR", "", 10000, 0, 10000);
+		vec_Hist.push_back( this->h_diPt_3jet_preFSR );
+
 
 		for( const auto &hist : vec_Hist ) 	hist->Sumw2();
 	}
