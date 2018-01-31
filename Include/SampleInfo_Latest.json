@@ -4,7 +4,7 @@
 		"Tag": "DYMuMu_M10to50",
 		"IsMC": 1,
 		"CrossSection": 6203.33333,
-		"SumWeights": 33344559.0,
+		"SumWeights": 33278866.0,
 		"List_Dir": ["../v2.3/DYLL_M10to50_ext1v1", "../v2.3/DYLL_M10to50_v1", "../v2.3/DYLL_M10to50_v2"]
 	},
 
@@ -114,7 +114,7 @@
 		"Tag": "DYEE_M10to50",
 		"IsMC": 1,
 		"CrossSection": 6203.33333,
-		"SumWeights": 33340851.0,
+		"SumWeights": 33275218.0,
 		"List_Dir": ["../v2.3/DYLL_M10to50_ext1v1", "../v2.3/DYLL_M10to50_v1", "../v2.3/DYLL_M10to50_v2"]
 	},
 
