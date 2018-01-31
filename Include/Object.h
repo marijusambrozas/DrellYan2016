@@ -1554,5 +1554,38 @@ public:
 
 };
 
+class LHEParticle : public Object
+{
+	Double_t Px;
+	Double_t Py;
+	Double_t Pz;
 
+	Int_t ID;
+	Int_t status;
 
+	LHEParticle()
+	{
+
+	}
+
+	LHEParticle( NtupleHandle *ntuple, Int_t index )
+	{
+		this->FillFromNtuple( ntuple, index );
+	}
+
+	void FillFromNtuple(NtupleHandle *ntuple, Int_t index)
+	{
+		Px = ntuple->LHEParticle_Px[index];
+		Py = ntuple->LHEParticle_Py[index];
+		Pz = ntuple->LHEParticle_Pz[index];
+		E = ntuple->LHEParticle_E[index];
+		ID = ntuple->LHEParticle_ID[index];
+		status = ntuple->LHEParticle_status[index];
+		
+		Momentum.SetPxPyPzE( Px, Py, Pz, E );
+		Pt = Momentum.Pt();
+		Et = Momentum.Et();
+		eta = Momentum.Eta();
+		phi = Momentum.Phi();
+	}
+};
