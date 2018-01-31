@@ -88,7 +88,12 @@ public:
 			LHEParticle lheParticle( ntuple, i_lhe );
 			if( lheParticle.status == 1 )
 			{
-				if( fabs(lheParticle.ID) <= 6 || lheParticle.ID == 21 ) nParton++;
+				if( fabs(lheParticle.ID) <= 6 || lheParticle.ID == 21 )
+				{
+					nParton++;
+					printf("[px, py, pz, E, ID, status] = [%.3e, %.3e, %.3e, %.3e, %d, %d]\n",
+						lheParticle.Px, lheParticle.Py, lheParticle.Pz, lheParticle.E, lheParticle.ID, lheParticle.status );
+				}
 			}
 		}
 
