@@ -1587,7 +1587,8 @@ public:
 		Momentum.SetPxPyPzE( Px, Py, Pz, E );
 		Pt = Momentum.Pt();
 		Et = Momentum.Et();
-		eta = Momentum.Eta();
+		if( Pt == 0 ) eta = 1e10;
+		else eta = Momentum.Eta();
 		phi = Momentum.Phi();
 	}
 };
