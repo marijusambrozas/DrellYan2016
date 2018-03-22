@@ -34,11 +34,8 @@ const Double_t massbins[44] = {15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 68, 7
 static inline void loadBar(int x, int n, int r, int w);
 
 // -- Muon Channel -- //
-void MuMuSelection(Int_t type, Int_t isTopPtReweighting = 1, TString HLTname = "IsoMu24_OR_IsoTkMu24")
+void MuMuSelection(Int_t type, Int_t isTopPtReweighting = 0, TString HLTname = "IsoMu24_OR_IsoTkMu24")
 {
-	TRandom *r1 = new TRandom();
-	TRandom *r2 = new TRandom();
-
 	// -- Run2016 luminosity [/pb] -- //
 	Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
 	L = L_B2H;
@@ -106,12 +103,15 @@ void MuMuSelection(Int_t type, Int_t isTopPtReweighting = 1, TString HLTname = "
 
 	DYAnalyzer *analyzer = new DYAnalyzer( HLTname );
 
-	// -- To setup efficiency SF -- //
+	// -- For PU re-weighting -- //
+	analyzer->SetupPileUpReWeighting_80X( isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root" );
+
+	// -- For Rochester correction -- //
+	TRandom3 *r1 = new TRandom3(0);
+
+	// -- For efficiency SF -- //
 	analyzer->SetupEfficiencyScaleFactor_BtoF();
 	analyzer->SetupEfficiencyScaleFactor_GtoH();
-
-	// -- To setup PU reweight -- //
-	analyzer->SetupPileUpReWeighting_80X( isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root" );
 
 	// -- Output ROOTFile -- //	
 	TString OutputDir = "./result";
@@ -135,7 +135,7 @@ void MuMuSelection(Int_t type, Int_t isTopPtReweighting = 1, TString HLTname = "
 
 		TChain *chain = new TChain("recoTree/DYTree");
 		//Set MC chain
-		if( Tag[i_tup] != "Data" ) chain->Add(BaseLocation+"/"+ntupleDirectory[i_tup]+"/*.root");
+		if( isMC == kTRUE ) chain->Add(BaseLocation+"/"+ntupleDirectory[i_tup]+"/*.root");
 		//Set Data chain
 		else {
 			chain->Add(BaseLocation+"/"+DataLocation+"/*.root");
@@ -143,7 +143,7 @@ void MuMuSelection(Int_t type, Int_t isTopPtReweighting = 1, TString HLTname = "
 		}
 
 		NtupleHandle *ntuple = new NtupleHandle( chain );
-		if( Tag[i_tup] != "Data" ) {
+		if( isMC == kTRUE ) {
 			ntuple->TurnOnBranches_GenLepton(); // for all leptons
 			ntuple->TurnOnBranches_GenOthers(); // for quarks
 		}
@@ -185,7 +185,8 @@ void MuMuSelection(Int_t type, Int_t isTopPtReweighting = 1, TString HLTname = "
 			SumWeight += GenWeight;
 
 			// -- Pileup-Reweighting -- //
-			Double_t PUWeight = analyzer->PileUpWeightValue_80X( ntuple->nPileUp );
+			Double_t PUWeight = 1;
+			if( isMC == kTRUE ) PUWeight = analyzer->PileUpWeightValue_80X( ntuple->nPileUp );
 
 			// -- efficiency weights -- //
 			Double_t weight1 = 0, weight2 = 0, effweight = 1;
@@ -195,17 +196,17 @@ void MuMuSelection(Int_t type, Int_t isTopPtReweighting = 1, TString HLTname = "
 			GenFlag = analyzer->SeparateDYLLSample_isHardProcess(Tag[i_tup], ntuple);
 
 			// -- Separate ttbar samples -- //
-			//Bool_t GenFlag_top = kTRUE;
-			Bool_t GenFlag_top = kFALSE;
-			vector<GenOthers> GenTopCollection;
-			GenFlag_top = analyzer->Separate_ttbarSample(Tag[i_tup], ntuple, &GenTopCollection);
+			Bool_t GenFlag_top = kTRUE;
+			//Bool_t GenFlag_top = kFALSE;
+			//vector<GenOthers> GenTopCollection;
+			//GenFlag_top = analyzer->Separate_ttbarSample(Tag[i_tup], ntuple, &GenTopCollection);
 
 			if( GenFlag == kTRUE && GenFlag_top == kTRUE )
 			{
 				SumWeight_Separated += GenWeight;
 
 				// -- Top Pt Reweighting -- //
-				if( isTopPtReweighting == 1 && Tag[i_tup].Contains("ttbar") )
+				/*if( isTopPtReweighting == 1 && Tag[i_tup].Contains("ttbar") )
 				{
 					GenOthers t1 = GenTopCollection[0];
 					GenOthers t2 = GenTopCollection[1];
@@ -213,12 +214,12 @@ void MuMuSelection(Int_t type, Int_t isTopPtReweighting = 1, TString HLTname = "
 					Double_t SF1 = exp(0.0615 - 0.0005*(t1.Pt));
 					Double_t SF2 = exp(0.0615 - 0.0005*(t2.Pt));
 					GenWeight = GenWeight*sqrt(SF1*SF2);
-				}
+				}*/
 			}
 
 			// -- Normalization -- //
 			Double_t TotWeight = GenWeight;
-			if( Tag[i_tup] != "Data" ) TotWeight = (L*Xsec[i_tup]/nEvents[i_tup])*GenWeight;
+			if( isMC == kTRUE ) TotWeight = (L*Xsec[i_tup]/nEvents[i_tup])*GenWeight;
 
 			Bool_t TriggerFlag = kFALSE;
 			TriggerFlag = ntuple->isTriggered( analyzer->HLT );
@@ -240,17 +241,16 @@ void MuMuSelection(Int_t type, Int_t isTopPtReweighting = 1, TString HLTname = "
 
 					MuonCollection_noRoccoR.push_back( mu );
 
-
 					////////////////////////////////
 					// -- Rochester correction -- //
 					////////////////////////////////
-					Double_t u1 = r1->Rndm(), u2 = r2->Rndm(), SF = 0;
+					Double_t rndm[2], SF=0; r1->RndmArray(2, rndm);
 					Int_t s, m;
 						
 					if( Tag[i_tup] == "Data" )
 						SF = rc.kScaleDT(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, s=0, m=0);
 					else
-						SF = rc.kScaleAndSmearMC(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, mu.trackerLayers, u1, u2, s=0, m=0);
+						SF = rc.kScaleAndSmearMC(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
 
 					mu.TuneP_pT = SF*mu.TuneP_pT;
 				
@@ -271,7 +271,7 @@ void MuMuSelection(Int_t type, Int_t isTopPtReweighting = 1, TString HLTname = "
 					Muon mu2 = SelectedMuonCollection[1];
 
 					// -- Apply efficiency scale factor -- //
-					if( Tag[i_tup] != "Data" )
+					if( isMC == kTRUE )
 					{
 						weight1 = analyzer->EfficiencySF_EventWeight_HLT_BtoF( mu1, mu2 );
 						weight2 = analyzer->EfficiencySF_EventWeight_HLT_GtoH( mu1, mu2 );
@@ -329,7 +329,7 @@ void MuMuSelection(Int_t type, Int_t isTopPtReweighting = 1, TString HLTname = "
 
 		printf("\tTotal sum of weights: %.1lf\n", SumWeight);
 		printf("\tSum of weights of Seperated events: %.1lf\n", SumWeight_Separated);
-		if( Tag[i_tup] != "Data" ) printf("\tNormalization factor: %.8f\n", L*Xsec[i_tup]/nEvents[i_tup]);
+		if( isMC == kTRUE ) printf("\tNormalization factor: %.8f\n", L*Xsec[i_tup]/nEvents[i_tup]);
 
 		Double_t LoopRunTime = looptime.CpuTime();
 		cout << "\tLoop RunTime(" << Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
