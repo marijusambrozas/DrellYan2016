@@ -12,7 +12,8 @@ public:
 	void Draw()
 	{
 		// this->Draw_Full_Zpeak();
-		this->Draw_Full_COLZ();
+		// this->Draw_Full_COLZ();
+		this->Draw_ExpectZpeak_COLZ();
 	}
 
 	void Draw_x1Q2_x2Q2()
@@ -72,19 +73,47 @@ public:
 
 	void Draw_Full_COLZ()
 	{
-		SampleInfo* sampleInfo_FullRange = new SampleInfo( 0, "FullRange", "15 < M < 3000 GeV");
+		SampleInfo* sampleInfo_FullRange = new SampleInfo( 0, "FullRange", "15 < M^{post-FSR}_{ll} < 3000 GeV");
 		sampleInfo_FullRange->SetFileName( "./Local/ROOTFile_MakeHist_xQ2_"+this->channelType+".root");
 		sampleInfo_FullRange->SetColor( kBlack );
 
+		vector<HistInfo*> vec_HistInfo;
+
 		HistInfo* histInfo_x1Q2_GEN = new HistInfo( "h2D_x1Q2_GEN", "x_{1}", "Q^{2} [GeV^{2}]" );
-		histInfo_x1Q2_GEN->SetXRange( 1e-8, 1 );
+		histInfo_x1Q2_GEN->SetXRange( 1e-5, 1 );
+		histInfo_x1Q2_GEN->SetYRange( 1, 1e8 );
+		histInfo_x1Q2_GEN->SetZRange( 1, 2e6 );
+		vec_HistInfo.push_back( histInfo_x1Q2_GEN );
 
 		HistInfo* histInfo_x2Q2_GEN = new HistInfo( "h2D_x2Q2_GEN", "x_{2}", "Q^{2} [GeV^{2}]" );
-		histInfo_x2Q2_GEN->SetXRange( 1e-8, 1 );
-
-		vector<HistInfo*> vec_HistInfo;
-		vec_HistInfo.push_back( histInfo_x1Q2_GEN );
+		histInfo_x2Q2_GEN->SetXRange( 1e-5, 1 );
+		histInfo_x2Q2_GEN->SetYRange( 1, 1e8 );
+		histInfo_x2Q2_GEN->SetZRange( 1, 2e6 );
 		vec_HistInfo.push_back( histInfo_x2Q2_GEN );
+
+		HistInfo* histInfo_x1Q2_M60to120_GEN = new HistInfo( "h2D_x1Q2_M60to120_GEN", "x_{1}", "Q^{2} [GeV^{2}]" );
+		histInfo_x1Q2_M60to120_GEN->SetXRange( 1e-5, 1 );
+		histInfo_x1Q2_M60to120_GEN->SetYRange( 1, 1e8 );
+		histInfo_x1Q2_M60to120_GEN->SetZRange( 1, 2e6 );
+		vec_HistInfo.push_back( histInfo_x1Q2_M60to120_GEN );
+
+		HistInfo* histInfo_x2Q2_M60to120_GEN = new HistInfo( "h2D_x2Q2_M60to120_GEN", "x_{2}", "Q^{2} [GeV^{2}]" );
+		histInfo_x2Q2_M60to120_GEN->SetXRange( 1e-5, 1 );
+		histInfo_x2Q2_M60to120_GEN->SetYRange( 1, 1e8 );
+		histInfo_x2Q2_M60to120_GEN->SetZRange( 1, 2e6 );
+		vec_HistInfo.push_back( histInfo_x2Q2_M60to120_GEN );
+
+		HistInfo* histInfo_x1Q2_RECO = new HistInfo( "h2D_x1Q2_RECO", "x_{1}", "Q^{2} [GeV^{2}]" );
+		histInfo_x1Q2_RECO->SetXRange( 1e-5, 1 );
+		histInfo_x1Q2_RECO->SetYRange( 1, 1e8 );
+		histInfo_x1Q2_RECO->SetZRange( 1, 2e6 );
+		vec_HistInfo.push_back( histInfo_x1Q2_RECO );
+
+		HistInfo* histInfo_x2Q2_RECO = new HistInfo( "h2D_x2Q2_RECO", "x_{2}", "Q^{2} [GeV^{2}]" );
+		histInfo_x2Q2_RECO->SetXRange( 1e-5, 1 );
+		histInfo_x2Q2_RECO->SetYRange( 1, 1e8 );
+		histInfo_x2Q2_RECO->SetZRange( 1, 2e6 );
+		vec_HistInfo.push_back( histInfo_x2Q2_RECO );
 
 		for(const auto& histInfo : vec_HistInfo )
 		{
@@ -102,14 +131,75 @@ public:
 			gStyle->SetPalette(1);
 
 			TLatex latex;
+			Latex_Simulation( latex );
+
 			TString channelInfo = "#mu channel";
 			if( this->channelType == "EE" ) channelInfo = "e channel";
 			latex.DrawLatexNDC(0.16, 0.91, "#font[62]{#scale[0.6]{"+channelInfo+"}}");
-			latex.DrawLatexNDC(0.16, 0.87, "#font[42]{#scale[0.5]{15 < M^{post-FSR}_{ll} < 3000 GeV}}");
+
+			TString massRangeInfo = sampleInfo_FullRange->fullName;
+			if( histInfo->name.Contains("M60to120") ) massRangeInfo = "60 < M^{post-FSR}_{ll} < 120 GeV";
+			if( histInfo->name.Contains("RECO") ) massRangeInfo = "15 < M^{RECO}_{ll} < 3000 GeV";
+			latex.DrawLatexNDC(0.16, 0.87, "#font[42]{#scale[0.5]{"+massRangeInfo+"}}");
+
 
 			// c->SaveAs(".png");
 			c->SaveAs(".pdf");
 		}
+	}
+
+	void Draw_ExpectZpeak_COLZ()
+	{
+		SampleInfo* sampleInfo = new SampleInfo( 0, "FullRange", "15 < M^{post-FSR}_{ll} < 3000 GeV except Z-peak");
+		sampleInfo->SetFileName( "./Local/ROOTFile_MakeHist_xQ2_"+this->channelType+".root");
+		sampleInfo->SetColor( kBlack );
+
+		vector<HistInfo*> vec_HistInfo;
+
+		HistInfo* histInfo_x1Q2_GEN = new HistInfo( "h2D_x1Q2_GEN", "x_{1}", "Q^{2} [GeV^{2}]" );
+		histInfo_x1Q2_GEN->SetXRange( 1e-5, 1 );
+		histInfo_x1Q2_GEN->SetYRange( 1, 1e8 );
+		histInfo_x1Q2_GEN->SetZRange( 1, 2e6 );
+		vec_HistInfo.push_back( histInfo_x1Q2_GEN );
+
+		for(const auto& histInfo : vec_HistInfo )
+		{
+			TString histName_FullRange = "DY"+this->channelType+"/"+histInfo->name;
+			TString histName_Zpeak = "DY"+this->channelType+"/"+histInfo->name;
+			histName_Zpeak.ReplaceAll("_GEN", "_M60to120_GEN");
+
+			TH2D* h_FullRange = Get_Hist_2D( sampleInfo->fileName, histName_FullRange );
+			TH2D* h_Zpeak = Get_Hist_2D( sampleInfo->fileName, histName_Zpeak );
+			TH2D* h2D_subtract = (TH2D*)h_FullRange->Clone(histInfo->name+"_SubtractZpeak");
+			h2D_subtract->Add( h_Zpeak, -1 );
+
+			TH2Ext* h2D = new TH2Ext( sampleInfo, histInfo, h2D_subtract );
+
+			TCanvas *c;
+			TString CanvasName = h2D->h->GetName();
+			CanvasName.ReplaceAll("h2D_", "Local/c2D_"+this->channelType+"_COLZ_");
+			SetCanvas_Square2D( c, CanvasName, 1, 1 );
+			c->SetLogz();
+
+			h2D->DrawAndSet( "COLZ" );
+			h2D->h->SetMinimum(1);
+			gStyle->SetPalette(1);
+
+			TLatex latex;
+			Latex_Simulation( latex );
+
+			TString channelInfo = "#mu channel";
+			if( this->channelType == "EE" ) channelInfo = "e channel";
+			latex.DrawLatexNDC(0.16, 0.91, "#font[62]{#scale[0.6]{"+channelInfo+"}}");
+
+			TString massRangeInfo = sampleInfo->fullName;
+			latex.DrawLatexNDC(0.16, 0.87, "#font[42]{#scale[0.5]{"+massRangeInfo+"}}");
+
+
+			// c->SaveAs(".png");
+			c->SaveAs(".pdf");
+		}
+
 
 	}
 

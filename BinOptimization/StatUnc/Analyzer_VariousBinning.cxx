@@ -1,4 +1,4 @@
-#include <Include/PlotTools.h>
+#include <Include/PlotTools_Old.h>
 
 class HistUnit
 {
@@ -311,11 +311,29 @@ public:
 private:
 	void Init()
 	{
-		this->vec_BinSize.push_back( 1 );
-		this->vec_BinSize.push_back( 2 );
-		this->vec_BinSize.push_back( 3 );
-		this->vec_BinSize.push_back( 4 );
-		this->vec_BinSize.push_back( 5 );
+		// this->vec_BinSize.push_back( 1 );
+		// this->vec_BinSize.push_back( 2 );
+		// this->vec_BinSize.push_back( 3 );
+		// this->vec_BinSize.push_back( 4 );
+		// this->vec_BinSize.push_back( 5 );
+
+		// this->vec_BinSize.push_back( 6 );
+		// this->vec_BinSize.push_back( 7 );
+		// this->vec_BinSize.push_back( 8 );
+		// this->vec_BinSize.push_back( 9 );
+		// this->vec_BinSize.push_back( 10 );
+
+		// this->vec_BinSize.push_back( 11 );
+		// this->vec_BinSize.push_back( 12 );
+		// this->vec_BinSize.push_back( 13 );
+		// this->vec_BinSize.push_back( 14 );
+		// this->vec_BinSize.push_back( 15 );
+
+		this->vec_BinSize.push_back( 16 );
+		this->vec_BinSize.push_back( 17 );
+		this->vec_BinSize.push_back( 18 );
+		this->vec_BinSize.push_back( 19 );
+		this->vec_BinSize.push_back( 20 );
 
 		this->vec_Color.push_back( kBlack );
 		this->vec_Color.push_back( kRed );
@@ -323,7 +341,7 @@ private:
 		this->vec_Color.push_back( kGreen+2 );
 		this->vec_Color.push_back( kViolet );
 
-		TString fileName = TString::Format("Local/ROOTFile_MakeHist_VariousBinning_%s.root", this->channelType.Data());
+		TString fileName = TString::Format("Local/ROOTFile_MakeHist_VariousBinning_%s_BinSize_1to20.root", this->channelType.Data());
 		TString sampleTag = "DY"+this->channelType;
 		for( const auto& binSize : this->vec_BinSize )
 		{
@@ -365,13 +383,13 @@ private:
 void Analyzer_VariousBinning()
 {
 	Analyzer *analyzer_MuMu = new Analyzer("MuMu");
-	// analyzer_MuMu->Print2DHist();
+	analyzer_MuMu->Print2DHist();
 	analyzer_MuMu->Draw_DiagonalHist();
-	// analyzer_MuMu->Draw_RelUnc_Stat();
+	analyzer_MuMu->Draw_RelUnc_Stat();
 
 	Analyzer *analyzer_EE = new Analyzer("EE");
-	// analyzer_EE->Print2DHist();
+	analyzer_EE->Print2DHist();
 	analyzer_EE->Draw_DiagonalHist();
 	analyzer_EE->Draw_DiagonalHist("dressed");
-	// analyzer_EE->Draw_RelUnc_Stat();
+	analyzer_EE->Draw_RelUnc_Stat();
 }
