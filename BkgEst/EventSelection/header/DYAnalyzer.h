@@ -358,7 +358,7 @@ void DYAnalyzer::SetupMCsamples_v20160412_76X_MINIAODv2_CheckPremix( TString Typ
 
 void DYAnalyzer::SetupMCsamples_Moriond17( TString Type, vector<TString> *ntupleDirectory, vector<TString> *Tag, vector<Double_t> *Xsec, vector<Double_t> *nEvents )
 {
-	if( Type == "DYMuMu_M10to50" ) // In case of full production : nEvents = 33344559.0
+	if( Type == "DYMuMu_M10to50" )
 	{
 		// cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
@@ -487,7 +487,8 @@ void DYAnalyzer::SetupMCsamples_Moriond17( TString Type, vector<TString> *ntuple
 	{
 		// cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "DYLL_M50toInf" ); Tag->push_back( "DYTauTau" ); Xsec->push_back( 6104.0/3.0 ); nEvents->push_back( 27277866.0 ); //nEvents: sum of DYTauTau weights
+		//ntupleDirectory->push_back( "DYLL_M50toInf" ); Tag->push_back( "DYTauTau" ); Xsec->push_back( 6104.0/3.0 ); nEvents->push_back( 27277866.0 ); //nEvents: sum of DYTauTau weights
+		ntupleDirectory->push_back( "DYLL_M50toInf" ); Tag->push_back( "DYTauTau" ); Xsec->push_back( 1921.8 ); nEvents->push_back( 27277866.0 ); //nEvents: sum of DYTauTau weights, NNLO Xsec
 	}
 	else if( Type == "VVnST" )
 	{
