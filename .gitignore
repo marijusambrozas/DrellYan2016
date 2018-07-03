@@ -36,3 +36,25 @@ Local/
 *.exe
 *.out
 *.app
+
+*~
+*.aux
+*.log
+*.pdf
+*.toc
+*.gz
+*.bbl
+*.blg
+*.lof
+*.lot
+*.root
+*.out
+*.ps
+*#
+# temporary ROOT files
+*.pcm
+*.d
+*.so
+*.nav
+*.snm
+
