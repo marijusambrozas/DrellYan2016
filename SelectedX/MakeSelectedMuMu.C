@@ -10,9 +10,12 @@
 #include <vector>
 #include <TMath.h>
 #include <TFormula.h>
+#include <iostream>
+#include <sstream>
 
-// -- Customized Analyzer for Drel-Yan Analysis -- //
+// -- Customized Analyzer for MuMu selection -- //
 #include "./header/DYAnalyzer.h"
+#include "SelectedX.h"
 
 #define M_Mu 0.1056583715 // -- GeV -- //
 
@@ -146,147 +149,80 @@ void MakeSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 //	else analyzer->SetupMCsamples_Moriond17(Type, &ntupleDirectory, &Tag, &Xsec, &nEvents);
 
         // -- Creating SelectedMuMu variables to assign branches -- //
-        Int_t nVertices, runNum, lumiBlock, evtNum, nPileUp;
-        Double_t GenWeight;
-        Int_t HLT_ntrig;
-        vector<int> *HLT_trigFired = new vector<int>;
-        vector<string> *HLT_trigName = new vector<string>;
-//        vector<double> *HLT_trigPt = new vecotr<double>;
-        vector<double> *HLT_trigEta = new vector<double>;
-        vector<double> *HLT_trigPhi = new vector<double>;
-        vector<double> *Muon_pT = new vector<double>;
-        vector<double> *Muon_eta = new vector<double>;
-        vector<double> *Muon_phi = new vector<double>;
-        vector<int> *isGLBmuon = new vector<int>;
-        vector<int> *isPFmuon = new vector<int>;
-        vector<int> *isTRKmuon = new vector<int>;
-        vector<int> *Muon_charge = new vector<int>;
-        vector<double> *Muon_chi2dof = new vector<double>;
-        vector<int> *Muon_muonHits = new vector<int>;
-        vector<int> *Muon_nSegments = new vector<int>;
-        vector<int> *Muon_nMatches = new vector<int>;
-        vector<int> *Muon_trackerLayers = new vector<int>;
-        vector<int> *Muon_pixelHits = new vector<int>;
-        vector<double> *Muon_dxyVTX = new vector<double>;
-        vector<double> *Muon_dzVTX = new vector<double>;
-        vector<double> *Muon_trkiso = new vector<double>;
-        vector<double> *Muon_PfChargedHadronIsoR04 = new vector<double>;
-        vector<double> *Muon_PfNeutralHadronIsoR04 = new vector<double>;
-        vector<double> *Muon_PfGammaIsoR04 = new vector<double>;
-        vector<double> *Muon_PFSumPUIsoR04 = new vector<double>;
-        vector<double> *Muon_Px = new vector<double>;
-        vector<double> *Muon_Py = new vector<double>;
-        vector<double> *Muon_Pz = new vector<double>;
-        vector<double> *Muon_E = new vector<double>;
-        Double_t Muon_InvM;
-        vector<double> *Muon_Best_pT = new vector<double>;
-        vector<double> *Muon_Best_pTError = new vector<double>;
-        vector<double> *Muon_Best_Px = new vector<double>;
-        vector<double> *Muon_Best_Py = new vector<double>;
-        vector<double> *Muon_Best_Pz = new vector<double>;
-        vector<double> *Muon_Best_eta = new vector<double>;
-        vector<double> *Muon_Best_phi = new vector<double>;
-        vector<double> *Muon_Inner_pT = new vector<double>;
-        vector<double> *Muon_Inner_pTError = new vector<double>;
-        vector<double> *Muon_Inner_Px = new vector<double>;
-        vector<double> *Muon_Inner_Py = new vector<double>;
-        vector<double> *Muon_Inner_Pz = new vector<double>;
-        vector<double> *Muon_Inner_eta = new vector<double>;
-        vector<double> *Muon_Inner_phi = new vector<double>;
-        vector<double> *Muon_Outer_pT = new vector<double>;
-        vector<double> *Muon_Outer_pTError = new vector<double>;
-        vector<double> *Muon_Outer_Px = new vector<double>;
-        vector<double> *Muon_Outer_Py = new vector<double>;
-        vector<double> *Muon_Outer_Pz = new vector<double>;
-        vector<double> *Muon_Outer_eta = new vector<double>;
-        vector<double> *Muon_Outer_phi = new vector<double>;
-        vector<double> *Muon_GLB_pT = new vector<double>;
-        vector<double> *Muon_GLB_pTError = new vector<double>;
-        vector<double> *Muon_GLB_Px = new vector<double>;
-        vector<double> *Muon_GLB_Py = new vector<double>;
-        vector<double> *Muon_GLB_Pz = new vector<double>;
-        vector<double> *Muon_GLB_eta = new vector<double>;
-        vector<double> *Muon_GLB_phi = new vector<double>;
-        vector<double> *Muon_TuneP_pT = new vector<double>;
-        vector<double> *Muon_TuneP_pTError = new vector<double>;
-        vector<double> *Muon_TuneP_Px = new vector<double>;
-        vector<double> *Muon_TuneP_Py = new vector<double>;
-        vector<double> *Muon_TuneP_Pz = new vector<double>;
-        vector<double> *Muon_TuneP_eta = new vector<double>;
-        vector<double> *Muon_TuneP_phi = new vector<double>;
+        SelectedMuMu_t MuMu; MuMu.CreateNew();
 
-        MuonTree->Branch("nVertices", &nVertices);
-        MuonTree->Branch("runNum", &runNum);
-        MuonTree->Branch("lumiBlock", &lumiBlock);
-        MuonTree->Branch("evtNum", &evtNum);
-        MuonTree->Branch("nPileUp", &nPileUp);
-        MuonTree->Branch("GENEvt_weight", &GenWeight);
-        MuonTree->Branch("HLT_ntrig", &HLT_ntrig);
-        MuonTree->Branch("HLT_trigFired", &HLT_trigFired);
-        MuonTree->Branch("HLT_trigName", &HLT_trigName);
-//        MuonTree->Branch("HLT_trigPt", &HLT_trigPt);
-        MuonTree->Branch("HLT_trigEta", &HLT_trigEta);
-        MuonTree->Branch("HLT_trigPhi", &HLT_trigPhi);
-        MuonTree->Branch("Muon_pT", &Muon_pT);
-        MuonTree->Branch("Muon_eta", &Muon_eta);
-        MuonTree->Branch("Muon_phi", &Muon_phi);
-        MuonTree->Branch("isGLBmuon", &isGLBmuon);
-        MuonTree->Branch("isPFmuon", &isPFmuon);
-        MuonTree->Branch("isTRKmuon", &isTRKmuon);
-        MuonTree->Branch("Muon_charge", &Muon_charge);
-        MuonTree->Branch("Muon_chi2dof", &Muon_chi2dof);
-        MuonTree->Branch("Muon_muonHits", &Muon_muonHits);
-        MuonTree->Branch("Muon_nSegments", &Muon_nSegments);
-        MuonTree->Branch("Muon_nMatches", &Muon_nMatches);
-        MuonTree->Branch("Muon_trackerLayers", &Muon_trackerLayers);
-        MuonTree->Branch("Muon_pixelHits", &Muon_pixelHits);
-        MuonTree->Branch("Muon_dxyVTX", &Muon_dxyVTX);
-        MuonTree->Branch("Muon_dzVTX", &Muon_dzVTX);
-        MuonTree->Branch("Muon_trkiso", &Muon_trkiso);
-        MuonTree->Branch("Muon_PfChargedHadronIsoR04", &Muon_PfChargedHadronIsoR04);
-        MuonTree->Branch("Muon_PfNeutralHadronIsoR04", &Muon_PfNeutralHadronIsoR04);
-        MuonTree->Branch("Muon_PfGammaIsoR04", &Muon_PfGammaIsoR04);
-        MuonTree->Branch("Muon_PFSumPUIsoR04", &Muon_PFSumPUIsoR04);
-        MuonTree->Branch("Muon_Px", &Muon_Px);
-        MuonTree->Branch("Muon_Py", &Muon_Py);
-        MuonTree->Branch("Muon_Pz", &Muon_Pz);
-        MuonTree->Branch("Muon_E", &Muon_E);
-        MuonTree->Branch("Muon_InvM", &Muon_InvM);
-        MuonTree->Branch("Muon_Best_pT", &Muon_Best_pT);
-        MuonTree->Branch("Muon_Best_pTError", &Muon_Best_pTError);
-        MuonTree->Branch("Muon_Best_Px", &Muon_Best_Px);
-        MuonTree->Branch("Muon_Best_Py", &Muon_Best_Py);
-        MuonTree->Branch("Muon_Best_Pz", &Muon_Best_Pz);
-        MuonTree->Branch("Muon_Best_eta", &Muon_Best_eta);
-        MuonTree->Branch("Muon_Best_phi", &Muon_Best_phi);
-        MuonTree->Branch("Muon_Inner_pT", &Muon_Inner_pT);
-        MuonTree->Branch("Muon_Inner_pTError", &Muon_Inner_pTError);
-        MuonTree->Branch("Muon_Inner_Px", &Muon_Inner_Px);
-        MuonTree->Branch("Muon_Inner_Py", &Muon_Inner_Py);
-        MuonTree->Branch("Muon_Inner_Pz", &Muon_Inner_Pz);
-        MuonTree->Branch("Muon_Inner_eta", &Muon_Inner_eta);
-        MuonTree->Branch("Muon_Inner_phi", &Muon_Inner_phi);
-        MuonTree->Branch("Muon_Outer_pT", &Muon_Outer_pT);
-        MuonTree->Branch("Muon_Outer_pTError", &Muon_Outer_pTError);
-        MuonTree->Branch("Muon_Outer_Px", &Muon_Outer_Px);
-        MuonTree->Branch("Muon_Outer_Py", &Muon_Outer_Py);
-        MuonTree->Branch("Muon_Outer_Pz", &Muon_Outer_Pz);
-        MuonTree->Branch("Muon_Outer_eta", &Muon_Outer_eta);
-        MuonTree->Branch("Muon_Outer_phi", &Muon_Outer_phi);
-        MuonTree->Branch("Muon_GLB_pT", &Muon_GLB_pT);
-        MuonTree->Branch("Muon_GLB_pTError", &Muon_GLB_pTError);
-        MuonTree->Branch("Muon_GLB_Px", &Muon_GLB_Px);
-        MuonTree->Branch("Muon_GLB_Py", &Muon_GLB_Py);
-        MuonTree->Branch("Muon_GLB_Pz", &Muon_GLB_Pz);
-        MuonTree->Branch("Muon_GLB_eta", &Muon_GLB_eta);
-        MuonTree->Branch("Muon_GLB_phi", &Muon_GLB_phi);
-        MuonTree->Branch("Muon_TuneP_pT", &Muon_TuneP_pT);
-        MuonTree->Branch("Muon_TuneP_pTError", &Muon_TuneP_pTError);
-        MuonTree->Branch("Muon_TuneP_Px", &Muon_TuneP_Px);
-        MuonTree->Branch("Muon_TuneP_Py", &Muon_TuneP_Py);
-        MuonTree->Branch("Muon_TuneP_Pz", &Muon_TuneP_Pz);
-        MuonTree->Branch("Muon_TuneP_eta", &Muon_TuneP_eta);
-        MuonTree->Branch("Muon_TuneP_phi", &Muon_TuneP_phi);
+        MuonTree->Branch("nVertices", &MuMu.nVertices);
+        MuonTree->Branch("runNum", &MuMu.runNum);
+        MuonTree->Branch("lumiBlock", &MuMu.lumiBlock);
+        MuonTree->Branch("evtNum", &MuMu.evtNum);
+        MuonTree->Branch("nPileUp", &MuMu.nPileUp);
+        MuonTree->Branch("GENEvt_weight", &MuMu.GENEvt_weight);
+        MuonTree->Branch("HLT_ntrig", &MuMu.HLT_ntrig);
+        MuonTree->Branch("HLT_trigFired", &MuMu.HLT_trigFired);
+        MuonTree->Branch("HLT_trigName", &MuMu.HLT_trigName);
+//        MuonTree->Branch("HLT_trigPt", &MuMu.HLT_trigPt);
+        MuonTree->Branch("HLT_trigEta", &MuMu.HLT_trigEta);
+        MuonTree->Branch("HLT_trigPhi", &MuMu.HLT_trigPhi);
+        MuonTree->Branch("Muon_pT", &MuMu.Muon_pT);
+        MuonTree->Branch("Muon_eta", &MuMu.Muon_eta);
+        MuonTree->Branch("Muon_phi", &MuMu.Muon_phi);
+        MuonTree->Branch("isGLBmuon", &MuMu.isGLBmuon);
+        MuonTree->Branch("isPFmuon", &MuMu.isPFmuon);
+        MuonTree->Branch("isTRKmuon", &MuMu.isTRKmuon);
+        MuonTree->Branch("Muon_charge", &MuMu.Muon_charge);
+        MuonTree->Branch("Muon_chi2dof", &MuMu.Muon_chi2dof);
+        MuonTree->Branch("Muon_muonHits", &MuMu.Muon_muonHits);
+        MuonTree->Branch("Muon_nSegments", &MuMu.Muon_nSegments);
+        MuonTree->Branch("Muon_nMatches", &MuMu.Muon_nMatches);
+        MuonTree->Branch("Muon_trackerLayers", &MuMu.Muon_trackerLayers);
+        MuonTree->Branch("Muon_pixelHits", &MuMu.Muon_pixelHits);
+        MuonTree->Branch("Muon_dxyVTX", &MuMu.Muon_dxyVTX);
+        MuonTree->Branch("Muon_dzVTX", &MuMu.Muon_dzVTX);
+        MuonTree->Branch("Muon_trkiso", &MuMu.Muon_trkiso);
+        MuonTree->Branch("Muon_PfChargedHadronIsoR04", &MuMu.Muon_PfChargedHadronIsoR04);
+        MuonTree->Branch("Muon_PfNeutralHadronIsoR04", &MuMu.Muon_PfNeutralHadronIsoR04);
+        MuonTree->Branch("Muon_PfGammaIsoR04", &MuMu.Muon_PfGammaIsoR04);
+        MuonTree->Branch("Muon_PFSumPUIsoR04", &MuMu.Muon_PFSumPUIsoR04);
+        MuonTree->Branch("Muon_Px", &MuMu.Muon_Px);
+        MuonTree->Branch("Muon_Py", &MuMu.Muon_Py);
+        MuonTree->Branch("Muon_Pz", &MuMu.Muon_Pz);
+        MuonTree->Branch("Muon_E", &MuMu.Muon_E);
+        MuonTree->Branch("Muon_InvM", &MuMu.Muon_InvM);
+        MuonTree->Branch("Muon_Best_pT", &MuMu.Muon_Best_pT);
+        MuonTree->Branch("Muon_Best_pTError", &MuMu.Muon_Best_pTError);
+        MuonTree->Branch("Muon_Best_Px", &MuMu.Muon_Best_Px);
+        MuonTree->Branch("Muon_Best_Py", &MuMu.Muon_Best_Py);
+        MuonTree->Branch("Muon_Best_Pz", &MuMu.Muon_Best_Pz);
+        MuonTree->Branch("Muon_Best_eta", &MuMu.Muon_Best_eta);
+        MuonTree->Branch("Muon_Best_phi", &MuMu.Muon_Best_phi);
+        MuonTree->Branch("Muon_Inner_pT", &MuMu.Muon_Inner_pT);
+        MuonTree->Branch("Muon_Inner_pTError", &MuMu.Muon_Inner_pTError);
+        MuonTree->Branch("Muon_Inner_Px", &MuMu.Muon_Inner_Px);
+        MuonTree->Branch("Muon_Inner_Py", &MuMu.Muon_Inner_Py);
+        MuonTree->Branch("Muon_Inner_Pz", &MuMu.Muon_Inner_Pz);
+        MuonTree->Branch("Muon_Inner_eta", &MuMu.Muon_Inner_eta);
+        MuonTree->Branch("Muon_Inner_phi", &MuMu.Muon_Inner_phi);
+        MuonTree->Branch("Muon_Outer_pT", &MuMu.Muon_Outer_pT);
+        MuonTree->Branch("Muon_Outer_pTError", &MuMu.Muon_Outer_pTError);
+        MuonTree->Branch("Muon_Outer_Px", &MuMu.Muon_Outer_Px);
+        MuonTree->Branch("Muon_Outer_Py", &MuMu.Muon_Outer_Py);
+        MuonTree->Branch("Muon_Outer_Pz", &MuMu.Muon_Outer_Pz);
+        MuonTree->Branch("Muon_Outer_eta", &MuMu.Muon_Outer_eta);
+        MuonTree->Branch("Muon_Outer_phi", &MuMu.Muon_Outer_phi);
+        MuonTree->Branch("Muon_GLB_pT", &MuMu.Muon_GLB_pT);
+        MuonTree->Branch("Muon_GLB_pTError", &MuMu.Muon_GLB_pTError);
+        MuonTree->Branch("Muon_GLB_Px", &MuMu.Muon_GLB_Px);
+        MuonTree->Branch("Muon_GLB_Py", &MuMu.Muon_GLB_Py);
+        MuonTree->Branch("Muon_GLB_Pz", &MuMu.Muon_GLB_Pz);
+        MuonTree->Branch("Muon_GLB_eta", &MuMu.Muon_GLB_eta);
+        MuonTree->Branch("Muon_GLB_phi", &MuMu.Muon_GLB_phi);
+        MuonTree->Branch("Muon_TuneP_pT", &MuMu.Muon_TuneP_pT);
+        MuonTree->Branch("Muon_TuneP_pTError", &MuMu.Muon_TuneP_pTError);
+        MuonTree->Branch("Muon_TuneP_Px", &MuMu.Muon_TuneP_Px);
+        MuonTree->Branch("Muon_TuneP_Py", &MuMu.Muon_TuneP_Py);
+        MuonTree->Branch("Muon_TuneP_Pz", &MuMu.Muon_TuneP_Pz);
+        MuonTree->Branch("Muon_TuneP_eta", &MuMu.Muon_TuneP_eta);
+        MuonTree->Branch("Muon_TuneP_phi", &MuMu.Muon_TuneP_phi);
 
 	//Loop for all samples
 //	const Int_t Ntup = ntupleDirectory.size();
@@ -329,8 +265,8 @@ void MakeSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 			ntuple->GetEvent(i);
 			
 			// -- Positive/Negative Gen-weights -- //
-			ntuple->GENEvt_weight < 0 ? GenWeight = -1 : GenWeight = 1;
-			SumWeight += GenWeight;
+                        ntuple->GENEvt_weight < 0 ? MuMu.GENEvt_weight = -1 : MuMu.GENEvt_weight = 1;
+                        SumWeight += MuMu.GENEvt_weight;
 
 			// -- Separate DYLL samples -- //
 			Bool_t GenFlag = kFALSE;
@@ -340,8 +276,8 @@ void MakeSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 			Bool_t GenFlag_top = kTRUE;
 
 			// -- Normalization -- //
-			Double_t TotWeight = GenWeight;
-			if( isMC == kTRUE ) TotWeight = (L*Xsec[i_tup]/nEvents[i_tup])*GenWeight;
+                        Double_t TotWeight = MuMu.GENEvt_weight;
+                        if( isMC == kTRUE ) TotWeight = (L*Xsec[i_tup]/nEvents[i_tup])*MuMu.GENEvt_weight;
 
 			Bool_t TriggerFlag = kFALSE;
 			TriggerFlag = ntuple->isTriggered( analyzer->HLT );
@@ -374,12 +310,12 @@ void MakeSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
                                         Muon mu1 = SelectedMuonCollection[0];
                                         Muon mu2 = SelectedMuonCollection[1];
 
-                                        nVertices = ntuple->nVertices;
-                                        runNum = ntuple->runNum;
-                                        lumiBlock = ntuple->lumiBlock;
-                                        evtNum = ntuple->evtNum;
-                                        nPileUp = ntuple->nPileUp;
-                                        HLT_ntrig = ntuple->HLT_ntrig;
+                                        MuMu.nVertices = ntuple->nVertices;
+                                        MuMu.runNum = ntuple->runNum;
+                                        MuMu.lumiBlock = ntuple->lumiBlock;
+                                        MuMu.evtNum = ntuple->evtNum;
+                                        MuMu.nPileUp = ntuple->nPileUp;
+                                        MuMu.HLT_ntrig = ntuple->HLT_ntrig;
 
                                         Int_t zero_count = 0; // resolving if there is no more information in arrays
 
@@ -387,10 +323,10 @@ void MakeSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
                                         {
                                             if(ntuple->HLT_trigEta[iter] && ntuple->HLT_trigPhi[iter])
                                             {
-                                                HLT_trigFired->push_back(ntuple->HLT_trigFired[iter]);
-                                                HLT_trigEta->push_back(ntuple->HLT_trigEta[iter]);
-                                                HLT_trigPhi->push_back(ntuple->HLT_trigPhi[iter]);
-                                                if(iter<ntuple->HLT_ntrig) HLT_trigName->push_back(ntuple->HLT_trigName->at(iter));
+                                                MuMu.HLT_trigFired->push_back(ntuple->HLT_trigFired[iter]);
+                                                MuMu.HLT_trigEta->push_back(ntuple->HLT_trigEta[iter]);
+                                                MuMu.HLT_trigPhi->push_back(ntuple->HLT_trigPhi[iter]);
+                                                if(iter<ntuple->HLT_ntrig) MuMu.HLT_trigName->push_back(ntuple->HLT_trigName->at(iter));
                                             }
                                             else
                                             {
@@ -399,146 +335,146 @@ void MakeSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
                                             }
                                         }
 
-                                        if(Sel_Index.size()!=2) cout << "========== ERROR: More than 2 muons saved ==========" << endl;
+                                        if(Sel_Index.size()!=2) cout << "======== ERROR: The number of muons saved is not 2 ========" << endl;
                                         else
                                         {
-                                            for (Int_t iter=0; iter<Sel_Index.size(); iter++)
+                                            for (UInt_t iter=0; iter<Sel_Index.size(); iter++)
                                             {
                                                 Int_t i = Sel_Index[iter];
 
-                                                Muon_pT->push_back(ntuple->Muon_pT[i]);
-                                                Muon_eta->push_back(ntuple->Muon_eta[i]);
-                                                Muon_phi->push_back(ntuple->Muon_phi[i]);
-                                                isGLBmuon->push_back(ntuple->isGLBmuon[i]);
-                                                isPFmuon->push_back(ntuple->isPFmuon[i]);
-                                                isTRKmuon->push_back(ntuple->isTRKmuon[i]);
-                                                Muon_charge->push_back(ntuple->Muon_charge[i]);
-                                                Muon_chi2dof->push_back(ntuple->Muon_chi2dof[i]);
-                                                Muon_muonHits->push_back(ntuple->Muon_muonHits[i]);
-                                                Muon_nSegments->push_back(ntuple->Muon_nSegments[i]);
-                                                Muon_nMatches->push_back(ntuple->Muon_nMatches[i]);
-                                                Muon_trackerLayers->push_back(ntuple->Muon_trackerLayers[i]);
-                                                Muon_pixelHits->push_back(ntuple->Muon_pixelHits[i]);
-                                                Muon_dxyVTX->push_back(ntuple->Muon_dxyVTX[i]);
-                                                Muon_dzVTX->push_back(ntuple->Muon_dzVTX[i]);
-                                                Muon_trkiso->push_back(ntuple->Muon_trkiso[i]);
-                                                Muon_PfChargedHadronIsoR04->push_back(ntuple->Muon_PfChargedHadronIsoR04[i]);
-                                                Muon_PfNeutralHadronIsoR04->push_back(ntuple->Muon_PfNeutralHadronIsoR04[i]);
-                                                Muon_PfGammaIsoR04->push_back(ntuple->Muon_PfGammaIsoR04[i]);
-                                                Muon_PFSumPUIsoR04->push_back(ntuple->Muon_PFSumPUIsoR04[i]);
-                                                Muon_Px->push_back(ntuple->Muon_Px[i]);
-                                                Muon_Py->push_back(ntuple->Muon_Py[i]);
-                                                Muon_Pz->push_back(ntuple->Muon_Pz[i]);
+                                                MuMu.Muon_pT->push_back(ntuple->Muon_pT[i]);
+                                                MuMu.Muon_eta->push_back(ntuple->Muon_eta[i]);
+                                                MuMu.Muon_phi->push_back(ntuple->Muon_phi[i]);
+                                                MuMu.isGLBmuon->push_back(ntuple->isGLBmuon[i]);
+                                                MuMu.isPFmuon->push_back(ntuple->isPFmuon[i]);
+                                                MuMu.isTRKmuon->push_back(ntuple->isTRKmuon[i]);
+                                                MuMu.Muon_charge->push_back(ntuple->Muon_charge[i]);
+                                                MuMu.Muon_chi2dof->push_back(ntuple->Muon_chi2dof[i]);
+                                                MuMu.Muon_muonHits->push_back(ntuple->Muon_muonHits[i]);
+                                                MuMu.Muon_nSegments->push_back(ntuple->Muon_nSegments[i]);
+                                                MuMu.Muon_nMatches->push_back(ntuple->Muon_nMatches[i]);
+                                                MuMu.Muon_trackerLayers->push_back(ntuple->Muon_trackerLayers[i]);
+                                                MuMu.Muon_pixelHits->push_back(ntuple->Muon_pixelHits[i]);
+                                                MuMu.Muon_dxyVTX->push_back(ntuple->Muon_dxyVTX[i]);
+                                                MuMu.Muon_dzVTX->push_back(ntuple->Muon_dzVTX[i]);
+                                                MuMu.Muon_trkiso->push_back(ntuple->Muon_trkiso[i]);
+                                                MuMu.Muon_PfChargedHadronIsoR04->push_back(ntuple->Muon_PfChargedHadronIsoR04[i]);
+                                                MuMu.Muon_PfNeutralHadronIsoR04->push_back(ntuple->Muon_PfNeutralHadronIsoR04[i]);
+                                                MuMu.Muon_PfGammaIsoR04->push_back(ntuple->Muon_PfGammaIsoR04[i]);
+                                                MuMu.Muon_PFSumPUIsoR04->push_back(ntuple->Muon_PFSumPUIsoR04[i]);
+                                                MuMu.Muon_Px->push_back(ntuple->Muon_Px[i]);
+                                                MuMu.Muon_Py->push_back(ntuple->Muon_Py[i]);
+                                                MuMu.Muon_Pz->push_back(ntuple->Muon_Pz[i]);
 
                                                 Double_t Mu_E = sqrt( ntuple->Muon_Px[i]*ntuple->Muon_Px[i] + ntuple->Muon_Py[i]*ntuple->Muon_Py[i]
                                                                       + ntuple->Muon_Pz[i]*ntuple->Muon_Pz[i] + M_Mu*M_Mu );
 
-                                                Muon_E->push_back(Mu_E);
-                                                Muon_InvM = (mu1.Momentum + mu2.Momentum).M();
+                                                MuMu.Muon_E->push_back(Mu_E);
+                                                MuMu.Muon_InvM = (mu1.Momentum + mu2.Momentum).M();
 
-                                                Muon_Best_pT->push_back(ntuple->Muon_Best_pT[i]);
-                                                Muon_Best_pTError->push_back(ntuple->Muon_Best_pTError[i]);
-                                                Muon_Best_Px->push_back(ntuple->Muon_Best_Px[i]);
-                                                Muon_Best_Py->push_back(ntuple->Muon_Best_Py[i]);
-                                                Muon_Best_Pz->push_back(ntuple->Muon_Best_Pz[i]);
-                                                Muon_Best_eta->push_back(ntuple->Muon_Best_eta[i]);
-                                                Muon_Best_phi->push_back(ntuple->Muon_Best_phi[i]);
-                                                Muon_Inner_pT->push_back(ntuple->Muon_Inner_pT[i]);
-                                                Muon_Inner_pTError->push_back(ntuple->Muon_Inner_pTError[i]);
-                                                Muon_Inner_Px->push_back(ntuple->Muon_Inner_Px[i]);
-                                                Muon_Inner_Py->push_back(ntuple->Muon_Inner_Py[i]);
-                                                Muon_Inner_Pz->push_back(ntuple->Muon_Inner_Pz[i]);
-                                                Muon_Inner_eta->push_back(ntuple->Muon_Inner_eta[i]);
-                                                Muon_Inner_phi->push_back(ntuple->Muon_Inner_phi[i]);
-                                                Muon_Outer_pT->push_back(ntuple->Muon_Outer_pT[i]);
-                                                Muon_Outer_pTError->push_back(ntuple->Muon_Outer_pTError[i]);
-                                                Muon_Outer_Px->push_back(ntuple->Muon_Outer_Px[i]);
-                                                Muon_Outer_Py->push_back(ntuple->Muon_Outer_Py[i]);
-                                                Muon_Outer_Pz->push_back(ntuple->Muon_Outer_Pz[i]);
-                                                Muon_Outer_eta->push_back(ntuple->Muon_Outer_eta[i]);
-                                                Muon_Outer_phi->push_back(ntuple->Muon_Outer_phi[i]);
-                                                Muon_GLB_pT->push_back(ntuple->Muon_GLB_pT[i]);
-                                                Muon_GLB_pTError->push_back(ntuple->Muon_GLB_pTError[i]);
-                                                Muon_GLB_Px->push_back(ntuple->Muon_GLB_Px[i]);
-                                                Muon_GLB_Py->push_back(ntuple->Muon_GLB_Py[i]);
-                                                Muon_GLB_Pz->push_back(ntuple->Muon_GLB_Pz[i]);
-                                                Muon_GLB_eta->push_back(ntuple->Muon_GLB_eta[i]);
-                                                Muon_GLB_phi->push_back(ntuple->Muon_GLB_phi[i]);
-                                                Muon_TuneP_pT->push_back(ntuple->Muon_TuneP_pT[i]);
-                                                Muon_TuneP_pTError->push_back(ntuple->Muon_TuneP_pTError[i]);
-                                                Muon_TuneP_Px->push_back(ntuple->Muon_TuneP_Px[i]);
-                                                Muon_TuneP_Py->push_back(ntuple->Muon_TuneP_Py[i]);
-                                                Muon_TuneP_Pz->push_back(ntuple->Muon_TuneP_Pz[i]);
-                                                Muon_TuneP_eta->push_back(ntuple->Muon_TuneP_eta[i]);
-                                                Muon_TuneP_phi->push_back(ntuple->Muon_TuneP_phi[i]);
+                                                MuMu.Muon_Best_pT->push_back(ntuple->Muon_Best_pT[i]);
+                                                MuMu.Muon_Best_pTError->push_back(ntuple->Muon_Best_pTError[i]);
+                                                MuMu.Muon_Best_Px->push_back(ntuple->Muon_Best_Px[i]);
+                                                MuMu.Muon_Best_Py->push_back(ntuple->Muon_Best_Py[i]);
+                                                MuMu.Muon_Best_Pz->push_back(ntuple->Muon_Best_Pz[i]);
+                                                MuMu.Muon_Best_eta->push_back(ntuple->Muon_Best_eta[i]);
+                                                MuMu.Muon_Best_phi->push_back(ntuple->Muon_Best_phi[i]);
+                                                MuMu.Muon_Inner_pT->push_back(ntuple->Muon_Inner_pT[i]);
+                                                MuMu.Muon_Inner_pTError->push_back(ntuple->Muon_Inner_pTError[i]);
+                                                MuMu.Muon_Inner_Px->push_back(ntuple->Muon_Inner_Px[i]);
+                                                MuMu.Muon_Inner_Py->push_back(ntuple->Muon_Inner_Py[i]);
+                                                MuMu.Muon_Inner_Pz->push_back(ntuple->Muon_Inner_Pz[i]);
+                                                MuMu.Muon_Inner_eta->push_back(ntuple->Muon_Inner_eta[i]);
+                                                MuMu.Muon_Inner_phi->push_back(ntuple->Muon_Inner_phi[i]);
+                                                MuMu.Muon_Outer_pT->push_back(ntuple->Muon_Outer_pT[i]);
+                                                MuMu.Muon_Outer_pTError->push_back(ntuple->Muon_Outer_pTError[i]);
+                                                MuMu.Muon_Outer_Px->push_back(ntuple->Muon_Outer_Px[i]);
+                                                MuMu.Muon_Outer_Py->push_back(ntuple->Muon_Outer_Py[i]);
+                                                MuMu.Muon_Outer_Pz->push_back(ntuple->Muon_Outer_Pz[i]);
+                                                MuMu.Muon_Outer_eta->push_back(ntuple->Muon_Outer_eta[i]);
+                                                MuMu.Muon_Outer_phi->push_back(ntuple->Muon_Outer_phi[i]);
+                                                MuMu.Muon_GLB_pT->push_back(ntuple->Muon_GLB_pT[i]);
+                                                MuMu.Muon_GLB_pTError->push_back(ntuple->Muon_GLB_pTError[i]);
+                                                MuMu.Muon_GLB_Px->push_back(ntuple->Muon_GLB_Px[i]);
+                                                MuMu.Muon_GLB_Py->push_back(ntuple->Muon_GLB_Py[i]);
+                                                MuMu.Muon_GLB_Pz->push_back(ntuple->Muon_GLB_Pz[i]);
+                                                MuMu.Muon_GLB_eta->push_back(ntuple->Muon_GLB_eta[i]);
+                                                MuMu.Muon_GLB_phi->push_back(ntuple->Muon_GLB_phi[i]);
+                                                MuMu.Muon_TuneP_pT->push_back(ntuple->Muon_TuneP_pT[i]);
+                                                MuMu.Muon_TuneP_pTError->push_back(ntuple->Muon_TuneP_pTError[i]);
+                                                MuMu.Muon_TuneP_Px->push_back(ntuple->Muon_TuneP_Px[i]);
+                                                MuMu.Muon_TuneP_Py->push_back(ntuple->Muon_TuneP_Py[i]);
+                                                MuMu.Muon_TuneP_Pz->push_back(ntuple->Muon_TuneP_Pz[i]);
+                                                MuMu.Muon_TuneP_eta->push_back(ntuple->Muon_TuneP_eta[i]);
+                                                MuMu.Muon_TuneP_phi->push_back(ntuple->Muon_TuneP_phi[i]);
                                             } // End of vector filling
                                         } // End of else()
 
                                         MuonTree->Fill();
 
-                                        HLT_trigFired->clear();
-                                        HLT_trigName->clear();
-                                        HLT_trigEta->clear();
-                                        HLT_trigPhi->clear();
-                                        Muon_pT->clear();
-                                        Muon_eta->clear();
-                                        Muon_phi->clear();
-                                        isGLBmuon->clear();
-                                        isPFmuon->clear();
-                                        isTRKmuon->clear();
-                                        Muon_charge->clear();
-                                        Muon_chi2dof->clear();
-                                        Muon_muonHits->clear();
-                                        Muon_nSegments->clear();
-                                        Muon_nMatches->clear();
-                                        Muon_trackerLayers->clear();
-                                        Muon_pixelHits->clear();
-                                        Muon_dxyVTX->clear();
-                                        Muon_dzVTX->clear();
-                                        Muon_trkiso->clear();
-                                        Muon_PfChargedHadronIsoR04->clear();
-                                        Muon_PfNeutralHadronIsoR04->clear();
-                                        Muon_PfGammaIsoR04->clear();
-                                        Muon_PFSumPUIsoR04->clear();
-                                        Muon_Px->clear();
-                                        Muon_Py->clear();
-                                        Muon_Pz->clear();
-                                        Muon_E->clear();
-                                        Muon_Best_pT->clear();
-                                        Muon_Best_pTError->clear();
-                                        Muon_Best_Px->clear();
-                                        Muon_Best_Py->clear();
-                                        Muon_Best_Pz->clear();
-                                        Muon_Best_eta->clear();
-                                        Muon_Best_phi->clear();
-                                        Muon_Inner_pT->clear();
-                                        Muon_Inner_pTError->clear();
-                                        Muon_Inner_Px->clear();
-                                        Muon_Inner_Py->clear();
-                                        Muon_Inner_Pz->clear();
-                                        Muon_Inner_eta->clear();
-                                        Muon_Inner_phi->clear();
-                                        Muon_Outer_pT->clear();
-                                        Muon_Outer_pTError->clear();
-                                        Muon_Outer_Px->clear();
-                                        Muon_Outer_Py->clear();
-                                        Muon_Outer_Pz->clear();
-                                        Muon_Outer_eta->clear();
-                                        Muon_Outer_phi->clear();
-                                        Muon_GLB_pT->clear();
-                                        Muon_GLB_pTError->clear();
-                                        Muon_GLB_Px->clear();
-                                        Muon_GLB_Py->clear();
-                                        Muon_GLB_Pz->clear();
-                                        Muon_GLB_eta->clear();
-                                        Muon_GLB_phi->clear();
-                                        Muon_TuneP_pT->clear();;
-                                        Muon_TuneP_pTError->clear();
-                                        Muon_TuneP_Px->clear();
-                                        Muon_TuneP_Py->clear();
-                                        Muon_TuneP_Pz->clear();
-                                        Muon_TuneP_eta->clear();
-                                        Muon_TuneP_phi->clear();
+                                        MuMu.HLT_trigFired->clear();
+                                        MuMu.HLT_trigName->clear();
+                                        MuMu.HLT_trigEta->clear();
+                                        MuMu.HLT_trigPhi->clear();
+                                        MuMu.Muon_pT->clear();
+                                        MuMu.Muon_eta->clear();
+                                        MuMu.Muon_phi->clear();
+                                        MuMu.isGLBmuon->clear();
+                                        MuMu.isPFmuon->clear();
+                                        MuMu.isTRKmuon->clear();
+                                        MuMu.Muon_charge->clear();
+                                        MuMu.Muon_chi2dof->clear();
+                                        MuMu.Muon_muonHits->clear();
+                                        MuMu.Muon_nSegments->clear();
+                                        MuMu.Muon_nMatches->clear();
+                                        MuMu.Muon_trackerLayers->clear();
+                                        MuMu.Muon_pixelHits->clear();
+                                        MuMu.Muon_dxyVTX->clear();
+                                        MuMu.Muon_dzVTX->clear();
+                                        MuMu.Muon_trkiso->clear();
+                                        MuMu.Muon_PfChargedHadronIsoR04->clear();
+                                        MuMu.Muon_PfNeutralHadronIsoR04->clear();
+                                        MuMu.Muon_PfGammaIsoR04->clear();
+                                        MuMu.Muon_PFSumPUIsoR04->clear();
+                                        MuMu.Muon_Px->clear();
+                                        MuMu.Muon_Py->clear();
+                                        MuMu.Muon_Pz->clear();
+                                        MuMu.Muon_E->clear();
+                                        MuMu.Muon_Best_pT->clear();
+                                        MuMu.Muon_Best_pTError->clear();
+                                        MuMu.Muon_Best_Px->clear();
+                                        MuMu.Muon_Best_Py->clear();
+                                        MuMu.Muon_Best_Pz->clear();
+                                        MuMu.Muon_Best_eta->clear();
+                                        MuMu.Muon_Best_phi->clear();
+                                        MuMu.Muon_Inner_pT->clear();
+                                        MuMu.Muon_Inner_pTError->clear();
+                                        MuMu.Muon_Inner_Px->clear();
+                                        MuMu.Muon_Inner_Py->clear();
+                                        MuMu.Muon_Inner_Pz->clear();
+                                        MuMu.Muon_Inner_eta->clear();
+                                        MuMu.Muon_Inner_phi->clear();
+                                        MuMu.Muon_Outer_pT->clear();
+                                        MuMu.Muon_Outer_pTError->clear();
+                                        MuMu.Muon_Outer_Px->clear();
+                                        MuMu.Muon_Outer_Py->clear();
+                                        MuMu.Muon_Outer_Pz->clear();
+                                        MuMu.Muon_Outer_eta->clear();
+                                        MuMu.Muon_Outer_phi->clear();
+                                        MuMu.Muon_GLB_pT->clear();
+                                        MuMu.Muon_GLB_pTError->clear();
+                                        MuMu.Muon_GLB_Px->clear();
+                                        MuMu.Muon_GLB_Py->clear();
+                                        MuMu.Muon_GLB_Pz->clear();
+                                        MuMu.Muon_GLB_eta->clear();
+                                        MuMu.Muon_GLB_phi->clear();
+                                        MuMu.Muon_TuneP_pT->clear();;
+                                        MuMu.Muon_TuneP_pTError->clear();
+                                        MuMu.Muon_TuneP_Px->clear();
+                                        MuMu.Muon_TuneP_Py->clear();
+                                        MuMu.Muon_TuneP_Pz->clear();
+                                        MuMu.Muon_TuneP_eta->clear();
+                                        MuMu.Muon_TuneP_phi->clear();
 
 //					Double_t reco_Pt = (mu1.Momentum + mu2.Momentum).Pt();
 //					Double_t reco_rapi = (mu1.Momentum + mu2.Momentum).Rapidity();

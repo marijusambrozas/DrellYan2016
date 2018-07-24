@@ -95,6 +95,7 @@ public:
 //    Double_t Muon_dB[MaxN];
     // -- for the muon momentum corrections -- //
     std::vector<int> *Muon_charge;
+    std::vector<double> *Muon_E;
     
     //PF information
     std::vector<double> *Muon_PfChargedHadronIsoR04;
@@ -211,6 +212,7 @@ public:
     //    Muon_dB = new std::vector<double>;
 
         Muon_charge = new std::vector<int>;
+        Muon_E = new std::vector<double>;
 
         Muon_PfChargedHadronIsoR04 = new std::vector<double>;
         Muon_PfNeutralHadronIsoR04 = new std::vector<double>;
@@ -353,6 +355,7 @@ public:
 //        chain->SetBranchAddress("Muon_dB", Muon_dB );
 
         chain->SetBranchAddress("Muon_charge", &Muon_charge);
+        chain->SetBranchAddress("Muon_E", &Muon_E);
 
         chain->SetBranchAddress("Muon_PfChargedHadronIsoR04", &Muon_PfChargedHadronIsoR04);
         chain->SetBranchAddress("Muon_PfNeutralHadronIsoR04", &Muon_PfNeutralHadronIsoR04);
@@ -478,6 +481,7 @@ public:
 //        chain->AddBranchToCache("Muon_dB", 1);
 
         chain->AddBranchToCache("Muon_charge", 1);
+        chain->AddBranchToCache("Muon_E", 1);
 
         chain->AddBranchToCache("Muon_PfChargedHadronIsoR04", 1);
         chain->AddBranchToCache("Muon_PfNeutralHadronIsoR04", 1);
@@ -613,6 +617,7 @@ public:
         chain->SetBranchStatus("Muon_Pz", 1);
 //        chain->SetBranchStatus("Muon_dB", 1);
         chain->SetBranchStatus("Muon_charge", 1);
+        chain->SetBranchStatus("Muon_E", 1);
         
         chain->SetBranchStatus("Muon_PfChargedHadronIsoR04", 1);
         chain->SetBranchStatus("Muon_PfNeutralHadronIsoR04" ,1);

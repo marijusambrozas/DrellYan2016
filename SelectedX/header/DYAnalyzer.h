@@ -9,6 +9,8 @@
 #include "Object.h"
 #include "NtupleHandle.h"
 #include <TGraphErrors.h>
+#include <TH2.h>
+#include <iostream>
 
 #define Lumi 35867 // -- from Run2016B to Run2016H, JSON. unit: /pb, Updated at 2017.07.30 -- //
 #define Lumi_HLTv4p2 865.919 // -- integrated luminosity before Run 257933 -- //
@@ -200,9 +202,9 @@ DYAnalyzer::DYAnalyzer(TString HLTname)
 {
 	if( HLTname == "None" )
 	{
-		cout << "===================================================" << endl;
-		cout << "[No specific trigger setting ... basic constructor]" << endl;
-		cout << "===================================================" << endl;
+                std::cout << "===================================================" << endl;
+                std::cout << "[No specific trigger setting ... basic constructor]" << endl;
+                std::cout << "===================================================" << endl;
 		
 		HLT = "None";
 		LeadPtCut = 9999;
@@ -213,13 +215,13 @@ DYAnalyzer::DYAnalyzer(TString HLTname)
 	else
 	{
 		this->AssignAccThreshold(HLTname, &HLT, &LeadPtCut, &SubPtCut, &LeadEtaCut, &SubEtaCut);
-		cout << "===========================================================" << endl;
-		cout << "Trigger: " << HLT << endl;
-		cout << "leading lepton pT Cut: " << LeadPtCut << endl;
-		cout << "Sub-leading lepton pT Cut: " << SubPtCut << endl;
-		cout << "leading lepton Eta Cut: " << LeadEtaCut << endl;
-		cout << "sub-leading lepton Eta Cut: " << SubEtaCut << endl;
-		cout << "===========================================================" << endl;
+                std::cout << "===========================================================" << endl;
+                std::cout << "Trigger: " << HLT << endl;
+                std::cout << "leading lepton pT Cut: " << LeadPtCut << endl;
+                std::cout << "Sub-leading lepton pT Cut: " << SubPtCut << endl;
+                std::cout << "leading lepton Eta Cut: " << LeadEtaCut << endl;
+                std::cout << "sub-leading lepton Eta Cut: " << SubEtaCut << endl;
+                std::cout << "===========================================================" << endl;
 	}
 
 }
@@ -336,7 +338,7 @@ void DYAnalyzer::AssignAccThreshold(TString HLTname, TString *HLT, Double_t *Lea
 	}
 	else
 	{ 
-		cout << "Wrong HLT name!: " << HLTname << endl;
+                std::cout << "Wrong HLT name!: " << HLTname << endl;
 		return; 
 	}
 
@@ -360,7 +362,7 @@ void DYAnalyzer::SetupMCsamples_Moriond17( TString Type, vector<TString> *ntuple
 {
 	if( Type == "DYMuMu_M10to50" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
 		ntupleDirectory->push_back( "DYLL_M10to50_v1" ); Tag->push_back( "DYMuMu_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
 		ntupleDirectory->push_back( "DYLL_M10to50_v2" ); Tag->push_back( "DYMuMu_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
@@ -368,13 +370,13 @@ void DYAnalyzer::SetupMCsamples_Moriond17( TString Type, vector<TString> *ntuple
 	}
 	else if( Type == "DYMuMu_M50to100" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
 		ntupleDirectory->push_back( "DYLL_M50toInf" ); Tag->push_back( "DYMuMu_M50to100" ); Xsec->push_back( 5869.58346/3.0 ); nEvents->push_back( 26175605.0 ); //nEvents: sum of DYMuMu weights
 	}
 	else if( Type == "DYMuMu_M100toInf" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
 		ntupleDirectory->push_back( "DYLL_M100to200" ); Tag->push_back( "DYMuMu_M100to200" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3433295.0 ); //nEvents: sum of DYMuMu weights
 		ntupleDirectory->push_back( "DYLL_M100to200_ext" ); Tag->push_back( "DYMuMu_M100to200_ext" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3433295.0 ); //nEvents: sum of DYMuMu weights
@@ -389,7 +391,7 @@ void DYAnalyzer::SetupMCsamples_Moriond17( TString Type, vector<TString> *ntuple
 	}
 	else if( Type == "DYMuMu_aMCNLO" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
 		ntupleDirectory->push_back( "DYLL_M10to50_v1" ); Tag->push_back( "DYMuMu_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
 		ntupleDirectory->push_back( "DYLL_M10to50_v2" ); Tag->push_back( "DYMuMu_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
@@ -408,7 +410,7 @@ void DYAnalyzer::SetupMCsamples_Moriond17( TString Type, vector<TString> *ntuple
 	}
 	else if( Type == "DYEE_M10to50" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
 		ntupleDirectory->push_back( "DYLL_M10to50_v1" ); Tag->push_back( "DYEE_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
 		ntupleDirectory->push_back( "DYLL_M10to50_v2" ); Tag->push_back( "DYEE_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
@@ -416,13 +418,13 @@ void DYAnalyzer::SetupMCsamples_Moriond17( TString Type, vector<TString> *ntuple
 	}
 	else if( Type == "DYEE_M50to100" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
 		ntupleDirectory->push_back( "DYLL_M50toInf" ); Tag->push_back( "DYEE_M50to100" ); Xsec->push_back( 5869.58346/3.0 ); nEvents->push_back( 26166194.0 ); //nEvents: sum of DYEE weights
 	}
 	else if( Type == "DYEE_M100toInf" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
 		ntupleDirectory->push_back( "DYLL_M100to200" ); Tag->push_back( "DYEE_M100to200" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3437885.0 ); //nEvents: sum of DYMuMu weights
 		ntupleDirectory->push_back( "DYLL_M100to200_ext" ); Tag->push_back( "DYEE_M100to200_ext" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3437885.0 ); //nEvents: sum of DYMuMu weights
@@ -437,7 +439,7 @@ void DYAnalyzer::SetupMCsamples_Moriond17( TString Type, vector<TString> *ntuple
 	}
 	else if( Type == "DYEE_aMCNLO" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
 		ntupleDirectory->push_back( "DYLL_M10to50_v1" ); Tag->push_back( "DYEE_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
 		ntupleDirectory->push_back( "DYLL_M10to50_v2" ); Tag->push_back( "DYEE_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
@@ -456,28 +458,28 @@ void DYAnalyzer::SetupMCsamples_Moriond17( TString Type, vector<TString> *ntuple
 	}
 	else if( Type == "ttbar" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
 		//ntupleDirectory->push_back( "ttbar" ); Tag->push_back( "ttbar" ); Xsec->push_back( 831.76 ); nEvents->push_back( 154948878.0 ); //ttbar+ ttbarBackup
 		ntupleDirectory->push_back( "ttbar" ); Tag->push_back( "ttbar" ); Xsec->push_back( 734.577 ); nEvents->push_back( 135949780.0 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
 	}
 	else if( Type == "ttbarBackup" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
 		//ntupleDirectory->push_back( "ttbarBackup" ); Tag->push_back( "ttbarBackup" ); Xsec->push_back( 831.76 ); nEvents->push_back( 154948878.0 ); //ttbar+ ttbarBackup
 		ntupleDirectory->push_back( "ttbarBackup" ); Tag->push_back( "ttbarBackup" ); Xsec->push_back( 734.577 ); nEvents->push_back( 135949780.0 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
 	}
 	else if( Type == "ttbar_M700toInf" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
 		ntupleDirectory->push_back( "ttbar_M700to1000" ); Tag->push_back( "ttbar_M700to1000" ); Xsec->push_back( 76.605 ); nEvents->push_back( 38422582.0 ); //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
 		ntupleDirectory->push_back( "ttbar_M1000toInf" ); Tag->push_back( "ttbar_M1000toInf" ); Xsec->push_back( 20.578 ); nEvents->push_back( 24561630.0 ); //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
 	}
 	else if( Type == "DYTauTau_M10to50" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
 		ntupleDirectory->push_back( "DYLL_M10to50_v1" ); Tag->push_back( "DYTauTau_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33080379.0 ); //nEvents: sum of DYTauTau weights
 		ntupleDirectory->push_back( "DYLL_M10to50_v2" ); Tag->push_back( "DYTauTau_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33080379.0 ); //nEvents: sum of DYTauTau weights
@@ -485,14 +487,14 @@ void DYAnalyzer::SetupMCsamples_Moriond17( TString Type, vector<TString> *ntuple
 	}
 	else if( Type == "DYTauTau_M50toInf" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
 		//ntupleDirectory->push_back( "DYLL_M50toInf" ); Tag->push_back( "DYTauTau" ); Xsec->push_back( 6104.0/3.0 ); nEvents->push_back( 27277866.0 ); //nEvents: sum of DYTauTau weights
 		ntupleDirectory->push_back( "DYLL_M50toInf" ); Tag->push_back( "DYTauTau" ); Xsec->push_back( 1921.8 ); nEvents->push_back( 27277866.0 ); //nEvents: sum of DYTauTau weights, NNLO Xsec
 	}
 	else if( Type == "VVnST" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
 		ntupleDirectory->push_back( "ST_tW" ); Tag->push_back( "tW" ); Xsec->push_back( 35.85 ); nEvents->push_back( 6952830.0 );
 		ntupleDirectory->push_back( "ST_tbarW" ); Tag->push_back( "tbarW" ); Xsec->push_back( 35.85 ); nEvents->push_back( 6933093.0 );
@@ -502,14 +504,14 @@ void DYAnalyzer::SetupMCsamples_Moriond17( TString Type, vector<TString> *ntuple
 	}
 	else if( Type == "WJetsToLNu" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
 		ntupleDirectory->push_back( "WJetsToLNu" ); Tag->push_back( "WJetsToLNu" ); Xsec->push_back( 61526.7 ); nEvents->push_back( 86731698.0 );
 		ntupleDirectory->push_back( "WJetsToLNu_ext" ); Tag->push_back( "WJetsToLNu_ext" ); Xsec->push_back( 61526.7 ); nEvents->push_back( 86731698.0 );
 	}
 	else if( Type == "QCDMuEnriched" )
 	{
-		cout << "# events should be adjusted later" << endl;
+                std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
 		ntupleDirectory->push_back( "QCDMuEnriched_Pt15to20" ); Tag->push_back( "QCDMuEnriched_Pt15to20" ); Xsec->push_back( 720648000*0.00042 ); nEvents->push_back( 1.0 );
 		ntupleDirectory->push_back( "QCDMuEnriched_Pt20to30" ); Tag->push_back( "QCDMuEnriched_Pt20to30" ); Xsec->push_back( 1273190000*0.003 ); nEvents->push_back( 1.0 );
@@ -539,7 +541,7 @@ void DYAnalyzer::SetupMCsamples_Moriond17( TString Type, vector<TString> *ntuple
 	}
 	else if( Type == "QCDEMEnriched" )
 	{
-		cout << "# events should be adjusted later" << endl;
+                std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
 		ntupleDirectory->push_back( "QCDEMEnriched_Pt20to30" ); Tag->push_back( "QCDEMEnriched_Pt20to30" ); Xsec->push_back( 557600000*0.0096 ); nEvents->push_back( 1.0 );
 		ntupleDirectory->push_back( "QCDEMEnriched_Pt30to50" ); Tag->push_back( "QCDEMEnriched_Pt30to50" ); Xsec->push_back( 136000000*0.073 ); nEvents->push_back( 1.0 );
@@ -554,14 +556,14 @@ void DYAnalyzer::SetupMCsamples_Moriond17( TString Type, vector<TString> *ntuple
 		ntupleDirectory->push_back( "QCDEMEnriched_Pt300toInf" ); Tag->push_back( "QCDEMEnriched_Pt300toInf" ); Xsec->push_back( 9000*0.15 ); nEvents->push_back( 1.0 );
 	}
 	else
-		cout << "Wrong Type!" << endl;
+                std::cout << "Wrong Type!" << endl;
 }
 
 void DYAnalyzer::SetupMCsamples_v20160309_76X_MiniAODv2( TString Type, vector<TString> *ntupleDirectory, vector<TString> *Tag, vector<Double_t> *Xsec, vector<Double_t> *nEvents )
 {
 	if( Type == "Full" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
 		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_ZZ_25ns" ); Tag->push_back( "ZZ" ); Xsec->push_back( 15.4 ); nEvents->push_back( 985598 );
 		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WZ_25ns" ); Tag->push_back( "WZ" ); Xsec->push_back( 66.1 ); nEvents->push_back( 999996 );
@@ -631,7 +633,7 @@ void DYAnalyzer::SetupMCsamples_v20160309_76X_MiniAODv2( TString Type, vector<TS
 
 	else if( Type == "Full_Include_M100to200" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
 		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_ZZ_25ns" ); Tag->push_back( "ZZ" ); Xsec->push_back( 15.4 ); nEvents->push_back( 985598 );
 		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WZ_25ns" ); Tag->push_back( "WZ" ); Xsec->push_back( 66.1 ); nEvents->push_back( 999996 );
@@ -656,7 +658,7 @@ void DYAnalyzer::SetupMCsamples_v20160309_76X_MiniAODv2( TString Type, vector<TS
 	}
 	else if( Type == "Full_NoHighMass" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
 		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_ZZ_25ns" ); Tag->push_back( "ZZ" ); Xsec->push_back( 15.4 ); nEvents->push_back( 985598 );
 		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WZ_25ns" ); Tag->push_back( "WZ" ); Xsec->push_back( 66.1 ); nEvents->push_back( 999996 );
@@ -672,7 +674,7 @@ void DYAnalyzer::SetupMCsamples_v20160309_76X_MiniAODv2( TString Type, vector<TS
 	}
 	else if( Type == "Full_Powheg" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
 		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_ZZ_25ns" ); Tag->push_back( "ZZ" ); Xsec->push_back( 15.4 ); nEvents->push_back( 985598 );
 		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WZ_25ns" ); Tag->push_back( "WZ" ); Xsec->push_back( 66.1 ); nEvents->push_back( 999996 );
@@ -696,7 +698,7 @@ void DYAnalyzer::SetupMCsamples_v20160309_76X_MiniAODv2( TString Type, vector<TS
 	}
 	else if( Type == "Full_M120Cut" )
 	{
-		// cout << "# events should be adjusted later" << endl;
+                // std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
 		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_ZZ_25ns" ); Tag->push_back( "ZZ" ); Xsec->push_back( 15.4 ); nEvents->push_back( 985598 );
 		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WZ_25ns" ); Tag->push_back( "WZ" ); Xsec->push_back( 66.1 ); nEvents->push_back( 999996 );
@@ -790,7 +792,7 @@ void DYAnalyzer::SetupMCsamples_v20160309_76X_MiniAODv2( TString Type, vector<TS
 
 	}
 	else
-		cout << "Wrong Type!" << endl;
+                std::cout << "Wrong Type!" << endl;
 }
 
 void DYAnalyzer::SetupMCsamples_v20160131_MiniAODv2( TString Type, vector<TString> *ntupleDirectory, vector<TString> *Tag, vector<Double_t> *Xsec, vector<Double_t> *nEvents )
@@ -921,7 +923,7 @@ void DYAnalyzer::SetupMCsamples_v20160131_MiniAODv2( TString Type, vector<TStrin
 	}
 	else if( Type == "aMCNLO_DYEE" )
 	{
-		// cout << "Warning: # events should be adjusted using Sum weights of DYEE events (current one: DYMuMu SumWeights)" << endl;
+                // std::cout << "Warning: # events should be adjusted using Sum weights of DYEE events (current one: DYMuMu SumWeights)" << endl;
 		// -- Signal binned samples -- //
 		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYEE_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7.29361e+06 ); //nEvents: sum of weights within 10<M<50
 		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYEE_M50to200" ); Xsec->push_back( 6095.58346/3.0 ); nEvents->push_back( 6.40938e+06 ); //nEvents: sum of DYEE weights
@@ -950,7 +952,7 @@ void DYAnalyzer::SetupMCsamples_v20160131_MiniAODv2( TString Type, vector<TStrin
 		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M2000to3000_25ns" ); Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.000176089 ); nEvents->push_back( 12376.0 ); //nEvents: sum of DYMuMu weights 
 	}
 	else
-		cout << "Wrong Type!" << endl;
+                std::cout << "Wrong Type!" << endl;
 
 	return;
 }
@@ -1008,7 +1010,7 @@ void DYAnalyzer::SetupMCsamples_v20160117_MiniAOD_JetMET( TString Type, vector<T
 		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_ZMuMuPowheg_M6000toInf_25ns" );  Tag->push_back( "ZMuMu_M6000toInf" );  Xsec->push_back(2.066E-08);  nEvents->push_back(100000);
 	}
 	else
-		cout << "Wrong Type!" << endl;
+                std::cout << "Wrong Type!" << endl;
 
 	return;
 }
@@ -1333,7 +1335,7 @@ void DYAnalyzer::SetupPileUpReWeighting( Bool_t isMC )
 	TH1D *h_weight = (TH1D*)f->Get("h_PUReWeights");
 	if( h_weight == NULL )
 	{
-		cout << "ERROR! ... No Weight histogram!"<< endl;
+                std::cout << "ERROR! ... No Weight histogram!"<< endl;
 		return;
 	}
 
@@ -1348,7 +1350,7 @@ Double_t DYAnalyzer::PileUpWeightValue(Int_t PileUp_MC)
 {
 	if( PileUp_MC < 0 || PileUp_MC > 51 )
 	{
-		cout << "[PileUp_MC = " << PileUp_MC << "]: NO CORRESPONDING PU Weight! ... it returns 0" << endl;
+                std::cout << "[PileUp_MC = " << PileUp_MC << "]: NO CORRESPONDING PU Weight! ... it returns 0" << endl;
 		return 0;
 	}
 	return PileUpWeight[PileUp_MC];
@@ -1371,7 +1373,7 @@ void DYAnalyzer::SetupPileUpReWeighting_76X( Bool_t isMC )
 	TH1D *h_weight = (TH1D*)f->Get("h_PUReWeights");
 	if( h_weight == NULL )
 	{
-		cout << "ERROR! ... No Weight histogram!"<< endl;
+                std::cout << "ERROR! ... No Weight histogram!"<< endl;
 		return;
 	}
 
@@ -1386,7 +1388,7 @@ Double_t DYAnalyzer::PileUpWeightValue_76X(Int_t PileUp_MC)
 {
 	if( PileUp_MC < 0 || PileUp_MC > 49 )
 	{
-		cout << "[PileUp_MC = " << PileUp_MC << "]: NO CORRESPONDING PU Weight! ... it returns 0" << endl;
+                std::cout << "[PileUp_MC = " << PileUp_MC << "]: NO CORRESPONDING PU Weight! ... it returns 0" << endl;
 		return 0;
 	}
 	return PileUpWeight[PileUp_MC];
@@ -1408,7 +1410,7 @@ void DYAnalyzer::SetupPileUpReWeighting_80X( Bool_t isMC, TString ROOTFileName )
 	TH1D *h_weight = (TH1D*)f->Get("h_PUReWeights");
 	if( h_weight == NULL )
 	{
-		cout << "ERROR! ... No Weight histogram!"<< endl;
+                std::cout << "ERROR! ... No Weight histogram!"<< endl;
 		return;
 	}
 
@@ -1423,7 +1425,7 @@ Double_t DYAnalyzer::PileUpWeightValue_80X(Int_t PileUp_MC)
 {
 	if( PileUp_MC < 0 || PileUp_MC > 74 )
 	{
-		cout << "[PileUp_MC = " << PileUp_MC << "]: NO CORRESPONDING PU Weight! ... it returns 0" << endl;
+                std::cout << "[PileUp_MC = " << PileUp_MC << "]: NO CORRESPONDING PU Weight! ... it returns 0" << endl;
 		return 0;
 	}
 	return PileUpWeight[PileUp_MC];
@@ -1432,7 +1434,7 @@ Double_t DYAnalyzer::PileUpWeightValue_80X(Int_t PileUp_MC)
 void DYAnalyzer::SetupEfficiencyScaleFactor()
 {
 	TString Location_TnP = "/home/kplee/CommonCodes/DrellYanAnalysis/ROOTFile_TagProbeEfficiency_v20160329.root";
-	cout << "[Tag&Probe efficiency is from " << Location_TnP << " (Default, 74X)]" << endl;
+        std::cout << "[Tag&Probe efficiency is from " << Location_TnP << " (Default, 74X)]" << endl;
 	
 	TFile *f = new TFile( Location_TnP );
 	TH2D *h_RecoID_data = (TH2D*)f->Get("h_2D_Eff_RecoID_Data");
@@ -1483,13 +1485,13 @@ void DYAnalyzer::SetupEfficiencyScaleFactor()
 			Eff_HLTv4p3_MC[iter_x][iter_y] = HLTv4p3_MC;
 		}
 	}
-	cout << "Setting for efficiency correction factors is completed" << endl;
+        std::cout << "Setting for efficiency correction factors is completed" << endl;
 }
 
 void DYAnalyzer::SetupEfficiencyScaleFactor(TString ROOTFileName)
 {
 	TString Location_TnP = "/home/kplee/CommonCodes/DrellYanAnalysis/"+ROOTFileName;
-	cout << "[Tag&Probe efficiency is from " << Location_TnP << "]" << endl; 
+        std::cout << "[Tag&Probe efficiency is from " << Location_TnP << "]" << endl;
 
 	TFile *f = new TFile( Location_TnP );
 
@@ -1541,13 +1543,13 @@ void DYAnalyzer::SetupEfficiencyScaleFactor(TString ROOTFileName)
 			Eff_HLTv4p3_MC[iter_x][iter_y] = HLTv4p3_MC;
 		}
 	}
-	cout << "Setting for efficiency correction factors is completed" << endl;
+        std::cout << "Setting for efficiency correction factors is completed" << endl;
 }
 
 void DYAnalyzer::SetupEfficiencyScaleFactor_BtoF()
 {
 	TString Location = "./etc/effSF/effSF_muon/";
-	cout << "[Tag&Probe efficiency is from " << Location+"*BtoF.root" << "]" << endl; 
+        std::cout << "[Tag&Probe efficiency is from " << Location+"*BtoF.root" << "]" << endl;
 
 	TFile *f1 = new TFile( Location+"ID_SF_RunBtoF.root" );
 	TH2F *h_RecoID_data = (TH2F*)f1->Get("MC_NUM_HighPtID_DEN_genTracks_PAR_newpt_eta/efficienciesDATA/abseta_pair_ne_DATA");
@@ -1601,18 +1603,18 @@ void DYAnalyzer::SetupEfficiencyScaleFactor_BtoF()
 			Eff_HLT_data_BtoF[iter_x][iter_y] = HLT_data;
 			Eff_HLT_MC_BtoF[iter_x][iter_y] = HLT_MC;
 
-			//cout << "[iter_x, iter_y] : [" << iter_x << ", " << iter_y << "]" << endl;
-			//cout << "Eff_HLT_data_1 : " << Eff_HLT_data_BtoF[iter_x][iter_y] << endl;
-			//cout << "Eff_HLT_MC_1 : " << Eff_HLT_MC_BtoF[iter_x][iter_y] << endl;
+                        //std::cout << "[iter_x, iter_y] : [" << iter_x << ", " << iter_y << "]" << endl;
+                        //std::cout << "Eff_HLT_data_1 : " << Eff_HLT_data_BtoF[iter_x][iter_y] << endl;
+                        //std::cout << "Eff_HLT_MC_1 : " << Eff_HLT_MC_BtoF[iter_x][iter_y] << endl;
 		}
 	}
-	cout << "Setting for efficiency correction factors (BtoF) is completed" << endl;
+        std::cout << "Setting for efficiency correction factors (BtoF) is completed" << endl;
 }
 
 void DYAnalyzer::SetupEfficiencyScaleFactor_GtoH()
 {
 	TString Location = "./etc/effSF/effSF_muon/";
-	cout << "[Tag&Probe efficiency is from " << Location+"*GtoH.root" << "]" << endl; 
+        std::cout << "[Tag&Probe efficiency is from " << Location+"*GtoH.root" << "]" << endl;
 
 	TFile *f1 = new TFile( Location+"ID_SF_RunGtoH.root" );
 	TH2F *h_RecoID_data = (TH2F*)f1->Get("MC_NUM_HighPtID_DEN_genTracks_PAR_newpt_eta/efficienciesDATA/abseta_pair_ne_DATA");
@@ -1666,18 +1668,18 @@ void DYAnalyzer::SetupEfficiencyScaleFactor_GtoH()
 			Eff_HLT_data_GtoH[iter_x][iter_y] = HLT_data;
 			Eff_HLT_MC_GtoH[iter_x][iter_y] = HLT_MC;
 
-			//cout << "[iter_x, iter_y] : [" << iter_x << ", " << iter_y << "]" << endl;
-			//cout << "Eff_HLT_data_2 : " << Eff_HLT_data_GtoH[iter_x][iter_y] << endl;
-			//cout << "Eff_HLT_MC_2 : " << Eff_HLT_MC_GtoH[iter_x][iter_y] << endl;
+                        //std::cout << "[iter_x, iter_y] : [" << iter_x << ", " << iter_y << "]" << endl;
+                        //std::cout << "Eff_HLT_data_2 : " << Eff_HLT_data_GtoH[iter_x][iter_y] << endl;
+                        //std::cout << "Eff_HLT_MC_2 : " << Eff_HLT_MC_GtoH[iter_x][iter_y] << endl;
 		}
 	}
-	cout << "Setting for efficiency correction factors (GtoH) is completed" << endl;
+        std::cout << "Setting for efficiency correction factors (GtoH) is completed" << endl;
 }
 
 void DYAnalyzer::SetupEfficiencyScaleFactor_electron()
 {
 	TString Location = "./etc/effSF/effSF_electron/";
-	cout << "[Tag&Probe efficiency is from " << Location+"*.root" << "]" << endl; 
+        std::cout << "[Tag&Probe efficiency is from " << Location+"*.root" << "]" << endl;
 
 	TFile *f1 = new TFile( Location+"Reco_SF.root" );
 	TGraphErrors *h_reco_sf = (TGraphErrors*)f1->Get("grSF1D_0");
@@ -1726,14 +1728,14 @@ void DYAnalyzer::SetupEfficiencyScaleFactor_electron()
 			yy_reco[j] = y_reco[jj];
 
 			xlow = xmin;
-//			cout << j << "  " << xx_reco[j] << "  " << yy_reco[j] << endl;
+//			std::cout << j << "  " << xx_reco[j] << "  " << yy_reco[j] << endl;
 		} // End of rearrangement
 
 		for(Int_t iter_x = 0; iter_x < nEtaBins_reco; iter_x++)
 		{
 			Eff_Reco_data[iter_x][iter_y] = yy_reco[iter_x]; // actually, it is the scale factor.
 			Eff_Reco_MC[iter_x][iter_y] = 1;
-//			cout << "Reco: bin# = [" << iter_x << ", " << iter_y << "]" << " eta = " << xx_reco[iter_x] << " sf = " << yy_reco[iter_x] << endl;
+//			std::cout << "Reco: bin# = [" << iter_x << ", " << iter_y << "]" << " eta = " << xx_reco[iter_x] << " sf = " << yy_reco[iter_x] << endl;
 		}
 	}
 
@@ -1775,18 +1777,18 @@ void DYAnalyzer::SetupEfficiencyScaleFactor_electron()
 			yy_id[j] = y_id[jj];
 
 			xlow = xmin;
-//			cout << j << "  " << xx_id[j] << "  " << yy_id[j] << endl;
+//			std::cout << j << "  " << xx_id[j] << "  " << yy_id[j] << endl;
 		} // End of rearrangement
 
 		for(Int_t iter_x = 0; iter_x < nEtaBins_id; iter_x++)
 		{
 			Eff_ID_data[iter_x][iter_y] = yy_id[iter_x]; // actually, it is the scale factor.
 			Eff_ID_MC[iter_x][iter_y] = 1;
-//			cout << "ID: bin# = [" << iter_x << ", " << iter_y << "]" << " eta = " << xx_id[iter_x] << " sf = " << yy_id[iter_x] << endl;
+//			std::cout << "ID: bin# = [" << iter_x << ", " << iter_y << "]" << " eta = " << xx_id[iter_x] << " sf = " << yy_id[iter_x] << endl;
 		}
 	}
 
-	cout << "Setting for efficiency correction factors is completed" << endl;
+        std::cout << "Setting for efficiency correction factors is completed" << endl;
 }
 
 Double_t DYAnalyzer::EfficiencySF_EventWeight_HLTv4p2(Muon mu1, Muon mu2)
@@ -1839,7 +1841,7 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLTv4p2(Muon mu1, Muon mu2)
 	Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
 	Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
 
-	// cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
+        // std::cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
 	weight = Eff_data_all / Eff_MC_all;
 
 	if( weight > 2 )
@@ -1911,7 +1913,7 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLTv4p3(Muon mu1, Muon mu2)
 	Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
 	Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
 
-	// cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
+        // std::cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
 	weight = Eff_data_all / Eff_MC_all;
 
 	if( weight > 2 )
@@ -1989,7 +1991,7 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF(Muon mu1, Muon mu2)
 	Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
 	Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
 
-	//cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
+        //std::cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
 	weight = Eff_data_all / Eff_MC_all;
 
 	if( weight > 2 )
@@ -2067,7 +2069,7 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH(Muon mu1, Muon mu2)
 	Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
 	Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
 
-	//cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
+        //std::cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
 	weight = Eff_data_all / Eff_MC_all;
 
 	if( weight > 2 )
@@ -2538,7 +2540,7 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight(Muon mu1, Muon mu2, NtupleHandle *
 	Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
 	Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
 
-	// cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
+        // std::cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
 	weight = Eff_data_all / Eff_MC_all;
 
 	if( weight > 2 )
@@ -4823,13 +4825,13 @@ void DYAnalyzer::DimuonVertexProbNormChi2(NtupleHandle *ntuple, Double_t Pt1, Do
 	Int_t NProb = (Int_t)VtxProbCollection->size();
 
 	if( NPt1 != NPt2 || NPt2 != NProb || NPt1 != NProb ) 
-		cout << "NPt1: " << NPt1 << " NPt2: " << NPt2 << " Nprob: " << NProb << endl;
+                std::cout << "NPt1: " << NPt1 << " NPt2: " << NPt2 << " Nprob: " << NProb << endl;
 
-	// cout << "Pt1: " << Pt1 << " Pt2: " << Pt2 << endl;
+        // std::cout << "Pt1: " << Pt1 << " Pt2: " << Pt2 << endl;
 
 	for(Int_t i=0; i<NProb; i++)
 	{
-		// cout << "\tPtCollection1->at("<< i << "): " << PtCollection1->at(i) << " PtCollection2->at("<< i << "): " << PtCollection2->at(i) << endl;
+                // std::cout << "\tPtCollection1->at("<< i << "): " << PtCollection1->at(i) << " PtCollection2->at("<< i << "): " << PtCollection2->at(i) << endl;
 		if( ( PtCollection1->at(i) == Pt1 && PtCollection2->at(i) == Pt2 )  || ( PtCollection1->at(i) == Pt2 && PtCollection2->at(i) == Pt1 ) )
 		{
 			*VtxProb = VtxProbCollection->at(i);
@@ -4852,14 +4854,14 @@ Bool_t DYAnalyzer::EventSelection_Electron(vector< Electron > ElectronCollection
 	for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
 	{
 		Electron elec = ElectronCollection[j];
-		// cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
+                // std::cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
 		if( elec.isMediumElectron_Spring25ns() && elec.ecalDriven == 1 && elec.Pt > 15 )
 			QElectronCollection.push_back( ElectronCollection[j] );
 	}
 
 	Int_t nQElectrons = (Int_t)QElectronCollection.size();
 
-	// cout << "# qualified electrons: " << nQElectrons << endl;
+        // std::cout << "# qualified electrons: " << nQElectrons << endl;
 
 	if( nQElectrons == 2 )
 	{
@@ -4893,7 +4895,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel(vector< Electron > ElectronCol
 	for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
 	{
 		Electron elec = ElectronCollection[j];
-		// cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
+                // std::cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
 		//if( elec.isMediumElectron_Spring25ns() && elec.ecalDriven == 1 
 		if( elec.passMediumID == kTRUE // modified by Dalmin Pai
 			&& elec.Pt > SubPtCut && fabs(elec.etaSC) < SubEtaCut && !( fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566 ) )
@@ -4902,7 +4904,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel(vector< Electron > ElectronCol
 
 	Int_t nQElectrons = (Int_t)QElectronCollection.size();
 
-	// cout << "# qualified electrons: " << nQElectrons << endl;
+        // std::cout << "# qualified electrons: " << nQElectrons << endl;
 
 	if( nQElectrons == 2 )
 	{
@@ -4937,7 +4939,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel1(vector< Electron > ElectronCo
 	for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
 	{
 		Electron elec = ElectronCollection[j];
-		// cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
+                // std::cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
 		//if( elec.isMediumElectron_Spring25ns() && elec.ecalDriven == 1 
 		//if( elec.passMediumID == kTRUE // modified by Dalmin Pai
 		if( elec.isMediumElectron_2016dataFor80X_minus_Full5x5_SigmaIEtaIEta() == kTRUE
@@ -4947,7 +4949,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel1(vector< Electron > ElectronCo
 
 	Int_t nQElectrons = (Int_t)QElectronCollection.size();
 
-	// cout << "# qualified electrons: " << nQElectrons << endl;
+        // std::cout << "# qualified electrons: " << nQElectrons << endl;
 
 	if( nQElectrons == 2 )
 	{
@@ -4981,7 +4983,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel2(vector< Electron > ElectronCo
 	for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
 	{
 		Electron elec = ElectronCollection[j];
-		// cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
+                // std::cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
 		//if( elec.isMediumElectron_Spring25ns() && elec.ecalDriven == 1 
 		//if( elec.passMediumID == kTRUE // modified by Dalmin Pai
 		if( elec.isMediumElectron_2016dataFor80X_minus_dEtaInSeed() == kTRUE
@@ -4991,7 +4993,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel2(vector< Electron > ElectronCo
 
 	Int_t nQElectrons = (Int_t)QElectronCollection.size();
 
-	// cout << "# qualified electrons: " << nQElectrons << endl;
+        // std::cout << "# qualified electrons: " << nQElectrons << endl;
 
 	if( nQElectrons == 2 )
 	{
@@ -5025,7 +5027,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel3(vector< Electron > ElectronCo
 	for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
 	{
 		Electron elec = ElectronCollection[j];
-		// cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
+                // std::cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
 		//if( elec.isMediumElectron_Spring25ns() && elec.ecalDriven == 1 
 		//if( elec.passMediumID == kTRUE // modified by Dalmin Pai
 		if( elec.isMediumElectron_2016dataFor80X_minus_dPhiIn() == kTRUE
@@ -5035,7 +5037,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel3(vector< Electron > ElectronCo
 
 	Int_t nQElectrons = (Int_t)QElectronCollection.size();
 
-	// cout << "# qualified electrons: " << nQElectrons << endl;
+        // std::cout << "# qualified electrons: " << nQElectrons << endl;
 
 	if( nQElectrons == 2 )
 	{
@@ -5069,7 +5071,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel4(vector< Electron > ElectronCo
 	for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
 	{
 		Electron elec = ElectronCollection[j];
-		// cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
+                // std::cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
 		//if( elec.isMediumElectron_Spring25ns() && elec.ecalDriven == 1 
 		//if( elec.passMediumID == kTRUE // modified by Dalmin Pai
 		if( elec.isMediumElectron_2016dataFor80X_minus_HoverE() == kTRUE
@@ -5079,7 +5081,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel4(vector< Electron > ElectronCo
 
 	Int_t nQElectrons = (Int_t)QElectronCollection.size();
 
-	// cout << "# qualified electrons: " << nQElectrons << endl;
+        // std::cout << "# qualified electrons: " << nQElectrons << endl;
 
 	if( nQElectrons == 2 )
 	{
@@ -5113,7 +5115,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel5(vector< Electron > ElectronCo
 	for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
 	{
 		Electron elec = ElectronCollection[j];
-		// cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
+                // std::cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
 		//if( elec.isMediumElectron_Spring25ns() && elec.ecalDriven == 1 
 		//if( elec.passMediumID == kTRUE // modified by Dalmin Pai
 		if( elec.isMediumElectron_2016dataFor80X_minus_RelPFIso_Rho() == kTRUE
@@ -5123,7 +5125,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel5(vector< Electron > ElectronCo
 
 	Int_t nQElectrons = (Int_t)QElectronCollection.size();
 
-	// cout << "# qualified electrons: " << nQElectrons << endl;
+        // std::cout << "# qualified electrons: " << nQElectrons << endl;
 
 	if( nQElectrons == 2 )
 	{
@@ -5157,7 +5159,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel6(vector< Electron > ElectronCo
 	for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
 	{
 		Electron elec = ElectronCollection[j];
-		// cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
+                // std::cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
 		//if( elec.isMediumElectron_Spring25ns() && elec.ecalDriven == 1 
 		//if( elec.passMediumID == kTRUE // modified by Dalmin Pai
 		if( elec.isMediumElectron_2016dataFor80X_minus_InvEminusInvP() == kTRUE
@@ -5167,7 +5169,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel6(vector< Electron > ElectronCo
 
 	Int_t nQElectrons = (Int_t)QElectronCollection.size();
 
-	// cout << "# qualified electrons: " << nQElectrons << endl;
+        // std::cout << "# qualified electrons: " << nQElectrons << endl;
 
 	if( nQElectrons == 2 )
 	{
@@ -5201,7 +5203,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel7(vector< Electron > ElectronCo
 	for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
 	{
 		Electron elec = ElectronCollection[j];
-		// cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
+                // std::cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
 		//if( elec.isMediumElectron_Spring25ns() && elec.ecalDriven == 1 
 		//if( elec.passMediumID == kTRUE // modified by Dalmin Pai
 		if( elec.isMediumElectron_2016dataFor80X_minus_mHits() == kTRUE
@@ -5211,7 +5213,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel7(vector< Electron > ElectronCo
 
 	Int_t nQElectrons = (Int_t)QElectronCollection.size();
 
-	// cout << "# qualified electrons: " << nQElectrons << endl;
+        // std::cout << "# qualified electrons: " << nQElectrons << endl;
 
 	if( nQElectrons == 2 )
 	{
@@ -5245,7 +5247,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel8(vector< Electron > ElectronCo
 	for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
 	{
 		Electron elec = ElectronCollection[j];
-		// cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
+                // std::cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
 		//if( elec.isMediumElectron_Spring25ns() && elec.ecalDriven == 1 
 		//if( elec.passMediumID == kTRUE // modified by Dalmin Pai
 		if( elec.isMediumElectron_2016dataFor80X_minus_passConvVeto() == kTRUE
@@ -5255,7 +5257,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel8(vector< Electron > ElectronCo
 
 	Int_t nQElectrons = (Int_t)QElectronCollection.size();
 
-	// cout << "# qualified electrons: " << nQElectrons << endl;
+        // std::cout << "# qualified electrons: " << nQElectrons << endl;
 
 	if( nQElectrons == 2 )
 	{
@@ -5291,7 +5293,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel_NminusPFIso(vector< Electron >
 	for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
 	{
 		Electron elec = ElectronCollection[j];
-		// cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
+                // std::cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
 		if( elec.isMediumElectron_Spring25ns_minus_PFIso() && elec.ecalDriven == 1 
 			&& elec.Pt > SubPtCut && fabs(elec.etaSC) < SubEtaCut && !( fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566 ) )
 			QElectronCollection.push_back( ElectronCollection[j] );
@@ -5299,7 +5301,7 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel_NminusPFIso(vector< Electron >
 
 	Int_t nQElectrons = (Int_t)QElectronCollection.size();
 
-	// cout << "# qualified electrons: " << nQElectrons << endl;
+        // std::cout << "# qualified electrons: " << nQElectrons << endl;
 
 	if( nQElectrons == 2 )
 	{
@@ -5466,7 +5468,7 @@ TString DYAnalyzer::DecideFSRType(GenLepton preFSR1, GenLepton preFSR2, GenLepto
 		FSRType = "D";
 	else
 	{
-		cout << "ERROR: NO FSR TYPE CORRESPONDING TO THIS EVENT" << endl;
+                std::cout << "ERROR: NO FSR TYPE CORRESPONDING TO THIS EVENT" << endl;
 		FSRType = "NOTAssigned";
 	}
 
@@ -5541,7 +5543,7 @@ void DYAnalyzer::GenMatching(TString MuonType, NtupleHandle* ntuple, vector<Muon
 	}
 	else
 	{
-		cout << "Incorrect MuonType!" << endl;
+                std::cout << "Incorrect MuonType!" << endl;
 		return;
 	}
 
