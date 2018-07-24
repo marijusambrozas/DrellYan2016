@@ -53,8 +53,6 @@ Local/
 *#
 # temporary ROOT files
 *.pcm
-*.d
-*.so
 *.nav
 *.snm
 
