@@ -15,7 +15,8 @@
 
 // -- Customized Analyzer for MuMu selection -- //
 #include "./header/DYAnalyzer.h"
-#include "SelectedX.h"
+#include "./header/SelectedX.h"
+#include "header/myProgressBar_t.h"
 
 #define M_Mu 0.1056583715 // -- GeV -- //
 
@@ -23,12 +24,12 @@ static inline void loadBar(int x, int n, int r, int w);
 
 // -- Muon Channel -- //
 //void MakeSelectedMuMu(Int_t type, TString HLTname = "IsoMu24_OR_IsoTkMu24")
-void MakeSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
+void MakeReSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 {
 	// -- Run2016 luminosity [/pb] -- //
 	Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
 	L = L_B2H;
-        TString OutputName = "SelectedMuMu_ZToMuMu_M4500to6000_4.root";
+        TString OutputName = "ReSelectedMuMu_ZToMuMu_M4500to6000_4.root";
 
 //        TString DataType, DataLocation, DataLocation2, Type, OutputName;
 
@@ -120,7 +121,7 @@ void MakeSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 
         //Creating a file
         TFile* MuonFile = new TFile("/media/sf_DATA/"+OutputName, "RECREATE");
-        TTree* MuonTree = new TTree("DYTree", "/recoTree");
+        TTree* MuonTree = new TTree("DYTree", "DYTree");
 
         TTimeStamp ts_start;
 	cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
@@ -149,7 +150,7 @@ void MakeSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 //	else analyzer->SetupMCsamples_Moriond17(Type, &ntupleDirectory, &Tag, &Xsec, &nEvents);
 
         // -- Creating SelectedMuMu variables to assign branches -- //
-        SelectedMuMu_t MuMu; MuMu.CreateNew();
+        LongSelectedMuMu_t MuMu; MuMu.CreateNew();
 
         MuonTree->Branch("nVertices", &MuMu.nVertices);
         MuonTree->Branch("runNum", &MuMu.runNum);
@@ -223,6 +224,12 @@ void MakeSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
         MuonTree->Branch("Muon_TuneP_Pz", &MuMu.Muon_TuneP_Pz);
         MuonTree->Branch("Muon_TuneP_eta", &MuMu.Muon_TuneP_eta);
         MuonTree->Branch("Muon_TuneP_phi", &MuMu.Muon_TuneP_phi);
+        MuonTree->Branch("CosAngle", &MuMu.CosAngle);
+        MuonTree->Branch("vtxTrkChi2", &MuMu.vtxTrkChi2);
+        MuonTree->Branch("vtxTrkProb", &MuMu.vtxTrkProb);
+        MuonTree->Branch("vtxTrkNdof", &MuMu.vtxTrkNdof);
+        MuonTree->Branch("vtxTrkCkt1Pt", &MuMu.vtxTrkCkt1Pt);
+        MuonTree->Branch("vtxTrkCkt2Pt", &MuMu.vtxTrkCkt2Pt);
 
 	//Loop for all samples
 //	const Int_t Ntup = ntupleDirectory.size();
@@ -234,7 +241,7 @@ void MakeSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 
 //		cout << "\t<" << [i_tup] << ">" << endl;
 
-                TChain *chain = new TChain("recoTree/DYTree");
+                TChain *chain = new TChain("DYTree");
 //		//Set MC chain
 //		if( isMC == kTRUE ) chain->Add(BaseLocation+"/"+ntupleDirectory[i_tup]+"/*.root");
 //		//Set Data chain
@@ -242,57 +249,44 @@ void MakeSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 //			chain->Add(BaseLocation+"/"+DataLocation+"/*.root");
 //			if(type==7) chain->Add(BaseLocation+"/"+DataLocation2+"/*.root");
 //		}
-                chain->Add("/media/sf_DATA/ZToMuMu_M4500to6000_4.root/recoTree/DYTree;2"); // NEED A WAY TO TELL THE NUMBER OF CYCLES AND THEIR EXTENTION NAMES
+                chain->Add("/media/sf_DATA/LongSelectedMuMu_ZToMuMu_M4500to6000_4.root");
 
-                chain->Add("/media/sf_DATA/ZToMuMu_M4500to6000_4.root/recoTree/DYTree;3");
-
-		NtupleHandle *ntuple = new NtupleHandle( chain );
-		if( isMC == kTRUE ) {
-			ntuple->TurnOnBranches_GenLepton(); // for all leptons
-			ntuple->TurnOnBranches_GenOthers(); // for quarks
-		}
-		ntuple->TurnOnBranches_Muon();
+                LongSelectedMuMu_t * MuMuInput = new LongSelectedMuMu_t();
+                MuMuInput->CreateFromChain(chain);
 
 		Double_t SumWeight = 0, SumWeight_Separated = 0;
 
                 Int_t NEvents = chain->GetEntries();
 //		Int_t NEvents = 10000;						// test using small events
 		cout << "\t[Total Events: " << NEvents << "]" << endl;
+                myProgressBar_t bar(NEvents);
+
 		for(Int_t i=0; i<NEvents; i++)		
 		{	                       
-                        loadBar(i+1, NEvents, 50, 50);
-		
-			ntuple->GetEvent(i);
+                        MuMuInput->GetEvent(i);
 			
 			// -- Positive/Negative Gen-weights -- //
-                        ntuple->GENEvt_weight < 0 ? MuMu.GENEvt_weight = -1 : MuMu.GENEvt_weight = 1;
+                        MuMuInput->GENEvt_weight < 0 ? MuMu.GENEvt_weight = -1 : MuMu.GENEvt_weight = 1;
                         SumWeight += MuMu.GENEvt_weight;
-
-			// -- Separate DYLL samples -- //
-			Bool_t GenFlag = kFALSE;
-			GenFlag = analyzer->SeparateDYLLSample_isHardProcess(Tag[i_tup], ntuple);
-
-			// -- Separate ttbar samples -- //
-			Bool_t GenFlag_top = kTRUE;
 
 			// -- Normalization -- //
                         Double_t TotWeight = MuMu.GENEvt_weight;
                         if( isMC == kTRUE ) TotWeight = (L*Xsec[i_tup]/nEvents[i_tup])*MuMu.GENEvt_weight;
 
 			Bool_t TriggerFlag = kFALSE;
-			TriggerFlag = ntuple->isTriggered( analyzer->HLT );
+                        TriggerFlag = MuMuInput->isTriggered( analyzer->HLT );
 
-			if( TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE )
+                        if( TriggerFlag == kTRUE )
 			{
 				////////////////////////////////
 				// -- Reco level selection -- //
 				////////////////////////////////
                                 vector< Muon > MuonCollection;
-				Int_t NLeptons = ntuple->nMuon;
+                                Int_t NLeptons = MuMuInput->Muon_pT->size();
 				for(Int_t i_reco=0; i_reco<NLeptons; i_reco++)
 				{
                                         Muon mu;
-					mu.FillFromNtuple(ntuple, i_reco);
+                                        mu.FillFromSelectedX(MuMuInput, i_reco);
 
 					// -- Convert to TuneP variables -- //
 					analyzer->ConvertToTunePInfo( mu );
@@ -302,111 +296,123 @@ void MakeSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 				// -- Event Selection -- //
 				vector< Muon > SelectedMuonCollection;
                                 vector< Int_t > Sel_Index;
+                                Int_t IndexDi;
 				Bool_t isPassEventSelection = kFALSE;
-                                isPassEventSelection = analyzer->EventSelection_Zdiff_13TeV_HighPt(MuonCollection, ntuple, &SelectedMuonCollection, &Sel_Index);
+                                isPassEventSelection = analyzer->EventSelection_Zdiff_13TeV_HighPt(MuonCollection, MuMuInput, &SelectedMuonCollection, &Sel_Index, IndexDi);
 
 				if( isPassEventSelection == kTRUE )
 				{
                                         Muon mu1 = SelectedMuonCollection[0];
                                         Muon mu2 = SelectedMuonCollection[1];
 
-                                        MuMu.nVertices = ntuple->nVertices;
-                                        MuMu.runNum = ntuple->runNum;
-                                        MuMu.lumiBlock = ntuple->lumiBlock;
-                                        MuMu.evtNum = ntuple->evtNum;
-                                        MuMu.nPileUp = ntuple->nPileUp;
-                                        MuMu.HLT_ntrig = ntuple->HLT_ntrig;
+                                        MuMu.nVertices = MuMuInput->nVertices;
+                                        MuMu.runNum = MuMuInput->runNum;
+                                        MuMu.lumiBlock = MuMuInput->lumiBlock;
+                                        MuMu.evtNum = MuMuInput->evtNum;
+                                        MuMu.nPileUp = MuMuInput->nPileUp;
+                                        MuMu.HLT_ntrig = MuMuInput->HLT_ntrig;
 
-                                        Int_t zero_count = 0; // resolving if there is no more information in arrays
+                                        MuMu.Muon_InvM = (mu1.Momentum + mu2.Momentum).M();
 
-                                        for (Int_t iter=0; iter<1000; iter++)
+                                        if( IndexDi!=-1 )
                                         {
-                                            if(ntuple->HLT_trigEta[iter] && ntuple->HLT_trigPhi[iter])
+                                            MuMu.CosAngle->push_back(MuMuInput->CosAngle->at(IndexDi));
+                                            MuMu.vtxTrkChi2->push_back(MuMuInput->vtxTrkChi2->at(IndexDi));
+                                            MuMu.vtxTrkProb->push_back(MuMuInput->vtxTrkProb->at(IndexDi));
+                                            MuMu.vtxTrkNdof->push_back(MuMuInput->vtxTrkNdof->at(IndexDi));
+                                            MuMu.vtxTrkCkt1Pt->push_back(MuMuInput->vtxTrkCkt1Pt->at(IndexDi));
+                                            MuMu.vtxTrkCkt2Pt->push_back(MuMuInput->vtxTrkCkt2Pt->at(IndexDi));
+                                        }
+                                        else cout << "== ERROR: Event selection was passed but no dimuon index registered. ==" << endl;
+
+                                        for (UInt_t iter=0; iter<MuMuInput->HLT_trigEta->size(); iter++)
+                                        {
+                                            if(MuMuInput->HLT_trigEta->at(iter) && MuMuInput->HLT_trigPhi->at(iter))
                                             {
-                                                MuMu.HLT_trigFired->push_back(ntuple->HLT_trigFired[iter]);
-                                                MuMu.HLT_trigEta->push_back(ntuple->HLT_trigEta[iter]);
-                                                MuMu.HLT_trigPhi->push_back(ntuple->HLT_trigPhi[iter]);
-                                                if(iter<ntuple->HLT_ntrig) MuMu.HLT_trigName->push_back(ntuple->HLT_trigName->at(iter));
+                                                MuMu.HLT_trigFired->push_back(MuMuInput->HLT_trigFired->at(iter));
+                                                MuMu.HLT_trigEta->push_back(MuMuInput->HLT_trigEta->at(iter));
+                                                MuMu.HLT_trigPhi->push_back(MuMuInput->HLT_trigPhi->at(iter));
+                                                if(((Int_t)(iter))<MuMuInput->HLT_ntrig) MuMu.HLT_trigName->push_back(MuMuInput->HLT_trigName->at(iter));
                                             }
                                             else
                                             {
-                                                zero_count++;
-                                                if(zero_count>1) break;
+                                                cout << "HLT_trigEta and HLT_trigPhi do not exist. Breaking at " << iter << " iteration." << endl;
+                                                break;
                                             }
                                         }
 
-                                        if(Sel_Index.size()!=2) cout << "======== ERROR: The number of muons saved is not 2 ========" << endl;
+                                        if(Sel_Index.size()!=2) cout << "=========== ERROR: The number of muons saved is not 2 ===========" << endl;
                                         else
                                         {
                                             for (UInt_t iter=0; iter<Sel_Index.size(); iter++)
                                             {
-                                                Int_t i = Sel_Index[iter];
+                                                Int_t index = Sel_Index[iter];
 
-                                                MuMu.Muon_pT->push_back(ntuple->Muon_pT[i]);
-                                                MuMu.Muon_eta->push_back(ntuple->Muon_eta[i]);
-                                                MuMu.Muon_phi->push_back(ntuple->Muon_phi[i]);
-                                                MuMu.isGLBmuon->push_back(ntuple->isGLBmuon[i]);
-                                                MuMu.isPFmuon->push_back(ntuple->isPFmuon[i]);
-                                                MuMu.isTRKmuon->push_back(ntuple->isTRKmuon[i]);
-                                                MuMu.Muon_charge->push_back(ntuple->Muon_charge[i]);
-                                                MuMu.Muon_chi2dof->push_back(ntuple->Muon_chi2dof[i]);
-                                                MuMu.Muon_muonHits->push_back(ntuple->Muon_muonHits[i]);
-                                                MuMu.Muon_nSegments->push_back(ntuple->Muon_nSegments[i]);
-                                                MuMu.Muon_nMatches->push_back(ntuple->Muon_nMatches[i]);
-                                                MuMu.Muon_trackerLayers->push_back(ntuple->Muon_trackerLayers[i]);
-                                                MuMu.Muon_pixelHits->push_back(ntuple->Muon_pixelHits[i]);
-                                                MuMu.Muon_dxyVTX->push_back(ntuple->Muon_dxyVTX[i]);
-                                                MuMu.Muon_dzVTX->push_back(ntuple->Muon_dzVTX[i]);
-                                                MuMu.Muon_trkiso->push_back(ntuple->Muon_trkiso[i]);
-                                                MuMu.Muon_PfChargedHadronIsoR04->push_back(ntuple->Muon_PfChargedHadronIsoR04[i]);
-                                                MuMu.Muon_PfNeutralHadronIsoR04->push_back(ntuple->Muon_PfNeutralHadronIsoR04[i]);
-                                                MuMu.Muon_PfGammaIsoR04->push_back(ntuple->Muon_PfGammaIsoR04[i]);
-                                                MuMu.Muon_PFSumPUIsoR04->push_back(ntuple->Muon_PFSumPUIsoR04[i]);
-                                                MuMu.Muon_Px->push_back(ntuple->Muon_Px[i]);
-                                                MuMu.Muon_Py->push_back(ntuple->Muon_Py[i]);
-                                                MuMu.Muon_Pz->push_back(ntuple->Muon_Pz[i]);
+                                                MuMu.Muon_pT->push_back(MuMuInput->Muon_pT->at(index));
+                                                MuMu.Muon_eta->push_back(MuMuInput->Muon_eta->at(index));
+                                                MuMu.Muon_phi->push_back(MuMuInput->Muon_phi->at(index));
+                                                MuMu.isGLBmuon->push_back(MuMuInput->isGLBmuon->at(index));
+                                                MuMu.isPFmuon->push_back(MuMuInput->isPFmuon->at(index));
+                                                MuMu.isTRKmuon->push_back(MuMuInput->isTRKmuon->at(index));
+                                                MuMu.Muon_charge->push_back(MuMuInput->Muon_charge->at(index));
+                                                MuMu.Muon_chi2dof->push_back(MuMuInput->Muon_chi2dof->at(index));
+                                                MuMu.Muon_muonHits->push_back(MuMuInput->Muon_muonHits->at(index));
+                                                MuMu.Muon_nSegments->push_back(MuMuInput->Muon_nSegments->at(index));
+                                                MuMu.Muon_nMatches->push_back(MuMuInput->Muon_nMatches->at(index));
+                                                MuMu.Muon_trackerLayers->push_back(MuMuInput->Muon_trackerLayers->at(index));
+                                                MuMu.Muon_pixelHits->push_back(MuMuInput->Muon_pixelHits->at(index));
+                                                MuMu.Muon_dxyVTX->push_back(MuMuInput->Muon_dxyVTX->at(index));
+                                                MuMu.Muon_dzVTX->push_back(MuMuInput->Muon_dzVTX->at(index));
+                                                MuMu.Muon_trkiso->push_back(MuMuInput->Muon_trkiso->at(index));
+                                                MuMu.Muon_PfChargedHadronIsoR04->push_back(MuMuInput->Muon_PfChargedHadronIsoR04->at(index));
+                                                MuMu.Muon_PfNeutralHadronIsoR04->push_back(MuMuInput->Muon_PfNeutralHadronIsoR04->at(index));
+                                                MuMu.Muon_PfGammaIsoR04->push_back(MuMuInput->Muon_PfGammaIsoR04->at(index));
+                                                MuMu.Muon_PFSumPUIsoR04->push_back(MuMuInput->Muon_PFSumPUIsoR04->at(index));
+                                                MuMu.Muon_Px->push_back(MuMuInput->Muon_Px->at(index));
+                                                MuMu.Muon_Py->push_back(MuMuInput->Muon_Py->at(index));
+                                                MuMu.Muon_Pz->push_back(MuMuInput->Muon_Pz->at(index));
 
-                                                Double_t Mu_E = sqrt( ntuple->Muon_Px[i]*ntuple->Muon_Px[i] + ntuple->Muon_Py[i]*ntuple->Muon_Py[i]
-                                                                      + ntuple->Muon_Pz[i]*ntuple->Muon_Pz[i] + M_Mu*M_Mu );
+                                                Double_t Mu_E = sqrt( MuMuInput->Muon_Px->at(index)*MuMuInput->Muon_Px->at(index) + MuMuInput->Muon_Py->at(index)
+                                                                      *MuMuInput->Muon_Py->at(index)+ MuMuInput->Muon_Pz->at(index)*MuMuInput->Muon_Pz->at(index)
+                                                                      + M_Mu*M_Mu );
 
-                                                MuMu.Muon_E->push_back(Mu_E);
-                                                MuMu.Muon_InvM = (mu1.Momentum + mu2.Momentum).M();
+                                                MuMu.Muon_E->push_back(Mu_E);                                                
 
-                                                MuMu.Muon_Best_pT->push_back(ntuple->Muon_Best_pT[i]);
-                                                MuMu.Muon_Best_pTError->push_back(ntuple->Muon_Best_pTError[i]);
-                                                MuMu.Muon_Best_Px->push_back(ntuple->Muon_Best_Px[i]);
-                                                MuMu.Muon_Best_Py->push_back(ntuple->Muon_Best_Py[i]);
-                                                MuMu.Muon_Best_Pz->push_back(ntuple->Muon_Best_Pz[i]);
-                                                MuMu.Muon_Best_eta->push_back(ntuple->Muon_Best_eta[i]);
-                                                MuMu.Muon_Best_phi->push_back(ntuple->Muon_Best_phi[i]);
-                                                MuMu.Muon_Inner_pT->push_back(ntuple->Muon_Inner_pT[i]);
-                                                MuMu.Muon_Inner_pTError->push_back(ntuple->Muon_Inner_pTError[i]);
-                                                MuMu.Muon_Inner_Px->push_back(ntuple->Muon_Inner_Px[i]);
-                                                MuMu.Muon_Inner_Py->push_back(ntuple->Muon_Inner_Py[i]);
-                                                MuMu.Muon_Inner_Pz->push_back(ntuple->Muon_Inner_Pz[i]);
-                                                MuMu.Muon_Inner_eta->push_back(ntuple->Muon_Inner_eta[i]);
-                                                MuMu.Muon_Inner_phi->push_back(ntuple->Muon_Inner_phi[i]);
-                                                MuMu.Muon_Outer_pT->push_back(ntuple->Muon_Outer_pT[i]);
-                                                MuMu.Muon_Outer_pTError->push_back(ntuple->Muon_Outer_pTError[i]);
-                                                MuMu.Muon_Outer_Px->push_back(ntuple->Muon_Outer_Px[i]);
-                                                MuMu.Muon_Outer_Py->push_back(ntuple->Muon_Outer_Py[i]);
-                                                MuMu.Muon_Outer_Pz->push_back(ntuple->Muon_Outer_Pz[i]);
-                                                MuMu.Muon_Outer_eta->push_back(ntuple->Muon_Outer_eta[i]);
-                                                MuMu.Muon_Outer_phi->push_back(ntuple->Muon_Outer_phi[i]);
-                                                MuMu.Muon_GLB_pT->push_back(ntuple->Muon_GLB_pT[i]);
-                                                MuMu.Muon_GLB_pTError->push_back(ntuple->Muon_GLB_pTError[i]);
-                                                MuMu.Muon_GLB_Px->push_back(ntuple->Muon_GLB_Px[i]);
-                                                MuMu.Muon_GLB_Py->push_back(ntuple->Muon_GLB_Py[i]);
-                                                MuMu.Muon_GLB_Pz->push_back(ntuple->Muon_GLB_Pz[i]);
-                                                MuMu.Muon_GLB_eta->push_back(ntuple->Muon_GLB_eta[i]);
-                                                MuMu.Muon_GLB_phi->push_back(ntuple->Muon_GLB_phi[i]);
-                                                MuMu.Muon_TuneP_pT->push_back(ntuple->Muon_TuneP_pT[i]);
-                                                MuMu.Muon_TuneP_pTError->push_back(ntuple->Muon_TuneP_pTError[i]);
-                                                MuMu.Muon_TuneP_Px->push_back(ntuple->Muon_TuneP_Px[i]);
-                                                MuMu.Muon_TuneP_Py->push_back(ntuple->Muon_TuneP_Py[i]);
-                                                MuMu.Muon_TuneP_Pz->push_back(ntuple->Muon_TuneP_Pz[i]);
-                                                MuMu.Muon_TuneP_eta->push_back(ntuple->Muon_TuneP_eta[i]);
-                                                MuMu.Muon_TuneP_phi->push_back(ntuple->Muon_TuneP_phi[i]);
+                                                MuMu.Muon_Best_pT->push_back(MuMuInput->Muon_Best_pT->at(index));
+                                                MuMu.Muon_Best_pTError->push_back(MuMuInput->Muon_Best_pTError->at(index));
+                                                MuMu.Muon_Best_Px->push_back(MuMuInput->Muon_Best_Px->at(index));
+                                                MuMu.Muon_Best_Py->push_back(MuMuInput->Muon_Best_Py->at(index));
+                                                MuMu.Muon_Best_Pz->push_back(MuMuInput->Muon_Best_Pz->at(index));
+                                                MuMu.Muon_Best_eta->push_back(MuMuInput->Muon_Best_eta->at(index));
+                                                MuMu.Muon_Best_phi->push_back(MuMuInput->Muon_Best_phi->at(index));
+                                                MuMu.Muon_Inner_pT->push_back(MuMuInput->Muon_Inner_pT->at(index));
+                                                MuMu.Muon_Inner_pTError->push_back(MuMuInput->Muon_Inner_pTError->at(index));
+                                                MuMu.Muon_Inner_Px->push_back(MuMuInput->Muon_Inner_Px->at(index));
+                                                MuMu.Muon_Inner_Py->push_back(MuMuInput->Muon_Inner_Py->at(index));
+                                                MuMu.Muon_Inner_Pz->push_back(MuMuInput->Muon_Inner_Pz->at(index));
+                                                MuMu.Muon_Inner_eta->push_back(MuMuInput->Muon_Inner_eta->at(index));
+                                                MuMu.Muon_Inner_phi->push_back(MuMuInput->Muon_Inner_phi->at(index));
+                                                MuMu.Muon_Outer_pT->push_back(MuMuInput->Muon_Outer_pT->at(index));
+                                                MuMu.Muon_Outer_pTError->push_back(MuMuInput->Muon_Outer_pTError->at(index));
+                                                MuMu.Muon_Outer_Px->push_back(MuMuInput->Muon_Outer_Px->at(index));
+                                                MuMu.Muon_Outer_Py->push_back(MuMuInput->Muon_Outer_Py->at(index));
+                                                MuMu.Muon_Outer_Pz->push_back(MuMuInput->Muon_Outer_Pz->at(index));
+                                                MuMu.Muon_Outer_eta->push_back(MuMuInput->Muon_Outer_eta->at(index));
+                                                MuMu.Muon_Outer_phi->push_back(MuMuInput->Muon_Outer_phi->at(index));
+                                                MuMu.Muon_GLB_pT->push_back(MuMuInput->Muon_GLB_pT->at(index));
+                                                MuMu.Muon_GLB_pTError->push_back(MuMuInput->Muon_GLB_pTError->at(index));
+                                                MuMu.Muon_GLB_Px->push_back(MuMuInput->Muon_GLB_Px->at(index));
+                                                MuMu.Muon_GLB_Py->push_back(MuMuInput->Muon_GLB_Py->at(index));
+                                                MuMu.Muon_GLB_Pz->push_back(MuMuInput->Muon_GLB_Pz->at(index));
+                                                MuMu.Muon_GLB_eta->push_back(MuMuInput->Muon_GLB_eta->at(index));
+                                                MuMu.Muon_GLB_phi->push_back(MuMuInput->Muon_GLB_phi->at(index));
+                                                MuMu.Muon_TuneP_pT->push_back(MuMuInput->Muon_TuneP_pT->at(index));
+                                                MuMu.Muon_TuneP_pTError->push_back(MuMuInput->Muon_TuneP_pTError->at(index));
+                                                MuMu.Muon_TuneP_Px->push_back(MuMuInput->Muon_TuneP_Px->at(index));
+                                                MuMu.Muon_TuneP_Py->push_back(MuMuInput->Muon_TuneP_Py->at(index));
+                                                MuMu.Muon_TuneP_Pz->push_back(MuMuInput->Muon_TuneP_Pz->at(index));
+                                                MuMu.Muon_TuneP_eta->push_back(MuMuInput->Muon_TuneP_eta->at(index));
+                                                MuMu.Muon_TuneP_phi->push_back(MuMuInput->Muon_TuneP_phi->at(index));
                                             } // End of vector filling
                                         } // End of else()
 
@@ -475,6 +481,12 @@ void MakeSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
                                         MuMu.Muon_TuneP_Pz->clear();
                                         MuMu.Muon_TuneP_eta->clear();
                                         MuMu.Muon_TuneP_phi->clear();
+                                        MuMu.CosAngle->clear();
+                                        MuMu.vtxTrkChi2->clear();
+                                        MuMu.vtxTrkProb->clear();
+                                        MuMu.vtxTrkNdof->clear();
+                                        MuMu.vtxTrkCkt1Pt->clear();
+                                        MuMu.vtxTrkCkt2Pt->clear();
 
 //					Double_t reco_Pt = (mu1.Momentum + mu2.Momentum).Pt();
 //					Double_t reco_rapi = (mu1.Momentum + mu2.Momentum).Rapidity();
@@ -483,14 +495,19 @@ void MakeSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 
 			} //End of if( isTriggered )
 
+                        bar.Draw(i);
 		} //End of event iteration
 
 		printf("\tTotal sum of weights: %.1lf\n", SumWeight);
 		printf("\tSum of weights of Seperated events: %.1lf\n", SumWeight_Separated);
-		if( isMC == kTRUE ) printf("\tNormalization factor: %.8f\n", L*Xsec[i_tup]/nEvents[i_tup]);
-
+		if( isMC == kTRUE ) printf("\tNormalization factor: %.8f\n", L*Xsec[i_tup]/nEvents[i_tup]);                
 		Double_t LoopRunTime = looptime.CpuTime();
-		cout << "\tLoop RunTime(" << Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
+                cout << "\tLoop RunTime(" << Tag[i_tup] << "): " << LoopRunTime << " seconds" << endl;
+                cout << "============================================================\n" << endl;
+
+                cout << "Checking number of entries in output and input files:   ";
+                if(chain->GetEntries()==MuonTree->GetEntries()) cout << "OK! (" << MuonTree->GetEntries() << ")" << endl;
+                else cout << "Input: " << chain->GetEntries() << "     Output: " << MuonTree->GetEntries() << "\nCHECK SELECTION ALGORITHMS.\n" << endl;
 
 	} //end of i_tup iteration
 
@@ -508,31 +525,3 @@ void MakeSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 	TTimeStamp ts_end;
 	cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
 }
-
-static inline void loadBar(int x, int n, int r, int w)
-{
-    // Only update r times.
-    if( x == n )
-    	cout << endl;
-
-    if ( x % (n/r +1) != 0 ) return;
-
- 
-    // Calculuate the ratio of complete-to-incomplete.
-    float ratio = x/(float)n;
-    int   c     = ratio * w;
- 
-    // Show the percentage complete.
-    printf("%3d%% [", (int)(ratio*100) );
- 
-    // Show the load bar.
-    for (int x=0; x<c; x++) cout << "=";
- 
-    for (int x=c; x<w; x++) cout << " ";
- 
-    // ANSI Control codes to go back to the
-    // previous line and clear it.
-	cout << "]\r" << flush;
-
-}
-

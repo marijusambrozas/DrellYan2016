@@ -18,6 +18,7 @@
 
 //customized header files
 #include "NtupleHandle.h"
+#include "SelectedX.h"
 
 #define M_Mu 0.1056583715 // -- GeV -- //
 #define M_Elec 0.000510998 // -- GeV -- //
@@ -973,6 +974,88 @@ public:
 		TuneP_phi = ntuple->Muon_TuneP_phi[index];
 	}
 
+        void FillFromSelectedX(LongSelectedMuMu_t *ntuple, Int_t index)
+        {
+                Pt = ntuple->Muon_pT->at(index);
+                eta = ntuple->Muon_eta->at(index);
+                phi = ntuple->Muon_phi->at(index);
+                isGLB = ntuple->isGLBmuon->at(index);
+                isPF = ntuple->isPFmuon->at(index);
+                isTRK = ntuple->isTRKmuon->at(index);
+                charge = ntuple->Muon_charge->at(index);
+
+                chi2dof = ntuple->Muon_chi2dof->at(index);
+                muonHits = ntuple->Muon_muonHits->at(index);
+                nSegments = ntuple->Muon_nSegments->at(index);
+                nMatches = ntuple->Muon_nMatches->at(index);
+                trackerLayers = ntuple->Muon_trackerLayers->at(index);
+                pixelHits = ntuple->Muon_pixelHits->at(index);
+                dxyVTX = ntuple->Muon_dxyVTX->at(index);
+                dzVTX = ntuple->Muon_dzVTX->at(index);
+                trkiso = ntuple->Muon_trkiso->at(index) / ntuple->Muon_pT->at(index);
+
+                Double_t pfChargedIso = ntuple->Muon_PfChargedHadronIsoR04->at(index);
+                Double_t pfNeutralIso = ntuple->Muon_PfNeutralHadronIsoR04->at(index);
+                Double_t pfGammaIso = ntuple->Muon_PfGammaIsoR04->at(index);
+                relPFiso = (pfChargedIso + pfNeutralIso + pfGammaIso) / ntuple->Muon_pT->at(index);
+
+                Double_t pfSumPUPt = ntuple->Muon_PFSumPUIsoR04->at(index);
+                this->RelPFIso_dBeta = ( pfChargedIso + max(0.0, pfNeutralIso + pfGammaIso - 0.5*pfSumPUPt) ) / this->Pt;
+
+                Double_t px = ntuple->Muon_Px->at(index);
+                Double_t py = ntuple->Muon_Py->at(index);
+                Double_t pz = ntuple->Muon_Pz->at(index);
+                Double_t Mu_E = sqrt( px*px + py*py + pz*pz + M_Mu*M_Mu );
+                TLorentzVector v;
+                v.SetPxPyPzE(px, py, pz, Mu_E);
+                Momentum = v;
+
+                Best_pT = ntuple->Muon_Best_pT->at(index);
+                Best_pTError = ntuple->Muon_Best_pTError->at(index);
+                Best_Px = ntuple->Muon_Best_Px->at(index);
+                Best_Py = ntuple->Muon_Best_Py->at(index);
+                Best_Pz = ntuple->Muon_Best_Pz->at(index);
+                Best_eta = ntuple->Muon_Best_eta->at(index);
+                Best_phi = ntuple->Muon_Best_phi->at(index);
+
+                Inner_pT = ntuple->Muon_Inner_pT->at(index);
+                Inner_pTError = ntuple->Muon_Inner_pTError->at(index);
+                Inner_Px = ntuple->Muon_Inner_Px->at(index);
+                Inner_Py = ntuple->Muon_Inner_Py->at(index);
+                Inner_Pz = ntuple->Muon_Inner_Pz->at(index);
+                Inner_eta = ntuple->Muon_Inner_eta->at(index);
+                Inner_phi = ntuple->Muon_Inner_phi->at(index);
+
+                TLorentzVector v_inner;
+                Double_t Mu_Inner_E = sqrt( Inner_Px*Inner_Px + Inner_Py*Inner_Py + Inner_Pz*Inner_Pz + M_Mu*M_Mu );
+                v_inner.SetPxPyPzE(Inner_Px, Inner_Py, Inner_Pz, Mu_Inner_E);
+                Momentum_Inner =  v_inner;
+
+                Outer_pT = ntuple->Muon_Outer_pT->at(index);
+                Outer_pTError = ntuple->Muon_Outer_pTError->at(index);
+                Outer_Px = ntuple->Muon_Outer_Px->at(index);
+                Outer_Py = ntuple->Muon_Outer_Py->at(index);
+                Outer_Pz = ntuple->Muon_Outer_Pz->at(index);
+                Outer_eta = ntuple->Muon_Outer_eta->at(index);
+                Outer_phi = ntuple->Muon_Outer_phi->at(index);
+
+                GLB_pT = ntuple->Muon_GLB_pT->at(index);
+                GLB_pTError = ntuple->Muon_GLB_pTError->at(index);
+                GLB_Px = ntuple->Muon_GLB_Px->at(index);
+                GLB_Py = ntuple->Muon_GLB_Py->at(index);
+                GLB_Pz = ntuple->Muon_GLB_Pz->at(index);
+                GLB_eta = ntuple->Muon_GLB_eta->at(index);
+                GLB_phi = ntuple->Muon_GLB_phi->at(index);
+
+                TuneP_pT = ntuple->Muon_TuneP_pT->at(index);
+                TuneP_pTError = ntuple->Muon_TuneP_pTError->at(index);
+                TuneP_Px = ntuple->Muon_TuneP_Px->at(index);
+                TuneP_Py = ntuple->Muon_TuneP_Py->at(index);
+                TuneP_Pz = ntuple->Muon_TuneP_Pz->at(index);
+                TuneP_eta = ntuple->Muon_TuneP_eta->at(index);
+                TuneP_phi = ntuple->Muon_TuneP_phi->at(index);
+        }
+
 	// void ApplyRochCorr(rochcor2015 *rmcor, Int_t type)
 	// {
 	// 	float qter = 1.0;
@@ -1030,6 +1113,32 @@ public:
 		}
 		return isTrigMatch;
 	}
+
+        Bool_t isTrigMatched(LongSelectedMuMu_t *nh, TString HLT)
+        {
+                vector<string> *hlt_trigName = nh->HLT_trigName;
+                Int_t hlt_ntrig = nh->HLT_ntrig;
+
+                Bool_t isTrigMatch = false;
+                for( Int_t k = 0; k < hlt_ntrig; k++ )
+                {
+                        if( (hlt_trigName->at((unsigned int)k)) == HLT )
+                        {
+                                Double_t Lepton_eta = this->eta;
+                                Double_t Lepton_phi = this->phi;
+                                Double_t Trig_eta = nh->HLT_trigEta->at(k);
+                                Double_t Trig_phi = nh->HLT_trigPhi->at(k);
+
+                                Double_t dR = sqrt( (Lepton_eta - Trig_eta)*(Lepton_eta - Trig_eta) + (Lepton_phi - Trig_phi)*(Lepton_phi - Trig_phi) );
+                                if( dR < 0.3 && fabs( Lepton_eta ) < 2.4 )
+                                {
+                                        isTrigMatch = true;
+                                        break;
+                                }
+                        }
+                }
+                return isTrigMatch;
+        }
 
 	Bool_t isHighPtMuon()
 	{

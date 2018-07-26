@@ -34,7 +34,7 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////////
 ///                                                                             ///
-///     The SelectedMuMu_t class                                                ///
+///     The LongSelectedMuMu_t class                                            ///
 ///                                                                             ///
 ///     Stores vectors (mostly) with information about a pair of muons that     ///
 ///     passed the DY->MuMu selection                                           ///
@@ -45,19 +45,20 @@ public:
 ///             > #include "SelectedX.h"                                        ///
 ///             > TChain *ch = new TChain("...");                               ///
 ///             > ch->Add("...");                                               ///
-///             > SelectedMuMu_t mu;                                            ///
+///             > LongSelectedMuMu_t mu;                                        ///
 ///             > mu.CreateFromChain(ch);                                       ///
 ///             > mu.GetEvent(...);                                             ///
 ///             > cout << mu.Muon_pT->at(...);                                  ///
 ///                                                                             ///
 ///         To create an empty class (e.g. to fill with values and write        ///
 ///         into a tree):                                                       ///
-///             > SelectedMuMu_t mu;                                            ///
+///             > #include "SelectedX.h"                                        ///
+///             > LongSelectedMuMu_t mu;                                        ///
 ///             > mu.CreateNew();                                               ///
 ///             > mu.Muon_pT->push_back(...);                                   ///
 ///                                                                             ///
 ///////////////////////////////////////////////////////////////////////////////////
-class SelectedMuMu_t : public SelectedX
+class LongSelectedMuMu_t : public SelectedX
 {
 public:	         
     Double_t Muon_InvM;
@@ -104,12 +105,12 @@ public:
     std::vector<double> *Muon_PFSumPUIsoR04;
 
     //Dimuon variables
-//    std::vector<double> *CosAngle;
-//    std::vector<double> *vtxTrkChi2;
-//    std::vector<double> *vtxTrkProb;
-//    std::vector<double> *vtxTrkNdof;
-//    std::vector<double> *vtxTrkCkt1Pt;
-//    std::vector<double> *vtxTrkCkt2Pt;
+    std::vector<double> *CosAngle;
+    std::vector<double> *vtxTrkChi2;
+    std::vector<double> *vtxTrkProb;
+    std::vector<double> *vtxTrkNdof;
+    std::vector<double> *vtxTrkCkt1Pt;
+    std::vector<double> *vtxTrkCkt2Pt;
 //    std::vector<double> *vtxTrkDiEChi2;
 //    std::vector<double> *vtxTrkDiEProb;
 //    std::vector<double> *vtxTrkDiENdof;
@@ -120,13 +121,6 @@ public:
 //    std::vector<double> *vtxTrkEMuNdof;
 //    std::vector<double> *vtxTrkEMu1Pt;
 //    std::vector<double> *vtxTrkEMu2Pt;
-
-//    std::vector<double> *CosAngle_TuneP;
-//    std::vector<double> *vtxTrk1Pt_TuneP;
-//    std::vector<double> *vtxTrk2Pt_TuneP;
-//    std::vector<double> *vtxTrkChi2_TuneP;
-//    std::vector<double> *vtxTrkNdof_TuneP;
-//    std::vector<double> *vtxTrkProb_TuneP;
 
     // -- Various Track Information -- //
     std::vector<double> *Muon_Best_pT;
@@ -219,29 +213,22 @@ public:
         Muon_PfGammaIsoR04 = new std::vector<double>;
         Muon_PFSumPUIsoR04 = new std::vector<double>;
 
-    //    CosAngle = new std::vector<double>;
-    //    vtxTrkChi2 = new std::vector<double>;
-    //    vtxTrkProb = new std::vector<double>;
-    //    vtxTrkNdof = new std::vector<double>;
-    //    vtxTrkCkt1Pt = new std::vector<double>;
-    //    vtxTrkCkt2Pt = new std::vector<double>;
-    //    vtxTrkDiEChi2 = new std::vector<double>;
-    //    vtxTrkDiEProb = new std::vector<double>;
-    //    vtxTrkDiENdof = new std::vector<double>;
-    //    vtxTrkDiE1Pt = new std::vector<double>;
-    //    vtxTrkDiE2Pt = new std::vector<double>;
-    //    vtxTrkEMuChi2 = new std::vector<double>;
-    //    vtxTrkEMuProb = new std::vector<double>;
-    //    vtxTrkEMuNdof = new std::vector<double>;
-    //    vtxTrkEMu1Pt = new std::vector<double>;
-    //    vtxTrkEMu2Pt = new std::vector<double>;
-
-    //    CosAngle_TuneP = new std::vector<double>;
-    //    vtxTrk1Pt_TuneP = new std::vector<double>;
-    //    vtxTrk2Pt_TuneP = new std::vector<double>;
-    //    vtxTrkChi2_TuneP = new std::vector<double>;
-    //    vtxTrkNdof_TuneP = new std::vector<double>;
-    //    vtxTrkProb_TuneP = new std::vector<double>;
+        CosAngle = new std::vector<double>;
+        vtxTrkChi2 = new std::vector<double>;
+        vtxTrkProb = new std::vector<double>;
+        vtxTrkNdof = new std::vector<double>;
+        vtxTrkCkt1Pt = new std::vector<double>;
+        vtxTrkCkt2Pt = new std::vector<double>;
+//        vtxTrkDiEChi2 = new std::vector<double>;
+//        vtxTrkDiEProb = new std::vector<double>;
+//        vtxTrkDiENdof = new std::vector<double>;
+//        vtxTrkDiE1Pt = new std::vector<double>;
+//        vtxTrkDiE2Pt = new std::vector<double>;
+//        vtxTrkEMuChi2 = new std::vector<double>;
+//        vtxTrkEMuProb = new std::vector<double>;
+//        vtxTrkEMuNdof = new std::vector<double>;
+//        vtxTrkEMu1Pt = new std::vector<double>;
+//        vtxTrkEMu2Pt = new std::vector<double>;
 
         Muon_Best_pT = new std::vector<double>;
         Muon_Best_pTError = new std::vector<double>;
@@ -362,12 +349,12 @@ public:
         chain->SetBranchAddress("Muon_PfGammaIsoR04", &Muon_PfGammaIsoR04);
         chain->SetBranchAddress("Muon_PFSumPUIsoR04", &Muon_PFSumPUIsoR04);
 
-//        chain->SetBranchAddress("CosAngle", &CosAngle);
-//        chain->SetBranchAddress("vtxTrkChi2", &vtxTrkChi2);
-//        chain->SetBranchAddress("vtxTrkProb", &vtxTrkProb);
-//        chain->SetBranchAddress("vtxTrkNdof", &vtxTrkNdof);
-//        chain->SetBranchAddress("vtxTrkCkt1Pt", &vtxTrkCkt1Pt);
-//        chain->SetBranchAddress("vtxTrkCkt2Pt", &vtxTrkCkt2Pt);
+        chain->SetBranchAddress("CosAngle", &CosAngle);
+        chain->SetBranchAddress("vtxTrkChi2", &vtxTrkChi2);
+        chain->SetBranchAddress("vtxTrkProb", &vtxTrkProb);
+        chain->SetBranchAddress("vtxTrkNdof", &vtxTrkNdof);
+        chain->SetBranchAddress("vtxTrkCkt1Pt", &vtxTrkCkt1Pt);
+        chain->SetBranchAddress("vtxTrkCkt2Pt", &vtxTrkCkt2Pt);
 //        chain->SetBranchAddress("vtxTrkDiEChi2", &vtxTrkDiEChi2);
 //        chain->SetBranchAddress("vtxTrkDiEProb", &vtxTrkDiEProb);
 //        chain->SetBranchAddress("vtxTrkDiENdof", &vtxTrkDiENdof);
@@ -378,13 +365,6 @@ public:
 //        chain->SetBranchAddress("vtxTrkEMuNdof", &vtxTrkEMuNdof);
 //        chain->SetBranchAddress("vtxTrkEMu1Pt", &vtxTrkEMu1Pt);
 //        chain->SetBranchAddress("vtxTrkEMu2Pt", &vtxTrkEMu2Pt);
-
-//        chain->SetBranchAddress("CosAngle_TuneP", &CosAngle_TuneP);
-//        chain->SetBranchAddress("vtxTrk1Pt_TuneP", &vtxTrk1Pt_TuneP);
-//        chain->SetBranchAddress("vtxTrk2Pt_TuneP", &vtxTrk2Pt_TuneP);
-//        chain->SetBranchAddress("vtxTrkChi2_TuneP", &vtxTrkChi2_TuneP);
-//        chain->SetBranchAddress("vtxTrkNdof_TuneP", &vtxTrkNdof_TuneP);
-//        chain->SetBranchAddress("vtxTrkProb_TuneP", &vtxTrkProb_TuneP);
 
         chain->SetBranchAddress("Muon_Best_pT", &Muon_Best_pT);
         chain->SetBranchAddress("Muon_Best_pTError", &Muon_Best_pTError);
@@ -432,12 +412,13 @@ public:
         chain->AddBranchToCache("isPFmuon", 1);
         chain->AddBranchToCache("isGLBmuon", 1);
         chain->AddBranchToCache("isTRKmuon", 1);
-//        chain->AddBranchToCache("CosAngle", 1);
-//        chain->AddBranchToCache("vtxTrkChi2", 1);
-//        chain->AddBranchToCache("vtxTrkProb", 1);
-//        chain->AddBranchToCache("vtxTrkNdof", 1);
-//        chain->AddBranchToCache("vtxTrkCkt1Pt", 1);
-//        chain->AddBranchToCache("vtxTrkCkt2Pt", 1);
+
+        chain->AddBranchToCache("CosAngle", 1);
+        chain->AddBranchToCache("vtxTrkChi2", 1);
+        chain->AddBranchToCache("vtxTrkProb", 1);
+        chain->AddBranchToCache("vtxTrkNdof", 1);
+        chain->AddBranchToCache("vtxTrkCkt1Pt", 1);
+        chain->AddBranchToCache("vtxTrkCkt2Pt", 1);
 //        chain->AddBranchToCache("vtxTrkDiEChi2", 1);
 //        chain->AddBranchToCache("vtxTrkDiEProb", 1);
 //        chain->AddBranchToCache("vtxTrkDiENdof", 1);
@@ -448,13 +429,6 @@ public:
 //        chain->AddBranchToCache("vtxTrkEMuNdof", 1);
 //        chain->AddBranchToCache("vtxTrkEMu1Pt", 1);
 //        chain->AddBranchToCache("vtxTrkEMu2Pt", 1);
-
-//        chain->AddBranchToCache("CosAngle_TuneP", 1);
-//        chain->AddBranchToCache("vtxTrk1Pt_TuneP", 1);
-//        chain->AddBranchToCache("vtxTrk2Pt_TuneP", 1);
-//        chain->AddBranchToCache("vtxTrkChi2_TuneP", 1);
-//        chain->AddBranchToCache("vtxTrkNdof_TuneP", 1);
-//        chain->AddBranchToCache("vtxTrkProb_TuneP", 1);
 
         chain->AddBranchToCache("Muon_pT", 1);
         chain->AddBranchToCache("Muon_eta", 1);
@@ -570,12 +544,13 @@ public:
         chain->SetBranchStatus("isPFmuon", 1);
         chain->SetBranchStatus("isGLBmuon", 1);
         chain->SetBranchStatus("isTRKmuon", 1);
-//        chain->SetBranchStatus("CosAngle", 1);
-//        chain->SetBranchStatus("vtxTrkChi2", 1);
-//        chain->SetBranchStatus("vtxTrkProb", 1);
-//        chain->SetBranchStatus("vtxTrkNdof", 1);
-//        chain->SetBranchStatus("vtxTrkCkt1Pt", 1);
-//        chain->SetBranchStatus("vtxTrkCkt2Pt", 1);
+
+        chain->SetBranchStatus("CosAngle", 1);
+        chain->SetBranchStatus("vtxTrkChi2", 1);
+        chain->SetBranchStatus("vtxTrkProb", 1);
+        chain->SetBranchStatus("vtxTrkNdof", 1);
+        chain->SetBranchStatus("vtxTrkCkt1Pt", 1);
+        chain->SetBranchStatus("vtxTrkCkt2Pt", 1);
 //        chain->SetBranchStatus("vtxTrkDiEChi2", 1);
 //        chain->SetBranchStatus("vtxTrkDiEProb", 1);
 //        chain->SetBranchStatus("vtxTrkDiENdof", 1);
@@ -586,13 +561,6 @@ public:
 //        chain->SetBranchStatus("vtxTrkEMuNdof", 1);
 //        chain->SetBranchStatus("vtxTrkEMu1Pt", 1);
 //        chain->SetBranchStatus("vtxTrkEMu2Pt", 1);
-
-//        chain->SetBranchStatus("CosAngle_TuneP", 1);
-//        chain->SetBranchStatus("vtxTrk1Pt_TuneP", 1);
-//        chain->SetBranchStatus("vtxTrk2Pt_TuneP", 1);
-//        chain->SetBranchStatus("vtxTrkChi2_TuneP", 1);
-//        chain->SetBranchStatus("vtxTrkNdof_TuneP", 1);
-//        chain->SetBranchStatus("vtxTrkProb_TuneP", 1);
 
         chain->SetBranchStatus("Muon_pT", 1);
         chain->SetBranchStatus("Muon_eta", 1);
@@ -823,7 +791,7 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////////
 ///                                                                             ///
-///     The SelectedEE_t class                                                  ///
+///     The LongSelectedEE_t class                                              ///
 ///                                                                             ///
 ///     Stores vectors (mostly) with information about a pair of electrons      ///
 ///     that passed the DY->ee selection                                        ///
@@ -833,7 +801,7 @@ public:
 ///         To read from file:                                                  ///
 ///             > TChain *ch = new TChain("...");                               ///
 ///             > ch->Add("...");                                               ///
-///             > SelectedEE_t ele;                                             ///
+///             > LongSelectedEE_t ele;                                         ///
 ///             > ele.CreateFromChain(ch);                                      ///
 ///             > ele.GetEvent(...);                                            ///
 ///             > cout << ele.Electron_pT->at(...);                             ///
@@ -845,7 +813,7 @@ public:
 ///             > ele.Electron_pT->push_back(...);                              ///
 ///                                                                             ///
 ///////////////////////////////////////////////////////////////////////////////////
-class SelectedEE_t : public SelectedX
+class LongSelectedEE_t : public SelectedX
 {
 public:
     Double_t Electron_InvM;
