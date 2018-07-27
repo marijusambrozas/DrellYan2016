@@ -21,10 +21,8 @@
 
 #define M_Mu 0.1056583715 // -- GeV -- //
 
-static inline void loadBar(int x, int n, int r, int w);
-
 // -- Muon Channel -- //
-//void MakeSelectedMuMu(Int_t type, TString HLTname = "IsoMu24_OR_IsoTkMu24")
+//void MakeLongSelectedMuMu(Int_t type, TString HLTname = "IsoMu24_OR_IsoTkMu24")
 void MakeLongSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 {
 	// -- Run2016 luminosity [/pb] -- //

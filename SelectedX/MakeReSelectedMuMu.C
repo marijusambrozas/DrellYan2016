@@ -13,17 +13,15 @@
 #include <iostream>
 #include <sstream>
 
-// -- Customized Analyzer for MuMu selection -- //
+// -- Customized Analyzer for MuMu reselection from selected MuMu file -- //
 #include "./header/DYAnalyzer.h"
 #include "./header/SelectedX.h"
 #include "header/myProgressBar_t.h"
 
 #define M_Mu 0.1056583715 // -- GeV -- //
 
-static inline void loadBar(int x, int n, int r, int w);
-
 // -- Muon Channel -- //
-//void MakeSelectedMuMu(Int_t type, TString HLTname = "IsoMu24_OR_IsoTkMu24")
+//void MakeReSelectedMuMu(Int_t type, TString HLTname = "IsoMu24_OR_IsoTkMu24")
 void MakeReSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 {
 	// -- Run2016 luminosity [/pb] -- //

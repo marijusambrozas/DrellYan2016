@@ -26,7 +26,7 @@ void myProgressBar_t::Draw(UInt_t iEntry)
                 std::cout.flush();
             }
 //            else std::cout << "\r";
-            if (nume==deno-1) std::cout << "\r        Selection finished.                                                         \n";
+            if (nume==deno-1) std::cout << "\r        Finished.                                                         \n";
         }
     }
     else { std::cout << "Progress bar was not set.\n"; return; }
