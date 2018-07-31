@@ -11,33 +11,19 @@
 class SelectedX
 {
 public:
-        TChain *chain;
-        Bool_t File_Given = kFALSE;
-
-    //Event Informations
-    Int_t nVertices;
-    Int_t runNum;
-    Int_t lumiBlock;
-    Int_t evtNum;
-    Int_t nPileUp;
-
-    //Trigger variables
-    Int_t HLT_ntrig;
-    std::vector<int> *HLT_trigFired;
-    std::vector<string> *HLT_trigName;
-//    std::vector<double> *HLT_trigPt;
-    std::vector<double> *HLT_trigEta;
-    std::vector<double> *HLT_trigPhi;
+    TChain *chain;
+    Bool_t File_Given = kFALSE;
 
     Double_t GENEvt_weight;
+    Int_t nPileUp;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////
 ///                                                                             ///
 ///     The LongSelectedMuMu_t class                                            ///
 ///                                                                             ///
-///     Stores vectors (mostly) with information about a pair of muons that     ///
-///     passed the DY->MuMu selection                                           ///
+///     Similar to SelectedMuMu_t, just stores enough information to repeat     ///
+///     the full event selection (except for the IsHardProcess)                 ///
 ///                                                                             ///
 ///     How to use (examples):                                                  ///
 ///                                                                             ///
@@ -60,14 +46,30 @@ public:
 ///////////////////////////////////////////////////////////////////////////////////
 class LongSelectedMuMu_t : public SelectedX
 {
-public:	         
+public:
+    //Event Information
+    Int_t nVertices;
+    Int_t runNum;
+    Int_t lumiBlock;
+    Int_t evtNum;
+
+    Bool_t isHardProcess;
+
+    //Trigger variables
+    Int_t HLT_ntrig;
+    std::vector<int> *HLT_trigFired;
+    std::vector<string> *HLT_trigName;
+//    std::vector<double> *HLT_trigPt;
+    std::vector<double> *HLT_trigEta;
+    std::vector<double> *HLT_trigPhi;
+
     Double_t Muon_InvM;
 
     // -- Physical Variables -- //
     std::vector<double> *Muon_pT;
     std::vector<double> *Muon_eta;
     std::vector<double> *Muon_phi;
-    
+
     // -- Cut variables -- //
 //    std::vector<int> *Muon_muonType;
     std::vector<double> *Muon_chi2dof;
@@ -87,17 +89,17 @@ public:
     std::vector<int> *isGLBmuon;
     std::vector<int> *isPFmuon;
     std::vector<int> *isTRKmuon;
-    
+
     // -- for invariant mass calculation -- //
     std::vector<double> *Muon_Px;
     std::vector<double> *Muon_Py;
     std::vector<double> *Muon_Pz;
-    
+
 //    Double_t Muon_dB[MaxN];
     // -- for the muon momentum corrections -- //
     std::vector<int> *Muon_charge;
-    std::vector<double> *Muon_E;
-    
+    std::vector<double> *Muon_Energy;
+
     //PF information
     std::vector<double> *Muon_PfChargedHadronIsoR04;
     std::vector<double> *Muon_PfNeutralHadronIsoR04;
@@ -206,7 +208,7 @@ public:
     //    Muon_dB = new std::vector<double>;
 
         Muon_charge = new std::vector<int>;
-        Muon_E = new std::vector<double>;
+        Muon_Energy = new std::vector<double>;
 
         Muon_PfChargedHadronIsoR04 = new std::vector<double>;
         Muon_PfNeutralHadronIsoR04 = new std::vector<double>;
@@ -276,46 +278,27 @@ public:
 
     // -- Constructor with chain -- //
     void CreateFromChain(TChain *chainptr)
-    {               
-    	chain = chainptr;
+    {
+        chain = chainptr;
         Int_t cachesize = 500000000; // -- 500MB -- //
         chain->SetCacheSize(cachesize);
 
-    	// -- Event Information -- //
-
-    	chain->SetBranchAddress("nVertices", &nVertices);
-    	chain->SetBranchAddress("runNum", &runNum);
+        chain->SetBranchAddress("nVertices", &nVertices);
+        chain->SetBranchAddress("runNum", &runNum);
         chain->SetBranchAddress("lumiBlock", &lumiBlock);
         chain->SetBranchAddress("evtNum", &evtNum);
-    	chain->SetBranchAddress("nPileUp", &nPileUp);
-
-        chain->AddBranchToCache("nVertices", 1);
-        chain->AddBranchToCache("runNum", 1);
-        chain->AddBranchToCache("lumiBlock", 1);
-        chain->AddBranchToCache("evtNum", 1);
-        chain->AddBranchToCache("nPileUp", 1);
-
-    	// -- Trigger Information -- //
-
-    	chain->SetBranchAddress("HLT_trigName", &HLT_trigName);
-        chain->SetBranchAddress("HLT_trigFired", &HLT_trigFired);
-    	chain->SetBranchAddress("HLT_ntrig", &HLT_ntrig);
-//        chain->SetBranchAddress("HLT_trigPt", &HLT_trigPt);
-    	chain->SetBranchAddress("HLT_trigEta", &HLT_trigEta);
-    	chain->SetBranchAddress("HLT_trigPhi", &HLT_trigPhi);
-
-        chain->AddBranchToCache("HLT_trigName", 1);
-        chain->AddBranchToCache("HLT_ntrig", 1);
-        chain->AddBranchToCache("HLT_trigFired", 1);
-//        chain->AddBranchToCache("HLT_trigPt", 1);
-        chain->AddBranchToCache("HLT_trigEta", 1);
-        chain->AddBranchToCache("HLT_trigPhi", 1);
-
+        chain->SetBranchAddress("nPileUp", &nPileUp);
+        chain->SetBranchAddress("isHardProcess", &isHardProcess);
         chain->SetBranchAddress("GENEvt_weight", &GENEvt_weight);
-        chain->SetBranchAddress("Muon_InvM", &Muon_InvM);
 
-        chain->AddBranchToCache("GENEvt_weight", 1);
-        chain->AddBranchToCache("Muon_InvM", 1);
+        chain->SetBranchAddress("HLT_trigName", &HLT_trigName);
+        chain->SetBranchAddress("HLT_trigFired", &HLT_trigFired);
+        chain->SetBranchAddress("HLT_ntrig", &HLT_ntrig);
+//        chain->SetBranchAddress("HLT_trigPt", &HLT_trigPt);
+        chain->SetBranchAddress("HLT_trigEta", &HLT_trigEta);
+        chain->SetBranchAddress("HLT_trigPhi", &HLT_trigPhi);
+
+        chain->SetBranchAddress("Muon_InvM", &Muon_InvM);
 
         chain->SetBranchAddress("Muon_pT", &Muon_pT);
         chain->SetBranchAddress("Muon_eta", &Muon_eta);
@@ -342,7 +325,7 @@ public:
 //        chain->SetBranchAddress("Muon_dB", Muon_dB );
 
         chain->SetBranchAddress("Muon_charge", &Muon_charge);
-        chain->SetBranchAddress("Muon_E", &Muon_E);
+        chain->SetBranchAddress("Muon_Energy", &Muon_Energy);
 
         chain->SetBranchAddress("Muon_PfChargedHadronIsoR04", &Muon_PfChargedHadronIsoR04);
         chain->SetBranchAddress("Muon_PfNeutralHadronIsoR04", &Muon_PfNeutralHadronIsoR04);
@@ -409,6 +392,23 @@ public:
 //        chain->SetBranchAddress("Muon_stationMask", &Muon_stationMask);
 //        chain->SetBranchAddress("Muon_nMatchesRPCLayers", &Muon_nMatchesRPCLayers);
 
+        chain->AddBranchToCache("nVertices", 1);
+        chain->AddBranchToCache("runNum", 1);
+        chain->AddBranchToCache("lumiBlock", 1);
+        chain->AddBranchToCache("evtNum", 1);
+        chain->AddBranchToCache("nPileUp", 1);
+        chain->AddBranchToCache("isHardProcess", 1);
+        chain->AddBranchToCache("GENEvt_weight", 1);
+
+        chain->AddBranchToCache("HLT_trigName", 1);
+        chain->AddBranchToCache("HLT_ntrig", 1);
+        chain->AddBranchToCache("HLT_trigFired", 1);
+//        chain->AddBranchToCache("HLT_trigPt", 1);
+        chain->AddBranchToCache("HLT_trigEta", 1);
+        chain->AddBranchToCache("HLT_trigPhi", 1);
+
+        chain->AddBranchToCache("Muon_InvM", 1);
+
         chain->AddBranchToCache("isPFmuon", 1);
         chain->AddBranchToCache("isGLBmuon", 1);
         chain->AddBranchToCache("isTRKmuon", 1);
@@ -455,7 +455,7 @@ public:
 //        chain->AddBranchToCache("Muon_dB", 1);
 
         chain->AddBranchToCache("Muon_charge", 1);
-        chain->AddBranchToCache("Muon_E", 1);
+        chain->AddBranchToCache("Muon_Energy", 1);
 
         chain->AddBranchToCache("Muon_PfChargedHadronIsoR04", 1);
         chain->AddBranchToCache("Muon_PfNeutralHadronIsoR04", 1);
@@ -530,6 +530,8 @@ public:
         chain->SetBranchStatus("lumiBlock", 1);
         chain->SetBranchStatus("evtNum", 1);
         chain->SetBranchStatus("nPileUp", 1);
+        chain->SetBranchStatus("isHardProcess", 1);
+        chain->SetBranchStatus("GENEvt_weight", 1);
 
         chain->SetBranchStatus("HLT_trigName", 1);
         chain->SetBranchStatus("HLT_ntrig", 1);
@@ -538,7 +540,6 @@ public:
         chain->SetBranchStatus("HLT_trigEta", 1);
         chain->SetBranchStatus("HLT_trigPhi", 1);
 
-        chain->SetBranchStatus("GENEvt_weight", 1);
         chain->SetBranchStatus("Muon_InvM", 1);
 
         chain->SetBranchStatus("isPFmuon", 1);
@@ -579,14 +580,14 @@ public:
         chain->SetBranchStatus("Muon_dxyVTX", 1);
         chain->SetBranchStatus("Muon_dzVTX", 1);
         chain->SetBranchStatus("Muon_trkiso", 1);
-        
+
         chain->SetBranchStatus("Muon_Px", 1);
         chain->SetBranchStatus("Muon_Py", 1);
         chain->SetBranchStatus("Muon_Pz", 1);
 //        chain->SetBranchStatus("Muon_dB", 1);
         chain->SetBranchStatus("Muon_charge", 1);
-        chain->SetBranchStatus("Muon_E", 1);
-        
+        chain->SetBranchStatus("Muon_Energy", 1);
+
         chain->SetBranchStatus("Muon_PfChargedHadronIsoR04", 1);
         chain->SetBranchStatus("Muon_PfNeutralHadronIsoR04" ,1);
         chain->SetBranchStatus("Muon_PfGammaIsoR04", 1);
@@ -706,7 +707,7 @@ public:
             return;
         }
         if(!chain) return;
-        
+
         chain->GetEntry(i);
     }
 
@@ -791,14 +792,230 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////////
 ///                                                                             ///
+///     The SelectedMuMu_t class                                                ///
+///                                                                             ///
+///     Stores vectors (mostly) with the main information about a pair of       ///
+///     muons that passed the DY->MuMu selection.                               ///
+///                                                                             ///
+///     How to use (examples):                                                  ///
+///                                                                             ///
+///         To read from file:                                                  ///
+///             > #include "SelectedX.h"                                        ///
+///             > TChain *ch = new TChain("...");                               ///
+///             > ch->Add("...");                                               ///
+///             > SelectedMuMu_t mu;                                            ///
+///             > mu.CreateFromChain(ch);                                       ///
+///             > mu.GetEvent(...);                                             ///
+///             > cout << mu.Muon_Px->at(...);                                  ///
+///                                                                             ///
+///         To create an empty class (e.g. to fill with values and write        ///
+///         into a tree):                                                       ///
+///             > #include "SelectedX.h"                                        ///
+///             > SelectedMuMu_t mu;                                            ///
+///             > mu.CreateNew();                                               ///
+///             > mu.Muon_Px->push_back(...);                                   ///
+///                                                                             ///
+///////////////////////////////////////////////////////////////////////////////////
+class SelectedMuMu_t : public SelectedX
+{
+public:
+    Bool_t isSelPassed;
+
+    Double_t Muon_InvM;
+    std::vector<double> *Muon_pT;
+    std::vector<double> *Muon_eta;
+    std::vector<double> *Muon_phi;
+    std::vector<double> *Muon_Energy;
+    std::vector<int> *Muon_charge;
+    std::vector<double> *Muon_TuneP_pT;
+    std::vector<double> *Muon_TuneP_eta;
+    std::vector<double> *Muon_TuneP_phi;
+
+    // -- Constructor -- //
+    void CreateNew()
+    {
+        Muon_pT = new std::vector<double>;
+        Muon_eta = new std::vector<double>;
+        Muon_phi = new std::vector<double>;
+        Muon_Energy = new std::vector<double>;
+        Muon_charge = new std::vector<int>;
+
+        Muon_TuneP_pT = new std::vector<double>;
+        Muon_TuneP_eta = new std::vector<double>;
+        Muon_TuneP_phi = new std::vector<double>;
+    }
+
+    // -- Constructor with chain -- //
+    void CreateFromChain(TChain *chainptr)
+    {
+        chain = chainptr;
+        Int_t cachesize = 500000000; // -- 500MB -- //
+        chain->SetCacheSize(cachesize);
+
+        chain->SetBranchAddress("GENEvt_weight", &GENEvt_weight);
+        chain->SetBranchAddress("nPileUp", &nPileUp);
+        chain->SetBranchAddress("isSelPassed", &isSelPassed);
+        chain->SetBranchAddress("Muon_InvM", &Muon_InvM);
+        chain->SetBranchAddress("Muon_pT", &Muon_pT);
+        chain->SetBranchAddress("Muon_eta", &Muon_eta);
+        chain->SetBranchAddress("Muon_phi", &Muon_phi);
+        chain->SetBranchAddress("Muon_charge", &Muon_charge);
+        chain->SetBranchAddress("Muon_Energy", &Muon_Energy);
+        chain->SetBranchAddress("Muon_TuneP_pT", &Muon_TuneP_pT);
+        chain->SetBranchAddress("Muon_TuneP_eta", &Muon_TuneP_eta);
+        chain->SetBranchAddress("Muon_TuneP_phi", &Muon_TuneP_phi);
+
+        chain->AddBranchToCache("GENEvt_weight", 1);
+        chain->AddBranchToCache("nPileUp", 1);
+        chain->AddBranchToCache("isSelPassed", 1);
+        chain->AddBranchToCache("Muon_InvM", 1);
+        chain->AddBranchToCache("Muon_pT", 1);
+        chain->AddBranchToCache("Muon_eta", 1);
+        chain->AddBranchToCache("Muon_phi", 1);
+        chain->AddBranchToCache("Muon_charge", 1);
+        chain->AddBranchToCache("Muon_Energy", 1);
+        chain->AddBranchToCache("Muon_TuneP_pT", 1);
+        chain->AddBranchToCache("Muon_TuneP_eta", 1);
+        chain->AddBranchToCache("Muon_TuneP_phi", 1);
+
+        File_Given = kTRUE;
+    }
+
+    void CreateFromLongSelectedMuMu(LongSelectedMuMu_t *Mu, Bool_t SelPassed)
+    {
+        GENEvt_weight = Mu->GENEvt_weight;
+        nPileUp = Mu->nPileUp;
+        isSelPassed = SelPassed;
+        Muon_InvM = Mu->Muon_InvM;
+
+        Muon_pT = Mu->Muon_pT;
+        Muon_eta = Mu->Muon_eta;
+        Muon_phi = Mu->Muon_phi;
+        Muon_charge = Mu->Muon_charge;
+        Muon_Energy = Mu->Muon_Energy;
+        Muon_TuneP_pT = Mu->Muon_TuneP_pT;
+        Muon_TuneP_eta = Mu->Muon_TuneP_eta;
+        Muon_TuneP_phi = Mu->Muon_TuneP_phi;
+    }
+
+    void Ready()
+    {
+        if (!chain || File_Given == kFALSE)
+        {
+            std::cout << "Error: no chain provided" << endl;
+            return;
+        }
+        chain->StopCacheLearningPhase();
+    }
+
+    void TurnOnAllBranches()
+    {
+        if (!chain || File_Given == kFALSE)
+        {
+            std::cout << "Error: no chain provided" << endl;
+            return;
+        }
+        chain->SetBranchStatus("GENEvt_weight", 1);
+        chain->SetBranchStatus("nPileUp", 1);
+        chain->SetBranchStatus("isSelPassed", 1);
+        chain->SetBranchStatus("Muon_InvM", 1);
+        chain->SetBranchStatus("Muon_pT", 1);
+        chain->SetBranchStatus("Muon_eta", 1);
+        chain->SetBranchStatus("Muon_phi", 1);
+        chain->SetBranchStatus("Muon_charge", 1);
+        chain->SetBranchStatus("Muon_Energy", 1);
+        chain->SetBranchStatus("Muon_TuneP_pT", 1);
+        chain->SetBranchStatus("Muon_TuneP_eta", 1);
+        chain->SetBranchStatus("Muon_TuneP_phi", 1);
+    }
+
+    void TurnOffAllBranches()
+    {
+        if (!chain || File_Given == kFALSE)
+        {
+            std::cout << "Error: no chain provided" << endl;
+            return;
+        }
+        chain->SetBranchStatus("*", 0);
+    }
+
+    void TurnOnBranches(TString brNames)
+    {
+        if (!chain || File_Given == kFALSE)
+        {
+            std::cout << "Error: no chain provided" << endl;
+            return;
+        }
+        if (brNames.Length()==0)
+        {
+            std::cout << "Error: no branches to turn off" << endl;
+            return;
+        }
+        std::stringstream ss(brNames.Data());
+        TString br;
+        while (!ss.eof())
+        {
+            ss >> br;
+            if (chain->GetBranchStatus(br)==kFALSE)
+            {
+                chain->SetBranchStatus(br,1);
+                std::cout << "Activating branch <" << br << ">\n";
+            }
+            else std::cout << "Branch <" << br << "> is already active\n";
+        }
+    }
+
+    void TurnOffBranches(TString brNames)
+    {
+        if (!chain || File_Given == kFALSE)
+        {
+            std::cout << "Error: no chain provided" << endl;
+            return;
+        }
+        if (brNames.Length()==0)
+        {
+            std::cout << "Error: no branches to turn off" << endl;
+            return;
+        }
+        std::stringstream ss(brNames.Data());
+        TString br;
+        while (!ss.eof())
+        {
+            ss >> br;
+            if (chain->GetBranchStatus(br)==kTRUE)
+            {
+                chain->SetBranchStatus(br,0);
+                std::cout << "Deactivating branch <" << br << ">\n";
+            }
+            else std::cout << "Branch <" << br << "> is already inactive\n";
+        }
+    }
+
+    void GetEvent(Int_t i)
+    {
+        if (!chain || File_Given == kFALSE)
+        {
+            std::cout << "Error: no chain provided" << endl;
+            return;
+        }
+        if(!chain) return;
+
+        chain->GetEntry(i);
+    }
+
+};
+
+///////////////////////////////////////////////////////////////////////////////////
+///                                                                             ///
 ///     The LongSelectedEE_t class                                              ///
 ///                                                                             ///
-///     Stores vectors (mostly) with information about a pair of electrons      ///
-///     that passed the DY->ee selection                                        ///
+///     Similar to SelectedEE_t, just stores enough information to repeat       ///
+///     the full event selection (except for the IsHardProcess)                 ///
 ///                                                                             ///
 ///     How to use:                                                             ///
 ///                                                                             ///
 ///         To read from file:                                                  ///
+///             > #include <SelectedX.h>                                        ///
 ///             > TChain *ch = new TChain("...");                               ///
 ///             > ch->Add("...");                                               ///
 ///             > LongSelectedEE_t ele;                                         ///
@@ -808,7 +1025,8 @@ public:
 ///                                                                             ///
 ///         To create an empty class (e.g. to fill with values and write        ///
 ///         into a tree):                                                       ///
-///             > SelectedEE_t ele;                                             ///
+///             > #include <SelectedX.h>                                        ///
+///             > LongSelectedEE_t ele;                                         ///
 ///             > ele.CreateNew();                                              ///
 ///             > ele.Electron_pT->push_back(...);                              ///
 ///                                                                             ///
@@ -816,6 +1034,20 @@ public:
 class LongSelectedEE_t : public SelectedX
 {
 public:
+    //Event Information
+    Int_t nVertices;
+    Int_t runNum;
+    Int_t lumiBlock;
+    Int_t evtNum;
+
+    //Trigger variables
+    Int_t HLT_ntrig;
+    std::vector<int> *HLT_trigFired;
+    std::vector<string> *HLT_trigName;
+//    std::vector<double> *HLT_trigPt;
+    std::vector<double> *HLT_trigEta;
+    std::vector<double> *HLT_trigPhi;
+
     Double_t Electron_InvM;
 
     // -- Electron Variables -- //
@@ -1260,5 +1492,185 @@ public:
             }
         }
         return isTrigger;
+    }
+};
+
+///////////////////////////////////////////////////////////////////////////////////
+///                                                                             ///
+///     The SelectedEE_t class                                                  ///
+///                                                                             ///
+///     Stores vectors (mostly) with main information about a pair of           ///
+///     electrons that passed the DY->ee selection                              ///
+///                                                                             ///
+///     How to use:                                                             ///
+///                                                                             ///
+///         To read from file:                                                  ///
+///             > #include <SelectedX.h>                                        ///
+///             > TChain *ch = new TChain("...");                               ///
+///             > ch->Add("...");                                               ///
+///             > SelectedEE_t ele;                                             ///
+///             > ele.CreateFromChain(ch);                                      ///
+///             > ele.GetEvent(...);                                            ///
+///             > cout << ele.Electron_pT->at(...);                             ///
+///                                                                             ///
+///         To create an empty class (e.g. to fill with values and write        ///
+///         into a tree):                                                       ///
+///             > #include <SelectedX.h>                                        ///
+///             > SelectedEE_t ele;                                             ///
+///             > ele.CreateNew();                                              ///
+///             > ele.Electron_pT->push_back(...);                              ///
+///                                                                             ///
+///////////////////////////////////////////////////////////////////////////////////
+class SelectedEE_t : public SelectedX
+{
+public:
+    Bool_t isSelPassed;
+
+    Double_t Electron_InvM;
+    std::vector<double> *Electron_pT;
+    std::vector<double> *Electron_eta;
+    std::vector<double> *Electron_phi;
+    std::vector<double> *Electron_Energy;
+    std::vector<int> *Electron_charge;
+
+    // -- Default constructor -- //
+    void CreateNew()
+    {
+        Electron_pT = new std::vector<double>;
+        Electron_eta = new std::vector<double>;
+        Electron_phi = new std::vector<double>;
+        Electron_Energy = new std::vector<double>;
+        Electron_charge = new std::vector<int>;
+    }
+
+    // -- Constructor with chain -- //
+    void CreateFromChain(TChain *chainptr)
+    {
+        chain = chainptr;
+        Int_t cachesize = 500000000; // -- 500MB -- //
+        chain->SetCacheSize(cachesize);
+
+        chain->SetBranchAddress("GENEvt_weight", &GENEvt_weight);
+        chain->SetBranchAddress("nPileUp", &nPileUp);
+        chain->SetBranchAddress("isSelPassed", &isSelPassed);
+        chain->SetBranchAddress("Electron_InvM", &Electron_InvM);
+        chain->SetBranchAddress("Electron_pT", &Electron_pT);
+        chain->SetBranchAddress("Electron_eta", &Electron_eta);
+        chain->SetBranchAddress("Electron_phi", &Electron_phi);
+        chain->SetBranchAddress("Electron_Energy", &Electron_Energy);
+        chain->SetBranchAddress("Electron_charge", &Electron_charge);
+
+        chain->AddBranchToCache("GENEvt_weight", 1);
+        chain->AddBranchToCache("nPileUp", 1);
+        chain->AddBranchToCache("isSelPassed", 1);
+        chain->AddBranchToCache("Electron_InvM", 1);
+        chain->AddBranchToCache("Electron_pT", 1);
+        chain->AddBranchToCache("Electron_eta", 1);
+        chain->AddBranchToCache("Electron_phi", 1);
+        chain->AddBranchToCache("Electron_Energy", 1);
+        chain->AddBranchToCache("Electron_charge", 1);
+    }
+
+    void CreateFromLongSelectedEE(LongSelectedEE_t *Ele, Bool_t SelPassed)
+    {
+        GENEvt_weight = Ele->GENEvt_weight;
+        nPileUp = Ele->nPileUp;
+        isSelPassed = SelPassed;
+        Electron_InvM = Ele->Electron_InvM;
+
+        Electron_pT = Ele->Electron_pT;
+        Electron_eta = Ele->Electron_eta;
+        Electron_phi = Ele->Electron_phi;
+        Electron_Energy = Ele->Electron_Energy;
+        Electron_charge = Ele->Electron_charge;
+    }
+
+    void Ready()
+    {
+        if (!chain || File_Given == kFALSE)
+        {
+            std::cout << "Error: no chain provided" << endl;
+            return;
+        }
+        chain->StopCacheLearningPhase();
+    }
+
+    void TurnOnAllBranches()
+    {
+        if (!chain || File_Given == kFALSE)
+        {
+            std::cout << "Error: no chain provided" << endl;
+            return;
+        }
+        chain->SetBranchStatus("GENEvt_weight", 1);
+        chain->SetBranchStatus("nPileUp", 1);
+        chain->SetBranchStatus("Electron_InvM", 1);
+        chain->SetBranchStatus("Electron_pT", 1);
+        chain->SetBranchStatus("Electron_eta", 1);
+        chain->SetBranchStatus("Electron_phi", 1);
+        chain->SetBranchStatus("Electron_Energy", 1);
+        chain->SetBranchStatus("Electron_charge", 1);
+    }
+
+    void TurnOffAllBranches()
+    {
+        if (!chain || File_Given == kFALSE)
+        {
+            std::cout << "Error: no chain provided" << endl;
+            return;
+        }
+        chain->SetBranchStatus("*", 0);
+    }
+
+    void TurnOnBranches(TString brNames)
+    {
+        if (!chain || File_Given == kFALSE)
+        {
+            std::cout << "Error: no chain provided" << endl;
+            return;
+        }
+        if (brNames.Length()==0) return;
+        std::stringstream ss(brNames.Data());
+        TString br;
+        while (!ss.eof()) {
+            ss >> br;
+            if (chain->GetBranchStatus(br)==kFALSE)
+            {
+                chain->SetBranchStatus(br,1);
+                std::cout << "Activating branch <" << br << ">\n";
+            }
+            else std::cout << "Branch <" << br << "> is already active\n";
+        }
+    }
+
+    void TurnOffBranches(TString brNames)
+    {
+        if (!chain || File_Given == kFALSE)
+        {
+            std::cout << "Error: no chain provided" << endl;
+            return;
+        }
+        if (brNames.Length()==0) return;
+        std::stringstream ss(brNames.Data());
+        TString br;
+        while (!ss.eof()) {
+            ss >> br;
+            if (chain->GetBranchStatus(br)==kTRUE)
+            {
+                chain->SetBranchStatus(br,0);
+                std::cout << "Deactivating branch <" << br << ">\n";
+            }
+            else std::cout << "Branch <" << br << "> is already inactive\n";
+        }
+    }
+
+    void GetEvent(Int_t i)
+    {
+        if (!chain || File_Given == kFALSE)
+        {
+            std::cout << "Error: no chain provided" << endl;
+            return;
+        }
+        chain->GetEntry(i);
     }
 };

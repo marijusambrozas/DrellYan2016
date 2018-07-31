@@ -141,6 +141,10 @@ public:
                                                  vector< Int_t >* Index, Int_t &IndexDi); // -- output: 2 muons passing event selection conditions and their indices -- //
         Bool_t EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollection, LongSelectedMuMu_t *ntuple, vector< Muon >* SelectedMuonCollection,
                                                  vector< Int_t >* Index, Int_t &IndexDi); // -- output: 2 muons passing event selection conditions and their indices -- //
+        Bool_t EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection,
+                                                 vector< Int_t >* Index); // -- output: 2 muons passing event selection conditions and their indices -- //
+        Bool_t EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollection, LongSelectedMuMu_t *ntuple, vector< Muon >* SelectedMuonCollection,
+                                                 vector< Int_t >* Index); // -- output: 2 muons passing event selection conditions and their indices -- //
 	Bool_t EventSelection_Dijet(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection); // -- output: 2 muons passing event selection conditions -- //
 	Bool_t EventSelection_Wjet(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection); // -- output: 2 muons passing event selection conditions -- //
 	Bool_t EventSelection_CheckMoreThanOneDimuonCand(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection, Bool_t& isMoreThanOneCand); // -- output: 2 muons passing event selection conditions -- //
@@ -3281,6 +3285,141 @@ Bool_t DYAnalyzer::EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollecti
 	return isPassEventSelection;
 }
 
+// -- Event selection used for differential Z cross section measurement @ 13TeV -- // For all mass bin, and HighPt id
+Bool_t DYAnalyzer::EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollection, NtupleHandle *ntuple, // -- input: All muons in a event & NtupleHandle -- //
+                                                        vector< Muon >* SelectedMuonCollection, // -- output: 2 muons passing event selection conditions -- //
+                                                        vector< Int_t >* Index) // -- output: 2 indices of muons that managed to pass the MuMu selection -- //
+{
+        Bool_t isPassEventSelection = kFALSE;
+
+        //Collect qualified muons among muons
+        vector< Muon > QMuonCollection;
+        vector< Int_t > QIndex;
+        for(Int_t j=0; j<(int)MuonCollection.size(); j++)
+        {
+            if( MuonCollection[j].isHighPtMuon() && MuonCollection[j].trkiso < 0.10)
+            //if( MuonCollection[j].isHighPtMuon() && MuonCollection[j].RelPFIso_dBeta < 0.10)
+                QMuonCollection.push_back( MuonCollection[j] );
+                QIndex.push_back( j );
+        }
+
+        Int_t nQMuons = (Int_t)QMuonCollection.size();
+        Int_t nQIndices = (Int_t)QIndex.size();
+        if( nQMuons == 2 && nQIndices == 2 )
+        {
+                Muon recolep1 = QMuonCollection[0];
+                Muon recolep2 = QMuonCollection[1];
+
+                // -- Check the Accpetance -- //
+                Bool_t isPassAcc = kFALSE;
+                isPassAcc = isPassAccCondition_Muon(recolep1, recolep2);
+
+                // -- Opposite sign condition -- //
+                Bool_t isOppositeSign = kFALSE;
+                if( recolep1.charge != recolep2.charge )
+                        isOppositeSign = kTRUE;
+
+                Double_t reco_M = (recolep1.Momentum + recolep2.Momentum).M();
+
+                // -- Dimuon Vtx cut -- //
+                Double_t VtxProb = -999;
+                Double_t VtxNormChi2 = 999;
+                DimuonVertexProbNormChi2(ntuple, recolep1.Inner_pT, recolep2.Inner_pT, &VtxProb, &VtxNormChi2);
+
+                TLorentzVector inner_v1 = recolep1.Momentum_Inner;
+                TLorentzVector inner_v2 = recolep2.Momentum_Inner;
+
+                // -- 3D open angle -- //
+                Double_t Angle = recolep1.Momentum.Angle( recolep2.Momentum.Vect() );
+
+//		if( isPassAcc == kTRUE && isOppositeSign == kTRUE )
+                if( reco_M > 10 && isPassAcc == kTRUE && VtxNormChi2 < 20 && Angle < TMath::Pi() - 0.005 && isOppositeSign == kTRUE )
+                {
+                        isPassEventSelection = kTRUE;
+                        SelectedMuonCollection->push_back( recolep1 );
+                        SelectedMuonCollection->push_back( recolep2 );
+                        Index->push_back( QIndex[0] );
+                        Index->push_back( QIndex[1] );
+                }
+        }
+        else if( nQMuons > 2 )
+        {
+                // -- More then 2 Qualified Muon: Select the muons with highest pT -- //
+                Double_t Pt_leading = 0;
+                Muon LeadingMuon;
+                Double_t i_leading = 0;
+                Int_t Index_leading = -1;
+                for(Int_t i_mu1 = 0; i_mu1 < nQMuons; i_mu1++)
+                {
+                        Muon Mu = QMuonCollection[i_mu1];
+
+                        // printf("%dth Muon: Pt = %.3lf\n", i_mu1, Mu.Pt);
+
+                        if( Mu.Pt > Pt_leading )
+                        {
+                                Pt_leading = Mu.Pt;
+                                LeadingMuon	= Mu;
+                                i_leading = i_mu1;
+                                Index_leading = QIndex[i_mu1];
+                        }
+                }
+
+                Double_t Pt_sub = 0;
+                Muon SubMuon;
+                Int_t Index_sub = -1;
+                for(Int_t i_mu2=0; i_mu2 < nQMuons; i_mu2++)
+                {
+                        if( i_mu2 == i_leading ) continue;
+
+                        Muon Mu = QMuonCollection[i_mu2];
+
+                        if( Mu.Pt > Pt_sub )
+                        {
+                                Pt_sub = Mu.Pt;
+                                SubMuon	= Mu;
+                                Index_sub = QIndex[i_mu2];
+                        }
+                }
+
+                // printf("\t(Pt_leading, Pt_sub) = (%.3lf, %.3lf)\n", LeadingMuon.Pt, SubMuon.Pt);
+
+                // -- Check the Accpetance -- //
+                Bool_t isPassAcc = kFALSE;
+                isPassAcc = isPassAccCondition_Muon(LeadingMuon, SubMuon);
+
+                // -- Opposite sign condition -- //
+                Bool_t isOppositeSign = kFALSE;
+                if( LeadingMuon.charge != SubMuon.charge )
+                        isOppositeSign = kTRUE;
+
+                Double_t reco_M = (LeadingMuon.Momentum + SubMuon.Momentum).M();
+
+                // -- Dimuon Vtx cut -- //
+                Double_t VtxProb = -999;
+                Double_t VtxNormChi2 = 999;
+                DimuonVertexProbNormChi2(ntuple, LeadingMuon.Inner_pT, SubMuon.Inner_pT, &VtxProb, &VtxNormChi2);
+
+                TLorentzVector inner_v1 = LeadingMuon.Momentum_Inner;
+                TLorentzVector inner_v2 = SubMuon.Momentum_Inner;
+
+                // -- 3D open angle -- //
+                Double_t Angle = LeadingMuon.Momentum.Angle( SubMuon.Momentum.Vect() );
+
+//		if( isPassAcc == kTRUE && isOppositeSign == kTRUE )
+                if( reco_M > 10 && isPassAcc == kTRUE && VtxNormChi2 < 20 && Angle < TMath::Pi() - 0.005 && isOppositeSign == kTRUE )
+                {
+                        isPassEventSelection = kTRUE;
+                        SelectedMuonCollection->push_back( LeadingMuon );
+                        SelectedMuonCollection->push_back( SubMuon );
+                        Index->push_back( Index_leading );
+                        Index->push_back( Index_sub );
+                }
+
+        } // -- End of else if( nQMuons > 2 ) -- //
+
+        return isPassEventSelection;
+}
+
 Bool_t DYAnalyzer::EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollection, LongSelectedMuMu_t *ntuple, // -- input: All muons in a event & NtupleHandle -- //
                                                         vector< Muon >* SelectedMuonCollection, // -- output: 2 muons passing event selection conditions -- //
                                                         vector< Int_t >* Index, // -- output: 2 indices of muons that managed to pass the MuMu selection -- //
@@ -3433,6 +3572,141 @@ Bool_t DYAnalyzer::EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollecti
 
         return isPassEventSelection;
 }
+
+Bool_t DYAnalyzer::EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollection, LongSelectedMuMu_t *ntuple, // -- input: All muons in a event & NtupleHandle -- //
+                                                        vector< Muon >* SelectedMuonCollection, // -- output: 2 muons passing event selection conditions -- //
+                                                        vector< Int_t >* Index) // -- output: 2 indices of muons that managed to pass the MuMu selection -- //
+{
+        Bool_t isPassEventSelection = kFALSE;
+
+        //Collect qualified muons among muons
+        vector< Muon > QMuonCollection;
+        vector< Int_t > QIndex;
+        for(Int_t j=0; j<(int)MuonCollection.size(); j++)
+        {
+            if( MuonCollection[j].isHighPtMuon() && MuonCollection[j].trkiso < 0.10)
+            //if( MuonCollection[j].isHighPtMuon() && MuonCollection[j].RelPFIso_dBeta < 0.10)
+                QMuonCollection.push_back( MuonCollection[j] );
+                QIndex.push_back( j );
+        }
+
+        Int_t nQMuons = (Int_t)QMuonCollection.size();
+        Int_t nQIndices = (Int_t)QIndex.size();
+        if( nQMuons == 2 && nQIndices == 2 )
+        {
+                Muon recolep1 = QMuonCollection[0];
+                Muon recolep2 = QMuonCollection[1];
+
+                // -- Check the Accpetance -- //
+                Bool_t isPassAcc = kFALSE;
+                isPassAcc = isPassAccCondition_Muon(recolep1, recolep2);
+
+                // -- Opposite sign condition -- //
+                Bool_t isOppositeSign = kFALSE;
+                if( recolep1.charge != recolep2.charge )
+                        isOppositeSign = kTRUE;
+
+                Double_t reco_M = (recolep1.Momentum + recolep2.Momentum).M();
+
+                // -- Dimuon Vtx cut -- //
+                Double_t VtxProb = -999;
+                Double_t VtxNormChi2 = 999;
+                DimuonVertexProbNormChi2(ntuple, recolep1.Inner_pT, recolep2.Inner_pT, &VtxProb, &VtxNormChi2);
+
+                TLorentzVector inner_v1 = recolep1.Momentum_Inner;
+                TLorentzVector inner_v2 = recolep2.Momentum_Inner;
+
+                // -- 3D open angle -- //
+                Double_t Angle = recolep1.Momentum.Angle( recolep2.Momentum.Vect() );
+
+//		if( isPassAcc == kTRUE && isOppositeSign == kTRUE )
+                if( reco_M > 10 && isPassAcc == kTRUE && VtxNormChi2 < 20 && Angle < TMath::Pi() - 0.005 && isOppositeSign == kTRUE )
+                {
+                        isPassEventSelection = kTRUE;
+                        SelectedMuonCollection->push_back( recolep1 );
+                        SelectedMuonCollection->push_back( recolep2 );
+                        Index->push_back( QIndex[0] );
+                        Index->push_back( QIndex[1] );
+                }
+        }
+        else if( nQMuons > 2 )
+        {
+                // -- More then 2 Qualified Muon: Select the muons with highest pT -- //
+                Double_t Pt_leading = 0;
+                Muon LeadingMuon;
+                Double_t i_leading = 0;
+                Int_t Index_leading = -1;
+                for(Int_t i_mu1 = 0; i_mu1 < nQMuons; i_mu1++)
+                {
+                        Muon Mu = QMuonCollection[i_mu1];
+
+                        // printf("%dth Muon: Pt = %.3lf\n", i_mu1, Mu.Pt);
+
+                        if( Mu.Pt > Pt_leading )
+                        {
+                                Pt_leading = Mu.Pt;
+                                LeadingMuon	= Mu;
+                                i_leading = i_mu1;
+                                Index_leading = QIndex[i_mu1];
+                        }
+                }
+
+                Double_t Pt_sub = 0;
+                Muon SubMuon;
+                Int_t Index_sub = -1;
+                for(Int_t i_mu2=0; i_mu2 < nQMuons; i_mu2++)
+                {
+                        if( i_mu2 == i_leading ) continue;
+
+                        Muon Mu = QMuonCollection[i_mu2];
+
+                        if( Mu.Pt > Pt_sub )
+                        {
+                                Pt_sub = Mu.Pt;
+                                SubMuon	= Mu;
+                                Index_sub = QIndex[i_mu2];
+                        }
+                }
+
+                // printf("\t(Pt_leading, Pt_sub) = (%.3lf, %.3lf)\n", LeadingMuon.Pt, SubMuon.Pt);
+
+                // -- Check the Accpetance -- //
+                Bool_t isPassAcc = kFALSE;
+                isPassAcc = isPassAccCondition_Muon(LeadingMuon, SubMuon);
+
+                // -- Opposite sign condition -- //
+                Bool_t isOppositeSign = kFALSE;
+                if( LeadingMuon.charge != SubMuon.charge )
+                        isOppositeSign = kTRUE;
+
+                Double_t reco_M = (LeadingMuon.Momentum + SubMuon.Momentum).M();
+
+                // -- Dimuon Vtx cut -- //
+                Double_t VtxProb = -999;
+                Double_t VtxNormChi2 = 999;
+                DimuonVertexProbNormChi2(ntuple, LeadingMuon.Inner_pT, SubMuon.Inner_pT, &VtxProb, &VtxNormChi2);
+
+                TLorentzVector inner_v1 = LeadingMuon.Momentum_Inner;
+                TLorentzVector inner_v2 = SubMuon.Momentum_Inner;
+
+                // -- 3D open angle -- //
+                Double_t Angle = LeadingMuon.Momentum.Angle( SubMuon.Momentum.Vect() );
+
+//		if( isPassAcc == kTRUE && isOppositeSign == kTRUE )
+                if( reco_M > 10 && isPassAcc == kTRUE && VtxNormChi2 < 20 && Angle < TMath::Pi() - 0.005 && isOppositeSign == kTRUE )
+                {
+                        isPassEventSelection = kTRUE;
+                        SelectedMuonCollection->push_back( LeadingMuon );
+                        SelectedMuonCollection->push_back( SubMuon );
+                        Index->push_back( Index_leading );
+                        Index->push_back( Index_sub );
+                }
+
+        } // -- End of else if( nQMuons > 2 ) -- //
+
+        return isPassEventSelection;
+}
+
 
 // -- Event selection used for N-1 cuts -- // For all mass bin, and HighPt id
 Bool_t DYAnalyzer::EventSelection_Zdiff_13TeV_HighPt1(vector< Muon > MuonCollection, NtupleHandle *ntuple, // -- input: All muons in a event & NtupleHandle -- //
