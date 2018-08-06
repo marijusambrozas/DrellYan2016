@@ -263,7 +263,6 @@ Bool_t AreVectorsTheSame( vector<Double_t> *vec1, vector<Double_t> *vec2, TStrin
             if( vec1->at(i)!=vec2->at(i) )
             {
                 cout << name << "[" << i << "] values do not match!!" << endl;
-                d
                 areThey = kFALSE;
             }
         }

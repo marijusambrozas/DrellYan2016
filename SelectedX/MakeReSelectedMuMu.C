@@ -323,20 +323,28 @@ void MakeReSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
                     }
                     else cout << "== ERROR: Event selection was passed but no dimuon index registered. ==" << endl;
 
-                    for (UInt_t iter=0; iter<MuMuInput->HLT_trigEta->size(); iter++)
+//                    for (UInt_t iter=0; iter<MuMuInput->HLT_trigEta->size(); iter++)
+//                    {
+//                        if(MuMuInput->HLT_trigEta->at(iter) && MuMuInput->HLT_trigPhi->at(iter))
+//                        {
+//                            MuMu.HLT_trigFired->push_back(MuMuInput->HLT_trigFired->at(iter));
+//                            MuMu.HLT_trigEta->push_back(MuMuInput->HLT_trigEta->at(iter));
+//                            MuMu.HLT_trigPhi->push_back(MuMuInput->HLT_trigPhi->at(iter));
+//                            if(((Int_t)(iter))<MuMuInput->HLT_ntrig) MuMu.HLT_trigName->push_back(MuMuInput->HLT_trigName->at(iter));
+//                        }
+//                        else
+//                        {
+//                            cout << "HLT_trigEta and HLT_trigPhi do not exist. Breaking at " << iter << " iteration." << endl;
+//                            break;
+//                        }
+//                    }
+
+                    for (Int_t iter=0; iter<MuMuInput->HLT_ntrig; iter++)
                     {
-                        if(MuMuInput->HLT_trigEta->at(iter) && MuMuInput->HLT_trigPhi->at(iter))
-                        {
-                            MuMu.HLT_trigFired->push_back(MuMuInput->HLT_trigFired->at(iter));
-                            MuMu.HLT_trigEta->push_back(MuMuInput->HLT_trigEta->at(iter));
-                            MuMu.HLT_trigPhi->push_back(MuMuInput->HLT_trigPhi->at(iter));
-                            if(((Int_t)(iter))<MuMuInput->HLT_ntrig) MuMu.HLT_trigName->push_back(MuMuInput->HLT_trigName->at(iter));
-                        }
-                        else
-                        {
-                            cout << "HLT_trigEta and HLT_trigPhi do not exist. Breaking at " << iter << " iteration." << endl;
-                            break;
-                        }
+                        MuMu.HLT_trigFired->push_back(MuMuInput->HLT_trigFired->at(iter));
+                        MuMu.HLT_trigEta->push_back(MuMuInput->HLT_trigEta->at(iter));
+                        MuMu.HLT_trigPhi->push_back(MuMuInput->HLT_trigPhi->at(iter));
+                        MuMu.HLT_trigName->push_back(MuMuInput->HLT_trigName->at(iter));
                     }
 
                     if(Sel_Index.size()!=2) cout << "=========== ERROR: The number of muons saved is not 2 ===========" << endl;

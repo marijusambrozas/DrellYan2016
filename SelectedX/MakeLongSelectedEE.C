@@ -276,20 +276,28 @@ void MakeLongSelectedEE(TString HLTname = "Ele23Ele12")
 
                     Int_t zero_count = 0; // resolving if there is no more information in arrays
 
-                    for (Int_t iter=0; iter<1000; iter++)
+//                    for (Int_t iter=0; iter<1000; iter++)
+//                    {
+//                        if(ntuple->HLT_trigEta[iter] && ntuple->HLT_trigPhi[iter])
+//                        {
+//                            EE.HLT_trigFired->push_back(ntuple->HLT_trigFired[iter]);
+//                            EE.HLT_trigEta->push_back(ntuple->HLT_trigEta[iter]);
+//                            EE.HLT_trigPhi->push_back(ntuple->HLT_trigPhi[iter]);
+//                            if(iter<ntuple->HLT_ntrig) EE.HLT_trigName->push_back(ntuple->HLT_trigName->at(iter));
+//                        }
+//                        else
+//                        {
+//                            zero_count++;
+//                            if(zero_count>1) break;
+//                        }
+//                    }
+
+                    for (Int_t iter=0; iter<ntuple->HLT_ntrig; iter++)
                     {
-                        if(ntuple->HLT_trigEta[iter] && ntuple->HLT_trigPhi[iter])
-                        {
-                            EE.HLT_trigFired->push_back(ntuple->HLT_trigFired[iter]);
-                            EE.HLT_trigEta->push_back(ntuple->HLT_trigEta[iter]);
-                            EE.HLT_trigPhi->push_back(ntuple->HLT_trigPhi[iter]);
-                            if(iter<ntuple->HLT_ntrig) EE.HLT_trigName->push_back(ntuple->HLT_trigName->at(iter));
-                        }
-                        else
-                        {
-                            zero_count++;
-                            if(zero_count>1) break;
-                        }
+                        EE.HLT_trigFired->push_back(ntuple->HLT_trigFired[iter]);
+                        EE.HLT_trigEta->push_back(ntuple->HLT_trigEta[iter]);
+                        EE.HLT_trigPhi->push_back(ntuple->HLT_trigPhi[iter]);
+                        EE.HLT_trigName->push_back(ntuple->HLT_trigName->at(iter));
                     }
 
                     if(Sel_Index.size()!=2) cout << "======== ERROR: The number of electrons saved is not 2 ========" << endl;

@@ -264,12 +264,20 @@ void MakeReSelectedEE(TString HLTname = "Ele23Ele12")
 
                         Int_t zero_count = 0; // resolving if there is no more information in arrays
 
-                        for (UInt_t iter=0; iter<EEInput->HLT_trigEta->size(); iter++)
+//                        for (UInt_t iter=0; iter<EEInput->HLT_trigEta->size(); iter++)
+//                        {
+//                            EE.HLT_trigFired->push_back(EEInput->HLT_trigFired->at(iter));
+//                            EE.HLT_trigEta->push_back(EEInput->HLT_trigEta->at(iter));
+//                            EE.HLT_trigPhi->push_back(EEInput->HLT_trigPhi->at(iter));
+//                            if(((Int_t)(iter))<EEInput->HLT_ntrig) EE.HLT_trigName->push_back(EEInput->HLT_trigName->at(iter));
+//                        }
+
+                        for (Int_t iter=0; iter<EEInput->HLT_ntrig; iter++)
                         {
-                                EE.HLT_trigFired->push_back(EEInput->HLT_trigFired->at(iter));
-                                EE.HLT_trigEta->push_back(EEInput->HLT_trigEta->at(iter));
-                                EE.HLT_trigPhi->push_back(EEInput->HLT_trigPhi->at(iter));
-                                if(((Int_t)(iter))<EEInput->HLT_ntrig) EE.HLT_trigName->push_back(EEInput->HLT_trigName->at(iter));
+                            EE.HLT_trigFired->push_back(EEInput->HLT_trigFired->at(iter));
+                            EE.HLT_trigEta->push_back(EEInput->HLT_trigEta->at(iter));
+                            EE.HLT_trigPhi->push_back(EEInput->HLT_trigPhi->at(iter));
+                            EE.HLT_trigName->push_back(EEInput->HLT_trigName->at(iter));
                         }
 
                         if(Sel_Index.size()!=2) cout << "======== ERROR: The number of electrons saved is not 2 ========" << endl;

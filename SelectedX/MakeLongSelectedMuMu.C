@@ -337,20 +337,28 @@ void MakeLongSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 
                     Int_t zero_count = 0; // resolving if there is no more information in arrays
 
-                    for (Int_t iter=0; iter<1000; iter++)
+//                    for (Int_t iter=0; iter<1000; iter++)
+//                    {
+//                        if(ntuple->HLT_trigEta[iter] && ntuple->HLT_trigPhi[iter])
+//                        {
+//                            MuMu.HLT_trigFired->push_back(ntuple->HLT_trigFired[iter]);
+//                            MuMu.HLT_trigEta->push_back(ntuple->HLT_trigEta[iter]);
+//                            MuMu.HLT_trigPhi->push_back(ntuple->HLT_trigPhi[iter]);
+//                            if(iter<ntuple->HLT_ntrig) MuMu.HLT_trigName->push_back(ntuple->HLT_trigName->at(iter));
+//                        }
+//                        else
+//                        {
+//                            zero_count++;
+//                            if(zero_count>1) break;
+//                        }
+//                    }
+
+                    for (Int_t iter=0; iter<ntuple->HLT_ntrig; iter++)      // There are more trigEta and trigPhi values than nTrig suggests
                     {
-                        if(ntuple->HLT_trigEta[iter] && ntuple->HLT_trigPhi[iter])
-                        {
-                            MuMu.HLT_trigFired->push_back(ntuple->HLT_trigFired[iter]);
-                            MuMu.HLT_trigEta->push_back(ntuple->HLT_trigEta[iter]);
-                            MuMu.HLT_trigPhi->push_back(ntuple->HLT_trigPhi[iter]);
-                            if(iter<ntuple->HLT_ntrig) MuMu.HLT_trigName->push_back(ntuple->HLT_trigName->at(iter));
-                        }
-                        else
-                        {
-                            zero_count++;
-                            if(zero_count>1) break;
-                        }
+                        MuMu.HLT_trigFired->push_back(ntuple->HLT_trigFired[iter]);
+                        MuMu.HLT_trigEta->push_back(ntuple->HLT_trigEta[iter]);
+                        MuMu.HLT_trigPhi->push_back(ntuple->HLT_trigPhi[iter]);
+                        MuMu.HLT_trigName->push_back(ntuple->HLT_trigName->at(iter));
                     }
 
                     if(Sel_Index.size()!=2) cout << "======== ERROR: The number of muons saved is not 2 ========" << endl;
