@@ -266,7 +266,7 @@ void MakeSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
                             MuMu.Muon_phi->push_back(ntuple->Muon_phi[index]);
                             MuMu.Muon_charge->push_back(ntuple->Muon_charge[index]);
 
-                            Double_t Mu_E = sqrt( ntuple->Muon_Px[i]*ntuple->Muon_Px[index] + ntuple->Muon_Py[index]*ntuple->Muon_Py[index]
+                            Double_t Mu_E = sqrt( ntuple->Muon_Px[index]*ntuple->Muon_Px[index] + ntuple->Muon_Py[index]*ntuple->Muon_Py[index]
                                                   + ntuple->Muon_Pz[index]*ntuple->Muon_Pz[index] + M_Mu*M_Mu );
 
                             MuMu.Muon_Energy->push_back(Mu_E);

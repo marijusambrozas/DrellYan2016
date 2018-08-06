@@ -146,6 +146,13 @@ public:
 //    Int_t Electron_passMediumID[MaxN]; // updated at 27 Apr. 2017 by Dalmin
     Bool_t Electron_passMediumID[MaxN]; // modified at 26 Jul. 2017 by Dalmin
 
+    // Probably not necessary in DY selection
+//    Bool_t Electron_passLooseID[MaxN];
+//    Bool_t Electron_passTightID[MaxN];
+//    Bool_t Electron_passMVAID_WP80[MaxN];
+//    Bool_t Electron_passMVAID_WP90[MaxN];
+//    Bool_t Electron_passHEEPID[MaxN];
+
     // -- Uncorrected Electrons -- //
     Int_t nUnCorrElectron;
     Double_t Electron_pTUnCorr[MaxN];
@@ -687,7 +694,14 @@ public:
         chain->SetBranchStatus("Electron_r9", 1);
         chain->SetBranchStatus("Electron_ecalDriven", 1);
         chain->SetBranchStatus("Electron_passConvVeto", 1);
-        chain->SetBranchStatus("Electron_passMediumID", 1); // updated at 27 Apr. 2017 by Dalmin
+        chain->SetBranchStatus("Electron_passMediumID", 1); // updated at 27 Apr. 2017 by Dalmin]
+
+        // Probably not necessary in DY selection
+//        chain->SetBranchStatus("Electron_passLooseID", 1);
+//        chain->SetBranchStatus("Electron_passTightID", 1);
+//        chain->SetBranchStatus("Electron_passMVAID_WP80", 1);
+//        chain->SetBranchStatus("Electron_passMVAID_WP90", 1);
+//        chain->SetBranchStatus("Electron_passHEEPID", 1);
 
     	// -- Uncorrected Electrons -- //
     	chain->SetBranchStatus("nUnCorrElectron", 1);
@@ -754,6 +768,13 @@ public:
     	chain->SetBranchAddress("Electron_ecalDriven", &Electron_ecalDriven);
         chain->SetBranchAddress("Electron_passConvVeto", &Electron_passConvVeto);
         chain->SetBranchAddress("Electron_passMediumID", &Electron_passMediumID); // updated at 27 Apr. 2017 by Dalmin
+
+        // Probably not necessary in DY selection
+//        chain->SetBranchAddress("Electron_passLooseID", &Electron_passLooseID);
+//        chain->SetBranchAddress("Electron_passTightID", &Electron_passTightID);
+//        chain->SetBranchAddress("Electron_passMVAID_WP80", &Electron_passMVAID_WP80);
+//        chain->SetBranchAddress("Electron_passMVAID_WP90", &Electron_passMVAID_WP80);
+//        chain->SetBranchAddress("Electron_passHEEPID", &Electron_passHEEPID);
 
     	// -- Uncorrected Electrons -- //
     	chain->SetBranchAddress("nUnCorrElectron", &nUnCorrElectron);

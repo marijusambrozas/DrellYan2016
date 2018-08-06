@@ -5,7 +5,6 @@
 #include <TStopwatch.h>
 #include <TTimeStamp.h>
 #include <TString.h>
-#include <TAttMarker.h>
 #include <TROOT.h>
 #include <TApplication.h>
 #include <vector>
@@ -17,7 +16,7 @@
 // -- Customized Analyzer for MuMu selection -- //
 #include "./header/DYAnalyzer.h"
 #include "./header/SelectedX.h"
-#include "header/myProgressBar_t.h"
+#include "./header/myProgressBar_t.h"
 
 #define M_Mu 0.1056583715 // -- GeV -- //
 
@@ -35,38 +34,38 @@ void MakeLongSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 //    if( type == 1 ) {
 //        DataType = "B";
 //        DataLocation = "SingleMuon_Run2016B";
-//        OutputName = "SelectedMuMu_SingleMuon_Run2016B.root";
+//        OutputName = "LongSelectedMuMu_SingleMuon_Run2016B.root";
 //    }
 //    if( type == 2 ) {
 //        DataType = "C";
 //        DataLocation = "SingleMuon_Run2016C";
-//        OutputName = "SelectedMuMu_SingleMuon_Run2016C.root";
+//        OutputName = "LongSelectedMuMu_SingleMuon_Run2016C.root";
 //    }
 //    if( type == 3 ) {
 //        DataType = "D";
 //        DataLocation = "SingleMuon_Run2016D";
-//        OutputName = "SelectedMuMu_SingleMuon_Run2016D.root";
+//        OutputName = "LongSelectedMuMu_SingleMuon_Run2016D.root";
 //    }
 //    if( type == 4 ) {
 //        DataType = "E";
 //        DataLocation = "SingleMuon_Run2016E";
-//        OutputName = "SelectedMuMu_SingleMuon_Run2016E.root";
+//        OutputName = "LongSelectedMuMu_SingleMuon_Run2016E.root";
 //    }
 //    if( type == 5 ) {
 //        DataType = "F";
 //        DataLocation = "SingleMuon_Run2016F";
-//        OutputName = "SelectedMuMu_SingleMuon_Run2016F.root";
+//        OutputName = "LongSelectedMuMu_SingleMuon_Run2016F.root";
 //    }
 //    if( type == 6 ) {
 //        DataType = "G";
 //        DataLocation = "SingleMuon_Run2016G";
-//        OutputName = "SelectedMuMu_SingleMuon_Run2016G.root";
+//        OutputName = "LongSelectedMuMu_SingleMuon_Run2016G.root";
 //    }
 //    if( type == 7 ) {
 //        DataType = "H";
 //        DataLocation = "SingleMuon_Run2016Hver2";
 //        DataLocation2 = "SingleMuon_Run2016Hver3";
-//        OutputName = "SelectedMuMu_SingleMuon_Run2016H.root";
+//        OutputName = "LongSelectedMuMu_SingleMuon_Run2016H.root";
 //    }
 
     Bool_t isMC = kTRUE;
@@ -74,48 +73,48 @@ void MakeLongSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 //    // -- Signal MC samples -- //
 //    if( type == 11 ) {
 //        Type = "DYMuMu_M10to50";
-//        OutputName = "SelectedMuMu_DYMuMu_M10to50.root";
+//        OutputName = "LongSelectedMuMu_DYMuMu_M10to50.root";
 //    }
 //    if( type == 12 ) {
 //        Type = "DYMuMu_M50to100";
-//        OutputName = "SelectedMuMu_DYMuMu_M50to100.root";
+//        OutputName = "LongSelectedMuMu_DYMuMu_M50to100.root";
 //    }
 //    if( type == 13 ) {
 //        Type = "DYMuMu_M100toInf";
-//        OutputName = "SelectedMuMu_DYMuMu_M100toInf.root";
+//        OutputName = "LongSelectedMuMu_DYMuMu_M100toInf.root";
 //    }
 //    // -- Background MC samples -- //
 //    if( type == 21 ) {
 //        Type = "ttbar";
-//        OutputName = "SelectedMuMu_ttbar.root";
+//        OutputName = "LongSelectedMuMu_ttbar.root";
 //    }
 //    if( type == 22 ) {
 //        Type = "ttbarBackup";
-//        OutputName = "SelectedMuMu_ttbarBackup.root";
+//        OutputName = "LongSelectedMuMu_ttbarBackup.root";
 //    }
 //    if( type == 23 ) {
 //        Type = "ttbar_M700toInf";
-//        OutputName = "SelectedMuMu_ttbar_M700toInf.root";
+//        OutputName = "LongSelectedMuMu_ttbar_M700toInf.root";
 //    }
 //    if( type == 31 ) {
 //        Type = "DYTauTau_M10to50";
-//        OutputName = "SelectedMuMu_DYTauTau_M10to50.root";
+//        OutputName = "LongSelectedMuMu_DYTauTau_M10to50.root";
 //    }
 //    if( type == 32 ) {
 //        Type = "DYTauTau_M50toInf";
-//        OutputName = "SelectedMuMu_DYTauTau_M50toInf.root";
+//        OutputName = "LongSelectedMuMu_DYTauTau_M50toInf.root";
 //    }
 //    if( type == 41 ) {
 //        Type = "VVnST";
-//        OutputName = "SelectedMuMu_VVnST.root";
+//        OutputName = "LongSelectedMuMu_VVnST.root";
 //    }
 //    if( type == 51 ) {
 //        Type = "WJetsToLNu";
-//        OutputName = "SelectedMuMu_WJetsToLNu.root";
+//        OutputName = "LongSelectedMuMu_WJetsToLNu.root";
 //    }
 //    if( type == 61 ) {
 //        Type = "QCDMuEnriched";
-//        OutputName = "SelectedMuMu_QCDMuEnriched.root";
+//        OutputName = "LongSelectedMuMu_QCDMuEnriched.root";
 //    }
 
     //Creating a file
@@ -148,7 +147,7 @@ void MakeLongSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 //    }
 //    else analyzer->SetupMCsamples_Moriond17(Type, &ntupleDirectory, &Tag, &Xsec, &nEvents);
 
-    // -- Creating SelectedMuMu variables to assign branches -- //
+    // -- Creating LongSelectedMuMu variables to assign branches -- //
     LongSelectedMuMu_t MuMu; MuMu.CreateNew();
 
     MuonTree->Branch("nVertices", &MuMu.nVertices);
@@ -233,7 +232,7 @@ void MakeLongSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 
     //Loop for all samples
 //    const Int_t Ntup = ntupleDirectory.size();
-    const Int_t Ntup = 1;
+    const Int_t Ntup = 1;       //Using just 1 ntuple for test
     for(Int_t i_tup = 0; i_tup<Ntup; i_tup++)
     {
         TStopwatch looptime;
@@ -250,7 +249,6 @@ void MakeLongSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 //            if(type==7) chain->Add(BaseLocation+"/"+DataLocation2+"/*.root");
 //        }
         chain->Add("/media/sf_DATA/ZToMuMu_M4500to6000_4.root/recoTree/DYTree;2"); // NEED A WAY TO TELL THE NUMBER OF CYCLES AND THEIR EXTENTION NAMES
-
         chain->Add("/media/sf_DATA/ZToMuMu_M4500to6000_4.root/recoTree/DYTree;3");
 
         NtupleHandle *ntuple = new NtupleHandle( chain );
@@ -307,8 +305,8 @@ void MakeLongSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 
                 // -- Event Selection -- //
                 vector< Muon > SelectedMuonCollection;
-                vector< Int_t > Sel_Index;
-                Int_t IndexDi;
+                vector< Int_t > Sel_Index;  // Ntuple indexes of muons that passed the selection
+                Int_t IndexDi;      // Index of the member of the dimuon vectors that describes the 2 selected muons
                 Bool_t isPassEventSelection = kFALSE;
                 isPassEventSelection = analyzer->EventSelection_Zdiff_13TeV_HighPt(MuonCollection, ntuple, &SelectedMuonCollection, &Sel_Index, IndexDi);
 
@@ -386,7 +384,7 @@ void MakeLongSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
                             MuMu.Muon_Py->push_back(ntuple->Muon_Py[index]);
                             MuMu.Muon_Pz->push_back(ntuple->Muon_Pz[index]);
 
-                            Double_t Mu_E = sqrt( ntuple->Muon_Px[i]*ntuple->Muon_Px[index] + ntuple->Muon_Py[index]*ntuple->Muon_Py[index]
+                            Double_t Mu_E = sqrt( ntuple->Muon_Px[index]*ntuple->Muon_Px[index] + ntuple->Muon_Py[index]*ntuple->Muon_Py[index]
                                                   + ntuple->Muon_Pz[index]*ntuple->Muon_Pz[index] + M_Mu*M_Mu );
 
                             MuMu.Muon_Energy->push_back(Mu_E);
@@ -526,7 +524,7 @@ void MakeLongSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
     MuonTree->Write();
     cout << "Finished." << endl << "Closing a file..." << endl;
     MuonFile->Close();
-    if (!MuonFile->IsOpen()) cout << "File " << OutputName << " has been closed successfully." << endl;
+    if ( !MuonFile->IsOpen() ) cout << "File " << OutputName << " has been closed successfully." << endl;
     else cout << "FILE " << OutputName << " COULD NOT BE CLOSED!" << endl;
 
     Double_t TotalRunTime = totaltime.CpuTime();

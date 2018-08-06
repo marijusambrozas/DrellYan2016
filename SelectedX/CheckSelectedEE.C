@@ -27,7 +27,7 @@ static inline Bool_t AreValuesTheSame(Double_t val1, Double_t val2, TString name
 static inline Bool_t AreValuesTheSame(Int_t val1, Int_t val2, TString name="");
 static inline Bool_t AreHistogramsTheSame(TH1D *hist1, TH1D *hist2, TString name="", Bool_t setBreak=kFALSE);
 
-void CheckSelectedMuMu(Bool_t DrawHistos = kFALSE, Bool_t BreakIfProblem = kFALSE)
+void CheckSelectedEE(Bool_t DrawHistos = kFALSE, Bool_t BreakIfProblem = kFALSE)
 {
     // -- Run2016 luminosity [/pb] -- //
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0; // Need checking
@@ -42,9 +42,9 @@ void CheckSelectedMuMu(Bool_t DrawHistos = kFALSE, Bool_t BreakIfProblem = kFALS
     // -- Each ntuple directory & corresponding Tags -- //
 //    vector<TString> ntupleDirectory; vector<TString> Tag; vector<Double_t> Xsec; vector<Double_t> nEvents;
     vector<TString> Tag; vector<Double_t> Xsec; vector<Double_t> nEvents;
-    Tag.push_back("ZMuMu_M4500to6000");
-    nEvents.push_back(100000);  // Primary dataset actually contained 19672 events.
-    Xsec.push_back(4.56E-07);   // Needs checking
+    Tag.push_back("ZToEE_M4500to6000");
+    nEvents.push_back(74606);       // The actual number of events in file is taken
+    Xsec.push_back(4.56E-07);       // Copied from ZToMuMu_M4500to6000
     const Int_t Ntup = 1;
     for(Int_t i_tup = 0; i_tup<Ntup; i_tup++)
     {
@@ -55,26 +55,20 @@ void CheckSelectedMuMu(Bool_t DrawHistos = kFALSE, Bool_t BreakIfProblem = kFALS
 
         TChain *ch_s = new TChain("DYTree");
         TChain *ch_l = new TChain("DYTree");
-        ch_s->Add("/media/sf_DATA/SelectedMuMu_ZToMuMu_M4500to6000_4.root");
-        ch_l->Add("/media/sf_DATA/LongSelectedMuMu_ZToMuMu_M4500to6000_4.root");
+        ch_s->Add("/media/sf_DATA/SelectedEE_ZToEE_M4500to6000_2.root");
+        ch_l->Add("/media/sf_DATA/LongSelectedEE_ZToEE_M4500to6000_2.root");
 
-        SelectedMuMu_t *MuMu_s = new SelectedMuMu_t();
-        LongSelectedMuMu_t *MuMu_l = new LongSelectedMuMu_t();
-        MuMu_s->CreateFromChain(ch_s);
-        MuMu_l->CreateFromChain(ch_l);
+        SelectedEE_t *EE_s = new SelectedEE_t();
+        LongSelectedEE_t *EE_l = new LongSelectedEE_t();
+        EE_s->CreateFromChain(ch_s);
+        EE_l->CreateFromChain(ch_l);
 
         TH1D* h1_pT_s = new TH1D("h1pts", "h1_pT_s", 400, 0, 4000);
         TH1D* h1_pT_l = new TH1D("h1ptl", "h1_pT_l", 400, 0, 4000);
-        TH1D* h1_TuneP_pT_s = new TH1D("h1tuneppts", "h1_TuneP_pT_s", 400, 0, 4000);
-        TH1D* h1_TuneP_pT_l = new TH1D("h1tunepptl", "h1_TuneP_pT_l", 400, 0, 4000);
         TH1D* h1_eta_s = new TH1D("h1etas", "h1_eta_s", 120, -3, 3);
         TH1D* h1_eta_l = new TH1D("h1etal", "h1_eta_l", 120, -3, 3);
-        TH1D* h1_TuneP_eta_s = new TH1D("h1tunepetas", "h1_TuneP_eta_s", 120, -3, 3);
-        TH1D* h1_TuneP_eta_l = new TH1D("h1tunepetal", "h1_TuneP_eta_l", 120, -3, 3);
         TH1D* h1_phi_s = new TH1D("h1phis", "h1_phi_s", 400, -4, 4);
         TH1D* h1_phi_l = new TH1D("h1phil", "h1_phi_l", 400, -4, 4);
-        TH1D* h1_TuneP_phi_s = new TH1D("h1tunepphis", "h1_TuneP_phi_s", 400, -4, 4);
-        TH1D* h1_TuneP_phi_l = new TH1D("h1tunepphil", "h1_TuneP_phi_l", 400, -4, 4);
         TH1D* h1_Energy_s = new TH1D("h1energys", "h1_Energy_s", 400, 0, 8000);
         TH1D* h1_Energy_l = new TH1D("h1energyl", "h1_Energy_l", 400, 0, 8000);
         TH1D* h1_invm_s = new TH1D("h1invms", "h1_invm_s", 350, 0, 7000);
@@ -82,8 +76,8 @@ void CheckSelectedMuMu(Bool_t DrawHistos = kFALSE, Bool_t BreakIfProblem = kFALS
         TH1D* h1_nPileUp_s = new TH1D("h1npileups", "h1_nPileUp_s", 60, 0, 60);
         TH1D* h1_nPileUp_l = new TH1D("h1npileupl", "h1_nPileUp_l", 60, 0, 60);
 
-        Bool_t AllOkVec[11];
-        Bool_t AllOkHist[9];
+        Bool_t AllOkVec[8];
+        Bool_t AllOkHist[6];
         Bool_t AllOkV = kTRUE, AllOkH = kTRUE, AllOk = kTRUE;
 
         Int_t NEvents_s = ch_s->GetEntries();
@@ -101,22 +95,19 @@ void CheckSelectedMuMu(Bool_t DrawHistos = kFALSE, Bool_t BreakIfProblem = kFALS
             cout << "\tChecking separate events:" << endl;
             for(Int_t i=0; i<NEvents_s; i++)
             {
-                MuMu_s->GetEvent(i);
-                MuMu_l->GetEvent(i);
+                EE_s->GetEvent(i);
+                EE_l->GetEvent(i);
 
-                AllOkVec[0] = AreVectorsTheSame(MuMu_s->Muon_pT, MuMu_l->Muon_pT, "pT"); if (AllOkVec[0]==kFALSE && BreakIfProblem==kTRUE) break;
-                AllOkVec[1] = AreVectorsTheSame(MuMu_s->Muon_TuneP_pT, MuMu_l->Muon_TuneP_pT, "TuneP_pT"); if (AllOkVec[1]==kFALSE && BreakIfProblem==kTRUE) break;
-                AllOkVec[2] = AreVectorsTheSame(MuMu_s->Muon_eta, MuMu_l->Muon_eta, "eta"); if (AllOkVec[2]==kFALSE && BreakIfProblem==kTRUE) break;
-                AllOkVec[3] = AreVectorsTheSame(MuMu_s->Muon_TuneP_eta, MuMu_l->Muon_TuneP_eta, "TuneP_eta"); if (AllOkVec[3]==kFALSE && BreakIfProblem==kTRUE) break;
-                AllOkVec[4] = AreVectorsTheSame(MuMu_s->Muon_phi, MuMu_l->Muon_phi, "phi"); if (AllOkVec[4]==kFALSE && BreakIfProblem==kTRUE) break;
-                AllOkVec[5] = AreVectorsTheSame(MuMu_s->Muon_TuneP_phi, MuMu_l->Muon_TuneP_phi, "TuneP_phi"); if (AllOkVec[5]==kFALSE && BreakIfProblem==kTRUE) break;
-                AllOkVec[6] = AreVectorsTheSame(MuMu_s->Muon_Energy, MuMu_l->Muon_Energy, "Energy"); if (AllOkVec[6]==kFALSE && BreakIfProblem==kTRUE) break;
-                AllOkVec[7] = AreVectorsTheSame(MuMu_s->Muon_charge, MuMu_l->Muon_charge, "charge"); if (AllOkVec[7]==kFALSE && BreakIfProblem==kTRUE) break;
-                AllOkVec[8] = AreValuesTheSame(MuMu_s->Muon_InvM, MuMu_l->Muon_InvM, "InvM"); if (AllOkVec[8]==kFALSE && BreakIfProblem==kTRUE) break;
-                AllOkVec[9] = AreValuesTheSame(MuMu_s->nPileUp, MuMu_l->nPileUp, "nPileUp"); if (AllOkVec[9]==kFALSE && BreakIfProblem==kTRUE) break;
-                AllOkVec[10] = AreValuesTheSame(MuMu_s->GENEvt_weight, MuMu_l->GENEvt_weight, "event weight"); if (AllOkVec[10]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[0] = AreVectorsTheSame(EE_s->Electron_pT, EE_l->Electron_pT, "pT"); if (AllOkVec[0]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[1] = AreVectorsTheSame(EE_s->Electron_eta, EE_l->Electron_eta, "eta"); if (AllOkVec[1]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[2] = AreVectorsTheSame(EE_s->Electron_phi, EE_l->Electron_phi, "phi"); if (AllOkVec[2]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[3] = AreVectorsTheSame(EE_s->Electron_Energy, EE_l->Electron_Energy, "Energy"); if (AllOkVec[3]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[4] = AreVectorsTheSame(EE_s->Electron_charge, EE_l->Electron_charge, "charge"); if (AllOkVec[4]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[5] = AreValuesTheSame(EE_s->Electron_InvM, EE_l->Electron_InvM, "InvM"); if (AllOkVec[5]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[6] = AreValuesTheSame(EE_s->nPileUp, EE_l->nPileUp, "nPileUp"); if (AllOkVec[6]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[7] = AreValuesTheSame(EE_s->GENEvt_weight, EE_l->GENEvt_weight, "event weight"); if (AllOkVec[7]==kFALSE && BreakIfProblem==kTRUE) break;
 
-                for (Int_t j=0; j<11; j++)
+                for (Int_t j=0; j<8; j++)
                 {
                     if(AllOkVec[j]==kFALSE)
                     {
@@ -134,25 +125,19 @@ void CheckSelectedMuMu(Bool_t DrawHistos = kFALSE, Bool_t BreakIfProblem = kFALS
                 // -- Histogram filling -- //
                 for (Int_t j=0; j<2; j++)
                 {
-                    h1_pT_s->Fill(MuMu_s->Muon_pT->at(j), MuMu_s->GENEvt_weight);
-                    h1_pT_l->Fill(MuMu_l->Muon_pT->at(j), MuMu_l->GENEvt_weight);
-                    h1_TuneP_pT_s->Fill(MuMu_s->Muon_TuneP_pT->at(j), MuMu_s->GENEvt_weight);
-                    h1_TuneP_pT_l->Fill(MuMu_l->Muon_TuneP_pT->at(j), MuMu_l->GENEvt_weight);
-                    h1_eta_s->Fill(MuMu_s->Muon_eta->at(j), MuMu_s->GENEvt_weight);
-                    h1_eta_l->Fill(MuMu_l->Muon_eta->at(j), MuMu_l->GENEvt_weight);
-                    h1_TuneP_eta_s->Fill(MuMu_s->Muon_TuneP_eta->at(j), MuMu_s->GENEvt_weight);
-                    h1_TuneP_eta_l->Fill(MuMu_l->Muon_TuneP_eta->at(j), MuMu_l->GENEvt_weight);
-                    h1_phi_s->Fill(MuMu_s->Muon_phi->at(j), MuMu_s->GENEvt_weight);
-                    h1_phi_l->Fill(MuMu_l->Muon_phi->at(j), MuMu_l->GENEvt_weight);
-                    h1_TuneP_phi_s->Fill(MuMu_s->Muon_TuneP_phi->at(j), MuMu_s->GENEvt_weight);
-                    h1_TuneP_phi_l->Fill(MuMu_l->Muon_TuneP_phi->at(j), MuMu_l->GENEvt_weight);
-                    h1_Energy_s->Fill(MuMu_s->Muon_Energy->at(j), MuMu_s->GENEvt_weight);
-                    h1_Energy_l->Fill(MuMu_l->Muon_Energy->at(j), MuMu_l->GENEvt_weight);
+                    h1_pT_s->Fill(EE_s->Electron_pT->at(j), EE_s->GENEvt_weight);
+                    h1_pT_l->Fill(EE_l->Electron_pT->at(j), EE_l->GENEvt_weight);
+                    h1_eta_s->Fill(EE_s->Electron_eta->at(j), EE_s->GENEvt_weight);
+                    h1_eta_l->Fill(EE_l->Electron_eta->at(j), EE_l->GENEvt_weight);
+                    h1_phi_s->Fill(EE_s->Electron_phi->at(j), EE_s->GENEvt_weight);
+                    h1_phi_l->Fill(EE_l->Electron_phi->at(j), EE_l->GENEvt_weight);
+                    h1_Energy_s->Fill(EE_s->Electron_Energy->at(j), EE_s->GENEvt_weight);
+                    h1_Energy_l->Fill(EE_l->Electron_Energy->at(j), EE_l->GENEvt_weight);
                 }
-                h1_nPileUp_s->Fill(MuMu_s->nPileUp, MuMu_s->GENEvt_weight);
-                h1_nPileUp_l->Fill(MuMu_l->nPileUp, MuMu_l->GENEvt_weight);
-                h1_invm_s->Fill(MuMu_s->Muon_InvM, MuMu_s->GENEvt_weight);
-                h1_invm_l->Fill(MuMu_l->Muon_InvM, MuMu_l->GENEvt_weight);
+                h1_nPileUp_s->Fill(EE_s->nPileUp, EE_s->GENEvt_weight);
+                h1_nPileUp_l->Fill(EE_l->nPileUp, EE_l->GENEvt_weight);
+                h1_invm_s->Fill(EE_s->Electron_InvM, EE_s->GENEvt_weight);
+                h1_invm_l->Fill(EE_l->Electron_InvM, EE_l->GENEvt_weight);
                 bar.Draw(i);
             } //End of event iteration
         } //End of if( same event numbers )
@@ -163,16 +148,13 @@ void CheckSelectedMuMu(Bool_t DrawHistos = kFALSE, Bool_t BreakIfProblem = kFALS
 
         // -- Histogram checking -- //
         AllOkHist[0] = AreHistogramsTheSame(h1_pT_s, h1_pT_l, "pT", BreakIfProblem);
-        AllOkHist[1] = AreHistogramsTheSame(h1_TuneP_pT_s, h1_TuneP_pT_l, "TuneP_pT", BreakIfProblem);
-        AllOkHist[2] = AreHistogramsTheSame(h1_eta_s, h1_eta_l, "eta", BreakIfProblem);
-        AllOkHist[3] = AreHistogramsTheSame(h1_TuneP_eta_s, h1_TuneP_eta_l, "TuneP_eta", BreakIfProblem);
-        AllOkHist[4] = AreHistogramsTheSame(h1_phi_s, h1_phi_l, "phi", BreakIfProblem);
-        AllOkHist[5] = AreHistogramsTheSame(h1_TuneP_phi_s, h1_TuneP_phi_l, "TuneP_phi", BreakIfProblem);
-        AllOkHist[6] = AreHistogramsTheSame(h1_Energy_s, h1_Energy_l, "Energy", BreakIfProblem);
-        AllOkHist[7] = AreHistogramsTheSame(h1_invm_s, h1_invm_l, "InvM", BreakIfProblem);
-        AllOkHist[8] = AreHistogramsTheSame(h1_nPileUp_s, h1_nPileUp_l, "phi", BreakIfProblem);
+        AllOkHist[1] = AreHistogramsTheSame(h1_eta_s, h1_eta_l, "eta", BreakIfProblem);
+        AllOkHist[2] = AreHistogramsTheSame(h1_phi_s, h1_phi_l, "phi", BreakIfProblem);
+        AllOkHist[3] = AreHistogramsTheSame(h1_Energy_s, h1_Energy_l, "Energy", BreakIfProblem);
+        AllOkHist[4] = AreHistogramsTheSame(h1_invm_s, h1_invm_l, "InvM", BreakIfProblem);
+        AllOkHist[5] = AreHistogramsTheSame(h1_nPileUp_s, h1_nPileUp_l, "phi", BreakIfProblem);
 
-        for ( Int_t j=0; j<9; j++ )
+        for ( Int_t j=0; j<6; j++ )
         {
             if ( AllOkHist[j]==kFALSE ) AllOkH = kFALSE;
         }
@@ -181,11 +163,8 @@ void CheckSelectedMuMu(Bool_t DrawHistos = kFALSE, Bool_t BreakIfProblem = kFALS
         if ( DrawHistos==kTRUE )
         {
             TCanvas* c_pT = new TCanvas ("pT", "pT", 1000, 1000);
-            TCanvas* c_TuneP_pT = new TCanvas ("TuneP_pT", "TuneP_pT", 1000, 1000);
             TCanvas* c_eta = new TCanvas ("eta", "eta", 1000, 1000);
-            TCanvas* c_TuneP_eta = new TCanvas ("TuneP_eta", "TuneP_eta", 1000, 1000);
             TCanvas* c_phi = new TCanvas ("phi", "phi", 1000, 1000);
-            TCanvas* c_TuneP_phi = new TCanvas ("TuneP_phi", "TuneP_phi", 1000, 1000);
             TCanvas* c_Energy = new TCanvas ("Energy", "Energy", 1000, 1000);
             TCanvas* c_invm = new TCanvas ("invm", "invm", 1000, 1000);
             TCanvas* c_nPileUp = new TCanvas ("nPileUp", "nPileUp", 1000, 1000);
@@ -195,21 +174,12 @@ void CheckSelectedMuMu(Bool_t DrawHistos = kFALSE, Bool_t BreakIfProblem = kFALS
             h1_pT_s->SetLineColor(kBlue);
             h1_pT_s->SetLineWidth(2);
             h1_pT_l->SetLineColor(kRed);
-            h1_TuneP_pT_s->SetLineColor(kBlue);
-            h1_TuneP_pT_s->SetLineWidth(2);
-            h1_TuneP_pT_l->SetLineColor(kRed);
             h1_eta_s->SetLineColor(kBlue);
             h1_eta_s->SetLineWidth(2);
             h1_eta_l->SetLineColor(kRed);
-            h1_TuneP_eta_s->SetLineColor(kBlue);
-            h1_TuneP_eta_s->SetLineWidth(2);
-            h1_TuneP_eta_l->SetLineColor(kRed);
             h1_phi_s->SetLineColor(kBlue);
             h1_phi_s->SetLineWidth(2);
             h1_phi_l->SetLineColor(kRed);
-            h1_TuneP_phi_s->SetLineColor(kBlue);
-            h1_TuneP_phi_s->SetLineWidth(2);
-            h1_TuneP_phi_l->SetLineColor(kRed);
             h1_Energy_s->SetLineColor(kBlue);
             h1_Energy_s->SetLineWidth(2);
             h1_Energy_l->SetLineColor(kRed);
@@ -220,15 +190,12 @@ void CheckSelectedMuMu(Bool_t DrawHistos = kFALSE, Bool_t BreakIfProblem = kFALS
             h1_nPileUp_s->SetLineWidth(2);
             h1_nPileUp_l->SetLineColor(kRed);
 
-            leg->AddEntry(h1_pT_s, "Selected MuMu", "l");
-            leg->AddEntry(h1_pT_l, "Long_Selected MuMu", "l");
+            leg->AddEntry(h1_pT_s, "Selected EE", "l");
+            leg->AddEntry(h1_pT_l, "Long_Selected EE", "l");
 
             c_pT->cd(); h1_pT_s->Draw(); h1_pT_l->Draw("SAME"); leg->Draw(); c_pT->Update();
-            c_TuneP_pT->cd(); h1_TuneP_pT_s->Draw(); h1_TuneP_pT_l->Draw("SAME"); leg->Draw(); c_TuneP_pT->Update();
             c_eta->cd(); h1_eta_s->Draw(); h1_eta_l->Draw("SAME"); leg->Draw(); c_eta->Update();
-            c_TuneP_eta->cd(); h1_TuneP_eta_s->Draw(); h1_TuneP_eta_l->Draw("SAME"); leg->Draw(); c_TuneP_eta->Update();
             c_phi->cd(); h1_phi_s->Draw(); h1_phi_l->Draw("SAME"); leg->Draw(); c_phi->Update();
-            c_TuneP_phi->cd(); h1_TuneP_phi_s->Draw(); h1_TuneP_phi_l->Draw("SAME"); leg->Draw(); c_TuneP_phi->Update();
             c_Energy->cd(); h1_Energy_s->Draw(); h1_Energy_l->Draw("SAME"); leg->Draw(); c_Energy->Update();
             c_invm->cd(); h1_invm_s->Draw(); h1_invm_l->Draw("SAME"); leg->Draw(); c_invm->Update();
             c_nPileUp->cd(); h1_nPileUp_s->Draw(); h1_nPileUp_l->Draw("SAME"); leg->Draw(); c_nPileUp->Update();
@@ -263,7 +230,6 @@ Bool_t AreVectorsTheSame( vector<Double_t> *vec1, vector<Double_t> *vec2, TStrin
             if( vec1->at(i)!=vec2->at(i) )
             {
                 cout << name << "[" << i << "] values do not match!!" << endl;
-                d
                 areThey = kFALSE;
             }
         }

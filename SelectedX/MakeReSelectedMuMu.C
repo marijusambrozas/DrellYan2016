@@ -275,8 +275,9 @@ void MakeReSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
             Bool_t TriggerFlag = kFALSE;
             TriggerFlag = MuMuInput->isTriggered( analyzer->HLT );
 
-            if( TriggerFlag == kTRUE )
+            if( TriggerFlag == kTRUE && MuMuInput->isHardProcess == kTRUE )
             {
+                MuMu.isHardProcess = kTRUE;
                 // -- Reco level selection -- //
                 vector< Muon > MuonCollection;
                 Int_t NLeptons = MuMuInput->Muon_pT->size();
@@ -298,9 +299,7 @@ void MakeReSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
                 isPassEventSelection = analyzer->EventSelection_Zdiff_13TeV_HighPt(MuonCollection, MuMuInput, &SelectedMuonCollection, &Sel_Index, IndexDi);
 
                 if( isPassEventSelection == kTRUE )
-                {
-                    MuMu.isHardProcess = MuMuInput->isHardProcess;
-
+                {                    
                     Muon mu1 = SelectedMuonCollection[0];
                     Muon mu2 = SelectedMuonCollection[1];
 
@@ -370,12 +369,7 @@ void MakeReSelectedMuMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
                             MuMu.Muon_Px->push_back(MuMuInput->Muon_Px->at(index));
                             MuMu.Muon_Py->push_back(MuMuInput->Muon_Py->at(index));
                             MuMu.Muon_Pz->push_back(MuMuInput->Muon_Pz->at(index));
-
-                            Double_t Mu_E = sqrt( MuMuInput->Muon_Px->at(index)*MuMuInput->Muon_Px->at(index) + MuMuInput->Muon_Py->at(index)
-                                                  *MuMuInput->Muon_Py->at(index)+ MuMuInput->Muon_Pz->at(index)*MuMuInput->Muon_Pz->at(index)
-                                                  + M_Mu*M_Mu );
-
-                            MuMu.Muon_Energy->push_back(Mu_E);
+                            MuMu.Muon_Energy->push_back(MuMuInput->Muon_Energy->at(index));
 
                             MuMu.Muon_Best_pT->push_back(MuMuInput->Muon_Best_pT->at(index));
                             MuMu.Muon_Best_pTError->push_back(MuMuInput->Muon_Best_pTError->at(index));

@@ -136,15 +136,17 @@ public:
 	Bool_t EventSelection(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection); // -- output: 2 muons passing event selection conditions -- //
 	Bool_t EventSelection_Mu50(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection); // -- output: 2 muons passing event selection conditions -- //
 	Bool_t EventSelection_minusDimuonVtxCut(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection); // -- output: 2 muons passing event selection conditions -- //
-	Bool_t EventSelection_Zdiff_13TeV(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection); // -- output: 2 muons passing event selection conditions -- //
-        Bool_t EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection,
+        Bool_t EventSelection_Zdiff_13TeV(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection); // -- output: 2 muons passing event selection conditions -- //
+
+        Bool_t EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection, //*Derived by Marijus Ambrozas 2018.07*//
                                                  vector< Int_t >* Index, Int_t &IndexDi); // -- output: 2 muons passing event selection conditions and their indices -- //
-        Bool_t EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollection, LongSelectedMuMu_t *ntuple, vector< Muon >* SelectedMuonCollection,
+        Bool_t EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollection, LongSelectedMuMu_t *ntuple, vector< Muon >* SelectedMuonCollection,  //*Derived by Marijus Ambrozas 2018.07*//
                                                  vector< Int_t >* Index, Int_t &IndexDi); // -- output: 2 muons passing event selection conditions and their indices -- //
-        Bool_t EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection,
+        Bool_t EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection,  //*Derived by Marijus Ambrozas 2018.07*//
                                                  vector< Int_t >* Index); // -- output: 2 muons passing event selection conditions and their indices -- //
-        Bool_t EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollection, LongSelectedMuMu_t *ntuple, vector< Muon >* SelectedMuonCollection,
+        Bool_t EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollection, LongSelectedMuMu_t *ntuple, vector< Muon >* SelectedMuonCollection,   //*Derived by Marijus Ambrozas 2018.07*//
                                                  vector< Int_t >* Index); // -- output: 2 muons passing event selection conditions and their indices -- //
+
 	Bool_t EventSelection_Dijet(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection); // -- output: 2 muons passing event selection conditions -- //
 	Bool_t EventSelection_Wjet(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection); // -- output: 2 muons passing event selection conditions -- //
 	Bool_t EventSelection_CheckMoreThanOneDimuonCand(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection, Bool_t& isMoreThanOneCand); // -- output: 2 muons passing event selection conditions -- //
@@ -173,6 +175,11 @@ public:
 	Bool_t EventSelection_Electron(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection); // -- output: 2 electrons passing event selection conditions -- //
 	Bool_t EventSelection_ElectronChannel_NminusPFIso(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection); // -- output: 2 electrons passing event selection conditions -- //
 	Bool_t EventSelection_ElectronChannel(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection); // -- output: 2 electrons passing event selection conditions -- //
+
+        Bool_t EventSelection_ElectronChannel(vector< Electron > ElectronCollection, NtupleHandle *ntuple,          // -- output: 2 electrons passing event selection conditions
+                                              vector< Electron >* SelectedElectronCollection, vector< Int_t >* Sel_Index);  // and their indices inside the ntuple vectors -- //*Derived by Marijus Ambrozas 2018.08.02*//
+        Bool_t EventSelection_ElectronChannel(vector< Electron > ElectronCollection, LongSelectedEE_t *ntuple,          // -- output: 2 electrons passing event selection conditions
+                                              vector< Electron >* SelectedElectronCollection, vector< Int_t >* Sel_Index);  // and their indices inside the ntuple vectors -- //*Derived by Marijus Ambrozas 2018.08.06*//
 
 	// -- for N-1 cuts of electron channel -- //
 	Bool_t EventSelection_ElectronChannel1(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection);
@@ -3147,8 +3154,10 @@ Bool_t DYAnalyzer::EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollecti
 	{
 	    if( MuonCollection[j].isHighPtMuon() && MuonCollection[j].trkiso < 0.10)
 	    //if( MuonCollection[j].isHighPtMuon() && MuonCollection[j].RelPFIso_dBeta < 0.10)
-	        QMuonCollection.push_back( MuonCollection[j] );
+            {
+                QMuonCollection.push_back( MuonCollection[j] );
                 QIndex.push_back( j );
+            }
 	}
 
 	Int_t nQMuons = (Int_t)QMuonCollection.size();
@@ -3299,8 +3308,10 @@ Bool_t DYAnalyzer::EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollecti
         {
             if( MuonCollection[j].isHighPtMuon() && MuonCollection[j].trkiso < 0.10)
             //if( MuonCollection[j].isHighPtMuon() && MuonCollection[j].RelPFIso_dBeta < 0.10)
+            {
                 QMuonCollection.push_back( MuonCollection[j] );
                 QIndex.push_back( j );
+            }
         }
 
         Int_t nQMuons = (Int_t)QMuonCollection.size();
@@ -3435,8 +3446,10 @@ Bool_t DYAnalyzer::EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollecti
         {
             if( MuonCollection[j].isHighPtMuon() && MuonCollection[j].trkiso < 0.10)
             //if( MuonCollection[j].isHighPtMuon() && MuonCollection[j].RelPFIso_dBeta < 0.10)
+            {
                 QMuonCollection.push_back( MuonCollection[j] );
                 QIndex.push_back( j );
+            }
         }
 
         Int_t nQMuons = (Int_t)QMuonCollection.size();
@@ -3586,8 +3599,10 @@ Bool_t DYAnalyzer::EventSelection_Zdiff_13TeV_HighPt(vector< Muon > MuonCollecti
         {
             if( MuonCollection[j].isHighPtMuon() && MuonCollection[j].trkiso < 0.10)
             //if( MuonCollection[j].isHighPtMuon() && MuonCollection[j].RelPFIso_dBeta < 0.10)
+            {
                 QMuonCollection.push_back( MuonCollection[j] );
                 QIndex.push_back( j );
+            }
         }
 
         Int_t nQMuons = (Int_t)QMuonCollection.size();
@@ -5405,6 +5420,112 @@ Bool_t DYAnalyzer::EventSelection_ElectronChannel(vector< Electron > ElectronCol
 		}
 	}
 	return isPassEventSelection;
+
+}
+
+// -- Event selecton for the electron channel (to make SelectedEE_t) (2018.08.02) -- // derived by Marijus Ambrozas
+Bool_t DYAnalyzer::EventSelection_ElectronChannel( vector< Electron > ElectronCollection, NtupleHandle *ntuple, // -- input: All electrons in an event & NtupleHandle -- //
+                                                vector< Electron >* SelectedElectronCollection,  // -- output: 2 electrons passing event selection conditions -- //
+                                                vector< Int_t >* Sel_Index )    // -- output: 2 indexes of electrons that passed the selection -- //
+{
+        Bool_t isPassEventSelection = kFALSE;
+
+        // -- Electron ID -- //
+        vector< Electron > QElectronCollection;
+        vector< Int_t > QIndex;
+
+        for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
+        {
+            Electron elec = ElectronCollection[j];
+            // std::cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
+            //if( elec.isMediumElectron_Spring25ns() && elec.ecalDriven == 1
+            if( elec.passMediumID == kTRUE // modified by Dalmin Pai
+                    && elec.Pt > SubPtCut && fabs(elec.etaSC) < SubEtaCut && !( fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566 ) )
+            {
+                QElectronCollection.push_back( ElectronCollection[j] );
+                QIndex.push_back( j );
+            }
+        }
+
+        Int_t nQElectrons = (Int_t)QElectronCollection.size();
+        Int_t nQIndices = (Int_t)QIndex.size();
+
+        // std::cout << "# qualified electrons: " << nQElectrons << endl;
+
+        if( nQElectrons == 2 && nQIndices == 2 )
+        {
+                Electron recolep1 = QElectronCollection[0];
+                Electron recolep2 = QElectronCollection[1];
+
+                Bool_t isPassAcc = kFALSE;
+                isPassAcc = isPassAccCondition_Electron(recolep1, recolep2);
+
+                Double_t reco_M = (recolep1.Momentum + recolep2.Momentum).M();
+
+                if( reco_M > 10 && isPassAcc == kTRUE )
+                //if( reco_M > 60 && reco_M < 120 && isPassAcc == kTRUE )
+                {
+                        isPassEventSelection = kTRUE;
+                        SelectedElectronCollection->push_back( recolep1 );
+                        SelectedElectronCollection->push_back( recolep2 );
+                        Sel_Index->push_back( QIndex[0] );
+                        Sel_Index->push_back( QIndex[1] );
+                }
+        }
+        return isPassEventSelection;
+
+}
+
+// -- Event re-selecton for the electron channel (from LongSelectedEE_t) (2018.08.06) -- // derived by Marijus Ambrozas
+Bool_t DYAnalyzer::EventSelection_ElectronChannel( vector< Electron > ElectronCollection, LongSelectedEE_t *ntuple, // -- input: All electrons in an event & LongSelectedEE_t -- //
+                                                vector< Electron >* SelectedElectronCollection,  // -- output: 2 electrons passing event selection conditions -- //
+                                                vector< Int_t >* Sel_Index )    // -- output: 2 indexes of electrons that passed the selection -- //
+{
+        Bool_t isPassEventSelection = kFALSE;
+
+        // -- Electron ID -- //
+        vector< Electron > QElectronCollection;
+        vector< Int_t > QIndex;
+
+        for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
+        {
+            Electron elec = ElectronCollection[j];
+            // std::cout << "elec.passConvVeto: " << elec.passConvVeto << endl;
+            //if( elec.isMediumElectron_Spring25ns() && elec.ecalDriven == 1
+            if( elec.passMediumID == kTRUE // modified by Dalmin Pai
+                    && elec.Pt > SubPtCut && fabs(elec.etaSC) < SubEtaCut && !( fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566 ) )
+            {
+                QElectronCollection.push_back( ElectronCollection[j] );
+                QIndex.push_back( j );
+            }
+        }
+
+        Int_t nQElectrons = (Int_t)QElectronCollection.size();
+        Int_t nQIndices = (Int_t)QIndex.size();
+
+        // std::cout << "# qualified electrons: " << nQElectrons << endl;
+
+        if( nQElectrons == 2 && nQIndices == 2 )
+        {
+                Electron recolep1 = QElectronCollection[0];
+                Electron recolep2 = QElectronCollection[1];
+
+                Bool_t isPassAcc = kFALSE;
+                isPassAcc = isPassAccCondition_Electron(recolep1, recolep2);
+
+                Double_t reco_M = (recolep1.Momentum + recolep2.Momentum).M();
+
+                if( reco_M > 10 && isPassAcc == kTRUE )
+                //if( reco_M > 60 && reco_M < 120 && isPassAcc == kTRUE )
+                {
+                        isPassEventSelection = kTRUE;
+                        SelectedElectronCollection->push_back( recolep1 );
+                        SelectedElectronCollection->push_back( recolep2 );
+                        Sel_Index->push_back( QIndex[0] );
+                        Sel_Index->push_back( QIndex[1] );
+                }
+        }
+        return isPassEventSelection;
 
 }
 

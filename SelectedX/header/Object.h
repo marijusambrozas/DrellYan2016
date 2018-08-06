@@ -302,6 +302,63 @@ public:
 		Momentum = v;
 	}
 
+        void FillFromSelectedX(LongSelectedEE_t *ntuple, Int_t index)   // added at 2018.08.06 by Marijus Ambrozas
+        {
+                Energy = ntuple->Electron_Energy->at(index);
+                Pt = ntuple->Electron_pT->at(index);
+                eta = ntuple->Electron_eta->at(index);
+                phi = ntuple->Electron_phi->at(index);
+                charge = ntuple->Electron_charge->at(index);
+                gsfpT = ntuple->Electron_gsfpT->at(index);
+                gsfPx = ntuple->Electron_gsfPx->at(index);
+                gsfPy = ntuple->Electron_gsfPy->at(index);
+                gsfPz = ntuple->Electron_gsfPz->at(index);
+                gsfEta = ntuple->Electron_gsfEta->at(index);
+                gsfPhi = ntuple->Electron_gsfPhi->at(index);
+                gsfCharge = ntuple->Electron_gsfCharge->at(index);
+                etaSC = ntuple->Electron_etaSC->at(index);
+                phiSC = ntuple->Electron_phiSC->at(index);
+                etaWidth = ntuple->Electron_etaWidth->at(index);
+                phiWidth = ntuple->Electron_phiWidth->at(index);
+                dEtaIn = ntuple->Electron_dEtaIn->at(index);
+                dEtaInSeed = ntuple->Electron_dEtaInSeed->at(index);
+                dPhiIn = ntuple->Electron_dPhiIn->at(index);
+                sigmaIEtaIEta = ntuple->Electron_sigmaIEtaIEta->at(index);
+                Full5x5_SigmaIEtaIEta = ntuple->Electron_Full5x5_SigmaIEtaIEta->at(index);
+                HoverE = ntuple->Electron_HoverE->at(index);
+                fbrem = ntuple->Electron_fbrem->at(index);
+                eOverP = ntuple->Electron_eOverP->at(index);
+                InvEminusInvP = ntuple->Electron_InvEminusInvP->at(index);
+                dxyVTX = ntuple->Electron_dxyVTX->at(index);
+                dzVTX = ntuple->Electron_dzVTX->at(index);
+                dxy = ntuple->Electron_dxy->at(index);
+                dz = ntuple->Electron_dz->at(index);
+                dxyBS = ntuple->Electron_dxyBS->at(index);
+                dzBS = ntuple->Electron_dzBS->at(index);
+                chIso03 = ntuple->Electron_chIso03->at(index);
+                nhIso03 = ntuple->Electron_nhIso03->at(index);
+                phIso03 = ntuple->Electron_phIso03->at(index);
+                ChIso03FromPU = ntuple->Electron_ChIso03FromPU->at(index);
+                mHits = ntuple->Electron_mHits->at(index);
+                EnergySC = ntuple->Electron_EnergySC->at(index);
+                preEnergySC = ntuple->Electron_preEnergySC->at(index);
+                rawEnergySC = ntuple->Electron_rawEnergySC->at(index);
+                etSC = ntuple->Electron_etSC->at(index);
+                E15 = ntuple->Electron_E15->at(index);
+                E25 = ntuple->Electron_E25->at(index);
+                E55 = ntuple->Electron_E55->at(index);
+                RelPFIso_dBeta = ntuple->Electron_RelPFIso_dBeta->at(index);
+                RelPFIso_Rho = ntuple->Electron_RelPFIso_Rho->at(index);
+                r9 = ntuple->Electron_r9->at(index);
+                ecalDriven = ntuple->Electron_ecalDriven->at(index);
+                passConvVeto = ntuple->Electron_passConvVeto->at(index);
+                passMediumID = ntuple->Electron_passMediumID->at(index);
+
+                TLorentzVector v;
+                v.SetPtEtaPhiM(Pt, eta, phi, M_Elec);
+                Momentum = v;
+        }
+
 	// -- Ref: https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2 -- // by Dalmin Pai
 	Bool_t isMediumElectron_2016dataFor80X()
 	{
