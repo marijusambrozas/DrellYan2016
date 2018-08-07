@@ -1,0 +1,345 @@
+#include <TChain.h>
+#include <TFile.h>
+#include <TLorentzVector.h>
+#include <TStopwatch.h>
+#include <TTimeStamp.h>
+#include <TString.h>
+#include <TAttMarker.h>
+#include <TROOT.h>
+#include <TApplication.h>
+#include <vector>
+#include <TMath.h>
+#include <TFormula.h>
+#include <TH2.h>
+#include <TCanvas.h>
+#include <TLegend.h>
+#include <iostream>
+#include <sstream>
+
+// -- Macro to check if selected and reselected events are the same -- //
+#include "./header/DYAnalyzer.h"
+#include "./header/SelectedX.h"
+#include "header/myProgressBar_t.h"
+
+static inline Bool_t AreVectorsTheSame(vector<Double_t> *vec1, vector<Double_t> *vec2, TString name="");
+static inline Bool_t AreVectorsTheSame(vector<Int_t> *vec1, vector<Int_t> *vec2, TString name="");
+static inline Bool_t AreValuesTheSame(Double_t val1, Double_t val2, TString name="");
+static inline Bool_t AreValuesTheSame(Int_t val1, Int_t val2, TString name="");
+static inline Bool_t AreHistogramsTheSame(TH1D *hist1, TH1D *hist2, TString name="", Bool_t setBreak=kFALSE);
+
+void CheckSelectedEMu(Bool_t DrawHistos = kFALSE, Bool_t BreakIfProblem = kFALSE)
+{
+    // -- Run2016 luminosity [/pb] -- //
+    Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0; // Need checking
+    L = L_B2H;
+
+    TTimeStamp ts_start;
+    cout << "\n[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
+
+    TStopwatch totaltime;
+    totaltime.Start();
+
+    // -- Each ntuple directory & corresponding Tags -- //
+//    vector<TString> ntupleDirectory; vector<TString> Tag; vector<Double_t> Xsec; vector<Double_t> nEvents;
+    vector<TString> Tag; vector<Double_t> Xsec; vector<Double_t> nEvents;
+    Tag.push_back("WW");
+    nEvents.push_back(6987123);
+    Xsec.push_back(118.7);
+    const Int_t Ntup = 1;
+    for(Int_t i_tup = 0; i_tup<Ntup; i_tup++)
+    {
+        TStopwatch looptime;
+        looptime.Start();
+
+//        cout << "\t<" << [i_tup] << ">" << endl;
+
+        TChain *ch_s = new TChain("DYTree");
+        TChain *ch_l = new TChain("DYTree");
+        ch_s->Add("/media/sf_DATA/SelectedEMu_WW_34.root");
+        ch_l->Add("/media/sf_DATA/LongSelectedEMu_WW_34.root");
+
+        SelectedEMu_t *EMu_s = new SelectedEMu_t();
+        LongSelectedEMu_t *EMu_l = new LongSelectedEMu_t();
+        EMu_s->CreateFromChain(ch_s);
+        EMu_l->CreateFromChain(ch_l);
+
+        TH1D* h1_pT_ele_s = new TH1D("h1pteles", "h1_pT_ele_s", 400, 0, 4000);
+        TH1D* h1_pT_ele_l = new TH1D("h1ptelel", "h1_pT_ele_l", 400, 0, 4000);
+        TH1D* h1_eta_ele_s = new TH1D("h1etaeles", "h1_eta_ele_s", 120, -3, 3);
+        TH1D* h1_eta_ele_l = new TH1D("h1etaelel", "h1_eta_ele_l", 120, -3, 3);
+        TH1D* h1_phi_ele_s = new TH1D("h1phieles", "h1_phi_ele_s", 400, -4, 4);
+        TH1D* h1_phi_ele_l = new TH1D("h1phielel", "h1_phi_ele_l", 400, -4, 4);
+        TH1D* h1_Energy_ele_s = new TH1D("h1energyeles", "h1_Energy_ele_s", 400, 0, 8000);
+        TH1D* h1_Energy_ele_l = new TH1D("h1energyelel", "h1_Energy_ele_l", 400, 0, 8000);
+        TH1D* h1_pT_mu_s = new TH1D("h1ptmus", "h1_pT_mu_s", 400, 0, 4000);
+        TH1D* h1_pT_mu_l = new TH1D("h1ptmul", "h1_pT_mu_l", 400, 0, 4000);
+        TH1D* h1_eta_mu_s = new TH1D("h1etamus", "h1_eta_mu_s", 120, -3, 3);
+        TH1D* h1_eta_mu_l = new TH1D("h1etamul", "h1_eta_mu_l", 120, -3, 3);
+        TH1D* h1_phi_mu_s = new TH1D("h1phimus", "h1_phi_mu_s", 400, -4, 4);
+        TH1D* h1_phi_mu_l = new TH1D("h1phimul", "h1_phi_mu_l", 400, -4, 4);
+        TH1D* h1_Energy_mu_s = new TH1D("h1energymus", "h1_Energy_mu_s", 400, 0, 8000);
+        TH1D* h1_Energy_mu_l = new TH1D("h1energymul", "h1_Energy_mu_l", 400, 0, 8000);
+        TH1D* h1_invm_s = new TH1D("h1invms", "h1_invm_s", 350, 0, 7000);
+        TH1D* h1_invm_l = new TH1D("h1invml", "h1_invm_l", 350, 0, 7000);
+        TH1D* h1_nPileUp_s = new TH1D("h1npileups", "h1_nPileUp_s", 60, 0, 60);
+        TH1D* h1_nPileUp_l = new TH1D("h1npileupl", "h1_nPileUp_l", 60, 0, 60);
+
+        Bool_t AllOkVec[13];
+        Bool_t AllOkHist[10];
+        Bool_t AllOkV = kTRUE, AllOkH = kTRUE, AllOk = kTRUE;
+
+        Int_t NEvents_s = ch_s->GetEntries();
+        Int_t NEvents_l = ch_l->GetEntries();
+        cout << "\tTotal selected Events: " << NEvents_s << endl;
+        cout << "\tTotal LongSelected Events: " << NEvents_l << endl;
+        if(NEvents_s!=NEvents_l)
+        {
+            cout << "\tNUMBER IS NOT THE SAME!!" << endl;
+            AllOk = kFALSE;
+        }
+        else
+        {
+            myProgressBar_t bar(NEvents_s);
+            cout << "\tChecking separate events:" << endl;
+            for(Int_t i=0; i<NEvents_s; i++)
+            {
+                EMu_s->GetEvent(i);
+                EMu_l->GetEvent(i);
+
+                AllOkVec[0] = AreValuesTheSame(EMu_s->Electron_pT, EMu_l->Electron_pT, "Electron pT"); if (AllOkVec[0]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[1] = AreValuesTheSame(EMu_s->Electron_eta, EMu_l->Electron_eta, "Electron eta"); if (AllOkVec[1]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[2] = AreValuesTheSame(EMu_s->Electron_phi, EMu_l->Electron_phi, "Electron phi"); if (AllOkVec[2]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[3] = AreValuesTheSame(EMu_s->Electron_Energy, EMu_l->Electron_Energy, "Electron Energy"); if (AllOkVec[3]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[4] = AreValuesTheSame(EMu_s->Electron_charge, EMu_l->Electron_charge, "Electron charge"); if (AllOkVec[4]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[5] = AreValuesTheSame(EMu_s->Muon_pT, EMu_l->Muon_pT, "Muon pT"); if (AllOkVec[5]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[6] = AreValuesTheSame(EMu_s->Muon_eta, EMu_l->Muon_eta, "Muon eta"); if (AllOkVec[6]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[7] = AreValuesTheSame(EMu_s->Muon_phi, EMu_l->Muon_phi, "Muon phi"); if (AllOkVec[7]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[8] = AreValuesTheSame(EMu_s->Muon_Energy, EMu_l->Muon_Energy, "Muon Energy"); if (AllOkVec[8]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[9] = AreValuesTheSame(EMu_s->Muon_charge, EMu_l->Muon_charge, "Muon charge"); if (AllOkVec[9]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[10] = AreValuesTheSame(EMu_s->EMu_InvM, EMu_l->EMu_InvM, "InvM"); if (AllOkVec[10]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[11] = AreValuesTheSame(EMu_s->nPileUp, EMu_l->nPileUp, "nPileUp"); if (AllOkVec[11]==kFALSE && BreakIfProblem==kTRUE) break;
+                AllOkVec[12] = AreValuesTheSame(EMu_s->GENEvt_weight, EMu_l->GENEvt_weight, "event weight"); if (AllOkVec[12]==kFALSE && BreakIfProblem==kTRUE) break;
+
+                for (Int_t j=0; j<12; j++)
+                {
+                    if(AllOkVec[j]==kFALSE)
+                    {
+                        AllOkV = kFALSE;
+                        cout << "\tProblems in entry no." << i << endl;
+                    }
+                }
+
+                // -- Normalization -- //
+//                Double_t TotWeight_s = MuMu_s->GENEvt_weight;
+//                Double_t TotWeight_l = MuMu_l->GENEvt_weight;
+//                TotWeight_s = (L*Xsec[i_tup]/nEvents[i_tup])*MuMu_s->GENEvt_weight;
+//                TotWeight_l = (L*Xsec[i_tup]/nEvents[i_tup])*MuMu_l->GENEvt_weight;
+
+                // -- Histogram filling -- //
+                h1_pT_ele_s->Fill(EMu_s->Electron_pT, EMu_s->GENEvt_weight);
+                h1_pT_ele_l->Fill(EMu_l->Electron_pT, EMu_l->GENEvt_weight);
+                h1_eta_ele_s->Fill(EMu_s->Electron_eta, EMu_s->GENEvt_weight);
+                h1_eta_ele_l->Fill(EMu_l->Electron_eta, EMu_l->GENEvt_weight);
+                h1_phi_ele_s->Fill(EMu_s->Electron_phi, EMu_s->GENEvt_weight);
+                h1_phi_ele_l->Fill(EMu_l->Electron_phi, EMu_l->GENEvt_weight);
+                h1_Energy_ele_s->Fill(EMu_s->Electron_Energy, EMu_s->GENEvt_weight);
+                h1_Energy_ele_l->Fill(EMu_l->Electron_Energy, EMu_l->GENEvt_weight);
+                h1_pT_mu_s->Fill(EMu_s->Muon_pT, EMu_s->GENEvt_weight);
+                h1_pT_mu_l->Fill(EMu_l->Muon_pT, EMu_l->GENEvt_weight);
+                h1_eta_mu_s->Fill(EMu_s->Muon_eta, EMu_s->GENEvt_weight);
+                h1_eta_mu_l->Fill(EMu_l->Muon_eta, EMu_l->GENEvt_weight);
+                h1_phi_mu_s->Fill(EMu_s->Muon_phi, EMu_s->GENEvt_weight);
+                h1_phi_mu_l->Fill(EMu_l->Muon_phi, EMu_l->GENEvt_weight);
+                h1_Energy_mu_s->Fill(EMu_s->Muon_Energy, EMu_s->GENEvt_weight);
+                h1_Energy_mu_l->Fill(EMu_l->Muon_Energy, EMu_l->GENEvt_weight);
+                h1_nPileUp_s->Fill(EMu_s->nPileUp, EMu_s->GENEvt_weight);
+                h1_nPileUp_l->Fill(EMu_l->nPileUp, EMu_l->GENEvt_weight);
+                h1_invm_s->Fill(EMu_s->EMu_InvM, EMu_s->GENEvt_weight);
+                h1_invm_l->Fill(EMu_l->EMu_InvM, EMu_l->GENEvt_weight);
+                bar.Draw(i);
+            } //End of event iteration
+        } //End of if( same event numbers )
+
+        if ( AllOk==kTRUE && AllOkV==kTRUE ) cout << "\tNo problems found so far." << endl;
+        else cout << "\tProblems were detected." << endl;
+        cout << "\tChecking histograms:  ";
+
+        // -- Histogram checking -- //
+        AllOkHist[0] = AreHistogramsTheSame(h1_pT_ele_s, h1_pT_ele_l, "Electron pT", BreakIfProblem);
+        AllOkHist[1] = AreHistogramsTheSame(h1_eta_ele_s, h1_eta_ele_l, "Electron eta", BreakIfProblem);
+        AllOkHist[2] = AreHistogramsTheSame(h1_phi_ele_s, h1_phi_ele_l, "Electron phi", BreakIfProblem);
+        AllOkHist[3] = AreHistogramsTheSame(h1_Energy_ele_s, h1_Energy_ele_l, "Electron Energy", BreakIfProblem);
+        AllOkHist[4] = AreHistogramsTheSame(h1_pT_mu_s, h1_pT_mu_l, "Muon pT", BreakIfProblem);
+        AllOkHist[5] = AreHistogramsTheSame(h1_eta_mu_s, h1_eta_mu_l, "Muon eta", BreakIfProblem);
+        AllOkHist[6] = AreHistogramsTheSame(h1_phi_mu_s, h1_phi_mu_l, "Muon phi", BreakIfProblem);
+        AllOkHist[7] = AreHistogramsTheSame(h1_Energy_mu_s, h1_Energy_mu_l, "Muon Energy", BreakIfProblem);
+        AllOkHist[8] = AreHistogramsTheSame(h1_invm_s, h1_invm_l, "InvM", BreakIfProblem);
+        AllOkHist[9] = AreHistogramsTheSame(h1_nPileUp_s, h1_nPileUp_l, "phi", BreakIfProblem);
+
+        for ( Int_t j=0; j<9; j++ )
+        {
+            if ( AllOkHist[j]==kFALSE ) AllOkH = kFALSE;
+        }
+
+        // -- Drawing histos -- //
+        if ( DrawHistos==kTRUE )
+        {
+            TCanvas* c_pT_ele = new TCanvas ("Electron pT", "Electron pT", 1000, 1000);
+            TCanvas* c_eta_ele = new TCanvas ("Electron eta", "Electron eta", 1000, 1000);
+            TCanvas* c_phi_ele = new TCanvas ("Electron phi", "Electron phi", 1000, 1000);
+            TCanvas* c_Energy_ele = new TCanvas ("Electron Energy", "Electron Energy", 1000, 1000);
+            TCanvas* c_pT_mu = new TCanvas ("Muon pT", "Muon pT", 1000, 1000);
+            TCanvas* c_eta_mu = new TCanvas ("Muon eta", "Muon eta", 1000, 1000);
+            TCanvas* c_phi_mu = new TCanvas ("Muon phi", "Muon phi", 1000, 1000);
+            TCanvas* c_Energy_mu = new TCanvas ("Muon Energy", "Muon Energy", 1000, 1000);
+            TCanvas* c_invm = new TCanvas ("invm", "invm", 1000, 1000);
+            TCanvas* c_nPileUp = new TCanvas ("nPileUp", "nPileUp", 1000, 1000);
+
+            TLegend* leg = new TLegend (0.1, 0.8, 0.3, 0.9);
+
+            h1_pT_ele_s->SetLineColor(kBlue);
+            h1_pT_ele_s->SetLineWidth(2);
+            h1_pT_ele_l->SetLineColor(kRed);
+            h1_eta_ele_s->SetLineColor(kBlue);
+            h1_eta_ele_s->SetLineWidth(2);
+            h1_eta_ele_l->SetLineColor(kRed);
+            h1_phi_ele_s->SetLineColor(kBlue);
+            h1_phi_ele_s->SetLineWidth(2);
+            h1_phi_ele_l->SetLineColor(kRed);
+            h1_Energy_ele_s->SetLineColor(kBlue);
+            h1_Energy_ele_s->SetLineWidth(2);
+            h1_Energy_ele_l->SetLineColor(kRed);
+            h1_pT_mu_s->SetLineColor(kBlue);
+            h1_pT_mu_s->SetLineWidth(2);
+            h1_pT_mu_l->SetLineColor(kRed);
+            h1_eta_mu_s->SetLineColor(kBlue);
+            h1_eta_mu_s->SetLineWidth(2);
+            h1_eta_mu_l->SetLineColor(kRed);
+            h1_phi_mu_s->SetLineColor(kBlue);
+            h1_phi_mu_s->SetLineWidth(2);
+            h1_phi_mu_l->SetLineColor(kRed);
+            h1_Energy_mu_s->SetLineColor(kBlue);
+            h1_Energy_mu_s->SetLineWidth(2);
+            h1_Energy_mu_l->SetLineColor(kRed);
+            h1_invm_s->SetLineColor(kBlue);
+            h1_invm_s->SetLineWidth(2);
+            h1_invm_l->SetLineColor(kRed);
+            h1_nPileUp_s->SetLineColor(kBlue);
+            h1_nPileUp_s->SetLineWidth(2);
+            h1_nPileUp_l->SetLineColor(kRed);
+
+            leg->AddEntry(h1_pT_ele_s, "Selected EMu", "l");
+            leg->AddEntry(h1_pT_ele_l, "Long_Selected EMu", "l");
+
+            c_pT_ele->cd(); h1_pT_ele_s->Draw(); h1_pT_ele_l->Draw("SAME"); leg->Draw(); c_pT_ele->Update();
+            c_eta_ele->cd(); h1_eta_ele_s->Draw(); h1_eta_ele_l->Draw("SAME"); leg->Draw(); c_eta_ele->Update();
+            c_phi_ele->cd(); h1_phi_ele_s->Draw(); h1_phi_ele_l->Draw("SAME"); leg->Draw(); c_phi_ele->Update();
+            c_Energy_ele->cd(); h1_Energy_ele_s->Draw(); h1_Energy_ele_l->Draw("SAME"); leg->Draw(); c_Energy_ele->Update();
+            c_pT_mu->cd(); h1_pT_mu_s->Draw(); h1_pT_mu_l->Draw("SAME"); leg->Draw(); c_pT_mu->Update();
+            c_eta_mu->cd(); h1_eta_mu_s->Draw(); h1_eta_mu_l->Draw("SAME"); leg->Draw(); c_eta_mu->Update();
+            c_phi_mu->cd(); h1_phi_mu_s->Draw(); h1_phi_mu_l->Draw("SAME"); leg->Draw(); c_phi_mu->Update();
+            c_Energy_mu->cd(); h1_Energy_mu_s->Draw(); h1_Energy_mu_l->Draw("SAME"); leg->Draw(); c_Energy_mu->Update();
+            c_invm->cd(); h1_invm_s->Draw(); h1_invm_l->Draw("SAME"); leg->Draw(); c_invm->Update();
+            c_nPileUp->cd(); h1_nPileUp_s->Draw(); h1_nPileUp_l->Draw("SAME"); leg->Draw(); c_nPileUp->Update();
+        }
+
+        if ( AllOkH==kTRUE ) cout << "All bin values match." << endl;
+        else cout << "Problems were detected." << endl;
+
+        if ( AllOk==kTRUE && AllOkV==kTRUE && AllOkH==kTRUE) cout << "Selected and LongSelected events match perfectly! Hooray!" << endl;
+    } //end of i_tup iteration
+
+    Double_t TotalRunTime = totaltime.CpuTime();
+    cout << "Total RunTime: " << TotalRunTime << " seconds." << endl;
+
+    TTimeStamp ts_end;
+    cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
+
+} // end of CheckSelectedMuMu
+
+Bool_t AreVectorsTheSame( vector<Double_t> *vec1, vector<Double_t> *vec2, TString name )
+{
+    Bool_t areThey = kTRUE;
+    if ( vec1->size()!=vec2->size() )
+    {
+        cout << name << " vector sizes do not match!!" << endl;
+        areThey = kFALSE;
+    }
+    else
+    {
+        for ( UInt_t i=0; i<vec1->size(); i++ )
+        {
+            if( vec1->at(i)!=vec2->at(i) )
+            {
+                cout << name << "[" << i << "] values do not match!!" << endl;
+                areThey = kFALSE;
+            }
+        }
+    }
+    return areThey;
+}
+
+Bool_t AreVectorsTheSame( vector<Int_t> *vec1, vector<Int_t> *vec2, TString name )
+{
+    Bool_t areThey = kTRUE;
+    if ( vec1->size()!=vec2->size() )
+    {
+        cout << name << " vector sizes do not match!!" << endl;
+        areThey = kFALSE;
+    }
+    else
+    {
+        for ( UInt_t i=0; i<vec1->size(); i++ )
+        {
+            if( vec1->at(i)!=vec2->at(i) )
+            {
+                cout << name << "[" << i << "] values do not match!!" << endl;
+                areThey = kFALSE;
+            }
+        }
+    }
+    return areThey;
+}
+
+Bool_t AreValuesTheSame( Double_t val1, Double_t val2, TString name )
+{
+    if( val1!=val2 )
+    {
+        cout << name << " values do not match!!" << endl;
+        return kFALSE;
+    }
+    else return kTRUE;
+}
+
+Bool_t AreValuesTheSame( Int_t val1, Int_t val2, TString name )
+{
+    if( val1!=val2 )
+    {
+        cout << name << " values do not match!!" << endl;
+        return kFALSE;
+    }
+    else return kTRUE;
+}
+
+Bool_t AreHistogramsTheSame( TH1D *hist1, TH1D *hist2, TString name, Bool_t setBreak )
+{
+    Bool_t areThey = kTRUE;
+    if( hist1->GetSize()!=hist2->GetSize() )
+    {
+        cout << name << " histogram sizes do not match!!" << endl;
+        areThey = kFALSE;
+    }
+    else
+    {
+        for ( Int_t i=1; i<hist1->GetSize()-1; i++ )
+        {
+            if( hist1->GetBinContent(i)!=hist2->GetBinContent(i) )
+            {
+                cout << "Histogram " << name << " bin " << i << ": Values do not match!!" << endl;
+                areThey = kFALSE;
+                if ( setBreak==kTRUE ) break;
+            }
+        }
+    }
+    return areThey;
+}

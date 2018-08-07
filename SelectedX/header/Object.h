@@ -359,6 +359,63 @@ public:
                 Momentum = v;
         }
 
+        void FillFromSelectedX(LongSelectedEMu_t *ntuple)   // added at 2018.08.07 by Marijus Ambrozas
+        {
+                Energy = ntuple->Electron_Energy;
+                Pt = ntuple->Electron_pT;
+                eta = ntuple->Electron_eta;
+                phi = ntuple->Electron_phi;
+                charge = ntuple->Electron_charge;
+                gsfpT = ntuple->Electron_gsfpT;
+                gsfPx = ntuple->Electron_gsfPx;
+                gsfPy = ntuple->Electron_gsfPy;
+                gsfPz = ntuple->Electron_gsfPz;
+                gsfEta = ntuple->Electron_gsfEta;
+                gsfPhi = ntuple->Electron_gsfPhi;
+                gsfCharge = ntuple->Electron_gsfCharge;
+                etaSC = ntuple->Electron_etaSC;
+                phiSC = ntuple->Electron_phiSC;
+                etaWidth = ntuple->Electron_etaWidth;
+                phiWidth = ntuple->Electron_phiWidth;
+                dEtaIn = ntuple->Electron_dEtaIn;
+                dEtaInSeed = ntuple->Electron_dEtaInSeed;
+                dPhiIn = ntuple->Electron_dPhiIn;
+                sigmaIEtaIEta = ntuple->Electron_sigmaIEtaIEta;
+                Full5x5_SigmaIEtaIEta = ntuple->Electron_Full5x5_SigmaIEtaIEta;
+                HoverE = ntuple->Electron_HoverE;
+                fbrem = ntuple->Electron_fbrem;
+                eOverP = ntuple->Electron_eOverP;
+                InvEminusInvP = ntuple->Electron_InvEminusInvP;
+                dxyVTX = ntuple->Electron_dxyVTX;
+                dzVTX = ntuple->Electron_dzVTX;
+                dxy = ntuple->Electron_dxy;
+                dz = ntuple->Electron_dz;
+                dxyBS = ntuple->Electron_dxyBS;
+                dzBS = ntuple->Electron_dzBS;
+                chIso03 = ntuple->Electron_chIso03;
+                nhIso03 = ntuple->Electron_nhIso03;
+                phIso03 = ntuple->Electron_phIso03;
+                ChIso03FromPU = ntuple->Electron_ChIso03FromPU;
+                mHits = ntuple->Electron_mHits;
+                EnergySC = ntuple->Electron_EnergySC;
+                preEnergySC = ntuple->Electron_preEnergySC;
+                rawEnergySC = ntuple->Electron_rawEnergySC;
+                etSC = ntuple->Electron_etSC;
+                E15 = ntuple->Electron_E15;
+                E25 = ntuple->Electron_E25;
+                E55 = ntuple->Electron_E55;
+                RelPFIso_dBeta = ntuple->Electron_RelPFIso_dBeta;
+                RelPFIso_Rho = ntuple->Electron_RelPFIso_Rho;
+                r9 = ntuple->Electron_r9;
+                ecalDriven = ntuple->Electron_ecalDriven;
+                passConvVeto = ntuple->Electron_passConvVeto;
+                passMediumID = ntuple->Electron_passMediumID;
+
+                TLorentzVector v;
+                v.SetPtEtaPhiM(Pt, eta, phi, M_Elec);
+                Momentum = v;
+        }
+
 	// -- Ref: https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2 -- // by Dalmin Pai
 	Bool_t isMediumElectron_2016dataFor80X()
 	{
@@ -1113,6 +1170,88 @@ public:
                 TuneP_phi = ntuple->Muon_TuneP_phi->at(index);
         }
 
+        void FillFromSelectedX(LongSelectedEMu_t *ntuple)
+        {
+                Pt = ntuple->Muon_pT;
+                eta = ntuple->Muon_eta;
+                phi = ntuple->Muon_phi;
+                isGLB = ntuple->isGLBmuon;
+                isPF = ntuple->isPFmuon;
+                isTRK = ntuple->isTRKmuon;
+                charge = ntuple->Muon_charge;
+
+                chi2dof = ntuple->Muon_chi2dof;
+                muonHits = ntuple->Muon_muonHits;
+                nSegments = ntuple->Muon_nSegments;
+                nMatches = ntuple->Muon_nMatches;
+                trackerLayers = ntuple->Muon_trackerLayers;
+                pixelHits = ntuple->Muon_pixelHits;
+                dxyVTX = ntuple->Muon_dxyVTX;
+                dzVTX = ntuple->Muon_dzVTX;
+                trkiso = ntuple->Muon_trkiso / ntuple->Muon_pT;
+
+                Double_t pfChargedIso = ntuple->Muon_PfChargedHadronIsoR04;
+                Double_t pfNeutralIso = ntuple->Muon_PfNeutralHadronIsoR04;
+                Double_t pfGammaIso = ntuple->Muon_PfGammaIsoR04;
+                relPFiso = (pfChargedIso + pfNeutralIso + pfGammaIso) / ntuple->Muon_pT;
+
+                Double_t pfSumPUPt = ntuple->Muon_PFSumPUIsoR04;
+                this->RelPFIso_dBeta = ( pfChargedIso + max(0.0, pfNeutralIso + pfGammaIso - 0.5*pfSumPUPt) ) / this->Pt;
+
+                Double_t px = ntuple->Muon_Px;
+                Double_t py = ntuple->Muon_Py;
+                Double_t pz = ntuple->Muon_Pz;
+                Double_t Mu_E = sqrt( px*px + py*py + pz*pz + M_Mu*M_Mu );
+                TLorentzVector v;
+                v.SetPxPyPzE(px, py, pz, Mu_E);
+                Momentum = v;
+
+                Best_pT = ntuple->Muon_Best_pT;
+                Best_pTError = ntuple->Muon_Best_pTError;
+                Best_Px = ntuple->Muon_Best_Px;
+                Best_Py = ntuple->Muon_Best_Py;
+                Best_Pz = ntuple->Muon_Best_Pz;
+                Best_eta = ntuple->Muon_Best_eta;
+                Best_phi = ntuple->Muon_Best_phi;
+
+                Inner_pT = ntuple->Muon_Inner_pT;
+                Inner_pTError = ntuple->Muon_Inner_pTError;
+                Inner_Px = ntuple->Muon_Inner_Px;
+                Inner_Py = ntuple->Muon_Inner_Py;
+                Inner_Pz = ntuple->Muon_Inner_Pz;
+                Inner_eta = ntuple->Muon_Inner_eta;
+                Inner_phi = ntuple->Muon_Inner_phi;
+
+                TLorentzVector v_inner;
+                Double_t Mu_Inner_E = sqrt( Inner_Px*Inner_Px + Inner_Py*Inner_Py + Inner_Pz*Inner_Pz + M_Mu*M_Mu );
+                v_inner.SetPxPyPzE(Inner_Px, Inner_Py, Inner_Pz, Mu_Inner_E);
+                Momentum_Inner =  v_inner;
+
+                Outer_pT = ntuple->Muon_Outer_pT;
+                Outer_pTError = ntuple->Muon_Outer_pTError;
+                Outer_Px = ntuple->Muon_Outer_Px;
+                Outer_Py = ntuple->Muon_Outer_Py;
+                Outer_Pz = ntuple->Muon_Outer_Pz;
+                Outer_eta = ntuple->Muon_Outer_eta;
+                Outer_phi = ntuple->Muon_Outer_phi;
+
+                GLB_pT = ntuple->Muon_GLB_pT;
+                GLB_pTError = ntuple->Muon_GLB_pTError;
+                GLB_Px = ntuple->Muon_GLB_Px;
+                GLB_Py = ntuple->Muon_GLB_Py;
+                GLB_Pz = ntuple->Muon_GLB_Pz;
+                GLB_eta = ntuple->Muon_GLB_eta;
+                GLB_phi = ntuple->Muon_GLB_phi;
+
+                TuneP_pT = ntuple->Muon_TuneP_pT;
+                TuneP_pTError = ntuple->Muon_TuneP_pTError;
+                TuneP_Px = ntuple->Muon_TuneP_Px;
+                TuneP_Py = ntuple->Muon_TuneP_Py;
+                TuneP_Pz = ntuple->Muon_TuneP_Pz;
+                TuneP_eta = ntuple->Muon_TuneP_eta;
+                TuneP_phi = ntuple->Muon_TuneP_phi;
+        }
+
 	// void ApplyRochCorr(rochcor2015 *rmcor, Int_t type)
 	// {
 	// 	float qter = 1.0;
@@ -1172,6 +1311,32 @@ public:
 	}
 
         Bool_t isTrigMatched(LongSelectedMuMu_t *nh, TString HLT)
+        {
+                vector<string> *hlt_trigName = nh->HLT_trigName;
+                Int_t hlt_ntrig = nh->HLT_ntrig;
+
+                Bool_t isTrigMatch = false;
+                for( Int_t k = 0; k < hlt_ntrig; k++ )
+                {
+                        if( (hlt_trigName->at((unsigned int)k)) == HLT )
+                        {
+                                Double_t Lepton_eta = this->eta;
+                                Double_t Lepton_phi = this->phi;
+                                Double_t Trig_eta = nh->HLT_trigEta->at(k);
+                                Double_t Trig_phi = nh->HLT_trigPhi->at(k);
+
+                                Double_t dR = sqrt( (Lepton_eta - Trig_eta)*(Lepton_eta - Trig_eta) + (Lepton_phi - Trig_phi)*(Lepton_phi - Trig_phi) );
+                                if( dR < 0.3 && fabs( Lepton_eta ) < 2.4 )
+                                {
+                                        isTrigMatch = true;
+                                        break;
+                                }
+                        }
+                }
+                return isTrigMatch;
+        }
+
+        Bool_t isTrigMatched(LongSelectedEMu_t *nh, TString HLT)
         {
                 vector<string> *hlt_trigName = nh->HLT_trigName;
                 Int_t hlt_ntrig = nh->HLT_ntrig;

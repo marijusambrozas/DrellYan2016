@@ -1866,8 +1866,10 @@ public:
     Double_t Electron_etaWidth;
     Double_t Electron_phiWidth;
     Double_t Electron_dEtaIn;
+    Double_t Electron_dEtaInSeed;
     Double_t Electron_dPhiIn;
     Double_t Electron_sigmaIEtaIEta;
+    Double_t Electron_Full5x5_SigmaIEtaIEta;
     Double_t Electron_HoverE;
     Double_t Electron_fbrem;
     Double_t Electron_eOverP;
@@ -1903,9 +1905,13 @@ public:
 //    Bool_t Electron_passMVAID_WP90;
 //    Bool_t Electron_passHEEPID;
 
-    // -- Useless constructor -- //
+    // -- Constructor -- //
     void CreateNew()
     {
+        HLT_trigFired = new std::vector<int>;
+        HLT_trigName = new std::vector<string>;
+        HLT_trigEta = new std::vector<double>;
+        HLT_trigPhi = new std::vector<double>;
 //        CosAngle = new std::vector<double>;
 //        vtxTrkChi2 = new std::vector<double>;
 //        vtxTrkProb = new std::vector<double>;
@@ -2060,8 +2066,10 @@ public:
         chain->SetBranchAddress("Electron_etaWidth", &Electron_etaWidth);
         chain->SetBranchAddress("Electron_phiWidth", &Electron_phiWidth);
         chain->SetBranchAddress("Electron_dEtaIn", &Electron_dEtaIn);
+        chain->SetBranchAddress("Electron_dEtaInSeed", &Electron_dEtaInSeed);
         chain->SetBranchAddress("Electron_dPhiIn", &Electron_dPhiIn);
         chain->SetBranchAddress("Electron_sigmaIEtaIEta", &Electron_sigmaIEtaIEta);
+        chain->SetBranchAddress("Electron_Full5x5_SigmaIEtaIEta", &Electron_Full5x5_SigmaIEtaIEta);
         chain->SetBranchAddress("Electron_HoverE", &Electron_HoverE);
         chain->SetBranchAddress("Electron_fbrem", &Electron_fbrem);
         chain->SetBranchAddress("Electron_eOverP", &Electron_eOverP);
@@ -2224,8 +2232,10 @@ public:
         chain->AddBranchToCache("Electron_etaWidth", 1);
         chain->AddBranchToCache("Electron_phiWidth", 1);
         chain->AddBranchToCache("Electron_dEtaIn", 1);
+        chain->AddBranchToCache("Electron_dEtaInSeed", 1);
         chain->AddBranchToCache("Electron_dPhiIn", 1);
         chain->AddBranchToCache("Electron_sigmaIEtaIEta", 1);
+        chain->AddBranchToCache("Electron_Full5x5_SigmaIEtaIEta", 1);
         chain->AddBranchToCache("Electron_HoverE", 1);
         chain->AddBranchToCache("Electron_fbrem", 1);
         chain->AddBranchToCache("Electron_eOverP", 1);
@@ -2399,8 +2409,10 @@ public:
         chain->SetBranchStatus("Electron_etaWidth", 1);
         chain->SetBranchStatus("Electron_phiWidth", 1);
         chain->SetBranchStatus("Electron_dEtaIn", 1);
+        chain->SetBranchStatus("Electron_dEtaInSeed", 1);
         chain->SetBranchStatus("Electron_dPhiIn", 1);
         chain->SetBranchStatus("Electron_sigmaIEtaIEta", 1);
+        chain->SetBranchStatus("Electron_Full5x5_SigmaIEtaIEta", 1);
         chain->SetBranchStatus("Electron_HoverE", 1);
         chain->SetBranchStatus("Electron_fbrem", 1);
         chain->SetBranchStatus("Electron_eOverP", 1);
@@ -2625,13 +2637,13 @@ public:
     Double_t Electron_eta;
     Double_t Electron_phi;
     Double_t Electron_Energy;
-    Double_t Electron_charge;
+    Int_t Electron_charge;
 
     Double_t Muon_pT;
     Double_t Muon_eta;
     Double_t Muon_phi;
     Double_t Muon_Energy;
-    Double_t Muon_charge;
+    Int_t Muon_charge;
     Double_t Muon_TuneP_pT;
     Double_t Muon_TuneP_eta;
     Double_t Muon_TuneP_phi;

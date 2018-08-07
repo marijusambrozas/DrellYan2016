@@ -207,7 +207,14 @@ public:
 	void PrintOutDoubleMuInfo( Muon mu1, Muon mu2 );
 
 	// -- emu method -- //
-	Bool_t EventSelection_emu_method_test(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection); // -- output: 1 muon and 1 electron passing event selection conditions -- //
+        Bool_t EventSelection_emu_method_test(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple,
+                                              vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection); // -- output: 1 muon and 1 electron passing event selection conditions -- //
+        Bool_t EventSelection_emu_method_test(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple, // Derived by Marijus Ambrozas 2018.08.07
+                                              vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection,
+                                              Int_t &Sel_Index_Mu, Int_t &Sel_Index_Ele); // -- output: 1 muon and 1 electron passing event selection conditions and their indices -- //
+        Bool_t EventSelection_emu_method_test(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, LongSelectedEMu_t *ntuple, // Derived by Marijus Ambrozas 2018.08.07
+                                              vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection,
+                                              Int_t &Sel_Index_Mu, Int_t &Sel_Index_Ele); // -- output: 1 muon and 1 electron passing event selection conditions and their indices -- //
 //	Bool_t EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection); // -- output: 1 muon and 1 electron passing event selection conditions -- //
 //	void emuVertexProbNormChi2(NtupleHandle *ntuple, Double_t Pt1, Double_t Pt2, Double_t *VtxProb, Double_t *VtxNormChi2);
 	Double_t EfficiencySF_EventWeight_emu_BtoF(Muon mu1, Electron ele2);
@@ -5143,6 +5150,220 @@ Bool_t DYAnalyzer::EventSelection_emu_method_test(vector< Muon > MuonCollection,
 	}
 
 	return isPassEventSelection;
+}
+
+// test for emu event selection not using vtx cut
+// Derived by Marijus Ambrozas 2018.08.07 to return indices of particles that passed the selection
+Bool_t DYAnalyzer::EventSelection_emu_method_test(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple, // Input: electron, muon vectors and NtupleHandle
+                                                vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection, // Output: Selected electron and muon
+                                                  Int_t &Sel_Index_Mu, Int_t &Sel_Index_Ele)      // Output: Indices of selected electron and muon
+{
+        Bool_t isPassEventSelection = kFALSE;
+        Sel_Index_Mu = -1; Sel_Index_Ele = -1;
+
+        //Collect qualified muons among muons
+        vector< Muon > QMuonCollection;
+        vector< Int_t > QIndexMu;
+        for(Int_t j=0; j<(int)MuonCollection.size(); j++)
+        {
+                if( MuonCollection[j].isHighPtMuon() && MuonCollection[j].trkiso < 0.10
+                        //&& MuonCollection[j].Pt > LeadPtCut && fabs(MuonCollection[j].eta) < LeadEtaCut )
+                        && MuonCollection[j].Pt > SubPtCut && fabs(MuonCollection[j].eta) < LeadEtaCut ) // pT>17 && |eta|<2.4
+                {
+                        QMuonCollection.push_back( MuonCollection[j] );
+                        QIndexMu.push_back( j );
+                }
+        }
+
+        //Collect qualified electrons among electrons
+        vector< Electron > QElectronCollection;
+        vector< Int_t > QIndexEle;
+        for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
+        {
+                Electron elec = ElectronCollection[j];
+                if( elec.passMediumID == kTRUE
+                        //&& elec.Pt > SubPtCut && fabs(elec.etaSC) < 2.5 && !( fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566 ) )
+                        && elec.Pt > SubPtCut && fabs(elec.etaSC) < LeadEtaCut && !( fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566 ) ) // pT>17 && |eta|<2.4
+                {
+                        QElectronCollection.push_back( ElectronCollection[j] );
+                        QIndexEle.push_back( j );
+                }
+        }
+
+        Int_t nQMuons = (Int_t)QMuonCollection.size();
+        Int_t nQElectrons = (Int_t)QElectronCollection.size();
+        Int_t nQIndicesMu = (Int_t)QIndexMu.size();
+        Int_t nQIndicesEle = (Int_t)QIndexEle.size();
+
+        Double_t Pt_mu = 0;
+        Double_t Pt_el = 0;
+        Int_t Index_mu = -1;
+        Int_t Index_ele = -1;
+        Muon mu_BestPair;
+        Electron el_BestPair;
+
+        // -- Select muon with highest pT -- //
+        if ( nQMuons == nQIndicesMu )
+        {
+            for(Int_t i_mu=0; i_mu<nQMuons; i_mu++)
+            {
+                    Muon Mu = QMuonCollection[i_mu];
+
+                    // -- muon should be matched with HLT objects in emu best pair -- //
+                    if( Mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*") || Mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*") )
+                    {
+                            if( Mu.Pt > Pt_mu )
+                            {
+                                    Pt_mu           = Mu.Pt;
+                                    mu_BestPair     = Mu;
+                                    Index_mu        = QIndexMu[i_mu];
+                            }
+                    }
+            }
+        }
+
+        // -- Select electron with highest pT -- //
+        for(Int_t j_el=0; j_el<nQElectrons; j_el++)
+        {
+                Electron El = QElectronCollection[j_el];
+
+                if( El.Pt > Pt_el )
+                {
+                        Pt_el		= El.Pt;
+                        el_BestPair	= El;
+                        Index_ele       = QIndexEle[j_el];
+                }
+        }
+
+        //if( Pt_mu > 0 && Pt_el > 0 )
+        if( Pt_mu > 0 && Pt_el > 0 && ( Pt_mu > LeadPtCut || Pt_el > LeadPtCut ) ) // At least one lepton has pT above 28 [GeV]
+        {
+                TLorentzVector reco_v1 = mu_BestPair.Momentum;
+                TLorentzVector reco_v2 = el_BestPair.Momentum;
+                Double_t reco_M = (reco_v1 + reco_v2).M();
+
+                // -- 3D open angle -- //
+                Double_t Angle = reco_v1.Angle( reco_v2.Vect() );
+
+                //if( reco_M > 10 && Angle < TMath::Pi() - 0.005 )
+                if( reco_M > 10 )
+                {
+                        isPassEventSelection = kTRUE;
+                        SelectedMuonCollection->push_back( mu_BestPair );
+                        SelectedElectronCollection->push_back( el_BestPair );
+                        Sel_Index_Mu = Index_mu;
+                        Sel_Index_Ele = Index_ele;
+                }
+        }
+
+        return isPassEventSelection;
+}
+
+// test for emu event selection not using vtx cut
+// Derived by Marijus Ambrozas 2018.08.07 to use LongSelectedEMu_t instead of NtupleHandle
+Bool_t DYAnalyzer::EventSelection_emu_method_test(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, LongSelectedEMu_t *ntuple, // Input: electron, muon vectors and LongSelectedEMu_t
+                                                vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection, // Output: Selected electron and muon
+                                                  Int_t &Sel_Index_Mu, Int_t &Sel_Index_Ele)      // Output: Indices of selected electron and muon
+{
+        Bool_t isPassEventSelection = kFALSE;
+        Sel_Index_Mu = -1; Sel_Index_Ele = -1;
+
+        //Collect qualified muons among muons
+        vector< Muon > QMuonCollection;
+        vector< Int_t > QIndexMu;
+        for(Int_t j=0; j<(int)MuonCollection.size(); j++)
+        {
+                if( MuonCollection[j].isHighPtMuon() && MuonCollection[j].trkiso < 0.10
+                        //&& MuonCollection[j].Pt > LeadPtCut && fabs(MuonCollection[j].eta) < LeadEtaCut )
+                        && MuonCollection[j].Pt > SubPtCut && fabs(MuonCollection[j].eta) < LeadEtaCut ) // pT>17 && |eta|<2.4
+                {
+                        QMuonCollection.push_back( MuonCollection[j] );
+                        QIndexMu.push_back( j );
+                }
+        }
+
+        //Collect qualified electrons among electrons
+        vector< Electron > QElectronCollection;
+        vector< Int_t > QIndexEle;
+        for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
+        {
+                Electron elec = ElectronCollection[j];
+                if( elec.passMediumID == kTRUE
+                        //&& elec.Pt > SubPtCut && fabs(elec.etaSC) < 2.5 && !( fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566 ) )
+                        && elec.Pt > SubPtCut && fabs(elec.etaSC) < LeadEtaCut && !( fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566 ) ) // pT>17 && |eta|<2.4
+                {
+                        QElectronCollection.push_back( ElectronCollection[j] );
+                        QIndexEle.push_back( j );
+                }
+        }
+
+        Int_t nQMuons = (Int_t)QMuonCollection.size();
+        Int_t nQElectrons = (Int_t)QElectronCollection.size();
+        Int_t nQIndicesMu = (Int_t)QIndexMu.size();
+        Int_t nQIndicesEle = (Int_t)QIndexEle.size();
+
+        Double_t Pt_mu = 0;
+        Double_t Pt_el = 0;
+        Int_t Index_mu = -1;
+        Int_t Index_ele = -1;
+        Muon mu_BestPair;
+        Electron el_BestPair;
+
+        // -- Select muon with highest pT -- //
+        if ( nQMuons == nQIndicesMu )
+        {
+            for(Int_t i_mu=0; i_mu<nQMuons; i_mu++)
+            {
+                    Muon Mu = QMuonCollection[i_mu];
+
+                    // -- muon should be matched with HLT objects in emu best pair -- //
+                    if( Mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*") || Mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*") )
+                    {
+                            if( Mu.Pt > Pt_mu )
+                            {
+                                    Pt_mu           = Mu.Pt;
+                                    mu_BestPair     = Mu;
+                                    Index_mu        = QIndexMu[i_mu];
+                            }
+                    }
+            }
+        }
+
+        // -- Select electron with highest pT -- //
+        for(Int_t j_el=0; j_el<nQElectrons; j_el++)
+        {
+                Electron El = QElectronCollection[j_el];
+
+                if( El.Pt > Pt_el )
+                {
+                        Pt_el		= El.Pt;
+                        el_BestPair	= El;
+                        Index_ele       = QIndexEle[j_el];
+                }
+        }
+
+        //if( Pt_mu > 0 && Pt_el > 0 )
+        if( Pt_mu > 0 && Pt_el > 0 && ( Pt_mu > LeadPtCut || Pt_el > LeadPtCut ) ) // At least one lepton has pT above 28 [GeV]
+        {
+                TLorentzVector reco_v1 = mu_BestPair.Momentum;
+                TLorentzVector reco_v2 = el_BestPair.Momentum;
+                Double_t reco_M = (reco_v1 + reco_v2).M();
+
+                // -- 3D open angle -- //
+                Double_t Angle = reco_v1.Angle( reco_v2.Vect() );
+
+                //if( reco_M > 10 && Angle < TMath::Pi() - 0.005 )
+                if( reco_M > 10 )
+                {
+                        isPassEventSelection = kTRUE;
+                        SelectedMuonCollection->push_back( mu_BestPair );
+                        SelectedElectronCollection->push_back( el_BestPair );
+                        Sel_Index_Mu = Index_mu;
+                        Sel_Index_Ele = Index_ele;
+                }
+        }
+
+        return isPassEventSelection;
 }
 
 /*
