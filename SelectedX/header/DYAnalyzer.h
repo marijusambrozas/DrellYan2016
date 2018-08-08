@@ -387,97 +387,201 @@ void DYAnalyzer::SetupMCsamples_Moriond17( TString Type, vector<TString> *ntuple
 	{
                 // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "DYLL_M10to50_v1" ); Tag->push_back( "DYMuMu_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M10to50_v2" ); Tag->push_back( "DYMuMu_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M10to50_ext1v1" ); Tag->push_back( "DYMuMu_M10to50_ext1v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
+                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000" );
+                Tag->push_back( "DYMuMu_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v2/180326_143001/0000" );
+                Tag->push_back( "DYMuMu_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_ext1v1/180326_143056/0000" );
+                Tag->push_back( "DYMuMu_M10to50_ext1v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
 	}
 	else if( Type == "DYMuMu_M50to100" )
 	{
                 // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "DYLL_M50toInf" ); Tag->push_back( "DYMuMu_M50to100" ); Xsec->push_back( 5869.58346/3.0 ); nEvents->push_back( 26175605.0 ); //nEvents: sum of DYMuMu weights
+                ntupleDirectory->push_back( "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000" );
+                Tag->push_back( "DYMuMu_M50to100" ); Xsec->push_back( 5869.58346/3.0 ); nEvents->push_back( 26175605.0 ); //nEvents: sum of DYMuMu weights
 	}
 	else if( Type == "DYMuMu_M100toInf" )
 	{
                 // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "DYLL_M100to200" ); Tag->push_back( "DYMuMu_M100to200" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3433295.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M100to200_ext" ); Tag->push_back( "DYMuMu_M100to200_ext" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3433295.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M200to400" ); Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 56340.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M400to500" ); Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 50136.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M500to700" ); Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 48188.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M700to800" ); Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 44984.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M800to1000" ); Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 43496.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M1000to1500" ); Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 40110.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M1500to2000" ); Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 37176.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M2000to3000" ); Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 33360.0 ); //nEvents: sum of DYMuMu weights
+                ntupleDirectory->push_back( "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200/180326_143238/0000" );
+                Tag->push_back( "DYMuMu_M100to200" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3433295.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200_ext/180326_143324/0000" );
+                Tag->push_back( "DYMuMu_M100to200_ext" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3433295.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-200to400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M200to400/180326_143408/0000" );
+                Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 56340.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-400to500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M400to500/180326_143512/0000" );
+                Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 50136.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-500to700_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M500to700/180326_143600/0000" );
+                Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 48188.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-700to800_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M700to800/180326_143640/0000" );
+                Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 44984.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-800to1000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M800to1000/180326_143747/0000" );
+                Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 43496.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-1000to1500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M1000to1500/180326_143836/0000" );
+                Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 40110.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-1500to2000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M1500to2000/180326_143921/0000" );
+                Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 37176.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-2000to3000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M2000to3000/180326_144005/0000" );
+                Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 33360.0 ); //nEvents: sum of DYMuMu weights
 	}
 	else if( Type == "DYMuMu_aMCNLO" )
 	{
                 // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "DYLL_M10to50_v1" ); Tag->push_back( "DYMuMu_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M10to50_v2" ); Tag->push_back( "DYMuMu_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M10to50_ext1v1" ); Tag->push_back( "DYMuMu_M10to50_ext1v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M50toInf" ); Tag->push_back( "DYMuMu_M50to100" ); Xsec->push_back( 5869.58346/3.0 ); nEvents->push_back( 26175605.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M100to200" ); Tag->push_back( "DYMuMu_M100to200" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3433295.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M100to200_ext" ); Tag->push_back( "DYMuMu_M100to200_ext" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3433295.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M200to400" ); Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 56340.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M400to500" ); Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 50136.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M500to700" ); Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 48188.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M700to800" ); Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 44984.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M800to1000" ); Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 43496.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M1000to1500" ); Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 40110.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M1500to2000" ); Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 37176.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M2000to3000" ); Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 33360.0 ); //nEvents: sum of DYMuMu weights
+                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000" );
+                Tag->push_back( "DYMuMu_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v2/180326_143001/0000" );
+                Tag->push_back( "DYMuMu_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_ext1v1/180326_143056/0000" );
+                Tag->push_back( "DYMuMu_M10to50_ext1v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000" );
+                Tag->push_back( "DYMuMu_M50to100" ); Xsec->push_back( 5869.58346/3.0 ); nEvents->push_back( 26175605.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200/180326_143238/0000" );
+                Tag->push_back( "DYMuMu_M100to200" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3433295.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200_ext/180326_143324/0000" );
+                Tag->push_back( "DYMuMu_M100to200_ext" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3433295.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-200to400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M200to400/180326_143408/0000" );
+                Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 56340.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-400to500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M400to500/180326_143512/0000" );
+                Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 50136.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-500to700_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M500to700/180326_143600/0000" );
+                Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 48188.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-700to800_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M700to800/180326_143640/0000" );
+                Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 44984.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-800to1000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M800to1000/180326_143747/0000" );
+                Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 43496.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-1000to1500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M1000to1500/180326_143836/0000" );
+                Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 40110.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-1500to2000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M1500to2000/180326_143921/0000" );
+                Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 37176.0 ); //nEvents: sum of DYMuMu weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-2000to3000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M2000to3000/180326_144005/0000" );
+                Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 33360.0 ); //nEvents: sum of DYMuMu weights
 	}
 	else if( Type == "DYEE_M10to50" )
 	{
                 // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "DYLL_M10to50_v1" ); Tag->push_back( "DYEE_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M10to50_v2" ); Tag->push_back( "DYEE_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M10to50_ext1v1" ); Tag->push_back( "DYEE_M10to50_ext1v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
+                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000" );
+                Tag->push_back( "DYEE_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v2/180326_143001/0000" );
+                Tag->push_back( "DYEE_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_ext1v1/180326_143056/0000" );
+                Tag->push_back( "DYEE_M10to50_ext1v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
 	}
 	else if( Type == "DYEE_M50to100" )
 	{
                 // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "DYLL_M50toInf" ); Tag->push_back( "DYEE_M50to100" ); Xsec->push_back( 5869.58346/3.0 ); nEvents->push_back( 26166194.0 ); //nEvents: sum of DYEE weights
+                ntupleDirectory->push_back( "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000" );
+                Tag->push_back( "DYEE_M50to100" ); Xsec->push_back( 5869.58346/3.0 ); nEvents->push_back( 26166194.0 ); //nEvents: sum of DYEE weights
 	}
 	else if( Type == "DYEE_M100toInf" )
 	{
                 // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "DYLL_M100to200" ); Tag->push_back( "DYEE_M100to200" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3437885.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M100to200_ext" ); Tag->push_back( "DYEE_M100to200_ext" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3437885.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M200to400" ); Tag->push_back( "DYEE_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 56144.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M400to500" ); Tag->push_back( "DYEE_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 50420.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M500to700" ); Tag->push_back( "DYEE_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 48039.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M700to800" ); Tag->push_back( "DYEE_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 46114.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M800to1000" ); Tag->push_back( "DYEE_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 44256.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M1000to1500" ); Tag->push_back( "DYEE_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 39712.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M1500to2000" ); Tag->push_back( "DYEE_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 37287.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M2000to3000" ); Tag->push_back( "DYEE_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 34031.0 ); //nEvents: sum of DYEE weights
+                ntupleDirectory->push_back( "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200/180326_143238/0000" );
+                Tag->push_back( "DYEE_M100to200" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3437885.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200_ext/180326_143324/0000" );
+                Tag->push_back( "DYEE_M100to200_ext" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3437885.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-200to400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M200to400/180326_143408/0000" );
+                Tag->push_back( "DYEE_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 56144.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-400to500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M400to500/180326_143512/0000" );
+                Tag->push_back( "DYEE_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 50420.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-500to700_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M500to700/180326_143600/0000" );
+                Tag->push_back( "DYEE_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 48039.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-700to800_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M700to800/180326_143640/0000" );
+                Tag->push_back( "DYEE_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 46114.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-800to1000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M800to1000/180326_143747/0000" );
+                Tag->push_back( "DYEE_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 44256.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-1000to1500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M1000to1500/180326_143836/0000" );
+                Tag->push_back( "DYEE_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 39712.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-1500to2000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M1500to2000/180326_143921/0000" );
+                Tag->push_back( "DYEE_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 37287.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-2000to3000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M2000to3000/180326_144005/0000" );
+                Tag->push_back( "DYEE_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 34031.0 ); //nEvents: sum of DYEE weights
 	}
 	else if( Type == "DYEE_aMCNLO" )
 	{
                 // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "DYLL_M10to50_v1" ); Tag->push_back( "DYEE_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M10to50_v2" ); Tag->push_back( "DYEE_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M10to50_ext1v1" ); Tag->push_back( "DYEE_M10to50_ext1v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M50toInf" ); Tag->push_back( "DYEE_M50to100" ); Xsec->push_back( 5869.58346/3.0 ); nEvents->push_back( 26166194.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M100to200" ); Tag->push_back( "DYEE_M100to200" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3437885.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M100to200_ext" ); Tag->push_back( "DYEE_M100to200_ext" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3437885.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "DYLL_M200to400" ); Tag->push_back( "DYEE_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 56144.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M400to500" ); Tag->push_back( "DYEE_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 50420.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M500to700" ); Tag->push_back( "DYEE_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 48039.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M700to800" ); Tag->push_back( "DYEE_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 46114.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M800to1000" ); Tag->push_back( "DYEE_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 44256.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M1000to1500" ); Tag->push_back( "DYEE_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 39712.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M1500to2000" ); Tag->push_back( "DYEE_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 37287.0 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "DYLL_M2000to3000" ); Tag->push_back( "DYEE_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 34031.0 ); //nEvents: sum of DYEE weights
+                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000" );
+                Tag->push_back( "DYEE_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v2/180326_143001/0000" );
+                Tag->push_back( "DYEE_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_ext1v1/180326_143056/0000" );
+                Tag->push_back( "DYEE_M10to50_ext1v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000" );
+                Tag->push_back( "DYEE_M50to100" ); Xsec->push_back( 5869.58346/3.0 ); nEvents->push_back( 26166194.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200/180326_143238/0000" );
+                Tag->push_back( "DYEE_M100to200" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3437885.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200_ext/180326_143324/0000" );
+                Tag->push_back( "DYEE_M100to200_ext" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3437885.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-200to400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M200to400/180326_143408/0000" );
+                Tag->push_back( "DYEE_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 56144.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-400to500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M400to500/180326_143512/0000" );
+                Tag->push_back( "DYEE_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 50420.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-500to700_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M500to700/180326_143600/0000" );
+                Tag->push_back( "DYEE_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 48039.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-700to800_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M700to800/180326_143640/0000" );
+                Tag->push_back( "DYEE_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 46114.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-800to1000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M800to1000/180326_143747/0000" );
+                Tag->push_back( "DYEE_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 44256.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-1000to1500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M1000to1500/180326_143836/0000" );
+                Tag->push_back( "DYEE_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 39712.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-1500to2000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M1500to2000/180326_143921/0000" );
+                Tag->push_back( "DYEE_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 37287.0 ); //nEvents: sum of DYEE weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-2000to3000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M2000to3000/180326_144005/0000" );
+                Tag->push_back( "DYEE_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 34031.0 ); //nEvents: sum of DYEE weights
 	}
 	else if( Type == "ttbar" )
 	{
