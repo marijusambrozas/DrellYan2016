@@ -588,99 +588,192 @@ void DYAnalyzer::SetupMCsamples_Moriond17( TString Type, vector<TString> *ntuple
                 // std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
 		//ntupleDirectory->push_back( "ttbar" ); Tag->push_back( "ttbar" ); Xsec->push_back( 831.76 ); nEvents->push_back( 154948878.0 ); //ttbar+ ttbarBackup
-		ntupleDirectory->push_back( "ttbar" ); Tag->push_back( "ttbar" ); Xsec->push_back( 734.577 ); nEvents->push_back( 135949780.0 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
+                ntupleDirectory->push_back( "TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/crab_ttbar/180326_142926/0000" );
+                Tag->push_back( "ttbar" ); Xsec->push_back( 734.577 ); nEvents->push_back( 135949780.0 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
 	}
 	else if( Type == "ttbarBackup" )
 	{
                 // std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
 		//ntupleDirectory->push_back( "ttbarBackup" ); Tag->push_back( "ttbarBackup" ); Xsec->push_back( 831.76 ); nEvents->push_back( 154948878.0 ); //ttbar+ ttbarBackup
-		ntupleDirectory->push_back( "ttbarBackup" ); Tag->push_back( "ttbarBackup" ); Xsec->push_back( 734.577 ); nEvents->push_back( 135949780.0 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
+                ntupleDirectory->push_back( "TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/crab_ttbarBackup/180326_143005/0000" );
+                Tag->push_back( "ttbarBackup" ); Xsec->push_back( 734.577 ); nEvents->push_back( 135949780.0 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
 	}
 	else if( Type == "ttbar_M700toInf" )
 	{
                 // std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
-		ntupleDirectory->push_back( "ttbar_M700to1000" ); Tag->push_back( "ttbar_M700to1000" ); Xsec->push_back( 76.605 ); nEvents->push_back( 38422582.0 ); //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
-		ntupleDirectory->push_back( "ttbar_M1000toInf" ); Tag->push_back( "ttbar_M1000toInf" ); Xsec->push_back( 20.578 ); nEvents->push_back( 24561630.0 ); //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
+                ntupleDirectory->push_back( "TT_Mtt-700to1000_TuneCUETP8M2T4_13TeV-powheg-pythia8/crab_ttbar_M700to1000/180326_143059/0000" );
+                Tag->push_back( "ttbar_M700to1000" ); Xsec->push_back( 76.605 ); nEvents->push_back( 38422582.0 ); //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
+
+                ntupleDirectory->push_back( "TT_Mtt-1000toInf_TuneCUETP8M2T4_13TeV-powheg-pythia8/crab_ttbar_M1000toInf/180326_143144/0000" );
+                Tag->push_back( "ttbar_M1000toInf" ); Xsec->push_back( 20.578 ); nEvents->push_back( 24561630.0 ); //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
 	}
 	else if( Type == "DYTauTau_M10to50" )
 	{
                 // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "DYLL_M10to50_v1" ); Tag->push_back( "DYTauTau_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33080379.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "DYLL_M10to50_v2" ); Tag->push_back( "DYTauTau_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33080379.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "DYLL_M10to50_ext1v1" ); Tag->push_back( "DYTauTau_M10to50_ext1v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33080379.0 ); //nEvents: sum of DYTauTau weights
+                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000" );
+                Tag->push_back( "DYTauTau_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33080379.0 ); //nEvents: sum of DYTauTau weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v2/180326_143001/0000" );
+                Tag->push_back( "DYTauTau_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33080379.0 ); //nEvents: sum of DYTauTau weights
+
+                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_ext1v1/180326_143056/0000" );
+                Tag->push_back( "DYTauTau_M10to50_ext1v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33080379.0 ); //nEvents: sum of DYTauTau weights
 	}
 	else if( Type == "DYTauTau_M50toInf" )
 	{
                 // std::cout << "# events should be adjusted later" << endl;
 		// -- Signal binned samples -- //
 		//ntupleDirectory->push_back( "DYLL_M50toInf" ); Tag->push_back( "DYTauTau" ); Xsec->push_back( 6104.0/3.0 ); nEvents->push_back( 27277866.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "DYLL_M50toInf" ); Tag->push_back( "DYTauTau" ); Xsec->push_back( 1921.8 ); nEvents->push_back( 27277866.0 ); //nEvents: sum of DYTauTau weights, NNLO Xsec
+                ntupleDirectory->push_back( "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000" );
+                Tag->push_back( "DYTauTau" ); Xsec->push_back( 1921.8 ); nEvents->push_back( 27277866.0 ); //nEvents: sum of DYTauTau weights, NNLO Xsec
 	}
 	else if( Type == "VVnST" )
 	{
                 // std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
-		ntupleDirectory->push_back( "ST_tW" ); Tag->push_back( "tW" ); Xsec->push_back( 35.85 ); nEvents->push_back( 6952830.0 );
-		ntupleDirectory->push_back( "ST_tbarW" ); Tag->push_back( "tbarW" ); Xsec->push_back( 35.85 ); nEvents->push_back( 6933093.0 );
-		ntupleDirectory->push_back( "ZZ" ); Tag->push_back( "ZZ" ); Xsec->push_back( 16.523 ); nEvents->push_back( 998034.0 );
-		ntupleDirectory->push_back( "WZ" ); Tag->push_back( "WZ" ); Xsec->push_back( 47.13 ); nEvents->push_back( 2995828.0 );
-		ntupleDirectory->push_back( "WW" ); Tag->push_back( "WW" ); Xsec->push_back( 118.7 ); nEvents->push_back( 6987123.0 );
+                ntupleDirectory->push_back( "ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/crab_ST_tW/180326_143800/0000" );
+                Tag->push_back( "tW" ); Xsec->push_back( 35.85 ); nEvents->push_back( 6952830.0 );
+
+                ntupleDirectory->push_back( "ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/crab_ST_tbarW/180326_143849/0000" );
+                Tag->push_back( "tbarW" ); Xsec->push_back( 35.85 ); nEvents->push_back( 6933093.0 );
+
+                ntupleDirectory->push_back( "ZZ_TuneCUETP8M1_13TeV-pythia8/crab_ZZ/180326_143627/0000" ); // NOT SURE (there also is ZZTo4L)
+                Tag->push_back( "ZZ" ); Xsec->push_back( 16.523 ); nEvents->push_back( 998034.0 );
+
+                ntupleDirectory->push_back( "WZ_TuneCUETP8M1_13TeV-pythia8/crab_WZ/180326_143414/0000" ); // NOT SURE (there also is WZTo3LNu)
+                Tag->push_back( "WZ" ); Xsec->push_back( 47.13 ); nEvents->push_back( 2995828.0 );
+
+                ntupleDirectory->push_back( "WW_TuneCUETP8M1_13TeV-pythia8/crab_WW/180326_143237/0000" ); // NOT SURE (there also is WWTo2L2Nu)
+                Tag->push_back( "WW" ); Xsec->push_back( 118.7 ); nEvents->push_back( 6987123.0 );
 	}
 	else if( Type == "WJetsToLNu" )
 	{
                 // std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
-		ntupleDirectory->push_back( "WJetsToLNu" ); Tag->push_back( "WJetsToLNu" ); Xsec->push_back( 61526.7 ); nEvents->push_back( 86731698.0 );
-		ntupleDirectory->push_back( "WJetsToLNu_ext" ); Tag->push_back( "WJetsToLNu_ext" ); Xsec->push_back( 61526.7 ); nEvents->push_back( 86731698.0 );
+                ntupleDirectory->push_back( "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo/180326_144617/0000" );
+                Tag->push_back( "WJetsToLNu" ); Xsec->push_back( 61526.7 ); nEvents->push_back( 86731698.0 );
+
+                ntupleDirectory->push_back( "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo_ext/180326_144652/0000" ); // There also is madgraph version
+                Tag->push_back( "WJetsToLNu_ext" ); Xsec->push_back( 61526.7 ); nEvents->push_back( 86731698.0 );
 	}
 	else if( Type == "QCDMuEnriched" )
 	{
                 std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt15to20" ); Tag->push_back( "QCDMuEnriched_Pt15to20" ); Xsec->push_back( 720648000*0.00042 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt20to30" ); Tag->push_back( "QCDMuEnriched_Pt20to30" ); Xsec->push_back( 1273190000*0.003 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt30to50" ); Tag->push_back( "QCDMuEnriched_Pt30to50" ); Xsec->push_back( 139803000*0.01182 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt50to80" ); Tag->push_back( "QCDMuEnriched_Pt50to80" ); Xsec->push_back( 19222500*0.02276 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt80to120" ); Tag->push_back( "QCDMuEnriched_Pt80to120" ); Xsec->push_back( 2758420*0.03844 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt80to120_ext1" ); Tag->push_back( "QCDMuEnriched_Pt80to120_ext1" ); Xsec->push_back( 2758420*0.03844  ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt120to170" ); Tag->push_back( "QCDMuEnriched_Pt120to170" ); Xsec->push_back( 469797*0.05362 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt120to170_backup" ); Tag->push_back( "QCDMuEnriched_Pt120to170_backup" ); Xsec->push_back( 469797*0.05362  ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt170to300" ); Tag->push_back( "QCDMuEnriched_Pt170to300" ); Xsec->push_back( 117989*0.07335 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt170to300_ext1" ); Tag->push_back( "QCDMuEnriched_Pt170to300_ext1" ); Xsec->push_back( 117989*0.07335 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt170to300_backup" ); Tag->push_back( "QCDMuEnriched_Pt170to300_backup" ); Xsec->push_back( 117989*0.07335 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt300to470" ); Tag->push_back( "QCDMuEnriched_Pt300to470" ); Xsec->push_back( 7820.25*0.10196 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt300to470_ext1" ); Tag->push_back( "QCDMuEnriched_Pt300to470_ext1" ); Xsec->push_back( 7820.25*0.10196 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt300to470_ext2" ); Tag->push_back( "QCDMuEnriched_Pt300to470_ext2" ); Xsec->push_back( 7820.25*0.10196 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt470to600" ); Tag->push_back( "QCDMuEnriched_Pt470to600" ); Xsec->push_back( 645.528*0.12242 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt470to600_ext1" ); Tag->push_back( "QCDMuEnriched_Pt470to600_ext1" ); Xsec->push_back( 645.528*0.12242 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt470to600_ext2" ); Tag->push_back( "QCDMuEnriched_Pt470to600_ext2" ); Xsec->push_back( 645.528*0.12242 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt600to800" ); Tag->push_back( "QCDMuEnriched_Pt600to800" ); Xsec->push_back( 187.109*0.13412 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt600to800_ext1" ); Tag->push_back( "QCDMuEnriched_Pt600to800_ext1" ); Xsec->push_back( 187.109*0.13412 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt600to800_backup" ); Tag->push_back( "QCDMuEnriched_Pt600to800_backup" ); Xsec->push_back( 187.109*0.13412 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt800to1000" ); Tag->push_back( "QCDMuEnriched_Pt800to1000" ); Xsec->push_back( 32.3486*0.14552 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt800to1000_ext1" ); Tag->push_back( "QCDMuEnriched_Pt800to1000_ext1" ); Xsec->push_back( 32.3486*0.14552 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt800to1000_ext2" ); Tag->push_back( "QCDMuEnriched_Pt800to1000_ext2" ); Xsec->push_back( 32.3486*0.14552 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt1000toInf" ); Tag->push_back( "QCDMuEnriched_Pt1000toInf" ); Xsec->push_back( 10.4305*0.15544 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDMuEnriched_Pt1000toInf_ext1" ); Tag->push_back( "QCDMuEnriched_Pt1000toInf_ext1" ); Xsec->push_back( 10.4305*0.15544 ); nEvents->push_back( 1.0 );
+                ntupleDirectory->push_back( "QCD_Pt-15to20_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt15to20/180326_143059/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt15to20" ); Xsec->push_back( 720648000*0.00042 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-20to30_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt20to30/180326_143144/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt20to30" ); Xsec->push_back( 1273190000*0.003 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-30to50_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt30to50/180326_143240/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt30to50" ); Xsec->push_back( 139803000*0.01182 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-50to80_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt50to80/180326_143340/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt50to80" ); Xsec->push_back( 19222500*0.02276 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-80to120_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt80to120/180326_143419/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt80to120" ); Xsec->push_back( 2758420*0.03844 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-80to120_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt80to120_ext1/180326_143533/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt80to120_ext1" ); Xsec->push_back( 2758420*0.03844  ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-120to170_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt120to170/180326_143612/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt120to170" ); Xsec->push_back( 469797*0.05362 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-120to170_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt120to170_backup/180326_143654/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt120to170_backup" ); Xsec->push_back( 469797*0.05362  ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-170to300_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt170to300/180326_143750/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt170to300" ); Xsec->push_back( 117989*0.07335 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-170to300_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt170to300_ext1/180326_143849/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt170to300_ext1" ); Xsec->push_back( 117989*0.07335 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-170to300_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt170to300_backup/180326_143946/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt170to300_backup" ); Xsec->push_back( 117989*0.07335 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-300to470_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt300to470/180326_144021/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt300to470" ); Xsec->push_back( 7820.25*0.10196 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-300to470_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt300to470_ext1/180326_144117/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt300to470_ext1" ); Xsec->push_back( 7820.25*0.10196 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-300to470_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt300to470_ext2/180326_144211/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt300to470_ext2" ); Xsec->push_back( 7820.25*0.10196 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-470to600_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt470to600/180326_144301/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt470to600" ); Xsec->push_back( 645.528*0.12242 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-470to600_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt470to600_ext1/180326_144358/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt470to600_ext1" ); Xsec->push_back( 645.528*0.12242 ); nEvents->push_back( 1.0 );
+
+//		ntupleDirectory->push_back( "QCDMuEnriched_Pt470to600_ext2" );      // DID NOT FIND THIS ONE
+//                Tag->push_back( "QCDMuEnriched_Pt470to600_ext2" ); Xsec->push_back( 645.528*0.12242 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-600to800_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt600to800/180326_144534/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt600to800" ); Xsec->push_back( 187.109*0.13412 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-600to800_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt600to800_ext1/180326_144612/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt600to800_ext1" ); Xsec->push_back( 187.109*0.13412 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-600to800_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt600to800_backup/180326_144648/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt600to800_backup" ); Xsec->push_back( 187.109*0.13412 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-800to1000_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt800to1000/180326_144736/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt800to1000" ); Xsec->push_back( 32.3486*0.14552 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-800to1000_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt800to1000_ext1/180326_144818/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt800to1000_ext1" ); Xsec->push_back( 32.3486*0.14552 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-800to1000_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt800to1000_ext2/180326_144856/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt800to1000_ext2" ); Xsec->push_back( 32.3486*0.14552 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-1000toInf_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt1000toInf/180326_144937/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt1000toInf" ); Xsec->push_back( 10.4305*0.15544 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-1000toInf_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt1000toInf_ext1/180326_145024/0000" );
+                Tag->push_back( "QCDMuEnriched_Pt1000toInf_ext1" ); Xsec->push_back( 10.4305*0.15544 ); nEvents->push_back( 1.0 );
 	}
 	else if( Type == "QCDEMEnriched" )
 	{
                 std::cout << "# events should be adjusted later" << endl;
 		// -- Background Samples -- //
-		ntupleDirectory->push_back( "QCDEMEnriched_Pt20to30" ); Tag->push_back( "QCDEMEnriched_Pt20to30" ); Xsec->push_back( 557600000*0.0096 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDEMEnriched_Pt30to50" ); Tag->push_back( "QCDEMEnriched_Pt30to50" ); Xsec->push_back( 136000000*0.073 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDEMEnriched_Pt30to50_ext1" ); Tag->push_back( "QCDEMEnriched_Pt30to50_ext1" ); Xsec->push_back( 136000000*0.073 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDEMEnriched_Pt50to80" ); Tag->push_back( "QCDEMEnriched_Pt50to80" ); Xsec->push_back( 19800000*0.146 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDEMEnriched_Pt50to80_ext1" ); Tag->push_back( "QCDEMEnriched_Pt50to80_ext1" ); Xsec->push_back( 19800000*0.146 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDEMEnriched_Pt80to120" ); Tag->push_back( "QCDEMEnriched_Pt80to120" ); Xsec->push_back( 2800000*0.125 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDEMEnriched_Pt80to120_ext1" ); Tag->push_back( "QCDEMEnriched_Pt80to120_ext1" ); Xsec->push_back( 2800000*0.125 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDEMEnriched_Pt120to170" ); Tag->push_back( "QCDEMEnriched_Pt120to170" ); Xsec->push_back( 477000*0.132 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDEMEnriched_Pt120to170_ext1" ); Tag->push_back( "QCDEMEnriched_Pt120to170_ext1" ); Xsec->push_back( 477000*0.132 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDEMEnriched_Pt170to300" ); Tag->push_back( "QCDEMEnriched_Pt170to300" ); Xsec->push_back( 114000*0.165 ); nEvents->push_back( 1.0 );
-		ntupleDirectory->push_back( "QCDEMEnriched_Pt300toInf" ); Tag->push_back( "QCDEMEnriched_Pt300toInf" ); Xsec->push_back( 9000*0.15 ); nEvents->push_back( 1.0 );
+                ntupleDirectory->push_back( "QCD_Pt-20to30_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt20to30/180326_145104/0000" );
+                Tag->push_back( "QCDEMEnriched_Pt20to30" ); Xsec->push_back( 557600000*0.0096 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-30to50_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt30to50/180326_145144/0000" );
+                Tag->push_back( "QCDEMEnriched_Pt30to50" ); Xsec->push_back( 136000000*0.073 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-30to50_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt30to50_ext1/180326_145227/0000" );
+                Tag->push_back( "QCDEMEnriched_Pt30to50_ext1" ); Xsec->push_back( 136000000*0.073 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-50to80_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt50to80/180326_145308/0000" );
+                Tag->push_back( "QCDEMEnriched_Pt50to80" ); Xsec->push_back( 19800000*0.146 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-50to80_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt50to80_ext1/180326_145353/0000" );
+                Tag->push_back( "QCDEMEnriched_Pt50to80_ext1" ); Xsec->push_back( 19800000*0.146 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-80to120_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt80to120/180326_145437/0000" );
+                Tag->push_back( "QCDEMEnriched_Pt80to120" ); Xsec->push_back( 2800000*0.125 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-80to120_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt80to120_ext1/180326_145522/0000" );
+                Tag->push_back( "QCDEMEnriched_Pt80to120_ext1" ); Xsec->push_back( 2800000*0.125 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-120to170_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt120to170/180326_145602/0000" );
+                Tag->push_back( "QCDEMEnriched_Pt120to170" ); Xsec->push_back( 477000*0.132 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-120to170_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt120to170_ext1/180326_145701/0000" );
+                Tag->push_back( "QCDEMEnriched_Pt120to170_ext1" ); Xsec->push_back( 477000*0.132 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-170to300_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt170to300/180326_145738/0000" );
+                Tag->push_back( "QCDEMEnriched_Pt170to300" ); Xsec->push_back( 114000*0.165 ); nEvents->push_back( 1.0 );
+
+                ntupleDirectory->push_back( "QCD_Pt-300toInf_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt300toInf/180326_145836/0000" );
+                Tag->push_back( "QCDEMEnriched_Pt300toInf" ); Xsec->push_back( 9000*0.15 ); nEvents->push_back( 1.0 );
 	}
 	else
                 std::cout << "Wrong Type!" << endl;
