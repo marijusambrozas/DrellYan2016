@@ -93,7 +93,7 @@ void MakeSelectedEE(Int_t type = -1 , TString HLTname = "Ele23Ele12")
 
     TString BaseLocation;
     if( Type == "Data" ) BaseLocation = "/xrd/store/user/dpai/_v2p3_";
-    else BaseLocation = "/xrd/store/user/dpai/_v2p3_";
+    else BaseLocation = "/xrootd/store/user/dpai/_v2p3_";
 
     if ( type == -1 ) cout << "DATA location: /media/sf_DATA" << endl;
     else cout << "DATA location: " << BaseLocation << endl;
@@ -264,7 +264,7 @@ void MakeSelectedEE(Int_t type = -1 , TString HLTname = "Ele23Ele12")
         cout << "\t" << timesPassed << " events have passed the event selection." << endl;
 
         printf("\tTotal sum of weights: %.1lf\n", SumWeight);
-        printf("\tSum of weights of Seperated events: %.1lf\n", SumWeight_Separated);
+        printf("\tSum of weights of Separated events: %.1lf\n", SumWeight_Separated);
         if ( isMC == kTRUE ) printf("\tNormalization factor: %.8f\n", L*Xsec[i_tup]/nEvents[i_tup]);
 
         Double_t LoopRunTime = looptime.CpuTime();
