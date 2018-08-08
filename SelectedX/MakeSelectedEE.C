@@ -30,36 +30,13 @@ void MakeSelectedEE(Int_t type = -1 , TString HLTname = "Ele23Ele12")
 
     if( type == -1 ) Type = "ZToEE_M4500to6000_2";
 
-    if( type == 1 ) {
-            DataType = "B";
-            DataLocation = "DoubleEG_Run2016B";
-    }
-    if( type == 2 ) {
-            DataType = "C";
-            DataLocation = "DoubleEG_Run2016C";
-    }
-    if( type == 3 ) {
-            DataType = "D";
-            DataLocation = "DoubleEG_Run2016D";
-    }
-    if( type == 4 ) {
-            DataType = "E";
-            DataLocation = "DoubleEG_Run2016E";
-    }
-    if( type == 5 ) {
-            DataType = "F";
-            DataLocation = "DoubleEG_Run2016F";
-    }
-    if( type == 6 ) {
-            DataType = "G";
-            DataLocation = "DoubleEG_Run2016G";
-    }
-    if( type == 7 ) {
-            DataType = "H";
-            DataLocation = "DoubleEG_Run2016Hver2";
-            DataLocation2 = "DoubleEG_Run2016Hver3";
-    }
-
+    if( type == 1 ) { DataType = "B"; DataLocation = "DoubleEG_Run2016B"; }
+    if( type == 2 ) { DataType = "C"; DataLocation = "DoubleEG_Run2016C"; }
+    if( type == 3 ) { DataType = "D"; DataLocation = "DoubleEG_Run2016D"; }
+    if( type == 4 ) { DataType = "E"; DataLocation = "DoubleEG_Run2016E"; }
+    if( type == 5 ) { DataType = "F"; DataLocation = "DoubleEG_Run2016F"; }
+    if( type == 6 ) { DataType = "G"; DataLocation = "DoubleEG_Run2016G"; }
+    if( type == 7 ) { DataType = "H"; DataLocation = "DoubleEG_Run2016Hver2"; DataLocation2 = "DoubleEG_Run2016Hver3"; }
     Bool_t isMC = kTRUE;
     if( type < 10 && type > -1 ) {Type = "Data"; isMC = kFALSE;}
     // -- Signal MC samples -- //
@@ -89,10 +66,10 @@ void MakeSelectedEE(Int_t type = -1 , TString HLTname = "Ele23Ele12")
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
     cout << "Type: " << Type << endl;
-    if( type < 10 ) cout << "DataType: Run2016" << DataType << endl;
+    if( type < 10 && type > -1 ) cout << "DataType: Run2016" << DataType << endl;
 
     TString BaseLocation;
-    if( Type == "Data" ) BaseLocation = "/xrd/store/user/dpai/_v2p3_";
+    if( Type == "Data" ) BaseLocation = "/xrootd/store/user/dpai/_v2p3_";
     else BaseLocation = "/xrootd/store/user/dpai/_v2p3_";
 
     if ( type == -1 ) cout << "DATA location: /media/sf_DATA" << endl;
@@ -132,7 +109,7 @@ void MakeSelectedEE(Int_t type = -1 , TString HLTname = "Ele23Ele12")
 
     //Loop for all samples
     Int_t Ntup;
-    if ( type == -1 ) Ntup = 1;    //Using just 1 ntuple for test
+    if ( type == -1 ) Ntup = 1;    // Using just 1 ntuple for test
     else Ntup = ntupleDirectory.size();
 
     for(Int_t i_tup = 0; i_tup<Ntup; i_tup++)
@@ -147,23 +124,25 @@ void MakeSelectedEE(Int_t type = -1 , TString HLTname = "Ele23Ele12")
         {
             chain->Add("/media/sf_DATA/ZToEE_M4500to6000_2.root/recoTree/DYTree;7");
             chain->Add("/media/sf_DATA/ZToEE_M4500to6000_2.root/recoTree/DYTree;8");
-//            chain->Add("/media/sf_DATA/ZToEE_M4500to6000_2.root/recoTree/DYTree");
+//            chain->Add("/media/sf_DATA/ZToEE_M4500to6000_2.root");
         }
         else
         {
             //Set MC chain
             if( isMC == kTRUE ) chain->Add(BaseLocation+"/"+ntupleDirectory[i_tup]+"/*.root");
             //Set Data chain
-            else {
-                    chain->Add(BaseLocation+"/"+DataLocation+"/*.root");
-                    if( type == 7 ) chain->Add(BaseLocation+"/"+DataLocation2+"/*.root");
+            else
+            {
+                chain->Add(BaseLocation+"/"+DataLocation+"/*.root");
+                if( type == 7 ) chain->Add(BaseLocation+"/"+DataLocation2+"/*.root");
             }
         }
 
         NtupleHandle *ntuple = new NtupleHandle( chain );
-        if( isMC == kTRUE ) {
-                ntuple->TurnOnBranches_GenLepton(); // for all leptons
-                ntuple->TurnOnBranches_GenOthers(); // for quarks
+        if( isMC == kTRUE )
+        {
+            ntuple->TurnOnBranches_GenLepton(); // for all leptons
+            ntuple->TurnOnBranches_GenOthers(); // for quarks
         }
         ntuple->TurnOnBranches_Electron();
 
@@ -275,7 +254,7 @@ void MakeSelectedEE(Int_t type = -1 , TString HLTname = "Ele23Ele12")
     ElectronFile->cd();
     cout << "Writing into file...";
     ElectronTree->Write();
-    cout  << "Finished." << endl << "Closing a file..." << endl;
+    cout << "Finished." << endl << "Closing a file..." << endl;
     ElectronFile->Close();
     if ( !ElectronFile->IsOpen() ) cout << "File SelectedEE_" << Type << ".root has been closed successfully." << endl;
     else cout << "FILE SelectedEE_" << Type << ".root COULD NOT BE CLOSED!" << endl;
