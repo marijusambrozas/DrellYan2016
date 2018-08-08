@@ -20,75 +20,83 @@
 
 // -- Electron Channel -- //
 //void MakeSelectedEE(Int_t type, Int_t Num = 100, Int_t isTopPtReweighting = 0, TString HLTname = "Ele23Ele12")
-void MakeSelectedEE(TString HLTname = "Ele23Ele12")
+void MakeSelectedEE(Int_t type = -1 , TString HLTname = "Ele23Ele12")
 {
     // -- Run2016 luminosity [/pb] -- //
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
     L = L_B2H;
-    TString OutputName = "SelectedEE_ZToEE_M4500to6000_2.root";
 
-//    TString DataType, DataLocation, DataLocation2, Type;
+    TString DataType, DataLocation, DataLocation2, Type;
 
-//    if( type == 1 ) {
-//            DataType = "B";
-//            DataLocation = "DoubleEG_Run2016B";
-//    }
-//    if( type == 2 ) {
-//            DataType = "C";
-//            DataLocation = "DoubleEG_Run2016C";
-//    }
-//    if( type == 3 ) {
-//            DataType = "D";
-//            DataLocation = "DoubleEG_Run2016D";
-//    }
-//    if( type == 4 ) {
-//            DataType = "E";
-//            DataLocation = "DoubleEG_Run2016E";
-//    }
-//    if( type == 5 ) {
-//            DataType = "F";
-//            DataLocation = "DoubleEG_Run2016F";
-//    }
-//    if( type == 6 ) {
-//            DataType = "G";
-//            DataLocation = "DoubleEG_Run2016G";
-//    }
-//    if( type == 7 ) {
-//            DataType = "H";
-//            DataLocation = "DoubleEG_Run2016Hver2";
-//            DataLocation2 = "DoubleEG_Run2016Hver3";
-//    }
+    if( type == -1 ) Type = "ZToEE_M4500to6000_2";
+
+    if( type == 1 ) {
+            DataType = "B";
+            DataLocation = "DoubleEG_Run2016B";
+    }
+    if( type == 2 ) {
+            DataType = "C";
+            DataLocation = "DoubleEG_Run2016C";
+    }
+    if( type == 3 ) {
+            DataType = "D";
+            DataLocation = "DoubleEG_Run2016D";
+    }
+    if( type == 4 ) {
+            DataType = "E";
+            DataLocation = "DoubleEG_Run2016E";
+    }
+    if( type == 5 ) {
+            DataType = "F";
+            DataLocation = "DoubleEG_Run2016F";
+    }
+    if( type == 6 ) {
+            DataType = "G";
+            DataLocation = "DoubleEG_Run2016G";
+    }
+    if( type == 7 ) {
+            DataType = "H";
+            DataLocation = "DoubleEG_Run2016Hver2";
+            DataLocation2 = "DoubleEG_Run2016Hver3";
+    }
 
     Bool_t isMC = kTRUE;
-//    if( type < 10  ) {Type = "Data"; isMC = kFALSE;}
-//    // -- Signal MC samples -- //
-//    if( type == 11 ) Type = "DYEE_M10to50";
-//    if( type == 12 ) Type = "DYEE_M50to100";
-//    if( type == 13 ) Type = "DYEE_M100toInf";
-//    // -- Background MC samples -- //
-//    if( type == 21 ) Type = "ttbar";
-//    if( type == 22 ) Type = "ttbarBackup";
-//    if( type == 23 ) Type = "ttbar_M700toInf";
-//    if( type == 31 ) Type = "DYTauTau_M10to50";
-//    if( type == 32 ) Type = "DYTauTau_M50toInf";
-//    if( type == 41 ) Type = "VVnST";
-//    if( type == 51 ) Type = "WJetsToLNu";
-//    //if( type == 61 ) Type = "QCDEMEnriched";
+    if( type < 10 && type > -1 ) {Type = "Data"; isMC = kFALSE;}
+    // -- Signal MC samples -- //
+    if( type == 11 ) Type = "DYEE_M10to50";
+    if( type == 12 ) Type = "DYEE_M50to100";
+    if( type == 13 ) Type = "DYEE_M100toInf";
+    // -- Background MC samples -- //
+    if( type == 21 ) Type = "ttbar";
+    if( type == 22 ) Type = "ttbarBackup";
+    if( type == 23 ) Type = "ttbar_M700toInf";
+    if( type == 31 ) Type = "DYTauTau_M10to50";
+    if( type == 32 ) Type = "DYTauTau_M50toInf";
+    if( type == 41 ) Type = "VVnST";
+    if( type == 51 ) Type = "WJetsToLNu";
+    if( type == 61 ) Type = "QCDEMEnriched";
 
     //Creating a file
-    TFile* ElectronFile = new TFile("/media/sf_DATA/"+OutputName, "RECREATE");
+    TFile* ElectronFile;
+    if ( type == -1 ) ElectronFile = new TFile("/media/sf_DATA/SelectedEE_"+Type+".root", "RECREATE");
+    else if ( type < 10 ) ElectronFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_"+Type+".root", "RECREATE");
+    else if (type < 20 )  ElectronFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_"+Type+".root", "RECREATE");
+    else ElectronFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Type+".root", "RECREATE");
+
     TTree* ElectronTree = new TTree("DYTree", "DYTree");
 
 
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
-//    cout << "Type: " << Type << endl;
-//    if( type < 10 ) cout << "DataType: Run2016" << DataType << endl;
+    cout << "Type: " << Type << endl;
+    if( type < 10 ) cout << "DataType: Run2016" << DataType << endl;
 
-//    TString BaseLocation;
-//    if( Type == "Data" ) BaseLocation = "/data9/DATA/DYntuple/v2.0";
-//    else BaseLocation = "/data9/DATA/DYntuple/v2.1";
-//    cout << "DATA location: " << BaseLocation << endl;
+    TString BaseLocation;
+    if( Type == "Data" ) BaseLocation = "/xrd/store/user/dpai/_v2p3_";
+    else BaseLocation = "/xrd/store/user/dpai/_v2p3_";
+
+    if ( type == -1 ) cout << "DATA location: /media/sf_DATA" << endl;
+    else cout << "DATA location: " << BaseLocation << endl;
 
     TStopwatch totaltime;
     totaltime.Start();
@@ -96,15 +104,18 @@ void MakeSelectedEE(TString HLTname = "Ele23Ele12")
     DYAnalyzer *analyzer = new DYAnalyzer( HLTname );
 
     // -- Each ntuple directory & corresponding Tags -- //
-//    vector<TString> ntupleDirectory; vector<TString> Tag; vector<Double_t> Xsec; vector<Double_t> nEvents;
-    vector<TString> Tag; vector<Double_t> Xsec; vector<Double_t> nEvents;
-    Tag.push_back("ZToEE_M4500to6000"); // There is no such type mentioned in DYAnalyzer
-    nEvents.push_back(74606);       // The actual number of events in file is taken
-    Xsec.push_back(4.56E-07);       // Copied from ZToMuMu_M4500to6000
-//    if( Type == "Data" ) {
-//            ntupleDirectory.push_back( "" ); Tag.push_back( "Data" ); // -- It will be filled later -- //
-//    }
-//    else analyzer->SetupMCsamples_Moriond17(Type, &ntupleDirectory, &Tag, &Xsec, &nEvents);
+    vector<TString> ntupleDirectory; vector<TString> Tag; vector<Double_t> Xsec; vector<Double_t> nEvents;
+    if ( type == -1 )
+    {
+        Tag.push_back("ZToEE_M4500to6000"); // There is no such type mentioned in DYAnalyzer
+        nEvents.push_back(74606);       // The actual number of events in file is taken
+        Xsec.push_back(4.56E-07);       // Copied from ZToMuMu_M4500to6000
+    }
+    else if( Type == "Data" )
+    {
+        ntupleDirectory.push_back( "" ); Tag.push_back( "Data" ); // -- It will be filled later -- //
+    }
+    else analyzer->SetupMCsamples_Moriond17(Type, &ntupleDirectory, &Tag, &Xsec, &nEvents);
 
     // -- Creating LongSelectedEE variables to assign branches -- //
     SelectedEE_t EE; EE.CreateNew();
@@ -120,26 +131,34 @@ void MakeSelectedEE(TString HLTname = "Ele23Ele12")
     ElectronTree->Branch("Electron_charge", &EE.Electron_charge);
 
     //Loop for all samples
-//	const Int_t Ntup = ntupleDirectory.size();
-    const Int_t Ntup = 1;       //Using just 1 ntuple for test
+    Int_t Ntup;
+    if ( type == -1 ) Ntup = 1;    //Using just 1 ntuple for test
+    else Ntup = ntupleDirectory.size();
+
     for(Int_t i_tup = 0; i_tup<Ntup; i_tup++)
     {
         TStopwatch looptime;
         looptime.Start();
 
-//        cout << "\t<" << Tag[i_tup] << ">" << endl;
+        cout << "\t<" << Tag[i_tup] << ">" << endl;
 
         TChain *chain = new TChain("recoTree/DYTree");
-        chain->Add("/media/sf_DATA/ZToEE_M4500to6000_2.root/recoTree/DYTree;7");
-        chain->Add("/media/sf_DATA/ZToEE_M4500to6000_2.root/recoTree/DYTree;8");
-
-//        //Set MC chain
-//        if( isMC == kTRUE ) chain->Add(BaseLocation+"/"+ntupleDirectory[i_tup]+"/*.root");
-//        //Set Data chain
-//        else {
-//                chain->Add(BaseLocation+"/"+DataLocation+"/*.root");
-//                if( type == 7 ) chain->Add(BaseLocation+"/"+DataLocation2+"/*.root");
-//        }
+        if ( type == -1 )   // For testing
+        {
+            chain->Add("/media/sf_DATA/ZToEE_M4500to6000_2.root/recoTree/DYTree;7");
+            chain->Add("/media/sf_DATA/ZToEE_M4500to6000_2.root/recoTree/DYTree;8");
+//            chain->Add("/media/sf_DATA/ZToEE_M4500to6000_2.root/recoTree/DYTree");
+        }
+        else
+        {
+            //Set MC chain
+            if( isMC == kTRUE ) chain->Add(BaseLocation+"/"+ntupleDirectory[i_tup]+"/*.root");
+            //Set Data chain
+            else {
+                    chain->Add(BaseLocation+"/"+DataLocation+"/*.root");
+                    if( type == 7 ) chain->Add(BaseLocation+"/"+DataLocation2+"/*.root");
+            }
+        }
 
         NtupleHandle *ntuple = new NtupleHandle( chain );
         if( isMC == kTRUE ) {
@@ -170,9 +189,11 @@ void MakeSelectedEE(TString HLTname = "Ele23Ele12")
 
             // -- Separate ttbar samples -- //
             Bool_t GenFlag_top = kTRUE;
-            //Bool_t GenFlag_top = kFALSE;
-            //vector<GenOthers> GenTopCollection;
-            //GenFlag_top = analyzer->Separate_ttbarSample(Tag[i_tup], ntuple, &GenTopCollection);
+//            Bool_t GenFlag_top = kFALSE;
+//            vector<GenOthers> GenTopCollection;
+//            GenFlag_top = analyzer->Separate_ttbarSample(Tag[i_tup], ntuple, &GenTopCollection);
+
+            if( GenFlag == kTRUE && GenFlag_top == kTRUE ) SumWeight_Separated += EE.GENEvt_weight;
 
             // -- Normalization -- //
             Double_t TotWeight = EE.GENEvt_weight;
@@ -256,8 +277,8 @@ void MakeSelectedEE(TString HLTname = "Ele23Ele12")
     ElectronTree->Write();
     cout  << "Finished." << endl << "Closing a file..." << endl;
     ElectronFile->Close();
-    if ( !ElectronFile->IsOpen() ) cout << "File " << OutputName << " has been closed successfully." << endl;
-    else cout << "FILE " << OutputName << " COULD NOT BE CLOSED!" << endl;
+    if ( !ElectronFile->IsOpen() ) cout << "File SelectedEE_" << Type << ".root has been closed successfully." << endl;
+    else cout << "FILE SelectedEE_" << Type << ".root COULD NOT BE CLOSED!" << endl;
 
     Double_t TotalRunTime = totaltime.CpuTime();
     cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
