@@ -21,69 +21,49 @@
 #define M_Mu 0.1056583715 // -- GeV -- //
 
 // -- Muon Channel -- //
-//void MakeSelectedEMu(Int_t type, TString HLTname = "IsoMu24_OR_IsoTkMu24")
-void MakeSelectedEMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
+void MakeSelectedEMu(Int_t type = -1, TString HLTname = "IsoMu24_OR_IsoTkMu24")
 {
     // -- Run2016 luminosity [/pb] -- //
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
     L = L_B2H;
-    TString OutputName = "SelectedEMu_WW_34.root";
 
-//    TString DataType, DataLocation, DataLocation2, Type, OutputName;
+    TString DataType, Type;
 
-//    if( type == 1 ) {
-//            DataType = "B";
-//            DataLocation = "SingleMuon_Run2016B";
-//    }
-//    else if( type == 2 ) {
-//            DataType = "C";
-//            DataLocation = "SingleMuon_Run2016C";
-//    }
-//    else if( type == 3 ) {
-//            DataType = "D";
-//            DataLocation = "SingleMuon_Run2016D";
-//    }
-//    else if( type == 4 ) {
-//            DataType = "E";
-//            DataLocation = "SingleMuon_Run2016E";
-//    }
-//    else if( type == 5 ) {
-//            DataType = "F";
-//            DataLocation = "SingleMuon_Run2016F";
-//    }
-//    else if( type == 6 ) {
-//            DataType = "G";
-//            DataLocation = "SingleMuon_Run2016G";
-//    }
-//    else if( type == 7 ) {
-//            DataType = "H";
-//            DataLocation = "SingleMuon_Run2016Hver2";
-//            DataLocation2 = "SingleMuon_Run2016Hver3";
-//    }
-
+    if ( type == -1 ) Type = "WW_34";
+    else if ( type == 1 ) DataType = "SingleMuon_B";
+    else if ( type == 2 ) DataType = "SingleMuon_C";
+    else if ( type == 3 ) DataType = "SingleMuon_D";
+    else if ( type == 4 ) DataType = "SingleMuon_E";
+    else if ( type == 5 ) DataType = "SingleMuon_F";
+    else if ( type == 6 ) DataType = "SingleMuon_G";
+    else if ( type == 7 ) DataType = "SingleMuon_H";
     Bool_t isMC = kTRUE;
-//    if( type < 10  ) Type = "Data";
-//    // -- Background MC samples -- //
-//    else if( type == 21 ) Type = "ttbar";
-//    else if( type == 22 ) Type = "ttbarBackup";
-//    else if( type == 23 ) Type = "ttbar_M700toInf";
-//    else if( type == 31 ) Type = "DYTauTau_M10to50";
-//    else if( type == 32 ) Type = "DYTauTau_M50toInf";
-//    else if( type == 41 ) Type = "VVnST";
+    if ( type < 10  && type > -1 ) Type = "Data";
+    // -- Background MC samples -- //
+    else if ( type == 21 ) Type = "ttbar";
+    else if ( type == 22 ) Type = "ttbarBackup";
+    else if ( type == 23 ) Type = "ttbar_M700toInf";
+    else if ( type == 31 ) Type = "DYTauTau_M10to50";
+    else if ( type == 32 ) Type = "DYTauTau_M50toInf";
+    else if ( type == 41 ) Type = "VVnST";
 
     //Creating a file
-    TFile* EMuFile = new TFile("/media/sf_DATA/"+OutputName, "RECREATE");
+    TFile* EMuFile;
+    if ( type == -1 ) EMuFile = new TFile("/media/sf_DATA/test/SelectedEMu_"+Type+".root", "RECREATE");
+    else if ( type < 10 && type > -1 ) EMuFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_"+Type+".root", "RECREATE");
+    else EMuFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/MC_bkg/SelectedEMu_"+Type+".root", "RECREATE");
+
     TTree* EMuTree = new TTree("DYTree", "DYTree");
 
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
-//    cout << "Type: " << Type << endl;
-//    if( type < 10 ) cout << "DataType: Run2016" << DataType << endl;
+    cout << "Type: " << Type << endl;
+    if( type < 10  && type > -1) cout << "DataType: Run2016" << DataType << endl;
 
-//    TString BaseLocation;
-//    if( Type == "Data" ) BaseLocation = "/data9/DATA/DYntuple/v2.0";
-//    else BaseLocation = "/data9/DATA/DYntuple/v2.1";
-//    cout << "DATA location: " << BaseLocation << endl;
+    TString BaseLocation;
+    if( Type == "Data" ) BaseLocation = "/xrootd/store/user/dpai/_v2p3_";
+    else BaseLocation = "/xrootd/store/user/dpai/_v2p3_";
+    cout << "DATA location: " << BaseLocation << endl;
 
     TStopwatch totaltime;
     totaltime.Start();
@@ -91,15 +71,15 @@ void MakeSelectedEMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
     DYAnalyzer *analyzer = new DYAnalyzer( HLTname );
 
     // -- Each ntuple directory & corresponding Tags -- //
-//    vector<TString> ntupleDirectory; vector<TString> Tag; vector<Double_t> Xsec; vector<Double_t> nEvents;
-    vector<TString> Tag; vector<Double_t> Xsec; vector<Double_t> nEvents;
-    Tag.push_back("WW");
-    nEvents.push_back(6987123);
-    Xsec.push_back(118.7);
-//    if( Type == "Data" ) {
-//        ntupleDirectory.push_back( "" ); Tag.push_back( "Data" ); // -- It will be filled later -- //
-//    }
-//    else analyzer->SetupMCsamples_Moriond17(Type, &ntupleDirectory, &Tag, &Xsec, &nEvents);
+    vector<TString> ntupleDirectory; vector<TString> Tag; vector<Double_t> Xsec; vector<Double_t> nEvents;
+    if ( type == -1 )
+    {
+        Tag.push_back("WW");
+        nEvents.push_back(6987123);
+        Xsec.push_back(118.7);
+    }
+    else if( Type == "Data" ) analyzer->SetupDataSamples(Type, DataType, &ntupleDirectory, &Tag);
+    else analyzer->SetupMCsamples_Moriond17(Type, &ntupleDirectory, &Tag, &Xsec, &nEvents);
 
     // -- Creating LongSelectedMuMu variables to assign branches -- //
     SelectedEMu_t EMu; EMu.CreateNew();
@@ -123,25 +103,25 @@ void MakeSelectedEMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
     EMuTree->Branch("Electron_charge", &EMu.Electron_charge);
 
     //Loop for all samples
-//    const Int_t Ntup = ntupleDirectory.size();
-    const Int_t Ntup = 1;       //Using just 1 ntuple for test
+    Int_t Ntup;
+    if ( type == -1 ) Ntup = 1;       //Using just 1 ntuple for test
+    else Ntup = ntupleDirectory.size();
+
     for(Int_t i_tup = 0; i_tup<Ntup; i_tup++)
     {
         TStopwatch looptime;
         looptime.Start();
 
-//        cout << "\t<" << [i_tup] << ">" << endl;
+        cout << "\t<" << Tag[i_tup] << ">" << endl;
 
         TChain *chain = new TChain("recoTree/DYTree");
-//        //Set MC chain
-//        if( isMC == kTRUE ) chain->Add(BaseLocation+"/"+ntupleDirectory[i_tup]+"/*.root");
-//        //Set Data chain
-//        else {
-//            chain->Add(BaseLocation+"/"+DataLocation+"/*.root");
-//            if(type==7) chain->Add(BaseLocation+"/"+DataLocation2+"/*.root");
-//        }
-        chain->Add("/media/sf_DATA/WW_34.root/recoTree/DYTree;1"); // NEED A WAY TO TELL THE NUMBER OF CYCLES AND THEIR EXTENTION NAMES
-        chain->Add("/media/sf_DATA/WW_34.root/recoTree/DYTree;2");
+        if ( type == -1 )
+        {
+            chain->Add("/media/sf_DATA/test/WW_34.root/recoTree/DYTree;1"); // NEED A WAY TO TELL THE NUMBER OF CYCLES AND THEIR EXTENTION NAMES
+            chain->Add("/media/sf_DATA/test/WW_34.root/recoTree/DYTree;2");
+//            chain->Add("/media/sf_DATA/test/WW_34.root");
+        }
+        else chain->Add(BaseLocation+"/"+DataLocation2+"/*.root");
 
         NtupleHandle *ntuple = new NtupleHandle( chain );
         if( isMC == kTRUE ) {
@@ -151,12 +131,13 @@ void MakeSelectedEMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
         ntuple->TurnOnBranches_Electron();
         ntuple->TurnOnBranches_Muon();
 
-        Double_t SumWeight = 0, SumWeight_Separated = 0;
+        Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
 
         Int_t NEvents = chain->GetEntries();
 //        Int_t NEvents = 10000;					// test using small events
         cout << "\t[Total Events: " << NEvents << "]" << endl;
         myProgressBar_t bar (NEvents);
+        Int_t timesPassed = 0;
 
         for(Int_t i=0; i<NEvents; i++)
         {
@@ -165,6 +146,7 @@ void MakeSelectedEMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
             // -- Positive/Negative Gen-weights -- //
             ntuple->GENEvt_weight < 0 ? EMu.GENEvt_weight = -1 : EMu.GENEvt_weight = 1;
             SumWeight += EMu.GENEvt_weight;
+            SumWeightRaw += ntuple->GENEvt_weight;
 
             // -- Separate DYLL samples -- //
             Bool_t GenFlag = kFALSE;
@@ -172,6 +154,11 @@ void MakeSelectedEMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 
             // -- Separate ttbar samples -- //
             Bool_t GenFlag_top = kTRUE;
+//            Bool_t GenFlag_top = kFALSE;
+//            vector<GenOthers> GenTopCollection;
+//            GenFlag_top = analyzer->Separate_ttbarSample(Tag[i_tup], ntuple, &GenTopCollection);
+
+            if( GenFlag == kTRUE && GenFlag_top == kTRUE ) SumWeight_Separated += EMu.GENEvt_weight;
 
             // -- Normalization -- //
             Double_t TotWeight = EMu.GENEvt_weight;
@@ -246,10 +233,12 @@ void MakeSelectedEMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
 
             bar.Draw(i);
         } //End of event iteration
+        cout << "\t" << timesPassed << " events have passed the event selection." << endl;
 
         printf("\tTotal sum of weights: %.1lf\n", SumWeight);
         printf("\tSum of weights of Seperated events: %.1lf\n", SumWeight_Separated);
-        if( isMC == kTRUE ) printf("\tNormalization factor: %.8f\n", L*Xsec[i_tup]/nEvents[i_tup]);
+        printf("\tSum of unchanged (to 1 or -1) weights: %.1lf", SumWeightRaw);
+        if ( isMC == kTRUE ) printf("\tNormalization factor: %.8f\n", L*Xsec[i_tup]/nEvents[i_tup]);
 
         Double_t LoopRunTime = looptime.CpuTime();
         cout << "\tLoop RunTime(" << Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
@@ -261,8 +250,8 @@ void MakeSelectedEMu(TString HLTname = "IsoMu24_OR_IsoTkMu24")
     EMuTree->Write();
     cout << "Finished." << endl << "Closing a file..." << endl;
     EMuFile->Close();
-    if ( !EMuFile->IsOpen() ) cout << "File " << OutputName << " has been closed successfully." << endl;
-    else cout << "FILE " << OutputName << " COULD NOT BE CLOSED!" << endl;
+    if ( !EMuFile->IsOpen() ) cout << "File SelectedEMu_" << Type << ".root has been closed successfully." << endl;
+    else cout << "FILE SelectedEMu_" << Type << ".root COULD NOT BE CLOSED!" << endl;
 
     Double_t TotalRunTime = totaltime.CpuTime();
     cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;

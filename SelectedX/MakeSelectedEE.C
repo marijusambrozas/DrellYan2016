@@ -26,17 +26,16 @@ void MakeSelectedEE(Int_t type = -1 , TString HLTname = "Ele23Ele12")
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
     L = L_B2H;
 
-    TString DataType, DataLocation, DataLocation2, Type;
+    TString DataType, Type;
 
     if( type == -1 ) Type = "ZToEE_M4500to6000_2";
-
-    if( type == 1 ) { DataType = "B"; DataLocation = "DoubleEG_Run2016B"; }
-    if( type == 2 ) { DataType = "C"; DataLocation = "DoubleEG_Run2016C"; }
-    if( type == 3 ) { DataType = "D"; DataLocation = "DoubleEG_Run2016D"; }
-    if( type == 4 ) { DataType = "E"; DataLocation = "DoubleEG_Run2016E"; }
-    if( type == 5 ) { DataType = "F"; DataLocation = "DoubleEG_Run2016F"; }
-    if( type == 6 ) { DataType = "G"; DataLocation = "DoubleEG_Run2016G"; }
-    if( type == 7 ) { DataType = "H"; DataLocation = "DoubleEG_Run2016Hver2"; DataLocation2 = "DoubleEG_Run2016Hver3"; }
+    if( type == 1 ) { DataType = "DoubleEG_B"; }
+    if( type == 2 ) { DataType = "DoubleEG_C"; }
+    if( type == 3 ) { DataType = "DoubleEG_D"; }
+    if( type == 4 ) { DataType = "DoubleEG_E"; }
+    if( type == 5 ) { DataType = "DoubleEG_F"; }
+    if( type == 6 ) { DataType = "DoubleEG_G"; }
+    if( type == 7 ) { DataType = "DoubleEG_H"; }
     Bool_t isMC = kTRUE;
     if( type < 10 && type > -1 ) {Type = "Data"; isMC = kFALSE;}
     // -- Signal MC samples -- //
@@ -55,7 +54,7 @@ void MakeSelectedEE(Int_t type = -1 , TString HLTname = "Ele23Ele12")
 
     //Creating a file
     TFile* ElectronFile;
-    if ( type == -1 ) ElectronFile = new TFile("/media/sf_DATA/SelectedEE_"+Type+".root", "RECREATE");
+    if ( type == -1 ) ElectronFile = new TFile("/media/sf_DATA/test/SelectedEE_"+Type+".root", "RECREATE");
     else if ( type < 10 ) ElectronFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_"+Type+".root", "RECREATE");
     else if (type < 20 )  ElectronFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_"+Type+".root", "RECREATE");
     else ElectronFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Type+".root", "RECREATE");
@@ -88,10 +87,7 @@ void MakeSelectedEE(Int_t type = -1 , TString HLTname = "Ele23Ele12")
         nEvents.push_back(74606);       // The actual number of events in file is taken
         Xsec.push_back(4.56E-07);       // Copied from ZToMuMu_M4500to6000
     }
-    else if( Type == "Data" )
-    {
-        ntupleDirectory.push_back( "" ); Tag.push_back( "Data" ); // -- It will be filled later -- //
-    }
+    else if( Type == "Data" ) analyzer->SetupDataSamples(Type, DataType, &ntupleDirectory, &Tag);
     else analyzer->SetupMCsamples_Moriond17(Type, &ntupleDirectory, &Tag, &Xsec, &nEvents);
 
     // -- Creating LongSelectedEE variables to assign branches -- //
@@ -122,21 +118,11 @@ void MakeSelectedEE(Int_t type = -1 , TString HLTname = "Ele23Ele12")
         TChain *chain = new TChain("recoTree/DYTree");
         if ( type == -1 )   // For testing
         {
-            chain->Add("/media/sf_DATA/ZToEE_M4500to6000_2.root/recoTree/DYTree;7");
-            chain->Add("/media/sf_DATA/ZToEE_M4500to6000_2.root/recoTree/DYTree;8");
-//            chain->Add("/media/sf_DATA/ZToEE_M4500to6000_2.root");
+            chain->Add("/media/sf_DATA/test/ZToEE_M4500to6000_2.root/recoTree/DYTree;7");
+            chain->Add("/media/sf_DATA/test/ZToEE_M4500to6000_2.root/recoTree/DYTree;8");
+//            chain->Add("/media/sf_DATA/test/ZToEE_M4500to6000_2.root");
         }
-        else
-        {
-            //Set MC chain
-            if( isMC == kTRUE ) chain->Add(BaseLocation+"/"+ntupleDirectory[i_tup]+"/*.root");
-            //Set Data chain
-            else
-            {
-                chain->Add(BaseLocation+"/"+DataLocation+"/*.root");
-                if( type == 7 ) chain->Add(BaseLocation+"/"+DataLocation2+"/*.root");
-            }
-        }
+        else chain->Add(BaseLocation+"/"+ntupleDirectory[i_tup]+"/*.root");
 
         NtupleHandle *ntuple = new NtupleHandle( chain );
         if( isMC == kTRUE )
@@ -146,7 +132,7 @@ void MakeSelectedEE(Int_t type = -1 , TString HLTname = "Ele23Ele12")
         }
         ntuple->TurnOnBranches_Electron();
 
-        Double_t SumWeight = 0, SumWeight_Separated = 0;
+        Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
 
         Int_t NEvents = chain->GetEntries();
 //        Int_t NEvents = 10000;		// test using few events
@@ -161,6 +147,7 @@ void MakeSelectedEE(Int_t type = -1 , TString HLTname = "Ele23Ele12")
             // -- Positive/Negative Gen-weights -- //
             ntuple->GENEvt_weight < 0 ? EE.GENEvt_weight = -1 : EE.GENEvt_weight = 1;
             SumWeight += EE.GENEvt_weight;
+            SumWeightRaw += ntuple->GENEvt_weight;
 
             // -- Separate DYLL samples -- //
             Bool_t GenFlag = kFALSE;
@@ -244,6 +231,7 @@ void MakeSelectedEE(Int_t type = -1 , TString HLTname = "Ele23Ele12")
 
         printf("\tTotal sum of weights: %.1lf\n", SumWeight);
         printf("\tSum of weights of Separated events: %.1lf\n", SumWeight_Separated);
+        printf("\tSum of unchanged (to 1 or -1) weights: %.1lf\n", SumWeightRaw);
         if ( isMC == kTRUE ) printf("\tNormalization factor: %.8f\n", L*Xsec[i_tup]/nEvents[i_tup]);
 
         Double_t LoopRunTime = looptime.CpuTime();

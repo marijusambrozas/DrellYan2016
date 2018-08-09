@@ -83,7 +83,8 @@ public:
 	void SetupMCsamples_v20160309_76X_MiniAODv2( TString Type, vector<TString> *ntupleDirectory, vector<TString> *Tag, vector<Double_t> *Xsec, vector<Double_t> *nEvents );
 	void SetupMCsamples_v20160131_MiniAODv2( TString Type, vector<TString> *ntupleDirectory, vector<TString> *Tag, vector<Double_t> *Xsec, vector<Double_t> *nEvents );
 	void SetupMCsamples_v20160117_MiniAOD_JetMET( TString Type, vector<TString> *ntupleDirectory, vector<TString> *Tag, vector<Double_t> *Xsec, vector<Double_t> *nEvents );
-	Bool_t SeparateDYLLSample_isHardProcess(TString Tag, NtupleHandle *ntuple);
+        void SetupDataSamples( TString Type, TString DataType, vector<TString> *ntupleDirectory, vector<TString> *Tag);
+        Bool_t SeparateDYLLSample_isHardProcess(TString Tag, NtupleHandle *ntuple);
 	Bool_t Separate_ttbarSample(TString Tag, NtupleHandle *ntuple, vector<GenOthers> *GenTopCollection);
 
 	// -- outdated -- //
@@ -1233,6 +1234,76 @@ void DYAnalyzer::SetupMCsamples_v20160117_MiniAOD_JetMET( TString Type, vector<T
                 std::cout << "Wrong Type!" << endl;
 
 	return;
+}
+
+void DYAnalyzer::SetupDataSamples(TString Type, TString DataType, vector<TString> *ntupleDirectory, vector<TString> *Tag)
+{
+    if ( Type == "Data" )
+    {
+        if( DataType == "DoubleEG_B")
+        {
+            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunB/180326_143532/0000" ); Tag->push_back( "DoubleEG_B_0000" );
+            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunB/180326_143532/0001" ); Tag->push_back( "DoubleEG_B_0001" );
+        }
+        if( DataType == "DoubleEG_C")
+        {
+            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunC/180326_143612/0000" ); Tag->push_back( "DoubleEG_C" );
+        }
+        if( DataType == "DoubleEG_D")
+        {
+            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunD/180326_143654/0000" ); Tag->push_back( "DoubleEG_D" );
+        }
+        if( DataType == "DoubleEG_E")
+        {
+            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunE/180326_143750/0000" ); Tag->push_back( "DoubleEG_E" );
+        }
+        if( DataType == "DoubleEG_F")
+        {
+            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunF/180326_143846/0000" ); Tag->push_back( "DoubleEG_F" );
+        }
+        if( DataType == "DoubleEG_G")
+        {
+            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunG/180326_144559/0000" ); Tag->push_back( "DoubleEG_G_0000" );
+            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunG/180326_144559/0001" ); Tag->push_back( "DoubleEG_G_0001" );
+        }
+        if( DataType == "DoubleEG_H")
+        {
+            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunHver2/180326_144638/0000" ); Tag->push_back( "DoubleEG_Hver2_0000" );
+            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunHver2/180326_144638/0001" ); Tag->push_back( "DoubleEG_Hver2_0001" );
+            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunHver3/180326_144719/0000" ); Tag->push_back( "DoubleEG_Hver3" );
+        }
+        if( DataType == "SingleMuon_B")
+        {
+            ntupleDirectory->push_back( "SingleMuon/crab_SingleMuon_RunB/180326_143105/0000" ); Tag->push_back( "SingleMuon_B" );
+        }
+        if( DataType == "SingleMuon_C")
+        {
+            ntupleDirectory->push_back( "SingleMuon/crab_SingleMuon_RunC/180326_143152/0000" ); Tag->push_back( "SingleMuon_C" );
+        }
+        if( DataType == "SingleMuon_D")
+        {
+            ntupleDirectory->push_back( "SingleMuon/crab_SingleMuon_RunD/180326_143257/0000" ); Tag->push_back( "SingleMuon_D" );
+        }
+        if( DataType == "SingleMuon_E")
+        {
+            ntupleDirectory->push_back( "SingleMuon/crab_SingleMuon_RunE/180326_143338/0000" ); Tag->push_back( "SingleMuon_E" );
+        }
+        if( DataType == "SingleMuon_F")
+        {
+            ntupleDirectory->push_back( "SingleMuon/crab_SingleMuon_RunF/180326_143419/0000" ); Tag->push_back( "SingleMuon_F" );
+        }
+        if( DataType == "SingleMuon_G")
+        {
+            ntupleDirectory->push_back( "SingleMuon/crab_SingleMuon_RunG/180326_144335/0000" ); Tag->push_back( "SingleMuon_G" );
+        }
+        if( DataType == "SingleMuon_H")
+        {
+            ntupleDirectory->push_back( "SingleMuon/crab_SingleMuon_RunHver2/180326_144412/0000" ); Tag->push_back( "SingleMuon_Hver2" );
+            ntupleDirectory->push_back( "SingleMuon/crab_SingleMuon_RunHver3/180326_144454/0000" ); Tag->push_back( "SingleMuon_Hver3" );
+        }
+        else cout << "Wrong DataType!" << endl;
+    }
+    else cout << "Wrong Type!" << endl;
 }
 
 Bool_t DYAnalyzer::Separate_ttbarSample(TString Tag, NtupleHandle *ntuple, vector<GenOthers> *GenTopCollection)

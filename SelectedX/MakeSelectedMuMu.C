@@ -28,36 +28,36 @@ void MakeSelectedMuMu(Int_t type = -1, TString HLTname = "IsoMu24_OR_IsoTkMu24")
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
     L = L_B2H;
 
-    TString DataType, DataLocation, DataLocation2, Type;
+    TString DataType, Type;
 
-    if( type == -1 ) Type = "MuMu_ZToMuMu_M4500to6000_4";
-    if( type == 1 ) { DataType = "B"; DataLocation = "SingleMuon_Run2016B"; }
-    if( type == 2 ) { DataType = "C"; DataLocation = "SingleMuon_Run2016C"; }
-    if( type == 3 ) { DataType = "D"; DataLocation = "SingleMuon_Run2016D"; }
-    if( type == 4 ) { DataType = "E"; DataLocation = "SingleMuon_Run2016E"; }
-    if( type == 5 ) { DataType = "F"; DataLocation = "SingleMuon_Run2016F"; }
-    if( type == 6 ) { DataType = "G"; DataLocation = "SingleMuon_Run2016G"; }
-    if( type == 7 ) { DataType = "H"; DataLocation = "SingleMuon_Run2016Hver2"; DataLocation2 = "SingleMuon_Run2016Hver3"; }
+    if ( type == -1 ) Type = "ZToMuMu_M4500to6000_4";
+    if ( type == 1 ) DataType = "SingleMuon_B";
+    if ( type == 2 ) DataType = "SingleMuon_C";
+    if ( type == 3 ) DataType = "SingleMuon_D";
+    if ( type == 4 ) DataType = "SingleMuon_E";
+    if ( type == 5 ) DataType = "SingleMuon_F";
+    if ( type == 6 ) DataType = "SingleMuon_G";
+    if ( type == 7 ) DataType = "SingleMuon_H";
     Bool_t isMC = kTRUE;
-    if( type < 10  ) {Type = "Data"; isMC = kFALSE;}
+    if ( type < 10 && type > -1 ) {Type = "Data"; isMC = kFALSE;}
     // -- Signal MC samples -- //
-    if( type == 11 ) Type = "DYMuMu_M10to50";
-    if( type == 12 ) Type = "DYMuMu_M50to100";
-    if( type == 13 ) Type = "DYMuMu_M100toInf";
+    if ( type == 11 ) Type = "DYMuMu_M10to50";
+    if ( type == 12 ) Type = "DYMuMu_M50to100";
+    if ( type == 13 ) Type = "DYMuMu_M100toInf";
     // -- Background MC samples -- //
-    if( type == 21 ) Type = "ttbar";
-    if( type == 22 ) Type = "ttbarBackup";
-    if( type == 23 ) Type = "ttbar_M700toInf";
-    if( type == 31 ) Type = "DYTauTau_M10to50";
-    if( type == 32 ) Type = "DYTauTau_M50toInf";
-    if( type == 41 ) Type = "VVnST";
-    if( type == 51 ) Type = "WJetsToLNu";
-    if( type == 61 ) Type = "QCDMuEnriched";
+    if ( type == 21 ) Type = "ttbar";
+    if ( type == 22 ) Type = "ttbarBackup";
+    if ( type == 23 ) Type = "ttbar_M700toInf";
+    if ( type == 31 ) Type = "DYTauTau_M10to50";
+    if ( type == 32 ) Type = "DYTauTau_M50toInf";
+    if ( type == 41 ) Type = "VVnST";
+    if ( type == 51 ) Type = "WJetsToLNu";
+    if ( type == 61 ) Type = "QCDMuEnriched";
 
     //Creating a file
     TFile* MuonFile;
-    if ( type == -1 ) MuonFile = new TFile("/media/sf_DATA/SelectedMuMu_"+Type+".root", "RECREATE");
-    else if ( type < 10 ) MuonFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_"+Type+".root", "RECREATE");
+    if ( type == -1 ) MuonFile = new TFile("/media/sf_DATA/test/SelectedMuMu_"+Type+".root", "RECREATE");
+    else if ( type < 10 && type > -1 ) MuonFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_"+Type+".root", "RECREATE");
     else if (type < 20 )  MuonFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_"+Type+".root", "RECREATE");
     else MuonFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_"+Type+".root", "RECREATE");
 
@@ -86,10 +86,7 @@ void MakeSelectedMuMu(Int_t type = -1, TString HLTname = "IsoMu24_OR_IsoTkMu24")
         nEvents.push_back(100000);  // Does not match the number of events inside the MC file provided
         Xsec.push_back(4.56E-07);
     }
-    else if( Type == "Data" )
-    {
-        ntupleDirectory.push_back( "" ); Tag.push_back( "Data" ); // -- It will be filled later -- //
-    }
+    else if( Type == "Data" ) analyzer->SetupDataSamples(Type, DataType, &ntupleDirectory, &Tag);
     else analyzer->SetupMCsamples_Moriond17(Type, &ntupleDirectory, &Tag, &Xsec, &nEvents);
 
     // -- Creating SelectedMuMu variables to assign branches -- //
@@ -123,21 +120,11 @@ void MakeSelectedMuMu(Int_t type = -1, TString HLTname = "IsoMu24_OR_IsoTkMu24")
         TChain *chain = new TChain("recoTree/DYTree");
         if ( type == -1 )   // For testing
         {
-            chain->Add("/media/sf_DATA/ZToMuMu_M4500to6000_4.root/recoTree/DYTree;2"); // NEED A WAY TO TELL THE NUMBER OF CYCLES AND THEIR EXTENTION NAMES
-            chain->Add("/media/sf_DATA/ZToMuMu_M4500to6000_4.root/recoTree/DYTree;3");
-//            chain->Add("/media/sf_DATA/ZToMuMu_M4500to6000_4.root");
+            chain->Add("/media/sf_DATA/test/ZToMuMu_M4500to6000_4.root/recoTree/DYTree;2"); // NEED A WAY TO TELL THE NUMBER OF CYCLES AND THEIR EXTENTION NAMES
+            chain->Add("/media/sf_DATA/test/ZToMuMu_M4500to6000_4.root/recoTree/DYTree;3");
+//            chain->Add("/media/sf_DATA/test/ZToMuMu_M4500to6000_4.root");
         }
-        else
-        {
-            //Set MC chain
-            if( isMC == kTRUE ) chain->Add(BaseLocation+"/"+ntupleDirectory[i_tup]+"/*.root");
-            //Set Data chain
-            else
-            {
-                chain->Add(BaseLocation+"/"+DataLocation+"/*.root");
-                if( type == 7 ) chain->Add(BaseLocation+"/"+DataLocation2+"/*.root");
-            }
-        }
+        else chain->Add(BaseLocation+"/"+ntupleDirectory[i_tup]+"/*.root");
 
         NtupleHandle *ntuple = new NtupleHandle( chain );
         if( isMC == kTRUE )
@@ -147,7 +134,7 @@ void MakeSelectedMuMu(Int_t type = -1, TString HLTname = "IsoMu24_OR_IsoTkMu24")
         }
         ntuple->TurnOnBranches_Muon();
 
-        Double_t SumWeight = 0, SumWeight_Separated = 0;
+        Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
 
         Int_t NEvents = chain->GetEntries();
 //        Int_t NEvents = 10000;                    // test using few events
@@ -162,6 +149,7 @@ void MakeSelectedMuMu(Int_t type = -1, TString HLTname = "IsoMu24_OR_IsoTkMu24")
             // -- Positive/Negative Gen-weights -- //           // IS THIS NECESSARY?
             ntuple->GENEvt_weight < 0 ? MuMu.GENEvt_weight = -1 : MuMu.GENEvt_weight = 1;
             SumWeight += MuMu.GENEvt_weight;
+            SumWeightRaw += ntuple->GENEvt_weight;
 
             // -- Separate DYLL samples -- //
             Bool_t GenFlag = kFALSE;
@@ -173,7 +161,7 @@ void MakeSelectedMuMu(Int_t type = -1, TString HLTname = "IsoMu24_OR_IsoTkMu24")
 //            vector<GenOthers> GenTopCollection;
 //            GenFlag_top = analyzer->Separate_ttbarSample(Tag[i_tup], ntuple, &GenTopCollection);
 
-             if( GenFlag == kTRUE && GenFlag_top == kTRUE ) SumWeight_Separated += MuMu.GENEvt_weight;
+            if( GenFlag == kTRUE && GenFlag_top == kTRUE ) SumWeight_Separated += MuMu.GENEvt_weight;
 
             // -- Normalization -- //
             Double_t TotWeight = MuMu.GENEvt_weight;
@@ -212,8 +200,6 @@ void MakeSelectedMuMu(Int_t type = -1, TString HLTname = "IsoMu24_OR_IsoTkMu24")
                     MuMu.isSelPassed = kTRUE;
                     MuMu.nPileUp = ntuple->nPileUp;
                     MuMu.Muon_InvM = (mu1.Momentum + mu2.Momentum).M();
-
-                    Int_t zero_count = 0; // resolving if there is no more information in arrays
 
                     if(Sel_Index.size()!=2) cout << "======== ERROR: The number of muons saved is not 2 ========" << endl;
                     else
@@ -261,6 +247,7 @@ void MakeSelectedMuMu(Int_t type = -1, TString HLTname = "IsoMu24_OR_IsoTkMu24")
 
         printf("\tTotal sum of weights: %.1lf\n", SumWeight);
         printf("\tSum of weights of Seperated events: %.1lf\n", SumWeight_Separated);
+        printf("\tSum of unchanged (to 1 or -1) weights: %.1lf", SumWeightRaw);
         if ( isMC == kTRUE ) printf("\tNormalization factor: %.8f\n", L*Xsec[i_tup]/nEvents[i_tup]);
 
         Double_t LoopRunTime = looptime.CpuTime();
