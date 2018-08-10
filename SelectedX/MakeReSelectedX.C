@@ -468,11 +468,20 @@ void MakeReSelectedEE( TString HLTname )
 
     ElectronFile->cd();
     cout << "Writing into file...";
-    ElectronTree->Write();
-    cout << "Finished." << endl << "Closing a file..." << endl;
-    ElectronFile->Close();
-    if (!ElectronFile->IsOpen()) cout << "File " << OutputName << " has been closed successfully." << endl;
-    else cout << "FILE " << OutputName << " COULD NOT BE CLOSED!" << endl;
+    Int_t write;
+    write = ElectronTree->Write();
+    if ( write )
+    {
+        cout << "Finished." << endl << "Closing a file..." << endl;
+        ElectronFile->Close();
+        if (!ElectronFile->IsOpen()) cout << "File " << OutputName << " has been closed successfully." << endl;
+        else cout << "FILE " << OutputName << " COULD NOT BE CLOSED!" << endl;
+    }
+    else
+    {
+        cout << " Writing was NOT successful!" << endl;
+        ElectronFile->Close();
+    }
 
     Double_t TotalRunTime = totaltime.CpuTime();
     cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
@@ -974,11 +983,20 @@ void MakeReSelectedMuMu ( TString HLTname )
 
     MuonFile->cd();
     cout << "Writing into file...";
-    MuonTree->Write();
-    cout << "Finished." << endl << "Closing a file..." << endl;
-    MuonFile->Close();
-    if (!MuonFile->IsOpen()) cout << "File " << OutputName << " has been closed successfully." << endl;
-    else cout << "FILE " << OutputName << " COULD NOT BE CLOSED!" << endl;
+    Int_t write;
+    write = MuonTree->Write();
+    if ( write )
+    {
+        cout << "Finished." << endl << "Closing a file..." << endl;
+        MuonFile->Close();
+        if (!MuonFile->IsOpen()) cout << "File " << OutputName << " has been closed successfully." << endl;
+        else cout << "FILE " << OutputName << " COULD NOT BE CLOSED!" << endl;
+    }
+    else
+    {
+        cout << " Writing was NOT successful!" << endl;
+        MuonFile->Close();
+    }
 
     Double_t TotalRunTime = totaltime.CpuTime();
     cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
@@ -1451,11 +1469,20 @@ void MakeReSelectedEMu ( TString HLTname )
 
     EMuFile->cd();
     cout << "Writing into file...";
-    EMuTree->Write();
-    cout << "Finished." << endl << "Closing a file..." << endl;
-    EMuFile->Close();
-    if ( !EMuFile->IsOpen() ) cout << "File " << OutputName << " has been closed successfully." << endl;
-    else cout << "FILE " << OutputName << " COULD NOT BE CLOSED!" << endl;
+    Int_t write;
+    write = EMuTree->Write();
+    if ( write )
+    {
+        cout << "Finished." << endl << "Closing a file..." << endl;
+        EMuFile->Close();
+        if ( !EMuFile->IsOpen() ) cout << "File " << OutputName << " has been closed successfully." << endl;
+        else cout << "FILE " << OutputName << " COULD NOT BE CLOSED!" << endl;
+    }
+    else
+    {
+        cout << " Writing was NOT successful!" << endl;
+        EMuFile->Close();
+    }
 
     Double_t TotalRunTime = totaltime.CpuTime();
     cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
