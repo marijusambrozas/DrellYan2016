@@ -1,0 +1,3 @@
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_ttbar.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_ttbarBackup.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_ttbar_M700toInf.root
