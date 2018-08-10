@@ -89,14 +89,14 @@ void MakeSelectedEE ( Int_t type, TString HLTname )
     if( type == 51 ) Type = "WJetsToLNu";
     if( type == 61 ) Type = "QCDEMEnriched";
 
-    //Creating a file
-    TFile* ElectronFile;
-    if ( type == -1 ) ElectronFile = new TFile("/media/sf_DATA/test/SelectedEE_"+Type+".root", "RECREATE");
-    else if ( type < 10 ) ElectronFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_"+Type+".root", "RECREATE");
-    else if (type < 20 )  ElectronFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_"+Type+".root", "RECREATE");
-    else ElectronFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Type+".root", "RECREATE");
+//    //Creating a file
+//    TFile* ElectronFile;
+//    if ( type == -1 ) ElectronFile = new TFile("/media/sf_DATA/test/SelectedEE_"+Type+".root", "RECREATE");
+//    else if ( type < 10 ) ElectronFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_"+Type+".root", "RECREATE");
+//    else if (type < 20 )  ElectronFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_"+Type+".root", "RECREATE");
+//    else ElectronFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Type+".root", "RECREATE");
 
-    TTree* ElectronTree = new TTree("DYTree", "DYTree");
+//    TTree* ElectronTree = new TTree("DYTree", "DYTree");
 
 
     TTimeStamp ts_start;
@@ -120,25 +120,25 @@ void MakeSelectedEE ( Int_t type, TString HLTname )
     vector<TString> ntupleDirectory; vector<TString> Tag; vector<Double_t> Xsec; vector<Double_t> nEvents;
     if ( type == -1 )
     {
-        Tag.push_back("ZToEE_M4500to6000"); // There is no such type mentioned in DYAnalyzer
+        Tag.push_back("ZToEE_M4500to6000_2"); // There is no such type mentioned in DYAnalyzer
         nEvents.push_back(74606);       // The actual number of events in file is taken
         Xsec.push_back(4.56E-07);       // Copied from ZToMuMu_M4500to6000
     }
     else if( Type == "Data" ) analyzer->SetupDataSamples(Type, DataType, &ntupleDirectory, &Tag);
     else analyzer->SetupMCsamples_Moriond17(Type, &ntupleDirectory, &Tag, &Xsec, &nEvents);
 
-    // -- Creating LongSelectedEE variables to assign branches -- //
-    SelectedEE_t EE; EE.CreateNew();
+//    // -- Creating LongSelectedEE variables to assign branches -- //
+//    SelectedEE_t EE; EE.CreateNew();
 
-    ElectronTree->Branch("isSelPassed", &EE.isSelPassed);
-    ElectronTree->Branch("nPileUp", &EE.nPileUp);
-    ElectronTree->Branch("GENEvt_weight", &EE.GENEvt_weight);
-    ElectronTree->Branch("Electron_InvM", &EE.Electron_InvM);
-    ElectronTree->Branch("Electron_pT", &EE.Electron_pT);
-    ElectronTree->Branch("Electron_eta", &EE.Electron_eta);
-    ElectronTree->Branch("Electron_phi", &EE.Electron_phi);
-    ElectronTree->Branch("Electron_Energy", &EE.Electron_Energy);
-    ElectronTree->Branch("Electron_charge", &EE.Electron_charge);
+//    ElectronTree->Branch("isSelPassed", &EE.isSelPassed);
+//    ElectronTree->Branch("nPileUp", &EE.nPileUp);
+//    ElectronTree->Branch("GENEvt_weight", &EE.GENEvt_weight);
+//    ElectronTree->Branch("Electron_InvM", &EE.Electron_InvM);
+//    ElectronTree->Branch("Electron_pT", &EE.Electron_pT);
+//    ElectronTree->Branch("Electron_eta", &EE.Electron_eta);
+//    ElectronTree->Branch("Electron_phi", &EE.Electron_phi);
+//    ElectronTree->Branch("Electron_Energy", &EE.Electron_Energy);
+//    ElectronTree->Branch("Electron_charge", &EE.Electron_charge);
 
     //Loop for all samples
     Int_t Ntup;
@@ -151,6 +151,27 @@ void MakeSelectedEE ( Int_t type, TString HLTname )
         looptime.Start();
 
         cout << "\t<" << Tag[i_tup] << ">" << endl;
+
+        //Creating a file
+        TFile* ElectronFile;
+        if ( type == -1 ) ElectronFile = new TFile("/media/sf_DATA/test/SelectedEE_"+Tag[i_tup]+".root", "RECREATE");
+        else if ( type < 10 ) ElectronFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_"+Tag[i_tup]+".root", "RECREATE");
+        else if (type < 20 )  ElectronFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_"+Tag[i_tup]+".root", "RECREATE");
+        else ElectronFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Tag[i_tup]+".root", "RECREATE");
+
+        TTree* ElectronTree = new TTree("DYTree", "DYTree");
+        // -- Creating LongSelectedEE variables to assign branches -- //
+        SelectedEE_t EE; EE.CreateNew();
+
+        ElectronTree->Branch("isSelPassed", &EE.isSelPassed);
+        ElectronTree->Branch("nPileUp", &EE.nPileUp);
+        ElectronTree->Branch("GENEvt_weight", &EE.GENEvt_weight);
+        ElectronTree->Branch("Electron_InvM", &EE.Electron_InvM);
+        ElectronTree->Branch("Electron_pT", &EE.Electron_pT);
+        ElectronTree->Branch("Electron_eta", &EE.Electron_eta);
+        ElectronTree->Branch("Electron_phi", &EE.Electron_phi);
+        ElectronTree->Branch("Electron_Energy", &EE.Electron_Energy);
+        ElectronTree->Branch("Electron_charge", &EE.Electron_charge);
 
         TChain *chain = new TChain("recoTree/DYTree");
         if ( type == -1 )   // For testing
@@ -191,10 +212,9 @@ void MakeSelectedEE ( Int_t type, TString HLTname )
             GenFlag = analyzer->SeparateDYLLSample_isHardProcess(Tag[i_tup], ntuple);
 
             // -- Separate ttbar samples -- //
-            Bool_t GenFlag_top = kTRUE;
-//            Bool_t GenFlag_top = kFALSE;
-//            vector<GenOthers> GenTopCollection;
-//            GenFlag_top = analyzer->Separate_ttbarSample(Tag[i_tup], ntuple, &GenTopCollection);
+            Bool_t GenFlag_top = kFALSE;
+            vector<GenOthers> GenTopCollection;
+            GenFlag_top = analyzer->Separate_ttbarSample(Tag[i_tup], ntuple, &GenTopCollection);
 
             if( GenFlag == kTRUE && GenFlag_top == kTRUE ) SumWeight_Separated += EE.GENEvt_weight;
 
@@ -277,24 +297,42 @@ void MakeSelectedEE ( Int_t type, TString HLTname )
         Double_t LoopRunTime = looptime.CpuTime();
         cout << "\tLoop RunTime(" << Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
 
+        // Writing
+        ElectronFile->cd();
+        cout << "Writing into file...";
+        Int_t write;
+        write = ElectronTree->Write();
+        if ( write )
+        {
+            cout << " Finished." << endl << "Closing a file..." << endl;
+            ElectronFile->Close();
+            if ( !ElectronFile->IsOpen() ) cout << "File SelectedEE_" << Tag[i_tup] << ".root has been closed successfully." << endl;
+            else cout << "FILE SelectedEE_" << Type << ".root COULD NOT BE CLOSED!" << endl;
+        }
+        else
+        {
+            cout << " Writing was NOT successful!" << endl;
+            ElectronFile->Close();
+        }
+
     } //end of i_tup iteration
 
-    ElectronFile->cd();
-    cout << "Writing into file...";
-    Int_t write;
-    write = ElectronTree->Write();
-    if ( write )
-    {
-        cout << " Finished." << endl << "Closing a file..." << endl;
-        ElectronFile->Close();
-        if ( !ElectronFile->IsOpen() ) cout << "File SelectedEE_" << Type << ".root has been closed successfully." << endl;
-        else cout << "FILE SelectedEE_" << Type << ".root COULD NOT BE CLOSED!" << endl;
-    }
-    else
-    {
-        cout << " Writing was NOT successful!" << endl;
-        ElectronFile->Close();
-    }
+//    ElectronFile->cd();
+//    cout << "Writing into file...";
+//    Int_t write;
+//    write = ElectronTree->Write();
+//    if ( write )
+//    {
+//        cout << " Finished." << endl << "Closing a file..." << endl;
+//        ElectronFile->Close();
+//        if ( !ElectronFile->IsOpen() ) cout << "File SelectedEE_" << Type << ".root has been closed successfully." << endl;
+//        else cout << "FILE SelectedEE_" << Type << ".root COULD NOT BE CLOSED!" << endl;
+//    }
+//    else
+//    {
+//        cout << " Writing was NOT successful!" << endl;
+//        ElectronFile->Close();
+//    }
 
     Double_t TotalRunTime = totaltime.CpuTime();
     cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
@@ -440,10 +478,9 @@ void MakeSelectedMuMu ( Int_t type, TString HLTname )
             GenFlag = analyzer->SeparateDYLLSample_isHardProcess(Tag[i_tup], ntuple);
 
             // -- Separate ttbar samples -- //
-            Bool_t GenFlag_top = kTRUE;
-//            Bool_t GenFlag_top = kFALSE;
-//            vector<GenOthers> GenTopCollection;
-//            GenFlag_top = analyzer->Separate_ttbarSample(Tag[i_tup], ntuple, &GenTopCollection);
+            Bool_t GenFlag_top = kFALSE;
+            vector<GenOthers> GenTopCollection;
+            GenFlag_top = analyzer->Separate_ttbarSample(Tag[i_tup], ntuple, &GenTopCollection);
 
             if( GenFlag == kTRUE && GenFlag_top == kTRUE ) SumWeight_Separated += MuMu.GENEvt_weight;
 
@@ -701,10 +738,9 @@ void MakeSelectedEMu ( Int_t type, TString HLTname )
             GenFlag = analyzer->SeparateDYLLSample_isHardProcess(Tag[i_tup], ntuple);
 
             // -- Separate ttbar samples -- //
-            Bool_t GenFlag_top = kTRUE;
-//            Bool_t GenFlag_top = kFALSE;
-//            vector<GenOthers> GenTopCollection;
-//            GenFlag_top = analyzer->Separate_ttbarSample(Tag[i_tup], ntuple, &GenTopCollection);
+            Bool_t GenFlag_top = kFALSE;
+            vector<GenOthers> GenTopCollection;
+            GenFlag_top = analyzer->Separate_ttbarSample(Tag[i_tup], ntuple, &GenTopCollection);
 
             if( GenFlag == kTRUE && GenFlag_top == kTRUE ) SumWeight_Separated += EMu.GENEvt_weight;
 
