@@ -376,14 +376,14 @@ void MakeSelectedMuMu ( Int_t type, TString HLTname )
     if ( type == 51 ) Type = "WJetsToLNu";
     if ( type == 61 ) Type = "QCDMuEnriched";
 
-    //Creating a file
-    TFile* MuonFile;
-    if ( type == -1 ) MuonFile = new TFile("/media/sf_DATA/test/SelectedMuMu_"+Type+".root", "RECREATE");
-    else if ( type < 10 && type > -1 ) MuonFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_"+Type+".root", "RECREATE");
-    else if (type < 20 )  MuonFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_"+Type+".root", "RECREATE");
-    else MuonFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_"+Type+".root", "RECREATE");
+//    //Creating a file
+//    TFile* MuonFile;
+//    if ( type == -1 ) MuonFile = new TFile("/media/sf_DATA/test/SelectedMuMu_"+Type+".root", "RECREATE");
+//    else if ( type < 10 && type > -1 ) MuonFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_"+Type+".root", "RECREATE");
+//    else if (type < 20 )  MuonFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_"+Type+".root", "RECREATE");
+//    else MuonFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_"+Type+".root", "RECREATE");
 
-    TTree* MuonTree = new TTree("DYTree", "DYTree");
+//    TTree* MuonTree = new TTree("DYTree", "DYTree");
 
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
@@ -411,21 +411,21 @@ void MakeSelectedMuMu ( Int_t type, TString HLTname )
     else if( Type == "Data" ) analyzer->SetupDataSamples(Type, DataType, &ntupleDirectory, &Tag);
     else analyzer->SetupMCsamples_Moriond17(Type, &ntupleDirectory, &Tag, &Xsec, &nEvents);
 
-    // -- Creating SelectedMuMu variables to assign branches -- //
-    SelectedMuMu_t MuMu; MuMu.CreateNew();
+//    // -- Creating SelectedMuMu variables to assign branches -- //
+//    SelectedMuMu_t MuMu; MuMu.CreateNew();
 
-    MuonTree->Branch("isSelPassed", &MuMu.isSelPassed);
-    MuonTree->Branch("nPileUp", &MuMu.nPileUp);
-    MuonTree->Branch("GENEvt_weight", &MuMu.GENEvt_weight);
-    MuonTree->Branch("Muon_pT", &MuMu.Muon_pT);
-    MuonTree->Branch("Muon_eta", &MuMu.Muon_eta);
-    MuonTree->Branch("Muon_phi", &MuMu.Muon_phi);
-    MuonTree->Branch("Muon_charge", &MuMu.Muon_charge);
-    MuonTree->Branch("Muon_Energy", &MuMu.Muon_Energy);
-    MuonTree->Branch("Muon_InvM", &MuMu.Muon_InvM);
-    MuonTree->Branch("Muon_TuneP_pT", &MuMu.Muon_TuneP_pT);
-    MuonTree->Branch("Muon_TuneP_eta", &MuMu.Muon_TuneP_eta);
-    MuonTree->Branch("Muon_TuneP_phi", &MuMu.Muon_TuneP_phi);
+//    MuonTree->Branch("isSelPassed", &MuMu.isSelPassed);
+//    MuonTree->Branch("nPileUp", &MuMu.nPileUp);
+//    MuonTree->Branch("GENEvt_weight", &MuMu.GENEvt_weight);
+//    MuonTree->Branch("Muon_pT", &MuMu.Muon_pT);
+//    MuonTree->Branch("Muon_eta", &MuMu.Muon_eta);
+//    MuonTree->Branch("Muon_phi", &MuMu.Muon_phi);
+//    MuonTree->Branch("Muon_charge", &MuMu.Muon_charge);
+//    MuonTree->Branch("Muon_Energy", &MuMu.Muon_Energy);
+//    MuonTree->Branch("Muon_InvM", &MuMu.Muon_InvM);
+//    MuonTree->Branch("Muon_TuneP_pT", &MuMu.Muon_TuneP_pT);
+//    MuonTree->Branch("Muon_TuneP_eta", &MuMu.Muon_TuneP_eta);
+//    MuonTree->Branch("Muon_TuneP_phi", &MuMu.Muon_TuneP_phi);
 
     //Loop for all samples
     Int_t Ntup;
@@ -438,6 +438,30 @@ void MakeSelectedMuMu ( Int_t type, TString HLTname )
         looptime.Start();
 
         cout << "\t<" << Tag[i_tup] << ">" << endl;
+
+        //Creating a file
+        TFile* MuonFile;
+        if ( type == -1 ) MuonFile = new TFile("/media/sf_DATA/test/SelectedMuMu_"+Tag[i_tup]+".root", "RECREATE");
+        else if ( type < 10 && type > -1 ) MuonFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_"+Tag[i_tup]+".root", "RECREATE");
+        else if (type < 20 )  MuonFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_"+Tag[i_tup]+".root", "RECREATE");
+        else MuonFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_"+Tag[i_tup]+".root", "RECREATE");
+
+        TTree* MuonTree = new TTree("DYTree", "DYTree");
+        // -- Creating SelectedMuMu variables to assign branches -- //
+        SelectedMuMu_t MuMu; MuMu.CreateNew();
+
+        MuonTree->Branch("isSelPassed", &MuMu.isSelPassed);
+        MuonTree->Branch("nPileUp", &MuMu.nPileUp);
+        MuonTree->Branch("GENEvt_weight", &MuMu.GENEvt_weight);
+        MuonTree->Branch("Muon_pT", &MuMu.Muon_pT);
+        MuonTree->Branch("Muon_eta", &MuMu.Muon_eta);
+        MuonTree->Branch("Muon_phi", &MuMu.Muon_phi);
+        MuonTree->Branch("Muon_charge", &MuMu.Muon_charge);
+        MuonTree->Branch("Muon_Energy", &MuMu.Muon_Energy);
+        MuonTree->Branch("Muon_InvM", &MuMu.Muon_InvM);
+        MuonTree->Branch("Muon_TuneP_pT", &MuMu.Muon_TuneP_pT);
+        MuonTree->Branch("Muon_TuneP_eta", &MuMu.Muon_TuneP_eta);
+        MuonTree->Branch("Muon_TuneP_phi", &MuMu.Muon_TuneP_phi);
 
         TChain *chain = new TChain("recoTree/DYTree");
         if ( type == -1 )   // For testing
@@ -632,13 +656,13 @@ void MakeSelectedEMu ( Int_t type, TString HLTname )
     else if ( type == 32 ) Type = "DYTauTau_M50toInf";
     else if ( type == 41 ) Type = "VVnST";
 
-    //Creating a file
-    TFile* EMuFile;
-    if ( type == -1 ) EMuFile = new TFile("/media/sf_DATA/test/SelectedEMu_"+Type+".root", "RECREATE");
-    else if ( type < 10 && type > -1 ) EMuFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_"+Type+".root", "RECREATE");
-    else EMuFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/MC_bkg/SelectedEMu_"+Type+".root", "RECREATE");
+//    //Creating a file
+//    TFile* EMuFile;
+//    if ( type == -1 ) EMuFile = new TFile("/media/sf_DATA/test/SelectedEMu_"+Type+".root", "RECREATE");
+//    else if ( type < 10 && type > -1 ) EMuFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_"+Type+".root", "RECREATE");
+//    else EMuFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/MC_bkg/SelectedEMu_"+Type+".root", "RECREATE");
 
-    TTree* EMuTree = new TTree("DYTree", "DYTree");
+//    TTree* EMuTree = new TTree("DYTree", "DYTree");
 
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
@@ -666,26 +690,26 @@ void MakeSelectedEMu ( Int_t type, TString HLTname )
     else if( Type == "Data" ) analyzer->SetupDataSamples(Type, DataType, &ntupleDirectory, &Tag);
     else analyzer->SetupMCsamples_Moriond17(Type, &ntupleDirectory, &Tag, &Xsec, &nEvents);
 
-    // -- Creating LongSelectedMuMu variables to assign branches -- //
-    SelectedEMu_t EMu; EMu.CreateNew();
+//    // -- Creating LongSelectedMuMu variables to assign branches -- //
+//    SelectedEMu_t EMu; EMu.CreateNew();
 
-    EMuTree->Branch("isSelPassed", &EMu.isSelPassed);
-    EMuTree->Branch("nPileUp", &EMu.nPileUp);
-    EMuTree->Branch("GENEvt_weight", &EMu.GENEvt_weight);
-    EMuTree->Branch("EMu_InvM", &EMu.EMu_InvM);
-    EMuTree->Branch("Muon_pT", &EMu.Muon_pT);
-    EMuTree->Branch("Muon_eta", &EMu.Muon_eta);
-    EMuTree->Branch("Muon_phi", &EMu.Muon_phi);
-    EMuTree->Branch("Muon_charge", &EMu.Muon_charge);
-    EMuTree->Branch("Muon_Energy", &EMu.Muon_Energy);
-    EMuTree->Branch("Muon_TuneP_pT", &EMu.Muon_TuneP_pT);
-    EMuTree->Branch("Muon_TuneP_eta", &EMu.Muon_TuneP_eta);
-    EMuTree->Branch("Muon_TuneP_phi", &EMu.Muon_TuneP_phi);
-    EMuTree->Branch("Electron_pT", &EMu.Electron_pT);
-    EMuTree->Branch("Electron_eta", &EMu.Electron_eta);
-    EMuTree->Branch("Electron_phi", &EMu.Electron_phi);
-    EMuTree->Branch("Electron_Energy", &EMu.Electron_Energy);
-    EMuTree->Branch("Electron_charge", &EMu.Electron_charge);
+//    EMuTree->Branch("isSelPassed", &EMu.isSelPassed);
+//    EMuTree->Branch("nPileUp", &EMu.nPileUp);
+//    EMuTree->Branch("GENEvt_weight", &EMu.GENEvt_weight);
+//    EMuTree->Branch("EMu_InvM", &EMu.EMu_InvM);
+//    EMuTree->Branch("Muon_pT", &EMu.Muon_pT);
+//    EMuTree->Branch("Muon_eta", &EMu.Muon_eta);
+//    EMuTree->Branch("Muon_phi", &EMu.Muon_phi);
+//    EMuTree->Branch("Muon_charge", &EMu.Muon_charge);
+//    EMuTree->Branch("Muon_Energy", &EMu.Muon_Energy);
+//    EMuTree->Branch("Muon_TuneP_pT", &EMu.Muon_TuneP_pT);
+//    EMuTree->Branch("Muon_TuneP_eta", &EMu.Muon_TuneP_eta);
+//    EMuTree->Branch("Muon_TuneP_phi", &EMu.Muon_TuneP_phi);
+//    EMuTree->Branch("Electron_pT", &EMu.Electron_pT);
+//    EMuTree->Branch("Electron_eta", &EMu.Electron_eta);
+//    EMuTree->Branch("Electron_phi", &EMu.Electron_phi);
+//    EMuTree->Branch("Electron_Energy", &EMu.Electron_Energy);
+//    EMuTree->Branch("Electron_charge", &EMu.Electron_charge);
 
     //Loop for all samples
     Int_t Ntup;
@@ -698,6 +722,34 @@ void MakeSelectedEMu ( Int_t type, TString HLTname )
         looptime.Start();
 
         cout << "\t<" << Tag[i_tup] << ">" << endl;
+
+        //Creating a file
+        TFile* EMuFile;
+        if ( type == -1 ) EMuFile = new TFile("/media/sf_DATA/test/SelectedEMu_"+Tag[i_tup]+".root", "RECREATE");
+        else if ( type < 10 ) EMuFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_"+Tag[i_tup]+".root", "RECREATE");
+        else EMuFile = new TFile("/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/MC_bkg/SelectedEMu_"+Tag[i_tup]+".root", "RECREATE");
+
+        TTree* EMuTree = new TTree("DYTree", "DYTree");
+        // -- Creating LongSelectedMuMu variables to assign branches -- //
+        SelectedEMu_t EMu; EMu.CreateNew();
+
+        EMuTree->Branch("isSelPassed", &EMu.isSelPassed);
+        EMuTree->Branch("nPileUp", &EMu.nPileUp);
+        EMuTree->Branch("GENEvt_weight", &EMu.GENEvt_weight);
+        EMuTree->Branch("EMu_InvM", &EMu.EMu_InvM);
+        EMuTree->Branch("Muon_pT", &EMu.Muon_pT);
+        EMuTree->Branch("Muon_eta", &EMu.Muon_eta);
+        EMuTree->Branch("Muon_phi", &EMu.Muon_phi);
+        EMuTree->Branch("Muon_charge", &EMu.Muon_charge);
+        EMuTree->Branch("Muon_Energy", &EMu.Muon_Energy);
+        EMuTree->Branch("Muon_TuneP_pT", &EMu.Muon_TuneP_pT);
+        EMuTree->Branch("Muon_TuneP_eta", &EMu.Muon_TuneP_eta);
+        EMuTree->Branch("Muon_TuneP_phi", &EMu.Muon_TuneP_phi);
+        EMuTree->Branch("Electron_pT", &EMu.Electron_pT);
+        EMuTree->Branch("Electron_eta", &EMu.Electron_eta);
+        EMuTree->Branch("Electron_phi", &EMu.Electron_phi);
+        EMuTree->Branch("Electron_Energy", &EMu.Electron_Energy);
+        EMuTree->Branch("Electron_charge", &EMu.Electron_charge);
 
         TChain *chain = new TChain("recoTree/DYTree");
         if ( type == -1 )
