@@ -176,9 +176,9 @@ void MakeSelectedEE ( Int_t type, TString HLTname )
         TChain *chain = new TChain("recoTree/DYTree");
         if ( type == -1 )   // For testing
         {
-            chain->Add("/media/sf_DATA/test/ZToEE_M4500to6000_2.root/recoTree/DYTree;7");
-            chain->Add("/media/sf_DATA/test/ZToEE_M4500to6000_2.root/recoTree/DYTree;8");
-//            chain->Add("/media/sf_DATA/test/ZToEE_M4500to6000_2.root");
+//            chain->Add("/media/sf_DATA/test/ZToEE_M4500to6000_2.root/recoTree/DYTree;7");
+//            chain->Add("/media/sf_DATA/test/ZToEE_M4500to6000_2.root/recoTree/DYTree;8");
+            chain->Add("/media/sf_DATA/test/ZToEE_M4500to6000_2.root");
         }
         else chain->Add(BaseLocation+"/"+ntupleDirectory[i_tup]+"/*.root");
 
@@ -466,9 +466,9 @@ void MakeSelectedMuMu ( Int_t type, TString HLTname )
         TChain *chain = new TChain("recoTree/DYTree");
         if ( type == -1 )   // For testing
         {
-            chain->Add("/media/sf_DATA/test/ZToMuMu_M4500to6000_4.root/recoTree/DYTree;2"); // NEED A WAY TO TELL THE NUMBER OF CYCLES AND THEIR EXTENTION NAMES
-            chain->Add("/media/sf_DATA/test/ZToMuMu_M4500to6000_4.root/recoTree/DYTree;3");
-//            chain->Add("/media/sf_DATA/test/ZToMuMu_M4500to6000_4.root");
+//            chain->Add("/media/sf_DATA/test/ZToMuMu_M4500to6000_4.root/recoTree/DYTree;2");
+//            chain->Add("/media/sf_DATA/test/ZToMuMu_M4500to6000_4.root/recoTree/DYTree;3");
+            chain->Add("/media/sf_DATA/test/ZToMuMu_M4500to6000_4.root");
         }
         else chain->Add(BaseLocation+"/"+ntupleDirectory[i_tup]+"/*.root");
 
@@ -601,24 +601,41 @@ void MakeSelectedMuMu ( Int_t type, TString HLTname )
         Double_t LoopRunTime = looptime.CpuTime();
         cout << "\tLoop RunTime(" << Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
 
+        MuonFile->cd();
+        cout << "Writing into file...";
+        Int_t write;
+        write = MuonTree->Write();
+        if ( write )
+        {
+            cout << " Finished." << endl << "Closing a file..." << endl;
+            MuonFile->Close();
+            if ( !MuonFile->IsOpen() ) cout << "File SelectedMuMu_" << Type << ".root has been closed successfully." << endl;
+            else cout << "FILE SelectedMuMu_" << Type << ".root COULD NOT BE CLOSED!" << endl;
+        }
+        else
+        {
+            cout << " Writing was NOT successful!" << endl;
+            MuonFile->Close();
+        }
+
     } //end of i_tup iteration
 
-    MuonFile->cd();
-    cout << "Writing into file...";
-    Int_t write;
-    write = MuonTree->Write();
-    if ( write )
-    {
-        cout << " Finished." << endl << "Closing a file..." << endl;
-        MuonFile->Close();
-        if ( !MuonFile->IsOpen() ) cout << "File SelectedMuMu_" << Type << ".root has been closed successfully." << endl;
-        else cout << "FILE SelectedMuMu_" << Type << ".root COULD NOT BE CLOSED!" << endl;
-    }
-    else
-    {
-        cout << " Writing was NOT successful!" << endl;
-        MuonFile->Close();
-    }
+//    MuonFile->cd();
+//    cout << "Writing into file...";
+//    Int_t write;
+//    write = MuonTree->Write();
+//    if ( write )
+//    {
+//        cout << " Finished." << endl << "Closing a file..." << endl;
+//        MuonFile->Close();
+//        if ( !MuonFile->IsOpen() ) cout << "File SelectedMuMu_" << Type << ".root has been closed successfully." << endl;
+//        else cout << "FILE SelectedMuMu_" << Type << ".root COULD NOT BE CLOSED!" << endl;
+//    }
+//    else
+//    {
+//        cout << " Writing was NOT successful!" << endl;
+//        MuonFile->Close();
+//    }
 
     Double_t TotalRunTime = totaltime.CpuTime();
     cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
@@ -754,9 +771,9 @@ void MakeSelectedEMu ( Int_t type, TString HLTname )
         TChain *chain = new TChain("recoTree/DYTree");
         if ( type == -1 )
         {
-            chain->Add("/media/sf_DATA/test/WW_34.root/recoTree/DYTree;1"); // NEED A WAY TO TELL THE NUMBER OF CYCLES AND THEIR EXTENTION NAMES
-            chain->Add("/media/sf_DATA/test/WW_34.root/recoTree/DYTree;2");
-//            chain->Add("/media/sf_DATA/test/WW_34.root");
+//            chain->Add("/media/sf_DATA/test/WW_34.root/recoTree/DYTree;1");
+//            chain->Add("/media/sf_DATA/test/WW_34.root/recoTree/DYTree;2");
+            chain->Add("/media/sf_DATA/test/WW_34.root");
         }
         else chain->Add(BaseLocation+"/"+ntupleDirectory[i_tup]+"/*.root");
 
@@ -883,24 +900,41 @@ void MakeSelectedEMu ( Int_t type, TString HLTname )
         Double_t LoopRunTime = looptime.CpuTime();
         cout << "\tLoop RunTime(" << Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
 
+        EMuFile->cd();
+        cout << "Writing into file...";
+        Int_t write;
+        write = EMuTree->Write();
+        if ( write )
+        {
+            cout << " Finished." << endl << "Closing a file..." << endl;
+            EMuFile->Close();
+            if ( !EMuFile->IsOpen() ) cout << "File SelectedEMu_" << Type << ".root has been closed successfully." << endl;
+            else cout << "FILE SelectedEMu_" << Type << ".root COULD NOT BE CLOSED!" << endl;
+        }
+        else
+        {
+            cout << " Writing was NOT successful!" << endl;
+            EMuFile->Close();
+        }
+
     } //end of i_tup iteration
 
-    EMuFile->cd();
-    cout << "Writing into file...";
-    Int_t write;
-    write = EMuTree->Write();
-    if ( write )
-    {
-        cout << " Finished." << endl << "Closing a file..." << endl;
-        EMuFile->Close();
-        if ( !EMuFile->IsOpen() ) cout << "File SelectedEMu_" << Type << ".root has been closed successfully." << endl;
-        else cout << "FILE SelectedEMu_" << Type << ".root COULD NOT BE CLOSED!" << endl;
-    }
-    else
-    {
-        cout << " Writing was NOT successful!" << endl;
-        EMuFile->Close();
-    }
+//    EMuFile->cd();
+//    cout << "Writing into file...";
+//    Int_t write;
+//    write = EMuTree->Write();
+//    if ( write )
+//    {
+//        cout << " Finished." << endl << "Closing a file..." << endl;
+//        EMuFile->Close();
+//        if ( !EMuFile->IsOpen() ) cout << "File SelectedEMu_" << Type << ".root has been closed successfully." << endl;
+//        else cout << "FILE SelectedEMu_" << Type << ".root COULD NOT BE CLOSED!" << endl;
+//    }
+//    else
+//    {
+//        cout << " Writing was NOT successful!" << endl;
+//        EMuFile->Close();
+//    }
 
     Double_t TotalRunTime = totaltime.CpuTime();
     cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
