@@ -609,8 +609,8 @@ void MakeSelectedMuMu ( Int_t type, TString HLTname )
         {
             cout << " Finished." << endl << "Closing a file..." << endl;
             MuonFile->Close();
-            if ( !MuonFile->IsOpen() ) cout << "File SelectedMuMu_" << Type << ".root has been closed successfully." << endl;
-            else cout << "FILE SelectedMuMu_" << Type << ".root COULD NOT BE CLOSED!" << endl;
+            if ( !MuonFile->IsOpen() ) cout << "File SelectedMuMu_" << Tag[i_tup] << ".root has been closed successfully." << endl;
+            else cout << "FILE SelectedMuMu_" << Tag[i_tup] << ".root COULD NOT BE CLOSED!" << endl;
         }
         else
         {
@@ -908,8 +908,8 @@ void MakeSelectedEMu ( Int_t type, TString HLTname )
         {
             cout << " Finished." << endl << "Closing a file..." << endl;
             EMuFile->Close();
-            if ( !EMuFile->IsOpen() ) cout << "File SelectedEMu_" << Type << ".root has been closed successfully." << endl;
-            else cout << "FILE SelectedEMu_" << Type << ".root COULD NOT BE CLOSED!" << endl;
+            if ( !EMuFile->IsOpen() ) cout << "File SelectedEMu_" << Tag[i_tup] << ".root has been closed successfully." << endl;
+            else cout << "FILE SelectedEMu_" << Tag[i_tup] << ".root COULD NOT BE CLOSED!" << endl;
         }
         else
         {
