@@ -374,6 +374,7 @@ void MakeSelectedMuMu ( Int_t type, TString HLTname )
     if ( type == 32 ) Type = "DYTauTau_M50toInf";
     if ( type == 41 ) Type = "VVnST";
     if ( type == 51 ) Type = "WJetsToLNu";
+    if ( type == 52 ) Type = "WJetsToLNu_test";
     if ( type == 61 ) Type = "QCDMuEnriched";
 
 //    //Creating a file

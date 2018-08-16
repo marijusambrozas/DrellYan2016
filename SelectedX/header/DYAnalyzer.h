@@ -660,6 +660,12 @@ void DYAnalyzer::SetupMCsamples_Moriond17( TString Type, vector<TString> *ntuple
                 ntupleDirectory->push_back( "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo_ext/180326_144652/0000" ); // There also is madgraph version
                 Tag->push_back( "WJetsToLNu_ext" ); Xsec->push_back( 61526.7 ); nEvents->push_back( 86731698.0 );
 	}
+        else if( Type == "WJetsToLNu_test" )
+        {
+                // -- Background Samples -- //
+                ntupleDirectory->push_back( "WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WJetsToLNu_ext/180326_143105/0000" );
+                Tag->push_back( "WJetsToLNu_test" ); Xsec->push_back( 61526.7 ); nEvents->push_back( 86731698.0 );
+        }
 	else if( Type == "QCDMuEnriched" )
 	{
                 std::cout << "# events should be adjusted later" << endl;
