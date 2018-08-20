@@ -126,9 +126,11 @@ void MakeSelectedEE ( TString type, TString HLTname )
 
         // Loop for all samples in a process
         for ( Int_t i_tup = 0; i_tup<Ntup; i_tup++ )
-        {
+        {           
             TStopwatch looptime;
             looptime.Start();
+
+            if ( Mgr.CurrentProc == _QCDEMEnriched_120to170 && i_tup == 0 ) continue; // Something crashes here
 
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
