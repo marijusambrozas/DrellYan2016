@@ -224,8 +224,7 @@ void MakeLongSelectedEE ( TString HLTname )
 //        cout << "\t<" << Tag[i_tup] << ">" << endl;
 
         TChain *chain = new TChain("recoTree/DYTree");
-        chain->Add("/media/sf_DATA/test/ZToEE_M4500to6000_2.root/recoTree/DYTree;7");
-        chain->Add("/media/sf_DATA/test/ZToEE_M4500to6000_2.root/recoTree/DYTree;8");
+        chain->Add("/media/sf_DATA/test/ZToEE_M4500to6000_2.root");
 
 //        //Set MC chain
 //        if( isMC == kTRUE ) chain->Add(BaseLocation+"/"+ntupleDirectory[i_tup]+"/*.root");
@@ -734,8 +733,7 @@ void MakeLongSelectedMuMu ( TString HLTname )
 //            chain->Add(BaseLocation+"/"+DataLocation+"/*.root");
 //            if(type==7) chain->Add(BaseLocation+"/"+DataLocation2+"/*.root");
 //        }
-        chain->Add("/media/sf_DATA/test/ZToMuMu_M4500to6000_4.root/recoTree/DYTree;2"); // NEED A WAY TO TELL THE NUMBER OF CYCLES AND THEIR EXTENTION NAMES
-        chain->Add("/media/sf_DATA/test/ZToMuMu_M4500to6000_4.root/recoTree/DYTree;3");
+        chain->Add("/media/sf_DATA/test/ZToMuMu_M4500to6000_4.root");
 
         NtupleHandle *ntuple = new NtupleHandle( chain );
         if( isMC == kTRUE ) {
@@ -1267,8 +1265,7 @@ void MakeLongSelectedEMu ( TString HLTname )
 //            chain->Add(BaseLocation+"/"+DataLocation+"/*.root");
 //            if(type==7) chain->Add(BaseLocation+"/"+DataLocation2+"/*.root");
 //        }
-        chain->Add("/media/sf_DATA/test/WW_34.root/recoTree/DYTree;1"); // NEED A WAY TO TELL THE NUMBER OF CYCLES AND THEIR EXTENTION NAMES
-        chain->Add("/media/sf_DATA/test/WW_34.root/recoTree/DYTree;2");
+        chain->Add("/media/sf_DATA/test/WW_34.root");
 
         NtupleHandle *ntuple = new NtupleHandle( chain );
         if( isMC == kTRUE ) {
