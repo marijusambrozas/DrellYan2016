@@ -1890,7 +1890,7 @@ void FileMgr::GetProc ( Process_t pr, Bool_t ClearOld )
         Location = "SingleElectron/crab_SingleElectron_RunF/180326_144247/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SingleElectron_F" ); nEvents.push_back( 0 );
+        Tag.push_back( "SingleElectron_G" ); nEvents.push_back( 0 );
         Location = "SingleElectron/crab_SingleElectron_RunG/180326_144755/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
