@@ -273,7 +273,7 @@ void MakeSelectedEE ( TString type, TString HLTname, Int_t start, Int_t finish )
 
                 } // End of if( isTriggered )
 
-                bar.Draw(i);
+                bar.Draw(i-startFrom);
             } // End of event iteration
 
             cout << "\t" << timesPassed << " events have passed the event selection." << endl;
