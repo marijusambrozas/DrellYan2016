@@ -947,7 +947,7 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t start, Int_t finish, TS
     cout << "\tEvent interval: " << start << " to " << finish << endl;
 
     //Creating a file
-    TFile* ElectronFile = new TFile ( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/QCDfail/SelectedEE_"+Mgr.Tag[0]+name+".root", "RECREATE" );
+    TFile* ElectronFile = new TFile ( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/QCDfail/SelectedEE_"+Mgr.Tag[0]+"_"+name+".root", "RECREATE" );
 
     TTree* ElectronTree = new TTree( "DYTree", "DYTree" );
     // -- Creating LongSelectedEE variables to assign branches -- //
@@ -1073,10 +1073,10 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t start, Int_t finish, TS
     write = ElectronTree->Write();
     if ( write )
     {
-        cout << " Finished." << endl << "Closing a file..." << endl;
+        cout << " Finished." << endl << "\tClosing a file..." << endl;
         ElectronFile->Close();
-        if ( !ElectronFile->IsOpen() ) cout << "\tFile SelectedEE_" << Mgr.Tag[0] << name << ".root has been closed successfully.\n" << endl;
-        else cout << "\tFILE SelectedEE_" << Mgr.Tag[0] << name << ".root COULD NOT BE CLOSED!\n" << endl;
+        if ( !ElectronFile->IsOpen() ) cout << "\tFile SelectedEE_" << Mgr.Tag[0] << "_" << name << ".root has been closed successfully.\n" << endl;
+        else cout << "\tFILE SelectedEE_" << Mgr.Tag[0] << "_" << name << ".root COULD NOT BE CLOSED!\n" << endl;
     }
     else
     {
