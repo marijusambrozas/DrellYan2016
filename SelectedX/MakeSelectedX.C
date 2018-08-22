@@ -60,7 +60,7 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
         if ( HLTname == "DEFAULT" ) HLT = "Ele23Ele12";
         else HLT = HLTname;
         cout << "\n*****   MakeSelectedQCDEM_120to170 ( " << HLT << " )  *****" << endl;
-        Int_t nEvents = 35841780, Step = 100000, min = -1, max = -1 , Iter = 24;
+        Int_t nEvents = 35841780, Step = 50000, min = -1, max = -1 , Iter = 50;
         TString name;
 
         while ( (Iter+1)*Step < nEvents )
