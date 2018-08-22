@@ -1796,7 +1796,7 @@ void FileMgr::GetProc ( Process_t pr, Bool_t ClearOld )
         Type = "DATA";
         BaseLocation = "/xrootd/store/user/dpai/_v2p3_/";
 
-        Tag.push_back( "SingleElectron_B" ); nEvents.push_back( 0 );
+        Tag.push_back( "SingleElectron_B" ); nEvents.push_back( 174105617 );
         Location = "SingleElectron/crab_SingleElectron_RunB/180326_143935/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
@@ -1806,7 +1806,7 @@ void FileMgr::GetProc ( Process_t pr, Bool_t ClearOld )
         Type = "DATA";
         BaseLocation = "/xrootd/store/user/dpai/_v2p3_/";
 
-        Tag.push_back( "SingleElectron_C" ); nEvents.push_back( 0 );
+        Tag.push_back( "SingleElectron_C" ); nEvents.push_back( 93325367 );
         Location = "SingleElectron/crab_SingleElectron_RunC/180326_144015/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
@@ -1816,7 +1816,7 @@ void FileMgr::GetProc ( Process_t pr, Bool_t ClearOld )
         Type = "DATA";
         BaseLocation = "/xrootd/store/user/dpai/_v2p3_/";
 
-        Tag.push_back( "SingleElectron_D" ); nEvents.push_back( 0 );
+        Tag.push_back( "SingleElectron_D" ); nEvents.push_back( 146493465 );
         Location = "SingleElectron/crab_SingleElectron_RunD/180326_144117/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
@@ -1826,7 +1826,7 @@ void FileMgr::GetProc ( Process_t pr, Bool_t ClearOld )
         Type = "DATA";
         BaseLocation = "/xrootd/store/user/dpai/_v2p3_/";
 
-        Tag.push_back( "SingleElectron_E" ); nEvents.push_back( 0 );
+        Tag.push_back( "SingleElectron_E" ); nEvents.push_back( 113168502 );
         Location = "SingleElectron/crab_SingleElectron_RunE/180326_144202/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
@@ -1836,7 +1836,7 @@ void FileMgr::GetProc ( Process_t pr, Bool_t ClearOld )
         Type = "DATA";
         BaseLocation = "/xrootd/store/user/dpai/_v2p3_/";
 
-        Tag.push_back( "SingleElectron_F" ); nEvents.push_back( 0 );
+        Tag.push_back( "SingleElectron_F" ); nEvents.push_back( 70085191 );
         Location = "SingleElectron/crab_SingleElectron_RunF/180326_144247/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
@@ -1846,7 +1846,7 @@ void FileMgr::GetProc ( Process_t pr, Bool_t ClearOld )
         Type = "DATA";
         BaseLocation = "/xrootd/store/user/dpai/_v2p3_/";
 
-        Tag.push_back( "SingleElectron_G" ); nEvents.push_back( 0 );
+        Tag.push_back( "SingleElectron_G" ); nEvents.push_back( 143169219 );
         Location = "SingleElectron/crab_SingleElectron_RunG/180326_144755/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
@@ -1856,11 +1856,11 @@ void FileMgr::GetProc ( Process_t pr, Bool_t ClearOld )
         Type = "DATA";
         BaseLocation = "/xrootd/store/user/dpai/_v2p3_/";
 
-        Tag.push_back( "SingleElectron_Hver2" ); nEvents.push_back( 0 );
+        Tag.push_back( "SingleElectron_Hver2" ); nEvents.push_back( 106262454 );
         Location = "SingleElectron/crab_SingleElectron_RunHver2/180326_144832/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SingleElectron_Hver3" ); nEvents.push_back( 0 );
+        Tag.push_back( "SingleElectron_Hver3" ); nEvents.push_back( 3187483 );
         Location = "SingleElectron/crab_SingleElectron_RunHver3/180326_144908/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
@@ -1870,35 +1870,35 @@ void FileMgr::GetProc ( Process_t pr, Bool_t ClearOld )
         Type = "DATA";
         BaseLocation = "/xrootd/store/user/dpai/_v2p3_/";
 
-        Tag.push_back( "SingleElectron_B" ); nEvents.push_back( 0 );
+        Tag.push_back( "SingleElectron_B" ); nEvents.push_back( 174105617 );
         Location = "SingleElectron/crab_SingleElectron_RunB/180326_143935/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SingleElectron_C" ); nEvents.push_back( 0 );
+        Tag.push_back( "SingleElectron_C" ); nEvents.push_back( 93325367 );
         Location = "SingleElectron/crab_SingleElectron_RunC/180326_144015/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SingleElectron_D" ); nEvents.push_back( 0 );
+        Tag.push_back( "SingleElectron_D" ); nEvents.push_back( 146493465 );
         Location = "SingleElectron/crab_SingleElectron_RunD/180326_144117/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SingleElectron_E" ); nEvents.push_back( 0 );
+        Tag.push_back( "SingleElectron_E" ); nEvents.push_back( 113168502 );
         Location = "SingleElectron/crab_SingleElectron_RunE/180326_144202/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SingleElectron_F" ); nEvents.push_back( 0 );
+        Tag.push_back( "SingleElectron_F" ); nEvents.push_back( 70085191 );
         Location = "SingleElectron/crab_SingleElectron_RunF/180326_144247/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SingleElectron_G" ); nEvents.push_back( 0 );
+        Tag.push_back( "SingleElectron_G" ); nEvents.push_back( 143169219 );
         Location = "SingleElectron/crab_SingleElectron_RunG/180326_144755/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SingleElectron_Hver2" ); nEvents.push_back( 0 );
+        Tag.push_back( "SingleElectron_Hver2" ); nEvents.push_back( 106262454 );
         Location = "SingleElectron/crab_SingleElectron_RunHver2/180326_144832/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SingleElectron_Hver3" ); nEvents.push_back( 0 );
+        Tag.push_back( "SingleElectron_Hver3" ); nEvents.push_back( 3187483 );
         Location = "SingleElectron/crab_SingleElectron_RunHver3/180326_144908/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }

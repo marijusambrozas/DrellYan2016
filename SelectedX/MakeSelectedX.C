@@ -190,7 +190,7 @@ void MakeSelectedEE ( TString type, TString HLTname, Int_t start, Int_t finish )
                 }
                 else continue;
             }
-            myProgressBar_t bar( goTo );
+            myProgressBar_t bar( goTo-startFrom );
 
             // Loop for all events in the chain
             for ( Int_t i=startFrom; i<goTo; i++ )
