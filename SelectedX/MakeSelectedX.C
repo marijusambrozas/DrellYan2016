@@ -24,7 +24,7 @@ void MakeSelectedMuMu ( TString type, TString HLTname );
 void MakeSelectedEMu ( TString type, TString HLTname );
 
 
-void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAULT" )
+void MakeSelectedX ( TString whichX, TString type = "", Int_t start = -1, Int_t finish = -1, TString HLTname = "DEFAULT" )
 {
     TString HLT;
     Int_t Xselected = 0;
@@ -34,7 +34,7 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
         if ( HLTname == "DEFAULT" ) HLT = "Ele23Ele12";
         else HLT = HLTname;
         cout << "\n*******      MakeSelectedEE ( " << type << ", " << HLT << " )      *******" << endl;
-        MakeSelectedEE( type, HLT );
+        MakeSelectedEE( type, HLT, start, finish );
     }
     if ( whichX.Contains("MuMu") || whichX.Contains("mumu") || whichX.Contains("MUMU") )
     {
@@ -59,7 +59,7 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
 
 /// ----------------------------- Electron Channel ------------------------------ ///
 //void MakeSelectedEE ( Int_t type, Int_t Num = 100, Int_t isTopPtReweighting = 0, TString HLTname = "Ele23Ele12" )
-void MakeSelectedEE ( TString type, TString HLTname )
+void MakeSelectedEE ( TString type, TString HLTname, Int_t start, Int_t finish )
 {
     // -- Run2016 luminosity [/pb] -- //
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
@@ -121,7 +121,6 @@ void MakeSelectedEE ( TString type, TString HLTname )
 //        ElectronTree->Branch( "Electron_Energy", &EE.Electron_Energy );
 //        ElectronTree->Branch( "Electron_charge", &EE.Electron_charge );
 
-
         Int_t Ntup = Mgr.FullLocation.size();
 
         // Loop for all samples in a process
@@ -129,8 +128,6 @@ void MakeSelectedEE ( TString type, TString HLTname )
         {           
             TStopwatch looptime;
             looptime.Start();
-
-            if ( Mgr.CurrentProc == _QCDEMEnriched_120to170 && i_tup == 0 ) continue; // Something crashes here
 
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
@@ -183,8 +180,20 @@ void MakeSelectedEE ( TString type, TString HLTname )
             myProgressBar_t bar( NEvents );
             Int_t timesPassed = 0;
 
+            Int_t startFrom = 0;
+            Int_t goTo = NEvents;
+            if ( Mgr.CurrentProc == _QCDEMEnriched_120to170 )
+            {
+                if ( i_tup == 0 && startFrom > -1 && finish > start )  // Something crashes here
+                {
+                    startFrom = start;
+                    goTo = finish;
+                }
+                else continue;
+            }
+
             // Loop for all events in the chain
-            for ( Int_t i=0; i<NEvents; i++ )
+            for ( Int_t i=startFrom; i<goTo; i++ )
             {
                 ntuple->GetEvent(i);
 

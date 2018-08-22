@@ -849,7 +849,7 @@ void FileMgr::GetProc ( Process_t pr, Bool_t ClearOld )
         BaseLocation = "/xrootd/store/user/dpai/_v2p3_/";
 
         Tag.push_back( "ZZ" ); Xsec.push_back( 16.523 ); Wsum.push_back( 998034.0 ); nEvents.push_back( 998034 );
-        Location = "ZZ_TuneCUETP8M1_13TeV-pythia8/crab_ZZ/180326_143627/0000/*.root";                  // NOT SURE (there also is ZZTo4L), but probably ok
+        Location = "ZZ_TuneCUETP8M1_13TeV-pythia8/crab_ZZ/180326_143627/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _WZ )
@@ -859,7 +859,7 @@ void FileMgr::GetProc ( Process_t pr, Bool_t ClearOld )
         BaseLocation = "/xrootd/store/user/dpai/_v2p3_/";
 
         Tag.push_back( "WZ" ); Xsec.push_back( 47.13 ); Wsum.push_back( 2995828.0 ); nEvents.push_back( 2995828 );
-        Location = "WZ_TuneCUETP8M1_13TeV-pythia8/crab_WZ/180326_143414/0000/*.root";                  // NOT SURE (there also is WZTo3LNu), but probably ok
+        Location = "WZ_TuneCUETP8M1_13TeV-pythia8/crab_WZ/180326_143414/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _WW )
@@ -869,7 +869,7 @@ void FileMgr::GetProc ( Process_t pr, Bool_t ClearOld )
         BaseLocation = "/xrootd/store/user/dpai/_v2p3_/";
 
         Tag.push_back( "WW" ); Xsec.push_back( 118.7 ); Wsum.push_back( 6987123.0 ); nEvents.push_back( 6987123 );
-        Location = "WW_TuneCUETP8M1_13TeV-pythia8/crab_WW/180326_143237/0000/*.root";                  // NOT SURE (there also is WWTo2L2Nu), but probably ok
+        Location = "WW_TuneCUETP8M1_13TeV-pythia8/crab_WW/180326_143237/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _VVnST )
@@ -887,15 +887,15 @@ void FileMgr::GetProc ( Process_t pr, Bool_t ClearOld )
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "ZZ" ); Xsec.push_back( 16.523 ); Wsum.push_back( 998034.0 ); nEvents.push_back( 998034 );
-        Location = "ZZ_TuneCUETP8M1_13TeV-pythia8/crab_ZZ/180326_143627/0000/*.root";                  // NOT SURE (there also is ZZTo4L), but probably ok
+        Location = "ZZ_TuneCUETP8M1_13TeV-pythia8/crab_ZZ/180326_143627/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "WZ" ); Xsec.push_back( 47.13 ); Wsum.push_back( 2995828.0 ); nEvents.push_back( 2995828 );
-        Location = "WZ_TuneCUETP8M1_13TeV-pythia8/crab_WZ/180326_143414/0000/*.root";                  // NOT SURE (there also is WZTo3LNu), but probably ok
+        Location = "WZ_TuneCUETP8M1_13TeV-pythia8/crab_WZ/180326_143414/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "WW" ); Xsec.push_back( 118.7 ); Wsum.push_back( 6987123.0 ); nEvents.push_back( 6987123 );
-        Location = "WW_TuneCUETP8M1_13TeV-pythia8/crab_WW/180326_143237/0000/*.root";                  // NOT SURE (there also is WWTo2L2Nu), but probably ok
+        Location = "WW_TuneCUETP8M1_13TeV-pythia8/crab_WW/180326_143237/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _WJets )
@@ -2394,8 +2394,8 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
                 }
                 else
                 {
-                    Result.push_back(_DYEE_Full);
-                    if ( notify == kTRUE ) cout << Procname[_DYEE_Full] << "." << endl;
+                    Result.push_back(_DYTauTau_Full);
+                    if ( notify == kTRUE ) cout << Procname[_DYTauTau_Full] << "." << endl;
                 }
             }
 
