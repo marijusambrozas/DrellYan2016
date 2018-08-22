@@ -19,12 +19,14 @@
 #include "./header/myProgressBar_t.h"
 #include "./header/FileMgr.h"
 
-void MakeSelectedEE ( TString type, TString HLTname, Int_t start, Int_t finish );
+void MakeSelectedEE ( TString type, TString HLTname );
 void MakeSelectedMuMu ( TString type, TString HLTname );
 void MakeSelectedEMu ( TString type, TString HLTname );
 
+void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t start, Int_t finish, TString name );
 
-void MakeSelectedX ( TString whichX, TString type = "", Int_t start = -1, Int_t finish = -1, TString HLTname = "DEFAULT" )
+
+void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAULT" )
 {
     TString HLT;
     Int_t Xselected = 0;
@@ -33,8 +35,8 @@ void MakeSelectedX ( TString whichX, TString type = "", Int_t start = -1, Int_t 
         Xselected++;
         if ( HLTname == "DEFAULT" ) HLT = "Ele23Ele12";
         else HLT = HLTname;
-        cout << "\n*******      MakeSelectedEE ( " << type << ", " << HLT << ", " << start << ", " << finish << " )      *******" << endl;
-        MakeSelectedEE( type, HLT, start, finish );
+        cout << "\n*******      MakeSelectedEE ( " << type << ", " << HLT << " )      *******" << endl;
+        MakeSelectedEE( type, HLT );
     }
     if ( whichX.Contains("MuMu") || whichX.Contains("mumu") || whichX.Contains("MUMU") )
     {
@@ -52,6 +54,34 @@ void MakeSelectedX ( TString whichX, TString type = "", Int_t start = -1, Int_t 
         cout << "\n*****   MakeSelectedEMu ( " << type << ", " << HLT << " )  *****" << endl;
         MakeSelectedEMu( type, HLT );
     }
+    if ( whichX.Contains("QCD") )
+    {
+        Xselected++;
+        if ( HLTname == "DEFAULT" ) HLT = "Ele23Ele12";
+        else HLT = HLTname;
+        cout << "\n*****   MakeSelectedQCDEM_120to170 ( " << HLT << " )  *****" << endl;
+        Int_t nEvents = 35841780, Step = 400000, min = -1, max = -1 , Iter = 0;
+        TString name;
+
+        while ( (Iter+1)*Step < nEvents )
+        {
+            stringstream ss;
+            ss << Iter;
+            name = ss.str();
+
+            min = Iter++ * Step;
+            max = Iter * Step;
+//            MakeSelectedQCDEM_120to170( HLT, min, max, name );
+            cout << min << "\t" << max << "\t" << name << endl;
+        }
+        stringstream ss;
+        ss << Iter;
+        name = ss.str();
+        min = Iter * Step;
+        max = nEvents;
+//        MakeSelectedQCDEM_120to170( HLT, min, nEvents, name );
+        cout << min << "\t" << max << "\t" << name << endl;
+    }
     if ( Xselected == 0 ) cout << "Wrong arument!" << endl;
 
 } // End of MakeSelectedX()
@@ -59,7 +89,7 @@ void MakeSelectedX ( TString whichX, TString type = "", Int_t start = -1, Int_t 
 
 /// ----------------------------- Electron Channel ------------------------------ ///
 //void MakeSelectedEE ( Int_t type, Int_t Num = 100, Int_t isTopPtReweighting = 0, TString HLTname = "Ele23Ele12" )
-void MakeSelectedEE ( TString type, TString HLTname, Int_t start, Int_t finish )
+void MakeSelectedEE ( TString type, TString HLTname )
 {
     // -- Run2016 luminosity [/pb] -- //
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
@@ -179,21 +209,12 @@ void MakeSelectedEE ( TString type, TString HLTname, Int_t start, Int_t finish )
             cout << "\t[Total Events: " << NEvents << "]" << endl;           
             Int_t timesPassed = 0;
 
-            Int_t startFrom = 0;
-            Int_t goTo = NEvents;
-            if ( Mgr.CurrentProc == _QCDEMEnriched_120to170 )
-            {
-                if ( i_tup == 0 && startFrom > -1 && finish > start )  // Something crashes here
-                {
-                    startFrom = start;
-                    goTo = finish;
-                }
-                else continue;
-            }
-            myProgressBar_t bar( goTo-startFrom );
+            if ( Mgr.CurrentProc == _QCDEMEnriched_120to170 && i_tup == 0 ) continue; // Something crashes here
+
+            myProgressBar_t bar( NEvents );
 
             // Loop for all events in the chain
-            for ( Int_t i=startFrom; i<goTo; i++ )
+            for ( Int_t i=0; i<NEvents; i++ )
             {
                 ntuple->GetEvent(i);
 
@@ -273,7 +294,7 @@ void MakeSelectedEE ( TString type, TString HLTname, Int_t start, Int_t finish )
 
                 } // End of if( isTriggered )
 
-                bar.Draw(i-startFrom);
+                bar.Draw(i);
             } // End of event iteration
 
             cout << "\t" << timesPassed << " events have passed the event selection." << endl;
@@ -907,3 +928,163 @@ void MakeSelectedEMu ( TString type, TString HLTname )
     cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
 
 }// End of MakeSelectedEMu
+
+
+/// ----------------------------- For QCD file that fails ------------------------------ ///
+void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t start, Int_t finish, TString name )
+{
+    TStopwatch totaltime;
+    totaltime.Start();
+
+    DYAnalyzer *analyzer = new DYAnalyzer( HLTname );
+
+    FileMgr Mgr( _QCDEMEnriched_120to170 );
+
+    cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
+    cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
+
+    cout << "\t<" << Mgr.Tag[0] << ">" << endl;
+    cout << "\tEvent interval: " << start << " to " << finish << endl;
+
+    //Creating a file
+    TFile* ElectronFile = new TFile ( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/QCDfail/SelectedEE_"+Mgr.Tag[0]+name+".root", "RECREATE" );
+
+    TTree* ElectronTree = new TTree( "DYTree", "DYTree" );
+    // -- Creating LongSelectedEE variables to assign branches -- //
+    SelectedEE_t EE; EE.CreateNew();
+
+    ElectronTree->Branch( "isSelPassed", &EE.isSelPassed );
+    ElectronTree->Branch( "nPileUp", &EE.nPileUp );
+    ElectronTree->Branch( "GENEvt_weight", &EE.GENEvt_weight );
+    ElectronTree->Branch( "Electron_InvM", &EE.Electron_InvM );
+    ElectronTree->Branch( "Electron_pT", &EE.Electron_pT );
+    ElectronTree->Branch( "Electron_eta", &EE.Electron_eta );
+    ElectronTree->Branch( "Electron_phi", &EE.Electron_phi );
+    ElectronTree->Branch( "Electron_Energy", &EE.Electron_Energy );
+    ElectronTree->Branch( "Electron_charge", &EE.Electron_charge );
+
+    TChain *chain = new TChain( Mgr.TreeName[0] );
+    chain->Add( Mgr.FullLocation[0] );
+
+    NtupleHandle *ntuple = new NtupleHandle( chain );
+    if ( Mgr.isMC == kTRUE )
+    {
+        ntuple->TurnOnBranches_GenLepton(); // for all leptons
+        ntuple->TurnOnBranches_GenOthers(); // for quarks
+    }
+    ntuple->TurnOnBranches_Electron();
+
+    Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
+
+    Int_t timesPassed = 0;
+
+    myProgressBar_t bar( finish-start );
+
+    // Loop for all events in the chain
+    for ( Int_t i=start; i<finish; i++ )
+    {
+        ntuple->GetEvent(i);
+
+        // -- Positive/Negative Gen-weights -- //
+        ntuple->GENEvt_weight < 0 ? EE.GENEvt_weight = -1 : EE.GENEvt_weight = 1;
+        SumWeight += EE.GENEvt_weight;
+        SumWeightRaw += ntuple->GENEvt_weight;
+
+        // -- Separate DYLL samples -- //
+        Bool_t GenFlag = kFALSE;
+        GenFlag = analyzer->SeparateDYLLSample_isHardProcess( Mgr.Tag[0], ntuple );
+
+        // -- Separate ttbar samples -- //
+        Bool_t GenFlag_top = kFALSE;
+        vector<GenOthers> GenTopCollection;
+        GenFlag_top = analyzer->Separate_ttbarSample( Mgr.Tag[0], ntuple, &GenTopCollection );
+
+        if ( GenFlag == kTRUE && GenFlag_top == kTRUE ) SumWeight_Separated += EE.GENEvt_weight;
+
+        Bool_t TriggerFlag = kFALSE;
+        TriggerFlag = ntuple->isTriggered( analyzer->HLT );
+
+        if ( TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE )
+        {
+            // -- Reco level selection -- //
+            vector< Electron > ElectronCollection;
+            Int_t NLeptons = ntuple->Nelectrons;
+            for ( Int_t i_reco=0; i_reco<NLeptons; i_reco++ )
+            {
+                Electron ele;
+                ele.FillFromNtuple( ntuple, i_reco );
+                ElectronCollection.push_back( ele );
+            }
+
+            // -- Event Selection -- //
+            vector< Electron > SelectedElectronCollection;
+            vector< Int_t > Sel_Index; // Ntuple indexes of electrons that passed the selection
+            Bool_t isPassEventSelection = kFALSE;
+            isPassEventSelection = analyzer->EventSelection_ElectronChannel( ElectronCollection, ntuple, &SelectedElectronCollection, &Sel_Index );
+
+            if ( isPassEventSelection == kTRUE )
+            {
+                timesPassed++;
+                Electron ele1 = SelectedElectronCollection[0];
+                Electron ele2 = SelectedElectronCollection[1];
+
+                EE.isSelPassed = kTRUE;
+                EE.nPileUp = ntuple->nPileUp;
+                EE.Electron_InvM = ( ele1.Momentum + ele2.Momentum ).M();
+
+                if ( Sel_Index.size() != 2 ) cout << "======== ERROR: The number of electrons saved is not 2 ========" << endl;
+                else
+                {
+                    for ( UInt_t iter=0; iter<Sel_Index.size(); iter++ )
+                    {
+                        Int_t index = Sel_Index[iter];
+
+                        EE.Electron_pT->push_back( ntuple->Electron_pT[index] );
+                        EE.Electron_eta->push_back( ntuple->Electron_eta[index] );
+                        EE.Electron_phi->push_back( ntuple->Electron_phi[index] );
+                        EE.Electron_Energy->push_back( ntuple->Electron_Energy[index] );
+                        EE.Electron_charge->push_back( ntuple->Electron_charge[index] );
+
+                    } // End of vector filling
+
+                } // End of else()
+
+                ElectronTree->Fill();
+
+                EE.Electron_pT->clear();
+                EE.Electron_eta->clear();
+                EE.Electron_phi->clear();
+                EE.Electron_Energy->clear();
+                EE.Electron_charge->clear();
+
+            } // End of event selection
+
+        } // End of if( isTriggered )
+
+        bar.Draw( i-start );
+    } // End of event iteration
+
+    cout << "\t" << timesPassed << " events have passed the event selection." << endl;
+
+    // Writing
+    ElectronFile->cd();
+    cout << "\tWriting into file...";
+    Int_t write;
+    write = ElectronTree->Write();
+    if ( write )
+    {
+        cout << " Finished." << endl << "Closing a file..." << endl;
+        ElectronFile->Close();
+        if ( !ElectronFile->IsOpen() ) cout << "\tFile SelectedEE_" << Mgr.Tag[0] << name << ".root has been closed successfully.\n" << endl;
+        else cout << "\tFILE SelectedEE_" << Mgr.Tag[0] << name << ".root COULD NOT BE CLOSED!\n" << endl;
+    }
+    else
+    {
+        cout << " Writing was NOT successful!\n" << endl;
+        ElectronFile->Close();
+    }
+
+    Double_t TotalRunTime = totaltime.CpuTime();
+    cout << "RunTime: " << TotalRunTime << " seconds" << endl;
+
+} // End of MakeSelectedQCDEM_120to170
