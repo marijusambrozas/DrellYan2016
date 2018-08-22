@@ -1,0 +1,12 @@
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_DoubleEG_B_0000.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_DoubleEG_B_0001.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_DoubleEG_C.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_DoubleEG_D.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_DoubleEG_E.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_DoubleEG_F.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_DoubleEG_G_0000.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_DoubleEG_G_0001.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_DoubleEG_Hver2_0000.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_DoubleEG_Hver2_0001.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_DoubleEG_Hver3.root
+

@@ -27,13 +27,14 @@ for f in `cat $@` ; do
 
 #    mkdir ${destPath}/$dpath1 2>/dev/null
 #    mkdir ${destPath}/$dpath2 2>/dev/null
-    echo "Start download?"
-    read isOk
-    if [[ "$isOk" == "y" || "$isOk" == "yes" ]] ; then
+
+#    echo "Start download?"
+#    read isOk
+#    if [[ "$isOk" == "y" || "$isOk" == "yes" ]] ; then
          ${eos} root://$server//$f ${destPath}$d
-    elif [[ "$isOk" == "n" || "$isOk" == "no" ]] ; then
-	echo "Uh.. Ok."
-    else
-        echo "Type \"yes\" or \"no\""
-    fi
+#    elif [[ "$isOk" == "n" || "$isOk" == "no" ]] ; then
+#	echo "Uh.. Ok."
+#    else
+#        echo "Type \"yes\" or \"no\""
+#    fi
 done

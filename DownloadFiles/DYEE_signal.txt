@@ -1,3 +1,0 @@
-/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_DYEE_M10to50.root
-/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_DYEE_M50to100.root
-/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_DYEE_M100toInf.root

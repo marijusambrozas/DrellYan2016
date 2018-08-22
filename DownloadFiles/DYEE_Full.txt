@@ -1,0 +1,15 @@
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_DYEE_M10to50_v1.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_DYEE_M10to50_v2.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_DYEE_M10to50_ext1v1.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_DYEE_M50to100.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_DYEE_M100to200.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_DYEE_M100to200_ext.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_DYEE_M200to400.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_DYEE_M400to500.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_DYEE_M500to700.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_DYEE_M700to800.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_DYEE_M800to1000.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_DYEE_M1000to1500.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_DYEE_M1500to2000.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_DYEE_M2000to3000.root
+

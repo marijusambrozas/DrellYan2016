@@ -1,0 +1,10 @@
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_SingleElectron_B.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_SingleElectron_C.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_SingleElectron_D.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_SingleElectron_E.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_SingleElectron_F.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_SingleElectron_G.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_SingleElectron_Hver2.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_SingleElectron_Hver3.root
+
+
