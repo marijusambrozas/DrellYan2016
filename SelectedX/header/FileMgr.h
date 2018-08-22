@@ -180,6 +180,7 @@ void FileMgr::GetProc ( Process_t pr, Bool_t ClearOld )
     else if( pr == _DY_50to100 )
     {
         isMC = kTRUE;
+        Type = "SIGNAL";
         BaseLocation = "/xrootd/store/user/dpai/_v2p3_/";
 
         Tag.push_back( "DY_M50to100" ); Xsec.push_back( 5869.58346 ); Wsum.push_back( 81780984 ); nEvents.push_back( 122055296 );
