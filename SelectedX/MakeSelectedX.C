@@ -71,16 +71,16 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
 
             min = Iter++ * Step;
             max = Iter * Step;
-//            MakeSelectedQCDEM_120to170( HLT, min, max, name );
-            cout << min << "\t" << max << "\t" << name << endl;
+            MakeSelectedQCDEM_120to170( HLT, min, max, name );
+//            cout << min << "\t" << max << "\t" << name << endl;
         }
         stringstream ss;
         ss << Iter;
         name = ss.str();
         min = Iter * Step;
         max = nEvents;
-//        MakeSelectedQCDEM_120to170( HLT, min, nEvents, name );
-        cout << min << "\t" << max << "\t" << name << endl;
+        MakeSelectedQCDEM_120to170( HLT, min, nEvents, name );
+//        cout << min << "\t" << max << "\t" << name << endl;
     }
     if ( Xselected == 0 ) cout << "Wrong arument!" << endl;
 
