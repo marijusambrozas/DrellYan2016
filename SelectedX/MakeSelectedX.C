@@ -176,8 +176,7 @@ void MakeSelectedEE ( TString type, TString HLTname, Int_t start, Int_t finish )
 
             Int_t NEvents = chain->GetEntries();
     //        Int_t NEvents = 10000;		// test using few events
-            cout << "\t[Total Events: " << NEvents << "]" << endl;
-            myProgressBar_t bar( NEvents );
+            cout << "\t[Total Events: " << NEvents << "]" << endl;           
             Int_t timesPassed = 0;
 
             Int_t startFrom = 0;
@@ -191,6 +190,7 @@ void MakeSelectedEE ( TString type, TString HLTname, Int_t start, Int_t finish )
                 }
                 else continue;
             }
+            myProgressBar_t bar( goTo );
 
             // Loop for all events in the chain
             for ( Int_t i=startFrom; i<goTo; i++ )
