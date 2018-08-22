@@ -19,7 +19,7 @@
 #include "./header/myProgressBar_t.h"
 #include "./header/FileMgr.h"
 
-void MakeSelectedEE ( TString type, TString HLTname );
+void MakeSelectedEE ( TString type, TString HLTname, Int_t start, Int_t finish );
 void MakeSelectedMuMu ( TString type, TString HLTname );
 void MakeSelectedEMu ( TString type, TString HLTname );
 
@@ -33,7 +33,7 @@ void MakeSelectedX ( TString whichX, TString type = "", Int_t start = -1, Int_t 
         Xselected++;
         if ( HLTname == "DEFAULT" ) HLT = "Ele23Ele12";
         else HLT = HLTname;
-        cout << "\n*******      MakeSelectedEE ( " << type << ", " << HLT << " )      *******" << endl;
+        cout << "\n*******      MakeSelectedEE ( " << type << ", " << HLT << ", " << start << ", " << finish << " )      *******" << endl;
         MakeSelectedEE( type, HLT, start, finish );
     }
     if ( whichX.Contains("MuMu") || whichX.Contains("mumu") || whichX.Contains("MUMU") )
