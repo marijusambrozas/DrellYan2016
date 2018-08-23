@@ -150,6 +150,8 @@ void MakeSelectedEE ( TString type, TString HLTname )
             TStopwatch looptime;
             looptime.Start();
 
+            if ( Mgr.CurrentProc == _QCDEMEnriched_120to170 && i_tup == 0 ) continue; // Something crashes here
+
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
             //Creating a file
@@ -198,9 +200,7 @@ void MakeSelectedEE ( TString type, TString HLTname )
             Int_t NEvents = chain->GetEntries();
     //        Int_t NEvents = 10000;		// test using few events
             cout << "\t[Total Events: " << NEvents << "]" << endl;           
-            Int_t timesPassed = 0;
-
-            if ( Mgr.CurrentProc == _QCDEMEnriched_120to170 && i_tup == 0 ) continue; // Something crashes here
+            Int_t timesPassed = 0;           
 
             myProgressBar_t bar( NEvents );
 
