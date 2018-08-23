@@ -26,7 +26,7 @@ void MakeSelectedEMu ( TString type, TString HLTname );
 void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name );
 
 
-void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAULT" )
+void MakeSelectedX ( TString whichX, TString type = "", Int_t begin, Int_t end, TString HLTname = "DEFAULT" )
 {
     TString HLT;
     Int_t Xselected = 0;
@@ -59,7 +59,7 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
         Xselected++;
         if ( HLTname == "DEFAULT" ) HLT = "Ele23Ele12";
         else HLT = HLTname;      
-        for ( Int_t name = 0; name <= 316; name++ )
+        for ( Int_t name = begin; name <= end; name++ )
         {
             cout << "\n*****   MakeSelectedQCDEM_120to170 ( skim_" << name << ", " << HLT << " )  *****" << endl;
             MakeSelectedQCDEM_120to170( HLT, name );
@@ -927,7 +927,7 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name )
     cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
 
     cout << "\t<" << Mgr.Tag[0] << ">" << endl;
-    cout << "\tntuple_skim_ " << name << ".root" << endl;
+    cout << "\tntuple_skim_" << name << ".root" << endl;
 
     stringstream ss;
     ss << name;
@@ -967,6 +967,7 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name )
 
     Int_t nEvents = chain->GetEntries();
     myProgressBar_t bar( nEvents );
+    cout << "\tNumber of events: " << nEvents << endl;
 
     // Loop for all events in the chain
     for ( Int_t i=0; i<nEvents; i++ )
