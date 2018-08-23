@@ -111,8 +111,8 @@ void MakeLongSelectedEE ( TString HLTname )
 //    //if( type == 61 ) Type = "QCDEMEnriched";
 
     //Creating a file
-    TFile* ElectronFile = new TFile("/media/sf_DATA/test/"+OutputName, "RECREATE");
-    TTree* ElectronTree = new TTree("DYTree", "DYTree");
+    TFile* ElectronFile = new TFile( "/media/sf_DATA/test/"+OutputName, "RECREATE" );
+    TTree* ElectronTree = new TTree( "DYTree", "DYTree" );
 
 
     TTimeStamp ts_start;
@@ -213,7 +213,7 @@ void MakeLongSelectedEE ( TString HLTname )
 //    ElectronTree->Branch("Electron_passMVAID_WP90", &EE.Electron_passMVAID_WP90);
 //    ElectronTree->Branch("Electron_passHEEPID", &EE.Electron_passHEEPID);
 
-    //Loop for all samples
+    // Loop for all samples
 //	const Int_t Ntup = ntupleDirectory.size();
     const Int_t Ntup = 1;       //Using just 1 ntuple for test
     for(Int_t i_tup = 0; i_tup<Ntup; i_tup++)
