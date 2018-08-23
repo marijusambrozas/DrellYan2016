@@ -24,9 +24,10 @@ void MakeSelectedMuMu ( TString type, TString HLTname );
 void MakeSelectedEMu ( TString type, TString HLTname );
 
 void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name );
+void MakeSelectedQCDEM_120to170_merged();
 
 
-void MakeSelectedX ( TString whichX, TString type = "", Int_t begin = 1, Int_t end = 316, TString HLTname = "DEFAULT" )
+void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAULT" )
 {
     TString HLT;
     Int_t Xselected = 0;
@@ -54,16 +55,23 @@ void MakeSelectedX ( TString whichX, TString type = "", Int_t begin = 1, Int_t e
         cout << "\n*****   MakeSelectedEMu ( " << type << ", " << HLT << " )  *****" << endl;
         MakeSelectedEMu( type, HLT );
     }
-    if ( whichX.Contains("QCD") )
+    if ( whichX.Contains("QCDfail") )   // To run through QCDEMEnriched_pT120to170 file that crashes
     {
         Xselected++;
         if ( HLTname == "DEFAULT" ) HLT = "Ele23Ele12";
         else HLT = HLTname;      
-        for ( Int_t name = begin; name <= end; name++ )
+        for ( Int_t name = 1; name <= 316; name++ )
         {
-            cout << "\n*****   MakeSelectedQCDEM_120to170 ( skim_" << name << ", " << HLT << " )  *****" << endl;
+            if ( name == 116 ) continue;
+            cout << "\n** MakeSelectedQCDEM_120to170 ( skim_" << name << ", " << HLT << " ) **" << endl;
             MakeSelectedQCDEM_120to170( HLT, name );
         }
+    }
+    if ( whichX.Contains("QCDmerge") ) // to merge 316-1(that fails) selected QCD files
+    {
+        Xselected++;
+        cout << "\n****   MakeSelectedQCDEM_120to170()   ****" << endl;
+        MakeSelectedQCDEM_120to170_merged();
     }
     if ( Xselected == 0 ) cout << "Wrong arument!" << endl;
 
@@ -1077,3 +1085,106 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name )
     cout << "RunTime: " << TotalRunTime << " seconds" << endl;
 
 } // End of MakeSelectedQCDEM_120to170
+
+/// ----------------------------- To merge small selected QCD files ------------------------------ ///
+void MakeSelectedQCDEM_120to170_merged()
+{
+    TStopwatch totaltime;
+    totaltime.Start();
+
+    FileMgr Mgr( _QCDEMEnriched_120to170 );
+
+    cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
+    cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
+
+    cout << "\t<" << Mgr.Tag[0] << ">" << endl;
+    cout << "\tMerging all selected events from ntuples that didn't fail into a single file:" << endl;
+
+    //Creating a file
+    TFile* ElectronFile = new TFile ( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Mgr.Tag[0]+".root", "RECREATE" );
+
+    TTree* ElectronTree = new TTree( "DYTree", "DYTree" );
+    // -- Creating LongSelectedEE variables to assign branches -- //
+    SelectedEE_t EE; EE.CreateNew();
+
+    ElectronTree->Branch( "isSelPassed", &EE.isSelPassed );
+    ElectronTree->Branch( "nPileUp", &EE.nPileUp );
+    ElectronTree->Branch( "GENEvt_weight", &EE.GENEvt_weight );
+    ElectronTree->Branch( "Electron_InvM", &EE.Electron_InvM );
+    ElectronTree->Branch( "Electron_pT", &EE.Electron_pT );
+    ElectronTree->Branch( "Electron_eta", &EE.Electron_eta );
+    ElectronTree->Branch( "Electron_phi", &EE.Electron_phi );
+    ElectronTree->Branch( "Electron_Energy", &EE.Electron_Energy );
+    ElectronTree->Branch( "Electron_charge", &EE.Electron_charge );
+
+    TChain *chain = new TChain( "DYTree" );
+    chain->Add( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/QCDfail/*.root" );
+
+    SelectedEE_t* QCD_EE = new SelectedEE_t();
+    QCD_EE->CreateFromChain( chain );
+
+    Int_t nEvents = chain->GetEntries();
+    myProgressBar_t bar( nEvents );
+    cout << "\tNumber of events: " << nEvents << endl;
+
+    // Loop for all events in the chain
+    for ( Int_t i=0; i<nEvents; i++ )
+    {
+        QCD_EE->GetEvent(i);
+
+        if ( QCD_EE->isSelPassed == kTRUE )
+        {
+            EE.isSelPassed = kTRUE;
+            EE.nPileUp = QCD_EE->nPileUp;
+            EE.Electron_InvM = QCD_EE->Electron_InvM;
+
+            if ( QCD_EE->Electron_charge->size() != 2 ) cout << "======== ERROR: Vector sizes are not 2 ========" << endl;
+            else
+            {
+                for ( UInt_t iter=0; iter<2; iter++ )
+                {
+                    EE.Electron_pT->push_back( QCD_EE->Electron_pT->at(iter) );
+                    EE.Electron_eta->push_back( QCD_EE->Electron_eta->at(iter) );
+                    EE.Electron_phi->push_back( QCD_EE->Electron_phi->at(iter) );
+                    EE.Electron_Energy->push_back( QCD_EE->Electron_Energy->at(iter) );
+                    EE.Electron_charge->push_back( QCD_EE->Electron_charge->at(iter) );
+
+                } // End of vector filling
+
+            } // End of else()
+
+            ElectronTree->Fill();
+
+            EE.Electron_pT->clear();
+            EE.Electron_eta->clear();
+            EE.Electron_phi->clear();
+            EE.Electron_Energy->clear();
+            EE.Electron_charge->clear();
+
+        } // End of event selection
+
+        bar.Draw(i);
+    } // End of event iteration
+
+    // Writing
+    ElectronFile->cd();
+    cout << "\tWriting into file...";
+    Int_t write;
+    write = ElectronTree->Write();
+    if ( write )
+    {
+        cout << " Finished." << endl << "\tClosing a file..." << endl;
+        ElectronFile->Close();
+        if ( !ElectronFile->IsOpen() ) cout << "\tFile SelectedEE_" << Mgr.Tag[0] << ".root has been closed successfully.\n" << endl;
+        else cout << "\tFILE SelectedEE_" << Mgr.Tag[0] << ".root COULD NOT BE CLOSED!\n" << endl;
+    }
+    else
+    {
+        cout << " Writing was NOT successful!\n" << endl;
+        ElectronFile->Close();
+    }
+
+    Double_t TotalRunTime = totaltime.CpuTime();
+    cout << "RunTime: " << TotalRunTime << " seconds" << endl;
+
+} // End of MakeSelectedQCDEM_120to170_merged
