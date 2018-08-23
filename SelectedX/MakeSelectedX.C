@@ -23,7 +23,7 @@ void MakeSelectedEE ( TString type, TString HLTname );
 void MakeSelectedMuMu ( TString type, TString HLTname );
 void MakeSelectedEMu ( TString type, TString HLTname );
 
-void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t start, Int_t finish, TString name );
+void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name );
 
 
 void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAULT" )
@@ -59,28 +59,11 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
         Xselected++;
         if ( HLTname == "DEFAULT" ) HLT = "Ele23Ele12";
         else HLT = HLTname;
-        cout << "\n*****   MakeSelectedQCDEM_120to170 ( " << HLT << " )  *****" << endl;
-        Int_t nEvents = 35841780, Step = 10000, min = -1, max = -1 , Iter = 250;
-        TString name;
-
-        while ( (Iter+1)*Step < nEvents )
+        cout << "\n*****   MakeSelectedQCDEM_120to170 ( skim_" << name << ", " << HLT << " )  *****" << endl;
+        for ( Int_t name = 0; name <= 316; name++ )
         {
-            stringstream ss;
-            ss << Iter;
-            name = ss.str();
-
-            min = Iter++ * Step;
-            max = Iter * Step;
-            MakeSelectedQCDEM_120to170( HLT, min, max, name );
-//            cout << min << "\t" << max << "\t" << name << endl;
+            MakeSelectedQCDEM_120to170( HLT, name );
         }
-        stringstream ss;
-        ss << Iter;
-        name = ss.str();
-        min = Iter * Step;
-        max = nEvents;
-        MakeSelectedQCDEM_120to170( HLT, min, nEvents, name );
-//        cout << min << "\t" << max << "\t" << name << endl;
     }
     if ( Xselected == 0 ) cout << "Wrong arument!" << endl;
 
@@ -931,7 +914,7 @@ void MakeSelectedEMu ( TString type, TString HLTname )
 
 
 /// ----------------------------- For QCD file that fails ------------------------------ ///
-void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t start, Int_t finish, TString name )
+void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name )
 {
     TStopwatch totaltime;
     totaltime.Start();
@@ -944,10 +927,14 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t start, Int_t finish, TS
     cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
 
     cout << "\t<" << Mgr.Tag[0] << ">" << endl;
-    cout << "\tEvent interval: " << start << " to " << finish << endl;
+    cout << "\tntuple_skim_ " << name << ".root" << endl;
+
+    stringstream ss;
+    ss << name;
+    TString Name = ss.str();
 
     //Creating a file
-    TFile* ElectronFile = new TFile ( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/QCDfail/SelectedEE_"+Mgr.Tag[0]+"_"+name+".root", "RECREATE" );
+    TFile* ElectronFile = new TFile ( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/QCDfail/SelectedEE_"+Mgr.Tag[0]+"_"+Name+".root", "RECREATE" );
 
     TTree* ElectronTree = new TTree( "DYTree", "DYTree" );
     // -- Creating LongSelectedEE variables to assign branches -- //
@@ -964,7 +951,7 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t start, Int_t finish, TS
     ElectronTree->Branch( "Electron_charge", &EE.Electron_charge );
 
     TChain *chain = new TChain( Mgr.TreeName[0] );
-    chain->Add( Mgr.FullLocation[0] );
+    chain->Add( Mgr.BaseLocation+"QCD_Pt-120to170_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt120to170/180326_145602/0000/ntuple_skim_"+Name+".root" );
 
     NtupleHandle *ntuple = new NtupleHandle( chain );
     if ( Mgr.isMC == kTRUE )
@@ -976,12 +963,13 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t start, Int_t finish, TS
 
     Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
 
-    Int_t timesPassed = 0;
+    Int_t timesPassed = 0;    
 
-    myProgressBar_t bar( finish-start );
+    Int_t nEvents = chain->GetEntries();
+    myProgressBar_t bar( nEvents );
 
     // Loop for all events in the chain
-    for ( Int_t i=start; i<finish; i++ )
+    for ( Int_t i=0; i<nEvents; i++ )
     {
         ntuple->GetEvent(i);
 
@@ -1061,7 +1049,7 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t start, Int_t finish, TS
 
         } // End of if( isTriggered )
 
-        bar.Draw( i-start );
+        bar.Draw(i);
     } // End of event iteration
 
     cout << "\t" << timesPassed << " events have passed the event selection." << endl;
@@ -1075,8 +1063,8 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t start, Int_t finish, TS
     {
         cout << " Finished." << endl << "\tClosing a file..." << endl;
         ElectronFile->Close();
-        if ( !ElectronFile->IsOpen() ) cout << "\tFile SelectedEE_" << Mgr.Tag[0] << "_" << name << ".root has been closed successfully.\n" << endl;
-        else cout << "\tFILE SelectedEE_" << Mgr.Tag[0] << "_" << name << ".root COULD NOT BE CLOSED!\n" << endl;
+        if ( !ElectronFile->IsOpen() ) cout << "\tFile SelectedEE_" << Mgr.Tag[0] << "_" << Name << ".root has been closed successfully.\n" << endl;
+        else cout << "\tFILE SelectedEE_" << Mgr.Tag[0] << "_" << Name << ".root COULD NOT BE CLOSED!\n" << endl;
     }
     else
     {
