@@ -58,10 +58,10 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
     {
         Xselected++;
         if ( HLTname == "DEFAULT" ) HLT = "Ele23Ele12";
-        else HLT = HLTname;
-        cout << "\n*****   MakeSelectedQCDEM_120to170 ( skim_" << name << ", " << HLT << " )  *****" << endl;
+        else HLT = HLTname;      
         for ( Int_t name = 0; name <= 316; name++ )
         {
+            cout << "\n*****   MakeSelectedQCDEM_120to170 ( skim_" << name << ", " << HLT << " )  *****" << endl;
             MakeSelectedQCDEM_120to170( HLT, name );
         }
     }
