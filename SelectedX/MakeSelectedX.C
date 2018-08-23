@@ -26,7 +26,7 @@ void MakeSelectedEMu ( TString type, TString HLTname );
 void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name );
 
 
-void MakeSelectedX ( TString whichX, TString type = "", Int_t begin, Int_t end, TString HLTname = "DEFAULT" )
+void MakeSelectedX ( TString whichX, TString type = "", Int_t begin = 1, Int_t end = 316, TString HLTname = "DEFAULT" )
 {
     TString HLT;
     Int_t Xselected = 0;
