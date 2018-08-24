@@ -72,7 +72,7 @@ void EE_HistMaker ( TString type, Int_t Num = 100, Int_t isTopPtReweighting = 0,
             analyzer->SetupEfficiencyScaleFactor_electron();
 
             // -- Output ROOTFile -- //
-            TString OutputDir = Mgr.BaseLocation+"SelectedEE/Histos/";
+            TString OutputDir = Mgr.HistLocation;
             TFile *f = new TFile( OutputDir+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
 
             //Loop for all samples

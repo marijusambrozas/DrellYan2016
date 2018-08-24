@@ -1,5 +1,6 @@
 // Header for file management
 // First working version created by Marijus Ambrozas 2018.08.23
+// 2018.08.14: Added HistLocation for every process
 
 #pragma once
 
@@ -109,6 +110,7 @@ public:
         vector<Double_t> nEvents;
 
         TString BaseLocation;
+        TString HistLocation;
         TString Type;       
         Bool_t isMC;       
 
@@ -158,6 +160,7 @@ void LocalFileMgr::ClearProc()
     {
         CurrentProc = _None;
         BaseLocation = "";
+        HistLocation = "";
         Type = "";
         isMC = kFALSE;
         this->GetProc(CurrentProc, kTRUE);
@@ -180,11 +183,13 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     TString Location;
     CurrentProc = pr;
 
+    if ( pr != _None )BaseLocation = "/media/sf_DATA/";
+
     if ( pr == _MuMu_DY_10to50 ) // Only MuMu evens are counted in Wsum and nEvents
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_DYMuMu_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7446893+16016651+9815322 ); nEvents.push_back( 20814 );
         Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M10to50_v1.root";
@@ -202,8 +207,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
-
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
         Tag.push_back( "SelectedMuMu_DYMuMu_M50to100" ); Xsec.push_back( 5869.58346/3.0 ); Wsum.push_back( 26175605.0 ); nEvents.push_back( 13699599 );
         Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M50to100.root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
@@ -212,7 +216,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_DYMuMu_M100to200" ); Xsec.push_back( 226/3.0 ); Wsum.push_back( 233822+3199473 ); nEvents.push_back( 145608 );
         Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M100to200.root";
@@ -226,7 +230,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_DYMuMu_M200to400" ); Xsec.push_back( 7.67/3.0 ); Wsum.push_back( 56340.0 ); nEvents.push_back( 51624 );
         Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M200to400.root";
@@ -236,7 +240,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_DYMuMu_M400to500" ); Xsec.push_back( 0.423/3.0 ); Wsum.push_back( 50136.0 ); nEvents.push_back( 58615 );
         Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M400to500.root";
@@ -246,7 +250,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_DYMuMu_M500to700" ); Xsec.push_back( 0.24/3.0 ); Wsum.push_back( 48188.0 ); nEvents.push_back( 62123 );
         Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M500to700.root";
@@ -256,7 +260,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_DYMuMu_M700to800" ); Xsec.push_back( 0.035/3.0 ); Wsum.push_back( 44984.0 ); nEvents.push_back( 64893 );
         Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M700to800.root";
@@ -266,7 +270,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_DYMuMu_M800to1000" ); Xsec.push_back( 0.03/3.0 ); Wsum.push_back( 43496.0 ); nEvents.push_back( 65829 );
         Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M800to1000.root";
@@ -276,7 +280,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_DYMuMu_M1000to1500" ); Xsec.push_back( 0.016/3.0 ); Wsum.push_back( 40110.0 ); nEvents.push_back( 66149 );
         Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M1000to1500.root";
@@ -286,7 +290,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_DYMuMu_M1500to2000" ); Xsec.push_back( 0.002/3.0 ); Wsum.push_back( 37176.0 ); nEvents.push_back( 68770 );
         Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M1500to2000.root";
@@ -296,7 +300,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_DYMuMu_M2000to3000" ); Xsec.push_back( 0.00054/3.0 ); Wsum.push_back( 33360.0 ); nEvents.push_back( 69286 );
         Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M2000to3000.root";
@@ -306,7 +310,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_DYMuMu_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7446893+16016651+9815322 ); nEvents.push_back( 20814 );
         Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M10to50_v1.root";
@@ -368,7 +372,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 11 );
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_v1.root";
@@ -386,7 +390,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_DYTauTau_M50toInf" ); Xsec.push_back( 1921.8 ); Wsum.push_back( 27277866.0 ); nEvents.push_back( 31733 ); //  NNLO Xsec
 //        Xsec->push_back( 6104.0/3.0 );
@@ -397,7 +401,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 11 );
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_v1.root";
@@ -420,7 +424,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_ttbar" ); Xsec.push_back( 734.577 ); Wsum.push_back( 67632273+68317507 ); nEvents.push_back( 473806 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar.root";
@@ -434,7 +438,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_ttbar_M700to1000" ); Xsec.push_back( 76.605 ); nEvents.push_back( 269627 );
         Wsum.push_back( 38422582.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
@@ -445,7 +449,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_ttbar_M1000toInf" ); Xsec.push_back( 20.578 ); nEvents.push_back( 152026 );
         Wsum.push_back( 24561630.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
@@ -456,7 +460,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_ttbar" ); Xsec.push_back( 734.577 ); Wsum.push_back( 67632273+68317507 ); nEvents.push_back( 473806 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar.root";
@@ -480,7 +484,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_tW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6952830.0 ); nEvents.push_back( 52490 );
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_tW.root";
@@ -490,7 +494,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_tbarW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6933093.0 ); nEvents.push_back( 52492 );
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_tbarW.root";
@@ -500,7 +504,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_ZZ" ); Xsec.push_back( 16.523 ); Wsum.push_back( 998034.0 ); nEvents.push_back( 30557 );
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ZZ.root";
@@ -510,7 +514,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_WZ" ); Xsec.push_back( 47.13 ); Wsum.push_back( 2995828.0 ); nEvents.push_back( 47568 );
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WZ.root";
@@ -520,7 +524,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_WW" ); Xsec.push_back( 118.7 ); Wsum.push_back( 6987123.0 ); nEvents.push_back( 35585 );
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WW.root";
@@ -530,7 +534,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_tW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6952830.0 ); nEvents.push_back( 52490 );
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_tW.root";
@@ -556,7 +560,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_WJetsToLNu" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 93 ); // I get Wsum=137540054
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WJetsToLNu.root";
@@ -570,7 +574,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt15to20" ); Xsec.push_back( 720648000*0.00042 ); Wsum.push_back( 4141251.0 ); nEvents.push_back( 0 );
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt15to20.root";
@@ -580,7 +584,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt20to30" ); Xsec.push_back( 1273190000*0.003 ); Wsum.push_back( 31302080.0 ); nEvents.push_back( 0 );
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt20to30.root";
@@ -590,7 +594,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt30to50" ); Xsec.push_back( 139803000*0.01182 ); Wsum.push_back( 29717171.0 ); nEvents.push_back( 2 );
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt30to50.root";
@@ -600,7 +604,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt50to80" ); Xsec.push_back( 19222500*0.02276 ); Wsum.push_back( 19806914.0 ); nEvents.push_back( 4 );
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt50to80.root";
@@ -610,7 +614,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt80to120" ); Xsec.push_back( 2758420*0.03844 ); Wsum.push_back( 13555323+9797243 ); nEvents.push_back( 10 );
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt80to120.root";
@@ -624,7 +628,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt120to170" ); Xsec.push_back( 469797*0.05362 ); Wsum.push_back( 8042720+11938137 ); nEvents.push_back( 5 );
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt120to170.root";
@@ -638,7 +642,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt170to300" ); Xsec.push_back( 117989*0.07335 ); Wsum.push_back( 7947158+9403070+19607775 );
         nEvents.push_back( 1 );
@@ -659,7 +663,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt300to470" ); Xsec.push_back( 7820.25*0.10196 ); Wsum.push_back( 7937587+16452587+24605502 );
         nEvents.push_back( 3 );
@@ -680,7 +684,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt470to600" ); Xsec.push_back( 645.528*0.12242 ); Wsum.push_back( 3851523+5663755 ); nEvents.push_back( 1 );
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt470to600.root";
@@ -699,7 +703,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt600to800" ); Xsec.push_back( 187.109*0.13412 ); Wsum.push_back( 4010135+5971173+9756852 );
         nEvents.push_back( 4 );
@@ -720,7 +724,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt800to1000" ); Xsec.push_back( 32.3486*0.14552 ); Wsum.push_back( 3962747+5838539+9966146 );
         nEvents.push_back( 2 );
@@ -741,7 +745,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt1000toInf" ); Xsec.push_back( 10.4305*0.15544 ); Wsum.push_back( 3861436+9609820 ); nEvents.push_back( 8 );
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt1000toInf.root";
@@ -755,7 +759,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt15to20" ); Xsec.push_back( 720648000*0.00042 ); Wsum.push_back( 4141251.0 ); nEvents.push_back( 0 );
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt15to20.root";
@@ -874,7 +878,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 33080379.0 ); nEvents.push_back( 11 );
         Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_v1.root";
@@ -1053,7 +1057,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_SingleMuon_B" ); Wsum.push_back( 108561074 ); nEvents.push_back( 2862076 );
         Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_B.root";
@@ -1063,7 +1067,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_SingleMuon_C" ); Wsum.push_back( 64715287 ); nEvents.push_back( 1735466 );
         Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_C.root";
@@ -1073,7 +1077,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_SingleMuon_D" ); Wsum.push_back( 96652779 ); nEvents.push_back( 2880299 );
         Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_D.root";
@@ -1083,7 +1087,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_SingleMuon_E" ); Wsum.push_back( 87358348 ); nEvents.push_back( 2651780 );
         Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_E.root";
@@ -1093,7 +1097,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_SingleMuon_F" ); Wsum.push_back( 64986568 ); nEvents.push_back( 2044183 );
         Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_F.root";
@@ -1103,7 +1107,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_SingleMuon_G" ); Wsum.push_back( 138710659 ); nEvents.push_back( 5054446 );
         Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_G.root";
@@ -1113,7 +1117,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_SingleMuon_Hver2" ); Wsum.push_back( 141936183 ); nEvents.push_back( 5168884 );
         Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_Hver2.root";
@@ -1127,7 +1131,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_SingleMuon_B" ); Wsum.push_back( 108561074 ); nEvents.push_back( 2862076 );
         Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_B.root";
@@ -1165,17 +1169,17 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "TEST";
-        BaseLocation = "/media/sf_DATA/test/";
+        HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_ZToMuMu_M4500to6000_4"); Xsec.push_back( 1.0 ); Wsum.push_back( 10200.0 ); nEvents.push_back( 10200 );
-        Location = "SelectedMuMu_ZToMuMu_M4500to6000_4.root";
+        Location = "test/SelectedMuMu_ZToMuMu_M4500to6000_4.root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EE_DY_10to50 )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DYEE_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7447023+16016761+9811434 ); nEvents.push_back( 10426 );
         Location = "SelectedEE/MC_signal/SelectedEE_DYEE_M10to50_v1.root";
@@ -1193,7 +1197,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DYEE_M50to100" ); Xsec.push_back( 5869.58346/3.0 ); Wsum.push_back( 26166194.0 ); nEvents.push_back( 7706926 );
         Location = "SelectedEE/MC_signal/SelectedEE_DYEE_M50to100.root";
@@ -1203,7 +1207,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DYEE_M100to200" ); Xsec.push_back( 226/3.0 ); Wsum.push_back( 234322+3203563 ); nEvents.push_back( 86786 );
         Location = "SelectedEE/MC_signal/SelectedEE_DYEE_M100to200.root";
@@ -1217,7 +1221,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DYEE_M200to400" ); Xsec.push_back( 7.67/3.0 ); Wsum.push_back( 56144.0 ); nEvents.push_back( 33801 );
         Location = "SelectedEE/MC_signal/SelectedEE_DYEE_M200to400.root";
@@ -1227,7 +1231,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DYEE_M400to500" ); Xsec.push_back( 0.423/3.0 ); Wsum.push_back( 50420.0 ); nEvents.push_back( 40021 );
         Location = "SelectedEE/MC_signal/SelectedEE_DYEE_M400to500.root";
@@ -1237,7 +1241,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DYEE_M500to700" ); Xsec.push_back( 0.24/3.0 ); Wsum.push_back( 48039.0 ); nEvents.push_back( 42770 );
         Location = "SelectedEE/MC_signal/SelectedEE_DYEE_M500to700.root";
@@ -1247,7 +1251,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DYEE_M700to800" ); Xsec.push_back( 0.035/3.0 ); Wsum.push_back( 46114.0 ); nEvents.push_back( 45351 );
         Location = "SelectedEE/MC_signal/SelectedEE_DYEE_M700to800.root";
@@ -1257,7 +1261,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DYEE_M800to1000" ); Xsec.push_back( 0.03/3.0 ); Wsum.push_back( 44256.0 ); nEvents.push_back( 46888 );
         Location = "SelectedEE/MC_signal/SelectedEE_DYEE_M800to1000.root";
@@ -1267,7 +1271,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DYEE_M1000to1500" ); Xsec.push_back( 0.016/3.0 ); Wsum.push_back( 39712.0 ); nEvents.push_back( 47223 );
         Location = "SelectedEE/MC_signal/SelectedEE_DYEE_M1000to1500.root";
@@ -1277,7 +1281,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DYEE_M1500to2000" ); Xsec.push_back( 0.002/3.0 ); Wsum.push_back( 37287.0 ); nEvents.push_back( 50387 );
         Location = "SelectedEE/MC_signal/SelectedEE_DYEE_M1500to2000.root";
@@ -1287,7 +1291,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DYEE_M2000to3000" ); Xsec.push_back( 0.00054/3.0 ); Wsum.push_back( 34031.0 ); nEvents.push_back( 50986 );
         Location = "SelectedEE/MC_signal/SelectedEE_DYEE_M2000to3000.root";
@@ -1297,7 +1301,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "SIGNAL";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DYEE_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7447023+16016761+9811434 ); nEvents.push_back( 10426 );
         Location = "SelectedEE/MC_signal/SelectedEE_DYEE_M10to50_v1.root";
@@ -1359,7 +1363,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DYTauTau_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 7 );
         Location = "SelectedEE/MC_bkg/SelectedEE_DYTauTau_M10to50_v1.root";
@@ -1377,7 +1381,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DYTauTau_M50toInf" ); Xsec.push_back( 1921.8 ); Wsum.push_back( 27277866.0 ); nEvents.push_back( 20257 ); //  NNLO Xsec
 //        Xsec->push_back( 6104.0/3.0 );
@@ -1388,7 +1392,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DYTauTau_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 7 );
         Location = "SelectedEE/MC_bkg/SelectedEE_DYTauTau_M10to50_v1.root";
@@ -1411,7 +1415,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_ttbar" ); Xsec.push_back( 734.577 ); Wsum.push_back( 67632273+68317507 ); nEvents.push_back( 277386 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
         Location = "SelectedEE/MC_bkg/SelectedEE_ttbar.root";
@@ -1425,7 +1429,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_ttbar_M700to1000" ); Xsec.push_back( 76.605 ); nEvents.push_back( 162178 );
         Wsum.push_back( 38422582.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
@@ -1436,7 +1440,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_ttbar_M1000toInf" ); Xsec.push_back( 20.578 ); nEvents.push_back( 89582 );
         Wsum.push_back( 24561630.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
@@ -1447,7 +1451,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_ttbar" ); Xsec.push_back( 734.577 ); Wsum.push_back( 67632273+68317507 ); nEvents.push_back( 277386 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
         Location = "SelectedEE/MC_bkg/SelectedEE_ttbar.root";
@@ -1471,7 +1475,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_tW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6952830.0 ); nEvents.push_back( 32181 );
         Location = "SelectedEE/MC_bkg/SelectedEE_tW.root";
@@ -1481,7 +1485,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_tbarW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6933093.0 ); nEvents.push_back( 32096 );
         Location = "SelectedEE/MC_bkg/SelectedEE_tbarW.root";
@@ -1491,7 +1495,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_ZZ" ); Xsec.push_back( 16.523 ); Wsum.push_back( 998034.0 ); nEvents.push_back( 17813 );
         Location = "SelectedEE/MC_bkg/SelectedEE_ZZ.root";                  // NOT SURE (there also is ZZTo4L), but probably ok
@@ -1501,7 +1505,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_WZ" ); Xsec.push_back( 47.13 ); Wsum.push_back( 2995828.0 ); nEvents.push_back( 28695 );
         Location = "SelectedEE/MC_bkg/SelectedEE_WZ.root";                  // NOT SURE (there also is WZTo3LNu), but probably ok
@@ -1511,7 +1515,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_WW" ); Xsec.push_back( 118.7 ); Wsum.push_back( 6987123.0 ); nEvents.push_back( 21068 );
         Location = "SelectedEE/MC_bkg/SelectedEE_WW.root";                  // NOT SURE (there also is WWTo2L2Nu), but probably ok
@@ -1521,7 +1525,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_tW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6952830.0 ); nEvents.push_back( 32181 );
         Location = "SelectedEE/MC_bkg/SelectedEE_tW.root";
@@ -1547,7 +1551,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_WJetsToLNu" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 200 ); // I get Wsum=137540054
         Location = "SelectedEE/MC_bkg/SelectedEE_WJetsToLNu.root";
@@ -1561,7 +1565,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_QCDEMEnriched_Pt20to30" ); Xsec.push_back( 557600000*0.0096 ); Wsum.push_back( 9218952.0 ); nEvents.push_back( 0 );
         Location = "SelectedEE/MC_bkg/SelectedEE_QCDEMEnriched_Pt20to30.root";
@@ -1571,7 +1575,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_QCDEMEnriched_Pt30to50" ); Xsec.push_back( 136000000*0.073 ); Wsum.push_back( 4730195+6768384 ); nEvents.push_back( 0 );
         Location = "SelectedEE/MC_bkg/SelectedEE_QCDEMEnriched_Pt30to50.root";
@@ -1585,7 +1589,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_QCDEMEnriched_Pt50to80" ); Xsec.push_back( 19800000*0.146 ); Wsum.push_back( 22337068+23474168 ); nEvents.push_back( 2 );
         Location = "SelectedEE/MC_bkg/SelectedEE_QCDEMEnriched_Pt50to80.root";
@@ -1599,7 +1603,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_QCDEMEnriched_Pt80to120" ); Xsec.push_back( 2800000*0.125 ); Wsum.push_back( 35841780+41853502 ); nEvents.push_back( 1 );
         Location = "SelectedEE/MC_bkg/SelectedEE_QCDEMEnriched_Pt80to120.root";
@@ -1613,7 +1617,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_QCDEMEnriched_Pt120to170" ); Xsec.push_back( 477000*0.132 ); Wsum.push_back( 35817276+41954033 ); nEvents.push_back( 6 );
         Location = "SelectedEE/MC_bkg/SelectedEE_QCDEMEnriched_Pt120to170.root";
@@ -1627,7 +1631,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_QCDEMEnriched_Pt170to300" ); Xsec.push_back( 114000*0.165 ); Wsum.push_back( 11540162.0 ); nEvents.push_back( 3 );
         Location = "SelectedEE/MC_bkg/SelectedEE_QCDEMEnriched_Pt170to300.root";
@@ -1637,7 +1641,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_QCDEMEnriched_Pt300toInf" ); Xsec.push_back( 9000*0.15 ); Wsum.push_back( 7373633.0 ); nEvents.push_back( 8 );
         Location = "SelectedEE/MC_bkg/SelectedEE_QCDEMEnriched_Pt300toInf.root";
@@ -1647,7 +1651,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_QCDEMEnriched_Pt20to30" ); Xsec.push_back( 557600000*0.0096 ); Wsum.push_back( 9218952.0 ); nEvents.push_back( 0 );
         Location = "SelectedEE/MC_bkg/SelectedEE_QCDEMEnriched_Pt20to30.root";
@@ -1697,7 +1701,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DYTauTau_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 7 );
         Location = "SelectedEE/MC_bkg/SelectedEE_DYTauTau_M10to50_v1.root";
@@ -1810,7 +1814,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DoubleEG_B_0000" ); Wsum.push_back( 103625724 ); nEvents.push_back( 1477919 );
         Location = "SelectedEE/Data/SelectedEE_DoubleEG_B_0000.root";
@@ -1824,7 +1828,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DoubleEG_C" ); Wsum.push_back( 45521797 ); nEvents.push_back( 912737 );
         Location = "SelectedEE/Data/SelectedEE_DoubleEG_C.root";
@@ -1834,7 +1838,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DoubleEG_D" ); Wsum.push_back( 52422569 ); nEvents.push_back( 1596627 );
         Location = "SelectedEE/Data/SelectedEE_DoubleEG_D.root";
@@ -1844,7 +1848,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DoubleEG_E" ); Wsum.push_back( 47326656 ); nEvents.push_back( 1388519 );
         Location = "SelectedEE/Data/SelectedEE_DoubleEG_E.root";
@@ -1854,7 +1858,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DoubleEG_F" ); Wsum.push_back( 33943052 ); nEvents.push_back( 1074053 );
         Location = "SelectedEE/Data/SelectedEE_DoubleEG_F.root";
@@ -1864,7 +1868,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DoubleEG_G_0000" ); Wsum.push_back( 71864512 ); nEvents.push_back( 2708188 );
         Location = "SelectedEE/Data/SelectedEE_DoubleEG_G_0000.root";
@@ -1878,7 +1882,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DoubleEG_Hver2_0000" ); Wsum.push_back( 68821231 ); nEvents.push_back( 2624157 );
         Location = "SelectedEE/Data/SelectedEE_DoubleEG_Hver2_0000.root";
@@ -1896,7 +1900,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_DoubleEG_B_0000" ); Wsum.push_back( 103625724 ); nEvents.push_back( 1477919 );
         Location = "SelectedEE/Data/SelectedEE_DoubleEG_B_0000.root";
@@ -1946,7 +1950,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_SingleElectron_B" ); Wsum.push_back( 174105617 ); nEvents.push_back( 1489369 );
         Location = "SelectedEE/Data/SelectedEE_SingleElectron_B.root";
@@ -1956,7 +1960,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_SingleElectron_C" ); Wsum.push_back( 93325367 ); nEvents.push_back( 883477 );
         Location = "SelectedEE/Data/SelectedEE_SingleElectron_C.root";
@@ -1966,7 +1970,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_SingleElectron_D" ); Wsum.push_back( 146493465 ); nEvents.push_back( 1545296 );
         Location = "SelectedEE/Data/SelectedEE_SingleElectron_D.root";
@@ -1976,7 +1980,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_SingleElectron_E" ); Wsum.push_back( 113168502 ); nEvents.push_back( 1338042 );
         Location = "SelectedEE/Data/SelectedEE_SingleElectron_E.root";
@@ -1986,7 +1990,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_SingleElectron_F" ); Wsum.push_back( 70085191 ); nEvents.push_back( 1034009 );
         Location = "SelectedEE/Data/SelectedEE_SingleElectron_F.root";
@@ -1996,7 +2000,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_SingleElectron_G" ); Wsum.push_back( 143169219 ); nEvents.push_back( 2627807 );
         Location = "SelectedEE/Data/SelectedEE_SingleElectron_G.root";
@@ -2006,7 +2010,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_SingleElectron_Hver2" ); Wsum.push_back( 106262454 ); nEvents.push_back( 2512996 );
         Location = "SelectedEE/Data/SelectedEE_SingleElectron_Hver2.root";
@@ -2020,7 +2024,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_SingleElectron_B" ); Wsum.push_back( 174105617 ); nEvents.push_back( 1489369 );
         Location = "SelectedEE/Data/SelectedEE_SingleElectron_B.root";
@@ -2058,17 +2062,17 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "TEST";
-        BaseLocation = "/media/sf_DATA/test/";
+        HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
         Tag.push_back( "SelectedEE_ZToEE_M4500to6000_2"); Xsec.push_back( 1.0 ); Wsum.push_back( 39200.0 ); nEvents.push_back( 39200 );
-        Location = "SelectedEE_ZToEE_M4500to6000_2.root";
+        Location = "test/SelectedEE_ZToEE_M4500to6000_2.root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_DYTauTau_10to50 ) // Only TauTau evens are counted in Wsum and nEvents
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_DYTauTau_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 1 );
         Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_v1.root";
@@ -2086,7 +2090,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_DYTauTau_M50toInf" ); Xsec.push_back( 1921.8 ); Wsum.push_back( 27277866.0 ); nEvents.push_back( 1 ); //  NNLO Xsec
 //        Xsec->push_back( 6104.0/3.0 );
@@ -2097,7 +2101,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_DYTauTau_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 1 );
         Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_v1.root";
@@ -2120,7 +2124,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_ttbar" ); Xsec.push_back( 734.577 ); Wsum.push_back( 67632273+68317507 ); nEvents.push_back( 1 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
         Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar.root";
@@ -2134,7 +2138,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_ttbar_M700to1000" ); Xsec.push_back( 76.605 ); nEvents.push_back( 1 );
         Wsum.push_back( 38422582.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
@@ -2145,7 +2149,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_ttbar_M1000toInf" ); Xsec.push_back( 20.578 ); nEvents.push_back( 1 );
         Wsum.push_back( 24561630.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
@@ -2156,7 +2160,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_ttbar" ); Xsec.push_back( 734.577 ); Wsum.push_back( 67632273+68317507 ); nEvents.push_back( 1 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
         Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar.root";
@@ -2180,7 +2184,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_tW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6952830.0 ); nEvents.push_back( 1 );
         Location = "SelectedEMu/MC_bkg/SelectedEMu_tW.root";
@@ -2190,7 +2194,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_tbarW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6933093.0 ); nEvents.push_back( 1 );
         Location = "SelectedEMu/MC_bkg/SelectedEMu_tbarW.root";
@@ -2200,7 +2204,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_ZZ" ); Xsec.push_back( 16.523 ); Wsum.push_back( 998034.0 ); nEvents.push_back( 1 );
         Location = "SelectedEMu/MC_bkg/SelectedEMu_ZZ.root";                  // NOT SURE (there also is ZZTo4L), but probably ok
@@ -2210,7 +2214,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_WZ" ); Xsec.push_back( 47.13 ); Wsum.push_back( 2995828.0 ); nEvents.push_back( 1 );
         Location = "SelectedEMu/MC_bkg/SelectedEMu_WZ.root";                  // NOT SURE (there also is WZTo3LNu), but probably ok
@@ -2220,7 +2224,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_WW" ); Xsec.push_back( 118.7 ); Wsum.push_back( 6987123.0 ); nEvents.push_back( 1 );
         Location = "SelectedEMu/MC_bkg/SelectedEMu_WW.root";                  // NOT SURE (there also is WWTo2L2Nu), but probably ok
@@ -2230,7 +2234,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_tW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6952830.0 ); nEvents.push_back( 1 );
         Location = "SelectedEMu/MC_bkg/SelectedEMu_tW.root";
@@ -2256,7 +2260,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_WJetsToLNu" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 1 ); // I get Wsum=137540054
         Location = "SelectedEMu/MC_bkg/SelectedEMu_WJetsToLNu.root";
@@ -2270,7 +2274,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_DYTauTau_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 33080379.0 ); nEvents.push_back( 1 );
         Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_v1.root";
@@ -2440,7 +2444,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_B" ); Wsum.push_back( 108561074 ); nEvents.push_back( 1 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_B.root";
@@ -2450,7 +2454,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_C" ); Wsum.push_back( 64715287 ); nEvents.push_back( 1 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_C.root";
@@ -2460,7 +2464,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_D" ); Wsum.push_back( 96652779 ); nEvents.push_back( 1 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_D.root";
@@ -2470,7 +2474,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_E" ); Wsum.push_back( 87358348 ); nEvents.push_back( 1 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_E.root";
@@ -2480,7 +2484,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_F" ); Wsum.push_back( 64986568 ); nEvents.push_back( 1 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_F.root";
@@ -2490,7 +2494,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_G" ); Wsum.push_back( 138710659 ); nEvents.push_back( 1 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_G.root";
@@ -2500,7 +2504,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_Hver2" ); Wsum.push_back( 141936183 ); nEvents.push_back( 1 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_Hver2.root";
@@ -2514,7 +2518,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "/media/sf_DATA/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_B" ); Wsum.push_back( 108561074 ); nEvents.push_back( 1 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_B.root";
@@ -2552,10 +2556,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
     {
         isMC = kTRUE;
         Type = "TEST";
-        BaseLocation = "/media/sf_DATA/test/";
+        HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_WW_34"); Xsec.push_back( 1.0 ); Wsum.push_back( 10788.0 ); nEvents.push_back( 10788 );
-        Location = "SelectedEMu_WW_34.root";
+        Location = "test/SelectedEMu_WW_34.root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
 }// end of Get()
@@ -5296,6 +5300,37 @@ void LocalFileMgr::CheckProcesses()
             }
 
         }
+        if ( !HistLocation.Length() )
+        {
+            cout << "Process " << Procname[pr] << ": no HistLocation found." << endl;
+            allOk = kFALSE;
+        }
+        else
+        {
+            if ( HistLocation[HistLocation.Length()-1] != '/') {
+                cout << "Process " << Procname[pr] << ": HistLocation does not end with '/'" << endl;
+                allOk = kFALSE;
+            }
+            if ( HistLocation[0] != '/') {
+                cout << "Process " << Procname[pr] << ": HistLocation does not begin with '/'" << endl;
+                allOk = kFALSE;
+            }
+            if ( pr < _EE_DY_10to50 && HistLocation != "/media/sf_DATA/SelectedMuMu/Histos/" )
+            {
+                cout << "Process " << Procname[pr] << ": HistLocation does is not '/media/sf_DATA/SelectedMuMu/Histos/'" << endl;
+                allOk = kFALSE;
+            }
+            if ( pr > _EndOf_MuMu && pr < _EMu_DYTauTau_10to50 && HistLocation != "/media/sf_DATA/SelectedEE/Histos/" )
+            {
+                cout << "Process " << Procname[pr] << ": HistLocation does is not '/media/sf_DATA/SelectedEE/Histos/'" << endl;
+                allOk = kFALSE;
+            }
+            if ( pr > _EndOf_EE && HistLocation != "/media/sf_DATA/SelectedEMu/Histos/" )
+            {
+                cout << "Process " << Procname[pr] << ": HistLocation does is not '/media/sf_DATA/SelectedEMu/Histos/'" << endl;
+                allOk = kFALSE;
+            }
+        }
         if ( !Wsum.size() )
         {
             cout << "Process " << Procname[pr] << ": no Wsum found." << endl;
@@ -5469,6 +5504,11 @@ void LocalFileMgr::CheckProcesses()
         if ( BaseLocation.Length() )
         {
             cout << "Process " << Procname[pr] << ": ClearProc() did not clear the BaseLocation." << endl;
+            allOk = kFALSE;
+        }
+        if ( HistLocation.Length() )
+        {
+            cout << "Process " << Procname[pr] << ": ClearProc() did not clear the HistLocation." << endl;
             allOk = kFALSE;
         }
         if ( FileLocation.size() )
