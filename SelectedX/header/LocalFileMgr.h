@@ -1615,7 +1615,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         BaseLocation = "/media/sf_DATA/";
 
-        Tag.push_back( "SelectedEE_QCDEMEnriched_Pt120to170" ); Xsec.push_back( 477000*0.132 ); Wsum.push_back( 35817276+41954033 ); nEvents.push_back( 0 );
+        Tag.push_back( "SelectedEE_QCDEMEnriched_Pt120to170" ); Xsec.push_back( 477000*0.132 ); Wsum.push_back( 35817276+41954033 ); nEvents.push_back( 6 );
         Location = "SelectedEE/MC_bkg/SelectedEE_QCDEMEnriched_Pt120to170.root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
@@ -1677,7 +1677,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Location = "SelectedEE/MC_bkg/SelectedEE_QCDEMEnriched_Pt80to120_ext1.root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEE_QCDEMEnriched_Pt120to170" ); Xsec.push_back( 477000*0.132 ); Wsum.push_back( 35817276+41954033 ); nEvents.push_back( 0 );
+        Tag.push_back( "SelectedEE_QCDEMEnriched_Pt120to170" ); Xsec.push_back( 477000*0.132 ); Wsum.push_back( 35817276+41954033 ); nEvents.push_back( 6 );
         Location = "SelectedEE/MC_bkg/SelectedEE_QCDEMEnriched_Pt120to170.root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
@@ -1790,7 +1790,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Location = "SelectedEE/MC_bkg/SelectedEE_QCDEMEnriched_Pt80to120_ext1.root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEE_QCDEMEnriched_Pt120to170" ); Xsec.push_back( 477000*0.132 ); Wsum.push_back( 35817276+41954033 ); nEvents.push_back( 0 );
+        Tag.push_back( "SelectedEE_QCDEMEnriched_Pt120to170" ); Xsec.push_back( 477000*0.132 ); Wsum.push_back( 35817276+41954033 ); nEvents.push_back( 6 );
         Location = "SelectedEE/MC_bkg/SelectedEE_QCDEMEnriched_Pt120to170.root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
@@ -5325,8 +5325,8 @@ void LocalFileMgr::CheckProcesses()
                 if ( !nEvents[i] && pr != _MuMu_QCDMuEnriched_15to20 && pr != _MuMu_QCDMuEnriched_20to30 && pr != _EE_QCDEMEnriched_20to30 )
                 {
                     if ( ( pr != _MuMu_QCDMuEnriched_Full || i > 1 ) && ( pr != _MuMu_Bkg_Full || i < 15 || i > 16 ) &&
-                         ( pr != _EE_QCDEMEnriched_30to50 || i > 0 ) && ( pr != _EE_QCDEMEnriched_120to170 || i > 0 ) &&
-                         ( pr != _EE_QCDEMEnriched_Full || ( i > 1 && i != 7 ) ) && ( pr != _EE_Bkg_Full || i < 15 || ( i > 16 && i != 22 ) ) )
+                         ( pr != _EE_QCDEMEnriched_30to50 || i > 0 ) && ( pr != _EE_QCDEMEnriched_Full || i > 1 ) &&
+                         ( pr != _EE_Bkg_Full || i < 15 || i > 16 ) )
                         ok = kFALSE;
 
                     if ( ok == kFALSE )
