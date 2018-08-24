@@ -1546,6 +1546,8 @@ public:
     std::vector<double> *Electron_phi;
     std::vector<double> *Electron_Energy;
     std::vector<int> *Electron_charge;
+    std::vector<double> *Electron_etaSC;
+    std::vector<double> *Electron_phiSC;
 
     // -- Default constructor -- //
     void CreateNew()
@@ -1555,6 +1557,8 @@ public:
         Electron_phi = new std::vector<double>;
         Electron_Energy = new std::vector<double>;
         Electron_charge = new std::vector<int>;
+        Electron_etaSC = new std::vector<double>;
+        Electron_phiSC = new std::vector<double>;
     }
 
     // -- Constructor with chain -- //
@@ -1574,6 +1578,8 @@ public:
         chain->SetBranchAddress("Electron_phi", &Electron_phi);
         chain->SetBranchAddress("Electron_Energy", &Electron_Energy);
         chain->SetBranchAddress("Electron_charge", &Electron_charge);
+        chain->SetBranchAddress("Electron_etaSC", &Electron_etaSC);
+        chain->SetBranchAddress("Electron_phiSC", &Electron_phiSC);
 
         // -- Adding to cache -- //
         chain->AddBranchToCache("GENEvt_weight", 1);
@@ -1585,6 +1591,8 @@ public:
         chain->AddBranchToCache("Electron_phi", 1);
         chain->AddBranchToCache("Electron_Energy", 1);
         chain->AddBranchToCache("Electron_charge", 1);
+        chain->AddBranchToCache("Electron_etaSC", 1);
+        chain->AddBranchToCache("Electron_phiSC", 1);
 
         File_Given = kTRUE;
     }
@@ -1601,6 +1609,8 @@ public:
         Electron_phi = Ele->Electron_phi;
         Electron_Energy = Ele->Electron_Energy;
         Electron_charge = Ele->Electron_charge;
+        Electron_etaSC = Ele->Electron_etaSC;
+        Electron_phiSC = Ele->Electron_phiSC;
     }
 
     void Ready()
@@ -1628,6 +1638,8 @@ public:
         chain->SetBranchStatus("Electron_phi", 1);
         chain->SetBranchStatus("Electron_Energy", 1);
         chain->SetBranchStatus("Electron_charge", 1);
+        chain->SetBranchStatus("Electron_etaSC", 1);
+        chain->SetBranchStatus("Electron_phiSC", 1);
     }
 
     void TurnOffAllBranches()

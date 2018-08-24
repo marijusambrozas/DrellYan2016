@@ -183,6 +183,8 @@ void MakeSelectedEE ( TString type, TString HLTname )
             ElectronTree->Branch( "Electron_phi", &EE.Electron_phi );
             ElectronTree->Branch( "Electron_Energy", &EE.Electron_Energy );
             ElectronTree->Branch( "Electron_charge", &EE.Electron_charge );
+            ElectronTree->Branch( "Electron_etaSC", &EE.Electron_etaSC );
+            ElectronTree->Branch( "Electron_phiSC", &EE.Electron_phiSC );
 
             TChain *chain = new TChain( Mgr.TreeName[i_tup] );
             chain->Add( Mgr.FullLocation[i_tup] );
@@ -242,7 +244,7 @@ void MakeSelectedEE ( TString type, TString HLTname )
 
                     // -- Event Selection -- //
                     vector< Electron > SelectedElectronCollection;
-                    vector< Int_t > Sel_Index; // Ntuple indexes of electrons that passed the selection
+                    vector< Int_t > Sel_Index; // Ntuple indices of electrons that passed the selection
                     Bool_t isPassEventSelection = kFALSE;
                     isPassEventSelection = analyzer->EventSelection_ElectronChannel( ElectronCollection, ntuple, &SelectedElectronCollection, &Sel_Index );
 
@@ -268,6 +270,8 @@ void MakeSelectedEE ( TString type, TString HLTname )
                                 EE.Electron_phi->push_back( ntuple->Electron_phi[index] );
                                 EE.Electron_Energy->push_back( ntuple->Electron_Energy[index] );
                                 EE.Electron_charge->push_back( ntuple->Electron_charge[index] );
+                                EE.Electron_etaSC->push_back( ntuple->Electron_etaSC[index] );
+                                EE.Electron_phiSC->push_back( ntuple->Electron_phiSC[index] );
 
                             } // End of vector filling
 
@@ -280,6 +284,8 @@ void MakeSelectedEE ( TString type, TString HLTname )
                         EE.Electron_phi->clear();
                         EE.Electron_Energy->clear();
                         EE.Electron_charge->clear();
+                        EE.Electron_etaSC->clear();
+                        EE.Electron_phiSC->clear();
 
                     } // End of event selection
 
