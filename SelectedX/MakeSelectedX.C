@@ -18,16 +18,17 @@
 #include "./header/SelectedX.h"
 #include "./header/myProgressBar_t.h"
 #include "./header/FileMgr.h"
+#include "./etc/RoccoR/RoccoR.cc"
 
 void MakeSelectedEE ( TString type, TString HLTname );
-void MakeSelectedMuMu ( TString type, TString HLTname );
+void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RoccoCorr );
 void MakeSelectedEMu ( TString type, TString HLTname );
 
 void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name );
 void MakeSelectedQCDEM_120to170_merged();
 
 
-void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAULT" )
+void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAULT",  Bool_t RoccoCorr = kFALSE )
 {
     TString HLT;
     Int_t Xselected = 0;
@@ -45,7 +46,7 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
         if ( HLTname == "DEFAULT" ) HLT = "IsoMu24_OR_IsoTkMu24";
         else HLT = HLTname;
         cout << "\n*****  MakeSelectedMuMu ( " << type << ", " << HLT << " )  *****" << endl;
-        MakeSelectedMuMu( type, HLT );
+        MakeSelectedMuMu( type, HLT, RoccoCorr );
     }
     if ( whichX.Contains("EMu") || whichX.Contains("emu") || whichX.Contains("Emu") || whichX.Contains("eMu") || whichX.Contains("EMU") )
     {
@@ -356,7 +357,7 @@ void MakeSelectedEE ( TString type, TString HLTname )
 
 
 /// -------------------------------- Muon Channel ------------------------------------ ///
-void MakeSelectedMuMu ( TString type, TString HLTname )
+void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RoccoCorr )
 {
     // -- Run2016 luminosity [/pb] -- //
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
@@ -483,6 +484,8 @@ void MakeSelectedMuMu ( TString type, TString HLTname )
             myProgressBar_t bar( NEvents );
             Int_t timesPassed = 0;
 
+            RoccoR rc("./etc/RoccoR/rcdata.2016.v3");
+
             // Loop for all events in the chain
             for ( Int_t i=0; i<NEvents; i++ )
             {
@@ -519,11 +522,30 @@ void MakeSelectedMuMu ( TString type, TString HLTname )
 
                         // -- Convert to TuneP variables -- //
                         analyzer->ConvertToTunePInfo( mu );
+
+                        if ( RoccoCorr == kTRUE )
+                        {
+                            // -- Rochester correction -- //
+                            Double_t rndm[2], SF=0; r1->RndmArray(2, rndm);
+                            Int_t s, m;
+
+                            if( Tag[i_tup] == "Data" )
+                                    SF = rc.kScaleDT(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, s=0, m=0);
+                            else
+                                    SF = rc.kScaleAndSmearMC(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
+
+                            mu.TuneP_pT = SF*mu.TuneP_pT;
+
+                            // -- Convert to TuneP variables -- //
+                            analyzer->ConvertToTunePInfo( mu );
+                        }
+
                         MuonCollection.push_back( mu );
-                    }
+
+                    } // End of i_reco iteration
 
                     // -- Event Selection -- //
-                    vector< Muon > SelectedMuonCollection; vector< Muon > MuonCollection_noRoccoR;
+                    vector< Muon > SelectedMuonCollection;
                     vector< Int_t > Sel_Index;
                     Bool_t isPassEventSelection = kFALSE;
                     isPassEventSelection = analyzer->EventSelection_Zdiff_13TeV_HighPt( MuonCollection, ntuple, &SelectedMuonCollection, &Sel_Index );
@@ -966,6 +988,8 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name )
     ElectronTree->Branch( "Electron_phi", &EE.Electron_phi );
     ElectronTree->Branch( "Electron_Energy", &EE.Electron_Energy );
     ElectronTree->Branch( "Electron_charge", &EE.Electron_charge );
+    ElectronTree->Branch( "Electron_etaSC", &EE.Electron_etaSC );
+    ElectronTree->Branch( "Electron_phiSC" &EE.Electron_phiSC );
 
     TChain *chain = new TChain( Mgr.TreeName[0] );
     chain->Add( Mgr.BaseLocation+"QCD_Pt-120to170_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt120to170/180326_145602/0000/ntuple_skim_"+Name+".root" );
@@ -1050,6 +1074,8 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name )
                         EE.Electron_phi->push_back( ntuple->Electron_phi[index] );
                         EE.Electron_Energy->push_back( ntuple->Electron_Energy[index] );
                         EE.Electron_charge->push_back( ntuple->Electron_charge[index] );
+                        EE.Electron_etaSC->push_back( ntuple->Electron_etaSC[index] );
+                        EE.Electron_phiSC->push_back( ntuple->Electron_phiSC[index] );
 
                     } // End of vector filling
 
@@ -1062,6 +1088,8 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name )
                 EE.Electron_phi->clear();
                 EE.Electron_Energy->clear();
                 EE.Electron_charge->clear();
+                EE.Electron_etaSC->clear();
+                EE.Electron_phiSC->clear();
 
             } // End of event selection
 
@@ -1125,6 +1153,8 @@ void MakeSelectedQCDEM_120to170_merged()
     ElectronTree->Branch( "Electron_phi", &EE.Electron_phi );
     ElectronTree->Branch( "Electron_Energy", &EE.Electron_Energy );
     ElectronTree->Branch( "Electron_charge", &EE.Electron_charge );
+    ElectronTree->Branch( "Electron_etaSC", &EE.Electron_etaSC );
+    ElectronTree->Branch( "Electron_phiSC", &EE.Electron_phiSC );
 
     TChain *chain = new TChain( "DYTree" );
     chain->Add( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/QCDfail/*.root" );
@@ -1157,6 +1187,8 @@ void MakeSelectedQCDEM_120to170_merged()
                     EE.Electron_phi->push_back( QCD_EE->Electron_phi->at(iter) );
                     EE.Electron_Energy->push_back( QCD_EE->Electron_Energy->at(iter) );
                     EE.Electron_charge->push_back( QCD_EE->Electron_charge->at(iter) );
+                    EE.Electron_etaSC->push_back( QCD_EE->Electron_etaSC->at(iter) );
+                    EE.Electron_phiSC->push_back( QCD_EE->Electron_phiSC->at(iter) );
 
                 } // End of vector filling
 
@@ -1169,6 +1201,8 @@ void MakeSelectedQCDEM_120to170_merged()
             EE.Electron_phi->clear();
             EE.Electron_Energy->clear();
             EE.Electron_charge->clear();
+            EE.Electron_etaSC->clear();
+            EE.Electron_phiSC->clear();
 
         } // End of event selection
 
