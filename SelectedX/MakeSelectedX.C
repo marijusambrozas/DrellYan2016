@@ -150,7 +150,7 @@ void MakeSelectedEE ( TString type, TString HLTname )
             TStopwatch looptime;
             looptime.Start();
 
-            if ( Mgr.CurrentProc == _QCDEMEnriched_120to170 && i_tup == 0 ) continue; // Something crashes here
+            if ( Mgr.Tag[i_tup] == "QCDEMEnriched_Pt120to170" && i_tup == 0 ) continue; // Something crashes here
 
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
@@ -463,6 +463,7 @@ void MakeSelectedMuMu ( TString type, TString HLTname )
             MuonTree->Branch( "Muon_TuneP_pT", &MuMu.Muon_TuneP_pT );
             MuonTree->Branch( "Muon_TuneP_eta", &MuMu.Muon_TuneP_eta );
             MuonTree->Branch( "Muon_TuneP_phi", &MuMu.Muon_TuneP_phi );
+            MuonTree->Branch( "Muon_trackerLayers", &MuMu.Muon_trackerLayers );
 
             TChain *chain = new TChain( Mgr.TreeName[i_tup] );
             chain->Add( Mgr.FullLocation[i_tup] );
@@ -522,7 +523,7 @@ void MakeSelectedMuMu ( TString type, TString HLTname )
                     }
 
                     // -- Event Selection -- //
-                    vector< Muon > SelectedMuonCollection;
+                    vector< Muon > SelectedMuonCollection; vector< Muon > MuonCollection_noRoccoR;
                     vector< Int_t > Sel_Index;
                     Bool_t isPassEventSelection = kFALSE;
                     isPassEventSelection = analyzer->EventSelection_Zdiff_13TeV_HighPt( MuonCollection, ntuple, &SelectedMuonCollection, &Sel_Index );
@@ -557,6 +558,7 @@ void MakeSelectedMuMu ( TString type, TString HLTname )
                                 MuMu.Muon_TuneP_pT->push_back( ntuple->Muon_TuneP_pT[index] );
                                 MuMu.Muon_TuneP_eta->push_back( ntuple->Muon_TuneP_eta[index] );
                                 MuMu.Muon_TuneP_phi->push_back( ntuple->Muon_TuneP_phi[index] );
+                                MuMu.Muon_trackerLayers->push_back( ntuple->Muon_trackerLayers[index] );
                             } // End of vector filling
 
                         } // End of else()
@@ -571,6 +573,7 @@ void MakeSelectedMuMu ( TString type, TString HLTname )
                         MuMu.Muon_TuneP_pT->clear();;
                         MuMu.Muon_TuneP_eta->clear();
                         MuMu.Muon_TuneP_phi->clear();
+                        MuMu.Muon_trackerLayers->clear();
 
                     } // End of event selection
 
