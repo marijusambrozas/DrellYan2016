@@ -118,6 +118,7 @@ public:
 	Double_t EfficiencySF_EventWeight_HLT_BtoF(Muon mu1, Muon mu2);
 	Double_t EfficiencySF_EventWeight_HLT_GtoH(Muon mu1, Muon mu2);
 	Double_t EfficiencySF_EventWeight_electron(Electron ele1, Electron ele2);
+        Double_t EfficiencySF_EventWeight_electron(SelectedEE_t *EE);
 	Int_t FindPtBin(Double_t Pt);
 	Int_t FindEtaBin(Double_t eta);
 	Int_t FindPtBin_trig(Double_t Pt);
@@ -1702,7 +1703,7 @@ void DYAnalyzer::SetupPileUpReWeighting_80X( Bool_t isMC, TString ROOTFileName )
 	}
 	
 	// -- Only for the MC -- //
-	TString FileLocation = "./etc/PileUp/80X/"+ROOTFileName;
+        TString FileLocation = "./etc/PileUp/80X/"+ROOTFileName;
 	TFile *f = new TFile(FileLocation);
 	TH1D *h_weight = (TH1D*)f->Get("h_PUReWeights");
 	if( h_weight == NULL )
@@ -1975,7 +1976,7 @@ void DYAnalyzer::SetupEfficiencyScaleFactor_GtoH()
 
 void DYAnalyzer::SetupEfficiencyScaleFactor_electron()
 {
-	TString Location = "./etc/effSF/effSF_electron/";
+        TString Location = "./etc/effSF/effSF_electron/";
         std::cout << "[Tag&Probe efficiency is from " << Location+"*.root" << "]" << endl;
 
 	TFile *f1 = new TFile( Location+"Reco_SF.root" );
@@ -2442,6 +2443,62 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_electron(Electron ele1, Electron e
 	if( weight > 2 ) printf("[SF] Weight = %.3lf\n", weight);
 
 	return weight;
+}
+
+Double_t DYAnalyzer::EfficiencySF_EventWeight_electron(SelectedEE_t *EE)
+{
+        Double_t weight = -999;
+
+        // -- Electron1 -- //
+        Double_t Pt1 = EE->Electron_pT->at(0);
+//        Double_t eta1 = EE->Electron_eta->at(0);
+        Double_t eta1 = EE->Electron_etaSC->at(0);
+
+        Int_t ptbin1_Reco = FindPtBin_Reco( Pt1 );
+        Int_t etabin1_Reco = FindEtaBin_Reco( eta1 );
+
+        Int_t ptbin1_ID = FindPtBin_ID( Pt1 );
+        Int_t etabin1_ID = FindEtaBin_ID( eta1 );
+
+        Double_t Eff_ele1_data = Eff_Reco_data[etabin1_Reco][ptbin1_Reco] * Eff_ID_data[etabin1_ID][ptbin1_ID];
+        Double_t Eff_ele1_MC = 1;
+
+        // -- Electron2 -- //
+        Double_t Pt2 = EE->Electron_pT->at(1);
+//        Double_t eta2 = EE->Electron_eta->at(1);
+        Double_t eta2 = EE->Electron_etaSC->at(1);
+
+        Int_t ptbin2_Reco = FindPtBin_Reco( Pt2 );
+        Int_t etabin2_Reco = FindEtaBin_Reco( eta2 );
+
+        Int_t ptbin2_ID = FindPtBin_ID( Pt2 );
+        Int_t etabin2_ID = FindEtaBin_ID( eta2 );
+
+        Double_t Eff_ele2_data = Eff_Reco_data[etabin2_Reco][ptbin2_Reco] * Eff_ID_data[etabin2_ID][ptbin2_ID];
+        Double_t Eff_ele2_MC = 1;
+
+        // -- This is trigger part -- // trigger SF is not yet.
+/*	Double_t Eff_EventTrig_data = 0;
+        Double_t Eff_EventTrig_MC = 0;
+
+        Double_t Eff_Trig_muon1_data = Eff_HLT_data_GtoH[etabin1_trig][ptbin1_trig];
+        Double_t Eff_Trig_muon2_data = Eff_HLT_data_GtoH[etabin2_trig][ptbin2_trig];
+        Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
+
+        Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_GtoH[etabin1_trig][ptbin1_trig];
+        Double_t Eff_Trig_muon2_MC = Eff_HLT_MC_GtoH[etabin2_trig][ptbin2_trig];
+        Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;*/
+
+//	Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
+//	Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
+        Double_t Eff_data_all = Eff_ele1_data * Eff_ele2_data;
+        Double_t Eff_MC_all = Eff_ele1_MC * Eff_ele2_MC;
+
+        weight = Eff_data_all / Eff_MC_all;
+
+        if( weight > 2 ) printf("[SF] Weight = %.3lf\n", weight);
+
+        return weight;
 }
 
 Double_t DYAnalyzer::EfficiencySF_EventWeight_emu_BtoF(Muon mu, Electron ele)
