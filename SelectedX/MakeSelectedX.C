@@ -370,6 +370,8 @@ void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RoccoCorr )
     totaltime.Start();
 
     DYAnalyzer *analyzer = new DYAnalyzer( HLTname );
+    // -- For Rochester correction -- //
+    TRandom3 *r1 = new TRandom3(0);
 
     FileMgr Mgr;
     vector<Process_t> Processes = Mgr.FindProc( type );
@@ -989,7 +991,7 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name )
     ElectronTree->Branch( "Electron_Energy", &EE.Electron_Energy );
     ElectronTree->Branch( "Electron_charge", &EE.Electron_charge );
     ElectronTree->Branch( "Electron_etaSC", &EE.Electron_etaSC );
-    ElectronTree->Branch( "Electron_phiSC" &EE.Electron_phiSC );
+    ElectronTree->Branch( "Electron_phiSC", &EE.Electron_phiSC );
 
     TChain *chain = new TChain( Mgr.TreeName[0] );
     chain->Add( Mgr.BaseLocation+"QCD_Pt-120to170_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt120to170/180326_145602/0000/ntuple_skim_"+Name+".root" );
