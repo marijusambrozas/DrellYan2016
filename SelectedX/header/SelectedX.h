@@ -831,6 +831,7 @@ public:
     std::vector<double> *Muon_TuneP_pT;
     std::vector<double> *Muon_TuneP_eta;
     std::vector<double> *Muon_TuneP_phi;
+    std::vector<int> *Muon_trackerLayers;
 
     // -- Constructor -- //
     void CreateNew()
@@ -844,6 +845,8 @@ public:
         Muon_TuneP_pT = new std::vector<double>;
         Muon_TuneP_eta = new std::vector<double>;
         Muon_TuneP_phi = new std::vector<double>;
+
+        Muon_trackerLayers = new std::vector<int>;
     }
 
     // -- Constructor with chain -- //
@@ -866,6 +869,7 @@ public:
         chain->SetBranchAddress("Muon_TuneP_pT", &Muon_TuneP_pT);
         chain->SetBranchAddress("Muon_TuneP_eta", &Muon_TuneP_eta);
         chain->SetBranchAddress("Muon_TuneP_phi", &Muon_TuneP_phi);
+        chain->SetBranchAddress("Muon_trackerLayers", &Muon_trackerLayers);
 
         // -- Adding to cache -- //
         chain->AddBranchToCache("GENEvt_weight", 1);
@@ -880,6 +884,7 @@ public:
         chain->AddBranchToCache("Muon_TuneP_pT", 1);
         chain->AddBranchToCache("Muon_TuneP_eta", 1);
         chain->AddBranchToCache("Muon_TuneP_phi", 1);
+        chain->AddBranchToCache("Muon_trackerLayers", 1);
 
         File_Given = kTRUE;
     }
@@ -899,6 +904,7 @@ public:
         Muon_TuneP_pT = Mu->Muon_TuneP_pT;
         Muon_TuneP_eta = Mu->Muon_TuneP_eta;
         Muon_TuneP_phi = Mu->Muon_TuneP_phi;
+        Muon_trackerLayers = Mu->Muon_trackerLayers;
     }
 
     void Ready()
@@ -930,6 +936,7 @@ public:
         chain->SetBranchStatus("Muon_TuneP_pT", 1);
         chain->SetBranchStatus("Muon_TuneP_eta", 1);
         chain->SetBranchStatus("Muon_TuneP_phi", 1);
+        chain->SetBranchAddress("Muon_trackerLayers", 1);
     }
 
     void TurnOffAllBranches()
