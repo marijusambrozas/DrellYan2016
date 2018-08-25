@@ -531,7 +531,7 @@ void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RoccoCorr )
                             Double_t rndm[2], SF=0; r1->RndmArray(2, rndm);
                             Int_t s, m;
 
-                            if( Tag[i_tup] == "Data" )
+                            if( Mgr.Tag[i_tup] == "DATA" )
                                     SF = rc.kScaleDT(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, s=0, m=0);
                             else
                                     SF = rc.kScaleAndSmearMC(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);

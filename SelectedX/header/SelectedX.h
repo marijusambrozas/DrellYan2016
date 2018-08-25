@@ -936,7 +936,7 @@ public:
         chain->SetBranchStatus("Muon_TuneP_pT", 1);
         chain->SetBranchStatus("Muon_TuneP_eta", 1);
         chain->SetBranchStatus("Muon_TuneP_phi", 1);
-        chain->SetBranchAddress("Muon_trackerLayers", 1);
+        chain->SetBranchStatus("Muon_trackerLayers", 1);
     }
 
     void TurnOffAllBranches()
