@@ -434,16 +434,19 @@ void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RoccoCorr )
 
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
+            TString RocCor = "";
+            if ( RoccoCorr == kTRUE ) RocCor = "_roccor";
+
             //Creating a file
             TFile* MuonFile;
             if ( Mgr.Type == "TEST" )
-                MuonFile = new TFile( "/media/sf_DATA/test/SelectedMuMu_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
+                MuonFile = new TFile( "/media/sf_DATA/test/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else if ( Mgr.Type == "DATA" )
-                MuonFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
+                MuonFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else if ( Mgr.Type == "SIGNAL" )
-                MuonFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
+                MuonFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else if ( Mgr.Type == "BKG" )
-                MuonFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
+                MuonFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else
             {
                 cout << "Problems with TYPE." << endl;
