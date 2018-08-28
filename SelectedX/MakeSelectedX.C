@@ -389,6 +389,7 @@ void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RoccoCorr )
         cout << "Type: " << Mgr.Type << endl;
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
         cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
+        if ( RoccoCorr == kTRUE ) cout << "Rochester correction will be applied." << endl;
 
 //        //Creating a file
 //        TFile* MuonFile;
@@ -631,8 +632,8 @@ void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RoccoCorr )
             {
                 cout << " Finished." << endl << "Closing a file..." << endl;
                 MuonFile->Close();
-                if ( !MuonFile->IsOpen() ) cout << "File SelectedMuMu_" << Mgr.Tag[i_tup] << ".root has been closed successfully." << endl;
-                else cout << "FILE SelectedMuMu_" << Mgr.Tag[i_tup] << ".root COULD NOT BE CLOSED!" << endl;
+                if ( !MuonFile->IsOpen() ) cout << "File SelectedMuMu_" << Mgr.Tag[i_tup]+RocCor << ".root has been closed successfully." << endl;
+                else cout << "FILE SelectedMuMu_" << Mgr.Tag[i_tup]+RocCor << ".root COULD NOT BE CLOSED!" << endl;
             }
             else
             {
