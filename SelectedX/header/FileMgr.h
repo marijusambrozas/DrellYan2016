@@ -722,11 +722,11 @@ void FileMgr::GetProc ( Process_t pr, Bool_t ClearOld )
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "DYTauTau_M10to50_v2" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 65887977 );
-        Location = "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000/*.root";
+        Location = "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v2/180326_143001/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "DYTauTau_M10to50_ext1v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 40381246 );
-        Location = "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000/*.root";
+        Location = "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_ext1v1/180326_143056/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _DYTauTau_50toInf ) // Only TauTau evens are counted in Wsum and nEvents
@@ -751,11 +751,11 @@ void FileMgr::GetProc ( Process_t pr, Bool_t ClearOld )
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "DYTauTau_M10to50_v2" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 65887977 );
-        Location = "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000/*.root";
+        Location = "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v2/180326_143001/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "DYTauTau_M10to50_ext1v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 40381246 );
-        Location = "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000/*.root";
+        Location = "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_ext1v1/180326_143056/0000/*.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "DYTauTau_M50toInf" ); Xsec.push_back( 1921.8 ); Wsum.push_back( 27277866.0 ); nEvents.push_back( 122055296 ); //  NNLO Xsec

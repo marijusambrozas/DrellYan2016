@@ -1343,19 +1343,19 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Location = "SelectedEE/MC_signal/SelectedEE_DYEE_M700to800.root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEE_DYEE_M800to1000" ); Xsec.push_back( 0.03/3.0 ); Wsum.push_back( 44256.0 ); nEvents.push_back( 271768 );
+        Tag.push_back( "SelectedEE_DYEE_M800to1000" ); Xsec.push_back( 0.03/3.0 ); Wsum.push_back( 44256.0 ); nEvents.push_back( 46888 );
         Location = "SelectedEE/MC_signal/SelectedEE_DYEE_M800to1000.root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEE_DYEE_M1000to1500" ); Xsec.push_back( 0.016/3.0 ); Wsum.push_back( 39712.0 ); nEvents.push_back( 46888 );
+        Tag.push_back( "SelectedEE_DYEE_M1000to1500" ); Xsec.push_back( 0.016/3.0 ); Wsum.push_back( 39712.0 ); nEvents.push_back( 47223 );
         Location = "SelectedEE/MC_signal/SelectedEE_DYEE_M1000to1500.root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEE_DYEE_M1500to2000" ); Xsec.push_back( 0.002/3.0 ); Wsum.push_back( 37287.0 ); nEvents.push_back( 47223 );
+        Tag.push_back( "SelectedEE_DYEE_M1500to2000" ); Xsec.push_back( 0.002/3.0 ); Wsum.push_back( 37287.0 ); nEvents.push_back( 50387 );
         Location = "SelectedEE/MC_signal/SelectedEE_DYEE_M1500to2000.root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEE_DYEE_M2000to3000" ); Xsec.push_back( 0.00054/3.0 ); Wsum.push_back( 34031.0 ); nEvents.push_back( 50387 );
+        Tag.push_back( "SelectedEE_DYEE_M2000to3000" ); Xsec.push_back( 0.00054/3.0 ); Wsum.push_back( 34031.0 ); nEvents.push_back( 50986 );
         Location = "SelectedEE/MC_signal/SelectedEE_DYEE_M2000to3000.root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }   
