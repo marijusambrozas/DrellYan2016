@@ -685,6 +685,8 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RoccoCorr )
     totaltime.Start();
 
     DYAnalyzer *analyzer = new DYAnalyzer( HLTname );
+    // -- For Rochester correction -- //
+    TRandom3 *r1 = new TRandom3(0);
 
     FileMgr Mgr;
     vector<Process_t> Processes = Mgr.FindProc( type );
@@ -702,6 +704,7 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RoccoCorr )
         cout << "Type: " << Mgr.Type << endl;
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
         cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
+        if ( RoccoCorr == kTRUE ) cout << "Rochester correction will be applied." << endl;
 
 //        //Creating a file
 //        TFile* EMuFile;
@@ -758,7 +761,7 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RoccoCorr )
             if ( Mgr.Type == "TEST" )
                 EMuFile = new TFile( "/media/sf_DATA/test/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else if ( Mgr.Type == "DATA" )
-                EMuFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_"+Mgr.Tag[i_tup+RocCor]+".root", "RECREATE" );
+                EMuFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else if ( Mgr.Type == "BKG" )
                 EMuFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/MC_bkg/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else
