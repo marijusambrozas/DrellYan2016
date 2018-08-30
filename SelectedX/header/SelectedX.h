@@ -2657,6 +2657,8 @@ public:
     Double_t Electron_phi;
     Double_t Electron_Energy;
     Int_t Electron_charge;
+    Double_t Electron_etaSC;
+    Double_t Electron_phiSC;
 
     Double_t Muon_pT;
     Double_t Muon_eta;
@@ -2666,6 +2668,7 @@ public:
     Double_t Muon_TuneP_pT;
     Double_t Muon_TuneP_eta;
     Double_t Muon_TuneP_phi;
+    Int_t Muon_trackerLayers;
 
     // -- Useless constructor -- //
     void CreateNew()
@@ -2690,6 +2693,8 @@ public:
         chain->SetBranchAddress("Electron_phi", &Electron_phi);
         chain->SetBranchAddress("Electron_Energy", &Electron_Energy);
         chain->SetBranchAddress("Electron_charge", &Electron_charge);
+        chain->SetBranchAddress("Electron_etaSC", &Electron_etaSC);
+        chain->SetBranchAddress("Electron_phiSC", &Electron_phiSC);
         chain->SetBranchAddress("Muon_pT", &Muon_pT);
         chain->SetBranchAddress("Muon_eta", &Muon_eta);
         chain->SetBranchAddress("Muon_phi", &Muon_phi);
@@ -2698,6 +2703,7 @@ public:
         chain->SetBranchAddress("Muon_TuneP_pT", &Muon_TuneP_pT);
         chain->SetBranchAddress("Muon_TuneP_eta", &Muon_TuneP_eta);
         chain->SetBranchAddress("Muon_TuneP_phi", &Muon_TuneP_phi);
+        chain->SetBranchAddress("Muon_trackerLayers", &Muon_trackerLayers);
 
         // -- Adding to cache -- //
         chain->AddBranchToCache("GENEvt_weight", 1);
@@ -2709,6 +2715,8 @@ public:
         chain->AddBranchToCache("Electron_phi", 1);
         chain->AddBranchToCache("Electron_Energy", 1);
         chain->AddBranchToCache("Electron_charge", 1);
+        chain->AddBranchToCache("Electron_etaSC", 1);
+        chain->AddBranchToCache("Electron_phiSC", 1);
         chain->AddBranchToCache("Muon_pT", 1);
         chain->AddBranchToCache("Muon_eta", 1);
         chain->AddBranchToCache("Muon_phi", 1);
@@ -2717,6 +2725,7 @@ public:
         chain->AddBranchToCache("Muon_TuneP_pT", 1);
         chain->AddBranchToCache("Muon_TuneP_eta", 1);
         chain->AddBranchToCache("Muon_TuneP_phi", 1);
+        chain->AddBranchToCache("Muon_trackerLayers", 1);
 
         File_Given = kTRUE;
     }
@@ -2736,12 +2745,15 @@ public:
         Muon_TuneP_pT = EMu->Muon_TuneP_pT;
         Muon_TuneP_eta = EMu->Muon_TuneP_eta;
         Muon_TuneP_phi = EMu->Muon_TuneP_phi;
+        Muon_trackerLayers = EMu->Muon_trackerLayers;
 
         Electron_pT = EMu->Electron_pT;
         Electron_eta = EMu->Electron_eta;
         Electron_phi = EMu->Electron_phi;
         Electron_Energy = EMu->Electron_Energy;
         Electron_charge = EMu->Electron_charge;
+        Electron_etaSC = EMu->Electron_etaSC;
+        Electron_phiSC = EMu->Electron_phiSC;
     }
 
     void Ready()
@@ -2770,6 +2782,8 @@ public:
         chain->SetBranchStatus("Electron_phi", 1);
         chain->SetBranchStatus("Electron_Energy", 1);
         chain->SetBranchStatus("Electron_charge", 1);
+        chain->SetBranchStatus("Electron_etaSC", 1);
+        chain->SetBranchStatus("Electron_phiSC", 1);
         chain->SetBranchStatus("Muon_pT", 1);
         chain->SetBranchStatus("Muon_eta", 1);
         chain->SetBranchStatus("Muon_phi", 1);
@@ -2778,6 +2792,7 @@ public:
         chain->SetBranchStatus("Muon_TuneP_pT", 1);
         chain->SetBranchStatus("Muon_TuneP_eta", 1);
         chain->SetBranchStatus("Muon_TuneP_phi", 1);
+        chain->SetBranchStatus("Muon_trackerLayers", 1);
     }
 
     void TurnOffAllBranches()

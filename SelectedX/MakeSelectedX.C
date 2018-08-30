@@ -22,7 +22,7 @@
 
 void MakeSelectedEE ( TString type, TString HLTname );
 void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RoccoCorr );
-void MakeSelectedEMu ( TString type, TString HLTname );
+void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RoccoCorr );
 
 void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name );
 void MakeSelectedQCDEM_120to170_merged();
@@ -54,7 +54,7 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
         if ( HLTname == "DEFAULT" ) HLT = "IsoMu24_OR_IsoTkMu24";
         else HLT = HLTname;
         cout << "\n*****   MakeSelectedEMu ( " << type << ", " << HLT << " )  *****" << endl;
-        MakeSelectedEMu( type, HLT );
+        MakeSelectedEMu( type, HLT, RoccoCorr );
     }
     if ( whichX.Contains("QCDfail") )   // To run through QCDEMEnriched_pT120to170 file that crashes
     {
@@ -672,7 +672,7 @@ void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RoccoCorr )
 
 
 /// --------------------------------- EMu events --------------------------------- ///
-void MakeSelectedEMu ( TString type, TString HLTname )
+void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RoccoCorr )
 {
     // -- Run2016 luminosity [/pb] -- //
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
@@ -750,14 +750,17 @@ void MakeSelectedEMu ( TString type, TString HLTname )
 
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
+            TString RocCor = "";
+            if ( RoccoCorr == kTRUE ) RocCor = "_roccor";
+
             //Creating a file
             TFile* EMuFile;
             if ( Mgr.Type == "TEST" )
-                EMuFile = new TFile( "/media/sf_DATA/test/SelectedEMu_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
+                EMuFile = new TFile( "/media/sf_DATA/test/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else if ( Mgr.Type == "DATA" )
-                EMuFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
+                EMuFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_"+Mgr.Tag[i_tup+RocCor]+".root", "RECREATE" );
             else if ( Mgr.Type == "BKG" )
-                EMuFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/MC_bkg/SelectedEMu_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
+                EMuFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/MC_bkg/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else
             {
                 cout << "Problems with TYPE." << endl;
@@ -780,11 +783,14 @@ void MakeSelectedEMu ( TString type, TString HLTname )
             EMuTree->Branch( "Muon_TuneP_pT", &EMu.Muon_TuneP_pT );
             EMuTree->Branch( "Muon_TuneP_eta", &EMu.Muon_TuneP_eta );
             EMuTree->Branch( "Muon_TuneP_phi", &EMu.Muon_TuneP_phi );
+            EMuTree->Branch( "Muon_trackerLayers", &EMu.Muon_trackerLayers );
             EMuTree->Branch( "Electron_pT", &EMu.Electron_pT );
             EMuTree->Branch( "Electron_eta", &EMu.Electron_eta );
             EMuTree->Branch( "Electron_phi", &EMu.Electron_phi );
             EMuTree->Branch( "Electron_Energy", &EMu.Electron_Energy );
             EMuTree->Branch( "Electron_charge", &EMu.Electron_charge );
+            EMuTree->Branch( "Electron_etaSC", &EMu.Electron_etaSC );
+            EMuTree->Branch( "Electron_phiSC", &EMu.Electron_phiSC );
 
             TChain *chain = new TChain( Mgr.TreeName[i_tup] );
             chain->Add( Mgr.FullLocation[i_tup] );
@@ -804,6 +810,8 @@ void MakeSelectedEMu ( TString type, TString HLTname )
             cout << "\t[Total Events: " << NEvents << "]" << endl;
             myProgressBar_t bar( NEvents );
             Int_t timesPassed = 0;
+
+            RoccoR rc("./etc/RoccoR/rcdata.2016.v3");
 
             // Loop for all events in the chain
             for ( Int_t i=0; i<NEvents; i++ )
@@ -842,6 +850,24 @@ void MakeSelectedEMu ( TString type, TString HLTname )
 
                         // Convert to TuneP variables
                         analyzer->ConvertToTunePInfo( mu );
+
+                        if ( RoccoCorr == kTRUE )
+                        {
+                            // -- Rochester correction -- //
+                            Double_t rndm[2], SF=0; r1->RndmArray(2, rndm);
+                            Int_t s, m;
+
+                            if( Mgr.Tag[i_tup] == "DATA" )
+                                    SF = rc.kScaleDT(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, s=0, m=0);
+                            else
+                                    SF = rc.kScaleAndSmearMC(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
+
+                            mu.TuneP_pT = SF*mu.TuneP_pT;
+
+                            // -- Convert to TuneP variables -- //
+                            analyzer->ConvertToTunePInfo( mu );
+                        }
+
                         MuonCollection.push_back( mu );
                     }
 
@@ -882,11 +908,14 @@ void MakeSelectedEMu ( TString type, TString HLTname )
                         EMu.Muon_TuneP_pT = ntuple->Muon_TuneP_pT[Sel_Index_Mu];
                         EMu.Muon_TuneP_eta = ntuple->Muon_TuneP_eta[Sel_Index_Mu];
                         EMu.Muon_TuneP_phi = ntuple->Muon_TuneP_phi[Sel_Index_Mu];
+                        EMu.Muon_trackerLayers = ntuple->Muon_trackerLayers[Sel_Index_Mu];
                         EMu.Electron_pT = ntuple->Electron_pT[Sel_Index_Ele];
                         EMu.Electron_eta = ntuple->Electron_eta[Sel_Index_Ele];
                         EMu.Electron_phi = ntuple->Electron_phi[Sel_Index_Ele];
                         EMu.Electron_Energy = ntuple->Electron_Energy[Sel_Index_Ele];
                         EMu.Electron_charge = ntuple->Electron_charge[Sel_Index_Ele];
+                        EMu.Electron_etaSC = ntuple->Electron_etaSC[Sel_Index_Ele];
+                        EMu.Electron_phiSC = ntuple->Electron_phiSC[Sel_Index_Ele];
 
                         EMuTree->Fill();
 
@@ -919,8 +948,8 @@ void MakeSelectedEMu ( TString type, TString HLTname )
             {
                 cout << " Finished." << endl << "Closing a file..." << endl;
                 EMuFile->Close();
-                if ( !EMuFile->IsOpen() ) cout << "File SelectedEMu_" << Mgr.Tag[i_tup] << ".root has been closed successfully." << endl;
-                else cout << "FILE SelectedEMu_" << Mgr.Tag[i_tup] << ".root COULD NOT BE CLOSED!" << endl;
+                if ( !EMuFile->IsOpen() ) cout << "File SelectedEMu_" << Mgr.Tag[i_tup]+RocCor << ".root has been closed successfully." << endl;
+                else cout << "FILE SelectedEMu_" << Mgr.Tag[i_tup]+RocCor << ".root COULD NOT BE CLOSED!" << endl;
             }
             else
             {
