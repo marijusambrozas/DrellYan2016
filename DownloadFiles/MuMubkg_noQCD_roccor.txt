@@ -1,0 +1,17 @@
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_v1_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_v2_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_ext1v1_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M50toInf_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_WJetsToLNu_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_WJetsToLNu_ext_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_WW_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_WZ_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_ZZ_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_tW_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_tbarW_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_ttbar_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_ttbarBackup_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_ttbar_M700to1000_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_ttbar_M1000toInf_roccor.root
+
+

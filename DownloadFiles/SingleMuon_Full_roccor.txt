@@ -1,0 +1,10 @@
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_B_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_C_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_D_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_E_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_F_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_G_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_Hver2_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_Hver3_roccor.root
+
+

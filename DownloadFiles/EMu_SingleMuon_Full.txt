@@ -1,0 +1,10 @@
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_SingleMuon_B.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_SingleMuon_C.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_SingleMuon_D.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_SingleMuon_E.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_SingleMuon_F.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_SingleMuon_G.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_SingleMuon_Hver2.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_SingleMuon_Hver3.root
+
+

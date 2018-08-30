@@ -1,0 +1,15 @@
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M10to50_v1_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M10to50_v2_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M10to50_ext1v1_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M50to100_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M100to200_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M100to200_ext_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M200to400_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M400to500_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M500to700_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M700to800_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M800to1000_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M1000to1500_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M1500to2000_roccor.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M2000to3000_roccor.root
+
