@@ -1,6 +1,7 @@
 // Header for file management
 // First working version created by Marijus Ambrozas 2018.08.23
 // 2018.08.14: Added HistLocation for every process
+// 2018.08.31: Added an ability to change between files that contain events selected before and after the Rochester correction (you need to change ROCCORR variable to switch)
 
 #pragma once
 
@@ -127,6 +128,7 @@ public:
 private:
         Bool_t namesSet = kFALSE;
         Bool_t processesChecked = kFALSE;
+        Bool_t ROCCORR = kTRUE; // Change this to kFALSE if you don't want to work with events that were selected after the Rochester correction was applied
 
         void PrepareProcNames ();
         void CheckProcesses ();
@@ -181,7 +183,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         nEvents.clear();
     }
     TString Location;
+    TString RocCorr = "";
     CurrentProc = pr;
+
+    if ( ROCCORR == kTRUE ) RocCorr = "_roccor";
 
     if ( pr != _None )BaseLocation = "/media/sf_DATA/";
 
@@ -191,16 +196,22 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "SIGNAL";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7446893+16016651+9815322 ); nEvents.push_back( 20814 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M10to50_v1.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7446893+16016651+9815322 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 20822 );
+        else nEvents.push_back( 20814 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M10to50_v1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation + Location );
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M10to50_v2" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7446893+16016651+9815322 ); nEvents.push_back( 44186 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M10to50_v2.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M10to50_v2" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7446893+16016651+9815322 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 44224 );
+        else nEvents.push_back( 44186 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M10to50_v2"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation + Location );
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M10to50_ext1v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7446893+16016651+9815322 ); nEvents.push_back( 27207 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M10to50_ext1v1.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M10to50_ext1v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7446893+16016651+9815322 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 27278 );
+        else nEvents.push_back( 27207 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M10to50_ext1v1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation + Location );
     }
     else if( pr ==_MuMu_DY_50to100 ) // Only MuMu evens are counted in Wsum and nEvents
@@ -208,8 +219,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         isMC = kTRUE;
         Type = "SIGNAL";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
-        Tag.push_back( "SelectedMuMu_DYMuMu_M50to100" ); Xsec.push_back( 5869.58346/3.0 ); Wsum.push_back( 26175605.0 ); nEvents.push_back( 13699599 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M50to100.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M50to100" ); Xsec.push_back( 5869.58346/3.0 ); Wsum.push_back( 26175605.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 13702787 );
+        else nEvents.push_back( 13699599 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M50to100"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr ==_MuMu_DY_100to200 )
@@ -218,12 +231,16 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "SIGNAL";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M100to200" ); Xsec.push_back( 226/3.0 ); Wsum.push_back( 233822+3199473 ); nEvents.push_back( 145608 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M100to200.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M100to200" ); Xsec.push_back( 226/3.0 ); Wsum.push_back( 233822+3199473 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 145625 );
+        else nEvents.push_back( 145608 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M100to200"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M100to200_ext" ); Xsec.push_back( 226/3.0 ); Wsum.push_back( 233822+3199473 ); nEvents.push_back( 2060233 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M100to200_ext.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M100to200_ext" ); Xsec.push_back( 226/3.0 ); Wsum.push_back( 233822+3199473 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2060461 );
+        else nEvents.push_back( 2060233 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M100to200_ext"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr ==_MuMu_DY_200to400 )
@@ -232,8 +249,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "SIGNAL";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M200to400" ); Xsec.push_back( 7.67/3.0 ); Wsum.push_back( 56340.0 ); nEvents.push_back( 51624 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M200to400.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M200to400" ); Xsec.push_back( 7.67/3.0 ); Wsum.push_back( 56340.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 51625 );
+        else nEvents.push_back( 51624 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M200to400"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr ==_MuMu_DY_400to500 )
@@ -242,8 +261,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "SIGNAL";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M400to500" ); Xsec.push_back( 0.423/3.0 ); Wsum.push_back( 50136.0 ); nEvents.push_back( 58615 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M400to500.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M400to500" ); Xsec.push_back( 0.423/3.0 ); Wsum.push_back( 50136.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 58616 );
+        else nEvents.push_back( 58615 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M400to500"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr ==_MuMu_DY_500to700 )
@@ -252,8 +273,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "SIGNAL";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M500to700" ); Xsec.push_back( 0.24/3.0 ); Wsum.push_back( 48188.0 ); nEvents.push_back( 62123 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M500to700.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M500to700" ); Xsec.push_back( 0.24/3.0 ); Wsum.push_back( 48188.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 62122 );
+        else nEvents.push_back( 62123 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M500to700"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr ==_MuMu_DY_700to800 )
@@ -262,8 +285,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "SIGNAL";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M700to800" ); Xsec.push_back( 0.035/3.0 ); Wsum.push_back( 44984.0 ); nEvents.push_back( 64893 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M700to800.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M700to800" ); Xsec.push_back( 0.035/3.0 ); Wsum.push_back( 44984.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 64895 );
+        else nEvents.push_back( 64893 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M700to800"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr ==_MuMu_DY_800to1000 )
@@ -272,8 +297,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "SIGNAL";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M800to1000" ); Xsec.push_back( 0.03/3.0 ); Wsum.push_back( 43496.0 ); nEvents.push_back( 65829 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M800to1000.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M800to1000" ); Xsec.push_back( 0.03/3.0 ); Wsum.push_back( 43496.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 65828 );
+        else nEvents.push_back( 65829 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M800to1000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr ==_MuMu_DY_1000to1500 )
@@ -282,8 +309,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "SIGNAL";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M1000to1500" ); Xsec.push_back( 0.016/3.0 ); Wsum.push_back( 40110.0 ); nEvents.push_back( 66149 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M1000to1500.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M1000to1500" ); Xsec.push_back( 0.016/3.0 ); Wsum.push_back( 40110.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 66149 );
+        else nEvents.push_back( 66149 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M1000to1500"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr ==_MuMu_DY_1500to2000 )
@@ -292,8 +321,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "SIGNAL";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M1500to2000" ); Xsec.push_back( 0.002/3.0 ); Wsum.push_back( 37176.0 ); nEvents.push_back( 68770 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M1500to2000.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M1500to2000" ); Xsec.push_back( 0.002/3.0 ); Wsum.push_back( 37176.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 68769 );
+        else nEvents.push_back( 68770 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M1500to2000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr ==_MuMu_DY_2000to3000 )
@@ -302,8 +333,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "SIGNAL";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M2000to3000" ); Xsec.push_back( 0.00054/3.0 ); Wsum.push_back( 33360.0 ); nEvents.push_back( 69286 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M2000to3000.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M2000to3000" ); Xsec.push_back( 0.00054/3.0 ); Wsum.push_back( 33360.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 69286 );
+        else nEvents.push_back( 69286 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M2000to3000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr ==_MuMu_DY_Full )
@@ -312,60 +345,88 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "SIGNAL";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7446893+16016651+9815322 ); nEvents.push_back( 20814 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M10to50_v1.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7446893+16016651+9815322 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 20822 );
+        else nEvents.push_back( 20814 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M10to50_v1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation + Location );
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M10to50_v2" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7446893+16016651+9815322 ); nEvents.push_back( 44186 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M10to50_v2.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M10to50_v2" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7446893+16016651+9815322 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 44224 );
+        else nEvents.push_back( 44186 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M10to50_v2"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation + Location );
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M10to50_ext1v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7446893+16016651+9815322 ); nEvents.push_back( 27207 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M10to50_ext1v1.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M10to50_ext1v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7446893+16016651+9815322 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 27278 );
+        else nEvents.push_back( 27207 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M10to50_ext1v1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation + Location );
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M50to100" ); Xsec.push_back( 5869.58346/3.0 ); Wsum.push_back( 26175605.0 ); nEvents.push_back( 13699599 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M50to100.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M50to100" ); Xsec.push_back( 5869.58346/3.0 ); Wsum.push_back( 26175605.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 13702787 );
+        else nEvents.push_back( 13699599 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M50to100"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M100to200" ); Xsec.push_back( 226/3.0 ); Wsum.push_back( 233822+3199473 ); nEvents.push_back( 145608 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M100to200.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M100to200" ); Xsec.push_back( 226/3.0 ); Wsum.push_back( 233822+3199473 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 145625 );
+        else nEvents.push_back( 145608 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M100to200"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M100to200_ext" ); Xsec.push_back( 226/3.0 ); Wsum.push_back( 233822+3199473 ); nEvents.push_back( 2060233 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M100to200_ext.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M100to200_ext" ); Xsec.push_back( 226/3.0 ); Wsum.push_back( 233822+3199473 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2060461 );
+        else nEvents.push_back( 2060233 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M100to200_ext"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M200to400" ); Xsec.push_back( 7.67/3.0 ); Wsum.push_back( 56340.0 ); nEvents.push_back( 51624 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M200to400.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M200to400" ); Xsec.push_back( 7.67/3.0 ); Wsum.push_back( 56340.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 51625 );
+        else nEvents.push_back( 51624 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M200to400"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M400to500" ); Xsec.push_back( 0.423/3.0 ); Wsum.push_back( 50136.0 ); nEvents.push_back( 58615 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M400to500.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M400to500" ); Xsec.push_back( 0.423/3.0 ); Wsum.push_back( 50136.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 58616 );
+        else nEvents.push_back( 58615 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M400to500"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M500to700" ); Xsec.push_back( 0.24/3.0 ); Wsum.push_back( 48188.0 ); nEvents.push_back( 62123 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M500to700.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M500to700" ); Xsec.push_back( 0.24/3.0 ); Wsum.push_back( 48188.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 62122 );
+        else nEvents.push_back( 62123 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M500to700"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M700to800" ); Xsec.push_back( 0.035/3.0 ); Wsum.push_back( 44984.0 ); nEvents.push_back( 64893 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M700to800.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M700to800" ); Xsec.push_back( 0.035/3.0 ); Wsum.push_back( 44984.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 64895 );
+        else nEvents.push_back( 64893 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M700to800"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M800to1000" ); Xsec.push_back( 0.03/3.0 ); Wsum.push_back( 43496.0 ); nEvents.push_back( 65829 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M800to1000.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M800to1000" ); Xsec.push_back( 0.03/3.0 ); Wsum.push_back( 43496.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 65828 );
+        else nEvents.push_back( 65829 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M800to1000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M1000to1500" ); Xsec.push_back( 0.016/3.0 ); Wsum.push_back( 40110.0 ); nEvents.push_back( 66149 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M1000to1500.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M1000to1500" ); Xsec.push_back( 0.016/3.0 ); Wsum.push_back( 40110.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 66149 );
+        else nEvents.push_back( 66149 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M1000to1500"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M1500to2000" ); Xsec.push_back( 0.002/3.0 ); Wsum.push_back( 37176.0 ); nEvents.push_back( 68770 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M1500to2000.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M1500to2000" ); Xsec.push_back( 0.002/3.0 ); Wsum.push_back( 37176.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 68769 );
+        else nEvents.push_back( 68770 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M1500to2000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYMuMu_M2000to3000" ); Xsec.push_back( 0.00054/3.0 ); Wsum.push_back( 33360.0 ); nEvents.push_back( 69286 );
-        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M2000to3000.root";
+        Tag.push_back( "SelectedMuMu_DYMuMu_M2000to3000" ); Xsec.push_back( 0.00054/3.0 ); Wsum.push_back( 33360.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 69286 );
+        else nEvents.push_back( 69286 );
+        Location = "SelectedMuMu/MC_signal/SelectedMuMu_DYMuMu_M2000to3000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_DYTauTau_10to50 ) // Only TauTau evens are counted in Wsum and nEvents
@@ -374,16 +435,22 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 11 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_v1.root";
+        Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 11 );
+        else nEvents.push_back( 11 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_v1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_v2" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 26 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_v2.root";
+        Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_v2" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 26 );
+        else nEvents.push_back( 26 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_v2"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_ext1v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 25 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_ext1v1.root";
+        Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_ext1v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 26 );
+        else nEvents.push_back( 25 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_ext1v1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_DYTauTau_50toInf ) // Only TauTau evens are counted in Wsum and nEvents
@@ -392,9 +459,11 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_DYTauTau_M50toInf" ); Xsec.push_back( 1921.8 ); Wsum.push_back( 27277866.0 ); nEvents.push_back( 31733 ); //  NNLO Xsec
+        Tag.push_back( "SelectedMuMu_DYTauTau_M50toInf" ); Xsec.push_back( 1921.8 ); Wsum.push_back( 27277866.0 );  //  NNLO Xsec
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 31777 );
+        else nEvents.push_back( 31733 );
 //        Xsec->push_back( 6104.0/3.0 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M50toInf.root";
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M50toInf"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_DYTauTau_Full )
@@ -403,21 +472,29 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 11 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_v1.root";
+        Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 11 );
+        else nEvents.push_back( 11 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_v1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_v2" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 26 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_v2.root";
+        Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_v2" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 26 );
+        else nEvents.push_back( 26 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_v2"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_ext1v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 25 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_ext1v1.root";
+        Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_ext1v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 26 );
+        else nEvents.push_back( 25 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_ext1v1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYTauTau_M50toInf" ); Xsec.push_back( 1921.8 ); Wsum.push_back( 27277866.0 ); nEvents.push_back( 31733 ); //  NNLO Xsec
+        Tag.push_back( "SelectedMuMu_DYTauTau_M50toInf" ); Xsec.push_back( 1921.8 ); Wsum.push_back( 27277866.0 );  //  NNLO Xsec
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 31777 );
+        else nEvents.push_back( 31733 );
 //        Xsec->push_back( 6104.0/3.0 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M50toInf.root";
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M50toInf"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_ttbar )
@@ -426,12 +503,16 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_ttbar" ); Xsec.push_back( 734.577 ); Wsum.push_back( 67632273+68317507 ); nEvents.push_back( 473806 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar.root";
+        Tag.push_back( "SelectedMuMu_ttbar" ); Xsec.push_back( 734.577 ); Wsum.push_back( 67632273+68317507 );  //M(ttbar) < 700GeV, ttbar+ttbarBackup
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 473907 );
+        else nEvents.push_back( 473806 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_ttbarBackup" ); Xsec.push_back( 734.577 ); Wsum.push_back( 67632273+68317507 ); nEvents.push_back( 479287 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbarBackup.root";
+        Tag.push_back( "SelectedMuMu_ttbarBackup" ); Xsec.push_back( 734.577 ); Wsum.push_back( 67632273+68317507 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 479397 );
+        else nEvents.push_back( 479287 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbarBackup"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_ttbar_700to1000 )
@@ -440,9 +521,11 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_ttbar_M700to1000" ); Xsec.push_back( 76.605 ); nEvents.push_back( 269627 );
+        Tag.push_back( "SelectedMuMu_ttbar_M700to1000" ); Xsec.push_back( 76.605 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 269661 );
+        else nEvents.push_back( 269627 );
         Wsum.push_back( 38422582.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar_M700to1000.root";
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar_M700to1000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _MuMu_ttbar_1000toInf )
@@ -451,9 +534,11 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_ttbar_M1000toInf" ); Xsec.push_back( 20.578 ); nEvents.push_back( 152026 );
+        Tag.push_back( "SelectedMuMu_ttbar_M1000toInf" ); Xsec.push_back( 20.578 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 152053 );
+        else nEvents.push_back( 152026 );
         Wsum.push_back( 24561630.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar_M1000toInf.root";
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar_M1000toInf"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_ttbar_Full )
@@ -462,22 +547,30 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_ttbar" ); Xsec.push_back( 734.577 ); Wsum.push_back( 67632273+68317507 ); nEvents.push_back( 473806 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar.root";
+        Tag.push_back( "SelectedMuMu_ttbar" ); Xsec.push_back( 734.577 ); Wsum.push_back( 67632273+68317507 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 473907 );
+        else nEvents.push_back( 473806 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_ttbarBackup" ); Xsec.push_back( 734.577 ); Wsum.push_back( 67632273+68317507 ); nEvents.push_back( 479287 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbarBackup.root";
+        Tag.push_back( "SelectedMuMu_ttbarBackup" ); Xsec.push_back( 734.577 ); Wsum.push_back( 67632273+68317507 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 479397 );
+        else nEvents.push_back( 479287 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbarBackup"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_ttbar_M700to1000" ); Xsec.push_back( 76.605 ); nEvents.push_back( 269627 );
+        Tag.push_back( "SelectedMuMu_ttbar_M700to1000" ); Xsec.push_back( 76.605 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 269661 );
+        else nEvents.push_back( 269627 );
         Wsum.push_back( 38422582.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar_M700to1000.root";
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar_M700to1000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_ttbar_M1000toInf" ); Xsec.push_back( 20.578 ); nEvents.push_back( 152026 );
+        Tag.push_back( "SelectedMuMu_ttbar_M1000toInf" ); Xsec.push_back( 20.578 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 152053 );
+        else nEvents.push_back( 152026 );
         Wsum.push_back( 24561630.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar_M1000toInf.root";
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar_M1000toInf"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_tW )
@@ -486,8 +579,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_tW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6952830.0 ); nEvents.push_back( 52490 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_tW.root";
+        Tag.push_back( "SelectedMuMu_tW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6952830.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 52500 );
+        else nEvents.push_back( 52490 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_tW"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_tbarW )
@@ -496,8 +591,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_tbarW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6933093.0 ); nEvents.push_back( 52492 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_tbarW.root";
+        Tag.push_back( "SelectedMuMu_tbarW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6933093.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 52489 );
+        else nEvents.push_back( 52492 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_tbarW"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_ZZ )
@@ -506,8 +603,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_ZZ" ); Xsec.push_back( 16.523 ); Wsum.push_back( 998034.0 ); nEvents.push_back( 30557 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ZZ.root";
+        Tag.push_back( "SelectedMuMu_ZZ" ); Xsec.push_back( 16.523 ); Wsum.push_back( 998034.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 30567 );
+        else nEvents.push_back( 30557 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ZZ"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_WZ )
@@ -516,8 +615,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_WZ" ); Xsec.push_back( 47.13 ); Wsum.push_back( 2995828.0 ); nEvents.push_back( 47568 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WZ.root";
+        Tag.push_back( "SelectedMuMu_WZ" ); Xsec.push_back( 47.13 ); Wsum.push_back( 2995828.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 47584 );
+        else nEvents.push_back( 47568 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WZ"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_WW )
@@ -526,8 +627,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_WW" ); Xsec.push_back( 118.7 ); Wsum.push_back( 6987123.0 ); nEvents.push_back( 35585 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WW.root";
+        Tag.push_back( "SelectedMuMu_WW" ); Xsec.push_back( 118.7 ); Wsum.push_back( 6987123.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 35594 );
+        else nEvents.push_back( 35585 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WW"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_VVnST )
@@ -536,24 +639,34 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_tW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6952830.0 ); nEvents.push_back( 52490 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_tW.root";
+        Tag.push_back( "SelectedMuMu_tW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6952830.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 52500 );
+        else nEvents.push_back( 52490 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_tW"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_tbarW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6933093.0 ); nEvents.push_back( 52492 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_tbarW.root";
+        Tag.push_back( "SelectedMuMu_tbarW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6933093.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 52489 );
+        else nEvents.push_back( 52492 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_tbarW"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_ZZ" ); Xsec.push_back( 16.523 ); Wsum.push_back( 998034.0 ); nEvents.push_back( 30557 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ZZ.root";
+        Tag.push_back( "SelectedMuMu_ZZ" ); Xsec.push_back( 16.523 ); Wsum.push_back( 998034.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 30567 );
+        else nEvents.push_back( 30557 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ZZ"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_WZ" ); Xsec.push_back( 47.13 ); Wsum.push_back( 2995828.0 ); nEvents.push_back( 47568 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WZ.root";
+        Tag.push_back( "SelectedMuMu_WZ" ); Xsec.push_back( 47.13 ); Wsum.push_back( 2995828.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 47584 );
+        else nEvents.push_back( 47568 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WZ"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_WW" ); Xsec.push_back( 118.7 ); Wsum.push_back( 6987123.0 ); nEvents.push_back( 35585 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WW.root";
+        Tag.push_back( "SelectedMuMu_WW" ); Xsec.push_back( 118.7 ); Wsum.push_back( 6987123.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 35594 );
+        else nEvents.push_back( 35585 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WW"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _MuMu_WJets )
@@ -562,12 +675,16 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_WJetsToLNu" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 93 ); // I get Wsum=137540054
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WJetsToLNu.root";
+        Tag.push_back( "SelectedMuMu_WJetsToLNu" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 137540054.0 ); //Wsum.push_back( 86731698.0 ); // I get Wsum=137540054
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 92 );
+        else nEvents.push_back( 93 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WJetsToLNu"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_WJetsToLNu_ext" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 823 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WJetsToLNu_ext.root";        // There also is madgraph version
+        Tag.push_back( "SelectedMuMu_WJetsToLNu_ext" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 137540054.0 ); //Wsum.push_back( 86731698.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 823 );
+        else nEvents.push_back( 823 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WJetsToLNu_ext"+RocCorr+".root";        // There also is madgraph version
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _MuMu_QCDMuEnriched_15to20 )
@@ -576,8 +693,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt15to20" ); Xsec.push_back( 720648000*0.00042 ); Wsum.push_back( 4141251.0 ); nEvents.push_back( 0 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt15to20.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt15to20" ); Xsec.push_back( 720648000*0.00042 ); Wsum.push_back( 4141251.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 0 );
+        else nEvents.push_back( 0 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt15to20"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _MuMu_QCDMuEnriched_20to30 )
@@ -586,8 +705,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt20to30" ); Xsec.push_back( 1273190000*0.003 ); Wsum.push_back( 31302080.0 ); nEvents.push_back( 0 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt20to30.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt20to30" ); Xsec.push_back( 1273190000*0.003 ); Wsum.push_back( 31302080.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 0 );
+        else nEvents.push_back( 0 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt20to30"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _MuMu_QCDMuEnriched_30to50 )
@@ -596,8 +717,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt30to50" ); Xsec.push_back( 139803000*0.01182 ); Wsum.push_back( 29717171.0 ); nEvents.push_back( 2 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt30to50.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt30to50" ); Xsec.push_back( 139803000*0.01182 ); Wsum.push_back( 29717171.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2 );
+        else nEvents.push_back( 2 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt30to50"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _MuMu_QCDMuEnriched_50to80 )
@@ -606,8 +729,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt50to80" ); Xsec.push_back( 19222500*0.02276 ); Wsum.push_back( 19806914.0 ); nEvents.push_back( 4 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt50to80.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt50to80" ); Xsec.push_back( 19222500*0.02276 ); Wsum.push_back( 19806914.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 4 );
+        else nEvents.push_back( 4 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt50to80"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _MuMu_QCDMuEnriched_80to120 )
@@ -616,12 +741,16 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt80to120" ); Xsec.push_back( 2758420*0.03844 ); Wsum.push_back( 13555323+9797243 ); nEvents.push_back( 10 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt80to120.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt80to120" ); Xsec.push_back( 2758420*0.03844 ); Wsum.push_back( 13555323+9797243 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 9 );
+        else nEvents.push_back( 10 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt80to120"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt80to120_ext1" ); Xsec.push_back( 2758420*0.03844  ); Wsum.push_back( 13555323+9797243 ); nEvents.push_back( 3 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt80to120_ext1.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt80to120_ext1" ); Xsec.push_back( 2758420*0.03844  ); Wsum.push_back( 13555323+9797243 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 3 );
+        else nEvents.push_back( 3 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt80to120_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _MuMu_QCDMuEnriched_120to170 )
@@ -630,12 +759,16 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt120to170" ); Xsec.push_back( 469797*0.05362 ); Wsum.push_back( 8042720+11938137 ); nEvents.push_back( 5 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt120to170.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt120to170" ); Xsec.push_back( 469797*0.05362 ); Wsum.push_back( 8042720+11938137 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 5 );
+        else nEvents.push_back( 5 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt120to170"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt120to170_backup" ); Xsec.push_back( 469797*0.05362  ); Wsum.push_back( 8042720+11938137 ); nEvents.push_back( 2 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt120to170_backup.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt120to170_backup" ); Xsec.push_back( 469797*0.05362  ); Wsum.push_back( 8042720+11938137 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2 );
+        else nEvents.push_back( 2 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt120to170_backup"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _MuMu_QCDMuEnriched_170to300 )
@@ -645,18 +778,21 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt170to300" ); Xsec.push_back( 117989*0.07335 ); Wsum.push_back( 7947158+9403070+19607775 );
-        nEvents.push_back( 1 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt170to300.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 1 );
+        else nEvents.push_back( 1 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt170to300"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt170to300_ext1" ); Xsec.push_back( 117989*0.07335 ); Wsum.push_back( 7947158+9403070+19607775 );
-        nEvents.push_back( 3 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt170to300_ext1.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2 );
+        else nEvents.push_back( 3 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt170to300_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt170to300_backup" ); Xsec.push_back( 117989*0.07335 ); Wsum.push_back( 7947158+9403070+19607775 );
-        nEvents.push_back( 10 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt170to300_backup.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 10 );
+        else nEvents.push_back( 10 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt170to300_backup"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _MuMu_QCDMuEnriched_300to470 )
@@ -666,18 +802,21 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt300to470" ); Xsec.push_back( 7820.25*0.10196 ); Wsum.push_back( 7937587+16452587+24605502 );
-        nEvents.push_back( 3 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt300to470.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 3 );
+        else nEvents.push_back( 3 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt300to470"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt300to470_ext1" ); Xsec.push_back( 7820.25*0.10196 ); Wsum.push_back( 7937587+16452587+24605502 );
-        nEvents.push_back( 1 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt300to470_ext1.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 1 );
+        else nEvents.push_back( 1 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt300to470_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt300to470_ext2" ); Xsec.push_back( 7820.25*0.10196 ); Wsum.push_back( 7937587+16452587+24605502 );
-        nEvents.push_back( 10 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt300to470_ext2.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 10 );
+        else nEvents.push_back( 10 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt300to470_ext2"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _MuMu_QCDMuEnriched_470to600 )
@@ -686,12 +825,16 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt470to600" ); Xsec.push_back( 645.528*0.12242 ); Wsum.push_back( 3851523+5663755 ); nEvents.push_back( 1 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt470to600.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt470to600" ); Xsec.push_back( 645.528*0.12242 ); Wsum.push_back( 3851523+5663755 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 1 );
+        else nEvents.push_back( 1 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt470to600"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt470to600_ext1" ); Xsec.push_back( 645.528*0.12242 ); Wsum.push_back( 3851523+5663755 ); nEvents.push_back( 1 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt470to600_ext1.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt470to600_ext1" ); Xsec.push_back( 645.528*0.12242 ); Wsum.push_back( 3851523+5663755 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 1 );
+        else nEvents.push_back( 1 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt470to600_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 // DID NOT FIND THIS ONE
@@ -706,18 +849,21 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt600to800" ); Xsec.push_back( 187.109*0.13412 ); Wsum.push_back( 4010135+5971173+9756852 );
-        nEvents.push_back( 4 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt600to800.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 4 );
+        else nEvents.push_back( 4 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt600to800"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt600to800_ext1" ); Xsec.push_back( 187.109*0.13412 ); Wsum.push_back( 4010135+5971173+9756852 );
-        nEvents.push_back( 4 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt600to800_ext1.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 4 );
+        else nEvents.push_back( 4 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt600to800_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt600to800_backup" ); Xsec.push_back( 187.109*0.13412 ); Wsum.push_back( 4010135+5971173+9756852 );
-        nEvents.push_back( 3 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt600to800_backup.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 3 );
+        else nEvents.push_back( 3 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt600to800_backup"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _MuMu_QCDMuEnriched_800to1000 )
@@ -727,18 +873,21 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt800to1000" ); Xsec.push_back( 32.3486*0.14552 ); Wsum.push_back( 3962747+5838539+9966146 );
-        nEvents.push_back( 2 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt800to1000.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2 );
+        else nEvents.push_back( 2 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt800to1000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt800to1000_ext1" ); Xsec.push_back( 32.3486*0.14552 ); Wsum.push_back( 3962747+5838539+9966146 );
-        nEvents.push_back( 6 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt800to1000_ext1.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 6 );
+        else nEvents.push_back( 6 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt800to1000_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt800to1000_ext2" ); Xsec.push_back( 32.3486*0.14552 ); Wsum.push_back( 3962747+5838539+9966146 );
-        nEvents.push_back( 3 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt800to1000_ext2.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 3 );
+        else nEvents.push_back( 3 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt800to1000_ext2"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _MuMu_QCDMuEnriched_1000toInf )
@@ -747,12 +896,16 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt1000toInf" ); Xsec.push_back( 10.4305*0.15544 ); Wsum.push_back( 3861436+9609820 ); nEvents.push_back( 8 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt1000toInf.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt1000toInf" ); Xsec.push_back( 10.4305*0.15544 ); Wsum.push_back( 3861436+9609820 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 8 );
+        else nEvents.push_back( 8 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt1000toInf"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt1000toInf_ext1" ); Xsec.push_back( 10.4305*0.15544 ); Wsum.push_back( 3861436+9609820 ); nEvents.push_back( 2 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt1000toInf_ext1.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt1000toInf_ext1" ); Xsec.push_back( 10.4305*0.15544 ); Wsum.push_back( 3861436+9609820 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 3 );
+        else nEvents.push_back( 2 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt1000toInf_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _MuMu_QCDMuEnriched_Full )
@@ -761,74 +914,100 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt15to20" ); Xsec.push_back( 720648000*0.00042 ); Wsum.push_back( 4141251.0 ); nEvents.push_back( 0 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt15to20.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt15to20" ); Xsec.push_back( 720648000*0.00042 ); Wsum.push_back( 4141251.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 0 );
+        else nEvents.push_back( 0 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt15to20"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt20to30" ); Xsec.push_back( 1273190000*0.003 ); Wsum.push_back( 31302080.0 ); nEvents.push_back( 0 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt20to30.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt20to30" ); Xsec.push_back( 1273190000*0.003 ); Wsum.push_back( 31302080.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 0 );
+        else nEvents.push_back( 0 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt20to30"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt30to50" ); Xsec.push_back( 139803000*0.01182 ); Wsum.push_back( 29717171.0 ); nEvents.push_back( 2 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt30to50.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt30to50" ); Xsec.push_back( 139803000*0.01182 ); Wsum.push_back( 29717171.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2 );
+        else nEvents.push_back( 2 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt30to50"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt50to80" ); Xsec.push_back( 19222500*0.02276 ); Wsum.push_back( 19806914.0 ); nEvents.push_back( 4 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt50to80.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt50to80" ); Xsec.push_back( 19222500*0.02276 ); Wsum.push_back( 19806914.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 4 );
+        else nEvents.push_back( 4 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt50to80"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt80to120" ); Xsec.push_back( 2758420*0.03844 ); Wsum.push_back( 13555323+9797243 ); nEvents.push_back( 10 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt80to120.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt80to120" ); Xsec.push_back( 2758420*0.03844 ); Wsum.push_back( 13555323+9797243 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 9 );
+        else nEvents.push_back( 10 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt80to120"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt80to120_ext1" ); Xsec.push_back( 2758420*0.03844  ); Wsum.push_back( 13555323+9797243 ); nEvents.push_back( 3 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt80to120_ext1.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt80to120_ext1" ); Xsec.push_back( 2758420*0.03844  ); Wsum.push_back( 13555323+9797243 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 3 );
+        else nEvents.push_back( 3 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt80to120_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt120to170" ); Xsec.push_back( 469797*0.05362 ); Wsum.push_back( 8042720+11938137 ); nEvents.push_back( 5 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt120to170.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt120to170" ); Xsec.push_back( 469797*0.05362 ); Wsum.push_back( 8042720+11938137 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 5 );
+        else nEvents.push_back( 5 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt120to170"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt120to170_backup" ); Xsec.push_back( 469797*0.05362  ); Wsum.push_back( 8042720+11938137 ); nEvents.push_back( 2 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt120to170_backup.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt120to170_backup" ); Xsec.push_back( 469797*0.05362  ); Wsum.push_back( 8042720+11938137 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2 );
+        else nEvents.push_back( 2 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt120to170_backup"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt170to300" ); Xsec.push_back( 117989*0.07335 ); Wsum.push_back( 7947158+9403070+19607775 );
-        nEvents.push_back( 1 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt170to300.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 1 );
+        else nEvents.push_back( 1 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt170to300"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt170to300_ext1" ); Xsec.push_back( 117989*0.07335 ); Wsum.push_back( 7947158+9403070+19607775 );
-        nEvents.push_back( 3 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt170to300_ext1.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2 );
+        else nEvents.push_back( 3 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt170to300_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt170to300_backup" ); Xsec.push_back( 117989*0.07335 ); Wsum.push_back( 7947158+9403070+19607775 );
-        nEvents.push_back( 10 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt170to300_backup.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 10 );
+        else nEvents.push_back( 10 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt170to300_backup"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt300to470" ); Xsec.push_back( 7820.25*0.10196 ); Wsum.push_back( 7937587+16452587+24605502 );
-        nEvents.push_back( 3 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt300to470.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 3 );
+        else nEvents.push_back( 3 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt300to470"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt300to470_ext1" ); Xsec.push_back( 7820.25*0.10196 ); Wsum.push_back( 7937587+16452587+24605502 );
-        nEvents.push_back( 1 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt300to470_ext1.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 1 );
+        else nEvents.push_back( 1 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt300to470_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt300to470_ext2" ); Xsec.push_back( 7820.25*0.10196 ); Wsum.push_back( 7937587+16452587+24605502 );
-        nEvents.push_back( 10 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt300to470_ext2.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 10 );
+        else nEvents.push_back( 10 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt300to470_ext2"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt470to600" ); Xsec.push_back( 645.528*0.12242 ); Wsum.push_back( 3851523+5663755 ); nEvents.push_back( 1 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt470to600.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt470to600" ); Xsec.push_back( 645.528*0.12242 ); Wsum.push_back( 3851523+5663755 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 1 );
+        else nEvents.push_back( 1 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt470to600"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt470to600_ext1" ); Xsec.push_back( 645.528*0.12242 ); Wsum.push_back( 3851523+5663755 ); nEvents.push_back( 1 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt470to600_ext1.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt470to600_ext1" ); Xsec.push_back( 645.528*0.12242 ); Wsum.push_back( 3851523+5663755 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 1 );
+        else nEvents.push_back( 1 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt470to600_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 // DID NOT FIND THIS ONE
@@ -837,41 +1016,51 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt600to800" ); Xsec.push_back( 187.109*0.13412 ); Wsum.push_back( 4010135+5971173+9756852 );
-        nEvents.push_back( 4 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt600to800.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 4 );
+        else nEvents.push_back( 4 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt600to800"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt600to800_ext1" ); Xsec.push_back( 187.109*0.13412 ); Wsum.push_back( 4010135+5971173+9756852 );
-        nEvents.push_back( 4 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt600to800_ext1.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 4 );
+        else nEvents.push_back( 4 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt600to800_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt600to800_backup" ); Xsec.push_back( 187.109*0.13412 ); Wsum.push_back( 4010135+5971173+9756852 );
-        nEvents.push_back( 3 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt600to800_backup.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 3 );
+        else nEvents.push_back( 3 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt600to800_backup"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt800to1000" ); Xsec.push_back( 32.3486*0.14552 ); Wsum.push_back( 3962747+5838539+9966146 );
-        nEvents.push_back( 2 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt800to1000.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2 );
+        else nEvents.push_back( 2 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt800to1000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt800to1000_ext1" ); Xsec.push_back( 32.3486*0.14552 ); Wsum.push_back( 3962747+5838539+9966146 );
-        nEvents.push_back( 6 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt800to1000_ext1.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 6 );
+        else nEvents.push_back( 6 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt800to1000_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt800to1000_ext2" ); Xsec.push_back( 32.3486*0.14552 ); Wsum.push_back( 3962747+5838539+9966146 );
-        nEvents.push_back( 3 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt800to1000_ext2.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 3 );
+        else nEvents.push_back( 3 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt800to1000_ext2"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt1000toInf" ); Xsec.push_back( 10.4305*0.15544 ); Wsum.push_back( 3861436+9609820 ); nEvents.push_back( 8 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt1000toInf.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt1000toInf" ); Xsec.push_back( 10.4305*0.15544 ); Wsum.push_back( 3861436+9609820 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 8 );
+        else nEvents.push_back( 8 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt1000toInf"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt1000toInf_ext1" ); Xsec.push_back( 10.4305*0.15544 ); Wsum.push_back( 3861436+9609820 ); nEvents.push_back( 2 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt1000toInf_ext1.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt1000toInf_ext1" ); Xsec.push_back( 10.4305*0.15544 ); Wsum.push_back( 3861436+9609820 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 3 );
+        else nEvents.push_back( 2 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt1000toInf_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_Bkg_Full )
@@ -880,137 +1069,193 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 33080379.0 ); nEvents.push_back( 11 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_v1.root";
+        Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 33080379.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 11 );
+        else nEvents.push_back( 11 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_v1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_v2" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 33080379.0 ); nEvents.push_back( 26 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_v2.root";
+        Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_v2" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 33080379.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 26 );
+        else nEvents.push_back( 26 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_v2"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_ext1v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 33080379.0 ); nEvents.push_back( 25 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_ext1v1.root";
+        Tag.push_back( "SelectedMuMu_DYTauTau_M10to50_ext1v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 33080379.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 26 );
+        else nEvents.push_back( 25 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M10to50_ext1v1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_DYTauTau_M50toInf" ); Xsec.push_back( 1921.8 ); Wsum.push_back( 27277866.0 ); nEvents.push_back( 31733 ); //  NNLO Xsec
+        Tag.push_back( "SelectedMuMu_DYTauTau_M50toInf" ); Xsec.push_back( 1921.8 ); Wsum.push_back( 27277866.0 );  //  NNLO Xsec
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 31777 );
+        else nEvents.push_back( 31733 );
 //        Xsec->push_back( 6104.0/3.0 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M50toInf.root";
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_DYTauTau_M50toInf"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_ttbar" ); Xsec.push_back( 734.577 ); Wsum.push_back( 135949780.0 ); nEvents.push_back( 473806 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar.root";
+        Tag.push_back( "SelectedMuMu_ttbar" ); Xsec.push_back( 734.577 ); Wsum.push_back( 135949780.0 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 473907 );
+        else nEvents.push_back( 473806 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_ttbarBackup" ); Xsec.push_back( 734.577 ); Wsum.push_back( 135949780.0 ); nEvents.push_back( 479287 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbarBackup.root";
+        Tag.push_back( "SelectedMuMu_ttbarBackup" ); Xsec.push_back( 734.577 ); Wsum.push_back( 135949780.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 479397 );
+        else nEvents.push_back( 479287 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbarBackup"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_ttbar_M700to1000" ); Xsec.push_back( 76.605 ); nEvents.push_back( 269627 );
+        Tag.push_back( "SelectedMuMu_ttbar_M700to1000" ); Xsec.push_back( 76.605 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 269661 );
+        else nEvents.push_back( 269627 );
         Wsum.push_back( 38422582.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar_M700to1000.root";
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar_M700to1000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_ttbar_M1000toInf" ); Xsec.push_back( 20.578 ); nEvents.push_back( 152026 );
+        Tag.push_back( "SelectedMuMu_ttbar_M1000toInf" ); Xsec.push_back( 20.578 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 152053 );
+        else nEvents.push_back( 152026 );
         Wsum.push_back( 24561630.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar_M1000toInf.root";
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ttbar_M1000toInf"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_tW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6952830.0 ); nEvents.push_back( 52490 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_tW.root";
+        Tag.push_back( "SelectedMuMu_tW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6952830.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 52500 );
+        else nEvents.push_back( 52490 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_tW"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_tbarW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6933093.0 ); nEvents.push_back( 52492 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_tbarW.root";
+        Tag.push_back( "SelectedMuMu_tbarW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6933093.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 52489 );
+        else nEvents.push_back( 52492 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_tbarW"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_ZZ" ); Xsec.push_back( 16.523 ); Wsum.push_back( 998034.0 ); nEvents.push_back( 30557 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ZZ.root";                  // NOT SURE (there also is ZZTo4L), but probably ok
+        Tag.push_back( "SelectedMuMu_ZZ" ); Xsec.push_back( 16.523 ); Wsum.push_back( 998034.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 30567 );
+        else nEvents.push_back( 30557 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_ZZ"+RocCorr+".root";                  // NOT SURE (there also is ZZTo4L), but probably ok
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_WZ" ); Xsec.push_back( 47.13 ); Wsum.push_back( 2995828.0 ); nEvents.push_back( 47568 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WZ.root";                  // NOT SURE (there also is WZTo3LNu), but probably ok
+        Tag.push_back( "SelectedMuMu_WZ" ); Xsec.push_back( 47.13 ); Wsum.push_back( 2995828.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 47584 );
+        else nEvents.push_back( 47568 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WZ"+RocCorr+".root";                  // NOT SURE (there also is WZTo3LNu), but probably ok
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_WW" ); Xsec.push_back( 118.7 ); Wsum.push_back( 6987123.0 ); nEvents.push_back( 35585 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WW.root";                  // NOT SURE (there also is WWTo2L2Nu), but probably ok
+        Tag.push_back( "SelectedMuMu_WW" ); Xsec.push_back( 118.7 ); Wsum.push_back( 6987123.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 35594 );
+        else nEvents.push_back( 35585 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WW"+RocCorr+".root";                  // NOT SURE (there also is WWTo2L2Nu), but probably ok
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_WJetsToLNu" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 93 ); // I get Wsum=137540054
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WJetsToLNu.root";
+        Tag.push_back( "SelectedMuMu_WJetsToLNu" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 137540054.0 ); // Wsum.push_back( 86731698.0 ); // I get Wsum=137540054
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 92 );
+        else nEvents.push_back( 93 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WJetsToLNu"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_WJetsToLNu_ext" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 823 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WJetsToLNu_ext.root";        // There also is madgraph version
+        Tag.push_back( "SelectedMuMu_WJetsToLNu_ext" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 137540054.0 ); // Wsum.push_back( 86731698.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 823 );
+        else nEvents.push_back( 823 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_WJetsToLNu_ext"+RocCorr+".root";        // There also is madgraph version
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt15to20" ); Xsec.push_back( 720648000*0.00042 ); Wsum.push_back( 4141251.0 ); nEvents.push_back( 0 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt15to20.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt15to20" ); Xsec.push_back( 720648000*0.00042 ); Wsum.push_back( 4141251.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 0 );
+        else nEvents.push_back( 0 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt15to20"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt20to30" ); Xsec.push_back( 1273190000*0.003 ); Wsum.push_back( 31302080.0 ); nEvents.push_back( 0 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt20to30.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt20to30" ); Xsec.push_back( 1273190000*0.003 ); Wsum.push_back( 31302080.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 0 );
+        else nEvents.push_back( 0 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt20to30"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt30to50" ); Xsec.push_back( 139803000*0.01182 ); Wsum.push_back( 29717171.0 ); nEvents.push_back( 2 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt30to50.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt30to50" ); Xsec.push_back( 139803000*0.01182 ); Wsum.push_back( 29717171.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2 );
+        else nEvents.push_back( 2 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt30to50"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt50to80" ); Xsec.push_back( 19222500*0.02276 ); Wsum.push_back( 19806914.0 ); nEvents.push_back( 4 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt50to80.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt50to80" ); Xsec.push_back( 19222500*0.02276 ); Wsum.push_back( 19806914.0 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 4 );
+        else nEvents.push_back( 4 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt50to80"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt80to120" ); Xsec.push_back( 2758420*0.03844 ); Wsum.push_back( 13555323+9797243 ); nEvents.push_back( 10 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt80to120.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt80to120" ); Xsec.push_back( 2758420*0.03844 ); Wsum.push_back( 13555323+9797243 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 9 );
+        else nEvents.push_back( 10 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt80to120"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt80to120_ext1" ); Xsec.push_back( 2758420*0.03844  ); Wsum.push_back( 13555323+9797243 ); nEvents.push_back( 3 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt80to120_ext1.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt80to120_ext1" ); Xsec.push_back( 2758420*0.03844  ); Wsum.push_back( 13555323+9797243 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 3 );
+        else nEvents.push_back( 3 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt80to120_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt120to170" ); Xsec.push_back( 469797*0.05362 ); Wsum.push_back( 8042720+11938137 ); nEvents.push_back( 5 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt120to170.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt120to170" ); Xsec.push_back( 469797*0.05362 ); Wsum.push_back( 8042720+11938137 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 5 );
+        else nEvents.push_back( 5 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt120to170"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt120to170_backup" ); Xsec.push_back( 469797*0.05362  ); Wsum.push_back( 8042720+11938137 ); nEvents.push_back( 2 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt120to170_backup.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt120to170_backup" ); Xsec.push_back( 469797*0.05362  ); Wsum.push_back( 8042720+11938137 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2 );
+        else nEvents.push_back( 2 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt120to170_backup"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt170to300" ); Xsec.push_back( 117989*0.07335 ); Wsum.push_back( 7947158+9403070+19607775 );
-        nEvents.push_back( 1 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt170to300.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 1 );
+        else nEvents.push_back( 1 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt170to300"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt170to300_ext1" ); Xsec.push_back( 117989*0.07335 ); Wsum.push_back( 7947158+9403070+19607775 );
-        nEvents.push_back( 3 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt170to300_ext1.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2 );
+        else nEvents.push_back( 3 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt170to300_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt170to300_backup" ); Xsec.push_back( 117989*0.07335 ); Wsum.push_back( 7947158+9403070+19607775 );
-        nEvents.push_back( 10 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt170to300_backup.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 10 );
+        else nEvents.push_back( 10 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt170to300_backup"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt300to470" ); Xsec.push_back( 7820.25*0.10196 ); Wsum.push_back( 7937587+16452587+24605502 );
-        nEvents.push_back( 3 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt300to470.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 3 );
+        else nEvents.push_back( 3 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt300to470"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt300to470_ext1" ); Xsec.push_back( 7820.25*0.10196 ); Wsum.push_back( 7937587+16452587+24605502 );
-        nEvents.push_back( 1 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt300to470_ext1.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 1 );
+        else nEvents.push_back( 1 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt300to470_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt300to470_ext2" ); Xsec.push_back( 7820.25*0.10196 ); Wsum.push_back( 7937587+16452587+24605502 );
-        nEvents.push_back( 10 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt300to470_ext2.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 10 );
+        else nEvents.push_back( 10 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt300to470_ext2"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt470to600" ); Xsec.push_back( 645.528*0.12242 ); Wsum.push_back( 3851523+5663755 ); nEvents.push_back( 1 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt470to600.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt470to600" ); Xsec.push_back( 645.528*0.12242 ); Wsum.push_back( 3851523+5663755 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 1 );
+        else nEvents.push_back( 1 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt470to600"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt470to600_ext1" ); Xsec.push_back( 645.528*0.12242 ); Wsum.push_back( 3851523+5663755 ); nEvents.push_back( 1 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt470to600_ext1.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt470to600_ext1" ); Xsec.push_back( 645.528*0.12242 ); Wsum.push_back( 3851523+5663755 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 1 );
+        else nEvents.push_back( 1 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt470to600_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 // DID NOT FIND THIS ONE
@@ -1019,38 +1264,51 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt600to800" ); Xsec.push_back( 187.109*0.13412 ); Wsum.push_back( 4010135+5971173+9756852 );
-        nEvents.push_back( 4 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt600to800.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 4 );
+        else nEvents.push_back( 4 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt600to800"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt600to800_ext1" ); Xsec.push_back( 187.109*0.13412 ); Wsum.push_back( 4010135+5971173+9756852 );
-        nEvents.push_back( 4 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt600to800_ext1.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 4 );
+        else nEvents.push_back( 4 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt600to800_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt600to800_backup" ); Xsec.push_back( 187.109*0.13412 ); Wsum.push_back( 4010135+5971173+9756852 );
-        nEvents.push_back( 3 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt600to800_backup.root";
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 3 );
+        else nEvents.push_back( 3 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt600to800_backup"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt800to1000" ); Xsec.push_back( 32.3486*0.14552 ); Wsum.push_back( 3962747+5838539+9966146 ); nEvents.push_back( 2 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt800to1000.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt800to1000" ); Xsec.push_back( 32.3486*0.14552 ); Wsum.push_back( 3962747+5838539+9966146 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2 );
+        else nEvents.push_back( 2 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt800to1000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt800to1000_ext1" ); Xsec.push_back( 32.3486*0.14552 ); Wsum.push_back( 3962747+5838539+9966146 ); nEvents.push_back( 6 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt800to1000_ext1.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt800to1000_ext1" ); Xsec.push_back( 32.3486*0.14552 ); Wsum.push_back( 3962747+5838539+9966146 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 6 );
+        else nEvents.push_back( 6 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt800to1000_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt800to1000_ext2" ); Xsec.push_back( 32.3486*0.14552 ); Wsum.push_back( 3962747+5838539+9966146 ); nEvents.push_back( 3 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt800to1000_ext2.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt800to1000_ext2" ); Xsec.push_back( 32.3486*0.14552 ); Wsum.push_back( 3962747+5838539+9966146 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 3 );
+        else nEvents.push_back( 3 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt800to1000_ext2"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt1000toInf" ); Xsec.push_back( 10.4305*0.15544 ); Wsum.push_back( 3861436+9609820 ); nEvents.push_back( 8 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt1000toInf.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt1000toInf" ); Xsec.push_back( 10.4305*0.15544 ); Wsum.push_back( 3861436+9609820 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 8 );
+        else nEvents.push_back( 8 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt1000toInf"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt1000toInf_ext1" ); Xsec.push_back( 10.4305*0.15544 ); Wsum.push_back( 3861436+9609820 ); nEvents.push_back( 2 );
-        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt1000toInf_ext1.root";
+        Tag.push_back( "SelectedMuMu_QCDMuEnriched_Pt1000toInf_ext1" ); Xsec.push_back( 10.4305*0.15544 ); Wsum.push_back( 3861436+9609820 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 3 );
+        else nEvents.push_back( 2 );
+        Location = "SelectedMuMu/MC_bkg/SelectedMuMu_QCDMuEnriched_Pt1000toInf_ext1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_SingleMuon_B ) // Number of events in the original sample (before selection) are written into Wsum
@@ -1059,8 +1317,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "DATA";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_SingleMuon_B" ); Wsum.push_back( 108561074 ); nEvents.push_back( 2862076 );
-        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_B.root";
+        Tag.push_back( "SelectedMuMu_SingleMuon_B" ); Wsum.push_back( 108561074 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2862839 );
+        else nEvents.push_back( 2862076 );
+        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_B"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_SingleMuon_C ) // Number of events in the original sample (before selection) are written into Wsum
@@ -1069,8 +1329,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "DATA";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_SingleMuon_C" ); Wsum.push_back( 64715287 ); nEvents.push_back( 1735466 );
-        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_C.root";
+        Tag.push_back( "SelectedMuMu_SingleMuon_C" ); Wsum.push_back( 64715287 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 1735877 );
+        else nEvents.push_back( 1735466 );
+        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_C"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_SingleMuon_D ) // Number of events in the original sample (before selection) are written into Wsum
@@ -1079,8 +1341,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "DATA";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_SingleMuon_D" ); Wsum.push_back( 96652779 ); nEvents.push_back( 2880299 );
-        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_D.root";
+        Tag.push_back( "SelectedMuMu_SingleMuon_D" ); Wsum.push_back( 96652779 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2880898 );
+        else nEvents.push_back( 2880299 );
+        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_D"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_SingleMuon_E ) // Number of events in the original sample (before selection) are written into Wsum
@@ -1089,8 +1353,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "DATA";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_SingleMuon_E" ); Wsum.push_back( 87358348 ); nEvents.push_back( 2651780 );
-        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_E.root";
+        Tag.push_back( "SelectedMuMu_SingleMuon_E" ); Wsum.push_back( 87358348 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2652397 );
+        else nEvents.push_back( 2651780 );
+        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_E"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_SingleMuon_F ) // Number of events in the original sample (before selection) are written into Wsum
@@ -1099,8 +1365,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "DATA";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_SingleMuon_F" ); Wsum.push_back( 64986568 ); nEvents.push_back( 2044183 );
-        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_F.root";
+        Tag.push_back( "SelectedMuMu_SingleMuon_F" ); Wsum.push_back( 64986568 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2044728 );
+        else nEvents.push_back( 2044183 );
+        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_F"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_SingleMuon_G ) // Number of events in the original sample (before selection) are written into Wsum
@@ -1109,8 +1377,10 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "DATA";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_SingleMuon_G" ); Wsum.push_back( 138710659 ); nEvents.push_back( 5054446 );
-        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_G.root";
+        Tag.push_back( "SelectedMuMu_SingleMuon_G" ); Wsum.push_back( 138710659 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 5055758 );
+        else nEvents.push_back( 5054446 );
+        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_G"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_SingleMuon_H ) // Number of events in the original sample (before selection) are written into Wsum
@@ -1119,12 +1389,16 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "DATA";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_SingleMuon_Hver2" ); Wsum.push_back( 141936183 ); nEvents.push_back( 5168884 );
-        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_Hver2.root";
+        Tag.push_back( "SelectedMuMu_SingleMuon_Hver2" ); Wsum.push_back( 141936183 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 5170278 );
+        else nEvents.push_back( 5168884 );
+        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_Hver2"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_SingleMuon_Hver3" ); Wsum.push_back( 4386928 ); nEvents.push_back( 157648 );
-        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_Hver3.root";
+        Tag.push_back( "SelectedMuMu_SingleMuon_Hver3" ); Wsum.push_back( 4386928 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 157691 );
+        else nEvents.push_back( 157648 );
+        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_Hver3"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _MuMu_SingleMuon_Full ) // Number of events in the original sample (before selection) are written into Wsum
@@ -1133,36 +1407,52 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "DATA";
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
-        Tag.push_back( "SelectedMuMu_SingleMuon_B" ); Wsum.push_back( 108561074 ); nEvents.push_back( 2862076 );
-        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_B.root";
+        Tag.push_back( "SelectedMuMu_SingleMuon_B" ); Wsum.push_back( 108561074 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2862839 );
+        else nEvents.push_back( 2862076 );
+        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_B"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_SingleMuon_C" ); Wsum.push_back( 64715287 ); nEvents.push_back( 1735466 );
-        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_C.root";
+        Tag.push_back( "SelectedMuMu_SingleMuon_C" ); Wsum.push_back( 64715287 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 1735877 );
+        else nEvents.push_back( 1735466 );
+        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_C"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_SingleMuon_D" ); Wsum.push_back( 96652779 ); nEvents.push_back( 2880299 );
-        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_D.root";
+        Tag.push_back( "SelectedMuMu_SingleMuon_D" ); Wsum.push_back( 96652779 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2880898 );
+        else nEvents.push_back( 2880299 );
+        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_D"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_SingleMuon_E" ); Wsum.push_back( 87358348 ); nEvents.push_back( 2651780 );
-        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_E.root";
+        Tag.push_back( "SelectedMuMu_SingleMuon_E" ); Wsum.push_back( 87358348 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2652397 );
+        else nEvents.push_back( 2651780 );
+        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_E"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_SingleMuon_F" ); Wsum.push_back( 64986568 ); nEvents.push_back( 2044183 );
-        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_F.root";
+        Tag.push_back( "SelectedMuMu_SingleMuon_F" ); Wsum.push_back( 64986568 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2044728 );
+        else nEvents.push_back( 2044183 );
+        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_F"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_SingleMuon_G" ); Wsum.push_back( 138710659 ); nEvents.push_back( 5054446 );
-        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_G.root";
+        Tag.push_back( "SelectedMuMu_SingleMuon_G" ); Wsum.push_back( 138710659 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 5055758 );
+        else nEvents.push_back( 5054446 );
+        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_G"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_SingleMuon_Hver2" ); Wsum.push_back( 141936183 ); nEvents.push_back( 5168884 );
-        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_Hver2.root";
+        Tag.push_back( "SelectedMuMu_SingleMuon_Hver2" ); Wsum.push_back( 141936183 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 5170278 );
+        else nEvents.push_back( 5168884 );
+        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_Hver2"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedMuMu_SingleMuon_Hver3" ); Wsum.push_back( 4386928 ); nEvents.push_back( 157648 );
-        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_Hver3.root";
+        Tag.push_back( "SelectedMuMu_SingleMuon_Hver3" ); Wsum.push_back( 4386928 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 157691 );
+        else nEvents.push_back( 157648 );
+        Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_Hver3"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _Test_MuMu )
@@ -1172,7 +1462,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedMuMu/Histos/";
 
         Tag.push_back( "SelectedMuMu_ZToMuMu_M4500to6000_4"); Xsec.push_back( 1.0 ); Wsum.push_back( 10200.0 ); nEvents.push_back( 10200 );
-        Location = "test/SelectedMuMu_ZToMuMu_M4500to6000_4.root";
+        Location = "test/SelectedMuMu_ZToMuMu_M4500to6000_4"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EE_DY_10to50 )
@@ -2075,15 +2365,15 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_DYTauTau_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_v1.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_v1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_DYTauTau_M10to50_v2" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_v2.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_v2"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_DYTauTau_M10to50_ext1v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_ext1v1.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_ext1v1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_DYTauTau_50toInf ) // Only TauTau evens are counted in Wsum and nEvents
@@ -2094,7 +2384,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
 
         Tag.push_back( "SelectedEMu_DYTauTau_M50toInf" ); Xsec.push_back( 1921.8 ); Wsum.push_back( 27277866.0 ); nEvents.push_back( 1 ); //  NNLO Xsec
 //        Xsec->push_back( 6104.0/3.0 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M50toInf.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M50toInf"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_DYTauTau_Full )
@@ -2104,20 +2394,20 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_DYTauTau_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_v1.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_v1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_DYTauTau_M10to50_v2" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_v2.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_v2"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_DYTauTau_M10to50_ext1v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 7407794+15912921+9759664 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_ext1v1.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_ext1v1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_DYTauTau_M50toInf" ); Xsec.push_back( 1921.8 ); Wsum.push_back( 27277866.0 ); nEvents.push_back( 1 ); //  NNLO Xsec
 //        Xsec->push_back( 6104.0/3.0 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M50toInf.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M50toInf"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_ttbar )
@@ -2127,11 +2417,11 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_ttbar" ); Xsec.push_back( 734.577 ); Wsum.push_back( 67632273+68317507 ); nEvents.push_back( 1 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_ttbarBackup" ); Xsec.push_back( 734.577 ); Wsum.push_back( 67632273+68317507 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbarBackup.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbarBackup"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_ttbar_700to1000 )
@@ -2142,7 +2432,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
 
         Tag.push_back( "SelectedEMu_ttbar_M700to1000" ); Xsec.push_back( 76.605 ); nEvents.push_back( 1 );
         Wsum.push_back( 38422582.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_SelectedMuMu_ttbar_M700to1000.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_SelectedMuMu_ttbar_M700to1000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _EMu_ttbar_1000toInf )
@@ -2153,7 +2443,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
 
         Tag.push_back( "SelectedEMu_ttbar_M1000toInf" ); Xsec.push_back( 20.578 ); nEvents.push_back( 1 );
         Wsum.push_back( 24561630.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar_M1000toInf.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar_M1000toInf"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_ttbar_Full )
@@ -2163,21 +2453,21 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_ttbar" ); Xsec.push_back( 734.577 ); Wsum.push_back( 67632273+68317507 ); nEvents.push_back( 1 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_ttbarBackup" ); Xsec.push_back( 734.577 ); Wsum.push_back( 67632273+68317507 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbarBackup.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbarBackup"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_ttbar_M700to1000" ); Xsec.push_back( 76.605 ); nEvents.push_back( 1 );
         Wsum.push_back( 38422582.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar_M700to1000.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar_M700to1000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_ttbar_M1000toInf" ); Xsec.push_back( 20.578 ); nEvents.push_back( 1 );
         Wsum.push_back( 24561630.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar_M1000toInf.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar_M1000toInf"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_tW )
@@ -2187,7 +2477,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_tW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6952830.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_tW.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_tW"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_tbarW )
@@ -2197,7 +2487,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_tbarW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6933093.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_tbarW.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_tbarW"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_ZZ )
@@ -2207,7 +2497,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_ZZ" ); Xsec.push_back( 16.523 ); Wsum.push_back( 998034.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_ZZ.root";                  // NOT SURE (there also is ZZTo4L), but probably ok
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_ZZ"+RocCorr+".root";                  // NOT SURE (there also is ZZTo4L), but probably ok
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_WZ )
@@ -2217,7 +2507,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_WZ" ); Xsec.push_back( 47.13 ); Wsum.push_back( 2995828.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_WZ.root";                  // NOT SURE (there also is WZTo3LNu), but probably ok
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_WZ"+RocCorr+".root";                  // NOT SURE (there also is WZTo3LNu), but probably ok
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_WW )
@@ -2227,7 +2517,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_WW" ); Xsec.push_back( 118.7 ); Wsum.push_back( 6987123.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_WW.root";                  // NOT SURE (there also is WWTo2L2Nu), but probably ok
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_WW"+RocCorr+".root";                  // NOT SURE (there also is WWTo2L2Nu), but probably ok
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_VVnST )
@@ -2237,23 +2527,23 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_tW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6952830.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_tW.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_tW"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_tbarW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6933093.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_tbarW.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_tbarW"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_ZZ" ); Xsec.push_back( 16.523 ); Wsum.push_back( 998034.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_ZZ.root";                  // NOT SURE (there also is ZZTo4L), but probably ok
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_ZZ"+RocCorr+".root";                  // NOT SURE (there also is ZZTo4L), but probably ok
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_WZ" ); Xsec.push_back( 47.13 ); Wsum.push_back( 2995828.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_WZ.root";                  // NOT SURE (there also is WZTo3LNu), but probably ok
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_WZ"+RocCorr+".root";                  // NOT SURE (there also is WZTo3LNu), but probably ok
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_WW" ); Xsec.push_back( 118.7 ); Wsum.push_back( 6987123.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_WW.root";                  // NOT SURE (there also is WWTo2L2Nu), but probably ok
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_WW"+RocCorr+".root";                  // NOT SURE (there also is WWTo2L2Nu), but probably ok
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _EMu_WJets )
@@ -2263,11 +2553,11 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_WJetsToLNu" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 1 ); // I get Wsum=137540054
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_WJetsToLNu.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_WJetsToLNu"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_WJetsToLNu_ext" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_WJetsToLNu_ext.root";        // There also is madgraph version
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_WJetsToLNu_ext"+RocCorr+".root";        // There also is madgraph version
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_Bkg_Full )
@@ -2277,130 +2567,130 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_DYTauTau_M10to50_v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 33080379.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_v1.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_v1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_DYTauTau_M10to50_v2" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 33080379.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_v2.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_v2"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_DYTauTau_M10to50_ext1v1" ); Xsec.push_back( 18610.0/3.0 ); Wsum.push_back( 33080379.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_ext1v1.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M10to50_ext1v1"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_DYTauTau_M50toInf" ); Xsec.push_back( 1921.8 ); Wsum.push_back( 27277866.0 ); nEvents.push_back( 1 ); //  NNLO Xsec
 //        Xsec->push_back( 6104.0/3.0 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M50toInf.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_DYTauTau_M50toInf"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_ttbar" ); Xsec.push_back( 734.577 ); Wsum.push_back( 135949780.0 ); nEvents.push_back( 1 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_ttbarBackup" ); Xsec.push_back( 734.577 ); Wsum.push_back( 135949780.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbarBackup.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbarBackup"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_ttbar_M700to1000" ); Xsec.push_back( 76.605 ); nEvents.push_back( 1 );
         Wsum.push_back( 38422582.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar_M700to1000.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar_M700to1000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_ttbar_M1000toInf" ); Xsec.push_back( 20.578 ); nEvents.push_back( 1 );
         Wsum.push_back( 24561630.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar_M1000toInf.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar_M1000toInf"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_tW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6952830.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_tW.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_tW"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_tbarW" ); Xsec.push_back( 35.85 ); Wsum.push_back( 6933093.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_tbarW.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_tbarW"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_ZZ" ); Xsec.push_back( 16.523 ); Wsum.push_back( 998034.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_ZZ.root";                  // NOT SURE (there also is ZZTo4L), but probably ok
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_ZZ"+RocCorr+".root";                  // NOT SURE (there also is ZZTo4L), but probably ok
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_WZ" ); Xsec.push_back( 47.13 ); Wsum.push_back( 2995828.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_WZ.root";                  // NOT SURE (there also is WZTo3LNu), but probably ok
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_WZ"+RocCorr+".root";                  // NOT SURE (there also is WZTo3LNu), but probably ok
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_WW" ); Xsec.push_back( 118.7 ); Wsum.push_back( 6987123.0 ); nEvents.push_back( 1);
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_WW.root";                  // NOT SURE (there also is WWTo2L2Nu), but probably ok
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_WW"+RocCorr+".root";                  // NOT SURE (there also is WWTo2L2Nu), but probably ok
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_WJetsToLNu" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 1 ); // I get Wsum=137540054
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_WJetsToLNu.root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_WJetsToLNu"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_WJetsToLNu_ext" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_WJetsToLNu_ext.root";        // There also is madgraph version
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_WJetsToLNu_ext"+RocCorr+".root";        // There also is madgraph version
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt15to20" ); Xsec.push_back( 720648000*0.00042 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt15to20.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt15to20"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt20to30" ); Xsec.push_back( 1273190000*0.003 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt20to30.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt20to30"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt30to50" ); Xsec.push_back( 139803000*0.01182 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt30to50.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt30to50"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt50to80" ); Xsec.push_back( 19222500*0.02276 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt50to80.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt50to80"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt80to120" ); Xsec.push_back( 2758420*0.03844 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt80to120.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt80to120"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt80to120_ext1" ); Xsec.push_back( 2758420*0.03844  ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt80to120_ext1.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt80to120_ext1"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt120to170" ); Xsec.push_back( 469797*0.05362 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt120to170.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt120to170"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt120to170_backup" ); Xsec.push_back( 469797*0.05362  ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt120to170_backup.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt120to170_backup"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt170to300" ); Xsec.push_back( 117989*0.07335 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt170to300.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt170to300"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt170to300_ext1" ); Xsec.push_back( 117989*0.07335 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt170to300_ext1.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt170to300_ext1"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt170to300_backup" ); Xsec.push_back( 117989*0.07335 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt170to300_backup.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt170to300_backup"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt300to470" ); Xsec.push_back( 7820.25*0.10196 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt300to470.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt300to470"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt300to470_ext1" ); Xsec.push_back( 7820.25*0.10196 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt300to470_ext1.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt300to470_ext1"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt300to470_ext2" ); Xsec.push_back( 7820.25*0.10196 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt300to470_ext2.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt300to470_ext2"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt470to600" ); Xsec.push_back( 645.528*0.12242 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt470to600.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt470to600"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt470to600_ext1" ); Xsec.push_back( 645.528*0.12242 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt470to600_ext1.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt470to600_ext1"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //// DID NOT FIND THIS ONE
@@ -2409,35 +2699,35 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
 ////        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt600to800" ); Xsec.push_back( 187.109*0.13412 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt600to800.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt600to800"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt600to800_ext1" ); Xsec.push_back( 187.109*0.13412 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt600to800_ext1.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt600to800_ext1"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt600to800_backup" ); Xsec.push_back( 187.109*0.13412 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt600to800_backup.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt600to800_backup"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt800to1000" ); Xsec.push_back( 32.3486*0.14552 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt800to1000.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt800to1000"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt800to1000_ext1" ); Xsec.push_back( 32.3486*0.14552 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt800to1000_ext1.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt800to1000_ext1"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt800to1000_ext2" ); Xsec.push_back( 32.3486*0.14552 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt800to1000_ext2.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt800to1000_ext2"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt1000toInf" ); Xsec.push_back( 10.4305*0.15544 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt1000toInf.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt1000toInf"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
 //        Tag.push_back( "SelectedEMu_QCDMuEnriched_Pt1000toInf_ext1" ); Xsec.push_back( 10.4305*0.15544 ); Wsum.push_back( 1.0 ); nEvents.push_back( 0 );
-//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt1000toInf_ext1.root";
+//        Location = "SelectedEMu/MC_bkg/SelectedEMu_QCDMuEnriched_Pt1000toInf_ext1"+RocCorr+".root";
 //        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_SingleMuon_B )
@@ -2447,7 +2737,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_B" ); Wsum.push_back( 108561074 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_B.root";
+        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_B"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_SingleMuon_C )
@@ -2457,7 +2747,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_C" ); Wsum.push_back( 64715287 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_C.root";
+        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_C"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_SingleMuon_D )
@@ -2467,7 +2757,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_D" ); Wsum.push_back( 96652779 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_D.root";
+        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_D"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_SingleMuon_E )
@@ -2477,7 +2767,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_E" ); Wsum.push_back( 87358348 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_E.root";
+        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_E"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_SingleMuon_F )
@@ -2487,7 +2777,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_F" ); Wsum.push_back( 64986568 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_F.root";
+        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_F"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_SingleMuon_G )
@@ -2497,7 +2787,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_G" ); Wsum.push_back( 138710659 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_G.root";
+        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_G"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_SingleMuon_H )
@@ -2507,11 +2797,11 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_Hver2" ); Wsum.push_back( 141936183 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_Hver2.root";
+        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_Hver2"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_SingleMuon_Hver3" ); Wsum.push_back( 4386928 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_Hver3.root";
+        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_Hver3"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_SingleMuon_Full )
@@ -2521,35 +2811,35 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_B" ); Wsum.push_back( 108561074 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_B.root";
+        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_B"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_SingleMuon_C" ); Wsum.push_back( 64715287 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_C.root";
+        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_C"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_SingleMuon_D" ); Wsum.push_back( 96652779 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_D.root";
+        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_D"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_SingleMuon_E" ); Wsum.push_back( 87358348 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_E.root";
+        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_E"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_SingleMuon_F" ); Wsum.push_back( 64986568 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_F.root";
+        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_F"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_SingleMuon_G" ); Wsum.push_back( 138710659 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_G.root";
+        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_G"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_SingleMuon_Hver2" ); Wsum.push_back( 141936183 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_Hver2.root";
+        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_Hver2"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_SingleMuon_Hver3" ); Wsum.push_back( 4386928 ); nEvents.push_back( 1 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_Hver3.root";
+        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_Hver3"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _Test_EMu )
@@ -2559,7 +2849,7 @@ void LocalFileMgr::GetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_WW_34"); Xsec.push_back( 1.0 ); Wsum.push_back( 10788.0 ); nEvents.push_back( 10788 );
-        Location = "test/SelectedEMu_WW_34.root";
+        Location = "test/SelectedEMu_WW_34"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
 }// end of Get()
@@ -5065,10 +5355,23 @@ void LocalFileMgr::CheckProcesses()
                 }
                 else
                 {
-                    if ( !FileLocation[i].Contains(".root") )
+                    if ( FileLocation[i].Contains("/*.root") )
+                    {
+                        cout << "Process " << Procname[pr] << ": FileLocation[" << i << "] has '/*.root' instead of '.root'." << endl;
+                        allOk = kFALSE;
+                    }
+                    else if ( !FileLocation[i].Contains(".root") )
                     {
                         cout << "Process " << Procname[pr] << ": FileLocation[" << i << "] does not have '.root'." << endl;
                         allOk = kFALSE;
+                    }
+                    if ( ( pr > _None && pr < _EndOf_MuMu ) || ( pr > _EndOf_EE && pr < _EndOf_EMu ) )
+                    {
+                        if ( ROCCORR == kTRUE && !FileLocation[i].Contains("_roccor.root") )
+                        {
+                            cout << "Process " << Procname[pr] << ": FileLocation[" << i << "] does not have '_roccor.root'." << endl;
+                            allOk = kFALSE;
+                        }
                     }
                     if ( pr < _EndOf_MuMu && !FileLocation[i].Contains("SelectedMuMu_") )
                     {
@@ -5114,6 +5417,14 @@ void LocalFileMgr::CheckProcesses()
                     {
                         cout << "Process " << Procname[pr] << ": FullLocation[" << i << "] does not have '.root'." << endl;
                         allOk = kFALSE;
+                    }
+                    if ( ( pr > _None && pr < _EndOf_MuMu ) || ( pr > _EndOf_EE && pr < _EndOf_EMu ) )
+                    {
+                        if ( ROCCORR == kTRUE && !FullLocation[i].Contains("_roccor.root") )
+                        {
+                            cout << "Process " << Procname[pr] << ": FullLocation[" << i << "] does not have '_roccor.root'." << endl;
+                            allOk = kFALSE;
+                        }
                     }
                     if ( ( pr > _None && pr < _EndOf_MuMu_MCsignal_Normal) || pr == _MuMu_DY_Full )
                     {

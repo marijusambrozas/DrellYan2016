@@ -632,12 +632,12 @@ void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RoccoCorr )
             {
                 cout << " Finished." << endl << "Closing a file..." << endl;
                 MuonFile->Close();
-                if ( !MuonFile->IsOpen() ) cout << "File SelectedMuMu_" << Mgr.Tag[i_tup]+RocCor << ".root has been closed successfully." << endl;
-                else cout << "FILE SelectedMuMu_" << Mgr.Tag[i_tup]+RocCor << ".root COULD NOT BE CLOSED!" << endl;
+                if ( !MuonFile->IsOpen() ) cout << "File SelectedMuMu_" << Mgr.Tag[i_tup]+RocCor << ".root has been closed successfully.\n" << endl;
+                else cout << "FILE SelectedMuMu_" << Mgr.Tag[i_tup]+RocCor << ".root COULD NOT BE CLOSED!\n" << endl;
             }
             else
             {
-                cout << " Writing was NOT successful!" << endl;
+                cout << " Writing was NOT successful!\n" << endl;
                 MuonFile->Close();
             }
 
@@ -951,12 +951,12 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RoccoCorr )
             {
                 cout << " Finished." << endl << "Closing a file..." << endl;
                 EMuFile->Close();
-                if ( !EMuFile->IsOpen() ) cout << "File SelectedEMu_" << Mgr.Tag[i_tup]+RocCor << ".root has been closed successfully." << endl;
-                else cout << "FILE SelectedEMu_" << Mgr.Tag[i_tup]+RocCor << ".root COULD NOT BE CLOSED!" << endl;
+                if ( !EMuFile->IsOpen() ) cout << "File SelectedEMu_" << Mgr.Tag[i_tup]+RocCor << ".root has been closed successfully.\n" << endl;
+                else cout << "FILE SelectedEMu_" << Mgr.Tag[i_tup]+RocCor << ".root COULD NOT BE CLOSED!\n" << endl;
             }
             else
             {
-                cout << " Writing was NOT successful!" << endl;
+                cout << " Writing was NOT successful!\n" << endl;
                 EMuFile->Close();
             }
 

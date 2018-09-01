@@ -62,6 +62,12 @@ void EE_HistMaker ( TString type = "", TString HLTname = "Ele23Ele12" )
 
     for ( Int_t i_proc; i_proc<((int)(Processes.size())); i_proc++ )
     {
+        if ( Processes[i_proc] <= _EndOf_MuMu || Processes[i_proc] > _EndOf_EE )
+        {
+            cout << "Error: process " << Mgr.Procname[Processes[i_proc]] << " is not EE!" << endl;
+            continue;
+        }
+
         Mgr.GetProc( Processes[i_proc] );
 
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
@@ -105,6 +111,10 @@ void EE_HistMaker ( TString type = "", TString HLTname = "Ele23Ele12" )
             TH1D *h_mass = new TH1D("h_mass_"+Mgr.Tag[i_tup], "", 43, massbins);
             TH1D *h_Pt = new TH1D("h_Pt_"+Mgr.Tag[i_tup], "", 300, 0, 600);
             TH1D *h_rapi = new TH1D("h_rapi_"+Mgr.Tag[i_tup], "", 100, -5, 5);
+
+            TH1D *h_nPU_beforePUCorr = new TH1D( "h_nPU_before_PUCorr"+Mgr.Tag[i_tup], "", 50, 0, 50 );
+            TH1D *h_nPU_beforeEffCorr = new TH1D( "h_nPU_before_EffCorr"+Mgr.Tag[i_tup], "", 50, 0, 50 );
+            TH1D *h_nPU = new TH1D( "h_nPU"+Mgr.Tag[i_tup], "", 50, 0, 50 );
 
             TH1D *h_pT = new TH1D("h_pT_"+Mgr.Tag[i_tup], "", 300, 0, 600);
             TH1D *h_eta = new TH1D("h_eta_"+Mgr.Tag[i_tup], "", 100, -5, 5);
@@ -154,6 +164,10 @@ void EE_HistMaker ( TString type = "", TString HLTname = "Ele23Ele12" )
                     h_Pt->Fill( reco_Pt, TotWeight * PUWeight * effweight );
                     h_rapi->Fill( reco_rapi, TotWeight * PUWeight * effweight );
 
+                    h_nPU_beforePUCorr->Fill( EE->nPileUp, TotWeight );
+                    h_nPU_beforeEffCorr->Fill( EE->nPileUp, TotWeight * PUWeight );
+                    h_nPU->Fill( EE->nPileUp, TotWeight * PUWeight * effweight );
+
                     h_pT->Fill( EE->Electron_pT->at(0), TotWeight * PUWeight * effweight );
                     h_pT->Fill( EE->Electron_pT->at(1), TotWeight * PUWeight * effweight );
                     h_eta->Fill( EE->Electron_eta->at(0), TotWeight * PUWeight * effweight );
@@ -164,7 +178,7 @@ void EE_HistMaker ( TString type = "", TString HLTname = "Ele23Ele12" )
                 } // End of event selection
                 bar.Draw(i);
 
-            } //End of event iteration
+            } // End of event iteration
 
             f->cd();
             cout << "\tWriting into file...";
@@ -176,12 +190,16 @@ void EE_HistMaker ( TString type = "", TString HLTname = "Ele23Ele12" )
             h_Pt->Write();
             h_rapi->Write();
 
+            h_nPU_beforePUCorr->Write();
+            h_nPU_beforeEffCorr->Write();
+            h_nPU->Write();
+
             h_pT->Write();
             h_eta->Write();
             h_phi->Write();
 
             cout << " Finished." << endl;
-            if( Mgr.isMC == kTRUE ) printf("\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup]);
+            if( Mgr.isMC == kTRUE ) printf( "\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup] );
 
             Double_t LoopRunTime = looptime.CpuTime();
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;

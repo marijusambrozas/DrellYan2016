@@ -37,14 +37,22 @@ const Double_t massbins[44] = {15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 68, 7
                                133, 141, 150, 160, 171, 185, 200, 220, 243, 273, 320, 380, 440, 510, 600, 700, 830, 1000, 1500, 3000};
 
 // -- Muon Channel -- //
-void MuMu_HistMaker ( TString type, TString HLTname = "IsoMu24_OR_IsoTkMu24" )
+void MuMu_HistMaker ( TString type = "", TString HLTname = "IsoMu24_OR_IsoTkMu24" )
 {
+    if ( !type.Length() )
+    {
+        cout << "Error: no type specified!" << endl;
+        return;
+    }
+
     // -- Run2016 luminosity [/pb] -- //
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
     L = L_B2H;
 
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
+    TStopwatch totaltime;
+    totaltime.Start();
 
     LocalFileMgr Mgr;
     vector<SelProc_t> Processes = Mgr.FindProc( type );
@@ -55,10 +63,14 @@ void MuMu_HistMaker ( TString type, TString HLTname = "IsoMu24_OR_IsoTkMu24" )
         return;
     }
 
-    cout << "Type: " << Type << endl;
-
-    for ( Int_t i_proc; i_proc<Processes.size(); i_proc++ )
+    for ( Int_t i_proc; i_proc<((int)(Processes.size())); i_proc++ )
     {
+        if ( Processes[i_proc] > _EndOf_MuMu )
+        {
+            cout << "Error: process " << Mgr.Procname[Processes[i_proc]] << " is not MuMu!" << endl;
+            continue;
+        }
+
         Mgr.GetProc( Processes[i_proc] );
 
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
@@ -71,7 +83,7 @@ void MuMu_HistMaker ( TString type, TString HLTname = "IsoMu24_OR_IsoTkMu24" )
         DYAnalyzer *analyzer = new DYAnalyzer( HLTname );
 
         // -- For PU re-weighting -- //
-        analyzer->SetupPileUpReWeighting_80X( isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root" );
+        analyzer->SetupPileUpReWeighting_80X( Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root" );
 
         // -- For Rochester correction -- //
         TRandom3 *r1 = new TRandom3(0);
@@ -93,7 +105,7 @@ void MuMu_HistMaker ( TString type, TString HLTname = "IsoMu24_OR_IsoTkMu24" )
 
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
-            TChain *chain = new TChain( Mgr.TreeName );
+            TChain *chain = new TChain( Mgr.TreeName[i_tup] );
             chain->Add( Mgr.FullLocation[i_tup] );
 
             SelectedMuMu_t *MuMu = new SelectedMuMu_t();
@@ -102,21 +114,25 @@ void MuMu_HistMaker ( TString type, TString HLTname = "IsoMu24_OR_IsoTkMu24" )
             RoccoR rc("./etc/RoccoR/rcdata.2016.v3");
 
             // -- Making Histogram -- //
-            TH1D *h_mass_fine_before_PUCorr = new TH1D("h_mass_fine_before_PUCorr_"+Mgr.Tag[i_tup], "", 10000, 0, 10000);
-            TH1D *h_mass_fine_before_RoccoR = new TH1D("h_mass_fine_before_RoccoR_"+Mgr.Tag[i_tup], "", 10000, 0, 10000);
-            TH1D *h_mass_fine_before_EffCorr = new TH1D("h_mass_fine_before_EffCorr_"+Mgr.Tag[i_tup], "", 10000, 0, 10000);
-            TH1D *h_mass_fine = new TH1D("h_mass_fine_"+Mgr.Tag[i_tup], "", 10000, 0, 10000);
-            TH1D *h_mass = new TH1D("h_mass_"+Mgr.Tag[i_tup], "", 43, massbins);
-            TH1D *h_Pt = new TH1D("h_Pt_"+Mgr.Tag[i_tup], "", 300, 0, 600);
-            TH1D *h_rapi = new TH1D("h_rapi_"+Mgr.Tag[i_tup], "", 100, -5, 5);
+            TH1D *h_mass_fine_before_PUCorr = new TH1D( "h_mass_fine_before_PUCorr_"+Mgr.Tag[i_tup], "", 10000, 0, 10000 );
+            TH1D *h_mass_fine_before_RoccoR = new TH1D( "h_mass_fine_before_RoccoR_"+Mgr.Tag[i_tup], "", 10000, 0, 10000 );
+            TH1D *h_mass_fine_before_EffCorr = new TH1D( "h_mass_fine_before_EffCorr_"+Mgr.Tag[i_tup], "", 10000, 0, 10000 );
+            TH1D *h_mass_fine = new TH1D( "h_mass_fine_"+Mgr.Tag[i_tup], "", 10000, 0, 10000 );
+            TH1D *h_mass = new TH1D( "h_mass_"+Mgr.Tag[i_tup], "", 43, massbins );
+            TH1D *h_Pt = new TH1D( "h_Pt_"+Mgr.Tag[i_tup], "", 300, 0, 600 );
+            TH1D *h_rapi = new TH1D( "h_rapi_"+Mgr.Tag[i_tup], "", 100, -5, 5 );
 
-            TH1D *h_pT = new TH1D("h_pT_"+Mgr.Tag[i_tup], "", 300, 0, 600);
-            TH1D *h_eta = new TH1D("h_eta_"+Mgr.Tag[i_tup], "", 100, -5, 5);
-            TH1D *h_phi = new TH1D("h_phi_"+Mgr.Tag[i_tup], "", 100, -5, 5);
+            TH1D *h_nPU_beforePUCorr = new TH1D( "h_nPU_before_PUCorr"+Mgr.Tag[i_tup], "", 50, 0, 50 );
+            TH1D *h_nPU_beforeEffCorr = new TH1D( "h_nPU_before_EffCorr"+Mgr.Tag[i_tup], "", 50, 0, 50 );
+            TH1D *h_nPU = new TH1D( "h_nPU"+Mgr.Tag[i_tup], "", 50, 0, 50 );
+
+            TH1D *h_pT = new TH1D( "h_pT_"+Mgr.Tag[i_tup], "", 300, 0, 600 );
+            TH1D *h_eta = new TH1D( "h_eta_"+Mgr.Tag[i_tup], "", 100, -5, 5 );
+            TH1D *h_phi = new TH1D( "h_phi_"+Mgr.Tag[i_tup], "", 100, -5, 5 );
 
             Int_t NEvents = chain->GetEntries();
             if ( NEvents != Mgr.nEvents[i_tup] ) cout << "\tEvent numbers do not match!!!" << endl;
-            cout << "\t[Total events: " << Mgr.Wsum << "]" << endl;
+            cout << "\t[Total events: " << Mgr.Wsum[i_tup] << "]" << endl;
             cout << "\t[Selected Events: " << NEvents << "]" << endl;
 
             myProgressBar_t bar( NEvents );
@@ -126,11 +142,10 @@ void MuMu_HistMaker ( TString type, TString HLTname = "IsoMu24_OR_IsoTkMu24" )
                 MuMu->GetEvent(i);
 
                 Double_t GenWeight = MuMu->GENEvt_weight;
-                SumWeight += GenWeight;
 
                 // -- Pileup-Reweighting -- //
                 Double_t PUWeight = 1;
-                if( Mgr.isMC == kTRUE ) PUWeight = analyzer->PileUpWeightValue_80X( EE->nPileUp );
+                if( Mgr.isMC == kTRUE ) PUWeight = analyzer->PileUpWeightValue_80X( MuMu->nPileUp );
 
                 // -- efficiency weights -- //
                 Double_t weight1 = 0, weight2 = 0, effweight = 1;
@@ -145,7 +160,7 @@ void MuMu_HistMaker ( TString type, TString HLTname = "IsoMu24_OR_IsoTkMu24" )
                     Double_t rndm[2], SF=0; r1->RndmArray(2, rndm);
                     Int_t s, m;
 
-                    if( Mgr.Type[i_tup] == "DATA" )
+                    if( Mgr.Type == "DATA" )
                             SF = rc.kScaleDT(MuMu->Muon_charge->at(iter), MuMu->Muon_TuneP_pT->at(iter), MuMu->Muon_TuneP_eta->at(iter),
                                              MuMu->Muon_TuneP_phi->at(iter), s=0, m=0);
                     else
@@ -172,11 +187,16 @@ void MuMu_HistMaker ( TString type, TString HLTname = "IsoMu24_OR_IsoTkMu24" )
                     Double_t reco_Pt = ( mu1 + mu2 ).Pt();
                     Double_t reco_rapi = ( mu1 + mu2 ).Rapidity();
 
+                    h_mass_fine_before_PUCorr->Fill( MuMu->Muon_InvM, TotWeight );
                     h_mass_fine_before_EffCorr->Fill( MuMu->Muon_InvM, TotWeight * PUWeight );
                     h_mass_fine->Fill( MuMu->Muon_InvM, TotWeight * PUWeight * effweight );
                     h_mass->Fill( MuMu->Muon_InvM, TotWeight * PUWeight * effweight );
                     h_Pt->Fill( reco_Pt, TotWeight * PUWeight * effweight );
                     h_rapi->Fill( reco_rapi, TotWeight * PUWeight * effweight );
+
+                    h_nPU_beforePUCorr->Fill( MuMu->nPileUp, TotWeight );
+                    h_nPU_beforeEffCorr->Fill( MuMu->nPileUp, TotWeight * PUWeight );
+                    h_nPU->Fill( MuMu->nPileUp, TotWeight * PUWeight * effweight );
 
                     h_pT->Fill( MuMu->Muon_TuneP_pT->at(0), TotWeight * PUWeight * effweight );
                     h_pT->Fill( MuMu->Muon_TuneP_pT->at(1), TotWeight * PUWeight * effweight );
@@ -201,15 +221,19 @@ void MuMu_HistMaker ( TString type, TString HLTname = "IsoMu24_OR_IsoTkMu24" )
             h_Pt->Write();
             h_rapi->Write();
 
+            h_nPU_beforePUCorr->Write();
+            h_nPU_beforeEffCorr->Write();
+            h_nPU->Write();
+
             h_pT->Write();
             h_eta->Write();
             h_phi->Write();
 
             cout << " Finished." << endl;
-            if( Mgr.isMC == kTRUE ) printf("\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup]);
+            if( Mgr.isMC == kTRUE ) printf( "\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup] );
 
             Double_t LoopRunTime = looptime.CpuTime();
-            cout << "\tLoop RunTime(" << Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
+            cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
 
         }// End of i_tup iteration
 

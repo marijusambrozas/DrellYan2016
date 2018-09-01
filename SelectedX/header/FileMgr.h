@@ -2560,83 +2560,86 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
             if ( notify == kTRUE ) cout << Procname[_ttbar_Full] << "." << endl;
         }
         // Checking for various intervals
-        else if ( srch.Contains("700to") || srch.Contains("700To") || srch.Contains("700TO") || srch.Contains("700 to") || srch.Contains("700 To") || srch.Contains("700 TO") ||
-             srch.Contains("700-") || srch.Contains("700 -") || srch.Contains("700_to") || srch.Contains("700_To") || srch.Contains("700_TO") )
-            first = _ttbar_700to1000;
-        else if ( srch.Contains("1000to") || srch.Contains("1000To") || srch.Contains("1000TO") || srch.Contains("1000 to") || srch.Contains("1000 To") ||
-                  srch.Contains("1000 TO") || srch.Contains("1000-") || srch.Contains("1000 -") || srch.Contains("1000_to") || srch.Contains("1000_To") ||
-                  srch.Contains("1000_TO") )
-            first = _ttbar_1000toInf;
-        else if ( srch.Contains("Infto") || srch.Contains("InfTo") || srch.Contains("InfTO") || srch.Contains("Inf to") || srch.Contains("Inf To") ||
-                  srch.Contains("Inf TO") ||  srch.Contains("Inf_to") || srch.Contains("Inf_To") || srch.Contains("Inf_TO") ||
-                  srch.Contains("infto") || srch.Contains("infTo") || srch.Contains("infTO") || srch.Contains("inf to") || srch.Contains("inf To") ||
-                  srch.Contains("inf TO") ||  srch.Contains("inf_to") || srch.Contains("inf_To") || srch.Contains("inf_TO") ||
-                  srch.Contains("INFto") || srch.Contains("INFTo") || srch.Contains("INFTO") || srch.Contains("INF to") || srch.Contains("INF To") ||
-                  srch.Contains("TO INF") ||  srch.Contains("to_INF") || srch.Contains("To_INF") || srch.Contains("TO_INF") ||
-                  srch.Contains("inf-") || srch.Contains("INF-") || srch.Contains("In-f") || srch.Contains("inf -") || srch.Contains("INF -") ||
-                  srch.Contains("Inf -") )
-            first = _EndOf_ttbar_Normal;
-        else first = _ttbar;
-
-        if ( srch.Contains("to700") || srch.Contains("To700") || srch.Contains("TO700") || srch.Contains("to 700") || srch.Contains("To 700") || srch.Contains("TO 700") ||
-             srch.Contains("-700") || srch.Contains("- 700") || srch.Contains("to_700") || srch.Contains("To_700") || srch.Contains("TO_700") )
-            last = _ttbar;
-        else if ( srch.Contains("to1000") || srch.Contains("To1000") || srch.Contains("TO1000") || srch.Contains("to 1000") || srch.Contains("To 1000") ||
-                  srch.Contains("TO 1000") || srch.Contains("-1000") || srch.Contains("- 1000") || srch.Contains("to_1000") || srch.Contains("To_1000") ||
-                  srch.Contains("TO_1000") )
-            last = _ttbar_700to1000;
-        else if ( srch.Contains("to1500") || srch.Contains("To1500") || srch.Contains("TO1500") || srch.Contains("to 1500") || srch.Contains("To 1500") ||
-                  srch.Contains("TO 1500") || srch.Contains("-1500") || srch.Contains("- 1500") || srch.Contains("to_1500") || srch.Contains("To_1500") ||
-                  srch.Contains("TO_1500") )
-            last = _ttbar_1000toInf;
-        else if ( srch.Contains("to2000") || srch.Contains("To2000") || srch.Contains("TO2000") || srch.Contains("to 2000") || srch.Contains("To 2000") ||
-                  srch.Contains("TO 2000") || srch.Contains("-2000") || srch.Contains("- 2000") || srch.Contains("to_2000") || srch.Contains("To_2000") ||
-                  srch.Contains("TO_2000") )
-            last = _ttbar_1000toInf;
-        else if ( srch.Contains("to3000") || srch.Contains("To3000") || srch.Contains("TO3000") || srch.Contains("to 3000") || srch.Contains("To 3000") ||
-                  srch.Contains("TO 3000") || srch.Contains("-3000") || srch.Contains("- 3000") || srch.Contains("to_3000") || srch.Contains("To_3000") ||
-                  srch.Contains("TO_3000") )
-            last = _ttbar_1000toInf;
-        else if ( srch.Contains("toInf") || srch.Contains("ToInf") || srch.Contains("TOInf") || srch.Contains("to Inf") || srch.Contains("To Inf") ||
-                  srch.Contains("TO Inf") ||  srch.Contains("to_Inf") || srch.Contains("To_Inf") || srch.Contains("TO_Inf") ||
-                  srch.Contains("toinf") || srch.Contains("Toinf") || srch.Contains("TOinf") || srch.Contains("to inf") || srch.Contains("To inf") ||
-                  srch.Contains("TO inf") ||  srch.Contains("to_inf") || srch.Contains("To_inf") || srch.Contains("TO_inf") ||
-                  srch.Contains("toINF") || srch.Contains("ToINF") || srch.Contains("TOINF") || srch.Contains("to INF") || srch.Contains("To INF") ||
-                  srch.Contains("TO INF") ||  srch.Contains("to_INF") || srch.Contains("To_INF") || srch.Contains("TO_INF") ||
-                  srch.Contains("-inf") || srch.Contains("-INF") || srch.Contains("-Inf") || srch.Contains("- inf") || srch.Contains("- INF") ||
-                  srch.Contains("- Inf") )
-            last = _ttbar_1000toInf;
-        else last = _ttbar;
-
-        // Swapping first with last if necessary
-        if ( int(first)>int(last) && last!=_None )
-        {
-            Process_t NewLast = Process_t(int(first)-1);
-            first = Process_t(int(last)+1);
-            last = NewLast;
-        }
-        if ( first == _ttbar && last == _ttbar_1000toInf )
-        {
-            Result.push_back(_ttbar_Full);
-            if ( notify == kTRUE ) cout << Procname[_ttbar_Full] << "." << endl;
-        }
-        else if ( first != _None && last != _None )
-        {
-            for ( Process_t pr=first; pr<=last; pr=next(pr) )
-            {
-                Result.push_back(pr);
-                if ( notify == kTRUE )
-                {
-                    if ( pr != last ) cout << Procname[pr] << ", ";
-                    else cout << Procname[pr] << "." << endl;
-                }
-            }
-        }
         else
         {
-            Result.push_back(_ttbar_Full);
-            if ( notify == kTRUE ) cout << Procname[_ttbar_Full] << "." << endl;
-        }
+            if ( srch.Contains("700to") || srch.Contains("700To") || srch.Contains("700TO") || srch.Contains("700 to") || srch.Contains("700 To") || srch.Contains("700 TO") ||
+                 srch.Contains("700-") || srch.Contains("700 -") || srch.Contains("700_to") || srch.Contains("700_To") || srch.Contains("700_TO") )
+                first = _ttbar_700to1000;
+            else if ( srch.Contains("1000to") || srch.Contains("1000To") || srch.Contains("1000TO") || srch.Contains("1000 to") || srch.Contains("1000 To") ||
+                      srch.Contains("1000 TO") || srch.Contains("1000-") || srch.Contains("1000 -") || srch.Contains("1000_to") || srch.Contains("1000_To") ||
+                      srch.Contains("1000_TO") )
+                first = _ttbar_1000toInf;
+            else if ( srch.Contains("Infto") || srch.Contains("InfTo") || srch.Contains("InfTO") || srch.Contains("Inf to") || srch.Contains("Inf To") ||
+                      srch.Contains("Inf TO") ||  srch.Contains("Inf_to") || srch.Contains("Inf_To") || srch.Contains("Inf_TO") ||
+                      srch.Contains("infto") || srch.Contains("infTo") || srch.Contains("infTO") || srch.Contains("inf to") || srch.Contains("inf To") ||
+                      srch.Contains("inf TO") ||  srch.Contains("inf_to") || srch.Contains("inf_To") || srch.Contains("inf_TO") ||
+                      srch.Contains("INFto") || srch.Contains("INFTo") || srch.Contains("INFTO") || srch.Contains("INF to") || srch.Contains("INF To") ||
+                      srch.Contains("TO INF") ||  srch.Contains("to_INF") || srch.Contains("To_INF") || srch.Contains("TO_INF") ||
+                      srch.Contains("inf-") || srch.Contains("INF-") || srch.Contains("In-f") || srch.Contains("inf -") || srch.Contains("INF -") ||
+                      srch.Contains("Inf -") )
+                first = _EndOf_ttbar_Normal;
+            else first = _ttbar;
+
+            if ( srch.Contains("to700") || srch.Contains("To700") || srch.Contains("TO700") || srch.Contains("to 700") || srch.Contains("To 700") || srch.Contains("TO 700") ||
+                 srch.Contains("-700") || srch.Contains("- 700") || srch.Contains("to_700") || srch.Contains("To_700") || srch.Contains("TO_700") )
+                last = _ttbar;
+            else if ( srch.Contains("to1000") || srch.Contains("To1000") || srch.Contains("TO1000") || srch.Contains("to 1000") || srch.Contains("To 1000") ||
+                      srch.Contains("TO 1000") || srch.Contains("-1000") || srch.Contains("- 1000") || srch.Contains("to_1000") || srch.Contains("To_1000") ||
+                      srch.Contains("TO_1000") )
+                last = _ttbar_700to1000;
+            else if ( srch.Contains("to1500") || srch.Contains("To1500") || srch.Contains("TO1500") || srch.Contains("to 1500") || srch.Contains("To 1500") ||
+                      srch.Contains("TO 1500") || srch.Contains("-1500") || srch.Contains("- 1500") || srch.Contains("to_1500") || srch.Contains("To_1500") ||
+                      srch.Contains("TO_1500") )
+                last = _ttbar_1000toInf;
+            else if ( srch.Contains("to2000") || srch.Contains("To2000") || srch.Contains("TO2000") || srch.Contains("to 2000") || srch.Contains("To 2000") ||
+                      srch.Contains("TO 2000") || srch.Contains("-2000") || srch.Contains("- 2000") || srch.Contains("to_2000") || srch.Contains("To_2000") ||
+                      srch.Contains("TO_2000") )
+                last = _ttbar_1000toInf;
+            else if ( srch.Contains("to3000") || srch.Contains("To3000") || srch.Contains("TO3000") || srch.Contains("to 3000") || srch.Contains("To 3000") ||
+                      srch.Contains("TO 3000") || srch.Contains("-3000") || srch.Contains("- 3000") || srch.Contains("to_3000") || srch.Contains("To_3000") ||
+                      srch.Contains("TO_3000") )
+                last = _ttbar_1000toInf;
+            else if ( srch.Contains("toInf") || srch.Contains("ToInf") || srch.Contains("TOInf") || srch.Contains("to Inf") || srch.Contains("To Inf") ||
+                      srch.Contains("TO Inf") ||  srch.Contains("to_Inf") || srch.Contains("To_Inf") || srch.Contains("TO_Inf") ||
+                      srch.Contains("toinf") || srch.Contains("Toinf") || srch.Contains("TOinf") || srch.Contains("to inf") || srch.Contains("To inf") ||
+                      srch.Contains("TO inf") ||  srch.Contains("to_inf") || srch.Contains("To_inf") || srch.Contains("TO_inf") ||
+                      srch.Contains("toINF") || srch.Contains("ToINF") || srch.Contains("TOINF") || srch.Contains("to INF") || srch.Contains("To INF") ||
+                      srch.Contains("TO INF") ||  srch.Contains("to_INF") || srch.Contains("To_INF") || srch.Contains("TO_INF") ||
+                      srch.Contains("-inf") || srch.Contains("-INF") || srch.Contains("-Inf") || srch.Contains("- inf") || srch.Contains("- INF") ||
+                      srch.Contains("- Inf") )
+                last = _ttbar_1000toInf;
+            else last = _ttbar;
+
+            // Swapping first with last if necessary
+            if ( int(first)>int(last) && last!=_None )
+            {
+                Process_t NewLast = Process_t(int(first)-1);
+                first = Process_t(int(last)+1);
+                last = NewLast;
+            }
+            if ( first == _ttbar && last == _ttbar_1000toInf )
+            {
+                Result.push_back(_ttbar_Full);
+                if ( notify == kTRUE ) cout << Procname[_ttbar_Full] << "." << endl;
+            }
+            else if ( first != _None && last != _None )
+            {
+                for ( Process_t pr=first; pr<=last; pr=next(pr) )
+                {
+                    Result.push_back(pr);
+                    if ( notify == kTRUE )
+                    {
+                        if ( pr != last ) cout << Procname[pr] << ", ";
+                        else cout << Procname[pr] << "." << endl;
+                    }
+                }
+            }
+            else
+            {
+                Result.push_back(_ttbar_Full);
+                if ( notify == kTRUE ) cout << Procname[_ttbar_Full] << "." << endl;
+            }
+        }// end of else (not "Full")
 
     }// end of if(ttbar)
 
