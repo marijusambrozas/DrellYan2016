@@ -39,10 +39,11 @@ const Double_t massbins[44] = {15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 68, 7
                                133, 141, 150, 160, 171, 185, 200, 220, 243, 273, 320, 380, 440, 510, 600, 700, 830, 1000, 1500, 3000};
 
 
-void HistMaker ( TString whichX = "", TString type = "", Bool_t SwitchROCCORR = kFALSE, TString HLTname = "DEFAULT" )
+void HistMaker ( TString whichX = "", TString Type = "", Bool_t SwitchROCCORR = kFALSE, TString HLTname = "DEFAULT" )
 {
     TString HLT;
     Int_t Xselected = 0;
+    TString type = whichX+"_"+Type;
     if ( whichX.Contains("EE") || whichX.Contains("ee") )
     {
         Xselected++;
@@ -67,9 +68,9 @@ void HistMaker ( TString whichX = "", TString type = "", Bool_t SwitchROCCORR = 
         cout << "\n*****   EMu_HistMaker ( " << type << " )  *****" << endl;
         EMu_HistMaker( type, SwitchROCCORR, HLT );
     }
-    if ( Xselected == 0 ) cout << "Wrong arument!" << endl;
+    if ( Xselected == 0 ) cout << "Wrong arument! \nType in: >> .x HistMaker.C+(\"whichX\", \"whichProcess\", SwitchROCCORR)" << endl;
 
-} // End of MakeSelectedX()
+} // End of HistMaker()
 
 
 /// ----------------------------- Electron Channel ------------------------------ ///
@@ -92,6 +93,9 @@ void EE_HistMaker ( TString type, TString HLTname )
 
     LocalFileMgr Mgr;
     vector<SelProc_t> Processes = Mgr.FindProc( type );
+    TFile *f;
+    TString OutputDir;
+    Bool_t isBkgFull = kFALSE;  // To tell if this is the _EE_Bkg_Full process (it is handled differently)
 
     if ( !Processes.size() )
     {
@@ -99,7 +103,22 @@ void EE_HistMaker ( TString type, TString HLTname )
         return;
     }
 
-    for ( Int_t i_proc; i_proc<((int)(Processes.size())); i_proc++ )
+    if ( Processes[0] == _EE_Bkg_Full )
+    {
+        isBkgFull = kTRUE;
+        Mgr.GetProc( _EE_Bkg_Full );
+        // -- Output ROOTFile -- //
+        OutputDir = Mgr.HistLocation;
+        f = new TFile( OutputDir+"Hist_"+Mgr.Procname[_EE_Bkg_Full]+".root", "RECREATE" );
+        Processes.clear();
+        Processes.push_back( _EE_DYTauTau_Full );
+        Processes.push_back( _EE_ttbar_Full );
+        Processes.push_back( _EE_VVnST );
+        Processes.push_back( _EE_WJets );
+        Processes.push_back( _EE_QCDEMEnriched_Full );
+    }
+
+    for ( Int_t i_proc=0; i_proc<((int)(Processes.size())); i_proc++ )
     {
         if ( Processes[i_proc] <= _EndOf_MuMu || Processes[i_proc] > _EndOf_EE )
         {
@@ -109,9 +128,17 @@ void EE_HistMaker ( TString type, TString HLTname )
 
         Mgr.GetProc( Processes[i_proc] );
 
+        // -- Output ROOTFile -- //
+        if ( isBkgFull == kFALSE )
+        {
+            OutputDir = Mgr.HistLocation;
+            f = new TFile( OutputDir+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
+        }
+
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
         cout << "Type: " << Mgr.Type << endl;
         cout << "DATA location: " << Mgr.BaseLocation << endl;
+        cout << "Output directory: " << OutputDir << endl;
 
         TStopwatch totaltime;
         totaltime.Start();
@@ -122,11 +149,23 @@ void EE_HistMaker ( TString type, TString HLTname )
         analyzer->SetupPileUpReWeighting_80X( Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root" );
 
         // -- For efficiency SF -- //
-        analyzer->SetupEfficiencyScaleFactor_electron();
+        analyzer->SetupEfficiencyScaleFactor_electron();        
 
-        // -- Output ROOTFile -- //
-        TString OutputDir = Mgr.HistLocation;
-        TFile *f = new TFile( OutputDir+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
+        // -- Creating Histograms -- //
+        TH1D *h_mass_fine_before_PUCorr = new TH1D("h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000);
+        TH1D *h_mass_fine_before_EffCorr = new TH1D("h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000);
+        TH1D *h_mass_fine = new TH1D("h_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000);
+        TH1D *h_mass = new TH1D("h_mass_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins);
+        TH1D *h_Pt = new TH1D("h_Pt_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600);
+        TH1D *h_rapi = new TH1D("h_rapi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5);
+
+        TH1D *h_nPU_beforePUCorr = new TH1D( "h_nPU_before_PUCorr"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
+        TH1D *h_nPU_beforeEffCorr = new TH1D( "h_nPU_before_EffCorr"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
+        TH1D *h_nPU = new TH1D( "h_nPU"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
+
+        TH1D *h_pT = new TH1D("h_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600);
+        TH1D *h_eta = new TH1D("h_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5);
+        TH1D *h_phi = new TH1D("h_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5);
 
         //Loop for all samples
         const Int_t Ntup = Mgr.FileLocation.size();
@@ -142,22 +181,6 @@ void EE_HistMaker ( TString type, TString HLTname )
 
             SelectedEE_t *EE = new SelectedEE_t();
             EE->CreateFromChain( chain );
-
-            // -- Making Histogram -- //
-            TH1D *h_mass_fine_before_PUCorr = new TH1D("h_mass_fine_before_PUCorr_"+Mgr.Tag[i_tup], "", 10000, 0, 10000);
-            TH1D *h_mass_fine_before_EffCorr = new TH1D("h_mass_fine_before_EffCorr_"+Mgr.Tag[i_tup], "", 10000, 0, 10000);
-            TH1D *h_mass_fine = new TH1D("h_mass_fine_"+Mgr.Tag[i_tup], "", 10000, 0, 10000);
-            TH1D *h_mass = new TH1D("h_mass_"+Mgr.Tag[i_tup], "", 43, massbins);
-            TH1D *h_Pt = new TH1D("h_Pt_"+Mgr.Tag[i_tup], "", 300, 0, 600);
-            TH1D *h_rapi = new TH1D("h_rapi_"+Mgr.Tag[i_tup], "", 100, -5, 5);
-
-            TH1D *h_nPU_beforePUCorr = new TH1D( "h_nPU_before_PUCorr"+Mgr.Tag[i_tup], "", 50, 0, 50 );
-            TH1D *h_nPU_beforeEffCorr = new TH1D( "h_nPU_before_EffCorr"+Mgr.Tag[i_tup], "", 50, 0, 50 );
-            TH1D *h_nPU = new TH1D( "h_nPU"+Mgr.Tag[i_tup], "", 50, 0, 50 );
-
-            TH1D *h_pT = new TH1D("h_pT_"+Mgr.Tag[i_tup], "", 300, 0, 600);
-            TH1D *h_eta = new TH1D("h_eta_"+Mgr.Tag[i_tup], "", 100, -5, 5);
-            TH1D *h_phi = new TH1D("h_phi_"+Mgr.Tag[i_tup], "", 100, -5, 5);
 
             Int_t NEvents = chain->GetEntries();
             if ( NEvents != Mgr.nEvents[i_tup] ) cout << "\tEvent numbers do not match!!!" << endl;
@@ -219,25 +242,6 @@ void EE_HistMaker ( TString type, TString HLTname )
 
             } // End of event iteration
 
-            f->cd();
-            cout << "\tWriting into file...";
-
-            h_mass_fine_before_PUCorr->Write();
-            h_mass_fine_before_EffCorr->Write();
-            h_mass_fine->Write();
-            h_mass->Write();
-            h_Pt->Write();
-            h_rapi->Write();
-
-            h_nPU_beforePUCorr->Write();
-            h_nPU_beforeEffCorr->Write();
-            h_nPU->Write();
-
-            h_pT->Write();
-            h_eta->Write();
-            h_phi->Write();
-
-            cout << " Finished." << endl;
             if( Mgr.isMC == kTRUE ) printf( "\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup] );
 
             Double_t LoopRunTime = looptime.CpuTime();
@@ -245,11 +249,39 @@ void EE_HistMaker ( TString type, TString HLTname )
 
         }// End of i_tup iteration
 
-        f->Close();
-        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[Mgr.CurrentProc] << ".root has been closed successfully.\n" << endl;
-        else cout << "FILE Hist_" << Mgr.Procname[Mgr.CurrentProc] << ".root COULD NOT BE CLOSED!\n" << endl;
+        f->cd();
+        cout << "\tWriting into file...";
+
+        h_mass_fine_before_PUCorr->Write();
+        h_mass_fine_before_EffCorr->Write();
+        h_mass_fine->Write();
+        h_mass->Write();
+        h_Pt->Write();
+        h_rapi->Write();
+
+        h_nPU_beforePUCorr->Write();
+        h_nPU_beforeEffCorr->Write();
+        h_nPU->Write();
+
+        h_pT->Write();
+        h_eta->Write();
+        h_phi->Write();
+
+        cout << " Finished." << endl;
 
     }// End of i_proc iteration
+
+    f->Close();
+    if ( isBkgFull == kTRUE )
+    {
+        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[_EE_Bkg_Full] << ".root has been closed successfully.\n" << endl;
+        else cout << "FILE Hist_" << Mgr.Procname[_EE_Bkg_Full] << ".root COULD NOT BE CLOSED!\n" << endl;
+    }
+    else
+    {
+        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[Mgr.CurrentProc] << ".root has been closed successfully.\n" << endl;
+        else cout << "FILE Hist_" << Mgr.Procname[Mgr.CurrentProc] << ".root COULD NOT BE CLOSED!\n" << endl;
+    }
 
     Double_t TotalRunTime = totaltime.CpuTime();
     cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
@@ -281,11 +313,29 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
     LocalFileMgr Mgr;
     vector<SelProc_t> Processes = Mgr.FindProc( type );
     if ( SwitchROCCORR == kTRUE ) Mgr.SwitchROCCORR();  // If kTRUE, this will go through events that were selected without Rochester correction applied
+    TFile *f;
+    TString OutputDir;
+    Bool_t isBkgFull = kFALSE;  // To tell if this is the _EE_Bkg_Full process (it is handled differently)
 
     if ( !Processes.size() )
     {
         cout << "Error: no processes!" << endl;
         return;
+    }
+
+    if ( Processes[0] == _MuMu_Bkg_Full )
+    {
+        isBkgFull = kTRUE;
+        Mgr.GetProc( _MuMu_Bkg_Full );
+        // -- Output ROOTFile -- //
+        OutputDir = Mgr.HistLocation;
+        f = new TFile( OutputDir+"Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root", "RECREATE" );
+        Processes.clear();
+        Processes.push_back( _MuMu_DYTauTau_Full );
+        Processes.push_back( _MuMu_ttbar_Full );
+        Processes.push_back( _MuMu_VVnST );
+        Processes.push_back( _MuMu_WJets );
+        Processes.push_back( _MuMu_QCDMuEnriched_Full );
     }
 
     for ( Int_t i_proc; i_proc<((int)(Processes.size())); i_proc++ )
@@ -298,9 +348,17 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
 
         Mgr.GetProc( Processes[i_proc] );
 
+        // -- Output ROOTFile -- //
+        if ( isBkgFull == kFALSE )
+        {
+            OutputDir = Mgr.HistLocation;
+            f = new TFile( OutputDir+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
+        }
+
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
         cout << "Type: " << Mgr.Type << endl;
         cout << "DATA location: " << Mgr.BaseLocation << endl;
+        cout << "Output directory: " << OutputDir << endl;
 
         TStopwatch totaltime;
         totaltime.Start();
@@ -317,9 +375,22 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
         analyzer->SetupEfficiencyScaleFactor_BtoF();
         analyzer->SetupEfficiencyScaleFactor_GtoH();
 
-        // -- Output ROOTFile -- //
-        TString OutputDir = Mgr.HistLocation;
-        TFile *f = new TFile( OutputDir+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
+        // -- Creating Histograms -- //
+        TH1D *h_mass_fine_before_PUCorr = new TH1D( "h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
+        TH1D *h_mass_fine_before_RoccoR = new TH1D( "h_mass_fine_before_RoccoR_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
+        TH1D *h_mass_fine_before_EffCorr = new TH1D( "h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
+        TH1D *h_mass_fine = new TH1D( "h_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
+        TH1D *h_mass = new TH1D( "h_mass_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
+        TH1D *h_Pt = new TH1D( "h_Pt_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600 );
+        TH1D *h_rapi = new TH1D( "h_rapi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
+
+        TH1D *h_nPU_beforePUCorr = new TH1D( "h_nPU_before_PUCorr"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
+        TH1D *h_nPU_beforeEffCorr = new TH1D( "h_nPU_before_EffCorr"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
+        TH1D *h_nPU = new TH1D( "h_nPU"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
+
+        TH1D *h_pT = new TH1D( "h_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600 );
+        TH1D *h_eta = new TH1D( "h_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
+        TH1D *h_phi = new TH1D( "h_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
 
         //Loop for all samples
         const Int_t Ntup = Mgr.FileLocation.size();
@@ -337,23 +408,6 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
             MuMu->CreateFromChain( chain );
 
             RoccoR rc("./etc/RoccoR/rcdata.2016.v3");
-
-            // -- Making Histogram -- //
-            TH1D *h_mass_fine_before_PUCorr = new TH1D( "h_mass_fine_before_PUCorr_"+Mgr.Tag[i_tup], "", 10000, 0, 10000 );
-            TH1D *h_mass_fine_before_RoccoR = new TH1D( "h_mass_fine_before_RoccoR_"+Mgr.Tag[i_tup], "", 10000, 0, 10000 );
-            TH1D *h_mass_fine_before_EffCorr = new TH1D( "h_mass_fine_before_EffCorr_"+Mgr.Tag[i_tup], "", 10000, 0, 10000 );
-            TH1D *h_mass_fine = new TH1D( "h_mass_fine_"+Mgr.Tag[i_tup], "", 10000, 0, 10000 );
-            TH1D *h_mass = new TH1D( "h_mass_"+Mgr.Tag[i_tup], "", 43, massbins );
-            TH1D *h_Pt = new TH1D( "h_Pt_"+Mgr.Tag[i_tup], "", 300, 0, 600 );
-            TH1D *h_rapi = new TH1D( "h_rapi_"+Mgr.Tag[i_tup], "", 100, -5, 5 );
-
-            TH1D *h_nPU_beforePUCorr = new TH1D( "h_nPU_before_PUCorr"+Mgr.Tag[i_tup], "", 50, 0, 50 );
-            TH1D *h_nPU_beforeEffCorr = new TH1D( "h_nPU_before_EffCorr"+Mgr.Tag[i_tup], "", 50, 0, 50 );
-            TH1D *h_nPU = new TH1D( "h_nPU"+Mgr.Tag[i_tup], "", 50, 0, 50 );
-
-            TH1D *h_pT = new TH1D( "h_pT_"+Mgr.Tag[i_tup], "", 300, 0, 600 );
-            TH1D *h_eta = new TH1D( "h_eta_"+Mgr.Tag[i_tup], "", 100, -5, 5 );
-            TH1D *h_phi = new TH1D( "h_phi_"+Mgr.Tag[i_tup], "", 100, -5, 5 );
 
             Int_t NEvents = chain->GetEntries();
             if ( NEvents != Mgr.nEvents[i_tup] ) cout << "\tEvent numbers do not match!!!" << endl;
@@ -435,26 +489,6 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
 
             }// End of event iteration
 
-            f->cd();
-            cout << "\tWriting into file...";
-
-            h_mass_fine_before_PUCorr->Write();
-            h_mass_fine_before_RoccoR->Write();
-            h_mass_fine_before_EffCorr->Write();
-            h_mass_fine->Write();
-            h_mass->Write();
-            h_Pt->Write();
-            h_rapi->Write();
-
-            h_nPU_beforePUCorr->Write();
-            h_nPU_beforeEffCorr->Write();
-            h_nPU->Write();
-
-            h_pT->Write();
-            h_eta->Write();
-            h_phi->Write();
-
-            cout << " Finished." << endl;
             if( Mgr.isMC == kTRUE ) printf( "\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup] );
 
             Double_t LoopRunTime = looptime.CpuTime();
@@ -462,11 +496,40 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
 
         }// End of i_tup iteration
 
-        f->Close();
+        f->cd();
+        cout << "\tWriting into file...";
+
+        h_mass_fine_before_PUCorr->Write();
+        h_mass_fine_before_RoccoR->Write();
+        h_mass_fine_before_EffCorr->Write();
+        h_mass_fine->Write();
+        h_mass->Write();
+        h_Pt->Write();
+        h_rapi->Write();
+
+        h_nPU_beforePUCorr->Write();
+        h_nPU_beforeEffCorr->Write();
+        h_nPU->Write();
+
+        h_pT->Write();
+        h_eta->Write();
+        h_phi->Write();
+
+        cout << " Finished." << endl;
+
+    } // End of i_proc iteration
+
+    f->Close();
+    if ( isBkgFull == kTRUE )
+    {
+        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[_MuMu_Bkg_Full] << ".root has been closed successfully.\n" << endl;
+        else cout << "FILE Hist_" << Mgr.Procname[_MuMu_Bkg_Full] << ".root COULD NOT BE CLOSED!\n" << endl;
+    }
+    else
+    {
         if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[Mgr.CurrentProc] << ".root has been closed successfully.\n" << endl;
         else cout << "FILE Hist_" << Mgr.Procname[Mgr.CurrentProc] << ".root COULD NOT BE CLOSED!\n" << endl;
-
-    }// End of i_proc iteration
+    }
 
     Double_t TotalRunTime = totaltime.CpuTime();
     cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
@@ -498,11 +561,29 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
     LocalFileMgr Mgr;
     vector<SelProc_t> Processes = Mgr.FindProc( type );
     if ( SwitchROCCORR == kTRUE ) Mgr.SwitchROCCORR(); // If kTRUE, this will go through events that were selected without Rochester correction applied
+    TFile *f;
+    TString OutputDir;
+    Bool_t isBkgFull = kFALSE;  // To tell if this is the _EE_Bkg_Full process (it is handled differently)
 
     if ( !Processes.size() )
     {
         cout << "Error: no processes!" << endl;
         return;
+    }
+
+    if ( Processes[0] == _EMu_Bkg_Full )
+    {
+        isBkgFull = kTRUE;
+        Mgr.GetProc( _EMu_Bkg_Full );
+        // -- Output ROOTFile -- //
+        OutputDir = Mgr.HistLocation;
+        f = new TFile( OutputDir+"Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root", "RECREATE" );
+        Processes.clear();
+        Processes.push_back( _EMu_DYTauTau_Full );
+        Processes.push_back( _EMu_ttbar_Full );
+        Processes.push_back( _EMu_VVnST );
+        Processes.push_back( _EMu_WJets );
+//        Processes.push_back( _EMu_QCDMuEnriched_Full );
     }
 
     for ( Int_t i_proc; i_proc<((int)(Processes.size())); i_proc++ )
@@ -515,9 +596,17 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
 
         Mgr.GetProc( Processes[i_proc] );
 
+        // -- Output ROOTFile -- //
+        if ( isBkgFull == kFALSE )
+        {
+            OutputDir = Mgr.HistLocation;
+            f = new TFile( OutputDir+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
+        }
+
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
         cout << "Type: " << Mgr.Type << endl;
         cout << "DATA location: " << Mgr.BaseLocation << endl;
+        cout << "Output directory: " << OutputDir << endl;
 
         TStopwatch totaltime;
         totaltime.Start();
@@ -534,9 +623,35 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
         analyzer->SetupEfficiencyScaleFactor_BtoF();
         analyzer->SetupEfficiencyScaleFactor_GtoH();
 
-        // -- Output ROOTFile -- //
-        TString OutputDir = Mgr.HistLocation;
-        TFile *f = new TFile( OutputDir+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
+        // -- Creating Histograms -- //
+        TH1D *h_emu_mass_fine_before_PUCorr = new TH1D( "h_emu_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
+        TH1D *h_emu_mass_fine_before_RoccoR = new TH1D( "h_emu_mass_fine_before_RoccoR_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
+        TH1D *h_emu_mass_fine_before_EffCorr = new TH1D( "h_emu_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
+        TH1D *h_emu_mass_fine = new TH1D( "h_emu_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
+        TH1D *h_emu_mass = new TH1D( "h_emu_mass_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
+        TH1D *h_emuSS_mass_fine_before_PUCorr = new TH1D( "h_emuSS_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
+        TH1D *h_emuSS_mass_fine_before_RoccoR = new TH1D( "h_emuSS_mass_fine_before_RoccoR_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
+        TH1D *h_emuSS_mass_fine_before_EffCorr = new TH1D( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
+        TH1D *h_emuSS_mass_fine = new TH1D( "h_emuSS_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
+        TH1D *h_emuSS_mass = new TH1D( "h_emuSS_mass_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
+
+        TH1D *h_nPU_beforePUCorr = new TH1D( "h_nPU_before_PUCorr"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
+        TH1D *h_nPU_beforeEffCorr = new TH1D( "h_nPU_before_EffCorr"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
+        TH1D *h_nPU = new TH1D( "h_nPU"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
+
+        TH1D *h_ele_pT = new TH1D( "h_ele_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600 );
+        TH1D *h_ele_eta = new TH1D( "h_ele_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
+        TH1D *h_ele_phi = new TH1D( "h_ele_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
+        TH1D *h_eleSS_pT = new TH1D( "h_eleSS_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600 );
+        TH1D *h_eleSS_eta = new TH1D( "h_eleSS_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
+        TH1D *h_eleSS_phi = new TH1D( "h_eleSS_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
+
+        TH1D *h_mu_pT = new TH1D( "h_mu_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600 );
+        TH1D *h_mu_eta = new TH1D( "h_mu_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
+        TH1D *h_mu_phi = new TH1D( "h_mu_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
+        TH1D *h_muSS_pT = new TH1D( "h_muSS_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600 );
+        TH1D *h_muSS_eta = new TH1D( "h_muSS_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
+        TH1D *h_muSS_phi = new TH1D( "h_muSS_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
 
         //Loop for all samples
         const Int_t Ntup = Mgr.FileLocation.size();
@@ -553,37 +668,7 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
             SelectedEMu_t *EMu = new SelectedEMu_t();
             EMu->CreateFromChain( chain );
 
-            RoccoR rc("./etc/RoccoR/rcdata.2016.v3");
-
-            // -- Making Histogram -- //
-            TH1D *h_emu_mass_fine_before_PUCorr = new TH1D( "h_emu_mass_fine_before_PUCorr_"+Mgr.Tag[i_tup], "", 10000, 0, 10000 );
-            TH1D *h_emu_mass_fine_before_RoccoR = new TH1D( "h_emu_mass_fine_before_RoccoR_"+Mgr.Tag[i_tup], "", 10000, 0, 10000 );
-            TH1D *h_emu_mass_fine_before_EffCorr = new TH1D( "h_emu_mass_fine_before_EffCorr_"+Mgr.Tag[i_tup], "", 10000, 0, 10000 );
-            TH1D *h_emu_mass_fine = new TH1D( "h_emu_mass_fine_"+Mgr.Tag[i_tup], "", 10000, 0, 10000 );
-            TH1D *h_emu_mass = new TH1D( "h_emu_mass_"+Mgr.Tag[i_tup], "", 43, massbins );
-            TH1D *h_emuSS_mass_fine_before_PUCorr = new TH1D( "h_emuSS_mass_fine_before_PUCorr_"+Mgr.Tag[i_tup], "", 10000, 0, 10000 );
-            TH1D *h_emuSS_mass_fine_before_RoccoR = new TH1D( "h_emuSS_mass_fine_before_RoccoR_"+Mgr.Tag[i_tup], "", 10000, 0, 10000 );
-            TH1D *h_emuSS_mass_fine_before_EffCorr = new TH1D( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Tag[i_tup], "", 10000, 0, 10000 );
-            TH1D *h_emuSS_mass_fine = new TH1D( "h_emuSS_mass_fine_"+Mgr.Tag[i_tup], "", 10000, 0, 10000 );
-            TH1D *h_emuSS_mass = new TH1D( "h_emuSS_mass_"+Mgr.Tag[i_tup], "", 43, massbins );
-
-            TH1D *h_nPU_beforePUCorr = new TH1D( "h_nPU_before_PUCorr"+Mgr.Tag[i_tup], "", 50, 0, 50 );
-            TH1D *h_nPU_beforeEffCorr = new TH1D( "h_nPU_before_EffCorr"+Mgr.Tag[i_tup], "", 50, 0, 50 );
-            TH1D *h_nPU = new TH1D( "h_nPU"+Mgr.Tag[i_tup], "", 50, 0, 50 );
-
-            TH1D *h_ele_pT = new TH1D( "h_ele_pT_"+Mgr.Tag[i_tup], "", 300, 0, 600 );
-            TH1D *h_ele_eta = new TH1D( "h_ele_eta_"+Mgr.Tag[i_tup], "", 100, -5, 5 );
-            TH1D *h_ele_phi = new TH1D( "h_ele_phi_"+Mgr.Tag[i_tup], "", 100, -5, 5 );
-            TH1D *h_eleSS_pT = new TH1D( "h_eleSS_pT_"+Mgr.Tag[i_tup], "", 300, 0, 600 );
-            TH1D *h_eleSS_eta = new TH1D( "h_eleSS_eta_"+Mgr.Tag[i_tup], "", 100, -5, 5 );
-            TH1D *h_eleSS_phi = new TH1D( "h_eleSS_phi_"+Mgr.Tag[i_tup], "", 100, -5, 5 );
-
-            TH1D *h_mu_pT = new TH1D( "h_mu_pT_"+Mgr.Tag[i_tup], "", 300, 0, 600 );
-            TH1D *h_mu_eta = new TH1D( "h_mu_eta_"+Mgr.Tag[i_tup], "", 100, -5, 5 );
-            TH1D *h_mu_phi = new TH1D( "h_mu_phi_"+Mgr.Tag[i_tup], "", 100, -5, 5 );
-            TH1D *h_muSS_pT = new TH1D( "h_muSS_pT_"+Mgr.Tag[i_tup], "", 300, 0, 600 );
-            TH1D *h_muSS_eta = new TH1D( "h_muSS_eta_"+Mgr.Tag[i_tup], "", 100, -5, 5 );
-            TH1D *h_muSS_phi = new TH1D( "h_muSS_phi_"+Mgr.Tag[i_tup], "", 100, -5, 5 );
+            RoccoR rc("./etc/RoccoR/rcdata.2016.v3");           
 
             Int_t NEvents = chain->GetEntries();
             if ( NEvents != Mgr.nEvents[i_tup] ) cout << "\tEvent numbers do not match!!!" << endl;
@@ -678,39 +763,6 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
 
             }// End of event iteration
 
-            f->cd();
-            cout << "\tWriting into file...";
-
-            h_emu_mass_fine_before_PUCorr->Write();
-            h_emu_mass_fine_before_RoccoR->Write();
-            h_emu_mass_fine_before_EffCorr->Write();
-            h_emu_mass_fine->Write();
-            h_emu_mass->Write();
-            h_emuSS_mass_fine_before_PUCorr->Write();
-            h_emuSS_mass_fine_before_RoccoR->Write();
-            h_emuSS_mass_fine_before_EffCorr->Write();
-            h_emuSS_mass_fine->Write();
-            h_emuSS_mass->Write();
-
-            h_nPU_beforePUCorr->Write();
-            h_nPU_beforeEffCorr->Write();
-            h_nPU->Write();
-
-            h_ele_pT->Write();
-            h_ele_eta->Write();
-            h_ele_phi->Write();
-            h_eleSS_pT->Write();
-            h_eleSS_eta->Write();
-            h_eleSS_phi->Write();
-
-            h_mu_pT->Write();
-            h_mu_eta->Write();
-            h_mu_phi->Write();
-            h_muSS_pT->Write();
-            h_muSS_eta->Write();
-            h_muSS_phi->Write();
-
-            cout << " Finished." << endl;
             if( Mgr.isMC == kTRUE ) printf( "\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup] );
 
             Double_t LoopRunTime = looptime.CpuTime();
@@ -718,11 +770,53 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
 
         }// End of i_tup iteration
 
-        f->Close();
-        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[Mgr.CurrentProc] << ".root has been closed successfully.\n" << endl;
-        else cout << "FILE Hist_" << Mgr.Procname[Mgr.CurrentProc] << ".root COULD NOT BE CLOSED!\n" << endl;
+        f->cd();
+        cout << "\tWriting into file...";
+
+        h_emu_mass_fine_before_PUCorr->Write();
+        h_emu_mass_fine_before_RoccoR->Write();
+        h_emu_mass_fine_before_EffCorr->Write();
+        h_emu_mass_fine->Write();
+        h_emu_mass->Write();
+        h_emuSS_mass_fine_before_PUCorr->Write();
+        h_emuSS_mass_fine_before_RoccoR->Write();
+        h_emuSS_mass_fine_before_EffCorr->Write();
+        h_emuSS_mass_fine->Write();
+        h_emuSS_mass->Write();
+
+        h_nPU_beforePUCorr->Write();
+        h_nPU_beforeEffCorr->Write();
+        h_nPU->Write();
+
+        h_ele_pT->Write();
+        h_ele_eta->Write();
+        h_ele_phi->Write();
+        h_eleSS_pT->Write();
+        h_eleSS_eta->Write();
+        h_eleSS_phi->Write();
+
+        h_mu_pT->Write();
+        h_mu_eta->Write();
+        h_mu_phi->Write();
+        h_muSS_pT->Write();
+        h_muSS_eta->Write();
+        h_muSS_phi->Write();
+
+        cout << " Finished." << endl;       
 
     }// End of i_proc iteration
+
+    f->Close();
+    if ( isBkgFull == kTRUE )
+    {
+        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[_EMu_Bkg_Full] << ".root has been closed successfully.\n" << endl;
+        else cout << "FILE Hist_" << Mgr.Procname[_EMu_Bkg_Full] << ".root COULD NOT BE CLOSED!\n" << endl;
+    }
+    else
+    {
+        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[Mgr.CurrentProc] << ".root has been closed successfully.\n" << endl;
+        else cout << "FILE Hist_" << Mgr.Procname[Mgr.CurrentProc] << ".root COULD NOT BE CLOSED!\n" << endl;
+    }
 
     Double_t TotalRunTime = totaltime.CpuTime();
     cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
