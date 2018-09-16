@@ -65,35 +65,29 @@ tmux send-keys -t $sessionName ". ~/.bash_profile" enter
 tmux send-keys -t $sessionName "cd $macroLocation" enter
 tmux send-keys -t $sessionName "root -l -q -b MakeSelectedX.C+(\\\"$1\\\", \\\"WJets\\\")" enter
 
-tmux new-window -n "window6"
-sleep 1
-tmux send-keys -t $sessionName "cd ~/" enter
-tmux send-keys -t $sessionName ". ~/.bash_profile" enter
-tmux send-keys -t $sessionName "cd $macroLocation" enter
-tmux send-keys -t $sessionName "root -l -q -b MakeSelectedX.C+(\\\"$1\\\", \\\"ttbar_full\\\")" enter
-
 if [ $1 == 'EE' ] || [ $1 == 'ee' ] ; then
-	tmux new-window -n "window7"
+	tmux new-window -n "window6"
 	sleep 1
 	tmux send-keys -t $sessionName "cd ~/" enter
 	tmux send-keys -t $sessionName ". ~/.bash_profile" enter
 	tmux send-keys -t $sessionName "cd $macroLocation" enter
 	tmux send-keys -t $sessionName "root -l -q -b MakeSelectedX.C+(\\\"$1\\\", \\\"QCDEM_full\\\")" enter
 
-	tmux new-window -n "window8"
+	tmux new-window -n "window7"
 	sleep 1
 	tmux send-keys -t $sessionName "cd ~/" enter
 	tmux send-keys -t $sessionName ". ~/.bash_profile" enter
 	tmux send-keys -t $sessionName "cd $macroLocation" enter
 	tmux send-keys -t $sessionName "root -l -q -b MakeSelectedX.C+(\\\"$1\\\", \\\"DoubleEG_full\\\")" enter
 
-	tmux new-window -n "window9"
+	tmux new-window -n "window8"
 	sleep 1
 	tmux send-keys -t $sessionName "cd ~/" enter
 	tmux send-keys -t $sessionName ". ~/.bash_profile" enter
+	tmux send-keys -t $sessionName "cd $macroLocation" enter
 	tmux send-keys -t $sessionName "root -l -q -b MakeSelectedX.C+(\\\"$1\\\", \\\"SingleElectron_full\\\")" enter
 
-	tmux new-window -n "window10"
+	tmux new-window -n "window9"
 	sleep 1
 	tmux send-keys -t $sessionName "cd ~/" enter
 	tmux send-keys -t $sessionName ". ~/.bash_profile" enter
@@ -102,14 +96,14 @@ if [ $1 == 'EE' ] || [ $1 == 'ee' ] ; then
 	tmux send-keys -t $sessionName "wait %1" enter
 	tmux send-keys -t $sessionName "root -l -q -b MakeSelectedX.C+(\\\"QCDmerge\\\")" enter
 else
-	tmux new-window -n "window7"
+	tmux new-window -n "window6"
 	sleep 1
 	tmux send-keys -t $sessionName "cd ~/" enter
 	tmux send-keys -t $sessionName ". ~/.bash_profile" enter
 	tmux send-keys -t $sessionName "cd $macroLocation" enter
 	tmux send-keys -t $sessionName "root -l -q -b MakeSelectedX.C+(\\\"$1\\\", \\\"QCDMu_full\\\")" enter
 
-	tmux new-window -n "window8"
+	tmux new-window -n "window7"
 	sleep 1
 	tmux send-keys -t $sessionName "cd ~/" enter
 	tmux send-keys -t $sessionName ". ~/.bash_profile" enter
