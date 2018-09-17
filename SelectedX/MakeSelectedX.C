@@ -151,7 +151,7 @@ void MakeSelectedEE ( TString type, TString HLTname )
             TStopwatch looptime;
             looptime.Start();
 
-            if ( Mgr.Tag[i_tup] == "QCDEMEnriched_Pt120to170" && i_tup == 0 ) continue; // Something crashes here
+            if ( Mgr.Tag[i_tup] == "QCDEMEnriched_Pt120to170" ) continue; // Something crashes here
 
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
