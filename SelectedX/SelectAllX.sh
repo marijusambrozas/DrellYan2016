@@ -35,7 +35,9 @@ sleep 1
 tmux send-keys -t $sessionName "cd ~/" enter
 tmux send-keys -t $sessionName ". ~/.bash_profile" enter
 tmux send-keys -t $sessionName "cd $macroLocation" enter
-tmux send-keys -t $sessionName "root -l -q -b MakeSelectedX.C+(\\\"$1\\\", \\\"DY$1 200toInf\\\")" enter
+tmux send-keys -t $sessionName "root -l -q -b MakeSelectedX.C+(\\\"$1\\\", \\\"DY$1 200toInf\\\")&" enter
+tmux send-keys -t $sessionName "wait %1" enter
+tmux send-keys -t $sessionName "root -l -q -b MakeSelectedX.C+(\\\"$1\\\", \\\"ttbar_700toInf\\\")" enter
 
 tmux new-window -n "window2"
 sleep 1
@@ -49,7 +51,7 @@ sleep 1
 tmux send-keys -t $sessionName "cd ~/" enter
 tmux send-keys -t $sessionName ". ~/.bash_profile" enter
 tmux send-keys -t $sessionName "cd $macroLocation" enter
-tmux send-keys -t $sessionName "root -l -q -b MakeSelectedX.C+(\\\"$1\\\", \\\"ttbar_full\\\")" enter
+tmux send-keys -t $sessionName "root -l -q -b MakeSelectedX.C+(\\\"$1\\\", \\\"ttbar\\\")" enter
 
 tmux new-window -n "window4"
 sleep 1
@@ -85,7 +87,7 @@ if [ $1 == 'EE' ] || [ $1 == 'ee' ] ; then
 	tmux send-keys -t $sessionName "cd ~/" enter
 	tmux send-keys -t $sessionName ". ~/.bash_profile" enter
 	tmux send-keys -t $sessionName "cd $macroLocation" enter
-	tmux send-keys -t $sessionName "root -l -q -b MakeSelectedX.C+(\\\"$1\\\", \\\"SingleElectron_full\\\")" enter
+	tmux send-keys -t $sessionName "root -l -q -b MakeSelectedX.C+(\\\"$1\\\", \\\"SingleElectron_DtoH\\\")" enter
 
 	tmux new-window -n "window9"
 	sleep 1
@@ -94,7 +96,9 @@ if [ $1 == 'EE' ] || [ $1 == 'ee' ] ; then
 	tmux send-keys -t $sessionName "cd $macroLocation" enter
 	tmux send-keys -t $sessionName "root -l -q -b MakeSelectedX.C+(\\\"QCDfail\\\")&" enter
 	tmux send-keys -t $sessionName "wait %1" enter
-	tmux send-keys -t $sessionName "root -l -q -b MakeSelectedX.C+(\\\"QCDmerge\\\")" enter
+	tmux send-keys -t $sessionName "root -l -q -b MakeSelectedX.C+(\\\"QCDmerge\\\")&" enter
+	tmux send-keys -t $sessionName "wait %1" enter
+	tmux send-keys -t $sessionName "root -l -q -b MakeSelectedX.C+(\\\"$1\\\", \\\"SingleElectron_BtoC\\\")" enter
 else
 	tmux new-window -n "window6"
 	sleep 1
