@@ -12,6 +12,7 @@
 #include <TFormula.h>
 #include <iostream>
 #include <sstream>
+#include <fstream>
 
 // -- Macro for making new data files with only selection-passing events  -- //
 #include "./header/DYAnalyzer.h"
@@ -21,17 +22,23 @@
 #include "./etc/RoccoR/RoccoR.cc"
 
 void MakeSelectedEE ( TString type, TString HLTname );
-void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RoccoCorr );
-void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RoccoCorr );
+void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RocCorr );
+void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr );
 
 void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name );
 void MakeSelectedQCDEM_120to170_merged();
 
 
-void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAULT",  Bool_t RoccoCorr = kFALSE )
+void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAULT",  Bool_t RocCorr = kFALSE )
 {
     TString HLT;
     Int_t Xselected = 0;
+
+    // for non-interactive status output
+    ofstream fs;
+    fs.open( "./Status/Status_"+whichX+"_"+type+".txt" );
+    fs << "Process MakeSelectedX ( " << whichX << ", " << type << ", " << HLTname << ", " << RocCorr << " ) initiated.\n";
+
     if ( whichX.Contains("EE") || whichX.Contains("ee") )
     {
         Xselected++;
@@ -46,7 +53,7 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
         if ( HLTname == "DEFAULT" ) HLT = "IsoMu24_OR_IsoTkMu24";
         else HLT = HLTname;
         cout << "\n*****  MakeSelectedMuMu ( " << type << ", " << HLT << " )  *****" << endl;
-        MakeSelectedMuMu( type, HLT, RoccoCorr );
+        MakeSelectedMuMu( type, HLT, RocCorr );
     }
     if ( whichX.Contains("EMu") || whichX.Contains("emu") || whichX.Contains("Emu") || whichX.Contains("eMu") || whichX.Contains("EMU") )
     {
@@ -54,7 +61,7 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
         if ( HLTname == "DEFAULT" ) HLT = "IsoMu24_OR_IsoTkMu24";
         else HLT = HLTname;
         cout << "\n*****   MakeSelectedEMu ( " << type << ", " << HLT << " )  *****" << endl;
-        MakeSelectedEMu( type, HLT, RoccoCorr );
+        MakeSelectedEMu( type, HLT, RocCorr );
     }
     if ( whichX.Contains("QCDfail") )   // To run through QCDEMEnriched_pT120to170 file that crashes
     {
@@ -74,7 +81,14 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
         cout << "\n****   MakeSelectedQCDEM_120to170()   ****" << endl;
         MakeSelectedQCDEM_120to170_merged();
     }
-    if ( Xselected == 0 ) cout << "Wrong arument!" << endl;
+
+    if ( Xselected == 0 ) {
+        cout << "Wrong arument!" << endl;
+        fs << "Process MakeSelectedX ( " << whichX << ", " << type << ", " << HLTname << ", " << RocCorr << " ) FAILED. Wrong arguments!\n";
+    }
+    else fs << "Process MakeSelectedX ( " << whichX << ", " << type << ", " << HLTname << ", " << RocCorr << " ) FINISHED.\n";
+
+    fs.close();
 
 } // End of MakeSelectedX()
 
@@ -357,7 +371,7 @@ void MakeSelectedEE ( TString type, TString HLTname )
 
 
 /// -------------------------------- Muon Channel ------------------------------------ ///
-void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RoccoCorr )
+void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RocCorr )
 {
     // -- Run2016 luminosity [/pb] -- //
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
@@ -389,7 +403,7 @@ void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RoccoCorr )
         cout << "Type: " << Mgr.Type << endl;
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
         cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
-        if ( RoccoCorr == kTRUE ) cout << "Rochester correction will be applied." << endl;
+        if ( RocCorr == kTRUE ) cout << "Rochester correction will be applied." << endl;
 
 //        //Creating a file
 //        TFile* MuonFile;
@@ -436,7 +450,7 @@ void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RoccoCorr )
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
             TString RocCor = "";
-            if ( RoccoCorr == kTRUE ) RocCor = "_roccor";
+            if ( RocCorr == kTRUE ) RocCor = "_roccor";
 
             //Creating a file
             TFile* MuonFile;
@@ -529,7 +543,7 @@ void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RoccoCorr )
                         // -- Convert to TuneP variables -- //
                         analyzer->ConvertToTunePInfo( mu );
 
-                        if ( RoccoCorr == kTRUE )
+                        if ( RocCorr == kTRUE )
                         {
                             // -- Rochester correction -- //
                             Double_t rndm[2], SF=0; r1->RndmArray(2, rndm);
@@ -672,7 +686,7 @@ void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RoccoCorr )
 
 
 /// --------------------------------- EMu events --------------------------------- ///
-void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RoccoCorr )
+void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr )
 {
     // -- Run2016 luminosity [/pb] -- //
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
@@ -704,7 +718,7 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RoccoCorr )
         cout << "Type: " << Mgr.Type << endl;
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
         cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
-        if ( RoccoCorr == kTRUE ) cout << "Rochester correction will be applied." << endl;
+        if ( RocCorr == kTRUE ) cout << "Rochester correction will be applied." << endl;
 
 //        //Creating a file
 //        TFile* EMuFile;
@@ -754,7 +768,7 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RoccoCorr )
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
             TString RocCor = "";
-            if ( RoccoCorr == kTRUE ) RocCor = "_roccor";
+            if ( RocCorr == kTRUE ) RocCor = "_roccor";
 
             //Creating a file
             TFile* EMuFile;
@@ -854,7 +868,7 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RoccoCorr )
                         // Convert to TuneP variables
                         analyzer->ConvertToTunePInfo( mu );
 
-                        if ( RoccoCorr == kTRUE )
+                        if ( RocCorr == kTRUE )
                         {
                             // -- Rochester correction -- //
                             Double_t rndm[2], SF=0; r1->RndmArray(2, rndm);
