@@ -33,6 +33,7 @@
 void EE_HistMaker ( TString type, TString HLTname );
 void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname );
 void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname );
+void MuMu_merge();
 
 // -- Drell-Yan mass bins -- //
 const Double_t massbins[44] = {15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 68, 72, 76, 81, 86, 91, 96, 101, 106, 110, 115, 120, 126,
@@ -67,6 +68,12 @@ void HistMaker ( TString whichX = "", TString Type = "", Bool_t SwitchROCCORR = 
         else HLT = HLTname;
         cout << "\n*****   EMu_HistMaker ( " << type << " )  *****" << endl;
         EMu_HistMaker( type, SwitchROCCORR, HLT );
+    }
+    if ( whichX.Contains("MuMu_merge") || whichX.Contains("MuMu_Merge") )
+    {
+        Xselected++;
+        cout << "\n*********   MuMu_merge  *********" << endl;
+        MuMu_merge();
     }
     if ( Xselected == 0 ) cout << "Wrong arument! \nType in: >> .x HistMaker.C+(\"whichX\", \"whichProcess\", SwitchROCCORR)" << endl;
 
@@ -159,9 +166,9 @@ void EE_HistMaker ( TString type, TString HLTname )
         TH1D *h_Pt = new TH1D("h_Pt_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600);
         TH1D *h_rapi = new TH1D("h_rapi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5);
 
-        TH1D *h_nPU_beforePUCorr = new TH1D( "h_nPU_before_PUCorr"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
-        TH1D *h_nPU_beforeEffCorr = new TH1D( "h_nPU_before_EffCorr"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
-        TH1D *h_nPU = new TH1D( "h_nPU"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
+        TH1D *h_nPU_beforePUCorr = new TH1D( "h_nPU_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
+        TH1D *h_nPU_beforeEffCorr = new TH1D( "h_nPU_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
+        TH1D *h_nPU = new TH1D( "h_nPU_"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
 
         TH1D *h_pT = new TH1D("h_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600);
         TH1D *h_eta = new TH1D("h_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5);
@@ -384,9 +391,9 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
         TH1D *h_Pt = new TH1D( "h_Pt_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600 );
         TH1D *h_rapi = new TH1D( "h_rapi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
 
-        TH1D *h_nPU_beforePUCorr = new TH1D( "h_nPU_before_PUCorr"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
-        TH1D *h_nPU_beforeEffCorr = new TH1D( "h_nPU_before_EffCorr"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
-        TH1D *h_nPU = new TH1D( "h_nPU"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
+        TH1D *h_nPU_beforePUCorr = new TH1D( "h_nPU_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
+        TH1D *h_nPU_beforeEffCorr = new TH1D( "h_nPU_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
+        TH1D *h_nPU = new TH1D( "h_nPU_"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
 
         TH1D *h_pT = new TH1D( "h_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600 );
         TH1D *h_eta = new TH1D( "h_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
@@ -635,9 +642,9 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
         TH1D *h_emuSS_mass_fine = new TH1D( "h_emuSS_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
         TH1D *h_emuSS_mass = new TH1D( "h_emuSS_mass_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
 
-        TH1D *h_nPU_beforePUCorr = new TH1D( "h_nPU_before_PUCorr"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
-        TH1D *h_nPU_beforeEffCorr = new TH1D( "h_nPU_before_EffCorr"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
-        TH1D *h_nPU = new TH1D( "h_nPU"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
+        TH1D *h_nPU_beforePUCorr = new TH1D( "h_nPU_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
+        TH1D *h_nPU_beforeEffCorr = new TH1D( "h_nPU_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
+        TH1D *h_nPU = new TH1D( "h_nPU_"+Mgr.Procname[Mgr.CurrentProc], "", 50, 0, 50 );
 
         TH1D *h_ele_pT = new TH1D( "h_ele_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600 );
         TH1D *h_ele_eta = new TH1D( "h_ele_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
@@ -825,3 +832,111 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
     cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
 
 } // End of EMu_HistMaker()
+
+
+/// ----------------------- MuMu_merge ----------------------------- ///
+void MuMu_merge()
+{
+    LocalFileMgr Mgr;
+
+    TH1D *h_mass_fine_before_PUCorr[7], *h_mass_fine_before_RoccoR[7], *h_mass_fine_before_EffCorr[7], *h_mass_fine[7], *h_mass[7], *h_Pt[7], *h_rapi[7],
+         *h_nPU_before_PUCorr[7], *h_nPU_before_EffCorr[7], *h_nPU[7], *h_pT[7], *h_eta[7], *h_phi[7];
+
+    TFile* files[7];
+    Mgr.GetProc(_MuMu_SingleMuon_Full);
+
+    TH1D *h_mass_fine_before_PUCorr_full  = new TH1D( "h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc],
+                                                      "h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], 10000, 0, 10000 );
+    TH1D *h_mass_fine_before_RoccoR_full  = new TH1D( "h_mass_fine_before_RoccoR_"+Mgr.Procname[Mgr.CurrentProc],
+                                                      "h_mass_fine_before_RoccoR_"+Mgr.Procname[Mgr.CurrentProc], 10000, 0, 10000 );
+    TH1D *h_mass_fine_before_EffCorr_full = new TH1D( "h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc],
+                                                      "h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], 10000, 0, 10000 );
+    TH1D *h_mass_fine_full                = new TH1D( "h_mass_fine_"+Mgr.Procname[Mgr.CurrentProc],
+                                                      "h_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], 10000, 0, 10000 );
+    TH1D *h_mass_full                     = new TH1D( "h_mass_"+Mgr.Procname[Mgr.CurrentProc],
+                                                      "h_mass_"+Mgr.Procname[Mgr.CurrentProc], 43, massbins );
+    TH1D *h_Pt_full                       = new TH1D( "h_Pt_"+Mgr.Procname[Mgr.CurrentProc],
+                                                      "h_Pt_"+Mgr.Procname[Mgr.CurrentProc], 300, 0, 600 );
+    TH1D *h_rapi_full                     = new TH1D( "h_rapi_"+Mgr.Procname[Mgr.CurrentProc],
+                                                      "h_rapi_"+Mgr.Procname[Mgr.CurrentProc], 100, -5, 5 );
+    TH1D *h_nPU_before_PUCorr_full         = new TH1D( "h_nPU_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc],
+                                                      "h_nPU_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], 50, 0, 50 );
+    TH1D *h_nPU_before_EffCorr_full        = new TH1D( "h_nPU_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc],
+                                                      "h_nPU_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], 50, 0, 50 );
+    TH1D *h_nPU_full                      = new TH1D( "h_nPU_"+Mgr.Procname[Mgr.CurrentProc],
+                                                      "h_nPU_"+Mgr.Procname[Mgr.CurrentProc], 50, 0, 50 );
+    TH1D *h_pT_full                       = new TH1D( "h_pT_"+Mgr.Procname[Mgr.CurrentProc],
+                                                      "h_pT_"+Mgr.Procname[Mgr.CurrentProc], 300, 0, 600 );
+    TH1D *h_eta_full                      = new TH1D( "h_eta_"+Mgr.Procname[Mgr.CurrentProc],
+                                                      "h_eta_"+Mgr.Procname[Mgr.CurrentProc], 100, -5, 5 );
+    TH1D *h_phi_full                      = new TH1D( "h_phi_"+Mgr.Procname[Mgr.CurrentProc],
+                                                      "h_phi_"+Mgr.Procname[Mgr.CurrentProc], 100, -5, 5 );
+
+    TFile* newFile = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
+    Int_t iter = 0;
+    for ( SelProc_t pr=_MuMu_SingleMuon_B; pr<=_MuMu_SingleMuon_H; pr=next(pr) )
+    {
+        Mgr.GetProc(pr);
+        files[iter] = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root", "READ" );
+
+        files[iter]->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc],  h_mass_fine_before_PUCorr[iter] );
+        files[iter]->GetObject( "h_mass_fine_before_RoccoR_"+Mgr.Procname[Mgr.CurrentProc],  h_mass_fine_before_RoccoR[iter] );
+        files[iter]->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], h_mass_fine_before_EffCorr[iter] );
+        files[iter]->GetObject( "h_mass_fine_"+Mgr.Procname[Mgr.CurrentProc],                h_mass_fine[iter] );
+        files[iter]->GetObject( "h_mass_"+Mgr.Procname[Mgr.CurrentProc],                     h_mass[iter] );
+        files[iter]->GetObject( "h_Pt_"+Mgr.Procname[Mgr.CurrentProc],                       h_Pt[iter] );
+        files[iter]->GetObject( "h_rapi_"+Mgr.Procname[Mgr.CurrentProc],                     h_rapi[iter] );
+        files[iter]->GetObject( "h_nPU_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc],        h_nPU_before_PUCorr[iter] );
+        files[iter]->GetObject( "h_nPU_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc],       h_nPU_before_EffCorr[iter] );
+        files[iter]->GetObject( "h_nPU_"+Mgr.Procname[Mgr.CurrentProc],                      h_nPU[iter] );
+        files[iter]->GetObject( "h_pT_"+Mgr.Procname[Mgr.CurrentProc],                       h_pT[iter] );
+        files[iter]->GetObject( "h_eta_"+Mgr.Procname[Mgr.CurrentProc],                      h_eta[iter] );
+        files[iter]->GetObject( "h_phi_"+Mgr.Procname[Mgr.CurrentProc],                      h_phi[iter] );
+
+        h_mass_fine_before_PUCorr[iter] ->SetDirectory(0);
+        h_mass_fine_before_RoccoR[iter] ->SetDirectory(0);
+        h_mass_fine_before_EffCorr[iter]->SetDirectory(0);
+        h_mass_fine[iter]               ->SetDirectory(0);
+        h_mass[iter]                    ->SetDirectory(0);
+        h_Pt[iter]                      ->SetDirectory(0);
+        h_rapi[iter]                    ->SetDirectory(0);
+        h_nPU_before_PUCorr[iter]       ->SetDirectory(0);
+        h_nPU_before_EffCorr[iter]      ->SetDirectory(0);
+        h_nPU[iter]                     ->SetDirectory(0);
+        h_pT[iter]                      ->SetDirectory(0);
+        h_eta[iter]                     ->SetDirectory(0);
+        h_phi[iter]                     ->SetDirectory(0);
+
+        h_mass_fine_before_PUCorr_full ->Add( h_mass_fine_before_PUCorr[iter] );
+        h_mass_fine_before_RoccoR_full ->Add( h_mass_fine_before_RoccoR[iter] );
+        h_mass_fine_before_EffCorr_full->Add( h_mass_fine_before_EffCorr[iter] );
+        h_mass_fine_full               ->Add( h_mass_fine[iter] );
+        h_mass_full                    ->Add( h_mass[iter] );
+        h_Pt_full                      ->Add( h_Pt[iter] );
+        h_rapi_full                    ->Add( h_rapi[iter] );
+        h_nPU_before_PUCorr_full       ->Add( h_nPU_before_PUCorr[iter] );
+        h_nPU_before_EffCorr_full      ->Add( h_nPU_before_EffCorr[iter] );
+        h_nPU_full                     ->Add( h_nPU[iter] );
+        h_pT_full                      ->Add( h_pT[iter] );
+        h_eta_full                     ->Add( h_eta[iter] );
+        h_phi_full                     ->Add( h_phi[iter] );
+
+        iter++;
+    }// End of for(SingleMuon_BtoH)
+
+    newFile->cd();
+    h_mass_fine_before_PUCorr_full  ->Write();
+    h_mass_fine_before_RoccoR_full  ->Write();
+    h_mass_fine_before_EffCorr_full ->Write();
+    h_mass_fine_full                ->Write();
+    h_mass_full                     ->Write();
+    h_Pt_full                       ->Write();
+    h_rapi_full                     ->Write();
+    h_nPU_before_PUCorr_full        ->Write();
+    h_nPU_before_EffCorr_full       ->Write();
+    h_nPU_full                      ->Write();
+    h_pT_full                       ->Write();
+    h_eta_full                      ->Write();
+    h_phi_full                      ->Write();
+
+}// End of MuMu_Merge

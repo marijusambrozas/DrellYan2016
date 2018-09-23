@@ -57,7 +57,7 @@ myRatioPlot_t::myRatioPlot_t(TString cName, const THStack *stack, const TH1D *hi
     h1_data = ((TH1D*)hist->Clone("h1_data"));
     s_stackedProcesses = new THStack(*stack);
     CanvasName = cName;
-
+    gStyle->SetOptStat(0);
 }
 
 myRatioPlot_t::myRatioPlot_t(TString cName, const TH1D *stack, const TH1D *hist) :
@@ -74,6 +74,7 @@ myRatioPlot_t::myRatioPlot_t(TString cName, const TH1D *stack, const TH1D *hist)
     hclone->SetDirectory(0);
     s_stackedProcesses->Add(hclone);
     CanvasName = cName;
+    gStyle->SetOptStat(0);
 }
 
 myRatioPlot_t::~myRatioPlot_t()
