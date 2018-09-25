@@ -410,9 +410,13 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
 
             TChain *chain = new TChain( Mgr.TreeName[i_tup] );
             chain->Add( Mgr.FullLocation[i_tup] );
+            TChain *chain_noRC = new TChain( Mgr.TreeName[i_tup] );
+            chain_noRC->Add( Mgr.FullLocation[i_tup] );
 
             SelectedMuMu_t *MuMu = new SelectedMuMu_t();
             MuMu->CreateFromChain( chain );
+            SelectedMuMu_t *MuMu_noRC = new SelectedMuMu_t();
+            MuMu_noRC->CreateFromChain( chain_noRC );
 
             RoccoR rc("./etc/RoccoR/rcdata.2016.v3");
 
@@ -426,6 +430,58 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
             for(Int_t i=0; i<NEvents; i++)
             {
                 MuMu->GetEvent(i);
+                MuMu_noRC->GetEvent(i);
+
+                if ( MuMu->Muon_charge->size() != 2 )
+                {
+                    cout << "Charge vector has " << MuMu->Muon_charge->size() << " elements!!!" << endl;
+                    break;
+                }
+                if ( MuMu->Muon_TuneP_pT->size() != 2 )
+                {
+                    cout << "pT vector has " << MuMu->Muon_TuneP_pT->size() << " elements!!!" << endl;
+                    break;
+                }
+                if ( MuMu->Muon_TuneP_eta->size() != 2 )
+                {
+                    cout << "eta vector has " << MuMu->Muon_TuneP_eta->size() << " elements!!!" << endl;
+                    break;
+                }
+                if ( MuMu->Muon_TuneP_phi->size() != 2 )
+                {
+                    cout << "phi vector has " << MuMu->Muon_TuneP_phi->size() << " elements!!!" << endl;
+                    break;
+                }
+                if ( MuMu->Muon_Energy->size() != 2 )
+                {
+                    cout << "Energy vector has " << MuMu->Muon_Energy->size() << " elements!!!" << endl;
+                    break;
+                }
+                if ( MuMu_noRC->Muon_charge->size() != 2 )
+                {
+                    cout << "Charge vector (no RC) has " << MuMu->Muon_charge->size() << " elements!!!" << endl;
+                    break;
+                }
+                if ( MuMu_noRC->Muon_TuneP_pT->size() != 2 )
+                {
+                    cout << "pT vector (no RC) has " << MuMu->Muon_TuneP_pT->size() << " elements!!!" << endl;
+                    break;
+                }
+                if ( MuMu_noRC->Muon_TuneP_eta->size() != 2 )
+                {
+                    cout << "eta vector (no RC) has " << MuMu->Muon_TuneP_eta->size() << " elements!!!" << endl;
+                    break;
+                }
+                if ( MuMu_noRC->Muon_TuneP_phi->size() != 2 )
+                {
+                    cout << "phi vector (no RC) has " << MuMu->Muon_TuneP_phi->size() << " elements!!!" << endl;
+                    break;
+                }
+                if ( MuMu_noRC->Muon_Energy->size() != 2 )
+                {
+                    cout << "Energy vector (no RC) has " << MuMu->Muon_Energy->size() << " elements!!!" << endl;
+                    break;
+                }
 
                 Double_t GenWeight = MuMu->GENEvt_weight;
 
@@ -459,9 +515,13 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
 
                 if( MuMu->isSelPassed == kTRUE )
                 {
-                    TLorentzVector mu1, mu2;
+                    TLorentzVector mu1, mu2, mu1_noRC, mu2_noRC;
                     mu1.SetPtEtaPhiE( MuMu->Muon_TuneP_pT->at(0), MuMu->Muon_TuneP_eta->at(0), MuMu->Muon_TuneP_phi->at(0), MuMu->Muon_Energy->at(0) );
                     mu2.SetPtEtaPhiE( MuMu->Muon_TuneP_pT->at(1), MuMu->Muon_TuneP_eta->at(1), MuMu->Muon_TuneP_phi->at(1), MuMu->Muon_Energy->at(1) );
+                    mu1_noRC.SetPtEtaPhiE( MuMu_noRC->Muon_TuneP_pT->at(0), MuMu_noRC->Muon_TuneP_eta->at(0), MuMu_noRC->Muon_TuneP_phi->at(0),
+                                           MuMu_noRC->Muon_Energy->at(0) );
+                    mu2_noRC.SetPtEtaPhiE( MuMu_noRC->Muon_TuneP_pT->at(1), MuMu_noRC->Muon_TuneP_eta->at(1), MuMu_noRC->Muon_TuneP_phi->at(1),
+                                           MuMu_noRC->Muon_Energy->at(1) );
                     // -- Apply efficiency scale factor -- //
                     if( Mgr.isMC == kTRUE )
                     {
@@ -472,11 +532,14 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
 
                     Double_t reco_Pt = ( mu1 + mu2 ).Pt();
                     Double_t reco_rapi = ( mu1 + mu2 ).Rapidity();
+                    Double_t reco_mass = ( mu1 + mu2 ).M();
+                    Double_t reco_mass_noRC = ( mu1_noRC + mu2_noRC ).M();
 
-                    h_mass_fine_before_PUCorr->Fill( MuMu->Muon_InvM, TotWeight );
-                    h_mass_fine_before_EffCorr->Fill( MuMu->Muon_InvM, TotWeight * PUWeight );
-                    h_mass_fine->Fill( MuMu->Muon_InvM, TotWeight * PUWeight * effweight );
-                    h_mass->Fill( MuMu->Muon_InvM, TotWeight * PUWeight * effweight );
+                    h_mass_fine_before_PUCorr->Fill( reco_mass, TotWeight );
+                    h_mass_fine_before_RoccoR->Fill( reco_mass_noRC, TotWeight * PUWeight );
+                    h_mass_fine_before_EffCorr->Fill( reco_mass, TotWeight * PUWeight );
+                    h_mass_fine->Fill( reco_mass, TotWeight * PUWeight * effweight );
+                    h_mass->Fill( reco_mass, TotWeight * PUWeight * effweight );
                     h_Pt->Fill( reco_Pt, TotWeight * PUWeight * effweight );
                     h_rapi->Fill( reco_rapi, TotWeight * PUWeight * effweight );
 
@@ -671,9 +734,13 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
 
             TChain *chain = new TChain( Mgr.TreeName[i_tup] );
             chain->Add( Mgr.FullLocation[i_tup] );
+            TChain *chain_noRC = new TChain( Mgr.TreeName[i_tup] );
+            chain_noRC->Add( Mgr.FullLocation[i_tup] );
 
             SelectedEMu_t *EMu = new SelectedEMu_t();
             EMu->CreateFromChain( chain );
+            SelectedEMu_t *EMu_noRC = new SelectedEMu_t();
+            EMu_noRC->CreateFromChain( chain_noRC );
 
             RoccoR rc("./etc/RoccoR/rcdata.2016.v3");           
 
@@ -687,6 +754,7 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
             for(Int_t i=0; i<NEvents; i++)
             {
                 EMu->GetEvent(i);
+                EMu_noRC->GetEvent(i);
 
                 Double_t GenWeight = EMu->GENEvt_weight;
 
@@ -717,9 +785,10 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
 
                 if( EMu->isSelPassed == kTRUE )
                 {
-                    TLorentzVector mu, ele;
+                    TLorentzVector mu, ele, mu_noRC;
                     mu.SetPtEtaPhiE( EMu->Muon_TuneP_pT, EMu->Muon_TuneP_eta, EMu->Muon_TuneP_phi, EMu->Muon_Energy );
                     ele.SetPtEtaPhiE( EMu->Electron_pT, EMu->Electron_eta, EMu->Electron_phi, EMu->Electron_Energy );
+                    mu_noRC.SetPtEtaPhiE( EMu_noRC->Muon_TuneP_pT, EMu_noRC->Muon_TuneP_eta, EMu_noRC->Muon_TuneP_phi, EMu_noRC->Muon_Energy );
                     // -- Apply efficiency scale factor -- //
                     if( Mgr.isMC == kTRUE )
                     {
@@ -730,13 +799,16 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
 
                     Double_t reco_Pt = ( mu + ele ).Pt();
                     Double_t reco_rapi = ( mu + ele ).Rapidity();
+                    Double_t reco_mass = ( mu + ele ).M();
+                    Double_t reco_mass_noRC = ( mu_noRC + ele ).M();
 
                     if ( EMu->Electron_charge != EMu->Muon_charge )
                     {
-                        h_emu_mass_fine_before_PUCorr->Fill( EMu->EMu_InvM, TotWeight );
-                        h_emu_mass_fine_before_EffCorr->Fill( EMu->EMu_InvM, TotWeight * PUWeight );
-                        h_emu_mass_fine->Fill( EMu->EMu_InvM, TotWeight * PUWeight * effweight );
-                        h_emu_mass->Fill( EMu->EMu_InvM, TotWeight * PUWeight * effweight );
+                        h_emu_mass_fine_before_PUCorr->Fill( reco_mass, TotWeight );
+                        h_emu_mass_fine_before_RoccoR->Fill( reco_mass_noRC, TotWeight * PUWeight );
+                        h_emu_mass_fine_before_EffCorr->Fill( reco_mass, TotWeight * PUWeight );
+                        h_emu_mass_fine->Fill( reco_mass, TotWeight * PUWeight * effweight );
+                        h_emu_mass->Fill( reco_mass, TotWeight * PUWeight * effweight );
 
                         h_ele_pT->Fill( EMu->Electron_pT, TotWeight * PUWeight * effweight );
                         h_ele_eta->Fill( EMu->Electron_eta, TotWeight * PUWeight * effweight );
@@ -748,10 +820,11 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
                     }
                     else
                     {
-                        h_emuSS_mass_fine_before_PUCorr->Fill( EMu->EMu_InvM, TotWeight );
-                        h_emuSS_mass_fine_before_EffCorr->Fill( EMu->EMu_InvM, TotWeight * PUWeight );
-                        h_emuSS_mass_fine->Fill( EMu->EMu_InvM, TotWeight * PUWeight * effweight );
-                        h_emuSS_mass->Fill( EMu->EMu_InvM, TotWeight * PUWeight * effweight );
+                        h_emuSS_mass_fine_before_PUCorr->Fill( reco_mass, TotWeight );
+                        h_emuSS_mass_fine_before_RoccoR->Fill( reco_mass_noRC, TotWeight * PUWeight );
+                        h_emuSS_mass_fine_before_EffCorr->Fill( reco_mass, TotWeight * PUWeight );
+                        h_emuSS_mass_fine->Fill( reco_mass, TotWeight * PUWeight * effweight );
+                        h_emuSS_mass->Fill( reco_mass, TotWeight * PUWeight * effweight );
 
                         h_eleSS_pT->Fill( EMu->Electron_pT, TotWeight * PUWeight * effweight );
                         h_eleSS_eta->Fill( EMu->Electron_eta, TotWeight * PUWeight * effweight );
