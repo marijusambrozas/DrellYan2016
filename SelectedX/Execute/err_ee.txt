@@ -1,0 +1,4 @@
+WARNING: In non-interactive mode release checks e.g. deprecated releases, production architectures are disabled.
+/var/lib/condor/execute/dir_153180/condor_exec.exe: line 16: cmsenv: command not found
+/var/lib/condor/execute/dir_153180/condor_exec.exe: line 22: syntax error near unexpected token `('
+/var/lib/condor/execute/dir_153180/condor_exec.exe: line 22: `root -l -q -b MakeSelectedX.C($WhichX, $Process, $Trigger)'

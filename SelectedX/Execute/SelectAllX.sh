@@ -14,7 +14,7 @@ source /cvmfs/cms.cern.ch/cmsset_default.sh
 scram p CMSSW CMSSW_8_0_6
 cd CMSSW_8_0_6/src
 cmsenv
-cd -
+cd /cms/ldap_home/mambroza/DrellYan2016/SelectedX/
 
 
 Process='\"'$2'\"'

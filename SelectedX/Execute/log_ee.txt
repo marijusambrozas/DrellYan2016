@@ -1,0 +1,185 @@
+000 (1461496.000.000) 10/01 18:17:03 Job submitted from host: <134.75.124.121:9618?addrs=134.75.124.121-9618+[--1]-9618&noUDP&sock=1334692_96f2_3>
+...
+000 (1461496.001.000) 10/01 18:17:03 Job submitted from host: <134.75.124.121:9618?addrs=134.75.124.121-9618+[--1]-9618&noUDP&sock=1334692_96f2_3>
+...
+000 (1461496.002.000) 10/01 18:17:03 Job submitted from host: <134.75.124.121:9618?addrs=134.75.124.121-9618+[--1]-9618&noUDP&sock=1334692_96f2_3>
+...
+000 (1461496.003.000) 10/01 18:17:03 Job submitted from host: <134.75.124.121:9618?addrs=134.75.124.121-9618+[--1]-9618&noUDP&sock=1334692_96f2_3>
+...
+000 (1461496.004.000) 10/01 18:17:03 Job submitted from host: <134.75.124.121:9618?addrs=134.75.124.121-9618+[--1]-9618&noUDP&sock=1334692_96f2_3>
+...
+000 (1461496.005.000) 10/01 18:17:03 Job submitted from host: <134.75.124.121:9618?addrs=134.75.124.121-9618+[--1]-9618&noUDP&sock=1334692_96f2_3>
+...
+000 (1461496.006.000) 10/01 18:17:03 Job submitted from host: <134.75.124.121:9618?addrs=134.75.124.121-9618+[--1]-9618&noUDP&sock=1334692_96f2_3>
+...
+000 (1461496.007.000) 10/01 18:17:03 Job submitted from host: <134.75.124.121:9618?addrs=134.75.124.121-9618+[--1]-9618&noUDP&sock=1334692_96f2_3>
+...
+000 (1461496.008.000) 10/01 18:17:03 Job submitted from host: <134.75.124.121:9618?addrs=134.75.124.121-9618+[--1]-9618&noUDP&sock=1334692_96f2_3>
+...
+001 (1461496.008.000) 10/01 18:17:11 Job executing on host: <134.75.127.193:9618?addrs=134.75.127.193-9618+[--1]-9618&noUDP&sock=23747_5bff_3>
+...
+001 (1461496.005.000) 10/01 18:17:11 Job executing on host: <134.75.127.194:9618?addrs=134.75.127.194-9618+[--1]-9618&noUDP&sock=74313_6df1_3>
+...
+001 (1461496.007.000) 10/01 18:17:11 Job executing on host: <134.75.127.206:9618?addrs=134.75.127.206-9618+[--1]-9618&noUDP&sock=135704_8c97_3>
+...
+001 (1461496.003.000) 10/01 18:17:11 Job executing on host: <134.75.127.197:9618?addrs=134.75.127.197-9618+[--1]-9618&noUDP&sock=7792_8e73_3>
+...
+001 (1461496.006.000) 10/01 18:17:11 Job executing on host: <134.75.127.199:9618?addrs=134.75.127.199-9618+[--1]-9618&noUDP&sock=62566_f6ec_3>
+...
+001 (1461496.002.000) 10/01 18:17:11 Job executing on host: <134.75.127.201:9618?addrs=134.75.127.201-9618+[--1]-9618&noUDP&sock=148137_8d94_3>
+...
+001 (1461496.001.000) 10/01 18:17:11 Job executing on host: <134.75.127.192:9618?addrs=134.75.127.192-9618+[--1]-9618&noUDP&sock=43108_651e_3>
+...
+001 (1461496.004.000) 10/01 18:17:11 Job executing on host: <134.75.127.202:9618?addrs=134.75.127.202-9618+[--1]-9618&noUDP&sock=182379_b788_3>
+...
+006 (1461496.008.000) 10/01 18:17:12 Image size of job updated: 1
+	0  -  MemoryUsage of job (MB)
+	0  -  ResidentSetSize of job (KB)
+...
+007 (1461496.008.000) 10/01 18:17:12 Shadow exception!
+	Error from slot1_43@cms-t3-wn3004.sdfarm.kr: STARTER at 134.75.127.193 failed to send file(s) to <134.75.124.121:9618>: error reading from /var/lib/condor/execute/dir_18304/RESULT: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <134.75.127.193:35618>
+	47  -  Run Bytes Sent By Job
+	846  -  Run Bytes Received By Job
+...
+012 (1461496.008.000) 10/01 18:17:12 Job was held.
+	Error from slot1_43@cms-t3-wn3004.sdfarm.kr: STARTER at 134.75.127.193 failed to send file(s) to <134.75.124.121:9618>: error reading from /var/lib/condor/execute/dir_18304/RESULT: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <134.75.127.193:35618>
+	Code 13 Subcode 2
+...
+001 (1461496.000.000) 10/01 18:17:17 Job executing on host: <134.75.127.200:9618?addrs=134.75.127.200-9618+[--1]-9618&noUDP&sock=3389_c75c_3>
+...
+006 (1461496.005.000) 10/01 18:17:19 Image size of job updated: 11188
+	11  -  MemoryUsage of job (MB)
+	11188  -  ResidentSetSize of job (KB)
+...
+006 (1461496.003.000) 10/01 18:17:19 Image size of job updated: 11196
+	11  -  MemoryUsage of job (MB)
+	11196  -  ResidentSetSize of job (KB)
+...
+006 (1461496.006.000) 10/01 18:17:19 Image size of job updated: 11188
+	11  -  MemoryUsage of job (MB)
+	11188  -  ResidentSetSize of job (KB)
+...
+006 (1461496.002.000) 10/01 18:17:20 Image size of job updated: 11192
+	11  -  MemoryUsage of job (MB)
+	11192  -  ResidentSetSize of job (KB)
+...
+006 (1461496.007.000) 10/01 18:17:22 Image size of job updated: 11188
+	11  -  MemoryUsage of job (MB)
+	11188  -  ResidentSetSize of job (KB)
+...
+006 (1461496.001.000) 10/01 18:17:23 Image size of job updated: 11192
+	11  -  MemoryUsage of job (MB)
+	11192  -  ResidentSetSize of job (KB)
+...
+006 (1461496.004.000) 10/01 18:17:24 Image size of job updated: 11224
+	11  -  MemoryUsage of job (MB)
+	11224  -  ResidentSetSize of job (KB)
+...
+006 (1461496.000.000) 10/01 18:17:33 Image size of job updated: 11172
+	11  -  MemoryUsage of job (MB)
+	11172  -  ResidentSetSize of job (KB)
+...
+006 (1461496.002.000) 10/01 18:18:18 Image size of job updated: 11404
+	11  -  MemoryUsage of job (MB)
+	11192  -  ResidentSetSize of job (KB)
+...
+006 (1461496.000.000) 10/01 18:18:18 Image size of job updated: 11400
+	11  -  MemoryUsage of job (MB)
+	11172  -  ResidentSetSize of job (KB)
+...
+006 (1461496.001.000) 10/01 18:18:18 Image size of job updated: 11448
+	11  -  MemoryUsage of job (MB)
+	11192  -  ResidentSetSize of job (KB)
+...
+006 (1461496.003.000) 10/01 18:18:18 Image size of job updated: 11452
+	11  -  MemoryUsage of job (MB)
+	11196  -  ResidentSetSize of job (KB)
+...
+007 (1461496.002.000) 10/01 18:18:18 Shadow exception!
+	Error from slot1_46@cms-t3-wn3012.sdfarm.kr: STARTER at 134.75.127.201 failed to send file(s) to <134.75.124.121:9618>: error reading from /var/lib/condor/execute/dir_144188/RESULT: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <134.75.127.201:44236>
+	422  -  Run Bytes Sent By Job
+	846  -  Run Bytes Received By Job
+...
+007 (1461496.000.000) 10/01 18:18:18 Shadow exception!
+	Error from slot1_47@cms-t3-wn3011.sdfarm.kr: STARTER at 134.75.127.200 failed to send file(s) to <134.75.124.121:9618>: error reading from /var/lib/condor/execute/dir_156442/RESULT: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <134.75.127.200:36773>
+	422  -  Run Bytes Sent By Job
+	846  -  Run Bytes Received By Job
+...
+012 (1461496.002.000) 10/01 18:18:18 Job was held.
+	Error from slot1_46@cms-t3-wn3012.sdfarm.kr: STARTER at 134.75.127.201 failed to send file(s) to <134.75.124.121:9618>: error reading from /var/lib/condor/execute/dir_144188/RESULT: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <134.75.127.201:44236>
+	Code 13 Subcode 2
+...
+012 (1461496.000.000) 10/01 18:18:18 Job was held.
+	Error from slot1_47@cms-t3-wn3011.sdfarm.kr: STARTER at 134.75.127.200 failed to send file(s) to <134.75.124.121:9618>: error reading from /var/lib/condor/execute/dir_156442/RESULT: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <134.75.127.200:36773>
+	Code 13 Subcode 2
+...
+007 (1461496.003.000) 10/01 18:18:18 Shadow exception!
+	Error from slot1_46@cms-t3-wn3008.sdfarm.kr: STARTER at 134.75.127.197 failed to send file(s) to <134.75.124.121:9618>: error reading from /var/lib/condor/execute/dir_70800/RESULT: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <134.75.127.197:37068>
+	419  -  Run Bytes Sent By Job
+	846  -  Run Bytes Received By Job
+...
+007 (1461496.001.000) 10/01 18:18:18 Shadow exception!
+	Error from slot1_47@cms-t3-wn3003.sdfarm.kr: STARTER at 134.75.127.192 failed to send file(s) to <134.75.124.121:9618>: error reading from /var/lib/condor/execute/dir_87620/RESULT: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <134.75.127.192:40334>
+	419  -  Run Bytes Sent By Job
+	846  -  Run Bytes Received By Job
+...
+012 (1461496.003.000) 10/01 18:18:18 Job was held.
+	Error from slot1_46@cms-t3-wn3008.sdfarm.kr: STARTER at 134.75.127.197 failed to send file(s) to <134.75.124.121:9618>: error reading from /var/lib/condor/execute/dir_70800/RESULT: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <134.75.127.197:37068>
+	Code 13 Subcode 2
+...
+012 (1461496.001.000) 10/01 18:18:18 Job was held.
+	Error from slot1_47@cms-t3-wn3003.sdfarm.kr: STARTER at 134.75.127.192 failed to send file(s) to <134.75.124.121:9618>: error reading from /var/lib/condor/execute/dir_87620/RESULT: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <134.75.127.192:40334>
+	Code 13 Subcode 2
+...
+006 (1461496.007.000) 10/01 18:18:21 Image size of job updated: 11444
+	11  -  MemoryUsage of job (MB)
+	11188  -  ResidentSetSize of job (KB)
+...
+006 (1461496.004.000) 10/01 18:18:21 Image size of job updated: 11440
+	11  -  MemoryUsage of job (MB)
+	11224  -  ResidentSetSize of job (KB)
+...
+007 (1461496.007.000) 10/01 18:18:21 Shadow exception!
+	Error from slot1_43@cms-t3-wn3017.sdfarm.kr: STARTER at 134.75.127.206 failed to send file(s) to <134.75.124.121:9618>: error reading from /var/lib/condor/execute/dir_50635/RESULT: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <134.75.127.206:45951>
+	419  -  Run Bytes Sent By Job
+	846  -  Run Bytes Received By Job
+...
+007 (1461496.004.000) 10/01 18:18:21 Shadow exception!
+	Error from slot1_45@cms-t3-wn3013.sdfarm.kr: STARTER at 134.75.127.202 failed to send file(s) to <134.75.124.121:9618>: error reading from /var/lib/condor/execute/dir_123668/RESULT: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <134.75.127.202:37893>
+	422  -  Run Bytes Sent By Job
+	846  -  Run Bytes Received By Job
+...
+012 (1461496.007.000) 10/01 18:18:21 Job was held.
+	Error from slot1_43@cms-t3-wn3017.sdfarm.kr: STARTER at 134.75.127.206 failed to send file(s) to <134.75.124.121:9618>: error reading from /var/lib/condor/execute/dir_50635/RESULT: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <134.75.127.206:45951>
+	Code 13 Subcode 2
+...
+012 (1461496.004.000) 10/01 18:18:21 Job was held.
+	Error from slot1_45@cms-t3-wn3013.sdfarm.kr: STARTER at 134.75.127.202 failed to send file(s) to <134.75.124.121:9618>: error reading from /var/lib/condor/execute/dir_123668/RESULT: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <134.75.127.202:37893>
+	Code 13 Subcode 2
+...
+006 (1461496.005.000) 10/01 18:18:21 Image size of job updated: 102044
+	11  -  MemoryUsage of job (MB)
+	11188  -  ResidentSetSize of job (KB)
+...
+007 (1461496.005.000) 10/01 18:18:22 Shadow exception!
+	Error from slot1_44@cms-t3-wn3005.sdfarm.kr: STARTER at 134.75.127.194 failed to send file(s) to <134.75.124.121:9618>: error reading from /var/lib/condor/execute/dir_125900/RESULT: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <134.75.127.194:39767>
+	422  -  Run Bytes Sent By Job
+	846  -  Run Bytes Received By Job
+...
+012 (1461496.005.000) 10/01 18:18:22 Job was held.
+	Error from slot1_44@cms-t3-wn3005.sdfarm.kr: STARTER at 134.75.127.194 failed to send file(s) to <134.75.124.121:9618>: error reading from /var/lib/condor/execute/dir_125900/RESULT: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <134.75.127.194:39767>
+	Code 13 Subcode 2
+...
+006 (1461496.006.000) 10/01 18:18:22 Image size of job updated: 11448
+	11  -  MemoryUsage of job (MB)
+	11188  -  ResidentSetSize of job (KB)
+...
+007 (1461496.006.000) 10/01 18:18:22 Shadow exception!
+	Error from slot1_43@cms-t3-wn3010.sdfarm.kr: STARTER at 134.75.127.199 failed to send file(s) to <134.75.124.121:9618>: error reading from /var/lib/condor/execute/dir_153180/RESULT: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <134.75.127.199:37580>
+	422  -  Run Bytes Sent By Job
+	846  -  Run Bytes Received By Job
+...
+012 (1461496.006.000) 10/01 18:18:22 Job was held.
+	Error from slot1_43@cms-t3-wn3010.sdfarm.kr: STARTER at 134.75.127.199 failed to send file(s) to <134.75.124.121:9618>: error reading from /var/lib/condor/execute/dir_153180/RESULT: (errno 2) No such file or directory; SHADOW failed to receive file(s) from <134.75.127.199:37580>
+	Code 13 Subcode 2
+...
