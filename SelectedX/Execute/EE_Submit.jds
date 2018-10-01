@@ -6,7 +6,6 @@ output = out_ee.txt
 error = err_ee.txt
 log = log_ee.txt
 getenv = True
-transfer_input_files = ../MakeSelectedX.C, `ls ../header/`
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
 transfer_output_files = RESULT
