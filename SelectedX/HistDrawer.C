@@ -81,9 +81,10 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
     TFile* f_bkg = new TFile( name_bkg, "READ" );
     if (f_bkg->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_EE_Bkg_Full]+".root" << " opened successfully" << endl;
     Mgr.GetProc( _EE_DoubleEG_Full );
-    TString name_data = Mgr.HistLocation+"Hist_"+Mgr.Procname[_EE_DoubleEG_Full]+".root";
+//    Mgr.GetProc( _EE_SingleElectron_Full );
+    TString name_data = Mgr.HistLocation+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root";
     TFile* f_data = new TFile( name_data, "READ" );
-    if (f_data->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_EE_DoubleEG_Full]+".root" << " opened successfully" << endl;
+    if (f_data->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root" << " opened successfully" << endl;
     TString name_PileUp = "./etc/PileUp/80X/ROOTFile_PUReWeight_80X_v20170817_64mb.root";
     TFile *f_PileUp = new TFile( name_PileUp, "READ" );
     if (f_PileUp->IsOpen()) std::cout << "File " << "ROOTFile_PUReWeight_80X_v20170817_64mb.root" << " opened successfully" << endl;
@@ -209,10 +210,13 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
 
         TH1D *h_data_mass_fine_before_PUCorr, *h_data_mass_fine_before_EffCorr, *h_data_mass_fine, *h_data_mass;
 
-        f_data->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[_EE_DoubleEG_Full], h_data_mass_fine_before_PUCorr );
-        f_data->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[_EE_DoubleEG_Full], h_data_mass_fine_before_EffCorr );
-        f_data->GetObject( "h_mass_fine_"+Mgr.Procname[_EE_DoubleEG_Full], h_data_mass_fine );
-        f_data->GetObject( "h_mass_"+Mgr.Procname[_EE_DoubleEG_Full], h_data_mass );
+        Mgr.GetProc(_EE_DoubleEG_Full);
+//        Mgr.GetProc(_EE_SingleElectron_Full);
+
+        f_data->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass_fine_before_PUCorr );
+        f_data->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass_fine_before_EffCorr );
+        f_data->GetObject( "h_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass_fine );
+        f_data->GetObject( "h_mass_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass );
 
         h_data_mass_fine_before_PUCorr->SetMarkerStyle(kFullDotLarge);
         h_data_mass_fine_before_EffCorr->SetMarkerStyle(kFullDotLarge);
@@ -444,11 +448,14 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
 
         TH1D *h_data_Pt, *h_data_rapi, *h_data_pT, *h_data_eta, *h_data_phi;
 
-        f_data->GetObject( "h_Pt_"+Mgr.Procname[_EE_DoubleEG_Full], h_data_Pt );
-        f_data->GetObject( "h_rapi_"+Mgr.Procname[_EE_DoubleEG_Full], h_data_rapi );
-        f_data->GetObject( "h_pT_"+Mgr.Procname[_EE_DoubleEG_Full], h_data_pT );
-        f_data->GetObject( "h_eta_"+Mgr.Procname[_EE_DoubleEG_Full], h_data_eta );
-        f_data->GetObject( "h_phi_"+Mgr.Procname[_EE_DoubleEG_Full], h_data_phi );
+        Mgr.GetProc(_EE_DoubleEG_Full);
+//        Mgr.GetProc(_EE_SingleElectron_Full);
+
+        f_data->GetObject( "h_Pt_"+Mgr.Procname[Mgr.CurrentProc], h_data_Pt );
+        f_data->GetObject( "h_rapi_"+Mgr.Procname[Mgr.CurrentProc], h_data_rapi );
+        f_data->GetObject( "h_pT_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT );
+        f_data->GetObject( "h_eta_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta );
+        f_data->GetObject( "h_phi_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi );
 
 
         h_data_Pt->SetMarkerStyle(kFullDotLarge);
