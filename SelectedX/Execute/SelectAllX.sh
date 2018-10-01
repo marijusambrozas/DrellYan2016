@@ -13,7 +13,7 @@ Trigger='\"'$3'\"'
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 scram p CMSSW CMSSW_8_0_6
 cd CMSSW_8_0_6/src
-eval ‘scramv1 runtime -sh‘
+eval ‘scram runtime -csh‘
 cd /cms/ldap_home/mambroza/DrellYan2016/SelectedX/
 
 
