@@ -11,7 +11,8 @@ Trigger='\"'$3'\"'
 #echo $Trigger
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-scram p CMSSW CMSSW_8_0_6
+scram p CMSSW CMSSW_8_0_6&
+wait %1
 cd CMSSW_8_0_6/src
 eval ‘scram runtime -sh‘
 cd /cms/ldap_home/mambroza/DrellYan2016/SelectedX/
