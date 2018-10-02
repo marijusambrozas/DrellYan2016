@@ -131,11 +131,11 @@ void MakeSelectedEE ( TString type, TString HLTname )
 //        if ( Mgr.Type == "TEST" )
 //            ElectronFile = new TFile( "/media/sf_DATA/test/SelectedEE_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
 //        else if ( Mgr.Type == "DATA" )
-//            ElectronFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
+//            ElectronFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
 //        else if ( Mgr.Type == "SIGNAL" )
-//            ElectronFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
+//            ElectronFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
 //        else if ( Mgr.Type == "BKG" )
-//            ElectronFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
+//            ElectronFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
 //        else
 //        {
 //            cout << "Problems with TYPE." << endl;
@@ -172,11 +172,11 @@ void MakeSelectedEE ( TString type, TString HLTname )
             //Creating a file
             TFile* ElectronFile;
             if ( Mgr.Type == "DATA" )
-                ElectronFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
+                ElectronFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
             else if ( Mgr.Type == "SIGNAL" )
-                ElectronFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
+                ElectronFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
             else if ( Mgr.Type == "BKG" )
-                ElectronFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
+                ElectronFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
             else if ( Mgr.Type == "TEST")
                 ElectronFile = new TFile( "/media/sf_DATA/test/SelectedEE_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
             else
@@ -410,11 +410,11 @@ void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RocCorr )
 //        if ( Mgr.Type == "TEST" )
 //            MuonFile = new TFile( "/media/sf_DATA/test/SelectedMuMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
 //        else if ( Mgr.Type == "DATA" )
-//            MuonFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
+//            MuonFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
 //        else if ( Mgr.Type == "SIGNAL" )
-//            MuonFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
+//            MuonFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
 //        else if ( Mgr.Type == "BKG" )
-//            MuonFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
+//            MuonFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
 //        else
 //        {
 //            cout << "Problems with TYPE." << endl;
@@ -457,11 +457,11 @@ void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RocCorr )
             if ( Mgr.Type == "TEST" )
                 MuonFile = new TFile( "/media/sf_DATA/test/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else if ( Mgr.Type == "DATA" )
-                MuonFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
+                MuonFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else if ( Mgr.Type == "SIGNAL" )
-                MuonFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
+                MuonFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else if ( Mgr.Type == "BKG" )
-                MuonFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
+                MuonFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else
             {
                 cout << "Problems with TYPE." << endl;
@@ -725,9 +725,9 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr )
 //        if ( Mgr.Type == "TEST" )
 //            EMuFile = new TFile( "/media/sf_DATA/test/SelectedEMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
 //        else if ( Mgr.Type == "DATA" )
-//            EMuFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
+//            EMuFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
 //        else if ( Mgr.Type == "BKG" )
-//            EMuFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/MC_bkg/SelectedEMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
+//            EMuFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/MC_bkg/SelectedEMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
 //        else
 //        {
 //            cout << "Problems with TYPE." << endl;
@@ -775,9 +775,9 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr )
             if ( Mgr.Type == "TEST" )
                 EMuFile = new TFile( "/media/sf_DATA/test/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else if ( Mgr.Type == "DATA" )
-                EMuFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
+                EMuFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else if ( Mgr.Type == "BKG" )
-                EMuFile = new TFile( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEMu/MC_bkg/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
+                EMuFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/MC_bkg/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else
             {
                 cout << "Problems with TYPE." << endl;
@@ -1025,7 +1025,7 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name )
     TString Name = ss.str();
 
     //Creating a file
-    TFile* ElectronFile = new TFile ( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/QCDfail/SelectedEE_"+Mgr.Tag[0]+"_"+Name+".root", "RECREATE" );
+    TFile* ElectronFile = new TFile ( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/QCDfail/SelectedEE_"+Mgr.Tag[0]+"_"+Name+".root", "RECREATE" );
 
     TTree* ElectronTree = new TTree( "DYTree", "DYTree" );
     // -- Creating LongSelectedEE variables to assign branches -- //
@@ -1190,7 +1190,7 @@ void MakeSelectedQCDEM_120to170_merged()
     cout << "\tMerging all selected events from ntuples that didn't fail into a single file:" << endl;
 
     //Creating a file
-    TFile* ElectronFile = new TFile ( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Mgr.Tag[0]+".root", "RECREATE" );
+    TFile* ElectronFile = new TFile ( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Mgr.Tag[0]+".root", "RECREATE" );
 
     TTree* ElectronTree = new TTree( "DYTree", "DYTree" );
     // -- Creating LongSelectedEE variables to assign branches -- //
@@ -1209,7 +1209,7 @@ void MakeSelectedQCDEM_120to170_merged()
     ElectronTree->Branch( "Electron_phiSC", &EE.Electron_phiSC );
 
     TChain *chain = new TChain( "DYTree" );
-    chain->Add( "/xrootd/store/user/mambroza/SelectedX_v1/SelectedEE/QCDfail/*.root" );
+    chain->Add( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/QCDfail/*.root" );
 
     SelectedEE_t* QCD_EE = new SelectedEE_t();
     QCD_EE->CreateFromChain( chain );

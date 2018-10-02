@@ -3737,11 +3737,11 @@ void FileMgr::CheckProcesses()
                         cout << "Process " << Procname[pr] << ": FullLocation[" << i << "] does not end with '.root'" << endl;
                         allOk = kFALSE;
                     }
-                    if ( FullLocation[i][0] != '/')
+                    /*if ( FullLocation[i][0] != '/')
                     {
                         cout << "Process " << Procname[pr] << ": FullLocation[" << i << "] does not begin with '/'" << endl;
                         allOk = kFALSE;
-                    }
+                    }*/
                 }
             }
 
@@ -3773,10 +3773,10 @@ void FileMgr::CheckProcesses()
                 cout << "Process " << Procname[pr] << ": BaseLocation does not end with '/'" << endl;
                 allOk = kFALSE;
             }
-            if ( BaseLocation[0] != '/') {
+            /*if ( BaseLocation[0] != '/') {
                 cout << "Process " << Procname[pr] << ": BaseLocation does not begin with '/'" << endl;
                 allOk = kFALSE;
-            }
+            }*/
 
         }
         if ( !nEvents.size() )

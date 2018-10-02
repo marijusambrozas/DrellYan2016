@@ -1,2 +1,0 @@
-Process MakeSelectedX ( EE, SingleElectron_Full, DEFAULT, 0 ) initiated.
-Process MakeSelectedX ( EE, SingleElectron_Full, DEFAULT, 0 ) FINISHED.

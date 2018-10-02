@@ -1,2 +1,0 @@
-Process MakeSelectedX ( EE, VVnST, DEFAULT, 0 ) initiated.
-Process MakeSelectedX ( EE, VVnST, DEFAULT, 0 ) FINISHED.
