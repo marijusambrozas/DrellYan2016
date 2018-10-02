@@ -1,7 +1,7 @@
 executable = SelectAllX.sh
 universe = vanilla
 
-arguments = EE $(LIST)
+arguments = EE $(LIST) DEFAULT
 output = out_ee.txt
 error = err_ee.txt
 log = log_ee.txt
