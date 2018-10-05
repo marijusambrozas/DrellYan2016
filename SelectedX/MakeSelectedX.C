@@ -172,11 +172,11 @@ void MakeSelectedEE ( TString type, TString HLTname )
             //Creating a file
             TFile* ElectronFile;
             if ( Mgr.Type == "DATA" )
-                ElectronFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
+                ElectronFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
             else if ( Mgr.Type == "SIGNAL" )
-                ElectronFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
+                ElectronFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
             else if ( Mgr.Type == "BKG" )
-                ElectronFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
+                ElectronFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
             else if ( Mgr.Type == "TEST")
                 ElectronFile = new TFile( "/media/sf_DATA/test/SelectedEE_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
             else
@@ -457,11 +457,11 @@ void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RocCorr )
             if ( Mgr.Type == "TEST" )
                 MuonFile = new TFile( "/media/sf_DATA/test/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else if ( Mgr.Type == "DATA" )
-                MuonFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
+                MuonFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else if ( Mgr.Type == "SIGNAL" )
-                MuonFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
+                MuonFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else if ( Mgr.Type == "BKG" )
-                MuonFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
+                MuonFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else
             {
                 cout << "Problems with TYPE." << endl;
@@ -775,9 +775,9 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr )
             if ( Mgr.Type == "TEST" )
                 EMuFile = new TFile( "/media/sf_DATA/test/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else if ( Mgr.Type == "DATA" )
-                EMuFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
+                EMuFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else if ( Mgr.Type == "BKG" )
-                EMuFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/MC_bkg/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
+                EMuFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/MC_bkg/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
             else
             {
                 cout << "Problems with TYPE." << endl;
@@ -1025,7 +1025,7 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name )
     TString Name = ss.str();
 
     //Creating a file
-    TFile* ElectronFile = new TFile ( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/QCDfail/SelectedEE_"+Mgr.Tag[0]+"_"+Name+".root", "RECREATE" );
+    TFile* ElectronFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/QCDfail/SelectedEE_"+Mgr.Tag[0]+"_"+Name+".root", "RECREATE" );
 
     TTree* ElectronTree = new TTree( "DYTree", "DYTree" );
     // -- Creating LongSelectedEE variables to assign branches -- //
@@ -1190,7 +1190,7 @@ void MakeSelectedQCDEM_120to170_merged()
     cout << "\tMerging all selected events from ntuples that didn't fail into a single file:" << endl;
 
     //Creating a file
-    TFile* ElectronFile = new TFile ( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Mgr.Tag[0]+".root", "RECREATE" );
+    TFile* ElectronFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Mgr.Tag[0]+".root", "RECREATE" );
 
     TTree* ElectronTree = new TTree( "DYTree", "DYTree" );
     // -- Creating LongSelectedEE variables to assign branches -- //
