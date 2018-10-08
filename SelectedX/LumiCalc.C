@@ -197,9 +197,15 @@ void EE_LumiCalc ()
         Double_t ChiSq_fine[size];
         Double_t ChiSq[size];
         Double_t factor[size];
-        Double_t factor_start = 0.9;
-        Double_t factor_end = 1.1;
+        Double_t factor_start = 0.85;
+        Double_t factor_end = 1.05;
         Double_t step = (factor_end - factor_start) / size;
+        Double_t smallest_chisq_fine = 1e6;
+        Double_t smallest_factor_fine = -1;
+        Double_t smallest_chisq = 1e6;
+        Double_t smallest_factor = -1;
+
+        myProgressBar_t bar(size);
 
         for ( Int_t i=0; i<size; i++ )
         {
@@ -225,43 +231,93 @@ void EE_LumiCalc ()
             {
                 if ( h_data_mass_fine->GetBinContent(j) != 0 )
                 {
-                    ChiSq_fine[i] += (h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) - h_data_mass_fine->GetBinContent(j)) *
-                                     (h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) - h_data_mass_fine->GetBinContent(j)) / h_data_mass_fine->GetBinContent(j);
+                    ChiSq_fine[i] += ( h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) - h_data_mass_fine->GetBinContent(j) ) *
+                                     ( h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) - h_data_mass_fine->GetBinContent(j) ) /
+                                     ( h_data_mass_fine->GetBinContent(j) * (h_data_mass_fine->GetSize() - 2) );
                 }
                 else if ( h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) != 0 )
                 {
-                    ChiSq_fine[i] += (h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) - h_data_mass_fine->GetBinContent(j)) *
-                                     (h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) - h_data_mass_fine->GetBinContent(j)) /
-                                      h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j);
+                    ChiSq_fine[i] += ( h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) - h_data_mass_fine->GetBinContent(j) ) *
+                                     ( h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) - h_data_mass_fine->GetBinContent(j) ) /
+                                     ( h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) * (h_data_mass_fine->GetSize() - 2) );
                 }
 
                 if ( j < h_MCstack_mass_MULTIPLIED->GetSize()-1 )
                 {
                     if ( h_data_mass_fine->GetBinContent(j) != 0 )
                     {
-                        ChiSq[i] += (h_MCstack_mass_MULTIPLIED->GetBinContent(j) - h_data_mass->GetBinContent(j)) *
-                                         (h_MCstack_mass_MULTIPLIED->GetBinContent(j) - h_data_mass->GetBinContent(j)) / h_data_mass->GetBinContent(j);
+                        ChiSq[i] += ( h_MCstack_mass_MULTIPLIED->GetBinContent(j) - h_data_mass->GetBinContent(j) ) *
+                                    ( h_MCstack_mass_MULTIPLIED->GetBinContent(j) - h_data_mass->GetBinContent(j) ) /
+                                    ( h_data_mass->GetBinContent(j) * (h_data_mass->GetSize() - 2) );
                     }
                     else if ( h_MCstack_mass_MULTIPLIED->GetBinContent(j) != 0 )
                     {
-                        ChiSq[i] += (h_MCstack_mass_MULTIPLIED->GetBinContent(j) - h_data_mass->GetBinContent(j)) *
-                                         (h_MCstack_mass_MULTIPLIED->GetBinContent(j) - h_data_mass->GetBinContent(j)) / h_MCstack_mass_MULTIPLIED->GetBinContent(j);
+                        ChiSq[i] += ( h_MCstack_mass_MULTIPLIED->GetBinContent(j) - h_data_mass->GetBinContent(j) ) *
+                                    ( h_MCstack_mass_MULTIPLIED->GetBinContent(j) - h_data_mass->GetBinContent(j) ) /
+                                    ( h_MCstack_mass_MULTIPLIED->GetBinContent(j) * (h_data_mass->GetSize() - 2) );
                     }
 
                 }
             }
+            if ( ChiSq_fine[i] < smallest_chisq_fine )
+            {
+                smallest_chisq_fine = ChiSq_fine[i];
+                smallest_factor_fine = factor[i];
+            }
+            if ( ChiSq[i] < smallest_chisq )
+            {
+                smallest_chisq = ChiSq[i];
+                smallest_factor = factor[i];
+            }
+            bar.Draw(i);
         }
 
-        TGraph* ChiSq_graph_fine = new TGraph(size, factor, ChiSq_fine);
-        TGraph* ChiSq_graph = new TGraph(size, factor, ChiSq);
+        cout << "The luminosity value that gives the smallest chi^2 for fine-binned ee mass histogram is " << LumiDefault * smallest_factor_fine;
+        cout << "   (factor: " << smallest_factor_fine << "; chi^2 value: " << smallest_chisq_fine << ")" << endl;
+        cout << "The luminosity value that gives the smallest chi^2 for ee mass histogram is " << LumiDefault * smallest_factor;
+        cout << "   (factor: " << smallest_factor << "; chi^2 value: " << smallest_chisq << ")" << endl;
 
-        TCanvas* c_fine = new TCanvas("ChiSq_fineBin", "ChiSq_fineBin", 1000, 1000);
+// ----------------------------- Drawing ------------------------------------ //
+
+        TCanvas* c_fine = new TCanvas( "ChiSq_fineBin", "ChiSq_fineBin", 1000, 1000 );
+        TGraph* ChiSq_graph_fine = new TGraph( size, factor, ChiSq_fine );
+        ChiSq_graph_fine->SetTitle( "Fine-binned ee invariant mass histogram's #chi^{2} dependancy on luminosity change" );
+        ChiSq_graph_fine->GetXaxis()->SetTitle( "Luminosity factor" );
+        ChiSq_graph_fine->GetYaxis()->SetTitle( "#frac{#chi^{2}}{ndof}" );
+        ChiSq_graph_fine->SetLineWidth(2);
+        ChiSq_graph_fine->GetYaxis()->SetRangeUser(0, 26);
+
+        TLine* l_vertical_fine = new TLine( smallest_factor_fine, 0, smallest_factor_fine, 26 );
+        l_vertical_fine->SetLineColor(kRed);
+        l_vertical_fine->SetLineWidth(2);
+
         ChiSq_graph_fine->Draw();
+        l_vertical_fine->Draw("same");
+        c_fine->SetGridx();
+        c_fine->SetTickx();
+        c_fine->SetGridy();
+        c_fine->SetTicky();
         c_fine->Update();
 
-        TCanvas* c = new TCanvas("ChiSq", "ChiSq", 1000, 1000);
+        TCanvas* c = new TCanvas( "ChiSq", "ChiSq", 1000, 1000 );
+        TGraph* ChiSq_graph = new TGraph(size, factor, ChiSq);
+        ChiSq_graph->SetTitle( "ee invariant mass histogram's #chi^{2} dependancy on luminosity change" );
+        ChiSq_graph->GetXaxis()->SetTitle( "Luminosity factor" );
+        ChiSq_graph->GetYaxis()->SetTitle( "#frac{#chi^{2}}{ndof}" );
+        ChiSq_graph->SetLineWidth(2);
+        ChiSq_graph->GetYaxis()->SetRangeUser(0, 5700);
+
+        TLine* l_vertical = new TLine( smallest_factor, 0, smallest_factor, 5700 );
+        l_vertical->SetLineColor(kRed);
+        l_vertical->SetLineWidth(2);
+
         c->cd();
         ChiSq_graph->Draw();
+        l_vertical->Draw("same");
+        c->SetGridx();
+        c->SetTickx();
+        c->SetGridy();
+        c->SetTicky();
         c->Update();
 
 } // End of EE_LumiCalc()
@@ -290,16 +346,12 @@ void MuMu_LumiCalc()
 
 //################################# INVARIANT MASS #################################################
 
-        THStack *s_mass_fine_before_PUCorr, *s_mass_fine_before_RoccoR, *s_mass_fine_before_EffCorr, *s_mass_fine, *s_mass;
-        s_mass_fine_before_PUCorr = new THStack("s_mass_fine_before_PUCorr", "");
-        s_mass_fine_before_RoccoR = new THStack("s_mass_fine_before_RoccoR", "");
-        s_mass_fine_before_EffCorr = new THStack("s_mass_fine_before_EffCorr", "");
+        THStack *s_mass_fine, *s_mass;
         s_mass_fine = new THStack("s_mass_fine", "");
         s_mass = new THStack("s_mass", "");
 
 //----------------------------------- MC bkg -------------------------------------------------------
-        TH1D *h_bkg_mass_fine_before_PUCorr[5], *h_bkg_mass_fine_before_EffCorr[5], *h_bkg_mass_fine_before_RoccoR[5],
-             *h_bkg_mass_fine[5], *h_bkg_mass[5];
+        TH1D *h_bkg_mass_fine[5], *h_bkg_mass[5];
         Int_t iter = 0;
 
         for ( SelProc_t pr = _MuMu_QCDMuEnriched_Full; pr > _MuMu_DY_Full; pr=SelProc_t((int)(pr-1)) )
@@ -309,67 +361,36 @@ void MuMu_LumiCalc()
                 cout << "Error: Iteration exceeds histogram limits!!!" << endl;
                 break;
             }
-
-            f_bkg->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_PUCorr[iter] );
-            f_bkg->GetObject( "h_mass_fine_before_RoccoR_"+Mgr.Procname[pr], h_bkg_mass_fine_before_RoccoR[iter] );
-            f_bkg->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_EffCorr[iter] );
             f_bkg->GetObject( "h_mass_fine_"+Mgr.Procname[pr], h_bkg_mass_fine[iter] );
             f_bkg->GetObject( "h_mass_"+Mgr.Procname[pr], h_bkg_mass[iter] );
 
-            h_bkg_mass_fine_before_PUCorr[iter]->SetFillColor(iter+2);
-            h_bkg_mass_fine_before_RoccoR[iter]->SetFillColor(iter+2);
-            h_bkg_mass_fine_before_EffCorr[iter]->SetFillColor(iter+2);
             h_bkg_mass_fine[iter]->SetFillColor(iter+2);
             h_bkg_mass[iter]->SetFillColor(iter+2);
 
-            h_bkg_mass_fine_before_PUCorr[iter]->SetLineColor(iter+2);
-            h_bkg_mass_fine_before_RoccoR[iter]->SetLineColor(iter+2);
-            h_bkg_mass_fine_before_EffCorr[iter]->SetLineColor(iter+2);
             h_bkg_mass_fine[iter]->SetLineColor(iter+2);
             h_bkg_mass[iter]->SetLineColor(iter+2);
 
-            h_bkg_mass_fine_before_PUCorr[iter]->SetDirectory(0);
-            h_bkg_mass_fine_before_RoccoR[iter]->SetDirectory(0);
-            h_bkg_mass_fine_before_EffCorr[iter]->SetDirectory(0);
             h_bkg_mass_fine[iter]->SetDirectory(0);
             h_bkg_mass[iter]->SetDirectory(0);
 
-            s_mass_fine_before_PUCorr->Add( h_bkg_mass_fine_before_PUCorr[iter] );
-            s_mass_fine_before_RoccoR->Add( h_bkg_mass_fine_before_RoccoR[iter] );
-            s_mass_fine_before_EffCorr->Add( h_bkg_mass_fine_before_EffCorr[iter] );
             s_mass_fine->Add( h_bkg_mass_fine[iter] );
             s_mass->Add( h_bkg_mass[iter] );
 
             if ( iter == 1 )
             {   // ---- WJETS ---- //
                 iter++;
-                f_bkg->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_mass_fine_before_PUCorr[iter] );
-                f_bkg->GetObject( "h_mass_fine_before_RoccoR_"+Mgr.Procname[_MuMu_WJets], h_bkg_mass_fine_before_RoccoR[iter] );
-                f_bkg->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_mass_fine_before_EffCorr[iter] );
                 f_bkg->GetObject( "h_mass_fine_"+Mgr.Procname[_MuMu_WJets], h_bkg_mass_fine[iter] );
                 f_bkg->GetObject( "h_mass_"+Mgr.Procname[_MuMu_WJets], h_bkg_mass[iter] );
 
-                h_bkg_mass_fine_before_PUCorr[iter]->SetFillColor(iter+2);
-                h_bkg_mass_fine_before_RoccoR[iter]->SetFillColor(iter+2);
-                h_bkg_mass_fine_before_EffCorr[iter]->SetFillColor(iter+2);
                 h_bkg_mass_fine[iter]->SetFillColor(iter+2);
                 h_bkg_mass[iter]->SetFillColor(iter+2);
 
-                h_bkg_mass_fine_before_PUCorr[iter]->SetLineColor(iter+2);
-                h_bkg_mass_fine_before_RoccoR[iter]->SetLineColor(iter+2);
-                h_bkg_mass_fine_before_EffCorr[iter]->SetLineColor(iter+2);
                 h_bkg_mass_fine[iter]->SetLineColor(iter+2);
                 h_bkg_mass[iter]->SetLineColor(iter+2);
 
-                h_bkg_mass_fine_before_PUCorr[iter]->SetDirectory(0);
-                h_bkg_mass_fine_before_RoccoR[iter]->SetDirectory(0);
-                h_bkg_mass_fine_before_EffCorr[iter]->SetDirectory(0);
                 h_bkg_mass_fine[iter]->SetDirectory(0);
                 h_bkg_mass[iter]->SetDirectory(0);
 
-                s_mass_fine_before_PUCorr->Add( h_bkg_mass_fine_before_PUCorr[iter] );
-                s_mass_fine_before_RoccoR->Add( h_bkg_mass_fine_before_RoccoR[iter] );
-                s_mass_fine_before_EffCorr->Add( h_bkg_mass_fine_before_EffCorr[iter] );
                 s_mass_fine->Add( h_bkg_mass_fine[iter] );
                 s_mass->Add( h_bkg_mass[iter] );
 
@@ -380,139 +401,43 @@ void MuMu_LumiCalc()
 
 //---------------------------------- MC signal -----------------------------------------------------
 
-        TH1D *h_DY_mass_fine_before_PUCorr, *h_DY_mass_fine_before_RoccoR, *h_DY_mass_fine_before_EffCorr, *h_DY_mass_fine, *h_DY_mass;
+        TH1D *h_DY_mass_fine, *h_DY_mass;
 
-        f_DY->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_fine_before_PUCorr );
-        f_DY->GetObject( "h_mass_fine_before_RoccoR_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_fine_before_RoccoR );
-        f_DY->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_fine_before_EffCorr );
         f_DY->GetObject( "h_mass_fine_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_fine );
         f_DY->GetObject( "h_mass_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass );
 
-        h_DY_mass_fine_before_PUCorr->SetFillColor(kOrange);
-        h_DY_mass_fine_before_RoccoR->SetFillColor(kOrange);
-        h_DY_mass_fine_before_EffCorr->SetFillColor(kOrange);
         h_DY_mass_fine->SetFillColor(kOrange);
         h_DY_mass->SetFillColor(kOrange);
 
-        h_DY_mass_fine_before_PUCorr->SetLineColor(kOrange);
-        h_DY_mass_fine_before_RoccoR->SetLineColor(kOrange);
-        h_DY_mass_fine_before_EffCorr->SetLineColor(kOrange);
         h_DY_mass_fine->SetLineColor(kOrange);
         h_DY_mass->SetLineColor(kOrange);
 
-        h_DY_mass_fine_before_PUCorr->SetDirectory(0);
-        h_DY_mass_fine_before_RoccoR->SetDirectory(0);
-        h_DY_mass_fine_before_EffCorr->SetDirectory(0);
         h_DY_mass_fine->SetDirectory(0);
         h_DY_mass->SetDirectory(0);
 
-        s_mass_fine_before_PUCorr->Add( h_DY_mass_fine_before_PUCorr );
-        s_mass_fine_before_RoccoR->Add( h_DY_mass_fine_before_RoccoR );
-        s_mass_fine_before_EffCorr->Add( h_DY_mass_fine_before_EffCorr );
         s_mass_fine->Add( h_DY_mass_fine );
         s_mass->Add( h_DY_mass );
 
 //--------------------------------------- DATA -----------------------------------------------------
 
-        TH1D *h_data_mass_fine_before_PUCorr, *h_data_mass_fine_before_RoccoR, *h_data_mass_fine_before_EffCorr, *h_data_mass_fine, *h_data_mass;
+        TH1D *h_data_mass_fine, *h_data_mass;
 
-        f_data->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_fine_before_PUCorr );
-        f_data->GetObject( "h_mass_fine_before_RoccoR_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_fine_before_RoccoR );
-        f_data->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_fine_before_EffCorr );
         f_data->GetObject( "h_mass_fine_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_fine );
         f_data->GetObject( "h_mass_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass );
 
-        h_data_mass_fine_before_PUCorr->SetMarkerStyle(kFullDotLarge);
-        h_data_mass_fine_before_RoccoR->SetMarkerStyle(kFullDotLarge);
-        h_data_mass_fine_before_EffCorr->SetMarkerStyle(kFullDotLarge);
         h_data_mass_fine->SetMarkerStyle(kFullDotLarge);
         h_data_mass->SetMarkerStyle(kFullDotLarge);
 
-        h_data_mass_fine_before_PUCorr->SetMarkerColor(kBlack);
-        h_data_mass_fine_before_RoccoR->SetMarkerColor(kBlack);
-        h_data_mass_fine_before_EffCorr->SetMarkerColor(kBlack);
         h_data_mass_fine->SetMarkerColor(kBlack);
         h_data_mass->SetMarkerColor(kBlack);
 
-        h_data_mass_fine_before_PUCorr->SetLineColor(kBlack);
-        h_data_mass_fine_before_RoccoR->SetLineColor(kBlack);
-        h_data_mass_fine_before_EffCorr->SetLineColor(kBlack);
         h_data_mass_fine->SetLineColor(kBlack);
         h_data_mass->SetLineColor(kBlack);
 
-        h_data_mass_fine_before_PUCorr->SetDirectory(0);
-        h_data_mass_fine_before_RoccoR->SetDirectory(0);
-        h_data_mass_fine_before_EffCorr->SetDirectory(0);
         h_data_mass_fine->SetDirectory(0);
         h_data_mass->SetDirectory(0);
 
-//--------------------------------- Ratio Plot --------------------------------------
-
-        myRatioPlot_t *RP_mass_fine_before_PUCorr, *RP_mass_fine_before_RoccoR, *RP_mass_fine_before_EffCorr, *RP_mass_fine, *RP_mass;
-        RP_mass_fine_before_PUCorr = new myRatioPlot_t( "RP_mass_fine_before_PUCorr", s_mass_fine_before_PUCorr, h_data_mass_fine_before_PUCorr );
-        RP_mass_fine_before_RoccoR = new myRatioPlot_t( "RP_mass_fine_before_RoccoR", s_mass_fine_before_RoccoR, h_data_mass_fine_before_RoccoR );
-        RP_mass_fine_before_EffCorr = new myRatioPlot_t( "RP_mass_fine_before_EffCorr", s_mass_fine_before_EffCorr, h_data_mass_fine_before_EffCorr );
-        RP_mass_fine = new myRatioPlot_t( "RP_mass_fine", s_mass_fine, h_data_mass_fine );
-        RP_mass = new myRatioPlot_t( "RP_mass", s_mass, h_data_mass );
-
-        RP_mass_fine_before_PUCorr->SetPlots("Dimuon invariant mass [GeV/c^{2}] (before PU correction)", 15, 3000);
-        RP_mass_fine_before_RoccoR->SetPlots("Dimuon invariant mass [GeV/c^{2}] (before Rochester correction)", 15, 3000);
-        RP_mass_fine_before_EffCorr->SetPlots("Dimuon invariant mass [GeV/c^{2}] (before Efficiency correction)", 15, 3000);
-        RP_mass_fine->SetPlots("Dimuon invariant mass [GeV/c^{2}]", 15, 3000);
-        RP_mass->SetPlots("Dimuon invariant mass [GeV/c^{2}]", 15, 3000);
-
-        RP_mass_fine_before_PUCorr->SetLegend(0.75, 0.4);
-        RP_mass_fine_before_RoccoR->SetLegend(0.75, 0.4);
-        RP_mass_fine_before_EffCorr->SetLegend(0.75, 0.4);
-        RP_mass_fine->SetLegend(0.75, 0.4);
-        RP_mass->SetLegend(0.75, 0.4);
-
-        // Legend data
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_data_mass_fine_before_PUCorr, "Data", "lp");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_data_mass_fine_before_RoccoR, "Data", "lp");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_data_mass_fine_before_EffCorr, "Data", "lp");
-        RP_mass_fine->AddLegendEntry(h_data_mass_fine, "Data", "lp");
-        RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
-
-        // Legend MC signal
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_DY_mass_fine_before_PUCorr, "DY#rightarrow#mu#mu", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_DY_mass_fine_before_RoccoR, "DY#rightarrow#mu#mu", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_DY_mass_fine_before_EffCorr, "DY#rightarrow#mu#mu", "f");
-        RP_mass_fine->AddLegendEntry(h_DY_mass_fine, "DY#rightarrow#mu#mu", "f");
-        RP_mass->AddLegendEntry(h_DY_mass, "DY#rightarrow#mu#mu", "f");
-
-        // Legend MC BKG
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[0], "QCD", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[0], "QCD", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[0], "QCD", "f");
-        RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[0], "QCD", "f");
-        RP_mass->AddLegendEntry(h_bkg_mass[0], "QCD", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[1], "VVnST", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[1], "VVnST", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[1], "VVnST", "f");
-        RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[1], "VVnST", "f");
-        RP_mass->AddLegendEntry(h_bkg_mass[1], "VVnST", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[2], "W+Jets", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[2], "W+Jets", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[2], "W+Jets", "f");
-        RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[2], "W+Jets", "f");
-        RP_mass->AddLegendEntry(h_bkg_mass[2], "W+Jets", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[3], "t#bar{t}", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[3], "t#bar{t}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[3], "t#bar{t}", "f");
-        RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[3], "t#bar{t}", "f");
-        RP_mass->AddLegendEntry(h_bkg_mass[3], "t#bar{t}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[4], "DY#rightarrow #tau#tau", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[4], "DY#rightarrow #tau#tau", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[4], "DY#rightarrow #tau#tau", "f");
-        RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[4], "DY#rightarrow #tau#tau", "f");
-        RP_mass->AddLegendEntry(h_bkg_mass[4], "DY#rightarrow #tau#tau", "f");
-
-        RP_mass_fine_before_PUCorr->Draw(0.5, 3e6, 1);
-        RP_mass_fine_before_RoccoR->Draw(0.5, 3e6, 1);
-        RP_mass_fine_before_EffCorr->Draw(0.5, 3e6, 1);
-        RP_mass_fine->Draw(0.5, 3e6, 1);
-        RP_mass->Draw(0.5, 1e7, 1);
+// --------------------------------- Calculation -------------------------------------- //
 
         dataintegral = h_data_mass->IntegralAndError(1, h_data_mass->GetSize()-2, dataerror);
         MCintegral = ((TH1D*)(s_mass->GetStack()->Last()))->IntegralAndError(1, h_data_mass->GetSize()-2, MCerror);
@@ -520,7 +445,140 @@ void MuMu_LumiCalc()
         std::cout << "data events: " << dataintegral << "+-" << dataerror << endl;
         std::cout << "MC events: " << MCintegral << "+-" << MCerror << endl;
 
-} // End of MuMu_HistDrawer()
+        TH1D* h_MCstack_mass_fine = ((TH1D*)(s_mass_fine->GetStack()->Last()));
+        TH1D* h_MCstack_mass = ((TH1D*)(s_mass->GetStack()->Last()));
+
+        TH1D* h_MCstack_mass_fine_MULTIPLIED;
+        TH1D* h_MCstack_mass_MULTIPLIED;
+
+        Int_t size = 200;
+        Double_t ChiSq_fine[size];
+        Double_t ChiSq[size];
+        Double_t factor[size];
+        Double_t factor_start = 0.8;
+        Double_t factor_end = 1.0;
+        Double_t step = (factor_end - factor_start) / size;
+        Double_t smallest_chisq_fine = 1e6;
+        Double_t smallest_factor_fine = -1;
+        Double_t smallest_chisq = 1e6;
+        Double_t smallest_factor = -1;
+
+        myProgressBar_t bar(size);
+
+        for ( Int_t i=0; i<size; i++ )
+        {
+            factor[i] = factor_start + ( i * step );
+
+            h_MCstack_mass_fine_MULTIPLIED = ( (TH1D*) (h_MCstack_mass_fine->Clone( "h_MCstack_mass_fine_MULTIPLIED" ) ) );
+            h_MCstack_mass_MULTIPLIED = ( (TH1D*) ( h_MCstack_mass->Clone( "h_MCstack_mass_MULTIPLIED" ) ) );
+
+            for ( Int_t k=1; k<h_MCstack_mass_fine->GetSize()-1; k++ )
+            {
+                Double_t cont = h_MCstack_mass_fine_MULTIPLIED->GetBinContent(k);
+                h_MCstack_mass_fine_MULTIPLIED->SetBinContent( k, cont * factor[i] );
+                if ( k < h_MCstack_mass_MULTIPLIED->GetSize()-1 )
+                {
+                    cont = h_MCstack_mass_MULTIPLIED->GetBinContent(k);
+                    h_MCstack_mass_MULTIPLIED->SetBinContent( k, cont * factor[i] );
+                }
+            }
+
+            ChiSq[i] = 0;
+            ChiSq_fine[i] = 0;
+            for (Int_t j=1; j<h_MCstack_mass_fine_MULTIPLIED->GetSize()-1; j++)
+            {
+                if ( h_data_mass_fine->GetBinContent(j) != 0 )
+                {
+                    ChiSq_fine[i] += ( h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) - h_data_mass_fine->GetBinContent(j) ) *
+                                     ( h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) - h_data_mass_fine->GetBinContent(j) ) /
+                                     ( h_data_mass_fine->GetBinContent(j) * (h_data_mass_fine->GetSize() - 2) );
+                }
+                else if ( h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) != 0 )
+                {
+                    ChiSq_fine[i] += ( h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) - h_data_mass_fine->GetBinContent(j) ) *
+                                     ( h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) - h_data_mass_fine->GetBinContent(j) ) /
+                                     ( h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) * (h_data_mass_fine->GetSize() - 2) );
+                }
+
+                if ( j < h_MCstack_mass_MULTIPLIED->GetSize()-1 )
+                {
+                    if ( h_data_mass_fine->GetBinContent(j) != 0 )
+                    {
+                        ChiSq[i] += ( h_MCstack_mass_MULTIPLIED->GetBinContent(j) - h_data_mass->GetBinContent(j) ) *
+                                    ( h_MCstack_mass_MULTIPLIED->GetBinContent(j) - h_data_mass->GetBinContent(j) ) /
+                                    ( h_data_mass->GetBinContent(j) * (h_data_mass->GetSize() - 2) );
+                    }
+                    else if ( h_MCstack_mass_MULTIPLIED->GetBinContent(j) != 0 )
+                    {
+                        ChiSq[i] += ( h_MCstack_mass_MULTIPLIED->GetBinContent(j) - h_data_mass->GetBinContent(j) ) *
+                                    ( h_MCstack_mass_MULTIPLIED->GetBinContent(j) - h_data_mass->GetBinContent(j) ) /
+                                    ( h_MCstack_mass_MULTIPLIED->GetBinContent(j) * (h_data_mass->GetSize() - 2) );
+                    }
+
+                }
+            }
+            if ( ChiSq_fine[i] < smallest_chisq_fine )
+            {
+                smallest_chisq_fine = ChiSq_fine[i];
+                smallest_factor_fine = factor[i];
+            }
+            if ( ChiSq[i] < smallest_chisq )
+            {
+                smallest_chisq = ChiSq[i];
+                smallest_factor = factor[i];
+            }
+            bar.Draw(i);
+        }
+
+        cout << "The luminosity value that gives the smallest chi^2 for fine-binned MuMu mass histogram is " << LumiDefault * smallest_factor_fine;
+        cout << "   (factor: " << smallest_factor_fine << "; chi^2 value: " << smallest_chisq_fine << ")" << endl;
+        cout << "The luminosity value that gives the smallest chi^2 for MuMu mass histogram is " << LumiDefault * smallest_factor;
+        cout << "   (factor: " << smallest_factor << "; chi^2 value: " << smallest_chisq << ")" << endl;
+
+// ----------------------------- Drawing ------------------------------------ //
+
+        TCanvas* c_fine = new TCanvas( "ChiSq_fineBin", "ChiSq_fineBin", 1000, 1000 );
+        TGraph* ChiSq_graph_fine = new TGraph( size, factor, ChiSq_fine );
+        ChiSq_graph_fine->SetTitle( "Fine-binned #mu#mu invariant mass histogram's #chi^{2} dependancy on luminosity change" );
+        ChiSq_graph_fine->GetXaxis()->SetTitle( "Luminosity factor" );
+        ChiSq_graph_fine->GetYaxis()->SetTitle( "#frac{#chi^{2}}{ndof}" );
+        ChiSq_graph_fine->SetLineWidth(2);
+        ChiSq_graph_fine->GetYaxis()->SetRangeUser(0, 50);
+
+        TLine* l_vertical_fine = new TLine( smallest_factor_fine, 0, smallest_factor_fine, 50 );
+        l_vertical_fine->SetLineColor(kRed);
+        l_vertical_fine->SetLineWidth(2);
+
+        ChiSq_graph_fine->Draw();
+        l_vertical_fine->Draw("same");
+        c_fine->SetGridx();
+        c_fine->SetTickx();
+        c_fine->SetGridy();
+        c_fine->SetTicky();
+        c_fine->Update();
+
+        TCanvas* c = new TCanvas( "ChiSq", "ChiSq", 1000, 1000 );
+        TGraph* ChiSq_graph = new TGraph(size, factor, ChiSq);
+        ChiSq_graph->SetTitle( "#mu#mu invariant mass histogram's #chi^{2} dependancy on luminosity change" );
+        ChiSq_graph->GetXaxis()->SetTitle( "Luminosity factor" );
+        ChiSq_graph->GetYaxis()->SetTitle( "#frac{#chi^{2}}{ndof}" );
+        ChiSq_graph->SetLineWidth(2);
+        ChiSq_graph->GetYaxis()->SetRangeUser(0, 9000);
+
+        TLine* l_vertical = new TLine( smallest_factor, 0, smallest_factor, 9000 );
+        l_vertical->SetLineColor(kRed);
+        l_vertical->SetLineWidth(2);
+
+        c->cd();
+        ChiSq_graph->Draw();
+        l_vertical->Draw("same");
+        c->SetGridx();
+        c->SetTickx();
+        c->SetGridy();
+        c->SetTicky();
+        c->Update();
+
+} // End of MuMu_LumiCalc()
 
 /// -------------------------------- EMu events ------------------------------------ ///
 void EMu_LumiCalc ()
@@ -540,23 +598,14 @@ void EMu_LumiCalc ()
 
 //################################# INVARIANT MASS #################################################
 
-        THStack *s_mass_fine_before_PUCorr, *s_mass_fine_before_RoccoR, *s_mass_fine_before_EffCorr, *s_mass_fine, *s_mass,
-                *s_SS_mass_fine_before_PUCorr, *s_SS_mass_fine_before_RoccoR, *s_SS_mass_fine_before_EffCorr, *s_SS_mass_fine, *s_SS_mass;
-        s_mass_fine_before_PUCorr = new THStack("s_mass_fine_before_PUCorr", "");
-        s_mass_fine_before_RoccoR = new THStack("s_mass_fine_before_RoccoR", "");
-        s_mass_fine_before_EffCorr = new THStack("s_mass_fine_before_EffCorr", "");
+        THStack *s_mass_fine, *s_mass, *s_SS_mass_fine, *s_SS_mass;
         s_mass_fine = new THStack("s_mass_fine", "");
         s_mass = new THStack("s_mass", "");
-        s_SS_mass_fine_before_PUCorr = new THStack("s_SS_mass_fine_before_PUCorr", "");
-        s_SS_mass_fine_before_RoccoR = new THStack("s_SS_mass_fine_before_RoccoR", "");
-        s_SS_mass_fine_before_EffCorr = new THStack("s_SS_mass_fine_before_EffCorr", "");
         s_SS_mass_fine = new THStack("s_SS_mass_fine", "");
         s_SS_mass = new THStack("s_SS_mass", "");
 
 //----------------------------------- MC bkg -------------------------------------------------------
-        TH1D *h_bkg_mass_fine_before_PUCorr[4], *h_bkg_mass_fine_before_EffCorr[4], *h_bkg_mass_fine_before_RoccoR[4],
-             *h_bkg_mass_fine[5], *h_bkg_mass[4], *h_SS_bkg_mass_fine_before_PUCorr[4], *h_SS_bkg_mass_fine_before_EffCorr[4],
-             *h_SS_bkg_mass_fine_before_RoccoR[4], *h_SS_bkg_mass_fine[4], *h_SS_bkg_mass[4];
+        TH1D *h_bkg_mass_fine[5], *h_bkg_mass[4];
         Int_t iter = 0;
 
         for ( SelProc_t pr = _EMu_VVnST; pr > _EndOf_EMu_Data_Normal; pr=SelProc_t((int)(pr-1)) )
@@ -567,118 +616,38 @@ void EMu_LumiCalc ()
                 break;
             }
 
-            f_bkg->GetObject( "h_emu_mass_fine_before_PUCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_PUCorr[iter] );
-            f_bkg->GetObject( "h_emu_mass_fine_before_RoccoR_"+Mgr.Procname[pr], h_bkg_mass_fine_before_RoccoR[iter] );
-            f_bkg->GetObject( "h_emu_mass_fine_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_EffCorr[iter] );
             f_bkg->GetObject( "h_emu_mass_fine_"+Mgr.Procname[pr], h_bkg_mass_fine[iter] );
             f_bkg->GetObject( "h_emu_mass_"+Mgr.Procname[pr], h_bkg_mass[iter] );
-            f_bkg->GetObject( "h_emuSS_mass_fine_before_PUCorr_"+Mgr.Procname[pr], h_SS_bkg_mass_fine_before_PUCorr[iter] );
-            f_bkg->GetObject( "h_emuSS_mass_fine_before_RoccoR_"+Mgr.Procname[pr], h_SS_bkg_mass_fine_before_RoccoR[iter] );
-            f_bkg->GetObject( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[pr], h_SS_bkg_mass_fine_before_EffCorr[iter] );
-            f_bkg->GetObject( "h_emuSS_mass_fine_"+Mgr.Procname[pr], h_SS_bkg_mass_fine[iter] );
-            f_bkg->GetObject( "h_emuSS_mass_"+Mgr.Procname[pr], h_SS_bkg_mass[iter] );
 
-            h_bkg_mass_fine_before_PUCorr[iter]->SetFillColor(iter+2);
-            h_bkg_mass_fine_before_RoccoR[iter]->SetFillColor(iter+2);
-            h_bkg_mass_fine_before_EffCorr[iter]->SetFillColor(iter+2);
             h_bkg_mass_fine[iter]->SetFillColor(iter+2);
             h_bkg_mass[iter]->SetFillColor(iter+2);
-            h_SS_bkg_mass_fine_before_PUCorr[iter]->SetFillColor(iter+2);
-            h_SS_bkg_mass_fine_before_RoccoR[iter]->SetFillColor(iter+2);
-            h_SS_bkg_mass_fine_before_EffCorr[iter]->SetFillColor(iter+2);
-            h_SS_bkg_mass_fine[iter]->SetFillColor(iter+2);
-            h_SS_bkg_mass[iter]->SetFillColor(iter+2);
 
-            h_bkg_mass_fine_before_PUCorr[iter]->SetLineColor(iter+2);
-            h_bkg_mass_fine_before_RoccoR[iter]->SetLineColor(iter+2);
-            h_bkg_mass_fine_before_EffCorr[iter]->SetLineColor(iter+2);
             h_bkg_mass_fine[iter]->SetLineColor(iter+2);
             h_bkg_mass[iter]->SetLineColor(iter+2);
-            h_SS_bkg_mass_fine_before_PUCorr[iter]->SetLineColor(iter+2);
-            h_SS_bkg_mass_fine_before_RoccoR[iter]->SetLineColor(iter+2);
-            h_SS_bkg_mass_fine_before_EffCorr[iter]->SetLineColor(iter+2);
-            h_SS_bkg_mass_fine[iter]->SetLineColor(iter+2);
-            h_SS_bkg_mass[iter]->SetLineColor(iter+2);
 
-            h_bkg_mass_fine_before_PUCorr[iter]->SetDirectory(0);
-            h_bkg_mass_fine_before_RoccoR[iter]->SetDirectory(0);
-            h_bkg_mass_fine_before_EffCorr[iter]->SetDirectory(0);
             h_bkg_mass_fine[iter]->SetDirectory(0);
             h_bkg_mass[iter]->SetDirectory(0);
-            h_SS_bkg_mass_fine_before_PUCorr[iter]->SetDirectory(0);
-            h_SS_bkg_mass_fine_before_RoccoR[iter]->SetDirectory(0);
-            h_SS_bkg_mass_fine_before_EffCorr[iter]->SetDirectory(0);
-            h_SS_bkg_mass_fine[iter]->SetDirectory(0);
-            h_SS_bkg_mass[iter]->SetDirectory(0);
 
-            s_mass_fine_before_PUCorr->Add( h_bkg_mass_fine_before_PUCorr[iter] );
-            s_mass_fine_before_RoccoR->Add( h_bkg_mass_fine_before_RoccoR[iter] );
-            s_mass_fine_before_EffCorr->Add( h_bkg_mass_fine_before_EffCorr[iter] );
             s_mass_fine->Add( h_bkg_mass_fine[iter] );
             s_mass->Add( h_bkg_mass[iter] );
-            s_SS_mass_fine_before_PUCorr->Add( h_SS_bkg_mass_fine_before_PUCorr[iter] );
-            s_SS_mass_fine_before_RoccoR->Add( h_SS_bkg_mass_fine_before_RoccoR[iter] );
-            s_SS_mass_fine_before_EffCorr->Add( h_SS_bkg_mass_fine_before_EffCorr[iter] );
-            s_SS_mass_fine->Add( h_SS_bkg_mass_fine[iter] );
-            s_SS_mass->Add( h_SS_bkg_mass[iter] );
 
             if ( iter == 0 )
             {   // ---- WJETS ---- //
                 iter++;
-                f_bkg->GetObject( "h_emu_mass_fine_before_PUCorr_"+Mgr.Procname[_EMu_WJets], h_bkg_mass_fine_before_PUCorr[iter] );
-                f_bkg->GetObject( "h_emu_mass_fine_before_RoccoR_"+Mgr.Procname[_EMu_WJets], h_bkg_mass_fine_before_RoccoR[iter] );
-                f_bkg->GetObject( "h_emu_mass_fine_before_EffCorr_"+Mgr.Procname[_EMu_WJets], h_bkg_mass_fine_before_EffCorr[iter] );
                 f_bkg->GetObject( "h_emu_mass_fine_"+Mgr.Procname[_EMu_WJets], h_bkg_mass_fine[iter] );
                 f_bkg->GetObject( "h_emu_mass_"+Mgr.Procname[_EMu_WJets], h_bkg_mass[iter] );
-                f_bkg->GetObject( "h_emuSS_mass_fine_before_PUCorr_"+Mgr.Procname[_EMu_WJets], h_SS_bkg_mass_fine_before_PUCorr[iter] );
-                f_bkg->GetObject( "h_emuSS_mass_fine_before_RoccoR_"+Mgr.Procname[_EMu_WJets], h_SS_bkg_mass_fine_before_RoccoR[iter] );
-                f_bkg->GetObject( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[_EMu_WJets], h_SS_bkg_mass_fine_before_EffCorr[iter] );
-                f_bkg->GetObject( "h_emuSS_mass_fine_"+Mgr.Procname[_EMu_WJets], h_SS_bkg_mass_fine[iter] );
-                f_bkg->GetObject( "h_emuSS_mass_"+Mgr.Procname[_EMu_WJets], h_SS_bkg_mass[iter] );
 
-                h_bkg_mass_fine_before_PUCorr[iter]->SetFillColor(iter+2);
-                h_bkg_mass_fine_before_RoccoR[iter]->SetFillColor(iter+2);
-                h_bkg_mass_fine_before_EffCorr[iter]->SetFillColor(iter+2);
                 h_bkg_mass_fine[iter]->SetFillColor(iter+2);
                 h_bkg_mass[iter]->SetFillColor(iter+2);
-                h_SS_bkg_mass_fine_before_PUCorr[iter]->SetFillColor(iter+2);
-                h_SS_bkg_mass_fine_before_RoccoR[iter]->SetFillColor(iter+2);
-                h_SS_bkg_mass_fine_before_EffCorr[iter]->SetFillColor(iter+2);
-                h_SS_bkg_mass_fine[iter]->SetFillColor(iter+2);
-                h_SS_bkg_mass[iter]->SetFillColor(iter+2);
 
-                h_bkg_mass_fine_before_PUCorr[iter]->SetLineColor(iter+2);
-                h_bkg_mass_fine_before_RoccoR[iter]->SetLineColor(iter+2);
-                h_bkg_mass_fine_before_EffCorr[iter]->SetLineColor(iter+2);
                 h_bkg_mass_fine[iter]->SetLineColor(iter+2);
                 h_bkg_mass[iter]->SetLineColor(iter+2);
-                h_SS_bkg_mass_fine_before_PUCorr[iter]->SetLineColor(iter+2);
-                h_SS_bkg_mass_fine_before_RoccoR[iter]->SetLineColor(iter+2);
-                h_SS_bkg_mass_fine_before_EffCorr[iter]->SetLineColor(iter+2);
-                h_SS_bkg_mass_fine[iter]->SetLineColor(iter+2);
-                h_SS_bkg_mass[iter]->SetLineColor(iter+2);
 
-                h_bkg_mass_fine_before_PUCorr[iter]->SetDirectory(0);
-                h_bkg_mass_fine_before_RoccoR[iter]->SetDirectory(0);
-                h_bkg_mass_fine_before_EffCorr[iter]->SetDirectory(0);
                 h_bkg_mass_fine[iter]->SetDirectory(0);
                 h_bkg_mass[iter]->SetDirectory(0);
-                h_SS_bkg_mass_fine_before_PUCorr[iter]->SetDirectory(0);
-                h_SS_bkg_mass_fine_before_RoccoR[iter]->SetDirectory(0);
-                h_SS_bkg_mass_fine_before_EffCorr[iter]->SetDirectory(0);
-                h_SS_bkg_mass_fine[iter]->SetDirectory(0);
-                h_SS_bkg_mass[iter]->SetDirectory(0);
 
-                s_mass_fine_before_PUCorr->Add( h_bkg_mass_fine_before_PUCorr[iter] );
-                s_mass_fine_before_RoccoR->Add( h_bkg_mass_fine_before_RoccoR[iter] );
-                s_mass_fine_before_EffCorr->Add( h_bkg_mass_fine_before_EffCorr[iter] );
                 s_mass_fine->Add( h_bkg_mass_fine[iter] );
                 s_mass->Add( h_bkg_mass[iter] );
-                s_SS_mass_fine_before_PUCorr->Add( h_bkg_mass_fine_before_PUCorr[iter] );
-                s_SS_mass_fine_before_RoccoR->Add( h_bkg_mass_fine_before_RoccoR[iter] );
-                s_SS_mass_fine_before_EffCorr->Add( h_bkg_mass_fine_before_EffCorr[iter] );
-                s_SS_mass_fine->Add( h_bkg_mass_fine[iter] );
-                s_SS_mass->Add( h_bkg_mass[iter] );
 
             } // End of WJets
 
@@ -687,171 +656,163 @@ void EMu_LumiCalc ()
 
 //--------------------------------------- DATA -----------------------------------------------------
 
-        TH1D *h_data_mass_fine_before_PUCorr, *h_data_mass_fine_before_RoccoR, *h_data_mass_fine_before_EffCorr, *h_data_mass_fine, *h_data_mass,
-             *h_SS_data_mass_fine_before_PUCorr, *h_SS_data_mass_fine_before_RoccoR, *h_SS_data_mass_fine_before_EffCorr, *h_SS_data_mass_fine, *h_SS_data_mass;
+        TH1D *h_data_mass_fine, *h_data_mass;
 
-        f_data->GetObject( "h_emu_mass_fine_before_PUCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_mass_fine_before_PUCorr );
-        f_data->GetObject( "h_emu_mass_fine_before_RoccoR_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_mass_fine_before_RoccoR );
-        f_data->GetObject( "h_emu_mass_fine_before_EffCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_mass_fine_before_EffCorr );
         f_data->GetObject( "h_emu_mass_fine_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_mass_fine );
         f_data->GetObject( "h_emu_mass_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_mass );
-        f_data->GetObject( "h_emuSS_mass_fine_before_PUCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_SS_data_mass_fine_before_PUCorr );
-        f_data->GetObject( "h_emuSS_mass_fine_before_RoccoR_"+Mgr.Procname[_EMu_SingleMuon_Full], h_SS_data_mass_fine_before_RoccoR );
-        f_data->GetObject( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_SS_data_mass_fine_before_EffCorr );
-        f_data->GetObject( "h_emuSS_mass_fine_"+Mgr.Procname[_EMu_SingleMuon_Full], h_SS_data_mass_fine );
-        f_data->GetObject( "h_emuSS_mass_"+Mgr.Procname[_EMu_SingleMuon_Full], h_SS_data_mass );
 
-        h_data_mass_fine_before_PUCorr->SetMarkerStyle(kFullDotLarge);
-        h_data_mass_fine_before_RoccoR->SetMarkerStyle(kFullDotLarge);
-        h_data_mass_fine_before_EffCorr->SetMarkerStyle(kFullDotLarge);
         h_data_mass_fine->SetMarkerStyle(kFullDotLarge);
         h_data_mass->SetMarkerStyle(kFullDotLarge);
-        h_SS_data_mass_fine_before_PUCorr->SetMarkerStyle(kFullDotLarge);
-        h_SS_data_mass_fine_before_RoccoR->SetMarkerStyle(kFullDotLarge);
-        h_SS_data_mass_fine_before_EffCorr->SetMarkerStyle(kFullDotLarge);
-        h_SS_data_mass_fine->SetMarkerStyle(kFullDotLarge);
-        h_SS_data_mass->SetMarkerStyle(kFullDotLarge);
 
-        h_data_mass_fine_before_PUCorr->SetMarkerColor(kBlack);
-        h_data_mass_fine_before_RoccoR->SetMarkerColor(kBlack);
-        h_data_mass_fine_before_EffCorr->SetMarkerColor(kBlack);
         h_data_mass_fine->SetMarkerColor(kBlack);
         h_data_mass->SetMarkerColor(kBlack);
-        h_SS_data_mass_fine_before_PUCorr->SetMarkerColor(kBlack);
-        h_SS_data_mass_fine_before_RoccoR->SetMarkerColor(kBlack);
-        h_SS_data_mass_fine_before_EffCorr->SetMarkerColor(kBlack);
-        h_SS_data_mass_fine->SetMarkerColor(kBlack);
-        h_SS_data_mass->SetMarkerColor(kBlack);
 
-        h_data_mass_fine_before_PUCorr->SetLineColor(kBlack);
-        h_data_mass_fine_before_RoccoR->SetLineColor(kBlack);
-        h_data_mass_fine_before_EffCorr->SetLineColor(kBlack);
         h_data_mass_fine->SetLineColor(kBlack);
         h_data_mass->SetLineColor(kBlack);
-        h_SS_data_mass_fine_before_PUCorr->SetLineColor(kBlack);
-        h_SS_data_mass_fine_before_RoccoR->SetLineColor(kBlack);
-        h_SS_data_mass_fine_before_EffCorr->SetLineColor(kBlack);
-        h_SS_data_mass_fine->SetLineColor(kBlack);
-        h_SS_data_mass->SetLineColor(kBlack);
 
-        h_data_mass_fine_before_PUCorr->SetDirectory(0);
-        h_data_mass_fine_before_RoccoR->SetDirectory(0);
-        h_data_mass_fine_before_EffCorr->SetDirectory(0);
         h_data_mass_fine->SetDirectory(0);
         h_data_mass->SetDirectory(0);
-        h_SS_data_mass_fine_before_PUCorr->SetDirectory(0);
-        h_SS_data_mass_fine_before_RoccoR->SetDirectory(0);
-        h_SS_data_mass_fine_before_EffCorr->SetDirectory(0);
-        h_SS_data_mass_fine->SetDirectory(0);
-        h_SS_data_mass->SetDirectory(0);
 
-//--------------------------------- Ratio Plot --------------------------------------
-
-        myRatioPlot_t *RP_mass_fine_before_PUCorr, *RP_mass_fine_before_RoccoR, *RP_mass_fine_before_EffCorr, *RP_mass_fine, *RP_mass,
-                      *RP_SS_mass_fine_before_PUCorr, *RP_SS_mass_fine_before_RoccoR, *RP_SS_mass_fine_before_EffCorr, *RP_SS_mass_fine, *RP_SS_mass;
-
-        RP_mass_fine_before_PUCorr = new myRatioPlot_t( "RP_mass_fine_before_PUCorr", s_mass_fine_before_PUCorr, h_data_mass_fine_before_PUCorr );
-        RP_mass_fine_before_RoccoR = new myRatioPlot_t( "RP_mass_fine_before_RoccoR", s_mass_fine_before_RoccoR, h_data_mass_fine_before_RoccoR );
-        RP_mass_fine_before_EffCorr = new myRatioPlot_t( "RP_mass_fine_before_EffCorr", s_mass_fine_before_EffCorr, h_data_mass_fine_before_EffCorr );
-        RP_mass_fine = new myRatioPlot_t( "RP_mass_fine", s_mass_fine, h_data_mass_fine );
-        RP_mass = new myRatioPlot_t( "RP_mass", s_mass, h_data_mass );
-        RP_SS_mass_fine_before_PUCorr = new myRatioPlot_t( "RP_SS_mass_fine_before_PUCorr", s_SS_mass_fine_before_PUCorr, h_SS_data_mass_fine_before_PUCorr );
-        RP_SS_mass_fine_before_RoccoR = new myRatioPlot_t( "RP_SS_mass_fine_before_RoccoR", s_SS_mass_fine_before_RoccoR, h_SS_data_mass_fine_before_RoccoR );
-        RP_SS_mass_fine_before_EffCorr = new myRatioPlot_t( "RP_SS_mass_fine_before_EffCorr", s_SS_mass_fine_before_EffCorr, h_SS_data_mass_fine_before_EffCorr );
-        RP_SS_mass_fine = new myRatioPlot_t( "RP_SS_mass_fine", s_SS_mass_fine, h_SS_data_mass_fine );
-        RP_SS_mass = new myRatioPlot_t( "RP_SS_mass", s_SS_mass, h_SS_data_mass );
-
-        RP_mass_fine_before_PUCorr->SetPlots("e#mu mass [GeV/c^{2}] (before PU correction)", 15, 3000);
-        RP_mass_fine_before_RoccoR->SetPlots("e#mu mass [GeV/c^{2}] (before Rochester correction)", 15, 3000);
-        RP_mass_fine_before_EffCorr->SetPlots("e#mu mass [GeV/c^{2}] (before Efficiency correction)", 15, 3000);
-        RP_mass_fine->SetPlots("e#mu mass [GeV/c^{2}]", 15, 3000);
-        RP_mass->SetPlots("e#mu mass [GeV/c^{2}]", 15, 3000);
-        RP_SS_mass_fine_before_PUCorr->SetPlots("e#mu (single-signed) mass [GeV/c^{2}] (before PU correction)", 15, 3000);
-        RP_SS_mass_fine_before_RoccoR->SetPlots("e#mu (single-signed) mass [GeV/c^{2}] (before Rochester correction)", 15, 3000);
-        RP_SS_mass_fine_before_EffCorr->SetPlots("e#mu (single-signed) mass [GeV/c^{2}] (before Efficiency correction)", 15, 3000);
-        RP_SS_mass_fine->SetPlots("e#mu (single-signed) mass [GeV/c^{2}]", 15, 3000);
-        RP_SS_mass->SetPlots("e#mu (single-signed) mass [GeV/c^{2}]", 15, 3000);
-
-        RP_mass_fine_before_PUCorr->SetLegend(0.75, 0.4);
-        RP_mass_fine_before_RoccoR->SetLegend(0.75, 0.4);
-        RP_mass_fine_before_EffCorr->SetLegend(0.75, 0.4);
-        RP_mass_fine->SetLegend(0.75, 0.4);
-        RP_mass->SetLegend(0.75, 0.4);
-        RP_SS_mass_fine_before_PUCorr->SetLegend(0.75, 0.4);
-        RP_SS_mass_fine_before_RoccoR->SetLegend(0.75, 0.4);
-        RP_SS_mass_fine_before_EffCorr->SetLegend(0.75, 0.4);
-        RP_SS_mass_fine->SetLegend(0.75, 0.4);
-        RP_SS_mass->SetLegend(0.75, 0.4);
-
-        // Legend data
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_data_mass_fine_before_PUCorr, "Data", "lp");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_data_mass_fine_before_RoccoR, "Data", "lp");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_data_mass_fine_before_EffCorr, "Data", "lp");
-        RP_mass_fine->AddLegendEntry(h_data_mass_fine, "Data", "lp");
-        RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
-        RP_SS_mass_fine_before_PUCorr->AddLegendEntry(h_SS_data_mass_fine_before_PUCorr, "Data", "lp");
-        RP_SS_mass_fine_before_RoccoR->AddLegendEntry(h_SS_data_mass_fine_before_RoccoR, "Data", "lp");
-        RP_SS_mass_fine_before_EffCorr->AddLegendEntry(h_SS_data_mass_fine_before_EffCorr, "Data", "lp");
-        RP_SS_mass_fine->AddLegendEntry(h_SS_data_mass_fine, "Data", "lp");
-        RP_SS_mass->AddLegendEntry(h_SS_data_mass, "Data", "lp");
-
-        // Legend MC BKG
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[0], "VVnST", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[0], "VVnST", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[0], "VVnST", "f");
-        RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[0], "VVnST", "f");
-        RP_mass->AddLegendEntry(h_bkg_mass[0], "VVnST", "f");
-        RP_SS_mass_fine_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_PUCorr[0], "VVnST", "f");
-        RP_SS_mass_fine_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_fine_before_RoccoR[0], "VVnST", "f");
-        RP_SS_mass_fine_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_EffCorr[0], "VVnST", "f");
-        RP_SS_mass_fine->AddLegendEntry(h_SS_bkg_mass_fine[0], "VVnST", "f");
-        RP_SS_mass->AddLegendEntry(h_SS_bkg_mass[0], "VVnST", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[1], "W+Jets", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[1], "W+Jets", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[1], "W+Jets", "f");
-        RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[1], "W+Jets", "f");
-        RP_mass->AddLegendEntry(h_bkg_mass[1], "W+Jets", "f");
-        RP_SS_mass_fine_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_PUCorr[1], "W+Jets", "f");
-        RP_SS_mass_fine_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_fine_before_RoccoR[1], "W+Jets", "f");
-        RP_SS_mass_fine_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_EffCorr[1], "W+Jets", "f");
-        RP_SS_mass_fine->AddLegendEntry(h_SS_bkg_mass_fine[1], "W+Jets", "f");
-        RP_SS_mass->AddLegendEntry(h_SS_bkg_mass[1], "W+Jets", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[2], "t#bar{t}", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[2], "t#bar{t}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[2], "t#bar{t}", "f");
-        RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[2], "t#bar{t}", "f");
-        RP_mass->AddLegendEntry(h_bkg_mass[2], "t#bar{t}", "f");
-        RP_SS_mass_fine_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_PUCorr[2], "t#bar{t}", "f");
-        RP_SS_mass_fine_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_fine_before_RoccoR[2], "t#bar{t}", "f");
-        RP_SS_mass_fine_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_EffCorr[2], "t#bar{t}", "f");
-        RP_SS_mass_fine->AddLegendEntry(h_SS_bkg_mass_fine[2], "t#bar{t}", "f");
-        RP_SS_mass->AddLegendEntry(h_SS_bkg_mass[2], "t#bar{t}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[3], "DY#rightarrow #tau#tau", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[3], "DY#rightarrow #tau#tau", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[3], "DY#rightarrow #tau#tau", "f");
-        RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[3], "DY#rightarrow #tau#tau", "f");
-        RP_mass->AddLegendEntry(h_bkg_mass[3], "DY#rightarrow #tau#tau", "f");
-        RP_SS_mass_fine_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_PUCorr[3], "DY#rightarrow #tau#tau", "f");
-        RP_SS_mass_fine_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_fine_before_RoccoR[3], "DY#rightarrow #tau#tau", "f");
-        RP_SS_mass_fine_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_EffCorr[3], "DY#rightarrow #tau#tau", "f");
-        RP_SS_mass_fine->AddLegendEntry(h_SS_bkg_mass_fine[3], "DY#rightarrow #tau#tau", "f");
-        RP_SS_mass->AddLegendEntry(h_SS_bkg_mass[3], "DY#rightarrow #tau#tau", "f");
-
-        RP_mass_fine_before_PUCorr->Draw(0.5, 3e6, 1);
-        RP_mass_fine_before_RoccoR->Draw(0.5, 3e6, 1);
-        RP_mass_fine_before_EffCorr->Draw(0.5, 3e6, 1);
-        RP_mass_fine->Draw(0.5, 3e6, 1);
-        RP_mass->Draw(0.5, 1e7, 1);
-        RP_SS_mass_fine_before_PUCorr->Draw(0.5, 3e6, 1);
-        RP_SS_mass_fine_before_RoccoR->Draw(0.5, 3e6, 1);
-        RP_SS_mass_fine_before_EffCorr->Draw(0.5, 3e6, 1);
-        RP_SS_mass_fine->Draw(0.5, 3e6, 1);
-        RP_SS_mass->Draw(0.5, 1e7, 1);
+// --------------------------------- Calculation -------------------------------------- //
 
         dataintegral = h_data_mass->IntegralAndError(1, h_data_mass->GetSize()-2, dataerror);
         MCintegral = ((TH1D*)(s_mass->GetStack()->Last()))->IntegralAndError(1, h_data_mass->GetSize()-2, MCerror);
 
         std::cout << "data events: " << dataintegral << "+-" << dataerror << endl;
         std::cout << "MC events: " << MCintegral << "+-" << MCerror << endl;
+
+        TH1D* h_MCstack_mass_fine = ((TH1D*)(s_mass_fine->GetStack()->Last()));
+        TH1D* h_MCstack_mass = ((TH1D*)(s_mass->GetStack()->Last()));
+
+        TH1D* h_MCstack_mass_fine_MULTIPLIED;
+        TH1D* h_MCstack_mass_MULTIPLIED;
+
+        Int_t size = 200;
+        Double_t ChiSq_fine[size];
+        Double_t ChiSq[size];
+        Double_t factor[size];
+        Double_t factor_start = 0.8;
+        Double_t factor_end = 1.0;
+        Double_t step = (factor_end - factor_start) / size;
+        Double_t smallest_chisq_fine = 1e6;
+        Double_t smallest_factor_fine = -1;
+        Double_t smallest_chisq = 1e6;
+        Double_t smallest_factor = -1;
+
+        myProgressBar_t bar(size);
+
+        for ( Int_t i=0; i<size; i++ )
+        {
+            factor[i] = factor_start + ( i * step );
+
+            h_MCstack_mass_fine_MULTIPLIED = ( (TH1D*) (h_MCstack_mass_fine->Clone( "h_MCstack_mass_fine_MULTIPLIED" ) ) );
+            h_MCstack_mass_MULTIPLIED = ( (TH1D*) ( h_MCstack_mass->Clone( "h_MCstack_mass_MULTIPLIED" ) ) );
+
+            for ( Int_t k=1; k<h_MCstack_mass_fine->GetSize()-1; k++ ) // Multiplying each MC bin by a certain factor (changing luminosity)
+            {
+                Double_t cont = h_MCstack_mass_fine_MULTIPLIED->GetBinContent(k);
+                h_MCstack_mass_fine_MULTIPLIED->SetBinContent( k, cont * factor[i] );
+
+                if ( k < h_MCstack_mass_MULTIPLIED->GetSize()-1 )
+                {
+                    cont = h_MCstack_mass_MULTIPLIED->GetBinContent(k);
+                    h_MCstack_mass_MULTIPLIED->SetBinContent( k, cont * factor[i] );
+                }
+            }
+
+            ChiSq[i] = 0;
+            ChiSq_fine[i] = 0;
+            for (Int_t j=1; j<h_MCstack_mass_fine_MULTIPLIED->GetSize()-1; j++)
+            {
+                if ( h_data_mass_fine->GetBinContent(j) != 0 )
+                {
+                    ChiSq_fine[i] += ( h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) - h_data_mass_fine->GetBinContent(j) ) *
+                                     ( h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) - h_data_mass_fine->GetBinContent(j) ) /
+                                     ( h_data_mass_fine->GetBinContent(j) * (h_data_mass_fine->GetSize() - 2) );
+                }
+                else if ( h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) != 0 )
+                {
+                    ChiSq_fine[i] += ( h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) - h_data_mass_fine->GetBinContent(j) ) *
+                                     ( h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) - h_data_mass_fine->GetBinContent(j) ) /
+                                     ( h_MCstack_mass_fine_MULTIPLIED->GetBinContent(j) * (h_data_mass_fine->GetSize() - 2) );
+                }
+
+                if ( j < h_MCstack_mass_MULTIPLIED->GetSize()-1 )
+                {
+                    if ( h_data_mass_fine->GetBinContent(j) != 0 )
+                    {
+                        ChiSq[i] += ( h_MCstack_mass_MULTIPLIED->GetBinContent(j) - h_data_mass->GetBinContent(j) ) *
+                                    ( h_MCstack_mass_MULTIPLIED->GetBinContent(j) - h_data_mass->GetBinContent(j) ) /
+                                    ( h_data_mass->GetBinContent(j) * (h_data_mass->GetSize() - 2) );
+                    }
+                    else if ( h_MCstack_mass_MULTIPLIED->GetBinContent(j) != 0 )
+                    {
+                        ChiSq[i] += ( h_MCstack_mass_MULTIPLIED->GetBinContent(j) - h_data_mass->GetBinContent(j) ) *
+                                    ( h_MCstack_mass_MULTIPLIED->GetBinContent(j) - h_data_mass->GetBinContent(j) ) /
+                                    ( h_MCstack_mass_MULTIPLIED->GetBinContent(j) * (h_data_mass->GetSize() - 2) );
+                    }
+
+                }
+            }
+            if ( ChiSq_fine[i] < smallest_chisq_fine )
+            {
+                smallest_chisq_fine = ChiSq_fine[i];
+                smallest_factor_fine = factor[i];
+            }
+            if ( ChiSq[i] < smallest_chisq )
+            {
+                smallest_chisq = ChiSq[i];
+                smallest_factor = factor[i];
+            }
+            bar.Draw(i);
+        }
+
+        cout << "The luminosity value that gives the smallest chi^2 for fine-binned EMu mass histogram is " << LumiDefault * smallest_factor_fine;
+        cout << "   (factor: " << smallest_factor_fine << "; chi^2 value: " << smallest_chisq_fine << ")" << endl;
+        cout << "The luminosity value that gives the smallest chi^2 for EMu mass histogram is " << LumiDefault * smallest_factor;
+        cout << "   (factor: " << smallest_factor << "; chi^2 value: " << smallest_chisq << ")" << endl;
+
+// ----------------------------- Drawing ------------------------------------ //
+
+        TCanvas* c_fine = new TCanvas( "ChiSq_fineBin", "ChiSq_fineBin", 1000, 1000 );
+        TGraph* ChiSq_graph_fine = new TGraph( size, factor, ChiSq_fine );
+        ChiSq_graph_fine->SetTitle( "Fine-binned e#mu invariant mass histogram's #chi^{2} dependancy on luminosity change" );
+        ChiSq_graph_fine->GetXaxis()->SetTitle( "Luminosity factor" );
+        ChiSq_graph_fine->GetYaxis()->SetTitle( "#frac{#chi^{2}}{ndof}" );
+        ChiSq_graph_fine->SetLineWidth(2);
+        ChiSq_graph_fine->GetYaxis()->SetRangeUser(0, 2);
+
+        TLine* l_vertical_fine = new TLine( smallest_factor_fine, 0, smallest_factor_fine, 2 );
+        l_vertical_fine->SetLineColor(kRed);
+        l_vertical_fine->SetLineWidth(2);
+
+        ChiSq_graph_fine->Draw();
+        l_vertical_fine->Draw("same");
+        c_fine->SetGridx();
+        c_fine->SetTickx();
+        c_fine->SetGridy();
+        c_fine->SetTicky();
+        c_fine->Update();
+
+        TCanvas* c = new TCanvas( "ChiSq", "ChiSq", 1000, 1000 );
+        TGraph* ChiSq_graph = new TGraph(size, factor, ChiSq);
+        ChiSq_graph->SetTitle( "e#mu invariant mass histogram's #chi^{2} dependancy on luminosity change" );
+        ChiSq_graph->GetXaxis()->SetTitle( "Luminosity factor" );
+        ChiSq_graph->GetYaxis()->SetTitle( "#frac{#chi^{2}}{ndof}" );
+        ChiSq_graph->SetLineWidth(2);
+        ChiSq_graph->GetYaxis()->SetRangeUser(0, 200);
+
+        TLine* l_vertical = new TLine( smallest_factor, 0, smallest_factor, 200 );
+        l_vertical->SetLineColor(kRed);
+        l_vertical->SetLineWidth(2);
+
+        c->cd();
+        ChiSq_graph->Draw();
+        l_vertical->Draw("same");
+        c->SetGridx();
+        c->SetTickx();
+        c->SetGridy();
+        c->SetTicky();
+        c->Update();
 
 } // End of EMu_HistDrawer()
