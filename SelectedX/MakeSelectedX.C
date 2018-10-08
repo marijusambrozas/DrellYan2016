@@ -357,9 +357,11 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
             if ( write )
             {
                 cout << " Finished." << endl << "Closing a file..." << endl;
+                TString addition = "";
+                if ( Debug == kTRUE ) addition = "_DEBUG";
                 ElectronFile->Close();
-                if ( !ElectronFile->IsOpen() ) cout << "File SelectedEE_" << Mgr.Tag[i_tup] << ".root has been closed successfully.\n" << endl;
-                else cout << "FILE SelectedEE_" << Mgr.Tag[i_tup] << ".root COULD NOT BE CLOSED!\n" << endl;
+                if ( !ElectronFile->IsOpen() ) cout << "File SelectedEE_" << Mgr.Tag[i_tup]+addition << ".root has been closed successfully.\n" << endl;
+                else cout << "FILE SelectedEE_" << Mgr.Tag[i_tup]+adition << ".root COULD NOT BE CLOSED!\n" << endl;
             }
             else
             {
@@ -694,9 +696,11 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
             if ( write )
             {
                 cout << " Finished." << endl << "Closing a file..." << endl;
+                TString addition = "";
+                if ( Debug == kTRUE ) addition = "_DEBUG";
                 MuonFile->Close();
-                if ( !MuonFile->IsOpen() ) cout << "File SelectedMuMu_" << Mgr.Tag[i_tup]+RocCor << ".root has been closed successfully.\n" << endl;
-                else cout << "FILE SelectedMuMu_" << Mgr.Tag[i_tup]+RocCor << ".root COULD NOT BE CLOSED!\n" << endl;
+                if ( !MuonFile->IsOpen() ) cout << "File SelectedMuMu_" << Mgr.Tag[i_tup]+RocCor+addition << ".root has been closed successfully.\n" << endl;
+                else cout << "FILE SelectedMuMu_" << Mgr.Tag[i_tup]+RocCor+addition << ".root COULD NOT BE CLOSED!\n" << endl;
             }
             else
             {
@@ -1032,9 +1036,11 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
             if ( write )
             {
                 cout << " Finished." << endl << "Closing a file..." << endl;
+                TString addition = "";
+                if ( Debug == kTRUE ) addition = "_DEBUG";
                 EMuFile->Close();
-                if ( !EMuFile->IsOpen() ) cout << "File SelectedEMu_" << Mgr.Tag[i_tup]+RocCor << ".root has been closed successfully.\n" << endl;
-                else cout << "FILE SelectedEMu_" << Mgr.Tag[i_tup]+RocCor << ".root COULD NOT BE CLOSED!\n" << endl;
+                if ( !EMuFile->IsOpen() ) cout << "File SelectedEMu_" << Mgr.Tag[i_tup]+RocCor+addition << ".root has been closed successfully.\n" << endl;
+                else cout << "FILE SelectedEMu_" << Mgr.Tag[i_tup]+RocCor+addition << ".root COULD NOT BE CLOSED!\n" << endl;
             }
             else
             {
@@ -1236,9 +1242,11 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name, Bool_t Debug )
     if ( write )
     {
         cout << " Finished." << endl << "\tClosing a file..." << endl;
+        TString addition = "";
+        if ( Debug == kTRUE ) addition = "_DEBUG";
         ElectronFile->Close();
-        if ( !ElectronFile->IsOpen() ) cout << "\tFile SelectedEE_" << Mgr.Tag[0] << "_" << Name << ".root has been closed successfully.\n" << endl;
-        else cout << "\tFILE SelectedEE_" << Mgr.Tag[0] << "_" << Name << ".root COULD NOT BE CLOSED!\n" << endl;
+        if ( !ElectronFile->IsOpen() ) cout << "\tFile SelectedEE_" << Mgr.Tag[0]+addition << "_" << Name << ".root has been closed successfully.\n" << endl;
+        else cout << "\tFILE SelectedEE_" << Mgr.Tag[0]+addition << "_" << Name << ".root COULD NOT BE CLOSED!\n" << endl;
     }
     else
     {
@@ -1344,7 +1352,7 @@ void MakeSelectedQCDEM_120to170_merged()
     write = ElectronTree->Write();
     if ( write )
     {
-        cout << " Finished." << endl << "\tClosing a file..." << endl;
+        cout << " Finished." << endl << "\tClosing a file..." << endl;        
         ElectronFile->Close();
         if ( !ElectronFile->IsOpen() ) cout << "\tFile SelectedEE_" << Mgr.Tag[0] << ".root has been closed successfully.\n" << endl;
         else cout << "\tFILE SelectedEE_" << Mgr.Tag[0] << ".root COULD NOT BE CLOSED!\n" << endl;
