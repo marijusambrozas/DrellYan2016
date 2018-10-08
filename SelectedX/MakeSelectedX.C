@@ -25,7 +25,7 @@ void MakeSelectedEE ( TString type, TString HLTname, Bool_t Debug );
 void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Debug );
 void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Debug );
 
-void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name, Debug );
+void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name, Bool_t Debug );
 void MakeSelectedQCDEM_120to170_merged();
 
 
@@ -243,7 +243,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
             Int_t NEvents = chain->GetEntries();
             if ( Debug == kTRUE ) NEvents = 100; // using few events for debugging
 
-            cout << "\t[Total Events: " << NEvents << "]" << endl;           
+            cout << "\t[Total Events: " << NEvents << "]" << endl;
             Int_t timesPassed = 0;           
 
             myProgressBar_t bar( NEvents );
@@ -680,7 +680,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                 printf( "\tTotal sum of weights: %.1lf\n", SumWeight );
                 printf( "\tSum of weights of Separated events: %.1lf\n", SumWeight_Separated );
                 printf( "\tSum of unchanged (to 1 or -1) weights: %.1lf\n", SumWeightRaw );
-                printf( "\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.nEvents[i_tup] );
+                printf( "\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.NEvents[i_tup] );
             }
 
             Double_t LoopRunTime = looptime.CpuTime();
@@ -735,7 +735,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
 
 
 /// --------------------------------- EMu events --------------------------------- ///
-void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr )
+void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Debug )
 {
     // -- Run2016 luminosity [/pb] -- //
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
@@ -1132,14 +1132,14 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name, Bool_t Debug )
 
     Int_t timesPassed = 0;    
 
-    Int_t nEvents = chain->GetEntries();
+    Int_t NEvents = chain->GetEntries();
     if ( Debug == kTRUE ) NEvents = 100; // using few events for debugging
 
-    myProgressBar_t bar( nEvents );
-    cout << "\tNumber of events: " << nEvents << endl;
+    myProgressBar_t bar( NEvents );
+    cout << "\tNumber of events: " << NEvents << endl;
 
     // Loop for all events in the chain
-    for ( Int_t i=0; i<nEvents; i++ )
+    for ( Int_t i=0; i<NEvents; i++ )
     {
         ntuple->GetEvent(i);
 
@@ -1290,12 +1290,12 @@ void MakeSelectedQCDEM_120to170_merged()
     SelectedEE_t* QCD_EE = new SelectedEE_t();
     QCD_EE->CreateFromChain( chain );
 
-    Int_t nEvents = chain->GetEntries();
-    myProgressBar_t bar( nEvents );
-    cout << "\tNumber of events: " << nEvents << endl;
+    Int_t NEvents = chain->GetEntries();
+    myProgressBar_t bar( NEvents );
+    cout << "\tNumber of events: " << NEvents << endl;
 
     // Loop for all events in the chain
-    for ( Int_t i=0; i<nEvents; i++ )
+    for ( Int_t i=0; i<NEvents; i++ )
     {
         QCD_EE->GetEvent(i);
 
