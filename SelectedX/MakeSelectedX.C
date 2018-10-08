@@ -680,7 +680,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                 printf( "\tTotal sum of weights: %.1lf\n", SumWeight );
                 printf( "\tSum of weights of Separated events: %.1lf\n", SumWeight_Separated );
                 printf( "\tSum of unchanged (to 1 or -1) weights: %.1lf\n", SumWeightRaw );
-                printf( "\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.NEvents[i_tup] );
+                printf( "\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.nEvents[i_tup] );
             }
 
             Double_t LoopRunTime = looptime.CpuTime();
