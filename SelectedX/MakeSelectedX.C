@@ -21,11 +21,11 @@
 #include "./header/FileMgr.h"
 #include "./etc/RoccoR/RoccoR.cc"
 
-void MakeSelectedEE ( TString type, TString HLTname );
-void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RocCorr );
-void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr );
+void MakeSelectedEE ( TString type, TString HLTname, Bool_t Debug );
+void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Debug );
+void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Debug );
 
-void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name );
+void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name, Debug );
 void MakeSelectedQCDEM_120to170_merged();
 
 
@@ -33,19 +33,25 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
 {
     TString HLT;
     Int_t Xselected = 0;
+    Bool_t Debug = kFALSE;
 
     // for non-interactive status output
     ofstream fs;
     fs.open( "./Status/Status_"+whichX+"_"+type+".txt" );
     fs << "Process MakeSelectedX ( " << whichX << ", " << type << ", " << HLTname << ", " << RocCorr << " ) initiated.\n";
 
+    if ( whichX.Contains("DEBUG") || whichX.Contains("debug") || whichX.Contains("Debug") )
+    {
+        Debug = kTRUE;
+        cout << "DEBUG MODE ON. Running on 100 events only" << endl;
+    }
     if ( whichX.Contains("EE") || whichX.Contains("ee") )
     {
         Xselected++;
         if ( HLTname == "DEFAULT" ) HLT = "Ele23Ele12";
         else HLT = HLTname;
         cout << "\n*******      MakeSelectedEE ( " << type << ", " << HLT << " )      *******" << endl;
-        MakeSelectedEE( type, HLT );
+        MakeSelectedEE( type, HLT, Debug );
     }
     if ( whichX.Contains("MuMu") || whichX.Contains("mumu") || whichX.Contains("MUMU") )
     {
@@ -53,7 +59,7 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
         if ( HLTname == "DEFAULT" ) HLT = "IsoMu24_OR_IsoTkMu24";
         else HLT = HLTname;
         cout << "\n*****  MakeSelectedMuMu ( " << type << ", " << HLT << " )  *****" << endl;
-        MakeSelectedMuMu( type, HLT, RocCorr );
+        MakeSelectedMuMu( type, HLT, RocCorr, Debug );
     }
     if ( whichX.Contains("EMu") || whichX.Contains("emu") || whichX.Contains("Emu") || whichX.Contains("eMu") || whichX.Contains("EMU") )
     {
@@ -61,7 +67,7 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
         if ( HLTname == "DEFAULT" ) HLT = "IsoMu24_OR_IsoTkMu24";
         else HLT = HLTname;
         cout << "\n*****   MakeSelectedEMu ( " << type << ", " << HLT << " )  *****" << endl;
-        MakeSelectedEMu( type, HLT, RocCorr );
+        MakeSelectedEMu( type, HLT, RocCorr, Debug );
     }
     if ( whichX.Contains("QCDfail") )   // To run through QCDEMEnriched_pT120to170 file that crashes
     {
@@ -72,7 +78,7 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
         {
             if ( name == 116 ) continue;
             cout << "\n** MakeSelectedQCDEM_120to170 ( skim_" << name << ", " << HLT << " ) **" << endl;
-            MakeSelectedQCDEM_120to170( HLT, name );
+            MakeSelectedQCDEM_120to170( HLT, name, Debug );
         }
     }
     if ( whichX.Contains("QCDmerge") ) // to merge 316-1(that fails) selected QCD files
@@ -95,7 +101,7 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
 
 /// ----------------------------- Electron Channel ------------------------------ ///
 //void MakeSelectedEE ( Int_t type, Int_t Num = 100, Int_t isTopPtReweighting = 0, TString HLTname = "Ele23Ele12" )
-void MakeSelectedEE ( TString type, TString HLTname )
+void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
 {
     // -- Run2016 luminosity [/pb] -- //
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
@@ -170,20 +176,40 @@ void MakeSelectedEE ( TString type, TString HLTname )
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
             //Creating a file
+            TString out_base;
+            TString out_dir;
             TFile* ElectronFile;
             if ( Mgr.Type == "DATA" )
-                ElectronFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
+            {
+                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/";
+                out_dir = "Data/SelectedEE_"+Mgr.Tag[i_tup];
+            }
             else if ( Mgr.Type == "SIGNAL" )
-                ElectronFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
+            {
+                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/";
+                out_dir = "MC_signal/SelectedEE_"+Mgr.Tag[i_tup];
+            }
             else if ( Mgr.Type == "BKG" )
-                ElectronFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
+            {
+                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/";
+                out_dir = "MC_bkg/SelectedEE_"+Mgr.Tag[i_tup];
+            }
             else if ( Mgr.Type == "TEST")
-                ElectronFile = new TFile( "/media/sf_DATA/test/SelectedEE_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
+            {
+                out_base = "/media/sf_DATA/test/";
+                out_dir = "SelectedEE_"+Mgr.Tag[i_tup];
+            }
             else
             {
                 cout << "Problems with TYPE." << endl;
                 return;
             }
+
+            if ( Debug == kTRUE )
+                ElectronFile = TFile::Open( out_base+out_dir+"_DEBUG.root", "RECREATE" );
+            else
+                ElectronFile = TFile::Open( out_base+out_dir+".root", "RECREATE" );
+
 
             TTree* ElectronTree = new TTree( "DYTree", "DYTree" );
             // -- Creating LongSelectedEE variables to assign branches -- //
@@ -215,7 +241,8 @@ void MakeSelectedEE ( TString type, TString HLTname )
             Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
 
             Int_t NEvents = chain->GetEntries();
-    //        Int_t NEvents = 10000;		// test using few events
+            if ( Debug == kTRUE ) NEvents = 100; // using few events for debugging
+
             cout << "\t[Total Events: " << NEvents << "]" << endl;           
             Int_t timesPassed = 0;           
 
@@ -371,7 +398,7 @@ void MakeSelectedEE ( TString type, TString HLTname )
 
 
 /// -------------------------------- Muon Channel ------------------------------------ ///
-void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RocCorr )
+void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t Debug)
 {
     // -- Run2016 luminosity [/pb] -- //
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
@@ -453,20 +480,40 @@ void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RocCorr )
             if ( RocCorr == kTRUE ) RocCor = "_roccor";
 
             //Creating a file
+            TString out_base;
+            TString out_dir;
             TFile* MuonFile;
-            if ( Mgr.Type == "TEST" )
-                MuonFile = new TFile( "/media/sf_DATA/test/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
-            else if ( Mgr.Type == "DATA" )
-                MuonFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
+            if ( Mgr.Type == "DATA" )
+            {
+                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/";
+                out_dir = "Data/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
+            }
             else if ( Mgr.Type == "SIGNAL" )
-                MuonFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
+            {
+                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/";
+                out_dir = "MC_signal/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
+            }
             else if ( Mgr.Type == "BKG" )
-                MuonFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
+            {
+                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/";
+                out_dir = "MC_bkg/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
+            }
+            else if ( Mgr.Type == "TEST")
+            {
+                out_base = "/media/sf_DATA/test/";
+                out_dir = "SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
+            }
             else
             {
                 cout << "Problems with TYPE." << endl;
                 return;
             }
+
+            if ( Debug == kTRUE )
+                MuonFile = TFile::Open( out_base+out_dir+"_DEBUG.root", "RECREATE" );
+            else
+                MuonFile = TFile::Open( out_base+out_dir+".root", "RECREATE" );
+
 
             TTree* MuonTree = new TTree( "DYTree", "DYTree" );
             // -- Creating SelectedMuMu variables to assign branches -- //
@@ -500,6 +547,8 @@ void MakeSelectedMuMu ( TString type, TString HLTname, Bool_t RocCorr )
             Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
 
             Int_t NEvents = chain->GetEntries();
+            if ( Debug == kTRUE ) NEvents = 100; // using few events for debugging
+
             cout << "\t[Total Events: " << NEvents << "]" << endl;
             myProgressBar_t bar( NEvents );
             Int_t timesPassed = 0;
@@ -771,18 +820,35 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr )
             if ( RocCorr == kTRUE ) RocCor = "_roccor";
 
             //Creating a file
+            TString out_base;
+            TString out_dir;
             TFile* EMuFile;
-            if ( Mgr.Type == "TEST" )
-                EMuFile = new TFile( "/media/sf_DATA/test/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
-            else if ( Mgr.Type == "DATA" )
-                EMuFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
+            if ( Mgr.Type == "DATA" )
+            {
+                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/";
+                out_dir = "Data/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor;
+            }
             else if ( Mgr.Type == "BKG" )
-                EMuFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/MC_bkg/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor+".root", "RECREATE" );
+            {
+                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/";
+                out_dir = "MC_bkg/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor;
+            }
+            else if ( Mgr.Type == "TEST")
+            {
+                out_base = "/media/sf_DATA/test/";
+                out_dir = "SelectedEMu_"+Mgr.Tag[i_tup]+RocCor;
+            }
             else
             {
                 cout << "Problems with TYPE." << endl;
                 return;
             }
+
+            if ( Debug == kTRUE )
+                EMuFile = TFile::Open( out_base+out_dir+"_DEBUG.root", "RECREATE" );
+            else
+                EMuFile = TFile::Open( out_base+out_dir+".root", "RECREATE" );
+
 
             TTree* EMuTree = new TTree( "DYTree", "DYTree" );
             // -- Creating SelectedMuMu variables to assign branches -- //
@@ -824,6 +890,8 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr )
             Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
 
             Int_t NEvents = chain->GetEntries();
+            if ( Debug == kTRUE ) NEvents = 100; // using few events for debugging
+
             cout << "\t[Total Events: " << NEvents << "]" << endl;
             myProgressBar_t bar( NEvents );
             Int_t timesPassed = 0;
@@ -1005,7 +1073,7 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr )
 
 
 /// ----------------------------- For QCD file that fails ------------------------------ ///
-void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name )
+void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name, Bool_t Debug )
 {
     TStopwatch totaltime;
     totaltime.Start();
@@ -1025,7 +1093,13 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name )
     TString Name = ss.str();
 
     //Creating a file
-    TFile* ElectronFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/QCDfail/SelectedEE_"+Mgr.Tag[0]+"_"+Name+".root", "RECREATE" );
+    TFile* ElectronFile;
+    if ( Debug == kTRUE )
+        ElectronFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/QCDfail/SelectedEE_"
+                                    +Mgr.Tag[0]+"_"+Name+"_DEBUG.root", "RECREATE" );
+    else
+        ElectronFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/QCDfail/SelectedEE_"
+                                    +Mgr.Tag[0]+"_"+Name+".root", "RECREATE" );
 
     TTree* ElectronTree = new TTree( "DYTree", "DYTree" );
     // -- Creating LongSelectedEE variables to assign branches -- //
@@ -1059,6 +1133,8 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name )
     Int_t timesPassed = 0;    
 
     Int_t nEvents = chain->GetEntries();
+    if ( Debug == kTRUE ) NEvents = 100; // using few events for debugging
+
     myProgressBar_t bar( nEvents );
     cout << "\tNumber of events: " << nEvents << endl;
 

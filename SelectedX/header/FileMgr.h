@@ -3700,12 +3700,12 @@ void FileMgr::CheckProcesses()
                 }
                 else if ( pr<_EndOf_Data_Special && !FileLocation[i].Contains("/*.root") )
                 {
-                    cout << "Process " << Procname[pr] << ": FileLocation[" << i << "] does not end with '/*.root'." << endl;
+                    cout << "Process " << Procname[pr] << ": FileLocation[" << i << "] does not contain '/*.root'." << endl;
                     allOk = kFALSE;
                 }
                 else if ( pr>_EndOf_Data_Special && !FileLocation[i].Contains(".root") )
                 {
-                    cout << "Process " << Procname[pr] << ": FileLocation[" << i << "] does not end with '.root'." << endl;
+                    cout << "Process " << Procname[pr] << ": FileLocation[" << i << "] does not contain '.root'." << endl;
                     allOk = kFALSE;
                 }
             }
@@ -3729,12 +3729,12 @@ void FileMgr::CheckProcesses()
                 {
                     if ( pr<_EndOf_Data_Special && !FullLocation[i].Contains("/*.root") )
                     {
-                        cout << "Process " << Procname[pr] << ": FullLocation[" << i << "] does not end with '/*.root'" << endl;
+                        cout << "Process " << Procname[pr] << ": FullLocation[" << i << "] does not contain '/*.root'" << endl;
                         allOk = kFALSE;
                     }
                     if ( pr>_EndOf_Data_Special && !FullLocation[i].Contains(".root") )
                     {
-                        cout << "Process " << Procname[pr] << ": FullLocation[" << i << "] does not end with '.root'" << endl;
+                        cout << "Process " << Procname[pr] << ": FullLocation[" << i << "] does not contain '.root'" << endl;
                         allOk = kFALSE;
                     }
                     /*if ( FullLocation[i][0] != '/')
