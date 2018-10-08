@@ -1,6 +1,11 @@
 # local files
 Local/
 
+# HTCondor outputs
+*err*.txt
+*out*.txt
+*log*.txt
+
 # python
 *.pyc
 

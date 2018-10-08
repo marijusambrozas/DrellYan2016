@@ -17,6 +17,7 @@ cd CMSSW_8_0_6/src
 eval `scram runtime -sh`
 cd /cms/ldap_home/mambroza/DrellYan2016/SelectedX/
 
+#voms-proxy-init --voms cms
 
 Process=$2
 root -l -q -b MakeSelectedX.C'("'$WhichX'", "'$Process'", "'$Trigger'")'
@@ -25,3 +26,5 @@ if [[ $Process == *'QCDEM'* ]] ; then
     wait %1
     root -l -q -b MakeSelectedX.C'("QCDmerge", "", "")'
 fi
+
+exit

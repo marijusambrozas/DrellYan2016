@@ -2,12 +2,12 @@ executable = SelectAllX.sh
 universe = vanilla
 
 arguments = EE $(LIST) DEFAULT
-output = ee_out_$(LIST).txt
-error = ee_err_$(LIST).txt
-log = ee_log$(LIST).txt
+output = out_test_$(LIST).txt
+error = err_test_$(LIST).txt
+log = log_test_$(LIST).txt
 getenv = True
 
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
 transfer_output_files = RESULT
-queue LIST from EE_list.txt
+queue LIST from list_test.txt
