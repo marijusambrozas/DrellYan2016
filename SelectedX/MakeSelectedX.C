@@ -361,7 +361,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
                 if ( Debug == kTRUE ) addition = "_DEBUG";
                 ElectronFile->Close();
                 if ( !ElectronFile->IsOpen() ) cout << "File SelectedEE_" << Mgr.Tag[i_tup]+addition << ".root has been closed successfully.\n" << endl;
-                else cout << "FILE SelectedEE_" << Mgr.Tag[i_tup]+adition << ".root COULD NOT BE CLOSED!\n" << endl;
+                else cout << "FILE SelectedEE_" << Mgr.Tag[i_tup]+addition << ".root COULD NOT BE CLOSED!\n" << endl;
             }
             else
             {
