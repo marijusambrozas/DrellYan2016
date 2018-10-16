@@ -1,0 +1,157 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[yyyymmdd]{datetime}
+\usepackage{fontspec}
+\usepackage{fontenc}
+\usepackage{amssymb}
+\usepackage{ulem}
+\usepackage{cite}
+\usepackage{multirow}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{graphicx}
+%\usepackage{url}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage[svgnames]{xcolor}
+\usepackage{xstring} % to define myund
+\usepackage[lithuanian]{babel}
+%\usepackage{lineno}
+\graphicspath{ {Images/} }
+
+\renewcommand{\dateseparator}{-}
+\renewcommand{\abstractname}{Santrauka}
+\renewcommand{\contentsname}{Turinys}
+\renewcommand{\figurename}{Pav}
+\renewcommand{\refname}{Literatūra}
+\renewcommand{\tablename}{Lentelė}
+\renewcommand{\listfigurename}{Paveikslėlių sąrašas}
+\renewcommand{\listtablename}{Lentelių sąrašas}
+
+\DeclareCaptionLabelFormat{numfirst}{#2~#1}
+%\captionsetup[figure]{labelformat = numfirst, labelsep = period}
+\captionsetup[figure]{labelformat = numfirst, labelsep = space}
+\captionsetup[table]{labelformat = numfirst, labelsep = period}
+
+\newcommand{\textblue}[1]{{\color{Blue}#1}}
+\newcommand{\textred}[1]{{\color{Red}#1}}
+\newcommand{\comment}[1]{\newline\textblue{#1}\newline}
+\newcommand{\commentNL}[1]{\textblue{#1}\newline}
+\newcommand{\commentMA}[1]{\newline\textred{#1}\newline}
+\newcommand{\commentMANL}[1]{\textred{#1}\newline}
+\newcommand{\pT}{p_{T}}
+\newcommand{\DYtau}{\mathrm{DY}\!\rightarrow\tau\tau}
+\newcommand{\DYee}{\mathrm{DY}\!\rightarrow ee}
+\newcommand{\QCD}{\mathrm{QCD}}
+\newcommand{\Data}{\mathrm{Data}}
+\newcommand{\MC}{\mathrm{MC}}
+\newcommand{\est}{\mathrm{est.}}
+\newcommand{\emu}{e\mu}
+\newcommand{\ET}{E_{T}}
+\newcommand{\refeqq}[1]{(\ref{#1})}
+\newcommand{\Lumi}{{\cal L}_\mathrm{int}}
+\newcommand{\invfb}{fb$^{-1}$}
+\newcommand{\invpb}{pb$^{-1}$}
+\newcommand{\ltq}[1]{{\quotedblbase{}#1\textquotedblleft{}}}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\ttt}[1]{\texttt{#1}}
+
+\def\myund#1{%
+  \saveexpandmode\expandarg
+  \IfSubStr{#1}{_}{%
+   \StrSubstitute{#1}{_}{\_}}{#1}%
+  \restoreexpandmode
+}
+
+
+\begin{document}
+
+%\linenumbers
+
+\title{Darbų dienoraštis}
+\author{M.\ Ambrozas}
+\date{\textit{Pradėta} 2018-10-09, \textit{Paskutinė versija} \today}
+\maketitle
+\pagebreak
+
+\section{Spalio 9-10 d. -- CMSDAS ataskaitos taisymas}
+\begin{itemize}
+	\item Tikrinau, ar veikia neinteraktyvus skaičiavimas tier3 centre
+	(prieš tai kelis kartus buvo išmetę klaidą, kad neįmanoma įrašyti atrinktų
+	įvykių į failą, nes nėra tinkamo serverio, tačiau, kai pabandžiau paleisti
+	tuos pačius skaičiavimus, tik su 100 įvykių kiekvienam procesui, viskas veikė
+	normaliai) -- pabandžiau paleisti atskirus skaičiavimus su $WW$, $WZ$, $ZZ$,
+	$tW$, $\overline{t}W$ procesais. Panašu, kad viskas suveikė normaliai, failų
+	įrašymas buvo sėkmingas. Dar ko gero reikėtų pabandyti paleisti skaičiavimą
+	su kitais procesais, kad galima būtų spręsti, ar ten buvo tik laikina problema
+	su tier3 sistemomis, ar ši problema priklauso nuo bandomų įrašyti failų dydžio,
+	ar nuo sistemos vykdomų skirtingų darbų skaičiaus ir pan.
+	\item Trumpai peržiūrėjau \textit{DY working meeting 2018-06-22} skaidres
+	(\url{https://indico.cern.ch/event/736672/contributions/3038893/
+	attachments/1673244/2685121/DY_working_meeting_20180622.pdf}).
+	Panašu, kad ten buvo naudojamas vienodas integruotas šviesis tiek $ee$, tiek
+	$\mu\mu$ įvykiams, o pritaikius korekcijas (PU, Rochester (miuonams),
+	track (miuonams), reco (elektronams) ID, iso (miuonams), trigger) nesutapimai
+	tarp eksperimento ir modeliavimo siekia maždaug iki 5 procentų. Kadangi mano
+	atveju taip nėra, trupmai užmečiau akį i mano korekcijų kodus (kuriuos paėmęs
+	iš Kyeongpil Lee github saugyklos netaisiau) -- bent jau prie elektronams
+	taikomų korekcijų nėra bandoma įvertinti trigerio efektyvumo. Taip pat skaidrėse
+	vaizduojami PU pasiskirstymai neatrodo panašūs į mano turimus (skaidrėse
+	esantys pasiskirstymai atrodo panašūs į 2015 metų duomenų pasiskirstymą, tik
+	PU vertės vidurkis didesnis, o mano turimi pasiskirstymai turi kažką panašaus
+	į lokalų maksimumą ties mažesnėmis PU vertėmis). Taip pat ir po PU korekcijos
+	vaizduojama PU pasiskirstymo Data/MC kreivė savo forma atrodo labai nepanaši
+	į mano (nors taip galbūt gali būti ir todėl, kad nežinau, ar savo grafikuose
+	atvaizduoju \ltq{tikrą} eksperimentinį PU pasiskirstymą: jį pavaizduoju pagal
+	failą, kuriuo naudojantis skaičiuojama modeliuotų įvykių PU svorio vertė, nes
+	eksperimentiniuose dydžiuose kintamasis \ttt{nPileUp} visur duoda 0.
+	\textbf{Reikia pasidomėti, kaip daromos tos korekcijos ir pabandyti pasitaisyti
+	kodus, kad viskas būtų įskaitoma kaip reikia (tam taip pat ko gero reikės
+	sutikrinti, ar korekcijų skaičiavimuose naudojamos failų versijos yra tinkamos)}.
+	\item Pagal vadovo pastabas taisiau CMSDAS ataskaitą. Pagrindinės problemos buvo
+	per daug bendrų, nieko konkretaus nepasakančių frazių vartojimas, per mažas
+	asmeninės patirties perteikimas. Kad ką nors pamiršęs nepridaryčiau faktinių
+	klaidų, užtrukau nemažai peržiūrėdamas iš naujo darytų užduočių skaidres,
+	twiki puslapius ir pan.\ (visos užduotys gali būti rastos čia:
+	\url{https://twiki.cern.ch/twiki/bin/viewauth/CMS/WorkBookExercisesCMSDataAnalysisSchool},
+	paskaitų skaidres galima rasti čia: \url{https://indico.cern.ch/event/684249/timetable/#20180910})
+\end{itemize}
+
+\section{Spalio 11 d. -- CMSDAS ataskaitos taisymas}
+
+\begin{itemize}
+	\item Ant tier3 paleidau neinteraktyviai skaičiuoti su kitais procesais,
+	kad patikrinčiau, ar problema tebėra.
+	
+	\textbf{UPDATE vakare:} paskaičiavau su procesais DYEE\_10to50, DYEE\_50to100,
+	DYTauTau\_10to50, DYTauTau\_50to100, WJets, ttbar. Kol kas baigė skaičiuoti su
+	Drell-Yan procesais, viskas veikė normaliai, WJets ir ttbar dar tebeskaičiuoja.
+	Kita problema: kažkodėl po to, kai skaičiavimas baigiasi, HTCondor sistema vietoje
+	to, kad mano paduotą darbą tiesiog užbaigtų (ir įvedus komandą condor\_q
+	darbas būtų rodomas prie užbaigtų -- sekcijoje DONE), ji darbo vykdymą
+	tiesiog pristabdo (rodo sekcijoje HELD). Galbūt taip gali būti dėl to,
+	kad darbas nebūna atliekamas be jokių klaidų žinučių -- kažkodėl klaidų išvestyje
+	gaunu tokį pranešimą:
+	
+	\ttt{WARNING: In non-interactive mode release checks e.g. deprecated releases,
+	production architectures are disabled.\\
+	**** Following environment variables are going to be unset.\\ SCONS\_LIB\_DIR}
+	
+	Nežinau, ką jis reiškia, bet skaičiavimui lyg ir netrukdo.
+	\item Bandžiau dar kartą įsitikinti, ar tikrai eksperimentiniuose duomenyse
+	dydis \ttt{nPileUp} visada yra lygus nuliui. Įsitikinau, kad taip, bet pastebėjau,
+	kad taip pat duomenyse yra saugomas dydis \ttt{nVertices}, kuris eksperimentiniams
+	duomenims jau nelygus nuliui. Tikrinau, kaip yra modeliuotuose duomenyse: ten taip
+	pat yra dydis \ttt{nVertices}, bet šio dydžio pasiskirstymas nesutampa su
+	\ttt{nPileUp} pasiskirstymu.
+	\item Dar  porą kartų taisiau CMSDAS ataskaitą. Šį kartą pagrinde tai jau buvo rašybos, formulavimo
+	arba minčių nuoseklumo klaidos.
+	\item Taisiau duomenų naudojimo schemą ir pradėjau daryti duomenų saugojimo tier3 schemą.
+\end{itemize}
+
+\bibliography{\jobname}
+\bibliographystyle{unsrt}
+
+\end{document}
+ 
