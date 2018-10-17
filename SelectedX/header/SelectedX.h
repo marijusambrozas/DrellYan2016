@@ -1589,17 +1589,17 @@ public:
         chain->SetBranchAddress("Electron_phiSC", &Electron_phiSC);
 
         // -- Adding to cache -- //
-        chain->AddBranchToCache("GENEvt_weight", 1);
-        chain->AddBranchToCache("nPileUp", 1);
-        chain->AddBranchToCache("isSelPassed", 1);
-        chain->AddBranchToCache("Electron_InvM", 1);
-        chain->AddBranchToCache("Electron_pT", 1);
-        chain->AddBranchToCache("Electron_eta", 1);
-        chain->AddBranchToCache("Electron_phi", 1);
-        chain->AddBranchToCache("Electron_Energy", 1);
-        chain->AddBranchToCache("Electron_charge", 1);
-        chain->AddBranchToCache("Electron_etaSC", 1);
-        chain->AddBranchToCache("Electron_phiSC", 1);
+//        chain->AddBranchToCache("GENEvt_weight", 1);
+//        chain->AddBranchToCache("nPileUp", 1);
+//        chain->AddBranchToCache("isSelPassed", 1);
+//        chain->AddBranchToCache("Electron_InvM", 1);
+//        chain->AddBranchToCache("Electron_pT", 1);
+//        chain->AddBranchToCache("Electron_eta", 1);
+//        chain->AddBranchToCache("Electron_phi", 1);
+//        chain->AddBranchToCache("Electron_Energy", 1);
+//        chain->AddBranchToCache("Electron_charge", 1);
+//        chain->AddBranchToCache("Electron_etaSC", 1);
+//        chain->AddBranchToCache("Electron_phiSC", 1);
 
         File_Given = kTRUE;
     }
@@ -2706,26 +2706,26 @@ public:
         chain->SetBranchAddress("Muon_trackerLayers", &Muon_trackerLayers);
 
         // -- Adding to cache -- //
-        chain->AddBranchToCache("GENEvt_weight", 1);
-        chain->AddBranchToCache("nPileUp", 1);
-        chain->AddBranchToCache("isSelPassed", 1);
-        chain->AddBranchToCache("EMu_InvM", 1);
-        chain->AddBranchToCache("Electron_pT", 1);
-        chain->AddBranchToCache("Electron_eta", 1);
-        chain->AddBranchToCache("Electron_phi", 1);
-        chain->AddBranchToCache("Electron_Energy", 1);
-        chain->AddBranchToCache("Electron_charge", 1);
-        chain->AddBranchToCache("Electron_etaSC", 1);
-        chain->AddBranchToCache("Electron_phiSC", 1);
-        chain->AddBranchToCache("Muon_pT", 1);
-        chain->AddBranchToCache("Muon_eta", 1);
-        chain->AddBranchToCache("Muon_phi", 1);
-        chain->AddBranchToCache("Muon_charge", 1);
-        chain->AddBranchToCache("Muon_Energy", 1);
-        chain->AddBranchToCache("Muon_TuneP_pT", 1);
-        chain->AddBranchToCache("Muon_TuneP_eta", 1);
-        chain->AddBranchToCache("Muon_TuneP_phi", 1);
-        chain->AddBranchToCache("Muon_trackerLayers", 1);
+//        chain->AddBranchToCache("GENEvt_weight", 1);
+//        chain->AddBranchToCache("nPileUp", 1);
+//        chain->AddBranchToCache("isSelPassed", 1);
+//        chain->AddBranchToCache("EMu_InvM", 1);
+//        chain->AddBranchToCache("Electron_pT", 1);
+//        chain->AddBranchToCache("Electron_eta", 1);
+//        chain->AddBranchToCache("Electron_phi", 1);
+//        chain->AddBranchToCache("Electron_Energy", 1);
+//        chain->AddBranchToCache("Electron_charge", 1);
+//        chain->AddBranchToCache("Electron_etaSC", 1);
+//        chain->AddBranchToCache("Electron_phiSC", 1);
+//        chain->AddBranchToCache("Muon_pT", 1);
+//        chain->AddBranchToCache("Muon_eta", 1);
+//        chain->AddBranchToCache("Muon_phi", 1);
+//        chain->AddBranchToCache("Muon_charge", 1);
+//        chain->AddBranchToCache("Muon_Energy", 1);
+//        chain->AddBranchToCache("Muon_TuneP_pT", 1);
+//        chain->AddBranchToCache("Muon_TuneP_eta", 1);
+//        chain->AddBranchToCache("Muon_TuneP_phi", 1);
+//        chain->AddBranchToCache("Muon_trackerLayers", 1);
 
         File_Given = kTRUE;
     }
