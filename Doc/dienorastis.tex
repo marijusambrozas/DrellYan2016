@@ -17,7 +17,18 @@
 \usepackage{xstring} % to define myund
 \usepackage[lithuanian]{babel}
 %\usepackage{lineno}
-\graphicspath{ {Images/} }
+\graphicspath{ {images/} }
+
+\usepackage{geometry}
+\pagestyle{myheadings}
+\geometry{
+	left=2cm,
+	right=2cm,
+	top=2cm,
+	bottom=2cm,
+}
+\pagenumbering{arabic}
+\linespread{1.25}
 
 \renewcommand{\dateseparator}{-}
 \renewcommand{\abstractname}{Santrauka}
@@ -118,7 +129,7 @@
 	paskaitų skaidres galima rasti čia: \url{https://indico.cern.ch/event/684249/timetable/#20180910})
 \end{itemize}
 
-\section{Spalio 11 d. -- CMSDAS ataskaitos taisymas}
+\section{Spalio 12 d. -- CMSDAS ataskaitos taisymas}
 
 \begin{itemize}
 	\item Ant tier3 paleidau neinteraktyviai skaičiuoti su kitais procesais,
@@ -148,6 +159,113 @@
 	\item Dar  porą kartų taisiau CMSDAS ataskaitą. Šį kartą pagrinde tai jau buvo rašybos, formulavimo
 	arba minčių nuoseklumo klaidos.
 	\item Taisiau duomenų naudojimo schemą ir pradėjau daryti duomenų saugojimo tier3 schemą.
+\end{itemize}
+
+\section{Spalio 16 d. -- CMSDAS ataskaitos taisymas}
+\begin{itemize}
+	\item Galutinai pataisiau CMSDAS ataskaitą.
+	\item Paleidau skaičiuoti daug procesų ant tier3.
+	
+	\textbf{Update:} visus failus įrašinėjo tvarkingai, išskyrus DYEE\_M50to100 --
+	ten išmetė daugybę žinučių, tokių, kaip:
+	
+	\ttt{} %jeigu dar kartą išmes - patikslinti!!!
+	
+	Taip pat visi procesai buvo sustabdyti (\ttt{held}) vietoje to, kad baigtų darbą.
+	Įvedus į terminalą \ttt{condor\_q -analyze <darbo\_nr>} gavau atsakymą, kad taip yra
+	dėl to, kad nesėkmingai yra sukuriamas rezultato išvesties failas, pavadinimu
+	\ttt{RESULT}. Iš esmės, jame nieko nėra įrašoma ir jis man yra nereikalingas, tiesiog
+	taip buvo parašyta pavyzdyje, kurį žiūrėjau, tad galbūt ištrynus atitinkamas eilutes
+	klaidos nebeliks.
+	
+	Informaciją, apie HTCondor komandas radau čia:
+	\url{http://research.cs.wisc.edu/htcondor/manual/v8.6/2_Users_Manual.html}
+	
+	\item Bandžiau sudėlioti duomenų laikymo tier3 centre schemą. Kažkaip atrodė natūralu
+	į ją įkomponuoti ir mano \ttt{FileMgr} klasės dalis, kad eitų suprasti, kaip
+	konkrečiai tie duomenys bus naudojami. Kadangi klasė šiek tiek skirtingais būdais
+	laiko tikrų ir modeliuotų įvykių adresus, buvo gan sudėtinga sugalvoti, kaip kuo
+	paprasčiau viską atvaizduoti. Pabandžiau padaryti dvi versijas -- vieną paprastesnę,
+	kuri vaizduoja tik tai, kaip klasė pateikia modeliuotų įvykių adresus, ir kitą --
+	sudėtingą, kur vaizduojami abu atvejai, bet tada schema pasidaro jau sunkiai suprantama.
+	
+	\begin{figure}
+		\centering
+		\label{fig:duomSchemSud}
+		\includegraphics[width=\textwidth]{Duomenu_schema_10-16.png}
+		\caption{Sudėtinga duomenų schema. Spalio 16 d. versija.}
+	\end{figure}
+	\begin{figure}
+		\centering
+		\label{fig:duomSchem}
+		\includegraphics[width=0.7\textwidth]{Duomenu_schema_paprasta_10-16.png}
+		\caption{Supaprastinta duomenų schema. Spalio 16 d. versija.}
+	\end{figure}
+\end{itemize}
+
+\section{Spalio 17-18 d. -- reikalų tvarkymas}
+\begin{itemize}
+	\item Bandžiau peržiūrėti skaidres iš Spalio 16 dieną vykusių DY mokslinių
+	grupių pristatymų. Spėjau peržiūrėti tik skaidres apie pirminį spinduliavimą
+	(angl. \textit{Initial State Radiation -- ISR}). Galiu pasakyti, kad supratau
+	nedaug.
+	\item Gavau užduotį padaryti plakatą, kuriame būtų informacija apie vykdomą
+	LMT projektą, kad jį būtų galima atspausdinti ir pakabinti. Plakatą padariau
+	ir nusiunčiau administratoriui. Jis bandė įsiūlyti į plakatą pridėti savo
+	vardus, pavardes, nuotraukas ir pan., bei išsispausdinti 10 plakatų ir juos
+	pakabinti visur, kur tik įmanoma, bet mes su vadovu šiai minčiai nepritarėme.
+	\item Šiek tiek bandžiau koreguoti duomenų schemą, bet nelabai spėjau.
+	\item Ieškojau kompiuterio, kuris turėtų mano norimas specifikacijas
+	(Intel 8 kartos procesorių, NVIDIA vaizdo plokštę, skaičių klaviatūrą, bent
+	8 GB DDR4 RAM atminties ir pan.), ir kurį eitų nupirkti iš projekto pinigų
+	(už ne daugiau, kaip 1000 eurų). Radau kelis variantus, nusiunčiau vadovui.
+\end{itemize}
+
+\section{Spalio 19 d. -- registracija į techninio studento praktiką, reikalų tvarkymas}
+\begin{itemize}
+	\item Iš naujo peržiūrėjau išsirinktų kompiuterių sąrašą, patikrindamas,
+	ar jie atitinka ir vadovo pridėtus kriterijus (HDMI ir JR45 jungtys, matinis
+	ekranas). Pakalbėję su vadovu nutarėme, kad reikėtų susidėlioti 5 kompiuterių
+	sąrąša, kurie būtų daugmaž panašūs, ir kurie man tiktų ir tada pateikti
+	administratoriui, kuris pažiūrėtų, ką galima padaryti (galima apklausti kelias
+	įmones, už kiek jie parduotų tam tikrą kompiuterį ar kelis ir tada išsirinkti
+	pigiausiai pasiūliusią įmonę), ir ar tikrai įmanoma iš projekto pinigų nusipirkti
+	kompiuterį. Sąrašą sudariau, bet gavosi taip, kad visi 5 kompiuteriai iš sąrašo
+	internete kainuoja šiek tiek virš 900 eurų, tad apsidraudimui (jeigu perkant per
+	projektą įmonės prašytų daugiau, sudėliojau ir 5 pigesnių kompiuterių sąrašą
+	(arti 900 eurų arba mažiau).
+	\item Bandžiau pildyti registraciją CERN techniniam studentui. Iš visų siūlomų
+	sričių išsirinkau taikomosios fizikos sritį (nes iš aprašymo mačiau, kad ten
+	galima gilintis į detektorių fiziką, trigerius ir pan.). Kadangi ten reikėjo
+	prisegti savo akademinius rezultatus įrodantį dokumentą bei buvo pateiktas
+	įspėjimas, kad užpildžius paraišką daugiau dokumentų prisegti bus nebegalima,
+	bijojau pildyti, kol neturėjau reikiamų dokumentų. Su vadovu pasitariau, kad
+	ko gero ten galiu prisegti tiesiog savo universiteto diplomą (kurio kopiją jau
+	ir taip turiu kompiuteryje), nes naujesnių pažymių dar nesu gavęs. Pildant
+	paraišką reikėjo pateikti ir CV, kurį buvo galima pasirašyti internetinėje
+	sistemoje \ltq{Indeed} ir ten tiesiogiai įkelti, tad taip ir padariau.
+	Registracijoje reikėjo įrašyti savo veiklos patirtį susijusioje srityje (mano
+	atveju tai gavosi detektorių fizika). Iš pradžių nelabai žinojau, ką ten rašyti,
+	nes maniau, kad tokios patirties neturiu išvis, galbūt išskyrus tai, kad lankiau
+	Christoph Schaefer paskaitas, tačiau vadovas mane pamokė, kad gebėjimas dirbti
+	su linux operacine sistema, programuoti Python ir C++ kalbomis, ROOT žinios ir
+	pan.\ jau yra su šia sritimi susijusi patirtis. Paraišką užpildžiau ir pateikiau,
+	išsisaugojau, kaip ji atrodo ir sudėjau į PDF dokumentą, kad, jeigu kas nors
+	kitas pildys vėliau, geriau žinotų, kaip ten viskas atrodo, ir galėtų lengviau
+	užpildyti. Gavau laišką su nuoroda, į kurią bent vienas žmogus turi įkelti
+	rekomendaciją. Nuorodą išsiunčiau vadovui bei dr. Gajdosik'ui.
+	\item Paleidau nedidelį neinteraktyvų skaičiavimą ant tier3, kad pažiūrėčiau,
+	ar nebesustabdo darbo, jeigu nebandau į kažkokį failą įrašyti rezultatų.
+	
+	\textbf{Suveikė} -- dabar darbas tiesiog baigiamas, kai baigiasi skaičiavimas.
+	\item Ištryniau testinius HTCondor paleidimo kodus ir palikau pataisytus
+	normalius. Pagal idėją turėtų veikti.
+	\item Parašiau laišką Dalmin Pai ir KyeongPil Lee su klausimu, ar jie žino,
+	kodėl mano \ttt{/xrootd/store/user/} aplankas tier3 centre man pasidarė
+	\ltq{read-only}, ir kaip šią problemą galima būtų išspręsti. Greitai gavau
+	atsakymą iš Dalmin'o, kad tier3 administratorius taip padarė specialiai visiems
+	vartotojams, nes kažkoks studentas ištryninėjo svetimus failus. Taip pat paminėjo,
+	kad taip yra tik laikinai, tačiau neaišku, kiek ilgai tęsis.
 \end{itemize}
 
 \bibliography{\jobname}
