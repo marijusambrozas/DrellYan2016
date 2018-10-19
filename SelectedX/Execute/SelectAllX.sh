@@ -21,7 +21,7 @@ cd /cms/ldap_home/mambroza/DrellYan2016/SelectedX/
 
 Process=$2
 root -l -q -b MakeSelectedX.C'("'$WhichX'", "'$Process'", "'$Trigger'")'
-if [[ $Process == *'QCDEM'* ]] ; then
+if [[ $Process == *'QCDEM_120to170'* ]] ; then
     root -l -q -b MakeSelectedX.C'("QCDfail", "", "'$Trigger'")'&
     wait %1
     root -l -q -b MakeSelectedX.C'("QCDmerge", "", "")'
