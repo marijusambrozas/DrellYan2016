@@ -5,6 +5,8 @@ Local/
 *err*.txt
 *out*.txt
 *log*.txt
+# Other outputs
+*Status*.txt
 
 # python
 *.pyc
