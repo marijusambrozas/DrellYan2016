@@ -1,2 +1,0 @@
-Process MakeSelectedX ( EE_DEBUG, WW, DEFAULT, 0 ) initiated.
-Process MakeSelectedX ( EE_DEBUG, WW, DEFAULT, 0 ) FINISHED.
