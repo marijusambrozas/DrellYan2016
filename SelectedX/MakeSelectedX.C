@@ -216,6 +216,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
             SelectedEE_t EE; EE.CreateNew();
 
             ElectronTree->Branch( "isSelPassed", &EE.isSelPassed );
+            ElectronTree->Branch( "nVertices", &EE.nVertices );
             ElectronTree->Branch( "nPileUp", &EE.nPileUp );
             ElectronTree->Branch( "GENEvt_weight", &EE.GENEvt_weight );
             ElectronTree->Branch( "Electron_InvM", &EE.Electron_InvM );
@@ -297,6 +298,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
                         Electron ele2 = SelectedElectronCollection[1];
 
                         EE.isSelPassed = kTRUE;
+                        EE.nVertices = ntuple->nVertices;
                         EE.nPileUp = ntuple->nPileUp;
                         EE.Electron_InvM = ( ele1.Momentum + ele2.Momentum ).M();
 
@@ -522,6 +524,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
             SelectedMuMu_t MuMu; MuMu.CreateNew();
 
             MuonTree->Branch( "isSelPassed", &MuMu.isSelPassed );
+            MuonTree->Branch( "nVertices", &MuMu.nVertices );
             MuonTree->Branch( "nPileUp", &MuMu.nPileUp );
             MuonTree->Branch( "GENEvt_weight", &MuMu.GENEvt_weight );
             MuonTree->Branch( "Muon_pT", &MuMu.Muon_pT );
@@ -619,7 +622,8 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                     vector< Muon > SelectedMuonCollection;
                     vector< Int_t > Sel_Index;
                     Bool_t isPassEventSelection = kFALSE;
-                    isPassEventSelection = analyzer->EventSelection_Zdiff_13TeV_HighPt( MuonCollection, ntuple, &SelectedMuonCollection, &Sel_Index );
+//                    isPassEventSelection = analyzer->EventSelection_Zdiff_13TeV_HighPt( MuonCollection, ntuple, &SelectedMuonCollection, &Sel_Index );
+                    isPassEventSelection = analyzer->EventSelection( MuonCollection, ntuple, &SelectedMuonCollection, &Sel_Index );
 
                     if ( isPassEventSelection == kTRUE )
                     {
@@ -628,6 +632,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                         Muon mu2 = SelectedMuonCollection[1];
 
                         MuMu.isSelPassed = kTRUE;
+                        MuMu.nVertices = ntuple->nVertices;
                         MuMu.nPileUp = ntuple->nPileUp;
                         MuMu.Muon_InvM = ( mu1.Momentum + mu2.Momentum ).M();
 
@@ -859,6 +864,7 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
             SelectedEMu_t EMu; EMu.CreateNew();
 
             EMuTree->Branch( "isSelPassed", &EMu.isSelPassed );
+            EMuTree->Branch( "nVertices", &EMu.nVertices );
             EMuTree->Branch( "nPileUp", &EMu.nPileUp );
             EMuTree->Branch( "GENEvt_weight", &EMu.GENEvt_weight );
             EMuTree->Branch( "EMu_InvM", &EMu.EMu_InvM );
@@ -986,6 +992,7 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
                         Electron ele = SelectedElectronCollection[0];
 
                         EMu.isSelPassed = kTRUE;
+                        EMu.nVertices = ntuple->nVertices;
                         EMu.nPileUp = ntuple->nPileUp;
                         EMu.EMu_InvM = ( mu.Momentum + ele.Momentum ).M();
                         EMu.Muon_pT = ntuple->Muon_pT[Sel_Index_Mu];
@@ -1112,6 +1119,7 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name, Bool_t Debug )
     SelectedEE_t EE; EE.CreateNew();
 
     ElectronTree->Branch( "isSelPassed", &EE.isSelPassed );
+    ElectronTree->Branch( "nVertices", &EE.nVertices );
     ElectronTree->Branch( "nPileUp", &EE.nPileUp );
     ElectronTree->Branch( "GENEvt_weight", &EE.GENEvt_weight );
     ElectronTree->Branch( "Electron_InvM", &EE.Electron_InvM );
@@ -1193,6 +1201,7 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name, Bool_t Debug )
                 Electron ele2 = SelectedElectronCollection[1];
 
                 EE.isSelPassed = kTRUE;
+                EE.nVertices = ntuple->nVertices;
                 EE.nPileUp = ntuple->nPileUp;
                 EE.Electron_InvM = ( ele1.Momentum + ele2.Momentum ).M();
 
@@ -1281,6 +1290,7 @@ void MakeSelectedQCDEM_120to170_merged()
     SelectedEE_t EE; EE.CreateNew();
 
     ElectronTree->Branch( "isSelPassed", &EE.isSelPassed );
+    ElectronTree->Branch( "nVertices", &EE.nVertices );
     ElectronTree->Branch( "nPileUp", &EE.nPileUp );
     ElectronTree->Branch( "GENEvt_weight", &EE.GENEvt_weight );
     ElectronTree->Branch( "Electron_InvM", &EE.Electron_InvM );
@@ -1310,6 +1320,7 @@ void MakeSelectedQCDEM_120to170_merged()
         if ( QCD_EE->isSelPassed == kTRUE )
         {
             EE.isSelPassed = kTRUE;
+            EE.nVertices = QCD_EE->nVertices;
             EE.nPileUp = QCD_EE->nPileUp;
             EE.Electron_InvM = QCD_EE->Electron_InvM;
 

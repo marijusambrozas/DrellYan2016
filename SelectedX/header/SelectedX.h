@@ -18,6 +18,7 @@ public:
 
     Double_t GENEvt_weight;
     Int_t nPileUp;
+    Int_t nVertices;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +52,6 @@ class LongSelectedMuMu_t : public SelectedX
 {
 public:
     //Event Information
-    Int_t nVertices;
     Int_t runNum;
     Int_t lumiBlock;
     Int_t evtNum;
@@ -857,6 +857,7 @@ public:
 //        chain->SetCacheSize(cachesize);
 
         // -- Setting addresses -- //
+        chain->SetBranchAddress("nVertices", &nVertices);
         chain->SetBranchAddress("GENEvt_weight", &GENEvt_weight);
         chain->SetBranchAddress("nPileUp", &nPileUp);
         chain->SetBranchAddress("isSelPassed", &isSelPassed);
@@ -872,6 +873,7 @@ public:
         chain->SetBranchAddress("Muon_trackerLayers", &Muon_trackerLayers);
 
         // -- Adding to cache -- //
+//        chain->AddBranchToCatche("nVertices", 1);
 //        chain->AddBranchToCache("GENEvt_weight", 1);
 //        chain->AddBranchToCache("nPileUp", 1);
 //        chain->AddBranchToCache("isSelPassed", 1);
@@ -892,6 +894,7 @@ public:
     void CreateFromLongSelectedMuMu(LongSelectedMuMu_t *Mu, Bool_t SelPassed)
     {
         GENEvt_weight = Mu->GENEvt_weight;
+        nVertices = Mu->nVertices;
         nPileUp = Mu->nPileUp;
         isSelPassed = SelPassed;
         Muon_InvM = Mu->Muon_InvM;
@@ -924,6 +927,7 @@ public:
             std::cout << "Error: no chain provided" << endl;
             return;
         }
+        chain->SetBranchStatus("nVertices", 1);
         chain->SetBranchStatus("GENEvt_weight", 1);
         chain->SetBranchStatus("nPileUp", 1);
         chain->SetBranchStatus("isSelPassed", 1);
@@ -1046,7 +1050,6 @@ class LongSelectedEE_t : public SelectedX
 {
 public:
     //Event Information
-    Int_t nVertices;
     Int_t runNum;
     Int_t lumiBlock;
     Int_t evtNum;
@@ -1576,6 +1579,7 @@ public:
         chain->SetCacheSize(cachesize);
 
         // -- Setting addresses -- //
+        chain->SetBranchAddress("nVertices", &nVertices);
         chain->SetBranchAddress("GENEvt_weight", &GENEvt_weight);
         chain->SetBranchAddress("nPileUp", &nPileUp);
         chain->SetBranchAddress("isSelPassed", &isSelPassed);
@@ -1589,6 +1593,7 @@ public:
         chain->SetBranchAddress("Electron_phiSC", &Electron_phiSC);
 
         // -- Adding to cache -- //
+//        chain->AddBranchToCache("nVertices", 1);
 //        chain->AddBranchToCache("GENEvt_weight", 1);
 //        chain->AddBranchToCache("nPileUp", 1);
 //        chain->AddBranchToCache("isSelPassed", 1);
@@ -1606,6 +1611,7 @@ public:
 
     void CreateFromLongSelectedEE(LongSelectedEE_t *Ele, Bool_t SelPassed)
     {
+        nVertices = Ele->nVertices;
         GENEvt_weight = Ele->GENEvt_weight;
         nPileUp = Ele->nPileUp;
         isSelPassed = SelPassed;
@@ -1637,6 +1643,7 @@ public:
             std::cout << "Error: no chain provided" << endl;
             return;
         }
+        chain->SetBranchStatus("nVertices", 1);
         chain->SetBranchStatus("GENEvt_weight", 1);
         chain->SetBranchStatus("nPileUp", 1);
         chain->SetBranchStatus("Electron_InvM", 1);
@@ -1742,7 +1749,6 @@ class LongSelectedEMu_t : public SelectedX
 {
 public:
     //Event Information
-    Int_t nVertices;
     Int_t runNum;
     Int_t lumiBlock;
     Int_t evtNum;
@@ -2684,6 +2690,7 @@ public:
         chain->SetCacheSize(cachesize);
 
         // -- Setting addresses -- //
+        chain->SetBranchAddress("nVertices", &nVertices);
         chain->SetBranchAddress("GENEvt_weight", &GENEvt_weight);
         chain->SetBranchAddress("nPileUp", &nPileUp);
         chain->SetBranchAddress("isSelPassed", &isSelPassed);
@@ -2706,6 +2713,7 @@ public:
         chain->SetBranchAddress("Muon_trackerLayers", &Muon_trackerLayers);
 
         // -- Adding to cache -- //
+//        chain->AddBranchToCache("nVertices", 1);
 //        chain->AddBranchToCache("GENEvt_weight", 1);
 //        chain->AddBranchToCache("nPileUp", 1);
 //        chain->AddBranchToCache("isSelPassed", 1);
@@ -2732,6 +2740,7 @@ public:
 
     void CreateFromLongSelectedEMu(LongSelectedEMu_t *EMu, Bool_t SelPassed)
     {
+        nVertices = EMu->nVertices;
         GENEvt_weight = EMu->GENEvt_weight;
         nPileUp = EMu->nPileUp;
         isSelPassed = SelPassed;
@@ -2773,6 +2782,7 @@ public:
             std::cout << "Error: no chain provided" << endl;
             return;
         }
+        chain->SetBranchStatus("nVertices", 1);
         chain->SetBranchStatus("GENEvt_weight", 1);
         chain->SetBranchStatus("nPileUp", 1);
         chain->SetBranchStatus("isSelPassed", 1);
