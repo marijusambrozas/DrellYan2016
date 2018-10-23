@@ -1,6 +1,7 @@
 #ifndef ElectroWeakAnalysis_RoccoR
 #define ElectroWeakAnalysis_RoccoR
 
+#include <iostream>
 #include <fstream>
 #include <sstream>
 #include "TSystem.h"
