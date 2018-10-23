@@ -559,7 +559,11 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
             Int_t timesPassed = 0;
 
             cout << "Before roccor\n";
-            RoccoR rc("./etc/RoccoR/rcdata.2016.v3");
+            TString RCaddress;
+            if ( Mgr.Type == "TEST" )
+                RCaddress = "./etc/RoccoR/rcdata.2016.v3";
+            else RCaddress = "/cms/ldap_home/mambroza/DrellYan2016/SelectedX/etc/RoccoR/rcdata.2016.v3";
+            RoccoR rc(RCaddress);
             cout << "After roccor\n";
             // Loop for all events in the chain
             for ( Int_t i=0; i<NEvents; i++ )
