@@ -2,9 +2,9 @@ executable = SelectAllX.sh
 universe = vanilla
 
 arguments = EMu $(LIST) DEFAULT
-output = emu_out_$(LIST).txt
-error = emu_err_$(LIST).txt
-log = emu_log$(LIST).txt
+output = output/emu_out_$(LIST).txt
+error = output/emu_err_$(LIST).txt
+log = output/emu_log$(LIST).txt
 getenv = True
 
 should_transfer_files = YES

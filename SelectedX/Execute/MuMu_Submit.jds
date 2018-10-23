@@ -2,9 +2,9 @@ executable = SelectAllX.sh
 universe = vanilla
 
 arguments = MuMu $(LIST) DEFAULT
-output = mumu_out_$(LIST).txt
-error = mumu_err_$(LIST).txt
-log = mumu_log$(LIST).txt
+output = output/mumu_out_$(LIST).txt
+error = output/mumu_err_$(LIST).txt
+log = output/mumu_log$(LIST).txt
 getenv = True
 
 should_transfer_files = YES
