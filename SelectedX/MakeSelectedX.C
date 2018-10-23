@@ -558,8 +558,9 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
             myProgressBar_t bar( NEvents );
             Int_t timesPassed = 0;
 
+            cout << "Before roccor\n";
             RoccoR rc("./etc/RoccoR/rcdata.2016.v3");
-
+            cout << "After roccor\n";
             // Loop for all events in the chain
             for ( Int_t i=0; i<NEvents; i++ )
             {
