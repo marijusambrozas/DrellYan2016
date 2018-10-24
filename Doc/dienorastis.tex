@@ -268,6 +268,53 @@
 	kad taip yra tik laikinai, tačiau neaišku, kiek ilgai tęsis.
 \end{itemize}
 
+\section{Spalio 22 d. -- Schemos darymas, MuMu atrankos redagavimas}
+\begin{itemize}
+	\item Skaičiau DY mokslinių grupių pristatymų likusias skaidres. Pagalvojau,
+	kad būtų verta patikrinti, ar taip pat vykdau įvykių atranką, kaip nurodyta
+	Dalmin Pai skaidrėse. Pastebėjau, kad taip pat vykdau tik elektronų atranką,
+	o miuonų reikia pakeisti (vietoje \ttt{TightMuon} kriterijaus naudojau
+	\ttt{HighPtMuon} ir vietoje \textit{ParticleFlow} izoliacijos -- treko izoliaciją).
+	Taigi pamodifikavau atrankos kodus. Taip pat papildžiau \ttt{SelectedX} klases
+	kintamuoju \ttt{nVertices}, nes eksperimentiniuose duomenyse dydžis \ttt{nPileUp}
+	nėra gaunamas.
+	\item Pradėjau schemą daryti iš naujo, nes reikia į duomenų struktūrą pažvelgti
+	iš toliau -- mažiau lįsti į detales, daugiau į pačią esmę (t.y., kad duomenys yra
+	eksperimentiniai ir modeliuoti, jie yra savo esme skirtingi ir pan.).
+\end{itemize}
+
+\section{Spalio 23 d. -- schemų tvarkymas, kodų taisymas}
+\begin{itemize}
+	\item Tvarkiau spalio 22 d.\ pradėtą schemą. Iš vadovo gavau pastabų, kad ji
+	turėtų būti dar bendresnė -- t.y.\ iš vis neturėtų būti kalbama apie failų
+	struktūrą, tik apie pačią idėją (kad yra eksperimentiniai ir modeliuoti duomenys,
+	ir kaip jie skiriasi). Taigi pradėjau daryti dar vieną schemą, kuri išsivystė į tris
+	atskiras schemas. Tada padariau schemą, kuri vaizduoja, pagal kokią logiką skirstomi
+	duomenys katloguose.
+	
+	\item Bandžiau ant tier3 HTCondor sistemos paleisti skaičiavimus su $\mu\mu$ 
+	įvykiais -- kažkodėl išmeta \ttt{Break: Segmentation violation}. Tikrinau, kodėl
+	taip gali būti. Nustačiau, kad kodas nulūžta tada kai bando inicializuoti
+	\textit{Rochester} korekcijos klasę. Bandžiau ieškoti, kur bėda, bet atrodė, kad
+	lyg ir viskas gerai. Paleidus kodą interaktyviai jis nenulūždavo. Tada pastebėjau,
+	kad kodas gali nulūžti ir leidžiant interaktyvai, bet tik tada, jeigu jis prieš
+	paleidimą nesukompiliuojamas (t.y., nepadedamas \ltq{+} ženklas po \textit{macro}
+	pavadinimo), o leisdamas kodą per HTCondor sistemą aš būtent taip ir darau.
+	
+	Į \ttt{rootlogon.C} failą pridėjau eilutę, kuri sukompiliuoja kodą \ttt{RoccoR.cc}.
+	Tam, kad sukompiliuotų be klaidų, į \ttt{RoccoR.cc} reikėjo pridėti \ttt{iostream}
+	biblioteką. Tada įvykių atrankos kodas veikė sėkmingai ir be sukompiliavimo. Išbandžiau
+	su neinteraktyviu skaičiavimu (HTCondor): panašu, kad veikia gerai.
+\end{itemize}
+
+\section{Spalio 24 d. -- schemų tvarkymas}
+\begin{itemize}
+	\item Toliau taisiau schemas, senesnes, kurios vaizdavo, kaip turėtų veikti mano
+	\ttt{FileMgr} klasė, pataisiau pagal vadovo pastabas, kad atitiktų kitas padarytas schemas.
+	\item Paleidau skaičiavimą su $e\mu$ įvykiais (du variantus: kai įvykiai atrenkami padarius
+	\textit{Rochester} korekciją, ir kai atrenkami be jokių korekcijų).
+\end{itemize}
+
 \bibliography{\jobname}
 \bibliographystyle{unsrt}
 
