@@ -315,6 +315,24 @@
 	\textit{Rochester} korekciją, ir kai atrenkami be jokių korekcijų).
 \end{itemize}
 
+\section{Spalio 26 d. -- schemų tvarkymas}
+\begin{itemize}
+	\item Paruošiau beveik galutines schemų versijas. Sudėjau jas į skaidrių prezentaciją,
+	kad geriau eitų matyti loginę seką.
+	\item Pakalbėjęs su vadovu pagal pastabas taisiau schemas, taip pat dar pridėjau
+	schemą, kuri parodo, kokios vertės yra \ttt{Process\_t} viduje, taip pat pseudo-kodo
+	fragmentą, kuriuo parodau, kaip daugmaž turėtų veikti mano kodai.
+	
+	\item Peržiūrėjau, ar visi paleisti kodai per HTCondor sistemą suveikė gerai.
+	Pasebėjau, kad kai kurie kodai paleisti išmetė tokias žinutes:
+	
+	\ttt{Error in <TNetXNGFile::Open>: [ERROR] Server responded with an error:
+	[3011] No servers are available to read the file.}
+	
+	Tačiau iš tolimesnių žinučių atrodo, kad kodas failą vėliau vis dėlto perskaitė
+	ir toliau viskas suveikė normaliai.
+\end{itemize}
+
 \bibliography{\jobname}
 \bibliographystyle{unsrt}
 
