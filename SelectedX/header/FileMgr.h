@@ -98,7 +98,7 @@ public:
 
         vector<Process_t> FindProc ( TString search, Bool_t notify = kTRUE, Bool_t instaGet = kFALSE );
         void NextProc ();
-        void GetProc ( Process_t pr = _None, Bool_t ClearOld = kTRUE );
+        void SetProc ( Process_t pr = _None, Bool_t ClearOld = kTRUE );
         void ClearProc ();        
 
 private:
@@ -118,7 +118,7 @@ FileMgr::FileMgr ( Process_t pr )
     if ( namesSet == kFALSE ) { this->PrepareProcNames(); namesSet = kTRUE; }
     if ( processesChecked == kFALSE ) { this->CheckProcesses(); processesChecked = kTRUE; }
     CurrentProc = pr;
-    this->GetProc(CurrentProc, kTRUE);
+    this->SetProc(CurrentProc, kTRUE);
 }
 
 
@@ -127,7 +127,7 @@ FileMgr::FileMgr ( Process_t pr )
 void FileMgr::NextProc()
 {
     CurrentProc = next(CurrentProc);
-    this->GetProc(CurrentProc, kTRUE);
+    this->SetProc(CurrentProc, kTRUE);
 }
 
 
@@ -139,12 +139,12 @@ void FileMgr::ClearProc()
         BaseLocation = "";
         Type = "";
         isMC = kFALSE;
-        this->GetProc(CurrentProc, kTRUE);
+        this->SetProc(CurrentProc, kTRUE);
     }
 }
 
 
-void FileMgr::GetProc ( Process_t pr, Bool_t ClearOld )
+void FileMgr::SetProc ( Process_t pr, Bool_t ClearOld )
 {
     if ( ClearOld == kTRUE )
     {
@@ -1939,127 +1939,80 @@ void FileMgr::GetProc ( Process_t pr, Bool_t ClearOld )
 vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t instaGet )
 {
     TString srch = search;
+    srch.ToUpper();
+    srch.ReplaceAll("-", "TO");
+    srch.ReplaceAll(" TO", "TO"); srch.ReplaceAll("_TO", "TO");
+    srch.ReplaceAll("TO ", "TO"); srch.ReplaceAll("TO_", "TO");
+    srch.ReplaceAll("DRELLYAN", "DY");
+    srch.ReplaceAll("ZW", "WZ");
+    srch.ReplaceAll("SINGLETOP", "TW");
+    srch.ReplaceAll("SINGLEANTITOP", "TBARW");
+    srch.ReplaceAll("TOPANTITOP", "TTBAR");
+    srch.ReplaceAll("DIMUON", "MUMU");
+    srch.ReplaceAll("DIELECTRON", "EE");
+    srch.ReplaceAll("DITAU", "TAUTAU");
+    srch.ReplaceAll("BACKGROUND", "BKG");
+
     if ( notify == kTRUE ) cout << "Searched for: " << search << "\nFound: ";
     vector<Process_t> Result;
     Process_t first = _None, last = _None;
-    if ( srch.Contains("DY") || srch.Contains("dy") || srch.Contains("dY") || srch.Contains("Dy") || srch.Contains("DrellYan") || srch.Contains("DRELLYAN") )
+    if ( srch.Contains("DY") )
     {
-        if ( srch.Contains("MuMu") || srch.Contains("mumu") || srch.Contains("MUMU") || srch.Contains("Dimuon") || srch.Contains("diMuon") ||
-             srch.Contains("DiMuon") || srch.Contains("dimuon") || srch.Contains("DIMUON") )
+        if ( srch.Contains("MUMU") )
         {
             // Checking for various intervals
-            if ( srch.Contains("Infto") || srch.Contains("InfTo") || srch.Contains("InfTO") || srch.Contains("Inf to") || srch.Contains("Inf To") ||
-                 srch.Contains("Inf TO") ||  srch.Contains("Inf_to") || srch.Contains("Inf_To") || srch.Contains("Inf_TO") ||
-                 srch.Contains("infto") || srch.Contains("infTo") || srch.Contains("infTO") || srch.Contains("inf to") || srch.Contains("inf To") ||
-                 srch.Contains("inf TO") ||  srch.Contains("inf_to") || srch.Contains("inf_To") || srch.Contains("inf_TO") ||
-                 srch.Contains("INFto") || srch.Contains("INFTo") || srch.Contains("INFTO") || srch.Contains("INF to") || srch.Contains("INF To") ||
-                 srch.Contains("TO INF") ||  srch.Contains("to_INF") || srch.Contains("To_INF") || srch.Contains("TO_INF") ||
-                 srch.Contains("inf-") || srch.Contains("INF-") || srch.Contains("In-f") || srch.Contains("inf -") || srch.Contains("INF -") ||
-                 srch.Contains("Inf -") )
+            if ( srch.Contains("INFTO") )
                 first = _EndOf_DYMuMu_Normal;
-            else if ( srch.Contains("3000to") || srch.Contains("3000To") || srch.Contains("3000TO") || srch.Contains("3000 to") || srch.Contains("3000 To") ||
-                      srch.Contains("3000 TO") || srch.Contains("3000-") || srch.Contains("3000 -") || srch.Contains("3000_to") || srch.Contains("3000_To") ||
-                      srch.Contains("3000_TO") )
+            else if ( srch.Contains("3000TO") )
                 first = _EndOf_DYMuMu_Normal;
-            else if ( srch.Contains("2000to") || srch.Contains("2000To") || srch.Contains("2000TO") || srch.Contains("2000 to") || srch.Contains("2000 To") ||
-                      srch.Contains("2000 TO") || srch.Contains("2000-") || srch.Contains("2000 -") || srch.Contains("2000_to") || srch.Contains("2000_To") ||
-                      srch.Contains("2000_TO") )
+            else if ( srch.Contains("2000TO") )
                 first = _DYMuMu_2000to3000;
-            else if ( srch.Contains("1500to") || srch.Contains("1500To") || srch.Contains("1500TO") || srch.Contains("1500 to") || srch.Contains("1500 To") ||
-                      srch.Contains("1500 TO") || srch.Contains("1500-") || srch.Contains("1500 -") || srch.Contains("1500_to") || srch.Contains("1500_To") ||
-                      srch.Contains("1500_TO") )
+            else if ( srch.Contains("1500TO") )
                 first = _DYMuMu_1500to2000;
-            else if ( srch.Contains("1000to") || srch.Contains("1000To") || srch.Contains("1000TO") || srch.Contains("1000 to") || srch.Contains("1000 To") ||
-                      srch.Contains("1000 TO") || srch.Contains("1000-") || srch.Contains("1000 -") || srch.Contains("1000_to") || srch.Contains("1000_To") ||
-                      srch.Contains("1000_TO") )
+            else if ( srch.Contains("1000TO") )
                 first = _DYMuMu_1000to1500;
-            else if ( srch.Contains("800to") || srch.Contains("800To") || srch.Contains("800TO") || srch.Contains("800 to") || srch.Contains("800 To") ||
-                      srch.Contains("800 TO") || srch.Contains("800-") || srch.Contains("800 -") || srch.Contains("800_to") || srch.Contains("800_To") ||
-                      srch.Contains("800_TO") )
+            else if ( srch.Contains("800TO") )
                 first = _DYMuMu_800to1000;
-            else if ( srch.Contains("700to") || srch.Contains("700To") || srch.Contains("700TO") || srch.Contains("700 to") || srch.Contains("700 To") ||
-                      srch.Contains("700 TO") || srch.Contains("700-") || srch.Contains("700 -") || srch.Contains("700_to") || srch.Contains("700_To") ||
-                      srch.Contains("700_TO") )
+            else if ( srch.Contains("700TO") )
                 first = _DYMuMu_700to800;
-            else if ( srch.Contains("500to") || srch.Contains("500To") || srch.Contains("500TO") || srch.Contains("500 to") || srch.Contains("500 To") ||
-                      srch.Contains("500 TO") || srch.Contains("500-") || srch.Contains("500 -") || srch.Contains("500_to") || srch.Contains("500_To") ||
-                      srch.Contains("500_TO") )
+            else if ( srch.Contains("500TO") )
                 first = _DYMuMu_500to700;
-            else if ( srch.Contains("400to") || srch.Contains("400To") || srch.Contains("400TO") || srch.Contains("400 to") || srch.Contains("400 To") ||
-                      srch.Contains("400 TO") || srch.Contains("400-") || srch.Contains("400 -") || srch.Contains("400_to") || srch.Contains("400_To") ||
-                      srch.Contains("400_TO") )
+            else if ( srch.Contains("400TO") )
                 first = _DYMuMu_400to500;
-            else if ( srch.Contains("200to") || srch.Contains("200To") || srch.Contains("200TO") || srch.Contains("200 to") || srch.Contains("200 To") ||
-                      srch.Contains("200 TO") || srch.Contains("200-") || srch.Contains("200 -") || srch.Contains("200_to") || srch.Contains("200_To") ||
-                      srch.Contains("200_TO") )
+            else if ( srch.Contains("200TO") )
                 first = _DYMuMu_200to400;
-            else if ( srch.Contains("100to") || srch.Contains("100To") || srch.Contains("100TO") || srch.Contains("100 to") || srch.Contains("100 To") ||
-                      srch.Contains("100 TO") || srch.Contains("100-") || srch.Contains("100 -") || srch.Contains("100_to") || srch.Contains("100_To") ||
-                      srch.Contains("100_TO") )
+            else if ( srch.Contains("100TO") )
                 first = _DYMuMu_100to200;
-            else if ( srch.Contains("50to") || srch.Contains("50To") || srch.Contains("50TO") || srch.Contains("50 to") || srch.Contains("50 To") ||
-                      srch.Contains("50 TO") || srch.Contains("50-") || srch.Contains("50 -") || srch.Contains("50_to") || srch.Contains("50_To") || srch.Contains("50_TO") )
+            else if ( srch.Contains("50TO") )
                 first = _DYMuMu_50to100;
-            else if ( srch.Contains("10to") || srch.Contains("10To") || srch.Contains("10TO") || srch.Contains("10 to") || srch.Contains("10 To") || srch.Contains("10 TO") ||
-                      srch.Contains("10-") || srch.Contains("10 -") || srch.Contains("10_to") || srch.Contains("10_To") || srch.Contains("10_TO") )
+            else if ( srch.Contains("10TO") )
                 first = _DYMuMu_10to50;
 
-            if ( srch.Contains("toInf") || srch.Contains("ToInf") || srch.Contains("TOInf") || srch.Contains("to Inf") || srch.Contains("To Inf") ||
-                 srch.Contains("TO Inf") ||  srch.Contains("to_Inf") || srch.Contains("To_Inf") || srch.Contains("TO_Inf") ||
-                 srch.Contains("toinf") || srch.Contains("Toinf") || srch.Contains("TOinf") || srch.Contains("to inf") || srch.Contains("To inf") ||
-                 srch.Contains("TO inf") ||  srch.Contains("to_inf") || srch.Contains("To_inf") || srch.Contains("TO_inf") ||
-                 srch.Contains("toINF") || srch.Contains("ToINF") || srch.Contains("TOINF") || srch.Contains("to INF") || srch.Contains("To INF") ||
-                 srch.Contains("TO INF") ||  srch.Contains("to_INF") || srch.Contains("To_INF") || srch.Contains("TO_INF") ||
-                 srch.Contains("-inf") || srch.Contains("-INF") || srch.Contains("-Inf") || srch.Contains("- inf") || srch.Contains("- INF") ||
-                 srch.Contains("- Inf") )
+            if ( srch.Contains("TOINF") )
                 last = _DYMuMu_2000to3000;
-            else if ( srch.Contains("to3000") || srch.Contains("To3000") || srch.Contains("TO3000") || srch.Contains("to 3000") || srch.Contains("To 3000") ||
-                      srch.Contains("TO 3000") || srch.Contains("-3000") || srch.Contains("- 3000") || srch.Contains("to_3000") || srch.Contains("To_3000") ||
-                      srch.Contains("TO_3000") )
+            else if ( srch.Contains("TO3000") )
                 last = _DYMuMu_2000to3000;
-            else if ( srch.Contains("to2000") || srch.Contains("To2000") || srch.Contains("TO2000") || srch.Contains("to 2000") || srch.Contains("To 2000") ||
-                      srch.Contains("TO 2000") || srch.Contains("-2000") || srch.Contains("- 2000") || srch.Contains("to_2000") || srch.Contains("To_2000") ||
-                      srch.Contains("TO_2000") )
+            else if ( srch.Contains("TO2000") )
                 last = _DYMuMu_1500to2000;
-            else if ( srch.Contains("to1500") || srch.Contains("To1500") || srch.Contains("TO1500") || srch.Contains("to 1500") || srch.Contains("To 1500") ||
-                      srch.Contains("TO 1500") || srch.Contains("-1500") || srch.Contains("- 1500") || srch.Contains("to_1500") || srch.Contains("To_1500") ||
-                      srch.Contains("TO_1500") )
+            else if ( srch.Contains("TO1500") )
                 last = _DYMuMu_1000to1500;
-            else if ( srch.Contains("to1000") || srch.Contains("To1000") || srch.Contains("TO1000") || srch.Contains("to 1000") || srch.Contains("To 1000") ||
-                      srch.Contains("TO 1000") || srch.Contains("-1000") || srch.Contains("- 1000") || srch.Contains("to_1000") || srch.Contains("To_1000") ||
-                      srch.Contains("TO_1000") )
+            else if ( srch.Contains("TO1000") )
                 last = _DYMuMu_800to1000;
-            else if ( srch.Contains("to800") || srch.Contains("To800") || srch.Contains("TO800") || srch.Contains("to 800") || srch.Contains("To 800") ||
-                      srch.Contains("TO 800") || srch.Contains("-800") || srch.Contains("- 800") || srch.Contains("to_800") || srch.Contains("To_800") ||
-                      srch.Contains("TO_800") )
+            else if ( srch.Contains("TO800") )
                 last = _DYMuMu_700to800;
-            else if ( srch.Contains("to700") || srch.Contains("To700") || srch.Contains("TO700") || srch.Contains("to 700") || srch.Contains("To 700") ||
-                      srch.Contains("TO 700") || srch.Contains("-700") || srch.Contains("- 700") || srch.Contains("to_700") || srch.Contains("To_700") ||
-                      srch.Contains("TO_700") )
+            else if ( srch.Contains("TO700") )
                 last = _DYMuMu_500to700;
-            else if ( srch.Contains("to500") || srch.Contains("To500") || srch.Contains("TO500") || srch.Contains("to 500") || srch.Contains("To 500") ||
-                      srch.Contains("TO 500") || srch.Contains("-500") || srch.Contains("- 500") || srch.Contains("to_500") || srch.Contains("To_500") ||
-                      srch.Contains("TO_500") )
+            else if ( srch.Contains("TO500") )
                 last = _DYMuMu_400to500;
-            else if ( srch.Contains("to400") || srch.Contains("To400") || srch.Contains("TO400") || srch.Contains("to 400") || srch.Contains("To 400") ||
-                      srch.Contains("TO 400") || srch.Contains("-400") || srch.Contains("- 400") || srch.Contains("to_400") || srch.Contains("To_400") ||
-                      srch.Contains("TO_400") )
+            else if ( srch.Contains("TO400") )
                 last = _DYMuMu_200to400;
-            else if ( srch.Contains("to200") || srch.Contains("To200") || srch.Contains("TO200") || srch.Contains("to 200") || srch.Contains("To 200") ||
-                      srch.Contains("TO 200") || srch.Contains("-200") || srch.Contains("- 200") || srch.Contains("to_200") || srch.Contains("To_200") ||
-                      srch.Contains("TO_200") )
+            else if ( srch.Contains("TO200") )
                 last = _DYMuMu_100to200;
-            else if ( srch.Contains("to100") || srch.Contains("To100") || srch.Contains("TO100") || srch.Contains("to 100") || srch.Contains("To 100") ||
-                      srch.Contains("TO 100") || srch.Contains("-100") || srch.Contains("- 100") || srch.Contains("to_100") || srch.Contains("To_100") ||
-                      srch.Contains("TO_100") )
+            else if ( srch.Contains("TO100") )
                 last = _DYMuMu_50to100;
-            else if ( srch.Contains("to50") || srch.Contains("To50") || srch.Contains("TO50") || srch.Contains("to 50") || srch.Contains("To 50") ||
-                      srch.Contains("TO 50") || srch.Contains("-50") || srch.Contains("- 50") || srch.Contains("to_50") || srch.Contains("To_50") ||
-                      srch.Contains("TO_50") )
+            else if ( srch.Contains("TO50") )
                 last = _DYMuMu_10to50;
-            else if ( srch.Contains("to10") || srch.Contains("To10") || srch.Contains("TO10") || srch.Contains("to 10") || srch.Contains("To 10") ||
-                      srch.Contains("TO 10") || srch.Contains("-10") || srch.Contains("- 10") || srch.Contains("to_10") || srch.Contains("To_10") ||
-                      srch.Contains("TO_10") )
+            else if ( srch.Contains("TO10") )
                 last = _EndOf_DY_Normal;
 
             // Swapping first with last if necessary
@@ -2094,122 +2047,61 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
 
         }// end of if(DYMuMu)
 
-        else if ( srch.Contains("EE") || srch.Contains("ee") || srch.Contains("Ee") || srch.Contains("eE") || srch.Contains("dielectron") ||
-             srch.Contains("Dielectron") || srch.Contains("diElectron") || srch.Contains("DiElectron") || srch.Contains("DIELECTRON") )
+        else if ( srch.Contains("EE") )
         {
             // Checking for various intervals
-            if ( srch.Contains("Infto") || srch.Contains("InfTo") || srch.Contains("InfTO") || srch.Contains("Inf to") || srch.Contains("Inf To") ||
-                 srch.Contains("Inf TO") ||  srch.Contains("Inf_to") || srch.Contains("Inf_To") || srch.Contains("Inf_TO") ||
-                 srch.Contains("infto") || srch.Contains("infTo") || srch.Contains("infTO") || srch.Contains("inf to") || srch.Contains("inf To") ||
-                 srch.Contains("inf TO") ||  srch.Contains("inf_to") || srch.Contains("inf_To") || srch.Contains("inf_TO") ||
-                 srch.Contains("INFto") || srch.Contains("INFTo") || srch.Contains("INFTO") || srch.Contains("INF to") || srch.Contains("INF To") ||
-                 srch.Contains("TO INF") ||  srch.Contains("to_INF") || srch.Contains("To_INF") || srch.Contains("TO_INF") ||
-                 srch.Contains("inf-") || srch.Contains("INF-") || srch.Contains("In-f") || srch.Contains("inf -") || srch.Contains("INF -") ||
-                 srch.Contains("Inf -") )
+            if ( srch.Contains("INFTO") )
                 first = _EndOf_DYEE_Normal;
-            else if ( srch.Contains("3000to") || srch.Contains("3000To") || srch.Contains("3000TO") || srch.Contains("3000 to") || srch.Contains("3000 To") ||
-                      srch.Contains("3000 TO") || srch.Contains("3000-") || srch.Contains("3000 -") || srch.Contains("3000_to") || srch.Contains("3000_To") ||
-                      srch.Contains("3000_TO") )
+            else if ( srch.Contains("3000TO") )
                 first = _EndOf_DYEE_Normal;
-            else if ( srch.Contains("2000to") || srch.Contains("2000To") || srch.Contains("2000TO") || srch.Contains("2000 to") || srch.Contains("2000 To") ||
-                      srch.Contains("2000 TO") || srch.Contains("2000-") || srch.Contains("2000 -") || srch.Contains("2000_to") || srch.Contains("2000_To") ||
-                      srch.Contains("2000_TO") )
+            else if ( srch.Contains("2000TO") )
                 first = _DYEE_2000to3000;
-            else if ( srch.Contains("1500to") || srch.Contains("1500To") || srch.Contains("1500TO") || srch.Contains("1500 to") || srch.Contains("1500 To") ||
-                      srch.Contains("1500 TO") || srch.Contains("1500-") || srch.Contains("1500 -") || srch.Contains("1500_to") || srch.Contains("1500_To") ||
-                      srch.Contains("1500_TO") )
+            else if ( srch.Contains("1500TO") )
                 first = _DYEE_1500to2000;
-            else if ( srch.Contains("1000to") || srch.Contains("1000To") || srch.Contains("1000TO") || srch.Contains("1000 to") || srch.Contains("1000 To") ||
-                      srch.Contains("1000 TO") || srch.Contains("1000-") || srch.Contains("1000 -") || srch.Contains("1000_to") || srch.Contains("1000_To") ||
-                      srch.Contains("1000_TO") )
+            else if ( srch.Contains("1000TO") )
                 first = _DYEE_1000to1500;
-            else if ( srch.Contains("800to") || srch.Contains("800To") || srch.Contains("800TO") || srch.Contains("800 to") || srch.Contains("800 To") ||
-                      srch.Contains("800 TO") || srch.Contains("800-") || srch.Contains("800 -") || srch.Contains("800_to") || srch.Contains("800_To") ||
-                      srch.Contains("800_TO") )
+            else if ( srch.Contains("800TO") )
                 first = _DYEE_800to1000;
-            else if ( srch.Contains("700to") || srch.Contains("700To") || srch.Contains("700TO") || srch.Contains("700 to") || srch.Contains("700 To") ||
-                      srch.Contains("700 TO") || srch.Contains("700-") || srch.Contains("700 -") || srch.Contains("700_to") || srch.Contains("700_To") ||
-                      srch.Contains("700_TO") )
+            else if ( srch.Contains("700TO") )
                 first = _DYEE_700to800;
-            else if ( srch.Contains("500to") || srch.Contains("500To") || srch.Contains("500TO") || srch.Contains("500 to") || srch.Contains("500 To") ||
-                      srch.Contains("500 TO") || srch.Contains("500-") || srch.Contains("500 -") || srch.Contains("500_to") || srch.Contains("500_To") ||
-                      srch.Contains("500_TO") )
+            else if ( srch.Contains("500TO") )
                 first = _DYEE_500to700;
-            else if ( srch.Contains("400to") || srch.Contains("400To") || srch.Contains("400TO") || srch.Contains("400 to") || srch.Contains("400 To") ||
-                      srch.Contains("400 TO") || srch.Contains("400-") || srch.Contains("400 -") || srch.Contains("400_to") || srch.Contains("400_To") ||
-                      srch.Contains("400_TO") )
+            else if ( srch.Contains("400TO") )
                 first = _DYEE_400to500;
-            else if ( srch.Contains("200to") || srch.Contains("200To") || srch.Contains("200TO") || srch.Contains("200 to") || srch.Contains("200 To") ||
-                      srch.Contains("200 TO") || srch.Contains("200-") || srch.Contains("200 -") || srch.Contains("200_to") || srch.Contains("200_To") ||
-                      srch.Contains("200_TO") )
+            else if ( srch.Contains("200TO") )
                 first = _DYEE_200to400;
-            else if ( srch.Contains("100to") || srch.Contains("100To") || srch.Contains("100TO") || srch.Contains("100 to") || srch.Contains("100 To") ||
-                      srch.Contains("100 TO") || srch.Contains("100-") || srch.Contains("100 -") || srch.Contains("100_to") || srch.Contains("100_To") ||
-                      srch.Contains("100_TO") )
+            else if ( srch.Contains("100TO") )
                 first = _DYEE_100to200;
-            else if ( srch.Contains("50to") || srch.Contains("50To") || srch.Contains("50TO") || srch.Contains("50 to") || srch.Contains("50 To") ||
-                      srch.Contains("50 TO") || srch.Contains("50-") || srch.Contains("50 -") || srch.Contains("50_to") || srch.Contains("50_To") || srch.Contains("50_TO") )
+            else if ( srch.Contains("50TO") )
                 first = _DYEE_50to100;
-            else if ( srch.Contains("10to") || srch.Contains("10To") || srch.Contains("10TO") || srch.Contains("10 to") || srch.Contains("10 To") || srch.Contains("10 TO") ||
-                      srch.Contains("10-") || srch.Contains("10 -") || srch.Contains("10_to") || srch.Contains("10_To") || srch.Contains("10_TO") )
+            else if ( srch.Contains("10TO") )
                 first = _DYEE_10to50;
 
-            if ( srch.Contains("toInf") || srch.Contains("ToInf") || srch.Contains("TOInf") || srch.Contains("to Inf") || srch.Contains("To Inf") ||
-                 srch.Contains("TO Inf") ||  srch.Contains("to_Inf") || srch.Contains("To_Inf") || srch.Contains("TO_Inf") ||
-                 srch.Contains("toinf") || srch.Contains("Toinf") || srch.Contains("TOinf") || srch.Contains("to inf") || srch.Contains("To inf") ||
-                 srch.Contains("TO inf") ||  srch.Contains("to_inf") || srch.Contains("To_inf") || srch.Contains("TO_inf") ||
-                 srch.Contains("toINF") || srch.Contains("ToINF") || srch.Contains("TOINF") || srch.Contains("to INF") || srch.Contains("To INF") ||
-                 srch.Contains("TO INF") ||  srch.Contains("to_INF") || srch.Contains("To_INF") || srch.Contains("TO_INF") ||
-                 srch.Contains("-inf") || srch.Contains("-INF") || srch.Contains("-Inf") || srch.Contains("- inf") || srch.Contains("- INF") ||
-                 srch.Contains("- Inf") )
+            if ( srch.Contains("TOINF") )
                 last = _DYEE_2000to3000;
-            else if ( srch.Contains("to3000") || srch.Contains("To3000") || srch.Contains("TO3000") || srch.Contains("to 3000") || srch.Contains("To 3000") ||
-                      srch.Contains("TO 3000") || srch.Contains("-3000") || srch.Contains("- 3000") || srch.Contains("to_3000") || srch.Contains("To_3000") ||
-                      srch.Contains("TO_3000") )
+            else if ( srch.Contains("TO3000") )
                 last = _DYEE_2000to3000;
-            else if ( srch.Contains("to2000") || srch.Contains("To2000") || srch.Contains("TO2000") || srch.Contains("to 2000") || srch.Contains("To 2000") ||
-                      srch.Contains("TO 2000") || srch.Contains("-2000") || srch.Contains("- 2000") || srch.Contains("to_2000") || srch.Contains("To_2000") ||
-                      srch.Contains("TO_2000") )
+            else if ( srch.Contains("TO2000") )
                 last = _DYEE_1500to2000;
-            else if ( srch.Contains("to1500") || srch.Contains("To1500") || srch.Contains("TO1500") || srch.Contains("to 1500") || srch.Contains("To 1500") ||
-                      srch.Contains("TO 1500") || srch.Contains("-1500") || srch.Contains("- 1500") || srch.Contains("to_1500") || srch.Contains("To_1500") ||
-                      srch.Contains("TO_1500") )
+            else if ( srch.Contains("TO1500") )
                 last = _DYEE_1000to1500;
-            else if ( srch.Contains("to1000") || srch.Contains("To1000") || srch.Contains("TO1000") || srch.Contains("to 1000") || srch.Contains("To 1000") ||
-                      srch.Contains("TO 1000") || srch.Contains("-1000") || srch.Contains("- 1000") || srch.Contains("to_1000") || srch.Contains("To_1000") ||
-                      srch.Contains("TO_1000") )
+            else if ( srch.Contains("TO1000") )
                 last = _DYEE_800to1000;
-            else if ( srch.Contains("to800") || srch.Contains("To800") || srch.Contains("TO800") || srch.Contains("to 800") || srch.Contains("To 800") ||
-                      srch.Contains("TO 800") || srch.Contains("-800") || srch.Contains("- 800") || srch.Contains("to_800") || srch.Contains("To_800") ||
-                      srch.Contains("TO_800") )
+            else if ( srch.Contains("TO800") )
                 last = _DYEE_700to800;
-            else if ( srch.Contains("to700") || srch.Contains("To700") || srch.Contains("TO700") || srch.Contains("to 700") || srch.Contains("To 700") ||
-                      srch.Contains("TO 700") || srch.Contains("-700") || srch.Contains("- 700") || srch.Contains("to_700") || srch.Contains("To_700") ||
-                      srch.Contains("TO_700") )
+            else if ( srch.Contains("TO700") )
                 last = _DYEE_500to700;
-            else if ( srch.Contains("to500") || srch.Contains("To500") || srch.Contains("TO500") || srch.Contains("to 500") || srch.Contains("To 500") ||
-                      srch.Contains("TO 500") || srch.Contains("-500") || srch.Contains("- 500") || srch.Contains("to_500") || srch.Contains("To_500") ||
-                      srch.Contains("TO_500") )
+            else if ( srch.Contains("TO500") )
                 last = _DYEE_400to500;
-            else if ( srch.Contains("to400") || srch.Contains("To400") || srch.Contains("TO400") || srch.Contains("to 400") || srch.Contains("To 400") ||
-                      srch.Contains("TO 400") || srch.Contains("-400") || srch.Contains("- 400") || srch.Contains("to_400") || srch.Contains("To_400") ||
-                      srch.Contains("TO_400") )
+            else if ( srch.Contains("TO400") )
                 last = _DYEE_200to400;
-            else if ( srch.Contains("to200") || srch.Contains("To200") || srch.Contains("TO200") || srch.Contains("to 200") || srch.Contains("To 200") ||
-                      srch.Contains("TO 200") || srch.Contains("-200") || srch.Contains("- 200") || srch.Contains("to_200") || srch.Contains("To_200") ||
-                      srch.Contains("TO_200") )
+            else if ( srch.Contains("TO200") )
                 last = _DYEE_100to200;
-            else if ( srch.Contains("to100") || srch.Contains("To100") || srch.Contains("TO100") || srch.Contains("to 100") || srch.Contains("To 100") ||
-                      srch.Contains("TO 100") || srch.Contains("-100") || srch.Contains("- 100") || srch.Contains("to_100") || srch.Contains("To_100") ||
-                      srch.Contains("TO_100") )
+            else if ( srch.Contains("TO100") )
                 last = _DYEE_50to100;
-            else if ( srch.Contains("to50") || srch.Contains("To50") || srch.Contains("TO50") || srch.Contains("to 50") || srch.Contains("To 50") ||
-                      srch.Contains("TO 50") || srch.Contains("-50") || srch.Contains("- 50") || srch.Contains("to_50") || srch.Contains("To_50") ||
-                      srch.Contains("TO_50") )
+            else if ( srch.Contains("TO50") )
                 last = _DYEE_10to50;
-            else if ( srch.Contains("to10") || srch.Contains("To10") || srch.Contains("TO10") || srch.Contains("to 10") || srch.Contains("To 10") ||
-                      srch.Contains("TO 10") || srch.Contains("-10") || srch.Contains("- 10") || srch.Contains("to_10") || srch.Contains("To_10") ||
-                      srch.Contains("TO_10") )
+            else if ( srch.Contains("TO10") )
                 last = _EndOf_DYMuMu_Normal;
 
             // Swapping first with last if necessary
@@ -2244,10 +2136,9 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
 
         }// end of if(DYEE)
 
-        else if ( srch.Contains("TauTau") || srch.Contains("tautau") || srch.Contains("TAUTAU") || srch.Contains("Ditau") || srch.Contains("DiTau") ||
-             srch.Contains("ditau") || srch.Contains("diTau") || srch.Contains("DITAU") )
+        else if ( srch.Contains("TAUTAU") )
         {
-            if ( srch.Contains("full") || srch.Contains("Full") || srch.Contains("FULL") )
+            if ( srch.Contains("FULL") )
             {
                 Result.push_back(_DYTauTau_Full);
                 if ( notify == kTRUE ) cout << Procname[_DYTauTau_Full] << "." << endl;
@@ -2255,118 +2146,58 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
             else
             {
                 // Checking for various intervals
-                if ( srch.Contains("Infto") || srch.Contains("InfTo") || srch.Contains("InfTO") || srch.Contains("Inf to") || srch.Contains("Inf To") ||
-                     srch.Contains("Inf TO") ||  srch.Contains("Inf_to") || srch.Contains("Inf_To") || srch.Contains("Inf_TO") ||
-                     srch.Contains("infto") || srch.Contains("infTo") || srch.Contains("infTO") || srch.Contains("inf to") || srch.Contains("inf To") ||
-                     srch.Contains("inf TO") ||  srch.Contains("inf_to") || srch.Contains("inf_To") || srch.Contains("inf_TO") ||
-                     srch.Contains("INFto") || srch.Contains("INFTo") || srch.Contains("INFTO") || srch.Contains("INF to") || srch.Contains("INF To") ||
-                     srch.Contains("TO INF") ||  srch.Contains("to_INF") || srch.Contains("To_INF") || srch.Contains("TO_INF") ||
-                     srch.Contains("inf-") || srch.Contains("INF-") || srch.Contains("In-f") || srch.Contains("inf -") || srch.Contains("INF -") ||
-                     srch.Contains("Inf -") )
+                if ( srch.Contains("INFTO") )
                     first = _EndOf_DYTauTau_Normal;
-                else if ( srch.Contains("3000to") || srch.Contains("3000To") || srch.Contains("3000TO") || srch.Contains("3000 to") || srch.Contains("3000 To") ||
-                          srch.Contains("3000 TO") || srch.Contains("3000-") || srch.Contains("3000 -") || srch.Contains("3000_to") || srch.Contains("3000_To") ||
-                          srch.Contains("3000_TO") )
+                else if ( srch.Contains("3000TO") )
                     first = _EndOf_DYTauTau_Normal;
-                else if ( srch.Contains("2000to") || srch.Contains("2000To") || srch.Contains("2000TO") || srch.Contains("2000 to") || srch.Contains("2000 To") ||
-                          srch.Contains("2000 TO") || srch.Contains("2000-") || srch.Contains("2000 -") || srch.Contains("2000_to") || srch.Contains("2000_To") ||
-                          srch.Contains("2000_TO") )
+                else if ( srch.Contains("2000TO") )
                     first = _DYTauTau_50toInf;
-                else if ( srch.Contains("1500to") || srch.Contains("1500To") || srch.Contains("1500TO") || srch.Contains("1500 to") || srch.Contains("1500 To") ||
-                          srch.Contains("1500 TO") || srch.Contains("1500-") || srch.Contains("1500 -") || srch.Contains("1500_to") || srch.Contains("1500_To") ||
-                          srch.Contains("1500_TO") )
+                else if ( srch.Contains("1500TO") )
                     first = _DYTauTau_50toInf;
-                else if ( srch.Contains("1000to") || srch.Contains("1000To") || srch.Contains("1000TO") || srch.Contains("1000 to") || srch.Contains("1000 To") ||
-                          srch.Contains("1000 TO") || srch.Contains("1000-") || srch.Contains("1000 -") || srch.Contains("1000_to") || srch.Contains("1000_To") ||
-                          srch.Contains("1000_TO") )
+                else if ( srch.Contains("1000TO") )
                     first = _DYTauTau_50toInf;
-                else if ( srch.Contains("800to") || srch.Contains("800To") || srch.Contains("800TO") || srch.Contains("800 to") || srch.Contains("800 To") ||
-                          srch.Contains("800 TO") || srch.Contains("800-") || srch.Contains("800 -") || srch.Contains("800_to") || srch.Contains("800_To") ||
-                          srch.Contains("800_TO") )
+                else if ( srch.Contains("800TO") )
                     first = _DYTauTau_50toInf;
-                else if ( srch.Contains("700to") || srch.Contains("700To") || srch.Contains("700TO") || srch.Contains("700 to") || srch.Contains("700 To") ||
-                          srch.Contains("700 TO") || srch.Contains("700-") || srch.Contains("700 -") || srch.Contains("700_to") || srch.Contains("700_To") ||
-                          srch.Contains("700_TO") )
+                else if ( srch.Contains("700TO") )
                     first = _DYTauTau_50toInf;
-                else if ( srch.Contains("500to") || srch.Contains("500To") || srch.Contains("500TO") || srch.Contains("500 to") || srch.Contains("500 To") ||
-                          srch.Contains("500 TO") || srch.Contains("500-") || srch.Contains("500 -") || srch.Contains("500_to") || srch.Contains("500_To") ||
-                          srch.Contains("500_TO") )
+                else if ( srch.Contains("500TO") )
                     first = _DYTauTau_50toInf;
-                else if ( srch.Contains("400to") || srch.Contains("400To") || srch.Contains("400TO") || srch.Contains("400 to") || srch.Contains("400 To") ||
-                          srch.Contains("400 TO") || srch.Contains("400-") || srch.Contains("400 -") || srch.Contains("400_to") || srch.Contains("400_To") ||
-                          srch.Contains("400_TO") )
+                else if ( srch.Contains("400TO") )
                     first = _DYTauTau_50toInf;
-                else if ( srch.Contains("200to") || srch.Contains("200To") || srch.Contains("200TO") || srch.Contains("200 to") || srch.Contains("200 To") ||
-                          srch.Contains("200 TO") || srch.Contains("200-") || srch.Contains("200 -") || srch.Contains("200_to") || srch.Contains("200_To") ||
-                          srch.Contains("200_TO") )
+                else if ( srch.Contains("200TO") )
                     first = _DYTauTau_50toInf;
-                else if ( srch.Contains("100to") || srch.Contains("100To") || srch.Contains("100TO") || srch.Contains("100 to") || srch.Contains("100 To") ||
-                          srch.Contains("100 TO") || srch.Contains("100-") || srch.Contains("100 -") || srch.Contains("100_to") || srch.Contains("100_To") ||
-                          srch.Contains("100_TO") )
+                else if ( srch.Contains("100TO") )
                     first = _DYTauTau_50toInf;
-                else if ( srch.Contains("50to") || srch.Contains("50To") || srch.Contains("50TO") || srch.Contains("50 to") || srch.Contains("50 To") ||
-                          srch.Contains("50 TO") || srch.Contains("50-") || srch.Contains("50 -") || srch.Contains("50_to") || srch.Contains("50_To") || srch.Contains("50_TO") )
+                else if ( srch.Contains("50TO") )
                     first = _DYTauTau_50toInf;
-                else if ( srch.Contains("10to") || srch.Contains("10To") || srch.Contains("10TO") || srch.Contains("10 to") || srch.Contains("10 To") || srch.Contains("10 TO") ||
-                          srch.Contains("10-") || srch.Contains("10 -") || srch.Contains("10_to") || srch.Contains("10_To") || srch.Contains("10_TO") )
+                else if ( srch.Contains("10TO") )
                     first = _DYTauTau_10to50;
 
-                if ( srch.Contains("toInf") || srch.Contains("ToInf") || srch.Contains("TOInf") || srch.Contains("to Inf") || srch.Contains("To Inf") ||
-                     srch.Contains("TO Inf") ||  srch.Contains("to_Inf") || srch.Contains("To_Inf") || srch.Contains("TO_Inf") ||
-                     srch.Contains("toinf") || srch.Contains("Toinf") || srch.Contains("TOinf") || srch.Contains("to inf") || srch.Contains("To inf") ||
-                     srch.Contains("TO inf") ||  srch.Contains("to_inf") || srch.Contains("To_inf") || srch.Contains("TO_inf") ||
-                     srch.Contains("toINF") || srch.Contains("ToINF") || srch.Contains("TOINF") || srch.Contains("to INF") || srch.Contains("To INF") ||
-                     srch.Contains("TO INF") ||  srch.Contains("to_INF") || srch.Contains("To_INF") || srch.Contains("TO_INF") ||
-                     srch.Contains("-inf") || srch.Contains("-INF") || srch.Contains("-Inf") || srch.Contains("- inf") || srch.Contains("- INF") ||
-                     srch.Contains("- Inf") )
+                if ( srch.Contains("TOINF") )
                     last = _DYTauTau_50toInf;
-                else if ( srch.Contains("to3000") || srch.Contains("To3000") || srch.Contains("TO3000") || srch.Contains("to 3000") || srch.Contains("To 3000") ||
-                          srch.Contains("TO 3000") || srch.Contains("-3000") || srch.Contains("- 3000") || srch.Contains("to_3000") || srch.Contains("To_3000") ||
-                          srch.Contains("TO_3000") )
+                else if ( srch.Contains("TO3000") )
                     last = _DYTauTau_50toInf;
-                else if ( srch.Contains("to2000") || srch.Contains("To2000") || srch.Contains("TO2000") || srch.Contains("to 2000") || srch.Contains("To 2000") ||
-                          srch.Contains("TO 2000") || srch.Contains("-2000") || srch.Contains("- 2000") || srch.Contains("to_2000") || srch.Contains("To_2000") ||
-                          srch.Contains("TO_2000") )
+                else if ( srch.Contains("TO2000") )
                     last = _DYTauTau_50toInf;
-                else if ( srch.Contains("to1500") || srch.Contains("To1500") || srch.Contains("TO1500") || srch.Contains("to 1500") || srch.Contains("To 1500") ||
-                          srch.Contains("TO 1500") || srch.Contains("-1500") || srch.Contains("- 1500") || srch.Contains("to_1500") || srch.Contains("To_1500") ||
-                          srch.Contains("TO_1500") )
+                else if ( srch.Contains("TO1500") )
                     last = _DYTauTau_50toInf;
-                else if ( srch.Contains("to1000") || srch.Contains("To1000") || srch.Contains("TO1000") || srch.Contains("to 1000") || srch.Contains("To 1000") ||
-                          srch.Contains("TO 1000") || srch.Contains("-1000") || srch.Contains("- 1000") || srch.Contains("to_1000") || srch.Contains("To_1000") ||
-                          srch.Contains("TO_1000") )
+                else if ( srch.Contains("TO1000") )
                     last = _DYTauTau_50toInf;
-                else if ( srch.Contains("to800") || srch.Contains("To800") || srch.Contains("TO800") || srch.Contains("to 800") || srch.Contains("To 800") ||
-                          srch.Contains("TO 800") || srch.Contains("-800") || srch.Contains("- 800") || srch.Contains("to_800") || srch.Contains("To_800") ||
-                          srch.Contains("TO_800") )
+                else if ( srch.Contains("TO800") )
                     last = _DYTauTau_50toInf;
-                else if ( srch.Contains("to700") || srch.Contains("To700") || srch.Contains("TO700") || srch.Contains("to 700") || srch.Contains("To 700") ||
-                          srch.Contains("TO 700") || srch.Contains("-700") || srch.Contains("- 700") || srch.Contains("to_700") || srch.Contains("To_700") ||
-                          srch.Contains("TO_700") )
+                else if ( srch.Contains("TO700") )
                     last = _DYTauTau_50toInf;
-                else if ( srch.Contains("to500") || srch.Contains("To500") || srch.Contains("TO500") || srch.Contains("to 500") || srch.Contains("To 500") ||
-                          srch.Contains("TO 500") || srch.Contains("-500") || srch.Contains("- 500") || srch.Contains("to_500") || srch.Contains("To_500") ||
-                          srch.Contains("TO_500") )
+                else if ( srch.Contains("TO500") )
                     last = _DYTauTau_50toInf;
-                else if ( srch.Contains("to400") || srch.Contains("To400") || srch.Contains("TO400") || srch.Contains("to 400") || srch.Contains("To 400") ||
-                          srch.Contains("TO 400") || srch.Contains("-400") || srch.Contains("- 400") || srch.Contains("to_400") || srch.Contains("To_400") ||
-                          srch.Contains("TO_400") )
+                else if ( srch.Contains("TO400") )
                     last = _DYTauTau_50toInf;
-                else if ( srch.Contains("to200") || srch.Contains("To200") || srch.Contains("TO200") || srch.Contains("to 200") || srch.Contains("To 200") ||
-                          srch.Contains("TO 200") || srch.Contains("-200") || srch.Contains("- 200") || srch.Contains("to_200") || srch.Contains("To_200") ||
-                          srch.Contains("TO_200") )
+                else if ( srch.Contains("TO200") )
                     last = _DYTauTau_50toInf;
-                else if ( srch.Contains("to100") || srch.Contains("To100") || srch.Contains("TO100") || srch.Contains("to 100") || srch.Contains("To 100") ||
-                          srch.Contains("TO 100") || srch.Contains("-100") || srch.Contains("- 100") || srch.Contains("to_100") || srch.Contains("To_100") ||
-                          srch.Contains("TO_100") )
+                else if ( srch.Contains("TO100") )
                     last = _DYTauTau_50toInf;
-                else if ( srch.Contains("to50") || srch.Contains("To50") || srch.Contains("TO50") || srch.Contains("to 50") || srch.Contains("To 50") ||
-                          srch.Contains("TO 50") || srch.Contains("-50") || srch.Contains("- 50") || srch.Contains("to_50") || srch.Contains("To_50") ||
-                          srch.Contains("TO_50") )
+                else if ( srch.Contains("TO50") )
                     last = _DYTauTau_10to50;
-                else if ( srch.Contains("to10") || srch.Contains("To10") || srch.Contains("TO10") || srch.Contains("to 10") || srch.Contains("To 10") ||
-                          srch.Contains("TO 10") || srch.Contains("-10") || srch.Contains("- 10") || srch.Contains("to_10") || srch.Contains("To_10") ||
-                          srch.Contains("TO_10") )
+                else if ( srch.Contains("TO10") )
                     last = _EndOf_MCsignal_Normal;
 
                 // Swapping first with last if necessary
@@ -2404,116 +2235,58 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
         else
         {
             // Checking for various intervals
-            if ( srch.Contains("Infto") || srch.Contains("InfTo") || srch.Contains("InfTO") || srch.Contains("Inf to") || srch.Contains("Inf To") ||
-                 srch.Contains("Inf TO") ||  srch.Contains("Inf_to") || srch.Contains("Inf_To") || srch.Contains("Inf_TO") ||
-                 srch.Contains("infto") || srch.Contains("infTo") || srch.Contains("infTO") || srch.Contains("inf to") || srch.Contains("inf To") ||
-                 srch.Contains("inf TO") ||  srch.Contains("inf_to") || srch.Contains("inf_To") || srch.Contains("inf_TO") ||
-                 srch.Contains("INFto") || srch.Contains("INFTo") || srch.Contains("INFTO") || srch.Contains("INF to") || srch.Contains("INF To") ||
-                 srch.Contains("TO INF") ||  srch.Contains("to_INF") || srch.Contains("To_INF") || srch.Contains("TO_INF") ||
-                 srch.Contains("inf-") || srch.Contains("INF-") || srch.Contains("In-f") || srch.Contains("inf -") || srch.Contains("INF -") ||
-                 srch.Contains("Inf -") )
+            if ( srch.Contains("INFTO") )
                 first = _EndOf_DY_Normal;
-            else if ( srch.Contains("3000to") || srch.Contains("3000To") || srch.Contains("3000TO") || srch.Contains("3000 to") || srch.Contains("3000 To") ||
-                      srch.Contains("3000 TO") || srch.Contains("3000-") || srch.Contains("3000 -") || srch.Contains("3000_to") || srch.Contains("3000_To") ||
-                      srch.Contains("3000_TO") )
+            else if ( srch.Contains("3000TO") )
                 first = _EndOf_DY_Normal;
-            else if ( srch.Contains("2000to") || srch.Contains("2000To") || srch.Contains("2000TO") || srch.Contains("2000 to") || srch.Contains("2000 To") ||
-                      srch.Contains("2000 TO") || srch.Contains("2000-") || srch.Contains("2000 -") || srch.Contains("2000_to") || srch.Contains("2000_To") ||
-                      srch.Contains("2000_TO") )
+            else if ( srch.Contains("2000TO") )
                 first = _DY_2000to3000;
-            else if ( srch.Contains("1500to") || srch.Contains("1500To") || srch.Contains("1500TO") || srch.Contains("1500 to") || srch.Contains("1500 To") ||
-                      srch.Contains("1500 TO") || srch.Contains("1500-") || srch.Contains("1500 -") || srch.Contains("1500_to") || srch.Contains("1500_To") ||
-                      srch.Contains("1500_TO") )
+            else if ( srch.Contains("1500TO") )
                 first = _DY_1500to2000;
-            else if ( srch.Contains("1000to") || srch.Contains("1000To") || srch.Contains("1000TO") || srch.Contains("1000 to") || srch.Contains("1000 To") ||
-                      srch.Contains("1000 TO") || srch.Contains("1000-") || srch.Contains("1000 -") || srch.Contains("1000_to") || srch.Contains("1000_To") ||
-                      srch.Contains("1000_TO") )
+            else if ( srch.Contains("1000TO") )
                 first = _DY_1000to1500;
-            else if ( srch.Contains("800to") || srch.Contains("800To") || srch.Contains("800TO") || srch.Contains("800 to") || srch.Contains("800 To") ||
-                      srch.Contains("800 TO") || srch.Contains("800-") || srch.Contains("800 -") || srch.Contains("800_to") || srch.Contains("800_To") ||
-                      srch.Contains("800_TO") )
+            else if ( srch.Contains("800TO") )
                 first = _DY_800to1000;
-            else if ( srch.Contains("700to") || srch.Contains("700To") || srch.Contains("700TO") || srch.Contains("700 to") || srch.Contains("700 To") ||
-                      srch.Contains("700 TO") || srch.Contains("700-") || srch.Contains("700 -") || srch.Contains("700_to") || srch.Contains("700_To") ||
-                      srch.Contains("700_TO") )
+            else if ( srch.Contains("700TO") )
                 first = _DY_700to800;
-            else if ( srch.Contains("500to") || srch.Contains("500To") || srch.Contains("500TO") || srch.Contains("500 to") || srch.Contains("500 To") ||
-                      srch.Contains("500 TO") || srch.Contains("500-") || srch.Contains("500 -") || srch.Contains("500_to") || srch.Contains("500_To") ||
-                      srch.Contains("500_TO") )
+            else if ( srch.Contains("500TO") )
                 first = _DY_500to700;
-            else if ( srch.Contains("400to") || srch.Contains("400To") || srch.Contains("400TO") || srch.Contains("400 to") || srch.Contains("400 To") ||
-                      srch.Contains("400 TO") || srch.Contains("400-") || srch.Contains("400 -") || srch.Contains("400_to") || srch.Contains("400_To") ||
-                      srch.Contains("400_TO") )
+            else if ( srch.Contains("400TO") )
                 first = _DY_400to500;
-            else if ( srch.Contains("200to") || srch.Contains("200To") || srch.Contains("200TO") || srch.Contains("200 to") || srch.Contains("200 To") ||
-                      srch.Contains("200 TO") || srch.Contains("200-") || srch.Contains("200 -") || srch.Contains("200_to") || srch.Contains("200_To") ||
-                      srch.Contains("200_TO") )
+            else if ( srch.Contains("200TO") )
                 first = _DY_200to400;
-            else if ( srch.Contains("100to") || srch.Contains("100To") || srch.Contains("100TO") || srch.Contains("100 to") || srch.Contains("100 To") ||
-                      srch.Contains("100 TO") || srch.Contains("100-") || srch.Contains("100 -") || srch.Contains("100_to") || srch.Contains("100_To") ||
-                      srch.Contains("100_TO") )
+            else if ( srch.Contains("100TO") )
                 first = _DY_100to200;
-            else if ( srch.Contains("50to") || srch.Contains("50To") || srch.Contains("50TO") || srch.Contains("50 to") || srch.Contains("50 To") ||
-                      srch.Contains("50 TO") || srch.Contains("50-") || srch.Contains("50 -") || srch.Contains("50_to") || srch.Contains("50_To") || srch.Contains("50_TO") )
+            else if ( srch.Contains("50TO") )
                 first = _DY_50to100;
-            else if ( srch.Contains("10to") || srch.Contains("10To") || srch.Contains("10TO") || srch.Contains("10 to") || srch.Contains("10 To") || srch.Contains("10 TO") ||
-                      srch.Contains("10-") || srch.Contains("10 -") || srch.Contains("10_to") || srch.Contains("10_To") || srch.Contains("10_TO") )
+            else if ( srch.Contains("10TO") )
                 first = _DY_10to50;
 
-            if ( srch.Contains("toInf") || srch.Contains("ToInf") || srch.Contains("TOInf") || srch.Contains("to Inf") || srch.Contains("To Inf") ||
-                 srch.Contains("TO Inf") ||  srch.Contains("to_Inf") || srch.Contains("To_Inf") || srch.Contains("TO_Inf") ||
-                 srch.Contains("toinf") || srch.Contains("Toinf") || srch.Contains("TOinf") || srch.Contains("to inf") || srch.Contains("To inf") ||
-                 srch.Contains("TO inf") ||  srch.Contains("to_inf") || srch.Contains("To_inf") || srch.Contains("TO_inf") ||
-                 srch.Contains("toINF") || srch.Contains("ToINF") || srch.Contains("TOINF") || srch.Contains("to INF") || srch.Contains("To INF") ||
-                 srch.Contains("TO INF") ||  srch.Contains("to_INF") || srch.Contains("To_INF") || srch.Contains("TO_INF") ||
-                 srch.Contains("-inf") || srch.Contains("-INF") || srch.Contains("-Inf") || srch.Contains("- inf") || srch.Contains("- INF") ||
-                 srch.Contains("- Inf") )
+            if ( srch.Contains("TOINF") )
                 last = _DY_2000to3000;
-            else if ( srch.Contains("to3000") || srch.Contains("To3000") || srch.Contains("TO3000") || srch.Contains("to 3000") || srch.Contains("To 3000") ||
-                      srch.Contains("TO 3000") || srch.Contains("-3000") || srch.Contains("- 3000") || srch.Contains("to_3000") || srch.Contains("To_3000") ||
-                      srch.Contains("TO_3000") )
+            else if ( srch.Contains("TO3000") )
                 last = _DY_2000to3000;
-            else if ( srch.Contains("to2000") || srch.Contains("To2000") || srch.Contains("TO2000") || srch.Contains("to 2000") || srch.Contains("To 2000") ||
-                      srch.Contains("TO 2000") || srch.Contains("-2000") || srch.Contains("- 2000") || srch.Contains("to_2000") || srch.Contains("To_2000") ||
-                      srch.Contains("TO_2000") )
+            else if ( srch.Contains("TO2000") )
                 last = _DY_1500to2000;
-            else if ( srch.Contains("to1500") || srch.Contains("To1500") || srch.Contains("TO1500") || srch.Contains("to 1500") || srch.Contains("To 1500") ||
-                      srch.Contains("TO 1500") || srch.Contains("-1500") || srch.Contains("- 1500") || srch.Contains("to_1500") || srch.Contains("To_1500") ||
-                      srch.Contains("TO_1500") )
+            else if ( srch.Contains("TO1500") )
                 last = _DY_1000to1500;
-            else if ( srch.Contains("to1000") || srch.Contains("To1000") || srch.Contains("TO1000") || srch.Contains("to 1000") || srch.Contains("To 1000") ||
-                      srch.Contains("TO 1000") || srch.Contains("-1000") || srch.Contains("- 1000") || srch.Contains("to_1000") || srch.Contains("To_1000") ||
-                      srch.Contains("TO_1000") )
+            else if ( srch.Contains("TO1000") )
                 last = _DY_800to1000;
-            else if ( srch.Contains("to800") || srch.Contains("To800") || srch.Contains("TO800") || srch.Contains("to 800") || srch.Contains("To 800") ||
-                      srch.Contains("TO 800") || srch.Contains("-800") || srch.Contains("- 800") || srch.Contains("to_800") || srch.Contains("To_800") ||
-                      srch.Contains("TO_800") )
+            else if ( srch.Contains("TO800") )
                 last = _DY_700to800;
-            else if ( srch.Contains("to700") || srch.Contains("To700") || srch.Contains("TO700") || srch.Contains("to 700") || srch.Contains("To 700") ||
-                      srch.Contains("TO 700") || srch.Contains("-700") || srch.Contains("- 700") || srch.Contains("to_700") || srch.Contains("To_700") ||
-                      srch.Contains("TO_700") )
+            else if ( srch.Contains("TO700") )
                 last = _DY_500to700;
-            else if ( srch.Contains("to500") || srch.Contains("To500") || srch.Contains("TO500") || srch.Contains("to 500") || srch.Contains("To 500") ||
-                      srch.Contains("TO 500") || srch.Contains("-500") || srch.Contains("- 500") || srch.Contains("to_500") || srch.Contains("To_500") ||
-                      srch.Contains("TO_500") )
+            else if ( srch.Contains("TO500") )
                 last = _DY_400to500;
-            else if ( srch.Contains("to400") || srch.Contains("To400") || srch.Contains("TO400") || srch.Contains("to 400") || srch.Contains("To 400") ||
-                      srch.Contains("TO 400") || srch.Contains("-400") || srch.Contains("- 400") || srch.Contains("to_400") || srch.Contains("To_400") ||
-                      srch.Contains("TO_400") )
+            else if ( srch.Contains("TO400") )
                 last = _DY_200to400;
-            else if ( srch.Contains("to200") || srch.Contains("To200") || srch.Contains("TO200") || srch.Contains("to 200") || srch.Contains("To 200") ||
-                      srch.Contains("TO 200") || srch.Contains("-200") || srch.Contains("- 200") || srch.Contains("to_200") || srch.Contains("To_200") ||
-                      srch.Contains("TO_200") )
+            else if ( srch.Contains("TO200") )
                 last = _DY_100to200;
-            else if ( srch.Contains("to100") || srch.Contains("To100") || srch.Contains("TO100") || srch.Contains("to 100") || srch.Contains("To 100") ||
-                      srch.Contains("TO 100") || srch.Contains("-100") || srch.Contains("- 100") || srch.Contains("to_100") || srch.Contains("To_100") ||
-                      srch.Contains("TO_100") )
+            else if ( srch.Contains("TO100") )
                 last = _DY_50to100;
-            else if ( srch.Contains("to50") || srch.Contains("To50") || srch.Contains("TO50") || srch.Contains("to 50") || srch.Contains("To 50") || srch.Contains("TO 50") ||
-                      srch.Contains("-50") || srch.Contains("- 50") || srch.Contains("to_50") || srch.Contains("To_50") || srch.Contains("TO_50") )
+            else if ( srch.Contains("TO50") )
                 last = _DY_10to50;
-            else if ( srch.Contains("to10") || srch.Contains("To10") || srch.Contains("TO10") || srch.Contains("to 10") || srch.Contains("To 10") || srch.Contains("TO 10") ||
-                      srch.Contains("-10") || srch.Contains("- 10") || srch.Contains("to_10") || srch.Contains("To_10") || srch.Contains("TO_10") )
+            else if ( srch.Contains("TO10") )
                 last = _None;
 
             //Swapping first with last if necessary
@@ -2550,11 +2323,9 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
 
     }// end of if(DrellYan)
 
-    else if ( srch.Contains("ttbar") || srch.Contains("tt") || srch.Contains("TTbar") || srch.Contains("TT") || srch.Contains("ttBAR") ||
-         srch.Contains("TTBAR") || srch.Contains("TantiT") || srch.Contains("tantit") || srch.Contains("TANTIT") || srch.Contains("tANTIt") ||
-         srch.Contains("TopAntiTop") )
+    else if ( srch.Contains("TT") || srch.Contains("TTBAR") )
     {
-        if ( srch.Contains("Full") || srch.Contains("full") || srch.Contains("FULL") )
+        if ( srch.Contains("FULL") )
         {
             Result.push_back(_ttbar_Full);
             if ( notify == kTRUE ) cout << Procname[_ttbar_Full] << "." << endl;
@@ -2562,51 +2333,25 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
         // Checking for various intervals
         else
         {
-            if ( srch.Contains("700to") || srch.Contains("700To") || srch.Contains("700TO") || srch.Contains("700 to") || srch.Contains("700 To") || srch.Contains("700 TO") ||
-                 srch.Contains("700-") || srch.Contains("700 -") || srch.Contains("700_to") || srch.Contains("700_To") || srch.Contains("700_TO") )
+            if ( srch.Contains("700TO") )
                 first = _ttbar_700to1000;
-            else if ( srch.Contains("1000to") || srch.Contains("1000To") || srch.Contains("1000TO") || srch.Contains("1000 to") || srch.Contains("1000 To") ||
-                      srch.Contains("1000 TO") || srch.Contains("1000-") || srch.Contains("1000 -") || srch.Contains("1000_to") || srch.Contains("1000_To") ||
-                      srch.Contains("1000_TO") )
+            else if ( srch.Contains("1000TO") )
                 first = _ttbar_1000toInf;
-            else if ( srch.Contains("Infto") || srch.Contains("InfTo") || srch.Contains("InfTO") || srch.Contains("Inf to") || srch.Contains("Inf To") ||
-                      srch.Contains("Inf TO") ||  srch.Contains("Inf_to") || srch.Contains("Inf_To") || srch.Contains("Inf_TO") ||
-                      srch.Contains("infto") || srch.Contains("infTo") || srch.Contains("infTO") || srch.Contains("inf to") || srch.Contains("inf To") ||
-                      srch.Contains("inf TO") ||  srch.Contains("inf_to") || srch.Contains("inf_To") || srch.Contains("inf_TO") ||
-                      srch.Contains("INFto") || srch.Contains("INFTo") || srch.Contains("INFTO") || srch.Contains("INF to") || srch.Contains("INF To") ||
-                      srch.Contains("TO INF") ||  srch.Contains("to_INF") || srch.Contains("To_INF") || srch.Contains("TO_INF") ||
-                      srch.Contains("inf-") || srch.Contains("INF-") || srch.Contains("In-f") || srch.Contains("inf -") || srch.Contains("INF -") ||
-                      srch.Contains("Inf -") )
+            else if ( srch.Contains("INFTO") )
                 first = _EndOf_ttbar_Normal;
             else first = _ttbar;
 
-            if ( srch.Contains("to700") || srch.Contains("To700") || srch.Contains("TO700") || srch.Contains("to 700") || srch.Contains("To 700") || srch.Contains("TO 700") ||
-                 srch.Contains("-700") || srch.Contains("- 700") || srch.Contains("to_700") || srch.Contains("To_700") || srch.Contains("TO_700") )
+            if ( srch.Contains("TO700") )
                 last = _ttbar;
-            else if ( srch.Contains("to1000") || srch.Contains("To1000") || srch.Contains("TO1000") || srch.Contains("to 1000") || srch.Contains("To 1000") ||
-                      srch.Contains("TO 1000") || srch.Contains("-1000") || srch.Contains("- 1000") || srch.Contains("to_1000") || srch.Contains("To_1000") ||
-                      srch.Contains("TO_1000") )
+            else if ( srch.Contains("TO1000") )
                 last = _ttbar_700to1000;
-            else if ( srch.Contains("to1500") || srch.Contains("To1500") || srch.Contains("TO1500") || srch.Contains("to 1500") || srch.Contains("To 1500") ||
-                      srch.Contains("TO 1500") || srch.Contains("-1500") || srch.Contains("- 1500") || srch.Contains("to_1500") || srch.Contains("To_1500") ||
-                      srch.Contains("TO_1500") )
+            else if ( srch.Contains("TO1500") )
                 last = _ttbar_1000toInf;
-            else if ( srch.Contains("to2000") || srch.Contains("To2000") || srch.Contains("TO2000") || srch.Contains("to 2000") || srch.Contains("To 2000") ||
-                      srch.Contains("TO 2000") || srch.Contains("-2000") || srch.Contains("- 2000") || srch.Contains("to_2000") || srch.Contains("To_2000") ||
-                      srch.Contains("TO_2000") )
+            else if ( srch.Contains("TO2000") )
                 last = _ttbar_1000toInf;
-            else if ( srch.Contains("to3000") || srch.Contains("To3000") || srch.Contains("TO3000") || srch.Contains("to 3000") || srch.Contains("To 3000") ||
-                      srch.Contains("TO 3000") || srch.Contains("-3000") || srch.Contains("- 3000") || srch.Contains("to_3000") || srch.Contains("To_3000") ||
-                      srch.Contains("TO_3000") )
+            else if ( srch.Contains("TO3000") )
                 last = _ttbar_1000toInf;
-            else if ( srch.Contains("toInf") || srch.Contains("ToInf") || srch.Contains("TOInf") || srch.Contains("to Inf") || srch.Contains("To Inf") ||
-                      srch.Contains("TO Inf") ||  srch.Contains("to_Inf") || srch.Contains("To_Inf") || srch.Contains("TO_Inf") ||
-                      srch.Contains("toinf") || srch.Contains("Toinf") || srch.Contains("TOinf") || srch.Contains("to inf") || srch.Contains("To inf") ||
-                      srch.Contains("TO inf") ||  srch.Contains("to_inf") || srch.Contains("To_inf") || srch.Contains("TO_inf") ||
-                      srch.Contains("toINF") || srch.Contains("ToINF") || srch.Contains("TOINF") || srch.Contains("to INF") || srch.Contains("To INF") ||
-                      srch.Contains("TO INF") ||  srch.Contains("to_INF") || srch.Contains("To_INF") || srch.Contains("TO_INF") ||
-                      srch.Contains("-inf") || srch.Contains("-INF") || srch.Contains("-Inf") || srch.Contains("- inf") || srch.Contains("- INF") ||
-                      srch.Contains("- Inf") )
+            else if ( srch.Contains("TOINF") )
                 last = _ttbar_1000toInf;
             else last = _ttbar;
 
@@ -2643,41 +2388,37 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
 
     }// end of if(ttbar)
 
-    else if ( srch.Contains("tW") || srch.Contains("TW") || srch.Contains("SingleTop") || srch.Contains("singleTop") || srch.Contains("singletop") ||
-         srch.Contains("SingleTOP") || srch.Contains("singleTOP") || srch.Contains("SINGLETOP") )
+    else if ( srch.Contains("TW") )
     {
         Result.push_back(_tW);
         if ( notify == kTRUE ) cout << Procname[_tW] << "." << endl;
     }
 
-    else if ( srch.Contains("tbarW") || srch.Contains("TbarW") || srch.Contains("TBarW") || srch.Contains("tBarW") || srch.Contains("TBARW") ||
-              srch.Contains("SingleAntiTop") || srch.Contains("SingleAntitop") || srch.Contains("singleAntiTop") || srch.Contains("singleAntitop") ||
-              srch.Contains("SingleAntiTOP") || srch.Contains("singleAntiTOP") || srch.Contains("SingleANTITOP") || srch.Contains("singleANTITOP") ||
-              srch.Contains("SINGLEANTITOP") )
+    else if ( srch.Contains("TBARW") || srch.Contains("SINGLEANTITOP") )
     {
         Result.push_back(_tbarW);
         if ( notify == kTRUE ) cout << Procname[_tbarW] << "." << endl;
     }
 
-    else if ( srch.Contains("ZZ") || srch.Contains("zz") )
+    else if ( srch.Contains("ZZ") )
     {
         Result.push_back(_ZZ);
         if ( notify == kTRUE ) cout << Procname[_ZZ] << "." << endl;
     }
 
-    else if ( srch.Contains("WZ") || srch.Contains("wz") || srch.Contains("ZW") || srch.Contains("zw") )
+    else if ( srch.Contains("WZ") )
     {
         Result.push_back(_WZ);
         if ( notify == kTRUE ) cout << Procname[_WZ] << "." << endl;
     }
 
-    else if ( srch.Contains("WW") || srch.Contains("ww") )
+    else if ( srch.Contains("WW") )
     {
         Result.push_back(_WW);
         if ( notify == kTRUE ) cout << Procname[_WW] << "." << endl;
     }
 
-    else if ( srch.Contains("DIBOSON") || srch.Contains("diboson") || srch.Contains("Diboson") || srch.Contains("diBoson"))
+    else if ( srch.Contains("DIBOSON") )
     {
         Result.push_back(_ZZ);
         Result.push_back(_WZ);
@@ -2685,139 +2426,76 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
         if ( notify == kTRUE ) cout << Procname[_ZZ] << ", " << Procname[_WZ] << ", " << Procname[_WW] << "." << endl;
     }
 
-    else if ( srch.Contains("VVnST") || srch.Contains("VVNST") || srch.Contains("vvnst") || srch.Contains("VVnst") || srch.Contains("vvnST") ||
-              srch.Contains("VV") || srch.Contains("vv") )
+    else if ( srch.Contains("VVNST") )
     {
         Result.push_back(_VVnST);
         if ( notify == kTRUE ) cout << Procname[_VVnST] << "." << endl;
     }
 
-    else if ( srch.Contains("WJets") || srch.Contains("Wjets") || srch.Contains("wjets") || srch.Contains("WJETS") || srch.Contains("W+jets") ||
-              srch.Contains("W+Jets") || srch.Contains("W+JETS") )
+    else if ( srch.Contains("WJETS") || srch.Contains("W+JETS") )
     {
         Result.push_back(_WJets);
         if ( notify == kTRUE ) cout << Procname[_WJets] << "." << endl;
     }
 
-    else if ( srch.Contains("QCD") || srch.Contains("qcd") )
+    else if ( srch.Contains("QCD") )
     {
-        if ( srch.Contains("Mu") || srch.Contains("mu") || srch.Contains("MU") )
+        if ( srch.Contains("MU") )
         {
             // Checking for various intervals
-            if ( srch.Contains("Infto") || srch.Contains("InfTo") || srch.Contains("InfTO") || srch.Contains("Inf to") || srch.Contains("Inf To") ||
-                 srch.Contains("Inf TO") ||  srch.Contains("Inf_to") || srch.Contains("Inf_To") || srch.Contains("Inf_TO") ||
-                 srch.Contains("infto") || srch.Contains("infTo") || srch.Contains("infTO") || srch.Contains("inf to") || srch.Contains("inf To") ||
-                 srch.Contains("inf TO") ||  srch.Contains("inf_to") || srch.Contains("inf_To") || srch.Contains("inf_TO") ||
-                 srch.Contains("INFto") || srch.Contains("INFTo") || srch.Contains("INFTO") || srch.Contains("INF to") || srch.Contains("INF To") ||
-                 srch.Contains("TO INF") ||  srch.Contains("to_INF") || srch.Contains("To_INF") || srch.Contains("TO_INF") ||
-                 srch.Contains("inf-") || srch.Contains("INF-") || srch.Contains("In-f") || srch.Contains("inf -") || srch.Contains("INF -") ||
-                 srch.Contains("Inf -") )
+            if ( srch.Contains("INFTO") || srch.Contains("INF_TO")  || srch.Contains("INF-") ||
+                 srch.Contains("INF_-") )
                 first = _EndOf_QCDMuEnriched_Normal;
-            else if ( srch.Contains("1000to") || srch.Contains("1000To") || srch.Contains("1000TO") || srch.Contains("1000 to") || srch.Contains("1000 To") ||
-                      srch.Contains("1000 TO") || srch.Contains("1000-") || srch.Contains("1000 -") || srch.Contains("1000_to") || srch.Contains("1000_To") ||
-                      srch.Contains("1000_TO") )
+            else if ( srch.Contains("1000TO") )
                 first = _QCDMuEnriched_1000toInf;
-            else if ( srch.Contains("800to") || srch.Contains("800To") || srch.Contains("800TO") || srch.Contains("800 to") || srch.Contains("800 To") ||
-                      srch.Contains("800 TO") || srch.Contains("800-") || srch.Contains("800 -") || srch.Contains("800_to") || srch.Contains("800_To") ||
-                      srch.Contains("800_TO") )
+            else if ( srch.Contains("800TO") )
                 first = _QCDMuEnriched_800to1000;
-            else if ( srch.Contains("600to") || srch.Contains("600To") || srch.Contains("600TO") || srch.Contains("600 to") || srch.Contains("600 To") ||
-                      srch.Contains("600 TO") || srch.Contains("600-") || srch.Contains("600 -") || srch.Contains("600_to") || srch.Contains("600_To") ||
-                      srch.Contains("600_TO") )
+            else if ( srch.Contains("600TO") )
                 first = _QCDMuEnriched_600to800;
-            else if ( srch.Contains("470to") || srch.Contains("470To") || srch.Contains("470TO") || srch.Contains("470 to") || srch.Contains("470 To") ||
-                      srch.Contains("470 TO") || srch.Contains("470-") || srch.Contains("470 -") || srch.Contains("470_to") || srch.Contains("470_To") ||
-                      srch.Contains("470_TO") )
+            else if ( srch.Contains("470TO") )
                 first = _QCDMuEnriched_470to600;
-            else if ( srch.Contains("300to") || srch.Contains("300To") || srch.Contains("300TO") || srch.Contains("300 to") || srch.Contains("300 To") ||
-                      srch.Contains("300 TO") || srch.Contains("300-") || srch.Contains("300 -") || srch.Contains("300_to") || srch.Contains("300_To") ||
-                      srch.Contains("300_TO") )
+            else if ( srch.Contains("300TO") )
                 first = _QCDMuEnriched_300to470;
-            else if ( srch.Contains("170to") || srch.Contains("170To") || srch.Contains("170TO") || srch.Contains("170 to") || srch.Contains("170 To") ||
-                      srch.Contains("170 TO") || srch.Contains("170-") || srch.Contains("170 -") || srch.Contains("170_to") || srch.Contains("170_To") ||
-                      srch.Contains("170_TO") )
+            else if ( srch.Contains("170TO") )
                 first = _QCDMuEnriched_170to300;
-            else if ( srch.Contains("120to") || srch.Contains("120To") || srch.Contains("120TO") || srch.Contains("120 to") || srch.Contains("120 To") ||
-                      srch.Contains("120 TO") || srch.Contains("120-") || srch.Contains("120 -") || srch.Contains("120_to") || srch.Contains("120_To") ||
-                      srch.Contains("120_TO") )
+            else if ( srch.Contains("120TO") )
                 first = _QCDMuEnriched_120to170;
-            else if ( srch.Contains("80to") || srch.Contains("80To") || srch.Contains("80TO") || srch.Contains("80 to") || srch.Contains("80 To") ||
-                      srch.Contains("80 TO") || srch.Contains("80-") || srch.Contains("80 -") || srch.Contains("80_to") || srch.Contains("80_To") ||
-                      srch.Contains("80_TO") )
+            else if ( srch.Contains("80TO") )
                 first = _QCDMuEnriched_80to120;
-            else if ( srch.Contains("50to") || srch.Contains("50To") || srch.Contains("50TO") || srch.Contains("50 to") || srch.Contains("50 To") ||
-                      srch.Contains("50 TO") || srch.Contains("50-") || srch.Contains("50 -") || srch.Contains("50_to") || srch.Contains("50_To") ||
-                      srch.Contains("50_TO") )
+            else if ( srch.Contains("50TO") )
                 first = _QCDMuEnriched_50to80;
-            else if ( srch.Contains("30to") || srch.Contains("30To") || srch.Contains("30TO") || srch.Contains("30 to") || srch.Contains("30 To") ||
-                      srch.Contains("30 TO") || srch.Contains("30-") || srch.Contains("30 -") || srch.Contains("30_to") || srch.Contains("30_To") ||
-                      srch.Contains("30_TO") )
+            else if ( srch.Contains("30TO") )
                 first = _QCDMuEnriched_30to50;
-            else if ( srch.Contains("20to") || srch.Contains("20To") || srch.Contains("20TO") || srch.Contains("20 to") || srch.Contains("20 To") ||
-                      srch.Contains("20 TO") || srch.Contains("20-") || srch.Contains("20 -") || srch.Contains("20_to") || srch.Contains("20_To") ||
-                      srch.Contains("20_TO") )
+            else if ( srch.Contains("20TO") )
                 first = _QCDMuEnriched_20to30;
-            else if ( srch.Contains("15to") || srch.Contains("15To") || srch.Contains("15TO") || srch.Contains("15 to") || srch.Contains("15 To") ||
-                      srch.Contains("15 TO") || srch.Contains("15-") || srch.Contains("15 -") || srch.Contains("15_to") || srch.Contains("15_To") ||
-                      srch.Contains("15_TO") )
+            else if ( srch.Contains("15TO") )
                 first = _QCDMuEnriched_15to20;
 
-            if ( srch.Contains("toInf") || srch.Contains("ToInf") || srch.Contains("TOInf") || srch.Contains("to Inf") || srch.Contains("To Inf") ||
-                 srch.Contains("TO Inf") ||  srch.Contains("to_Inf") || srch.Contains("To_Inf") || srch.Contains("TO_Inf") ||
-                 srch.Contains("toinf") || srch.Contains("Toinf") || srch.Contains("TOinf") || srch.Contains("to inf") || srch.Contains("To inf") ||
-                 srch.Contains("TO inf") ||  srch.Contains("to_inf") || srch.Contains("To_inf") || srch.Contains("TO_inf") ||
-                 srch.Contains("toINF") || srch.Contains("ToINF") || srch.Contains("TOINF") || srch.Contains("to INF") || srch.Contains("To INF") ||
-                 srch.Contains("TO INF") ||  srch.Contains("to_INF") || srch.Contains("To_INF") || srch.Contains("TO_INF") ||
-                 srch.Contains("-inf") || srch.Contains("-INF") || srch.Contains("-Inf") || srch.Contains("- inf") || srch.Contains("- INF") ||
-                 srch.Contains("- Inf") )
+            if ( srch.Contains("TOINF") )
                 last = _QCDMuEnriched_1000toInf;
-            else if ( srch.Contains("to1000") || srch.Contains("To1000") || srch.Contains("TO1000") || srch.Contains("to 1000") || srch.Contains("To 1000") ||
-                      srch.Contains("TO 1000") || srch.Contains("-1000") || srch.Contains("- 1000") || srch.Contains("to_1000") || srch.Contains("To_1000") ||
-                      srch.Contains("TO_1000") )
+            else if ( srch.Contains("TO1000") )
                 last = _QCDMuEnriched_800to1000;
-            else if ( srch.Contains("to800") || srch.Contains("To800") || srch.Contains("TO800") || srch.Contains("to 800") || srch.Contains("To 800") ||
-                      srch.Contains("TO 800") || srch.Contains("-800") || srch.Contains("- 800") || srch.Contains("to_800") || srch.Contains("To_800") ||
-                      srch.Contains("TO_800") )
+            else if ( srch.Contains("TO800") )
                 last = _QCDMuEnriched_600to800;
-            else if ( srch.Contains("to600") || srch.Contains("To600") || srch.Contains("TO600") || srch.Contains("to 600") || srch.Contains("To 600") ||
-                      srch.Contains("TO 600") || srch.Contains("-600") || srch.Contains("- 600") || srch.Contains("to_600") || srch.Contains("To_600") ||
-                      srch.Contains("TO_600") )
+            else if ( srch.Contains("TO600") )
                 last = _QCDMuEnriched_470to600;
-            else if ( srch.Contains("to470") || srch.Contains("To470") || srch.Contains("TO470") || srch.Contains("to 470") || srch.Contains("To 470") ||
-                      srch.Contains("TO 470") || srch.Contains("-470") || srch.Contains("- 470") || srch.Contains("to_470") || srch.Contains("To_470") ||
-                      srch.Contains("TO_470") )
+            else if ( srch.Contains("TO470") )
                 last = _QCDMuEnriched_300to470;
-            else if ( srch.Contains("to300") || srch.Contains("To300") || srch.Contains("TO300") || srch.Contains("to 300") || srch.Contains("To 300") ||
-                      srch.Contains("TO 300") || srch.Contains("-300") || srch.Contains("- 300") || srch.Contains("to_300") || srch.Contains("To_300") ||
-                      srch.Contains("TO_300") )
+            else if ( srch.Contains("TO300") )
                 last = _QCDMuEnriched_170to300;
-            else if ( srch.Contains("to170") || srch.Contains("To170") || srch.Contains("TO170") || srch.Contains("to 170") || srch.Contains("To 170") ||
-                      srch.Contains("TO 170") || srch.Contains("-170") || srch.Contains("- 170") || srch.Contains("to_170") || srch.Contains("To_170") ||
-                      srch.Contains("TO_170") )
+            else if ( srch.Contains("TO170") )
                 last = _QCDMuEnriched_120to170;
-            else if ( srch.Contains("to120") || srch.Contains("To120") || srch.Contains("TO120") || srch.Contains("to 120") || srch.Contains("To 120") ||
-                      srch.Contains("TO 120") || srch.Contains("-120") || srch.Contains("- 120") || srch.Contains("to_120") || srch.Contains("To_120") ||
-                      srch.Contains("TO_120") )
+            else if ( srch.Contains("TO120") )
                 last = _QCDMuEnriched_80to120;
-            else if ( srch.Contains("to80") || srch.Contains("To80") || srch.Contains("TO80") || srch.Contains("to 80") || srch.Contains("To 80") ||
-                      srch.Contains("TO 80") || srch.Contains("-80") || srch.Contains("- 80") || srch.Contains("to_80") || srch.Contains("To_80") ||
-                      srch.Contains("TO_80") )
+            else if ( srch.Contains("TO80") )
                 last = _QCDMuEnriched_50to80;
-            else if ( srch.Contains("to50") || srch.Contains("To50") || srch.Contains("TO50") || srch.Contains("to 50") || srch.Contains("To 50") ||
-                      srch.Contains("TO 50") || srch.Contains("-50") || srch.Contains("- 50") || srch.Contains("to_50") || srch.Contains("To_50") ||
-                      srch.Contains("TO_50") )
+            else if ( srch.Contains("TO50") )
                 last = _QCDMuEnriched_30to50;
-            else if ( srch.Contains("to30") || srch.Contains("To30") || srch.Contains("TO30") || srch.Contains("to 30") || srch.Contains("To 30") ||
-                      srch.Contains("TO 30") || srch.Contains("-30") || srch.Contains("- 30") || srch.Contains("to_30") || srch.Contains("To_30") ||
-                      srch.Contains("TO_30") )
+            else if ( srch.Contains("TO30") )
                 last = _QCDMuEnriched_20to30;
-            else if ( srch.Contains("to20") || srch.Contains("To20") || srch.Contains("TO20") || srch.Contains("to 20") || srch.Contains("To 20") ||
-                      srch.Contains("TO 20") || srch.Contains("-20") || srch.Contains("- 20") || srch.Contains("to_20") || srch.Contains("To_20") ||
-                      srch.Contains("TO_20") )
+            else if ( srch.Contains("TO20") )
                 last = _QCDMuEnriched_15to20;
-            else if ( srch.Contains("to15") || srch.Contains("To15") || srch.Contains("TO15") || srch.Contains("to 15") || srch.Contains("To 15") ||
-                      srch.Contains("TO 15") || srch.Contains("-15") || srch.Contains("- 15") || srch.Contains("to_15") || srch.Contains("To_15") ||
-                      srch.Contains("TO_15") )
+            else if ( srch.Contains("TO15") )
                 last = _EndOf_WJets;
 
             // Swapping first with last if necessary
@@ -2851,99 +2529,49 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
             }
 
         }// end of if(MuEnriched)
-        else if ( srch.Contains("EM") || srch.Contains("em") || srch.Contains("Em") || srch.Contains("eM") )
+        else if ( srch.Contains("EM") )
         {
             // Checking for various intervals
-            if ( srch.Contains("Infto") || srch.Contains("InfTo") || srch.Contains("InfTO") || srch.Contains("Inf to") || srch.Contains("Inf To") ||
-                 srch.Contains("Inf TO") ||  srch.Contains("Inf_to") || srch.Contains("Inf_To") || srch.Contains("Inf_TO") ||
-                 srch.Contains("infto") || srch.Contains("infTo") || srch.Contains("infTO") || srch.Contains("inf to") || srch.Contains("inf To") ||
-                 srch.Contains("inf TO") ||  srch.Contains("inf_to") || srch.Contains("inf_To") || srch.Contains("inf_TO") ||
-                 srch.Contains("INFto") || srch.Contains("INFTo") || srch.Contains("INFTO") || srch.Contains("INF to") || srch.Contains("INF To") ||
-                 srch.Contains("TO INF") ||  srch.Contains("to_INF") || srch.Contains("To_INF") || srch.Contains("TO_INF") ||
-                 srch.Contains("inf-") || srch.Contains("INF-") || srch.Contains("In-f") || srch.Contains("inf -") || srch.Contains("INF -") ||
-                 srch.Contains("Inf -") )
+            if ( srch.Contains("INFTO") )
                 first = _EndOf_QCDEMEnriched_Normal;
-            else if ( srch.Contains("300to") || srch.Contains("300To") || srch.Contains("300TO") || srch.Contains("300 to") || srch.Contains("300 To") ||
-                      srch.Contains("300 TO") || srch.Contains("300-") || srch.Contains("300 -") || srch.Contains("300_to") || srch.Contains("300_To") ||
-                      srch.Contains("300_TO") )
+            else if ( srch.Contains("300TO") )
                 first = _QCDEMEnriched_300toInf;
-            else if ( srch.Contains("170to") || srch.Contains("170To") || srch.Contains("170TO") || srch.Contains("170 to") || srch.Contains("170 To") ||
-                      srch.Contains("170 TO") || srch.Contains("170-") || srch.Contains("170 -") || srch.Contains("170_to") || srch.Contains("170_To") ||
-                      srch.Contains("170_TO") )
+            else if ( srch.Contains("170TO") )
                 first = _QCDEMEnriched_170to300;
-            else if ( srch.Contains("120to") || srch.Contains("120To") || srch.Contains("120TO") || srch.Contains("120 to") || srch.Contains("120 To") ||
-                      srch.Contains("120 TO") || srch.Contains("120-") || srch.Contains("120 -") || srch.Contains("120_to") || srch.Contains("120_To") ||
-                      srch.Contains("120_TO") )
+            else if ( srch.Contains("120TO") )
                 first = _QCDEMEnriched_120to170;
-            else if ( srch.Contains("80to") || srch.Contains("80To") || srch.Contains("80TO") || srch.Contains("80 to") || srch.Contains("80 To") ||
-                      srch.Contains("80 TO") || srch.Contains("80-") || srch.Contains("80 -") || srch.Contains("80_to") || srch.Contains("80_To") ||
-                      srch.Contains("80_TO") )
+            else if ( srch.Contains("80TO") )
                 first = _QCDEMEnriched_80to120;
-            else if ( srch.Contains("50to") || srch.Contains("50To") || srch.Contains("50TO") || srch.Contains("50 to") || srch.Contains("50 To") ||
-                      srch.Contains("50 TO") || srch.Contains("50-") || srch.Contains("50 -") || srch.Contains("50_to") || srch.Contains("50_To") ||
-                      srch.Contains("50_TO") )
+            else if ( srch.Contains("50TO") )
                 first = _QCDEMEnriched_50to80;
-            else if ( srch.Contains("30to") || srch.Contains("30To") || srch.Contains("30TO") || srch.Contains("30 to") || srch.Contains("30 To") ||
-                      srch.Contains("30 TO") || srch.Contains("30-") || srch.Contains("30 -") || srch.Contains("30_to") || srch.Contains("30_To") ||
-                      srch.Contains("30_TO") )
+            else if ( srch.Contains("30TO") )
                 first = _QCDEMEnriched_30to50;
-            else if ( srch.Contains("20to") || srch.Contains("20To") || srch.Contains("20TO") || srch.Contains("20 to") || srch.Contains("20 To") ||
-                      srch.Contains("20 TO") || srch.Contains("20-") || srch.Contains("20 -") || srch.Contains("20_to") || srch.Contains("20_To") ||
-                      srch.Contains("20_TO") )
+            else if ( srch.Contains("20TO") )
                 first = _QCDEMEnriched_20to30;
 
-            if ( srch.Contains("toInf") || srch.Contains("ToInf") || srch.Contains("TOInf") || srch.Contains("to Inf") || srch.Contains("To Inf") ||
-                 srch.Contains("TO Inf") ||  srch.Contains("to_Inf") || srch.Contains("To_Inf") || srch.Contains("TO_Inf") ||
-                 srch.Contains("toinf") || srch.Contains("Toinf") || srch.Contains("TOinf") || srch.Contains("to inf") || srch.Contains("To inf") ||
-                 srch.Contains("TO inf") ||  srch.Contains("to_inf") || srch.Contains("To_inf") || srch.Contains("TO_inf") ||
-                 srch.Contains("toINF") || srch.Contains("ToINF") || srch.Contains("TOINF") || srch.Contains("to INF") || srch.Contains("To INF") ||
-                 srch.Contains("TO INF") ||  srch.Contains("to_INF") || srch.Contains("To_INF") || srch.Contains("TO_INF") ||
-                 srch.Contains("-inf") || srch.Contains("-INF") || srch.Contains("-Inf") || srch.Contains("- inf") || srch.Contains("- INF") ||
-                 srch.Contains("- Inf") )
+            if ( srch.Contains("TOINF") )
                 last = _QCDEMEnriched_300toInf;
-            else if ( srch.Contains("to1000") || srch.Contains("To1000") || srch.Contains("TO1000") || srch.Contains("to 1000") || srch.Contains("To 1000") ||
-                      srch.Contains("TO 1000") || srch.Contains("-1000") || srch.Contains("- 1000") || srch.Contains("to_1000") || srch.Contains("To_1000") ||
-                      srch.Contains("TO_1000") )
+            else if ( srch.Contains("TO1000") )
                 last = _QCDEMEnriched_300toInf;
-            else if ( srch.Contains("to800") || srch.Contains("To800") || srch.Contains("TO800") || srch.Contains("to 800") || srch.Contains("To 800") ||
-                      srch.Contains("TO 800") || srch.Contains("-800") || srch.Contains("- 800") || srch.Contains("to_800") || srch.Contains("To_800") ||
-                      srch.Contains("TO_800") )
+            else if ( srch.Contains("TO800") )
                 last = _QCDEMEnriched_300toInf;
-            else if ( srch.Contains("to600") || srch.Contains("To600") || srch.Contains("TO600") || srch.Contains("to 600") || srch.Contains("To 600") ||
-                      srch.Contains("TO 600") || srch.Contains("-600") || srch.Contains("- 600") || srch.Contains("to_600") || srch.Contains("To_600") ||
-                      srch.Contains("TO_600") )
+            else if ( srch.Contains("TO600") )
                 last = _QCDEMEnriched_300toInf;
-            else if ( srch.Contains("to470") || srch.Contains("To470") || srch.Contains("TO470") || srch.Contains("to 470") || srch.Contains("To 470") ||
-                      srch.Contains("TO 470") || srch.Contains("-470") || srch.Contains("- 470") || srch.Contains("to_470") || srch.Contains("To_470") ||
-                      srch.Contains("TO_470") )
+            else if ( srch.Contains("TO470") )
                 last = _QCDEMEnriched_300toInf;
-            else if ( srch.Contains("to300") || srch.Contains("To300") || srch.Contains("TO300") || srch.Contains("to 300") || srch.Contains("To 300") ||
-                      srch.Contains("TO 300") || srch.Contains("-300") || srch.Contains("- 300") || srch.Contains("to_300") || srch.Contains("To_300") ||
-                      srch.Contains("TO_300") )
+            else if ( srch.Contains("TO300") )
                 last = _QCDEMEnriched_170to300;
-            else if ( srch.Contains("to170") || srch.Contains("To170") || srch.Contains("TO170") || srch.Contains("to 170") || srch.Contains("To 170") ||
-                      srch.Contains("TO 170") || srch.Contains("-170") || srch.Contains("- 170") || srch.Contains("to_170") || srch.Contains("To_170") ||
-                      srch.Contains("TO_170") )
+            else if ( srch.Contains("TO170") )
                 last = _QCDEMEnriched_120to170;
-            else if ( srch.Contains("to120") || srch.Contains("To120") || srch.Contains("TO120") || srch.Contains("to 120") || srch.Contains("To 120") ||
-                      srch.Contains("TO 120") || srch.Contains("-120") || srch.Contains("- 120") || srch.Contains("to_120") || srch.Contains("To_120") ||
-                      srch.Contains("TO_120") )
+            else if ( srch.Contains("TO120") )
                 last = _QCDEMEnriched_80to120;
-            else if ( srch.Contains("to80") || srch.Contains("To80") || srch.Contains("TO80") || srch.Contains("to 80") || srch.Contains("To 80") ||
-                      srch.Contains("TO 80") || srch.Contains("-80") || srch.Contains("- 80") || srch.Contains("to_80") || srch.Contains("To_80") ||
-                      srch.Contains("TO_80") )
+            else if ( srch.Contains("TO80") )
                 last = _QCDEMEnriched_50to80;
-            else if ( srch.Contains("to50") || srch.Contains("To50") || srch.Contains("TO50") || srch.Contains("to 50") || srch.Contains("To 50") ||
-                      srch.Contains("TO 50") || srch.Contains("-50") || srch.Contains("- 50") || srch.Contains("to_50") || srch.Contains("To_50") ||
-                      srch.Contains("TO_50") )
+            else if ( srch.Contains("TO50") )
                 last = _QCDEMEnriched_30to50;
-            else if ( srch.Contains("to30") || srch.Contains("To30") || srch.Contains("TO30") || srch.Contains("to 30") || srch.Contains("To 30") ||
-                      srch.Contains("TO 30") || srch.Contains("-30") || srch.Contains("- 30") || srch.Contains("to_30") || srch.Contains("To_30") ||
-                      srch.Contains("TO_30") )
+            else if ( srch.Contains("TO30") )
                 last = _QCDEMEnriched_20to30;
-            else if ( srch.Contains("to20") || srch.Contains("To20") || srch.Contains("TO20") || srch.Contains("to 20") || srch.Contains("To 20") ||
-                      srch.Contains("TO 20") || srch.Contains("-20") || srch.Contains("- 20") || srch.Contains("to_20") || srch.Contains("To_20") ||
-                      srch.Contains("TO_20") )
+            else if ( srch.Contains("TO20") )
                 last = _EndOf_QCDMuEnriched_Normal;
 
             // Swapping first with last if necessary
@@ -2980,94 +2608,39 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
 
     }// end of if(QCD)
 
-    else if (  srch.Contains("Double") || srch.Contains("double") || srch.Contains("DOUBLE") )
+    else if ( srch.Contains("DOUBLE") )
     {
-        if ( srch.Contains("Eg") || srch.Contains("eg") || srch.Contains("EG") )
+        if ( srch.Contains("EG") )
         {
             // Checking if search contains intervals
-            if ( srch.Contains("Bto") || srch.Contains("BTo") || srch.Contains("BTO") || srch.Contains("B to") || srch.Contains("B To") ||
-                 srch.Contains("B TO") || srch.Contains("B-") || srch.Contains("B -") || srch.Contains("B_to") || srch.Contains("B_To") || srch.Contains("B_TO") ||
-                 srch.Contains("bto") || srch.Contains("bTo") || srch.Contains("bTO") || srch.Contains("b to") || srch.Contains("b To") || srch.Contains("c TO") ||
-                 srch.Contains("b-") || srch.Contains("b -") || srch.Contains("b_to") || srch.Contains("b_To") || srch.Contains("b_TO"))
+            if ( srch.Contains("BTO") )
                 first = _DoubleEG_B;
-            else if ( srch.Contains("Cto") || srch.Contains("CTo") || srch.Contains("CTO") || srch.Contains("C to") || srch.Contains("C To") ||
-                      srch.Contains("C TO") || srch.Contains("C-") || srch.Contains("C -") || srch.Contains("C_to") || srch.Contains("C_To") ||
-                      srch.Contains("C_TO") || srch.Contains("cto") || srch.Contains("cTo") || srch.Contains("cTO") || srch.Contains("c to") ||
-                      srch.Contains("c To") || srch.Contains("c TO") || srch.Contains("c-") || srch.Contains("c -") || srch.Contains("c_to") ||
-                      srch.Contains("c_To") || srch.Contains("c_TO") )
+            else if ( srch.Contains("CTO") )
                 first = _DoubleEG_C;
-            else if ( srch.Contains("Dto") || srch.Contains("DTo") || srch.Contains("DTO") || srch.Contains("D to") || srch.Contains("D To") ||
-                      srch.Contains("D TO") || srch.Contains("D-") || srch.Contains("D -") || srch.Contains("D_to") || srch.Contains("D_To") ||
-                      srch.Contains("D_TO") || srch.Contains("dto") || srch.Contains("dTo") || srch.Contains("dTO") || srch.Contains("d to") ||
-                      srch.Contains("d To") || srch.Contains("d TO") || srch.Contains("d-") || srch.Contains("d -") || srch.Contains("d_to") ||
-                      srch.Contains("d_To") || srch.Contains("d_TO") )
+            else if ( srch.Contains("DTO") )
                 first = _DoubleEG_D;
-            else if ( srch.Contains("Eto") || srch.Contains("ETo") || srch.Contains("ETO") || srch.Contains("E to") || srch.Contains("E To") ||
-                      srch.Contains("E TO") || srch.Contains("E-") || srch.Contains("E -") || srch.Contains("E_to") || srch.Contains("E_To") ||
-                      srch.Contains("E_TO") || srch.Contains("eto") || srch.Contains("eTo") || srch.Contains("eTO") || srch.Contains("e to") ||
-                      srch.Contains("e To") || srch.Contains("e TO") || srch.Contains("e-") || srch.Contains("e -") || srch.Contains("e_to") ||
-                      srch.Contains("e_To") || srch.Contains("e_TO") )
+            else if ( srch.Contains("ETO") )
                 first = _DoubleEG_E;
-            else if ( srch.Contains("Fto") || srch.Contains("FTo") || srch.Contains("FTO") || srch.Contains("F to") || srch.Contains("F To") ||
-                      srch.Contains("F TO") || srch.Contains("F-") || srch.Contains("F -") || srch.Contains("F_to") || srch.Contains("F_To") ||
-                      srch.Contains("F_TO") || srch.Contains("fto") || srch.Contains("fTo") || srch.Contains("fTO") || srch.Contains("f to") ||
-                      srch.Contains("f To") || srch.Contains("f TO") || srch.Contains("f-") || srch.Contains("f -") || srch.Contains("f_to") ||
-                      srch.Contains("f_To") || srch.Contains("f_TO") )
+            else if ( srch.Contains("FTO") )
                 first = _DoubleEG_F;
-            else if ( srch.Contains("Gto") || srch.Contains("GTo") || srch.Contains("GTO") || srch.Contains("G to") || srch.Contains("G To") ||
-                      srch.Contains("G TO") || srch.Contains("G-") || srch.Contains("G -") || srch.Contains("G_to") || srch.Contains("G_To") ||
-                      srch.Contains("G_TO") || srch.Contains("gto") || srch.Contains("gTo") || srch.Contains("gTO") || srch.Contains("g to") ||
-                      srch.Contains("g To") || srch.Contains("g TO") || srch.Contains("g-") || srch.Contains("g -") || srch.Contains("g_to") ||
-                      srch.Contains("g_To") || srch.Contains("g_TO") )
+            else if ( srch.Contains("GTO") )
                 first = _DoubleEG_G;
-            else if ( srch.Contains("Hto") || srch.Contains("HTo") || srch.Contains("HTO") || srch.Contains("H to") || srch.Contains("H To") ||
-                      srch.Contains("H TO") || srch.Contains("H-") || srch.Contains("H -") || srch.Contains("H_to") || srch.Contains("H_To") ||
-                      srch.Contains("H_TO") || srch.Contains("hto") || srch.Contains("hTo") || srch.Contains("hTO") || srch.Contains("h to") ||
-                      srch.Contains("h To") || srch.Contains("h TO") || srch.Contains("h-") || srch.Contains("h -") || srch.Contains("h_to") ||
-                      srch.Contains("h_To") || srch.Contains("h_TO") )
+            else if ( srch.Contains("HTO") )
                 first = _DoubleEG_H;
 
-            if ( srch.Contains("toB") || srch.Contains("ToB") || srch.Contains("TOB") || srch.Contains("to B") || srch.Contains("To B") ||
-                 srch.Contains("TO B") || srch.Contains("-B") || srch.Contains("- B") || srch.Contains("to_B") || srch.Contains("To_B") ||
-                 srch.Contains("TO_B") || srch.Contains("tob") || srch.Contains("Tob") || srch.Contains("TOb") || srch.Contains("to b") ||
-                 srch.Contains("To b") || srch.Contains("TO b") || srch.Contains("-b") || srch.Contains("- b") || srch.Contains("to_b") ||
-                 srch.Contains("To_b") || srch.Contains("TO_b") )
+            if ( srch.Contains("TOB") )
                 last = _DoubleEG_B;
-            else if ( srch.Contains("toC") || srch.Contains("ToC") || srch.Contains("TOC") || srch.Contains("to C") || srch.Contains("To C") ||
-                      srch.Contains("TO C") || srch.Contains("-C") || srch.Contains("- C") || srch.Contains("to_C") || srch.Contains("To_C") ||
-                      srch.Contains("TO_C") || srch.Contains("toc") || srch.Contains("Toc") || srch.Contains("TOc") || srch.Contains("to c") ||
-                      srch.Contains("To c") || srch.Contains("TO c") || srch.Contains("-c") || srch.Contains("- c") || srch.Contains("to_c") ||
-                      srch.Contains("To_c") || srch.Contains("TO_c") )
+            else if ( srch.Contains("TOC") )
                 last = _DoubleEG_C;
-            else if ( srch.Contains("toD") || srch.Contains("ToD") || srch.Contains("TOD") || srch.Contains("to D") || srch.Contains("To D") ||
-                      srch.Contains("TO D") || srch.Contains("-D") || srch.Contains("- D") || srch.Contains("to_D") || srch.Contains("To_D") ||
-                      srch.Contains("TO_D") || srch.Contains("tod") || srch.Contains("Tod") || srch.Contains("TOd") || srch.Contains("to d") ||
-                      srch.Contains("To d") || srch.Contains("TO d") || srch.Contains("-d") || srch.Contains("- d") || srch.Contains("to_d") ||
-                      srch.Contains("To_d") || srch.Contains("TO_d") )
+            else if ( srch.Contains("TOD") )
                 last = _DoubleEG_D;
-            else if ( srch.Contains("toE") || srch.Contains("ToE") || srch.Contains("TOE") || srch.Contains("to E") || srch.Contains("To E") ||
-                      srch.Contains("TO E") || srch.Contains("-E") || srch.Contains("- E") || srch.Contains("to_E") || srch.Contains("To_E") ||
-                      srch.Contains("TO_E") || srch.Contains("toe") || srch.Contains("Toe") || srch.Contains("TOe") || srch.Contains("to e") ||
-                      srch.Contains("To e") || srch.Contains("TO e") || srch.Contains("-e") || srch.Contains("- e") || srch.Contains("to_e") ||
-                      srch.Contains("To_e") || srch.Contains("TO_e") )
+            else if ( srch.Contains("TOE") )
                 last = _DoubleEG_E;
-            else if ( srch.Contains("toF") || srch.Contains("ToF") || srch.Contains("TOF") || srch.Contains("to F") || srch.Contains("To F") ||
-                      srch.Contains("TO F") || srch.Contains("-F") || srch.Contains("- F") || srch.Contains("to_F") || srch.Contains("To_F") ||
-                      srch.Contains("TO_F") || srch.Contains("tof") || srch.Contains("Tof") || srch.Contains("TOf") || srch.Contains("to f") ||
-                      srch.Contains("To f") || srch.Contains("TO f") || srch.Contains("-f") || srch.Contains("- f") || srch.Contains("to_f") ||
-                      srch.Contains("To_f") || srch.Contains("TO_f") )
+            else if ( srch.Contains("TOF") )
                 last = _DoubleEG_F;
-            else if ( srch.Contains("toG") || srch.Contains("ToG") || srch.Contains("TOG") || srch.Contains("to G") || srch.Contains("To G") ||
-                      srch.Contains("TO G") || srch.Contains("-G") || srch.Contains("- G") || srch.Contains("to_G") || srch.Contains("To_G") ||
-                      srch.Contains("TO_G") || srch.Contains("tog") || srch.Contains("Tog") || srch.Contains("TOg") || srch.Contains("to g") ||
-                      srch.Contains("To g") || srch.Contains("TO g") || srch.Contains("-g") || srch.Contains("- g") || srch.Contains("to_g") ||
-                      srch.Contains("To_g") || srch.Contains("TO_g") )
+            else if ( srch.Contains("TOG") )
                 last = _DoubleEG_G;
-            else if ( srch.Contains("toH") || srch.Contains("ToH") || srch.Contains("TOH") || srch.Contains("to H") || srch.Contains("To H") ||
-                      srch.Contains("TO H") || srch.Contains("-H") || srch.Contains("- H") || srch.Contains("to_H") || srch.Contains("To_H") ||
-                      srch.Contains("TO_H") || srch.Contains("toh") || srch.Contains("Toh") || srch.Contains("TOh") || srch.Contains("to h") ||
-                      srch.Contains("To h") || srch.Contains("TO h") || srch.Contains("-h") || srch.Contains("- h") || srch.Contains("to_h") ||
-                      srch.Contains("To_h") || srch.Contains("TO_h") )
+            else if ( srch.Contains("TOH") )
                 last = _DoubleEG_H;
 
             // Swapping first with last if necessary
@@ -3095,42 +2668,42 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
                 }
             }
             // Goes on if there are no intervals
-            else if ( srch.Contains("Full") || srch.Contains("full") || srch.Contains("FULL") )
+            else if ( srch.Contains("FULL") )
             {
                 Result.push_back(_DoubleEG_Full);
                 if ( notify == kTRUE ) cout << Procname[_DoubleEG_Full] << "." << endl;
             }
-            else if ( srch.Contains("_B") || srch.Contains("_b") || srch.Contains("runB") || srch.Contains("RUNB") || srch.Contains("RunB") || srch.Contains("runb") )
+            else if ( srch.Contains("_B") || srch.Contains("RUNB") )
             {
                 Result.push_back(_DoubleEG_B);
                 if ( notify == kTRUE ) cout << Procname[_DoubleEG_B] << "." << endl;
             }
-            else if ( srch.Contains("_C") || srch.Contains("_c") || srch.Contains("runC") || srch.Contains("RUNC") || srch.Contains("RunC") || srch.Contains("runc") )
+            else if ( srch.Contains("_C") || srch.Contains("RUNC") )
             {
                 Result.push_back(_DoubleEG_C);
                 if ( notify == kTRUE ) cout << Procname[_DoubleEG_C] << "." << endl;
             }
-            else if ( srch.Contains("_D") || srch.Contains("_d") || srch.Contains("runD") || srch.Contains("RUND") || srch.Contains("RunD") || srch.Contains("runD") )
+            else if ( srch.Contains("_D") || srch.Contains("RUND") )
             {
                 Result.push_back(_DoubleEG_D);
                 if ( notify == kTRUE ) cout << Procname[_DoubleEG_D] << "." << endl;
             }
-            else if ( srch.Contains("_E") || srch.Contains("_e") || srch.Contains("runE") || srch.Contains("RUNE") || srch.Contains("RunE") || srch.Contains("runE") )
+            else if ( srch.Contains("_E") || srch.Contains("RUNE") )
             {
                 Result.push_back(_DoubleEG_E);
                 if ( notify == kTRUE ) cout << Procname[_DoubleEG_E] << "." << endl;
             }
-            else if ( srch.Contains("_F") || srch.Contains("_f") || srch.Contains("runF") || srch.Contains("RUNF") || srch.Contains("RunF") || srch.Contains("runF") )
+            else if ( srch.Contains("_F") || srch.Contains("RUNF") )
             {
                 Result.push_back(_DoubleEG_F);
                 if ( notify == kTRUE ) cout << Procname[_DoubleEG_F] << "." << endl;
             }
-            else if ( srch.Contains("_G") || srch.Contains("_g") || srch.Contains("runG") || srch.Contains("RUNG") || srch.Contains("RunG") || srch.Contains("runG") )
+            else if ( srch.Contains("_G") || srch.Contains("RUNG") )
             {
                 Result.push_back(_DoubleEG_G);
                 if ( notify == kTRUE ) cout << Procname[_DoubleEG_G] << "." << endl;
             }
-            else if ( srch.Contains("_H") || srch.Contains("_h") || srch.Contains("runH") || srch.Contains("RUNH") || srch.Contains("RunH") || srch.Contains("runH") )
+            else if ( srch.Contains("_H") || srch.Contains("RUNH") )
             {
                 Result.push_back(_DoubleEG_H);
                 if ( notify == kTRUE ) cout << Procname[_DoubleEG_H] << "." << endl;
@@ -3145,94 +2718,39 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
 
     }// end of if(Double)
 
-    else if ( srch.Contains("Single") || srch.Contains("single") || srch.Contains("SINGLE") )
+    else if ( srch.Contains("SINGLE") )
     {
-        if ( srch.Contains("Mu") || srch.Contains("mu") || srch.Contains("MU") )
+        if ( srch.Contains("MU") )
         {
             // Checking if search contains intervals
-            if ( srch.Contains("Bto") || srch.Contains("BTo") || srch.Contains("BTO") || srch.Contains("B to") || srch.Contains("B To") ||
-                 srch.Contains("B TO") || srch.Contains("B-") || srch.Contains("B -") || srch.Contains("B_to") || srch.Contains("B_To") || srch.Contains("B_TO") ||
-                 srch.Contains("bto") || srch.Contains("bTo") || srch.Contains("bTO") || srch.Contains("b to") || srch.Contains("b To") || srch.Contains("c TO") ||
-                 srch.Contains("b-") || srch.Contains("b -") || srch.Contains("b_to") || srch.Contains("b_To") || srch.Contains("b_TO"))
+            if ( srch.Contains("BTO") )
                 first = _SingleMuon_B;
-            else if ( srch.Contains("Cto") || srch.Contains("CTo") || srch.Contains("CTO") || srch.Contains("C to") || srch.Contains("C To") ||
-                      srch.Contains("C TO") || srch.Contains("C-") || srch.Contains("C -") || srch.Contains("C_to") || srch.Contains("C_To") ||
-                      srch.Contains("C_TO") || srch.Contains("cto") || srch.Contains("cTo") || srch.Contains("cTO") || srch.Contains("c to") ||
-                      srch.Contains("c To") || srch.Contains("c TO") || srch.Contains("c-") || srch.Contains("c -") || srch.Contains("c_to") ||
-                      srch.Contains("c_To") || srch.Contains("c_TO") )
+            else if ( srch.Contains("CTO") )
                 first = _SingleMuon_C;
-            else if ( srch.Contains("Dto") || srch.Contains("DTo") || srch.Contains("DTO") || srch.Contains("D to") || srch.Contains("D To") ||
-                      srch.Contains("D TO") || srch.Contains("D-") || srch.Contains("D -") || srch.Contains("D_to") || srch.Contains("D_To") ||
-                      srch.Contains("D_TO") || srch.Contains("dto") || srch.Contains("dTo") || srch.Contains("dTO") || srch.Contains("d to") ||
-                      srch.Contains("d To") || srch.Contains("d TO") || srch.Contains("d-") || srch.Contains("d -") || srch.Contains("d_to") ||
-                      srch.Contains("d_To") || srch.Contains("d_TO") )
+            else if ( srch.Contains("DTO") )
                 first = _SingleMuon_D;
-            else if ( srch.Contains("Eto") || srch.Contains("ETo") || srch.Contains("ETO") || srch.Contains("E to") || srch.Contains("E To") ||
-                      srch.Contains("E TO") || srch.Contains("E-") || srch.Contains("E -") || srch.Contains("E_to") || srch.Contains("E_To") ||
-                      srch.Contains("E_TO") || srch.Contains("eto") || srch.Contains("eTo") || srch.Contains("eTO") || srch.Contains("e to") ||
-                      srch.Contains("e To") || srch.Contains("e TO") || srch.Contains("e-") || srch.Contains("e -") || srch.Contains("e_to") ||
-                      srch.Contains("e_To") || srch.Contains("e_TO") )
+            else if ( srch.Contains("ETO") )
                 first = _SingleMuon_E;
-            else if ( srch.Contains("Fto") || srch.Contains("FTo") || srch.Contains("FTO") || srch.Contains("F to") || srch.Contains("F To") ||
-                      srch.Contains("F TO") || srch.Contains("F-") || srch.Contains("F -") || srch.Contains("F_to") || srch.Contains("F_To") ||
-                      srch.Contains("F_TO") || srch.Contains("fto") || srch.Contains("fTo") || srch.Contains("fTO") || srch.Contains("f to") ||
-                      srch.Contains("f To") || srch.Contains("f TO") || srch.Contains("f-") || srch.Contains("f -") || srch.Contains("f_to") ||
-                      srch.Contains("f_To") || srch.Contains("f_TO") )
+            else if ( srch.Contains("FTO") )
                 first = _SingleMuon_F;
-            else if ( srch.Contains("Gto") || srch.Contains("GTo") || srch.Contains("GTO") || srch.Contains("G to") || srch.Contains("G To") ||
-                      srch.Contains("G TO") || srch.Contains("G-") || srch.Contains("G -") || srch.Contains("G_to") || srch.Contains("G_To") ||
-                      srch.Contains("G_TO") || srch.Contains("gto") || srch.Contains("gTo") || srch.Contains("gTO") || srch.Contains("g to") ||
-                      srch.Contains("g To") || srch.Contains("g TO") || srch.Contains("g-") || srch.Contains("g -") || srch.Contains("g_to") ||
-                      srch.Contains("g_To") || srch.Contains("g_TO") )
+            else if ( srch.Contains("GTO") )
                 first = _SingleMuon_G;
-            else if ( srch.Contains("Hto") || srch.Contains("HTo") || srch.Contains("HTO") || srch.Contains("H to") || srch.Contains("H To") ||
-                      srch.Contains("H TO") || srch.Contains("H-") || srch.Contains("H -") || srch.Contains("H_to") || srch.Contains("H_To") ||
-                      srch.Contains("H_TO") || srch.Contains("hto") || srch.Contains("hTo") || srch.Contains("hTO") || srch.Contains("h to") ||
-                      srch.Contains("h To") || srch.Contains("h TO") || srch.Contains("h-") || srch.Contains("h -") || srch.Contains("h_to") ||
-                      srch.Contains("h_To") || srch.Contains("h_TO") )
+            else if ( srch.Contains("HTO") )
                 first = _SingleMuon_H;
 
-            if ( srch.Contains("toB") || srch.Contains("ToB") || srch.Contains("TOB") || srch.Contains("to B") || srch.Contains("To B") ||
-                 srch.Contains("TO B") || srch.Contains("-B") || srch.Contains("- B") || srch.Contains("to_B") || srch.Contains("To_B") ||
-                 srch.Contains("TO_B") || srch.Contains("tob") || srch.Contains("Tob") || srch.Contains("TOb") || srch.Contains("to b") ||
-                 srch.Contains("To b") || srch.Contains("TO b") || srch.Contains("-b") || srch.Contains("- b") || srch.Contains("to_b") ||
-                 srch.Contains("To_b") || srch.Contains("TO_b") )
+            if ( srch.Contains("TOB") )
                 last = _SingleMuon_B;
-            else if ( srch.Contains("toC") || srch.Contains("ToC") || srch.Contains("TOC") || srch.Contains("to C") || srch.Contains("To C") ||
-                      srch.Contains("TO C") || srch.Contains("-C") || srch.Contains("- C") || srch.Contains("to_C") || srch.Contains("To_C") ||
-                      srch.Contains("TO_C") || srch.Contains("toc") || srch.Contains("Toc") || srch.Contains("TOc") || srch.Contains("to c") ||
-                      srch.Contains("To c") || srch.Contains("TO c") || srch.Contains("-c") || srch.Contains("- c") || srch.Contains("to_c") ||
-                      srch.Contains("To_c") || srch.Contains("TO_c") )
+            else if ( srch.Contains("TOC") )
                 last = _SingleMuon_C;
-            else if ( srch.Contains("toD") || srch.Contains("ToD") || srch.Contains("TOD") || srch.Contains("to D") || srch.Contains("To D") ||
-                      srch.Contains("TO D") || srch.Contains("-D") || srch.Contains("- D") || srch.Contains("to_D") || srch.Contains("To_D") ||
-                      srch.Contains("TO_D") || srch.Contains("tod") || srch.Contains("Tod") || srch.Contains("TOd") || srch.Contains("to d") ||
-                      srch.Contains("To d") || srch.Contains("TO d") || srch.Contains("-d") || srch.Contains("- d") || srch.Contains("to_d") ||
-                      srch.Contains("To_d") || srch.Contains("TO_d") )
+            else if ( srch.Contains("TOD") )
                 last = _SingleMuon_D;
-            else if ( srch.Contains("toE") || srch.Contains("ToE") || srch.Contains("TOE") || srch.Contains("to E") || srch.Contains("To E") ||
-                      srch.Contains("TO E") || srch.Contains("-E") || srch.Contains("- E") || srch.Contains("to_E") || srch.Contains("To_E") ||
-                      srch.Contains("TO_E") || srch.Contains("toe") || srch.Contains("Toe") || srch.Contains("TOe") || srch.Contains("to e") ||
-                      srch.Contains("To e") || srch.Contains("TO e") || srch.Contains("-e") || srch.Contains("- e") || srch.Contains("to_e") ||
-                      srch.Contains("To_e") || srch.Contains("TO_e") )
+            else if ( srch.Contains("TOE") )
                 last = _SingleMuon_E;
-            else if ( srch.Contains("toF") || srch.Contains("ToF") || srch.Contains("TOF") || srch.Contains("to F") || srch.Contains("To F") ||
-                      srch.Contains("TO F") || srch.Contains("-F") || srch.Contains("- F") || srch.Contains("to_F") || srch.Contains("To_F") ||
-                      srch.Contains("TO_F") || srch.Contains("tof") || srch.Contains("Tof") || srch.Contains("TOf") || srch.Contains("to f") ||
-                      srch.Contains("To f") || srch.Contains("TO f") || srch.Contains("-f") || srch.Contains("- f") || srch.Contains("to_f") ||
-                      srch.Contains("To_f") || srch.Contains("TO_f") )
+            else if ( srch.Contains("TOF") )
                 last = _SingleMuon_F;
-            else if ( srch.Contains("toG") || srch.Contains("ToG") || srch.Contains("TOG") || srch.Contains("to G") || srch.Contains("To G") ||
-                      srch.Contains("TO G") || srch.Contains("-G") || srch.Contains("- G") || srch.Contains("to_G") || srch.Contains("To_G") ||
-                      srch.Contains("TO_G") || srch.Contains("tog") || srch.Contains("Tog") || srch.Contains("TOg") || srch.Contains("to g") ||
-                      srch.Contains("To g") || srch.Contains("TO g") || srch.Contains("-g") || srch.Contains("- g") || srch.Contains("to_g") ||
-                      srch.Contains("To_g") || srch.Contains("TO_g") )
+            else if ( srch.Contains("TOG") )
                 last = _SingleMuon_G;
-            else if ( srch.Contains("toH") || srch.Contains("ToH") || srch.Contains("TOH") || srch.Contains("to H") || srch.Contains("To H") ||
-                      srch.Contains("TO H") || srch.Contains("-H") || srch.Contains("- H") || srch.Contains("to_H") || srch.Contains("To_H") ||
-                      srch.Contains("TO_H") || srch.Contains("toh") || srch.Contains("Toh") || srch.Contains("TOh") || srch.Contains("to h") ||
-                      srch.Contains("To h") || srch.Contains("TO h") || srch.Contains("-h") || srch.Contains("- h") || srch.Contains("to_h") ||
-                      srch.Contains("To_h") || srch.Contains("TO_h") )
+            else if ( srch.Contains("TOH") )
                 last = _SingleMuon_H;
 
             // Swapping first with last if necessary
@@ -3260,42 +2778,42 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
                 }
             }
             // Goes on if there are no intervals
-            else if ( srch.Contains("Full") || srch.Contains("full") || srch.Contains("FULL") )
+            else if ( srch.Contains("FULL") )
             {
                 Result.push_back(_SingleMuon_Full);
                 if ( notify == kTRUE ) cout << Procname[_SingleMuon_Full] << "." << endl;
             }
-            else if ( srch.Contains("_B") || srch.Contains("_b") || srch.Contains("runB") || srch.Contains("RUNB") || srch.Contains("RunB") || srch.Contains("runb") )
+            else if ( srch.Contains("_B")  || srch.Contains("RUNB") )
             {
                 Result.push_back(_SingleMuon_B);
                 if ( notify == kTRUE ) cout << Procname[_SingleMuon_B] << "." << endl;
             }
-            else if ( srch.Contains("_C") || srch.Contains("_c") || srch.Contains("runC") || srch.Contains("RUNC") || srch.Contains("RunC") || srch.Contains("runc") )
+            else if ( srch.Contains("_C") || srch.Contains("RUNC") )
             {
                 Result.push_back(_SingleMuon_C);
                 if ( notify == kTRUE ) cout << Procname[_SingleMuon_C] << "." << endl;
             }
-            else if ( srch.Contains("_D") || srch.Contains("_d") || srch.Contains("runD") || srch.Contains("RUND") || srch.Contains("RunD") || srch.Contains("runD") )
+            else if ( srch.Contains("_D") || srch.Contains("RUND") )
             {
                 Result.push_back(_SingleMuon_D);
                 if ( notify == kTRUE ) cout << Procname[_SingleMuon_D] << "." << endl;
             }
-            else if ( srch.Contains("_E") || srch.Contains("_e") || srch.Contains("runE") || srch.Contains("RUNE") || srch.Contains("RunE") || srch.Contains("runE") )
+            else if ( srch.Contains("_E") || srch.Contains("RUNE") )
             {
                 Result.push_back(_SingleMuon_E);
                 if ( notify == kTRUE ) cout << Procname[_SingleMuon_E] << "." << endl;
             }
-            else if ( srch.Contains("_F") || srch.Contains("_f") || srch.Contains("runF") || srch.Contains("RUNF") || srch.Contains("RunF") || srch.Contains("runF") )
+            else if ( srch.Contains("_F") || srch.Contains("RUNF") )
             {
                 Result.push_back(_SingleMuon_F);
                 if ( notify == kTRUE ) cout << Procname[_SingleMuon_F] << "." << endl;
             }
-            else if ( srch.Contains("_G") || srch.Contains("_g") || srch.Contains("runG") || srch.Contains("RUNG") || srch.Contains("RunG") || srch.Contains("runG") )
+            else if ( srch.Contains("_G") || srch.Contains("RUNG") )
             {
                 Result.push_back(_SingleMuon_G);
                 if ( notify == kTRUE ) cout << Procname[_SingleMuon_G] << "." << endl;
             }
-            else if ( srch.Contains("_H") || srch.Contains("_h") || srch.Contains("runH") || srch.Contains("RUNH") || srch.Contains("RunH") || srch.Contains("runH") )
+            else if ( srch.Contains("_H") || srch.Contains("RUNH") )
             {
                 Result.push_back(_SingleMuon_H);
                 if ( notify == kTRUE ) cout << Procname[_SingleMuon_H] << "." << endl;
@@ -3307,92 +2825,37 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
             }
         }// end of if(SingleMuon)
 
-        if ( srch.Contains("Elec") || srch.Contains("elec") || srch.Contains("ELEC") )
+        if ( srch.Contains("ELEC") )
         {
             // Checking if search contains intervals
-            if ( srch.Contains("Bto") || srch.Contains("BTo") || srch.Contains("BTO") || srch.Contains("B to") || srch.Contains("B To") ||
-                 srch.Contains("B TO") || srch.Contains("B-") || srch.Contains("B -") || srch.Contains("B_to") || srch.Contains("B_To") || srch.Contains("B_TO") ||
-                 srch.Contains("bto") || srch.Contains("bTo") || srch.Contains("bTO") || srch.Contains("b to") || srch.Contains("b To") || srch.Contains("c TO") ||
-                 srch.Contains("b-") || srch.Contains("b -") || srch.Contains("b_to") || srch.Contains("b_To") || srch.Contains("b_TO"))
+            if ( srch.Contains("BTO") )
                 first = _SingleElectron_B;
-            else if ( srch.Contains("Cto") || srch.Contains("CTo") || srch.Contains("CTO") || srch.Contains("C to") || srch.Contains("C To") ||
-                      srch.Contains("C TO") || srch.Contains("C-") || srch.Contains("C -") || srch.Contains("C_to") || srch.Contains("C_To") ||
-                      srch.Contains("C_TO") || srch.Contains("cto") || srch.Contains("cTo") || srch.Contains("cTO") || srch.Contains("c to") ||
-                      srch.Contains("c To") || srch.Contains("c TO") || srch.Contains("c-") || srch.Contains("c -") || srch.Contains("c_to") ||
-                      srch.Contains("c_To") || srch.Contains("c_TO") )
+            else if ( srch.Contains("CTO") )
                 first = _SingleElectron_C;
-            else if ( srch.Contains("Dto") || srch.Contains("DTo") || srch.Contains("DTO") || srch.Contains("D to") || srch.Contains("D To") ||
-                      srch.Contains("D TO") || srch.Contains("D-") || srch.Contains("D -") || srch.Contains("D_to") || srch.Contains("D_To") ||
-                      srch.Contains("D_TO") || srch.Contains("dto") || srch.Contains("dTo") || srch.Contains("dTO") || srch.Contains("d to") ||
-                      srch.Contains("d To") || srch.Contains("d TO") || srch.Contains("d-") || srch.Contains("d -") || srch.Contains("d_to") ||
-                      srch.Contains("d_To") || srch.Contains("d_TO") )
+            else if ( srch.Contains("DTO") )
                 first = _SingleElectron_D;
-            else if ( srch.Contains("Eto") || srch.Contains("ETo") || srch.Contains("ETO") || srch.Contains("E to") || srch.Contains("E To") ||
-                      srch.Contains("E TO") || srch.Contains("E-") || srch.Contains("E -") || srch.Contains("E_to") || srch.Contains("E_To") ||
-                      srch.Contains("E_TO") || srch.Contains("eto") || srch.Contains("eTo") || srch.Contains("eTO") || srch.Contains("e to") ||
-                      srch.Contains("e To") || srch.Contains("e TO") || srch.Contains("e-") || srch.Contains("e -") || srch.Contains("e_to") ||
-                      srch.Contains("e_To") || srch.Contains("e_TO") )
+            else if ( srch.Contains("ETO") )
                 first = _SingleElectron_E;
-            else if ( srch.Contains("Fto") || srch.Contains("FTo") || srch.Contains("FTO") || srch.Contains("F to") || srch.Contains("F To") ||
-                      srch.Contains("F TO") || srch.Contains("F-") || srch.Contains("F -") || srch.Contains("F_to") || srch.Contains("F_To") ||
-                      srch.Contains("F_TO") || srch.Contains("fto") || srch.Contains("fTo") || srch.Contains("fTO") || srch.Contains("f to") ||
-                      srch.Contains("f To") || srch.Contains("f TO") || srch.Contains("f-") || srch.Contains("f -") || srch.Contains("f_to") ||
-                      srch.Contains("f_To") || srch.Contains("f_TO") )
+            else if ( srch.Contains("FTO") )
                 first = _SingleElectron_F;
-            else if ( srch.Contains("Gto") || srch.Contains("GTo") || srch.Contains("GTO") || srch.Contains("G to") || srch.Contains("G To") ||
-                      srch.Contains("G TO") || srch.Contains("G-") || srch.Contains("G -") || srch.Contains("G_to") || srch.Contains("G_To") ||
-                      srch.Contains("G_TO") || srch.Contains("gto") || srch.Contains("gTo") || srch.Contains("gTO") || srch.Contains("g to") ||
-                      srch.Contains("g To") || srch.Contains("g TO") || srch.Contains("g-") || srch.Contains("g -") || srch.Contains("g_to") ||
-                      srch.Contains("g_To") || srch.Contains("g_TO") )
+            else if ( srch.Contains("GTO") )
                 first = _SingleElectron_G;
-            else if ( srch.Contains("Hto") || srch.Contains("HTo") || srch.Contains("HTO") || srch.Contains("H to") || srch.Contains("H To") ||
-                      srch.Contains("H TO") || srch.Contains("H-") || srch.Contains("H -") || srch.Contains("H_to") || srch.Contains("H_To") ||
-                      srch.Contains("H_TO") || srch.Contains("hto") || srch.Contains("hTo") || srch.Contains("hTO") || srch.Contains("h to") ||
-                      srch.Contains("h To") || srch.Contains("h TO") || srch.Contains("h-") || srch.Contains("h -") || srch.Contains("h_to") ||
-                      srch.Contains("h_To") || srch.Contains("h_TO") )
+            else if ( srch.Contains("HTO") )
                 first = _SingleElectron_H;
 
-            if ( srch.Contains("toB") || srch.Contains("ToB") || srch.Contains("TOB") || srch.Contains("to B") || srch.Contains("To B") ||
-                 srch.Contains("TO B") || srch.Contains("-B") || srch.Contains("- B") || srch.Contains("to_B") || srch.Contains("To_B") ||
-                 srch.Contains("TO_B") || srch.Contains("tob") || srch.Contains("Tob") || srch.Contains("TOb") || srch.Contains("to b") ||
-                 srch.Contains("To b") || srch.Contains("TO b") || srch.Contains("-b") || srch.Contains("- b") || srch.Contains("to_b") ||
-                 srch.Contains("To_b") || srch.Contains("TO_b") )
+            if ( srch.Contains("TOB") )
                 last = _SingleElectron_B;
-            else if ( srch.Contains("toC") || srch.Contains("ToC") || srch.Contains("TOC") || srch.Contains("to C") || srch.Contains("To C") ||
-                      srch.Contains("TO C") || srch.Contains("-C") || srch.Contains("- C") || srch.Contains("to_C") || srch.Contains("To_C") ||
-                      srch.Contains("TO_C") || srch.Contains("toc") || srch.Contains("Toc") || srch.Contains("TOc") || srch.Contains("to c") ||
-                      srch.Contains("To c") || srch.Contains("TO c") || srch.Contains("-c") || srch.Contains("- c") || srch.Contains("to_c") ||
-                      srch.Contains("To_c") || srch.Contains("TO_c") )
+            else if ( srch.Contains("TOC") )
                 last = _SingleElectron_C;
-            else if ( srch.Contains("toD") || srch.Contains("ToD") || srch.Contains("TOD") || srch.Contains("to D") || srch.Contains("To D") ||
-                      srch.Contains("TO D") || srch.Contains("-D") || srch.Contains("- D") || srch.Contains("to_D") || srch.Contains("To_D") ||
-                      srch.Contains("TO_D") || srch.Contains("tod") || srch.Contains("Tod") || srch.Contains("TOd") || srch.Contains("to d") ||
-                      srch.Contains("To d") || srch.Contains("TO d") || srch.Contains("-d") || srch.Contains("- d") || srch.Contains("to_d") ||
-                      srch.Contains("To_d") || srch.Contains("TO_d") )
+            else if ( srch.Contains("TOD") )
                 last = _SingleElectron_D;
-            else if ( srch.Contains("toE") || srch.Contains("ToE") || srch.Contains("TOE") || srch.Contains("to E") || srch.Contains("To E") ||
-                      srch.Contains("TO E") || srch.Contains("-E") || srch.Contains("- E") || srch.Contains("to_E") || srch.Contains("To_E") ||
-                      srch.Contains("TO_E") || srch.Contains("toe") || srch.Contains("Toe") || srch.Contains("TOe") || srch.Contains("to e") ||
-                      srch.Contains("To e") || srch.Contains("TO e") || srch.Contains("-e") || srch.Contains("- e") || srch.Contains("to_e") ||
-                      srch.Contains("To_e") || srch.Contains("TO_e") )
+            else if ( srch.Contains("TOE") )
                 last = _SingleElectron_E;
-            else if ( srch.Contains("toF") || srch.Contains("ToF") || srch.Contains("TOF") || srch.Contains("to F") || srch.Contains("To F") ||
-                      srch.Contains("TO F") || srch.Contains("-F") || srch.Contains("- F") || srch.Contains("to_F") || srch.Contains("To_F") ||
-                      srch.Contains("TO_F") || srch.Contains("tof") || srch.Contains("Tof") || srch.Contains("TOf") || srch.Contains("to f") ||
-                      srch.Contains("To f") || srch.Contains("TO f") || srch.Contains("-f") || srch.Contains("- f") || srch.Contains("to_f") ||
-                      srch.Contains("To_f") || srch.Contains("TO_f") )
+            else if ( srch.Contains("TOF") )
                 last = _SingleElectron_F;
-            else if ( srch.Contains("toG") || srch.Contains("ToG") || srch.Contains("TOG") || srch.Contains("to G") || srch.Contains("To G") ||
-                      srch.Contains("TO G") || srch.Contains("-G") || srch.Contains("- G") || srch.Contains("to_G") || srch.Contains("To_G") ||
-                      srch.Contains("TO_G") || srch.Contains("tog") || srch.Contains("Tog") || srch.Contains("TOg") || srch.Contains("to g") ||
-                      srch.Contains("To g") || srch.Contains("TO g") || srch.Contains("-g") || srch.Contains("- g") || srch.Contains("to_g") ||
-                      srch.Contains("To_g") || srch.Contains("TO_g") )
+            else if ( srch.Contains("TOG") )
                 last = _SingleElectron_G;
-            else if ( srch.Contains("toH") || srch.Contains("ToH") || srch.Contains("TOH") || srch.Contains("to H") || srch.Contains("To H") ||
-                      srch.Contains("TO H") || srch.Contains("-H") || srch.Contains("- H") || srch.Contains("to_H") || srch.Contains("To_H") ||
-                      srch.Contains("TO_H") || srch.Contains("toh") || srch.Contains("Toh") || srch.Contains("TOh") || srch.Contains("to h") ||
-                      srch.Contains("To h") || srch.Contains("TO h") || srch.Contains("-h") || srch.Contains("- h") || srch.Contains("to_h") ||
-                      srch.Contains("To_h") || srch.Contains("TO_h") )
+            else if ( srch.Contains("TOH") )
                 last = _SingleElectron_H;
 
             // Swapping first with last if necessary
@@ -3420,42 +2883,42 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
                 }
             }
             // Goes on if there are no intervals
-            else if ( srch.Contains("Full") || srch.Contains("full") || srch.Contains("FULL") )
+            else if ( srch.Contains("FULL") )
             {
                 Result.push_back(_SingleElectron_Full);
                 if ( notify == kTRUE ) cout << Procname[_SingleElectron_Full] << "." << endl;
             }
-            else if ( srch.Contains("_B") || srch.Contains("_b") || srch.Contains("runB") || srch.Contains("RUNB") || srch.Contains("RunB") || srch.Contains("runb") )
+            else if ( srch.Contains("_B")  || srch.Contains("RUNB") )
             {
                 Result.push_back(_SingleElectron_B);
                 if ( notify == kTRUE ) cout << Procname[_SingleElectron_B] << "." << endl;
             }
-            else if ( srch.Contains("_C") || srch.Contains("_c") || srch.Contains("runC") || srch.Contains("RUNC") || srch.Contains("RunC") || srch.Contains("runc") )
+            else if ( srch.Contains("_C") || srch.Contains("RUNC") )
             {
                 Result.push_back(_SingleElectron_C);
                 if ( notify == kTRUE ) cout << Procname[_SingleElectron_C] << "." << endl;
             }
-            else if ( srch.Contains("_D") || srch.Contains("_d") || srch.Contains("runD") || srch.Contains("RUND") || srch.Contains("RunD") || srch.Contains("runD") )
+            else if ( srch.Contains("_D") || srch.Contains("RUND") )
             {
                 Result.push_back(_SingleElectron_D);
                 if ( notify == kTRUE ) cout << Procname[_SingleElectron_D] << "." << endl;
             }
-            else if ( srch.Contains("_E") || srch.Contains("_e") || srch.Contains("runE") || srch.Contains("RUNE") || srch.Contains("RunE") || srch.Contains("runE") )
+            else if ( srch.Contains("_E") || srch.Contains("RUNE") )
             {
                 Result.push_back(_SingleElectron_E);
                 if ( notify == kTRUE ) cout << Procname[_SingleElectron_E] << "." << endl;
             }
-            else if ( srch.Contains("_F") || srch.Contains("_f") || srch.Contains("runF") || srch.Contains("RUNF") || srch.Contains("RunF") || srch.Contains("runF") )
+            else if ( srch.Contains("_F") || srch.Contains("RUNF") )
             {
                 Result.push_back(_SingleElectron_F);
                 if ( notify == kTRUE ) cout << Procname[_SingleElectron_F] << "." << endl;
             }
-            else if ( srch.Contains("_G") || srch.Contains("_g") || srch.Contains("runG") || srch.Contains("RUNG") || srch.Contains("RunG") || srch.Contains("runG") )
+            else if ( srch.Contains("_G")|| srch.Contains("RUNG") )
             {
                 Result.push_back(_SingleElectron_G);
                 if ( notify == kTRUE ) cout << Procname[_SingleElectron_G] << "." << endl;
             }
-            else if ( srch.Contains("_H") || srch.Contains("_h") || srch.Contains("runH") || srch.Contains("RUNH") || srch.Contains("RunH") || srch.Contains("runH") )
+            else if ( srch.Contains("_H")|| srch.Contains("RUNH") )
             {
                 Result.push_back(_SingleElectron_H);
                 if ( notify == kTRUE ) cout << Procname[_SingleElectron_H] << "." << endl;
@@ -3469,35 +2932,31 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
 
     }// end of if(Single)
 
-    else if ( srch.Contains("Signal") || srch.Contains("signal") || srch.Contains("SIGNAL") )
+    else if ( srch.Contains("SIGNAL") )
     {
         Result.push_back(_DY_Full);
         if ( notify == kTRUE ) cout << Procname[_DY_Full] << "." << endl;
     }
 
-    else if ( srch.Contains("Bkg") || srch.Contains("bkg") || srch.Contains("BKG") || srch.Contains("Background") || srch.Contains("background") ||
-              srch.Contains("BACKGROUND") )
+    else if ( srch.Contains("BKG") )
     {
         Result.push_back(_bkg_Full);
         if ( notify == kTRUE )  cout << Procname[_bkg_Full] << "." << endl;
     }
 
-    else if ( srch.Contains("Test") || srch.Contains("test") || srch.Contains("TEST") )
+    else if ( srch.Contains("TEST") )
     {
-        if ( srch.Contains("EE") || srch.Contains("ee") || srch.Contains("Ee") || srch.Contains("eE") || srch.Contains("dielectron") ||
-             srch.Contains("Dielectron") || srch.Contains("diElectron") || srch.Contains("DiElectron") || srch.Contains("DIELECTRON") )
+        if ( srch.Contains("EE") )
         {
             Result.push_back(_Test_EE);
             if ( notify == kTRUE )  cout << Procname[_Test_EE] << "." << endl;
         }
-        else if ( srch.Contains("MuMu") || srch.Contains("mumu") || srch.Contains("MUMU") || srch.Contains("Dimuon") || srch.Contains("diMuon") ||
-                  srch.Contains("DiMuon") || srch.Contains("dimuon") || srch.Contains("DIMUON") )
+        else if ( srch.Contains("MUMU") )
         {
             Result.push_back(_Test_MuMu);
             if ( notify == kTRUE )  cout << Procname[_Test_MuMu] << "." << endl;
         }
-        else if ( srch.Contains("EMu") || srch.Contains("emu") || srch.Contains("EMU") || srch.Contains("eMu") || srch.Contains("eMU") ||
-                  srch.Contains("Emu") || ( srch.Contains("Ele") && srch.Contains("Mu") ) )
+        else if ( srch.Contains("EMU") )
         {
             Result.push_back(_Test_EMu);
             if ( notify == kTRUE )  cout << Procname[_Test_EMu] << "." << endl;
@@ -3510,12 +2969,12 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
         if ( notify == kTRUE ) cout << Procname[_None] << "." << endl;
     }
 
-    if ( instaGet == kTRUE )    // Applying GetProc if asked
+    if ( instaGet == kTRUE )    // Applying SetProc if asked
     {
         cout << "Getting information for returned processes..";
         for ( Int_t i=0; i<(int(Result.size())); i++ )
         {
-            if ( Result[i] != _None ) this->GetProc( Result[i], kFALSE );
+            if ( Result[i] != _None ) this->SetProc( Result[i], kFALSE );
         }
         cout << " Finished." << endl;
     }
@@ -3657,7 +3116,7 @@ void FileMgr::CheckProcesses()
     cout << "Checking processes: " << endl;
     for ( Process_t pr=_DY_10to50; pr<_EndOf_Data_Special; pr=next(pr) )
     {
-        this->GetProc(pr, kTRUE);
+        this->SetProc(pr, kTRUE);
         if ( !Procname[pr].Length() )
         {
             cout << "Process " << pr << ": no Procname found (providing its int expression)." << endl;
