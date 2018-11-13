@@ -55,19 +55,25 @@ enum Process_t
     _EndOf_Data_Special,
     // Processes for testing at local pc
     _Test_MuMu, _Test_EE, _Test_EMu,
-    _EndOf_Test
+    _EndOf_Test,
+    // Alternatively generated MC processes for comparing
+    _A_DY_50to100, _A_DY_100to250, _A_DY_250to400, _A_DY_400to650, _A_DY_650toInf, _EndOf_A_DY_Normal,
+    _A_WJets, _A_ZZ, _A_WZ, _A_WW, _EndOf_A_MCbkg_Normal,
+    _A_DY_Full,
+    _EndOf_Alternatives
 };
 
 inline
 Process_t next ( Process_t pr )    // Processes that begin with "EndOf" will be skipped by this
 {
-  if ( pr == _EndOf_Test )
+  if ( pr == _EndOf_Alternatives )
       return pr;
   else if ( pr == _DYEE_2000to3000 || pr == _QCDEMEnriched_300toInf || pr == _SingleElectron_H )
       return Process_t(int(pr)+3);
   else if ( pr == _DY_2000to3000 || pr == _DYMuMu_2000to3000 || pr == _EndOf_DYEE_Normal || pr == _DYTauTau_50toInf || pr == _ttbar_1000toInf ||
             pr == _WW || pr == _WJets || pr == _QCDMuEnriched_1000toInf || pr == _EndOf_QCDEMEnriched_Normal || pr == _DoubleEG_H ||
-            pr == _SingleMuon_H || pr == _EndOf_SingleElectron_Normal || pr == _DYEE_Full || pr == _bkg_Full || pr == _SingleElectron_Full )
+            pr == _SingleMuon_H || pr == _EndOf_SingleElectron_Normal || pr == _DYEE_Full || pr == _bkg_Full || pr == _SingleElectron_Full ||
+            pr == _Test_EMu || pr == _A_DY_650toInf || pr == _A_WW )
       return Process_t(int(pr)+2);
   else
       return Process_t(int(pr)+1);
@@ -1933,99 +1939,286 @@ void FileMgr::SetProc ( Process_t pr, Bool_t ClearOld )
         Location = "WW_34.root";
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
-}// end of Get()
+    if ( pr == _A_DY_50to100 )
+    {
+        isMC = kTRUE;
+        Type = "SIGNAL";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/";
+
+        Tag.push_back( "DY_Pt50to100" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-50To100_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt50to100/180326_142950/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation + Location );
+
+        Tag.push_back( "DY_Pt50to100_ext3" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-50To100_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt50to100_ext3/180326_143053/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation + Location );
+    }
+    else if( pr == _A_DY_100to250 )
+    {
+        isMC = kTRUE;
+        Type = "SIGNAL";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/";
+
+        Tag.push_back( "DY_Pt100to250" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-100To250_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt100to250/180326_143142/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt100to250_ext1" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-100To250_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt100to250_ext1/180326_143238/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt100to250_ext2" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-100To250_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt100to250_ext2/180326_143323/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt100to250_ext5" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-100To250_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt100to250_ext5/180326_143408/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+    }
+    else if( pr == _A_DY_250to400 )
+    {
+        isMC = kTRUE;
+        Type = "SIGNAL";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/";
+
+        Tag.push_back( "DY_Pt250to400" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-250To400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt250to400/180326_143530/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt250to400_ext1" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-250To400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt250to400_ext1/180326_143611/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt250to400_ext2" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-250To400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt250to400_ext2/180326_143654/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt250to400_ext5" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-250To400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt250to400_ext5/180326_143749/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+    }
+    else if( pr == _A_DY_400to650 )
+    {
+        isMC = kTRUE;
+        Type = "SIGNAL";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/";
+
+        Tag.push_back( "DY_Pt400to650" ); Xsec.push_back( 1 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-400To650_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt400to650/180326_143837/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt400to650_ext1" ); Xsec.push_back( 1 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-400To650_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt400to650_ext1/180326_143921/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt400to650_ext2" ); Xsec.push_back( 1 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-400To650_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt400to650_ext2/180326_144003/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+    }
+    else if( pr == _A_DY_650toInf )
+    {
+        isMC = kTRUE;
+        Type = "SIGNAL";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/";
+
+        Tag.push_back( "DY_Pt650toInf" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-650ToInf_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt650toInf/180326_144113/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt650toInf_ext1" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-650ToInf_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt650toInf_ext1/180326_144200/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt650toInf_ext2" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-650ToInf_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt650toInf_ext2/180326_144249/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+    }
+    else if( pr == _A_DY_Full )
+    {
+        isMC = kTRUE;
+        Type = "SIGNAL";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/";
+
+        Tag.push_back( "DY_Pt50to100" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-50To100_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt50to100/180326_142950/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation + Location );
+
+        Tag.push_back( "DY_Pt50to100_ext3" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-50To100_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt50to100_ext3/180326_143053/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation + Location );
+
+        Tag.push_back( "DY_Pt100to250" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-100To250_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt100to250/180326_143142/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt100to250_ext1" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-100To250_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt100to250_ext1/180326_143238/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt100to250_ext2" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-100To250_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt100to250_ext2/180326_143323/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt100to250_ext5" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-100To250_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt100to250_ext5/180326_143408/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt250to400" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-250To400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt250to400/180326_143530/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt250to400_ext1" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-250To400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt250to400_ext1/180326_143611/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt250to400_ext2" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-250To400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt250to400_ext2/180326_143654/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt250to400_ext5" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-250To400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt250to400_ext5/180326_143749/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt400to650" ); Xsec.push_back( 1 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-400To650_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt400to650/180326_143837/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt400to650_ext1" ); Xsec.push_back( 1 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-400To650_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt400to650_ext1/180326_143921/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt400to650_ext2" ); Xsec.push_back( 1 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-400To650_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt400to650_ext2/180326_144003/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt650toInf" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-650ToInf_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt650toInf/180326_144113/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt650toInf_ext1" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-650ToInf_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt650toInf_ext1/180326_144200/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "DY_Pt650toInf_ext2" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "DYJetsToLL_Pt-650ToInf_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_Pt650toInf_ext2/180326_144249/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+    }
+    else if( pr == _A_WJets )
+    {
+        isMC = kTRUE;
+        Type = "SIGNAL";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/";
+
+        Tag.push_back( "WJets_madgraph" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WJetsToLNu_ext/180326_143105/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+    }
+    else if( pr == _A_ZZ )
+    {
+        isMC = kTRUE;
+        Type = "SIGNAL";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/";
+
+        Tag.push_back( "ZZ_powheg" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "ZZTo4L_13TeV_powheg_pythia8/crab_ZZto4L/180326_143705/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+    }
+    else if( pr == _A_WZ )
+    {
+        isMC = kTRUE;
+        Type = "SIGNAL";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/";
+
+        Tag.push_back( "WZ_powheg" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/crab_WZTo3LNu/180326_143554/0000/ntuple_skim_120.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+    }
+    else if( pr == _A_WW )
+    {
+        isMC = kTRUE;
+        Type = "SIGNAL";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/";
+
+        Tag.push_back( "WW_powheg" ); Xsec.push_back( 1.0 ); Wsum.push_back( 1 ); nEvents.push_back( 1 );
+        Location = "WWTo2L2Nu_13TeV-powheg/crab_WWTo2L2Nu/180326_143324/0000/*.root";
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+    }
+
+}// end of SetProc()
 
 
 vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t instaGet )
 {
     TString srch = search;
     srch.ToUpper();
-    srch.ReplaceAll("-", "TO");
-    srch.ReplaceAll(" TO", "TO"); srch.ReplaceAll("_TO", "TO");
-    srch.ReplaceAll("TO ", "TO"); srch.ReplaceAll("TO_", "TO");
-    srch.ReplaceAll("DRELLYAN", "DY");
-    srch.ReplaceAll("ZW", "WZ");
-    srch.ReplaceAll("SINGLETOP", "TW");
-    srch.ReplaceAll("SINGLEANTITOP", "TBARW");
-    srch.ReplaceAll("TOPANTITOP", "TTBAR");
-    srch.ReplaceAll("DIMUON", "MUMU");
-    srch.ReplaceAll("DIELECTRON", "EE");
-    srch.ReplaceAll("DITAU", "TAUTAU");
-    srch.ReplaceAll("BACKGROUND", "BKG");
+    srch.ReplaceAll( "-", "TO" );
+    srch.ReplaceAll( " TO", "TO" ); srch.ReplaceAll( "_TO", "TO" );
+    srch.ReplaceAll( "TO ", "TO" ); srch.ReplaceAll( "TO_", "TO" );
+    srch.ReplaceAll( "DRELLYAN", "DY" );
+    srch.ReplaceAll( "ZW", "WZ" );
+    srch.ReplaceAll( "SINGLETOP", "TW" );
+    srch.ReplaceAll( "SINGLEANTITOP", "TBARW") ;
+    srch.ReplaceAll( "TOPANTITOP", "TTBAR" );
+    srch.ReplaceAll( "DIMUON", "MUMU" );
+    srch.ReplaceAll( "DIELECTRON", "EE" );
+    srch.ReplaceAll( "DITAU", "TAUTAU" );
+    srch.ReplaceAll( "BACKGROUND", "BKG" );
+    srch.ReplaceAll( "POWHEG", "ALTERNATIVE" );
+    srch.ReplaceAll( "MADGRAPH", "ALTERNATIVE" );
+    srch.ReplaceAll( "ALT", "ALTERNATIVE" );
 
     if ( notify == kTRUE ) cout << "Searched for: " << search << "\nFound: ";
     vector<Process_t> Result;
     Process_t first = _None, last = _None;
     if ( srch.Contains("DY") )
     {
-        if ( srch.Contains("MUMU") )
+        if ( srch.Contains("ALTERNATIVE") )
         {
+            if ( srch.Contains("FULL") )
+            {
+                Result.push_back(_A_DY_Full);
+                if ( notify == kTRUE ) cout << Procname[_A_DY_Full] << "." << endl;
+            }
             // Checking for various intervals
             if ( srch.Contains("INFTO") )
-                first = _EndOf_DYMuMu_Normal;
-            else if ( srch.Contains("3000TO") )
-                first = _EndOf_DYMuMu_Normal;
-            else if ( srch.Contains("2000TO") )
-                first = _DYMuMu_2000to3000;
-            else if ( srch.Contains("1500TO") )
-                first = _DYMuMu_1500to2000;
-            else if ( srch.Contains("1000TO") )
-                first = _DYMuMu_1000to1500;
-            else if ( srch.Contains("800TO") )
-                first = _DYMuMu_800to1000;
-            else if ( srch.Contains("700TO") )
-                first = _DYMuMu_700to800;
-            else if ( srch.Contains("500TO") )
-                first = _DYMuMu_500to700;
+                first = _EndOf_A_DY_Normal;
+            else if ( srch.Contains("650TO") )
+                first = _A_DY_650toInf;
             else if ( srch.Contains("400TO") )
-                first = _DYMuMu_400to500;
-            else if ( srch.Contains("200TO") )
-                first = _DYMuMu_200to400;
+                first = _A_DY_400to650;
+            else if ( srch.Contains("250TO") )
+                first = _A_DY_250to400;
             else if ( srch.Contains("100TO") )
-                first = _DYMuMu_100to200;
+                first = _A_DY_100to250;
             else if ( srch.Contains("50TO") )
-                first = _DYMuMu_50to100;
-            else if ( srch.Contains("10TO") )
-                first = _DYMuMu_10to50;
+                first = _A_DY_50to100;
+            else first = _None;
 
             if ( srch.Contains("TOINF") )
-                last = _DYMuMu_2000to3000;
-            else if ( srch.Contains("TO3000") )
-                last = _DYMuMu_2000to3000;
-            else if ( srch.Contains("TO2000") )
-                last = _DYMuMu_1500to2000;
-            else if ( srch.Contains("TO1500") )
-                last = _DYMuMu_1000to1500;
-            else if ( srch.Contains("TO1000") )
-                last = _DYMuMu_800to1000;
-            else if ( srch.Contains("TO800") )
-                last = _DYMuMu_700to800;
-            else if ( srch.Contains("TO700") )
-                last = _DYMuMu_500to700;
-            else if ( srch.Contains("TO500") )
-                last = _DYMuMu_400to500;
+                last = _A_DY_650toInf;
+            else if ( srch.Contains("TO650") )
+                last = _A_DY_400to650;
             else if ( srch.Contains("TO400") )
-                last = _DYMuMu_200to400;
-            else if ( srch.Contains("TO200") )
-                last = _DYMuMu_100to200;
+                last = _A_DY_250to400;
+            else if ( srch.Contains("TO250") )
+                last = _A_DY_100to250;
             else if ( srch.Contains("TO100") )
-                last = _DYMuMu_50to100;
+                last = _A_DY_50to100;
             else if ( srch.Contains("TO50") )
-                last = _DYMuMu_10to50;
-            else if ( srch.Contains("TO10") )
-                last = _EndOf_DY_Normal;
+                last = _EndOf_Test;
+            else last = _None;
 
-            // Swapping first with last if necessary
-            if ( int(first)>int(last) && last!=_None)
+            //Swapping first with last if necessary
+            if ( int(first) > int(last) )
             {
                 Process_t NewLast = Process_t(int(first)-1);
                 first = Process_t(int(last)+1);
                 last = NewLast;
             }
-            if ( first == _DYMuMu_10to50 && last == _DYMuMu_2000to3000 )
+            if ( first == _A_DY_50to100 && last == _A_DY_650toInf )
             {
-                Result.push_back(_DYMuMu_Full);
-                if ( notify == kTRUE ) cout << Procname[_DYMuMu_Full] << "." << endl;
+                Result.push_back(_A_DY_Full);
+                if ( notify == kTRUE ) cout << Procname[_A_DY_Full] << "." << endl;
             }
             else if ( first != _None && last != _None )
             {
@@ -2041,176 +2234,82 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
             }
             else
             {
-                Result.push_back(_DYMuMu_Full);
-                if ( notify == kTRUE ) cout << Procname[_DYMuMu_Full] << "." << endl;
+                Result.push_back(_A_DY_Full);
+                if ( notify == kTRUE ) cout << Procname[_A_DY_Full] << "." << endl;
             }
 
-        }// end of if(DYMuMu)
+        }// End of if(ALTERNATIVE)
 
-        else if ( srch.Contains("EE") )
+        else
         {
-            // Checking for various intervals
-            if ( srch.Contains("INFTO") )
-                first = _EndOf_DYEE_Normal;
-            else if ( srch.Contains("3000TO") )
-                first = _EndOf_DYEE_Normal;
-            else if ( srch.Contains("2000TO") )
-                first = _DYEE_2000to3000;
-            else if ( srch.Contains("1500TO") )
-                first = _DYEE_1500to2000;
-            else if ( srch.Contains("1000TO") )
-                first = _DYEE_1000to1500;
-            else if ( srch.Contains("800TO") )
-                first = _DYEE_800to1000;
-            else if ( srch.Contains("700TO") )
-                first = _DYEE_700to800;
-            else if ( srch.Contains("500TO") )
-                first = _DYEE_500to700;
-            else if ( srch.Contains("400TO") )
-                first = _DYEE_400to500;
-            else if ( srch.Contains("200TO") )
-                first = _DYEE_200to400;
-            else if ( srch.Contains("100TO") )
-                first = _DYEE_100to200;
-            else if ( srch.Contains("50TO") )
-                first = _DYEE_50to100;
-            else if ( srch.Contains("10TO") )
-                first = _DYEE_10to50;
-
-            if ( srch.Contains("TOINF") )
-                last = _DYEE_2000to3000;
-            else if ( srch.Contains("TO3000") )
-                last = _DYEE_2000to3000;
-            else if ( srch.Contains("TO2000") )
-                last = _DYEE_1500to2000;
-            else if ( srch.Contains("TO1500") )
-                last = _DYEE_1000to1500;
-            else if ( srch.Contains("TO1000") )
-                last = _DYEE_800to1000;
-            else if ( srch.Contains("TO800") )
-                last = _DYEE_700to800;
-            else if ( srch.Contains("TO700") )
-                last = _DYEE_500to700;
-            else if ( srch.Contains("TO500") )
-                last = _DYEE_400to500;
-            else if ( srch.Contains("TO400") )
-                last = _DYEE_200to400;
-            else if ( srch.Contains("TO200") )
-                last = _DYEE_100to200;
-            else if ( srch.Contains("TO100") )
-                last = _DYEE_50to100;
-            else if ( srch.Contains("TO50") )
-                last = _DYEE_10to50;
-            else if ( srch.Contains("TO10") )
-                last = _EndOf_DYMuMu_Normal;
-
-            // Swapping first with last if necessary
-            if ( int(first)>int(last) && last!=_None )
-            {
-                Process_t NewLast = Process_t(int(first)-1);
-                first = Process_t(int(last)+1);
-                last = NewLast;
-            }
-            if ( first == _DYEE_10to50 && last == _DYEE_2000to3000 )
-            {
-                Result.push_back(_DYEE_Full);
-                if ( notify == kTRUE ) cout << Procname[_DYEE_Full] << "." << endl;
-            }
-            else if ( first != _None && last != _None)
-            {
-                for ( Process_t pr=first; pr<=last; pr=next(pr) )
-                {
-                    Result.push_back(pr);
-                    if ( notify == kTRUE )
-                    {
-                        if ( pr != last ) cout << Procname[pr] << ", ";
-                        else cout << Procname[pr] << "." << endl;
-                    }
-                }
-            }
-            else
-            {
-                Result.push_back(_DYEE_Full);
-                if ( notify == kTRUE ) cout << Procname[_DYEE_Full] << "." << endl;
-            }
-
-        }// end of if(DYEE)
-
-        else if ( srch.Contains("TAUTAU") )
-        {
-            if ( srch.Contains("FULL") )
-            {
-                Result.push_back(_DYTauTau_Full);
-                if ( notify == kTRUE ) cout << Procname[_DYTauTau_Full] << "." << endl;
-            }
-            else
+            if ( srch.Contains("MUMU") )
             {
                 // Checking for various intervals
                 if ( srch.Contains("INFTO") )
-                    first = _EndOf_DYTauTau_Normal;
+                    first = _EndOf_DYMuMu_Normal;
                 else if ( srch.Contains("3000TO") )
-                    first = _EndOf_DYTauTau_Normal;
+                    first = _EndOf_DYMuMu_Normal;
                 else if ( srch.Contains("2000TO") )
-                    first = _DYTauTau_50toInf;
+                    first = _DYMuMu_2000to3000;
                 else if ( srch.Contains("1500TO") )
-                    first = _DYTauTau_50toInf;
+                    first = _DYMuMu_1500to2000;
                 else if ( srch.Contains("1000TO") )
-                    first = _DYTauTau_50toInf;
+                    first = _DYMuMu_1000to1500;
                 else if ( srch.Contains("800TO") )
-                    first = _DYTauTau_50toInf;
+                    first = _DYMuMu_800to1000;
                 else if ( srch.Contains("700TO") )
-                    first = _DYTauTau_50toInf;
+                    first = _DYMuMu_700to800;
                 else if ( srch.Contains("500TO") )
-                    first = _DYTauTau_50toInf;
+                    first = _DYMuMu_500to700;
                 else if ( srch.Contains("400TO") )
-                    first = _DYTauTau_50toInf;
+                    first = _DYMuMu_400to500;
                 else if ( srch.Contains("200TO") )
-                    first = _DYTauTau_50toInf;
+                    first = _DYMuMu_200to400;
                 else if ( srch.Contains("100TO") )
-                    first = _DYTauTau_50toInf;
+                    first = _DYMuMu_100to200;
                 else if ( srch.Contains("50TO") )
-                    first = _DYTauTau_50toInf;
+                    first = _DYMuMu_50to100;
                 else if ( srch.Contains("10TO") )
-                    first = _DYTauTau_10to50;
+                    first = _DYMuMu_10to50;
 
                 if ( srch.Contains("TOINF") )
-                    last = _DYTauTau_50toInf;
+                    last = _DYMuMu_2000to3000;
                 else if ( srch.Contains("TO3000") )
-                    last = _DYTauTau_50toInf;
+                    last = _DYMuMu_2000to3000;
                 else if ( srch.Contains("TO2000") )
-                    last = _DYTauTau_50toInf;
+                    last = _DYMuMu_1500to2000;
                 else if ( srch.Contains("TO1500") )
-                    last = _DYTauTau_50toInf;
+                    last = _DYMuMu_1000to1500;
                 else if ( srch.Contains("TO1000") )
-                    last = _DYTauTau_50toInf;
+                    last = _DYMuMu_800to1000;
                 else if ( srch.Contains("TO800") )
-                    last = _DYTauTau_50toInf;
+                    last = _DYMuMu_700to800;
                 else if ( srch.Contains("TO700") )
-                    last = _DYTauTau_50toInf;
+                    last = _DYMuMu_500to700;
                 else if ( srch.Contains("TO500") )
-                    last = _DYTauTau_50toInf;
+                    last = _DYMuMu_400to500;
                 else if ( srch.Contains("TO400") )
-                    last = _DYTauTau_50toInf;
+                    last = _DYMuMu_200to400;
                 else if ( srch.Contains("TO200") )
-                    last = _DYTauTau_50toInf;
+                    last = _DYMuMu_100to200;
                 else if ( srch.Contains("TO100") )
-                    last = _DYTauTau_50toInf;
+                    last = _DYMuMu_50to100;
                 else if ( srch.Contains("TO50") )
-                    last = _DYTauTau_10to50;
+                    last = _DYMuMu_10to50;
                 else if ( srch.Contains("TO10") )
-                    last = _EndOf_MCsignal_Normal;
+                    last = _EndOf_DY_Normal;
 
                 // Swapping first with last if necessary
-                if ( int(first)>int(last) && last!=_None )
+                if ( int(first)>int(last) && last!=_None)
                 {
                     Process_t NewLast = Process_t(int(first)-1);
                     first = Process_t(int(last)+1);
                     last = NewLast;
                 }
-                if ( first == _DYTauTau_10to50 && last == _DYTauTau_50toInf )
+                if ( first == _DYMuMu_10to50 && last == _DYMuMu_2000to3000 )
                 {
-                    Result.push_back(_DYTauTau_Full);
-                    if ( notify == kTRUE ) cout << Procname[_DYTauTau_Full] << "." << endl;
+                    Result.push_back(_DYMuMu_Full);
+                    if ( notify == kTRUE ) cout << Procname[_DYMuMu_Full] << "." << endl;
                 }
                 else if ( first != _None && last != _None )
                 {
@@ -2226,100 +2325,286 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
                 }
                 else
                 {
+                    Result.push_back(_DYMuMu_Full);
+                    if ( notify == kTRUE ) cout << Procname[_DYMuMu_Full] << "." << endl;
+                }
+
+            }// end of if(DYMuMu)
+
+            else if ( srch.Contains("EE") )
+            {
+                // Checking for various intervals
+                if ( srch.Contains("INFTO") )
+                    first = _EndOf_DYEE_Normal;
+                else if ( srch.Contains("3000TO") )
+                    first = _EndOf_DYEE_Normal;
+                else if ( srch.Contains("2000TO") )
+                    first = _DYEE_2000to3000;
+                else if ( srch.Contains("1500TO") )
+                    first = _DYEE_1500to2000;
+                else if ( srch.Contains("1000TO") )
+                    first = _DYEE_1000to1500;
+                else if ( srch.Contains("800TO") )
+                    first = _DYEE_800to1000;
+                else if ( srch.Contains("700TO") )
+                    first = _DYEE_700to800;
+                else if ( srch.Contains("500TO") )
+                    first = _DYEE_500to700;
+                else if ( srch.Contains("400TO") )
+                    first = _DYEE_400to500;
+                else if ( srch.Contains("200TO") )
+                    first = _DYEE_200to400;
+                else if ( srch.Contains("100TO") )
+                    first = _DYEE_100to200;
+                else if ( srch.Contains("50TO") )
+                    first = _DYEE_50to100;
+                else if ( srch.Contains("10TO") )
+                    first = _DYEE_10to50;
+
+                if ( srch.Contains("TOINF") )
+                    last = _DYEE_2000to3000;
+                else if ( srch.Contains("TO3000") )
+                    last = _DYEE_2000to3000;
+                else if ( srch.Contains("TO2000") )
+                    last = _DYEE_1500to2000;
+                else if ( srch.Contains("TO1500") )
+                    last = _DYEE_1000to1500;
+                else if ( srch.Contains("TO1000") )
+                    last = _DYEE_800to1000;
+                else if ( srch.Contains("TO800") )
+                    last = _DYEE_700to800;
+                else if ( srch.Contains("TO700") )
+                    last = _DYEE_500to700;
+                else if ( srch.Contains("TO500") )
+                    last = _DYEE_400to500;
+                else if ( srch.Contains("TO400") )
+                    last = _DYEE_200to400;
+                else if ( srch.Contains("TO200") )
+                    last = _DYEE_100to200;
+                else if ( srch.Contains("TO100") )
+                    last = _DYEE_50to100;
+                else if ( srch.Contains("TO50") )
+                    last = _DYEE_10to50;
+                else if ( srch.Contains("TO10") )
+                    last = _EndOf_DYMuMu_Normal;
+
+                // Swapping first with last if necessary
+                if ( int(first)>int(last) && last!=_None )
+                {
+                    Process_t NewLast = Process_t(int(first)-1);
+                    first = Process_t(int(last)+1);
+                    last = NewLast;
+                }
+                if ( first == _DYEE_10to50 && last == _DYEE_2000to3000 )
+                {
+                    Result.push_back(_DYEE_Full);
+                    if ( notify == kTRUE ) cout << Procname[_DYEE_Full] << "." << endl;
+                }
+                else if ( first != _None && last != _None)
+                {
+                    for ( Process_t pr=first; pr<=last; pr=next(pr) )
+                    {
+                        Result.push_back(pr);
+                        if ( notify == kTRUE )
+                        {
+                            if ( pr != last ) cout << Procname[pr] << ", ";
+                            else cout << Procname[pr] << "." << endl;
+                        }
+                    }
+                }
+                else
+                {
+                    Result.push_back(_DYEE_Full);
+                    if ( notify == kTRUE ) cout << Procname[_DYEE_Full] << "." << endl;
+                }
+
+            }// end of if(DYEE)
+
+            else if ( srch.Contains("TAUTAU") )
+            {
+                if ( srch.Contains("FULL") )
+                {
                     Result.push_back(_DYTauTau_Full);
                     if ( notify == kTRUE ) cout << Procname[_DYTauTau_Full] << "." << endl;
                 }
-            }
-
-        }// end of if(DYTauTau)
-        else
-        {
-            // Checking for various intervals
-            if ( srch.Contains("INFTO") )
-                first = _EndOf_DY_Normal;
-            else if ( srch.Contains("3000TO") )
-                first = _EndOf_DY_Normal;
-            else if ( srch.Contains("2000TO") )
-                first = _DY_2000to3000;
-            else if ( srch.Contains("1500TO") )
-                first = _DY_1500to2000;
-            else if ( srch.Contains("1000TO") )
-                first = _DY_1000to1500;
-            else if ( srch.Contains("800TO") )
-                first = _DY_800to1000;
-            else if ( srch.Contains("700TO") )
-                first = _DY_700to800;
-            else if ( srch.Contains("500TO") )
-                first = _DY_500to700;
-            else if ( srch.Contains("400TO") )
-                first = _DY_400to500;
-            else if ( srch.Contains("200TO") )
-                first = _DY_200to400;
-            else if ( srch.Contains("100TO") )
-                first = _DY_100to200;
-            else if ( srch.Contains("50TO") )
-                first = _DY_50to100;
-            else if ( srch.Contains("10TO") )
-                first = _DY_10to50;
-
-            if ( srch.Contains("TOINF") )
-                last = _DY_2000to3000;
-            else if ( srch.Contains("TO3000") )
-                last = _DY_2000to3000;
-            else if ( srch.Contains("TO2000") )
-                last = _DY_1500to2000;
-            else if ( srch.Contains("TO1500") )
-                last = _DY_1000to1500;
-            else if ( srch.Contains("TO1000") )
-                last = _DY_800to1000;
-            else if ( srch.Contains("TO800") )
-                last = _DY_700to800;
-            else if ( srch.Contains("TO700") )
-                last = _DY_500to700;
-            else if ( srch.Contains("TO500") )
-                last = _DY_400to500;
-            else if ( srch.Contains("TO400") )
-                last = _DY_200to400;
-            else if ( srch.Contains("TO200") )
-                last = _DY_100to200;
-            else if ( srch.Contains("TO100") )
-                last = _DY_50to100;
-            else if ( srch.Contains("TO50") )
-                last = _DY_10to50;
-            else if ( srch.Contains("TO10") )
-                last = _None;
-
-            //Swapping first with last if necessary
-            if ( int(first) > int(last) )
-            {
-                Process_t NewLast = Process_t(int(first)-1);
-                first = Process_t(int(last)+1);
-                last = NewLast;
-            }
-            if ( first == _DY_10to50 && last == _DY_2000to3000 )
-            {
-                Result.push_back(_DY_Full);
-                if ( notify == kTRUE ) cout << Procname[_DY_Full] << "." << endl;
-            }
-            else if ( first != _None && last != _None)
-            {
-                for ( Process_t pr=first; pr<=last; pr=next(pr) )
+                else
                 {
-                    Result.push_back(pr);
-                    if ( notify == kTRUE )
+                    // Checking for various intervals
+                    if ( srch.Contains("INFTO") )
+                        first = _EndOf_DYTauTau_Normal;
+                    else if ( srch.Contains("3000TO") )
+                        first = _EndOf_DYTauTau_Normal;
+                    else if ( srch.Contains("2000TO") )
+                        first = _DYTauTau_50toInf;
+                    else if ( srch.Contains("1500TO") )
+                        first = _DYTauTau_50toInf;
+                    else if ( srch.Contains("1000TO") )
+                        first = _DYTauTau_50toInf;
+                    else if ( srch.Contains("800TO") )
+                        first = _DYTauTau_50toInf;
+                    else if ( srch.Contains("700TO") )
+                        first = _DYTauTau_50toInf;
+                    else if ( srch.Contains("500TO") )
+                        first = _DYTauTau_50toInf;
+                    else if ( srch.Contains("400TO") )
+                        first = _DYTauTau_50toInf;
+                    else if ( srch.Contains("200TO") )
+                        first = _DYTauTau_50toInf;
+                    else if ( srch.Contains("100TO") )
+                        first = _DYTauTau_50toInf;
+                    else if ( srch.Contains("50TO") )
+                        first = _DYTauTau_50toInf;
+                    else if ( srch.Contains("10TO") )
+                        first = _DYTauTau_10to50;
+
+                    if ( srch.Contains("TOINF") )
+                        last = _DYTauTau_50toInf;
+                    else if ( srch.Contains("TO3000") )
+                        last = _DYTauTau_50toInf;
+                    else if ( srch.Contains("TO2000") )
+                        last = _DYTauTau_50toInf;
+                    else if ( srch.Contains("TO1500") )
+                        last = _DYTauTau_50toInf;
+                    else if ( srch.Contains("TO1000") )
+                        last = _DYTauTau_50toInf;
+                    else if ( srch.Contains("TO800") )
+                        last = _DYTauTau_50toInf;
+                    else if ( srch.Contains("TO700") )
+                        last = _DYTauTau_50toInf;
+                    else if ( srch.Contains("TO500") )
+                        last = _DYTauTau_50toInf;
+                    else if ( srch.Contains("TO400") )
+                        last = _DYTauTau_50toInf;
+                    else if ( srch.Contains("TO200") )
+                        last = _DYTauTau_50toInf;
+                    else if ( srch.Contains("TO100") )
+                        last = _DYTauTau_50toInf;
+                    else if ( srch.Contains("TO50") )
+                        last = _DYTauTau_10to50;
+                    else if ( srch.Contains("TO10") )
+                        last = _EndOf_MCsignal_Normal;
+
+                    // Swapping first with last if necessary
+                    if ( int(first)>int(last) && last!=_None )
                     {
-                        if ( pr != last ) cout << Procname[pr] << ", ";
-                        else cout << Procname[pr] << "." << endl;
+                        Process_t NewLast = Process_t(int(first)-1);
+                        first = Process_t(int(last)+1);
+                        last = NewLast;
+                    }
+                    if ( first == _DYTauTau_10to50 && last == _DYTauTau_50toInf )
+                    {
+                        Result.push_back(_DYTauTau_Full);
+                        if ( notify == kTRUE ) cout << Procname[_DYTauTau_Full] << "." << endl;
+                    }
+                    else if ( first != _None && last != _None )
+                    {
+                        for ( Process_t pr=first; pr<=last; pr=next(pr) )
+                        {
+                            Result.push_back(pr);
+                            if ( notify == kTRUE )
+                            {
+                                if ( pr != last ) cout << Procname[pr] << ", ";
+                                else cout << Procname[pr] << "." << endl;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Result.push_back(_DYTauTau_Full);
+                        if ( notify == kTRUE ) cout << Procname[_DYTauTau_Full] << "." << endl;
                     }
                 }
-            }
+
+            }// end of if(DYTauTau)
             else
             {
-                Result.push_back(_DY_Full);
-                if ( notify == kTRUE ) cout << Procname[_DY_Full] << "." << endl;
-            }
+                // Checking for various intervals
+                if ( srch.Contains("INFTO") )
+                    first = _EndOf_DY_Normal;
+                else if ( srch.Contains("3000TO") )
+                    first = _EndOf_DY_Normal;
+                else if ( srch.Contains("2000TO") )
+                    first = _DY_2000to3000;
+                else if ( srch.Contains("1500TO") )
+                    first = _DY_1500to2000;
+                else if ( srch.Contains("1000TO") )
+                    first = _DY_1000to1500;
+                else if ( srch.Contains("800TO") )
+                    first = _DY_800to1000;
+                else if ( srch.Contains("700TO") )
+                    first = _DY_700to800;
+                else if ( srch.Contains("500TO") )
+                    first = _DY_500to700;
+                else if ( srch.Contains("400TO") )
+                    first = _DY_400to500;
+                else if ( srch.Contains("200TO") )
+                    first = _DY_200to400;
+                else if ( srch.Contains("100TO") )
+                    first = _DY_100to200;
+                else if ( srch.Contains("50TO") )
+                    first = _DY_50to100;
+                else if ( srch.Contains("10TO") )
+                    first = _DY_10to50;
 
-        }// end of else (DY)
+                if ( srch.Contains("TOINF") )
+                    last = _DY_2000to3000;
+                else if ( srch.Contains("TO3000") )
+                    last = _DY_2000to3000;
+                else if ( srch.Contains("TO2000") )
+                    last = _DY_1500to2000;
+                else if ( srch.Contains("TO1500") )
+                    last = _DY_1000to1500;
+                else if ( srch.Contains("TO1000") )
+                    last = _DY_800to1000;
+                else if ( srch.Contains("TO800") )
+                    last = _DY_700to800;
+                else if ( srch.Contains("TO700") )
+                    last = _DY_500to700;
+                else if ( srch.Contains("TO500") )
+                    last = _DY_400to500;
+                else if ( srch.Contains("TO400") )
+                    last = _DY_200to400;
+                else if ( srch.Contains("TO200") )
+                    last = _DY_100to200;
+                else if ( srch.Contains("TO100") )
+                    last = _DY_50to100;
+                else if ( srch.Contains("TO50") )
+                    last = _DY_10to50;
+                else if ( srch.Contains("TO10") )
+                    last = _None;
+
+                //Swapping first with last if necessary
+                if ( int(first) > int(last) )
+                {
+                    Process_t NewLast = Process_t(int(first)-1);
+                    first = Process_t(int(last)+1);
+                    last = NewLast;
+                }
+                if ( first == _DY_10to50 && last == _DY_2000to3000 )
+                {
+                    Result.push_back(_DY_Full);
+                    if ( notify == kTRUE ) cout << Procname[_DY_Full] << "." << endl;
+                }
+                else if ( first != _None && last != _None)
+                {
+                    for ( Process_t pr=first; pr<=last; pr=next(pr) )
+                    {
+                        Result.push_back(pr);
+                        if ( notify == kTRUE )
+                        {
+                            if ( pr != last ) cout << Procname[pr] << ", ";
+                            else cout << Procname[pr] << "." << endl;
+                        }
+                    }
+                }
+                else
+                {
+                    Result.push_back(_DY_Full);
+                    if ( notify == kTRUE ) cout << Procname[_DY_Full] << "." << endl;
+                }
+            }// end of else (DY)
+
+        }// end of else (not alternative)
 
     }// end of if(DrellYan)
 
@@ -2402,28 +2687,62 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
 
     else if ( srch.Contains("ZZ") )
     {
-        Result.push_back(_ZZ);
-        if ( notify == kTRUE ) cout << Procname[_ZZ] << "." << endl;
+        if ( srch.Contains("ALTERNATIVE") )
+        {
+            Result.push_back(_A_ZZ);
+            if ( notify == kTRUE ) cout << Procname[_A_ZZ] << "." << endl;
+        }
+        else
+        {
+            Result.push_back(_ZZ);
+            if ( notify == kTRUE ) cout << Procname[_ZZ] << "." << endl;
+        }
     }
 
     else if ( srch.Contains("WZ") )
     {
-        Result.push_back(_WZ);
-        if ( notify == kTRUE ) cout << Procname[_WZ] << "." << endl;
+        if ( srch.Contains("ALTERNATIVE") )
+        {
+            Result.push_back(_A_WZ);
+            if ( notify == kTRUE ) cout << Procname[_A_WZ] << "." << endl;
+        }
+        else
+        {
+            Result.push_back(_WZ);
+            if ( notify == kTRUE ) cout << Procname[_WZ] << "." << endl;
+        }
     }
 
     else if ( srch.Contains("WW") )
     {
-        Result.push_back(_WW);
-        if ( notify == kTRUE ) cout << Procname[_WW] << "." << endl;
+        if ( srch.Contains("ALTERNATIVE") )
+        {
+            Result.push_back(_A_WW);
+            if ( notify == kTRUE ) cout << Procname[_A_WW] << "." << endl;
+        }
+        else
+        {
+            Result.push_back(_WW);
+            if ( notify == kTRUE ) cout << Procname[_WW] << "." << endl;
+        }
     }
 
     else if ( srch.Contains("DIBOSON") )
     {
-        Result.push_back(_ZZ);
-        Result.push_back(_WZ);
-        Result.push_back(_WW);
-        if ( notify == kTRUE ) cout << Procname[_ZZ] << ", " << Procname[_WZ] << ", " << Procname[_WW] << "." << endl;
+        if ( srch.Contains("ALTERNATIVE") )
+        {
+            Result.push_back(_A_ZZ);
+            Result.push_back(_A_WZ);
+            Result.push_back(_A_WW);
+            if ( notify == kTRUE ) cout << Procname[_A_ZZ] << ", " << Procname[_A_WZ] << ", " << Procname[_A_WW] << "." << endl;
+        }
+        else
+        {
+            Result.push_back(_ZZ);
+            Result.push_back(_WZ);
+            Result.push_back(_WW);
+            if ( notify == kTRUE ) cout << Procname[_ZZ] << ", " << Procname[_WZ] << ", " << Procname[_WW] << "." << endl;
+        }
     }
 
     else if ( srch.Contains("VVNST") )
@@ -2434,8 +2753,16 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
 
     else if ( srch.Contains("WJETS") || srch.Contains("W+JETS") )
     {
-        Result.push_back(_WJets);
-        if ( notify == kTRUE ) cout << Procname[_WJets] << "." << endl;
+        if ( srch.Contains("ALTERNATIVE") )
+        {
+            Result.push_back(_A_WJets);
+            if ( notify == kTRUE ) cout << Procname[_A_WJets] << "." << endl;
+        }
+        else
+        {
+            Result.push_back(_WJets);
+            if ( notify == kTRUE ) cout << Procname[_WJets] << "." << endl;
+        }
     }
 
     else if ( srch.Contains("QCD") )
@@ -3105,6 +3432,19 @@ void FileMgr::PrepareProcNames ()
     Procname[_Test_EE] = "Test_EE";
     Procname[_Test_EMu] = "Test_EMu";
     Procname[_EndOf_Test] = "EndOf_Test";
+    Procname[_A_DY_50to100] = "Alt_DY50to100";
+    Procname[_A_DY_100to250] = "Alt_DY100to250";
+    Procname[_A_DY_250to400] = "Alt_DY250to400";
+    Procname[_A_DY_400to650] = "Alt_DY400to650";
+    Procname[_A_DY_650toInf] = "Alt_DY650toInf";
+    Procname[_EndOf_A_DY_Normal] = "EndOf_Alt_DY_Normal";
+    Procname[_A_WJets] = "Alt_WJets";
+    Procname[_A_ZZ] = "Alt_ZZ";
+    Procname[_A_WZ] = "Alt_WZ";
+    Procname[_A_WW] = "Alt_WW";
+    Procname[_EndOf_A_MCbkg_Normal] = "EndOf_Alt_MCbkg_Normal";
+    Procname[_A_DY_Full] = "Alt_DY_Full";
+    Procname[_EndOf_Alternatives] = "EndOf_Alternatives";
     return;
 
 }// end of PrepareProcNames()
@@ -3114,8 +3454,9 @@ void FileMgr::CheckProcesses()
 {
     Bool_t allOk = kTRUE;
     cout << "Checking processes: " << endl;
-    for ( Process_t pr=_DY_10to50; pr<_EndOf_Data_Special; pr=next(pr) )
+    for ( Process_t pr=_DY_10to50; pr<_EndOf_Alternatives; pr=next(pr) )
     {
+        if ( pr > _EndOf_Data_Special && pr <_EndOf_Test ) continue;
         this->SetProc(pr, kTRUE);
         if ( !Procname[pr].Length() )
         {
@@ -3254,7 +3595,7 @@ void FileMgr::CheckProcesses()
                 }
             }
         }
-        if ( pr < _DoubleEG_B || ( pr > _EndOf_Data_Normal && pr < _EndOf_MCbkg_Special ) || ( pr > _EndOf_Data_Special && pr < _EndOf_Test ) )
+        if ( pr < _DoubleEG_B || ( pr > _EndOf_Data_Normal && pr < _EndOf_MCbkg_Special ) || pr > _EndOf_Data_Special )
         {
             if ( isMC == kFALSE )
             {
