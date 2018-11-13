@@ -22,11 +22,13 @@ void MakeLongSelectedEE ( TString HLTname );
 void MakeLongSelectedMuMu ( TString HLTname );
 void MakeLongSelectedEMu ( TString HLTname );
 
-void MakeLongSelectedX ( TString whichX, TString HLTname = "DEFAULT" )
+void MakeLongSelectedX ( TString WhichX, TString HLTname = "DEFAULT" )
 {
+    TString whichX = WhichX;
+    whichX.ToUpper();
     TString HLT;
     Int_t Xselected = 0;
-    if ( whichX.Contains("EE") || whichX.Contains("ee") )
+    if ( whichX.Contains("EE") )
     {
         Xselected++;
         if ( HLTname == "DEFAULT" ) HLT = "Ele23Ele12";
@@ -34,7 +36,7 @@ void MakeLongSelectedX ( TString whichX, TString HLTname = "DEFAULT" )
         cout << "\n*******      MakeLongSelectedEE ( " << HLT << " )      *******" << endl;
         MakeLongSelectedEE(HLT);
     }
-    if ( whichX.Contains("MuMu") || whichX.Contains("mumu") || whichX.Contains("MUMU") )
+    if ( whichX.Contains("MUMU") )
     {
         Xselected++;
         if ( HLTname == "DEFAULT" ) HLT = "IsoMu24_OR_IsoTkMu24";
@@ -42,7 +44,7 @@ void MakeLongSelectedX ( TString whichX, TString HLTname = "DEFAULT" )
         cout << "\n*****  MakeLongSelectedMuMu ( " << HLT << " )  *****" << endl;
         MakeLongSelectedMuMu(HLT);
     }
-    if ( whichX.Contains("EMu") || whichX.Contains("emu") || whichX.Contains("Emu") || whichX.Contains("eMu") || whichX.Contains("EMU") )
+    if ( whichX.Contains("EMU") )
     {
         Xselected++;
         if ( HLTname == "DEFAULT" ) HLT = "IsoMu24_OR_IsoTkMu24";
@@ -143,75 +145,7 @@ void MakeLongSelectedEE ( TString HLTname )
 
     // -- Creating LongSelectedEE variables to assign branches -- //
     LongSelectedEE_t EE; EE.CreateNew();
-
-    ElectronTree->Branch("nVertices", &EE.nVertices);
-    ElectronTree->Branch("runNum", &EE.runNum);
-    ElectronTree->Branch("lumiBlock", &EE.lumiBlock);
-    ElectronTree->Branch("evtNum", &EE.evtNum);
-    ElectronTree->Branch("nPileUp", &EE.nPileUp);
-    ElectronTree->Branch("GENEvt_weight", &EE.GENEvt_weight);
-    ElectronTree->Branch("HLT_ntrig", &EE.HLT_ntrig);
-    ElectronTree->Branch("HLT_trigFired", &EE.HLT_trigFired);
-    ElectronTree->Branch("HLT_trigName", &EE.HLT_trigName);
-//    ElectronTree->Branch("HLT_trigPt", &EE.HLT_trigPt);
-    ElectronTree->Branch("HLT_trigEta", &EE.HLT_trigEta);
-    ElectronTree->Branch("HLT_trigPhi", &EE.HLT_trigPhi);
-    ElectronTree->Branch("isHardProcess", &EE.isHardProcess);
-    ElectronTree->Branch("Electron_InvM", &EE.Electron_InvM);
-    ElectronTree->Branch("Electron_pT", &EE.Electron_pT);
-    ElectronTree->Branch("Electron_eta", &EE.Electron_eta);
-    ElectronTree->Branch("Electron_phi", &EE.Electron_phi);
-    ElectronTree->Branch("Electron_Energy", &EE.Electron_Energy);
-    ElectronTree->Branch("Electron_charge", &EE.Electron_charge);
-    ElectronTree->Branch("Electron_gsfpT", &EE.Electron_gsfpT);
-    ElectronTree->Branch("Electron_gsfPx", &EE.Electron_gsfPx);
-    ElectronTree->Branch("Electron_gsfPy", &EE.Electron_gsfPy);
-    ElectronTree->Branch("Electron_gsfPz", &EE.Electron_gsfPz);
-    ElectronTree->Branch("Electron_gsfEta", &EE.Electron_gsfEta);
-    ElectronTree->Branch("Electron_gsfPhi", &EE.Electron_gsfEta);
-    ElectronTree->Branch("Electron_gsfCharge", &EE.Electron_gsfCharge);
-    ElectronTree->Branch("Electron_etaSC", &EE.Electron_etaSC);
-    ElectronTree->Branch("Electron_phiSC", &EE.Electron_phiSC);
-    ElectronTree->Branch("Electron_etaWidth", &EE.Electron_etaWidth);
-    ElectronTree->Branch("Electron_phiWidth", &EE.Electron_phiWidth);
-    ElectronTree->Branch("Electron_dEtaIn", &EE.Electron_dEtaIn);
-    ElectronTree->Branch("Electron_dEtaInSeed", &EE.Electron_dEtaInSeed);
-    ElectronTree->Branch("Electron_dPhiIn", &EE.Electron_dPhiIn);
-    ElectronTree->Branch("Electron_sigmaIEtaIEta", &EE.Electron_sigmaIEtaIEta);
-    ElectronTree->Branch("Electron_Full5x5_SigmaIEtaIEta", &EE.Electron_Full5x5_SigmaIEtaIEta);
-    ElectronTree->Branch("Electron_HoverE", &EE.Electron_HoverE);
-    ElectronTree->Branch("Electron_fbrem", &EE.Electron_fbrem);
-    ElectronTree->Branch("Electron_eOverP", &EE.Electron_eOverP);
-    ElectronTree->Branch("Electron_InvEminusInvP", &EE.Electron_InvEminusInvP);
-    ElectronTree->Branch("Electron_dxyVTX", &EE.Electron_dxyVTX);
-    ElectronTree->Branch("Electron_dzVTX", &EE.Electron_dzVTX);
-    ElectronTree->Branch("Electron_dxy", &EE.Electron_dxy);
-    ElectronTree->Branch("Electron_dz", &EE.Electron_dz);
-    ElectronTree->Branch("Electron_dxyBS", &EE.Electron_dxyBS);
-    ElectronTree->Branch("Electron_dzBS", &EE.Electron_dxyBS);
-    ElectronTree->Branch("Electron_chIso03", &EE.Electron_chIso03);
-    ElectronTree->Branch("Electron_nhIso03", &EE.Electron_nhIso03);
-    ElectronTree->Branch("Electron_phIso03", &EE.Electron_phIso03);
-    ElectronTree->Branch("Electron_ChIso03FromPU", &EE.Electron_ChIso03FromPU);
-    ElectronTree->Branch("Electron_mHits", &EE.Electron_mHits);
-    ElectronTree->Branch("Electron_EnergySC", &EE.Electron_EnergySC);
-    ElectronTree->Branch("Electron_preEnergySC", &EE.Electron_preEnergySC);
-    ElectronTree->Branch("Electron_rawEnergySC", &EE.Electron_rawEnergySC);
-    ElectronTree->Branch("Electron_etSC", &EE.Electron_etSC);
-    ElectronTree->Branch("Electron_E15", &EE.Electron_E15);
-    ElectronTree->Branch("Electron_E25", &EE.Electron_E25);
-    ElectronTree->Branch("Electron_E55", &EE.Electron_E55);
-    ElectronTree->Branch("Electron_RelPFIso_dBeta", &EE.Electron_RelPFIso_dBeta);
-    ElectronTree->Branch("Electron_RelPFIso_Rho", &EE.Electron_RelPFIso_Rho);
-    ElectronTree->Branch("Electron_r9", &EE.Electron_r9);
-    ElectronTree->Branch("Electron_ecalDriven", &EE.Electron_ecalDriven);
-    ElectronTree->Branch("Electron_passConvVeto", &EE.Electron_passConvVeto);
-//    ElectronTree->Branch("Electron_passLooseID", &EE.Electron_passLooseID);
-    ElectronTree->Branch("Electron_passMediumID", &EE.Electron_passMediumID);
-//    ElectronTree->Branch("Electron_passTightID", &EE.Electron_passTightID);
-//    ElectronTree->Branch("Electron_passMVAID_WP80", &EE.Electron_passMVAID_WP80);
-//    ElectronTree->Branch("Electron_passMVAID_WP90", &EE.Electron_passMVAID_WP90);
-//    ElectronTree->Branch("Electron_passHEEPID", &EE.Electron_passHEEPID);
+    EE.MakeBranches( ElectronTree );
 
     // Loop for all samples
 //	const Int_t Ntup = ntupleDirectory.size();
@@ -401,65 +335,7 @@ void MakeLongSelectedEE ( TString HLTname )
                     } // End of else()
 
                     ElectronTree->Fill();
-
-                    EE.HLT_trigFired->clear();
-                    EE.HLT_trigEta->clear();
-                    EE.HLT_trigPhi->clear();
-                    EE.HLT_trigName->clear();
-                    EE.Electron_pT->clear();
-                    EE.Electron_eta->clear();
-                    EE.Electron_phi->clear();
-                    EE.Electron_Energy->clear();
-                    EE.Electron_charge->clear();
-                    EE.Electron_gsfpT->clear();
-                    EE.Electron_gsfPx->clear();
-                    EE.Electron_gsfPy->clear();
-                    EE.Electron_gsfPz->clear();
-                    EE.Electron_gsfEta->clear();
-                    EE.Electron_gsfPhi->clear();
-                    EE.Electron_gsfCharge->clear();
-                    EE.Electron_etaSC->clear();
-                    EE.Electron_phiSC->clear();
-                    EE.Electron_etaWidth->clear();
-                    EE.Electron_phiWidth->clear();
-                    EE.Electron_dEtaIn->clear();
-                    EE.Electron_dEtaInSeed->clear();
-                    EE.Electron_dPhiIn->clear();
-                    EE.Electron_sigmaIEtaIEta->clear();
-                    EE.Electron_Full5x5_SigmaIEtaIEta->clear();
-                    EE.Electron_HoverE->clear();
-                    EE.Electron_fbrem->clear();
-                    EE.Electron_eOverP->clear();
-                    EE.Electron_InvEminusInvP->clear();
-                    EE.Electron_dxyVTX->clear();
-                    EE.Electron_dzVTX->clear();
-                    EE.Electron_dxy->clear();
-                    EE.Electron_dz->clear();
-                    EE.Electron_dxyBS->clear();
-                    EE.Electron_dzBS->clear();
-                    EE.Electron_chIso03->clear();
-                    EE.Electron_nhIso03->clear();
-                    EE.Electron_phIso03->clear();
-                    EE.Electron_ChIso03FromPU->clear();
-                    EE.Electron_mHits->clear();
-                    EE.Electron_EnergySC->clear();
-                    EE.Electron_preEnergySC->clear();
-                    EE.Electron_rawEnergySC->clear();
-                    EE.Electron_etSC->clear();
-                    EE.Electron_E15->clear();
-                    EE.Electron_E25->clear();
-                    EE.Electron_E55->clear();
-                    EE.Electron_RelPFIso_dBeta->clear();
-                    EE.Electron_RelPFIso_Rho->clear();
-                    EE.Electron_r9->clear();
-                    EE.Electron_ecalDriven->clear();
-                    EE.Electron_passConvVeto->clear();
-//                    EE.Electron_passLooseID->clear();
-                    EE.Electron_passMediumID->clear();
-//                    EE.Electron_passTightID->clear();
-//                    EE.Electron_passMVAID_WP80->clear();
-//                    EE.Electron_passMVAID_WP90->clear();
-//                    EE.Electron_passHEEPID->clear();
+                    EE.ClearVectors();
 
 //                    Double_t reco_Pt = (ele1.Momentum + ele2.Momentum).Pt();
 //                    Double_t reco_rapi = (ele1.Momentum + ele2.Momentum).Rapidity();
@@ -634,86 +510,7 @@ void MakeLongSelectedMuMu ( TString HLTname )
 
     // -- Creating LongSelectedMuMu variables to assign branches -- //
     LongSelectedMuMu_t MuMu; MuMu.CreateNew();
-
-    MuonTree->Branch("nVertices", &MuMu.nVertices);
-    MuonTree->Branch("runNum", &MuMu.runNum);
-    MuonTree->Branch("lumiBlock", &MuMu.lumiBlock);
-    MuonTree->Branch("evtNum", &MuMu.evtNum);
-    MuonTree->Branch("nPileUp", &MuMu.nPileUp);
-    MuonTree->Branch("GENEvt_weight", &MuMu.GENEvt_weight);
-    MuonTree->Branch("HLT_ntrig", &MuMu.HLT_ntrig);
-    MuonTree->Branch("HLT_trigFired", &MuMu.HLT_trigFired);
-    MuonTree->Branch("HLT_trigName", &MuMu.HLT_trigName);
-//    MuonTree->Branch("HLT_trigPt", &MuMu.HLT_trigPt);
-    MuonTree->Branch("HLT_trigEta", &MuMu.HLT_trigEta);
-    MuonTree->Branch("HLT_trigPhi", &MuMu.HLT_trigPhi);
-    MuonTree->Branch("isHardProcess", &MuMu.isHardProcess);
-    MuonTree->Branch("Muon_pT", &MuMu.Muon_pT);
-    MuonTree->Branch("Muon_eta", &MuMu.Muon_eta);
-    MuonTree->Branch("Muon_phi", &MuMu.Muon_phi);
-    MuonTree->Branch("isGLBmuon", &MuMu.isGLBmuon);
-    MuonTree->Branch("isPFmuon", &MuMu.isPFmuon);
-    MuonTree->Branch("isTRKmuon", &MuMu.isTRKmuon);
-    MuonTree->Branch("Muon_charge", &MuMu.Muon_charge);
-    MuonTree->Branch("Muon_chi2dof", &MuMu.Muon_chi2dof);
-    MuonTree->Branch("Muon_muonHits", &MuMu.Muon_muonHits);
-    MuonTree->Branch("Muon_nSegments", &MuMu.Muon_nSegments);
-    MuonTree->Branch("Muon_nMatches", &MuMu.Muon_nMatches);
-    MuonTree->Branch("Muon_trackerLayers", &MuMu.Muon_trackerLayers);
-    MuonTree->Branch("Muon_pixelHits", &MuMu.Muon_pixelHits);
-    MuonTree->Branch("Muon_dxyVTX", &MuMu.Muon_dxyVTX);
-    MuonTree->Branch("Muon_dzVTX", &MuMu.Muon_dzVTX);
-    MuonTree->Branch("Muon_trkiso", &MuMu.Muon_trkiso);
-    MuonTree->Branch("Muon_PfChargedHadronIsoR04", &MuMu.Muon_PfChargedHadronIsoR04);
-    MuonTree->Branch("Muon_PfNeutralHadronIsoR04", &MuMu.Muon_PfNeutralHadronIsoR04);
-    MuonTree->Branch("Muon_PfGammaIsoR04", &MuMu.Muon_PfGammaIsoR04);
-    MuonTree->Branch("Muon_PFSumPUIsoR04", &MuMu.Muon_PFSumPUIsoR04);
-    MuonTree->Branch("Muon_Px", &MuMu.Muon_Px);
-    MuonTree->Branch("Muon_Py", &MuMu.Muon_Py);
-    MuonTree->Branch("Muon_Pz", &MuMu.Muon_Pz);
-    MuonTree->Branch("Muon_Energy", &MuMu.Muon_Energy);
-    MuonTree->Branch("Muon_InvM", &MuMu.Muon_InvM);
-    MuonTree->Branch("Muon_Best_pT", &MuMu.Muon_Best_pT);
-    MuonTree->Branch("Muon_Best_pTError", &MuMu.Muon_Best_pTError);
-    MuonTree->Branch("Muon_Best_Px", &MuMu.Muon_Best_Px);
-    MuonTree->Branch("Muon_Best_Py", &MuMu.Muon_Best_Py);
-    MuonTree->Branch("Muon_Best_Pz", &MuMu.Muon_Best_Pz);
-    MuonTree->Branch("Muon_Best_eta", &MuMu.Muon_Best_eta);
-    MuonTree->Branch("Muon_Best_phi", &MuMu.Muon_Best_phi);
-    MuonTree->Branch("Muon_Inner_pT", &MuMu.Muon_Inner_pT);
-    MuonTree->Branch("Muon_Inner_pTError", &MuMu.Muon_Inner_pTError);
-    MuonTree->Branch("Muon_Inner_Px", &MuMu.Muon_Inner_Px);
-    MuonTree->Branch("Muon_Inner_Py", &MuMu.Muon_Inner_Py);
-    MuonTree->Branch("Muon_Inner_Pz", &MuMu.Muon_Inner_Pz);
-    MuonTree->Branch("Muon_Inner_eta", &MuMu.Muon_Inner_eta);
-    MuonTree->Branch("Muon_Inner_phi", &MuMu.Muon_Inner_phi);
-    MuonTree->Branch("Muon_Outer_pT", &MuMu.Muon_Outer_pT);
-    MuonTree->Branch("Muon_Outer_pTError", &MuMu.Muon_Outer_pTError);
-    MuonTree->Branch("Muon_Outer_Px", &MuMu.Muon_Outer_Px);
-    MuonTree->Branch("Muon_Outer_Py", &MuMu.Muon_Outer_Py);
-    MuonTree->Branch("Muon_Outer_Pz", &MuMu.Muon_Outer_Pz);
-    MuonTree->Branch("Muon_Outer_eta", &MuMu.Muon_Outer_eta);
-    MuonTree->Branch("Muon_Outer_phi", &MuMu.Muon_Outer_phi);
-    MuonTree->Branch("Muon_GLB_pT", &MuMu.Muon_GLB_pT);
-    MuonTree->Branch("Muon_GLB_pTError", &MuMu.Muon_GLB_pTError);
-    MuonTree->Branch("Muon_GLB_Px", &MuMu.Muon_GLB_Px);
-    MuonTree->Branch("Muon_GLB_Py", &MuMu.Muon_GLB_Py);
-    MuonTree->Branch("Muon_GLB_Pz", &MuMu.Muon_GLB_Pz);
-    MuonTree->Branch("Muon_GLB_eta", &MuMu.Muon_GLB_eta);
-    MuonTree->Branch("Muon_GLB_phi", &MuMu.Muon_GLB_phi);
-    MuonTree->Branch("Muon_TuneP_pT", &MuMu.Muon_TuneP_pT);
-    MuonTree->Branch("Muon_TuneP_pTError", &MuMu.Muon_TuneP_pTError);
-    MuonTree->Branch("Muon_TuneP_Px", &MuMu.Muon_TuneP_Px);
-    MuonTree->Branch("Muon_TuneP_Py", &MuMu.Muon_TuneP_Py);
-    MuonTree->Branch("Muon_TuneP_Pz", &MuMu.Muon_TuneP_Pz);
-    MuonTree->Branch("Muon_TuneP_eta", &MuMu.Muon_TuneP_eta);
-    MuonTree->Branch("Muon_TuneP_phi", &MuMu.Muon_TuneP_phi);
-    MuonTree->Branch("CosAngle", &MuMu.CosAngle);
-    MuonTree->Branch("vtxTrkChi2", &MuMu.vtxTrkChi2);
-    MuonTree->Branch("vtxTrkProb", &MuMu.vtxTrkProb);
-    MuonTree->Branch("vtxTrkNdof", &MuMu.vtxTrkNdof);
-    MuonTree->Branch("vtxTrkCkt1Pt", &MuMu.vtxTrkCkt1Pt);
-    MuonTree->Branch("vtxTrkCkt2Pt", &MuMu.vtxTrkCkt2Pt);
+    MuMu.MakeBranches( MuonTree );
 
     //Loop for all samples
 //    const Int_t Ntup = ntupleDirectory.size();
@@ -921,76 +718,7 @@ void MakeLongSelectedMuMu ( TString HLTname )
                     } // End of else()
 
                     MuonTree->Fill();
-
-                    MuMu.HLT_trigFired->clear();
-                    MuMu.HLT_trigName->clear();
-                    MuMu.HLT_trigEta->clear();
-                    MuMu.HLT_trigPhi->clear();
-                    MuMu.Muon_pT->clear();
-                    MuMu.Muon_eta->clear();
-                    MuMu.Muon_phi->clear();
-                    MuMu.isGLBmuon->clear();
-                    MuMu.isPFmuon->clear();
-                    MuMu.isTRKmuon->clear();
-                    MuMu.Muon_charge->clear();
-                    MuMu.Muon_chi2dof->clear();
-                    MuMu.Muon_muonHits->clear();
-                    MuMu.Muon_nSegments->clear();
-                    MuMu.Muon_nMatches->clear();
-                    MuMu.Muon_trackerLayers->clear();
-                    MuMu.Muon_pixelHits->clear();
-                    MuMu.Muon_dxyVTX->clear();
-                    MuMu.Muon_dzVTX->clear();
-                    MuMu.Muon_trkiso->clear();
-                    MuMu.Muon_PfChargedHadronIsoR04->clear();
-                    MuMu.Muon_PfNeutralHadronIsoR04->clear();
-                    MuMu.Muon_PfGammaIsoR04->clear();
-                    MuMu.Muon_PFSumPUIsoR04->clear();
-                    MuMu.Muon_Px->clear();
-                    MuMu.Muon_Py->clear();
-                    MuMu.Muon_Pz->clear();
-                    MuMu.Muon_Energy->clear();
-                    MuMu.Muon_Best_pT->clear();
-                    MuMu.Muon_Best_pTError->clear();
-                    MuMu.Muon_Best_Px->clear();
-                    MuMu.Muon_Best_Py->clear();
-                    MuMu.Muon_Best_Pz->clear();
-                    MuMu.Muon_Best_eta->clear();
-                    MuMu.Muon_Best_phi->clear();
-                    MuMu.Muon_Inner_pT->clear();
-                    MuMu.Muon_Inner_pTError->clear();
-                    MuMu.Muon_Inner_Px->clear();
-                    MuMu.Muon_Inner_Py->clear();
-                    MuMu.Muon_Inner_Pz->clear();
-                    MuMu.Muon_Inner_eta->clear();
-                    MuMu.Muon_Inner_phi->clear();
-                    MuMu.Muon_Outer_pT->clear();
-                    MuMu.Muon_Outer_pTError->clear();
-                    MuMu.Muon_Outer_Px->clear();
-                    MuMu.Muon_Outer_Py->clear();
-                    MuMu.Muon_Outer_Pz->clear();
-                    MuMu.Muon_Outer_eta->clear();
-                    MuMu.Muon_Outer_phi->clear();
-                    MuMu.Muon_GLB_pT->clear();
-                    MuMu.Muon_GLB_pTError->clear();
-                    MuMu.Muon_GLB_Px->clear();
-                    MuMu.Muon_GLB_Py->clear();
-                    MuMu.Muon_GLB_Pz->clear();
-                    MuMu.Muon_GLB_eta->clear();
-                    MuMu.Muon_GLB_phi->clear();
-                    MuMu.Muon_TuneP_pT->clear();;
-                    MuMu.Muon_TuneP_pTError->clear();
-                    MuMu.Muon_TuneP_Px->clear();
-                    MuMu.Muon_TuneP_Py->clear();
-                    MuMu.Muon_TuneP_Pz->clear();
-                    MuMu.Muon_TuneP_eta->clear();
-                    MuMu.Muon_TuneP_phi->clear();
-                    MuMu.CosAngle->clear();
-                    MuMu.vtxTrkChi2->clear();
-                    MuMu.vtxTrkProb->clear();
-                    MuMu.vtxTrkNdof->clear();
-                    MuMu.vtxTrkCkt1Pt->clear();
-                    MuMu.vtxTrkCkt2Pt->clear();
+                    MuMu.ClearVectors();
 
 //                    Double_t reco_Pt = (mu1.Momentum + mu2.Momentum).Pt();
 //                    Double_t reco_rapi = (mu1.Momentum + mu2.Momentum).Rapidity();
@@ -1118,134 +846,7 @@ void MakeLongSelectedEMu ( TString HLTname )
 
     // -- Creating LongSelectedMuMu variables to assign branches -- //
     LongSelectedEMu_t EMu; EMu.CreateNew();
-
-    EMuTree->Branch("nVertices", &EMu.nVertices);
-    EMuTree->Branch("runNum", &EMu.runNum);
-    EMuTree->Branch("lumiBlock", &EMu.lumiBlock);
-    EMuTree->Branch("evtNum", &EMu.evtNum);
-    EMuTree->Branch("nPileUp", &EMu.nPileUp);
-    EMuTree->Branch("GENEvt_weight", &EMu.GENEvt_weight);
-    EMuTree->Branch("HLT_ntrig", &EMu.HLT_ntrig);
-    EMuTree->Branch("HLT_trigFired", &EMu.HLT_trigFired);
-    EMuTree->Branch("HLT_trigName", &EMu.HLT_trigName);
-//    EMuTree->Branch("HLT_trigPt", &EMu.HLT_trigPt);
-    EMuTree->Branch("HLT_trigEta", &EMu.HLT_trigEta);
-    EMuTree->Branch("HLT_trigPhi", &EMu.HLT_trigPhi);
-    EMuTree->Branch("isHardProcess", &EMu.isHardProcess);
-    EMuTree->Branch("EMu_InvM", &EMu.EMu_InvM);
-    EMuTree->Branch("Muon_pT", &EMu.Muon_pT);
-    EMuTree->Branch("Muon_eta", &EMu.Muon_eta);
-    EMuTree->Branch("Muon_phi", &EMu.Muon_phi);
-    EMuTree->Branch("isGLBmuon", &EMu.isGLBmuon);
-    EMuTree->Branch("isPFmuon", &EMu.isPFmuon);
-    EMuTree->Branch("isTRKmuon", &EMu.isTRKmuon);
-    EMuTree->Branch("Muon_charge", &EMu.Muon_charge);
-    EMuTree->Branch("Muon_chi2dof", &EMu.Muon_chi2dof);
-    EMuTree->Branch("Muon_muonHits", &EMu.Muon_muonHits);
-    EMuTree->Branch("Muon_nSegments", &EMu.Muon_nSegments);
-    EMuTree->Branch("Muon_nMatches", &EMu.Muon_nMatches);
-    EMuTree->Branch("Muon_trackerLayers", &EMu.Muon_trackerLayers);
-    EMuTree->Branch("Muon_pixelHits", &EMu.Muon_pixelHits);
-    EMuTree->Branch("Muon_dxyVTX", &EMu.Muon_dxyVTX);
-    EMuTree->Branch("Muon_dzVTX", &EMu.Muon_dzVTX);
-    EMuTree->Branch("Muon_trkiso", &EMu.Muon_trkiso);
-    EMuTree->Branch("Muon_PfChargedHadronIsoR04", &EMu.Muon_PfChargedHadronIsoR04);
-    EMuTree->Branch("Muon_PfNeutralHadronIsoR04", &EMu.Muon_PfNeutralHadronIsoR04);
-    EMuTree->Branch("Muon_PfGammaIsoR04", &EMu.Muon_PfGammaIsoR04);
-    EMuTree->Branch("Muon_PFSumPUIsoR04", &EMu.Muon_PFSumPUIsoR04);
-    EMuTree->Branch("Muon_Px", &EMu.Muon_Px);
-    EMuTree->Branch("Muon_Py", &EMu.Muon_Py);
-    EMuTree->Branch("Muon_Pz", &EMu.Muon_Pz);
-    EMuTree->Branch("Muon_Energy", &EMu.Muon_Energy);
-    EMuTree->Branch("Muon_Best_pT", &EMu.Muon_Best_pT);
-    EMuTree->Branch("Muon_Best_pTError", &EMu.Muon_Best_pTError);
-    EMuTree->Branch("Muon_Best_Px", &EMu.Muon_Best_Px);
-    EMuTree->Branch("Muon_Best_Py", &EMu.Muon_Best_Py);
-    EMuTree->Branch("Muon_Best_Pz", &EMu.Muon_Best_Pz);
-    EMuTree->Branch("Muon_Best_eta", &EMu.Muon_Best_eta);
-    EMuTree->Branch("Muon_Best_phi", &EMu.Muon_Best_phi);
-    EMuTree->Branch("Muon_Inner_pT", &EMu.Muon_Inner_pT);
-    EMuTree->Branch("Muon_Inner_pTError", &EMu.Muon_Inner_pTError);
-    EMuTree->Branch("Muon_Inner_Px", &EMu.Muon_Inner_Px);
-    EMuTree->Branch("Muon_Inner_Py", &EMu.Muon_Inner_Py);
-    EMuTree->Branch("Muon_Inner_Pz", &EMu.Muon_Inner_Pz);
-    EMuTree->Branch("Muon_Inner_eta", &EMu.Muon_Inner_eta);
-    EMuTree->Branch("Muon_Inner_phi", &EMu.Muon_Inner_phi);
-    EMuTree->Branch("Muon_Outer_pT", &EMu.Muon_Outer_pT);
-    EMuTree->Branch("Muon_Outer_pTError", &EMu.Muon_Outer_pTError);
-    EMuTree->Branch("Muon_Outer_Px", &EMu.Muon_Outer_Px);
-    EMuTree->Branch("Muon_Outer_Py", &EMu.Muon_Outer_Py);
-    EMuTree->Branch("Muon_Outer_Pz", &EMu.Muon_Outer_Pz);
-    EMuTree->Branch("Muon_Outer_eta", &EMu.Muon_Outer_eta);
-    EMuTree->Branch("Muon_Outer_phi", &EMu.Muon_Outer_phi);
-    EMuTree->Branch("Muon_GLB_pT", &EMu.Muon_GLB_pT);
-    EMuTree->Branch("Muon_GLB_pTError", &EMu.Muon_GLB_pTError);
-    EMuTree->Branch("Muon_GLB_Px", &EMu.Muon_GLB_Px);
-    EMuTree->Branch("Muon_GLB_Py", &EMu.Muon_GLB_Py);
-    EMuTree->Branch("Muon_GLB_Pz", &EMu.Muon_GLB_Pz);
-    EMuTree->Branch("Muon_GLB_eta", &EMu.Muon_GLB_eta);
-    EMuTree->Branch("Muon_GLB_phi", &EMu.Muon_GLB_phi);
-    EMuTree->Branch("Muon_TuneP_pT", &EMu.Muon_TuneP_pT);
-    EMuTree->Branch("Muon_TuneP_pTError", &EMu.Muon_TuneP_pTError);
-    EMuTree->Branch("Muon_TuneP_Px", &EMu.Muon_TuneP_Px);
-    EMuTree->Branch("Muon_TuneP_Py", &EMu.Muon_TuneP_Py);
-    EMuTree->Branch("Muon_TuneP_Pz", &EMu.Muon_TuneP_Pz);
-    EMuTree->Branch("Muon_TuneP_eta", &EMu.Muon_TuneP_eta);
-    EMuTree->Branch("Muon_TuneP_phi", &EMu.Muon_TuneP_phi);
-    EMuTree->Branch("Electron_pT", &EMu.Electron_pT);
-    EMuTree->Branch("Electron_eta", &EMu.Electron_eta);
-    EMuTree->Branch("Electron_phi", &EMu.Electron_phi);
-    EMuTree->Branch("Electron_Energy", &EMu.Electron_Energy);
-    EMuTree->Branch("Electron_charge", &EMu.Electron_charge);
-    EMuTree->Branch("Electron_gsfpT", &EMu.Electron_gsfpT);
-    EMuTree->Branch("Electron_gsfPx", &EMu.Electron_gsfPx);
-    EMuTree->Branch("Electron_gsfPy", &EMu.Electron_gsfPy);
-    EMuTree->Branch("Electron_gsfPz", &EMu.Electron_gsfPz);
-    EMuTree->Branch("Electron_gsfEta", &EMu.Electron_gsfEta);
-    EMuTree->Branch("Electron_gsfPhi", &EMu.Electron_gsfEta);
-    EMuTree->Branch("Electron_gsfCharge", &EMu.Electron_gsfCharge);
-    EMuTree->Branch("Electron_etaSC", &EMu.Electron_etaSC);
-    EMuTree->Branch("Electron_phiSC", &EMu.Electron_phiSC);
-    EMuTree->Branch("Electron_etaWidth", &EMu.Electron_etaWidth);
-    EMuTree->Branch("Electron_phiWidth", &EMu.Electron_phiWidth);
-    EMuTree->Branch("Electron_dEtaIn", &EMu.Electron_dEtaIn);
-    EMuTree->Branch("Electron_dEtaInSeed", &EMu.Electron_dEtaInSeed);
-    EMuTree->Branch("Electron_dPhiIn", &EMu.Electron_dPhiIn);
-    EMuTree->Branch("Electron_sigmaIEtaIEta", &EMu.Electron_sigmaIEtaIEta);
-    EMuTree->Branch("Electron_Full5x5_SigmaIEtaIEta", &EMu.Electron_Full5x5_SigmaIEtaIEta);
-    EMuTree->Branch("Electron_HoverE", &EMu.Electron_HoverE);
-    EMuTree->Branch("Electron_fbrem", &EMu.Electron_fbrem);
-    EMuTree->Branch("Electron_eOverP", &EMu.Electron_eOverP);
-    EMuTree->Branch("Electron_InvEminusInvP", &EMu.Electron_InvEminusInvP);
-    EMuTree->Branch("Electron_dxyVTX", &EMu.Electron_dxyVTX);
-    EMuTree->Branch("Electron_dzVTX", &EMu.Electron_dzVTX);
-    EMuTree->Branch("Electron_dxy", &EMu.Electron_dxy);
-    EMuTree->Branch("Electron_dz", &EMu.Electron_dz);
-    EMuTree->Branch("Electron_dxyBS", &EMu.Electron_dxyBS);
-    EMuTree->Branch("Electron_dzBS", &EMu.Electron_dxyBS);
-    EMuTree->Branch("Electron_chIso03", &EMu.Electron_chIso03);
-    EMuTree->Branch("Electron_nhIso03", &EMu.Electron_nhIso03);
-    EMuTree->Branch("Electron_phIso03", &EMu.Electron_phIso03);
-    EMuTree->Branch("Electron_ChIso03FromPU", &EMu.Electron_ChIso03FromPU);
-    EMuTree->Branch("Electron_mHits", &EMu.Electron_mHits);
-    EMuTree->Branch("Electron_EnergySC", &EMu.Electron_EnergySC);
-    EMuTree->Branch("Electron_preEnergySC", &EMu.Electron_preEnergySC);
-    EMuTree->Branch("Electron_rawEnergySC", &EMu.Electron_rawEnergySC);
-    EMuTree->Branch("Electron_etSC", &EMu.Electron_etSC);
-    EMuTree->Branch("Electron_E15", &EMu.Electron_E15);
-    EMuTree->Branch("Electron_E25", &EMu.Electron_E25);
-    EMuTree->Branch("Electron_E55", &EMu.Electron_E55);
-    EMuTree->Branch("Electron_RelPFIso_dBeta", &EMu.Electron_RelPFIso_dBeta);
-    EMuTree->Branch("Electron_RelPFIso_Rho", &EMu.Electron_RelPFIso_Rho);
-    EMuTree->Branch("Electron_r9", &EMu.Electron_r9);
-    EMuTree->Branch("Electron_ecalDriven", &EMu.Electron_ecalDriven);
-    EMuTree->Branch("Electron_passConvVeto", &EMu.Electron_passConvVeto);
-//    EMuTree->Branch("Electron_passLooseID", &EMu.Electron_passLooseID);
-    EMuTree->Branch("Electron_passMediumID", &EMu.Electron_passMediumID);
-//    EMuTree->Branch("Electron_passTightID", &EMu.Electron_passTightID);
-//    EMuTree->Branch("Electron_passMVAID_WP80", &EMu.Electron_passMVAID_WP80);
-//    EMuTree->Branch("Electron_passMVAID_WP90", &EMu.Electron_passMVAID_WP90);
-//    EMuTree->Branch("Electron_passHEEPID", &EMu.Electron_passHEEPID);
+    EMu.MakeBranches( EMuTree );
 
     //Loop for all samples
 //    const Int_t Ntup = ntupleDirectory.size();
@@ -1488,20 +1089,15 @@ void MakeLongSelectedEMu ( TString HLTname )
                     EMu.Electron_r9 = ntuple->Electron_r9[Sel_Index_Ele];
                     EMu.Electron_ecalDriven = ntuple->Electron_ecalDriven[Sel_Index_Ele];
                     EMu.Electron_passConvVeto = ntuple->Electron_passConvVeto[Sel_Index_Ele];
-//                            EMu.Electron_passLooseID = ntuple->Electron_passLooseID[Sel_Index_Ele];
+//                      EMu.Electron_passLooseID = ntuple->Electron_passLooseID[Sel_Index_Ele];
                     EMu.Electron_passMediumID = ntuple->Electron_passMediumID[Sel_Index_Ele];
-//                            EMu.Electron_passTightID = ntuple->Electron_passTightID[Sel_Index_Ele];
-//                            EMu.Electron_passMVAID_WP80 = ntuple->Electron_passMVAID_WP80[Sel_Index_Ele];
-//                            EMu.Electron_passMVAID_WP90 = ntuple->Electron_passMVAID_WP90[Sel_Index_Ele];
-//                            EMu.Electron_passHEEPID = ntuple->Electron_passHEEPID[Sel_Index_Ele];
+//                      EMu.Electron_passTightID = ntuple->Electron_passTightID[Sel_Index_Ele];
+//                      EMu.Electron_passMVAID_WP80 = ntuple->Electron_passMVAID_WP80[Sel_Index_Ele];
+//                      EMu.Electron_passMVAID_WP90 = ntuple->Electron_passMVAID_WP90[Sel_Index_Ele];
+//                      EMu.Electron_passHEEPID = ntuple->Electron_passHEEPID[Sel_Index_Ele];
 
                     EMuTree->Fill();
-
-                    EMu.HLT_trigFired->clear();
-                    EMu.HLT_trigName->clear();
-                    EMu.HLT_trigEta->clear();
-                    EMu.HLT_trigPhi->clear();
-
+                    EMu.ClearVectors();
 
 //                    Double_t reco_Pt = (mu.Momentum + ele.Momentum).Pt();
 //                    Double_t reco_rapi = (mu.Momentum + ele.Momentum).Rapidity();

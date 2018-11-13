@@ -35,22 +35,24 @@ const Double_t massbins[44] = {15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 68, 7
 const Double_t LumiDefault = 35867.0;
 
 
-void LumiCalc ( TString whichX = "" )
+void LumiCalc ( TString WhichX = "" )
 {
+    TString whichX = WhichX;
+    whichX.ToUpper();
     Int_t Xselected = 0;
-    if ( whichX.Contains("EE") || whichX.Contains("ee") )
+    if ( whichX.Contains("EE") )
     {
         Xselected++;
         cout << "\n**********       EE_HistDrawer       **********" << endl;
         EE_LumiCalc();
     }
-    if ( whichX.Contains("MuMu") || whichX.Contains("mumu") || whichX.Contains("MUMU") )
+    if ( whichX.Contains("MUMU") )
     {
         Xselected++;
         cout << "\n**********      MuMu_HistDrawer      **********" << endl;
         MuMu_LumiCalc();
     }
-    if ( whichX.Contains("EMu") || whichX.Contains("emu") || whichX.Contains("Emu") || whichX.Contains("eMu") || whichX.Contains("EMU") )
+    if ( whichX.Contains("EMU") )
     {
         Xselected++;
         cout << "\n**********      EMu_HistDrawer     ************" << endl;
@@ -66,17 +68,17 @@ void EE_LumiCalc ()
 {
     LocalFileMgr Mgr;
 
-    Mgr.GetProc( _EE_DY_Full );
+    Mgr.SetProc( _EE_DY_Full );
     TString name_DY = Mgr.HistLocation+"Hist_"+Mgr.Procname[_EE_DY_Full]+".root";
     TFile* f_DY = new TFile( name_DY, "READ" );
     cout << "Hists location: " << Mgr.HistLocation << endl;
     if (f_DY->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_EE_DY_Full]+".root" << " opened successfully" << endl;
-    Mgr.GetProc( _EE_Bkg_Full );
+    Mgr.SetProc( _EE_Bkg_Full );
     TString name_bkg = Mgr.HistLocation+"Hist_"+Mgr.Procname[_EE_Bkg_Full]+".root";
     TFile* f_bkg = new TFile( name_bkg, "READ" );
     if (f_bkg->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_EE_Bkg_Full]+".root" << " opened successfully" << endl;
-    Mgr.GetProc( _EE_DoubleEG_Full );
-//    Mgr.GetProc( _EE_SingleElectron_Full );
+    Mgr.SetProc( _EE_DoubleEG_Full );
+//    Mgr.SetProc( _EE_SingleElectron_Full );
     TString name_data = Mgr.HistLocation+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root";
     TFile* f_data = new TFile( name_data, "READ" );
     if (f_data->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root" << " opened successfully" << endl;
@@ -161,8 +163,8 @@ void EE_LumiCalc ()
 
         TH1D *h_data_mass_fine, *h_data_mass;
 
-        Mgr.GetProc(_EE_DoubleEG_Full);
-//        Mgr.GetProc(_EE_SingleElectron_Full);
+        Mgr.SetProc(_EE_DoubleEG_Full);
+//        Mgr.SetProc(_EE_SingleElectron_Full);
 
         f_data->GetObject( "h_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass_fine );
         f_data->GetObject( "h_mass_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass );
@@ -328,16 +330,16 @@ void MuMu_LumiCalc()
 {
     LocalFileMgr Mgr;
 
-    Mgr.GetProc( _MuMu_DY_Full );
+    Mgr.SetProc( _MuMu_DY_Full );
     TString name_DY = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root";
     TFile* f_DY = new TFile( name_DY, "READ" );
     cout << "Hists location: " << Mgr.HistLocation << endl;
     if (f_DY->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root" << " opened successfully" << endl;
-    Mgr.GetProc( _MuMu_Bkg_Full );
+    Mgr.SetProc( _MuMu_Bkg_Full );
     TString name_bkg = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root";
     TFile* f_bkg = new TFile( name_bkg, "READ" );
     if (f_bkg->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root" << " opened successfully" << endl;
-    Mgr.GetProc( _MuMu_SingleMuon_Full );
+    Mgr.SetProc( _MuMu_SingleMuon_Full );
     TString name_data = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+".root";
     TFile* f_data = new TFile( name_data, "READ" );
     if (f_data->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+".root" << " opened successfully" << endl;
@@ -585,11 +587,11 @@ void EMu_LumiCalc ()
 {
     LocalFileMgr Mgr;
 
-    Mgr.GetProc( _EMu_Bkg_Full );
+    Mgr.SetProc( _EMu_Bkg_Full );
     TString name_bkg = Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root";
     TFile* f_bkg = new TFile( name_bkg, "READ" );
     if (f_bkg->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root" << " opened successfully" << endl;
-    Mgr.GetProc( _EMu_SingleMuon_Full );
+    Mgr.SetProc( _EMu_SingleMuon_Full );
     TString name_data = Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root";
     TFile* f_data = new TFile( name_data, "READ" );
     if (f_data->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root" << " opened successfully" << endl;

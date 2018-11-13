@@ -40,12 +40,14 @@ const Double_t massbins[44] = {15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 68, 7
                                133, 141, 150, 160, 171, 185, 200, 220, 243, 273, 320, 380, 440, 510, 600, 700, 830, 1000, 1500, 3000};
 
 
-void HistMaker ( TString whichX = "", TString Type = "", Bool_t SwitchROCCORR = kFALSE, TString HLTname = "DEFAULT" )
+void HistMaker ( TString WhichX = "", TString Type = "", Bool_t SwitchROCCORR = kFALSE, TString HLTname = "DEFAULT" )
 {
+    TString whichX = WhichX;
+    whichX.ToUpper();
     TString HLT;
     Int_t Xselected = 0;
     TString type = whichX+"_"+Type;
-    if ( whichX.Contains("EE") || whichX.Contains("ee") )
+    if ( whichX.Contains("EE") )
     {
         Xselected++;
         if ( HLTname == "DEFAULT" ) HLT = "Ele23Ele12";
@@ -53,7 +55,7 @@ void HistMaker ( TString whichX = "", TString Type = "", Bool_t SwitchROCCORR = 
         cout << "\n*******      EE_HistMaker ( " << type << " )      *******" << endl;
         EE_HistMaker( type, HLT );
     }
-    if ( whichX.Contains("MuMu") || whichX.Contains("mumu") || whichX.Contains("MUMU") )
+    if ( whichX.Contains("MUMU") )
     {
         Xselected++;
         if ( HLTname == "DEFAULT" ) HLT = "IsoMu24_OR_IsoTkMu24";
@@ -61,7 +63,7 @@ void HistMaker ( TString whichX = "", TString Type = "", Bool_t SwitchROCCORR = 
         cout << "\n*****  MuMu_HistMaker ( " << type << " )  *****" << endl;
         MuMu_HistMaker( type, SwitchROCCORR, HLT );
     }
-    if ( whichX.Contains("EMu") || whichX.Contains("emu") || whichX.Contains("Emu") || whichX.Contains("eMu") || whichX.Contains("EMU") )
+    if ( whichX.Contains("EMU") )
     {
         Xselected++;
         if ( HLTname == "DEFAULT" ) HLT = "IsoMu24_OR_IsoTkMu24";
@@ -69,7 +71,7 @@ void HistMaker ( TString whichX = "", TString Type = "", Bool_t SwitchROCCORR = 
         cout << "\n*****   EMu_HistMaker ( " << type << " )  *****" << endl;
         EMu_HistMaker( type, SwitchROCCORR, HLT );
     }
-    if ( whichX.Contains("MuMu_merge") || whichX.Contains("MuMu_Merge") )
+    if ( whichX.Contains("MUMU_MERGE") )
     {
         Xselected++;
         cout << "\n*********   MuMu_merge  *********" << endl;
@@ -113,7 +115,7 @@ void EE_HistMaker ( TString type, TString HLTname )
     if ( Processes[0] == _EE_Bkg_Full )
     {
         isBkgFull = kTRUE;
-        Mgr.GetProc( _EE_Bkg_Full );
+        Mgr.SetProc( _EE_Bkg_Full );
         // -- Output ROOTFile -- //
         OutputDir = Mgr.HistLocation;
         f = new TFile( OutputDir+"Hist_"+Mgr.Procname[_EE_Bkg_Full]+".root", "RECREATE" );
@@ -133,7 +135,7 @@ void EE_HistMaker ( TString type, TString HLTname )
             continue;
         }
 
-        Mgr.GetProc( Processes[i_proc] );
+        Mgr.SetProc( Processes[i_proc] );
 
         // -- Output ROOTFile -- //
         if ( isBkgFull == kFALSE )
@@ -342,7 +344,7 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
     if ( Processes[0] == _MuMu_Bkg_Full )
     {
         isBkgFull = kTRUE;
-        Mgr.GetProc( _MuMu_Bkg_Full );
+        Mgr.SetProc( _MuMu_Bkg_Full );
         // -- Output ROOTFile -- //
         OutputDir = Mgr.HistLocation;
         f = new TFile( OutputDir+"Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root", "RECREATE" );
@@ -362,7 +364,7 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
             continue;
         }
 
-        Mgr.GetProc( Processes[i_proc] );
+        Mgr.SetProc( Processes[i_proc] );
 
         // -- Output ROOTFile -- //
         if ( isBkgFull == kFALSE )
@@ -662,7 +664,7 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
     if ( Processes[0] == _EMu_Bkg_Full )
     {
         isBkgFull = kTRUE;
-        Mgr.GetProc( _EMu_Bkg_Full );
+        Mgr.SetProc( _EMu_Bkg_Full );
         // -- Output ROOTFile -- //
         OutputDir = Mgr.HistLocation;
         f = new TFile( OutputDir+"Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root", "RECREATE" );
@@ -682,7 +684,7 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
             continue;
         }
 
-        Mgr.GetProc( Processes[i_proc] );
+        Mgr.SetProc( Processes[i_proc] );
 
         // -- Output ROOTFile -- //
         if ( isBkgFull == kFALSE )
@@ -944,7 +946,7 @@ void MuMu_merge()
          *h_nPU_before_PUCorr[7], *h_nPU_before_EffCorr[7], *h_nPU[7], *h_pT[7], *h_eta[7], *h_phi[7];
 
     TFile* files[7];
-    Mgr.GetProc(_MuMu_SingleMuon_Full);
+    Mgr.SetProc(_MuMu_SingleMuon_Full);
 
     TH1D *h_mass_fine_before_PUCorr_full  = new TH1D( "h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc],
                                                       "h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], 10000, 0, 10000 );
@@ -985,7 +987,7 @@ void MuMu_merge()
     Int_t iter = 0;
     for ( SelProc_t pr=_MuMu_SingleMuon_B; pr<=_MuMu_SingleMuon_H; pr=next(pr) )
     {
-        Mgr.GetProc(pr);
+        Mgr.SetProc(pr);
         files[iter] = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root", "READ" );
 
         files[iter]->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc],  h_mass_fine_before_PUCorr[iter] );

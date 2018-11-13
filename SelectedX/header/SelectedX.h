@@ -394,119 +394,292 @@ public:
 //        chain->SetBranchAddress("Muon_nMatchesRPCLayers", &Muon_nMatchesRPCLayers);
 
         // -- Adding to cache -- //
-        chain->AddBranchToCache("nVertices", 1);
-        chain->AddBranchToCache("runNum", 1);
-        chain->AddBranchToCache("lumiBlock", 1);
-        chain->AddBranchToCache("evtNum", 1);
-        chain->AddBranchToCache("nPileUp", 1);
-        chain->AddBranchToCache("isHardProcess", 1);
-        chain->AddBranchToCache("GENEvt_weight", 1);
+//        chain->AddBranchToCache("nVertices", 1);
+//        chain->AddBranchToCache("runNum", 1);
+//        chain->AddBranchToCache("lumiBlock", 1);
+//        chain->AddBranchToCache("evtNum", 1);
+//        chain->AddBranchToCache("nPileUp", 1);
+//        chain->AddBranchToCache("isHardProcess", 1);
+//        chain->AddBranchToCache("GENEvt_weight", 1);
 
-        chain->AddBranchToCache("HLT_trigName", 1);
-        chain->AddBranchToCache("HLT_ntrig", 1);
-        chain->AddBranchToCache("HLT_trigFired", 1);
-//        chain->AddBranchToCache("HLT_trigPt", 1);
-        chain->AddBranchToCache("HLT_trigEta", 1);
-        chain->AddBranchToCache("HLT_trigPhi", 1);
+//        chain->AddBranchToCache("HLT_trigName", 1);
+//        chain->AddBranchToCache("HLT_ntrig", 1);
+//        chain->AddBranchToCache("HLT_trigFired", 1);
+////        chain->AddBranchToCache("HLT_trigPt", 1);
+//        chain->AddBranchToCache("HLT_trigEta", 1);
+//        chain->AddBranchToCache("HLT_trigPhi", 1);
 
-        chain->AddBranchToCache("Muon_InvM", 1);
+//        chain->AddBranchToCache("Muon_InvM", 1);
 
-        chain->AddBranchToCache("isPFmuon", 1);
-        chain->AddBranchToCache("isGLBmuon", 1);
-        chain->AddBranchToCache("isTRKmuon", 1);
+//        chain->AddBranchToCache("isPFmuon", 1);
+//        chain->AddBranchToCache("isGLBmuon", 1);
+//        chain->AddBranchToCache("isTRKmuon", 1);
 
-        chain->AddBranchToCache("CosAngle", 1);
-        chain->AddBranchToCache("vtxTrkChi2", 1);
-        chain->AddBranchToCache("vtxTrkProb", 1);
-        chain->AddBranchToCache("vtxTrkNdof", 1);
-        chain->AddBranchToCache("vtxTrkCkt1Pt", 1);
-        chain->AddBranchToCache("vtxTrkCkt2Pt", 1);
-//        chain->AddBranchToCache("vtxTrkDiEChi2", 1);
-//        chain->AddBranchToCache("vtxTrkDiEProb", 1);
-//        chain->AddBranchToCache("vtxTrkDiENdof", 1);
-//        chain->AddBranchToCache("vtxTrkDiE1Pt", 1);
-//        chain->AddBranchToCache("vtxTrkDiE2Pt", 1);
-//        chain->AddBranchToCache("vtxTrkEMuChi2", 1);
-//        chain->AddBranchToCache("vtxTrkEMuProb", 1);
-//        chain->AddBranchToCache("vtxTrkEMuNdof", 1);
-//        chain->AddBranchToCache("vtxTrkEMu1Pt", 1);
-//        chain->AddBranchToCache("vtxTrkEMu2Pt", 1);
+//        chain->AddBranchToCache("CosAngle", 1);
+//        chain->AddBranchToCache("vtxTrkChi2", 1);
+//        chain->AddBranchToCache("vtxTrkProb", 1);
+//        chain->AddBranchToCache("vtxTrkNdof", 1);
+//        chain->AddBranchToCache("vtxTrkCkt1Pt", 1);
+//        chain->AddBranchToCache("vtxTrkCkt2Pt", 1);
+////        chain->AddBranchToCache("vtxTrkDiEChi2", 1);
+////        chain->AddBranchToCache("vtxTrkDiEProb", 1);
+////        chain->AddBranchToCache("vtxTrkDiENdof", 1);
+////        chain->AddBranchToCache("vtxTrkDiE1Pt", 1);
+////        chain->AddBranchToCache("vtxTrkDiE2Pt", 1);
+////        chain->AddBranchToCache("vtxTrkEMuChi2", 1);
+////        chain->AddBranchToCache("vtxTrkEMuProb", 1);
+////        chain->AddBranchToCache("vtxTrkEMuNdof", 1);
+////        chain->AddBranchToCache("vtxTrkEMu1Pt", 1);
+////        chain->AddBranchToCache("vtxTrkEMu2Pt", 1);
 
-        chain->AddBranchToCache("Muon_pT", 1);
-        chain->AddBranchToCache("Muon_eta", 1);
-        chain->AddBranchToCache("Muon_phi", 1);
-        chain->AddBranchToCache("Muon_Energy", 1);
-        chain->AddBranchToCache("Muon_charge", 1);
-//        chain->AddBranchToCache("Muon_muonType", 1);
-        chain->AddBranchToCache("Muon_chi2dof", 1);
-        chain->AddBranchToCache("Muon_muonHits", 1);
-        chain->AddBranchToCache("Muon_nSegments", 1);
-        chain->AddBranchToCache("Muon_nMatches", 1);
-        chain->AddBranchToCache("Muon_trackerLayers", 1);
+//        chain->AddBranchToCache("Muon_pT", 1);
+//        chain->AddBranchToCache("Muon_eta", 1);
+//        chain->AddBranchToCache("Muon_phi", 1);
+//        chain->AddBranchToCache("Muon_Energy", 1);
+//        chain->AddBranchToCache("Muon_charge", 1);
+////        chain->AddBranchToCache("Muon_muonType", 1);
+//        chain->AddBranchToCache("Muon_chi2dof", 1);
+//        chain->AddBranchToCache("Muon_muonHits", 1);
+//        chain->AddBranchToCache("Muon_nSegments", 1);
+//        chain->AddBranchToCache("Muon_nMatches", 1);
+//        chain->AddBranchToCache("Muon_trackerLayers", 1);
 
-//        chain->AddBranchToCache("Muon_pixelHitsGLB", 1);
-//        chain->AddBranchToCache("Muon_trackerLayersGLB", 1);
+////        chain->AddBranchToCache("Muon_pixelHitsGLB", 1);
+////        chain->AddBranchToCache("Muon_trackerLayersGLB", 1);
 
-        chain->AddBranchToCache("Muon_pixelHits", 1);
-        chain->AddBranchToCache("Muon_dxyVTX", 1);
-        chain->AddBranchToCache("Muon_dzVTX", 1);
-        chain->AddBranchToCache("Muon_trkiso", 1);
+//        chain->AddBranchToCache("Muon_pixelHits", 1);
+//        chain->AddBranchToCache("Muon_dxyVTX", 1);
+//        chain->AddBranchToCache("Muon_dzVTX", 1);
+//        chain->AddBranchToCache("Muon_trkiso", 1);
 
-        chain->AddBranchToCache("Muon_Px", 1);
-        chain->AddBranchToCache("Muon_Py", 1);
-        chain->AddBranchToCache("Muon_Pz", 1);
+//        chain->AddBranchToCache("Muon_Px", 1);
+//        chain->AddBranchToCache("Muon_Py", 1);
+//        chain->AddBranchToCache("Muon_Pz", 1);
 
-//        chain->AddBranchToCache("Muon_dB", 1);
+////        chain->AddBranchToCache("Muon_dB", 1);
 
-        chain->AddBranchToCache("Muon_PfChargedHadronIsoR04", 1);
-        chain->AddBranchToCache("Muon_PfNeutralHadronIsoR04", 1);
-        chain->AddBranchToCache("Muon_PfGammaIsoR04", 1);
-        chain->AddBranchToCache("Muon_PFSumPUIsoR04", 1);
+//        chain->AddBranchToCache("Muon_PfChargedHadronIsoR04", 1);
+//        chain->AddBranchToCache("Muon_PfNeutralHadronIsoR04", 1);
+//        chain->AddBranchToCache("Muon_PfGammaIsoR04", 1);
+//        chain->AddBranchToCache("Muon_PFSumPUIsoR04", 1);
 
-        chain->AddBranchToCache("Muon_Best_pT", 1);
-        chain->AddBranchToCache("Muon_Best_pTError", 1);
-        chain->AddBranchToCache("Muon_Best_Px", 1);
-        chain->AddBranchToCache("Muon_Best_Py", 1);
-        chain->AddBranchToCache("Muon_Best_Pz", 1);
-        chain->AddBranchToCache("Muon_Best_eta", 1);
-        chain->AddBranchToCache("Muon_Best_phi", 1);
+//        chain->AddBranchToCache("Muon_Best_pT", 1);
+//        chain->AddBranchToCache("Muon_Best_pTError", 1);
+//        chain->AddBranchToCache("Muon_Best_Px", 1);
+//        chain->AddBranchToCache("Muon_Best_Py", 1);
+//        chain->AddBranchToCache("Muon_Best_Pz", 1);
+//        chain->AddBranchToCache("Muon_Best_eta", 1);
+//        chain->AddBranchToCache("Muon_Best_phi", 1);
 
-        chain->AddBranchToCache("Muon_Inner_pT", 1);
-        chain->AddBranchToCache("Muon_Inner_pTError", 1);
-        chain->AddBranchToCache("Muon_Inner_eta", 1);
-        chain->AddBranchToCache("Muon_Inner_phi", 1);
-        chain->AddBranchToCache("Muon_Inner_Px", 1);
-        chain->AddBranchToCache("Muon_Inner_Py", 1);
-        chain->AddBranchToCache("Muon_Inner_Pz", 1);
+//        chain->AddBranchToCache("Muon_Inner_pT", 1);
+//        chain->AddBranchToCache("Muon_Inner_pTError", 1);
+//        chain->AddBranchToCache("Muon_Inner_eta", 1);
+//        chain->AddBranchToCache("Muon_Inner_phi", 1);
+//        chain->AddBranchToCache("Muon_Inner_Px", 1);
+//        chain->AddBranchToCache("Muon_Inner_Py", 1);
+//        chain->AddBranchToCache("Muon_Inner_Pz", 1);
 
-        chain->AddBranchToCache("Muon_Outer_pT", 1);
-        chain->AddBranchToCache("Muon_Outer_pTError", 1);
-        chain->AddBranchToCache("Muon_Outer_Px", 1);
-        chain->AddBranchToCache("Muon_Outer_Py", 1);
-        chain->AddBranchToCache("Muon_Outer_Pz", 1);
-        chain->AddBranchToCache("Muon_Outer_eta", 1);
-        chain->AddBranchToCache("Muon_Outer_phi", 1);
+//        chain->AddBranchToCache("Muon_Outer_pT", 1);
+//        chain->AddBranchToCache("Muon_Outer_pTError", 1);
+//        chain->AddBranchToCache("Muon_Outer_Px", 1);
+//        chain->AddBranchToCache("Muon_Outer_Py", 1);
+//        chain->AddBranchToCache("Muon_Outer_Pz", 1);
+//        chain->AddBranchToCache("Muon_Outer_eta", 1);
+//        chain->AddBranchToCache("Muon_Outer_phi", 1);
 
-        chain->AddBranchToCache("Muon_GLB_pT", 1);
-        chain->AddBranchToCache("Muon_GLB_pTError", 1);
-        chain->AddBranchToCache("Muon_GLB_Px", 1);
-        chain->AddBranchToCache("Muon_GLB_Py", 1);
-        chain->AddBranchToCache("Muon_GLB_Pz", 1);
-        chain->AddBranchToCache("Muon_GLB_eta", 1);
-        chain->AddBranchToCache("Muon_GLB_phi", 1);
+//        chain->AddBranchToCache("Muon_GLB_pT", 1);
+//        chain->AddBranchToCache("Muon_GLB_pTError", 1);
+//        chain->AddBranchToCache("Muon_GLB_Px", 1);
+//        chain->AddBranchToCache("Muon_GLB_Py", 1);
+//        chain->AddBranchToCache("Muon_GLB_Pz", 1);
+//        chain->AddBranchToCache("Muon_GLB_eta", 1);
+//        chain->AddBranchToCache("Muon_GLB_phi", 1);
 
-        chain->AddBranchToCache("Muon_TuneP_pT", 1);
-        chain->AddBranchToCache("Muon_TuneP_pTError", 1);
-        chain->AddBranchToCache("Muon_TuneP_eta", 1);
-        chain->AddBranchToCache("Muon_TuneP_phi", 1);
-        chain->AddBranchToCache("Muon_TuneP_Px", 1);
-        chain->AddBranchToCache("Muon_TuneP_Py", 1);
-        chain->AddBranchToCache("Muon_TuneP_Pz", 1);
+//        chain->AddBranchToCache("Muon_TuneP_pT", 1);
+//        chain->AddBranchToCache("Muon_TuneP_pTError", 1);
+//        chain->AddBranchToCache("Muon_TuneP_eta", 1);
+//        chain->AddBranchToCache("Muon_TuneP_phi", 1);
+//        chain->AddBranchToCache("Muon_TuneP_Px", 1);
+//        chain->AddBranchToCache("Muon_TuneP_Py", 1);
+//        chain->AddBranchToCache("Muon_TuneP_Pz", 1);
 
-//        chain->AddBranchToCache("Muon_stationMask", 1);
-//        chain->AddBranchToCache("Muon_nMatchesRPCLayers", 1);
+////        chain->AddBranchToCache("Muon_stationMask", 1);
+////        chain->AddBranchToCache("Muon_nMatchesRPCLayers", 1);
 
         File_Given = kTRUE;
+    }
+
+    void MakeBranches(TTree *tree)
+    {
+        tree->Branch("nVertices", &this->nVertices);
+        tree->Branch("runNum", &this->runNum);
+        tree->Branch("lumiBlock", &this->lumiBlock);
+        tree->Branch("evtNum", &this->evtNum);
+        tree->Branch("nPileUp", &this->nPileUp);
+        tree->Branch("GENEvt_weight", &this->GENEvt_weight);
+        tree->Branch("HLT_ntrig", &this->HLT_ntrig);
+        tree->Branch("HLT_trigFired", &this->HLT_trigFired);
+        tree->Branch("HLT_trigName", &this->HLT_trigName);
+    //    tree->Branch("HLT_trigPt", &this->HLT_trigPt);
+        tree->Branch("HLT_trigEta", &this->HLT_trigEta);
+        tree->Branch("HLT_trigPhi", &this->HLT_trigPhi);
+        tree->Branch("isHardProcess", &this->isHardProcess);
+        tree->Branch("Muon_pT", &this->Muon_pT);
+        tree->Branch("Muon_eta", &this->Muon_eta);
+        tree->Branch("Muon_phi", &this->Muon_phi);
+        tree->Branch("isGLBmuon", &this->isGLBmuon);
+        tree->Branch("isPFmuon", &this->isPFmuon);
+        tree->Branch("isTRKmuon", &this->isTRKmuon);
+        tree->Branch("Muon_charge", &this->Muon_charge);
+        tree->Branch("Muon_chi2dof", &this->Muon_chi2dof);
+        tree->Branch("Muon_muonHits", &this->Muon_muonHits);
+        tree->Branch("Muon_nSegments", &this->Muon_nSegments);
+        tree->Branch("Muon_nMatches", &this->Muon_nMatches);
+        tree->Branch("Muon_trackerLayers", &this->Muon_trackerLayers);
+        tree->Branch("Muon_pixelHits", &this->Muon_pixelHits);
+        tree->Branch("Muon_dxyVTX", &this->Muon_dxyVTX);
+        tree->Branch("Muon_dzVTX", &this->Muon_dzVTX);
+        tree->Branch("Muon_trkiso", &this->Muon_trkiso);
+        tree->Branch("Muon_PfChargedHadronIsoR04", &this->Muon_PfChargedHadronIsoR04);
+        tree->Branch("Muon_PfNeutralHadronIsoR04", &this->Muon_PfNeutralHadronIsoR04);
+        tree->Branch("Muon_PfGammaIsoR04", &this->Muon_PfGammaIsoR04);
+        tree->Branch("Muon_PFSumPUIsoR04", &this->Muon_PFSumPUIsoR04);
+        tree->Branch("Muon_Px", &this->Muon_Px);
+        tree->Branch("Muon_Py", &this->Muon_Py);
+        tree->Branch("Muon_Pz", &this->Muon_Pz);
+        tree->Branch("Muon_Energy", &this->Muon_Energy);
+        tree->Branch("Muon_InvM", &this->Muon_InvM);
+        tree->Branch("Muon_Best_pT", &this->Muon_Best_pT);
+        tree->Branch("Muon_Best_pTError", &this->Muon_Best_pTError);
+        tree->Branch("Muon_Best_Px", &this->Muon_Best_Px);
+        tree->Branch("Muon_Best_Py", &this->Muon_Best_Py);
+        tree->Branch("Muon_Best_Pz", &this->Muon_Best_Pz);
+        tree->Branch("Muon_Best_eta", &this->Muon_Best_eta);
+        tree->Branch("Muon_Best_phi", &this->Muon_Best_phi);
+        tree->Branch("Muon_Inner_pT", &this->Muon_Inner_pT);
+        tree->Branch("Muon_Inner_pTError", &this->Muon_Inner_pTError);
+        tree->Branch("Muon_Inner_Px", &this->Muon_Inner_Px);
+        tree->Branch("Muon_Inner_Py", &this->Muon_Inner_Py);
+        tree->Branch("Muon_Inner_Pz", &this->Muon_Inner_Pz);
+        tree->Branch("Muon_Inner_eta", &this->Muon_Inner_eta);
+        tree->Branch("Muon_Inner_phi", &this->Muon_Inner_phi);
+        tree->Branch("Muon_Outer_pT", &this->Muon_Outer_pT);
+        tree->Branch("Muon_Outer_pTError", &this->Muon_Outer_pTError);
+        tree->Branch("Muon_Outer_Px", &this->Muon_Outer_Px);
+        tree->Branch("Muon_Outer_Py", &this->Muon_Outer_Py);
+        tree->Branch("Muon_Outer_Pz", &this->Muon_Outer_Pz);
+        tree->Branch("Muon_Outer_eta", &this->Muon_Outer_eta);
+        tree->Branch("Muon_Outer_phi", &this->Muon_Outer_phi);
+        tree->Branch("Muon_GLB_pT", &this->Muon_GLB_pT);
+        tree->Branch("Muon_GLB_pTError", &this->Muon_GLB_pTError);
+        tree->Branch("Muon_GLB_Px", &this->Muon_GLB_Px);
+        tree->Branch("Muon_GLB_Py", &this->Muon_GLB_Py);
+        tree->Branch("Muon_GLB_Pz", &this->Muon_GLB_Pz);
+        tree->Branch("Muon_GLB_eta", &this->Muon_GLB_eta);
+        tree->Branch("Muon_GLB_phi", &this->Muon_GLB_phi);
+        tree->Branch("Muon_TuneP_pT", &this->Muon_TuneP_pT);
+        tree->Branch("Muon_TuneP_pTError", &this->Muon_TuneP_pTError);
+        tree->Branch("Muon_TuneP_Px", &this->Muon_TuneP_Px);
+        tree->Branch("Muon_TuneP_Py", &this->Muon_TuneP_Py);
+        tree->Branch("Muon_TuneP_Pz", &this->Muon_TuneP_Pz);
+        tree->Branch("Muon_TuneP_eta", &this->Muon_TuneP_eta);
+        tree->Branch("Muon_TuneP_phi", &this->Muon_TuneP_phi);
+        tree->Branch("CosAngle", &this->CosAngle);
+        tree->Branch("vtxTrkChi2", &this->vtxTrkChi2);
+        tree->Branch("vtxTrkProb", &this->vtxTrkProb);
+        tree->Branch("vtxTrkNdof", &this->vtxTrkNdof);
+        tree->Branch("vtxTrkCkt1Pt", &this->vtxTrkCkt1Pt);
+        tree->Branch("vtxTrkCkt2Pt", &this->vtxTrkCkt2Pt);
+    }
+
+//    int ClearVectors()
+    void ClearVectors()
+    {
+        HLT_trigFired->clear();
+        HLT_trigName->clear();
+        HLT_trigEta->clear();
+        HLT_trigPhi->clear();
+        Muon_pT->clear();
+        Muon_eta->clear();
+        Muon_phi->clear();
+        isGLBmuon->clear();
+        isPFmuon->clear();
+        isTRKmuon->clear();
+        Muon_charge->clear();
+        Muon_chi2dof->clear();
+        Muon_muonHits->clear();
+        Muon_nSegments->clear();
+        Muon_nMatches->clear();
+        Muon_trackerLayers->clear();
+        Muon_pixelHits->clear();
+        Muon_dxyVTX->clear();
+        Muon_dzVTX->clear();
+        Muon_trkiso->clear();
+        Muon_PfChargedHadronIsoR04->clear();
+        Muon_PfNeutralHadronIsoR04->clear();
+        Muon_PfGammaIsoR04->clear();
+        Muon_PFSumPUIsoR04->clear();
+        Muon_Px->clear();
+        Muon_Py->clear();
+        Muon_Pz->clear();
+        Muon_Energy->clear();
+        Muon_Best_pT->clear();
+        Muon_Best_pTError->clear();
+        Muon_Best_Px->clear();
+        Muon_Best_Py->clear();
+        Muon_Best_Pz->clear();
+        Muon_Best_eta->clear();
+        Muon_Best_phi->clear();
+        Muon_Inner_pT->clear();
+        Muon_Inner_pTError->clear();
+        Muon_Inner_Px->clear();
+        Muon_Inner_Py->clear();
+        Muon_Inner_Pz->clear();
+        Muon_Inner_eta->clear();
+        Muon_Inner_phi->clear();
+        Muon_Outer_pT->clear();
+        Muon_Outer_pTError->clear();
+        Muon_Outer_Px->clear();
+        Muon_Outer_Py->clear();
+        Muon_Outer_Pz->clear();
+        Muon_Outer_eta->clear();
+        Muon_Outer_phi->clear();
+        Muon_GLB_pT->clear();
+        Muon_GLB_pTError->clear();
+        Muon_GLB_Px->clear();
+        Muon_GLB_Py->clear();
+        Muon_GLB_Pz->clear();
+        Muon_GLB_eta->clear();
+        Muon_GLB_phi->clear();
+        Muon_TuneP_pT->clear();
+        Muon_TuneP_pTError->clear();
+        Muon_TuneP_Px->clear();
+        Muon_TuneP_Py->clear();
+        Muon_TuneP_Pz->clear();
+        Muon_TuneP_eta->clear();
+        Muon_TuneP_phi->clear();
+        CosAngle->clear();
+        vtxTrkChi2->clear();
+        vtxTrkProb->clear();
+        vtxTrkNdof->clear();
+        vtxTrkCkt1Pt->clear();
+        vtxTrkCkt2Pt->clear();
+
+//        if ( !HLT_trigFired->size() && !HLT_trigName->size() && !HLT_trigEta->size() && !HLT_trigPhi->size() && !Muon_pT->size() && !Muon_eta->size() &&
+//             !Muon_phi->size() && !isGLBmuon->size() && !isPFmuon->size() && !isTRKmuon->size() && !Muon_charge->size() && !Muon_chi2dof->size() &&
+//             !Muon_muonHits->size() && !Muon_nSegments->size() && !Muon_nMatches->size() && !Muon_trackerLayers->size() && !Muon_pixelHits->size() &&
+//             !Muon_dxyVTX->size() && !Muon_dzVTX->size() && !Muon_trkiso->size() && !Muon_PfChargedHadronIsoR04->size() && !Muon_PfNeutralHadronIsoR04->size() &&
+//             !Muon_PfGammaIsoR04->size() && !Muon_PFSumPUIsoR04->size() && !Muon_Px->size() && !Muon_Py->size() && !Muon_Pz->size() && !Muon_Energy->size() &&
+//             !Muon_Best_pT->size() && !Muon_Best_pTError->size() && !Muon_Best_Px->size() && !Muon_Best_Py->size() && !Muon_Best_Pz->size() &&
+//             !Muon_Best_eta->size() && !Muon_Best_phi->size() && !Muon_Inner_pT->size() && !Muon_Inner_pTError->size() && !Muon_Inner_Px->size() &&
+//             !Muon_Inner_Py->size() && !Muon_Inner_Pz->size() && !Muon_Inner_eta->size() && !Muon_Inner_phi->size() && !Muon_Outer_pT->size() &&
+//             !Muon_Outer_pTError->size() && !Muon_Outer_Px->size() && !Muon_Outer_Py->size() && !Muon_Outer_Pz->size() && !Muon_Outer_eta->size() &&
+//             !Muon_Outer_phi->size() && !Muon_GLB_pT->size() && !Muon_GLB_pTError->size() && !Muon_GLB_Px->size() && !Muon_GLB_Py->size() &&
+//             !Muon_GLB_Pz->size() && !Muon_GLB_eta->size() && !Muon_GLB_phi->size() && !Muon_TuneP_pT->size() && !Muon_TuneP_pTError->size() &&
+//             !Muon_TuneP_Px->size() && !Muon_TuneP_Py->size() && !Muon_TuneP_Pz->size() && !Muon_TuneP_eta->size() && !Muon_TuneP_phi->size() &&
+//             !CosAngle->size() && !vtxTrkChi2->size() && !vtxTrkProb->size() && !vtxTrkNdof->size() && !vtxTrkCkt1Pt->size() && !vtxTrkCkt2Pt->size() )
+//            return 1;
+//        else return 0;
     }
 
     void Ready()
@@ -910,6 +1083,42 @@ public:
         Muon_trackerLayers = Mu->Muon_trackerLayers;
     }
 
+    void MakeBranches(TTree *tree)
+    {
+        tree->Branch( "isSelPassed", &this->isSelPassed );
+        tree->Branch( "nVertices", &this->nVertices );
+        tree->Branch( "nPileUp", &this->nPileUp );
+        tree->Branch( "GENEvt_weight", &this->GENEvt_weight );
+        tree->Branch( "Muon_pT", &this->Muon_pT );
+        tree->Branch( "Muon_eta", &this->Muon_eta );
+        tree->Branch( "Muon_phi", &this->Muon_phi );
+        tree->Branch( "Muon_charge", &this->Muon_charge );
+        tree->Branch( "Muon_Energy", &this->Muon_Energy );
+        tree->Branch( "Muon_InvM", &this->Muon_InvM );
+        tree->Branch( "Muon_TuneP_pT", &this->Muon_TuneP_pT );
+        tree->Branch( "Muon_TuneP_eta", &this->Muon_TuneP_eta );
+        tree->Branch( "Muon_TuneP_phi", &this->Muon_TuneP_phi );
+        tree->Branch( "Muon_trackerLayers", &this->Muon_trackerLayers );
+    }
+
+    int ClearVectors()
+    {
+        Muon_pT->clear();
+        Muon_eta->clear();
+        Muon_phi->clear();
+        Muon_charge->clear();
+        Muon_Energy->clear();
+        Muon_TuneP_pT->clear();;
+        Muon_TuneP_eta->clear();
+        Muon_TuneP_phi->clear();
+        Muon_trackerLayers->clear();
+
+        if ( !Muon_pT->size() && !Muon_eta->size() && !Muon_phi->size() && !Muon_charge->size() && !Muon_Energy->size() &&
+             !Muon_TuneP_pT->size() && !Muon_TuneP_eta->size() && !Muon_TuneP_phi->size() && !Muon_trackerLayers->size() )
+            return 1;
+        else return 0;
+    }
+
     void Ready()
     {
         if (!chain || File_Given == kFALSE)
@@ -1274,77 +1483,228 @@ public:
 //        chain->SetBranchAddress("Electron_passHEEPID", &Electron_passHEEPID);
 
         // -- Adding to cache -- //
-        chain->AddBranchToCache("nVertices", 1);
-        chain->AddBranchToCache("runNum", 1);
-        chain->AddBranchToCache("lumiBlock", 1);
-        chain->AddBranchToCache("evtNum", 1);
-        chain->AddBranchToCache("nPileUp", 1);
-        chain->AddBranchToCache("HLT_trigName", 1);
-        chain->AddBranchToCache("HLT_ntrig", 1);
-        chain->AddBranchToCache("HLT_trigFired", 1);
-//        chain->AddBranchToCache("HLT_trigPt", 1);
-        chain->AddBranchToCache("HLT_trigEta", 1);
-        chain->AddBranchToCache("HLT_trigPhi", 1);
-        chain->AddBranchToCache("GENEvt_weight", 1);
-        chain->AddBranchToCache("isHardProcess", 1);
-        chain->AddBranchToCache("Electron_InvM", 1);
+//        chain->AddBranchToCache("nVertices", 1);
+//        chain->AddBranchToCache("runNum", 1);
+//        chain->AddBranchToCache("lumiBlock", 1);
+//        chain->AddBranchToCache("evtNum", 1);
+//        chain->AddBranchToCache("nPileUp", 1);
+//        chain->AddBranchToCache("HLT_trigName", 1);
+//        chain->AddBranchToCache("HLT_ntrig", 1);
+//        chain->AddBranchToCache("HLT_trigFired", 1);
+////        chain->AddBranchToCache("HLT_trigPt", 1);
+//        chain->AddBranchToCache("HLT_trigEta", 1);
+//        chain->AddBranchToCache("HLT_trigPhi", 1);
+//        chain->AddBranchToCache("GENEvt_weight", 1);
+//        chain->AddBranchToCache("isHardProcess", 1);
+//        chain->AddBranchToCache("Electron_InvM", 1);
 
-        chain->AddBranchToCache("Electron_pT", 1);
-        chain->AddBranchToCache("Electron_eta", 1);
-        chain->AddBranchToCache("Electron_phi", 1);
-        chain->AddBranchToCache("Electron_Energy", 1);
-        chain->AddBranchToCache("Electron_charge", 1);
-        chain->AddBranchToCache("Electron_gsfpT", 1);
-        chain->AddBranchToCache("Electron_gsfPx", 1);
-        chain->AddBranchToCache("Electron_gsfPy", 1);
-        chain->AddBranchToCache("Electron_gsfPz", 1);
-        chain->AddBranchToCache("Electron_gsfEta", 1);
-        chain->AddBranchToCache("Electron_gsfPhi", 1);
-        chain->AddBranchToCache("Electron_gsfCharge", 1);
-        chain->AddBranchToCache("Electron_etaSC", 1);
-        chain->AddBranchToCache("Electron_phiSC", 1);
-        chain->AddBranchToCache("Electron_etaWidth", 1);
-        chain->AddBranchToCache("Electron_phiWidth", 1);
-        chain->AddBranchToCache("Electron_dEtaIn", 1);
-        chain->AddBranchToCache("Electron_dEtaInSeed", 1);
-        chain->AddBranchToCache("Electron_dPhiIn", 1);
-        chain->AddBranchToCache("Electron_sigmaIEtaIEta", 1);
-        chain->AddBranchToCache("Electron_Full5x5_SigmaIEtaIEta", 1);
-        chain->AddBranchToCache("Electron_HoverE", 1);
-        chain->AddBranchToCache("Electron_fbrem", 1);
-        chain->AddBranchToCache("Electron_eOverP", 1);
-        chain->AddBranchToCache("Electron_InvEminusInvP", 1);
-        chain->AddBranchToCache("Electron_dxyVTX", 1);
-        chain->AddBranchToCache("Electron_dzVTX", 1);
-        chain->AddBranchToCache("Electron_dxy", 1);
-        chain->AddBranchToCache("Electron_dz", 1);
-        chain->AddBranchToCache("Electron_dxyBS", 1);
-        chain->AddBranchToCache("Electron_dzBS", 1);
-        chain->AddBranchToCache("Electron_chIso03", 1);
-        chain->AddBranchToCache("Electron_nhIso03", 1);
-        chain->AddBranchToCache("Electron_phIso03", 1);
-        chain->AddBranchToCache("Electron_ChIso03FromPU", 1);
-        chain->AddBranchToCache("Electron_mHits", 1);
-        chain->AddBranchToCache("Electron_EnergySC", 1);
-        chain->AddBranchToCache("Electron_preEnergySC", 1);
-        chain->AddBranchToCache("Electron_rawEnergySC", 1);
-        chain->AddBranchToCache("Electron_etSC", 1);
-        chain->AddBranchToCache("Electron_E15", 1);
-        chain->AddBranchToCache("Electron_E25", 1);
-        chain->AddBranchToCache("Electron_E55", 1);
-        chain->AddBranchToCache("Electron_RelPFIso_dBeta", 1);
-        chain->AddBranchToCache("Electron_RelPFIso_Rho", 1);
-        chain->AddBranchToCache("Electron_r9", 1);
-        chain->AddBranchToCache("Electron_ecalDriven", 1);
-        chain->AddBranchToCache("Electron_passConvVeto", 1);
-//        chain->AddBranchToCache("Electron_passLooseID", 1);
-        chain->AddBranchToCache("Electron_passMediumID", 1);
-//        chain->AddBranchToCache("Electron_passTightID", 1);
-//        chain->AddBranchToCache("Electron_passMVAID_WP80", 1);
-//        chain->AddBranchToCache("Electron_passMVAID_WP90", 1);
-//        chain->AddBranchToCache("Electron_passHEEPID", 1);
+//        chain->AddBranchToCache("Electron_pT", 1);
+//        chain->AddBranchToCache("Electron_eta", 1);
+//        chain->AddBranchToCache("Electron_phi", 1);
+//        chain->AddBranchToCache("Electron_Energy", 1);
+//        chain->AddBranchToCache("Electron_charge", 1);
+//        chain->AddBranchToCache("Electron_gsfpT", 1);
+//        chain->AddBranchToCache("Electron_gsfPx", 1);
+//        chain->AddBranchToCache("Electron_gsfPy", 1);
+//        chain->AddBranchToCache("Electron_gsfPz", 1);
+//        chain->AddBranchToCache("Electron_gsfEta", 1);
+//        chain->AddBranchToCache("Electron_gsfPhi", 1);
+//        chain->AddBranchToCache("Electron_gsfCharge", 1);
+//        chain->AddBranchToCache("Electron_etaSC", 1);
+//        chain->AddBranchToCache("Electron_phiSC", 1);
+//        chain->AddBranchToCache("Electron_etaWidth", 1);
+//        chain->AddBranchToCache("Electron_phiWidth", 1);
+//        chain->AddBranchToCache("Electron_dEtaIn", 1);
+//        chain->AddBranchToCache("Electron_dEtaInSeed", 1);
+//        chain->AddBranchToCache("Electron_dPhiIn", 1);
+//        chain->AddBranchToCache("Electron_sigmaIEtaIEta", 1);
+//        chain->AddBranchToCache("Electron_Full5x5_SigmaIEtaIEta", 1);
+//        chain->AddBranchToCache("Electron_HoverE", 1);
+//        chain->AddBranchToCache("Electron_fbrem", 1);
+//        chain->AddBranchToCache("Electron_eOverP", 1);
+//        chain->AddBranchToCache("Electron_InvEminusInvP", 1);
+//        chain->AddBranchToCache("Electron_dxyVTX", 1);
+//        chain->AddBranchToCache("Electron_dzVTX", 1);
+//        chain->AddBranchToCache("Electron_dxy", 1);
+//        chain->AddBranchToCache("Electron_dz", 1);
+//        chain->AddBranchToCache("Electron_dxyBS", 1);
+//        chain->AddBranchToCache("Electron_dzBS", 1);
+//        chain->AddBranchToCache("Electron_chIso03", 1);
+//        chain->AddBranchToCache("Electron_nhIso03", 1);
+//        chain->AddBranchToCache("Electron_phIso03", 1);
+//        chain->AddBranchToCache("Electron_ChIso03FromPU", 1);
+//        chain->AddBranchToCache("Electron_mHits", 1);
+//        chain->AddBranchToCache("Electron_EnergySC", 1);
+//        chain->AddBranchToCache("Electron_preEnergySC", 1);
+//        chain->AddBranchToCache("Electron_rawEnergySC", 1);
+//        chain->AddBranchToCache("Electron_etSC", 1);
+//        chain->AddBranchToCache("Electron_E15", 1);
+//        chain->AddBranchToCache("Electron_E25", 1);
+//        chain->AddBranchToCache("Electron_E55", 1);
+//        chain->AddBranchToCache("Electron_RelPFIso_dBeta", 1);
+//        chain->AddBranchToCache("Electron_RelPFIso_Rho", 1);
+//        chain->AddBranchToCache("Electron_r9", 1);
+//        chain->AddBranchToCache("Electron_ecalDriven", 1);
+//        chain->AddBranchToCache("Electron_passConvVeto", 1);
+////        chain->AddBranchToCache("Electron_passLooseID", 1);
+//        chain->AddBranchToCache("Electron_passMediumID", 1);
+////        chain->AddBranchToCache("Electron_passTightID", 1);
+////        chain->AddBranchToCache("Electron_passMVAID_WP80", 1);
+////        chain->AddBranchToCache("Electron_passMVAID_WP90", 1);
+////        chain->AddBranchToCache("Electron_passHEEPID", 1);
 
         File_Given = kTRUE;
+    }
+
+    void MakeBranches(TTree *tree)
+    {
+        tree->Branch("nVertices", &this->nVertices);
+        tree->Branch("runNum", &this->runNum);
+        tree->Branch("lumiBlock", &this->lumiBlock);
+        tree->Branch("evtNum", &this->evtNum);
+        tree->Branch("nPileUp", &this->nPileUp);
+        tree->Branch("GENEvt_weight", &this->GENEvt_weight);
+        tree->Branch("HLT_ntrig", &this->HLT_ntrig);
+        tree->Branch("HLT_trigFired", &this->HLT_trigFired);
+        tree->Branch("HLT_trigName", &this->HLT_trigName);
+    //    tree->Branch("HLT_trigPt", &this->HLT_trigPt);
+        tree->Branch("HLT_trigEta", &this->HLT_trigEta);
+        tree->Branch("HLT_trigPhi", &this->HLT_trigPhi);
+        tree->Branch("isHardProcess", &this->isHardProcess);
+        tree->Branch("Electron_InvM", &this->Electron_InvM);
+        tree->Branch("Electron_pT", &this->Electron_pT);
+        tree->Branch("Electron_eta", &this->Electron_eta);
+        tree->Branch("Electron_phi", &this->Electron_phi);
+        tree->Branch("Electron_Energy", &this->Electron_Energy);
+        tree->Branch("Electron_charge", &this->Electron_charge);
+        tree->Branch("Electron_gsfpT", &this->Electron_gsfpT);
+        tree->Branch("Electron_gsfPx", &this->Electron_gsfPx);
+        tree->Branch("Electron_gsfPy", &this->Electron_gsfPy);
+        tree->Branch("Electron_gsfPz", &this->Electron_gsfPz);
+        tree->Branch("Electron_gsfEta", &this->Electron_gsfEta);
+        tree->Branch("Electron_gsfPhi", &this->Electron_gsfEta);
+        tree->Branch("Electron_gsfCharge", &this->Electron_gsfCharge);
+        tree->Branch("Electron_etaSC", &this->Electron_etaSC);
+        tree->Branch("Electron_phiSC", &this->Electron_phiSC);
+        tree->Branch("Electron_etaWidth", &this->Electron_etaWidth);
+        tree->Branch("Electron_phiWidth", &this->Electron_phiWidth);
+        tree->Branch("Electron_dEtaIn", &this->Electron_dEtaIn);
+        tree->Branch("Electron_dEtaInSeed", &this->Electron_dEtaInSeed);
+        tree->Branch("Electron_dPhiIn", &this->Electron_dPhiIn);
+        tree->Branch("Electron_sigmaIEtaIEta", &this->Electron_sigmaIEtaIEta);
+        tree->Branch("Electron_Full5x5_SigmaIEtaIEta", &this->Electron_Full5x5_SigmaIEtaIEta);
+        tree->Branch("Electron_HoverE", &this->Electron_HoverE);
+        tree->Branch("Electron_fbrem", &this->Electron_fbrem);
+        tree->Branch("Electron_eOverP", &this->Electron_eOverP);
+        tree->Branch("Electron_InvEminusInvP", &this->Electron_InvEminusInvP);
+        tree->Branch("Electron_dxyVTX", &this->Electron_dxyVTX);
+        tree->Branch("Electron_dzVTX", &this->Electron_dzVTX);
+        tree->Branch("Electron_dxy", &this->Electron_dxy);
+        tree->Branch("Electron_dz", &this->Electron_dz);
+        tree->Branch("Electron_dxyBS", &this->Electron_dxyBS);
+        tree->Branch("Electron_dzBS", &this->Electron_dxyBS);
+        tree->Branch("Electron_chIso03", &this->Electron_chIso03);
+        tree->Branch("Electron_nhIso03", &this->Electron_nhIso03);
+        tree->Branch("Electron_phIso03", &this->Electron_phIso03);
+        tree->Branch("Electron_ChIso03FromPU", &this->Electron_ChIso03FromPU);
+        tree->Branch("Electron_mHits", &this->Electron_mHits);
+        tree->Branch("Electron_EnergySC", &this->Electron_EnergySC);
+        tree->Branch("Electron_preEnergySC", &this->Electron_preEnergySC);
+        tree->Branch("Electron_rawEnergySC", &this->Electron_rawEnergySC);
+        tree->Branch("Electron_etSC", &this->Electron_etSC);
+        tree->Branch("Electron_E15", &this->Electron_E15);
+        tree->Branch("Electron_E25", &this->Electron_E25);
+        tree->Branch("Electron_E55", &this->Electron_E55);
+        tree->Branch("Electron_RelPFIso_dBeta", &this->Electron_RelPFIso_dBeta);
+        tree->Branch("Electron_RelPFIso_Rho", &this->Electron_RelPFIso_Rho);
+        tree->Branch("Electron_r9", &this->Electron_r9);
+        tree->Branch("Electron_ecalDriven", &this->Electron_ecalDriven);
+        tree->Branch("Electron_passConvVeto", &this->Electron_passConvVeto);
+    //    tree->Branch("Electron_passLooseID", &this->Electron_passLooseID);
+        tree->Branch("Electron_passMediumID", &this->Electron_passMediumID);
+    //    tree->Branch("Electron_passTightID", &this->Electron_passTightID);
+    //    tree->Branch("Electron_passMVAID_WP80", &this->Electron_passMVAID_WP80);
+    //    tree->Branch("Electron_passMVAID_WP90", &this->Electron_passMVAID_WP90);
+    //    tree->Branch("Electron_passHEEPID", &this->Electron_passHEEPID);
+
+    }
+
+//    int ClearVectors()
+    void ClearVectors()
+    {
+        HLT_trigFired->clear();
+        HLT_trigEta->clear();
+        HLT_trigPhi->clear();
+        HLT_trigName->clear();
+        Electron_pT->clear();
+        Electron_eta->clear();
+        Electron_phi->clear();
+        Electron_Energy->clear();
+        Electron_charge->clear();
+        Electron_gsfpT->clear();
+        Electron_gsfPx->clear();
+        Electron_gsfPy->clear();
+        Electron_gsfPz->clear();
+        Electron_gsfEta->clear();
+        Electron_gsfPhi->clear();
+        Electron_gsfCharge->clear();
+        Electron_etaSC->clear();
+        Electron_phiSC->clear();
+        Electron_etaWidth->clear();
+        Electron_phiWidth->clear();
+        Electron_dEtaIn->clear();
+        Electron_dEtaInSeed->clear();
+        Electron_dPhiIn->clear();
+        Electron_sigmaIEtaIEta->clear();
+        Electron_Full5x5_SigmaIEtaIEta->clear();
+        Electron_HoverE->clear();
+        Electron_fbrem->clear();
+        Electron_eOverP->clear();
+        Electron_InvEminusInvP->clear();
+        Electron_dxyVTX->clear();
+        Electron_dzVTX->clear();
+        Electron_dxy->clear();
+        Electron_dz->clear();
+        Electron_dxyBS->clear();
+        Electron_dzBS->clear();
+        Electron_chIso03->clear();
+        Electron_nhIso03->clear();
+        Electron_phIso03->clear();
+        Electron_ChIso03FromPU->clear();
+        Electron_mHits->clear();
+        Electron_EnergySC->clear();
+        Electron_preEnergySC->clear();
+        Electron_rawEnergySC->clear();
+        Electron_etSC->clear();
+        Electron_E15->clear();
+        Electron_E25->clear();
+        Electron_E55->clear();
+        Electron_RelPFIso_dBeta->clear();
+        Electron_RelPFIso_Rho->clear();
+        Electron_r9->clear();
+        Electron_ecalDriven->clear();
+        Electron_passConvVeto->clear();
+//        Electron_passLooseID->clear();
+        Electron_passMediumID->clear();
+//        Electron_passTightID->clear();
+//        Electron_passMVAID_WP80->clear();
+//        Electron_passMVAID_WP90->clear();
+//        Electron_passHEEPID->clear();
+
+//        if ( !HLT_trigFired->size() && !HLT_trigEta->size() && !HLT_trigPhi->size() && !HLT_trigName->size() && !Electron_pT->size() && !Electron_eta->size() &&
+//             !Electron_phi->size() && !Electron_Energy->size() && !Electron_charge->size() && !Electron_gsfpT->size() && !Electron_gsfPx->size() &&
+//             !Electron_gsfPy->size() && !Electron_gsfPz->size() && !Electron_gsfEta->size() && !Electron_gsfPhi->size() && !Electron_gsfCharge->size() &&
+//             !Electron_etaSC->size() && !Electron_phiSC->size() && !Electron_etaWidth->size() && !Electron_phiWidth->size() && !Electron_dEtaIn->size() &&
+//             !Electron_dEtaInSeed->size() && !Electron_dPhiIn->size() && !Electron_sigmaIEtaIEta->size() && !Electron_HoverE->size() && !Electron_fbrem->size() &&
+//             !Electron_eOverP->size() && !Electron_InvEminusInvP->size() && !Electron_dxyVTX->size() && !Electron_dzVTX->size() && !Electron_dxy->size() &&
+//             !Electron_dz->size() && !Electron_dxyBS->size() && !Electron_dzBS->size() && !Electron_chIso03->size() && !Electron_nhIso03->size() &&
+//             !Electron_phIso03->size() && !Electron_ChIso03FromPU->size() && !Electron_mHits->size() && !Electron_EnergySC->size() && !Electron_preEnergySC->size() &&
+//             !Electron_rawEnergySC->size() && !Electron_etSC->size() && !Electron_E15->size() && !Electron_E25->size() && !Electron_E55->size() &&
+//             !Electron_RelPFIso_dBeta->size() && !Electron_RelPFIso_Rho->size() && !Electron_r9->size() && !Electron_ecalDriven->size() &&
+//             !Electron_passConvVeto->size() && !Electron_passMediumID->size() /*&& !Electron_passLooseID->size() && !Electron_passTightID->size() &&
+//             !Electron_passMVAID_WP80->size() && !Electron_passMVAID_WP90->size() && !Electron_passHEEPID->size() */ )
+//            return 1;
+//        else return 0;
     }
 
     void Ready()
@@ -1624,6 +1984,38 @@ public:
         Electron_charge = Ele->Electron_charge;
         Electron_etaSC = Ele->Electron_etaSC;
         Electron_phiSC = Ele->Electron_phiSC;
+    }
+
+    void MakeBranches(TTree *tree)
+    {
+        tree->Branch( "isSelPassed", &this->isSelPassed );
+        tree->Branch( "nVertices", &this->nVertices );
+        tree->Branch( "nPileUp", &this->nPileUp );
+        tree->Branch( "GENEvt_weight", &this->GENEvt_weight );
+        tree->Branch( "Electron_InvM", &this->Electron_InvM );
+        tree->Branch( "Electron_pT", &this->Electron_pT );
+        tree->Branch( "Electron_eta", &this->Electron_eta );
+        tree->Branch( "Electron_phi", &this->Electron_phi );
+        tree->Branch( "Electron_Energy", &this->Electron_Energy );
+        tree->Branch( "Electron_charge", &this->Electron_charge );
+        tree->Branch( "Electron_etaSC", &this->Electron_etaSC );
+        tree->Branch( "Electron_phiSC", &this->Electron_phiSC );
+    }
+
+    int ClearVectors()
+    {
+        Electron_pT->clear();
+        Electron_eta->clear();
+        Electron_phi->clear();
+        Electron_Energy->clear();
+        Electron_charge->clear();
+        Electron_etaSC->clear();
+        Electron_phiSC->clear();
+
+        if ( !Electron_pT->size() && !Electron_eta->size() && !Electron_phi->size() && !Electron_Energy->size() &&
+             !Electron_charge->size() && !Electron_etaSC->size() && !Electron_phiSC->size() )
+            return 1;
+        else return 0;
     }
 
     void Ready()
@@ -2130,172 +2522,316 @@ public:
 //        chain->SetBranchAddress("Electron_passHEEPID", &Electron_passHEEPID);
 
         // -- Adding to cache -- //
-        chain->AddBranchToCache("nVertices", 1);
-        chain->AddBranchToCache("runNum", 1);
-        chain->AddBranchToCache("lumiBlock", 1);
-        chain->AddBranchToCache("evtNum", 1);
-        chain->AddBranchToCache("nPileUp", 1);
-        chain->AddBranchToCache("isHardProcess", 1);
-        chain->AddBranchToCache("GENEvt_weight", 1);
+//        chain->AddBranchToCache("nVertices", 1);
+//        chain->AddBranchToCache("runNum", 1);
+//        chain->AddBranchToCache("lumiBlock", 1);
+//        chain->AddBranchToCache("evtNum", 1);
+//        chain->AddBranchToCache("nPileUp", 1);
+//        chain->AddBranchToCache("isHardProcess", 1);
+//        chain->AddBranchToCache("GENEvt_weight", 1);
 
-        chain->AddBranchToCache("HLT_trigName", 1);
-        chain->AddBranchToCache("HLT_ntrig", 1);
-        chain->AddBranchToCache("HLT_trigFired", 1);
-//        chain->AddBranchToCache("HLT_trigPt", 1);
-        chain->AddBranchToCache("HLT_trigEta", 1);
-        chain->AddBranchToCache("HLT_trigPhi", 1);
+//        chain->AddBranchToCache("HLT_trigName", 1);
+//        chain->AddBranchToCache("HLT_ntrig", 1);
+//        chain->AddBranchToCache("HLT_trigFired", 1);
+////        chain->AddBranchToCache("HLT_trigPt", 1);
+//        chain->AddBranchToCache("HLT_trigEta", 1);
+//        chain->AddBranchToCache("HLT_trigPhi", 1);
 
-        chain->AddBranchToCache("EMu_InvM", 1);
+//        chain->AddBranchToCache("EMu_InvM", 1);
 
-        // -- Muon -- //
-        chain->AddBranchToCache("isPFmuon", 1);
-        chain->AddBranchToCache("isGLBmuon", 1);
-        chain->AddBranchToCache("isTRKmuon", 1);
+//        // -- Muon -- //
+//        chain->AddBranchToCache("isPFmuon", 1);
+//        chain->AddBranchToCache("isGLBmuon", 1);
+//        chain->AddBranchToCache("isTRKmuon", 1);
 
-//        chain->AddBranchToCache("CosAngle", 1);
-//        chain->AddBranchToCache("vtxTrkChi2", 1);
-//        chain->AddBranchToCache("vtxTrkProb", 1);
-//        chain->AddBranchToCache("vtxTrkNdof", 1);
-//        chain->AddBranchToCache("vtxTrkCkt1Pt", 1);
-//        chain->AddBranchToCache("vtxTrkCkt2Pt", 1);
-//        chain->AddBranchToCache("vtxTrkDiEChi2", 1);
-//        chain->AddBranchToCache("vtxTrkDiEProb", 1);
-//        chain->AddBranchToCache("vtxTrkDiENdof", 1);
-//        chain->AddBranchToCache("vtxTrkDiE1Pt", 1);
-//        chain->AddBranchToCache("vtxTrkDiE2Pt", 1);
-//        chain->AddBranchToCache("vtxTrkEMuChi2", 1);
-//        chain->AddBranchToCache("vtxTrkEMuProb", 1);
-//        chain->AddBranchToCache("vtxTrkEMuNdof", 1);
-//        chain->AddBranchToCache("vtxTrkEMu1Pt", 1);
-//        chain->AddBranchToCache("vtxTrkEMu2Pt", 1);
+////        chain->AddBranchToCache("CosAngle", 1);
+////        chain->AddBranchToCache("vtxTrkChi2", 1);
+////        chain->AddBranchToCache("vtxTrkProb", 1);
+////        chain->AddBranchToCache("vtxTrkNdof", 1);
+////        chain->AddBranchToCache("vtxTrkCkt1Pt", 1);
+////        chain->AddBranchToCache("vtxTrkCkt2Pt", 1);
+////        chain->AddBranchToCache("vtxTrkDiEChi2", 1);
+////        chain->AddBranchToCache("vtxTrkDiEProb", 1);
+////        chain->AddBranchToCache("vtxTrkDiENdof", 1);
+////        chain->AddBranchToCache("vtxTrkDiE1Pt", 1);
+////        chain->AddBranchToCache("vtxTrkDiE2Pt", 1);
+////        chain->AddBranchToCache("vtxTrkEMuChi2", 1);
+////        chain->AddBranchToCache("vtxTrkEMuProb", 1);
+////        chain->AddBranchToCache("vtxTrkEMuNdof", 1);
+////        chain->AddBranchToCache("vtxTrkEMu1Pt", 1);
+////        chain->AddBranchToCache("vtxTrkEMu2Pt", 1);
 
-        chain->AddBranchToCache("Muon_pT", 1);
-        chain->AddBranchToCache("Muon_eta", 1);
-        chain->AddBranchToCache("Muon_phi", 1);
-        chain->AddBranchToCache("Muon_Energy", 1);
-        chain->AddBranchToCache("Muon_charge", 1);
-//        chain->AddBranchToCache("Muon_muonType", 1);
-        chain->AddBranchToCache("Muon_chi2dof", 1);
-        chain->AddBranchToCache("Muon_muonHits", 1);
-        chain->AddBranchToCache("Muon_nSegments", 1);
-        chain->AddBranchToCache("Muon_nMatches", 1);
-        chain->AddBranchToCache("Muon_trackerLayers", 1);
-//        chain->AddBranchToCache("Muon_pixelHitsGLB", 1);
-//        chain->AddBranchToCache("Muon_trackerLayersGLB", 1);
-        chain->AddBranchToCache("Muon_pixelHits", 1);
-        chain->AddBranchToCache("Muon_dxyVTX", 1);
-        chain->AddBranchToCache("Muon_dzVTX", 1);
-        chain->AddBranchToCache("Muon_trkiso", 1);
-        chain->AddBranchToCache("Muon_Px", 1);
-        chain->AddBranchToCache("Muon_Py", 1);
-        chain->AddBranchToCache("Muon_Pz", 1);
-//        chain->AddBranchToCache("Muon_dB", 1);
+//        chain->AddBranchToCache("Muon_pT", 1);
+//        chain->AddBranchToCache("Muon_eta", 1);
+//        chain->AddBranchToCache("Muon_phi", 1);
+//        chain->AddBranchToCache("Muon_Energy", 1);
+//        chain->AddBranchToCache("Muon_charge", 1);
+////        chain->AddBranchToCache("Muon_muonType", 1);
+//        chain->AddBranchToCache("Muon_chi2dof", 1);
+//        chain->AddBranchToCache("Muon_muonHits", 1);
+//        chain->AddBranchToCache("Muon_nSegments", 1);
+//        chain->AddBranchToCache("Muon_nMatches", 1);
+//        chain->AddBranchToCache("Muon_trackerLayers", 1);
+////        chain->AddBranchToCache("Muon_pixelHitsGLB", 1);
+////        chain->AddBranchToCache("Muon_trackerLayersGLB", 1);
+//        chain->AddBranchToCache("Muon_pixelHits", 1);
+//        chain->AddBranchToCache("Muon_dxyVTX", 1);
+//        chain->AddBranchToCache("Muon_dzVTX", 1);
+//        chain->AddBranchToCache("Muon_trkiso", 1);
+//        chain->AddBranchToCache("Muon_Px", 1);
+//        chain->AddBranchToCache("Muon_Py", 1);
+//        chain->AddBranchToCache("Muon_Pz", 1);
+////        chain->AddBranchToCache("Muon_dB", 1);
 
-        chain->AddBranchToCache("Muon_PfChargedHadronIsoR04", 1);
-        chain->AddBranchToCache("Muon_PfNeutralHadronIsoR04", 1);
-        chain->AddBranchToCache("Muon_PfGammaIsoR04", 1);
-        chain->AddBranchToCache("Muon_PFSumPUIsoR04", 1);
+//        chain->AddBranchToCache("Muon_PfChargedHadronIsoR04", 1);
+//        chain->AddBranchToCache("Muon_PfNeutralHadronIsoR04", 1);
+//        chain->AddBranchToCache("Muon_PfGammaIsoR04", 1);
+//        chain->AddBranchToCache("Muon_PFSumPUIsoR04", 1);
 
-        chain->AddBranchToCache("Muon_Best_pT", 1);
-        chain->AddBranchToCache("Muon_Best_pTError", 1);
-        chain->AddBranchToCache("Muon_Best_Px", 1);
-        chain->AddBranchToCache("Muon_Best_Py", 1);
-        chain->AddBranchToCache("Muon_Best_Pz", 1);
-        chain->AddBranchToCache("Muon_Best_eta", 1);
-        chain->AddBranchToCache("Muon_Best_phi", 1);
+//        chain->AddBranchToCache("Muon_Best_pT", 1);
+//        chain->AddBranchToCache("Muon_Best_pTError", 1);
+//        chain->AddBranchToCache("Muon_Best_Px", 1);
+//        chain->AddBranchToCache("Muon_Best_Py", 1);
+//        chain->AddBranchToCache("Muon_Best_Pz", 1);
+//        chain->AddBranchToCache("Muon_Best_eta", 1);
+//        chain->AddBranchToCache("Muon_Best_phi", 1);
 
-        chain->AddBranchToCache("Muon_Inner_pT", 1);
-        chain->AddBranchToCache("Muon_Inner_pTError", 1);
-        chain->AddBranchToCache("Muon_Inner_eta", 1);
-        chain->AddBranchToCache("Muon_Inner_phi", 1);
-        chain->AddBranchToCache("Muon_Inner_Px", 1);
-        chain->AddBranchToCache("Muon_Inner_Py", 1);
-        chain->AddBranchToCache("Muon_Inner_Pz", 1);
+//        chain->AddBranchToCache("Muon_Inner_pT", 1);
+//        chain->AddBranchToCache("Muon_Inner_pTError", 1);
+//        chain->AddBranchToCache("Muon_Inner_eta", 1);
+//        chain->AddBranchToCache("Muon_Inner_phi", 1);
+//        chain->AddBranchToCache("Muon_Inner_Px", 1);
+//        chain->AddBranchToCache("Muon_Inner_Py", 1);
+//        chain->AddBranchToCache("Muon_Inner_Pz", 1);
 
-        chain->AddBranchToCache("Muon_Outer_pT", 1);
-        chain->AddBranchToCache("Muon_Outer_pTError", 1);
-        chain->AddBranchToCache("Muon_Outer_Px", 1);
-        chain->AddBranchToCache("Muon_Outer_Py", 1);
-        chain->AddBranchToCache("Muon_Outer_Pz", 1);
-        chain->AddBranchToCache("Muon_Outer_eta", 1);
-        chain->AddBranchToCache("Muon_Outer_phi", 1);
+//        chain->AddBranchToCache("Muon_Outer_pT", 1);
+//        chain->AddBranchToCache("Muon_Outer_pTError", 1);
+//        chain->AddBranchToCache("Muon_Outer_Px", 1);
+//        chain->AddBranchToCache("Muon_Outer_Py", 1);
+//        chain->AddBranchToCache("Muon_Outer_Pz", 1);
+//        chain->AddBranchToCache("Muon_Outer_eta", 1);
+//        chain->AddBranchToCache("Muon_Outer_phi", 1);
 
-        chain->AddBranchToCache("Muon_GLB_pT", 1);
-        chain->AddBranchToCache("Muon_GLB_pTError", 1);
-        chain->AddBranchToCache("Muon_GLB_Px", 1);
-        chain->AddBranchToCache("Muon_GLB_Py", 1);
-        chain->AddBranchToCache("Muon_GLB_Pz", 1);
-        chain->AddBranchToCache("Muon_GLB_eta", 1);
-        chain->AddBranchToCache("Muon_GLB_phi", 1);
+//        chain->AddBranchToCache("Muon_GLB_pT", 1);
+//        chain->AddBranchToCache("Muon_GLB_pTError", 1);
+//        chain->AddBranchToCache("Muon_GLB_Px", 1);
+//        chain->AddBranchToCache("Muon_GLB_Py", 1);
+//        chain->AddBranchToCache("Muon_GLB_Pz", 1);
+//        chain->AddBranchToCache("Muon_GLB_eta", 1);
+//        chain->AddBranchToCache("Muon_GLB_phi", 1);
 
-        chain->AddBranchToCache("Muon_TuneP_pT", 1);
-        chain->AddBranchToCache("Muon_TuneP_pTError", 1);
-        chain->AddBranchToCache("Muon_TuneP_eta", 1);
-        chain->AddBranchToCache("Muon_TuneP_phi", 1);
-        chain->AddBranchToCache("Muon_TuneP_Px", 1);
-        chain->AddBranchToCache("Muon_TuneP_Py", 1);
-        chain->AddBranchToCache("Muon_TuneP_Pz", 1);
+//        chain->AddBranchToCache("Muon_TuneP_pT", 1);
+//        chain->AddBranchToCache("Muon_TuneP_pTError", 1);
+//        chain->AddBranchToCache("Muon_TuneP_eta", 1);
+//        chain->AddBranchToCache("Muon_TuneP_phi", 1);
+//        chain->AddBranchToCache("Muon_TuneP_Px", 1);
+//        chain->AddBranchToCache("Muon_TuneP_Py", 1);
+//        chain->AddBranchToCache("Muon_TuneP_Pz", 1);
 
-//        chain->AddBranchToCache("Muon_stationMask", 1);
-//        chain->AddBranchToCache("Muon_nMatchesRPCLayers", 1);
+////        chain->AddBranchToCache("Muon_stationMask", 1);
+////        chain->AddBranchToCache("Muon_nMatchesRPCLayers", 1);
 
-        // -- Electron -- //
-        chain->AddBranchToCache("Electron_pT", 1);
-        chain->AddBranchToCache("Electron_eta", 1);
-        chain->AddBranchToCache("Electron_phi", 1);
-        chain->AddBranchToCache("Electron_Energy", 1);
-        chain->AddBranchToCache("Electron_charge", 1);
-        chain->AddBranchToCache("Electron_gsfpT", 1);
-        chain->AddBranchToCache("Electron_gsfPx", 1);
-        chain->AddBranchToCache("Electron_gsfPy", 1);
-        chain->AddBranchToCache("Electron_gsfPz", 1);
-        chain->AddBranchToCache("Electron_gsfEta", 1);
-        chain->AddBranchToCache("Electron_gsfPhi", 1);
-        chain->AddBranchToCache("Electron_gsfCharge", 1);
-        chain->AddBranchToCache("Electron_etaSC", 1);
-        chain->AddBranchToCache("Electron_phiSC", 1);
-        chain->AddBranchToCache("Electron_etaWidth", 1);
-        chain->AddBranchToCache("Electron_phiWidth", 1);
-        chain->AddBranchToCache("Electron_dEtaIn", 1);
-        chain->AddBranchToCache("Electron_dEtaInSeed", 1);
-        chain->AddBranchToCache("Electron_dPhiIn", 1);
-        chain->AddBranchToCache("Electron_sigmaIEtaIEta", 1);
-        chain->AddBranchToCache("Electron_Full5x5_SigmaIEtaIEta", 1);
-        chain->AddBranchToCache("Electron_HoverE", 1);
-        chain->AddBranchToCache("Electron_fbrem", 1);
-        chain->AddBranchToCache("Electron_eOverP", 1);
-        chain->AddBranchToCache("Electron_InvEminusInvP", 1);
-        chain->AddBranchToCache("Electron_dxyVTX", 1);
-        chain->AddBranchToCache("Electron_dzVTX", 1);
-        chain->AddBranchToCache("Electron_dxy", 1);
-        chain->AddBranchToCache("Electron_dz", 1);
-        chain->AddBranchToCache("Electron_dxyBS", 1);
-        chain->AddBranchToCache("Electron_dzBS", 1);
-        chain->AddBranchToCache("Electron_chIso03", 1);
-        chain->AddBranchToCache("Electron_nhIso03", 1);
-        chain->AddBranchToCache("Electron_phIso03", 1);
-        chain->AddBranchToCache("Electron_ChIso03FromPU", 1);
-        chain->AddBranchToCache("Electron_mHits", 1);
-        chain->AddBranchToCache("Electron_EnergySC", 1);
-        chain->AddBranchToCache("Electron_preEnergySC", 1);
-        chain->AddBranchToCache("Electron_rawEnergySC", 1);
-        chain->AddBranchToCache("Electron_etSC", 1);
-        chain->AddBranchToCache("Electron_E15", 1);
-        chain->AddBranchToCache("Electron_E25", 1);
-        chain->AddBranchToCache("Electron_E55", 1);
-        chain->AddBranchToCache("Electron_RelPFIso_dBeta", 1);
-        chain->AddBranchToCache("Electron_RelPFIso_Rho", 1);
-        chain->AddBranchToCache("Electron_r9", 1);
-        chain->AddBranchToCache("Electron_ecalDriven", 1);
-        chain->AddBranchToCache("Electron_passConvVeto", 1);
-//        chain->AddBranchToCache("Electron_passLooseID", 1);
-        chain->AddBranchToCache("Electron_passMediumID", 1);
-//        chain->AddBranchToCache("Electron_passTightID", 1);
-//        chain->AddBranchToCache("Electron_passMVAID_WP80", 1);
-//        chain->AddBranchToCache("Electron_passMVAID_WP90", 1);
-//        chain->AddBranchToCache("Electron_passHEEPID", 1);
+//        // -- Electron -- //
+//        chain->AddBranchToCache("Electron_pT", 1);
+//        chain->AddBranchToCache("Electron_eta", 1);
+//        chain->AddBranchToCache("Electron_phi", 1);
+//        chain->AddBranchToCache("Electron_Energy", 1);
+//        chain->AddBranchToCache("Electron_charge", 1);
+//        chain->AddBranchToCache("Electron_gsfpT", 1);
+//        chain->AddBranchToCache("Electron_gsfPx", 1);
+//        chain->AddBranchToCache("Electron_gsfPy", 1);
+//        chain->AddBranchToCache("Electron_gsfPz", 1);
+//        chain->AddBranchToCache("Electron_gsfEta", 1);
+//        chain->AddBranchToCache("Electron_gsfPhi", 1);
+//        chain->AddBranchToCache("Electron_gsfCharge", 1);
+//        chain->AddBranchToCache("Electron_etaSC", 1);
+//        chain->AddBranchToCache("Electron_phiSC", 1);
+//        chain->AddBranchToCache("Electron_etaWidth", 1);
+//        chain->AddBranchToCache("Electron_phiWidth", 1);
+//        chain->AddBranchToCache("Electron_dEtaIn", 1);
+//        chain->AddBranchToCache("Electron_dEtaInSeed", 1);
+//        chain->AddBranchToCache("Electron_dPhiIn", 1);
+//        chain->AddBranchToCache("Electron_sigmaIEtaIEta", 1);
+//        chain->AddBranchToCache("Electron_Full5x5_SigmaIEtaIEta", 1);
+//        chain->AddBranchToCache("Electron_HoverE", 1);
+//        chain->AddBranchToCache("Electron_fbrem", 1);
+//        chain->AddBranchToCache("Electron_eOverP", 1);
+//        chain->AddBranchToCache("Electron_InvEminusInvP", 1);
+//        chain->AddBranchToCache("Electron_dxyVTX", 1);
+//        chain->AddBranchToCache("Electron_dzVTX", 1);
+//        chain->AddBranchToCache("Electron_dxy", 1);
+//        chain->AddBranchToCache("Electron_dz", 1);
+//        chain->AddBranchToCache("Electron_dxyBS", 1);
+//        chain->AddBranchToCache("Electron_dzBS", 1);
+//        chain->AddBranchToCache("Electron_chIso03", 1);
+//        chain->AddBranchToCache("Electron_nhIso03", 1);
+//        chain->AddBranchToCache("Electron_phIso03", 1);
+//        chain->AddBranchToCache("Electron_ChIso03FromPU", 1);
+//        chain->AddBranchToCache("Electron_mHits", 1);
+//        chain->AddBranchToCache("Electron_EnergySC", 1);
+//        chain->AddBranchToCache("Electron_preEnergySC", 1);
+//        chain->AddBranchToCache("Electron_rawEnergySC", 1);
+//        chain->AddBranchToCache("Electron_etSC", 1);
+//        chain->AddBranchToCache("Electron_E15", 1);
+//        chain->AddBranchToCache("Electron_E25", 1);
+//        chain->AddBranchToCache("Electron_E55", 1);
+//        chain->AddBranchToCache("Electron_RelPFIso_dBeta", 1);
+//        chain->AddBranchToCache("Electron_RelPFIso_Rho", 1);
+//        chain->AddBranchToCache("Electron_r9", 1);
+//        chain->AddBranchToCache("Electron_ecalDriven", 1);
+//        chain->AddBranchToCache("Electron_passConvVeto", 1);
+////        chain->AddBranchToCache("Electron_passLooseID", 1);
+//        chain->AddBranchToCache("Electron_passMediumID", 1);
+////        chain->AddBranchToCache("Electron_passTightID", 1);
+////        chain->AddBranchToCache("Electron_passMVAID_WP80", 1);
+////        chain->AddBranchToCache("Electron_passMVAID_WP90", 1);
+////        chain->AddBranchToCache("Electron_passHEEPID", 1);
 
         File_Given = kTRUE;
+    }
+
+    void MakeBranches(TTree *tree)
+    {
+        tree->Branch("nVertices", &this->nVertices);
+        tree->Branch("runNum", &this->runNum);
+        tree->Branch("lumiBlock", &this->lumiBlock);
+        tree->Branch("evtNum", &this->evtNum);
+        tree->Branch("nPileUp", &this->nPileUp);
+        tree->Branch("GENEvt_weight", &this->GENEvt_weight);
+        tree->Branch("HLT_ntrig", &this->HLT_ntrig);
+        tree->Branch("HLT_trigFired", &this->HLT_trigFired);
+        tree->Branch("HLT_trigName", &this->HLT_trigName);
+    //    tree->Branch("HLT_trigPt", &this->HLT_trigPt);
+        tree->Branch("HLT_trigEta", &this->HLT_trigEta);
+        tree->Branch("HLT_trigPhi", &this->HLT_trigPhi);
+        tree->Branch("isHardProcess", &this->isHardProcess);
+        tree->Branch("EMu_InvM", &this->EMu_InvM);
+        tree->Branch("Muon_pT", &this->Muon_pT);
+        tree->Branch("Muon_eta", &this->Muon_eta);
+        tree->Branch("Muon_phi", &this->Muon_phi);
+        tree->Branch("isGLBmuon", &this->isGLBmuon);
+        tree->Branch("isPFmuon", &this->isPFmuon);
+        tree->Branch("isTRKmuon", &this->isTRKmuon);
+        tree->Branch("Muon_charge", &this->Muon_charge);
+        tree->Branch("Muon_chi2dof", &this->Muon_chi2dof);
+        tree->Branch("Muon_muonHits", &this->Muon_muonHits);
+        tree->Branch("Muon_nSegments", &this->Muon_nSegments);
+        tree->Branch("Muon_nMatches", &this->Muon_nMatches);
+        tree->Branch("Muon_trackerLayers", &this->Muon_trackerLayers);
+        tree->Branch("Muon_pixelHits", &this->Muon_pixelHits);
+        tree->Branch("Muon_dxyVTX", &this->Muon_dxyVTX);
+        tree->Branch("Muon_dzVTX", &this->Muon_dzVTX);
+        tree->Branch("Muon_trkiso", &this->Muon_trkiso);
+        tree->Branch("Muon_PfChargedHadronIsoR04", &this->Muon_PfChargedHadronIsoR04);
+        tree->Branch("Muon_PfNeutralHadronIsoR04", &this->Muon_PfNeutralHadronIsoR04);
+        tree->Branch("Muon_PfGammaIsoR04", &this->Muon_PfGammaIsoR04);
+        tree->Branch("Muon_PFSumPUIsoR04", &this->Muon_PFSumPUIsoR04);
+        tree->Branch("Muon_Px", &this->Muon_Px);
+        tree->Branch("Muon_Py", &this->Muon_Py);
+        tree->Branch("Muon_Pz", &this->Muon_Pz);
+        tree->Branch("Muon_Energy", &this->Muon_Energy);
+        tree->Branch("Muon_Best_pT", &this->Muon_Best_pT);
+        tree->Branch("Muon_Best_pTError", &this->Muon_Best_pTError);
+        tree->Branch("Muon_Best_Px", &this->Muon_Best_Px);
+        tree->Branch("Muon_Best_Py", &this->Muon_Best_Py);
+        tree->Branch("Muon_Best_Pz", &this->Muon_Best_Pz);
+        tree->Branch("Muon_Best_eta", &this->Muon_Best_eta);
+        tree->Branch("Muon_Best_phi", &this->Muon_Best_phi);
+        tree->Branch("Muon_Inner_pT", &this->Muon_Inner_pT);
+        tree->Branch("Muon_Inner_pTError", &this->Muon_Inner_pTError);
+        tree->Branch("Muon_Inner_Px", &this->Muon_Inner_Px);
+        tree->Branch("Muon_Inner_Py", &this->Muon_Inner_Py);
+        tree->Branch("Muon_Inner_Pz", &this->Muon_Inner_Pz);
+        tree->Branch("Muon_Inner_eta", &this->Muon_Inner_eta);
+        tree->Branch("Muon_Inner_phi", &this->Muon_Inner_phi);
+        tree->Branch("Muon_Outer_pT", &this->Muon_Outer_pT);
+        tree->Branch("Muon_Outer_pTError", &this->Muon_Outer_pTError);
+        tree->Branch("Muon_Outer_Px", &this->Muon_Outer_Px);
+        tree->Branch("Muon_Outer_Py", &this->Muon_Outer_Py);
+        tree->Branch("Muon_Outer_Pz", &this->Muon_Outer_Pz);
+        tree->Branch("Muon_Outer_eta", &this->Muon_Outer_eta);
+        tree->Branch("Muon_Outer_phi", &this->Muon_Outer_phi);
+        tree->Branch("Muon_GLB_pT", &this->Muon_GLB_pT);
+        tree->Branch("Muon_GLB_pTError", &this->Muon_GLB_pTError);
+        tree->Branch("Muon_GLB_Px", &this->Muon_GLB_Px);
+        tree->Branch("Muon_GLB_Py", &this->Muon_GLB_Py);
+        tree->Branch("Muon_GLB_Pz", &this->Muon_GLB_Pz);
+        tree->Branch("Muon_GLB_eta", &this->Muon_GLB_eta);
+        tree->Branch("Muon_GLB_phi", &this->Muon_GLB_phi);
+        tree->Branch("Muon_TuneP_pT", &this->Muon_TuneP_pT);
+        tree->Branch("Muon_TuneP_pTError", &this->Muon_TuneP_pTError);
+        tree->Branch("Muon_TuneP_Px", &this->Muon_TuneP_Px);
+        tree->Branch("Muon_TuneP_Py", &this->Muon_TuneP_Py);
+        tree->Branch("Muon_TuneP_Pz", &this->Muon_TuneP_Pz);
+        tree->Branch("Muon_TuneP_eta", &this->Muon_TuneP_eta);
+        tree->Branch("Muon_TuneP_phi", &this->Muon_TuneP_phi);
+        tree->Branch("Electron_pT", &this->Electron_pT);
+        tree->Branch("Electron_eta", &this->Electron_eta);
+        tree->Branch("Electron_phi", &this->Electron_phi);
+        tree->Branch("Electron_Energy", &this->Electron_Energy);
+        tree->Branch("Electron_charge", &this->Electron_charge);
+        tree->Branch("Electron_gsfpT", &this->Electron_gsfpT);
+        tree->Branch("Electron_gsfPx", &this->Electron_gsfPx);
+        tree->Branch("Electron_gsfPy", &this->Electron_gsfPy);
+        tree->Branch("Electron_gsfPz", &this->Electron_gsfPz);
+        tree->Branch("Electron_gsfEta", &this->Electron_gsfEta);
+        tree->Branch("Electron_gsfPhi", &this->Electron_gsfEta);
+        tree->Branch("Electron_gsfCharge", &this->Electron_gsfCharge);
+        tree->Branch("Electron_etaSC", &this->Electron_etaSC);
+        tree->Branch("Electron_phiSC", &this->Electron_phiSC);
+        tree->Branch("Electron_etaWidth", &this->Electron_etaWidth);
+        tree->Branch("Electron_phiWidth", &this->Electron_phiWidth);
+        tree->Branch("Electron_dEtaIn", &this->Electron_dEtaIn);
+        tree->Branch("Electron_dEtaInSeed", &this->Electron_dEtaInSeed);
+        tree->Branch("Electron_dPhiIn", &this->Electron_dPhiIn);
+        tree->Branch("Electron_sigmaIEtaIEta", &this->Electron_sigmaIEtaIEta);
+        tree->Branch("Electron_Full5x5_SigmaIEtaIEta", &this->Electron_Full5x5_SigmaIEtaIEta);
+        tree->Branch("Electron_HoverE", &this->Electron_HoverE);
+        tree->Branch("Electron_fbrem", &this->Electron_fbrem);
+        tree->Branch("Electron_eOverP", &this->Electron_eOverP);
+        tree->Branch("Electron_InvEminusInvP", &this->Electron_InvEminusInvP);
+        tree->Branch("Electron_dxyVTX", &this->Electron_dxyVTX);
+        tree->Branch("Electron_dzVTX", &this->Electron_dzVTX);
+        tree->Branch("Electron_dxy", &this->Electron_dxy);
+        tree->Branch("Electron_dz", &this->Electron_dz);
+        tree->Branch("Electron_dxyBS", &this->Electron_dxyBS);
+        tree->Branch("Electron_dzBS", &this->Electron_dxyBS);
+        tree->Branch("Electron_chIso03", &this->Electron_chIso03);
+        tree->Branch("Electron_nhIso03", &this->Electron_nhIso03);
+        tree->Branch("Electron_phIso03", &this->Electron_phIso03);
+        tree->Branch("Electron_ChIso03FromPU", &this->Electron_ChIso03FromPU);
+        tree->Branch("Electron_mHits", &this->Electron_mHits);
+        tree->Branch("Electron_EnergySC", &this->Electron_EnergySC);
+        tree->Branch("Electron_preEnergySC", &this->Electron_preEnergySC);
+        tree->Branch("Electron_rawEnergySC", &this->Electron_rawEnergySC);
+        tree->Branch("Electron_etSC", &this->Electron_etSC);
+        tree->Branch("Electron_E15", &this->Electron_E15);
+        tree->Branch("Electron_E25", &this->Electron_E25);
+        tree->Branch("Electron_E55", &this->Electron_E55);
+        tree->Branch("Electron_RelPFIso_dBeta", &this->Electron_RelPFIso_dBeta);
+        tree->Branch("Electron_RelPFIso_Rho", &this->Electron_RelPFIso_Rho);
+        tree->Branch("Electron_r9", &this->Electron_r9);
+        tree->Branch("Electron_ecalDriven", &this->Electron_ecalDriven);
+        tree->Branch("Electron_passConvVeto", &this->Electron_passConvVeto);
+    //    tree->Branch("Electron_passLooseID", &this->Electron_passLooseID);
+        tree->Branch("Electron_passMediumID", &this->Electron_passMediumID);
+    //    tree->Branch("Electron_passTightID", &this->Electron_passTightID);
+    //    tree->Branch("Electron_passMVAID_WP80", &this->Electron_passMVAID_WP80);
+    //    tree->Branch("Electron_passMVAID_WP90", &this->Electron_passMVAID_WP90);
+    //    tree->Branch("Electron_passHEEPID", &this->Electron_passHEEPID);
+    }
+
+//    int ClearVectors()
+    void ClearVectors()
+    {
+        HLT_trigFired->clear();
+        HLT_trigName->clear();
+        HLT_trigEta->clear();
+        HLT_trigPhi->clear();
+
+//        if ( !HLT_trigFired->size() && !HLT_trigName->size() && HLT_trigEta->size() && HLT_trigPhi->size() )
+//            return 1;
+//        else return 0;
     }
 
     void Ready()
@@ -2763,6 +3299,31 @@ public:
         Electron_charge = EMu->Electron_charge;
         Electron_etaSC = EMu->Electron_etaSC;
         Electron_phiSC = EMu->Electron_phiSC;
+    }
+
+    void MakeBranches(TTree *tree)
+    {
+        tree->Branch( "isSelPassed", &this->isSelPassed );
+        tree->Branch( "nVertices", &this->nVertices );
+        tree->Branch( "nPileUp", &this->nPileUp );
+        tree->Branch( "GENEvt_weight", &this->GENEvt_weight );
+        tree->Branch( "EMu_InvM", &this->EMu_InvM );
+        tree->Branch( "Muon_pT", &this->Muon_pT );
+        tree->Branch( "Muon_eta", &this->Muon_eta );
+        tree->Branch( "Muon_phi", &this->Muon_phi );
+        tree->Branch( "Muon_charge", &this->Muon_charge );
+        tree->Branch( "Muon_Energy", &this->Muon_Energy );
+        tree->Branch( "Muon_TuneP_pT", &this->Muon_TuneP_pT );
+        tree->Branch( "Muon_TuneP_eta", &this->Muon_TuneP_eta );
+        tree->Branch( "Muon_TuneP_phi", &this->Muon_TuneP_phi );
+        tree->Branch( "Muon_trackerLayers", &this->Muon_trackerLayers );
+        tree->Branch( "Electron_pT", &this->Electron_pT );
+        tree->Branch( "Electron_eta", &this->Electron_eta );
+        tree->Branch( "Electron_phi", &this->Electron_phi );
+        tree->Branch( "Electron_Energy", &this->Electron_Energy );
+        tree->Branch( "Electron_charge", &this->Electron_charge );
+        tree->Branch( "Electron_etaSC", &this->Electron_etaSC );
+        tree->Branch( "Electron_phiSC", &this->Electron_phiSC );
     }
 
     void Ready()

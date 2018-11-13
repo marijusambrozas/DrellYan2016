@@ -1,3 +1,4 @@
+//  KO GERO GALIMA BUTU MEDZIUI SUKURTI SAKAS SELECTEDX FUNKCIJOS VIDUJE ee.CreateBranches(*Tree)
 #include <TChain.h>
 #include <TTree.h>
 #include <TFile.h>
@@ -29,8 +30,10 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name, Bool_t Debug );
 void MakeSelectedQCDEM_120to170_merged();
 
 
-void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAULT",  Bool_t RocCorr = kFALSE )
+void MakeSelectedX ( TString WhichX, TString type = "", TString HLTname = "DEFAULT",  Bool_t RocCorr = kFALSE )
 {
+    TString whichX = WhichX;
+    whichX.ToUpper();
     TString HLT;
     Int_t Xselected = 0;
     Bool_t Debug = kFALSE;
@@ -40,12 +43,12 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
     fs.open( "./Status/Status_"+whichX+"_"+type+".txt" );
     fs << "Process MakeSelectedX ( " << whichX << ", " << type << ", " << HLTname << ", " << RocCorr << " ) initiated.\n";
 
-    if ( whichX.Contains("DEBUG") || whichX.Contains("debug") || whichX.Contains("Debug") )
+    if ( whichX.Contains("DEBUG") )
     {
         Debug = kTRUE;
         cout << "DEBUG MODE ON. Running on 100 events only" << endl;
     }
-    if ( whichX.Contains("EE") || whichX.Contains("ee") )
+    if ( whichX.Contains("EE") )
     {
         Xselected++;
         if ( HLTname == "DEFAULT" ) HLT = "Ele23Ele12";
@@ -53,7 +56,7 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
         cout << "\n*******      MakeSelectedEE ( " << type << ", " << HLT << " )      *******" << endl;
         MakeSelectedEE( type, HLT, Debug );
     }
-    if ( whichX.Contains("MuMu") || whichX.Contains("mumu") || whichX.Contains("MUMU") )
+    if ( whichX.Contains("MUMU") )
     {
         Xselected++;
         if ( HLTname == "DEFAULT" ) HLT = "IsoMu24_OR_IsoTkMu24";
@@ -61,7 +64,7 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
         cout << "\n*****  MakeSelectedMuMu ( " << type << ", " << HLT << " )  *****" << endl;
         MakeSelectedMuMu( type, HLT, RocCorr, Debug );
     }
-    if ( whichX.Contains("EMu") || whichX.Contains("emu") || whichX.Contains("Emu") || whichX.Contains("eMu") || whichX.Contains("EMU") )
+    if ( whichX.Contains("EMU") )
     {
         Xselected++;
         if ( HLTname == "DEFAULT" ) HLT = "IsoMu24_OR_IsoTkMu24";
@@ -69,7 +72,7 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
         cout << "\n*****   MakeSelectedEMu ( " << type << ", " << HLT << " )  *****" << endl;
         MakeSelectedEMu( type, HLT, RocCorr, Debug );
     }
-    if ( whichX.Contains("QCDfail") )   // To run through QCDEMEnriched_pT120to170 file that crashes
+    if ( whichX.Contains("QCDFAIL") )   // To run through QCDEMEnriched_pT120to170 file that crashes
     {
         Xselected++;
         if ( HLTname == "DEFAULT" ) HLT = "Ele23Ele12";
@@ -81,7 +84,7 @@ void MakeSelectedX ( TString whichX, TString type = "", TString HLTname = "DEFAU
             MakeSelectedQCDEM_120to170( HLT, name, Debug );
         }
     }
-    if ( whichX.Contains("QCDmerge") ) // to merge 316-1(that fails) selected QCD files
+    if ( whichX.Contains("QCDMERGE") ) // to merge 316-1(that fails) selected QCD files
     {
         Xselected++;
         cout << "\n****   MakeSelectedQCDEM_120to170()   ****" << endl;
@@ -127,41 +130,10 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
     // Loop for all processes
     for ( Int_t i_proc=0; i_proc<Nproc; i_proc++ )
     {
-        Mgr.GetProc( Processes[i_proc], kTRUE );
+        Mgr.SetProc( Processes[i_proc], kTRUE );
         cout << "Type: " << Mgr.Type << endl;
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
         cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
-
-//        //Creating a file
-//        TFile* ElectronFile;
-//        if ( Mgr.Type == "TEST" )
-//            ElectronFile = new TFile( "/media/sf_DATA/test/SelectedEE_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
-//        else if ( Mgr.Type == "DATA" )
-//            ElectronFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/Data/SelectedEE_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
-//        else if ( Mgr.Type == "SIGNAL" )
-//            ElectronFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_signal/SelectedEE_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
-//        else if ( Mgr.Type == "BKG" )
-//            ElectronFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
-//        else
-//        {
-//            cout << "Problems with TYPE." << endl;
-//            return;
-//        }
-
-//        TTree* ElectronTree = new TTree( "DYTree", "DYTree" );
-
-//        // -- Creating LongSelectedEE variables to assign branches -- //
-//        SelectedEE_t EE; EE.CreateNew();
-
-//        ElectronTree->Branch( "isSelPassed", &EE.isSelPassed );
-//        ElectronTree->Branch( "nPileUp", &EE.nPileUp );
-//        ElectronTree->Branch( "GENEvt_weight", &EE.GENEvt_weight );
-//        ElectronTree->Branch( "Electron_InvM", &EE.Electron_InvM );
-//        ElectronTree->Branch( "Electron_pT", &EE.Electron_pT );
-//        ElectronTree->Branch( "Electron_eta", &EE.Electron_eta );
-//        ElectronTree->Branch( "Electron_phi", &EE.Electron_phi );
-//        ElectronTree->Branch( "Electron_Energy", &EE.Electron_Energy );
-//        ElectronTree->Branch( "Electron_charge", &EE.Electron_charge );
 
         Int_t Ntup = Mgr.FullLocation.size();
 
@@ -171,7 +143,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
             TStopwatch looptime;
             looptime.Start();
 
-            if ( Mgr.Tag[i_tup] == "QCDEMEnriched_Pt120to170" ) continue; // Something crashes here
+            if ( Mgr.Tag[i_tup] == "QCDEMEnriched_Pt120to170" ) continue; // One of the skims crashes here
 
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
@@ -214,19 +186,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
             TTree* ElectronTree = new TTree( "DYTree", "DYTree" );
             // -- Creating LongSelectedEE variables to assign branches -- //
             SelectedEE_t EE; EE.CreateNew();
-
-            ElectronTree->Branch( "isSelPassed", &EE.isSelPassed );
-            ElectronTree->Branch( "nVertices", &EE.nVertices );
-            ElectronTree->Branch( "nPileUp", &EE.nPileUp );
-            ElectronTree->Branch( "GENEvt_weight", &EE.GENEvt_weight );
-            ElectronTree->Branch( "Electron_InvM", &EE.Electron_InvM );
-            ElectronTree->Branch( "Electron_pT", &EE.Electron_pT );
-            ElectronTree->Branch( "Electron_eta", &EE.Electron_eta );
-            ElectronTree->Branch( "Electron_phi", &EE.Electron_phi );
-            ElectronTree->Branch( "Electron_Energy", &EE.Electron_Energy );
-            ElectronTree->Branch( "Electron_charge", &EE.Electron_charge );
-            ElectronTree->Branch( "Electron_etaSC", &EE.Electron_etaSC );
-            ElectronTree->Branch( "Electron_phiSC", &EE.Electron_phiSC );
+            EE.MakeBranches(ElectronTree);
 
             TChain *chain = new TChain( Mgr.TreeName[i_tup] );
             chain->Add( Mgr.FullLocation[i_tup] );
@@ -246,6 +206,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
 
             cout << "\t[Total Events: " << NEvents << "]" << endl;
             Int_t timesPassed = 0;           
+            Int_t isClear = 0; // vectors that are writen into files should be cleared afer each event
 
             myProgressBar_t bar( NEvents );
 
@@ -322,14 +283,12 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
                         } // End of else()
 
                         ElectronTree->Fill();
-
-                        EE.Electron_pT->clear();
-                        EE.Electron_eta->clear();
-                        EE.Electron_phi->clear();
-                        EE.Electron_Energy->clear();
-                        EE.Electron_charge->clear();
-                        EE.Electron_etaSC->clear();
-                        EE.Electron_phiSC->clear();
+                        isClear = EE.ClearVectors();
+                        if ( !isClear )
+                        {
+                            cout << "======== ERROR: The vectors were not cleared ========" << endl;
+                            break;
+                        }
 
                     } // End of event selection
 
@@ -373,23 +332,6 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
 
         } // End of i_tup iteration
 
-//        ElectronFile->cd();
-//        cout << "Writing into file...";
-//        Int_t write;
-//        write = ElectronTree->Write();
-//        if ( write )
-//        {
-//            cout << " Finished." << endl << "Closing a file..." << endl;
-//            ElectronFile->Close();
-//            if ( !ElectronFile->IsOpen() ) cout << "File SelectedEE_" << Mgr.Procname[i_proc] << ".root has been closed successfully.\n" << endl;
-//            else cout << "FILE SelectedEE_" << Mgr.Procname[i_proc] << ".root COULD NOT BE CLOSED!\n" << endl;
-//        }
-//        else
-//        {
-//            cout << " Writing was NOT successful!\n" << endl;
-//            ElectronFile->Close();
-//        }
-
     } // End of i_proc iteration
 
     Double_t TotalRunTime = totaltime.CpuTime();
@@ -430,45 +372,11 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
     // Loop for all processes
     for ( Int_t i_proc=0; i_proc<Nproc; i_proc++ )
     {
-        Mgr.GetProc(Processes[i_proc], kTRUE);
+        Mgr.SetProc(Processes[i_proc], kTRUE);
         cout << "Type: " << Mgr.Type << endl;
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
         cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
         if ( RocCorr == kTRUE ) cout << "Rochester correction will be applied." << endl;
-
-//        //Creating a file
-//        TFile* MuonFile;
-//        if ( Mgr.Type == "TEST" )
-//            MuonFile = new TFile( "/media/sf_DATA/test/SelectedMuMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
-//        else if ( Mgr.Type == "DATA" )
-//            MuonFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
-//        else if ( Mgr.Type == "SIGNAL" )
-//            MuonFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_signal/SelectedMuMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
-//        else if ( Mgr.Type == "BKG" )
-//            MuonFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/MC_bkg/SelectedMuMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
-//        else
-//        {
-//            cout << "Problems with TYPE." << endl;
-//            return;
-//        }
-
-//        TTree* MuonTree = new TTree( "DYTree", "DYTree" );
-
-//        // -- Creating SelectedMuMu variables to assign branches -- //
-//        SelectedMuMu_t MuMu; MuMu.CreateNew();
-
-//        MuonTree->Branch( "isSelPassed", &MuMu.isSelPassed );
-//        MuonTree->Branch( "nPileUp", &MuMu.nPileUp );
-//        MuonTree->Branch( "GENEvt_weight", &MuMu.GENEvt_weight );
-//        MuonTree->Branch( "Muon_pT", &MuMu.Muon_pT );
-//        MuonTree->Branch( "Muon_eta", &MuMu.Muon_eta );
-//        MuonTree->Branch( "Muon_phi", &MuMu.Muon_phi );
-//        MuonTree->Branch( "Muon_charge", &MuMu.Muon_charge );
-//        MuonTree->Branch( "Muon_Energy", &MuMu.Muon_Energy );
-//        MuonTree->Branch( "Muon_InvM", &MuMu.Muon_InvM );
-//        MuonTree->Branch( "Muon_TuneP_pT", &MuMu.Muon_TuneP_pT );
-//        MuonTree->Branch( "Muon_TuneP_eta", &MuMu.Muon_TuneP_eta );
-//        MuonTree->Branch( "Muon_TuneP_phi", &MuMu.Muon_TuneP_phi );
 
         Int_t Ntup = Mgr.FullLocation.size();
 
@@ -522,21 +430,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
             TTree* MuonTree = new TTree( "DYTree", "DYTree" );
             // -- Creating SelectedMuMu variables to assign branches -- //
             SelectedMuMu_t MuMu; MuMu.CreateNew();
-
-            MuonTree->Branch( "isSelPassed", &MuMu.isSelPassed );
-            MuonTree->Branch( "nVertices", &MuMu.nVertices );
-            MuonTree->Branch( "nPileUp", &MuMu.nPileUp );
-            MuonTree->Branch( "GENEvt_weight", &MuMu.GENEvt_weight );
-            MuonTree->Branch( "Muon_pT", &MuMu.Muon_pT );
-            MuonTree->Branch( "Muon_eta", &MuMu.Muon_eta );
-            MuonTree->Branch( "Muon_phi", &MuMu.Muon_phi );
-            MuonTree->Branch( "Muon_charge", &MuMu.Muon_charge );
-            MuonTree->Branch( "Muon_Energy", &MuMu.Muon_Energy );
-            MuonTree->Branch( "Muon_InvM", &MuMu.Muon_InvM );
-            MuonTree->Branch( "Muon_TuneP_pT", &MuMu.Muon_TuneP_pT );
-            MuonTree->Branch( "Muon_TuneP_eta", &MuMu.Muon_TuneP_eta );
-            MuonTree->Branch( "Muon_TuneP_phi", &MuMu.Muon_TuneP_phi );
-            MuonTree->Branch( "Muon_trackerLayers", &MuMu.Muon_trackerLayers );
+            MuMu.MakeBranches(MuonTree);
 
             TChain *chain = new TChain( Mgr.TreeName[i_tup] );
             chain->Add( Mgr.FullLocation[i_tup] );
@@ -557,6 +451,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
             cout << "\t[Total Events: " << NEvents << "]" << endl;
             myProgressBar_t bar( NEvents );
             Int_t timesPassed = 0;
+            Int_t isClear = 0; // vectors that are writen into files should be cleared afer each event
 
             std::string RCaddress;
             if ( Mgr.Type == "TEST" )
@@ -630,19 +525,29 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                     isPassEventSelection = analyzer->EventSelection( MuonCollection, ntuple, &SelectedMuonCollection, &Sel_Index );
 
                     if ( isPassEventSelection == kTRUE )
-                    {
-                        timesPassed++;
-                        Muon mu1 = SelectedMuonCollection[0];
-                        Muon mu2 = SelectedMuonCollection[1];
-
-                        MuMu.isSelPassed = kTRUE;
-                        MuMu.nVertices = ntuple->nVertices;
-                        MuMu.nPileUp = ntuple->nPileUp;
-                        MuMu.Muon_InvM = ( mu1.Momentum + mu2.Momentum ).M();
-
-                        if ( Sel_Index.size()!=2 ) cout << "======== ERROR: The number of muons saved is not 2 ========" << endl;
+                    {                       
+                        if ( Sel_Index.size()!=2 )
+                        {
+                            cout << "======== ERROR: The number of muons saved is not 2 ========" << endl;
+                            break;
+                        }
                         else
                         {
+                            timesPassed++;
+                            Muon mu1 = SelectedMuonCollection[0];
+                            Muon mu2 = SelectedMuonCollection[1];
+
+                            MuMu.isSelPassed = kTRUE;
+                            MuMu.nVertices = ntuple->nVertices;
+                            MuMu.nPileUp = ntuple->nPileUp;
+
+                            MuMu.Muon_TuneP_pT->push_back( mu1.Momentum.Pt() );
+                            MuMu.Muon_TuneP_pT->push_back( mu2.Momentum.Pt() );
+                            MuMu.Muon_Energy->push_back( mu1.Momentum.E() );
+                            MuMu.Muon_Energy->push_back( mu2.Momentum.E() );
+                            MuMu.Muon_InvM = ( mu1.Momentum + mu2.Momentum ).M();
+
+
                             for ( UInt_t iter=0; iter<Sel_Index.size(); iter++ )
                             {
                                 Int_t index = Sel_Index[iter];
@@ -651,31 +556,25 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                                 MuMu.Muon_eta->push_back( ntuple->Muon_eta[index] );
                                 MuMu.Muon_phi->push_back( ntuple->Muon_phi[index] );
                                 MuMu.Muon_charge->push_back( ntuple->Muon_charge[index] );
-
-                                Double_t Mu_E = sqrt( ntuple->Muon_Px[index]*ntuple->Muon_Px[index] + ntuple->Muon_Py[index]*ntuple->Muon_Py[index]
-                                                      + ntuple->Muon_Pz[index]*ntuple->Muon_Pz[index] + M_Mu*M_Mu );
-
-                                MuMu.Muon_Energy->push_back( Mu_E );
-
-                                MuMu.Muon_TuneP_pT->push_back( ntuple->Muon_TuneP_pT[index] );
                                 MuMu.Muon_TuneP_eta->push_back( ntuple->Muon_TuneP_eta[index] );
                                 MuMu.Muon_TuneP_phi->push_back( ntuple->Muon_TuneP_phi[index] );
                                 MuMu.Muon_trackerLayers->push_back( ntuple->Muon_trackerLayers[index] );
                             } // End of vector filling
+                            if ( MuMu.Muon_Energy->size() != 2 || MuMu.Muon_TuneP_pT->size() != 2 || !MuMu.Muon_InvM )
+                            {
+                                cout << "======== ERROR: The size of created vectors is not 2 ========" << endl;
+                                break;
+                            }
 
                         } // End of else()
 
                         MuonTree->Fill();
-
-                        MuMu.Muon_pT->clear();
-                        MuMu.Muon_eta->clear();
-                        MuMu.Muon_phi->clear();
-                        MuMu.Muon_charge->clear();
-                        MuMu.Muon_Energy->clear();
-                        MuMu.Muon_TuneP_pT->clear();;
-                        MuMu.Muon_TuneP_eta->clear();
-                        MuMu.Muon_TuneP_phi->clear();
-                        MuMu.Muon_trackerLayers->clear();
+                        isClear = MuMu.ClearVectors();
+                        if ( !isClear )
+                        {
+                            cout << "======== ERROR: The vectors were not cleared ========" << endl;
+                            break;
+                        }
 
                     } // End of event selection
 
@@ -719,23 +618,6 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
 
         } // End of i_tup iteration
 
-//        MuonFile->cd();
-//        cout << "Writing into file...";
-//        Int_t write;
-//        write = MuonTree->Write();
-//        if ( write )
-//        {
-//            cout << " Finished." << endl << "Closing a file..." << endl;
-//            MuonFile->Close();
-//            if ( !MuonFile->IsOpen() ) cout << "File SelectedMuMu_" << Mgr.Type << ".root has been closed successfully." << endl;
-//            else cout << "FILE SelectedMuMu_" << Mgr.Type << ".root COULD NOT BE CLOSED!" << endl;
-//        }
-//        else
-//        {
-//            cout << " Writing was NOT successful!" << endl;
-//            MuonFile->Close();
-//        }
-
     } // End of i_proc iteration
 
     Double_t TotalRunTime = totaltime.CpuTime();
@@ -776,48 +658,11 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
     // Loop for all processes
     for ( Int_t i_proc=0; i_proc<Nproc; i_proc++ )
     {
-        Mgr.GetProc( Processes[i_proc], kTRUE );
+        Mgr.SetProc( Processes[i_proc], kTRUE );
         cout << "Type: " << Mgr.Type << endl;
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
         cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
         if ( RocCorr == kTRUE ) cout << "Rochester correction will be applied." << endl;
-
-//        //Creating a file
-//        TFile* EMuFile;
-//        if ( Mgr.Type == "TEST" )
-//            EMuFile = new TFile( "/media/sf_DATA/test/SelectedEMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
-//        else if ( Mgr.Type == "DATA" )
-//            EMuFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/Data/SelectedEMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
-//        else if ( Mgr.Type == "BKG" )
-//            EMuFile = new TFile( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/MC_bkg/SelectedEMu_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
-//        else
-//        {
-//            cout << "Problems with TYPE." << endl;
-//            return;
-//        }
-
-//        TTree* EMuTree = new TTree( "DYTree", "DYTree" );
-
-//        // -- Creating LongSelectedMuMu variables to assign branches -- //
-//        SelectedEMu_t EMu; EMu.CreateNew();
-
-//        EMuTree->Branch( "isSelPassed", &EMu.isSelPassed );
-//        EMuTree->Branch( "nPileUp", &EMu.nPileUp );
-//        EMuTree->Branch( "GENEvt_weight", &EMu.GENEvt_weight );
-//        EMuTree->Branch( "EMu_InvM", &EMu.EMu_InvM );
-//        EMuTree->Branch( "Muon_pT", &EMu.Muon_pT );
-//        EMuTree->Branch( "Muon_eta", &EMu.Muon_eta );
-//        EMuTree->Branch( "Muon_phi", &EMu.Muon_phi );
-//        EMuTree->Branch( "Muon_charge", &EMu.Muon_charge );
-//        EMuTree->Branch( "Muon_Energy", &EMu.Muon_Energy );
-//        EMuTree->Branch( "Muon_TuneP_pT", &EMu.Muon_TuneP_pT );
-//        EMuTree->Branch( "Muon_TuneP_eta", &EMu.Muon_TuneP_eta );
-//        EMuTree->Branch( "Muon_TuneP_phi", &EMu.Muon_TuneP_phi );
-//        EMuTree->Branch( "Electron_pT", &EMu.Electron_pT );
-//        EMuTree->Branch( "Electron_eta", &EMu.Electron_eta );
-//        EMuTree->Branch( "Electron_phi", &EMu.Electron_phi );
-//        EMuTree->Branch( "Electron_Energy", &EMu.Electron_Energy );
-//        EMuTree->Branch( "Electron_charge", &EMu.Electron_charge );
 
         Int_t Ntup = Mgr.FullLocation.size();
 
@@ -866,28 +711,7 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
             TTree* EMuTree = new TTree( "DYTree", "DYTree" );
             // -- Creating SelectedMuMu variables to assign branches -- //
             SelectedEMu_t EMu; EMu.CreateNew();
-
-            EMuTree->Branch( "isSelPassed", &EMu.isSelPassed );
-            EMuTree->Branch( "nVertices", &EMu.nVertices );
-            EMuTree->Branch( "nPileUp", &EMu.nPileUp );
-            EMuTree->Branch( "GENEvt_weight", &EMu.GENEvt_weight );
-            EMuTree->Branch( "EMu_InvM", &EMu.EMu_InvM );
-            EMuTree->Branch( "Muon_pT", &EMu.Muon_pT );
-            EMuTree->Branch( "Muon_eta", &EMu.Muon_eta );
-            EMuTree->Branch( "Muon_phi", &EMu.Muon_phi );
-            EMuTree->Branch( "Muon_charge", &EMu.Muon_charge );
-            EMuTree->Branch( "Muon_Energy", &EMu.Muon_Energy );
-            EMuTree->Branch( "Muon_TuneP_pT", &EMu.Muon_TuneP_pT );
-            EMuTree->Branch( "Muon_TuneP_eta", &EMu.Muon_TuneP_eta );
-            EMuTree->Branch( "Muon_TuneP_phi", &EMu.Muon_TuneP_phi );
-            EMuTree->Branch( "Muon_trackerLayers", &EMu.Muon_trackerLayers );
-            EMuTree->Branch( "Electron_pT", &EMu.Electron_pT );
-            EMuTree->Branch( "Electron_eta", &EMu.Electron_eta );
-            EMuTree->Branch( "Electron_phi", &EMu.Electron_phi );
-            EMuTree->Branch( "Electron_Energy", &EMu.Electron_Energy );
-            EMuTree->Branch( "Electron_charge", &EMu.Electron_charge );
-            EMuTree->Branch( "Electron_etaSC", &EMu.Electron_etaSC );
-            EMuTree->Branch( "Electron_phiSC", &EMu.Electron_phiSC );
+            EMu.MakeBranches( EMuTree );
 
             TChain *chain = new TChain( Mgr.TreeName[i_tup] );
             chain->Add( Mgr.FullLocation[i_tup] );
@@ -997,15 +821,16 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
 
                         EMu.isSelPassed = kTRUE;
                         EMu.nVertices = ntuple->nVertices;
-                        EMu.nPileUp = ntuple->nPileUp;
+                        EMu.nPileUp = ntuple->nPileUp;                      
                         EMu.EMu_InvM = ( mu.Momentum + ele.Momentum ).M();
                         EMu.Muon_pT = ntuple->Muon_pT[Sel_Index_Mu];
                         EMu.Muon_eta = ntuple->Muon_eta[Sel_Index_Mu];
                         EMu.Muon_phi = ntuple->Muon_phi[Sel_Index_Mu];
                         EMu.Muon_charge = ntuple->Muon_charge[Sel_Index_Mu];
-                        EMu.Muon_Energy = sqrt( ntuple->Muon_Px[Sel_Index_Mu]*ntuple->Muon_Px[Sel_Index_Mu] + ntuple->Muon_Py[Sel_Index_Mu]*ntuple->Muon_Py[Sel_Index_Mu]
-                                              + ntuple->Muon_Pz[Sel_Index_Mu]*ntuple->Muon_Pz[Sel_Index_Mu] + M_Mu*M_Mu );
-                        EMu.Muon_TuneP_pT = ntuple->Muon_TuneP_pT[Sel_Index_Mu];
+
+                        EMu.Muon_TuneP_pT = mu.Momentum.Pt();
+                        EMu.Muon_Energy = mu.Momentum.E();
+
                         EMu.Muon_TuneP_eta = ntuple->Muon_TuneP_eta[Sel_Index_Mu];
                         EMu.Muon_TuneP_phi = ntuple->Muon_TuneP_phi[Sel_Index_Mu];
                         EMu.Muon_trackerLayers = ntuple->Muon_trackerLayers[Sel_Index_Mu];
@@ -1060,23 +885,6 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
             }
 
         }// End of i_tup iteration
-
-    //    EMuFile->cd();
-    //    cout << "Writing into file...";
-    //    Int_t write;
-    //    write = EMuTree->Write();
-    //    if ( write )
-    //    {
-    //        cout << " Finished." << endl << "Closing a file..." << endl;
-    //        EMuFile->Close();
-//            if ( !EMuFile->IsOpen() ) cout << "File SelectedEMu_" << Mgr.Procname[Mgr.CurrentProc] << ".root has been closed successfully." << endl;
-//            else cout << "FILE SelectedEMu_" << Mgr.Procname[Mgr.CurrentProc] << ".root COULD NOT BE CLOSED!" << endl;
-    //    }
-    //    else
-    //    {
-    //        cout << " Writing was NOT successful!" << endl;
-    //        EMuFile->Close();
-    //    }
 
     }// End of i_proc iteration
 

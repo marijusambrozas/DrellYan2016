@@ -33,22 +33,24 @@ void CheckSelectedMuMu(Bool_t DrawHistos, Bool_t BreakIfProblem);
 void CheckSelectedEMu(Bool_t DrawHistos, Bool_t BreakIfProblem);
 
 
-void CheckSelectedX ( TString whichX, Bool_t DrawHistos = kFALSE, Bool_t BreakIfProblem = kFALSE )
+void CheckSelectedX ( TString WhichX, Bool_t DrawHistos = kFALSE, Bool_t BreakIfProblem = kFALSE )
 {
+    TString whichX = WhichX;
+    whichX.ToUpper();
     Int_t Xselected = 0;
-    if ( whichX.Contains("EE") || whichX.Contains("ee") )
+    if ( whichX.Contains("EE") )
     {
         Xselected++;
         cout << "\n**********         CheckSelectedEE         **********" << endl;
         CheckSelectedEE(DrawHistos, BreakIfProblem);
     }
-    if ( whichX.Contains("MuMu") || whichX.Contains("mumu") || whichX.Contains("MUMU") )
+    if ( whichX.Contains("MUMU") )
     {
         Xselected++;
         cout << "\n**********        CheckSelectedMuMu        **********" << endl;
         CheckSelectedMuMu(DrawHistos, BreakIfProblem);
     }
-    if ( whichX.Contains("EMu") || whichX.Contains("emu") || whichX.Contains("Emu") || whichX.Contains("eMu") || whichX.Contains("EMU") )
+    if ( whichX.Contains("EMU") )
     {
         Xselected++;
         cout << "\n**********        CheckSelectedEMu         **********" << endl;

@@ -33,22 +33,26 @@ const Double_t massbins[44] = {15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 68, 7
                                133, 141, 150, 160, 171, 185, 200, 220, 243, 273, 320, 380, 440, 510, 600, 700, 830, 1000, 1500, 3000};
 
 
-void HistDrawer ( TString whichX = "", TString whichGraphs = "ALL", TString type = "" )
+void HistDrawer ( TString WhichX = "", TString WhichGraphs = "ALL", TString type = "" )
 {
+    TString whichX = WhichX;
+    whichX.ToUpper();
+    TString whichGraphs = WhichGraphs;
+    whichGraphs.ToUpper();
     Int_t Xselected = 0;
-    if ( whichX.Contains("EE") || whichX.Contains("ee") )
+    if ( whichX.Contains("EE") )
     {
         Xselected++;
         cout << "\n*******      EE_HistDrawer ( " << whichGraphs << " " << type << " )      *******" << endl;
         EE_HistDrawer( whichGraphs, type );
     }
-    if ( whichX.Contains("MuMu") || whichX.Contains("mumu") || whichX.Contains("MUMU") )
+    if ( whichX.Contains("MUMU") )
     {
         Xselected++;
         cout << "\n*****  MuMu_HistDrawer ( " << whichGraphs << " " << type << " )  *****" << endl;
         MuMu_HistDrawer( whichGraphs, type );
     }
-    if ( whichX.Contains("EMu") || whichX.Contains("emu") || whichX.Contains("Emu") || whichX.Contains("eMu") || whichX.Contains("EMU") )
+    if ( whichX.Contains("EMU") )
     {
         Xselected++;
         cout << "\n*****   EMu_HistDrawer ( " << whichGraphs << " " << type << " )  *****" << endl;
@@ -71,17 +75,17 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
     Int_t count_drawn = 0;
     LocalFileMgr Mgr;
 
-    Mgr.GetProc( _EE_DY_Full );
+    Mgr.SetProc( _EE_DY_Full );
     TString name_DY = Mgr.HistLocation+"Hist_"+Mgr.Procname[_EE_DY_Full]+".root";
     TFile* f_DY = new TFile( name_DY, "READ" );
     cout << "Hists location: " << Mgr.HistLocation << endl;
     if (f_DY->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_EE_DY_Full]+".root" << " opened successfully" << endl;
-    Mgr.GetProc( _EE_Bkg_Full );
+    Mgr.SetProc( _EE_Bkg_Full );
     TString name_bkg = Mgr.HistLocation+"Hist_"+Mgr.Procname[_EE_Bkg_Full]+".root";
     TFile* f_bkg = new TFile( name_bkg, "READ" );
     if (f_bkg->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_EE_Bkg_Full]+".root" << " opened successfully" << endl;
-    Mgr.GetProc( _EE_DoubleEG_Full );
-//    Mgr.GetProc( _EE_SingleElectron_Full );
+    Mgr.SetProc( _EE_DoubleEG_Full );
+//    Mgr.SetProc( _EE_SingleElectron_Full );
     TString name_data = Mgr.HistLocation+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root";
     TFile* f_data = new TFile( name_data, "READ" );
     if (f_data->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root" << " opened successfully" << endl;
@@ -94,9 +98,7 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
 
 //################################# INVARIANT MASS #################################################
 
-    if(whichGraphs=="all" || whichGraphs=="All" || whichGraphs=="ALL" || whichGraphs=="invm" || whichGraphs=="InvM" ||
-       whichGraphs=="Invm" || whichGraphs=="invM" || whichGraphs=="INVM" || whichGraphs=="InvMass"||
-       whichGraphs=="invmass" || whichGraphs=="invMass" || whichGraphs=="INVMASS")
+    if( whichGraphs=="ALL" || whichGraphs=="INVMASS" )
     {
         count_drawn++;
 
@@ -210,8 +212,8 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
 
         TH1D *h_data_mass_fine_before_PUCorr, *h_data_mass_fine_before_EffCorr, *h_data_mass_fine, *h_data_mass;
 
-        Mgr.GetProc(_EE_DoubleEG_Full);
-//        Mgr.GetProc(_EE_SingleElectron_Full);
+        Mgr.SetProc(_EE_DoubleEG_Full);
+//        Mgr.SetProc(_EE_SingleElectron_Full);
 
         f_data->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass_fine_before_PUCorr );
         f_data->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass_fine_before_EffCorr );
@@ -305,10 +307,7 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
 
 //################################# Pt, RAPI, pT, ETA, PHI #################################################
 
-    if ( whichGraphs=="all" || whichGraphs=="All" || whichGraphs=="ALL" || whichGraphs.Contains("pt") || whichGraphs.Contains("pT") ||
-         whichGraphs.Contains("Pt") || whichGraphs.Contains("PT") || whichGraphs.Contains("eta") || whichGraphs.Contains("Eta") ||
-         whichGraphs.Contains("ETA") || whichGraphs.Contains("Phi") || whichGraphs.Contains("phi") || whichGraphs.Contains("PHI") ||
-         whichGraphs.Contains("Rapi") || whichGraphs.Contains("rapi") || whichGraphs.Contains("RAPI") )
+    if ( whichGraphs=="ALL" || whichGraphs.Contains("PT") || whichGraphs.Contains("ETA") || whichGraphs.Contains("PHI") || whichGraphs.Contains("RAPI") )
     {
         count_drawn++;
 
@@ -448,8 +447,8 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
 
         TH1D *h_data_Pt, *h_data_rapi, *h_data_pT, *h_data_eta, *h_data_phi;
 
-        Mgr.GetProc(_EE_DoubleEG_Full);
-//        Mgr.GetProc(_EE_SingleElectron_Full);
+        Mgr.SetProc(_EE_DoubleEG_Full);
+//        Mgr.SetProc(_EE_SingleElectron_Full);
 
         f_data->GetObject( "h_Pt_"+Mgr.Procname[Mgr.CurrentProc], h_data_Pt );
         f_data->GetObject( "h_rapi_"+Mgr.Procname[Mgr.CurrentProc], h_data_rapi );
@@ -569,9 +568,7 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
 
 //################################# nPU #################################################
 
-    if(whichGraphs=="all" || whichGraphs=="All" || whichGraphs=="ALL" || whichGraphs=="npu" || whichGraphs=="Npu" ||
-       whichGraphs=="nPU" || whichGraphs=="NPU" || whichGraphs=="nPV" || whichGraphs=="npv"||
-       whichGraphs=="Npv" || whichGraphs=="nPV" || whichGraphs=="PileUp")
+    if( whichGraphs=="ALL" || whichGraphs=="NPU" || whichGraphs=="NPV" || whichGraphs.Contains("PILEUP") )
     {
         count_drawn++;
 
@@ -752,16 +749,16 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
     Int_t count_drawn = 0;
     LocalFileMgr Mgr;
 
-    Mgr.GetProc( _MuMu_DY_Full );
+    Mgr.SetProc( _MuMu_DY_Full );
     TString name_DY = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root";
     TFile* f_DY = new TFile( name_DY, "READ" );
     cout << "Hists location: " << Mgr.HistLocation << endl;
     if (f_DY->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root" << " opened successfully" << endl;
-    Mgr.GetProc( _MuMu_Bkg_Full );
+    Mgr.SetProc( _MuMu_Bkg_Full );
     TString name_bkg = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root";
     TFile* f_bkg = new TFile( name_bkg, "READ" );
     if (f_bkg->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root" << " opened successfully" << endl;
-    Mgr.GetProc( _MuMu_SingleMuon_Full );
+    Mgr.SetProc( _MuMu_SingleMuon_Full );
     TString name_data = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+".root";
     TFile* f_data = new TFile( name_data, "READ" );
     if (f_data->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+".root" << " opened successfully" << endl;
@@ -774,9 +771,7 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
 
 //################################# INVARIANT MASS #################################################
 
-    if(whichGraphs=="all" || whichGraphs=="All" || whichGraphs=="ALL" || whichGraphs=="invm" || whichGraphs=="InvM" ||
-       whichGraphs=="Invm" || whichGraphs=="invM" || whichGraphs=="INVM" || whichGraphs=="InvMass"||
-       whichGraphs=="invmass" || whichGraphs=="invMass" || whichGraphs=="INVMASS")
+    if( whichGraphs=="ALL" || whichGraphs=="INVM" || whichGraphs=="INVMASS" )
     {
         count_drawn++;
 
@@ -1014,10 +1009,7 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
 
 //################################# Pt, RAPI, pT, ETA, PHI #################################################
 
-    if ( whichGraphs=="all" || whichGraphs=="All" || whichGraphs=="ALL" || whichGraphs.Contains("pt") || whichGraphs.Contains("pT") ||
-         whichGraphs.Contains("Pt") || whichGraphs.Contains("PT") || whichGraphs.Contains("eta") || whichGraphs.Contains("Eta") ||
-         whichGraphs.Contains("ETA") || whichGraphs.Contains("Phi") || whichGraphs.Contains("phi") || whichGraphs.Contains("PHI") ||
-         whichGraphs.Contains("Rapi") || whichGraphs.Contains("rapi") || whichGraphs.Contains("RAPI") )
+    if ( whichGraphs=="ALL" || whichGraphs.Contains("PT") || whichGraphs.Contains("ETA") || whichGraphs.Contains("PHI") || whichGraphs.Contains("RAPI") )
     {
         count_drawn++;
 
@@ -1275,9 +1267,7 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
 
 //################################# nPU #################################################
 
-    if(whichGraphs=="all" || whichGraphs=="All" || whichGraphs=="ALL" || whichGraphs=="npu" || whichGraphs=="Npu" ||
-       whichGraphs=="nPU" || whichGraphs=="NPU" || whichGraphs=="nPV" || whichGraphs=="npv"||
-       whichGraphs=="Npv" || whichGraphs=="nPV" || whichGraphs=="PileUp")
+    if( whichGraphs=="ALL" || whichGraphs=="NPU" || whichGraphs=="NPV" || whichGraphs.Contains("PILEUP") )
     {
         count_drawn++;
 
@@ -1457,11 +1447,11 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
     Int_t count_drawn = 0;
     LocalFileMgr Mgr;
 
-    Mgr.GetProc( _EMu_Bkg_Full );
+    Mgr.SetProc( _EMu_Bkg_Full );
     TString name_bkg = Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root";
     TFile* f_bkg = new TFile( name_bkg, "READ" );
     if (f_bkg->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root" << " opened successfully" << endl;
-    Mgr.GetProc( _EMu_SingleMuon_Full );
+    Mgr.SetProc( _EMu_SingleMuon_Full );
     TString name_data = Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root";
     TFile* f_data = new TFile( name_data, "READ" );
     if (f_data->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root" << " opened successfully" << endl;
@@ -1474,9 +1464,7 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
 
 //################################# INVARIANT MASS #################################################
 
-    if(whichGraphs=="all" || whichGraphs=="All" || whichGraphs=="ALL" || whichGraphs=="invm" || whichGraphs=="InvM" ||
-       whichGraphs=="Invm" || whichGraphs=="invM" || whichGraphs=="INVM" || whichGraphs=="InvMass"||
-       whichGraphs=="invmass" || whichGraphs=="invMass" || whichGraphs=="INVMASS")
+    if( whichGraphs=="ALL" || whichGraphs=="INVM" || whichGraphs=="INVMASS" )
     {
         count_drawn++;
 
@@ -1798,9 +1786,7 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
 
 //################################# Pt, RAPI, pT, ETA, PHI #################################################
 
-    if ( whichGraphs=="all" || whichGraphs=="All" || whichGraphs=="ALL" || whichGraphs.Contains("pt") || whichGraphs.Contains("pT") ||
-         whichGraphs.Contains("Pt") || whichGraphs.Contains("PT") || whichGraphs.Contains("eta") || whichGraphs.Contains("Eta") ||
-         whichGraphs.Contains("ETA") || whichGraphs.Contains("Phi") || whichGraphs.Contains("phi") || whichGraphs.Contains("PHI") )
+    if ( whichGraphs=="ALL" || whichGraphs.Contains("PT") || whichGraphs.Contains("ETA") || whichGraphs.Contains("PHI") || whichGraphs.Contains("RAPI") )
     {
         count_drawn++;
 
@@ -2174,9 +2160,7 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
 
 //################################# nPU #################################################
 
-    if(whichGraphs=="all" || whichGraphs=="All" || whichGraphs=="ALL" || whichGraphs=="npu" || whichGraphs=="Npu" ||
-       whichGraphs=="nPU" || whichGraphs=="NPU" || whichGraphs=="nPV" || whichGraphs=="npv"||
-       whichGraphs=="Npv" || whichGraphs=="nPV" || whichGraphs=="PileUp")
+    if( whichGraphs=="ALL" || whichGraphs=="NPU" || whichGraphs=="NPV" || whichGraphs.Contains("PILEUP") )
     {
         count_drawn++;
 
