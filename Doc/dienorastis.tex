@@ -86,6 +86,74 @@
 \maketitle
 \pagebreak
 
+\section{Darbų planas}
+\textbf{Tikslas: Įvertinti Drell-Yan proceso triukšmo įvykių skaičių $e\mu$ metodu. Parašyti kursinį darbą.}
+
+Uždaviniai:
+\begin{enumerate}
+	\item Atrinktų duomenų rinkinių gavimas:
+	\begin{enumerate}
+		\item Nuspręsti, kokius duomenis (dydžius) saugoti. (padaryta, bet dar būtų gerai pasitarti su vadovu)
+		\item Nuspręsti, kokie atrankos kriterijai naudojami. (padaryta)
+		\item Pasiruošti galutines atrankos ir duomenų parsisiuntimo kodų versijas.
+		Įsitikinti, kad viskas veikia. (beveik padaryta)
+		\item Paleisti kodus, gauti ir atsisiųsti duomenis.
+		\item \textit{Parengti instrukciją, kad kiti, naudodamiesi mano kodais galėtų pakartoti tą patį.}
+	\end{enumerate}
+	
+	\item Korekcijų pritaikymas:
+	\begin{enumerate}
+		\item Tiksliai išsiaiškinti, kokių korekcijų kuriems duomenims reikia.
+		(informacijos ieškoti pranešimų skaidrėse, analizės užrašuose, straipsniuose, CMS Twiki)
+		\item Išsiašiktinti, kaip kurios korekcijos daromos:
+		\begin{itemize}
+			\item Pažiūrėti, kaip tai daroma Dalmin'o koduose;
+			\item Informacijos ieškoti pranešimų skaidrėse, analizės užrašuose, straipsniuose, CMS Twiki;
+			\item Reikalui esant klausti vadovo arba rašyti laišką Dalmin'ui;
+		\end{itemize}
+		\item Išsiaiškinti, ar korekcijoms reikalingi turimi failai yra tinkami.
+		(Informacijos ieškoti CMS twiki, arba rašyti laišką Dalmin'ui)
+		\item Pasirašyti ir pritaikyti korekcijų kodus. (jeigu viskas bus gerai, ko gero galima
+		būtų naudoti ir Dalmin'o kodus, svarbu suprasti, kaip veikia ir gebėti paaiškinti)
+	\end{enumerate}
+	
+	\item Matavimo ir modeliavimo pasiskirstymų palyginimas:
+	\begin{enumerate}
+		\item Nuspręsti, kokius kontrolinius dydžius reikia brėžti.
+		(pasižiūrėti pranešimų skaidrėse, analizės užrašuose)
+		\item Gauti grafikus bei turėti galimybes detalesnei analizei.
+		(Turėtų užtekti tik pakoreguoti jau turimą kodą)
+		\item Esant dideliems nesutapimams tarp matavimo ir modeliavimo, aiškintis, kodėl
+		taip yra ir taisyti klaidas / keisti metodikas. (Tartis su vadovu, kitais mokslinės
+		grupės nariais)
+	\end{enumerate}
+	
+	\item Triukšmo įvykių skaičiaus įvertinimas $e\mu$ metodu:
+	\begin{enumerate}
+		\item Išsiaiškinti, kaip įvertinami $e\mu$ $QCD$ triukšmai.
+		(Informacijos ieškoti pranešimų skaidrėse, analizės užrašuose, straipsniuose)
+		\item Įšsiaiškinti, ar $QCD$ triukšmų įvertinimo metodas nesikerta su anksčiau naudotu
+		$W+\mathrm{Jets}$ įvykių \ltq{išprastinimu}, ir nuspręsti, kuriuos metodus taikyti.
+		(Informacijos ieškoti analizės užrašuose, reikalui esant tartis su vadovu ir/arba kitais
+		mokslinės grupės nariais)
+		\item Pasirašyti kodus, kurie atliks įvertinimą $e\mu$ metodu bei palygins gautą rezultatą
+		su modeliuotu įverčiu. (Pasinaudoti Dalmin'o ir savo paties senesniais kodais)
+	\end{enumerate}
+	
+	\item Neapibrėžtumų įvertinimas:
+	\begin{enumerate}
+		\item Išsiaiškinti, koks naudotų pataisų indėlis į neapibrėžtumus. (Informacijos ieškoti
+		pranešimų skaidrėse, analizės užrašuose, straipsniuose, reikalui esant klausti vadovo)
+		\item Nustatyti pagrindinius sisteminių neapibrėžtumų šaltinius. (Informacijos ieškoti
+		Dalmin'o koduose, pranešimų skaidrėse, analizės užrašuose, straipsniuose, reikalui
+		esant klausti vadovo)
+		\item Įvertinti, ar $\emu$ metodo įvertis yra reikšmingas lyginant su apskaičiuotais
+		neapibrėžtumais. (Bandyti pritaikyti savo ankstesnius kodus)
+	\end{enumerate}
+	
+	\item Darbo rašymas
+\end{enumerate}
+
 \section{Spalio 9-10 d. -- CMSDAS ataskaitos taisymas}
 \begin{itemize}
 	\item Tikrinau, ar veikia neinteraktyvus skaičiavimas tier3 centre
@@ -167,9 +235,9 @@
 	\item Paleidau skaičiuoti daug procesų ant tier3.
 	
 	\textbf{Update:} visus failus įrašinėjo tvarkingai, išskyrus DYEE\_M50to100 --
-	ten išmetė daugybę žinučių, tokių, kaip:
-	
-	\ttt{} %jeigu dar kartą išmes - patikslinti!!!
+	ten išmetė daugybę žinučių, sakančių, kad neišeina sukurti šakų medžiui
+	ir to medžio įrašyti į failą, bei siūlančių kode pirmiau apsibrėžti failą, o
+	tik po to -- medį. Keista, nes aš taip ir darau.
 	
 	Taip pat visi procesai buvo sustabdyti (\ttt{held}) vietoje to, kad baigtų darbą.
 	Įvedus į terminalą \ttt{condor\_q -analyze <darbo\_nr>} gavau atsakymą, kad taip yra
@@ -332,6 +400,61 @@
 	Tačiau iš tolimesnių žinučių atrodo, kad kodas failą vėliau vis dėlto perskaitė
 	ir toliau viskas suveikė normaliai.
 \end{itemize}
+
+\section{Spalio 29-31 d. -- schemų tvarkymas}
+\begin{itemize}
+	\item Toliau taisiau schemas ir kūriau naujas. \ttt{Process\_t} galimas vertes
+	pavaizdavau kaip pseudokodą. Sukūriau \ltq{medžio} schemas, vaizduojančias procesų
+	ir pirminių rinkinių hierarchinę struktūrą. Taip pat padariau schemas, kur vaizduoju,
+	kaip veikia duomenų skaitymas, bet su konkrečiais pavyzdžiais.
+	\item \ttt{FileMgr} funkciją \ttt{GetProc} pervadinau į \ttt{SetProc} pagal vadovo
+	rekomendaciją, nes toks pavadimas labiau atitinka tai, ką ta funkcija iš tikrųjų
+	daro.
+	\item Dalyvavau susitikime su Ch. Schaefer.
+\end{itemize}
+
+\section{Lapkričio 5-6 d. -- schemų tvarkymas}
+\begin{itemize}
+	\item Užbaigiau darbą su schemomis: skaidrėse iš viso gavosi 21 paveikslėlis.
+	\item Šiek tiek pradėjau taisyti įvykių atrankos kodus: bandžiau padaryti, kad darant
+	įvykių atranką su \textit{Rochester} korekcija, informacija apie atrinktus įvykius
+	būtų įrašoma jau su atlikta korekcija (anksčiau įrašydavau informaciją apie atranką
+	praėjusį įvykį iki korekcijos ir brėždamas grafikus ją darydavau iš naujo (kas ko gero
+	nėra teisinga, nes atliekant šią korekciją yra naudojami sugeneruoti atsitiktiniai skaičiai).
+\end{itemize}
+
+\section{Lapkričio 7-9 d. -- kodų taisymas}
+\begin{itemize}
+	\item Taisiau savo kodus:
+	\begin{enumerate}
+		\item \ttt{SelectedX} klasėse pridėjau funkciją, kuri, padavus medį, priskiria jo šakoms
+		klasės kintamųjų adresus. Taip galėjo sutrumpėti \ttt{MakeSelectedX.C} kodas.
+		\item Pakeičiau \ttt{FileMgr} klasėje esančios funkcijos \ttt{FindProc} veikimą.
+		Pasinaudodamas funkcijomis \ttt{TString::ToUpper()} ir \ttt{TString::ReplaceAll(..)}
+		suvedžiau paieškos įvestis į pastovesnį formatą (visas raides transformavau į didžiąsias,
+		kai kurias išraiškas pakeičiau kitomis). Taip buvo galima atsikratyti labai didelės
+		dalies OR sąlygų IF funkcijose ieškant, kurį procesą grąžinti pagal užklausą.
+		\item Tą patį pakartojau su \ttt{LocalFileMgr} klase.
+	\end{enumerate}
+	\item Pakalbėję su vadovu nutarėme, kad dar reikėtų schemos, kuri pavaizduotų, kaip
+	atrinktiems failams priskiriami adresai.
+\end{itemize}
+
+\section{Lapkričio 12 d. -- kodų tvarkymas, plano sudarymas}
+\begin{itemize}
+	\item Tvarkiau kodus:
+	\begin{enumerate}
+		\item Funkcija \ttt{MakeBranches(..)} papildžiau ir \ttt{LongSelectedX} subklases.
+		\item Pakoregavau \ttt{MakeLongSelectedX.C} ir \ttt{MakeReSelectedX.C} kodus, kad
+		naudotų naują funkciją vietoje to, kad kurtų medžio šakas paties \textit{macro} viduje.
+		\item Pakoregavau visų atrankos kodų įvesties priėmimą, kad sumažinčiau OR sąlygų
+		skaičių nusprendžiant, kurią atrankos funkciją paleisti ($ee$, $\mu\mu$, ar $e\mu$).
+		Pasinaudojau funkcija \ttt{TString::ToUpper()}.
+	\end{enumerate}
+	\item Pakalbėjęs su vadovu pradėjau daryti veiklos planą (nes projekto paraiškoje sudėtas
+	darbų planas yra pernelyg platus.
+\end{itemize}
+
 
 \bibliography{\jobname}
 \bibliographystyle{unsrt}
