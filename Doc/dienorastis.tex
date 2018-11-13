@@ -452,7 +452,36 @@ Uždaviniai:
 		Pasinaudojau funkcija \ttt{TString::ToUpper()}.
 	\end{enumerate}
 	\item Pakalbėjęs su vadovu pradėjau daryti veiklos planą (nes projekto paraiškoje sudėtas
-	darbų planas yra pernelyg platus.
+	darbų planas yra pernelyg platus. Kol kas planą dariau su Draw.io (schematišką, medžio tipo).
+\end{itemize}
+
+\section{Lapkričio 13 d. -- darbų plano sudarymas, kodų taisymas}
+\begin{itemize}
+	\item Peržiūrėjau ir šiek tiek koregavau planą. Pasidariau ir tekstinę versiją, kurią įkėliau
+	į šio failo pirmą sekciją.
+	\item Pabandžiau dat šiek tiek optimizuoti kodus, pridėdamas į \ttt{SelectedX} klases funkciją
+	\ttt{ClearVectors()}, kuri tą ir daro -- ištuština savyje turimus vektorius. Taip galėjau iš
+	atrankos kodų išmesti eilutes, kurios po kiekvieno medžio užpildymo atranką praėjusio įvykio
+	informacija išvalo visus vektorius (kad naudojantis funkcija \ttt{push\_back} jie nebūtų pildomi
+	toliau ir kiekvieno įvykio informacija nesitempų su savimi visų prieš tai atranką praėjusių
+	įvukių informacijos).
+	\item Pakoregavau visus kodus, kad naudotų šią naują funkciją.
+	\item Bandžiau aiškintis, kuo skiriasi dydžiai \ttt{Muon\_pT} ir \ttt{Muon\_TuneP\_pT}: šiek tiek
+	informacijos radau čia:
+	\url{https://twiki.cern.ch/twiki/bin/view/CMS/SWGuideMuonIdRun2#High_pT_Muon_pT_assignment_detai};
+	taip pat galimai pasenusios informacijos (nes kalbama apie CMSSW\_5\_0\_X versijas) radau čia:
+	\url{https://twiki.cern.ch/twiki/bin/view/CMS/MuonReferenceResolution}.
+	
+	Kaip suprantu, \ttt{Muon\_TuneP\_pT} yra miuono skersinio impulso vertė, apskaičiuota naudojantis
+	kitu algoritmu -- TuneP, kuris yra tikslesnis aukštesnių skersinių impulsų srityje. Tačiau kaip
+	supratau toliau skaitydamas, TuneP kintamųjų nereikėtų naudoti (bet nelabai supratau, kodėl),
+	jeigu naudojamasi ParticleFlow algoritmo apskaičiuotais dydžiais. Taip pat perskaičiau, kad
+	miuono \ttt{HighPt} identifikavimas atliekamas naudojantis TuneP algoritmu. Reikėtų pasiaiškinti,
+	ar Dalmin'o koduose visur buvo naudojamas \ttt{Muon\_TuneP\_pT} todėl, kad buvo naudojamas
+	atrankos kriterijus \ttt{IsHighPtMuon},	ar dėl kitų priežasčių (kai paėmiau kodus iš KyeongPil
+	Lee github saugyklos, ten iš pradžių taip	buvo sudaryta miuonų atranka, nors vėliau kai
+	peržiūrinėjau pranešimo skaidres, mačiau, kad ten	jau naudojamas kriterijus \ttt{IsTightMuon}, 
+	tad galbūt tokiu atveju naudoti TuneP kintamųjų	nebereikia).
 \end{itemize}
 
 
