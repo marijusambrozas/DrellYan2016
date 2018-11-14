@@ -5967,7 +5967,7 @@ Bool_t DYAnalyzer::EventSelection_emu_method_test(vector< Muon > MuonCollection,
         vector< Int_t > QIndexMu;
         for(Int_t j=0; j<(int)MuonCollection.size(); j++)
         {
-                if( MuonCollection[j].isHighPtMuon() && MuonCollection[j].trkiso < 0.10
+                if( MuonCollection[j].isTightMuon() && MuonCollection[j].relPFiso < 0.15
                         //&& MuonCollection[j].Pt > LeadPtCut && fabs(MuonCollection[j].eta) < LeadEtaCut )
                         && MuonCollection[j].Pt > SubPtCut && fabs(MuonCollection[j].eta) < LeadEtaCut ) // pT>17 && |eta|<2.4
                 {
