@@ -14,6 +14,8 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <TH1.h>
+#include <TCanvas.h>
 
 // -- Macro for making new data files with only selection-passing events  -- //
 #include "./header/DYAnalyzer.h"
@@ -494,7 +496,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                         mu.FillFromNtuple( ntuple, i_reco );
 
                         // -- Convert to TuneP variables -- //
-                        analyzer->ConvertToTunePInfo( mu );
+//                        analyzer->ConvertToTunePInfo( mu );
 
                         if ( RocCorr == kTRUE )
                         {
@@ -503,14 +505,21 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                             Int_t s, m;
 
                             if( Mgr.Tag[i_tup] == "DATA" )
-                                    SF = rc.kScaleDT(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, s=0, m=0);
+                            {
+//                                SF = rc.kScaleDT(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, s=0, m=0);
+                                SF = rc.kScaleDT(mu.charge, mu.Pt, mu.eta, mu.phi, s=0, m=0);
+                            }
                             else
-                                    SF = rc.kScaleAndSmearMC(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
+                            {
+//                                SF = rc.kScaleAndSmearMC(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
+                                SF = rc.kScaleAndSmearMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
+                            }
 
-                            mu.TuneP_pT = SF*mu.TuneP_pT;
+//                            mu.TuneP_pT = SF*mu.TuneP_pT;
+                            mu.Pt = SF*mu.Pt;
 
                             // -- Convert to TuneP variables -- //
-                            analyzer->ConvertToTunePInfo( mu );
+//                            analyzer->ConvertToTunePInfo( mu );
                         }
 
                         MuonCollection.push_back( mu );
@@ -535,36 +544,36 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                         {
                             timesPassed++;
                             Muon mu1 = SelectedMuonCollection[0];
-                            Muon mu2 = SelectedMuonCollection[1];
+                            Muon mu2 = SelectedMuonCollection[1];                                                       
 
                             MuMu.isSelPassed = kTRUE;
                             MuMu.nVertices = ntuple->nVertices;
                             MuMu.nPileUp = ntuple->nPileUp;
 
-                            MuMu.Muon_TuneP_pT->push_back( mu1.Momentum.Pt() );
-                            MuMu.Muon_TuneP_pT->push_back( mu2.Momentum.Pt() );
-                            MuMu.Muon_Energy->push_back( mu1.Momentum.E() );
-                            MuMu.Muon_Energy->push_back( mu2.Momentum.E() );
-                            MuMu.Muon_InvM = ( mu1.Momentum + mu2.Momentum ).M();
+                            TLorentzVector mu_temp1, mu_temp2; // Rochester correction changed pT value so the correct value needs to be saved
+                            mu_temp1.SetPtEtaPhiM( mu1.Pt, mu1.eta, mu1.phi, M_Mu );
+                            mu_temp2.SetPtEtaPhiM( mu2.Pt, mu2.eta, mu2.phi, M_Mu );
+
+                            MuMu.Muon_pT->push_back( mu_temp1.Pt() );
+                            MuMu.Muon_pT->push_back( mu_temp2.Pt() );
+                            MuMu.Muon_Energy->push_back( mu_temp1.E() );
+                            MuMu.Muon_Energy->push_back( mu_temp2.E() );
+
+                            MuMu.Muon_InvM = ( mu_temp1 + mu_temp2 ).M();
 
 
                             for ( UInt_t iter=0; iter<Sel_Index.size(); iter++ )
                             {
                                 Int_t index = Sel_Index[iter];
 
-                                MuMu.Muon_pT->push_back( ntuple->Muon_pT[index] );
                                 MuMu.Muon_eta->push_back( ntuple->Muon_eta[index] );
                                 MuMu.Muon_phi->push_back( ntuple->Muon_phi[index] );
                                 MuMu.Muon_charge->push_back( ntuple->Muon_charge[index] );
+                                MuMu.Muon_TuneP_pT->push_back( ntuple->Muon_TuneP_pT[index] );
                                 MuMu.Muon_TuneP_eta->push_back( ntuple->Muon_TuneP_eta[index] );
                                 MuMu.Muon_TuneP_phi->push_back( ntuple->Muon_TuneP_phi[index] );
                                 MuMu.Muon_trackerLayers->push_back( ntuple->Muon_trackerLayers[index] );
                             } // End of vector filling
-                            if ( MuMu.Muon_Energy->size() != 2 || MuMu.Muon_TuneP_pT->size() != 2 || !MuMu.Muon_InvM )
-                            {
-                                cout << "======== ERROR: The size of created vectors is not 2 ========" << endl;
-                                break;
-                            }
 
                         } // End of else()
 
@@ -772,7 +781,7 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
                         mu.FillFromNtuple(ntuple, i_reco);
 
                         // Convert to TuneP variables
-                        analyzer->ConvertToTunePInfo( mu );
+//                        analyzer->ConvertToTunePInfo( mu );
 
                         if ( RocCorr == kTRUE )
                         {
@@ -781,14 +790,21 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
                             Int_t s, m;
 
                             if( Mgr.Tag[i_tup] == "DATA" )
-                                    SF = rc.kScaleDT(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, s=0, m=0);
+                            {
+//                                SF = rc.kScaleDT(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, s=0, m=0);
+                                SF = rc.kScaleDT(mu.charge, mu.Pt, mu.eta, mu.phi, s=0, m=0);
+                            }
                             else
-                                    SF = rc.kScaleAndSmearMC(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
+                            {
+//                                SF = rc.kScaleAndSmearMC(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
+                                SF = rc.kScaleAndSmearMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
+                            }
 
-                            mu.TuneP_pT = SF*mu.TuneP_pT;
+//                            mu.TuneP_pT = SF*mu.TuneP_pT;
+                            mu.Pt = SF*mu.Pt;
 
                             // -- Convert to TuneP variables -- //
-                            analyzer->ConvertToTunePInfo( mu );
+//                            analyzer->ConvertToTunePInfo( mu );
                         }
 
                         MuonCollection.push_back( mu );
@@ -811,7 +827,7 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
                     Int_t Sel_Index_Mu, Sel_Index_Ele;  // Ntuple indexes of electron and muon that passed the selection
                     Bool_t isPassEventSelection = kFALSE;
                     isPassEventSelection = analyzer->EventSelection_emu_method_test( MuonCollection, ElectronCollection, ntuple, &SelectedMuonCollection,
-                                                                                    &SelectedElectronCollection, Sel_Index_Mu, Sel_Index_Ele );
+                                                                                     &SelectedElectronCollection, Sel_Index_Mu, Sel_Index_Ele );
 
                     if ( isPassEventSelection == kTRUE && Sel_Index_Mu != -1 && Sel_Index_Ele != -1 )
                     {
@@ -819,21 +835,26 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
                         Muon mu = SelectedMuonCollection[0];
                         Electron ele = SelectedElectronCollection[0];
 
+                        TLorentzVector mu_temp; // Rochester correction changed pT value so the correct value needs to be saved
+                        mu_temp.SetPtEtaPhiM( mu.Pt, mu.eta, mu.phi, M_Mu );
+                        EMu.Muon_pT = mu_temp.Pt();
+                        EMu.Muon_Energy = mu_temp.E();
+                        EMu.EMu_InvM = ( mu_temp + ele.Momentum ).M();
+
+
                         EMu.isSelPassed = kTRUE;
                         EMu.nVertices = ntuple->nVertices;
                         EMu.nPileUp = ntuple->nPileUp;                      
-                        EMu.EMu_InvM = ( mu.Momentum + ele.Momentum ).M();
-                        EMu.Muon_pT = ntuple->Muon_pT[Sel_Index_Mu];
+
                         EMu.Muon_eta = ntuple->Muon_eta[Sel_Index_Mu];
                         EMu.Muon_phi = ntuple->Muon_phi[Sel_Index_Mu];
                         EMu.Muon_charge = ntuple->Muon_charge[Sel_Index_Mu];
 
-                        EMu.Muon_TuneP_pT = mu.Momentum.Pt();
-                        EMu.Muon_Energy = mu.Momentum.E();
-
+                        EMu.Muon_TuneP_pT = ntuple->Muon_TuneP_pT[Sel_Index_Mu];
                         EMu.Muon_TuneP_eta = ntuple->Muon_TuneP_eta[Sel_Index_Mu];
                         EMu.Muon_TuneP_phi = ntuple->Muon_TuneP_phi[Sel_Index_Mu];
                         EMu.Muon_trackerLayers = ntuple->Muon_trackerLayers[Sel_Index_Mu];
+
                         EMu.Electron_pT = ntuple->Electron_pT[Sel_Index_Ele];
                         EMu.Electron_eta = ntuple->Electron_eta[Sel_Index_Ele];
                         EMu.Electron_phi = ntuple->Electron_phi[Sel_Index_Ele];
