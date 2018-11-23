@@ -89,10 +89,6 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
     TString name_data = Mgr.HistLocation+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root";
     TFile* f_data = new TFile( name_data, "READ" );
     if (f_data->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root" << " opened successfully" << endl;
-    TString name_PileUp = "./etc/PileUp/80X/ROOTFile_PUReWeight_80X_v20170817_64mb.root";
-    TFile *f_PileUp = new TFile( name_PileUp, "READ" );
-    if (f_PileUp->IsOpen()) std::cout << "File " << "ROOTFile_PUReWeight_80X_v20170817_64mb.root" << " opened successfully" << endl;
-
 
     Double_t dataerror, MCerror, dataintegral=1.3107e+07, MCintegral;
 
@@ -311,12 +307,31 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
     {
         count_drawn++;
 
-        THStack *s_Pt, *s_rapi, *s_pT, *s_eta, *s_phi;
-        s_Pt = new THStack("s_Pt", "");
-        s_rapi = new THStack("s_rapi", "");
-        s_pT = new THStack("s_pT", "");
-        s_eta = new THStack("s_eta", "");
-        s_phi = new THStack("s_phi", "");
+        THStack *s_pT, *s_rapi;
+        s_rapi = new THStack( "s_rapi", "" );
+        s_pT = new THStack( "s_pT", "" );
+
+        THStack *s_pT_lead_before_PUCorr = new THStack( "s_pT_lead_before_PUCorr", "" );
+        THStack *s_pT_sublead_before_PUCorr = new THStack("h_pT_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "" );
+        THStack *s_eta_lead_before_PUCorr = new THStack("h_eta_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "" );
+        THStack *s_eta_sublead_before_PUCorr = new THStack("h_eta_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "" );
+        THStack *s_phi_lead_before_PUCorr = new THStack("h_phi_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "" );
+        THStack *s_phi_sublead_before_PUCorr = new THStack("h_phi_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "" );
+
+        THStack *s_pT_lead_before_EffCorr = new THStack("h_pT_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "" );
+        THStack *s_pT_sublead_before_EffCorr = new THStack("h_pT_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
+        THStack *s_eta_lead_before_EffCorr = new THStack("h_eta_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        THStack *s_eta_sublead_before_EffCorr = new THStack("h_eta_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        THStack *s_phi_lead_before_EffCorr = new THStack("h_phi_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        THStack *s_phi_sublead_before_EffCorr = new THStack("h_phi_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+
+        THStack *s_pT_lead = new THStack("h_pT_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
+        THStack *s_pT_sublead = new THStack("h_pT_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
+        THStack *s_eta_lead = new THStack("h_eta_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        THStack *s_eta_sublead = new THStack("h_eta_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        THStack *s_phi_lead = new THStack("h_phi_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        THStack *s_phi_sublead = new THStack("h_phi_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+
 
 //----------------------------------- MC bkg -------------------------------------------------------
         TH1D *h_bkg_Pt[5], *h_bkg_rapi[5], *h_bkg_pT[5], *h_bkg_eta[5], *h_bkg_phi[5];
