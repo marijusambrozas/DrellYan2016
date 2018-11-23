@@ -183,6 +183,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
                 ElectronFile = TFile::Open( out_base+out_dir+"_DEBUG.root", "RECREATE" );
             else
                 ElectronFile = TFile::Open( out_base+out_dir+".root", "RECREATE" );
+            ElectronFile->cd();
 
 
             TTree* ElectronTree = new TTree( "DYTree", "DYTree" );
@@ -313,7 +314,6 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
 
             // Writing
-            ElectronFile->cd();
             cout << "Writing into file...";
             Int_t write;
             write = ElectronTree->Write();
@@ -427,6 +427,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                 MuonFile = TFile::Open( out_base+out_dir+"_DEBUG.root", "RECREATE" );
             else
                 MuonFile = TFile::Open( out_base+out_dir+".root", "RECREATE" );
+            MuonFile->cd();
 
 
             TTree* MuonTree = new TTree( "DYTree", "DYTree" );
@@ -670,7 +671,6 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
 
             // Writing
-            MuonFile->cd();
             cout << "Writing into file...";
             Int_t write;
             write = MuonTree->Write();
@@ -779,6 +779,7 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
                 EMuFile = TFile::Open( out_base+out_dir+"_DEBUG.root", "RECREATE" );
             else
                 EMuFile = TFile::Open( out_base+out_dir+".root", "RECREATE" );
+            EMuFile->cd();
 
 
             TTree* EMuTree = new TTree( "DYTree", "DYTree" );
@@ -950,7 +951,6 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
 
             // Writing
-            EMuFile->cd();
             cout << "Writing into file...";
             Int_t write;
             write = EMuTree->Write();
@@ -1010,6 +1010,7 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name, Bool_t Debug )
     else
         ElectronFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/QCDfail/SelectedEE_"
                                     +Mgr.Tag[0]+"_"+Name+".root", "RECREATE" );
+    ElectronFile->cd();
 
     TTree* ElectronTree = new TTree( "DYTree", "DYTree" );
     // -- Creating LongSelectedEE variables to assign branches -- //
@@ -1141,7 +1142,6 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name, Bool_t Debug )
     cout << "\t" << timesPassed << " events have passed the event selection." << endl;
 
     // Writing
-    ElectronFile->cd();
     cout << "\tWriting into file...";
     Int_t write;
     write = ElectronTree->Write();
@@ -1181,6 +1181,7 @@ void MakeSelectedQCDEM_120to170_merged()
 
     //Creating a file
     TFile* ElectronFile = TFile::Open( "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/MC_bkg/SelectedEE_"+Mgr.Tag[0]+".root", "RECREATE" );
+    ElectronFile->cd();
 
     TTree* ElectronTree = new TTree( "DYTree", "DYTree" );
     // -- Creating LongSelectedEE variables to assign branches -- //
@@ -1254,7 +1255,6 @@ void MakeSelectedQCDEM_120to170_merged()
     } // End of event iteration
 
     // Writing
-    ElectronFile->cd();
     cout << "\tWriting into file...";
     Int_t write;
     write = ElectronTree->Write();
