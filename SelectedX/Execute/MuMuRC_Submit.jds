@@ -1,11 +1,11 @@
-executable = SelectAllX.sh
+executable = SelectAllXRC.sh
 universe = vanilla
 accounting_group = group_cms
 
 arguments = MuMu $(LIST) DEFAULT
-output = output/mumu_out_$(LIST).txt
-error = output/mumu_err_$(LIST).txt
-log = output/mumu_log$(LIST).txt
+output = output/mumuRC_out_$(LIST).txt
+error = output/mumuRC_err_$(LIST).txt
+log = output/mumuRC_log$(LIST).txt
 getenv = True
 
 should_transfer_files = YES

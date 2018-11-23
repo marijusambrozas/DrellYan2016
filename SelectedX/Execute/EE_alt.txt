@@ -1,0 +1,9 @@
+alt_DY_50to100
+alt_DY_100to250
+alt_DY_250to400
+alt_DY_400to650
+alt_DY_650toInf
+alt_WJets
+alt_WW
+alt_WZ
+alt_ZZ
