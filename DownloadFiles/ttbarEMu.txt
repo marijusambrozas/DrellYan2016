@@ -1,3 +1,0 @@
-/xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/MC_bkg/SelectedEMu_ttbar_M700to1000.root
-/xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/MC_bkg/SelectedEMu_ttbar_M1000toInf.root
-

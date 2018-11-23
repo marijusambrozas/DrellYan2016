@@ -540,6 +540,12 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                             cout << "======== ERROR: The number of muons saved is not 2 ========" << endl;
                             break;
                         }
+                        else if ( fabs(SelectedMuonCollection[0].eta) >= 2.4 || fabs(SelectedMuonCollection[1].eta) >= 2.4 )
+                        {
+                            cout << "ERROR: Evt " << i << ":    etas of selected muons are:\n[0]  " << SelectedMuonCollection[0].eta;
+                            cout << "\n[1]  " << SelectedMuonCollection[1].eta << endl;
+                            continue;
+                        }
                         else
                         {
                             timesPassed++;
@@ -551,13 +557,73 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                             MuMu.nPileUp = ntuple->nPileUp;
 
                             TLorentzVector mu_temp1, mu_temp2; // Rochester correction changed pT value so the correct value needs to be saved
-                            mu_temp1.SetPtEtaPhiM( mu1.Pt, mu1.eta, mu1.phi, M_Mu );
-                            mu_temp2.SetPtEtaPhiM( mu2.Pt, mu2.eta, mu2.phi, M_Mu );
+
+                            if ( mu1.charge != ntuple->Muon_charge[Sel_Index[0]] )
+                            {
+                                cout << "Event " << i << ": Charges of first selected muon do not match!" << endl;
+                                if ( mu2.charge != ntuple->Muon_charge[Sel_Index[1]] && mu1.charge != mu2.charge && fabs(mu1.charge) == fabs(mu2.charge) )
+                                {
+                                    cout << "Need to swap muons..." << endl;
+                                    mu_temp2.SetPtEtaPhiM( mu1.Pt, mu1.eta, mu1.phi, M_Mu );
+                                    mu_temp1.SetPtEtaPhiM( mu2.Pt, mu2.eta, mu2.phi, M_Mu );
+                                }
+                                else
+                                {
+                                    cout << "******* THIS IS A BIG PROBLEM ********" << endl;
+                                    continue;
+                                }
+                            }
+                            else if ( mu2.charge != ntuple->Muon_charge[Sel_Index[1]] )
+                            {
+                                cout << "Event " << i << ": Charges of second selected muon do not match!" << endl;
+                                if ( mu1.charge != ntuple->Muon_charge[Sel_Index[0]] && mu1.charge != mu2.charge && fabs(mu1.charge) == fabs(mu2.charge) )
+                                {
+                                    cout << "Need to swap muons..." << endl;
+                                    mu_temp2.SetPtEtaPhiM( mu1.Pt, mu1.eta, mu1.phi, M_Mu );
+                                    mu_temp1.SetPtEtaPhiM( mu2.Pt, mu2.eta, mu2.phi, M_Mu );
+                                }
+                                else
+                                {
+                                    cout << "******* THIS IS A BIG PROBLEM ********" << endl;
+                                    cout << "Number of muons in the given event: " << ntuple->nMuon << endl;
+                                    for (int a=0; a<ntuple->nMuon; a++ )
+                                    {
+                                        cout << "Muon" << a << ": \n   pT: " << ntuple->Muon_pT[a] << "  eta: " << ntuple->Muon_eta[a] << endl;
+                                        Double_t iso = ( ntuple->Muon_PfChargedHadronIsoR04[a] + ntuple->Muon_PfNeutralHadronIsoR04[a] + ntuple->Muon_PfGammaIsoR04[a] )
+                                                       / ntuple->Muon_pT[a];
+                                        cout << "   Iso: " << iso << "  charge: " << ntuple->Muon_charge[a] << endl;
+                                    }
+                                    cout << "Selected muons by muon vector:\nMuon 0: \n   pT: " << mu1.Pt << "  eta: " << mu1.eta << endl;
+                                    cout << "   Iso: " << mu1.relPFiso << "  charge: " << mu1.charge << endl;
+                                    cout << "Muon 1: \n   pT: " << mu2.Pt << "  eta: " << mu2.eta << endl;
+                                    cout << "   Iso: " << mu2.relPFiso << "  charge: " << mu2.charge << endl;
+
+                                    cout << "Selected muons by index:\nMuon 0: \n   pT: " << ntuple->Muon_pT[Sel_Index[0]] << "  eta: ";
+                                    cout << ntuple->Muon_eta[Sel_Index[0]] << endl;
+                                    Double_t iso0 = ( ntuple->Muon_PfChargedHadronIsoR04[Sel_Index[0]] + ntuple->Muon_PfNeutralHadronIsoR04[Sel_Index[0]] +
+                                                      ntuple->Muon_PfGammaIsoR04[Sel_Index[0]] ) / ntuple->Muon_pT[Sel_Index[0]];
+                                    cout << "   Iso: " << iso0 << "  charge: " << ntuple->Muon_charge[Sel_Index[0]] << endl;
+                                    cout << "Muon 1: \n   pT: " << ntuple->Muon_pT[Sel_Index[1]] << "  eta: ";
+                                    cout << ntuple->Muon_eta[Sel_Index[1]] << endl;
+                                    Double_t iso1 = ( ntuple->Muon_PfChargedHadronIsoR04[Sel_Index[1]] + ntuple->Muon_PfNeutralHadronIsoR04[Sel_Index[1]] +
+                                                      ntuple->Muon_PfGammaIsoR04[Sel_Index[1]] ) / ntuple->Muon_pT[Sel_Index[1]];
+                                    cout << "   Iso: " << iso1 << "  charge: " << ntuple->Muon_charge[Sel_Index[1]] << endl;
+
+                                    continue;
+                                }
+                            }
+                            else
+                            {
+                                mu_temp1.SetPtEtaPhiM( mu1.Pt, mu1.eta, mu1.phi, M_Mu );
+                                mu_temp2.SetPtEtaPhiM( mu2.Pt, mu2.eta, mu2.phi, M_Mu );
+                            }
 
                             MuMu.Muon_pT->push_back( mu_temp1.Pt() );
                             MuMu.Muon_pT->push_back( mu_temp2.Pt() );
                             MuMu.Muon_Energy->push_back( mu_temp1.E() );
                             MuMu.Muon_Energy->push_back( mu_temp2.E() );
+                            MuMu.Muon_eta->push_back( mu_temp1.Eta() );
+                            MuMu.Muon_phi->push_back( mu_temp1.Eta() );
 
                             MuMu.Muon_InvM = ( mu_temp1 + mu_temp2 ).M();
 
@@ -566,8 +632,6 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                             {
                                 Int_t index = Sel_Index[iter];
 
-                                MuMu.Muon_eta->push_back( ntuple->Muon_eta[index] );
-                                MuMu.Muon_phi->push_back( ntuple->Muon_phi[index] );
                                 MuMu.Muon_charge->push_back( ntuple->Muon_charge[index] );
                                 MuMu.Muon_TuneP_pT->push_back( ntuple->Muon_TuneP_pT[index] );
                                 MuMu.Muon_TuneP_eta->push_back( ntuple->Muon_TuneP_eta[index] );
@@ -826,8 +890,8 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
                     vector< Electron > SelectedElectronCollection;
                     Int_t Sel_Index_Mu, Sel_Index_Ele;  // Ntuple indexes of electron and muon that passed the selection
                     Bool_t isPassEventSelection = kFALSE;
-                    isPassEventSelection = analyzer->EventSelection_emu_method_test( MuonCollection, ElectronCollection, ntuple, &SelectedMuonCollection,
-                                                                                     &SelectedElectronCollection, Sel_Index_Mu, Sel_Index_Ele );
+                    isPassEventSelection = analyzer->EventSelection_emu_method( MuonCollection, ElectronCollection, ntuple, &SelectedMuonCollection,
+                                                                                &SelectedElectronCollection, Sel_Index_Mu, Sel_Index_Ele );
 
                     if ( isPassEventSelection == kTRUE && Sel_Index_Mu != -1 && Sel_Index_Ele != -1 )
                     {

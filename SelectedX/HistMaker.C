@@ -28,11 +28,10 @@
 #include "./header/SelectedX.h"
 #include "./header/myProgressBar_t.h"
 #include "./header/LocalFileMgr.h"
-#include "./etc/RoccoR/RoccoR.cc"
 
-void EE_HistMaker ( TString type, TString HLTname );
-void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname );
-void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname );
+void EE_HistMaker ( TString type, TString HLTname, Bool_t DEBUG );
+void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname, Bool_t DEBUG );
+void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname, Bool_t DEBUG );
 void MuMu_merge();
 
 // -- Drell-Yan mass bins -- //
@@ -46,6 +45,12 @@ void HistMaker ( TString WhichX = "", TString Type = "", Bool_t SwitchROCCORR = 
     whichX.ToUpper();
     TString HLT;
     Int_t Xselected = 0;
+    Bool_t DEBUG = kFALSE;
+    if ( whichX.Contains("DEBUG") )
+    {
+        DEBUG = kTRUE;
+        cout << "**** DEBUG MODE: Running with 10 events only. ****" << endl;
+    }
     TString type = whichX+"_"+Type;
     if ( whichX.Contains("EE") )
     {
@@ -53,7 +58,7 @@ void HistMaker ( TString WhichX = "", TString Type = "", Bool_t SwitchROCCORR = 
         if ( HLTname == "DEFAULT" ) HLT = "Ele23Ele12";
         else HLT = HLTname;
         cout << "\n*******      EE_HistMaker ( " << type << " )      *******" << endl;
-        EE_HistMaker( type, HLT );
+        EE_HistMaker( type, HLT, DEBUG );
     }
     if ( whichX.Contains("MUMU") )
     {
@@ -61,7 +66,7 @@ void HistMaker ( TString WhichX = "", TString Type = "", Bool_t SwitchROCCORR = 
         if ( HLTname == "DEFAULT" ) HLT = "IsoMu24_OR_IsoTkMu24";
         else HLT = HLTname;
         cout << "\n*****  MuMu_HistMaker ( " << type << " )  *****" << endl;
-        MuMu_HistMaker( type, SwitchROCCORR, HLT );
+        MuMu_HistMaker( type, SwitchROCCORR, HLT, DEBUG );
     }
     if ( whichX.Contains("EMU") )
     {
@@ -69,7 +74,7 @@ void HistMaker ( TString WhichX = "", TString Type = "", Bool_t SwitchROCCORR = 
         if ( HLTname == "DEFAULT" ) HLT = "IsoMu24_OR_IsoTkMu24";
         else HLT = HLTname;
         cout << "\n*****   EMu_HistMaker ( " << type << " )  *****" << endl;
-        EMu_HistMaker( type, SwitchROCCORR, HLT );
+        EMu_HistMaker( type, SwitchROCCORR, HLT, DEBUG );
     }
     if ( whichX.Contains("MUMU_MERGE") )
     {
@@ -83,7 +88,7 @@ void HistMaker ( TString WhichX = "", TString Type = "", Bool_t SwitchROCCORR = 
 
 
 /// ----------------------------- Electron Channel ------------------------------ ///
-void EE_HistMaker ( TString type, TString HLTname )
+void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 {
     if ( !type.Length() )
     {
@@ -104,6 +109,8 @@ void EE_HistMaker ( TString type, TString HLTname )
     vector<SelProc_t> Processes = Mgr.FindProc( type );
     TFile *f;
     TString OutputDir;
+    TString debug = "";
+    if ( DEBUG == kTRUE ) debug = "_DEBUG";
     Bool_t isBkgFull = kFALSE;  // To tell if this is the _EE_Bkg_Full process (it is handled differently)
 
     if ( !Processes.size() )
@@ -118,7 +125,7 @@ void EE_HistMaker ( TString type, TString HLTname )
         Mgr.SetProc( _EE_Bkg_Full );
         // -- Output ROOTFile -- //
         OutputDir = Mgr.HistLocation;
-        f = new TFile( OutputDir+"Hist_"+Mgr.Procname[_EE_Bkg_Full]+".root", "RECREATE" );
+        f = new TFile( OutputDir+"Hist_"+Mgr.Procname[_EE_Bkg_Full]+debug+".root", "RECREATE" );
         Processes.clear();
         Processes.push_back( _EE_DYTauTau_Full );
         Processes.push_back( _EE_ttbar_Full );
@@ -141,7 +148,7 @@ void EE_HistMaker ( TString type, TString HLTname )
         if ( isBkgFull == kFALSE )
         {
             OutputDir = Mgr.HistLocation;
-            f = new TFile( OutputDir+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
+            f = new TFile( OutputDir+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+debug+".root", "RECREATE" );
         }
 
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
@@ -165,19 +172,33 @@ void EE_HistMaker ( TString type, TString HLTname )
         TH1D *h_mass_fine_before_EffCorr = new TH1D("h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000);
         TH1D *h_mass_fine = new TH1D("h_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000);
         TH1D *h_mass = new TH1D("h_mass_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins);
-        TH1D *h_Pt = new TH1D("h_Pt_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600);
+        TH1D *h_pT = new TH1D("h_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
         TH1D *h_rapi = new TH1D("h_rapi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5);
 
-        TH1D *h_nPU_beforePUCorr = new TH1D( "h_nPU_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
-        TH1D *h_nPU_beforeEffCorr = new TH1D( "h_nPU_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
-        TH1D *h_nPU = new TH1D( "h_nPU_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
-        TH1D *h_nVTX_beforePUCorr = new TH1D( "h_nVTX_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
-        TH1D *h_nVTX_beforeEffCorr = new TH1D( "h_nVTX_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
+        TH1D *h_nVTX_before_PUCorr = new TH1D( "h_nVTX_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
+        TH1D *h_nVTX_before_EffCorr = new TH1D( "h_nVTX_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
         TH1D *h_nVTX = new TH1D( "h_nVTX_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
 
-        TH1D *h_pT = new TH1D("h_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600);
-        TH1D *h_eta = new TH1D("h_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5);
-        TH1D *h_phi = new TH1D("h_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5);
+        TH1D *h_pT_lead_before_PUCorr = new TH1D("h_pT_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
+        TH1D *h_pT_sublead_before_PUCorr = new TH1D("h_pT_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
+        TH1D *h_eta_lead_before_PUCorr = new TH1D("h_eta_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        TH1D *h_eta_sublead_before_PUCorr = new TH1D("h_eta_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        TH1D *h_phi_lead_before_PUCorr = new TH1D("h_phi_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        TH1D *h_phi_sublead_before_PUCorr = new TH1D("h_phi_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+
+        TH1D *h_pT_lead_before_EffCorr = new TH1D("h_pT_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
+        TH1D *h_pT_sublead_before_EffCorr = new TH1D("h_pT_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
+        TH1D *h_eta_lead_before_EffCorr = new TH1D("h_eta_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        TH1D *h_eta_sublead_before_EffCorr = new TH1D("h_eta_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        TH1D *h_phi_lead_before_EffCorr = new TH1D("h_phi_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        TH1D *h_phi_sublead_before_EffCorr = new TH1D("h_phi_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+
+        TH1D *h_pT_lead = new TH1D("h_pT_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
+        TH1D *h_pT_sublead = new TH1D("h_pT_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
+        TH1D *h_eta_lead = new TH1D("h_eta_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        TH1D *h_eta_sublead = new TH1D("h_eta_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        TH1D *h_phi_lead = new TH1D("h_phi_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        TH1D *h_phi_sublead = new TH1D("h_phi_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
 
         //Loop for all samples
         const Int_t Ntup = Mgr.FileLocation.size();
@@ -196,9 +217,10 @@ void EE_HistMaker ( TString type, TString HLTname )
 
             Int_t NEvents = chain->GetEntries();
             if ( NEvents != Mgr.nEvents[i_tup] ) cout << "\tEvent numbers do not match!!!" << endl;
-            cout << "\t[Total events: " << Mgr.Wsum[i_tup] << "]" << endl;
+            cout << "\t[Sum of weights:: " << Mgr.Wsum[i_tup] << "]" << endl;
             cout << "\t[Selected Events: " << NEvents << "]" << endl;
 
+            if ( DEBUG == kTRUE ) NEvents = 10;
             myProgressBar_t bar( NEvents );
 
             for ( Int_t i=0; i<NEvents; i++ )
@@ -230,27 +252,46 @@ void EE_HistMaker ( TString type, TString HLTname )
                     // -- Apply efficiency correcion -- //
                     if( Mgr.isMC == kTRUE )
                             effweight = analyzer->EfficiencySF_EventWeight_electron( EE );
+//                    cout << effweight << endl;
 
                     h_mass_fine_before_PUCorr->Fill( EE->Electron_InvM, TotWeight );
                     h_mass_fine_before_EffCorr->Fill( EE->Electron_InvM, TotWeight * PUWeight );
                     h_mass_fine->Fill( EE->Electron_InvM, TotWeight * PUWeight * effweight );
                     h_mass->Fill( EE->Electron_InvM, TotWeight * PUWeight * effweight );
-                    h_Pt->Fill( reco_Pt, TotWeight * PUWeight * effweight );
+                    h_pT->Fill( reco_Pt, TotWeight * PUWeight * effweight );
                     h_rapi->Fill( reco_rapi, TotWeight * PUWeight * effweight );
 
-                    h_nPU_beforePUCorr->Fill( EE->nPileUp, TotWeight );
-                    h_nPU_beforeEffCorr->Fill( EE->nPileUp, TotWeight * PUWeight );
-                    h_nPU->Fill( EE->nPileUp, TotWeight * PUWeight * effweight );
-                    h_nVTX_beforePUCorr->Fill( EE->nVertices, TotWeight );
-                    h_nVTX_beforeEffCorr->Fill( EE->nVertices, TotWeight * PUWeight );
+                    h_nVTX_before_PUCorr->Fill( EE->nVertices, TotWeight );
+                    h_nVTX_before_EffCorr->Fill( EE->nVertices, TotWeight * PUWeight );
                     h_nVTX->Fill( EE->nVertices, TotWeight * PUWeight * effweight );
 
-                    h_pT->Fill( EE->Electron_pT->at(0), TotWeight * PUWeight * effweight );
-                    h_pT->Fill( EE->Electron_pT->at(1), TotWeight * PUWeight * effweight );
-                    h_eta->Fill( EE->Electron_eta->at(0), TotWeight * PUWeight * effweight );
-                    h_eta->Fill( EE->Electron_eta->at(1), TotWeight * PUWeight * effweight );
-                    h_phi->Fill( EE->Electron_phi->at(0), TotWeight * PUWeight * effweight );
-                    h_phi->Fill( EE->Electron_phi->at(1), TotWeight * PUWeight * effweight );
+                    int lead=0, sublead=1;
+                    if ( EE->Electron_pT->at(0) < EE->Electron_pT->at(1) )
+                    {
+                        lead = 1;
+                        sublead = 0;
+                    }
+
+                    h_pT_lead_before_PUCorr->Fill( EE->Electron_pT->at(lead), TotWeight );
+                    h_pT_sublead_before_PUCorr->Fill( EE->Electron_pT->at(sublead), TotWeight );
+                    h_eta_lead_before_PUCorr->Fill( EE->Electron_eta->at(lead), TotWeight );
+                    h_eta_sublead_before_PUCorr->Fill( EE->Electron_eta->at(sublead), TotWeight );
+                    h_phi_lead_before_PUCorr->Fill( EE->Electron_phi->at(lead), TotWeight );
+                    h_phi_sublead_before_PUCorr->Fill( EE->Electron_phi->at(sublead), TotWeight );
+
+                    h_pT_lead_before_EffCorr->Fill( EE->Electron_pT->at(lead), TotWeight * PUWeight );
+                    h_pT_sublead_before_EffCorr->Fill( EE->Electron_pT->at(sublead), TotWeight * PUWeight );
+                    h_eta_lead_before_EffCorr->Fill( EE->Electron_eta->at(lead), TotWeight * PUWeight );
+                    h_eta_sublead_before_EffCorr->Fill( EE->Electron_eta->at(sublead), TotWeight * PUWeight );
+                    h_phi_lead_before_EffCorr->Fill( EE->Electron_phi->at(lead), TotWeight * PUWeight );
+                    h_phi_sublead_before_EffCorr->Fill( EE->Electron_phi->at(sublead), TotWeight * PUWeight );
+
+                    h_pT_lead->Fill( EE->Electron_pT->at(lead), TotWeight * PUWeight * effweight );
+                    h_pT_sublead->Fill( EE->Electron_pT->at(sublead), TotWeight * PUWeight * effweight );
+                    h_eta_lead->Fill( EE->Electron_eta->at(lead), TotWeight * PUWeight * effweight );
+                    h_eta_sublead->Fill( EE->Electron_eta->at(sublead), TotWeight * PUWeight * effweight );
+                    h_phi_lead->Fill( EE->Electron_phi->at(lead), TotWeight * PUWeight * effweight );
+                    h_phi_sublead->Fill( EE->Electron_phi->at(sublead), TotWeight * PUWeight * effweight );
 
                 } // End of event selection
                 bar.Draw(i);
@@ -271,19 +312,33 @@ void EE_HistMaker ( TString type, TString HLTname )
         h_mass_fine_before_EffCorr->Write();
         h_mass_fine->Write();
         h_mass->Write();
-        h_Pt->Write();
+        h_pT->Write();
         h_rapi->Write();
 
-        h_nPU_beforePUCorr->Write();
-        h_nPU_beforeEffCorr->Write();
-        h_nPU->Write();
-        h_nVTX_beforePUCorr->Write();
-        h_nVTX_beforeEffCorr->Write();
+        h_nVTX_before_PUCorr->Write();
+        h_nVTX_before_EffCorr->Write();
         h_nVTX->Write();
 
-        h_pT->Write();
-        h_eta->Write();
-        h_phi->Write();
+        h_pT_lead_before_PUCorr->Write();
+        h_pT_sublead_before_PUCorr->Write();
+        h_eta_lead_before_PUCorr->Write();
+        h_eta_sublead_before_PUCorr->Write();
+        h_phi_lead_before_PUCorr->Write();
+        h_phi_sublead_before_PUCorr->Write();
+
+        h_pT_lead_before_EffCorr->Write();
+        h_pT_sublead_before_EffCorr->Write();
+        h_eta_lead_before_EffCorr->Write();
+        h_eta_sublead_before_EffCorr->Write();
+        h_phi_lead_before_EffCorr->Write();
+        h_phi_sublead_before_EffCorr->Write();
+
+        h_pT_lead->Write();
+        h_pT_sublead->Write();
+        h_eta_lead->Write();
+        h_eta_sublead->Write();
+        h_phi_lead->Write();
+        h_phi_sublead->Write();
 
         cout << " Finished." << endl;
 
@@ -292,13 +347,13 @@ void EE_HistMaker ( TString type, TString HLTname )
     f->Close();
     if ( isBkgFull == kTRUE )
     {
-        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[_EE_Bkg_Full] << ".root has been closed successfully.\n" << endl;
-        else cout << "FILE Hist_" << Mgr.Procname[_EE_Bkg_Full] << ".root COULD NOT BE CLOSED!\n" << endl;
+        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[_EE_Bkg_Full]+debug << ".root has been closed successfully.\n" << endl;
+        else cout << "FILE Hist_" << Mgr.Procname[_EE_Bkg_Full]+debug << ".root COULD NOT BE CLOSED!\n" << endl;
     }
     else
     {
-        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[Mgr.CurrentProc] << ".root has been closed successfully.\n" << endl;
-        else cout << "FILE Hist_" << Mgr.Procname[Mgr.CurrentProc] << ".root COULD NOT BE CLOSED!\n" << endl;
+        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[Mgr.CurrentProc]+debug << ".root has been closed successfully.\n" << endl;
+        else cout << "FILE Hist_" << Mgr.Procname[Mgr.CurrentProc]+debug << ".root COULD NOT BE CLOSED!\n" << endl;
     }
 
     Double_t TotalRunTime = totaltime.CpuTime();
@@ -311,7 +366,7 @@ void EE_HistMaker ( TString type, TString HLTname )
 
 
 /// -------------------------------- Muon Channel ------------------------------------ ///
-void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
+void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t DEBUG)
 {
     if ( !type.Length() )
     {
@@ -330,10 +385,17 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
 
     LocalFileMgr Mgr;
     vector<SelProc_t> Processes = Mgr.FindProc( type );
-    if ( SwitchROCCORR == kTRUE ) Mgr.SwitchROCCORR();  // If kTRUE, this will go through events that were selected without Rochester correction applied
+    TString RocCor = "_roccor";
+    if ( SwitchROCCORR == kTRUE )
+    {
+        Mgr.SwitchROCCORR();  // If kTRUE, this will go through events that were selected without Rochester correction applied
+        RocCor = "";
+    }
     TFile *f;
     TString OutputDir;
     Bool_t isBkgFull = kFALSE;  // To tell if this is the _EE_Bkg_Full process (it is handled differently)
+    TString debug = "";
+    if ( DEBUG == kTRUE ) debug = "_DEBUG";
 
     if ( !Processes.size() )
     {
@@ -347,7 +409,7 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
         Mgr.SetProc( _MuMu_Bkg_Full );
         // -- Output ROOTFile -- //
         OutputDir = Mgr.HistLocation;
-        f = new TFile( OutputDir+"Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root", "RECREATE" );
+        f = new TFile( OutputDir+"Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+RocCor+debug+".root", "RECREATE" );
         Processes.clear();
         Processes.push_back( _MuMu_DYTauTau_Full );
         Processes.push_back( _MuMu_ttbar_Full );
@@ -370,7 +432,7 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
         if ( isBkgFull == kFALSE )
         {
             OutputDir = Mgr.HistLocation;
-            f = new TFile( OutputDir+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
+            f = new TFile( OutputDir+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+RocCor+debug+".root", "RECREATE" );
         }
 
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
@@ -386,32 +448,42 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
         // -- For PU re-weighting -- //
         analyzer->SetupPileUpReWeighting_80X( Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root" );
 
-        // -- For Rochester correction -- //
-        TRandom3 *r1 = new TRandom3(0);
-
         // -- For efficiency SF -- //
         analyzer->SetupEfficiencyScaleFactor_BtoF();
         analyzer->SetupEfficiencyScaleFactor_GtoH();
 
         // -- Creating Histograms -- //
         TH1D *h_mass_fine_before_PUCorr = new TH1D( "h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
-        TH1D *h_mass_fine_before_RoccoR = new TH1D( "h_mass_fine_before_RoccoR_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
         TH1D *h_mass_fine_before_EffCorr = new TH1D( "h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
         TH1D *h_mass_fine = new TH1D( "h_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
         TH1D *h_mass = new TH1D( "h_mass_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
-        TH1D *h_Pt = new TH1D( "h_Pt_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600 );
+        TH1D *h_pT = new TH1D( "h_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
         TH1D *h_rapi = new TH1D( "h_rapi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
 
-        TH1D *h_nPU_beforePUCorr = new TH1D( "h_nPU_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
-        TH1D *h_nPU_beforeEffCorr = new TH1D( "h_nPU_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
-        TH1D *h_nPU = new TH1D( "h_nPU_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
-        TH1D *h_nVTX_beforePUCorr = new TH1D( "h_nVTX_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
-        TH1D *h_nVTX_beforeEffCorr = new TH1D( "h_nVTX_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
+        TH1D *h_nVTX_before_PUCorr = new TH1D( "h_nVTX_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
+        TH1D *h_nVTX_before_EffCorr = new TH1D( "h_nVTX_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
         TH1D *h_nVTX = new TH1D( "h_nVTX_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
 
-        TH1D *h_pT = new TH1D( "h_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600 );
-        TH1D *h_eta = new TH1D( "h_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
-        TH1D *h_phi = new TH1D( "h_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
+        TH1D *h_pT_lead_before_PUCorr = new TH1D( "h_pT_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_pT_sublead_before_PUCorr = new TH1D( "h_pT_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_eta_lead_before_PUCorr = new TH1D( "h_eta_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_eta_sublead_before_PUCorr = new TH1D( "h_eta_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_phi_lead_before_PUCorr = new TH1D( "h_phi_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_phi_sublead_before_PUCorr = new TH1D( "h_phi_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+
+        TH1D *h_pT_lead_before_EffCorr = new TH1D( "h_pT_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_pT_sublead_before_EffCorr = new TH1D( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_eta_lead_before_EffCorr = new TH1D( "h_eta_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_eta_sublead_before_EffCorr = new TH1D( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_phi_lead_before_EffCorr = new TH1D( "h_phi_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_phi_sublead_before_EffCorr = new TH1D( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+
+        TH1D *h_pT_lead = new TH1D( "h_pT_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_pT_sublead = new TH1D( "h_pT_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_eta_lead = new TH1D( "h_eta_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_eta_sublead = new TH1D( "h_eta_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_phi_lead = new TH1D( "h_phi_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_phi_sublead = new TH1D( "h_phi_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
 
         //Loop for all samples
         const Int_t Ntup = Mgr.FileLocation.size();
@@ -424,78 +496,54 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
 
             TChain *chain = new TChain( Mgr.TreeName[i_tup] );
             chain->Add( Mgr.FullLocation[i_tup] );
-            TChain *chain_noRC = new TChain( Mgr.TreeName[i_tup] );
-            chain_noRC->Add( Mgr.FullLocation[i_tup] );
 
             SelectedMuMu_t *MuMu = new SelectedMuMu_t();
             MuMu->CreateFromChain( chain );
-            SelectedMuMu_t *MuMu_noRC = new SelectedMuMu_t();
-            MuMu_noRC->CreateFromChain( chain_noRC );
-
-            RoccoR rc("./etc/RoccoR/rcdata.2016.v3");
 
             Int_t NEvents = chain->GetEntries();
             if ( NEvents != Mgr.nEvents[i_tup] ) cout << "\tEvent numbers do not match!!!" << endl;
-            cout << "\t[Total events: " << Mgr.Wsum[i_tup] << "]" << endl;
+            cout << "\t[Sum of weights: " << Mgr.Wsum[i_tup] << "]" << endl;
             cout << "\t[Selected Events: " << NEvents << "]" << endl;
+
+            if ( DEBUG == kTRUE ) NEvents = 10;
 
             myProgressBar_t bar( NEvents );
 
             for(Int_t i=0; i<NEvents; i++)
             {
                 MuMu->GetEvent(i);
-                MuMu_noRC->GetEvent(i);
+
+                if ( fabs(MuMu->Muon_eta->at(0)) > 2.4 || fabs(MuMu->Muon_eta->at(1)) > 2.4 )
+                {
+                    cout << "Muon etas:  [0] " << MuMu->Muon_eta->at(0) << "    [1] " << MuMu->Muon_eta->at(1) << endl;
+                    continue;
+                }
 
                 if ( MuMu->Muon_charge->size() != 2 )
                 {
                     cout << "Charge vector has " << MuMu->Muon_charge->size() << " elements!!!" << endl;
                     break;
                 }
-                if ( MuMu->Muon_TuneP_pT->size() != 2 )
+                if ( MuMu->Muon_pT->size() != 2 )
                 {
-                    cout << "pT vector has " << MuMu->Muon_TuneP_pT->size() << " elements!!!" << endl;
+                    cout << "pT vector has " << MuMu->Muon_pT->size() << " elements!!!" << endl;
                     break;
                 }
-                if ( MuMu->Muon_TuneP_eta->size() != 2 )
+                if ( MuMu->Muon_eta->size() != 2 )
                 {
-                    cout << "eta vector has " << MuMu->Muon_TuneP_eta->size() << " elements!!!" << endl;
+                    cout << "eta vector has " << MuMu->Muon_eta->size() << " elements!!!" << endl;
                     break;
                 }
-                if ( MuMu->Muon_TuneP_phi->size() != 2 )
+                if ( MuMu->Muon_phi->size() != 2 )
                 {
-                    cout << "phi vector has " << MuMu->Muon_TuneP_phi->size() << " elements!!!" << endl;
+                    cout << "phi vector has " << MuMu->Muon_phi->size() << " elements!!!" << endl;
                     break;
                 }
                 if ( MuMu->Muon_Energy->size() != 2 )
                 {
                     cout << "Energy vector has " << MuMu->Muon_Energy->size() << " elements!!!" << endl;
                     break;
-                }
-                if ( MuMu_noRC->Muon_charge->size() != 2 )
-                {
-                    cout << "Charge vector (no RC) has " << MuMu->Muon_charge->size() << " elements!!!" << endl;
-                    break;
-                }
-                if ( MuMu_noRC->Muon_TuneP_pT->size() != 2 )
-                {
-                    cout << "pT vector (no RC) has " << MuMu->Muon_TuneP_pT->size() << " elements!!!" << endl;
-                    break;
-                }
-                if ( MuMu_noRC->Muon_TuneP_eta->size() != 2 )
-                {
-                    cout << "eta vector (no RC) has " << MuMu->Muon_TuneP_eta->size() << " elements!!!" << endl;
-                    break;
-                }
-                if ( MuMu_noRC->Muon_TuneP_phi->size() != 2 )
-                {
-                    cout << "phi vector (no RC) has " << MuMu->Muon_TuneP_phi->size() << " elements!!!" << endl;
-                    break;
-                }
-                if ( MuMu_noRC->Muon_Energy->size() != 2 )
-                {
-                    cout << "Energy vector (no RC) has " << MuMu->Muon_Energy->size() << " elements!!!" << endl;
-                    break;
-                }
+                }                
 
                 Double_t GenWeight = MuMu->GENEvt_weight;
 
@@ -510,32 +558,12 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
                 Double_t TotWeight = GenWeight;
                 if( Mgr.isMC == kTRUE ) TotWeight = ( L * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup] ) * GenWeight;
 
-                // -- Rochester correction -- //
-                for ( Int_t iter = 0; i<=1; i++ )
-                {
-                    Double_t rndm[2], SF=0; r1->RndmArray(2, rndm);
-                    Int_t s, m;
-
-                    if( Mgr.Type == "DATA" )
-                            SF = rc.kScaleDT(MuMu->Muon_charge->at(iter), MuMu->Muon_TuneP_pT->at(iter), MuMu->Muon_TuneP_eta->at(iter),
-                                             MuMu->Muon_TuneP_phi->at(iter), s=0, m=0);
-                    else
-                            SF = rc.kScaleAndSmearMC(MuMu->Muon_charge->at(iter), MuMu->Muon_TuneP_pT->at(iter),
-                                                     MuMu->Muon_TuneP_eta->at(iter), MuMu->Muon_TuneP_phi->at(iter),
-                                                     MuMu->Muon_trackerLayers->at(iter), rndm[0], rndm[1], s=0, m=0);
-
-                    MuMu->Muon_TuneP_pT->at(iter) = SF*MuMu->Muon_TuneP_pT->at(iter);
-                }
-
                 if( MuMu->isSelPassed == kTRUE )
                 {
-                    TLorentzVector mu1, mu2, mu1_noRC, mu2_noRC;
-                    mu1.SetPtEtaPhiE( MuMu->Muon_TuneP_pT->at(0), MuMu->Muon_TuneP_eta->at(0), MuMu->Muon_TuneP_phi->at(0), MuMu->Muon_Energy->at(0) );
-                    mu2.SetPtEtaPhiE( MuMu->Muon_TuneP_pT->at(1), MuMu->Muon_TuneP_eta->at(1), MuMu->Muon_TuneP_phi->at(1), MuMu->Muon_Energy->at(1) );
-                    mu1_noRC.SetPtEtaPhiE( MuMu_noRC->Muon_TuneP_pT->at(0), MuMu_noRC->Muon_TuneP_eta->at(0), MuMu_noRC->Muon_TuneP_phi->at(0),
-                                           MuMu_noRC->Muon_Energy->at(0) );
-                    mu2_noRC.SetPtEtaPhiE( MuMu_noRC->Muon_TuneP_pT->at(1), MuMu_noRC->Muon_TuneP_eta->at(1), MuMu_noRC->Muon_TuneP_phi->at(1),
-                                           MuMu_noRC->Muon_Energy->at(1) );
+                    TLorentzVector mu1, mu2;
+                    mu1.SetPtEtaPhiE( MuMu->Muon_pT->at(0), MuMu->Muon_eta->at(0), MuMu->Muon_phi->at(0), MuMu->Muon_Energy->at(0) );
+                    mu2.SetPtEtaPhiE( MuMu->Muon_pT->at(1), MuMu->Muon_eta->at(1), MuMu->Muon_phi->at(1), MuMu->Muon_Energy->at(1) );
+
                     // -- Apply efficiency scale factor -- //
                     if( Mgr.isMC == kTRUE )
                     {
@@ -547,29 +575,45 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
                     Double_t reco_Pt = ( mu1 + mu2 ).Pt();
                     Double_t reco_rapi = ( mu1 + mu2 ).Rapidity();
                     Double_t reco_mass = ( mu1 + mu2 ).M();
-                    Double_t reco_mass_noRC = ( mu1_noRC + mu2_noRC ).M();
 
                     h_mass_fine_before_PUCorr->Fill( reco_mass, TotWeight );
-                    h_mass_fine_before_RoccoR->Fill( reco_mass_noRC, TotWeight * PUWeight );
                     h_mass_fine_before_EffCorr->Fill( reco_mass, TotWeight * PUWeight );
                     h_mass_fine->Fill( reco_mass, TotWeight * PUWeight * effweight );
                     h_mass->Fill( reco_mass, TotWeight * PUWeight * effweight );
-                    h_Pt->Fill( reco_Pt, TotWeight * PUWeight * effweight );
+                    h_pT->Fill( reco_Pt, TotWeight * PUWeight * effweight );
                     h_rapi->Fill( reco_rapi, TotWeight * PUWeight * effweight );
 
-                    h_nPU_beforePUCorr->Fill( MuMu->nPileUp, TotWeight );
-                    h_nPU_beforeEffCorr->Fill( MuMu->nPileUp, TotWeight * PUWeight );
-                    h_nPU->Fill( MuMu->nPileUp, TotWeight * PUWeight * effweight );
-                    h_nVTX_beforePUCorr->Fill( MuMu->nVertices, TotWeight );
-                    h_nVTX_beforeEffCorr->Fill( MuMu->nVertices, TotWeight * PUWeight );
+                    h_nVTX_before_PUCorr->Fill( MuMu->nVertices, TotWeight );
+                    h_nVTX_before_EffCorr->Fill( MuMu->nVertices, TotWeight * PUWeight );
                     h_nVTX->Fill( MuMu->nVertices, TotWeight * PUWeight * effweight );
 
-                    h_pT->Fill( MuMu->Muon_TuneP_pT->at(0), TotWeight * PUWeight * effweight );
-                    h_pT->Fill( MuMu->Muon_TuneP_pT->at(1), TotWeight * PUWeight * effweight );
-                    h_eta->Fill( MuMu->Muon_TuneP_eta->at(0), TotWeight * PUWeight * effweight );
-                    h_eta->Fill( MuMu->Muon_TuneP_eta->at(1), TotWeight * PUWeight * effweight );
-                    h_phi->Fill( MuMu->Muon_TuneP_phi->at(0), TotWeight * PUWeight * effweight );
-                    h_phi->Fill( MuMu->Muon_TuneP_phi->at(1), TotWeight * PUWeight * effweight );
+                    int lead=0, sublead=1;
+                    if ( MuMu->Muon_pT->at(0) < MuMu->Muon_pT->at(1) )
+                    {
+                        lead = 1;
+                        sublead = 0;
+                    }
+
+                    h_pT_lead_before_PUCorr->Fill( MuMu->Muon_pT->at(lead), TotWeight );
+                    h_pT_sublead_before_PUCorr->Fill( MuMu->Muon_pT->at(sublead), TotWeight );
+                    h_eta_lead_before_PUCorr->Fill( MuMu->Muon_eta->at(lead), TotWeight );
+                    h_eta_sublead_before_PUCorr->Fill( MuMu->Muon_eta->at(sublead), TotWeight );
+                    h_phi_lead_before_PUCorr->Fill( MuMu->Muon_phi->at(lead), TotWeight );
+                    h_phi_sublead_before_PUCorr->Fill( MuMu->Muon_phi->at(sublead), TotWeight );
+
+                    h_pT_lead_before_EffCorr->Fill( MuMu->Muon_pT->at(lead), TotWeight * PUWeight );
+                    h_pT_sublead_before_EffCorr->Fill( MuMu->Muon_pT->at(sublead), TotWeight * PUWeight );
+                    h_eta_lead_before_EffCorr->Fill( MuMu->Muon_eta->at(lead), TotWeight * PUWeight );
+                    h_eta_sublead_before_EffCorr->Fill( MuMu->Muon_eta->at(sublead), TotWeight * PUWeight );
+                    h_phi_lead_before_EffCorr->Fill( MuMu->Muon_phi->at(lead), TotWeight * PUWeight );
+                    h_phi_sublead_before_EffCorr->Fill( MuMu->Muon_phi->at(sublead), TotWeight * PUWeight );
+
+                    h_pT_lead->Fill( MuMu->Muon_pT->at(lead), TotWeight * PUWeight * effweight );
+                    h_pT_sublead->Fill( MuMu->Muon_pT->at(sublead), TotWeight * PUWeight * effweight );
+                    h_eta_lead->Fill( MuMu->Muon_eta->at(lead), TotWeight * PUWeight * effweight );
+                    h_eta_sublead->Fill( MuMu->Muon_eta->at(sublead), TotWeight * PUWeight * effweight );
+                    h_phi_lead->Fill( MuMu->Muon_phi->at(lead), TotWeight * PUWeight * effweight );
+                    h_phi_sublead->Fill( MuMu->Muon_phi->at(sublead), TotWeight * PUWeight * effweight );
 
                 }// End of event selection
                 bar.Draw(i);
@@ -587,23 +631,36 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
         cout << "\tWriting into file...";
 
         h_mass_fine_before_PUCorr->Write();
-        h_mass_fine_before_RoccoR->Write();
         h_mass_fine_before_EffCorr->Write();
         h_mass_fine->Write();
         h_mass->Write();
-        h_Pt->Write();
+        h_pT->Write();
         h_rapi->Write();
 
-        h_nPU_beforePUCorr->Write();
-        h_nPU_beforeEffCorr->Write();
-        h_nPU->Write();
-        h_nVTX_beforePUCorr->Write();
-        h_nVTX_beforeEffCorr->Write();
+        h_nVTX_before_PUCorr->Write();
+        h_nVTX_before_EffCorr->Write();
         h_nVTX->Write();
 
-        h_pT->Write();
-        h_eta->Write();
-        h_phi->Write();
+        h_pT_lead_before_PUCorr->Write();
+        h_pT_sublead_before_PUCorr->Write();
+        h_eta_lead_before_PUCorr->Write();
+        h_eta_sublead_before_PUCorr->Write();
+        h_phi_lead_before_PUCorr->Write();
+        h_phi_sublead_before_PUCorr->Write();
+
+        h_pT_lead_before_EffCorr->Write();
+        h_pT_sublead_before_EffCorr->Write();
+        h_eta_lead_before_EffCorr->Write();
+        h_eta_sublead_before_EffCorr->Write();
+        h_phi_lead_before_EffCorr->Write();
+        h_phi_sublead_before_EffCorr->Write();
+
+        h_pT_lead->Write();
+        h_pT_sublead->Write();
+        h_eta_lead->Write();
+        h_eta_sublead->Write();
+        h_phi_lead->Write();
+        h_phi_sublead->Write();
 
         cout << " Finished." << endl;
 
@@ -612,13 +669,13 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
     f->Close();
     if ( isBkgFull == kTRUE )
     {
-        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[_MuMu_Bkg_Full] << ".root has been closed successfully.\n" << endl;
-        else cout << "FILE Hist_" << Mgr.Procname[_MuMu_Bkg_Full] << ".root COULD NOT BE CLOSED!\n" << endl;
+        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[_MuMu_Bkg_Full]+RocCor+debug << ".root has been closed successfully.\n" << endl;
+        else cout << "FILE Hist_" << Mgr.Procname[_MuMu_Bkg_Full]+RocCor+debug << ".root COULD NOT BE CLOSED!\n" << endl;
     }
     else
     {
-        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[Mgr.CurrentProc] << ".root has been closed successfully.\n" << endl;
-        else cout << "FILE Hist_" << Mgr.Procname[Mgr.CurrentProc] << ".root COULD NOT BE CLOSED!\n" << endl;
+        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[Mgr.CurrentProc]+RocCor+debug << ".root has been closed successfully.\n" << endl;
+        else cout << "FILE Hist_" << Mgr.Procname[Mgr.CurrentProc]+RocCor+debug << ".root COULD NOT BE CLOSED!\n" << endl;
     }
 
     Double_t TotalRunTime = totaltime.CpuTime();
@@ -631,7 +688,7 @@ void MuMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
 
 
 /// --------------------------------- EMu events --------------------------------- ///
-void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
+void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t DEBUG)
 {
     if ( !type.Length() )
     {
@@ -650,10 +707,17 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
 
     LocalFileMgr Mgr;
     vector<SelProc_t> Processes = Mgr.FindProc( type );
-    if ( SwitchROCCORR == kTRUE ) Mgr.SwitchROCCORR(); // If kTRUE, this will go through events that were selected without Rochester correction applied
+    TString RocCor = "_roccor";
+    if ( SwitchROCCORR == kTRUE )
+    {
+        Mgr.SwitchROCCORR();  // If kTRUE, this will go through events that were selected without Rochester correction applied
+        RocCor = "";
+    }
     TFile *f;
     TString OutputDir;
     Bool_t isBkgFull = kFALSE;  // To tell if this is the _EE_Bkg_Full process (it is handled differently)
+    TString debug = "";
+    if ( DEBUG == kTRUE ) debug = "_DEBUG";
 
     if ( !Processes.size() )
     {
@@ -667,7 +731,7 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
         Mgr.SetProc( _EMu_Bkg_Full );
         // -- Output ROOTFile -- //
         OutputDir = Mgr.HistLocation;
-        f = new TFile( OutputDir+"Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root", "RECREATE" );
+        f = new TFile( OutputDir+"Hist_"+Mgr.Procname[_EMu_Bkg_Full]+RocCor+debug+".root", "RECREATE" );
         Processes.clear();
         Processes.push_back( _EMu_DYTauTau_Full );
         Processes.push_back( _EMu_ttbar_Full );
@@ -690,7 +754,7 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
         if ( isBkgFull == kFALSE )
         {
             OutputDir = Mgr.HistLocation;
-            f = new TFile( OutputDir+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE" );
+            f = new TFile( OutputDir+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+RocCor+debug+".root", "RECREATE" );
         }
 
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
@@ -706,46 +770,66 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
         // -- For PU re-weighting -- //
         analyzer->SetupPileUpReWeighting_80X( Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root" );
 
-        // -- For Rochester correction -- //
-        TRandom3 *r1 = new TRandom3(0);
-
         // -- For efficiency SF -- //
         analyzer->SetupEfficiencyScaleFactor_BtoF();
         analyzer->SetupEfficiencyScaleFactor_GtoH();
+        analyzer->SetupEfficiencyScaleFactor_electron();
 
         // -- Creating Histograms -- //
         TH1D *h_emu_mass_fine_before_PUCorr = new TH1D( "h_emu_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
-        TH1D *h_emu_mass_fine_before_RoccoR = new TH1D( "h_emu_mass_fine_before_RoccoR_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
         TH1D *h_emu_mass_fine_before_EffCorr = new TH1D( "h_emu_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
         TH1D *h_emu_mass_fine = new TH1D( "h_emu_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
         TH1D *h_emu_mass = new TH1D( "h_emu_mass_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
         TH1D *h_emuSS_mass_fine_before_PUCorr = new TH1D( "h_emuSS_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
-        TH1D *h_emuSS_mass_fine_before_RoccoR = new TH1D( "h_emuSS_mass_fine_before_RoccoR_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
         TH1D *h_emuSS_mass_fine_before_EffCorr = new TH1D( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
         TH1D *h_emuSS_mass_fine = new TH1D( "h_emuSS_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
         TH1D *h_emuSS_mass = new TH1D( "h_emuSS_mass_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
 
-        TH1D *h_nPU_beforePUCorr = new TH1D( "h_nPU_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
-        TH1D *h_nPU_beforeEffCorr = new TH1D( "h_nPU_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
-        TH1D *h_nPU = new TH1D( "h_nPU_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
-        TH1D *h_nVTX_beforePUCorr = new TH1D( "h_nVTX_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
-        TH1D *h_nVTX_beforeEffCorr = new TH1D( "h_nVTX_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
+        TH1D *h_nVTX_before_PUCorr = new TH1D( "h_nVTX_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
+        TH1D *h_nVTX_before_EffCorr = new TH1D( "h_nVTX_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
         TH1D *h_nVTX = new TH1D( "h_nVTX_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
 
+        TH1D *h_ele_pT_before_PUCorr = new TH1D( "h_ele_pT_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_ele_eta_before_PUCorr = new TH1D( "h_ele_eta_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_ele_phi_before_PUCorr = new TH1D( "h_ele_phi_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_eleSS_pT_before_PUCorr = new TH1D( "h_eleSS_pT_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_eleSS_eta_before_PUCorr = new TH1D( "h_eleSS_eta_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_eleSS_phi_before_PUCorr = new TH1D( "h_eleSS_phi_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
 
-        TH1D *h_ele_pT = new TH1D( "h_ele_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600 );
-        TH1D *h_ele_eta = new TH1D( "h_ele_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
-        TH1D *h_ele_phi = new TH1D( "h_ele_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
-        TH1D *h_eleSS_pT = new TH1D( "h_eleSS_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600 );
-        TH1D *h_eleSS_eta = new TH1D( "h_eleSS_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
-        TH1D *h_eleSS_phi = new TH1D( "h_eleSS_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
+        TH1D *h_ele_pT_before_EffCorr = new TH1D( "h_ele_pT_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_ele_eta_before_EffCorr = new TH1D( "h_ele_eta_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_ele_phi_before_EffCorr = new TH1D( "h_ele_phi_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_eleSS_pT_before_EffCorr = new TH1D( "h_eleSS_pT_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_eleSS_eta_before_EffCorr = new TH1D( "h_eleSS_eta_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_eleSS_phi_before_EffCorr = new TH1D( "h_eleSS_phi_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
 
-        TH1D *h_mu_pT = new TH1D( "h_mu_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600 );
-        TH1D *h_mu_eta = new TH1D( "h_mu_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
-        TH1D *h_mu_phi = new TH1D( "h_mu_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
-        TH1D *h_muSS_pT = new TH1D( "h_muSS_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 300, 0, 600 );
-        TH1D *h_muSS_eta = new TH1D( "h_muSS_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
-        TH1D *h_muSS_phi = new TH1D( "h_muSS_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
+        TH1D *h_ele_pT = new TH1D( "h_ele_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_ele_eta = new TH1D( "h_ele_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_ele_phi = new TH1D( "h_ele_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_eleSS_pT = new TH1D( "h_eleSS_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_eleSS_eta = new TH1D( "h_eleSS_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_eleSS_phi = new TH1D( "h_eleSS_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+
+        TH1D *h_mu_pT_before_PUCorr = new TH1D( "h_mu_pT_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_mu_eta_before_PUCorr = new TH1D( "h_mu_eta_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_mu_phi_before_PUCorr = new TH1D( "h_mu_phi_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_muSS_pT_before_PUCorr = new TH1D( "h_muSS_pT_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_muSS_eta_before_PUCorr = new TH1D( "h_muSS_eta_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_muSS_phi_before_PUCorr = new TH1D( "h_muSS_phi_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+
+        TH1D *h_mu_pT_before_EffCorr = new TH1D( "h_mu_pT_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_mu_eta_before_EffCorr = new TH1D( "h_mu_eta_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_mu_phi_before_EffCorr = new TH1D( "h_mu_phi_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_muSS_pT_before_EffCorr = new TH1D( "h_muSS_pT_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_muSS_eta_before_EffCorr = new TH1D( "h_muSS_eta_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_muSS_phi_before_EffCorr = new TH1D( "h_muSS_phi_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+
+        TH1D *h_mu_pT = new TH1D( "h_mu_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_mu_eta = new TH1D( "h_mu_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_mu_phi = new TH1D( "h_mu_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_muSS_pT = new TH1D( "h_muSS_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_muSS_eta = new TH1D( "h_muSS_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_muSS_phi = new TH1D( "h_muSS_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
 
         //Loop for all samples
         const Int_t Ntup = Mgr.FileLocation.size();
@@ -758,27 +842,22 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
 
             TChain *chain = new TChain( Mgr.TreeName[i_tup] );
             chain->Add( Mgr.FullLocation[i_tup] );
-            TChain *chain_noRC = new TChain( Mgr.TreeName[i_tup] );
-            chain_noRC->Add( Mgr.FullLocation[i_tup] );
 
             SelectedEMu_t *EMu = new SelectedEMu_t();
-            EMu->CreateFromChain( chain );
-            SelectedEMu_t *EMu_noRC = new SelectedEMu_t();
-            EMu_noRC->CreateFromChain( chain_noRC );
-
-            RoccoR rc("./etc/RoccoR/rcdata.2016.v3");           
+            EMu->CreateFromChain( chain );        
 
             Int_t NEvents = chain->GetEntries();
             if ( NEvents != Mgr.nEvents[i_tup] ) cout << "\tEvent numbers do not match!!!" << endl;
-            cout << "\t[Total events: " << Mgr.Wsum[i_tup] << "]" << endl;
+            cout << "\t[Sum of weights: " << Mgr.Wsum[i_tup] << "]" << endl;
             cout << "\t[Selected Events: " << NEvents << "]" << endl;
+
+            if ( DEBUG == kTRUE ) NEvents = 10;
 
             myProgressBar_t bar( NEvents );
 
             for(Int_t i=0; i<NEvents; i++)
             {
                 EMu->GetEvent(i);
-                EMu_noRC->GetEvent(i);
 
                 Double_t GenWeight = EMu->GENEvt_weight;
 
@@ -793,76 +872,86 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
                 Double_t TotWeight = GenWeight;
                 if( Mgr.isMC == kTRUE ) TotWeight = ( L * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup] ) * GenWeight;
 
-                // -- Rochester correction -- //
-                Double_t rndm[2], SF=0; r1->RndmArray(2, rndm);
-                Int_t s, m;
-
-                if( Mgr.Type == "DATA" )
-                        SF = rc.kScaleDT(EMu->Muon_charge, EMu->Muon_TuneP_pT, EMu->Muon_TuneP_eta,
-                                         EMu->Muon_TuneP_phi, s=0, m=0);
-                else
-                        SF = rc.kScaleAndSmearMC(EMu->Muon_charge, EMu->Muon_TuneP_pT,
-                                                 EMu->Muon_TuneP_eta, EMu->Muon_TuneP_phi,
-                                                 EMu->Muon_trackerLayers, rndm[0], rndm[1], s=0, m=0);
-
-                EMu->Muon_TuneP_pT = SF*EMu->Muon_TuneP_pT;
-
                 if( EMu->isSelPassed == kTRUE )
                 {
-                    TLorentzVector mu, ele, mu_noRC;
-                    mu.SetPtEtaPhiE( EMu->Muon_TuneP_pT, EMu->Muon_TuneP_eta, EMu->Muon_TuneP_phi, EMu->Muon_Energy );
+                    TLorentzVector mu, ele;
+                    mu.SetPtEtaPhiE( EMu->Muon_pT, EMu->Muon_eta, EMu->Muon_phi, EMu->Muon_Energy );
                     ele.SetPtEtaPhiE( EMu->Electron_pT, EMu->Electron_eta, EMu->Electron_phi, EMu->Electron_Energy );
-                    mu_noRC.SetPtEtaPhiE( EMu_noRC->Muon_TuneP_pT, EMu_noRC->Muon_TuneP_eta, EMu_noRC->Muon_TuneP_phi, EMu_noRC->Muon_Energy );
+
                     // -- Apply efficiency scale factor -- //
                     if( Mgr.isMC == kTRUE )
                     {
-                        weight1 = analyzer->EfficiencySF_EventWeight_HLT_BtoF( EMu );
-                        weight2 = analyzer->EfficiencySF_EventWeight_HLT_GtoH( EMu );
+                        weight1 = analyzer->EfficiencySF_EventWeight_emu_BtoF( EMu );
+                        weight2 = analyzer->EfficiencySF_EventWeight_emu_GtoH( EMu );
                         effweight = (L_B2F*weight1 + L_G2H*weight2)/L_B2H;
                     }
 
-                    Double_t reco_Pt = ( mu + ele ).Pt();
-                    Double_t reco_rapi = ( mu + ele ).Rapidity();
                     Double_t reco_mass = ( mu + ele ).M();
-                    Double_t reco_mass_noRC = ( mu_noRC + ele ).M();
 
                     if ( EMu->Electron_charge != EMu->Muon_charge )
                     {
                         h_emu_mass_fine_before_PUCorr->Fill( reco_mass, TotWeight );
-                        h_emu_mass_fine_before_RoccoR->Fill( reco_mass_noRC, TotWeight * PUWeight );
                         h_emu_mass_fine_before_EffCorr->Fill( reco_mass, TotWeight * PUWeight );
                         h_emu_mass_fine->Fill( reco_mass, TotWeight * PUWeight * effweight );
                         h_emu_mass->Fill( reco_mass, TotWeight * PUWeight * effweight );
+
+                        h_ele_pT_before_PUCorr->Fill( EMu->Electron_pT, TotWeight );
+                        h_ele_eta_before_PUCorr->Fill( EMu->Electron_eta, TotWeight );
+                        h_ele_phi_before_PUCorr->Fill( EMu->Electron_phi, TotWeight );
+
+                        h_ele_pT_before_EffCorr->Fill( EMu->Electron_pT, TotWeight * PUWeight );
+                        h_ele_eta_before_EffCorr->Fill( EMu->Electron_eta, TotWeight * PUWeight );
+                        h_ele_phi_before_EffCorr->Fill( EMu->Electron_phi, TotWeight * PUWeight );
 
                         h_ele_pT->Fill( EMu->Electron_pT, TotWeight * PUWeight * effweight );
                         h_ele_eta->Fill( EMu->Electron_eta, TotWeight * PUWeight * effweight );
                         h_ele_phi->Fill( EMu->Electron_phi, TotWeight * PUWeight * effweight );
 
-                        h_mu_pT->Fill( EMu->Muon_TuneP_pT, TotWeight * PUWeight * effweight );
-                        h_mu_eta->Fill( EMu->Muon_TuneP_eta, TotWeight * PUWeight * effweight );
-                        h_mu_phi->Fill( EMu->Muon_TuneP_phi, TotWeight * PUWeight * effweight );
+                        h_mu_pT_before_PUCorr->Fill( EMu->Muon_pT, TotWeight );
+                        h_mu_eta_before_PUCorr->Fill( EMu->Muon_eta, TotWeight );
+                        h_mu_phi_before_PUCorr->Fill( EMu->Muon_phi, TotWeight );
+
+                        h_mu_pT_before_EffCorr->Fill( EMu->Muon_pT, TotWeight * PUWeight );
+                        h_mu_eta_before_EffCorr->Fill( EMu->Muon_eta, TotWeight * PUWeight );
+                        h_mu_phi_before_EffCorr->Fill( EMu->Muon_phi, TotWeight * PUWeight );
+
+                        h_mu_pT->Fill( EMu->Muon_pT, TotWeight * PUWeight * effweight );
+                        h_mu_eta->Fill( EMu->Muon_eta, TotWeight * PUWeight * effweight );
+                        h_mu_phi->Fill( EMu->Muon_phi, TotWeight * PUWeight * effweight );
                     }
                     else
                     {
                         h_emuSS_mass_fine_before_PUCorr->Fill( reco_mass, TotWeight );
-                        h_emuSS_mass_fine_before_RoccoR->Fill( reco_mass_noRC, TotWeight * PUWeight );
                         h_emuSS_mass_fine_before_EffCorr->Fill( reco_mass, TotWeight * PUWeight );
                         h_emuSS_mass_fine->Fill( reco_mass, TotWeight * PUWeight * effweight );
                         h_emuSS_mass->Fill( reco_mass, TotWeight * PUWeight * effweight );
+
+                        h_eleSS_pT_before_PUCorr->Fill( EMu->Electron_pT, TotWeight );
+                        h_eleSS_eta_before_PUCorr->Fill( EMu->Electron_eta, TotWeight );
+                        h_eleSS_phi_before_PUCorr->Fill( EMu->Electron_phi, TotWeight );
+
+                        h_eleSS_pT_before_EffCorr->Fill( EMu->Electron_pT, TotWeight * PUWeight );
+                        h_eleSS_eta_before_EffCorr->Fill( EMu->Electron_eta, TotWeight * PUWeight );
+                        h_eleSS_phi_before_EffCorr->Fill( EMu->Electron_phi, TotWeight * PUWeight );
 
                         h_eleSS_pT->Fill( EMu->Electron_pT, TotWeight * PUWeight * effweight );
                         h_eleSS_eta->Fill( EMu->Electron_eta, TotWeight * PUWeight * effweight );
                         h_eleSS_phi->Fill( EMu->Electron_phi, TotWeight * PUWeight * effweight );
 
+                        h_muSS_pT_before_PUCorr->Fill( EMu->Muon_TuneP_pT, TotWeight );
+                        h_muSS_eta_before_PUCorr->Fill( EMu->Muon_TuneP_eta, TotWeight );
+                        h_muSS_phi_before_PUCorr->Fill( EMu->Muon_TuneP_phi, TotWeight );
+
+                        h_muSS_pT_before_EffCorr->Fill( EMu->Muon_TuneP_pT, TotWeight * PUWeight );
+                        h_muSS_eta_before_EffCorr->Fill( EMu->Muon_TuneP_eta, TotWeight * PUWeight );
+                        h_muSS_phi_before_EffCorr->Fill( EMu->Muon_TuneP_phi, TotWeight * PUWeight );
+
                         h_muSS_pT->Fill( EMu->Muon_TuneP_pT, TotWeight * PUWeight * effweight );
                         h_muSS_eta->Fill( EMu->Muon_TuneP_eta, TotWeight * PUWeight * effweight );
                         h_muSS_phi->Fill( EMu->Muon_TuneP_phi, TotWeight * PUWeight * effweight );
                     }
-                    h_nPU_beforePUCorr->Fill( EMu->nPileUp, TotWeight );
-                    h_nPU_beforeEffCorr->Fill( EMu->nPileUp, TotWeight * PUWeight );
-                    h_nPU->Fill( EMu->nPileUp, TotWeight * PUWeight * effweight );
-                    h_nVTX_beforePUCorr->Fill( EMu->nVertices, TotWeight );
-                    h_nVTX_beforeEffCorr->Fill( EMu->nVertices, TotWeight * PUWeight );
+                    h_nVTX_before_PUCorr->Fill( EMu->nVertices, TotWeight );
+                    h_nVTX_before_EffCorr->Fill( EMu->nVertices, TotWeight * PUWeight );
                     h_nVTX->Fill( EMu->nVertices, TotWeight * PUWeight * effweight );
 
                 }// End of event selection
@@ -881,22 +970,31 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
         cout << "\tWriting into file...";
 
         h_emu_mass_fine_before_PUCorr->Write();
-        h_emu_mass_fine_before_RoccoR->Write();
         h_emu_mass_fine_before_EffCorr->Write();
         h_emu_mass_fine->Write();
         h_emu_mass->Write();
         h_emuSS_mass_fine_before_PUCorr->Write();
-        h_emuSS_mass_fine_before_RoccoR->Write();
         h_emuSS_mass_fine_before_EffCorr->Write();
         h_emuSS_mass_fine->Write();
         h_emuSS_mass->Write();
 
-        h_nPU_beforePUCorr->Write();
-        h_nPU_beforeEffCorr->Write();
-        h_nPU->Write();
-        h_nVTX_beforePUCorr->Write();
-        h_nVTX_beforeEffCorr->Write();
+        h_nVTX_before_PUCorr->Write();
+        h_nVTX_before_EffCorr->Write();
         h_nVTX->Write();
+
+        h_ele_pT_before_PUCorr->Write();
+        h_ele_eta_before_PUCorr->Write();
+        h_ele_phi_before_PUCorr->Write();
+        h_eleSS_pT_before_PUCorr->Write();
+        h_eleSS_eta_before_PUCorr->Write();
+        h_eleSS_phi_before_PUCorr->Write();
+
+        h_ele_pT_before_EffCorr->Write();
+        h_ele_eta_before_EffCorr->Write();
+        h_ele_phi_before_EffCorr->Write();
+        h_eleSS_pT_before_EffCorr->Write();
+        h_eleSS_eta_before_EffCorr->Write();
+        h_eleSS_phi_before_EffCorr->Write();
 
         h_ele_pT->Write();
         h_ele_eta->Write();
@@ -905,12 +1003,28 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
         h_eleSS_eta->Write();
         h_eleSS_phi->Write();
 
+        h_mu_pT_before_PUCorr->Write();
+        h_mu_eta_before_PUCorr->Write();
+        h_mu_phi_before_PUCorr->Write();
+        h_muSS_pT_before_PUCorr->Write();
+        h_muSS_eta_before_PUCorr->Write();
+        h_muSS_phi_before_PUCorr->Write();
+
+        h_mu_pT_before_EffCorr->Write();
+        h_mu_eta_before_EffCorr->Write();
+        h_mu_phi_before_EffCorr->Write();
+        h_muSS_pT_before_EffCorr->Write();
+        h_muSS_eta_before_EffCorr->Write();
+        h_muSS_phi_before_EffCorr->Write();
+
+
         h_mu_pT->Write();
         h_mu_eta->Write();
         h_mu_phi->Write();
         h_muSS_pT->Write();
         h_muSS_eta->Write();
         h_muSS_phi->Write();
+
 
         cout << " Finished." << endl;       
 
@@ -919,13 +1033,13 @@ void EMu_HistMaker ( TString type, Bool_t SwitchROCCORR, TString HLTname )
     f->Close();
     if ( isBkgFull == kTRUE )
     {
-        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[_EMu_Bkg_Full] << ".root has been closed successfully.\n" << endl;
-        else cout << "FILE Hist_" << Mgr.Procname[_EMu_Bkg_Full] << ".root COULD NOT BE CLOSED!\n" << endl;
+        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[_EMu_Bkg_Full]+RocCor+debug << ".root has been closed successfully.\n" << endl;
+        else cout << "FILE Hist_" << Mgr.Procname[_EMu_Bkg_Full]+RocCor+debug << ".root COULD NOT BE CLOSED!\n" << endl;
     }
     else
     {
-        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[Mgr.CurrentProc] << ".root has been closed successfully.\n" << endl;
-        else cout << "FILE Hist_" << Mgr.Procname[Mgr.CurrentProc] << ".root COULD NOT BE CLOSED!\n" << endl;
+        if ( !f->IsOpen() ) cout << "File Hist_" << Mgr.Procname[Mgr.CurrentProc]+RocCor+debug << ".root has been closed successfully.\n" << endl;
+        else cout << "FILE Hist_" << Mgr.Procname[Mgr.CurrentProc]+RocCor+debug << ".root COULD NOT BE CLOSED!\n" << endl;
     }
 
     Double_t TotalRunTime = totaltime.CpuTime();
@@ -943,7 +1057,7 @@ void MuMu_merge()
     LocalFileMgr Mgr;
 
     TH1D *h_mass_fine_before_PUCorr[7], *h_mass_fine_before_RoccoR[7], *h_mass_fine_before_EffCorr[7], *h_mass_fine[7], *h_mass[7], *h_Pt[7], *h_rapi[7],
-         *h_nPU_before_PUCorr[7], *h_nPU_before_EffCorr[7], *h_nPU[7], *h_pT[7], *h_eta[7], *h_phi[7];
+         *h_nPU_before_PUCorr[7], *h_nPU_before_EffCorr[7], *h_nPU[7], *h_nVTX_before_PUCorr[7], *h_nVTX_before_EffCorr[7], *h_nVTX[7], *h_pT[7], *h_eta[7], *h_phi[7];
 
     TFile* files[7];
     Mgr.SetProc(_MuMu_SingleMuon_Full);

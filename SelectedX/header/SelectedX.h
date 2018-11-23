@@ -2211,11 +2211,11 @@ public:
 //    std::vector<double> *vtxTrkDiENdof;
 //    std::vector<double> *vtxTrkDiE1Pt;
 //    std::vector<double> *vtxTrkDiE2Pt;
-//    std::vector<double> *vtxTrkEMuChi2;
-//    std::vector<double> *vtxTrkEMuProb;
-//    std::vector<double> *vtxTrkEMuNdof;
-//    std::vector<double> *vtxTrkEMu1Pt;
-//    std::vector<double> *vtxTrkEMu2Pt;
+    std::vector<double> *vtxTrkEMuChi2;
+    std::vector<double> *vtxTrkEMuProb;
+    std::vector<double> *vtxTrkEMuNdof;
+    std::vector<double> *vtxTrkEMu1Pt;
+    std::vector<double> *vtxTrkEMu2Pt;
 
     // -- Various Track Information -- //
     Double_t Muon_Best_pT;
@@ -2340,11 +2340,11 @@ public:
 //        vtxTrkDiENdof = new std::vector<double>;
 //        vtxTrkDiE1Pt = new std::vector<double>;
 //        vtxTrkDiE2Pt = new std::vector<double>;
-//        vtxTrkEMuChi2 = new std::vector<double>;
-//        vtxTrkEMuProb = new std::vector<double>;
-//        vtxTrkEMuNdof = new std::vector<double>;
-//        vtxTrkEMu1Pt = new std::vector<double>;
-//        vtxTrkEMu2Pt = new std::vector<double>;
+        vtxTrkEMuChi2 = new std::vector<double>;
+        vtxTrkEMuProb = new std::vector<double>;
+        vtxTrkEMuNdof = new std::vector<double>;
+        vtxTrkEMu1Pt = new std::vector<double>;
+        vtxTrkEMu2Pt = new std::vector<double>;
 
         return;
     }
@@ -2416,11 +2416,11 @@ public:
 //        chain->SetBranchAddress("vtxTrkDiENdof", &vtxTrkDiENdof);
 //        chain->SetBranchAddress("vtxTrkDiE1Pt", &vtxTrkDiE1Pt);
 //        chain->SetBranchAddress("vtxTrkDiE2Pt", &vtxTrkDiE2Pt);
-//        chain->SetBranchAddress("vtxTrkEMuChi2", &vtxTrkEMuChi2);
-//        chain->SetBranchAddress("vtxTrkEMuProb", &vtxTrkEMuProb);
-//        chain->SetBranchAddress("vtxTrkEMuNdof", &vtxTrkEMuNdof);
-//        chain->SetBranchAddress("vtxTrkEMu1Pt", &vtxTrkEMu1Pt);
-//        chain->SetBranchAddress("vtxTrkEMu2Pt", &vtxTrkEMu2Pt);
+        chain->SetBranchAddress("vtxTrkEMuChi2", &vtxTrkEMuChi2);
+        chain->SetBranchAddress("vtxTrkEMuProb", &vtxTrkEMuProb);
+        chain->SetBranchAddress("vtxTrkEMuNdof", &vtxTrkEMuNdof);
+        chain->SetBranchAddress("vtxTrkEMu1Pt", &vtxTrkEMu1Pt);
+        chain->SetBranchAddress("vtxTrkEMu2Pt", &vtxTrkEMu2Pt);
 
         chain->SetBranchAddress("Muon_Best_pT", &Muon_Best_pT);
         chain->SetBranchAddress("Muon_Best_pTError", &Muon_Best_pTError);
@@ -2555,11 +2555,11 @@ public:
 ////        chain->AddBranchToCache("vtxTrkDiENdof", 1);
 ////        chain->AddBranchToCache("vtxTrkDiE1Pt", 1);
 ////        chain->AddBranchToCache("vtxTrkDiE2Pt", 1);
-////        chain->AddBranchToCache("vtxTrkEMuChi2", 1);
-////        chain->AddBranchToCache("vtxTrkEMuProb", 1);
-////        chain->AddBranchToCache("vtxTrkEMuNdof", 1);
-////        chain->AddBranchToCache("vtxTrkEMu1Pt", 1);
-////        chain->AddBranchToCache("vtxTrkEMu2Pt", 1);
+//        chain->AddBranchToCache("vtxTrkEMuChi2", 1);
+//        chain->AddBranchToCache("vtxTrkEMuProb", 1);
+//        chain->AddBranchToCache("vtxTrkEMuNdof", 1);
+//        chain->AddBranchToCache("vtxTrkEMu1Pt", 1);
+//        chain->AddBranchToCache("vtxTrkEMu2Pt", 1);
 
 //        chain->AddBranchToCache("Muon_pT", 1);
 //        chain->AddBranchToCache("Muon_eta", 1);
@@ -2765,6 +2765,11 @@ public:
         tree->Branch("Muon_TuneP_Pz", &this->Muon_TuneP_Pz);
         tree->Branch("Muon_TuneP_eta", &this->Muon_TuneP_eta);
         tree->Branch("Muon_TuneP_phi", &this->Muon_TuneP_phi);
+        tree->Branch("vtxTrkEMuChi2", &this->vtxTrkEMuChi2);
+        tree->Branch("vtxTrkEMuProb", &this->vtxTrkEMuProb);
+        tree->Branch("vtxTrkEMuNdof", &this->vtxTrkEMuNdof);
+        tree->Branch("vtxTrkEMu1Pt", &this->vtxTrkEMu1Pt);
+        tree->Branch("vtxTrkEMu2Pt", &this->vtxTrkEMu2Pt);
         tree->Branch("Electron_pT", &this->Electron_pT);
         tree->Branch("Electron_eta", &this->Electron_eta);
         tree->Branch("Electron_phi", &this->Electron_phi);
@@ -2883,11 +2888,11 @@ public:
 //        chain->SetBranchStatus("vtxTrkDiENdof", 1);
 //        chain->SetBranchStatus("vtxTrkDiE1Pt", 1);
 //        chain->SetBranchStatus("vtxTrkDiE2Pt", 1);
-//        chain->SetBranchStatus("vtxTrkEMuChi2", 1);
-//        chain->SetBranchStatus("vtxTrkEMuProb", 1);
-//        chain->SetBranchStatus("vtxTrkEMuNdof", 1);
-//        chain->SetBranchStatus("vtxTrkEMu1Pt", 1);
-//        chain->SetBranchStatus("vtxTrkEMu2Pt", 1);
+        chain->SetBranchStatus("vtxTrkEMuChi2", 1);
+        chain->SetBranchStatus("vtxTrkEMuProb", 1);
+        chain->SetBranchStatus("vtxTrkEMuNdof", 1);
+        chain->SetBranchStatus("vtxTrkEMu1Pt", 1);
+        chain->SetBranchStatus("vtxTrkEMu2Pt", 1);
 
         chain->SetBranchStatus("Muon_pT", 1);
         chain->SetBranchStatus("Muon_eta", 1);

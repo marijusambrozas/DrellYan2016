@@ -11,6 +11,7 @@
 #include "SelectedX.h"
 #include <TGraphErrors.h>
 #include <TH2.h>
+#include <TGraphAsymmErrors.h>
 #include <iostream>
 
 #define Lumi 35867 // -- from Run2016B to Run2016H, JSON. unit: /pb, Updated at 2017.07.30 -- //
@@ -30,34 +31,28 @@ public:
 //	Double_t PileUpWeight[52];
 	Double_t PileUpWeight[75];
 
-	Double_t Eff_RecoID_data[5][4];
-	Double_t Eff_RecoID_MC[5][4];
-
-	Double_t Eff_Iso_data[5][4];
-	Double_t Eff_Iso_MC[5][4];
-
-	Double_t Eff_HLTv4p2_data[5][4];
-	Double_t Eff_HLTv4p2_MC[5][4];
-
-	Double_t Eff_HLTv4p3_data[5][4];
-	Double_t Eff_HLTv4p3_MC[5][4];
-
 	// -- For efficiency SF of BtoF -- //
-	Double_t Eff_RecoID_data_BtoF[4][7];
-	Double_t Eff_RecoID_MC_BtoF[4][7];
+        Double_t Eff_Reco_data_BtoF[15][1];
+        Double_t Eff_Reco_MC_BtoF[15][1];
 
-	Double_t Eff_Iso_data_BtoF[4][7];
-	Double_t Eff_Iso_MC_BtoF[4][7];
+        Double_t Eff_ID_data_BtoF[4][6];
+        Double_t Eff_ID_MC_BtoF[4][6];
+
+        Double_t Eff_Iso_data_BtoF[4][6];
+        Double_t Eff_Iso_MC_BtoF[4][6];
 
 	Double_t Eff_HLT_data_BtoF[4][7];
 	Double_t Eff_HLT_MC_BtoF[4][7];
 
 	// -- For efficiency SF of GtoH -- //
-	Double_t Eff_RecoID_data_GtoH[4][7];
-	Double_t Eff_RecoID_MC_GtoH[4][7];
+        Double_t Eff_Reco_data_GtoH[15][1];
+        Double_t Eff_Reco_MC_GtoH[15][1];
 
-	Double_t Eff_Iso_data_GtoH[4][7];
-	Double_t Eff_Iso_MC_GtoH[4][7];
+        Double_t Eff_ID_data_GtoH[4][6];
+        Double_t Eff_ID_MC_GtoH[4][6];
+
+        Double_t Eff_Iso_data_GtoH[4][6];
+        Double_t Eff_Iso_MC_GtoH[4][6];
 
 	Double_t Eff_HLT_data_GtoH[4][7];
 	Double_t Eff_HLT_MC_GtoH[4][7];
@@ -66,8 +61,11 @@ public:
 	Double_t Eff_Reco_data[30][1];
 	Double_t Eff_Reco_MC[30][1];
 
-	Double_t Eff_ID_data[10][5];
-	Double_t Eff_ID_MC[10][5];
+        Double_t Eff_ID_data[20][5];
+        Double_t Eff_ID_MC[20][5];
+
+        Double_t Eff_HLT_Leg2_data[20][7];
+        Double_t Eff_HLT_Leg2_MC[20][7];
 
 	// -- Constructor -- //
 	DYAnalyzer(TString HLTname);
@@ -75,15 +73,6 @@ public:
 	// -- Setup accetpance cuts -- //
 	void AssignAccThreshold(TString HLTname, TString *HLT, Double_t *LeadPtCut, Double_t *SubPtCut, Double_t *LeadEtaCut, Double_t *SubEtaCut);
 
-	////////////////////////////
-	// -- Setup MC samples -- //
-	////////////////////////////
-	void SetupMCsamples_v20160412_76X_MINIAODv2_CheckPremix( TString Type, vector<TString> *ntupleDirectory, vector<TString> *Tag, vector<Double_t> *Xsec, vector<Double_t> *nEvents );
-	void SetupMCsamples_Moriond17( TString Type, vector<TString> *ntupleDirectory, vector<TString> *Tag, vector<Double_t> *Xsec, vector<Double_t> *nEvents );
-	void SetupMCsamples_v20160309_76X_MiniAODv2( TString Type, vector<TString> *ntupleDirectory, vector<TString> *Tag, vector<Double_t> *Xsec, vector<Double_t> *nEvents );
-	void SetupMCsamples_v20160131_MiniAODv2( TString Type, vector<TString> *ntupleDirectory, vector<TString> *Tag, vector<Double_t> *Xsec, vector<Double_t> *nEvents );
-	void SetupMCsamples_v20160117_MiniAOD_JetMET( TString Type, vector<TString> *ntupleDirectory, vector<TString> *Tag, vector<Double_t> *Xsec, vector<Double_t> *nEvents );
-        void SetupDataSamples( TString Type, TString DataType, vector<TString> *ntupleDirectory, vector<TString> *Tag);
         Bool_t SeparateDYLLSample_isHardProcess(TString Tag, NtupleHandle *ntuple);
 	Bool_t Separate_ttbarSample(TString Tag, NtupleHandle *ntuple, vector<GenOthers> *GenTopCollection);
 
@@ -108,33 +97,32 @@ public:
 	/////////////////////////////////////////
 	// -- Setup Efficiency scale factor -- //
 	/////////////////////////////////////////
-	void SetupEfficiencyScaleFactor();
-	void SetupEfficiencyScaleFactor(TString ROOTFileName);
-	void SetupEfficiencyScaleFactor_BtoF();
+        // MUONS
+        void SetupEfficiencyScaleFactor_BtoF();
 	void SetupEfficiencyScaleFactor_GtoH();
-	void SetupEfficiencyScaleFactor_electron();
-	Double_t EfficiencySF_EventWeight_HLTv4p2(Muon mu1, Muon mu2);
-	Double_t EfficiencySF_EventWeight_HLTv4p3(Muon mu1, Muon mu2);
-	Double_t EfficiencySF_EventWeight_HLT_BtoF(Muon mu1, Muon mu2);
+        Double_t EfficiencySF_EventWeight_HLT_BtoF(Muon mu1, Muon mu2);
         Double_t EfficiencySF_EventWeight_HLT_BtoF(SelectedMuMu_t *MuMu);
-        Double_t EfficiencySF_EventWeight_HLT_BtoF(SelectedEMu_t *EMu);
-	Double_t EfficiencySF_EventWeight_HLT_GtoH(Muon mu1, Muon mu2);
+        Double_t EfficiencySF_EventWeight_HLT_GtoH(Muon mu1, Muon mu2);
         Double_t EfficiencySF_EventWeight_HLT_GtoH(SelectedMuMu_t *MuMu);
-        Double_t EfficiencySF_EventWeight_HLT_GtoH(SelectedEMu_t *EMu);
-	Double_t EfficiencySF_EventWeight_electron(Electron ele1, Electron ele2);
-        Double_t EfficiencySF_EventWeight_electron(SelectedEE_t *EE);
-	Int_t FindPtBin(Double_t Pt);
-	Int_t FindEtaBin(Double_t eta);
-	Int_t FindPtBin_trig(Double_t Pt);
-	Int_t FindEtaBin_trig(Double_t eta);
-	Int_t FindPtBin_Reco(Double_t Pt);
-	Int_t FindEtaBin_Reco(Double_t eta);
-	Int_t FindPtBin_ID(Double_t Pt);
-	Int_t FindEtaBin_ID(Double_t eta);
+        Int_t Find_muon_PtBin_Reco(Double_t Pt);
+        Int_t Find_muon_PtBin_ID(Double_t Pt);
+        Int_t Find_muon_PtBin_Iso(Double_t Pt);
+        Int_t Find_muon_PtBin_Trig(Double_t Pt);
+        Int_t Find_muon_EtaBin_Reco(Double_t eta);
+        Int_t Find_muon_EtaBin_ID(Double_t eta);
+        Int_t Find_muon_EtaBin_Iso(Double_t eta);
+        Int_t Find_muon_EtaBin_Trig(Double_t eta);
 
-	// -- outdated -- //
-	Double_t EfficiencySF_EventWeight(Muon mu1, Muon mu2, NtupleHandle *ntuple);
-	Double_t EfficiencySF_EventWeight_RecoIdIso(Muon mu1, Muon mu2, NtupleHandle *ntuple);
+        // ELECTRONS
+        void SetupEfficiencyScaleFactor_electron();
+        Double_t EfficiencySF_EventWeight_electron(Electron ele1, Electron ele2);
+        Double_t EfficiencySF_EventWeight_electron(SelectedEE_t *EE);
+        Int_t Find_electron_PtBin_Reco(Double_t Pt);
+        Int_t Find_electron_PtBin_ID(Double_t Pt);
+        Int_t Find_electron_PtBin_Trig(Double_t Pt);
+        Int_t Find_electron_EtaBin_Reco(Double_t eta);
+        Int_t Find_electron_EtaBin_ID(Double_t eta);
+        Int_t Find_electron_EtaBin_Trig(Double_t eta);
 	
 	////////////////////////////
 	// -- Event Selections -- //
@@ -214,18 +202,20 @@ public:
 	void PrintOutDoubleMuInfo( Muon mu1, Muon mu2 );
 
 	// -- emu method -- //
-        Bool_t EventSelection_emu_method_test(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple,
+        Bool_t EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple,
                                               vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection); // -- output: 1 muon and 1 electron passing event selection conditions -- //
-        Bool_t EventSelection_emu_method_test(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple, // Derived by Marijus Ambrozas 2018.08.07
+        Bool_t EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple, // Derived by Marijus Ambrozas 2018.08.07
                                               vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection,
                                               Int_t &Sel_Index_Mu, Int_t &Sel_Index_Ele); // -- output: 1 muon and 1 electron passing event selection conditions and their indices -- //
-        Bool_t EventSelection_emu_method_test(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, LongSelectedEMu_t *ntuple, // Derived by Marijus Ambrozas 2018.08.07
+        Bool_t EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, LongSelectedEMu_t *ntuple, // Derived by Marijus Ambrozas 2018.08.07
                                               vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection,
                                               Int_t &Sel_Index_Mu, Int_t &Sel_Index_Ele); // -- output: 1 muon and 1 electron passing event selection conditions and their indices -- //
-//	Bool_t EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection); // -- output: 1 muon and 1 electron passing event selection conditions -- //
-//	void emuVertexProbNormChi2(NtupleHandle *ntuple, Double_t Pt1, Double_t Pt2, Double_t *VtxProb, Double_t *VtxNormChi2);
+        void emuVertexProbNormChi2(NtupleHandle *ntuple, Double_t Pt1, Double_t Pt2, Double_t *VtxProb, Double_t *VtxNormChi2);
+        void emuVertexProbNormChi2(LongSelectedEMu_t *ntuple, Double_t Pt1, Double_t Pt2, Double_t *VtxProb, Double_t *VtxNormChi2);
 	Double_t EfficiencySF_EventWeight_emu_BtoF(Muon mu1, Electron ele2);
+        Double_t EfficiencySF_EventWeight_emu_BtoF(SelectedEMu_t *EMu);
 	Double_t EfficiencySF_EventWeight_emu_GtoH(Muon mu1, Electron ele2);
+        Double_t EfficiencySF_EventWeight_emu_GtoH(SelectedEMu_t *EMu);
 };
 
 DYAnalyzer::DYAnalyzer(TString HLTname)
@@ -372,950 +362,6 @@ void DYAnalyzer::AssignAccThreshold(TString HLTname, TString *HLT, Double_t *Lea
 		return; 
 	}
 
-}
-
-void DYAnalyzer::SetupMCsamples_v20160412_76X_MINIAODv2_CheckPremix( TString Type, vector<TString> *ntupleDirectory, vector<TString> *Tag, vector<Double_t> *Xsec, vector<Double_t> *nEvents )
-{
-	if( Type == "DYMuMu_PU25" )
-	{
-		ntupleDirectory->push_back( "Premix/v20160412_76X_MINIAODv2_CheckPremix_CorrectDataSetName_DYJets_Classic_PU25" ); Tag->push_back( "DYMuMu_M50_PU25_Classic" ); Xsec->push_back( 6104/3.0 ); nEvents->push_back( 8426438.0 );
-		ntupleDirectory->push_back( "Premix/v20160412_76X_MINIAODv2_CheckPremix_CorrectDataSetName_DYJets_NonDeterministic_PU25" ); Tag->push_back( "DYMuMu_M50_PU25_NonDet" ); Xsec->push_back( 6104/3.0 ); nEvents->push_back( 8286714.0 );
-	}
-	else if( Type == "DYEE_PU25" )
-	{
-		ntupleDirectory->push_back( "Premix/v20160412_76X_MINIAODv2_CheckPremix_CorrectDataSetName_DYJets_Classic_PU25" ); Tag->push_back( "DYEE_M50_PU25_Classic" ); Xsec->push_back( 6104/3.0 ); nEvents->push_back( 8439605.0 );
-		ntupleDirectory->push_back( "Premix/v20160412_76X_MINIAODv2_CheckPremix_CorrectDataSetName_DYJets_NonDeterministic_PU25" ); Tag->push_back( "DYEE_M50_PU25_NonDet" ); Xsec->push_back( 6104/3.0 ); nEvents->push_back( 8300442.0 );
-	}
-}
-
-void DYAnalyzer::SetupMCsamples_Moriond17( TString Type, vector<TString> *ntupleDirectory, vector<TString> *Tag, vector<Double_t> *Xsec, vector<Double_t> *nEvents )
-{
-	if( Type == "DYMuMu_M10to50" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Signal binned samples -- //
-                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000" );
-                Tag->push_back( "DYMuMu_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v2/180326_143001/0000" );
-                Tag->push_back( "DYMuMu_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_ext1v1/180326_143056/0000" );
-                Tag->push_back( "DYMuMu_M10to50_ext1v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
-	}
-	else if( Type == "DYMuMu_M50to100" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Signal binned samples -- //
-                ntupleDirectory->push_back( "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000" );
-                Tag->push_back( "DYMuMu_M50to100" ); Xsec->push_back( 5869.58346/3.0 ); nEvents->push_back( 26175605.0 ); //nEvents: sum of DYMuMu weights
-	}
-	else if( Type == "DYMuMu_M100toInf" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Signal binned samples -- //
-                ntupleDirectory->push_back( "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200/180326_143238/0000" );
-                Tag->push_back( "DYMuMu_M100to200" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3433295.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200_ext/180326_143324/0000" );
-                Tag->push_back( "DYMuMu_M100to200_ext" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3433295.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-200to400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M200to400/180326_143408/0000" );
-                Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 56340.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-400to500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M400to500/180326_143512/0000" );
-                Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 50136.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-500to700_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M500to700/180326_143600/0000" );
-                Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 48188.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-700to800_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M700to800/180326_143640/0000" );
-                Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 44984.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-800to1000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M800to1000/180326_143747/0000" );
-                Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 43496.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-1000to1500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M1000to1500/180326_143836/0000" );
-                Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 40110.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-1500to2000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M1500to2000/180326_143921/0000" );
-                Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 37176.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-2000to3000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M2000to3000/180326_144005/0000" );
-                Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 33360.0 ); //nEvents: sum of DYMuMu weights
-	}
-	else if( Type == "DYMuMu_aMCNLO" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Signal binned samples -- //
-                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000" );
-                Tag->push_back( "DYMuMu_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v2/180326_143001/0000" );
-                Tag->push_back( "DYMuMu_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_ext1v1/180326_143056/0000" );
-                Tag->push_back( "DYMuMu_M10to50_ext1v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33278866.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000" );
-                Tag->push_back( "DYMuMu_M50to100" ); Xsec->push_back( 5869.58346/3.0 ); nEvents->push_back( 26175605.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200/180326_143238/0000" );
-                Tag->push_back( "DYMuMu_M100to200" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3433295.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200_ext/180326_143324/0000" );
-                Tag->push_back( "DYMuMu_M100to200_ext" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3433295.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-200to400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M200to400/180326_143408/0000" );
-                Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 56340.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-400to500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M400to500/180326_143512/0000" );
-                Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 50136.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-500to700_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M500to700/180326_143600/0000" );
-                Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 48188.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-700to800_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M700to800/180326_143640/0000" );
-                Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 44984.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-800to1000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M800to1000/180326_143747/0000" );
-                Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 43496.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-1000to1500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M1000to1500/180326_143836/0000" );
-                Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 40110.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-1500to2000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M1500to2000/180326_143921/0000" );
-                Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 37176.0 ); //nEvents: sum of DYMuMu weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-2000to3000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M2000to3000/180326_144005/0000" );
-                Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 33360.0 ); //nEvents: sum of DYMuMu weights
-	}
-	else if( Type == "DYEE_M10to50" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Signal binned samples -- //
-                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000" );
-                Tag->push_back( "DYEE_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v2/180326_143001/0000" );
-                Tag->push_back( "DYEE_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_ext1v1/180326_143056/0000" );
-                Tag->push_back( "DYEE_M10to50_ext1v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
-	}
-	else if( Type == "DYEE_M50to100" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Signal binned samples -- //
-                ntupleDirectory->push_back( "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000" );
-                Tag->push_back( "DYEE_M50to100" ); Xsec->push_back( 5869.58346/3.0 ); nEvents->push_back( 26166194.0 ); //nEvents: sum of DYEE weights
-	}
-	else if( Type == "DYEE_M100toInf" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Signal binned samples -- //
-                ntupleDirectory->push_back( "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200/180326_143238/0000" );
-                Tag->push_back( "DYEE_M100to200" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3437885.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200_ext/180326_143324/0000" );
-                Tag->push_back( "DYEE_M100to200_ext" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3437885.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-200to400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M200to400/180326_143408/0000" );
-                Tag->push_back( "DYEE_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 56144.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-400to500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M400to500/180326_143512/0000" );
-                Tag->push_back( "DYEE_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 50420.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-500to700_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M500to700/180326_143600/0000" );
-                Tag->push_back( "DYEE_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 48039.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-700to800_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M700to800/180326_143640/0000" );
-                Tag->push_back( "DYEE_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 46114.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-800to1000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M800to1000/180326_143747/0000" );
-                Tag->push_back( "DYEE_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 44256.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-1000to1500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M1000to1500/180326_143836/0000" );
-                Tag->push_back( "DYEE_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 39712.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-1500to2000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M1500to2000/180326_143921/0000" );
-                Tag->push_back( "DYEE_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 37287.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-2000to3000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M2000to3000/180326_144005/0000" );
-                Tag->push_back( "DYEE_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 34031.0 ); //nEvents: sum of DYEE weights
-	}
-	else if( Type == "DYEE_aMCNLO" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Signal binned samples -- //
-                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000" );
-                Tag->push_back( "DYEE_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v2/180326_143001/0000" );
-                Tag->push_back( "DYEE_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_ext1v1/180326_143056/0000" );
-                Tag->push_back( "DYEE_M10to50_ext1v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33275218.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000" );
-                Tag->push_back( "DYEE_M50to100" ); Xsec->push_back( 5869.58346/3.0 ); nEvents->push_back( 26166194.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200/180326_143238/0000" );
-                Tag->push_back( "DYEE_M100to200" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3437885.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200_ext/180326_143324/0000" );
-                Tag->push_back( "DYEE_M100to200_ext" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 3437885.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-200to400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M200to400/180326_143408/0000" );
-                Tag->push_back( "DYEE_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 56144.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-400to500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M400to500/180326_143512/0000" );
-                Tag->push_back( "DYEE_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 50420.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-500to700_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M500to700/180326_143600/0000" );
-                Tag->push_back( "DYEE_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 48039.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-700to800_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M700to800/180326_143640/0000" );
-                Tag->push_back( "DYEE_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 46114.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-800to1000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M800to1000/180326_143747/0000" );
-                Tag->push_back( "DYEE_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 44256.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-1000to1500_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M1000to1500/180326_143836/0000" );
-                Tag->push_back( "DYEE_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 39712.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-1500to2000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M1500to2000/180326_143921/0000" );
-                Tag->push_back( "DYEE_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 37287.0 ); //nEvents: sum of DYEE weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-2000to3000_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M2000to3000/180326_144005/0000" );
-                Tag->push_back( "DYEE_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 34031.0 ); //nEvents: sum of DYEE weights
-	}
-	else if( Type == "ttbar" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Background Samples -- //
-		//ntupleDirectory->push_back( "ttbar" ); Tag->push_back( "ttbar" ); Xsec->push_back( 831.76 ); nEvents->push_back( 154948878.0 ); //ttbar+ ttbarBackup
-                ntupleDirectory->push_back( "TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/crab_ttbar/180326_142926/0000" );
-                Tag->push_back( "ttbar" ); Xsec->push_back( 734.577 ); nEvents->push_back( 135949780.0 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
-	}
-	else if( Type == "ttbarBackup" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Background Samples -- //
-		//ntupleDirectory->push_back( "ttbarBackup" ); Tag->push_back( "ttbarBackup" ); Xsec->push_back( 831.76 ); nEvents->push_back( 154948878.0 ); //ttbar+ ttbarBackup
-                ntupleDirectory->push_back( "TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/crab_ttbarBackup/180326_143005/0000" );
-                Tag->push_back( "ttbarBackup" ); Xsec->push_back( 734.577 ); nEvents->push_back( 135949780.0 ); //M(ttbar) < 700GeV, ttbar+ttbarBackup
-	}
-	else if( Type == "ttbar_M700toInf" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Background Samples -- //
-                ntupleDirectory->push_back( "TT_Mtt-700to1000_TuneCUETP8M2T4_13TeV-powheg-pythia8/crab_ttbar_M700to1000/180326_143059/0000" );
-                Tag->push_back( "ttbar_M700to1000" ); Xsec->push_back( 76.605 ); nEvents->push_back( 38422582.0 ); //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
-
-                ntupleDirectory->push_back( "TT_Mtt-1000toInf_TuneCUETP8M2T4_13TeV-powheg-pythia8/crab_ttbar_M1000toInf/180326_143144/0000" );
-                Tag->push_back( "ttbar_M1000toInf" ); Xsec->push_back( 20.578 ); nEvents->push_back( 24561630.0 ); //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
-	}
-	else if( Type == "DYTauTau_M10to50" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Signal binned samples -- //
-                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000" );
-                Tag->push_back( "DYTauTau_M10to50_v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33080379.0 ); //nEvents: sum of DYTauTau weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v2/180326_143001/0000" );
-                Tag->push_back( "DYTauTau_M10to50_v2" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33080379.0 ); //nEvents: sum of DYTauTau weights
-
-                ntupleDirectory->push_back( "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_ext1v1/180326_143056/0000" );
-                Tag->push_back( "DYTauTau_M10to50_ext1v1" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 33080379.0 ); //nEvents: sum of DYTauTau weights
-	}
-	else if( Type == "DYTauTau_M50toInf" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Signal binned samples -- //
-		//ntupleDirectory->push_back( "DYLL_M50toInf" ); Tag->push_back( "DYTauTau" ); Xsec->push_back( 6104.0/3.0 ); nEvents->push_back( 27277866.0 ); //nEvents: sum of DYTauTau weights
-                ntupleDirectory->push_back( "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000" );
-                Tag->push_back( "DYTauTau" ); Xsec->push_back( 1921.8 ); nEvents->push_back( 27277866.0 ); //nEvents: sum of DYTauTau weights, NNLO Xsec
-	}
-	else if( Type == "VVnST" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Background Samples -- //
-                ntupleDirectory->push_back( "ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/crab_ST_tW/180326_143800/0000" );
-                Tag->push_back( "tW" ); Xsec->push_back( 35.85 ); nEvents->push_back( 6952830.0 );
-
-                ntupleDirectory->push_back( "ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/crab_ST_tbarW/180326_143849/0000" );
-                Tag->push_back( "tbarW" ); Xsec->push_back( 35.85 ); nEvents->push_back( 6933093.0 );
-
-                ntupleDirectory->push_back( "ZZ_TuneCUETP8M1_13TeV-pythia8/crab_ZZ/180326_143627/0000" ); // NOT SURE (there also is ZZTo4L)
-                Tag->push_back( "ZZ" ); Xsec->push_back( 16.523 ); nEvents->push_back( 998034.0 );
-
-                ntupleDirectory->push_back( "WZ_TuneCUETP8M1_13TeV-pythia8/crab_WZ/180326_143414/0000" ); // NOT SURE (there also is WZTo3LNu)
-                Tag->push_back( "WZ" ); Xsec->push_back( 47.13 ); nEvents->push_back( 2995828.0 );
-
-                ntupleDirectory->push_back( "WW_TuneCUETP8M1_13TeV-pythia8/crab_WW/180326_143237/0000" ); // NOT SURE (there also is WWTo2L2Nu)
-                Tag->push_back( "WW" ); Xsec->push_back( 118.7 ); nEvents->push_back( 6987123.0 );
-	}
-	else if( Type == "WJetsToLNu" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Background Samples -- //
-                ntupleDirectory->push_back( "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo/180326_144617/0000" );
-                Tag->push_back( "WJetsToLNu" ); Xsec->push_back( 61526.7 ); nEvents->push_back( 86731698.0 );
-
-                ntupleDirectory->push_back( "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo_ext/180326_144652/0000" ); // There also is madgraph version
-                Tag->push_back( "WJetsToLNu_ext" ); Xsec->push_back( 61526.7 ); nEvents->push_back( 86731698.0 );
-	}
-        else if( Type == "WJetsToLNu_test" )
-        {
-                // -- Background Samples -- //
-                ntupleDirectory->push_back( "WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WJetsToLNu_ext/180326_143105/0000" );
-                Tag->push_back( "WJetsToLNu_test" ); Xsec->push_back( 61526.7 ); nEvents->push_back( 86731698.0 );
-        }
-	else if( Type == "QCDMuEnriched" )
-	{
-                std::cout << "# events should be adjusted later" << endl;
-		// -- Background Samples -- //
-                ntupleDirectory->push_back( "QCD_Pt-15to20_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt15to20/180326_143059/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt15to20" ); Xsec->push_back( 720648000*0.00042 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-20to30_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt20to30/180326_143144/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt20to30" ); Xsec->push_back( 1273190000*0.003 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-30to50_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt30to50/180326_143240/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt30to50" ); Xsec->push_back( 139803000*0.01182 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-50to80_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt50to80/180326_143340/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt50to80" ); Xsec->push_back( 19222500*0.02276 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-80to120_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt80to120/180326_143419/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt80to120" ); Xsec->push_back( 2758420*0.03844 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-80to120_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt80to120_ext1/180326_143533/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt80to120_ext1" ); Xsec->push_back( 2758420*0.03844  ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-120to170_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt120to170/180326_143612/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt120to170" ); Xsec->push_back( 469797*0.05362 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-120to170_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt120to170_backup/180326_143654/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt120to170_backup" ); Xsec->push_back( 469797*0.05362  ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-170to300_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt170to300/180326_143750/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt170to300" ); Xsec->push_back( 117989*0.07335 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-170to300_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt170to300_ext1/180326_143849/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt170to300_ext1" ); Xsec->push_back( 117989*0.07335 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-170to300_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt170to300_backup/180326_143946/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt170to300_backup" ); Xsec->push_back( 117989*0.07335 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-300to470_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt300to470/180326_144021/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt300to470" ); Xsec->push_back( 7820.25*0.10196 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-300to470_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt300to470_ext1/180326_144117/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt300to470_ext1" ); Xsec->push_back( 7820.25*0.10196 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-300to470_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt300to470_ext2/180326_144211/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt300to470_ext2" ); Xsec->push_back( 7820.25*0.10196 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-470to600_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt470to600/180326_144301/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt470to600" ); Xsec->push_back( 645.528*0.12242 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-470to600_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt470to600_ext1/180326_144358/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt470to600_ext1" ); Xsec->push_back( 645.528*0.12242 ); nEvents->push_back( 1.0 );
-
-//		ntupleDirectory->push_back( "QCDMuEnriched_Pt470to600_ext2" );      // DID NOT FIND THIS ONE
-//                Tag->push_back( "QCDMuEnriched_Pt470to600_ext2" ); Xsec->push_back( 645.528*0.12242 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-600to800_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt600to800/180326_144534/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt600to800" ); Xsec->push_back( 187.109*0.13412 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-600to800_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt600to800_ext1/180326_144612/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt600to800_ext1" ); Xsec->push_back( 187.109*0.13412 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-600to800_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt600to800_backup/180326_144648/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt600to800_backup" ); Xsec->push_back( 187.109*0.13412 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-800to1000_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt800to1000/180326_144736/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt800to1000" ); Xsec->push_back( 32.3486*0.14552 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-800to1000_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt800to1000_ext1/180326_144818/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt800to1000_ext1" ); Xsec->push_back( 32.3486*0.14552 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-800to1000_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt800to1000_ext2/180326_144856/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt800to1000_ext2" ); Xsec->push_back( 32.3486*0.14552 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-1000toInf_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt1000toInf/180326_144937/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt1000toInf" ); Xsec->push_back( 10.4305*0.15544 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-1000toInf_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/crab_QCDMuEnriched_Pt1000toInf_ext1/180326_145024/0000" );
-                Tag->push_back( "QCDMuEnriched_Pt1000toInf_ext1" ); Xsec->push_back( 10.4305*0.15544 ); nEvents->push_back( 1.0 );
-	}
-	else if( Type == "QCDEMEnriched" )
-	{
-                std::cout << "# events should be adjusted later" << endl;
-		// -- Background Samples -- //
-                ntupleDirectory->push_back( "QCD_Pt-20to30_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt20to30/180326_145104/0000" );
-                Tag->push_back( "QCDEMEnriched_Pt20to30" ); Xsec->push_back( 557600000*0.0096 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-30to50_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt30to50/180326_145144/0000" );
-                Tag->push_back( "QCDEMEnriched_Pt30to50" ); Xsec->push_back( 136000000*0.073 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-30to50_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt30to50_ext1/180326_145227/0000" );
-                Tag->push_back( "QCDEMEnriched_Pt30to50_ext1" ); Xsec->push_back( 136000000*0.073 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-50to80_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt50to80/180326_145308/0000" );
-                Tag->push_back( "QCDEMEnriched_Pt50to80" ); Xsec->push_back( 19800000*0.146 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-50to80_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt50to80_ext1/180326_145353/0000" );
-                Tag->push_back( "QCDEMEnriched_Pt50to80_ext1" ); Xsec->push_back( 19800000*0.146 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-80to120_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt80to120/180326_145437/0000" );
-                Tag->push_back( "QCDEMEnriched_Pt80to120" ); Xsec->push_back( 2800000*0.125 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-80to120_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt80to120_ext1/180326_145522/0000" );
-                Tag->push_back( "QCDEMEnriched_Pt80to120_ext1" ); Xsec->push_back( 2800000*0.125 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-120to170_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt120to170/180326_145602/0000" );
-                Tag->push_back( "QCDEMEnriched_Pt120to170" ); Xsec->push_back( 477000*0.132 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-120to170_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt120to170_ext1/180326_145701/0000" );
-                Tag->push_back( "QCDEMEnriched_Pt120to170_ext1" ); Xsec->push_back( 477000*0.132 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-170to300_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt170to300/180326_145738/0000" );
-                Tag->push_back( "QCDEMEnriched_Pt170to300" ); Xsec->push_back( 114000*0.165 ); nEvents->push_back( 1.0 );
-
-                ntupleDirectory->push_back( "QCD_Pt-300toInf_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt300toInf/180326_145836/0000" );
-                Tag->push_back( "QCDEMEnriched_Pt300toInf" ); Xsec->push_back( 9000*0.15 ); nEvents->push_back( 1.0 );
-	}
-	else
-                std::cout << "Wrong Type!" << endl;
-}
-
-void DYAnalyzer::SetupMCsamples_v20160309_76X_MiniAODv2( TString Type, vector<TString> *ntupleDirectory, vector<TString> *Tag, vector<Double_t> *Xsec, vector<Double_t> *nEvents )
-{
-	if( Type == "Full" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Background Samples -- //
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_ZZ_25ns" ); Tag->push_back( "ZZ" ); Xsec->push_back( 15.4 ); nEvents->push_back( 985598 );
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WZ_25ns" ); Tag->push_back( "WZ" ); Xsec->push_back( 66.1 ); nEvents->push_back( 999996 );
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WW_25ns" ); Tag->push_back( "WW" ); Xsec->push_back( 118.7 ); nEvents->push_back( 988416 );
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WJets_25ns" ); Tag->push_back( "WJets" ); Xsec->push_back( 6.15e4 ); nEvents->push_back( 16520811.0 ); //nEvents: sum of weights
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYTauTau_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7467514.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYTauTau" ); Xsec->push_back( 6104/3.0 ); nEvents->push_back( 6309713.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_ttbar_25ns" ); Tag->push_back( "ttbar" ); Xsec->push_back( 831.76 ); nEvents->push_back( 97994304 );
-		
-		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYMuMu_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7506956.0 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50to200" ); Xsec->push_back( 6095.58346/3.0 ); nEvents->push_back( 6302525.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M200to400_25ns" ); Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 170955.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M400to500_25ns" ); Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 50136.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M500to700_25ns" ); Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 47833.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M700to800_25ns" ); Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 44740.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M800to1000_25ns" ); Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 43496.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M1000to1500_25ns" ); Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 40783.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M1500to2000_25ns" ); Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 37176.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M2000to3000_25ns" ); Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 23078.0 ); //nEvents: sum of DYMuMu weights 
-	}
-	else if( Type == "aMCNLO" )
-	{
-		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYMuMu_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7506956.0 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50to200" ); Xsec->push_back( 6095.58346/3.0 ); nEvents->push_back( 6302525.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M200to400_25ns" ); Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 170955.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M400to500_25ns" ); Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 50136.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M500to700_25ns" ); Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 47833.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M700to800_25ns" ); Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 44740.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M800to1000_25ns" ); Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 43496.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M1000to1500_25ns" ); Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 40783.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M1500to2000_25ns" ); Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 37176.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M2000to3000_25ns" ); Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 23078.0 ); //nEvents: sum of DYMuMu weights 
-	}
-	else if( Type == "M100to200" )
-	{
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M100to200_25ns" ); Tag->push_back( "DYMuMu_M100to200" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 227522.0 ); //nEvents: sum of weights within 10<M<50
-	}
-	else if( Type == "M50to200" )
-	{
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50to200" ); Xsec->push_back( 6095.58346/3.0 ); nEvents->push_back( 6302525.0 ); //nEvents: sum of DYMuMu weights
-	}
-	else if( Type == "M50toInf" )
-	{
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50toInf" ); Xsec->push_back( 6104/3.0 ); nEvents->push_back( 6311695.0 );
-	}
-	else if( Type == "M10to50_M50toInf" )
-	{
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYMuMu_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7506956.0 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50toInf" ); Xsec->push_back( 6104/3.0 ); nEvents->push_back( 6311695.0 );
-	}
-	else if( Type == "aMCNLO_M120Cut" )
-	{
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYMuMu_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7506956.0 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50to120" ); Xsec->push_back( 1975 ); nEvents->push_back( 6243307.0 );
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M100to200_25ns" ); Tag->push_back( "DYMuMu_M120to200" ); Xsec->push_back( 19.32 ); nEvents->push_back( 55554.0 );
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M200to400_25ns" ); Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 2.731 ); nEvents->push_back( 170955.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M400to500_25ns" ); Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 50136.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M500to700_25ns" ); Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 47833.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M700to800_25ns" ); Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 44740.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M800to1000_25ns" ); Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 43496.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M1000to1500_25ns" ); Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 40783.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M1500to2000_25ns" ); Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 37176.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M2000to3000_25ns" ); Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 23078.0 ); //nEvents: sum of DYMuMu weights
-	}
-
-	else if( Type == "Full_Include_M100to200" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Background Samples -- //
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_ZZ_25ns" ); Tag->push_back( "ZZ" ); Xsec->push_back( 15.4 ); nEvents->push_back( 985598 );
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WZ_25ns" ); Tag->push_back( "WZ" ); Xsec->push_back( 66.1 ); nEvents->push_back( 999996 );
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WW_25ns" ); Tag->push_back( "WW" ); Xsec->push_back( 118.7 ); nEvents->push_back( 988416 );
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WJets_25ns" ); Tag->push_back( "WJets" ); Xsec->push_back( 6.15e4 ); nEvents->push_back( 16520811.0 ); //nEvents: sum of weights
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYTauTau_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7467514.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYTauTau" ); Xsec->push_back( 6104/3.0 ); nEvents->push_back( 6309713.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_ttbar_25ns" ); Tag->push_back( "ttbar" ); Xsec->push_back( 831.76 ); nEvents->push_back( 97994304 );
-		
-		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYMuMu_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7506956.0 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50to100" ); Xsec->push_back( 5869.58346/3.0 ); nEvents->push_back( 6061181.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M100to200_25ns" ); Tag->push_back( "DYMuMu_M100to200" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 227522.0 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M200to400_25ns" ); Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 170955.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M400to500_25ns" ); Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 50136.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M500to700_25ns" ); Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 47833.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M700to800_25ns" ); Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 44740.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M800to1000_25ns" ); Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 43496.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M1000to1500_25ns" ); Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 40783.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M1500to2000_25ns" ); Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 37176.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M2000to3000_25ns" ); Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 23078.0 ); //nEvents: sum of DYMuMu weights 
-	}
-	else if( Type == "Full_NoHighMass" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Background Samples -- //
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_ZZ_25ns" ); Tag->push_back( "ZZ" ); Xsec->push_back( 15.4 ); nEvents->push_back( 985598 );
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WZ_25ns" ); Tag->push_back( "WZ" ); Xsec->push_back( 66.1 ); nEvents->push_back( 999996 );
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WW_25ns" ); Tag->push_back( "WW" ); Xsec->push_back( 118.7 ); nEvents->push_back( 988416 );
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WJets_25ns" ); Tag->push_back( "WJets" ); Xsec->push_back( 6.15e4 ); nEvents->push_back( 16520811.0 ); //nEvents: sum of weights
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYTauTau_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7467514.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYTauTau" ); Xsec->push_back( 6104/3.0 ); nEvents->push_back( 6309713.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_ttbar_25ns" ); Tag->push_back( "ttbar" ); Xsec->push_back( 831.76 ); nEvents->push_back( 97994304 );
-		
-		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYMuMu_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7506956.0 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50toInf" ); Xsec->push_back( 6104/3.0 ); nEvents->push_back( 6311695.0 ); // -- sum of weight should be updated! -- //
-	}
-	else if( Type == "Full_Powheg" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Background Samples -- //
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_ZZ_25ns" ); Tag->push_back( "ZZ" ); Xsec->push_back( 15.4 ); nEvents->push_back( 985598 );
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WZ_25ns" ); Tag->push_back( "WZ" ); Xsec->push_back( 66.1 ); nEvents->push_back( 999996 );
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WW_25ns" ); Tag->push_back( "WW" ); Xsec->push_back( 118.7 ); nEvents->push_back( 988416 );
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WJets_25ns" ); Tag->push_back( "WJets" ); Xsec->push_back( 6.15e4 ); nEvents->push_back( 16520811.0 ); //nEvents: sum of weights
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYTauTau_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7467514.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYTauTau" ); Xsec->push_back( 6104/3.0 ); nEvents->push_back( 6309713.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_ttbar_25ns" ); Tag->push_back( "ttbar" ); Xsec->push_back( 831.76 ); nEvents->push_back( 97994304 );
-		
-		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "76X/v20160519_76X_MINIAODv2_Resubmit4_AdjustRunTime_ZMuMuPowheg_M50to120_25ns" ); Tag->push_back( "ZMuMu_M50to120" );  Xsec->push_back(1975);  nEvents->push_back(2971982.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M120to200_25ns" ); Tag->push_back( "ZMuMu_M120to200" );  Xsec->push_back(19.32);  nEvents->push_back(99999.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M200to400_25ns" ); Tag->push_back( "ZMuMu_M200to400" );  Xsec->push_back(2.731);  nEvents->push_back(99999.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M400to800_25ns" ); Tag->push_back( "ZMuMu_M400to800" );  Xsec->push_back(0.241);  nEvents->push_back(99600.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M800to1400_25ns" );  Tag->push_back( "ZMuMu_M800to1400" );  Xsec->push_back(0.01678);  nEvents->push_back(97600.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M1400to2300_25ns" );  Tag->push_back( "ZMuMu_M1400to2300" );  Xsec->push_back(0.00139);  nEvents->push_back(99200.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M2300to3500_25ns" );  Tag->push_back( "ZMuMu_M2300to3500" );  Xsec->push_back(0.00008948);  nEvents->push_back(100000.0);
-		ntupleDirectory->push_back( "76X/v20160525_76X_MINIAODv2_Resubmit_HighMass_ZMuMuPowheg_M3500to4500_25ns" );  Tag->push_back( "ZMuMu_M3500to4500" );  Xsec->push_back(0.000004135);  nEvents->push_back(100000.0);
-		ntupleDirectory->push_back( "76X/v20160525_76X_MINIAODv2_Resubmit_HighMass_ZMuMuPowheg_M4500to6000_25ns" );  Tag->push_back( "ZMuMu_M4500to6000" );  Xsec->push_back(4.56E-07);  nEvents->push_back(100000.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M6000toInf_25ns" );  Tag->push_back( "ZMuMu_M6000toInf" );  Xsec->push_back(2.066E-08);  nEvents->push_back(99200.0);
-	}
-	else if( Type == "Full_M120Cut" )
-	{
-                // std::cout << "# events should be adjusted later" << endl;
-		// -- Background Samples -- //
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_ZZ_25ns" ); Tag->push_back( "ZZ" ); Xsec->push_back( 15.4 ); nEvents->push_back( 985598 );
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WZ_25ns" ); Tag->push_back( "WZ" ); Xsec->push_back( 66.1 ); nEvents->push_back( 999996 );
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WW_25ns" ); Tag->push_back( "WW" ); Xsec->push_back( 118.7 ); nEvents->push_back( 988416 );
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_WJets_25ns" ); Tag->push_back( "WJets" ); Xsec->push_back( 6.15e4 ); nEvents->push_back( 16520811.0 ); //nEvents: sum of weights
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYTauTau_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7467514.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYTauTau" ); Xsec->push_back( 6104/3.0 ); nEvents->push_back( 6309713.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "76X/v20160303_76X_MINIAODv2_ttbar_25ns" ); Tag->push_back( "ttbar" ); Xsec->push_back( 831.76 ); nEvents->push_back( 97994304 );
-		
-		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYMuMu_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7506956.0 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50to120" ); Xsec->push_back( 1975 ); nEvents->push_back( 6243307.0 );
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M100to200_25ns" ); Tag->push_back( "DYMuMu_M120to200" ); Xsec->push_back( 19.32 ); nEvents->push_back( 55554.0 );
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M200to400_25ns" ); Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 2.731 ); nEvents->push_back( 170955.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M400to500_25ns" ); Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 50136.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M500to700_25ns" ); Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 47833.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M700to800_25ns" ); Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 44740.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M800to1000_25ns" ); Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 43496.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M1000to1500_25ns" ); Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 40783.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M1500to2000_25ns" ); Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 37176.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M2000to3000_25ns" ); Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 23078.0 ); //nEvents: sum of DYMuMu weights 
-	}
-	else if( Type == "aMCNLO_Include_M100to200")
-	{
-		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYMuMu_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7506956.0 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50to100" ); Xsec->push_back( 5869.58346/3.0 ); nEvents->push_back( 6061181.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M100to200_25ns" ); Tag->push_back( "DYMuMu_M100to200" ); Xsec->push_back( 226/3.0 ); nEvents->push_back( 227522.0 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M200to400_25ns" ); Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 170955.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M400to500_25ns" ); Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 50136.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M500to700_25ns" ); Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 47833.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M700to800_25ns" ); Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 44740.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M800to1000_25ns" ); Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 43496.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M1000to1500_25ns" ); Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 40783.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M1500to2000_25ns" ); Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 37176.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "76X/v20160304_76X_MINIAODv2_DYLL_M2000to3000_25ns" ); Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 23078.0 ); //nEvents: sum of DYMuMu weights 
-	}
-	else if( Type == "Madgraph" )
-	{
-		ntupleDirectory->push_back( "76X/v20160520_76X_MINIAODv2_Madgraph_LO_M5to50_25ns" ); Tag->push_back( "Madgraph_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 631905.0 );
-		ntupleDirectory->push_back( "76X/v20160520_76X_MINIAODv2_Madgraph_LO_M50toInf_25ns" ); Tag->push_back( "Madgraph_M50toInf" ); Xsec->push_back( 6014/3.0 ); nEvents->push_back( 3003455.0 );
-
-		// ntupleDirectory->push_back( "76X/v20160520_76X_MINIAODv2_Madgraph_LO_M5to50_25ns" ); Tag->push_back( "Madgraph_M5to50" ); Xsec->push_back( 7160/3.0 ); nEvents->push_back( 2782834.0 );
-		// ntupleDirectory->push_back( "76X/v20160520_76X_MINIAODv2_Madgraph_LO_M50toInf_25ns" ); Tag->push_back( "Madgraph_M50toInf" ); Xsec->push_back( 4895/3.0 ); nEvents->push_back( 3003455.0 );
-
-		// ntupleDirectory->push_back( "76X/v20160520_76X_MINIAODv2_Madgraph_LO_M50toInf_25ns" ); Tag->push_back( "Madgraph_M50to150" ); Xsec->push_back( (4895 - 6.58)/3.0 ); nEvents->push_back( 3003455.0 ); 
-		// ntupleDirectory->push_back( "76X/v20160520_76X_MINIAODv2_Madgraph_LO_M150toInf_25ns" ); Tag->push_back( "Madgraph_M150toInf" ); Xsec->push_back( 6.58/3.0 ); nEvents->push_back( 1.0 );
-
-	}
-	else if( Type == "MadgraphPowheg" ) // -- for estimation of syst. from unfolding -- //
-	{
-		ntupleDirectory->push_back( "76X/v20160520_76X_MINIAODv2_Madgraph_LO_M5to50_25ns" ); Tag->push_back( "Madgraph_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 631905.0 );
-		ntupleDirectory->push_back( "76X/v20160519_76X_MINIAODv2_Resubmit4_AdjustRunTime_ZMuMuPowheg_M50to120_25ns" ); Tag->push_back( "ZMuMu_M50to120" );  Xsec->push_back(1975);  nEvents->push_back(2971982.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M120to200_25ns" ); Tag->push_back( "ZMuMu_M120to200" );  Xsec->push_back(19.32);  nEvents->push_back(99999.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M200to400_25ns" ); Tag->push_back( "ZMuMu_M200to400" );  Xsec->push_back(2.731);  nEvents->push_back(99999.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M400to800_25ns" ); Tag->push_back( "ZMuMu_M400to800" );  Xsec->push_back(0.241);  nEvents->push_back(99600.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M800to1400_25ns" );  Tag->push_back( "ZMuMu_M800to1400" );  Xsec->push_back(0.01678);  nEvents->push_back(97600.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M1400to2300_25ns" );  Tag->push_back( "ZMuMu_M1400to2300" );  Xsec->push_back(0.00139);  nEvents->push_back(99200.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M2300to3500_25ns" );  Tag->push_back( "ZMuMu_M2300to3500" );  Xsec->push_back(0.00008948);  nEvents->push_back(100000.0);
-		ntupleDirectory->push_back( "76X/v20160525_76X_MINIAODv2_Resubmit_HighMass_ZMuMuPowheg_M3500to4500_25ns" );  Tag->push_back( "ZMuMu_M3500to4500" );  Xsec->push_back(0.000004135);  nEvents->push_back(100000.0);
-		ntupleDirectory->push_back( "76X/v20160525_76X_MINIAODv2_Resubmit_HighMass_ZMuMuPowheg_M4500to6000_25ns" );  Tag->push_back( "ZMuMu_M4500to6000" );  Xsec->push_back(4.56E-07);  nEvents->push_back(100000.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M6000toInf_25ns" );  Tag->push_back( "ZMuMu_M6000toInf" );  Xsec->push_back(2.066E-08);  nEvents->push_back(99200.0);
-
-
-		// ntupleDirectory->push_back( "76X/v20160520_76X_MINIAODv2_Madgraph_LO_M5to50_25ns" ); Tag->push_back( "Madgraph_M5to50" ); Xsec->push_back( 7160/3.0 ); nEvents->push_back( 2782834.0 );
-		// ntupleDirectory->push_back( "76X/v20160520_76X_MINIAODv2_Madgraph_LO_M50toInf_25ns" ); Tag->push_back( "Madgraph_M50toInf" ); Xsec->push_back( 4895/3.0 ); nEvents->push_back( 3003455.0 );
-
-		// ntupleDirectory->push_back( "76X/v20160520_76X_MINIAODv2_Madgraph_LO_M50toInf_25ns" ); Tag->push_back( "Madgraph_M50to150" ); Xsec->push_back( (4895 - 6.58)/3.0 ); nEvents->push_back( 3003455.0 ); 
-		// ntupleDirectory->push_back( "76X/v20160520_76X_MINIAODv2_Madgraph_LO_M150toInf_25ns" ); Tag->push_back( "Madgraph_M150toInf" ); Xsec->push_back( 6.58/3.0 ); nEvents->push_back( 1.0 );
-
-	}
-	else if( Type == "Powheg" ) // -- for estimation of syst. from unfolding -- //
-	{
-		ntupleDirectory->push_back( "76X/v20160519_76X_MINIAODv2_Resubmit4_AdjustRunTime_ZMuMuPowheg_M50to120_25ns" ); Tag->push_back( "ZMuMu_M50to120" );  Xsec->push_back(1975);  nEvents->push_back(2971982.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M120to200_25ns" ); Tag->push_back( "ZMuMu_M120to200" );  Xsec->push_back(19.32);  nEvents->push_back(99999.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M200to400_25ns" ); Tag->push_back( "ZMuMu_M200to400" );  Xsec->push_back(2.731);  nEvents->push_back(99999.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M400to800_25ns" ); Tag->push_back( "ZMuMu_M400to800" );  Xsec->push_back(0.241);  nEvents->push_back(99600.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M800to1400_25ns" );  Tag->push_back( "ZMuMu_M800to1400" );  Xsec->push_back(0.01678);  nEvents->push_back(97600.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M1400to2300_25ns" );  Tag->push_back( "ZMuMu_M1400to2300" );  Xsec->push_back(0.00139);  nEvents->push_back(99200.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M2300to3500_25ns" );  Tag->push_back( "ZMuMu_M2300to3500" );  Xsec->push_back(0.00008948);  nEvents->push_back(100000.0);
-		ntupleDirectory->push_back( "76X/v20160525_76X_MINIAODv2_Resubmit_HighMass_ZMuMuPowheg_M3500to4500_25ns" );  Tag->push_back( "ZMuMu_M3500to4500" );  Xsec->push_back(0.000004135);  nEvents->push_back(100000.0);
-		ntupleDirectory->push_back( "76X/v20160525_76X_MINIAODv2_Resubmit_HighMass_ZMuMuPowheg_M4500to6000_25ns" );  Tag->push_back( "ZMuMu_M4500to6000" );  Xsec->push_back(4.56E-07);  nEvents->push_back(100000.0);
-		ntupleDirectory->push_back( "76X/v20160404_76X_MINIAODv2_ZMuMuPowheg_M6000toInf_25ns" );  Tag->push_back( "ZMuMu_M6000toInf" );  Xsec->push_back(2.066E-08);  nEvents->push_back(99200.0);
-
-
-		// ntupleDirectory->push_back( "76X/v20160520_76X_MINIAODv2_Madgraph_LO_M5to50_25ns" ); Tag->push_back( "Madgraph_M5to50" ); Xsec->push_back( 7160/3.0 ); nEvents->push_back( 2782834.0 );
-		// ntupleDirectory->push_back( "76X/v20160520_76X_MINIAODv2_Madgraph_LO_M50toInf_25ns" ); Tag->push_back( "Madgraph_M50toInf" ); Xsec->push_back( 4895/3.0 ); nEvents->push_back( 3003455.0 );
-
-		// ntupleDirectory->push_back( "76X/v20160520_76X_MINIAODv2_Madgraph_LO_M50toInf_25ns" ); Tag->push_back( "Madgraph_M50to150" ); Xsec->push_back( (4895 - 6.58)/3.0 ); nEvents->push_back( 3003455.0 ); 
-		// ntupleDirectory->push_back( "76X/v20160520_76X_MINIAODv2_Madgraph_LO_M150toInf_25ns" ); Tag->push_back( "Madgraph_M150toInf" ); Xsec->push_back( 6.58/3.0 ); nEvents->push_back( 1.0 );
-
-	}
-	else
-                std::cout << "Wrong Type!" << endl;
-}
-
-void DYAnalyzer::SetupMCsamples_v20160131_MiniAODv2( TString Type, vector<TString> *ntupleDirectory, vector<TString> *Tag, vector<Double_t> *Xsec, vector<Double_t> *nEvents )
-{
-	if( Type == "Full" )
-	{
-		// -- Background Samples -- //
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_ZZ_25ns" ); Tag->push_back( "ZZ" ); Xsec->push_back( 15.4 ); nEvents->push_back( 996944 );
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_WZ_25ns" ); Tag->push_back( "WZ" ); Xsec->push_back( 66.1 ); nEvents->push_back( 978512 );
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_WW_25ns" ); Tag->push_back( "WW" ); Xsec->push_back( 118.7 ); nEvents->push_back( 993640 );
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_WJets_25ns" ); Tag->push_back( "WJets" ); Xsec->push_back( 6.15e4 ); nEvents->push_back( 16541203.0 ); //nEvents: sum of weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYTauTau_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7255646.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYTauTau" ); Xsec->push_back( 6104/3.0 ); nEvents->push_back( 6419292.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_ttbar_25ns" ); Tag->push_back( "ttbar" ); Xsec->push_back( 831.76 ); nEvents->push_back( 19757182 );
-		
-		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYMuMu_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7293818.0 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50to200" ); Xsec->push_back( 6095.58346/3.0 ); nEvents->push_back( 6413327.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M200to400_25ns" ); Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 18497.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M400to500_25ns" ); Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 17143.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M500to700_25ns" ); Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 17397.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M700to800_25ns" ); Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 15827.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M800to1000_25ns" ); Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 14742.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160130_MINIAODv2_DYLL_M1000to1500_25ns_Resubmit" ); Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 14381.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M1500to2000_25ns" ); Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 13855.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M2000to3000_25ns" ); Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 12376.0 ); //nEvents: sum of DYMuMu weights 
-	}
-	else if( Type == "Full_NoHighMass" )
-	{
-		// -- Background Samples -- //
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_ZZ_25ns" ); Tag->push_back( "ZZ" ); Xsec->push_back( 15.4 ); nEvents->push_back( 996944 );
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_WZ_25ns" ); Tag->push_back( "WZ" ); Xsec->push_back( 66.1 ); nEvents->push_back( 978512 );
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_WW_25ns" ); Tag->push_back( "WW" ); Xsec->push_back( 118.7 ); nEvents->push_back( 993640 );
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_WJets_25ns" ); Tag->push_back( "WJets" ); Xsec->push_back( 6.15e4 ); nEvents->push_back( 16541203.0 ); //nEvents: sum of weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYTauTau_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7255646.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYTauTau" ); Xsec->push_back( 6104/3.0 ); nEvents->push_back( 6419292.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_ttbar_25ns" ); Tag->push_back( "ttbar" ); Xsec->push_back( 831.76 ); nEvents->push_back( 19757182 );
-		
-		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYMuMu_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7293818.0 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50" ); Xsec->push_back( 6104/3.0 ); nEvents->push_back( 6422093.0 ); //nEvents: sum of DYMuMu weights
-		// ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M200to400_25ns" ); Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 18497.0 ); //nEvents: sum of DYMuMu weights 
-		// ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M400to500_25ns" ); Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 17143.0 ); //nEvents: sum of DYMuMu weights 
-		// ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M500to700_25ns" ); Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 17397.0 ); //nEvents: sum of DYMuMu weights 
-		// ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M700to800_25ns" ); Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 15827.0 ); //nEvents: sum of DYMuMu weights 
-		// ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M800to1000_25ns" ); Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 14742.0 ); //nEvents: sum of DYMuMu weights 
-		// ntupleDirectory->push_back( "Spring15DR/25ns/v20160130_MINIAODv2_DYLL_M1000to1500_25ns_Resubmit" ); Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 14381.0 ); //nEvents: sum of DYMuMu weights 
-		// ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M1500to2000_25ns" ); Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 13855.0 ); //nEvents: sum of DYMuMu weights 
-		// ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M2000to3000_25ns" ); Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 12376.0 ); //nEvents: sum of DYMuMu weights 
-	}
-	else if( Type == "M50_M200to400" )
-	{
-		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50" ); Xsec->push_back( 6104/3.0 ); nEvents->push_back( 6422093.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M200to400_25ns" ); Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 18497.0 ); //nEvents: sum of DYMuMu weights 
-	}
-	else if( Type == "aMCNLO" )
-	{
-		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYMuMu_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7293818.0 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50to200" ); Xsec->push_back( 6095.58346/3.0 ); nEvents->push_back( 6413327.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M200to400_25ns" ); Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 18497.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M400to500_25ns" ); Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 17143.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M500to700_25ns" ); Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 17397.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M700to800_25ns" ); Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 15827.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M800to1000_25ns" ); Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 14742.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160130_MINIAODv2_DYLL_M1000to1500_25ns_Resubmit" ); Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 14381.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M1500to2000_25ns" ); Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 13855.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M2000to3000_25ns" ); Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 12376.0 ); //nEvents: sum of DYMuMu weights 
-	}
-	else if( Type == "Powheg" )
-	{
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_ZMuMuPowheg_M50to120_25ns" ); Tag->push_back( "ZMuMu_M50to120" );  Xsec->push_back(1975);  nEvents->push_back(2836871);
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_ZMuMuPowheg_M120to200_25ns" ); Tag->push_back( "ZMuMu_M120to200" );  Xsec->push_back(19.32);  nEvents->push_back(100000);
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_ZMuMuPowheg_M200to400_25ns" ); Tag->push_back( "ZMuMu_M200to400" );  Xsec->push_back(2.731);  nEvents->push_back(100000);
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_ZMuMuPowheg_M400to800_25ns" ); Tag->push_back( "ZMuMu_M400to800" );  Xsec->push_back(0.241);  nEvents->push_back(100000);
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_ZMuMuPowheg_M800to1400_25ns" );  Tag->push_back( "ZMuMu_M800to1400" );  Xsec->push_back(0.01678);  nEvents->push_back(100000);
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_ZMuMuPowheg_M1400to2300_25ns" );  Tag->push_back( "ZMuMu_M1400to2300" );  Xsec->push_back(0.00139);  nEvents->push_back(99600);
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_ZMuMuPowheg_M2300to3500_25ns" );  Tag->push_back( "ZMuMu_M2300to3500" );  Xsec->push_back(0.00008948);  nEvents->push_back(100000);
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_ZMuMuPowheg_M3500to4500_25ns" );  Tag->push_back( "ZMuMu_M3500to4500" );  Xsec->push_back(0.000004135);  nEvents->push_back(100000);
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_ZMuMuPowheg_M4500to6000_25ns" );  Tag->push_back( "ZMuMu_M4500to6000" );  Xsec->push_back(4.56E-07);  nEvents->push_back(100000);
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_ZMuMuPowheg_M6000toInf_25ns" );  Tag->push_back( "ZMuMu_M6000toInf" );  Xsec->push_back(2.066E-08);  nEvents->push_back(100000);
-	}
-	else if( Type == "Full_withoutM200to400" )
-	{
-		// -- Background Samples -- //
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_ZZ_25ns" ); Tag->push_back( "ZZ" ); Xsec->push_back( 15.4 ); nEvents->push_back( 996944 );
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_WZ_25ns" ); Tag->push_back( "WZ" ); Xsec->push_back( 66.1 ); nEvents->push_back( 978512 );
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_WW_25ns" ); Tag->push_back( "WW" ); Xsec->push_back( 118.7 ); nEvents->push_back( 993640 );
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_WJets_25ns" ); Tag->push_back( "WJets" ); Xsec->push_back( 6.15e4 ); nEvents->push_back( 16541203.0 ); //nEvents: sum of weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYTauTau_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7255646.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYTauTau" ); Xsec->push_back( 6104/3.0 ); nEvents->push_back( 6419292.0 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_ttbar_25ns" ); Tag->push_back( "ttbar" ); Xsec->push_back( 831.76 ); nEvents->push_back( 19757182 );
-		
-		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYMuMu_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7293818.0 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50to400" ); Xsec->push_back( 6103.25346/3.0 ); nEvents->push_back( 6413327.0 ); //nEvents: sum of DYMuMu weights
-		// ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M200to400_25ns" ); Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 18497.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M400to500_25ns" ); Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 17143.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M500to700_25ns" ); Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 17397.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M700to800_25ns" ); Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 15827.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M800to1000_25ns" ); Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 14742.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160130_MINIAODv2_DYLL_M1000to1500_25ns_Resubmit" ); Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 14381.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M1500to2000_25ns" ); Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 13855.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M2000to3000_25ns" ); Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 12376.0 ); //nEvents: sum of DYMuMu weights 
-	}
-	else if( Type == "aMCNLO_withoutM200to400" )
-	{
-		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYMuMu_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7293818.0 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50to400" ); Xsec->push_back( 6103.25346/3.0 ); nEvents->push_back( 6413327.0 ); //nEvents: sum of DYMuMu weights
-		// ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M200to400_25ns" ); Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 18497.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M400to500_25ns" ); Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 17143.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M500to700_25ns" ); Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 17397.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M700to800_25ns" ); Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 15827.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M800to1000_25ns" ); Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 14742.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160130_MINIAODv2_DYLL_M1000to1500_25ns_Resubmit" ); Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 14381.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M1500to2000_25ns" ); Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 13855.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M2000to3000_25ns" ); Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 12376.0 ); //nEvents: sum of DYMuMu weights 
-	}
-	else if( Type == "aMCNLO_M50toInf" )
-	{
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50toInf" ); Xsec->push_back( 2008.4 ); nEvents->push_back( 6422093.0 ); //nEvents: sum of DYMuMu weights
-	}
-	else if( Type == "aMCNLO_M200to400" )
-	{
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M200to400_25ns" ); Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 18497.0 ); //nEvents: sum of DYMuMu weights 
-	}
-	else if( Type == "aMCNLO_DYEE" )
-	{
-                // std::cout << "Warning: # events should be adjusted using Sum weights of DYEE events (current one: DYMuMu SumWeights)" << endl;
-		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYEE_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7.29361e+06 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYEE_M50to200" ); Xsec->push_back( 6095.58346/3.0 ); nEvents->push_back( 6.40938e+06 ); //nEvents: sum of DYEE weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M200to400_25ns" ); Tag->push_back( "DYEE_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 18348 ); //nEvents: sum of DYEE weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M400to500_25ns" ); Tag->push_back( "DYEE_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 17410 ); //nEvents: sum of DYEE weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M500to700_25ns" ); Tag->push_back( "DYEE_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 17245 ); //nEvents: sum of DYEE weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M700to800_25ns" ); Tag->push_back( "DYEE_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 16120 ); //nEvents: sum of DYEE weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M800to1000_25ns" ); Tag->push_back( "DYEE_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 14397 ); //nEvents: sum of DYEE weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160130_MINIAODv2_DYLL_M1000to1500_25ns_Resubmit" ); Tag->push_back( "DYEE_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 13857 ); //nEvents: sum of DYEE weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M1500to2000_25ns" ); Tag->push_back( "DYEE_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 13495 ); //nEvents: sum of DYEE weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M2000to3000_25ns" ); Tag->push_back( "DYEE_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 12859 ); //nEvents: sum of DYEE weights 
-	}
-	else if( Type == "aMCNLO_FEWZxSec" )
-	{
-		// xSec of M10-50 and M50 sample: aMC@NLO -- //
-		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M10to50_25ns" ); Tag->push_back( "DYMuMu_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7293818.0 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50to200" ); Xsec->push_back( 6095.58346/3.0 ); nEvents->push_back( 6413327.0 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M200to400_25ns" ); Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 2.59583 ); nEvents->push_back( 18497.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M400to500_25ns" ); Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.136235 ); nEvents->push_back( 17143.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M500to700_25ns" ); Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.0775862 ); nEvents->push_back( 17397.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M700to800_25ns" ); Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.0121251 ); nEvents->push_back( 15827.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M800to1000_25ns" ); Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.010281 ); nEvents->push_back( 14742.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160130_MINIAODv2_DYLL_M1000to1500_25ns_Resubmit" ); Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.00546713 ); nEvents->push_back( 14381.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M1500to2000_25ns" ); Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.000735022 ); nEvents->push_back( 13855.0 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160123_MINIAODv2_DYLL_M2000to3000_25ns" ); Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.000176089 ); nEvents->push_back( 12376.0 ); //nEvents: sum of DYMuMu weights 
-	}
-	else
-                std::cout << "Wrong Type!" << endl;
-
-	return;
-}
-
-void DYAnalyzer::SetupMCsamples_v20160117_MiniAOD_JetMET( TString Type, vector<TString> *ntupleDirectory, vector<TString> *Tag, vector<Double_t> *Xsec, vector<Double_t> *nEvents )
-{
-	if( Type == "Full" )
-	{
-		// -- Background Samples -- //
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_ZZ_25ns" ); Tag->push_back( "ZZ" ); Xsec->push_back( 15.4 ); nEvents->push_back( 996168 );
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_WZ_25ns" ); Tag->push_back( "WZ" ); Xsec->push_back( 66.1 ); nEvents->push_back( 991232 );
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_WW_25ns" ); Tag->push_back( "WW" ); Xsec->push_back( 118.7 ); nEvents->push_back( 994416 );
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_WJets_25ns" ); Tag->push_back( "WJets" ); Xsec->push_back( 6.15e4 ); nEvents->push_back( 16518173 ); //nEvents: sum of weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M10to50_25ns" ); Tag->push_back( "DYTauTau_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7418362 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M50toInf_25ns" ); Tag->push_back( "DYTauTau" ); Xsec->push_back( 6104/3.0 ); nEvents->push_back( 6430407 ); //nEvents: sum of DYTauTau weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_ttbar_25ns" ); Tag->push_back( "ttbar" ); Xsec->push_back( 831.76 ); nEvents->push_back( 19899492 );
-		
-		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M10to50_25ns" ); Tag->push_back( "DYMuMu_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7418362 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50to200" ); Xsec->push_back( 6095.58346/3.0 ); nEvents->push_back( 6430407 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M200to400_25ns" ); Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 18339 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M400to500_25ns" ); Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 17143 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M500to700_25ns" ); Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 17397 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M700to800_25ns" ); Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 15827 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M800to1000_25ns" ); Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 6951 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M1000to1500_25ns" ); Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 14381 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M1500to2000_25ns" ); Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 13855 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M2000to3000_25ns" ); Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 12376 ); //nEvents: sum of DYMuMu weights 
-	}
-	else if( Type == "aMCNLO" )
-	{
-		// -- Signal binned samples -- //
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M10to50_25ns" ); Tag->push_back( "DYMuMu_M10to50" ); Xsec->push_back( 18610.0/3.0 ); nEvents->push_back( 7418362 ); //nEvents: sum of weights within 10<M<50
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M50toInf_25ns" ); Tag->push_back( "DYMuMu_M50to200" ); Xsec->push_back( 6095.58346/3.0 ); nEvents->push_back( 6430407 ); //nEvents: sum of DYMuMu weights
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M200to400_25ns" ); Tag->push_back( "DYMuMu_M200to400" ); Xsec->push_back( 7.67/3.0 ); nEvents->push_back( 18339 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M400to500_25ns" ); Tag->push_back( "DYMuMu_M400to500" ); Xsec->push_back( 0.423/3.0 ); nEvents->push_back( 17143 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M500to700_25ns" ); Tag->push_back( "DYMuMu_M500to700" ); Xsec->push_back( 0.24/3.0 ); nEvents->push_back( 17397 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M700to800_25ns" ); Tag->push_back( "DYMuMu_M700to800" ); Xsec->push_back( 0.035/3.0 ); nEvents->push_back( 15827 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M800to1000_25ns" ); Tag->push_back( "DYMuMu_M800to1000" ); Xsec->push_back( 0.03/3.0 ); nEvents->push_back( 6951 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M1000to1500_25ns" ); Tag->push_back( "DYMuMu_M1000to1500" ); Xsec->push_back( 0.016/3.0 ); nEvents->push_back( 14381 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M1500to2000_25ns" ); Tag->push_back( "DYMuMu_M1500to2000" ); Xsec->push_back( 0.002/3.0 ); nEvents->push_back( 13855 ); //nEvents: sum of DYMuMu weights 
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_DYLL_M2000to3000_25ns" ); Tag->push_back( "DYMuMu_M2000to3000" ); Xsec->push_back( 0.00054/3.0 ); nEvents->push_back( 12376 ); //nEvents: sum of DYMuMu weights
-	}
-	else if( Type == "Powheg" )
-	{
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_ZMuMuPowheg_M50to120_25ns" ); Tag->push_back( "ZMuMu_M50to120" );  Xsec->push_back(1975);  nEvents->push_back(2848071);
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_ZMuMuPowheg_M120to200_25ns" ); Tag->push_back( "ZMuMu_M120to200" );  Xsec->push_back(19.32);  nEvents->push_back(100000);
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_ZMuMuPowheg_M200to400_25ns" ); Tag->push_back( "ZMuMu_M200to400" );  Xsec->push_back(2.731);  nEvents->push_back(100000);
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_ZMuMuPowheg_M400to800_25ns" ); Tag->push_back( "ZMuMu_M400to800" );  Xsec->push_back(0.241);  nEvents->push_back(100000);
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_ZMuMuPowheg_M800to1400_25ns" );  Tag->push_back( "ZMuMu_M800to1400" );  Xsec->push_back(0.01678);  nEvents->push_back(100000);
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_ZMuMuPowheg_M1400to2300_25ns" );  Tag->push_back( "ZMuMu_M1400to2300" );  Xsec->push_back(0.00139);  nEvents->push_back(99600);
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_ZMuMuPowheg_M2300to3500_25ns" );  Tag->push_back( "ZMuMu_M2300to3500" );  Xsec->push_back(0.00008948);  nEvents->push_back(100000);
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_ZMuMuPowheg_M3500to4500_25ns" );  Tag->push_back( "ZMuMu_M3500to4500" );  Xsec->push_back(0.000004135);  nEvents->push_back(100000);
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_ZMuMuPowheg_M4500to6000_25ns" );  Tag->push_back( "ZMuMu_M4500to6000" );  Xsec->push_back(4.56E-07);  nEvents->push_back(100000);
-		ntupleDirectory->push_back( "Spring15DR/25ns/v20160102_MINIAOD_AddJetMET_ZMuMuPowheg_M6000toInf_25ns" );  Tag->push_back( "ZMuMu_M6000toInf" );  Xsec->push_back(2.066E-08);  nEvents->push_back(100000);
-	}
-	else
-                std::cout << "Wrong Type!" << endl;
-
-	return;
-}
-
-void DYAnalyzer::SetupDataSamples(TString Type, TString DataType, vector<TString> *ntupleDirectory, vector<TString> *Tag)
-{
-    if ( Type == "Data" )
-    {
-        if( DataType == "DoubleEG_B" )
-        {
-            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunB/180326_143532/0000" ); Tag->push_back( "DoubleEG_B_0000" );
-            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunB/180326_143532/0001" ); Tag->push_back( "DoubleEG_B_0001" );
-        }
-        else if( DataType == "DoubleEG_C" )
-        {
-            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunC/180326_143612/0000" ); Tag->push_back( "DoubleEG_C" );
-        }
-        else if( DataType == "DoubleEG_D" )
-        {
-            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunD/180326_143654/0000" ); Tag->push_back( "DoubleEG_D" );
-        }
-        else if( DataType == "DoubleEG_E" )
-        {
-            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunE/180326_143750/0000" ); Tag->push_back( "DoubleEG_E" );
-        }
-        else if( DataType == "DoubleEG_F" )
-        {
-            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunF/180326_143846/0000" ); Tag->push_back( "DoubleEG_F" );
-        }
-        else if( DataType == "DoubleEG_G" )
-        {
-            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunG/180326_144559/0000" ); Tag->push_back( "DoubleEG_G_0000" );
-            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunG/180326_144559/0001" ); Tag->push_back( "DoubleEG_G_0001" );
-        }
-        else if( DataType == "DoubleEG_H" )
-        {
-            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunHver2/180326_144638/0000" ); Tag->push_back( "DoubleEG_Hver2_0000" );
-            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunHver2/180326_144638/0001" ); Tag->push_back( "DoubleEG_Hver2_0001" );
-            ntupleDirectory->push_back( "DoubleEG/crab_DoubleEG_RunHver3/180326_144719/0000" ); Tag->push_back( "DoubleEG_Hver3" );
-        }
-        else if( DataType == "SingleMuon_B" )
-        {
-            ntupleDirectory->push_back( "SingleMuon/crab_SingleMuon_RunB/180326_143105/0000" ); Tag->push_back( "SingleMuon_B" );
-        }
-        else if( DataType == "SingleMuon_C" )
-        {
-            ntupleDirectory->push_back( "SingleMuon/crab_SingleMuon_RunC/180326_143152/0000" ); Tag->push_back( "SingleMuon_C" );
-        }
-        else if( DataType == "SingleMuon_D" )
-        {
-            ntupleDirectory->push_back( "SingleMuon/crab_SingleMuon_RunD/180326_143257/0000" ); Tag->push_back( "SingleMuon_D" );
-        }
-        else if( DataType == "SingleMuon_E" )
-        {
-            ntupleDirectory->push_back( "SingleMuon/crab_SingleMuon_RunE/180326_143338/0000" ); Tag->push_back( "SingleMuon_E" );
-        }
-        else if( DataType == "SingleMuon_F" )
-        {
-            ntupleDirectory->push_back( "SingleMuon/crab_SingleMuon_RunF/180326_143419/0000" ); Tag->push_back( "SingleMuon_F" );
-        }
-        else if( DataType == "SingleMuon_G" )
-        {
-            ntupleDirectory->push_back( "SingleMuon/crab_SingleMuon_RunG/180326_144335/0000" ); Tag->push_back( "SingleMuon_G" );
-        }
-        else if( DataType == "SingleMuon_H" )
-        {
-            ntupleDirectory->push_back( "SingleMuon/crab_SingleMuon_RunHver2/180326_144412/0000" ); Tag->push_back( "SingleMuon_Hver2" );
-            ntupleDirectory->push_back( "SingleMuon/crab_SingleMuon_RunHver3/180326_144454/0000" ); Tag->push_back( "SingleMuon_Hver3" );
-        }
-        else cout << "Wrong DataType!" << endl;
-    }
-    else cout << "Wrong Type!" << endl;
 }
 
 Bool_t DYAnalyzer::Separate_ttbarSample(TString Tag, NtupleHandle *ntuple, vector<GenOthers> *GenTopCollection)
@@ -1734,183 +780,129 @@ Double_t DYAnalyzer::PileUpWeightValue_80X(Int_t PileUp_MC)
 	return PileUpWeight[PileUp_MC];
 }
 
-void DYAnalyzer::SetupEfficiencyScaleFactor()
-{
-	TString Location_TnP = "/home/kplee/CommonCodes/DrellYanAnalysis/ROOTFile_TagProbeEfficiency_v20160329.root";
-        std::cout << "[Tag&Probe efficiency is from " << Location_TnP << " (Default, 74X)]" << endl;
-	
-	TFile *f = new TFile( Location_TnP );
-	TH2D *h_RecoID_data = (TH2D*)f->Get("h_2D_Eff_RecoID_Data");
-	TH2D *h_RecoID_MC = (TH2D*)f->Get("h_2D_Eff_RecoID_MC");
-
-	TH2D *h_Iso_data = (TH2D*)f->Get("h_2D_Eff_Iso_Data");
-	TH2D *h_Iso_MC = (TH2D*)f->Get("h_2D_Eff_Iso_MC");
-
-	TH2D *h_HLTv4p2_data = (TH2D*)f->Get("h_2D_Eff_HLTv4p2_Data");
-	TH2D *h_HLTv4p2_MC = (TH2D*)f->Get("h_2D_Eff_HLTv4p2_MC");
-
-	TH2D *h_HLTv4p3_data = (TH2D*)f->Get("h_2D_Eff_HLTv4p3_Data");
-	TH2D *h_HLTv4p3_MC = (TH2D*)f->Get("h_2D_Eff_HLTv4p3_MC");
-
-
-	Int_t nEtaBins = h_RecoID_data->GetNbinsX();
-	Int_t nPtBins = h_RecoID_data->GetNbinsY();
-
-	for(Int_t iter_x = 0; iter_x < nEtaBins; iter_x++)
-	{
-		for(Int_t iter_y = 0; iter_y < nPtBins; iter_y++)
-		{
-			Int_t i_etabin = iter_x + 1;
-			Int_t i_ptbin = iter_y + 1;
-
-			Double_t RecoID_data = h_RecoID_data->GetBinContent(i_etabin, i_ptbin);
-			Double_t RecoID_MC = h_RecoID_MC->GetBinContent(i_etabin, i_ptbin);
-
-			Double_t Iso_data = h_Iso_data->GetBinContent(i_etabin, i_ptbin);
-			Double_t Iso_MC = h_Iso_MC->GetBinContent(i_etabin, i_ptbin);
-
-			Double_t HLTv4p2_data = h_HLTv4p2_data->GetBinContent(i_etabin, i_ptbin);
-			Double_t HLTv4p2_MC = h_HLTv4p2_MC->GetBinContent(i_etabin, i_ptbin);
-
-			Double_t HLTv4p3_data = h_HLTv4p3_data->GetBinContent(i_etabin, i_ptbin);
-			Double_t HLTv4p3_MC = h_HLTv4p3_MC->GetBinContent(i_etabin, i_ptbin);
-
-			Eff_RecoID_data[iter_x][iter_y] = RecoID_data;
-			Eff_RecoID_MC[iter_x][iter_y] = RecoID_MC;
-
-			Eff_Iso_data[iter_x][iter_y] = Iso_data;
-			Eff_Iso_MC[iter_x][iter_y] = Iso_MC;
-
-			Eff_HLTv4p2_data[iter_x][iter_y] = HLTv4p2_data;
-			Eff_HLTv4p2_MC[iter_x][iter_y] = HLTv4p2_MC;
-
-			Eff_HLTv4p3_data[iter_x][iter_y] = HLTv4p3_data;
-			Eff_HLTv4p3_MC[iter_x][iter_y] = HLTv4p3_MC;
-		}
-	}
-        std::cout << "Setting for efficiency correction factors is completed" << endl;
-}
-
-void DYAnalyzer::SetupEfficiencyScaleFactor(TString ROOTFileName)
-{
-	TString Location_TnP = "/home/kplee/CommonCodes/DrellYanAnalysis/"+ROOTFileName;
-        std::cout << "[Tag&Probe efficiency is from " << Location_TnP << "]" << endl;
-
-	TFile *f = new TFile( Location_TnP );
-
-	TH2D *h_RecoID_data = (TH2D*)f->Get("h_2D_Eff_RecoID_Data");
-	TH2D *h_RecoID_MC = (TH2D*)f->Get("h_2D_Eff_RecoID_MC");
-
-	TH2D *h_Iso_data = (TH2D*)f->Get("h_2D_Eff_Iso_Data");
-	TH2D *h_Iso_MC = (TH2D*)f->Get("h_2D_Eff_Iso_MC");
-
-	TH2D *h_HLTv4p2_data = (TH2D*)f->Get("h_2D_Eff_HLTv4p2_Data");
-	TH2D *h_HLTv4p2_MC = (TH2D*)f->Get("h_2D_Eff_HLTv4p2_MC");
-
-	TH2D *h_HLTv4p3_data = (TH2D*)f->Get("h_2D_Eff_HLTv4p3_Data");
-	TH2D *h_HLTv4p3_MC = (TH2D*)f->Get("h_2D_Eff_HLTv4p3_MC");
-
-
-	Int_t nEtaBins = h_RecoID_data->GetNbinsX();
-	Int_t nPtBins = h_RecoID_data->GetNbinsY();
-
-	for(Int_t iter_x = 0; iter_x < nEtaBins; iter_x++)
-	{
-		for(Int_t iter_y = 0; iter_y < nPtBins; iter_y++)
-		{
-			Int_t i_etabin = iter_x + 1;
-			Int_t i_ptbin = iter_y + 1;
-
-			Double_t RecoID_data = h_RecoID_data->GetBinContent(i_etabin, i_ptbin);
-			Double_t RecoID_MC = h_RecoID_MC->GetBinContent(i_etabin, i_ptbin);
-
-			Double_t Iso_data = h_Iso_data->GetBinContent(i_etabin, i_ptbin);
-			Double_t Iso_MC = h_Iso_MC->GetBinContent(i_etabin, i_ptbin);
-
-			Double_t HLTv4p2_data = h_HLTv4p2_data->GetBinContent(i_etabin, i_ptbin);
-			Double_t HLTv4p2_MC = h_HLTv4p2_MC->GetBinContent(i_etabin, i_ptbin);
-
-			Double_t HLTv4p3_data = h_HLTv4p3_data->GetBinContent(i_etabin, i_ptbin);
-			Double_t HLTv4p3_MC = h_HLTv4p3_MC->GetBinContent(i_etabin, i_ptbin);
-
-			Eff_RecoID_data[iter_x][iter_y] = RecoID_data;
-			Eff_RecoID_MC[iter_x][iter_y] = RecoID_MC;
-
-			Eff_Iso_data[iter_x][iter_y] = Iso_data;
-			Eff_Iso_MC[iter_x][iter_y] = Iso_MC;
-
-			Eff_HLTv4p2_data[iter_x][iter_y] = HLTv4p2_data;
-			Eff_HLTv4p2_MC[iter_x][iter_y] = HLTv4p2_MC;
-
-			Eff_HLTv4p3_data[iter_x][iter_y] = HLTv4p3_data;
-			Eff_HLTv4p3_MC[iter_x][iter_y] = HLTv4p3_MC;
-		}
-	}
-        std::cout << "Setting for efficiency correction factors is completed" << endl;
-}
 
 void DYAnalyzer::SetupEfficiencyScaleFactor_BtoF()
 {
 	TString Location = "./etc/effSF/effSF_muon/";
         std::cout << "[Tag&Probe efficiency is from " << Location+"*BtoF.root" << "]" << endl;
 
-	TFile *f1 = new TFile( Location+"ID_SF_RunBtoF.root" );
-	TH2F *h_RecoID_data = (TH2F*)f1->Get("MC_NUM_HighPtID_DEN_genTracks_PAR_newpt_eta/efficienciesDATA/abseta_pair_ne_DATA");
-	TH2F *h_RecoID_MC = (TH2F*)f1->Get("MC_NUM_HighPtID_DEN_genTracks_PAR_newpt_eta/efficienciesMC/abseta_pair_ne_MC");
+        // RECO
+        TFile *f_reco = new TFile( Location+"Tracking_SF_RunBtoF.root" );
+        TGraphAsymmErrors *h_Reco_ratio = (TGraphAsymmErrors*)f_reco->Get("ratio_eff_eta3_dr030e030_corr");
+        Int_t nEtaBins_reco = h_Reco_ratio->GetN();
+        Int_t nPtBins_reco = 1;
 
-	TFile *f2 = new TFile( Location+"ISO_SF_RunBtoF.root" );
-	TH2F *h_Iso_data = (TH2F*)f2->Get("tkLooseISO_highptID_newpt_eta/efficienciesDATA/abseta_pair_ne_DATA");
-	TH2F *h_Iso_MC = (TH2F*)f2->Get("tkLooseISO_highptID_newpt_eta/efficienciesMC/abseta_pair_ne_MC");
+        Double_t eta_reco[15]; Double_t eta_reco_ordered[15];
+        Double_t SF_reco[15]; Double_t SF_reco_ordered[15];
 
-	TFile *f3 = new TFile( Location+"Trigger_SF_RunBtoF.root" );
-	TH2F *h_HLT_data = (TH2F*)f3->Get("IsoMu24_OR_IsoTkMu24_PtEtaBins/efficienciesDATA/abseta_pt_DATA");
-	TH2F *h_HLT_MC = (TH2F*)f3->Get("IsoMu24_OR_IsoTkMu24_PtEtaBins/efficienciesMC/abseta_pt_MC");
+        for(Int_t iter_y = 0; iter_y < nPtBins_reco; iter_y++) // in this case (2d distribution): x=eta, y=pT
+        {
+                for(Int_t i=0; i<nEtaBins_reco; i++)
+                {
+                        h_Reco_ratio->GetPoint(i, eta_reco[i], SF_reco[i]); // in this case: x=eta, y=SF
+                }
 
+                // -- Rearrangement in order of x (eta) values -- //
+                Double_t etamin; // the minimum value in given iteration
+                Double_t etalow = -9999; // the minimum value of the previous iteration
+                for(Int_t j=0; j<nEtaBins_reco; j++)
+                {
+                        Int_t jj = -9999;
 
-	Int_t nEtaBins1 = h_RecoID_data->GetNbinsX();
-	Int_t nPtBins1 = h_RecoID_data->GetNbinsY();
+                        etamin = 9999;
+                        for(Int_t k=0; k<nEtaBins_reco; k++)
+                        {
+                                if( etalow < eta_reco[k] && eta_reco[k] < etamin ) // the lowest number but higher than the one from previos iteration
+                                {
+                                        jj = k;
+                                        etamin = eta_reco[k];
+                                }
+                        }
+                        eta_reco_ordered[j] = eta_reco[jj];
+                        SF_reco_ordered[j] = SF_reco[jj];
 
-	Int_t nEtaBins2 = h_HLT_data->GetNbinsX();
-	Int_t nPtBins2 = h_HLT_data->GetNbinsY();
+                        etalow = etamin;
+                } // End of rearrangement
 
-	for(Int_t iter_x = 0; iter_x < nEtaBins1; iter_x++)
-	{
-		for(Int_t iter_y = 0; iter_y < nPtBins1; iter_y++)
-		{
-			Int_t i_etabin = iter_x + 1;
-			Int_t i_ptbin = iter_y + 1;
+                for(Int_t iter_x = 0; iter_x < nEtaBins_reco; iter_x++)
+                {
+                        Eff_Reco_data_BtoF[iter_x][iter_y] = SF_reco_ordered[iter_x]; // actually, it is the scale factor.
+                        Eff_Reco_MC_BtoF[iter_x][iter_y] = 1;
+                }
+        }
 
-			Double_t RecoID_data = h_RecoID_data->GetBinContent(i_etabin, i_ptbin);
-			Double_t RecoID_MC = h_RecoID_MC->GetBinContent(i_etabin, i_ptbin);
+        // ID
+        TFile *f_ID = new TFile( Location+"ID_SF_RunBtoF.root" );
+//	TH2F *h_ID_data = (TH2F*)f_ID->Get("MC_NUM_HighPtID_DEN_genTracks_PAR_newpt_eta/efficienciesDATA/abseta_pair_ne_DATA");
+//	TH2F *h_ID_MC = (TH2F*)f_ID->Get("MC_NUM_HighPtID_DEN_genTracks_PAR_newpt_eta/efficienciesMC/abseta_pair_ne_MC");
+        TH2F *h_ID_data = (TH2F*)f_ID->Get("MC_NUM_TightID_DEN_genTracks_PAR_pt_eta/efficienciesDATA/abseta_pt_DATA");
+        TH2F *h_ID_MC = (TH2F*)f_ID->Get("MC_NUM_TightID_DEN_genTracks_PAR_pt_eta/efficienciesMC/abseta_pt_MC");
 
-			Double_t Iso_data = h_Iso_data->GetBinContent(i_etabin, i_ptbin);
-			Double_t Iso_MC = h_Iso_MC->GetBinContent(i_etabin, i_ptbin);
+        Int_t nEtaBins_ID = h_ID_data->GetNbinsX();
+        Int_t nPtBins_ID = h_ID_data->GetNbinsY();
 
-			Eff_RecoID_data_BtoF[iter_x][iter_y] = RecoID_data;
-			Eff_RecoID_MC_BtoF[iter_x][iter_y] = RecoID_MC;
+        for(Int_t iter_x = 0; iter_x < nEtaBins_ID; iter_x++)
+        {
+                for(Int_t iter_y = 0; iter_y < nPtBins_ID; iter_y++)
+                {
+                        Int_t i_etabin = iter_x + 1;
+                        Int_t i_ptbin = iter_y + 1;
 
-			Eff_Iso_data_BtoF[iter_x][iter_y] = Iso_data;
-			Eff_Iso_MC_BtoF[iter_x][iter_y] = Iso_MC;
-		}
-	}
-	for(Int_t iter_x = 0; iter_x < nEtaBins2; iter_x++)
-	{
-		for(Int_t iter_y = 0; iter_y < nPtBins2; iter_y++)
-		{
-			Int_t i_etabin = iter_x + 1;
-			Int_t i_ptbin = iter_y + 1;
+                        Double_t ID_data = h_ID_data->GetBinContent(i_etabin, i_ptbin);
+                        Double_t ID_MC = h_ID_MC->GetBinContent(i_etabin, i_ptbin);
 
-			Double_t HLT_data = h_HLT_data->GetBinContent(i_etabin, i_ptbin);
-			Double_t HLT_MC = h_HLT_MC->GetBinContent(i_etabin, i_ptbin);
+                        Eff_ID_data_BtoF[iter_x][iter_y] = ID_data;
+                        Eff_ID_MC_BtoF[iter_x][iter_y] = ID_MC;
+                }
+        }
 
-			Eff_HLT_data_BtoF[iter_x][iter_y] = HLT_data;
-			Eff_HLT_MC_BtoF[iter_x][iter_y] = HLT_MC;
+        // ISO
+        TFile *f_iso = new TFile( Location+"ISO_SF_RunBtoF.root" );
+//	TH2F *h_Iso_data = (TH2F*)f_iso->Get("tkLooseISO_highptID_newpt_eta/efficienciesDATA/abseta_pair_ne_DATA");
+//	TH2F *h_Iso_MC = (TH2F*)f_iso->Get("tkLooseISO_highptID_newpt_eta/efficienciesMC/abseta_pair_ne_MC");
+        TH2F *h_Iso_data = (TH2F*)f_iso->Get("TightISO_TightID_pt_eta/efficienciesDATA/abseta_pt_DATA");
+        TH2F *h_Iso_MC = (TH2F*)f_iso->Get("TightISO_TightID_pt_eta/efficienciesMC/abseta_pt_MC");
 
-                        //std::cout << "[iter_x, iter_y] : [" << iter_x << ", " << iter_y << "]" << endl;
-                        //std::cout << "Eff_HLT_data_1 : " << Eff_HLT_data_BtoF[iter_x][iter_y] << endl;
-                        //std::cout << "Eff_HLT_MC_1 : " << Eff_HLT_MC_BtoF[iter_x][iter_y] << endl;
-		}
-	}
+        Int_t nEtaBins_iso = h_Iso_data->GetNbinsX();
+        Int_t nPtBins_iso = h_Iso_data->GetNbinsY();
+
+        for(Int_t iter_x = 0; iter_x < nEtaBins_iso; iter_x++)
+        {
+                for(Int_t iter_y = 0; iter_y < nPtBins_iso; iter_y++)
+                {
+                        Int_t i_etabin = iter_x + 1;
+                        Int_t i_ptbin = iter_y + 1;
+
+                        Double_t Iso_data = h_Iso_data->GetBinContent(i_etabin, i_ptbin);
+                        Double_t Iso_MC = h_Iso_MC->GetBinContent(i_etabin, i_ptbin);
+
+                        Eff_Iso_data_BtoF[iter_x][iter_y] = Iso_data;
+                        Eff_Iso_MC_BtoF[iter_x][iter_y] = Iso_MC;
+                }
+        }
+
+        // TRIGGER
+        TFile *f_HLT = new TFile( Location+"Trigger_SF_RunBtoF.root" );
+        TH2F *h_HLT_data = (TH2F*)f_HLT->Get("IsoMu24_OR_IsoTkMu24_PtEtaBins/efficienciesDATA/abseta_pt_DATA");
+        TH2F *h_HLT_MC = (TH2F*)f_HLT->Get("IsoMu24_OR_IsoTkMu24_PtEtaBins/efficienciesMC/abseta_pt_MC");
+
+        Int_t nEtaBins_HLT = h_HLT_data->GetNbinsX();
+        Int_t nPtBins_HLT = h_HLT_data->GetNbinsY();
+
+        for(Int_t iter_x = 0; iter_x < nEtaBins_HLT; iter_x++)
+        {
+                for(Int_t iter_y = 0; iter_y < nPtBins_HLT; iter_y++)
+                {
+                        Int_t i_etabin = iter_x + 1;
+                        Int_t i_ptbin = iter_y + 1;
+
+                        Double_t HLT_data = h_HLT_data->GetBinContent(i_etabin, i_ptbin);
+                        Double_t HLT_MC = h_HLT_MC->GetBinContent(i_etabin, i_ptbin);
+
+                        Eff_HLT_data_BtoF[iter_x][iter_y] = HLT_data;
+                        Eff_HLT_MC_BtoF[iter_x][iter_y] = HLT_MC;
+                }
+        }
         std::cout << "Setting for efficiency correction factors (BtoF) is completed" << endl;
 }
 
@@ -1919,63 +911,123 @@ void DYAnalyzer::SetupEfficiencyScaleFactor_GtoH()
 	TString Location = "./etc/effSF/effSF_muon/";
         std::cout << "[Tag&Probe efficiency is from " << Location+"*GtoH.root" << "]" << endl;
 
-	TFile *f1 = new TFile( Location+"ID_SF_RunGtoH.root" );
-	TH2F *h_RecoID_data = (TH2F*)f1->Get("MC_NUM_HighPtID_DEN_genTracks_PAR_newpt_eta/efficienciesDATA/abseta_pair_ne_DATA");
-	TH2F *h_RecoID_MC = (TH2F*)f1->Get("MC_NUM_HighPtID_DEN_genTracks_PAR_newpt_eta/efficienciesMC/abseta_pair_ne_MC");
+        // RECO
+        TFile *f_reco = new TFile( Location+"Tracking_SF_RunGtoH.root" );
+        TGraphAsymmErrors *h_Reco_ratio = (TGraphAsymmErrors*)f_reco->Get("ratio_eff_eta3_dr030e030_corr");
+        Int_t nEtaBins_reco = h_Reco_ratio->GetN();
+        Int_t nPtBins_reco = 1;
 
-	TFile *f2 = new TFile( Location+"ISO_SF_RunGtoH.root" );
-	TH2F *h_Iso_data = (TH2F*)f2->Get("tkLooseISO_highptID_newpt_eta/efficienciesDATA/abseta_pair_ne_DATA");
-	TH2F *h_Iso_MC = (TH2F*)f2->Get("tkLooseISO_highptID_newpt_eta/efficienciesMC/abseta_pair_ne_MC");
+        Double_t eta_reco[15]; Double_t eta_reco_ordered[15];
+        Double_t SF_reco[15]; Double_t SF_reco_ordered[15];
 
-	TFile *f3 = new TFile( Location+"Trigger_SF_RunGtoH.root" );
-	TH2F *h_HLT_data = (TH2F*)f3->Get("IsoMu24_OR_IsoTkMu24_PtEtaBins/efficienciesDATA/abseta_pt_DATA");
-	TH2F *h_HLT_MC = (TH2F*)f3->Get("IsoMu24_OR_IsoTkMu24_PtEtaBins/efficienciesMC/abseta_pt_MC");
+        for(Int_t iter_y = 0; iter_y < nPtBins_reco; iter_y++) // in this case (2d distribution): x=eta, y=pT
+        {
+                for(Int_t i=0; i<nEtaBins_reco; i++)
+                {
+                        h_Reco_ratio->GetPoint(i, eta_reco[i], SF_reco[i]); // in this case: x=eta, y=SF
+                }
 
+                // -- Rearrangement in order of x (eta) values -- //
+                Double_t etamin; // the minimum value in given iteration
+                Double_t etalow = -9999; // the minimum value of the previous iteration
+                for(Int_t j=0; j<nEtaBins_reco; j++)
+                {
+                        Int_t jj = -9999;
 
-	Int_t nEtaBins1 = h_RecoID_data->GetNbinsX();
-	Int_t nPtBins1 = h_RecoID_data->GetNbinsY();
+                        etamin = 9999;
+                        for(Int_t k=0; k<nEtaBins_reco; k++)
+                        {
+                                if( etalow < eta_reco[k] && eta_reco[k] < etamin ) // the lowest number, but higher than the one from the previous iteration
+                                {
+                                        jj = k;
+                                        etamin = eta_reco[k];
+                                }
+                        }
+                        eta_reco_ordered[j] = eta_reco[jj];
+                        SF_reco_ordered[j] = SF_reco[jj];
 
-	Int_t nEtaBins2 = h_HLT_data->GetNbinsX();
-	Int_t nPtBins2 = h_HLT_data->GetNbinsY();
+                        etalow = etamin;
+                } // End of rearrangement
 
-	for(Int_t iter_x = 0; iter_x < nEtaBins1; iter_x++)
-	{
-		for(Int_t iter_y = 0; iter_y < nPtBins1; iter_y++)
-		{
-			Int_t i_etabin = iter_x + 1;
-			Int_t i_ptbin = iter_y + 1;
+                for(Int_t iter_x = 0; iter_x < nEtaBins_reco; iter_x++)
+                {
+                        Eff_Reco_data_GtoH[iter_x][iter_y] = SF_reco_ordered[iter_x]; // actually, it is the scale factor.
+                        Eff_Reco_MC_GtoH[iter_x][iter_y] = 1;
+                }
+        }
 
-			Double_t RecoID_data = h_RecoID_data->GetBinContent(i_etabin, i_ptbin);
-			Double_t RecoID_MC = h_RecoID_MC->GetBinContent(i_etabin, i_ptbin);
+        // ID
+        TFile *f_ID = new TFile( Location+"ID_SF_RunGtoH.root" );
+//	TH2F *h_ID_data = (TH2F*)f_ID->Get("MC_NUM_HighPtID_DEN_genTracks_PAR_newpt_eta/efficienciesDATA/abseta_pair_ne_DATA");
+//	TH2F *h_ID_MC = (TH2F*)f_ID->Get("MC_NUM_HighPtID_DEN_genTracks_PAR_newpt_eta/efficienciesMC/abseta_pair_ne_MC");
+        TH2F *h_ID_data = (TH2F*)f_ID->Get("MC_NUM_TightID_DEN_genTracks_PAR_pt_eta/efficienciesDATA/abseta_pt_DATA");
+        TH2F *h_ID_MC = (TH2F*)f_ID->Get("MC_NUM_TightID_DEN_genTracks_PAR_pt_eta/efficienciesMC/abseta_pt_MC");
 
-			Double_t Iso_data = h_Iso_data->GetBinContent(i_etabin, i_ptbin);
-			Double_t Iso_MC = h_Iso_MC->GetBinContent(i_etabin, i_ptbin);
+        Int_t nEtaBins_ID = h_ID_data->GetNbinsX();
+        Int_t nPtBins_ID = h_ID_data->GetNbinsY();
 
-			Eff_RecoID_data_GtoH[iter_x][iter_y] = RecoID_data;
-			Eff_RecoID_MC_GtoH[iter_x][iter_y] = RecoID_MC;
+        for(Int_t iter_x = 0; iter_x < nEtaBins_ID; iter_x++)
+        {
+                for(Int_t iter_y = 0; iter_y < nPtBins_ID; iter_y++)
+                {
+                        Int_t i_etabin = iter_x + 1;
+                        Int_t i_ptbin = iter_y + 1;
 
-			Eff_Iso_data_GtoH[iter_x][iter_y] = Iso_data;
-			Eff_Iso_MC_GtoH[iter_x][iter_y] = Iso_MC;
-		}
-	}
-	for(Int_t iter_x = 0; iter_x < nEtaBins2; iter_x++)
-	{
-		for(Int_t iter_y = 0; iter_y < nPtBins2; iter_y++)
-		{
-			Int_t i_etabin = iter_x + 1;
-			Int_t i_ptbin = iter_y + 1;
+                        Double_t ID_data = h_ID_data->GetBinContent(i_etabin, i_ptbin);
+                        Double_t ID_MC = h_ID_MC->GetBinContent(i_etabin, i_ptbin);
 
-			Double_t HLT_data = h_HLT_data->GetBinContent(i_etabin, i_ptbin);
-			Double_t HLT_MC = h_HLT_MC->GetBinContent(i_etabin, i_ptbin);
+                        Eff_ID_data_GtoH[iter_x][iter_y] = ID_data;
+                        Eff_ID_MC_GtoH[iter_x][iter_y] = ID_MC;
+                }
+        }
 
-			Eff_HLT_data_GtoH[iter_x][iter_y] = HLT_data;
-			Eff_HLT_MC_GtoH[iter_x][iter_y] = HLT_MC;
+        // ISO
+        TFile *f_iso = new TFile( Location+"ISO_SF_RunGtoH.root" );
+//	TH2F *h_Iso_data = (TH2F*)f_iso->Get("tkLooseISO_highptID_newpt_eta/efficienciesDATA/abseta_pair_ne_DATA");
+//	TH2F *h_Iso_MC = (TH2F*)f_iso->Get("tkLooseISO_highptID_newpt_eta/efficienciesMC/abseta_pair_ne_MC");
+        TH2F *h_Iso_data = (TH2F*)f_iso->Get("TightISO_TightID_pt_eta/efficienciesDATA/abseta_pt_DATA");
+        TH2F *h_Iso_MC = (TH2F*)f_iso->Get("TightISO_TightID_pt_eta/efficienciesMC/abseta_pt_MC");
 
-                        //std::cout << "[iter_x, iter_y] : [" << iter_x << ", " << iter_y << "]" << endl;
-                        //std::cout << "Eff_HLT_data_2 : " << Eff_HLT_data_GtoH[iter_x][iter_y] << endl;
-                        //std::cout << "Eff_HLT_MC_2 : " << Eff_HLT_MC_GtoH[iter_x][iter_y] << endl;
-		}
-	}
+        Int_t nEtaBins_iso = h_Iso_data->GetNbinsX();
+        Int_t nPtBins_iso = h_Iso_data->GetNbinsY();
+
+        for(Int_t iter_x = 0; iter_x < nEtaBins_iso; iter_x++)
+        {
+                for(Int_t iter_y = 0; iter_y < nPtBins_iso; iter_y++)
+                {
+                        Int_t i_etabin = iter_x + 1;
+                        Int_t i_ptbin = iter_y + 1;
+
+                        Double_t Iso_data = h_Iso_data->GetBinContent(i_etabin, i_ptbin);
+                        Double_t Iso_MC = h_Iso_MC->GetBinContent(i_etabin, i_ptbin);
+
+                        Eff_Iso_data_GtoH[iter_x][iter_y] = Iso_data;
+                        Eff_Iso_MC_GtoH[iter_x][iter_y] = Iso_MC;
+                }
+        }
+
+        // TRIGGER
+        TFile *f_HLT = new TFile( Location+"Trigger_SF_RunGtoH.root" );
+        TH2F *h_HLT_data = (TH2F*)f_HLT->Get("IsoMu24_OR_IsoTkMu24_PtEtaBins/efficienciesDATA/abseta_pt_DATA");
+        TH2F *h_HLT_MC = (TH2F*)f_HLT->Get("IsoMu24_OR_IsoTkMu24_PtEtaBins/efficienciesMC/abseta_pt_MC");
+
+        Int_t nEtaBins_HLT = h_HLT_data->GetNbinsX();
+        Int_t nPtBins_HLT = h_HLT_data->GetNbinsY();
+
+        for(Int_t iter_x = 0; iter_x < nEtaBins_HLT; iter_x++)
+        {
+                for(Int_t iter_y = 0; iter_y < nPtBins_HLT; iter_y++)
+                {
+                        Int_t i_etabin = iter_x + 1;
+                        Int_t i_ptbin = iter_y + 1;
+
+                        Double_t HLT_data = h_HLT_data->GetBinContent(i_etabin, i_ptbin);
+                        Double_t HLT_MC = h_HLT_MC->GetBinContent(i_etabin, i_ptbin);
+
+                        Eff_HLT_data_GtoH[iter_x][iter_y] = HLT_data;
+                        Eff_HLT_MC_GtoH[iter_x][iter_y] = HLT_MC;
+                }
+        }
         std::cout << "Setting for efficiency correction factors (GtoH) is completed" << endl;
 }
 
@@ -1984,70 +1036,73 @@ void DYAnalyzer::SetupEfficiencyScaleFactor_electron()
         TString Location = "./etc/effSF/effSF_electron/";
         std::cout << "[Tag&Probe efficiency is from " << Location+"*.root" << "]" << endl;
 
-	TFile *f1 = new TFile( Location+"Reco_SF.root" );
-	TGraphErrors *h_reco_sf = (TGraphErrors*)f1->Get("grSF1D_0");
+        // RECO
+        TFile *f_reco = new TFile( Location+"Reco_SF.root" );
+        TGraphErrors *h_reco_sf = (TGraphErrors*)f_reco->Get("grSF1D_0");
 
-	TFile *f2 = new TFile( Location+"MediumID_SF.root" );
-	TGraphErrors *h_id_sf_0 = (TGraphErrors*)f2->Get("grSF1D_0");
-	TGraphErrors *h_id_sf_1 = (TGraphErrors*)f2->Get("grSF1D_1");
-	TGraphErrors *h_id_sf_2 = (TGraphErrors*)f2->Get("grSF1D_2");
-	TGraphErrors *h_id_sf_3 = (TGraphErrors*)f2->Get("grSF1D_3");
-	TGraphErrors *h_id_sf_4 = (TGraphErrors*)f2->Get("grSF1D_4");
+        Int_t nEtaBins_reco = h_reco_sf->GetN();
+        Int_t nPtBins_reco = 1;
 
-	Int_t nEtaBins_reco = h_reco_sf->GetN();
-	Int_t nPtBins_reco = 1;
+        Double_t eta_reco[30]; Double_t eta_reco_ordered[30];
+        Double_t SF_reco[30]; Double_t SF_reco_ordered[30];
+
+        for(Int_t iter_y = 0; iter_y < nPtBins_reco; iter_y++) // in this case (2d distribution): x=eta, y=pT
+        {
+            for(Int_t i=0; i<nEtaBins_reco; i++)
+            {
+                h_reco_sf->GetPoint(i, eta_reco[i], SF_reco[i]); // in this case: x=eta, y=SF
+            }
+
+            // -- Rearrangement in order of x (eta) values -- //
+            Double_t etamin; // the minimum value in given iteration
+            Double_t etalow = -9999; // the minimum value of the previous iteration
+            for(Int_t j=0; j<nEtaBins_reco; j++)
+            {
+                Int_t jj = -9999;
+
+                etamin = 9999;
+                for(Int_t k=0; k<nEtaBins_reco; k++)
+                {
+                    if( etalow < eta_reco[k] && eta_reco[k] < etamin ) // the lowest number, but higher than the one from the previous iteration
+                    {
+                        jj = k;
+                        etamin = eta_reco[k];
+                    }
+                }
+                eta_reco_ordered[j] = eta_reco[jj];
+                SF_reco_ordered[j] = SF_reco[jj];
+
+                etalow = etamin;
+//                std::cout << j << "  " << eta_reco_ordered[j] << "  " << SF_reco_ordered[j] << endl;
+            } // End of rearrangement
+
+            for(Int_t iter_x = 0; iter_x < nEtaBins_reco; iter_x++)
+            {
+                Eff_Reco_data[iter_x][iter_y] = SF_reco_ordered[iter_x]; // actually, it is the scale factor.
+                Eff_Reco_MC[iter_x][iter_y] = 1;
+//                cout << "Reco: bin# = [" << iter_x << ", " << iter_y << "]" << " eta = " << eta_reco_ordered[iter_x] << " sf = " << SF_reco_ordered[iter_x] << endl;
+            }
+        }
+
+        // ID
+//	TFile *f_ID = new TFile( Location+"MediumID_SF.root" );
+        TFile *f_ID = new TFile( Location+"Electron_MediumID_Run2016BtoH.root" );
+        TGraphErrors *h_id_sf_0 = (TGraphErrors*)f_ID->Get("grSF1D_0"); // Five graphs (functions of eta) for different pT bins
+        TGraphErrors *h_id_sf_1 = (TGraphErrors*)f_ID->Get("grSF1D_1");
+        TGraphErrors *h_id_sf_2 = (TGraphErrors*)f_ID->Get("grSF1D_2");
+        TGraphErrors *h_id_sf_3 = (TGraphErrors*)f_ID->Get("grSF1D_3");
+        TGraphErrors *h_id_sf_4 = (TGraphErrors*)f_ID->Get("grSF1D_4");
 
 	Int_t nEtaBins_id = h_id_sf_0->GetN();
 	Int_t nPtBins_id = 5;
 
-	// -- For reco efficiency -- //
-	Double_t x_reco[30]; Double_t xx_reco[30];
-	Double_t y_reco[30]; Double_t yy_reco[30];
-
-	for(Int_t iter_y = 0; iter_y < nPtBins_reco; iter_y++)
-	{
-		for(Int_t i=0; i<nEtaBins_reco; i++)
-		{
-			h_reco_sf->GetPoint(i, x_reco[i], y_reco[i]);
-		}
-
-		// -- Rearrangement in order of x values -- //
-		Double_t xmin;
-		Double_t xlow = -9999;
-		for(Int_t j=0; j<nEtaBins_reco; j++)
-		{
-			Int_t jj = -9999;
-
-			xmin = 9999;
-			for(Int_t k=0; k<nEtaBins_reco; k++)
-			{
-				if( xlow < x_reco[k] && x_reco[k] < xmin )
-				{
-					jj = k;
-					xmin = x_reco[k];
-				}
-			}
-			xx_reco[j] = x_reco[jj];
-			yy_reco[j] = y_reco[jj];
-
-			xlow = xmin;
-//			std::cout << j << "  " << xx_reco[j] << "  " << yy_reco[j] << endl;
-		} // End of rearrangement
-
-		for(Int_t iter_x = 0; iter_x < nEtaBins_reco; iter_x++)
-		{
-			Eff_Reco_data[iter_x][iter_y] = yy_reco[iter_x]; // actually, it is the scale factor.
-			Eff_Reco_MC[iter_x][iter_y] = 1;
-//			std::cout << "Reco: bin# = [" << iter_x << ", " << iter_y << "]" << " eta = " << xx_reco[iter_x] << " sf = " << yy_reco[iter_x] << endl;
-		}
-	}
-
-	// -- For id efficiency -- //
-	Double_t x_id[10]; Double_t xx_id[10];
-	Double_t y_id[10]; Double_t yy_id[10];
+//	Double_t eta_id[10]; Double_t eta_id_ordered[10];
+//	Double_t SF_id[10]; Double_t SF_id_ordered[10];
+        Double_t eta_id[20]; Double_t eta_id_ordered[20];
+        Double_t SF_id[20]; Double_t SF_id_ordered[20];
 
 	TGraphErrors *h_id_sf;
-	for(Int_t iter_y = 0; iter_y < nPtBins_id; iter_y++)
+        for(Int_t iter_y = 0; iter_y < nPtBins_id; iter_y++) // In this case, x=eta, y=pT
 	{
 		if(iter_y == 0) h_id_sf = (TGraphErrors*)h_id_sf_0->Clone();
 		else if(iter_y == 1) h_id_sf = (TGraphErrors*)h_id_sf_1->Clone();
@@ -2057,1225 +1112,1048 @@ void DYAnalyzer::SetupEfficiencyScaleFactor_electron()
 
 		for(Int_t i=0; i<nEtaBins_id; i++)
 		{
-			h_id_sf->GetPoint(i, x_id[i], y_id[i]);
+                        h_id_sf->GetPoint(i, eta_id[i], SF_id[i]); // In this case, x=eta, y=SF
 		}
 
-		// -- Rearrangement in order of x values -- //
-		Double_t xmin;
-		Double_t xlow = -9999;
+                // -- Rearrangement in order of x (eta) values -- //
+                Double_t etamin; // the minimum value in given iteration
+                Double_t etalow = -9999; // the minimum value of the previous iteration
 		for(Int_t j=0; j<nEtaBins_id; j++)
 		{
 			Int_t jj = -9999;
 
-			xmin = 9999;
+                        etamin = 9999;
 			for(Int_t k=0; k<nEtaBins_id; k++)
 			{
-				if( xlow < x_id[k] && x_id[k] < xmin )
+                                if( etalow < eta_id[k] && eta_id[k] < etamin ) // the lowest number, but higher than the one from the previous iteration
 				{
 					jj = k;
-					xmin = x_id[k];
+                                        etamin = eta_id[k];
 				}
 			}
-			xx_id[j] = x_id[jj];
-			yy_id[j] = y_id[jj];
+                        eta_id_ordered[j] = eta_id[jj];
+                        SF_id_ordered[j] = SF_id[jj];
 
-			xlow = xmin;
-//			std::cout << j << "  " << xx_id[j] << "  " << yy_id[j] << endl;
+                        etalow = etamin;
+//			std::cout << j << "  " << eta_id_ordered[j] << "  " << SF_id_ordered[j] << endl;
 		} // End of rearrangement
 
 		for(Int_t iter_x = 0; iter_x < nEtaBins_id; iter_x++)
 		{
-			Eff_ID_data[iter_x][iter_y] = yy_id[iter_x]; // actually, it is the scale factor.
+                        Eff_ID_data[iter_x][iter_y] = SF_id_ordered[iter_x]; // actually, it is the scale factor.
 			Eff_ID_MC[iter_x][iter_y] = 1;
-//			std::cout << "ID: bin# = [" << iter_x << ", " << iter_y << "]" << " eta = " << xx_id[iter_x] << " sf = " << yy_id[iter_x] << endl;
+//			std::cout << "ID: bin# = [" << iter_x << ", " << iter_y << "]" << " eta = " << eta_id_ordered[iter_x] << " sf = " << SF_id_ordered[iter_x] << endl;
 		}
 	}
+
+        // TRIGGER (leg2)
+        //TFile *f_HLT = new TFile( Location+"Leg2_SF.root" );
+        TFile *f_HLT = new TFile( Location+"Electron_Leg2_SF.root" );
+        TGraphErrors *h_leg2_sf_0 = (TGraphErrors*)f_HLT->Get("grSF1D_0"); // 7 graphs (functions of eta) for different pT bins
+        TGraphErrors *h_leg2_sf_1 = (TGraphErrors*)f_HLT->Get("grSF1D_1");
+        TGraphErrors *h_leg2_sf_2 = (TGraphErrors*)f_HLT->Get("grSF1D_2");
+        TGraphErrors *h_leg2_sf_3 = (TGraphErrors*)f_HLT->Get("grSF1D_3");
+        TGraphErrors *h_leg2_sf_4 = (TGraphErrors*)f_HLT->Get("grSF1D_4");
+        TGraphErrors *h_leg2_sf_5 = (TGraphErrors*)f_HLT->Get("grSF1D_5");
+        TGraphErrors *h_leg2_sf_6 = (TGraphErrors*)f_HLT->Get("grSF1D_6");
+        //TGraphErrors *h_leg2_sf_7 = (TGraphErrors*)f_HLT->Get("grSF1D_7");
+
+        Int_t nEtaBins_leg2 = h_leg2_sf_0->GetN();
+        //Int_t nPtBins_leg2 = 8;
+        Int_t nPtBins_leg2 = 7;
+
+        //Double_t eta_leg2[10]; Double_t eta_leg2_ordered[10];
+        //Double_t SF_leg2[10]; Double_t SF_leg2_ordered[10];
+        Double_t eta_leg2[20]; Double_t eta_leg2_ordered[20];
+        Double_t SF_leg2[20]; Double_t SF_leg2_ordered[20];
+
+        TGraphErrors *h_leg2_sf;
+        for(Int_t iter_y = 0; iter_y < nPtBins_leg2; iter_y++) // In this case, x=eta, y=pT
+        {
+            if(iter_y == 0) h_leg2_sf = (TGraphErrors*)h_leg2_sf_0->Clone();
+            else if(iter_y == 1) h_leg2_sf = (TGraphErrors*)h_leg2_sf_1->Clone();
+            else if(iter_y == 2) h_leg2_sf = (TGraphErrors*)h_leg2_sf_2->Clone();
+            else if(iter_y == 3) h_leg2_sf = (TGraphErrors*)h_leg2_sf_3->Clone();
+            else if(iter_y == 4) h_leg2_sf = (TGraphErrors*)h_leg2_sf_4->Clone();
+            else if(iter_y == 5) h_leg2_sf = (TGraphErrors*)h_leg2_sf_5->Clone();
+            else if(iter_y == 6) h_leg2_sf = (TGraphErrors*)h_leg2_sf_6->Clone();
+            //else if(iter_y == 7) h_leg2_sf = (TGraphErrors*)h_leg2_sf_7->Clone();
+
+            for(Int_t i=0; i<nEtaBins_leg2; i++)
+            {
+                h_leg2_sf->GetPoint(i, eta_leg2[i], SF_leg2[i]); // In this case, x=eta, y=SF
+            }
+
+            // -- Rearrangement in order of x (eta) values -- //
+            Double_t etamin; // the minimum value in given iteration
+            Double_t etalow = -9999; // the minimum value of the previous iteration
+            for(Int_t j=0; j<nEtaBins_leg2; j++)
+            {
+                Int_t jj = -9999;
+
+                etamin = 9999;
+                for(Int_t k=0; k<nEtaBins_leg2; k++)
+                {
+                    if( etalow < eta_leg2[k] && eta_leg2[k] < etamin ) // the lowest number, but higher than the one from the previous iteration
+                    {
+                            jj = k;
+                            etamin = eta_leg2[k];
+                    }
+                }
+                eta_leg2_ordered[j] = eta_leg2[jj];
+                SF_leg2_ordered[j] = SF_leg2[jj];
+
+                etalow = etamin;
+                //cout << j << "  " << eta_leg2_ordered[j] << "  " << SF_leg2_ordered[j] << endl;
+            } // End of rearrangement
+
+            for(Int_t iter_x = 0; iter_x < nEtaBins_leg2; iter_x++)
+            {
+                Eff_HLT_Leg2_data[iter_x][iter_y] = SF_leg2_ordered[iter_x]; // actually, it is the scale factor.
+                Eff_HLT_Leg2_MC[iter_x][iter_y] = 1;
+                //cout << "ID: bin# = [" << iter_x << ", " << iter_y << "]" << " eta = " << eta_leg2_ordered[iter_x] << " sf = " << SF_leg2_ordered[iter_x] << endl;
+            }
+        }
 
         std::cout << "Setting for efficiency correction factors is completed" << endl;
 }
 
-Double_t DYAnalyzer::EfficiencySF_EventWeight_HLTv4p2(Muon mu1, Muon mu2)
-{
-	Double_t weight = -999;
-
-	// -- Muon1 -- //
-	Double_t Pt1 = mu1.Pt;
-	Double_t eta1 = mu1.eta;
-
-	Int_t ptbin1 = FindPtBin( Pt1 );
-	Int_t etabin1 = FindEtaBin( eta1 );
-
-	if( ptbin1 == 9999 || etabin1 == 9999 )
-	{
-		printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin1, etabin1);
-		return -999;
-	}
-
-	Double_t Eff_muon1_data = Eff_RecoID_data[etabin1][ptbin1] * Eff_Iso_data[etabin1][ptbin1];
-	Double_t Eff_muon1_MC = Eff_RecoID_MC[etabin1][ptbin1] * Eff_Iso_MC[etabin1][ptbin1];
-
-	// -- Muon2 -- //
-	Double_t Pt2 = mu2.Pt;
-	Double_t eta2 = mu2.eta;
-
-	Int_t ptbin2 = FindPtBin( Pt2 );
-	Int_t etabin2 = FindEtaBin( eta2 );
-
-	if( ptbin2 == 9999 || etabin2 == 9999 )
-	{
-		printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin2, etabin2);
-		return -999;
-	}
-	Double_t Eff_muon2_data = Eff_RecoID_data[etabin2][ptbin2] * Eff_Iso_data[etabin2][ptbin2];
-	Double_t Eff_muon2_MC = Eff_RecoID_MC[etabin2][ptbin2] * Eff_Iso_MC[etabin2][ptbin2];
-
-
-	Double_t Eff_EventTrig_data = 0;
-	Double_t Eff_EventTrig_MC = 0;
-
-	Double_t Eff_Trig_muon1_data = Eff_HLTv4p2_data[etabin1][ptbin1];
-	Double_t Eff_Trig_muon2_data = Eff_HLTv4p2_data[etabin2][ptbin2];
-	Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
-
-	Double_t Eff_Trig_muon1_MC = Eff_HLTv4p2_MC[etabin1][ptbin1];
-	Double_t Eff_Trig_muon2_MC = Eff_HLTv4p2_MC[etabin2][ptbin2];
-	Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;
-
-	Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
-	Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
-
-        // std::cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
-	weight = Eff_data_all / Eff_MC_all;
-
-	if( weight > 2 )
-	{
-		printf("[Data]\n");
-		printf("\t[Muon1] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_data[etabin1][ptbin1], Eff_Iso_data[etabin1][ptbin1]);
-		printf("\t[Muon2] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_data[etabin2][ptbin2], Eff_Iso_data[etabin2][ptbin2]);
-		printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_data, Eff_data_all);
-
-		printf("[MC]\n");
-		printf("\t[Muon1] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_MC[etabin1][ptbin1], Eff_Iso_MC[etabin1][ptbin1]);
-		printf("\t[Muon2] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_MC[etabin2][ptbin2], Eff_Iso_MC[etabin2][ptbin2]);
-		printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_MC, Eff_MC_all);
-
-		printf("(ptbin1, etabin1, ptbin2, etabin2): (%d, %d, %d, %d)\n", ptbin1, etabin1, ptbin2, etabin2);
-		
-		printf("[SF] Weight = %.3lf\n", weight);
-	}
-	return weight;
-}
-
-Double_t DYAnalyzer::EfficiencySF_EventWeight_HLTv4p3(Muon mu1, Muon mu2)
-{
-	Double_t weight = -999;
-
-	// -- Muon1 -- //
-	Double_t Pt1 = mu1.Pt;
-	Double_t eta1 = mu1.eta;
-
-	Int_t ptbin1 = FindPtBin( Pt1 );
-	Int_t etabin1 = FindEtaBin( eta1 );
-
-	if( ptbin1 == 9999 || etabin1 == 9999 )
-	{
-		printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin1, etabin1);
-		return -999;
-	}
-
-	Double_t Eff_muon1_data = Eff_RecoID_data[etabin1][ptbin1] * Eff_Iso_data[etabin1][ptbin1];
-	Double_t Eff_muon1_MC = Eff_RecoID_MC[etabin1][ptbin1] * Eff_Iso_MC[etabin1][ptbin1];
-
-	// -- Muon2 -- //
-	Double_t Pt2 = mu2.Pt;
-	Double_t eta2 = mu2.eta;
-
-	Int_t ptbin2 = FindPtBin( Pt2 );
-	Int_t etabin2 = FindEtaBin( eta2 );
-
-	if( ptbin2 == 9999 || etabin2 == 9999 )
-	{
-		printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin2, etabin2);
-		return -999;
-	}
-	Double_t Eff_muon2_data = Eff_RecoID_data[etabin2][ptbin2] * Eff_Iso_data[etabin2][ptbin2];
-	Double_t Eff_muon2_MC = Eff_RecoID_MC[etabin2][ptbin2] * Eff_Iso_MC[etabin2][ptbin2];
-
-
-	Double_t Eff_EventTrig_data = 0;
-	Double_t Eff_EventTrig_MC = 0;
-
-	Double_t Eff_Trig_muon1_data = Eff_HLTv4p3_data[etabin1][ptbin1];
-	Double_t Eff_Trig_muon2_data = Eff_HLTv4p3_data[etabin2][ptbin2];
-	Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
-
-	Double_t Eff_Trig_muon1_MC = Eff_HLTv4p3_MC[etabin1][ptbin1];
-	Double_t Eff_Trig_muon2_MC = Eff_HLTv4p3_MC[etabin2][ptbin2];
-	Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;
-
-	Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
-	Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
-
-        // std::cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
-	weight = Eff_data_all / Eff_MC_all;
-
-	if( weight > 2 )
-	{
-		printf("[Data]\n");
-		printf("\t[Muon1] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_data[etabin1][ptbin1], Eff_Iso_data[etabin1][ptbin1]);
-		printf("\t[Muon2] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_data[etabin2][ptbin2], Eff_Iso_data[etabin2][ptbin2]);
-		printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_data, Eff_data_all);
-
-		printf("[MC]\n");
-		printf("\t[Muon1] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_MC[etabin1][ptbin1], Eff_Iso_MC[etabin1][ptbin1]);
-		printf("\t[Muon2] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_MC[etabin2][ptbin2], Eff_Iso_MC[etabin2][ptbin2]);
-		printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_MC, Eff_MC_all);
-
-		printf("(ptbin1, etabin1, ptbin2, etabin2): (%d, %d, %d, %d)\n", ptbin1, etabin1, ptbin2, etabin2);
-		
-		printf("[SF] Weight = %.3lf\n", weight);
-	}
-	return weight;
-}
 
 Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF(Muon mu1, Muon mu2)
 {
-	Double_t weight = -999;
+    Double_t weight = -999;
 
-	// -- Muon1 -- //
-	Double_t Pt1 = mu1.Pt;
-	Double_t eta1 = mu1.eta;
+    // -- Muon1 -- //
+    Double_t Pt1 = mu1.Pt;
+    Double_t eta1 = mu1.eta;
 
-	Int_t ptbin1 = FindPtBin( Pt1 );
-	Int_t etabin1 = FindEtaBin( eta1 );
+    Int_t ptbin1_Reco = Find_muon_PtBin_Reco( Pt1 );
+    Int_t etabin1_Reco = Find_muon_EtaBin_Reco( eta1 );
 
-	Int_t ptbin1_trig = FindPtBin_trig( Pt1 );
-	Int_t etabin1_trig = FindEtaBin_trig( eta1 );
+    Int_t ptbin1_ID = Find_muon_PtBin_ID( Pt1 );
+    Int_t etabin1_ID = Find_muon_EtaBin_ID( eta1 );
 
-	if( ptbin1 == 9999 || etabin1 == 9999 )
-	{
-		printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin1, etabin1);
-		return -999;
-	}
+    Int_t ptbin1_Iso = Find_muon_PtBin_Iso( Pt1 );
+    Int_t etabin1_Iso = Find_muon_EtaBin_Iso( eta1 );
 
-	Double_t Eff_muon1_data = Eff_RecoID_data_BtoF[etabin1][ptbin1] * Eff_Iso_data_BtoF[etabin1][ptbin1];
-	Double_t Eff_muon1_MC = Eff_RecoID_MC_BtoF[etabin1][ptbin1] * Eff_Iso_MC_BtoF[etabin1][ptbin1];
+    Int_t ptbin1_Trig = Find_muon_PtBin_Trig( Pt1 );
+    Int_t etabin1_Trig = Find_muon_EtaBin_Trig( eta1 );
 
-	// -- Muon2 -- //
-	Double_t Pt2 = mu2.Pt;
-	Double_t eta2 = mu2.eta;
+    if( ptbin1_Reco == 9999 || etabin1_Reco == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d)\n", ptbin1_Reco, etabin1_Reco);
+        return -999;
+    }
+    if( ptbin1_ID == 9999 || etabin1_ID == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d)\n", ptbin1_ID, etabin1_ID);
+        return -999;
+    }
+    if( ptbin1_Iso == 9999 || etabin1_Iso == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d)\n", ptbin1_Iso, etabin1_Iso);
+        return -999;
+    }
+    if( ptbin1_Trig == 9999 || etabin1_Trig == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d)\n", ptbin1_Trig, etabin1_Trig);
+        return -999;
+    }
 
-	Int_t ptbin2 = FindPtBin( Pt2 );
-	Int_t etabin2 = FindEtaBin( eta2 );
+    Double_t Eff_muon1_data = Eff_Reco_data_BtoF[etabin1_Reco][ptbin1_Reco] * Eff_ID_data_BtoF[etabin1_ID][ptbin1_ID] * Eff_Iso_data_BtoF[etabin1_Iso][ptbin1_Iso];
+    Double_t Eff_muon1_MC = Eff_Reco_MC_BtoF[etabin1_Reco][ptbin1_Reco] * Eff_ID_MC_BtoF[etabin1_ID][ptbin1_ID] * Eff_Iso_MC_BtoF[etabin1_Iso][ptbin1_Iso];
 
-	Int_t ptbin2_trig = FindPtBin_trig( Pt2 );
-	Int_t etabin2_trig = FindEtaBin_trig( eta2 );
+    // -- Muon2 -- //
+    Double_t Pt2 = mu2.Pt;
+    Double_t eta2 = mu2.eta;
 
-	if( ptbin2 == 9999 || etabin2 == 9999 )
-	{
-		printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin2, etabin2);
-		return -999;
-	}
-	Double_t Eff_muon2_data = Eff_RecoID_data_BtoF[etabin2][ptbin2] * Eff_Iso_data_BtoF[etabin2][ptbin2];
-	Double_t Eff_muon2_MC = Eff_RecoID_MC_BtoF[etabin2][ptbin2] * Eff_Iso_MC_BtoF[etabin2][ptbin2];
+    Int_t ptbin2_Reco = Find_muon_PtBin_Reco( Pt2 );
+    Int_t etabin2_Reco = Find_muon_EtaBin_Reco( eta2 );
 
+    Int_t ptbin2_ID = Find_muon_PtBin_ID( Pt2 );
+    Int_t etabin2_ID = Find_muon_EtaBin_ID( eta2 );
 
-	Double_t Eff_EventTrig_data = 0;
-	Double_t Eff_EventTrig_MC = 0;
+    Int_t ptbin2_Iso = Find_muon_PtBin_Iso( Pt2 );
+    Int_t etabin2_Iso = Find_muon_EtaBin_Iso( eta2 );
 
-	Double_t Eff_Trig_muon1_data = Eff_HLT_data_BtoF[etabin1_trig][ptbin1_trig];
-	Double_t Eff_Trig_muon2_data = Eff_HLT_data_BtoF[etabin2_trig][ptbin2_trig];
-	Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
+    Int_t ptbin2_Trig = Find_muon_PtBin_Trig( Pt2 );
+    Int_t etabin2_Trig = Find_muon_EtaBin_Trig( eta2 );
 
-	Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_BtoF[etabin1_trig][ptbin1_trig];
-	Double_t Eff_Trig_muon2_MC = Eff_HLT_MC_BtoF[etabin2_trig][ptbin2_trig];
-	Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;
+    if( ptbin2_Reco == 9999 || etabin2_Reco == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d)\n", ptbin2_Reco, etabin2_Reco);
+        return -999;
+    }
+    if( ptbin2_ID == 9999 || etabin2_ID == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d)\n", ptbin2_ID, etabin2_ID);
+        return -999;
+    }
+    if( ptbin2_Iso == 9999 || etabin2_Iso == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d)\n", ptbin2_Iso, etabin2_Iso);
+        return -999;
+    }
+    if( ptbin2_Trig == 9999 || etabin2_Trig == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d)\n", ptbin2_Trig, etabin2_Trig);
+        return -999;
+    }
 
-	Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
-	Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
+    Double_t Eff_muon2_data = Eff_Reco_data_BtoF[etabin2_Reco][ptbin2_Reco] * Eff_ID_data_BtoF[etabin2_ID][ptbin2_ID] * Eff_Iso_data_BtoF[etabin2_Iso][ptbin2_Iso];
+    Double_t Eff_muon2_MC = Eff_Reco_MC_BtoF[etabin2_Reco][ptbin2_Reco] * Eff_ID_MC_BtoF[etabin2_ID][ptbin2_ID] * Eff_Iso_MC_BtoF[etabin2_Iso][ptbin2_Iso];
 
-        //std::cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
-	weight = Eff_data_all / Eff_MC_all;
+    // Trigger SF
+    Double_t Eff_EventTrig_data = 0;
+    Double_t Eff_EventTrig_MC = 0;
 
-	if( weight > 2 )
-	{
-		printf("[Data]\n");
-		printf("\t[Muon1] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_data_BtoF[etabin1][ptbin1], Eff_Iso_data_BtoF[etabin1][ptbin1]);
-		printf("\t[Muon2] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_data_BtoF[etabin2][ptbin2], Eff_Iso_data_BtoF[etabin2][ptbin2]);
-		printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_data, Eff_data_all);
+    Double_t Eff_Trig_muon1_data = Eff_HLT_data_BtoF[etabin1_Trig][ptbin1_Trig];
+    Double_t Eff_Trig_muon2_data = Eff_HLT_data_BtoF[etabin2_Trig][ptbin2_Trig];
+    Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
 
-		printf("[MC]\n");
-		printf("\t[Muon1] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_MC_BtoF[etabin1][ptbin1], Eff_Iso_MC_BtoF[etabin1][ptbin1]);
-		printf("\t[Muon2] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_MC_BtoF[etabin2][ptbin2], Eff_Iso_MC_BtoF[etabin2][ptbin2]);
-		printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_MC, Eff_MC_all);
+    Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_BtoF[etabin1_Trig][ptbin1_Trig];
+    Double_t Eff_Trig_muon2_MC = Eff_HLT_MC_BtoF[etabin2_Trig][ptbin2_Trig];
+    Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;
 
-		printf("(ptbin1, etabin1, ptbin2, etabin2): (%d, %d, %d, %d)\n", ptbin1, etabin1, ptbin2, etabin2);
-		
-		printf("[SF] Weight = %.3lf\n", weight);
-	}
-	return weight;
-}
+    Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
+    Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
+
+    //std::cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
+    weight = Eff_data_all / Eff_MC_all;
+
+    if( weight > 2 )
+    {
+        printf("(pt1, eta1, pt2, eta2): (%.3lf, %.3lf, %.3lf, %.3lf)\n", Pt1, eta1, Pt2, eta2);
+
+        printf("[Data]\n");
+        printf("\t[Muon1] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_Reco_data_BtoF[etabin1_Reco][ptbin1_Reco], Eff_ID_data_BtoF[etabin1_ID][ptbin1_ID],
+               Eff_Iso_data_BtoF[etabin1_Iso][ptbin1_Iso]);
+        printf("\t[Muon2] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_Reco_data_BtoF[etabin2_Reco][ptbin2_Reco], Eff_ID_data_BtoF[etabin2_ID][ptbin2_ID],
+               Eff_Iso_data_BtoF[etabin2_Iso][ptbin2_Iso]);
+        printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_data, Eff_data_all);
+
+        printf("[MC]\n");
+        printf("\t[Muon1] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_Reco_MC_BtoF[etabin1_Reco][ptbin1_Reco], Eff_ID_MC_BtoF[etabin1_ID][ptbin1_ID],
+               Eff_Iso_MC_BtoF[etabin1_Iso][ptbin1_Iso]);
+        printf("\t[Muon2] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_Reco_MC_BtoF[etabin2_Reco][ptbin2_Reco], Eff_ID_MC_BtoF[etabin2_ID][ptbin2_ID],
+               Eff_Iso_MC_BtoF[etabin2_Iso][ptbin2_Iso]);
+        printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_MC, Eff_MC_all);
+
+        printf("[SF] Weight = %.3lf\n", weight);
+    }
+    return weight;
+
+}// End of EfficiencySF_EventWeight_HLT_BtoF(mu1, mu2)
+
 
 Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF(SelectedMuMu_t *MuMu)
 {
-        Double_t weight = -999;
+    Double_t weight = -999;
 
-        // -- Muon1 -- //
-        Double_t Pt1 = MuMu->Muon_TuneP_pT->at(0);
-        Double_t eta1 = MuMu->Muon_TuneP_eta->at(0);
+    // -- Muon1 -- //
+//    Double_t Pt1 = MuMu->Muon_TuneP_pT->at(0);
+//    Double_t eta1 = MuMu->Muon_TuneP_eta->at(0);
+    Double_t Pt1 = MuMu->Muon_pT->at(0);
+    Double_t eta1 = MuMu->Muon_eta->at(0);
 
-        Int_t ptbin1 = FindPtBin( Pt1 );
-        Int_t etabin1 = FindEtaBin( eta1 );
+    Int_t ptbin1_Reco = Find_muon_PtBin_Reco( Pt1 );
+    Int_t etabin1_Reco = Find_muon_EtaBin_Reco( eta1 );
 
-        Int_t ptbin1_trig = FindPtBin_trig( Pt1 );
-        Int_t etabin1_trig = FindEtaBin_trig( eta1 );
+    Int_t ptbin1_ID = Find_muon_PtBin_ID( Pt1 );
+    Int_t etabin1_ID = Find_muon_EtaBin_ID( eta1 );
 
-        if( ptbin1 == 9999 || etabin1 == 9999 )
-        {
-                printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin1, etabin1);
-                return -999;
-        }
+    Int_t ptbin1_Iso = Find_muon_PtBin_Iso( Pt1 );
+    Int_t etabin1_Iso = Find_muon_EtaBin_Iso( eta1 );
 
-        Double_t Eff_muon1_data = Eff_RecoID_data_BtoF[etabin1][ptbin1] * Eff_Iso_data_BtoF[etabin1][ptbin1];
-        Double_t Eff_muon1_MC = Eff_RecoID_MC_BtoF[etabin1][ptbin1] * Eff_Iso_MC_BtoF[etabin1][ptbin1];
+    Int_t ptbin1_Trig = Find_muon_PtBin_Trig( Pt1 );
+    Int_t etabin1_Trig = Find_muon_EtaBin_Trig( eta1 );
 
-        // -- Muon2 -- //
-        Double_t Pt2 = MuMu->Muon_TuneP_pT->at(1);
-        Double_t eta2 = MuMu->Muon_TuneP_eta->at(1);
+    if( ptbin1_Reco == 9999 || etabin1_Reco == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d)\n", ptbin1_Reco, etabin1_Reco);
+        cout << "pT1: " << Pt1 << "    eta1: " << eta1 << endl;
+        return -999;
+    }
+    if( ptbin1_ID == 9999 || etabin1_ID == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d)\n", ptbin1_ID, etabin1_ID);
+        return -999;
+    }
+    if( ptbin1_Iso == 9999 || etabin1_Iso == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d)\n", ptbin1_Iso, etabin1_Iso);
+        return -999;
+    }
+    if( ptbin1_Trig == 9999 || etabin1_Trig == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d)\n", ptbin1_Trig, etabin1_Trig);
+        return -999;
+    }
 
-        Int_t ptbin2 = FindPtBin( Pt2 );
-        Int_t etabin2 = FindEtaBin( eta2 );
+    Double_t Eff_muon1_data = Eff_Reco_data_BtoF[etabin1_Reco][ptbin1_Reco] * Eff_ID_data_BtoF[etabin1_ID][ptbin1_ID] * Eff_Iso_data_BtoF[etabin1_Iso][ptbin1_Iso];
+    Double_t Eff_muon1_MC = Eff_Reco_MC_BtoF[etabin1_Reco][ptbin1_Reco] * Eff_ID_MC_BtoF[etabin1_ID][ptbin1_ID] * Eff_Iso_MC_BtoF[etabin1_Iso][ptbin1_Iso];
 
-        Int_t ptbin2_trig = FindPtBin_trig( Pt2 );
-        Int_t etabin2_trig = FindEtaBin_trig( eta2 );
+    // -- Muon2 -- //
+//    Double_t Pt2 = MuMu->Muon_TuneP_pT->at(1);
+//    Double_t eta2 = MuMu->Muon_TuneP_eta->at(1);
+    Double_t Pt2 = MuMu->Muon_pT->at(1);
+    Double_t eta2 = MuMu->Muon_eta->at(1);
 
-        if( ptbin2 == 9999 || etabin2 == 9999 )
-        {
-                printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin2, etabin2);
-                return -999;
-        }
-        Double_t Eff_muon2_data = Eff_RecoID_data_BtoF[etabin2][ptbin2] * Eff_Iso_data_BtoF[etabin2][ptbin2];
-        Double_t Eff_muon2_MC = Eff_RecoID_MC_BtoF[etabin2][ptbin2] * Eff_Iso_MC_BtoF[etabin2][ptbin2];
+    Int_t ptbin2_Reco = Find_muon_PtBin_Reco( Pt2 );
+    Int_t etabin2_Reco = Find_muon_EtaBin_Reco( eta2 );
 
+    Int_t ptbin2_ID = Find_muon_PtBin_ID( Pt2 );
+    Int_t etabin2_ID = Find_muon_EtaBin_ID( eta2 );
 
-        Double_t Eff_EventTrig_data = 0;
-        Double_t Eff_EventTrig_MC = 0;
+    Int_t ptbin2_Iso = Find_muon_PtBin_Iso( Pt2 );
+    Int_t etabin2_Iso = Find_muon_EtaBin_Iso( eta2 );
 
-        Double_t Eff_Trig_muon1_data = Eff_HLT_data_BtoF[etabin1_trig][ptbin1_trig];
-        Double_t Eff_Trig_muon2_data = Eff_HLT_data_BtoF[etabin2_trig][ptbin2_trig];
-        Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
+    Int_t ptbin2_Trig = Find_muon_PtBin_Trig( Pt2 );
+    Int_t etabin2_Trig = Find_muon_EtaBin_Trig( eta2 );
 
-        Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_BtoF[etabin1_trig][ptbin1_trig];
-        Double_t Eff_Trig_muon2_MC = Eff_HLT_MC_BtoF[etabin2_trig][ptbin2_trig];
-        Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;
+    if( ptbin2_Reco == 9999 || etabin2_Reco == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d)\n", ptbin2_Reco, etabin2_Reco);
+        return -999;
+        cout << "pT2: " << Pt2 << "    eta2: " << eta2 << endl;
+    }
+    if( ptbin2_ID == 9999 || etabin2_ID == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d)\n", ptbin2_ID, etabin2_ID);
+        return -999;
+    }
+    if( ptbin2_Iso == 9999 || etabin2_Iso == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d)\n", ptbin2_Iso, etabin2_Iso);
+        return -999;
+    }
+    if( ptbin2_Trig == 9999 || etabin2_Trig == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d)\n", ptbin2_Trig, etabin2_Trig);
+        return -999;
+    }
 
-        Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
-        Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
+    Double_t Eff_muon2_data = Eff_Reco_data_BtoF[etabin2_Reco][ptbin2_Reco] * Eff_ID_data_BtoF[etabin2_ID][ptbin2_ID] * Eff_Iso_data_BtoF[etabin2_Iso][ptbin2_Iso];
+    Double_t Eff_muon2_MC = Eff_Reco_MC_BtoF[etabin2_Reco][ptbin2_Reco] * Eff_ID_MC_BtoF[etabin2_ID][ptbin2_ID] * Eff_Iso_MC_BtoF[etabin2_Iso][ptbin2_Iso];
 
-        //std::cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
-        weight = Eff_data_all / Eff_MC_all;
+    // Trigger SF
+    Double_t Eff_EventTrig_data = 0;
+    Double_t Eff_EventTrig_MC = 0;
 
-        if( weight > 2 )
-        {
-                printf("[Data]\n");
-                printf("\t[Muon1] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_data_BtoF[etabin1][ptbin1], Eff_Iso_data_BtoF[etabin1][ptbin1]);
-                printf("\t[Muon2] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_data_BtoF[etabin2][ptbin2], Eff_Iso_data_BtoF[etabin2][ptbin2]);
-                printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_data, Eff_data_all);
+    Double_t Eff_Trig_muon1_data = Eff_HLT_data_BtoF[etabin1_Trig][ptbin1_Trig];
+    Double_t Eff_Trig_muon2_data = Eff_HLT_data_BtoF[etabin2_Trig][ptbin2_Trig];
+    Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
 
-                printf("[MC]\n");
-                printf("\t[Muon1] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_MC_BtoF[etabin1][ptbin1], Eff_Iso_MC_BtoF[etabin1][ptbin1]);
-                printf("\t[Muon2] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_MC_BtoF[etabin2][ptbin2], Eff_Iso_MC_BtoF[etabin2][ptbin2]);
-                printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_MC, Eff_MC_all);
+    Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_BtoF[etabin1_Trig][ptbin1_Trig];
+    Double_t Eff_Trig_muon2_MC = Eff_HLT_MC_BtoF[etabin2_Trig][ptbin2_Trig];
+    Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;
 
-                printf("(ptbin1, etabin1, ptbin2, etabin2): (%d, %d, %d, %d)\n", ptbin1, etabin1, ptbin2, etabin2);
+    Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
+    Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
 
-                printf("[SF] Weight = %.3lf\n", weight);
-        }
-        return weight;
-}
+    //std::cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
+    weight = Eff_data_all / Eff_MC_all;
 
-Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF(SelectedEMu_t *EMu)
-{
-        Double_t weight = -999;
+    if( weight > 2 )
+    {
+        printf("(pt1, eta1, pt2, eta2): (%.3lf, %.3lf, %.3lf, %.3lf)\n", Pt1, eta1, Pt2, eta2);
 
-        // -- Muon1 -- //
-        Double_t Pt1 = EMu->Muon_TuneP_pT;
-        Double_t eta1 = EMu->Muon_TuneP_eta;
+        printf("[Data]\n");
+        printf("\t[Muon1] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_Reco_data_BtoF[etabin1_Reco][ptbin1_Reco], Eff_ID_data_BtoF[etabin1_ID][ptbin1_ID],
+               Eff_Iso_data_BtoF[etabin1_Iso][ptbin1_Iso]);
+        printf("\t[Muon2] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_Reco_data_BtoF[etabin2_Reco][ptbin2_Reco], Eff_ID_data_BtoF[etabin2_ID][ptbin2_ID],
+               Eff_Iso_data_BtoF[etabin2_Iso][ptbin2_Iso]);
+        printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_data, Eff_data_all);
 
-        Int_t ptbin1 = FindPtBin( Pt1 );
-        Int_t etabin1 = FindEtaBin( eta1 );
+        printf("[MC]\n");
+        printf("\t[Muon1] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_Reco_MC_BtoF[etabin1_Reco][ptbin1_Reco], Eff_ID_MC_BtoF[etabin1_ID][ptbin1_ID],
+               Eff_Iso_MC_BtoF[etabin1_Iso][ptbin1_Iso]);
+        printf("\t[Muon2] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_Reco_MC_BtoF[etabin2_Reco][ptbin2_Reco], Eff_ID_MC_BtoF[etabin2_ID][ptbin2_ID],
+               Eff_Iso_MC_BtoF[etabin2_Iso][ptbin2_Iso]);
+        printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_MC, Eff_MC_all);
 
-        Int_t ptbin1_trig = FindPtBin_trig( Pt1 );
-        Int_t etabin1_trig = FindEtaBin_trig( eta1 );
+        printf("[SF] Weight = %.3lf\n", weight);
+    }
+    return weight;
 
-        if( ptbin1 == 9999 || etabin1 == 9999 )
-        {
-                printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin1, etabin1);
-                return -999;
-        }
-
-        Double_t Eff_muon1_data = Eff_RecoID_data_BtoF[etabin1][ptbin1] * Eff_Iso_data_BtoF[etabin1][ptbin1];
-        Double_t Eff_muon1_MC = Eff_RecoID_MC_BtoF[etabin1][ptbin1] * Eff_Iso_MC_BtoF[etabin1][ptbin1];
-
-        // -- Muon2 -- //
-        Double_t Pt2 = EMu->Electron_pT;
-        Double_t eta2 = EMu->Electron_etaSC;
-
-        Int_t ptbin2 = FindPtBin( Pt2 );
-        Int_t etabin2 = FindEtaBin( eta2 );
-
-        Int_t ptbin2_trig = FindPtBin_trig( Pt2 );
-        Int_t etabin2_trig = FindEtaBin_trig( eta2 );
-
-        if( ptbin2 == 9999 || etabin2 == 9999 )
-        {
-                printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin2, etabin2);
-                return -999;
-        }
-        Double_t Eff_muon2_data = Eff_RecoID_data_BtoF[etabin2][ptbin2] * Eff_Iso_data_BtoF[etabin2][ptbin2];
-        Double_t Eff_muon2_MC = Eff_RecoID_MC_BtoF[etabin2][ptbin2] * Eff_Iso_MC_BtoF[etabin2][ptbin2];
-
-
-        Double_t Eff_EventTrig_data = 0;
-        Double_t Eff_EventTrig_MC = 0;
-
-        Double_t Eff_Trig_muon1_data = Eff_HLT_data_BtoF[etabin1_trig][ptbin1_trig];
-        Double_t Eff_Trig_muon2_data = Eff_HLT_data_BtoF[etabin2_trig][ptbin2_trig];
-        Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
-
-        Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_BtoF[etabin1_trig][ptbin1_trig];
-        Double_t Eff_Trig_muon2_MC = Eff_HLT_MC_BtoF[etabin2_trig][ptbin2_trig];
-        Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;
-
-        Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
-        Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
-
-        //std::cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
-        weight = Eff_data_all / Eff_MC_all;
-
-        if( weight > 2 )
-        {
-                printf("[Data]\n");
-                printf("\t[Muon1] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_data_BtoF[etabin1][ptbin1], Eff_Iso_data_BtoF[etabin1][ptbin1]);
-                printf("\t[Muon2] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_data_BtoF[etabin2][ptbin2], Eff_Iso_data_BtoF[etabin2][ptbin2]);
-                printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_data, Eff_data_all);
-
-                printf("[MC]\n");
-                printf("\t[Muon1] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_MC_BtoF[etabin1][ptbin1], Eff_Iso_MC_BtoF[etabin1][ptbin1]);
-                printf("\t[Muon2] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_MC_BtoF[etabin2][ptbin2], Eff_Iso_MC_BtoF[etabin2][ptbin2]);
-                printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_MC, Eff_MC_all);
-
-                printf("(ptbin1, etabin1, ptbin2, etabin2): (%d, %d, %d, %d)\n", ptbin1, etabin1, ptbin2, etabin2);
-
-                printf("[SF] Weight = %.3lf\n", weight);
-        }
-        return weight;
-}
+}// End of EfficiencySF_EventWeight_HLT_BtoF(SelectedMuMu_t)
 
 
 Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH(Muon mu1, Muon mu2)
 {
-	Double_t weight = -999;
+    Double_t weight = -999;
 
-	// -- Muon1 -- //
-	Double_t Pt1 = mu1.Pt;
-	Double_t eta1 = mu1.eta;
+    // -- Muon1 -- //
+    Double_t Pt1 = mu1.Pt;
+    Double_t eta1 = mu1.eta;
 
-	Int_t ptbin1 = FindPtBin( Pt1 );
-	Int_t etabin1 = FindEtaBin( eta1 );
+    Int_t ptbin1_Reco = Find_muon_PtBin_Reco( Pt1 );
+    Int_t etabin1_Reco = Find_muon_EtaBin_Reco( eta1 );
 
-	Int_t ptbin1_trig = FindPtBin_trig( Pt1 );
-	Int_t etabin1_trig = FindEtaBin_trig( eta1 );
+    Int_t ptbin1_ID = Find_muon_PtBin_ID( Pt1 );
+    Int_t etabin1_ID = Find_muon_EtaBin_ID( eta1 );
 
-	if( ptbin1 == 9999 || etabin1 == 9999 )
-	{
-		printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin1, etabin1);
-		return -999;
-	}
+    Int_t ptbin1_Iso = Find_muon_PtBin_Iso( Pt1 );
+    Int_t etabin1_Iso = Find_muon_EtaBin_Iso( eta1 );
 
-	Double_t Eff_muon1_data = Eff_RecoID_data_GtoH[etabin1][ptbin1] * Eff_Iso_data_GtoH[etabin1][ptbin1];
-	Double_t Eff_muon1_MC = Eff_RecoID_MC_GtoH[etabin1][ptbin1] * Eff_Iso_MC_GtoH[etabin1][ptbin1];
+    Int_t ptbin1_Trig = Find_muon_PtBin_Trig( Pt1 );
+    Int_t etabin1_Trig = Find_muon_EtaBin_Trig( eta1 );
 
-	// -- Muon2 -- //
-	Double_t Pt2 = mu2.Pt;
-	Double_t eta2 = mu2.eta;
+    if( ptbin1_Reco == 9999 || etabin1_Reco == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d)\n", ptbin1_Reco, etabin1_Reco);
+        return -999;
+    }
+    if( ptbin1_ID == 9999 || etabin1_ID == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d)\n", ptbin1_ID, etabin1_ID);
+        return -999;
+    }
+    if( ptbin1_Iso == 9999 || etabin1_Iso == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d)\n", ptbin1_Iso, etabin1_Iso);
+        return -999;
+    }
+    if( ptbin1_Trig == 9999 || etabin1_Trig == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d)\n", ptbin1_Trig, etabin1_Trig);
+        return -999;
+    }
 
-	Int_t ptbin2 = FindPtBin( Pt2 );
-	Int_t etabin2 = FindEtaBin( eta2 );
+    Double_t Eff_muon1_data = Eff_Reco_data_GtoH[etabin1_Reco][ptbin1_Reco] * Eff_ID_data_GtoH[etabin1_ID][ptbin1_ID] * Eff_Iso_data_GtoH[etabin1_Iso][ptbin1_Iso];
+    Double_t Eff_muon1_MC = Eff_Reco_MC_GtoH[etabin1_Reco][ptbin1_Reco] * Eff_ID_MC_GtoH[etabin1_ID][ptbin1_ID] * Eff_Iso_MC_GtoH[etabin1_Iso][ptbin1_Iso];
 
-	Int_t ptbin2_trig = FindPtBin_trig( Pt2 );
-	Int_t etabin2_trig = FindEtaBin_trig( eta2 );
+    // -- Muon2 -- //
+    Double_t Pt2 = mu2.Pt;
+    Double_t eta2 = mu2.eta;
 
-	if( ptbin2 == 9999 || etabin2 == 9999 )
-	{
-		printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin2, etabin2);
-		return -999;
-	}
-	Double_t Eff_muon2_data = Eff_RecoID_data_GtoH[etabin2][ptbin2] * Eff_Iso_data_GtoH[etabin2][ptbin2];
-	Double_t Eff_muon2_MC = Eff_RecoID_MC_GtoH[etabin2][ptbin2] * Eff_Iso_MC_GtoH[etabin2][ptbin2];
+    Int_t ptbin2_Reco = Find_muon_PtBin_Reco( Pt2 );
+    Int_t etabin2_Reco = Find_muon_EtaBin_Reco( eta2 );
+
+    Int_t ptbin2_ID = Find_muon_PtBin_ID( Pt2 );
+    Int_t etabin2_ID = Find_muon_EtaBin_ID( eta2 );
+
+    Int_t ptbin2_Iso = Find_muon_PtBin_Iso( Pt2 );
+    Int_t etabin2_Iso = Find_muon_EtaBin_Iso( eta2 );
+
+    Int_t ptbin2_Trig = Find_muon_PtBin_Trig( Pt2 );
+    Int_t etabin2_Trig = Find_muon_EtaBin_Trig( eta2 );
+
+    if( ptbin2_Reco == 9999 || etabin2_Reco == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d)\n", ptbin2_Reco, etabin2_Reco);
+        return -999;
+    }
+    if( ptbin2_ID == 9999 || etabin2_ID == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d)\n", ptbin2_ID, etabin2_ID);
+        return -999;
+    }
+    if( ptbin2_Iso == 9999 || etabin2_Iso == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d)\n", ptbin2_Iso, etabin2_Iso);
+        return -999;
+    }
+    if( ptbin2_Trig == 9999 || etabin2_Trig == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d)\n", ptbin2_Trig, etabin2_Trig);
+        return -999;
+    }
+    Double_t Eff_muon2_data = Eff_Reco_data_GtoH[etabin2_Reco][ptbin2_Reco] * Eff_ID_data_GtoH[etabin2_ID][ptbin2_ID] * Eff_Iso_data_GtoH[etabin2_Iso][ptbin2_Iso];
+    Double_t Eff_muon2_MC = Eff_Reco_MC_GtoH[etabin2_Reco][ptbin2_Reco] * Eff_ID_MC_GtoH[etabin2_ID][ptbin2_ID] * Eff_Iso_MC_GtoH[etabin2_Iso][ptbin2_Iso];
 
 
-	Double_t Eff_EventTrig_data = 0;
-	Double_t Eff_EventTrig_MC = 0;
+    // -- Trigger part -- //
+    Double_t Eff_EventTrig_data = 0;
+    Double_t Eff_EventTrig_MC = 0;
 
-	Double_t Eff_Trig_muon1_data = Eff_HLT_data_GtoH[etabin1_trig][ptbin1_trig];
-	Double_t Eff_Trig_muon2_data = Eff_HLT_data_GtoH[etabin2_trig][ptbin2_trig];
-	Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
+    Double_t Eff_Trig_muon1_data = Eff_HLT_data_GtoH[etabin1_Trig][ptbin1_Trig];
+    Double_t Eff_Trig_muon2_data = Eff_HLT_data_GtoH[etabin2_Trig][ptbin2_Trig];
+    Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
 
-	Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_GtoH[etabin1_trig][ptbin1_trig];
-	Double_t Eff_Trig_muon2_MC = Eff_HLT_MC_GtoH[etabin2_trig][ptbin2_trig];
-	Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;
+    Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_GtoH[etabin1_Trig][ptbin1_Trig];
+    Double_t Eff_Trig_muon2_MC = Eff_HLT_MC_GtoH[etabin2_Trig][ptbin2_Trig];
+    Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;
 
-	Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
-	Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
+    Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
+    Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
 
-        //std::cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
-	weight = Eff_data_all / Eff_MC_all;
+    //cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
+    weight = Eff_data_all / Eff_MC_all;
 
-	if( weight > 2 )
-	{
-		printf("[Data]\n");
-		printf("\t[Muon1] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_data_GtoH[etabin1][ptbin1], Eff_Iso_data_GtoH[etabin1][ptbin1]);
-		printf("\t[Muon2] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_data_GtoH[etabin2][ptbin2], Eff_Iso_data_GtoH[etabin2][ptbin2]);
-		printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_data, Eff_data_all);
+    if( weight > 2 )
+    {
+        printf("(pt1, eta1, pt2, eta2): (%.3lf, %.3lf, %.3lf, %.3lf)\n", Pt1, eta1, Pt2, eta2);
 
-		printf("[MC]\n");
-		printf("\t[Muon1] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_MC_GtoH[etabin1][ptbin1], Eff_Iso_MC_GtoH[etabin1][ptbin1]);
-		printf("\t[Muon2] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_MC_GtoH[etabin2][ptbin2], Eff_Iso_MC_GtoH[etabin2][ptbin2]);
-		printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_MC, Eff_MC_all);
+        printf("[Data]\n");
+        printf("\t[Muon1] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_Reco_data_GtoH[etabin1_Reco][ptbin1_Reco], Eff_ID_data_GtoH[etabin1_ID][ptbin1_ID],
+               Eff_Iso_data_GtoH[etabin1_Iso][ptbin1_Iso]);
+        printf("\t[Muon2] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_Reco_data_GtoH[etabin2_Reco][ptbin2_Reco], Eff_ID_data_GtoH[etabin2_ID][ptbin2_ID],
+               Eff_Iso_data_GtoH[etabin2_Iso][ptbin2_Iso]);
+        printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_data, Eff_data_all);
 
-		printf("(ptbin1, etabin1, ptbin2, etabin2): (%d, %d, %d, %d)\n", ptbin1, etabin1, ptbin2, etabin2);
-		
-		printf("[SF] Weight = %.3lf\n", weight);
-	}
-	return weight;
-}
+        printf("[MC]\n");
+        printf("\t[Muon1] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_Reco_MC_GtoH[etabin1_Reco][ptbin1_Reco], Eff_ID_MC_GtoH[etabin1_ID][ptbin1_ID],
+               Eff_Iso_MC_GtoH[etabin1_Iso][ptbin1_Iso]);
+        printf("\t[Muon2] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_Reco_MC_GtoH[etabin2_Reco][ptbin2_Reco], Eff_ID_MC_GtoH[etabin2_ID][ptbin2_ID],
+               Eff_Iso_MC_GtoH[etabin2_Iso][ptbin2_Iso]);
+        printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_MC, Eff_MC_all);
+
+        printf("[SF] Weight = %.3lf\n", weight);
+    }
+    return weight;
+
+}// End of EfficiencySF_EventWeight_HLT_GtoH(mu1, mu2)
+
 
 Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH(SelectedMuMu_t *MuMu)
 {
-        Double_t weight = -999;
+    Double_t weight = -999;
 
-        // -- Muon1 -- //
-        Double_t Pt1 = MuMu->Muon_TuneP_pT->at(0);
-        Double_t eta1 = MuMu->Muon_TuneP_eta->at(0);
+    // -- Muon1 -- //
+//    Double_t Pt1 = MuMu->Muon_TuneP_pT->at(0);
+//    Double_t eta1 = MuMu->Muon_TuneP_eta->at(0);
+    Double_t Pt1 = MuMu->Muon_pT->at(0);
+    Double_t eta1 = MuMu->Muon_eta->at(0);
 
-        Int_t ptbin1 = FindPtBin( Pt1 );
-        Int_t etabin1 = FindEtaBin( eta1 );
+    Int_t ptbin1_Reco = Find_muon_PtBin_Reco( Pt1 );
+    Int_t etabin1_Reco = Find_muon_EtaBin_Reco( eta1 );
 
-        Int_t ptbin1_trig = FindPtBin_trig( Pt1 );
-        Int_t etabin1_trig = FindEtaBin_trig( eta1 );
+    Int_t ptbin1_ID = Find_muon_PtBin_ID( Pt1 );
+    Int_t etabin1_ID = Find_muon_EtaBin_ID( eta1 );
 
-        if( ptbin1 == 9999 || etabin1 == 9999 )
-        {
-                printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin1, etabin1);
-                return -999;
-        }
+    Int_t ptbin1_Iso = Find_muon_PtBin_Iso( Pt1 );
+    Int_t etabin1_Iso = Find_muon_EtaBin_Iso( eta1 );
 
-        Double_t Eff_muon1_data = Eff_RecoID_data_GtoH[etabin1][ptbin1] * Eff_Iso_data_GtoH[etabin1][ptbin1];
-        Double_t Eff_muon1_MC = Eff_RecoID_MC_GtoH[etabin1][ptbin1] * Eff_Iso_MC_GtoH[etabin1][ptbin1];
+    Int_t ptbin1_Trig = Find_muon_PtBin_Trig( Pt1 );
+    Int_t etabin1_Trig = Find_muon_EtaBin_Trig( eta1 );
 
-        // -- Muon2 -- //
-        Double_t Pt2 = MuMu->Muon_TuneP_pT->at(1);
-        Double_t eta2 = MuMu->Muon_TuneP_eta->at(1);
+    if( ptbin1_Reco == 9999 || etabin1_Reco == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d)\n", ptbin1_Reco, etabin1_Reco);
+        cout << "pT1: " << Pt1 << "    eta1: " << eta1 << endl;
+        return -999;
+    }
+    if( ptbin1_ID == 9999 || etabin1_ID == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d)\n", ptbin1_ID, etabin1_ID);
+        return -999;
+    }
+    if( ptbin1_Iso == 9999 || etabin1_Iso == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d)\n", ptbin1_Iso, etabin1_Iso);
+        return -999;
+    }
+    if( ptbin1_Trig == 9999 || etabin1_Trig == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d)\n", ptbin1_Trig, etabin1_Trig);
+        return -999;
+    }
 
-        Int_t ptbin2 = FindPtBin( Pt2 );
-        Int_t etabin2 = FindEtaBin( eta2 );
+    Double_t Eff_muon1_data = Eff_Reco_data_GtoH[etabin1_Reco][ptbin1_Reco] * Eff_ID_data_GtoH[etabin1_ID][ptbin1_ID] * Eff_Iso_data_GtoH[etabin1_Iso][ptbin1_Iso];
+    Double_t Eff_muon1_MC = Eff_Reco_MC_GtoH[etabin1_Reco][ptbin1_Reco] * Eff_ID_MC_GtoH[etabin1_ID][ptbin1_ID] * Eff_Iso_MC_GtoH[etabin1_Iso][ptbin1_Iso];
 
-        Int_t ptbin2_trig = FindPtBin_trig( Pt2 );
-        Int_t etabin2_trig = FindEtaBin_trig( eta2 );
+    // -- Muon2 -- //
+//    Double_t Pt2 = MuMu->Muon_TuneP_pT->at(1);
+//    Double_t eta2 = MuMu->Muon_TuneP_eta->at(1);
+    Double_t Pt2 = MuMu->Muon_pT->at(1);
+    Double_t eta2 = MuMu->Muon_eta->at(1);
 
-        if( ptbin2 == 9999 || etabin2 == 9999 )
-        {
-                printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin2, etabin2);
-                return -999;
-        }
-        Double_t Eff_muon2_data = Eff_RecoID_data_GtoH[etabin2][ptbin2] * Eff_Iso_data_GtoH[etabin2][ptbin2];
-        Double_t Eff_muon2_MC = Eff_RecoID_MC_GtoH[etabin2][ptbin2] * Eff_Iso_MC_GtoH[etabin2][ptbin2];
+    Int_t ptbin2_Reco = Find_muon_PtBin_Reco( Pt2 );
+    Int_t etabin2_Reco = Find_muon_EtaBin_Reco( eta2 );
 
+    Int_t ptbin2_ID = Find_muon_PtBin_ID( Pt2 );
+    Int_t etabin2_ID = Find_muon_EtaBin_ID( eta2 );
 
-        Double_t Eff_EventTrig_data = 0;
-        Double_t Eff_EventTrig_MC = 0;
+    Int_t ptbin2_Iso = Find_muon_PtBin_Iso( Pt2 );
+    Int_t etabin2_Iso = Find_muon_EtaBin_Iso( eta2 );
 
-        Double_t Eff_Trig_muon1_data = Eff_HLT_data_GtoH[etabin1_trig][ptbin1_trig];
-        Double_t Eff_Trig_muon2_data = Eff_HLT_data_GtoH[etabin2_trig][ptbin2_trig];
-        Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
+    Int_t ptbin2_Trig = Find_muon_PtBin_Trig( Pt2 );
+    Int_t etabin2_Trig = Find_muon_EtaBin_Trig( eta2 );
 
-        Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_GtoH[etabin1_trig][ptbin1_trig];
-        Double_t Eff_Trig_muon2_MC = Eff_HLT_MC_GtoH[etabin2_trig][ptbin2_trig];
-        Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;
-
-        Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
-        Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
-
-        //std::cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
-        weight = Eff_data_all / Eff_MC_all;
-
-        if( weight > 2 )
-        {
-                printf("[Data]\n");
-                printf("\t[Muon1] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_data_GtoH[etabin1][ptbin1], Eff_Iso_data_GtoH[etabin1][ptbin1]);
-                printf("\t[Muon2] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_data_GtoH[etabin2][ptbin2], Eff_Iso_data_GtoH[etabin2][ptbin2]);
-                printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_data, Eff_data_all);
-
-                printf("[MC]\n");
-                printf("\t[Muon1] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_MC_GtoH[etabin1][ptbin1], Eff_Iso_MC_GtoH[etabin1][ptbin1]);
-                printf("\t[Muon2] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_MC_GtoH[etabin2][ptbin2], Eff_Iso_MC_GtoH[etabin2][ptbin2]);
-                printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_MC, Eff_MC_all);
-
-                printf("(ptbin1, etabin1, ptbin2, etabin2): (%d, %d, %d, %d)\n", ptbin1, etabin1, ptbin2, etabin2);
-
-                printf("[SF] Weight = %.3lf\n", weight);
-        }
-        return weight;
-}
-
-Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH(SelectedEMu_t *EMu)
-{
-        Double_t weight = -999;
-
-        // -- Muon1 -- //
-        Double_t Pt1 = EMu->Muon_TuneP_pT;
-        Double_t eta1 = EMu->Muon_TuneP_eta;
-
-        Int_t ptbin1 = FindPtBin( Pt1 );
-        Int_t etabin1 = FindEtaBin( eta1 );
-
-        Int_t ptbin1_trig = FindPtBin_trig( Pt1 );
-        Int_t etabin1_trig = FindEtaBin_trig( eta1 );
-
-        if( ptbin1 == 9999 || etabin1 == 9999 )
-        {
-                printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin1, etabin1);
-                return -999;
-        }
-
-        Double_t Eff_muon1_data = Eff_RecoID_data_GtoH[etabin1][ptbin1] * Eff_Iso_data_GtoH[etabin1][ptbin1];
-        Double_t Eff_muon1_MC = Eff_RecoID_MC_GtoH[etabin1][ptbin1] * Eff_Iso_MC_GtoH[etabin1][ptbin1];
-
-        // -- Muon2 -- //
-        Double_t Pt2 = EMu->Electron_pT;
-        Double_t eta2 = EMu->Electron_etaSC;
-
-        Int_t ptbin2 = FindPtBin( Pt2 );
-        Int_t etabin2 = FindEtaBin( eta2 );
-
-        Int_t ptbin2_trig = FindPtBin_trig( Pt2 );
-        Int_t etabin2_trig = FindEtaBin_trig( eta2 );
-
-        if( ptbin2 == 9999 || etabin2 == 9999 )
-        {
-                printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin2, etabin2);
-                return -999;
-        }
-        Double_t Eff_muon2_data = Eff_RecoID_data_GtoH[etabin2][ptbin2] * Eff_Iso_data_GtoH[etabin2][ptbin2];
-        Double_t Eff_muon2_MC = Eff_RecoID_MC_GtoH[etabin2][ptbin2] * Eff_Iso_MC_GtoH[etabin2][ptbin2];
+    if( ptbin2_Reco == 9999 || etabin2_Reco == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d)\n", ptbin2_Reco, etabin2_Reco);
+        cout << "pT2: " << Pt2 << "    eta2: " << eta2 << endl;
+        return -999;
+    }
+    if( ptbin2_ID == 9999 || etabin2_ID == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d)\n", ptbin2_ID, etabin2_ID);
+        return -999;
+    }
+    if( ptbin2_Iso == 9999 || etabin2_Iso == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d)\n", ptbin2_Iso, etabin2_Iso);
+        return -999;
+    }
+    if( ptbin2_Trig == 9999 || etabin2_Trig == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d)\n", ptbin2_Trig, etabin2_Trig);
+        return -999;
+    }
+    Double_t Eff_muon2_data = Eff_Reco_data_GtoH[etabin2_Reco][ptbin2_Reco] * Eff_ID_data_GtoH[etabin2_ID][ptbin2_ID] * Eff_Iso_data_GtoH[etabin2_Iso][ptbin2_Iso];
+    Double_t Eff_muon2_MC = Eff_Reco_MC_GtoH[etabin2_Reco][ptbin2_Reco] * Eff_ID_MC_GtoH[etabin2_ID][ptbin2_ID] * Eff_Iso_MC_GtoH[etabin2_Iso][ptbin2_Iso];
 
 
-        Double_t Eff_EventTrig_data = 0;
-        Double_t Eff_EventTrig_MC = 0;
+    // -- Trigger part -- //
+    Double_t Eff_EventTrig_data = 0;
+    Double_t Eff_EventTrig_MC = 0;
 
-        Double_t Eff_Trig_muon1_data = Eff_HLT_data_GtoH[etabin1_trig][ptbin1_trig];
-        Double_t Eff_Trig_muon2_data = Eff_HLT_data_GtoH[etabin2_trig][ptbin2_trig];
-        Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
+    Double_t Eff_Trig_muon1_data = Eff_HLT_data_GtoH[etabin1_Trig][ptbin1_Trig];
+    Double_t Eff_Trig_muon2_data = Eff_HLT_data_GtoH[etabin2_Trig][ptbin2_Trig];
+    Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
 
-        Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_GtoH[etabin1_trig][ptbin1_trig];
-        Double_t Eff_Trig_muon2_MC = Eff_HLT_MC_GtoH[etabin2_trig][ptbin2_trig];
-        Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;
+    Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_GtoH[etabin1_Trig][ptbin1_Trig];
+    Double_t Eff_Trig_muon2_MC = Eff_HLT_MC_GtoH[etabin2_Trig][ptbin2_Trig];
+    Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;
 
-        Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
-        Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
+    Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
+    Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
 
-        //std::cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
-        weight = Eff_data_all / Eff_MC_all;
+    //cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
+    weight = Eff_data_all / Eff_MC_all;
 
-        if( weight > 2 )
-        {
-                printf("[Data]\n");
-                printf("\t[Muon1] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_data_GtoH[etabin1][ptbin1], Eff_Iso_data_GtoH[etabin1][ptbin1]);
-                printf("\t[Muon2] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_data_GtoH[etabin2][ptbin2], Eff_Iso_data_GtoH[etabin2][ptbin2]);
-                printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_data, Eff_data_all);
+    if( weight > 2 )
+    {
+        printf("(pt1, eta1, pt2, eta2): (%.3lf, %.3lf, %.3lf, %.3lf)\n", Pt1, eta1, Pt2, eta2);
 
-                printf("[MC]\n");
-                printf("\t[Muon1] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_MC_GtoH[etabin1][ptbin1], Eff_Iso_MC_GtoH[etabin1][ptbin1]);
-                printf("\t[Muon2] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_MC_GtoH[etabin2][ptbin2], Eff_Iso_MC_GtoH[etabin2][ptbin2]);
-                printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_MC, Eff_MC_all);
+        printf("[Data]\n");
+        printf("\t[Muon1] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_Reco_data_GtoH[etabin1_Reco][ptbin1_Reco], Eff_ID_data_GtoH[etabin1_ID][ptbin1_ID],
+               Eff_Iso_data_GtoH[etabin1_Iso][ptbin1_Iso]);
+        printf("\t[Muon2] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_Reco_data_GtoH[etabin2_Reco][ptbin2_Reco], Eff_ID_data_GtoH[etabin2_ID][ptbin2_ID],
+               Eff_Iso_data_GtoH[etabin2_Iso][ptbin2_Iso]);
+        printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_data, Eff_data_all);
 
-                printf("(ptbin1, etabin1, ptbin2, etabin2): (%d, %d, %d, %d)\n", ptbin1, etabin1, ptbin2, etabin2);
+        printf("[MC]\n");
+        printf("\t[Muon1] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_Reco_MC_GtoH[etabin1_Reco][ptbin1_Reco], Eff_ID_MC_GtoH[etabin1_ID][ptbin1_ID],
+               Eff_Iso_MC_GtoH[etabin1_Iso][ptbin1_Iso]);
+        printf("\t[Muon2] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_Reco_MC_GtoH[etabin2_Reco][ptbin2_Reco], Eff_ID_MC_GtoH[etabin2_ID][ptbin2_ID],
+               Eff_Iso_MC_GtoH[etabin2_Iso][ptbin2_Iso]);
+        printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_MC, Eff_MC_all);
 
-                printf("[SF] Weight = %.3lf\n", weight);
-        }
-        return weight;
-}
+        printf("[SF] Weight = %.3lf\n", weight);
+    }
+    return weight;
+
+}// End of EfficiencySF_EventWeight_HLT_GtoH(SelectedMuMu_t)
+
 
 Double_t DYAnalyzer::EfficiencySF_EventWeight_electron(Electron ele1, Electron ele2)
 {
-	Double_t weight = -999;
+    Double_t weight = -999;
 
-	// -- Electron1 -- //
-	Double_t Pt1 = ele1.Pt;
-	//Double_t eta1 = ele1.eta;
-	Double_t eta1 = ele1.etaSC;
+    // -- Electron1 -- //
+    Double_t Pt1 = ele1.Pt;
+    //Double_t eta1 = ele1.eta;
+    Double_t eta1 = ele1.etaSC;
 
-	Int_t ptbin1_Reco = FindPtBin_Reco( Pt1 );
-	Int_t etabin1_Reco = FindEtaBin_Reco( eta1 );
+    Int_t ptbin1_Reco = Find_electron_PtBin_Reco( Pt1 );
+    Int_t etabin1_Reco = Find_electron_EtaBin_Reco( eta1 );
 
-	Int_t ptbin1_ID = FindPtBin_ID( Pt1 );
-	Int_t etabin1_ID = FindEtaBin_ID( eta1 );
+    Int_t ptbin1_ID = Find_electron_PtBin_ID( Pt1 );
+    Int_t etabin1_ID = Find_electron_EtaBin_ID( eta1 );
 
-	Double_t Eff_ele1_data = Eff_Reco_data[etabin1_Reco][ptbin1_Reco] * Eff_ID_data[etabin1_ID][ptbin1_ID];
-	Double_t Eff_ele1_MC = 1;
+    Int_t ptbin1_Trig = Find_electron_PtBin_Trig( Pt1 );
+    Int_t etabin1_Trig = Find_electron_EtaBin_Trig( eta1 );
 
-	// -- Electron2 -- //
-	Double_t Pt2 = ele2.Pt;
-	//Double_t eta2 = ele2.eta;
-	Double_t eta2 = ele2.etaSC;
+    Double_t Eff_ele1_data = Eff_Reco_data[etabin1_Reco][ptbin1_Reco] * Eff_ID_data[etabin1_ID][ptbin1_ID];
+    Double_t Eff_ele1_MC = Eff_Reco_MC[etabin1_Reco][ptbin1_Reco] * Eff_ID_MC[etabin1_ID][ptbin1_ID];
 
-	Int_t ptbin2_Reco = FindPtBin_Reco( Pt2 );
-	Int_t etabin2_Reco = FindEtaBin_Reco( eta2 );
+    // -- Electron2 -- //
+    Double_t Pt2 = ele2.Pt;
+    //Double_t eta2 = ele2.eta;
+    Double_t eta2 = ele2.etaSC;
 
-	Int_t ptbin2_ID = FindPtBin_ID( Pt2 );
-	Int_t etabin2_ID = FindEtaBin_ID( eta2 );
+    Int_t ptbin2_Reco = Find_electron_PtBin_Reco( Pt2 );
+    Int_t etabin2_Reco = Find_electron_EtaBin_Reco( eta2 );
 
-	Double_t Eff_ele2_data = Eff_Reco_data[etabin2_Reco][ptbin2_Reco] * Eff_ID_data[etabin2_ID][ptbin2_ID];
-	Double_t Eff_ele2_MC = 1;
+    Int_t ptbin2_ID = Find_electron_PtBin_ID( Pt2 );
+    Int_t etabin2_ID = Find_electron_EtaBin_ID( eta2 );
 
-	// -- This is trigger part -- // trigger SF is not yet.
-/*	Double_t Eff_EventTrig_data = 0;
-	Double_t Eff_EventTrig_MC = 0;
+    Int_t ptbin2_Trig = Find_electron_PtBin_Trig( Pt2 );
+    Int_t etabin2_Trig = Find_electron_EtaBin_Trig( eta2 );
 
-	Double_t Eff_Trig_muon1_data = Eff_HLT_data_GtoH[etabin1_trig][ptbin1_trig];
-	Double_t Eff_Trig_muon2_data = Eff_HLT_data_GtoH[etabin2_trig][ptbin2_trig];
-	Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
+    Double_t Eff_ele2_data = Eff_Reco_data[etabin2_Reco][ptbin2_Reco] * Eff_ID_data[etabin2_ID][ptbin2_ID];
+    Double_t Eff_ele2_MC = Eff_Reco_MC[etabin2_Reco][ptbin2_Reco] * Eff_ID_MC[etabin2_ID][ptbin2_ID];
 
-	Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_GtoH[etabin1_trig][ptbin1_trig];
-	Double_t Eff_Trig_muon2_MC = Eff_HLT_MC_GtoH[etabin2_trig][ptbin2_trig];
-	Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;*/
+    // TRIGGERS
+    Double_t Eff_EventTrig_data = 0;
+    Double_t Eff_EventTrig_MC = 0;
 
-//	Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
-//	Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
-	Double_t Eff_data_all = Eff_ele1_data * Eff_ele2_data;
-	Double_t Eff_MC_all = Eff_ele1_MC * Eff_ele2_MC;
+    Eff_EventTrig_data = Eff_HLT_Leg2_data[etabin1_Trig][ptbin1_Trig] * Eff_HLT_Leg2_data[etabin2_Trig][ptbin2_Trig];
+    Eff_EventTrig_MC = Eff_HLT_Leg2_MC[etabin1_Trig][ptbin1_Trig] * Eff_HLT_Leg2_MC[etabin2_Trig][ptbin2_Trig];
 
-	weight = Eff_data_all / Eff_MC_all;
+    //cout << Eff_EventTrig_data << "\t" << Eff_EventTrig_MC << endl;
 
-	if( weight > 2 ) printf("[SF] Weight = %.3lf\n", weight);
+    Double_t Eff_data_all = Eff_ele1_data * Eff_ele2_data * Eff_EventTrig_data;
+    Double_t Eff_MC_all = Eff_ele1_MC * Eff_ele2_MC * Eff_EventTrig_MC;
 
-	return weight;
-}
+    weight = Eff_data_all / Eff_MC_all;
+
+    if( weight > 2 )
+    {
+        printf("(pt1, eta1, pt2, eta2): (%.3lf, %.3lf, %.3lf, %.3lf)\n", Pt1, eta1, Pt2, eta2);
+        printf("[SF] Weight = %.3lf\n", weight);
+    }
+
+    /*if( (Pt1 < 25 && eta1 > 2.3) || (Pt2 < 25 && eta2 > 2.3) )
+    {
+        printf("(pt1, eta1, pt2, eta2): (%.3lf, %.3lf, %.3lf, %.3lf)\n", Pt1, eta1, Pt2, eta2);
+        cout << Eff_EventTrig_data << "\t" << Eff_EventTrig_MC << endl;
+        cout << weight << endl;
+    }*/
+
+    return weight;
+
+}// End of EfficiencySF_EventWeight_electron(ele1, ele2)
+
 
 Double_t DYAnalyzer::EfficiencySF_EventWeight_electron(SelectedEE_t *EE)
 {
-        Double_t weight = -999;
+    Double_t weight = -999;
 
-        // -- Electron1 -- //
-        Double_t Pt1 = EE->Electron_pT->at(0);
-//        Double_t eta1 = EE->Electron_eta->at(0);
-        Double_t eta1 = EE->Electron_etaSC->at(0);
+    // -- Electron1 -- //
+    Double_t Pt1 = EE->Electron_pT->at(0);
+//    Double_t eta1 = EE->Electron_eta->at(0);
+    Double_t eta1 = EE->Electron_etaSC->at(0);
 
-        Int_t ptbin1_Reco = FindPtBin_Reco( Pt1 );
-        Int_t etabin1_Reco = FindEtaBin_Reco( eta1 );
+    Int_t ptbin1_Reco = Find_electron_PtBin_Reco( Pt1 );
+    Int_t etabin1_Reco = Find_electron_EtaBin_Reco( eta1 );
 
-        Int_t ptbin1_ID = FindPtBin_ID( Pt1 );
-        Int_t etabin1_ID = FindEtaBin_ID( eta1 );
+    Int_t ptbin1_ID = Find_electron_PtBin_ID( Pt1 );
+    Int_t etabin1_ID = Find_electron_EtaBin_ID( eta1 );
 
-        Double_t Eff_ele1_data = Eff_Reco_data[etabin1_Reco][ptbin1_Reco] * Eff_ID_data[etabin1_ID][ptbin1_ID];
-        Double_t Eff_ele1_MC = 1;
+    Int_t ptbin1_Trig = Find_electron_PtBin_Trig( Pt1 );
+    Int_t etabin1_Trig = Find_electron_EtaBin_Trig( eta1 );
 
-        // -- Electron2 -- //
-        Double_t Pt2 = EE->Electron_pT->at(1);
+    Double_t Eff_ele1_data = Eff_Reco_data[etabin1_Reco][ptbin1_Reco] * Eff_ID_data[etabin1_ID][ptbin1_ID];
+    Double_t Eff_ele1_MC = Eff_Reco_MC[etabin1_Reco][ptbin1_Reco] * Eff_ID_MC[etabin1_ID][ptbin1_ID];
+
+    // -- Electron2 -- //
+    Double_t Pt2 = EE->Electron_pT->at(1);
 //        Double_t eta2 = EE->Electron_eta->at(1);
-        Double_t eta2 = EE->Electron_etaSC->at(1);
+    Double_t eta2 = EE->Electron_etaSC->at(1);
 
-        Int_t ptbin2_Reco = FindPtBin_Reco( Pt2 );
-        Int_t etabin2_Reco = FindEtaBin_Reco( eta2 );
+    Int_t ptbin2_Reco = Find_electron_PtBin_Reco( Pt2 );
+    Int_t etabin2_Reco = Find_electron_EtaBin_Reco( eta2 );
 
-        Int_t ptbin2_ID = FindPtBin_ID( Pt2 );
-        Int_t etabin2_ID = FindEtaBin_ID( eta2 );
+    Int_t ptbin2_ID = Find_electron_PtBin_ID( Pt2 );
+    Int_t etabin2_ID = Find_electron_EtaBin_ID( eta2 );
 
-        Double_t Eff_ele2_data = Eff_Reco_data[etabin2_Reco][ptbin2_Reco] * Eff_ID_data[etabin2_ID][ptbin2_ID];
-        Double_t Eff_ele2_MC = 1;
+    Int_t ptbin2_Trig = Find_electron_PtBin_Trig( Pt2 );
+    Int_t etabin2_Trig = Find_electron_EtaBin_Trig( eta2 );
 
-        // -- This is trigger part -- // trigger SF is not yet.
-/*	Double_t Eff_EventTrig_data = 0;
-        Double_t Eff_EventTrig_MC = 0;
+    Double_t Eff_ele2_data = Eff_Reco_data[etabin2_Reco][ptbin2_Reco] * Eff_ID_data[etabin2_ID][ptbin2_ID];
+    Double_t Eff_ele2_MC = Eff_Reco_MC[etabin2_Reco][ptbin2_Reco] * Eff_ID_MC[etabin2_ID][ptbin2_ID];
 
-        Double_t Eff_Trig_muon1_data = Eff_HLT_data_GtoH[etabin1_trig][ptbin1_trig];
-        Double_t Eff_Trig_muon2_data = Eff_HLT_data_GtoH[etabin2_trig][ptbin2_trig];
-        Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
+    // TRIGGERS
+    Double_t Eff_EventTrig_data = 0;
+    Double_t Eff_EventTrig_MC = 0;
 
-        Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_GtoH[etabin1_trig][ptbin1_trig];
-        Double_t Eff_Trig_muon2_MC = Eff_HLT_MC_GtoH[etabin2_trig][ptbin2_trig];
-        Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;*/
+    Eff_EventTrig_data = Eff_HLT_Leg2_data[etabin1_Trig][ptbin1_Trig] * Eff_HLT_Leg2_data[etabin2_Trig][ptbin2_Trig];
+    Eff_EventTrig_MC = Eff_HLT_Leg2_MC[etabin1_Trig][ptbin1_Trig] * Eff_HLT_Leg2_MC[etabin2_Trig][ptbin2_Trig];
 
-//	Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
-//	Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
-        Double_t Eff_data_all = Eff_ele1_data * Eff_ele2_data;
-        Double_t Eff_MC_all = Eff_ele1_MC * Eff_ele2_MC;
+    //cout << Eff_EventTrig_data << "\t" << Eff_EventTrig_MC << endl;
 
-        weight = Eff_data_all / Eff_MC_all;
+    Double_t Eff_data_all = Eff_ele1_data * Eff_ele2_data * Eff_EventTrig_data;
+    Double_t Eff_MC_all = Eff_ele1_MC * Eff_ele2_MC * Eff_EventTrig_MC;
 
-        if( weight > 2 ) printf("[SF] Weight = %.3lf\n", weight);
+    weight = Eff_data_all / Eff_MC_all;
 
-        return weight;
-}
+    if( weight > 2 )
+    {
+        printf("(pt1, eta1, pt2, eta2): (%.3lf, %.3lf, %.3lf, %.3lf)\n", Pt1, eta1, Pt2, eta2);
+        printf("[SF] Weight = %.3lf\n", weight);
+    }
+
+    /*if( (Pt1 < 25 && eta1 > 2.3) || (Pt2 < 25 && eta2 > 2.3) )
+    {
+        printf("(pt1, eta1, pt2, eta2): (%.3lf, %.3lf, %.3lf, %.3lf)\n", Pt1, eta1, Pt2, eta2);
+        cout << Eff_EventTrig_data << "\t" << Eff_EventTrig_MC << endl;
+        cout << weight << endl;
+    }*/
+
+    return weight;
+
+}// End of EfficiencySF_EventWeight_electron(SelectedEE_t)
+
 
 Double_t DYAnalyzer::EfficiencySF_EventWeight_emu_BtoF(Muon mu, Electron ele)
 {
-	Double_t weight = -999;
+    Double_t weight = -999;
 
-	// -- Muon1 -- //
-	Double_t Pt1 = mu.Pt;
-	Double_t eta1 = mu.eta;
+    // -- Muon1 -- //
+    Double_t Pt1 = mu.Pt;
+    Double_t eta1 = mu.eta;
 
-	Int_t ptbin1 = FindPtBin( Pt1 );
-	Int_t etabin1 = FindEtaBin( eta1 );
+    Int_t ptbin1_Reco = Find_muon_PtBin_Reco( Pt1 );
+    Int_t etabin1_Reco = Find_muon_EtaBin_Reco( eta1 );
 
-	Int_t ptbin1_trig = FindPtBin_trig( Pt1 );
-	Int_t etabin1_trig = FindEtaBin_trig( eta1 );
+    Int_t ptbin1_ID = Find_muon_PtBin_ID( Pt1 );
+    Int_t etabin1_ID = Find_muon_EtaBin_ID( eta1 );
 
-	// -- Electron2 -- //
-	Double_t Pt2 = ele.Pt;
-	//Double_t eta2 = ele.eta;
-	Double_t eta2 = ele.etaSC;
+    Int_t ptbin1_Iso = Find_muon_PtBin_Iso( Pt1 );
+    Int_t etabin1_Iso = Find_muon_EtaBin_Iso( eta1 );
 
-	Int_t ptbin2_Reco = FindPtBin_Reco( Pt2 );
-	Int_t etabin2_Reco = FindEtaBin_Reco( eta2 );
+    Int_t ptbin1_Trig = Find_muon_PtBin_Trig( Pt1 );
+    Int_t etabin1_Trig = Find_muon_EtaBin_Trig( eta1 );
 
-	Int_t ptbin2_ID = FindPtBin_ID( Pt2 );
-	Int_t etabin2_ID = FindEtaBin_ID( eta2 );
+    // -- Electron2 -- //
+    Double_t Pt2 = ele.Pt;
+    //Double_t eta2 = ele.eta;
+    Double_t eta2 = ele.etaSC;
 
-	//Check about bin settings
-	if( ptbin1 == 9999 || etabin1 == 9999 || ptbin1_trig == 9999 || etabin1_trig == 9999 || ptbin2_Reco == 9999 || etabin2_Reco == 9999 || ptbin2_ID == 9999 || etabin2_ID == 9999)
-	{
-		printf("ERROR! Wrong assigned bin number ...");
-		return -999;
-	}
+    Int_t ptbin2_Reco = Find_electron_PtBin_Reco( Pt2 );
+    Int_t etabin2_Reco = Find_electron_EtaBin_Reco( eta2 );
 
-	//Muon1
-	Double_t Eff_muon1_data = Eff_RecoID_data_BtoF[etabin1][ptbin1] * Eff_Iso_data_BtoF[etabin1][ptbin1];
-	Double_t Eff_muon1_MC = Eff_RecoID_MC_BtoF[etabin1][ptbin1] * Eff_Iso_MC_BtoF[etabin1][ptbin1];
+    Int_t ptbin2_ID = Find_electron_PtBin_ID( Pt2 );
+    Int_t etabin2_ID = Find_electron_EtaBin_ID( eta2 );
 
-	//Electron2
-	Double_t Eff_ele2_data = Eff_Reco_data[etabin2_Reco][ptbin2_Reco] * Eff_ID_data[etabin2_ID][ptbin2_ID];
-	Double_t Eff_ele2_MC = 1;
+    //Check about bin settings
+    if( ptbin1_Reco == 9999 || etabin1_Reco == 9999 || ptbin1_ID == 9999 || etabin1_ID == 9999 || ptbin1_Iso == 9999 || etabin1_Iso == 9999 ||
+        ptbin1_Trig == 9999 || etabin1_Trig == 9999 || ptbin2_Reco == 9999 || etabin2_Reco == 9999 || ptbin2_ID == 9999 || etabin2_ID == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ...");
+        return -999;
+    }
 
-	//Trigger : We consider only SingleMuon trigger
-	Double_t Eff_EventTrig_data = 0;
-	Double_t Eff_EventTrig_MC = 0;
+    //Muon1
+    Double_t Eff_muon1_data = Eff_Reco_data_BtoF[etabin1_Reco][ptbin1_Reco] * Eff_ID_data_BtoF[etabin1_ID][ptbin1_ID] * Eff_Iso_data_BtoF[etabin1_Iso][ptbin1_Iso];
+    Double_t Eff_muon1_MC = Eff_Reco_MC_BtoF[etabin1_Reco][ptbin1_Reco] * Eff_ID_MC_BtoF[etabin1_ID][ptbin1_ID] * Eff_Iso_MC_BtoF[etabin1_Iso][ptbin1_Iso];
 
-	Double_t Eff_Trig_muon1_data = Eff_HLT_data_BtoF[etabin1_trig][ptbin1_trig];
-	Eff_EventTrig_data = Eff_Trig_muon1_data;
+    //Electron2
+    Double_t Eff_ele2_data = Eff_Reco_data[etabin2_Reco][ptbin2_Reco] * Eff_ID_data[etabin2_ID][ptbin2_ID];
+    Double_t Eff_ele2_MC = Eff_Reco_MC[etabin2_Reco][ptbin2_Reco] * Eff_ID_MC[etabin2_ID][ptbin2_ID];
 
-	Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_BtoF[etabin1_trig][ptbin1_trig];
-	Eff_EventTrig_MC = Eff_Trig_muon1_MC;
+    //TRIGGER : SingleMuon trigger only
+    Double_t Eff_EventTrig_data = 0;
+    Double_t Eff_EventTrig_MC = 0;
 
-	// -- emu event SF -- //
-	Double_t Eff_data_all = Eff_muon1_data * Eff_ele2_data * Eff_EventTrig_data;
-	Double_t Eff_MC_all = Eff_muon1_MC * Eff_ele2_MC * Eff_EventTrig_MC;
+    Double_t Eff_Trig_muon1_data = Eff_HLT_data_BtoF[etabin1_Trig][ptbin1_Trig];
+    Eff_EventTrig_data = Eff_Trig_muon1_data;
 
-	weight = Eff_data_all / Eff_MC_all;
+    Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_BtoF[etabin1_Trig][ptbin1_Trig];
+    Eff_EventTrig_MC = Eff_Trig_muon1_MC;
 
-	if( weight > 2 ) printf("[SF] Weight = %.3lf\n", weight);
-	return weight;
-}
+    // -- emu event SF -- //
+    Double_t Eff_data_all = Eff_muon1_data * Eff_ele2_data * Eff_EventTrig_data;
+    Double_t Eff_MC_all = Eff_muon1_MC * Eff_ele2_MC * Eff_EventTrig_MC;
+
+    weight = Eff_data_all / Eff_MC_all;
+
+    if( weight > 2 ) printf("[SF] Weight = %.3lf\n", weight);
+    return weight;
+
+}// End of EfficiencySF_EventWeight_emu_BtoF(mu, ele)
+
+
+Double_t DYAnalyzer::EfficiencySF_EventWeight_emu_BtoF(SelectedEMu_t *EMu)
+{
+    Double_t weight = -999;
+
+    // -- Muon1 -- //
+    Double_t Pt1 = EMu->Muon_pT;
+    Double_t eta1 = EMu->Muon_eta;
+
+    Int_t ptbin1_Reco = Find_muon_PtBin_Reco( Pt1 );
+    Int_t etabin1_Reco = Find_muon_EtaBin_Reco( eta1 );
+
+    Int_t ptbin1_ID = Find_muon_PtBin_ID( Pt1 );
+    Int_t etabin1_ID = Find_muon_EtaBin_ID( eta1 );
+
+    Int_t ptbin1_Iso = Find_muon_PtBin_Iso( Pt1 );
+    Int_t etabin1_Iso = Find_muon_EtaBin_Iso( eta1 );
+
+    Int_t ptbin1_Trig = Find_muon_PtBin_Trig( Pt1 );
+    Int_t etabin1_Trig = Find_muon_EtaBin_Trig( eta1 );
+
+    // -- Electron2 -- //
+    Double_t Pt2 = EMu->Electron_pT;
+    //Double_t eta2 = EMu->Electron_eta;
+    Double_t eta2 = EMu->Electron_etaSC;
+
+    Int_t ptbin2_Reco = Find_electron_PtBin_Reco( Pt2 );
+    Int_t etabin2_Reco = Find_electron_EtaBin_Reco( eta2 );
+
+    Int_t ptbin2_ID = Find_electron_PtBin_ID( Pt2 );
+    Int_t etabin2_ID = Find_electron_EtaBin_ID( eta2 );
+
+    //Check about bin settings
+    if( ptbin1_Reco == 9999 || etabin1_Reco == 9999 || ptbin1_ID == 9999 || etabin1_ID == 9999 || ptbin1_Iso == 9999 || etabin1_Iso == 9999 ||
+        ptbin1_Trig == 9999 || etabin1_Trig == 9999 || ptbin2_Reco == 9999 || etabin2_Reco == 9999 || ptbin2_ID == 9999 || etabin2_ID == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ...");
+        return -999;
+    }
+
+    //Muon1
+    Double_t Eff_muon1_data = Eff_Reco_data_BtoF[etabin1_Reco][ptbin1_Reco] * Eff_ID_data_BtoF[etabin1_ID][ptbin1_ID] * Eff_Iso_data_BtoF[etabin1_Iso][ptbin1_Iso];
+    Double_t Eff_muon1_MC = Eff_Reco_MC_BtoF[etabin1_Reco][ptbin1_Reco] * Eff_ID_MC_BtoF[etabin1_ID][ptbin1_ID] * Eff_Iso_MC_BtoF[etabin1_Iso][ptbin1_Iso];
+
+    //Electron2
+    Double_t Eff_ele2_data = Eff_Reco_data[etabin2_Reco][ptbin2_Reco] * Eff_ID_data[etabin2_ID][ptbin2_ID];
+    Double_t Eff_ele2_MC = Eff_Reco_MC[etabin2_Reco][ptbin2_Reco] * Eff_ID_MC[etabin2_ID][ptbin2_ID];
+
+    //TRIGGER : SingleMuon trigger only
+    Double_t Eff_EventTrig_data = 0;
+    Double_t Eff_EventTrig_MC = 0;
+
+    Double_t Eff_Trig_muon1_data = Eff_HLT_data_BtoF[etabin1_Trig][ptbin1_Trig];
+    Eff_EventTrig_data = Eff_Trig_muon1_data;
+
+    Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_BtoF[etabin1_Trig][ptbin1_Trig];
+    Eff_EventTrig_MC = Eff_Trig_muon1_MC;
+
+    // -- emu event SF -- //
+    Double_t Eff_data_all = Eff_muon1_data * Eff_ele2_data * Eff_EventTrig_data;
+    Double_t Eff_MC_all = Eff_muon1_MC * Eff_ele2_MC * Eff_EventTrig_MC;
+
+    weight = Eff_data_all / Eff_MC_all;
+
+    if( weight > 2 ) printf("[SF] Weight = %.3lf\n", weight);
+    return weight;
+
+}// End of EfficiencySF_EventWeight_emu_BtoF(SelectedEMu_t)
+
 
 Double_t DYAnalyzer::EfficiencySF_EventWeight_emu_GtoH(Muon mu, Electron ele)
 {
-	Double_t weight = -999;
+    Double_t weight = -999;
 
-	// -- Muon1 -- //
-	Double_t Pt1 = mu.Pt;
-	Double_t eta1 = mu.eta;
+    // -- Muon1 -- //
+    Double_t Pt1 = mu.Pt;
+    Double_t eta1 = mu.eta;
 
-	Int_t ptbin1 = FindPtBin( Pt1 );
-	Int_t etabin1 = FindEtaBin( eta1 );
+    Int_t ptbin1_Reco = Find_muon_PtBin_Reco( Pt1 );
+    Int_t etabin1_Reco = Find_muon_EtaBin_Reco( eta1 );
 
-	Int_t ptbin1_trig = FindPtBin_trig( Pt1 );
-	Int_t etabin1_trig = FindEtaBin_trig( eta1 );
+    Int_t ptbin1_ID = Find_muon_PtBin_ID( Pt1 );
+    Int_t etabin1_ID = Find_muon_EtaBin_ID( eta1 );
 
-	// -- Electron2 -- //
-	Double_t Pt2 = ele.Pt;
-	//Double_t eta2 = ele.eta;
-	Double_t eta2 = ele.etaSC;
+    Int_t ptbin1_Iso = Find_muon_PtBin_Iso( Pt1 );
+    Int_t etabin1_Iso = Find_muon_EtaBin_Iso( eta1 );
 
-	Int_t ptbin2_Reco = FindPtBin_Reco( Pt2 );
-	Int_t etabin2_Reco = FindEtaBin_Reco( eta2 );
+    Int_t ptbin1_Trig = Find_muon_PtBin_Trig( Pt1 );
+    Int_t etabin1_Trig = Find_muon_EtaBin_Trig( eta1 );
 
-	Int_t ptbin2_ID = FindPtBin_ID( Pt2 );
-	Int_t etabin2_ID = FindEtaBin_ID( eta2 );
+    // -- Electron2 -- //
+    Double_t Pt2 = ele.Pt;
+    //Double_t eta2 = ele.eta;
+    Double_t eta2 = ele.etaSC;
 
-	//Check about bin settings
-	if( ptbin1 == 9999 || etabin1 == 9999 || ptbin1_trig == 9999 || etabin1_trig == 9999 || ptbin2_Reco == 9999 || etabin2_Reco == 9999 || ptbin2_ID == 9999 || etabin2_ID == 9999)
-	{
-		printf("ERROR! Wrong assigned bin number ...");
-		return -999;
-	}
+    Int_t ptbin2_Reco = Find_electron_PtBin_Reco( Pt2 );
+    Int_t etabin2_Reco = Find_electron_EtaBin_Reco( eta2 );
 
-	//Muon1
-	Double_t Eff_muon1_data = Eff_RecoID_data_GtoH[etabin1][ptbin1] * Eff_Iso_data_GtoH[etabin1][ptbin1];
-	Double_t Eff_muon1_MC = Eff_RecoID_MC_GtoH[etabin1][ptbin1] * Eff_Iso_MC_GtoH[etabin1][ptbin1];
+    Int_t ptbin2_ID = Find_electron_PtBin_ID( Pt2 );
+    Int_t etabin2_ID = Find_electron_EtaBin_ID( eta2 );
 
-	//Electron2
-	Double_t Eff_ele2_data = Eff_Reco_data[etabin2_Reco][ptbin2_Reco] * Eff_ID_data[etabin2_ID][ptbin2_ID];
-	Double_t Eff_ele2_MC = 1;
+    //Check about bin settings
+    if( ptbin1_Reco == 9999 || etabin1_Reco == 9999 || ptbin1_ID == 9999 || etabin1_ID == 9999 || ptbin1_Iso == 9999 || etabin1_Iso == 9999 ||
+        ptbin1_Trig == 9999 || etabin1_Trig == 9999 || ptbin2_Reco == 9999 || etabin2_Reco == 9999 || ptbin2_ID == 9999 || etabin2_ID == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ...");
+        return -999;
+    }
 
-	//Trigger : We consider only SingleMuon trigger
-	Double_t Eff_EventTrig_data = 0;
-	Double_t Eff_EventTrig_MC = 0;
+    //Muon1
+    Double_t Eff_muon1_data = Eff_Reco_data_GtoH[etabin1_Reco][ptbin1_Reco] * Eff_ID_data_GtoH[etabin1_ID][ptbin1_ID] * Eff_Iso_data_GtoH[etabin1_Iso][ptbin1_Iso];
+    Double_t Eff_muon1_MC = Eff_Reco_MC_GtoH[etabin1_Reco][ptbin1_Reco] * Eff_ID_MC_GtoH[etabin1_ID][ptbin1_ID] * Eff_Iso_MC_GtoH[etabin1_Iso][ptbin1_Iso];
 
-	Double_t Eff_Trig_muon1_data = Eff_HLT_data_GtoH[etabin1_trig][ptbin1_trig];
-	Eff_EventTrig_data = Eff_Trig_muon1_data;
+    //Electron2
+    Double_t Eff_ele2_data = Eff_Reco_data[etabin2_Reco][ptbin2_Reco] * Eff_ID_data[etabin2_ID][ptbin2_ID];
+    Double_t Eff_ele2_MC = Eff_Reco_MC[etabin2_Reco][ptbin2_Reco] * Eff_ID_MC[etabin2_ID][ptbin2_ID];
 
-	Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_GtoH[etabin1_trig][ptbin1_trig];
-	Eff_EventTrig_MC = Eff_Trig_muon1_MC;
+    //TRIGGER : SingleMuon trigger only
+    Double_t Eff_EventTrig_data = 0;
+    Double_t Eff_EventTrig_MC = 0;
 
-	// -- emu event SF -- //
-	Double_t Eff_data_all = Eff_muon1_data * Eff_ele2_data * Eff_EventTrig_data;
-	Double_t Eff_MC_all = Eff_muon1_MC * Eff_ele2_MC * Eff_EventTrig_MC;
+    Double_t Eff_Trig_muon1_data = Eff_HLT_data_GtoH[etabin1_Trig][ptbin1_Trig];
+    Eff_EventTrig_data = Eff_Trig_muon1_data;
 
-	weight = Eff_data_all / Eff_MC_all;
+    Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_GtoH[etabin1_Trig][ptbin1_Trig];
+    Eff_EventTrig_MC = Eff_Trig_muon1_MC;
 
-	if( weight > 2 ) printf("[SF] Weight = %.3lf\n", weight);
-	return weight;
-}
+    // -- emu event SF -- //
+    Double_t Eff_data_all = Eff_muon1_data * Eff_ele2_data * Eff_EventTrig_data;
+    Double_t Eff_MC_all = Eff_muon1_MC * Eff_ele2_MC * Eff_EventTrig_MC;
 
-Int_t DYAnalyzer::FindPtBin(Double_t Pt)
+    weight = Eff_data_all / Eff_MC_all;
+
+    if( weight > 2 ) printf("[SF] Weight = %.3lf\n", weight);
+    return weight;
+
+}// End of EfficiencySF_EventWeight_emu_GtoH(mu, ele)
+
+
+Double_t DYAnalyzer::EfficiencySF_EventWeight_emu_GtoH(SelectedEMu_t *EMu)
 {
-	//const Int_t nPtBins = 4;
-	const Int_t nPtBins = 7;
-	//Double_t PtBinEdges[nPtBins+1] = {10, 22, 40, 70, 250};
-	Double_t PtBinEdges[nPtBins+1] = {20, 25, 30, 40, 50, 55, 60, 120};
+    Double_t weight = -999;
 
-	Int_t ptbin = 9999;
+    // -- Muon1 -- //
+    Double_t Pt1 = EMu->Muon_pT;
+    Double_t eta1 = EMu->Muon_eta;
 
-	// -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- // 
-	if( Pt > PtBinEdges[nPtBins] )
-		ptbin = nPtBins-1;
-	// -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- // updated at 14 Apr. 2017 by Dalmin Pai
-	else if( Pt < PtBinEdges[0] )
-		ptbin = 0;
-	else
-	{
-		for(Int_t i=0; i<nPtBins; i++)
-		{
-			if( Pt > PtBinEdges[i] && Pt < PtBinEdges[i+1] )
-			{
-				ptbin = i;
-				break;
-			}
-		}
-	}
+    Int_t ptbin1_Reco = Find_muon_PtBin_Reco( Pt1 );
+    Int_t etabin1_Reco = Find_muon_EtaBin_Reco( eta1 );
 
-	return ptbin;
-}
+    Int_t ptbin1_ID = Find_muon_PtBin_ID( Pt1 );
+    Int_t etabin1_ID = Find_muon_EtaBin_ID( eta1 );
 
-Int_t DYAnalyzer::FindPtBin_Reco(Double_t Pt)
-{
-	//const Int_t nPtBins = 4;
-	const Int_t nPtBins = 1;
-	//Double_t PtBinEdges[nPtBins+1] = {10, 22, 40, 70, 250};
-	Double_t PtBinEdges[nPtBins+1] = {25, 500};
+    Int_t ptbin1_Iso = Find_muon_PtBin_Iso( Pt1 );
+    Int_t etabin1_Iso = Find_muon_EtaBin_Iso( eta1 );
 
-	Int_t ptbin = 9999;
+    Int_t ptbin1_Trig = Find_muon_PtBin_Trig( Pt1 );
+    Int_t etabin1_Trig = Find_muon_EtaBin_Trig( eta1 );
 
-	// -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- // 
-	if( Pt > PtBinEdges[nPtBins] )
-		ptbin = nPtBins-1;
-	// -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- // updated at 14 Apr. 2017 by Dalmin Pai
-	else if( Pt < PtBinEdges[0] )
-		ptbin = 0;
-	else
-	{
-		for(Int_t i=0; i<nPtBins; i++)
-		{
-			if( Pt > PtBinEdges[i] && Pt < PtBinEdges[i+1] )
-			{
-				ptbin = i;
-				break;
-			}
-		}
-	}
+    // -- Electron2 -- //
+    Double_t Pt2 = EMu->Electron_pT;
+    //Double_t eta2 = EMu->Electron_eta;
+    Double_t eta2 = EMu->Electron_etaSC;
 
-	return ptbin;
-}
+    Int_t ptbin2_Reco = Find_electron_PtBin_Reco( Pt2 );
+    Int_t etabin2_Reco = Find_electron_EtaBin_Reco( eta2 );
 
-Int_t DYAnalyzer::FindPtBin_ID(Double_t Pt)
-{
-	//const Int_t nPtBins = 4;
-	const Int_t nPtBins = 5;
-	//Double_t PtBinEdges[nPtBins+1] = {10, 22, 40, 70, 250};
-	Double_t PtBinEdges[nPtBins+1] = {10, 20, 35, 50, 90, 150};
+    Int_t ptbin2_ID = Find_electron_PtBin_ID( Pt2 );
+    Int_t etabin2_ID = Find_electron_EtaBin_ID( eta2 );
 
-	Int_t ptbin = 9999;
+    //Check about bin settings
+    if( ptbin1_Reco == 9999 || etabin1_Reco == 9999 || ptbin1_ID == 9999 || etabin1_ID == 9999 || ptbin1_Iso == 9999 || etabin1_Iso == 9999 ||
+        ptbin1_Trig == 9999 || etabin1_Trig == 9999 || ptbin2_Reco == 9999 || etabin2_Reco == 9999 || ptbin2_ID == 9999 || etabin2_ID == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ...");
+        return -999;
+    }
 
-	// -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- // 
-	if( Pt > PtBinEdges[nPtBins] )
-		ptbin = nPtBins-1;
-	// -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- // updated at 14 Apr. 2017 by Dalmin Pai
-	else if( Pt < PtBinEdges[0] )
-		ptbin = 0;
-	else
-	{
-		for(Int_t i=0; i<nPtBins; i++)
-		{
-			if( Pt > PtBinEdges[i] && Pt < PtBinEdges[i+1] )
-			{
-				ptbin = i;
-				break;
-			}
-		}
-	}
+    //Muon1
+    Double_t Eff_muon1_data = Eff_Reco_data_GtoH[etabin1_Reco][ptbin1_Reco] * Eff_ID_data_GtoH[etabin1_ID][ptbin1_ID] * Eff_Iso_data_GtoH[etabin1_Iso][ptbin1_Iso];
+    Double_t Eff_muon1_MC = Eff_Reco_MC_GtoH[etabin1_Reco][ptbin1_Reco] * Eff_ID_MC_GtoH[etabin1_ID][ptbin1_ID] * Eff_Iso_MC_GtoH[etabin1_Iso][ptbin1_Iso];
 
-	return ptbin;
-}
+    //Electron2
+    Double_t Eff_ele2_data = Eff_Reco_data[etabin2_Reco][ptbin2_Reco] * Eff_ID_data[etabin2_ID][ptbin2_ID];
+    Double_t Eff_ele2_MC = Eff_Reco_MC[etabin2_Reco][ptbin2_Reco] * Eff_ID_MC[etabin2_ID][ptbin2_ID];
 
-Int_t DYAnalyzer::FindPtBin_trig(Double_t Pt)
-{
-	//const Int_t nPtBins = 4;
-	const Int_t nPtBins = 7;
-	//Double_t PtBinEdges[nPtBins+1] = {10, 22, 40, 70, 250};
-	Double_t PtBinEdges[nPtBins+1] = {26, 30, 40, 50, 60, 120, 200, 500};
+    //TRIGGER : SingleMuon trigger only
+    Double_t Eff_EventTrig_data = 0;
+    Double_t Eff_EventTrig_MC = 0;
 
-	Int_t ptbin = 9999;
+    Double_t Eff_Trig_muon1_data = Eff_HLT_data_GtoH[etabin1_Trig][ptbin1_Trig];
+    Eff_EventTrig_data = Eff_Trig_muon1_data;
 
-	// -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- // 
-	if( Pt > PtBinEdges[nPtBins] )
-		ptbin = nPtBins-1;
-	// -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- // updated at 14 Apr. 2017 by Dalmin Pai
-	else if( Pt < PtBinEdges[0] )
-		ptbin = 0;
-	else
-	{
-		for(Int_t i=0; i<nPtBins; i++)
-		{
-			if( Pt > PtBinEdges[i] && Pt < PtBinEdges[i+1] )
-			{
-				ptbin = i;
-				break;
-			}
-		}
-	}
+    Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_GtoH[etabin1_Trig][ptbin1_Trig];
+    Eff_EventTrig_MC = Eff_Trig_muon1_MC;
 
-	return ptbin;
-}
+    // -- emu event SF -- //
+    Double_t Eff_data_all = Eff_muon1_data * Eff_ele2_data * Eff_EventTrig_data;
+    Double_t Eff_MC_all = Eff_muon1_MC * Eff_ele2_MC * Eff_EventTrig_MC;
 
-Int_t DYAnalyzer::FindEtaBin(Double_t eta)
-{
-	//const Int_t nEtaBins = 5;
-	const Int_t nEtaBins = 4;
-	//Double_t EtaBinEdges[nEtaBins+1] = {-2.4, -1.2, -0.3, 0.3, 1.2, 2.4};
-	Double_t EtaBinEdges[nEtaBins+1] = {0, 0.9, 1.2, 2.1, 2.4};
+    weight = Eff_data_all / Eff_MC_all;
 
-	Int_t etabin = 9999;
+    if( weight > 2 ) printf("[SF] Weight = %.3lf\n", weight);
+    return weight;
 
-	for(Int_t i=0; i<nEtaBins; i++)
-	{
-		//if( eta > EtaBinEdges[i] && eta < EtaBinEdges[i+1] )
-		if( fabs(eta) > EtaBinEdges[i] && fabs(eta) < EtaBinEdges[i+1] )
-		{
-			etabin = i;
-			break;
-		}
-	}
+} // End of EfficiencySF_EventWeight_emu_GtoH(SelectedEMu_t)
 
-	return etabin;
-}
-
-Int_t DYAnalyzer::FindEtaBin_Reco(Double_t eta)
-{
-	//const Int_t nEtaBins = 5;
-	const Int_t nEtaBins = 30;
-	//Double_t EtaBinEdges[nEtaBins+1] = {-2.4, -1.2, -0.3, 0.3, 1.2, 2.4};
-	Double_t EtaBinEdges[nEtaBins+1] = {-2.5,-2.45,-2.4,-2.3,-2.2,-2.0,-1.8,-1.63,-1.566,-1.4442,-1.2,-1.0,-0.6,-0.4,-0.2,0.0,0.2,0.4,0.6,1.0,1.2,1.4442,1.566,1.63,1.8,2.0,2.2,2.3,2.4,2.45,2.5};
-
-	Int_t etabin = 9999;
-
-	for(Int_t i=0; i<nEtaBins; i++)
-	{
-		if( eta > EtaBinEdges[i] && eta < EtaBinEdges[i+1] )
-		//if( fabs(eta) > EtaBinEdges[i] && fabs(eta) < EtaBinEdges[i+1] )
-		{
-			etabin = i;
-			break;
-		}
-	}
-
-	return etabin;
-}
-
-Int_t DYAnalyzer::FindEtaBin_ID(Double_t eta)
-{
-	//const Int_t nEtaBins = 5;
-	const Int_t nEtaBins = 10;
-	//Double_t EtaBinEdges[nEtaBins+1] = {-2.4, -1.2, -0.3, 0.3, 1.2, 2.4};
-	Double_t EtaBinEdges[nEtaBins+1] = {-2.5, -2.0, -1.566, -1.444, -0.8, 0.0, 0.8, 1.444, 1.566, 2.0, 2.5};
-
-	Int_t etabin = 9999;
-
-	for(Int_t i=0; i<nEtaBins; i++)
-	{
-		if( eta > EtaBinEdges[i] && eta < EtaBinEdges[i+1] )
-		//if( fabs(eta) > EtaBinEdges[i] && fabs(eta) < EtaBinEdges[i+1] )
-		{
-			etabin = i;
-			break;
-		}
-	}
-
-	return etabin;
-}
-
-Int_t DYAnalyzer::FindEtaBin_trig(Double_t eta)
-{
-	//const Int_t nEtaBins = 5;
-	const Int_t nEtaBins = 4;
-	//Double_t EtaBinEdges[nEtaBins+1] = {-2.4, -1.2, -0.3, 0.3, 1.2, 2.4};
-	Double_t EtaBinEdges[nEtaBins+1] = {0, 0.9, 1.2, 2.1, 2.4};
-
-	Int_t etabin = 9999;
-
-	for(Int_t i=0; i<nEtaBins; i++)
-	{
-		//if( eta > EtaBinEdges[i] && eta < EtaBinEdges[i+1] )
-		if( fabs(eta) > EtaBinEdges[i] && fabs(eta) < EtaBinEdges[i+1] )
-		{
-			etabin = i;
-			break;
-		}
-	}
-
-	return etabin;
-}
-
-Double_t DYAnalyzer::EfficiencySF_EventWeight(Muon mu1, Muon mu2, NtupleHandle *ntuple)
-{
-	Double_t weight = -999;
-
-	// -- Muon1 -- //
-	Double_t Pt1 = mu1.Pt;
-	Double_t eta1 = mu1.eta;
-
-	Int_t ptbin1 = FindPtBin( Pt1 );
-	Int_t etabin1 = FindEtaBin( eta1 );
-
-	if( ptbin1 == 9999 || etabin1 == 9999 )
-	{
-		printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin1, etabin1);
-		return -999;
-	}
-
-	Double_t Eff_muon1_data = Eff_RecoID_data[etabin1][ptbin1] * Eff_Iso_data[etabin1][ptbin1];
-	Double_t Eff_muon1_MC = Eff_RecoID_MC[etabin1][ptbin1] * Eff_Iso_MC[etabin1][ptbin1];
-
-	// -- Muon2 -- //
-	Double_t Pt2 = mu2.Pt;
-	Double_t eta2 = mu2.eta;
-
-	Int_t ptbin2 = FindPtBin( Pt2 );
-	Int_t etabin2 = FindEtaBin( eta2 );
-
-	if( ptbin2 == 9999 || etabin2 == 9999 )
-	{
-		printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin2, etabin2);
-		return -999;
-	}
-	Double_t Eff_muon2_data = Eff_RecoID_data[etabin2][ptbin2] * Eff_Iso_data[etabin2][ptbin2];
-	Double_t Eff_muon2_MC = Eff_RecoID_MC[etabin2][ptbin2] * Eff_Iso_MC[etabin2][ptbin2];
-
-	Bool_t isHLTv4p2 = kFALSE;
-	if( ntuple->runNum < 257932.5 )
-		isHLTv4p2 = kTRUE;
-
-	Double_t Eff_EventTrig_data = 0;
-	Double_t Eff_EventTrig_MC = 0;
-	if( isHLTv4p2 )
-	{
-		Double_t Eff_Trig_muon1_data = Eff_HLTv4p2_data[etabin1][ptbin1];
-		Double_t Eff_Trig_muon2_data = Eff_HLTv4p2_data[etabin2][ptbin2];
-		Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
-
-		Double_t Eff_Trig_muon1_MC = Eff_HLTv4p2_MC[etabin1][ptbin1];
-		Double_t Eff_Trig_muon2_MC = Eff_HLTv4p2_MC[etabin2][ptbin2];
-		Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;
-	}
-	else
-	{
-		Double_t Eff_Trig_muon1_data = Eff_HLTv4p3_data[etabin1][ptbin1];
-		Double_t Eff_Trig_muon2_data = Eff_HLTv4p3_data[etabin2][ptbin2];
-		Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
-
-		Double_t Eff_Trig_muon1_MC = Eff_HLTv4p3_MC[etabin1][ptbin1];
-		Double_t Eff_Trig_muon2_MC = Eff_HLTv4p3_MC[etabin2][ptbin2];
-		Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;
-	}
-
-	Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
-	Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
-
-        // std::cout << "Eff_data_all: " << Eff_data_all << ", Eff_MC_all: " << Eff_MC_all << endl;
-	weight = Eff_data_all / Eff_MC_all;
-
-	if( weight > 2 )
-	{
-		printf("[Data]\n");
-		printf("\t[Muon1] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_data[etabin1][ptbin1], Eff_Iso_data[etabin1][ptbin1]);
-		printf("\t[Muon2] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_data[etabin2][ptbin2], Eff_Iso_data[etabin2][ptbin2]);
-		printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_data, Eff_data_all);
-
-		printf("[MC]\n");
-		printf("\t[Muon1] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_MC[etabin1][ptbin1], Eff_Iso_MC[etabin1][ptbin1]);
-		printf("\t[Muon2] (RecoID, Iso): (%.3lf, %.3lf)\n", Eff_RecoID_MC[etabin2][ptbin2], Eff_Iso_MC[etabin2][ptbin2]);
-		printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_MC, Eff_MC_all);
-
-		printf("(ptbin1, etabin1, ptbin2, etabin2): (%d, %d, %d, %d)\n", ptbin1, etabin1, ptbin2, etabin2);
-		
-		printf("[SF] Weight = %.3lf\n", weight);
-	}
-	return weight;
-}
-
-Double_t DYAnalyzer::EfficiencySF_EventWeight_RecoIdIso(Muon mu1, Muon mu2, NtupleHandle *ntuple)
-{
-	Double_t weight = -999;
-
-	// -- Muon1 -- //
-	Double_t Pt1 = mu1.Pt;
-	Double_t eta1 = mu1.eta;
-
-	Int_t ptbin1 = FindPtBin( Pt1 );
-	Int_t etabin1 = FindEtaBin( eta1 );
-
-	if( ptbin1 == 9999 || etabin1 == 9999 )
-	{
-		printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin1, etabin1);
-		return -999;
-	}
-
-	Double_t Eff_muon1_data = Eff_RecoID_data[etabin1][ptbin1] * Eff_Iso_data[etabin1][ptbin1];
-	Double_t Eff_muon1_MC = Eff_RecoID_MC[etabin1][ptbin1] * Eff_Iso_MC[etabin1][ptbin1];
-
-	// -- Muon2 -- //
-	Double_t Pt2 = mu2.Pt;
-	Double_t eta2 = mu2.eta;
-
-	Int_t ptbin2 = FindPtBin( Pt2 );
-	Int_t etabin2 = FindEtaBin( eta2 );
-
-	if( ptbin2 == 9999 || etabin2 == 9999 )
-	{
-		printf("ERROR! Wrong assigned bin number ... (ptbin, etabin) = (%d, %d)\n", ptbin2, etabin2);
-		return -999;
-	}
-	Double_t Eff_muon2_data = Eff_RecoID_data[etabin2][ptbin2] * Eff_Iso_data[etabin2][ptbin2];
-	Double_t Eff_muon2_MC = Eff_RecoID_MC[etabin2][ptbin2] * Eff_Iso_MC[etabin2][ptbin2];
-
-	Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data;
-	Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC;
-
-	weight = Eff_data_all / Eff_MC_all;
-
-	return weight;
-}
 
 Bool_t DYAnalyzer::EventSelection(vector< Muon > MuonCollection, NtupleHandle *ntuple, // -- input: All muons in a event & NtupleHandle -- //
 						vector< Muon >* SelectedMuonCollection) // -- output: 2 muons passing event selection conditions -- //
@@ -3524,8 +2402,8 @@ Bool_t DYAnalyzer::EventSelection(vector< Muon > MuonCollection, NtupleHandle *n
                                                                     VtxNormChi2_BestPair = VtxNormChi2_temp;
                                                                     mu1_BestPair = Mu;
                                                                     mu2_BestPair = Mu_jth;
-                                                                    index_1 = i_mu;
-                                                                    index_2 = j_mu;
+                                                                    index_1 = QIndex[i_mu];
+                                                                    index_2 = QIndex[j_mu];
                                                             }
                                                     }
                                             }
@@ -5867,304 +4745,299 @@ Bool_t DYAnalyzer::EventSelection_Zdiff_13TeV_HighPt11(vector< Muon > MuonCollec
 	return isPassEventSelection;
 }
 
-// test for emu event selection not using vtx cut
-// Updated to use synchronized acceptance cut : 19 Jan. 2018
-Bool_t DYAnalyzer::EventSelection_emu_method_test(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple,
+Bool_t DYAnalyzer::EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple,
 						vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection)
 {
-	Bool_t isPassEventSelection = kFALSE;
+    Bool_t isPassEventSelection = kFALSE;
 
-	//Collect qualified muons among muons
-	vector< Muon > QMuonCollection;
-	for(Int_t j=0; j<(int)MuonCollection.size(); j++)
-	{
-		if( MuonCollection[j].isHighPtMuon() && MuonCollection[j].trkiso < 0.10
-			//&& MuonCollection[j].Pt > LeadPtCut && fabs(MuonCollection[j].eta) < LeadEtaCut )
-			&& MuonCollection[j].Pt > SubPtCut && fabs(MuonCollection[j].eta) < LeadEtaCut ) // pT>17 && |eta|<2.4
-			QMuonCollection.push_back( MuonCollection[j] );
-	}
+    //Collect qualified muons among muons
+    vector< Muon > QMuonCollection;
+    for(Int_t j=0; j<(int)MuonCollection.size(); j++)
+    {
+        if( /*MuonCollection[j].isHighPtMuon() && MuonCollection[j].trkiso < 0.10 &&*/
+            MuonCollection[j].isTightMuon() && MuonCollection[j].relPFiso < 0.15 &&
+            MuonCollection[j].Pt > SubPtCut && fabs(MuonCollection[j].eta) < LeadEtaCut ) // pT>17 && |eta|<2.4
+                QMuonCollection.push_back( MuonCollection[j] );
+    }
 
-	//Collect qualified electrons among electrons
-	vector< Electron > QElectronCollection;
-	for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
-	{
-		Electron elec = ElectronCollection[j];
-		if( elec.passMediumID == kTRUE
-			//&& elec.Pt > SubPtCut && fabs(elec.etaSC) < 2.5 && !( fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566 ) )
-			&& elec.Pt > SubPtCut && fabs(elec.etaSC) < LeadEtaCut && !( fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566 ) ) // pT>17 && |eta|<2.4
-			QElectronCollection.push_back( ElectronCollection[j] );
-	}
+    //Collect qualified electrons among electrons
+    vector< Electron > QElectronCollection;
+    for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
+    {
+        Electron elec = ElectronCollection[j];
+        if( elec.passMediumID == kTRUE && elec.Pt > SubPtCut && fabs(elec.etaSC) < LeadEtaCut &&
+            !( fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566 ) ) // pT>17 && |eta|<2.4
+                QElectronCollection.push_back( ElectronCollection[j] );
+    }
 
-	Int_t nQMuons = (Int_t)QMuonCollection.size();
-	Int_t nQElectrons = (Int_t)QElectronCollection.size();
+    Int_t nQMuons = (Int_t)QMuonCollection.size();
+    Int_t nQElectrons = (Int_t)QElectronCollection.size();
 
-	Double_t Pt_mu = 0;
-	Double_t Pt_el = 0;
-	Muon mu_BestPair;
-	Electron el_BestPair;
+    Double_t VtxProb_BestPair = -1;
+    Double_t VtxNormChi2_BestPair = 999;
+    Muon mu_BestPair;
+    Electron el_BestPair;
 
-	// -- Select muon with highest pT -- //
-	for(Int_t i_mu=0; i_mu<nQMuons; i_mu++)
-	{
-		Muon Mu = QMuonCollection[i_mu];
+    // -- Select muon with highest pT -- //
+    for(Int_t i_mu=0; i_mu<nQMuons; i_mu++)
+    {
+        Muon Mu = QMuonCollection[i_mu];
 
-		// -- muon should be matched with HLT objects in emu best pair -- //
-		if( Mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*") || Mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*") )
-		{
-			if( Mu.Pt > Pt_mu )
-			{
-				Pt_mu		= Mu.Pt;
-				mu_BestPair	= Mu;
-			}
-		}
-	}
+        // -- muon should be matched with HLT objects in emu best pair -- //
+        if( Mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*") || Mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*") )
+        {
+            // -- Start another loop for finding electron (for electron, we don't need to check about trigger) -- //
+            for(Int_t j_el=0; j_el<nQElectrons; j_el++)
+            {
+                Electron El = QElectronCollection[j_el];
 
-	// -- Select electron with highest pT -- //
-	for(Int_t j_el=0; j_el<nQElectrons; j_el++)
-	{
-		Electron El = QElectronCollection[j_el];
+                Double_t VtxProb_temp = -999;
+                Double_t VtxNormChi2_temp = 999;
+                emuVertexProbNormChi2(ntuple, El.gsfpT, Mu.Inner_pT, &VtxProb_temp, &VtxNormChi2_temp);
 
-		if( El.Pt > Pt_el )
-		{
-			Pt_el		= El.Pt;
-			el_BestPair	= El;
-		}
-	}
+                // -- Find best pair by selecting smallest Chi2/dnof(VTX) value -- //
+                if( VtxNormChi2_temp < VtxNormChi2_BestPair )
+                {
+                    VtxNormChi2_BestPair = VtxNormChi2_temp;
+                    mu_BestPair = Mu;
+                    el_BestPair = El;
+                }
+            } // -- end of the loop for j_el (finding for electron)
+        }
+    } // -- end of the loop for i_mu (finding for the first muon matched with HLT matching)
 
-	//if( Pt_mu > 0 && Pt_el > 0 )
-	if( Pt_mu > 0 && Pt_el > 0 && ( Pt_mu > LeadPtCut || Pt_el > LeadPtCut ) ) // At least one lepton has pT above 28 [GeV]
-	{
-		TLorentzVector reco_v1 = mu_BestPair.Momentum;
-		TLorentzVector reco_v2 = el_BestPair.Momentum;
-		Double_t reco_M = (reco_v1 + reco_v2).M();
+    if( VtxNormChi2_BestPair < 999 )
+    {
+        TLorentzVector reco_v1 = mu_BestPair.Momentum;
+        TLorentzVector reco_v2 = el_BestPair.Momentum;
+        Double_t reco_M = (reco_v1 + reco_v2).M();
 
-		// -- 3D open angle -- //
-		Double_t Angle = reco_v1.Angle( reco_v2.Vect() );
+        Bool_t isPassAcc = kFALSE;
+        if( mu_BestPair.Pt > LeadPtCut || el_BestPair.Pt > LeadPtCut ) isPassAcc = kTRUE;
 
-		//if( reco_M > 10 && Angle < TMath::Pi() - 0.005 )
-		if( reco_M > 10 )
-		{
-			isPassEventSelection = kTRUE;
-			SelectedMuonCollection->push_back( mu_BestPair );
-			SelectedElectronCollection->push_back( el_BestPair );
-		}
-	}
+        // -- 3D open angle -- //
+        Double_t Angle = reco_v1.Angle( reco_v2.Vect() );
 
-	return isPassEventSelection;
+        if( reco_M > 10 && VtxNormChi2_BestPair < 20 && Angle < TMath::Pi() - 0.005 && isPassAcc == kTRUE )
+        {
+            isPassEventSelection = kTRUE;
+            SelectedMuonCollection->push_back( mu_BestPair );
+            SelectedElectronCollection->push_back( el_BestPair );
+        }
+    }
+
+    return isPassEventSelection;
 }
 
-// test for emu event selection not using vtx cut
 // Derived by Marijus Ambrozas 2018.08.07 to return indices of particles that passed the selection
-Bool_t DYAnalyzer::EventSelection_emu_method_test(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple, // Input: electron, muon vectors and NtupleHandle
+Bool_t DYAnalyzer::EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple, // Input: electron, muon vectors and NtupleHandle
                                                 vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection, // Output: Selected electron and muon
                                                   Int_t &Sel_Index_Mu, Int_t &Sel_Index_Ele)      // Output: Indices of selected electron and muon
 {
-        Bool_t isPassEventSelection = kFALSE;
-        Sel_Index_Mu = -1; Sel_Index_Ele = -1;
+    Bool_t isPassEventSelection = kFALSE;
+    Sel_Index_Mu = -1; Sel_Index_Ele = -1;
 
-        //Collect qualified muons among muons
-        vector< Muon > QMuonCollection;
-        vector< Int_t > QIndexMu;
-        for(Int_t j=0; j<(int)MuonCollection.size(); j++)
+    //Collect qualified muons among muons
+    vector< Muon > QMuonCollection;
+    vector< Int_t > QIndexMu;
+    for(Int_t j=0; j<(int)MuonCollection.size(); j++)
+    {
+        if( MuonCollection[j].isTightMuon() && MuonCollection[j].relPFiso < 0.15 &&
+            MuonCollection[j].Pt > SubPtCut && fabs(MuonCollection[j].eta) < LeadEtaCut ) // pT>17 && |eta|<2.4
         {
-                if( MuonCollection[j].isTightMuon() && MuonCollection[j].relPFiso < 0.15
-                        //&& MuonCollection[j].Pt > LeadPtCut && fabs(MuonCollection[j].eta) < LeadEtaCut )
-                        && MuonCollection[j].Pt > SubPtCut && fabs(MuonCollection[j].eta) < LeadEtaCut ) // pT>17 && |eta|<2.4
-                {
-                        QMuonCollection.push_back( MuonCollection[j] );
-                        QIndexMu.push_back( j );
-                }
+            QMuonCollection.push_back( MuonCollection[j] );
+            QIndexMu.push_back( j );
         }
+    }
 
-        //Collect qualified electrons among electrons
-        vector< Electron > QElectronCollection;
-        vector< Int_t > QIndexEle;
-        for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
+    //Collect qualified electrons among electrons
+    vector< Electron > QElectronCollection;
+    vector< Int_t > QIndexEle;
+    for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
+    {
+        Electron elec = ElectronCollection[j];
+        if( elec.passMediumID == kTRUE && elec.Pt > SubPtCut && fabs(elec.etaSC) < LeadEtaCut &&
+            !( fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566 ) ) // pT>17 && |eta|<2.4
         {
-                Electron elec = ElectronCollection[j];
-                if( elec.passMediumID == kTRUE
-                        //&& elec.Pt > SubPtCut && fabs(elec.etaSC) < 2.5 && !( fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566 ) )
-                        && elec.Pt > SubPtCut && fabs(elec.etaSC) < LeadEtaCut && !( fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566 ) ) // pT>17 && |eta|<2.4
-                {
-                        QElectronCollection.push_back( ElectronCollection[j] );
-                        QIndexEle.push_back( j );
-                }
+            QElectronCollection.push_back( ElectronCollection[j] );
+            QIndexEle.push_back( j );
         }
+    }
 
-        Int_t nQMuons = (Int_t)QMuonCollection.size();
-        Int_t nQElectrons = (Int_t)QElectronCollection.size();
-        Int_t nQIndicesMu = (Int_t)QIndexMu.size();
-        Int_t nQIndicesEle = (Int_t)QIndexEle.size();
+    Int_t nQMuons = (Int_t)QMuonCollection.size();
+    Int_t nQElectrons = (Int_t)QElectronCollection.size();
+    Int_t nQIndicesMu = (Int_t)QIndexMu.size();
+    Int_t nQIndicesEle = (Int_t)QIndexEle.size();
 
-        Double_t Pt_mu = 0;
-        Double_t Pt_el = 0;
-        Int_t Index_mu = -1;
-        Int_t Index_ele = -1;
-        Muon mu_BestPair;
-        Electron el_BestPair;
+    Double_t VtxProb_BestPair = -1;
+    Double_t VtxNormChi2_BestPair = 999;
+    Int_t Index_mu = -1;
+    Int_t Index_ele = -1;
+    Muon mu_BestPair;
+    Electron el_BestPair;
 
-        // -- Select muon with highest pT -- //
-        if ( nQMuons == nQIndicesMu )
+    // -- Select muon with highest pT -- //
+    if ( nQMuons == nQIndicesMu && nQElectrons == nQIndicesEle )
+    {
+        for(Int_t i_mu=0; i_mu<nQMuons; i_mu++)
         {
-            for(Int_t i_mu=0; i_mu<nQMuons; i_mu++)
+            Muon Mu = QMuonCollection[i_mu];
+
+            // -- muon should be matched with HLT objects in emu best pair -- //
+            if( Mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*") || Mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*") )
             {
-                    Muon Mu = QMuonCollection[i_mu];
+                // -- Start another loop for finding electron (for electron, we don't need to check about trigger) -- //
+                for(Int_t j_el=0; j_el<nQElectrons; j_el++)
+                {
+                    Electron El = QElectronCollection[j_el];
 
-                    // -- muon should be matched with HLT objects in emu best pair -- //
-                    if( Mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*") || Mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*") )
+                    Double_t VtxProb_temp = -999;
+                    Double_t VtxNormChi2_temp = 999;
+                    emuVertexProbNormChi2(ntuple, El.gsfpT, Mu.Inner_pT, &VtxProb_temp, &VtxNormChi2_temp);
+
+                    // -- Find best pair by selecting smallest Chi2/dnof(VTX) value -- //
+                    if( VtxNormChi2_temp < VtxNormChi2_BestPair )
                     {
-                            if( Mu.Pt > Pt_mu )
-                            {
-                                    Pt_mu           = Mu.Pt;
-                                    mu_BestPair     = Mu;
-                                    Index_mu        = QIndexMu[i_mu];
-                            }
+                        VtxNormChi2_BestPair = VtxNormChi2_temp;
+                        mu_BestPair = Mu;
+                        el_BestPair = El;
+                        Index_mu = QIndexMu[i_mu];
+                        Index_ele = QIndexEle[j_el];
                     }
+                } // -- end of the loop for j_el (finding for electron)
             }
-        }
+        }// -- end of the loop for i_mu (finding for the first muon matched with HLT matching)
+    }
 
-        // -- Select electron with highest pT -- //
-        for(Int_t j_el=0; j_el<nQElectrons; j_el++)
+    if( VtxNormChi2_BestPair < 999 )
+    {
+        TLorentzVector reco_v1 = mu_BestPair.Momentum;
+        TLorentzVector reco_v2 = el_BestPair.Momentum;
+        Double_t reco_M = (reco_v1 + reco_v2).M();
+
+        Bool_t isPassAcc = kFALSE;
+        if( mu_BestPair.Pt > LeadPtCut || el_BestPair.Pt > LeadPtCut ) isPassAcc = kTRUE;
+
+        // -- 3D open angle -- //
+        Double_t Angle = reco_v1.Angle( reco_v2.Vect() );
+
+        if( reco_M > 10 && VtxNormChi2_BestPair < 20 && Angle < TMath::Pi() - 0.005 && isPassAcc == kTRUE )
         {
-                Electron El = QElectronCollection[j_el];
-
-                if( El.Pt > Pt_el )
-                {
-                        Pt_el		= El.Pt;
-                        el_BestPair	= El;
-                        Index_ele       = QIndexEle[j_el];
-                }
+            isPassEventSelection = kTRUE;
+            SelectedMuonCollection->push_back( mu_BestPair );
+            SelectedElectronCollection->push_back( el_BestPair );
+            Sel_Index_Mu = Index_mu;
+            Sel_Index_Ele = Index_ele;
         }
+    }
 
-        //if( Pt_mu > 0 && Pt_el > 0 )
-        if( Pt_mu > 0 && Pt_el > 0 && ( Pt_mu > LeadPtCut || Pt_el > LeadPtCut ) ) // At least one lepton has pT above 28 [GeV]
-        {
-                TLorentzVector reco_v1 = mu_BestPair.Momentum;
-                TLorentzVector reco_v2 = el_BestPair.Momentum;
-                Double_t reco_M = (reco_v1 + reco_v2).M();
-
-                // -- 3D open angle -- //
-                Double_t Angle = reco_v1.Angle( reco_v2.Vect() );
-
-                //if( reco_M > 10 && Angle < TMath::Pi() - 0.005 )
-                if( reco_M > 10 )
-                {
-                        isPassEventSelection = kTRUE;
-                        SelectedMuonCollection->push_back( mu_BestPair );
-                        SelectedElectronCollection->push_back( el_BestPair );
-                        Sel_Index_Mu = Index_mu;
-                        Sel_Index_Ele = Index_ele;
-                }
-        }
-
-        return isPassEventSelection;
+    return isPassEventSelection;
 }
 
 // test for emu event selection not using vtx cut
 // Derived by Marijus Ambrozas 2018.08.07 to use LongSelectedEMu_t instead of NtupleHandle
-Bool_t DYAnalyzer::EventSelection_emu_method_test(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, LongSelectedEMu_t *ntuple, // Input: electron, muon vectors and LongSelectedEMu_t
+Bool_t DYAnalyzer::EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, LongSelectedEMu_t *ntuple, // Input: electron, muon vectors and LongSelectedEMu_t
                                                 vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection, // Output: Selected electron and muon
                                                   Int_t &Sel_Index_Mu, Int_t &Sel_Index_Ele)      // Output: Indices of selected electron and muon
 {
-        Bool_t isPassEventSelection = kFALSE;
-        Sel_Index_Mu = -1; Sel_Index_Ele = -1;
+    Bool_t isPassEventSelection = kFALSE;
+    Sel_Index_Mu = -1; Sel_Index_Ele = -1;
 
-        //Collect qualified muons among muons
-        vector< Muon > QMuonCollection;
-        vector< Int_t > QIndexMu;
-        for(Int_t j=0; j<(int)MuonCollection.size(); j++)
+    //Collect qualified muons among muons
+    vector< Muon > QMuonCollection;
+    vector< Int_t > QIndexMu;
+    for(Int_t j=0; j<(int)MuonCollection.size(); j++)
+    {
+        if( /*MuonCollection[j].isHighPtMuon() && MuonCollection[j].trkiso < 0.10 &&*/
+            MuonCollection[j].isTightMuon() && MuonCollection[j].relPFiso < 0.15 &&
+            MuonCollection[j].Pt > SubPtCut && fabs(MuonCollection[j].eta) < LeadEtaCut ) // pT>17 && |eta|<2.4
         {
-                if( MuonCollection[j].isHighPtMuon() && MuonCollection[j].trkiso < 0.10
-                        //&& MuonCollection[j].Pt > LeadPtCut && fabs(MuonCollection[j].eta) < LeadEtaCut )
-                        && MuonCollection[j].Pt > SubPtCut && fabs(MuonCollection[j].eta) < LeadEtaCut ) // pT>17 && |eta|<2.4
-                {
-                        QMuonCollection.push_back( MuonCollection[j] );
-                        QIndexMu.push_back( j );
-                }
+            QMuonCollection.push_back( MuonCollection[j] );
+            QIndexMu.push_back( j );
         }
+    }
 
-        //Collect qualified electrons among electrons
-        vector< Electron > QElectronCollection;
-        vector< Int_t > QIndexEle;
-        for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
+    //Collect qualified electrons among electrons
+    vector< Electron > QElectronCollection;
+    vector< Int_t > QIndexEle;
+    for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
+    {
+        Electron elec = ElectronCollection[j];
+        if( elec.passMediumID == kTRUE && elec.Pt > SubPtCut && fabs(elec.etaSC) < LeadEtaCut &&
+            !( fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566 ) ) // pT>17 && |eta|<2.4
         {
-                Electron elec = ElectronCollection[j];
-                if( elec.passMediumID == kTRUE
-                        //&& elec.Pt > SubPtCut && fabs(elec.etaSC) < 2.5 && !( fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566 ) )
-                        && elec.Pt > SubPtCut && fabs(elec.etaSC) < LeadEtaCut && !( fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566 ) ) // pT>17 && |eta|<2.4
-                {
-                        QElectronCollection.push_back( ElectronCollection[j] );
-                        QIndexEle.push_back( j );
-                }
+            QElectronCollection.push_back( ElectronCollection[j] );
+            QIndexEle.push_back( j );
         }
+    }
 
-        Int_t nQMuons = (Int_t)QMuonCollection.size();
-        Int_t nQElectrons = (Int_t)QElectronCollection.size();
-        Int_t nQIndicesMu = (Int_t)QIndexMu.size();
-        Int_t nQIndicesEle = (Int_t)QIndexEle.size();
+    Int_t nQMuons = (Int_t)QMuonCollection.size();
+    Int_t nQElectrons = (Int_t)QElectronCollection.size();
+    Int_t nQIndicesMu = (Int_t)QIndexMu.size();
+    Int_t nQIndicesEle = (Int_t)QIndexEle.size();
 
-        Double_t Pt_mu = 0;
-        Double_t Pt_el = 0;
-        Int_t Index_mu = -1;
-        Int_t Index_ele = -1;
-        Muon mu_BestPair;
-        Electron el_BestPair;
+    Double_t VtxProb_BestPair = -1;
+    Double_t VtxNormChi2_BestPair = 999;
+    Int_t Index_mu = -1;
+    Int_t Index_ele = -1;
+    Muon mu_BestPair;
+    Electron el_BestPair;
 
-        // -- Select muon with highest pT -- //
-        if ( nQMuons == nQIndicesMu )
+    if ( nQMuons == nQIndicesMu && nQElectrons == nQIndicesEle )
+    {
+        for(Int_t i_mu=0; i_mu<nQMuons; i_mu++)
         {
-            for(Int_t i_mu=0; i_mu<nQMuons; i_mu++)
+            Muon Mu = QMuonCollection[i_mu];
+
+            // -- muon should be matched with HLT objects in emu best pair -- //
+            if( Mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*") || Mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*") )
             {
-                    Muon Mu = QMuonCollection[i_mu];
+                // -- Start another loop for finding electron (for electron, we don't need to check about trigger) -- //
+                for(Int_t j_el=0; j_el<nQElectrons; j_el++)
+                {
+                    Electron El = QElectronCollection[j_el];
 
-                    // -- muon should be matched with HLT objects in emu best pair -- //
-                    if( Mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*") || Mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*") )
+                    Double_t VtxProb_temp = -999;
+                    Double_t VtxNormChi2_temp = 999;
+                    emuVertexProbNormChi2(ntuple, El.gsfpT, Mu.Inner_pT, &VtxProb_temp, &VtxNormChi2_temp);
+
+                    // -- Find best pair by selecting smallest Chi2/dnof(VTX) value -- //
+                    if( VtxNormChi2_temp < VtxNormChi2_BestPair )
                     {
-                            if( Mu.Pt > Pt_mu )
-                            {
-                                    Pt_mu           = Mu.Pt;
-                                    mu_BestPair     = Mu;
-                                    Index_mu        = QIndexMu[i_mu];
-                            }
+                        VtxNormChi2_BestPair = VtxNormChi2_temp;
+                        mu_BestPair = Mu;
+                        el_BestPair = El;
+                        Index_mu = QIndexMu[i_mu];
+                        Index_ele = QIndexEle[j_el];
                     }
+                } // -- end of the loop for j_el (finding for electron)
             }
         }
+    }// -- end of the loop for i_mu (finding for the first muon matched with HLT matching)
 
-        // -- Select electron with highest pT -- //
-        for(Int_t j_el=0; j_el<nQElectrons; j_el++)
+    if( VtxNormChi2_BestPair < 999 )
+    {
+        TLorentzVector reco_v1 = mu_BestPair.Momentum;
+        TLorentzVector reco_v2 = el_BestPair.Momentum;
+        Double_t reco_M = (reco_v1 + reco_v2).M();
+
+        Bool_t isPassAcc = kFALSE;
+        if( mu_BestPair.Pt > LeadPtCut || el_BestPair.Pt > LeadPtCut ) isPassAcc = kTRUE;
+
+        // -- 3D open angle -- //
+        Double_t Angle = reco_v1.Angle( reco_v2.Vect() );
+
+        if( reco_M > 10 && VtxNormChi2_BestPair < 20 && Angle < TMath::Pi() - 0.005 && isPassAcc == kTRUE )
         {
-                Electron El = QElectronCollection[j_el];
-
-                if( El.Pt > Pt_el )
-                {
-                        Pt_el		= El.Pt;
-                        el_BestPair	= El;
-                        Index_ele       = QIndexEle[j_el];
-                }
+            isPassEventSelection = kTRUE;
+            SelectedMuonCollection->push_back( mu_BestPair );
+            SelectedElectronCollection->push_back( el_BestPair );
+            Sel_Index_Mu = Index_mu;
+            Sel_Index_Ele = Index_ele;
         }
+    }
 
-        //if( Pt_mu > 0 && Pt_el > 0 )
-        if( Pt_mu > 0 && Pt_el > 0 && ( Pt_mu > LeadPtCut || Pt_el > LeadPtCut ) ) // At least one lepton has pT above 28 [GeV]
-        {
-                TLorentzVector reco_v1 = mu_BestPair.Momentum;
-                TLorentzVector reco_v2 = el_BestPair.Momentum;
-                Double_t reco_M = (reco_v1 + reco_v2).M();
-
-                // -- 3D open angle -- //
-                Double_t Angle = reco_v1.Angle( reco_v2.Vect() );
-
-                //if( reco_M > 10 && Angle < TMath::Pi() - 0.005 )
-                if( reco_M > 10 )
-                {
-                        isPassEventSelection = kTRUE;
-                        SelectedMuonCollection->push_back( mu_BestPair );
-                        SelectedElectronCollection->push_back( el_BestPair );
-                        Sel_Index_Mu = Index_mu;
-                        Sel_Index_Ele = Index_ele;
-                }
-        }
-
-        return isPassEventSelection;
+    return isPassEventSelection;
 }
 
 /*
@@ -7562,3 +6435,446 @@ Bool_t DYAnalyzer::EventSelection_CheckMoreThanOneDimuonCand(vector< Muon > Muon
 	return isPassEventSelection;
 }
 
+
+Int_t DYAnalyzer::Find_muon_PtBin_Reco(Double_t Pt)
+{
+        const Int_t nPtBins = 1;
+        Double_t PtBinEdges[nPtBins+1] = {25, 500};
+
+        Int_t ptbin = 9999;
+
+        // -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- //
+        if( Pt > PtBinEdges[nPtBins] )
+                ptbin = nPtBins-1;
+        // -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- // updated at 14 Apr. 2017 by Dalmin Pai
+        else if( Pt < PtBinEdges[0] )
+                ptbin = 0;
+        else
+        {
+                for(Int_t i=0; i<nPtBins; i++)
+                {
+                        if( Pt >= PtBinEdges[i] && Pt < PtBinEdges[i+1] )
+                        {
+                                ptbin = i;
+                                break;
+                        }
+                }
+        }
+
+        return ptbin;
+}
+
+
+Int_t DYAnalyzer::Find_muon_PtBin_ID(Double_t Pt)
+{
+        // -- HighPtID & TrkIso -- //
+        //const Int_t nPtBins = 7;
+        //Double_t PtBinEdges[nPtBins+1] = {20, 25, 30, 40, 50, 55, 60, 120};
+
+        // -- TightID & PFIso -- //
+        const Int_t nPtBins = 6;
+        Double_t PtBinEdges[nPtBins+1] = {20, 25, 30, 40, 50, 60, 120};
+
+        Int_t ptbin = 9999;
+
+        // -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- //
+        if( Pt > PtBinEdges[nPtBins] )
+                ptbin = nPtBins-1;
+        // -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- // updated at 14 Apr. 2017 by Dalmin Pai
+        else if( Pt < PtBinEdges[0] )
+                ptbin = 0;
+        else
+        {
+                for(Int_t i=0; i<nPtBins; i++)
+                {
+                        if( Pt >= PtBinEdges[i] && Pt < PtBinEdges[i+1] )
+                        {
+                                ptbin = i;
+                                break;
+                        }
+                }
+        }
+
+        return ptbin;
+}
+
+
+Int_t DYAnalyzer::Find_muon_PtBin_Iso(Double_t Pt)
+{
+        // -- HighPtID & TrkIso -- //
+        //const Int_t nPtBins = 7;
+        //Double_t PtBinEdges[nPtBins+1] = {20, 25, 30, 40, 50, 55, 60, 120};
+
+        // -- TightID & PFIso -- //
+        const Int_t nPtBins = 6;
+        Double_t PtBinEdges[nPtBins+1] = {20, 25, 30, 40, 50, 60, 120};
+
+        Int_t ptbin = 9999;
+
+        // -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- //
+        if( Pt > PtBinEdges[nPtBins] )
+                ptbin = nPtBins-1;
+        // -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- // updated at 14 Apr. 2017 by Dalmin Pai
+        else if( Pt < PtBinEdges[0] )
+                ptbin = 0;
+        else
+        {
+                for(Int_t i=0; i<nPtBins; i++)
+                {
+                        if( Pt >= PtBinEdges[i] && Pt < PtBinEdges[i+1] )
+                        {
+                                ptbin = i;
+                                break;
+                        }
+                }
+        }
+
+        return ptbin;
+}
+
+
+Int_t DYAnalyzer::Find_muon_PtBin_Trig(Double_t Pt)
+{
+        // -- IsoMu24_OR_IsoTkMu24 -- //
+        const Int_t nPtBins = 7;
+        Double_t PtBinEdges[nPtBins+1] = {26, 30, 40, 50, 60, 120, 200, 500};
+
+        Int_t ptbin = 9999;
+
+        // -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- //
+        if( Pt > PtBinEdges[nPtBins] )
+                ptbin = nPtBins-1;
+        // -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- // updated at 14 Apr. 2017 by Dalmin Pai
+        else if( Pt < PtBinEdges[0] )
+                ptbin = 0;
+        else
+        {
+                for(Int_t i=0; i<nPtBins; i++)
+                {
+                        if( Pt >= PtBinEdges[i] && Pt < PtBinEdges[i+1] )
+                        {
+                                ptbin = i;
+                                break;
+                        }
+                }
+        }
+
+        return ptbin;
+}
+
+
+Int_t DYAnalyzer::Find_muon_EtaBin_Reco(Double_t eta)
+{
+        const Int_t nEtaBins = 15;
+        Double_t EtaBinEdges[nEtaBins+1] = {-2.4, -2.1, -1.6, -1.2, -0.9, -0.6, -0.3, -0.2, 0.2, 0.3, 0.6, 0.9, 1.2, 1.6, 2.1, 2.4};
+
+        Int_t etabin = 9999;
+
+        for(Int_t i=0; i<nEtaBins; i++)
+        {
+                if( eta >= EtaBinEdges[i] && eta < EtaBinEdges[i+1] )
+                //if( fabs(eta) > EtaBinEdges[i] && fabs(eta) < EtaBinEdges[i+1] )
+                {
+                        etabin = i;
+                        break;
+                }
+        }
+
+        return etabin;
+}
+
+
+Int_t DYAnalyzer::Find_muon_EtaBin_ID(Double_t eta)
+{
+        //const Int_t nEtaBins = 5;
+        const Int_t nEtaBins = 4;
+        //Double_t EtaBinEdges[nEtaBins+1] = {-2.4, -1.2, -0.3, 0.3, 1.2, 2.4};
+        Double_t EtaBinEdges[nEtaBins+1] = {0, 0.9, 1.2, 2.1, 2.4};
+
+        Int_t etabin = 9999;
+
+        for(Int_t i=0; i<nEtaBins; i++)
+        {
+                //if( eta > EtaBinEdges[i] && eta < EtaBinEdges[i+1] )
+                if( fabs(eta) >= EtaBinEdges[i] && fabs(eta) < EtaBinEdges[i+1] )
+                {
+                        etabin = i;
+                        break;
+                }
+        }
+
+        return etabin;
+}
+
+
+Int_t DYAnalyzer::Find_muon_EtaBin_Iso(Double_t eta)
+{
+        //const Int_t nEtaBins = 5;
+        const Int_t nEtaBins = 4;
+        //Double_t EtaBinEdges[nEtaBins+1] = {-2.4, -1.2, -0.3, 0.3, 1.2, 2.4};
+        Double_t EtaBinEdges[nEtaBins+1] = {0, 0.9, 1.2, 2.1, 2.4};
+
+        Int_t etabin = 9999;
+
+        for(Int_t i=0; i<nEtaBins; i++)
+        {
+                //if( eta > EtaBinEdges[i] && eta < EtaBinEdges[i+1] )
+                if( fabs(eta) >= EtaBinEdges[i] && fabs(eta) < EtaBinEdges[i+1] )
+                {
+                        etabin = i;
+                        break;
+                }
+        }
+
+        return etabin;
+}
+
+
+Int_t DYAnalyzer::Find_muon_EtaBin_Trig(Double_t eta)
+{
+        //const Int_t nEtaBins = 5;
+        const Int_t nEtaBins = 4;
+        //Double_t EtaBinEdges[nEtaBins+1] = {-2.4, -1.2, -0.3, 0.3, 1.2, 2.4};
+        Double_t EtaBinEdges[nEtaBins+1] = {0, 0.9, 1.2, 2.1, 2.4};
+
+        Int_t etabin = 9999;
+
+        for(Int_t i=0; i<nEtaBins; i++)
+        {
+                //if( eta > EtaBinEdges[i] && eta < EtaBinEdges[i+1] )
+                if( fabs(eta) >= EtaBinEdges[i] && fabs(eta) < EtaBinEdges[i+1] )
+                {
+                        etabin = i;
+                        break;
+                }
+        }
+
+        return etabin;
+}
+
+
+Int_t DYAnalyzer::Find_electron_PtBin_Reco(Double_t Pt)
+{
+        //const Int_t nPtBins = 4;
+        const Int_t nPtBins = 1;
+        //Double_t PtBinEdges[nPtBins+1] = {10, 22, 40, 70, 250};
+        Double_t PtBinEdges[nPtBins+1] = {25, 500};
+
+        Int_t ptbin = 9999;
+
+        // -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- //
+        if( Pt > PtBinEdges[nPtBins] )
+                ptbin = nPtBins-1;
+        // -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- // updated at 14 Apr. 2017 by Dalmin Pai
+        else if( Pt < PtBinEdges[0] )
+                ptbin = 0;
+        else
+        {
+                for(Int_t i=0; i<nPtBins; i++)
+                {
+                        if( Pt >= PtBinEdges[i] && Pt < PtBinEdges[i+1] )
+                        {
+                                ptbin = i;
+                                break;
+                        }
+                }
+        }
+
+        return ptbin;
+}
+
+
+Int_t DYAnalyzer::Find_electron_PtBin_ID(Double_t Pt)
+{
+        //const Int_t nPtBins = 4;
+        const Int_t nPtBins = 5;
+        //Double_t PtBinEdges[nPtBins+1] = {10, 22, 40, 70, 250};
+        Double_t PtBinEdges[nPtBins+1] = {10, 20, 35, 50, 90, 150};
+
+        Int_t ptbin = 9999;
+
+        // -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- //
+        if( Pt > PtBinEdges[nPtBins] )
+                ptbin = nPtBins-1;
+        // -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- // updated at 14 Apr. 2017 by Dalmin Pai
+        else if( Pt < PtBinEdges[0] )
+                ptbin = 0;
+        else
+        {
+                for(Int_t i=0; i<nPtBins; i++)
+                {
+                        if( Pt >= PtBinEdges[i] && Pt < PtBinEdges[i+1] )
+                        {
+                                ptbin = i;
+                                break;
+                        }
+                }
+        }
+
+        return ptbin;
+}
+
+
+Int_t DYAnalyzer::Find_electron_PtBin_Trig(Double_t Pt)
+{
+        //const Int_t nPtBins = 4;
+        const Int_t nPtBins = 7;
+        //Double_t PtBinEdges[nPtBins+1] = {10, 22, 40, 70, 250};
+        Double_t PtBinEdges[nPtBins+1] = {10, 15, 20, 25, 30, 50, 90, 150};
+
+        Int_t ptbin = 9999;
+
+        // -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- //
+        if( Pt > PtBinEdges[nPtBins] )
+                ptbin = nPtBins-1;
+        // -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- // updated at 14 Apr. 2017 by Dalmin Pai
+        else if( Pt < PtBinEdges[0] )
+                ptbin = 0;
+        else
+        {
+                for(Int_t i=0; i<nPtBins; i++)
+                {
+                        if( Pt >= PtBinEdges[i] && Pt < PtBinEdges[i+1] )
+                        {
+                                ptbin = i;
+                                break;
+                        }
+                }
+        }
+
+        return ptbin;
+}
+
+
+Int_t DYAnalyzer::Find_electron_EtaBin_Reco(Double_t eta)
+{
+        //const Int_t nEtaBins = 5;
+        const Int_t nEtaBins = 30;
+        //Double_t EtaBinEdges[nEtaBins+1] = {-2.4, -1.2, -0.3, 0.3, 1.2, 2.4};
+        Double_t EtaBinEdges[nEtaBins+1] = {-2.5,-2.45,-2.4,-2.3,-2.2,-2.0,-1.8,-1.63,-1.566,-1.4442,-1.2,-1.0,-0.6,-0.4,-0.2,0.0,0.2,0.4,0.6,1.0,1.2,1.4442,1.566,1.63,1.8,2.0,2.2,2.3,2.4,2.45,2.5};
+
+        Int_t etabin = 9999;
+
+        for(Int_t i=0; i<nEtaBins; i++)
+        {
+                if( eta >= EtaBinEdges[i] && eta < EtaBinEdges[i+1] )
+                //if( fabs(eta) > EtaBinEdges[i] && fabs(eta) < EtaBinEdges[i+1] )
+                {
+                        etabin = i;
+                        break;
+                }
+        }
+
+        return etabin;
+}
+
+
+Int_t DYAnalyzer::Find_electron_EtaBin_ID(Double_t eta)
+{
+        //const Int_t nEtaBins = 5;
+        //const Int_t nEtaBins = 10;
+        const Int_t nEtaBins = 22;
+        //Double_t EtaBinEdges[nEtaBins+1] = {-2.4, -1.2, -0.3, 0.3, 1.2, 2.4};
+        //Double_t EtaBinEdges[nEtaBins+1] = {-2.5, -2.0, -1.566, -1.444, -0.8, 0.0, 0.8, 1.444, 1.566, 2.0, 2.5};
+        Double_t EtaBinEdges[nEtaBins+1] = {-2.4,-2.3,-2.2,-2.1,-2.0,-1.566,-1.4442,-1.1,-0.8,-0.4,-0.2,0.0,0.2,0.4,0.8,1.1,1.4442,1.566,2.0,2.1,2.2,2.3,2.4};
+
+        Int_t etabin = 9999;
+
+        for(Int_t i=0; i<nEtaBins; i++)
+        {
+                if( eta >= EtaBinEdges[i] && eta < EtaBinEdges[i+1] )
+                //if( fabs(eta) > EtaBinEdges[i] && fabs(eta) < EtaBinEdges[i+1] )
+                {
+                        //etabin = i;
+                        if( eta < -1.566 ) etabin = i;
+                        else if( -1.4442 < eta && eta < 1.4442 ) etabin = i-1;
+                        else if( 1.4442 < eta ) etabin = i-2;
+
+                        break;
+                }
+        }
+
+        return etabin;
+}
+
+
+Int_t DYAnalyzer::Find_electron_EtaBin_Trig(Double_t eta)
+{
+        //const Int_t nEtaBins = 5;
+        //const Int_t nEtaBins = 10;
+        const Int_t nEtaBins = 22;
+        //Double_t EtaBinEdges[nEtaBins+1] = {-2.4, -1.2, -0.3, 0.3, 1.2, 2.4};
+        //Double_t EtaBinEdges[nEtaBins+1] = {-2.5, -2.0, -1.566, -1.444, -0.8, 0.0, 0.8, 1.444, 1.566, 2.0, 2.5};
+        Double_t EtaBinEdges[nEtaBins+1] = {-2.4,-2.3,-2.2,-2.1,-2.0,-1.566,-1.4442,-1.1,-0.8,-0.4,-0.2,0.0,0.2,0.4,0.8,1.1,1.4442,1.566,2.0,2.1,2.2,2.3,2.4};
+
+        Int_t etabin = 9999;
+
+        for(Int_t i=0; i<nEtaBins; i++)
+        {
+                if( eta >= EtaBinEdges[i] && eta < EtaBinEdges[i+1] )
+                //if( fabs(eta) > EtaBinEdges[i] && fabs(eta) < EtaBinEdges[i+1] )
+                {
+                        //etabin = i;
+                        if( eta < -1.566 ) etabin = i;
+                        else if( -1.4442 < eta && eta < 1.4442 ) etabin = i-1;
+                        else if( 1.4442 < eta ) etabin = i-2;
+
+                        break;
+                }
+        }
+
+        return etabin;
+}
+
+
+void DYAnalyzer::emuVertexProbNormChi2(NtupleHandle *ntuple, Double_t ele_Pt, Double_t mu_Pt, Double_t *VtxProb, Double_t *VtxNormChi2)
+{
+        vector<double> *PtCollection1 = ntuple->vtxTrkEMu1Pt; //electron
+        vector<double> *PtCollection2 = ntuple->vtxTrkEMu2Pt; //muon
+        vector<double> *VtxProbCollection = ntuple->vtxTrkEMuProb;
+
+        Int_t NPt1 = (Int_t)PtCollection1->size();
+        Int_t NPt2 = (Int_t)PtCollection2->size();
+        Int_t NProb = (Int_t)VtxProbCollection->size();
+
+        if( NPt1 != NPt2 || NPt2 != NProb || NPt1 != NProb )
+                cout << "NPt1: " << NPt1 << " NPt2: " << NPt2 << " Nprob: " << NProb << endl;
+
+        for(Int_t i=0; i<NProb; i++)
+        {
+                if( PtCollection1->at(i) == ele_Pt && PtCollection2->at(i) == mu_Pt )
+                {
+                        *VtxProb = VtxProbCollection->at(i);
+                        *VtxNormChi2 = ntuple->vtxTrkEMuChi2->at(i) / ntuple->vtxTrkEMuNdof->at(i);
+                        break;
+                }
+        }
+
+        return;
+}
+
+void DYAnalyzer::emuVertexProbNormChi2(LongSelectedEMu_t *ntuple, Double_t ele_Pt, Double_t mu_Pt, Double_t *VtxProb, Double_t *VtxNormChi2)
+{
+        vector<double> *PtCollection1 = ntuple->vtxTrkEMu1Pt; //electron
+        vector<double> *PtCollection2 = ntuple->vtxTrkEMu2Pt; //muon
+        vector<double> *VtxProbCollection = ntuple->vtxTrkEMuProb;
+
+        Int_t NPt1 = (Int_t)PtCollection1->size();
+        Int_t NPt2 = (Int_t)PtCollection2->size();
+        Int_t NProb = (Int_t)VtxProbCollection->size();
+
+        if( NPt1 != NPt2 || NPt2 != NProb || NPt1 != NProb )
+                cout << "NPt1: " << NPt1 << " NPt2: " << NPt2 << " Nprob: " << NProb << endl;
+
+        for(Int_t i=0; i<NProb; i++)
+        {
+                if( PtCollection1->at(i) == ele_Pt && PtCollection2->at(i) == mu_Pt )
+                {
+                        *VtxProb = VtxProbCollection->at(i);
+                        *VtxNormChi2 = ntuple->vtxTrkEMuChi2->at(i) / ntuple->vtxTrkEMuNdof->at(i);
+                        break;
+                }
+        }
+
+        return;
+}
