@@ -159,7 +159,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
 //                out_dir = "Data/SelectedEE_"+Mgr.Tag[i_tup];
 
                 out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
-                out_dir = "SelectedEE_"+Mgr.Tag[i_tup]+RocCor;
+                out_dir = "SelectedEE_"+Mgr.Tag[i_tup];
             }
             else if ( Mgr.Type == "SIGNAL" )
             {
@@ -167,7 +167,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
 //                out_dir = "MC_signal/SelectedEE_"+Mgr.Tag[i_tup];
 
                 out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
-                out_dir = "SelectedEE_"+Mgr.Tag[i_tup]+RocCor;
+                out_dir = "SelectedEE_"+Mgr.Tag[i_tup];
             }
             else if ( Mgr.Type == "BKG" )
             {
@@ -175,7 +175,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
 //                out_dir = "MC_bkg/SelectedEE_"+Mgr.Tag[i_tup];
 
                 out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
-                out_dir = "SelectedEE_"+Mgr.Tag[i_tup]+RocCor;
+                out_dir = "SelectedEE_"+Mgr.Tag[i_tup];
             }
             else if ( Mgr.Type == "TEST")
             {
