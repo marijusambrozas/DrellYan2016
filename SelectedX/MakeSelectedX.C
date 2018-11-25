@@ -155,18 +155,27 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
             TFile* ElectronFile;
             if ( Mgr.Type == "DATA" )
             {
-                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/";
-                out_dir = "Data/SelectedEE_"+Mgr.Tag[i_tup];
+//                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/";
+//                out_dir = "Data/SelectedEE_"+Mgr.Tag[i_tup];
+
+                out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
+                out_dir = "SelectedEE_"+Mgr.Tag[i_tup]+RocCor;
             }
             else if ( Mgr.Type == "SIGNAL" )
             {
-                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/";
-                out_dir = "MC_signal/SelectedEE_"+Mgr.Tag[i_tup];
+//                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/";
+//                out_dir = "MC_signal/SelectedEE_"+Mgr.Tag[i_tup];
+
+                out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
+                out_dir = "SelectedEE_"+Mgr.Tag[i_tup]+RocCor;
             }
             else if ( Mgr.Type == "BKG" )
             {
-                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/";
-                out_dir = "MC_bkg/SelectedEE_"+Mgr.Tag[i_tup];
+//                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/";
+//                out_dir = "MC_bkg/SelectedEE_"+Mgr.Tag[i_tup];
+
+                out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
+                out_dir = "SelectedEE_"+Mgr.Tag[i_tup]+RocCor;
             }
             else if ( Mgr.Type == "TEST")
             {
@@ -399,18 +408,27 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
             TFile* MuonFile;
             if ( Mgr.Type == "DATA" )
             {
-                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/";
-                out_dir = "Data/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
+//                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/";
+//                out_dir = "Data/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
+
+                out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
+                out_dir = "SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
             }
             else if ( Mgr.Type == "SIGNAL" )
             {
-                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/";
-                out_dir = "MC_signal/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
+//                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/";
+//                out_dir = "MC_signal/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
+
+                out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
+                out_dir = "SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
             }
             else if ( Mgr.Type == "BKG" )
             {
-                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/";
-                out_dir = "MC_bkg/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
+//                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/";
+//                out_dir = "MC_bkg/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
+
+                out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
+                out_dir = "SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
             }
             else if ( Mgr.Type == "TEST")
             {
