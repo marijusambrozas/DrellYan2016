@@ -312,29 +312,34 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         s_pT = new THStack( "s_pT", "" );
 
         THStack *s_pT_lead_before_PUCorr = new THStack( "s_pT_lead_before_PUCorr", "" );
-        THStack *s_pT_sublead_before_PUCorr = new THStack("h_pT_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "" );
-        THStack *s_eta_lead_before_PUCorr = new THStack("h_eta_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "" );
-        THStack *s_eta_sublead_before_PUCorr = new THStack("h_eta_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "" );
-        THStack *s_phi_lead_before_PUCorr = new THStack("h_phi_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "" );
-        THStack *s_phi_sublead_before_PUCorr = new THStack("h_phi_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "" );
+        THStack *s_pT_sublead_before_PUCorr = new THStack( "s_pT_sublead_before_PUCorr", "" );
+        THStack *s_eta_lead_before_PUCorr = new THStack( "s_eta_lead_before_PUCorr", "" );
+        THStack *s_eta_sublead_before_PUCorr = new THStack( "s_eta_sublead_before_PUCorr", "" );
+        THStack *s_phi_lead_before_PUCorr = new THStack( "s_phi_lead_before_PUCorr", "" );
+        THStack *s_phi_sublead_before_PUCorr = new THStack( "s_phi_sublead_before_PUCorr", "" );
 
-        THStack *s_pT_lead_before_EffCorr = new THStack("h_pT_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "" );
-        THStack *s_pT_sublead_before_EffCorr = new THStack("h_pT_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
-        THStack *s_eta_lead_before_EffCorr = new THStack("h_eta_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
-        THStack *s_eta_sublead_before_EffCorr = new THStack("h_eta_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
-        THStack *s_phi_lead_before_EffCorr = new THStack("h_phi_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
-        THStack *s_phi_sublead_before_EffCorr = new THStack("h_phi_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        THStack *s_pT_lead_before_EffCorr = new THStack( "s_pT_lead_before_EffCorr", "" );
+        THStack *s_pT_sublead_before_EffCorr = new THStack( "s_pT_sublead_before_EffCorr", "" );
+        THStack *s_eta_lead_before_EffCorr = new THStack( "s_eta_lead_before_EffCorr", "" );
+        THStack *s_eta_sublead_before_EffCorr = new THStack( "s_eta_sublead_before_EffCorr", "" );
+        THStack *s_phi_lead_before_EffCorr = new THStack( "s_phi_lead_before_EffCorr", "" );
+        THStack *s_phi_sublead_before_EffCorr = new THStack( "s_phi_sublead_before_EffCorr", "" );
 
-        THStack *s_pT_lead = new THStack("h_pT_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
-        THStack *s_pT_sublead = new THStack("h_pT_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
-        THStack *s_eta_lead = new THStack("h_eta_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
-        THStack *s_eta_sublead = new THStack("h_eta_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
-        THStack *s_phi_lead = new THStack("h_phi_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
-        THStack *s_phi_sublead = new THStack("h_phi_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        THStack *s_pT_lead = new THStack( "s_pT_lead", "" );
+        THStack *s_pT_sublead = new THStack( "s_pT_sublead", "" );
+        THStack *s_eta_lead = new THStack( "s_eta_lead", "" );
+        THStack *s_eta_sublead = new THStack( "s_eta_sublead", "" );
+        THStack *s_phi_lead = new THStack( "s_phi_lead", "" );
+        THStack *s_phi_sublead = new THStack( "s_phi_sublead", "" );
 
 
 //----------------------------------- MC bkg -------------------------------------------------------
-        TH1D *h_bkg_Pt[5], *h_bkg_rapi[5], *h_bkg_pT[5], *h_bkg_eta[5], *h_bkg_phi[5];
+        TH1D *h_bkg_pT[5], *h_bkg_rapi[5], *h_bkg_pT_lead_before_PUCorr[5], *h_bkg_pT_lead_before_EffCorr[5], *h_bkg_pT_lead[5],
+             *h_bkg_pT_sublead_before_PUCorr[5], *h_bkg_pT_sublead_before_EffCorr[5], *h_bkg_pT_sublead[5],
+             *h_bkg_eta_lead_before_PUCorr[5], *h_bkg_eta_lead_before_EffCorr[5], *h_bkg_eta_lead[5],
+             *h_bkg_eta_sublead_before_PUCorr[5], *h_bkg_eta_sublead_before_EffCorr[5], *h_bkg_eta_sublead[5],
+             *h_bkg_phi_lead_before_PUCorr[5], *h_bkg_phi_lead_before_EffCorr[5], *h_bkg_phi_lead[5],
+             *h_bkg_phi_sublead_before_PUCorr[5], *h_bkg_phi_sublead_before_EffCorr[5], *h_bkg_phi_sublead[5];
         Int_t iter = 0;
 
         for ( SelProc_t pr = _EE_QCDEMEnriched_Full; pr > _EE_DY_Full; pr=SelProc_t((int)(pr-1)) )
@@ -345,75 +350,225 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
                 break;
             }
 
-            f_bkg->GetObject( "h_Pt_"+Mgr.Procname[pr], h_bkg_Pt[iter] );
-            f_bkg->GetObject( "h_rapi_"+Mgr.Procname[pr], h_bkg_rapi[iter] );
             f_bkg->GetObject( "h_pT_"+Mgr.Procname[pr], h_bkg_pT[iter] );
-            f_bkg->GetObject( "h_eta_"+Mgr.Procname[pr], h_bkg_eta[iter] );
-            f_bkg->GetObject( "h_phi_"+Mgr.Procname[pr], h_bkg_phi[iter] );
+            f_bkg->GetObject( "h_rapi_"+Mgr.Procname[pr], h_bkg_rapi[iter] );
+            f_bkg->GetObject( "h_pT_lead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_pT_lead_before_PUCorr[iter] );
+            f_bkg->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_pT_lead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_pT_lead_"+Mgr.Procname[pr], h_bkg_pT_lead[iter] );
+            f_bkg->GetObject( "h_pT_sublead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_pT_sublead_before_PUCorr[iter] );
+            f_bkg->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_pT_sublead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_pT_sublead_"+Mgr.Procname[pr], h_bkg_pT_sublead[iter] );
+            f_bkg->GetObject( "h_eta_lead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_eta_lead_before_PUCorr[iter] );
+            f_bkg->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_eta_lead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_eta_lead_"+Mgr.Procname[pr], h_bkg_eta_lead[iter] );
+            f_bkg->GetObject( "h_eta_sublead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_PUCorr[iter] );
+            f_bkg->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_eta_sublead_"+Mgr.Procname[pr], h_bkg_eta_sublead[iter] );
+            f_bkg->GetObject( "h_phi_lead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_PUCorr[iter] );
+            f_bkg->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_phi_lead_"+Mgr.Procname[pr], h_bkg_phi_lead[iter] );
+            f_bkg->GetObject( "h_phi_sublead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_PUCorr[iter] );
+            f_bkg->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_phi_sublead_"+Mgr.Procname[pr], h_bkg_phi_sublead[iter] );
 
-            h_bkg_Pt[iter]->SetFillColor(iter+2);
-            h_bkg_rapi[iter]->SetFillColor(iter+2);
             h_bkg_pT[iter]->SetFillColor(iter+2);
-            h_bkg_eta[iter]->SetFillColor(iter+2);
-            h_bkg_phi[iter]->SetFillColor(iter+2);
+            h_bkg_rapi[iter]->SetFillColor(iter+2);
+            h_bkg_pT_lead_before_PUCorr[iter]->SetFillColor(iter+2);
+            h_bkg_pT_lead_before_EffCorr[iter]->SetFillColor(iter+2);
+            h_bkg_pT_lead[iter]->SetFillColor(iter+2);
+            h_bkg_pT_sublead_before_PUCorr[iter]->SetFillColor(iter+2);
+            h_bkg_pT_sublead_before_EffCorr[iter]->SetFillColor(iter+2);
+            h_bkg_pT_sublead[iter]->SetFillColor(iter+2);
+            h_bkg_eta_lead_before_PUCorr[iter]->SetFillColor(iter+2);
+            h_bkg_eta_lead_before_EffCorr[iter]->SetFillColor(iter+2);
+            h_bkg_eta_lead[iter]->SetFillColor(iter+2);
+            h_bkg_eta_sublead_before_PUCorr[iter]->SetFillColor(iter+2);
+            h_bkg_eta_sublead_before_EffCorr[iter]->SetFillColor(iter+2);
+            h_bkg_eta_sublead[iter]->SetFillColor(iter+2);
+            h_bkg_phi_lead_before_PUCorr[iter]->SetFillColor(iter+2);
+            h_bkg_phi_lead_before_EffCorr[iter]->SetFillColor(iter+2);
+            h_bkg_phi_lead[iter]->SetFillColor(iter+2);
+            h_bkg_phi_sublead_before_PUCorr[iter]->SetFillColor(iter+2);
+            h_bkg_phi_sublead_before_EffCorr[iter]->SetFillColor(iter+2);
+            h_bkg_phi_sublead[iter]->SetFillColor(iter+2);
 
-            h_bkg_Pt[iter]->SetLineColor(iter+2);
-            h_bkg_rapi[iter]->SetLineColor(iter+2);
             h_bkg_pT[iter]->SetLineColor(iter+2);
-            h_bkg_eta[iter]->SetLineColor(iter+2);
-            h_bkg_phi[iter]->SetLineColor(iter+2);
+            h_bkg_rapi[iter]->SetLineColor(iter+2);
+            h_bkg_pT_lead_before_PUCorr[iter]->SetLineColor(iter+2);
+            h_bkg_pT_lead_before_EffCorr[iter]->SetLineColor(iter+2);
+            h_bkg_pT_lead[iter]->SetLineColor(iter+2);
+            h_bkg_pT_sublead_before_PUCorr[iter]->SetLineColor(iter+2);
+            h_bkg_pT_sublead_before_EffCorr[iter]->SetLineColor(iter+2);
+            h_bkg_pT_sublead[iter]->SetLineColor(iter+2);
+            h_bkg_eta_lead_before_PUCorr[iter]->SetLineColor(iter+2);
+            h_bkg_eta_lead_before_EffCorr[iter]->SetLineColor(iter+2);
+            h_bkg_eta_lead[iter]->SetLineColor(iter+2);
+            h_bkg_eta_sublead_before_PUCorr[iter]->SetLineColor(iter+2);
+            h_bkg_eta_sublead_before_EffCorr[iter]->SetLineColor(iter+2);
+            h_bkg_eta_sublead[iter]->SetLineColor(iter+2);
+            h_bkg_phi_lead_before_PUCorr[iter]->SetLineColor(iter+2);
+            h_bkg_phi_lead_before_EffCorr[iter]->SetLineColor(iter+2);
+            h_bkg_phi_lead[iter]->SetLineColor(iter+2);
+            h_bkg_phi_sublead_before_PUCorr[iter]->SetLineColor(iter+2);
+            h_bkg_phi_sublead_before_EffCorr[iter]->SetLineColor(iter+2);
+            h_bkg_phi_sublead[iter]->SetLineColor(iter+2);
 
 
-            h_bkg_Pt[iter]->SetDirectory(0);
-            h_bkg_rapi[iter]->SetDirectory(0);
             h_bkg_pT[iter]->SetDirectory(0);
-            h_bkg_eta[iter]->SetDirectory(0);
-            h_bkg_phi[iter]->SetDirectory(0);
+            h_bkg_rapi[iter]->SetDirectory(0);
+            h_bkg_pT_lead_before_PUCorr[iter]->SetDirectory(0);
+            h_bkg_pT_lead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_pT_lead[iter]->SetDirectory(0);
+            h_bkg_pT_sublead_before_PUCorr[iter]->SetDirectory(0);
+            h_bkg_pT_sublead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_pT_sublead[iter]->SetDirectory(0);
+            h_bkg_eta_lead_before_PUCorr[iter]->SetDirectory(0);
+            h_bkg_eta_lead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_eta_lead[iter]->SetDirectory(0);
+            h_bkg_eta_sublead_before_PUCorr[iter]->SetDirectory(0);
+            h_bkg_eta_sublead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_eta_sublead[iter]->SetDirectory(0);
+            h_bkg_phi_lead_before_PUCorr[iter]->SetDirectory(0);
+            h_bkg_phi_lead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_phi_lead[iter]->SetDirectory(0);
+            h_bkg_phi_sublead_before_PUCorr[iter]->SetDirectory(0);
+            h_bkg_phi_sublead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_phi_sublead[iter]->SetDirectory(0);
 
 
-            s_Pt->Add( h_bkg_Pt[iter] );
-            s_rapi->Add( h_bkg_rapi[iter] );
             s_pT->Add( h_bkg_pT[iter] );
-            s_eta->Add( h_bkg_eta[iter] );
-            s_phi->Add( h_bkg_phi[iter] );
+            s_rapi->Add( h_bkg_rapi[iter] );
+            s_pT_lead_before_PUCorr->Add( h_bkg_pT_lead_before_PUCorr[iter] );
+            s_pT_lead_before_EffCorr->Add( h_bkg_pT_lead_before_EffCorr[iter] );
+            s_pT_lead->Add( h_bkg_pT_lead[iter] );
+            s_pT_sublead_before_PUCorr->Add( h_bkg_pT_sublead_before_PUCorr[iter] );
+            s_pT_sublead_before_EffCorr->Add( h_bkg_pT_sublead_before_EffCorr[iter] );
+            s_pT_sublead->Add( h_bkg_pT_sublead[iter] );
+            s_eta_lead_before_PUCorr->Add( h_bkg_eta_lead_before_PUCorr[iter] );
+            s_eta_lead_before_EffCorr->Add( h_bkg_eta_lead_before_EffCorr[iter] );
+            s_eta_lead->Add( h_bkg_eta_lead[iter] );
+            s_eta_sublead_before_PUCorr->Add( h_bkg_eta_sublead_before_PUCorr[iter] );
+            s_eta_sublead_before_EffCorr->Add( h_bkg_eta_sublead_before_EffCorr[iter] );
+            s_eta_sublead->Add( h_bkg_eta_sublead[iter] );
+            s_phi_lead_before_PUCorr->Add( h_bkg_phi_lead_before_PUCorr[iter] );
+            s_phi_lead_before_EffCorr->Add( h_bkg_phi_lead_before_EffCorr[iter] );
+            s_phi_lead->Add( h_bkg_phi_lead[iter] );
+            s_phi_sublead_before_PUCorr->Add( h_bkg_phi_sublead_before_PUCorr[iter] );
+            s_phi_sublead_before_EffCorr->Add( h_bkg_phi_sublead_before_EffCorr[iter] );
+            s_phi_sublead->Add( h_bkg_phi_sublead[iter] );
 
 
             if ( iter == 1 )
             {   // ---- WJETS ---- //
                 iter++;
-                f_bkg->GetObject( "h_Pt_"+Mgr.Procname[_EE_WJets], h_bkg_Pt[iter] );
-                f_bkg->GetObject( "h_rapi_"+Mgr.Procname[_EE_WJets], h_bkg_rapi[iter] );
+
                 f_bkg->GetObject( "h_pT_"+Mgr.Procname[_EE_WJets], h_bkg_pT[iter] );
-                f_bkg->GetObject( "h_eta_"+Mgr.Procname[_EE_WJets], h_bkg_eta[iter] );
-                f_bkg->GetObject( "h_phi_"+Mgr.Procname[_EE_WJets], h_bkg_phi[iter] );
+                f_bkg->GetObject( "h_rapi_"+Mgr.Procname[_EE_WJets], h_bkg_rapi[iter] );
+                f_bkg->GetObject( "h_pT_lead_before_PUCorr_"+Mgr.Procname[_EE_WJets], h_bkg_pT_lead_before_PUCorr[iter] );
+                f_bkg->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[_EE_WJets], h_bkg_pT_lead_before_EffCorr[iter] );
+                f_bkg->GetObject( "h_pT_lead_"+Mgr.Procname[_EE_WJets], h_bkg_pT_lead[iter] );
+                f_bkg->GetObject( "h_pT_sublead_before_PUCorr_"+Mgr.Procname[_EE_WJets], h_bkg_pT_sublead_before_PUCorr[iter] );
+                f_bkg->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[_EE_WJets], h_bkg_pT_sublead_before_EffCorr[iter] );
+                f_bkg->GetObject( "h_pT_sublead_"+Mgr.Procname[_EE_WJets], h_bkg_pT_sublead[iter] );
+                f_bkg->GetObject( "h_eta_lead_before_PUCorr_"+Mgr.Procname[_EE_WJets], h_bkg_eta_lead_before_PUCorr[iter] );
+                f_bkg->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[_EE_WJets], h_bkg_eta_lead_before_EffCorr[iter] );
+                f_bkg->GetObject( "h_eta_lead_"+Mgr.Procname[_EE_WJets], h_bkg_eta_lead[iter] );
+                f_bkg->GetObject( "h_eta_sublead_before_PUCorr_"+Mgr.Procname[_EE_WJets], h_bkg_eta_sublead_before_PUCorr[iter] );
+                f_bkg->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[_EE_WJets], h_bkg_eta_sublead_before_EffCorr[iter] );
+                f_bkg->GetObject( "h_eta_sublead_"+Mgr.Procname[_EE_WJets], h_bkg_eta_sublead[iter] );
+                f_bkg->GetObject( "h_phi_lead_before_PUCorr_"+Mgr.Procname[_EE_WJets], h_bkg_phi_lead_before_PUCorr[iter] );
+                f_bkg->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[_EE_WJets], h_bkg_phi_lead_before_EffCorr[iter] );
+                f_bkg->GetObject( "h_phi_lead_"+Mgr.Procname[_EE_WJets], h_bkg_phi_lead[iter] );
+                f_bkg->GetObject( "h_phi_sublead_before_PUCorr_"+Mgr.Procname[_EE_WJets], h_bkg_phi_sublead_before_PUCorr[iter] );
+                f_bkg->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[_EE_WJets], h_bkg_phi_sublead_before_EffCorr[iter] );
+                f_bkg->GetObject( "h_phi_sublead_"+Mgr.Procname[_EE_WJets], h_bkg_phi_sublead[iter] );
 
 
-                h_bkg_Pt[iter]->SetFillColor(iter+2);
-                h_bkg_rapi[iter]->SetFillColor(iter+2);
                 h_bkg_pT[iter]->SetFillColor(iter+2);
-                h_bkg_eta[iter]->SetFillColor(iter+2);
-                h_bkg_phi[iter]->SetFillColor(iter+2);
+                h_bkg_rapi[iter]->SetFillColor(iter+2);
+                h_bkg_pT_lead_before_PUCorr[iter]->SetFillColor(iter+2);
+                h_bkg_pT_lead_before_EffCorr[iter]->SetFillColor(iter+2);
+                h_bkg_pT_lead[iter]->SetFillColor(iter+2);
+                h_bkg_pT_sublead_before_PUCorr[iter]->SetFillColor(iter+2);
+                h_bkg_pT_sublead_before_EffCorr[iter]->SetFillColor(iter+2);
+                h_bkg_pT_sublead[iter]->SetFillColor(iter+2);
+                h_bkg_eta_lead_before_PUCorr[iter]->SetFillColor(iter+2);
+                h_bkg_eta_lead_before_EffCorr[iter]->SetFillColor(iter+2);
+                h_bkg_eta_lead[iter]->SetFillColor(iter+2);
+                h_bkg_eta_sublead_before_PUCorr[iter]->SetFillColor(iter+2);
+                h_bkg_eta_sublead_before_EffCorr[iter]->SetFillColor(iter+2);
+                h_bkg_eta_sublead[iter]->SetFillColor(iter+2);
+                h_bkg_phi_lead_before_PUCorr[iter]->SetFillColor(iter+2);
+                h_bkg_phi_lead_before_EffCorr[iter]->SetFillColor(iter+2);
+                h_bkg_phi_lead[iter]->SetFillColor(iter+2);
+                h_bkg_phi_sublead_before_PUCorr[iter]->SetFillColor(iter+2);
+                h_bkg_phi_sublead_before_EffCorr[iter]->SetFillColor(iter+2);
+                h_bkg_phi_sublead[iter]->SetFillColor(iter+2);
 
-
-                h_bkg_Pt[iter]->SetLineColor(iter+2);
-                h_bkg_rapi[iter]->SetLineColor(iter+2);
                 h_bkg_pT[iter]->SetLineColor(iter+2);
-                h_bkg_eta[iter]->SetLineColor(iter+2);
-                h_bkg_phi[iter]->SetLineColor(iter+2);
+                h_bkg_rapi[iter]->SetLineColor(iter+2);
+                h_bkg_pT_lead_before_PUCorr[iter]->SetLineColor(iter+2);
+                h_bkg_pT_lead_before_EffCorr[iter]->SetLineColor(iter+2);
+                h_bkg_pT_lead[iter]->SetLineColor(iter+2);
+                h_bkg_pT_sublead_before_PUCorr[iter]->SetLineColor(iter+2);
+                h_bkg_pT_sublead_before_EffCorr[iter]->SetLineColor(iter+2);
+                h_bkg_pT_sublead[iter]->SetLineColor(iter+2);
+                h_bkg_eta_lead_before_PUCorr[iter]->SetLineColor(iter+2);
+                h_bkg_eta_lead_before_EffCorr[iter]->SetLineColor(iter+2);
+                h_bkg_eta_lead[iter]->SetLineColor(iter+2);
+                h_bkg_eta_sublead_before_PUCorr[iter]->SetLineColor(iter+2);
+                h_bkg_eta_sublead_before_EffCorr[iter]->SetLineColor(iter+2);
+                h_bkg_eta_sublead[iter]->SetLineColor(iter+2);
+                h_bkg_phi_lead_before_PUCorr[iter]->SetLineColor(iter+2);
+                h_bkg_phi_lead_before_EffCorr[iter]->SetLineColor(iter+2);
+                h_bkg_phi_lead[iter]->SetLineColor(iter+2);
+                h_bkg_phi_sublead_before_PUCorr[iter]->SetLineColor(iter+2);
+                h_bkg_phi_sublead_before_EffCorr[iter]->SetLineColor(iter+2);
+                h_bkg_phi_sublead[iter]->SetLineColor(iter+2);
 
 
-                h_bkg_Pt[iter]->SetDirectory(0);
-                h_bkg_rapi[iter]->SetDirectory(0);
                 h_bkg_pT[iter]->SetDirectory(0);
-                h_bkg_eta[iter]->SetDirectory(0);
-                h_bkg_phi[iter]->SetDirectory(0);
+                h_bkg_rapi[iter]->SetDirectory(0);
+                h_bkg_pT_lead_before_PUCorr[iter]->SetDirectory(0);
+                h_bkg_pT_lead_before_EffCorr[iter]->SetDirectory(0);
+                h_bkg_pT_lead[iter]->SetDirectory(0);
+                h_bkg_pT_sublead_before_PUCorr[iter]->SetDirectory(0);
+                h_bkg_pT_sublead_before_EffCorr[iter]->SetDirectory(0);
+                h_bkg_pT_sublead[iter]->SetDirectory(0);
+                h_bkg_eta_lead_before_PUCorr[iter]->SetDirectory(0);
+                h_bkg_eta_lead_before_EffCorr[iter]->SetDirectory(0);
+                h_bkg_eta_lead[iter]->SetDirectory(0);
+                h_bkg_eta_sublead_before_PUCorr[iter]->SetDirectory(0);
+                h_bkg_eta_sublead_before_EffCorr[iter]->SetDirectory(0);
+                h_bkg_eta_sublead[iter]->SetDirectory(0);
+                h_bkg_phi_lead_before_PUCorr[iter]->SetDirectory(0);
+                h_bkg_phi_lead_before_EffCorr[iter]->SetDirectory(0);
+                h_bkg_phi_lead[iter]->SetDirectory(0);
+                h_bkg_phi_sublead_before_PUCorr[iter]->SetDirectory(0);
+                h_bkg_phi_sublead_before_EffCorr[iter]->SetDirectory(0);
+                h_bkg_phi_sublead[iter]->SetDirectory(0);
 
 
-                s_Pt->Add( h_bkg_Pt[iter] );
-                s_rapi->Add( h_bkg_rapi[iter] );
                 s_pT->Add( h_bkg_pT[iter] );
-                s_eta->Add( h_bkg_eta[iter] );
-                s_phi->Add( h_bkg_phi[iter] );
+                s_rapi->Add( h_bkg_rapi[iter] );
+                s_pT_lead_before_PUCorr->Add( h_bkg_pT_lead_before_PUCorr[iter] );
+                s_pT_lead_before_EffCorr->Add( h_bkg_pT_lead_before_EffCorr[iter] );
+                s_pT_lead->Add( h_bkg_pT_lead[iter] );
+                s_pT_sublead_before_PUCorr->Add( h_bkg_pT_sublead_before_PUCorr[iter] );
+                s_pT_sublead_before_EffCorr->Add( h_bkg_pT_sublead_before_EffCorr[iter] );
+                s_pT_sublead->Add( h_bkg_pT_sublead[iter] );
+                s_eta_lead_before_PUCorr->Add( h_bkg_eta_lead_before_PUCorr[iter] );
+                s_eta_lead_before_EffCorr->Add( h_bkg_eta_lead_before_EffCorr[iter] );
+                s_eta_lead->Add( h_bkg_eta_lead[iter] );
+                s_eta_sublead_before_PUCorr->Add( h_bkg_eta_sublead_before_PUCorr[iter] );
+                s_eta_sublead_before_EffCorr->Add( h_bkg_eta_sublead_before_EffCorr[iter] );
+                s_eta_sublead->Add( h_bkg_eta_sublead[iter] );
+                s_phi_lead_before_PUCorr->Add( h_bkg_phi_lead_before_PUCorr[iter] );
+                s_phi_lead_before_EffCorr->Add( h_bkg_phi_lead_before_EffCorr[iter] );
+                s_phi_lead->Add( h_bkg_phi_lead[iter] );
+                s_phi_sublead_before_PUCorr->Add( h_bkg_phi_sublead_before_PUCorr[iter] );
+                s_phi_sublead_before_EffCorr->Add( h_bkg_phi_sublead_before_EffCorr[iter] );
+                s_phi_sublead->Add( h_bkg_phi_sublead[iter] );
             } // End of WJets
 
             iter++;
@@ -421,179 +576,507 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
 
 //---------------------------------- MC signal -----------------------------------------------------
 
-        TH1D *h_DY_Pt, *h_DY_rapi, *h_DY_pT, *h_DY_eta, *h_DY_phi;
+        TH1D *h_DY_pT, *h_DY_rapi, *h_DY_pT_lead_before_PUCorr, *h_DY_pT_lead_before_EffCorr, *h_DY_pT_lead,
+             *h_DY_pT_sublead_before_PUCorr, *h_DY_pT_sublead_before_EffCorr, *h_DY_pT_sublead,
+             *h_DY_eta_lead_before_PUCorr, *h_DY_eta_lead_before_EffCorr, *h_DY_eta_lead,
+             *h_DY_eta_sublead_before_PUCorr, *h_DY_eta_sublead_before_EffCorr, *h_DY_eta_sublead,
+             *h_DY_phi_lead_before_PUCorr, *h_DY_phi_lead_before_EffCorr, *h_DY_phi_lead,
+             *h_DY_phi_sublead_before_PUCorr, *h_DY_phi_sublead_before_EffCorr, *h_DY_phi_sublead;
 
-        f_DY->GetObject( "h_Pt_"+Mgr.Procname[_EE_DY_Full], h_DY_Pt );
-        f_DY->GetObject( "h_rapi_"+Mgr.Procname[_EE_DY_Full], h_DY_rapi );
         f_DY->GetObject( "h_pT_"+Mgr.Procname[_EE_DY_Full], h_DY_pT );
-        f_DY->GetObject( "h_eta_"+Mgr.Procname[_EE_DY_Full], h_DY_eta );
-        f_DY->GetObject( "h_phi_"+Mgr.Procname[_EE_DY_Full], h_DY_phi );
+        f_DY->GetObject( "h_rapi_"+Mgr.Procname[_EE_DY_Full], h_DY_rapi );
+        f_DY->GetObject( "h_pT_lead_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_lead_before_PUCorr );
+        f_DY->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_lead_before_EffCorr );
+        f_DY->GetObject( "h_pT_lead_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_lead );
+        f_DY->GetObject( "h_pT_sublead_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_sublead_before_PUCorr );
+        f_DY->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_sublead_before_EffCorr );
+        f_DY->GetObject( "h_pT_sublead_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_sublead );
+        f_DY->GetObject( "h_eta_lead_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_lead_before_PUCorr );
+        f_DY->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_lead_before_EffCorr );
+        f_DY->GetObject( "h_eta_lead_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_lead );
+        f_DY->GetObject( "h_eta_sublead_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_sublead_before_PUCorr );
+        f_DY->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_sublead_before_EffCorr );
+        f_DY->GetObject( "h_eta_sublead_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_sublead );
+        f_DY->GetObject( "h_phi_lead_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_lead_before_PUCorr );
+        f_DY->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_lead_before_EffCorr );
+        f_DY->GetObject( "h_phi_lead_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_lead );
+        f_DY->GetObject( "h_phi_sublead_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_sublead_before_PUCorr );
+        f_DY->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_sublead_before_EffCorr );
+        f_DY->GetObject( "h_phi_sublead_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_sublead );
 
 
-        h_DY_Pt->SetFillColor(kOrange);
-        h_DY_rapi->SetFillColor(kOrange);
         h_DY_pT->SetFillColor(kOrange);
-        h_DY_eta->SetFillColor(kOrange);
-        h_DY_phi->SetFillColor(kOrange);
+        h_DY_rapi->SetFillColor(kOrange);
+        h_DY_pT_lead_before_PUCorr->SetFillColor(kOrange);
+        h_DY_pT_lead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_pT_lead->SetFillColor(kOrange);
+        h_DY_pT_sublead_before_PUCorr->SetFillColor(kOrange);
+        h_DY_pT_sublead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_pT_sublead->SetFillColor(kOrange);
+        h_DY_eta_lead_before_PUCorr->SetFillColor(kOrange);
+        h_DY_eta_lead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_eta_lead->SetFillColor(kOrange);
+        h_DY_eta_sublead_before_PUCorr->SetFillColor(kOrange);
+        h_DY_eta_sublead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_eta_sublead->SetFillColor(kOrange);
+        h_DY_phi_lead_before_PUCorr->SetFillColor(kOrange);
+        h_DY_phi_lead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_phi_lead->SetFillColor(kOrange);
+        h_DY_phi_sublead_before_PUCorr->SetFillColor(kOrange);
+        h_DY_phi_sublead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_phi_sublead->SetFillColor(kOrange);
 
 
-        h_DY_Pt->SetLineColor(kOrange);
-        h_DY_rapi->SetLineColor(kOrange);
         h_DY_pT->SetLineColor(kOrange);
-        h_DY_eta->SetLineColor(kOrange);
-        h_DY_phi->SetLineColor(kOrange);
+        h_DY_rapi->SetLineColor(kOrange);
+        h_DY_pT_lead_before_PUCorr->SetLineColor(kOrange);
+        h_DY_pT_lead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_pT_lead->SetLineColor(kOrange);
+        h_DY_pT_sublead_before_PUCorr->SetLineColor(kOrange);
+        h_DY_pT_sublead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_pT_sublead->SetLineColor(kOrange);
+        h_DY_eta_lead_before_PUCorr->SetLineColor(kOrange);
+        h_DY_eta_lead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_eta_lead->SetLineColor(kOrange);
+        h_DY_eta_sublead_before_PUCorr->SetLineColor(kOrange);
+        h_DY_eta_sublead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_eta_sublead->SetLineColor(kOrange);
+        h_DY_phi_lead_before_PUCorr->SetLineColor(kOrange);
+        h_DY_phi_lead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_phi_lead->SetLineColor(kOrange);
+        h_DY_phi_sublead_before_PUCorr->SetLineColor(kOrange);
+        h_DY_phi_sublead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_phi_sublead->SetLineColor(kOrange);
 
 
-        h_DY_Pt->SetDirectory(0);
-        h_DY_rapi->SetDirectory(0);
         h_DY_pT->SetDirectory(0);
-        h_DY_eta->SetDirectory(0);
-        h_DY_phi->SetDirectory(0);
+        h_DY_rapi->SetDirectory(0);
+        h_DY_pT_lead_before_PUCorr->SetDirectory(0);
+        h_DY_pT_lead_before_EffCorr->SetDirectory(0);
+        h_DY_pT_lead->SetDirectory(0);
+        h_DY_pT_sublead_before_PUCorr->SetDirectory(0);
+        h_DY_pT_sublead_before_EffCorr->SetDirectory(0);
+        h_DY_pT_sublead->SetDirectory(0);
+        h_DY_eta_lead_before_PUCorr->SetDirectory(0);
+        h_DY_eta_lead_before_EffCorr->SetDirectory(0);
+        h_DY_eta_lead->SetDirectory(0);
+        h_DY_eta_sublead_before_PUCorr->SetDirectory(0);
+        h_DY_eta_sublead_before_EffCorr->SetDirectory(0);
+        h_DY_eta_sublead->SetDirectory(0);
+        h_DY_phi_lead_before_PUCorr->SetDirectory(0);
+        h_DY_phi_lead_before_EffCorr->SetDirectory(0);
+        h_DY_phi_lead->SetDirectory(0);
+        h_DY_phi_sublead_before_PUCorr->SetDirectory(0);
+        h_DY_phi_sublead_before_EffCorr->SetDirectory(0);
+        h_DY_phi_sublead->SetDirectory(0);
 
 
-        s_Pt->Add( h_DY_Pt );
-        s_rapi->Add( h_DY_rapi );
         s_pT->Add( h_DY_pT );
-        s_eta->Add( h_DY_eta );
-        s_phi->Add( h_DY_phi );
+        s_rapi->Add( h_DY_rapi );
+        s_pT_lead_before_PUCorr->Add( h_DY_pT_lead_before_PUCorr );
+        s_pT_lead_before_EffCorr->Add( h_DY_pT_lead_before_EffCorr );
+        s_pT_lead->Add( h_DY_pT_lead );
+        s_pT_sublead_before_PUCorr->Add( h_DY_pT_sublead_before_PUCorr );
+        s_pT_sublead_before_EffCorr->Add( h_DY_pT_sublead_before_EffCorr );
+        s_pT_sublead->Add( h_DY_pT_sublead );
+        s_eta_lead_before_PUCorr->Add( h_DY_eta_lead_before_PUCorr );
+        s_eta_lead_before_EffCorr->Add( h_DY_eta_lead_before_EffCorr );
+        s_eta_lead->Add( h_DY_eta_lead );
+        s_eta_sublead_before_PUCorr->Add( h_DY_eta_sublead_before_PUCorr );
+        s_eta_sublead_before_EffCorr->Add( h_DY_eta_sublead_before_EffCorr );
+        s_eta_sublead->Add( h_DY_eta_sublead );
+        s_phi_lead_before_PUCorr->Add( h_DY_phi_lead_before_PUCorr );
+        s_phi_lead_before_EffCorr->Add( h_DY_phi_lead_before_EffCorr );
+        s_phi_lead->Add( h_DY_phi_lead );
+        s_phi_sublead_before_PUCorr->Add( h_DY_phi_sublead_before_PUCorr );
+        s_phi_sublead_before_EffCorr->Add( h_DY_phi_sublead_before_EffCorr );
+        s_phi_sublead->Add( h_DY_phi_sublead );
 
 
 //--------------------------------------- DATA -----------------------------------------------------
 
-        TH1D *h_data_Pt, *h_data_rapi, *h_data_pT, *h_data_eta, *h_data_phi;
+        TH1D *h_data_pT, *h_data_rapi, *h_data_pT_lead_before_PUCorr, *h_data_pT_lead_before_EffCorr, *h_data_pT_lead,
+             *h_data_pT_sublead_before_PUCorr, *h_data_pT_sublead_before_EffCorr, *h_data_pT_sublead,
+             *h_data_eta_lead_before_PUCorr, *h_data_eta_lead_before_EffCorr, *h_data_eta_lead,
+             *h_data_eta_sublead_before_PUCorr, *h_data_eta_sublead_before_EffCorr, *h_data_eta_sublead,
+             *h_data_phi_lead_before_PUCorr, *h_data_phi_lead_before_EffCorr, *h_data_phi_lead,
+             *h_data_phi_sublead_before_PUCorr, *h_data_phi_sublead_before_EffCorr, *h_data_phi_sublead;
 
         Mgr.SetProc(_EE_DoubleEG_Full);
 //        Mgr.SetProc(_EE_SingleElectron_Full);
 
-        f_data->GetObject( "h_Pt_"+Mgr.Procname[Mgr.CurrentProc], h_data_Pt );
-        f_data->GetObject( "h_rapi_"+Mgr.Procname[Mgr.CurrentProc], h_data_rapi );
         f_data->GetObject( "h_pT_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT );
-        f_data->GetObject( "h_eta_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta );
-        f_data->GetObject( "h_phi_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi );
+        f_data->GetObject( "h_rapi_"+Mgr.Procname[Mgr.CurrentProc], h_data_rapi );
+        f_data->GetObject( "h_pT_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_lead_before_PUCorr );
+        f_data->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_lead_before_EffCorr );
+        f_data->GetObject( "h_pT_lead_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_lead );
+        f_data->GetObject( "h_pT_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_sublead_before_PUCorr );
+        f_data->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_sublead_before_EffCorr );
+        f_data->GetObject( "h_pT_sublead_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_sublead );
+        f_data->GetObject( "h_eta_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_lead_before_PUCorr );
+        f_data->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_lead_before_EffCorr );
+        f_data->GetObject( "h_eta_lead_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_lead );
+        f_data->GetObject( "h_eta_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_sublead_before_PUCorr );
+        f_data->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_sublead_before_EffCorr );
+        f_data->GetObject( "h_eta_sublead_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_sublead );
+        f_data->GetObject( "h_phi_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_lead_before_PUCorr );
+        f_data->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_lead_before_EffCorr );
+        f_data->GetObject( "h_phi_lead_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_lead );
+        f_data->GetObject( "h_phi_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_sublead_before_PUCorr );
+        f_data->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_sublead_before_EffCorr );
+        f_data->GetObject( "h_phi_sublead_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_sublead );
 
 
-        h_data_Pt->SetMarkerStyle(kFullDotLarge);
-        h_data_rapi->SetMarkerStyle(kFullDotLarge);
         h_data_pT->SetMarkerStyle(kFullDotLarge);
-        h_data_eta->SetMarkerStyle(kFullDotLarge);
-        h_data_phi->SetMarkerStyle(kFullDotLarge);
+        h_data_rapi->SetMarkerStyle(kFullDotLarge);
+        h_data_pT_lead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_pT_lead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_pT_lead->SetMarkerStyle(kFullDotLarge);
+        h_data_pT_sublead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_pT_sublead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_pT_sublead->SetMarkerStyle(kFullDotLarge);
+        h_data_eta_lead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_eta_lead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_eta_lead->SetMarkerStyle(kFullDotLarge);
+        h_data_eta_sublead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_eta_sublead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_eta_sublead->SetMarkerStyle(kFullDotLarge);
+        h_data_phi_lead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_phi_lead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_phi_lead->SetMarkerStyle(kFullDotLarge);
+        h_data_phi_sublead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_phi_sublead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_phi_sublead->SetMarkerStyle(kFullDotLarge);
 
 
-        h_data_Pt->SetMarkerColor(kBlack);
-        h_data_rapi->SetMarkerColor(kBlack);
         h_data_pT->SetMarkerColor(kBlack);
-        h_data_eta->SetMarkerColor(kBlack);
-        h_data_phi->SetMarkerColor(kBlack);
+        h_data_rapi->SetMarkerColor(kBlack);
+        h_data_pT_lead_before_PUCorr->SetMarkerColor(kBlack);
+        h_data_pT_lead_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_pT_lead->SetMarkerColor(kBlack);
+        h_data_pT_sublead_before_PUCorr->SetMarkerColor(kBlack);
+        h_data_pT_sublead_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_pT_sublead->SetMarkerColor(kBlack);
+        h_data_eta_lead_before_PUCorr->SetMarkerColor(kBlack);
+        h_data_eta_lead_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_eta_lead->SetMarkerColor(kBlack);
+        h_data_eta_sublead_before_PUCorr->SetMarkerColor(kBlack);
+        h_data_eta_sublead_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_eta_sublead->SetMarkerColor(kBlack);
+        h_data_phi_lead_before_PUCorr->SetMarkerColor(kBlack);
+        h_data_phi_lead_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_phi_lead->SetMarkerColor(kBlack);
+        h_data_phi_sublead_before_PUCorr->SetMarkerColor(kBlack);
+        h_data_phi_sublead_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_phi_sublead->SetMarkerColor(kBlack);
 
 
-        h_data_Pt->SetLineColor(kBlack);
-        h_data_rapi->SetLineColor(kBlack);
         h_data_pT->SetLineColor(kBlack);
-        h_data_eta->SetLineColor(kBlack);
-        h_data_phi->SetLineColor(kBlack);
+        h_data_rapi->SetLineColor(kBlack);
+        h_data_pT_lead_before_PUCorr->SetLineColor(kBlack);
+        h_data_pT_lead_before_EffCorr->SetLineColor(kBlack);
+        h_data_pT_lead->SetLineColor(kBlack);
+        h_data_pT_sublead_before_PUCorr->SetLineColor(kBlack);
+        h_data_pT_sublead_before_EffCorr->SetLineColor(kBlack);
+        h_data_pT_sublead->SetLineColor(kBlack);
+        h_data_eta_lead_before_PUCorr->SetLineColor(kBlack);
+        h_data_eta_lead_before_EffCorr->SetLineColor(kBlack);
+        h_data_eta_lead->SetLineColor(kBlack);
+        h_data_eta_sublead_before_PUCorr->SetLineColor(kBlack);
+        h_data_eta_sublead_before_EffCorr->SetLineColor(kBlack);
+        h_data_eta_sublead->SetLineColor(kBlack);
+        h_data_phi_lead_before_PUCorr->SetLineColor(kBlack);
+        h_data_phi_lead_before_EffCorr->SetLineColor(kBlack);
+        h_data_phi_lead->SetLineColor(kBlack);
+        h_data_phi_sublead_before_PUCorr->SetLineColor(kBlack);
+        h_data_phi_sublead_before_EffCorr->SetLineColor(kBlack);
+        h_data_phi_sublead->SetLineColor(kBlack);
 
 
-        h_data_Pt->SetDirectory(0);
-        h_data_rapi->SetDirectory(0);
         h_data_pT->SetDirectory(0);
-        h_data_eta->SetDirectory(0);
-        h_data_phi->SetDirectory(0);
+        h_data_rapi->SetDirectory(0);
+        h_data_pT_lead_before_PUCorr->SetDirectory(0);
+        h_data_pT_lead_before_EffCorr->SetDirectory(0);
+        h_data_pT_lead->SetDirectory(0);
+        h_data_pT_sublead_before_PUCorr->SetDirectory(0);
+        h_data_pT_sublead_before_EffCorr->SetDirectory(0);
+        h_data_pT_sublead->SetDirectory(0);
+        h_data_eta_lead_before_PUCorr->SetDirectory(0);
+        h_data_eta_lead_before_EffCorr->SetDirectory(0);
+        h_data_eta_lead->SetDirectory(0);
+        h_data_eta_sublead_before_PUCorr->SetDirectory(0);
+        h_data_eta_sublead_before_EffCorr->SetDirectory(0);
+        h_data_eta_sublead->SetDirectory(0);
+        h_data_phi_lead_before_PUCorr->SetDirectory(0);
+        h_data_phi_lead_before_EffCorr->SetDirectory(0);
+        h_data_phi_lead->SetDirectory(0);
+        h_data_phi_sublead_before_PUCorr->SetDirectory(0);
+        h_data_phi_sublead_before_EffCorr->SetDirectory(0);
+        h_data_phi_sublead->SetDirectory(0);
 
 
 //--------------------------------- Ratio Plot --------------------------------------
 
-        myRatioPlot_t *RP_Pt, *RP_rapi, *RP_pT, *RP_eta, *RP_phi;
-        RP_Pt = new myRatioPlot_t( "RP_Pt", s_Pt, h_data_Pt );
-        RP_rapi = new myRatioPlot_t( "RP_rapi", s_rapi, h_data_rapi );
+        myRatioPlot_t *RP_pT, *RP_rapi, *RP_pT_lead_before_PUCorr, *RP_pT_lead_before_EffCorr, *RP_pT_lead,
+                      *RP_pT_sublead_before_PUCorr, *RP_pT_sublead_before_EffCorr, *RP_pT_sublead,
+                      *RP_eta_lead_before_PUCorr, *RP_eta_lead_before_EffCorr, *RP_eta_lead,
+                      *RP_eta_sublead_before_PUCorr, *RP_eta_sublead_before_EffCorr, *RP_eta_sublead,
+                      *RP_phi_lead_before_PUCorr, *RP_phi_lead_before_EffCorr, *RP_phi_lead,
+                      *RP_phi_sublead_before_PUCorr, *RP_phi_sublead_before_EffCorr, *RP_phi_sublead;
         RP_pT = new myRatioPlot_t( "RP_pT", s_pT, h_data_pT );
-        RP_eta = new myRatioPlot_t( "RP_eta", s_eta, h_data_eta );
-        RP_phi = new myRatioPlot_t( "RP_phi", s_phi, h_data_phi );
+        RP_rapi = new myRatioPlot_t( "RP_rapi", s_rapi, h_data_rapi );
+        RP_pT_lead_before_PUCorr = new myRatioPlot_t( "RP_pT_lead_before_PUCorr", s_pT_lead_before_PUCorr, h_data_pT_lead_before_PUCorr );
+        RP_pT_lead_before_EffCorr = new myRatioPlot_t( "RP_pT_lead_before_EffCorr", s_pT_lead_before_EffCorr, h_data_pT_lead_before_EffCorr );
+        RP_pT_lead = new myRatioPlot_t( "RP_pT_lead", s_pT_lead, h_data_pT_lead );
+        RP_pT_sublead_before_PUCorr = new myRatioPlot_t( "RP_pT_sublead_before_PUCorr", s_pT_sublead_before_PUCorr, h_data_pT_lead_before_EffCorr );
+        RP_pT_sublead_before_EffCorr = new myRatioPlot_t( "RP_pT_sublead_before_EffCorr", s_pT_sublead_before_EffCorr, h_data_pT_sublead_before_EffCorr );
+        RP_pT_sublead = new myRatioPlot_t( "RP_pT_sublead", s_pT_sublead, h_data_pT_sublead );
+        RP_eta_lead_before_PUCorr = new myRatioPlot_t( "RP_eta_lead_before_PUCorr", s_eta_lead_before_PUCorr, h_data_eta_lead_before_PUCorr );
+        RP_eta_lead_before_EffCorr = new myRatioPlot_t( "RP_eta_lead_before_EffCorr", s_eta_lead_before_EffCorr, h_data_eta_lead_before_EffCorr );
+        RP_eta_lead = new myRatioPlot_t( "RP_eta_lead", s_eta_lead, h_data_eta_lead );
+        RP_eta_sublead_before_PUCorr = new myRatioPlot_t( "RP_eta_sublead_before_PUCorr", s_eta_sublead_before_PUCorr, h_data_eta_sublead_before_PUCorr );
+        RP_eta_sublead_before_EffCorr = new myRatioPlot_t( "RP_eta_sublead_before_EffCorr", s_eta_sublead_before_EffCorr, h_data_eta_sublead_before_EffCorr );
+        RP_eta_sublead = new myRatioPlot_t( "RP_eta_sublead", s_eta_sublead, h_data_eta_sublead );
+        RP_phi_lead_before_PUCorr = new myRatioPlot_t( "RP_phi_lead_before_PUCorr", s_phi_lead_before_PUCorr, h_data_phi_lead_before_PUCorr );
+        RP_phi_lead_before_EffCorr = new myRatioPlot_t( "RP_phi_lead_before_EffCorr", s_phi_lead_before_EffCorr, h_data_phi_lead_before_EffCorr );
+        RP_phi_lead = new myRatioPlot_t( "RP_phi_lead", s_phi_lead, h_data_phi_lead );
+        RP_phi_sublead_before_PUCorr = new myRatioPlot_t( "RP_phi_sublead_before_PUCorr", s_phi_sublead_before_PUCorr, h_data_phi_sublead_before_PUCorr );
+        RP_phi_sublead_before_EffCorr = new myRatioPlot_t( "RP_phi_sublead_before_EffCorr", s_phi_sublead_before_EffCorr, h_data_phi_sublead_before_EffCorr );
+        RP_phi_sublead = new myRatioPlot_t( "RP_phi_sublead", s_phi_sublead, h_data_phi_sublead );
 
 
-        RP_Pt->SetPlots("Dielectron p_{T} [GeV/c]", 0, 600);
+        RP_pT->SetPlots("Dielectron p_{T} [GeV/c]", 0, 600);
         RP_rapi->SetPlots("Dielectron rapidity", -3, 3);
-        RP_pT->SetPlots("Electron p_{T} (leading+subleading) [GeV/c]", 0, 600);
-        RP_eta->SetPlots("Electron #eta (leading+subleading)", -3, 3);
-        RP_phi->SetPlots("Electron #phi (leading+subleading)", -3.3, 3.3);
+        RP_pT_lead_before_PUCorr->SetPlots("Leading electron p_{T} [GeV/c] (before PU correction)", 0, 600);
+        RP_pT_lead_before_EffCorr->SetPlots("Leading electron p_{T} [GeV/c] (before Efficiency SF)", -3, 3);
+        RP_pT_lead->SetPlots("Leading electron p_{T} [GeV/c]", -3.3, 3.3);
+        RP_pT_sublead_before_PUCorr->SetPlots("Subleading electron p_{T} [GeV/c] (before PU correction)", 0, 600);
+        RP_pT_sublead_before_EffCorr->SetPlots("Subleading electron p_{T} [GeV/c] (before Efficiency SF)", -3, 3);
+        RP_pT_sublead->SetPlots("Subleading electron p_{T} [GeV/c]", -3.3, 3.3);
+        RP_eta_lead_before_PUCorr->SetPlots("Leading electron #eta (before PU correction)", 0, 600);
+        RP_eta_lead_before_EffCorr->SetPlots("Leading electron #eta (before Efficiency SF)", -3, 3);
+        RP_eta_lead->SetPlots("Leading electron #eta", -3.3, 3.3);
+        RP_eta_sublead_before_PUCorr->SetPlots("Subleading electron #eta (before PU correction)", 0, 600);
+        RP_eta_sublead_before_EffCorr->SetPlots("Subleading electron #eta (before Efficiency SF)", -3, 3);
+        RP_eta_sublead->SetPlots("Subleading electron #eta", -3.3, 3.3);
+        RP_phi_lead_before_PUCorr->SetPlots("Leading electron #phi (before PU correction)", 0, 600);
+        RP_phi_lead_before_EffCorr->SetPlots("Leading electron #phi (before Efficiency SF)", -3, 3);
+        RP_phi_lead->SetPlots("Leading electron #phi", -3.3, 3.3);
+        RP_phi_sublead_before_PUCorr->SetPlots("Subleading electron #phi (before PU correction)", 0, 600);
+        RP_phi_sublead_before_EffCorr->SetPlots("Subleading electron #phi (before Efficiency SF)", -3, 3);
+        RP_phi_sublead->SetPlots("Subleading electron #phi", -3.3, 3.3);
 
 
-        RP_Pt->SetLegend(0.75, 0.4);
-        RP_rapi->SetLegend(0.75, 0.4);
         RP_pT->SetLegend(0.75, 0.4);
-        RP_eta->SetLegend(0.75, 0.4);
-        RP_phi->SetLegend(0.75, 0.4);
+        RP_rapi->SetLegend(0.75, 0.4);
+        RP_pT_lead_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_pT_lead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_pT_lead->SetLegend(0.75, 0.4);
+        RP_pT_sublead_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_pT_sublead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_pT_sublead->SetLegend(0.75, 0.4);
+        RP_eta_lead_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_eta_lead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_eta_lead->SetLegend(0.75, 0.4);
+        RP_eta_sublead_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_eta_sublead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_eta_sublead->SetLegend(0.75, 0.4);
+        RP_phi_lead_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_phi_lead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_phi_lead->SetLegend(0.75, 0.4);
+        RP_phi_sublead_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_phi_sublead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_phi_sublead->SetLegend(0.75, 0.4);
 
 
         // Legend data
-        RP_Pt->AddLegendEntry(h_data_Pt, "Data", "lp");
-        RP_rapi->AddLegendEntry(h_data_rapi, "Data", "lp");
         RP_pT->AddLegendEntry(h_data_pT, "Data", "lp");
-        RP_eta->AddLegendEntry(h_data_eta, "Data", "lp");
-        RP_phi->AddLegendEntry(h_data_phi, "Data", "lp");
+        RP_rapi->AddLegendEntry(h_data_rapi, "Data", "lp");
+        RP_pT_lead_before_PUCorr->AddLegendEntry(h_data_pT_lead_before_PUCorr, "Data", "lp");
+        RP_pT_lead_before_EffCorr->AddLegendEntry(h_data_pT_lead_before_EffCorr, "Data", "lp");
+        RP_pT_lead->AddLegendEntry(h_data_pT_lead, "Data", "lp");
+        RP_pT_sublead_before_PUCorr->AddLegendEntry(h_data_pT_sublead_before_PUCorr, "Data", "lp");
+        RP_pT_sublead_before_EffCorr->AddLegendEntry(h_data_pT_sublead_before_EffCorr, "Data", "lp");
+        RP_pT_sublead->AddLegendEntry(h_data_pT_sublead, "Data", "lp");
+        RP_eta_lead_before_PUCorr->AddLegendEntry(h_data_eta_lead_before_PUCorr, "Data", "lp");
+        RP_eta_lead_before_EffCorr->AddLegendEntry(h_data_eta_lead_before_EffCorr, "Data", "lp");
+        RP_eta_lead->AddLegendEntry(h_data_eta_lead, "Data", "lp");
+        RP_eta_sublead_before_PUCorr->AddLegendEntry(h_data_eta_sublead_before_PUCorr, "Data", "lp");
+        RP_eta_sublead_before_EffCorr->AddLegendEntry(h_data_eta_sublead_before_EffCorr, "Data", "lp");
+        RP_eta_sublead->AddLegendEntry(h_data_eta_sublead, "Data", "lp");
+        RP_phi_lead_before_PUCorr->AddLegendEntry(h_data_phi_lead_before_PUCorr, "Data", "lp");
+        RP_phi_lead_before_EffCorr->AddLegendEntry(h_data_phi_lead_before_EffCorr, "Data", "lp");
+        RP_phi_lead->AddLegendEntry(h_data_phi_lead, "Data", "lp");
+        RP_phi_sublead_before_PUCorr->AddLegendEntry(h_data_phi_sublead_before_PUCorr, "Data", "lp");
+        RP_phi_sublead_before_EffCorr->AddLegendEntry(h_data_phi_sublead_before_EffCorr, "Data", "lp");
+        RP_phi_sublead->AddLegendEntry(h_data_phi_sublead, "Data", "lp");
 
 
         // Legend MC signal
-        RP_Pt->AddLegendEntry(h_DY_Pt, "DY#rightarrow ee", "f");
-        RP_rapi->AddLegendEntry(h_DY_rapi, "DY#rightarrow ee", "f");
         RP_pT->AddLegendEntry(h_DY_pT, "DY#rightarrow ee", "f");
-        RP_eta->AddLegendEntry(h_DY_eta, "DY#rightarrow ee", "f");
-        RP_phi->AddLegendEntry(h_DY_phi, "DY#rightarrow ee", "f");
+        RP_rapi->AddLegendEntry(h_DY_rapi, "DY#rightarrow ee", "f");
+        RP_pT_lead_before_PUCorr->AddLegendEntry(h_DY_pT_lead_before_PUCorr, "DY#rightarrow ee", "f");
+        RP_pT_lead_before_EffCorr->AddLegendEntry(h_DY_pT_lead_before_EffCorr, "DY#rightarrow ee", "f");
+        RP_pT_lead->AddLegendEntry(h_DY_pT_lead, "DY#rightarrow ee", "f");
+        RP_pT_sublead_before_PUCorr->AddLegendEntry(h_DY_pT_sublead_before_PUCorr, "DY#rightarrow ee", "f");
+        RP_pT_sublead_before_EffCorr->AddLegendEntry(h_DY_pT_sublead_before_EffCorr, "DY#rightarrow ee", "f");
+        RP_pT_sublead->AddLegendEntry(h_DY_pT_sublead, "DY#rightarrow ee", "f");
+        RP_eta_lead_before_PUCorr->AddLegendEntry(h_DY_eta_lead_before_PUCorr, "DY#rightarrow ee", "f");
+        RP_eta_lead_before_EffCorr->AddLegendEntry(h_DY_eta_lead_before_EffCorr, "DY#rightarrow ee", "f");
+        RP_eta_lead->AddLegendEntry(h_DY_eta_lead, "DY#rightarrow ee", "f");
+        RP_eta_sublead_before_PUCorr->AddLegendEntry(h_DY_eta_sublead_before_PUCorr, "DY#rightarrow ee", "f");
+        RP_eta_sublead_before_EffCorr->AddLegendEntry(h_DY_eta_sublead_before_EffCorr, "DY#rightarrow ee", "f");
+        RP_eta_sublead->AddLegendEntry(h_DY_eta_sublead, "DY#rightarrow ee", "f");
+        RP_phi_lead_before_PUCorr->AddLegendEntry(h_DY_phi_lead_before_PUCorr, "DY#rightarrow ee", "f");
+        RP_phi_lead_before_EffCorr->AddLegendEntry(h_DY_phi_lead_before_EffCorr, "DY#rightarrow ee", "f");
+        RP_phi_lead->AddLegendEntry(h_DY_phi_lead, "DY#rightarrow ee", "f");
+        RP_phi_sublead_before_PUCorr->AddLegendEntry(h_DY_phi_sublead_before_PUCorr, "DY#rightarrow ee", "f");
+        RP_phi_sublead_before_EffCorr->AddLegendEntry(h_DY_phi_sublead_before_EffCorr, "DY#rightarrow ee", "f");
+        RP_phi_sublead->AddLegendEntry(h_DY_phi_sublead, "DY#rightarrow ee", "f");
 
 
         // Legend MC BKG
-        RP_Pt->AddLegendEntry(h_bkg_Pt[0], "QCD", "f");
-        RP_rapi->AddLegendEntry(h_bkg_rapi[0], "QCD", "f");
         RP_pT->AddLegendEntry(h_bkg_pT[0], "QCD", "f");
-        RP_eta->AddLegendEntry(h_bkg_eta[0], "QCD", "f");
-        RP_phi->AddLegendEntry(h_bkg_phi[0], "QCD", "f");
-        RP_Pt->AddLegendEntry(h_bkg_Pt[1], "VVnST", "f");
-        RP_rapi->AddLegendEntry(h_bkg_rapi[1], "VVnST", "f");
+        RP_rapi->AddLegendEntry(h_bkg_rapi[0], "QCD", "f");
+        RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[0], "QCD", "f");
+        RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[0], "QCD", "f");
+        RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[0], "QCD", "f");
+        RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[0], "QCD", "f");
+        RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[0], "QCD", "f");
+        RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[0], "QCD", "f");
+        RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[0], "QCD", "f");
+        RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[0], "QCD", "f");
+        RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[0], "QCD", "f");
+        RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[0], "QCD", "f");
+        RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[0], "QCD", "f");
+        RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[0], "QCD", "f");
+        RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[0], "QCD", "f");
+        RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[0], "QCD", "f");
+        RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[0], "QCD", "f");
+        RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[0], "QCD", "f");
+        RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[0], "QCD", "f");
+        RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[0], "QCD", "f");
+
         RP_pT->AddLegendEntry(h_bkg_pT[1], "VVnST", "f");
-        RP_eta->AddLegendEntry(h_bkg_eta[1], "VVnST", "f");
-        RP_phi->AddLegendEntry(h_bkg_phi[1], "VVnST", "f");
-        RP_Pt->AddLegendEntry(h_bkg_Pt[2], "W+Jets", "f");
-        RP_rapi->AddLegendEntry(h_bkg_rapi[2], "W+Jets", "f");
+        RP_rapi->AddLegendEntry(h_bkg_rapi[1], "VVnST", "f");
+        RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[1], "VVnST", "f");
+        RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[1], "VVnST", "f");
+        RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[1], "VVnST", "f");
+        RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[1], "VVnST", "f");
+        RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[1], "VVnST", "f");
+        RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[1], "VVnST", "f");
+        RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[1], "VVnST", "f");
+        RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[1], "VVnST", "f");
+        RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[1], "VVnST", "f");
+        RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[1], "VVnST", "f");
+        RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[1], "VVnST", "f");
+        RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[1], "VVnST", "f");
+        RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[1], "VVnST", "f");
+        RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[1], "VVnST", "f");
+        RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[1], "VVnST", "f");
+        RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[1], "VVnST", "f");
+        RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[1], "VVnST", "f");
+        RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[1], "VVnST", "f");
+
         RP_pT->AddLegendEntry(h_bkg_pT[2], "W+Jets", "f");
-        RP_eta->AddLegendEntry(h_bkg_eta[2], "W+Jets", "f");
-        RP_phi->AddLegendEntry(h_bkg_phi[2], "W+Jets", "f");
-        RP_Pt->AddLegendEntry(h_bkg_Pt[3], "t#bar{t}", "f");
-        RP_rapi->AddLegendEntry(h_bkg_rapi[3], "t#bar{t}", "f");
+        RP_rapi->AddLegendEntry(h_bkg_rapi[2], "W+Jets", "f");
+        RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[2], "W+Jets", "f");
+        RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[2], "W+Jets", "f");
+        RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[2], "W+Jets", "f");
+        RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[2], "W+Jets", "f");
+        RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[2], "W+Jets", "f");
+        RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[2], "W+Jets", "f");
+        RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[2], "W+Jets", "f");
+        RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[2], "W+Jets", "f");
+        RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[2], "W+Jets", "f");
+        RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[2], "W+Jets", "f");
+        RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[2], "W+Jets", "f");
+        RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[2], "W+Jets", "f");
+        RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[2], "W+Jets", "f");
+        RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[2], "W+Jets", "f");
+        RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[2], "W+Jets", "f");
+        RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[2], "W+Jets", "f");
+        RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[2], "W+Jets", "f");
+        RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[2], "W+Jets", "f");
+
         RP_pT->AddLegendEntry(h_bkg_pT[3], "t#bar{t}", "f");
-        RP_eta->AddLegendEntry(h_bkg_eta[3], "t#bar{t}", "f");
-        RP_phi->AddLegendEntry(h_bkg_phi[3], "t#bar{t}", "f");
-        RP_Pt->AddLegendEntry(h_bkg_Pt[4], "DY#rightarrow #tau#tau", "f");
-        RP_rapi->AddLegendEntry(h_bkg_rapi[4], "DY#rightarrow #tau#tau", "f");
+        RP_rapi->AddLegendEntry(h_bkg_rapi[3], "t#bar{t}", "f");
+        RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[3], "t#bar{t}", "f");
+        RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[3], "t#bar{t}", "f");
+        RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[3], "t#bar{t}", "f");
+        RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[3], "t#bar{t}", "f");
+        RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[3], "t#bar{t}", "f");
+        RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[3], "t#bar{t}", "f");
+        RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[3], "t#bar{t}", "f");
+        RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[3], "t#bar{t}", "f");
+        RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[3], "t#bar{t}", "f");
+        RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[3], "t#bar{t}", "f");
+        RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[3], "t#bar{t}", "f");
+        RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[3], "t#bar{t}", "f");
+        RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[3], "t#bar{t}", "f");
+        RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[3], "t#bar{t}", "f");
+        RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[3], "t#bar{t}", "f");
+        RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[3], "t#bar{t}", "f");
+        RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[3], "t#bar{t}", "f");
+        RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[3], "t#bar{t}", "f");
+
         RP_pT->AddLegendEntry(h_bkg_pT[4], "DY#rightarrow #tau#tau", "f");
-        RP_eta->AddLegendEntry(h_bkg_eta[4], "DY#rightarrow #tau#tau", "f");
-        RP_phi->AddLegendEntry(h_bkg_phi[4], "DY#rightarrow #tau#tau", "f");
+        RP_rapi->AddLegendEntry(h_bkg_rapi[4], "DY#rightarrow #tau#tau", "f");
+        RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[4], "DY#rightarrow #tau#tau", "f");
+        RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[4], "DY#rightarrow #tau#tau", "f");
+        RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[4], "DY#rightarrow #tau#tau", "f");
+        RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[4], "DY#rightarrow #tau#tau", "f");
+        RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[4], "DY#rightarrow #tau#tau", "f");
+        RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[4], "DY#rightarrow #tau#tau", "f");
 
-        RP_Pt->Draw(0.5, 3e6, 0);
-        RP_rapi->Draw(0.5, 3e6, 0);
         RP_pT->Draw(0.5, 3e6, 0);
-        RP_eta->Draw(0.5, 3e6, 0);
-        RP_phi->Draw(0.5, 3e6, 0);
-//        Double_t dataerror, MCerror;
-//        Double_t dataintegral = h_data_mass->IntegralAndError(1, h_data_mass->GetSize()-2, dataerror);
-//        Double_t MCintegral = ((TH1D*)(s_mass->GetStack()->Last()))->IntegralAndError(1, h_data_mass->GetSize()-2, MCerror);
-
-//        std::cout << "data events: " << dataintegral << "+-" << dataerror << endl;
-//        std::cout << "MC events: " << MCintegral << "+-" << MCerror << endl;
+        RP_rapi->Draw(0.5, 3e6, 0);
+        RP_pT_lead_before_PUCorr->Draw(0.5, 3e6, 0);
+        RP_pT_lead_before_EffCorr->Draw(0.5, 3e6, 0);
+        RP_pT_lead->Draw(0.5, 3e6, 0);
+        RP_pT_sublead_before_PUCorr->Draw(0.5, 3e6, 0);
+        RP_pT_sublead_before_EffCorr->Draw(0.5, 3e6, 0);
+        RP_pT_sublead->Draw(0.5, 3e6, 0);
+        RP_eta_lead_before_PUCorr->Draw(0.5, 3e6, 0);
+        RP_eta_lead_before_EffCorr->Draw(0.5, 3e6, 0);
+        RP_eta_lead->Draw(0.5, 3e6, 0);
+        RP_eta_sublead_before_PUCorr->Draw(0.5, 3e6, 0);
+        RP_eta_sublead_before_EffCorr->Draw(0.5, 3e6, 0);
+        RP_eta_sublead->Draw(0.5, 3e6, 0);
+        RP_phi_lead_before_PUCorr->Draw(0.5, 3e6, 0);
+        RP_phi_lead_before_EffCorr->Draw(0.5, 3e6, 0);
+        RP_phi_lead->Draw(0.5, 3e6, 0);
+        RP_phi_sublead_before_PUCorr->Draw(0.5, 3e6, 0);
+        RP_phi_sublead_before_EffCorr->Draw(0.5, 3e6, 0);
+        RP_phi_sublead->Draw(0.5, 3e6, 0);
 
     } // End of if(Pt, rapi, pT, eta, phi)
 
-//################################# nPU #################################################
+//################################# nVTX #################################################
 
-    if( whichGraphs=="ALL" || whichGraphs=="NPU" || whichGraphs=="NPV" || whichGraphs.Contains("PILEUP") )
+    if( whichGraphs=="ALL" || whichGraphs=="nVTX" || whichGraphs=="NPV" || whichGraphs.Contains("PILEUP") )
     {
         count_drawn++;
 
-        THStack *s_nPU_before_PUCorr, *s_nPU_before_EffCorr, *s_nPU;
-        s_nPU_before_PUCorr = new THStack("s_nPU_before_PUCorr", "");
-        s_nPU_before_EffCorr = new THStack("s_nPU_before_EffCorr", "");
-        s_nPU = new THStack("s_nPU", "");
+        THStack *s_nVTX_before_PUCorr, *s_nVTX_before_EffCorr, *s_nVTX;
+        s_nVTX_before_PUCorr = new THStack("s_nVTX_before_PUCorr", "");
+        s_nVTX_before_EffCorr = new THStack("s_nVTX_before_EffCorr", "");
+        s_nVTX = new THStack("s_nVTX", "");
 
 //----------------------------------- MC bkg -------------------------------------------------------
-        TH1D *h_bkg_nPU_before_PUCorr[5], *h_bkg_nPU_before_EffCorr[5], *h_bkg_nPU[5];
+        TH1D *h_bkg_nVTX_before_PUCorr[5], *h_bkg_nVTX_before_EffCorr[5], *h_bkg_nVTX[5];
         Int_t iter = 0;
 
         for ( SelProc_t pr = _EE_QCDEMEnriched_Full; pr > _EE_DY_Full; pr=SelProc_t((int)(pr-1)) )
@@ -604,48 +1087,48 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
                 break;
             }
 
-            f_bkg->GetObject( "h_nPU_before_PUCorr_"+Mgr.Procname[pr], h_bkg_nPU_before_PUCorr[iter] );
-            f_bkg->GetObject( "h_nPU_before_EffCorr_"+Mgr.Procname[pr], h_bkg_nPU_before_EffCorr[iter] );
-            f_bkg->GetObject( "h_nPU_"+Mgr.Procname[pr], h_bkg_nPU[iter] );
+            f_bkg->GetObject( "h_nVTX_before_PUCorr_"+Mgr.Procname[pr], h_bkg_nVTX_before_PUCorr[iter] );
+            f_bkg->GetObject( "h_nVTX_before_EffCorr_"+Mgr.Procname[pr], h_bkg_nVTX_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_nVTX_"+Mgr.Procname[pr], h_bkg_nVTX[iter] );
 
-            h_bkg_nPU_before_PUCorr[iter]->SetFillColor(iter+2);
-            h_bkg_nPU_before_EffCorr[iter]->SetFillColor(iter+2);
-            h_bkg_nPU[iter]->SetFillColor(iter+2);
+            h_bkg_nVTX_before_PUCorr[iter]->SetFillColor(iter+2);
+            h_bkg_nVTX_before_EffCorr[iter]->SetFillColor(iter+2);
+            h_bkg_nVTX[iter]->SetFillColor(iter+2);
 
-            h_bkg_nPU_before_PUCorr[iter]->SetLineColor(iter+2);
-            h_bkg_nPU_before_EffCorr[iter]->SetLineColor(iter+2);
-            h_bkg_nPU[iter]->SetLineColor(iter+2);
+            h_bkg_nVTX_before_PUCorr[iter]->SetLineColor(iter+2);
+            h_bkg_nVTX_before_EffCorr[iter]->SetLineColor(iter+2);
+            h_bkg_nVTX[iter]->SetLineColor(iter+2);
 
-            h_bkg_nPU_before_PUCorr[iter]->SetDirectory(0);
-            h_bkg_nPU_before_EffCorr[iter]->SetDirectory(0);
-            h_bkg_nPU[iter]->SetDirectory(0);
+            h_bkg_nVTX_before_PUCorr[iter]->SetDirectory(0);
+            h_bkg_nVTX_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_nVTX[iter]->SetDirectory(0);
 
-            s_nPU_before_PUCorr->Add( h_bkg_nPU_before_PUCorr[iter] );
-            s_nPU_before_EffCorr->Add( h_bkg_nPU_before_EffCorr[iter] );
-            s_nPU->Add( h_bkg_nPU[iter] );
+            s_nVTX_before_PUCorr->Add( h_bkg_nVTX_before_PUCorr[iter] );
+            s_nVTX_before_EffCorr->Add( h_bkg_nVTX_before_EffCorr[iter] );
+            s_nVTX->Add( h_bkg_nVTX[iter] );
 
             if ( iter == 1 )
             {   // ---- WJETS ---- //
                 iter++;
-                f_bkg->GetObject( "h_nPU_before_PUCorr_"+Mgr.Procname[_EE_WJets], h_bkg_nPU_before_PUCorr[iter] );
-                f_bkg->GetObject( "h_nPU_before_EffCorr_"+Mgr.Procname[_EE_WJets], h_bkg_nPU_before_EffCorr[iter] );
-                f_bkg->GetObject( "h_nPU_"+Mgr.Procname[_EE_WJets], h_bkg_nPU[iter] );
+                f_bkg->GetObject( "h_nVTX_before_PUCorr_"+Mgr.Procname[_EE_WJets], h_bkg_nVTX_before_PUCorr[iter] );
+                f_bkg->GetObject( "h_nVTX_before_EffCorr_"+Mgr.Procname[_EE_WJets], h_bkg_nVTX_before_EffCorr[iter] );
+                f_bkg->GetObject( "h_nVTX_"+Mgr.Procname[_EE_WJets], h_bkg_nVTX[iter] );
 
-                h_bkg_nPU_before_PUCorr[iter]->SetFillColor(iter+2);
-                h_bkg_nPU_before_EffCorr[iter]->SetFillColor(iter+2);
-                h_bkg_nPU[iter]->SetFillColor(iter+2);
+                h_bkg_nVTX_before_PUCorr[iter]->SetFillColor(iter+2);
+                h_bkg_nVTX_before_EffCorr[iter]->SetFillColor(iter+2);
+                h_bkg_nVTX[iter]->SetFillColor(iter+2);
 
-                h_bkg_nPU_before_PUCorr[iter]->SetLineColor(iter+2);
-                h_bkg_nPU_before_EffCorr[iter]->SetLineColor(iter+2);
-                h_bkg_nPU[iter]->SetLineColor(iter+2);
+                h_bkg_nVTX_before_PUCorr[iter]->SetLineColor(iter+2);
+                h_bkg_nVTX_before_EffCorr[iter]->SetLineColor(iter+2);
+                h_bkg_nVTX[iter]->SetLineColor(iter+2);
 
-                h_bkg_nPU_before_PUCorr[iter]->SetDirectory(0);
-                h_bkg_nPU_before_EffCorr[iter]->SetDirectory(0);
-                h_bkg_nPU[iter]->SetDirectory(0);
+                h_bkg_nVTX_before_PUCorr[iter]->SetDirectory(0);
+                h_bkg_nVTX_before_EffCorr[iter]->SetDirectory(0);
+                h_bkg_nVTX[iter]->SetDirectory(0);
 
-                s_nPU_before_PUCorr->Add( h_bkg_nPU_before_PUCorr[iter] );
-                s_nPU_before_EffCorr->Add( h_bkg_nPU_before_EffCorr[iter] );
-                s_nPU->Add( h_bkg_nPU[iter] );
+                s_nVTX_before_PUCorr->Add( h_bkg_nVTX_before_PUCorr[iter] );
+                s_nVTX_before_EffCorr->Add( h_bkg_nVTX_before_EffCorr[iter] );
+                s_nVTX->Add( h_bkg_nVTX[iter] );
 
             } // End of WJets
 
@@ -654,100 +1137,89 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
 
 //---------------------------------- MC signal -----------------------------------------------------
 
-        TH1D *h_DY_nPU_before_PUCorr, *h_DY_nPU_before_EffCorr, *h_DY_nPU;
+        TH1D *h_DY_nVTX_before_PUCorr, *h_DY_nVTX_before_EffCorr, *h_DY_nVTX;
 
-        f_DY->GetObject( "h_nPU_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_nPU_before_PUCorr );
-        f_DY->GetObject( "h_nPU_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_nPU_before_EffCorr );
-        f_DY->GetObject( "h_nPU_"+Mgr.Procname[_EE_DY_Full], h_DY_nPU );
+        f_DY->GetObject( "h_nVTX_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_nVTX_before_PUCorr );
+        f_DY->GetObject( "h_nVTX_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_nVTX_before_EffCorr );
+        f_DY->GetObject( "h_nVTX_"+Mgr.Procname[_EE_DY_Full], h_DY_nVTX );
 
-        h_DY_nPU_before_PUCorr->SetFillColor(kOrange);
-        h_DY_nPU_before_EffCorr->SetFillColor(kOrange);
-        h_DY_nPU->SetFillColor(kOrange);
+        h_DY_nVTX_before_PUCorr->SetFillColor(kOrange);
+        h_DY_nVTX_before_EffCorr->SetFillColor(kOrange);
+        h_DY_nVTX->SetFillColor(kOrange);
 
-        h_DY_nPU_before_PUCorr->SetLineColor(kOrange);
-        h_DY_nPU_before_EffCorr->SetLineColor(kOrange);
-        h_DY_nPU->SetLineColor(kOrange);
+        h_DY_nVTX_before_PUCorr->SetLineColor(kOrange);
+        h_DY_nVTX_before_EffCorr->SetLineColor(kOrange);
+        h_DY_nVTX->SetLineColor(kOrange);
 
-        h_DY_nPU_before_PUCorr->SetDirectory(0);
-        h_DY_nPU_before_EffCorr->SetDirectory(0);
-        h_DY_nPU->SetDirectory(0);
+        h_DY_nVTX_before_PUCorr->SetDirectory(0);
+        h_DY_nVTX_before_EffCorr->SetDirectory(0);
+        h_DY_nVTX->SetDirectory(0);
 
-        s_nPU_before_PUCorr->Add( h_DY_nPU_before_PUCorr );
-        s_nPU_before_EffCorr->Add( h_DY_nPU_before_EffCorr );
-        s_nPU->Add( h_DY_nPU );
+        s_nVTX_before_PUCorr->Add( h_DY_nVTX_before_PUCorr );
+        s_nVTX_before_EffCorr->Add( h_DY_nVTX_before_EffCorr );
+        s_nVTX->Add( h_DY_nVTX );
 
 //--------------------------------------- DATA -----------------------------------------------------
 
-        TH1D *h_data_nPU;
-        TH1D *h_ones = new TH1D( "ones", "", 75, 0, 75 );
-        for ( int i=0; i<=75; i++ )
-        {
-            h_ones->Fill(i);
-        }
+        TH1D *h_data_nVTX;
+        Mgr.SetProc(_EE_DoubleEG_Full);
+//        Mgr.SetProc(_EE_SingleElectron_Full);
 
-        f_PileUp->GetObject( "pileup", h_data_nPU );
+        f_data->GetObject( "h_nVTX_"+Mgr.Procname[Mgr.CurrentProc], h_data_nVTX );
 
-        h_data_nPU->Multiply( h_ones, h_data_nPU, 1, dataintegral );
+        h_data_nVTX->SetMarkerStyle(kFullDotLarge);
+        h_data_nVTX->SetMarkerColor(kBlack);
+        h_data_nVTX->SetLineColor(kBlack);
 
-        h_data_nPU->SetMarkerStyle(kFullDotLarge);
-        h_data_nPU->SetMarkerColor(kBlack);
-        h_data_nPU->SetLineColor(kBlack);
-
-        h_data_nPU->SetDirectory(0);
+        h_data_nVTX->SetDirectory(0);
 
 //--------------------------------- Ratio Plot --------------------------------------
 
-        myRatioPlot_t *RP_nPU_before_PUCorr, *RP_nPU_before_EffCorr, *RP_nPU;
-        RP_nPU_before_PUCorr = new myRatioPlot_t( "RP_nPU_before_PUCorr", s_nPU_before_PUCorr, h_data_nPU );
-        RP_nPU_before_EffCorr = new myRatioPlot_t( "RP_nPU_before_EffCorr", s_nPU_before_EffCorr, h_data_nPU );
-        RP_nPU = new myRatioPlot_t( "RP_nPU", s_nPU, h_data_nPU );
+        myRatioPlot_t *RP_nVTX_before_PUCorr, *RP_nVTX_before_EffCorr, *RP_nVTX;
+        RP_nVTX_before_PUCorr = new myRatioPlot_t( "RP_nVTX_before_PUCorr", s_nVTX_before_PUCorr, h_data_nVTX );
+        RP_nVTX_before_EffCorr = new myRatioPlot_t( "RP_nVTX_before_EffCorr", s_nVTX_before_EffCorr, h_data_nVTX );
+        RP_nVTX = new myRatioPlot_t( "RP_nVTX", s_nVTX, h_data_nVTX );
 
-        RP_nPU_before_PUCorr->SetPlots("# Primary Vertices (before PU correction)", 0, 50);
-        RP_nPU_before_EffCorr->SetPlots("# Primary Vertices (before Efficiency correction)", 0, 50);
-        RP_nPU->SetPlots("# Primary Vertices", 0, 50);
+        RP_nVTX_before_PUCorr->SetPlots("nVTX (before PU correction)", 0, 50);
+        RP_nVTX_before_EffCorr->SetPlots("nVTX (before Efficiency correction)", 0, 50);
+        RP_nVTX->SetPlots("nVTX", 0, 50);
 
-        RP_nPU_before_PUCorr->SetLegend(0.75, 0.4);
-        RP_nPU_before_EffCorr->SetLegend(0.75, 0.4);
-        RP_nPU->SetLegend(0.75, 0.4);
+        RP_nVTX_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_nVTX_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_nVTX->SetLegend(0.75, 0.4);
 
         // Legend data
-        RP_nPU_before_PUCorr->AddLegendEntry(h_data_nPU, "Data", "lp");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_data_nPU, "Data", "lp");
-        RP_nPU->AddLegendEntry(h_data_nPU, "Data", "lp");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_data_nVTX, "Data", "lp");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_data_nVTX, "Data", "lp");
+        RP_nVTX->AddLegendEntry(h_data_nVTX, "Data", "lp");
 
         // Legend MC signal
-        RP_nPU_before_PUCorr->AddLegendEntry(h_DY_nPU_before_PUCorr, "DY#rightarrow ee", "f");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_DY_nPU_before_EffCorr, "DY#rightarrow ee", "f");
-        RP_nPU->AddLegendEntry(h_DY_nPU, "DY#rightarrow ee", "f");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_DY_nVTX_before_PUCorr, "DY#rightarrow ee", "f");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_DY_nVTX_before_EffCorr, "DY#rightarrow ee", "f");
+        RP_nVTX->AddLegendEntry(h_DY_nVTX, "DY#rightarrow ee", "f");
 
         // Legend MC BKG
-        RP_nPU_before_PUCorr->AddLegendEntry(h_bkg_nPU_before_PUCorr[0], "QCD", "f");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_bkg_nPU_before_EffCorr[0], "QCD", "f");
-        RP_nPU->AddLegendEntry(h_bkg_nPU[0], "QCD", "f");
-        RP_nPU_before_PUCorr->AddLegendEntry(h_bkg_nPU_before_PUCorr[1], "VVnST", "f");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_bkg_nPU_before_EffCorr[1], "VVnST", "f");
-        RP_nPU->AddLegendEntry(h_bkg_nPU[1], "VVnST", "f");
-        RP_nPU_before_PUCorr->AddLegendEntry(h_bkg_nPU_before_PUCorr[2], "W+Jets", "f");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_bkg_nPU_before_EffCorr[2], "W+Jets", "f");
-        RP_nPU->AddLegendEntry(h_bkg_nPU[2], "W+Jets", "f");
-        RP_nPU_before_PUCorr->AddLegendEntry(h_bkg_nPU_before_PUCorr[3], "t#bar{t}", "f");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_bkg_nPU_before_EffCorr[3], "t#bar{t}", "f");
-        RP_nPU->AddLegendEntry(h_bkg_nPU[3], "t#bar{t}", "f");
-        RP_nPU_before_PUCorr->AddLegendEntry(h_bkg_nPU_before_PUCorr[4], "DY#rightarrow #tau#tau", "f");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_bkg_nPU_before_EffCorr[4], "DY#rightarrow #tau#tau", "f");
-        RP_nPU->AddLegendEntry(h_bkg_nPU[4], "DY#rightarrow #tau#tau", "f");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_bkg_nVTX_before_PUCorr[0], "QCD", "f");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_bkg_nVTX_before_EffCorr[0], "QCD", "f");
+        RP_nVTX->AddLegendEntry(h_bkg_nVTX[0], "QCD", "f");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_bkg_nVTX_before_PUCorr[1], "VVnST", "f");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_bkg_nVTX_before_EffCorr[1], "VVnST", "f");
+        RP_nVTX->AddLegendEntry(h_bkg_nVTX[1], "VVnST", "f");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_bkg_nVTX_before_PUCorr[2], "W+Jets", "f");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_bkg_nVTX_before_EffCorr[2], "W+Jets", "f");
+        RP_nVTX->AddLegendEntry(h_bkg_nVTX[2], "W+Jets", "f");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_bkg_nVTX_before_PUCorr[3], "t#bar{t}", "f");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_bkg_nVTX_before_EffCorr[3], "t#bar{t}", "f");
+        RP_nVTX->AddLegendEntry(h_bkg_nVTX[3], "t#bar{t}", "f");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_bkg_nVTX_before_PUCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_bkg_nVTX_before_EffCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_nVTX->AddLegendEntry(h_bkg_nVTX[4], "DY#rightarrow #tau#tau", "f");
 
-        RP_nPU_before_PUCorr->Draw(0.5, 3e6, 0);
-        RP_nPU_before_EffCorr->Draw(0.5, 3e6, 0);
-        RP_nPU->Draw(0.5, 3e6, 0);
-//        Double_t dataerror, MCerror;
-//        Double_t dataintegral = h_data_mass->IntegralAndError(1, h_data_mass->GetSize()-2, dataerror);
-//        Double_t MCintegral = ((TH1D*)(s_mass->GetStack()->Last()))->IntegralAndError(1, h_data_mass->GetSize()-2, MCerror);
+        RP_nVTX_before_PUCorr->Draw(0.5, 3e6, 0);
+        RP_nVTX_before_EffCorr->Draw(0.5, 3e6, 0);
+        RP_nVTX->Draw(0.5, 3e6, 0);
 
-//        std::cout << "data events: " << dataintegral << "+-" << dataerror << endl;
-//        std::cout << "MC events: " << MCintegral << "+-" << MCerror << endl;
-
-    } // End of if(nPU)
+    } // End of if(nVTX)
 
 } // End of EE_HistDrawer()
 
@@ -765,22 +1237,32 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
     LocalFileMgr Mgr;
 
     Mgr.SetProc( _MuMu_DY_Full );
-    TString name_DY = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root";
+    TString name_DY = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_DY_Full]+"_roccor.root";
     TFile* f_DY = new TFile( name_DY, "READ" );
     cout << "Hists location: " << Mgr.HistLocation << endl;
-    if (f_DY->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root" << " opened successfully" << endl;
+    if (f_DY->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_DY_Full]+"_roccor.root" << " opened successfully" << endl;
     Mgr.SetProc( _MuMu_Bkg_Full );
-    TString name_bkg = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root";
+    TString name_bkg = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+"_roccor.root";
     TFile* f_bkg = new TFile( name_bkg, "READ" );
-    if (f_bkg->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root" << " opened successfully" << endl;
+    if (f_bkg->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+"_roccor.root" << " opened successfully" << endl;
     Mgr.SetProc( _MuMu_SingleMuon_Full );
-    TString name_data = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+".root";
+    TString name_data = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+"_roccor.root";
     TFile* f_data = new TFile( name_data, "READ" );
-    if (f_data->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+".root" << " opened successfully" << endl;
-    TString name_PileUp = "./etc/PileUp/80X/ROOTFile_PUReWeight_80X_v20170817_64mb.root";
-    TFile *f_PileUp = new TFile( name_PileUp, "READ" );
-    if (f_PileUp->IsOpen()) std::cout << "File " << "ROOTFile_PUReWeight_80X_v20170817_64mb.root" << " opened successfully" << endl;
+    if (f_data->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+"_roccor.root" << " opened successfully" << endl;
 
+    // Files without Rochester correction
+    Mgr.SetProc( _MuMu_DY_Full );
+    TString name_DY_noRC = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root";
+    TFile* f_DY_noRC = new TFile( name_DY_noRC, "READ" );
+    if (f_DY_noRC->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root" << " opened successfully" << endl;
+    Mgr.SetProc( _MuMu_Bkg_Full );
+    TString name_bkg_noRC = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root";
+    TFile* f_bkg_noRC = new TFile( name_bkg_noRC, "READ" );
+    if (f_bkg_noRC->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root" << " opened successfully" << endl;
+    Mgr.SetProc( _MuMu_SingleMuon_Full );
+    TString name_data_noRC = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+".root";
+    TFile* f_data_noRC = new TFile( name_data_noRC, "READ" );
+    if (f_data_noRC->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+".root" << " opened successfully" << endl;
 
     Double_t dataerror, MCerror, dataintegral=2.25081e+07, MCintegral;
 
@@ -798,7 +1280,7 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         s_mass = new THStack("s_mass", "");
 
 //----------------------------------- MC bkg -------------------------------------------------------
-        TH1D *h_bkg_mass_fine_before_PUCorr[5], *h_bkg_mass_fine_before_EffCorr[5], *h_bkg_mass_fine_before_RoccoR[5],
+        TH1D *h_bkg_mass_fine_before_PUCorr[5], *h_bkg_mass_fine_before_RoccoR[5], *h_bkg_mass_fine_before_EffCorr[5],
              *h_bkg_mass_fine[5], *h_bkg_mass[5];
         Int_t iter = 0;
 
@@ -810,8 +1292,8 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
                 break;
             }
 
-            f_bkg->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_PUCorr[iter] );
-            f_bkg->GetObject( "h_mass_fine_before_RoccoR_"+Mgr.Procname[pr], h_bkg_mass_fine_before_RoccoR[iter] );
+            f_bkg_noRC->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_PUCorr[iter] );
+            f_bkg_noRC->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_RoccoR[iter] );
             f_bkg->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_EffCorr[iter] );
             f_bkg->GetObject( "h_mass_fine_"+Mgr.Procname[pr], h_bkg_mass_fine[iter] );
             f_bkg->GetObject( "h_mass_"+Mgr.Procname[pr], h_bkg_mass[iter] );
@@ -843,8 +1325,8 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
             if ( iter == 1 )
             {   // ---- WJETS ---- //
                 iter++;
-                f_bkg->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_mass_fine_before_PUCorr[iter] );
-                f_bkg->GetObject( "h_mass_fine_before_RoccoR_"+Mgr.Procname[_MuMu_WJets], h_bkg_mass_fine_before_RoccoR[iter] );
+                f_bkg_noRC->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_mass_fine_before_PUCorr[iter] );
+                f_bkg_noRC->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_mass_fine_before_RoccoR[iter] );
                 f_bkg->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_mass_fine_before_EffCorr[iter] );
                 f_bkg->GetObject( "h_mass_fine_"+Mgr.Procname[_MuMu_WJets], h_bkg_mass_fine[iter] );
                 f_bkg->GetObject( "h_mass_"+Mgr.Procname[_MuMu_WJets], h_bkg_mass[iter] );
@@ -882,8 +1364,8 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
 
         TH1D *h_DY_mass_fine_before_PUCorr, *h_DY_mass_fine_before_RoccoR, *h_DY_mass_fine_before_EffCorr, *h_DY_mass_fine, *h_DY_mass;
 
-        f_DY->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_fine_before_PUCorr );
-        f_DY->GetObject( "h_mass_fine_before_RoccoR_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_fine_before_RoccoR );
+        f_DY_noRC->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_fine_before_PUCorr );
+        f_DY_noRC->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_fine_before_RoccoR );
         f_DY->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_fine_before_EffCorr );
         f_DY->GetObject( "h_mass_fine_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_fine );
         f_DY->GetObject( "h_mass_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass );
@@ -916,8 +1398,8 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
 
         TH1D *h_data_mass_fine_before_PUCorr, *h_data_mass_fine_before_RoccoR, *h_data_mass_fine_before_EffCorr, *h_data_mass_fine, *h_data_mass;
 
-        f_data->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_fine_before_PUCorr );
-        f_data->GetObject( "h_mass_fine_before_RoccoR_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_fine_before_RoccoR );
+        f_data_noRC->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_fine_before_PUCorr );
+        f_data_noRC->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_fine_before_RoccoR );
         f_data->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_fine_before_EffCorr );
         f_data->GetObject( "h_mass_fine_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_fine );
         f_data->GetObject( "h_mass_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass );
@@ -957,7 +1439,7 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
 
         RP_mass_fine_before_PUCorr->SetPlots("Dimuon invariant mass [GeV/c^{2}] (before PU correction)", 15, 3000);
         RP_mass_fine_before_RoccoR->SetPlots("Dimuon invariant mass [GeV/c^{2}] (before Rochester correction)", 15, 3000);
-        RP_mass_fine_before_EffCorr->SetPlots("Dimuon invariant mass [GeV/c^{2}] (before Efficiency correction)", 15, 3000);
+        RP_mass_fine_before_EffCorr->SetPlots("Dimuon invariant mass [GeV/c^{2}] (before Efficiency SF)", 15, 3000);
         RP_mass_fine->SetPlots("Dimuon invariant mass [GeV/c^{2}]", 15, 3000);
         RP_mass->SetPlots("Dimuon invariant mass [GeV/c^{2}]", 15, 3000);
 
@@ -1028,15 +1510,46 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
     {
         count_drawn++;
 
-        THStack *s_Pt, *s_rapi, *s_pT, *s_eta, *s_phi;
-        s_Pt = new THStack("s_Pt", "");
-        s_rapi = new THStack("s_rapi", "");
-        s_pT = new THStack("s_pT", "");
-        s_eta = new THStack("s_eta", "");
-        s_phi = new THStack("s_phi", "");
+        THStack *s_pT, *s_rapi;
+        s_rapi = new THStack( "s_rapi", "" );
+        s_pT = new THStack( "s_pT", "" );
+
+        THStack *s_pT_lead_before_PUCorr = new THStack( "s_pT_lead_before_PUCorr", "" );
+        THStack *s_pT_sublead_before_PUCorr = new THStack( "s_pT_sublead_before_PUCorr", "" );
+        THStack *s_eta_lead_before_PUCorr = new THStack( "s_eta_lead_before_PUCorr", "" );
+        THStack *s_eta_sublead_before_PUCorr = new THStack( "s_eta_sublead_before_PUCorr", "" );
+        THStack *s_phi_lead_before_PUCorr = new THStack( "s_phi_lead_before_PUCorr", "" );
+        THStack *s_phi_sublead_before_PUCorr = new THStack( "s_phi_sublead_before_PUCorr", "" );
+
+        THStack *s_pT_lead_before_RoccoR = new THStack( "s_pT_lead_before_RoccoR", "" );
+        THStack *s_pT_sublead_before_RoccoR = new THStack( "s_pT_sublead_before_RoccoR", "" );
+        THStack *s_eta_lead_before_RoccoR = new THStack( "s_eta_lead_before_RoccoR", "" );
+        THStack *s_eta_sublead_before_RoccoR = new THStack( "s_eta_sublead_before_RoccoR", "" );
+        THStack *s_phi_lead_before_RoccoR = new THStack( "s_phi_lead_before_RoccoR", "" );
+        THStack *s_phi_sublead_before_RoccoR = new THStack( "s_phi_sublead_before_RoccoR", "" );
+
+        THStack *s_pT_lead_before_EffCorr = new THStack( "s_pT_lead_before_EffCorr", "" );
+        THStack *s_pT_sublead_before_EffCorr = new THStack( "s_pT_sublead_before_EffCorr", "" );
+        THStack *s_eta_lead_before_EffCorr = new THStack( "s_eta_lead_before_EffCorr", "" );
+        THStack *s_eta_sublead_before_EffCorr = new THStack( "s_eta_sublead_before_EffCorr", "" );
+        THStack *s_phi_lead_before_EffCorr = new THStack( "s_phi_lead_before_EffCorr", "" );
+        THStack *s_phi_sublead_before_EffCorr = new THStack( "s_phi_sublead_before_EffCorr", "" );
+
+        THStack *s_pT_lead = new THStack( "s_pT_lead", "" );
+        THStack *s_pT_sublead = new THStack( "s_pT_sublead", "" );
+        THStack *s_eta_lead = new THStack( "s_eta_lead", "" );
+        THStack *s_eta_sublead = new THStack( "s_eta_sublead", "" );
+        THStack *s_phi_lead = new THStack( "s_phi_lead", "" );
+        THStack *s_phi_sublead = new THStack( "s_phi_sublead", "" );
 
 //----------------------------------- MC bkg -------------------------------------------------------
-        TH1D *h_bkg_Pt[5], *h_bkg_rapi[5], *h_bkg_pT[5], *h_bkg_eta[5], *h_bkg_phi[5];
+
+        TH1D *h_bkg_pT[5], *h_bkg_rapi[5], *h_bkg_pT_lead_before_PUCorr[5], *h_bkg_pT_lead_before_RoccoR[5], *h_bkg_pT_lead_before_EffCorr[5], *h_bkg_pT_lead[5],
+             *h_bkg_pT_sublead_before_PUCorr[5],*h_bkg_pT_sublead_before_RoccoR[5],  *h_bkg_pT_sublead_before_EffCorr[5], *h_bkg_pT_sublead[5],
+             *h_bkg_eta_lead_before_PUCorr[5], *h_bkg_eta_lead_before_RoccoR[5], *h_bkg_eta_lead_before_EffCorr[5], *h_bkg_eta_lead[5],
+             *h_bkg_eta_sublead_before_PUCorr[5], *h_bkg_eta_sublead_before_RoccoR[5], *h_bkg_eta_sublead_before_EffCorr[5], *h_bkg_eta_sublead[5],
+             *h_bkg_phi_lead_before_PUCorr[5], *h_bkg_phi_lead_before_RoccoR[5], *h_bkg_phi_lead_before_EffCorr[5], *h_bkg_phi_lead[5],
+             *h_bkg_phi_sublead_before_PUCorr[5], *h_bkg_phi_sublead_before_RoccoR[5], *h_bkg_phi_sublead_before_EffCorr[5], *h_bkg_phi_sublead[5];
         Int_t iter = 0;
 
         for ( SelProc_t pr = _MuMu_QCDMuEnriched_Full; pr > _MuMu_DY_Full; pr=SelProc_t((int)(pr-1)) )
@@ -1047,75 +1560,284 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
                 break;
             }
 
-            f_bkg->GetObject( "h_Pt_"+Mgr.Procname[pr], h_bkg_Pt[iter] );
-            f_bkg->GetObject( "h_rapi_"+Mgr.Procname[pr], h_bkg_rapi[iter] );
             f_bkg->GetObject( "h_pT_"+Mgr.Procname[pr], h_bkg_pT[iter] );
-            f_bkg->GetObject( "h_eta_"+Mgr.Procname[pr], h_bkg_eta[iter] );
-            f_bkg->GetObject( "h_phi_"+Mgr.Procname[pr], h_bkg_phi[iter] );
+            f_bkg->GetObject( "h_rapi_"+Mgr.Procname[pr], h_bkg_rapi[iter] );
+            f_bkg_noRC->GetObject( "h_pT_lead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_pT_lead_before_PUCorr[iter] );
+            f_bkg_noRC->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_pT_lead_before_RoccoR[iter] );
+            f_bkg->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_pT_lead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_pT_lead_"+Mgr.Procname[pr], h_bkg_pT_lead[iter] );
+            f_bkg_noRC->GetObject( "h_pT_sublead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_pT_sublead_before_PUCorr[iter] );
+            f_bkg_noRC->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_pT_sublead_before_RoccoR[iter] );
+            f_bkg->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_pT_sublead_before_EffCorr[iter] );
+            f_bkg->GetObject( "g_pT_sublead_"+Mgr.Procname[pr], h_bkg_pT_sublead[iter] );
+            f_bkg_noRC->GetObject( "h_eta_lead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_eta_lead_before_PUCorr[iter] );
+            f_bkg_noRC->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_eta_lead_before_RoccoR[iter] );
+            f_bkg->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_eta_lead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_eta_lead_"+Mgr.Procname[pr], h_bkg_eta_lead[iter] );
+            f_bkg_noRC->GetObject( "h_eta_sublead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_PUCorr[iter] );
+            f_bkg_noRC->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_RoccoR[iter] );
+            f_bkg->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_eta_sublead_"+Mgr.Procname[pr], h_bkg_eta_sublead[iter] );
+            f_bkg_noRC->GetObject( "h_phi_lead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_PUCorr[iter] );
+            f_bkg_noRC->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_RoccoR[iter] );
+            f_bkg->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_phi_lead_"+Mgr.Procname[pr], h_bkg_phi_lead[iter] );
+            f_bkg_noRC->GetObject( "h_phi_sublead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_PUCorr[iter] );
+            f_bkg_noRC->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_RoccoR[iter] );
+            f_bkg->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_phi_sublead_"+Mgr.Procname[pr], h_bkg_phi_sublead[iter] );
 
-            h_bkg_Pt[iter]->SetFillColor(iter+2);
-            h_bkg_rapi[iter]->SetFillColor(iter+2);
             h_bkg_pT[iter]->SetFillColor(iter+2);
-            h_bkg_eta[iter]->SetFillColor(iter+2);
-            h_bkg_phi[iter]->SetFillColor(iter+2);
+            h_bkg_rapi[iter]->SetFillColor(iter+2);
+            h_bkg_pT_lead_before_PUCorr[iter]->SetFillColor(iter+2);
+            h_bkg_pT_lead_before_RoccoR[iter]->SetFillColor(iter+2);
+            h_bkg_pT_lead_before_EffCorr[iter]->SetFillColor(iter+2);
+            h_bkg_pT_lead[iter]->SetFillColor(iter+2);
+            h_bkg_pT_sublead_before_PUCorr[iter]->SetFillColor(iter+2);
+            h_bkg_pT_sublead_before_RoccoR[iter]->SetFillColor(iter+2);
+            h_bkg_pT_sublead_before_EffCorr[iter]->SetFillColor(iter+2);
+            h_bkg_pT_sublead[iter]->SetFillColor(iter+2);
+            h_bkg_eta_lead_before_PUCorr[iter]->SetFillColor(iter+2);
+            h_bkg_eta_lead_before_RoccoR[iter]->SetFillColor(iter+2);
+            h_bkg_eta_lead_before_EffCorr[iter]->SetFillColor(iter+2);
+            h_bkg_eta_lead[iter]->SetFillColor(iter+2);
+            h_bkg_eta_sublead_before_PUCorr[iter]->SetFillColor(iter+2);
+            h_bkg_eta_sublead_before_RoccoR[iter]->SetFillColor(iter+2);
+            h_bkg_eta_sublead_before_EffCorr[iter]->SetFillColor(iter+2);
+            h_bkg_eta_sublead[iter]->SetFillColor(iter+2);
+            h_bkg_phi_lead_before_PUCorr[iter]->SetFillColor(iter+2);
+            h_bkg_phi_lead_before_RoccoR[iter]->SetFillColor(iter+2);
+            h_bkg_phi_lead_before_EffCorr[iter]->SetFillColor(iter+2);
+            h_bkg_phi_lead[iter]->SetFillColor(iter+2);
+            h_bkg_phi_sublead_before_PUCorr[iter]->SetFillColor(iter+2);
+            h_bkg_phi_sublead_before_RoccoR[iter]->SetFillColor(iter+2);
+            h_bkg_phi_sublead_before_EffCorr[iter]->SetFillColor(iter+2);
+            h_bkg_phi_sublead[iter]->SetFillColor(iter+2);
 
-            h_bkg_Pt[iter]->SetLineColor(iter+2);
-            h_bkg_rapi[iter]->SetLineColor(iter+2);
             h_bkg_pT[iter]->SetLineColor(iter+2);
-            h_bkg_eta[iter]->SetLineColor(iter+2);
-            h_bkg_phi[iter]->SetLineColor(iter+2);
+            h_bkg_rapi[iter]->SetLineColor(iter+2);
+            h_bkg_pT_lead_before_PUCorr[iter]->SetLineColor(iter+2);
+            h_bkg_pT_lead_before_RoccoR[iter]->SetLineColor(iter+2);
+            h_bkg_pT_lead_before_EffCorr[iter]->SetLineColor(iter+2);
+            h_bkg_pT_lead[iter]->SetLineColor(iter+2);
+            h_bkg_pT_sublead_before_PUCorr[iter]->SetLineColor(iter+2);
+            h_bkg_pT_sublead_before_RoccoR[iter]->SetLineColor(iter+2);
+            h_bkg_pT_sublead_before_EffCorr[iter]->SetLineColor(iter+2);
+            h_bkg_pT_sublead[iter]->SetLineColor(iter+2);
+            h_bkg_eta_lead_before_PUCorr[iter]->SetLineColor(iter+2);
+            h_bkg_eta_lead_before_RoccoR[iter]->SetLineColor(iter+2);
+            h_bkg_eta_lead_before_EffCorr[iter]->SetLineColor(iter+2);
+            h_bkg_eta_lead[iter]->SetLineColor(iter+2);
+            h_bkg_eta_sublead_before_PUCorr[iter]->SetLineColor(iter+2);
+            h_bkg_eta_sublead_before_RoccoR[iter]->SetLineColor(iter+2);
+            h_bkg_eta_sublead_before_EffCorr[iter]->SetLineColor(iter+2);
+            h_bkg_eta_sublead[iter]->SetLineColor(iter+2);
+            h_bkg_phi_lead_before_PUCorr[iter]->SetLineColor(iter+2);
+            h_bkg_phi_lead_before_RoccoR[iter]->SetLineColor(iter+2);
+            h_bkg_phi_lead_before_EffCorr[iter]->SetLineColor(iter+2);
+            h_bkg_phi_lead[iter]->SetLineColor(iter+2);
+            h_bkg_phi_sublead_before_PUCorr[iter]->SetLineColor(iter+2);
+            h_bkg_phi_sublead_before_RoccoR[iter]->SetLineColor(iter+2);
+            h_bkg_phi_sublead_before_EffCorr[iter]->SetLineColor(iter+2);
+            h_bkg_phi_sublead[iter]->SetLineColor(iter+2);
 
-
-            h_bkg_Pt[iter]->SetDirectory(0);
-            h_bkg_rapi[iter]->SetDirectory(0);
             h_bkg_pT[iter]->SetDirectory(0);
-            h_bkg_eta[iter]->SetDirectory(0);
-            h_bkg_phi[iter]->SetDirectory(0);
+            h_bkg_rapi[iter]->SetDirectory(0);
+            h_bkg_pT_lead_before_PUCorr[iter]->SetDirectory(0);
+            h_bkg_pT_lead_before_RoccoR[iter]->SetDirectory(0);
+            h_bkg_pT_lead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_pT_lead[iter]->SetDirectory(0);
+            h_bkg_pT_sublead_before_PUCorr[iter]->SetDirectory(0);
+            h_bkg_pT_sublead_before_RoccoR[iter]->SetDirectory(0);
+            h_bkg_pT_sublead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_pT_sublead[iter]->SetDirectory(0);
+            h_bkg_eta_lead_before_PUCorr[iter]->SetDirectory(0);
+            h_bkg_eta_lead_before_RoccoR[iter]->SetDirectory(0);
+            h_bkg_eta_lead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_eta_lead[iter]->SetDirectory(0);
+            h_bkg_eta_sublead_before_PUCorr[iter]->SetDirectory(0);
+            h_bkg_eta_sublead_before_RoccoR[iter]->SetDirectory(0);
+            h_bkg_eta_sublead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_eta_sublead[iter]->SetDirectory(0);
+            h_bkg_phi_lead_before_PUCorr[iter]->SetDirectory(0);
+            h_bkg_phi_lead_before_RoccoR[iter]->SetDirectory(0);
+            h_bkg_phi_lead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_phi_lead[iter]->SetDirectory(0);
+            h_bkg_phi_sublead_before_PUCorr[iter]->SetDirectory(0);
+            h_bkg_phi_sublead_before_RoccoR[iter]->SetDirectory(0);
+            h_bkg_phi_sublead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_phi_sublead[iter]->SetDirectory(0);
 
 
-            s_Pt->Add( h_bkg_Pt[iter] );
-            s_rapi->Add( h_bkg_rapi[iter] );
             s_pT->Add( h_bkg_pT[iter] );
-            s_eta->Add( h_bkg_eta[iter] );
-            s_phi->Add( h_bkg_phi[iter] );
+            s_rapi->Add( h_bkg_rapi[iter] );
+            s_pT_lead_before_PUCorr->Add( h_bkg_pT_lead_before_PUCorr[iter] );
+            s_pT_lead_before_RoccoR->Add( h_bkg_pT_lead_before_RoccoR[iter] );
+            s_pT_lead_before_EffCorr->Add( h_bkg_pT_lead_before_EffCorr[iter] );
+            s_pT_lead->Add( h_bkg_pT_lead[iter] );
+            s_pT_sublead_before_PUCorr->Add( h_bkg_pT_sublead_before_PUCorr[iter] );
+            s_pT_sublead_before_RoccoR->Add( h_bkg_pT_sublead_before_RoccoR[iter] );
+            s_pT_sublead_before_EffCorr->Add( h_bkg_pT_sublead_before_EffCorr[iter] );
+            s_pT_sublead->Add( h_bkg_pT_sublead[iter] );
+            s_eta_lead_before_PUCorr->Add( h_bkg_eta_lead_before_PUCorr[iter] );
+            s_eta_lead_before_RoccoR->Add( h_bkg_eta_lead_before_RoccoR[iter] );
+            s_eta_lead_before_EffCorr->Add( h_bkg_eta_lead_before_EffCorr[iter] );
+            s_eta_lead->Add( h_bkg_eta_lead[iter] );
+            s_eta_sublead_before_PUCorr->Add( h_bkg_eta_sublead_before_PUCorr[iter] );
+            s_eta_sublead_before_RoccoR->Add( h_bkg_eta_sublead_before_RoccoR[iter] );
+            s_eta_sublead_before_EffCorr->Add( h_bkg_eta_sublead_before_EffCorr[iter] );
+            s_eta_sublead->Add( h_bkg_eta_sublead[iter] );
+            s_phi_lead_before_PUCorr->Add( h_bkg_phi_lead_before_PUCorr[iter] );
+            s_phi_lead_before_RoccoR->Add( h_bkg_phi_lead_before_RoccoR[iter] );
+            s_phi_lead_before_EffCorr->Add( h_bkg_phi_lead_before_EffCorr[iter] );
+            s_phi_lead->Add( h_bkg_phi_lead[iter] );
+            s_phi_sublead_before_PUCorr->Add( h_bkg_phi_sublead_before_PUCorr[iter] );
+            s_phi_sublead_before_RoccoR->Add( h_bkg_phi_sublead_before_RoccoR[iter] );
+            s_phi_sublead_before_EffCorr->Add( h_bkg_phi_sublead_before_EffCorr[iter] );
+            s_phi_sublead->Add( h_bkg_phi_sublead[iter] );
 
 
             if ( iter == 1 )
             {   // ---- WJETS ---- //
                 iter++;
-                f_bkg->GetObject( "h_Pt_"+Mgr.Procname[_MuMu_WJets], h_bkg_Pt[iter] );
-                f_bkg->GetObject( "h_rapi_"+Mgr.Procname[_MuMu_WJets], h_bkg_rapi[iter] );
                 f_bkg->GetObject( "h_pT_"+Mgr.Procname[_MuMu_WJets], h_bkg_pT[iter] );
-                f_bkg->GetObject( "h_eta_"+Mgr.Procname[_MuMu_WJets], h_bkg_eta[iter] );
-                f_bkg->GetObject( "h_phi_"+Mgr.Procname[_MuMu_WJets], h_bkg_phi[iter] );
+                f_bkg->GetObject( "h_rapi_"+Mgr.Procname[_MuMu_WJets], h_bkg_rapi[iter] );
+                f_bkg_noRC->GetObject( "h_pT_lead_before_PUCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_pT_lead_before_PUCorr[iter] );
+                f_bkg_noRC->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_pT_lead_before_RoccoR[iter] );
+                f_bkg->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_pT_lead_before_EffCorr[iter] );
+                f_bkg->GetObject( "h_pT_lead_"+Mgr.Procname[_MuMu_WJets], h_bkg_pT_lead[iter] );
+                f_bkg_noRC->GetObject( "h_pT_sublead_before_PUCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_pT_sublead_before_PUCorr[iter] );
+                f_bkg_noRC->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_pT_sublead_before_RoccoR[iter] );
+                f_bkg->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_pT_sublead_before_EffCorr[iter] );
+                f_bkg->GetObject( "h_pT_sublead_"+Mgr.Procname[_MuMu_WJets], h_bkg_pT_sublead[iter] );
+                f_bkg_noRC->GetObject( "h_eta_lead_before_PUCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_eta_lead_before_PUCorr[iter] );
+                f_bkg_noRC->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_eta_lead_before_RoccoR[iter] );
+                f_bkg->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_eta_lead_before_EffCorr[iter] );
+                f_bkg->GetObject( "h_eta_lead_"+Mgr.Procname[_MuMu_WJets], h_bkg_eta_lead[iter] );
+                f_bkg_noRC->GetObject( "h_eta_sublead_before_PUCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_eta_sublead_before_PUCorr[iter] );
+                f_bkg_noRC->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_eta_sublead_before_RoccoR[iter] );
+                f_bkg->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_eta_sublead_before_EffCorr[iter] );
+                f_bkg->GetObject( "h_eta_sublead_"+Mgr.Procname[_MuMu_WJets], h_bkg_eta_sublead[iter] );
+                f_bkg_noRC->GetObject( "h_phi_lead_before_PUCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_phi_lead_before_PUCorr[iter] );
+                f_bkg_noRC->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_phi_lead_before_RoccoR[iter] );
+                f_bkg->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_phi_lead_before_EffCorr[iter] );
+                f_bkg->GetObject( "h_phi_lead_"+Mgr.Procname[_MuMu_WJets], h_bkg_phi_lead[iter] );
+                f_bkg_noRC->GetObject( "h_phi_sublead_before_PUCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_phi_sublead_before_PUCorr[iter] );
+                f_bkg_noRC->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_phi_sublead_before_RoccoR[iter] );
+                f_bkg->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_phi_sublead_before_EffCorr[iter] );
+                f_bkg->GetObject( "h_phi_sublead_"+Mgr.Procname[_MuMu_WJets], h_bkg_phi_sublead[iter] );
 
 
-                h_bkg_Pt[iter]->SetFillColor(iter+2);
-                h_bkg_rapi[iter]->SetFillColor(iter+2);
                 h_bkg_pT[iter]->SetFillColor(iter+2);
-                h_bkg_eta[iter]->SetFillColor(iter+2);
-                h_bkg_phi[iter]->SetFillColor(iter+2);
+                h_bkg_rapi[iter]->SetFillColor(iter+2);
+                h_bkg_pT_lead_before_PUCorr[iter]->SetFillColor(iter+2);
+                h_bkg_pT_lead_before_RoccoR[iter]->SetFillColor(iter+2);
+                h_bkg_pT_lead_before_EffCorr[iter]->SetFillColor(iter+2);
+                h_bkg_pT_lead[iter]->SetFillColor(iter+2);
+                h_bkg_pT_sublead_before_PUCorr[iter]->SetFillColor(iter+2);
+                h_bkg_pT_sublead_before_RoccoR[iter]->SetFillColor(iter+2);
+                h_bkg_pT_sublead_before_EffCorr[iter]->SetFillColor(iter+2);
+                h_bkg_pT_sublead[iter]->SetFillColor(iter+2);
+                h_bkg_eta_lead_before_PUCorr[iter]->SetFillColor(iter+2);
+                h_bkg_eta_lead_before_RoccoR[iter]->SetFillColor(iter+2);
+                h_bkg_eta_lead_before_EffCorr[iter]->SetFillColor(iter+2);
+                h_bkg_eta_lead[iter]->SetFillColor(iter+2);
+                h_bkg_eta_sublead_before_PUCorr[iter]->SetFillColor(iter+2);
+                h_bkg_eta_sublead_before_RoccoR[iter]->SetFillColor(iter+2);
+                h_bkg_eta_sublead_before_EffCorr[iter]->SetFillColor(iter+2);
+                h_bkg_eta_sublead[iter]->SetFillColor(iter+2);
+                h_bkg_phi_lead_before_PUCorr[iter]->SetFillColor(iter+2);
+                h_bkg_phi_lead_before_RoccoR[iter]->SetFillColor(iter+2);
+                h_bkg_phi_lead_before_EffCorr[iter]->SetFillColor(iter+2);
+                h_bkg_phi_lead[iter]->SetFillColor(iter+2);
+                h_bkg_phi_sublead_before_PUCorr[iter]->SetFillColor(iter+2);
+                h_bkg_phi_sublead_before_RoccoR[iter]->SetFillColor(iter+2);
+                h_bkg_phi_sublead_before_EffCorr[iter]->SetFillColor(iter+2);
+                h_bkg_phi_sublead[iter]->SetFillColor(iter+2);
 
 
-                h_bkg_Pt[iter]->SetLineColor(iter+2);
-                h_bkg_rapi[iter]->SetLineColor(iter+2);
                 h_bkg_pT[iter]->SetLineColor(iter+2);
-                h_bkg_eta[iter]->SetLineColor(iter+2);
-                h_bkg_phi[iter]->SetLineColor(iter+2);
+                h_bkg_rapi[iter]->SetLineColor(iter+2);
+                h_bkg_pT_lead_before_PUCorr[iter]->SetLineColor(iter+2);
+                h_bkg_pT_lead_before_RoccoR[iter]->SetLineColor(iter+2);
+                h_bkg_pT_lead_before_EffCorr[iter]->SetLineColor(iter+2);
+                h_bkg_pT_lead[iter]->SetLineColor(iter+2);
+                h_bkg_pT_sublead_before_PUCorr[iter]->SetLineColor(iter+2);
+                h_bkg_pT_sublead_before_RoccoR[iter]->SetLineColor(iter+2);
+                h_bkg_pT_sublead_before_EffCorr[iter]->SetLineColor(iter+2);
+                h_bkg_pT_sublead[iter]->SetLineColor(iter+2);
+                h_bkg_eta_lead_before_PUCorr[iter]->SetLineColor(iter+2);
+                h_bkg_eta_lead_before_RoccoR[iter]->SetLineColor(iter+2);
+                h_bkg_eta_lead_before_EffCorr[iter]->SetLineColor(iter+2);
+                h_bkg_eta_lead[iter]->SetLineColor(iter+2);
+                h_bkg_eta_sublead_before_PUCorr[iter]->SetLineColor(iter+2);
+                h_bkg_eta_sublead_before_RoccoR[iter]->SetLineColor(iter+2);
+                h_bkg_eta_sublead_before_EffCorr[iter]->SetLineColor(iter+2);
+                h_bkg_eta_sublead[iter]->SetLineColor(iter+2);
+                h_bkg_phi_lead_before_PUCorr[iter]->SetLineColor(iter+2);
+                h_bkg_phi_lead_before_RoccoR[iter]->SetLineColor(iter+2);
+                h_bkg_phi_lead_before_EffCorr[iter]->SetLineColor(iter+2);
+                h_bkg_phi_lead[iter]->SetLineColor(iter+2);
+                h_bkg_phi_sublead_before_PUCorr[iter]->SetLineColor(iter+2);
+                h_bkg_phi_sublead_before_RoccoR[iter]->SetLineColor(iter+2);
+                h_bkg_phi_sublead_before_EffCorr[iter]->SetLineColor(iter+2);
+                h_bkg_phi_sublead[iter]->SetLineColor(iter+2);
 
 
-                h_bkg_Pt[iter]->SetDirectory(0);
-                h_bkg_rapi[iter]->SetDirectory(0);
                 h_bkg_pT[iter]->SetDirectory(0);
-                h_bkg_eta[iter]->SetDirectory(0);
-                h_bkg_phi[iter]->SetDirectory(0);
+                h_bkg_rapi[iter]->SetDirectory(0);
+                h_bkg_pT_lead_before_PUCorr[iter]->SetDirectory(0);
+                h_bkg_pT_lead_before_RoccoR[iter]->SetDirectory(0);
+                h_bkg_pT_lead_before_EffCorr[iter]->SetDirectory(0);
+                h_bkg_pT_lead[iter]->SetDirectory(0);
+                h_bkg_pT_sublead_before_PUCorr[iter]->SetDirectory(0);
+                h_bkg_pT_sublead_before_RoccoR[iter]->SetDirectory(0);
+                h_bkg_pT_sublead_before_EffCorr[iter]->SetDirectory(0);
+                h_bkg_pT_sublead[iter]->SetDirectory(0);
+                h_bkg_eta_lead_before_PUCorr[iter]->SetDirectory(0);
+                h_bkg_eta_lead_before_RoccoR[iter]->SetDirectory(0);
+                h_bkg_eta_lead_before_EffCorr[iter]->SetDirectory(0);
+                h_bkg_eta_lead[iter]->SetDirectory(0);
+                h_bkg_eta_sublead_before_PUCorr[iter]->SetDirectory(0);
+                h_bkg_eta_sublead_before_RoccoR[iter]->SetDirectory(0);
+                h_bkg_eta_sublead_before_EffCorr[iter]->SetDirectory(0);
+                h_bkg_eta_sublead[iter]->SetDirectory(0);
+                h_bkg_phi_lead_before_PUCorr[iter]->SetDirectory(0);
+                h_bkg_phi_lead_before_RoccoR[iter]->SetDirectory(0);
+                h_bkg_phi_lead_before_EffCorr[iter]->SetDirectory(0);
+                h_bkg_phi_lead[iter]->SetDirectory(0);
+                h_bkg_phi_sublead_before_PUCorr[iter]->SetDirectory(0);
+                h_bkg_phi_sublead_before_RoccoR[iter]->SetDirectory(0);
+                h_bkg_phi_sublead_before_EffCorr[iter]->SetDirectory(0);
+                h_bkg_phi_sublead[iter]->SetDirectory(0);
 
 
-                s_Pt->Add( h_bkg_Pt[iter] );
-                s_rapi->Add( h_bkg_rapi[iter] );
                 s_pT->Add( h_bkg_pT[iter] );
-                s_eta->Add( h_bkg_eta[iter] );
-                s_phi->Add( h_bkg_phi[iter] );
+                s_rapi->Add( h_bkg_rapi[iter] );
+                s_pT_lead_before_PUCorr->Add( h_bkg_pT_lead_before_PUCorr[iter] );
+                s_pT_lead_before_RoccoR->Add( h_bkg_pT_lead_before_RoccoR[iter] );
+                s_pT_lead_before_EffCorr->Add( h_bkg_pT_lead_before_EffCorr[iter] );
+                s_pT_lead->Add( h_bkg_pT_lead[iter] );
+                s_pT_sublead_before_PUCorr->Add( h_bkg_pT_sublead_before_PUCorr[iter] );
+                s_pT_sublead_before_RoccoR->Add( h_bkg_pT_sublead_before_RoccoR[iter] );
+                s_pT_sublead_before_EffCorr->Add( h_bkg_pT_sublead_before_EffCorr[iter] );
+                s_pT_sublead->Add( h_bkg_pT_sublead[iter] );
+                s_eta_lead_before_PUCorr->Add( h_bkg_eta_lead_before_PUCorr[iter] );
+                s_eta_lead_before_RoccoR->Add( h_bkg_eta_lead_before_RoccoR[iter] );
+                s_eta_lead_before_EffCorr->Add( h_bkg_eta_lead_before_EffCorr[iter] );
+                s_eta_lead->Add( h_bkg_eta_lead[iter] );
+                s_eta_sublead_before_PUCorr->Add( h_bkg_eta_sublead_before_PUCorr[iter] );
+                s_eta_sublead_before_RoccoR->Add( h_bkg_eta_sublead_before_RoccoR[iter] );
+                s_eta_sublead_before_EffCorr->Add( h_bkg_eta_sublead_before_EffCorr[iter] );
+                s_eta_sublead->Add( h_bkg_eta_sublead[iter] );
+                s_phi_lead_before_PUCorr->Add( h_bkg_phi_lead_before_PUCorr[iter] );
+                s_phi_lead_before_RoccoR->Add( h_bkg_phi_lead_before_RoccoR[iter] );
+                s_phi_lead_before_EffCorr->Add( h_bkg_phi_lead_before_EffCorr[iter] );
+                s_phi_lead->Add( h_bkg_phi_lead[iter] );
+                s_phi_sublead_before_PUCorr->Add( h_bkg_phi_sublead_before_PUCorr[iter] );
+                s_phi_sublead_before_RoccoR->Add( h_bkg_phi_sublead_before_RoccoR[iter] );
+                s_phi_sublead_before_EffCorr->Add( h_bkg_phi_sublead_before_EffCorr[iter] );
+                s_phi_sublead->Add( h_bkg_phi_sublead[iter] );
             } // End of WJets
 
             iter++;
@@ -1123,176 +1845,630 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
 
 //---------------------------------- MC signal -----------------------------------------------------
 
-        TH1D *h_DY_Pt, *h_DY_rapi, *h_DY_pT, *h_DY_eta, *h_DY_phi;
+        TH1D *h_DY_pT, *h_DY_rapi, *h_DY_pT_lead_before_PUCorr, *h_DY_pT_lead_before_RoccoR, *h_DY_pT_lead_before_EffCorr, *h_DY_pT_lead,
+             *h_DY_pT_sublead_before_PUCorr, *h_DY_pT_sublead_before_RoccoR, *h_DY_pT_sublead_before_EffCorr, *h_DY_pT_sublead,
+             *h_DY_eta_lead_before_PUCorr, *h_DY_eta_lead_before_RoccoR, *h_DY_eta_lead_before_EffCorr, *h_DY_eta_lead,
+             *h_DY_eta_sublead_before_PUCorr, *h_DY_eta_sublead_before_RoccoR,*h_DY_eta_sublead_before_EffCorr, *h_DY_eta_sublead,
+             *h_DY_phi_lead_before_PUCorr, *h_DY_phi_lead_before_RoccoR, *h_DY_phi_lead_before_EffCorr, *h_DY_phi_lead,
+             *h_DY_phi_sublead_before_PUCorr, *h_DY_phi_sublead_before_RoccoR, *h_DY_phi_sublead_before_EffCorr, *h_DY_phi_sublead;
 
-        f_DY->GetObject( "h_Pt_"+Mgr.Procname[_MuMu_DY_Full], h_DY_Pt );
-        f_DY->GetObject( "h_rapi_"+Mgr.Procname[_MuMu_DY_Full], h_DY_rapi );
         f_DY->GetObject( "h_pT_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT );
-        f_DY->GetObject( "h_eta_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta );
-        f_DY->GetObject( "h_phi_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi );
+        f_DY->GetObject( "h_rapi_"+Mgr.Procname[_MuMu_DY_Full], h_DY_rapi );
+        f_DY_noRC->GetObject( "h_pT_lead_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_lead_before_PUCorr );
+        f_DY_noRC->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_lead_before_RoccoR );
+        f_DY->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_lead_before_EffCorr );
+        f_DY->GetObject( "h_pT_lead_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_lead );
+        f_DY_noRC->GetObject( "h_pT_sublead_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_sublead_before_PUCorr );
+        f_DY_noRC->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_sublead_before_RoccoR );
+        f_DY->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_sublead_before_EffCorr );
+        f_DY->GetObject( "h_pT_sublead_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_sublead );
+        f_DY_noRC->GetObject( "h_eta_lead_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_lead_before_PUCorr );
+        f_DY_noRC->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_lead_before_RoccoR );
+        f_DY->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_lead_before_EffCorr );
+        f_DY->GetObject( "h_eta_lead_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_lead );
+        f_DY_noRC->GetObject( "h_eta_sublead_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_sublead_before_PUCorr );
+        f_DY_noRC->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_sublead_before_RoccoR );
+        f_DY->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_sublead_before_EffCorr );
+        f_DY->GetObject( "h_eta_sublead_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_sublead );
+        f_DY_noRC->GetObject( "h_phi_lead_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_lead_before_PUCorr );
+        f_DY_noRC->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_lead_before_RoccoR );
+        f_DY->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_lead_before_EffCorr );
+        f_DY->GetObject( "h_phi_lead_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_lead );
+        f_DY_noRC->GetObject( "h_phi_sublead_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_sublead_before_PUCorr );
+        f_DY_noRC->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_sublead_before_RoccoR );
+        f_DY->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_sublead_before_EffCorr );
+        f_DY->GetObject( "h_phi_sublead_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_sublead );
 
 
-        h_DY_Pt->SetFillColor(kOrange);
-        h_DY_rapi->SetFillColor(kOrange);
         h_DY_pT->SetFillColor(kOrange);
-        h_DY_eta->SetFillColor(kOrange);
-        h_DY_phi->SetFillColor(kOrange);
+        h_DY_rapi->SetFillColor(kOrange);
+        h_DY_pT_lead_before_PUCorr->SetFillColor(kOrange);
+        h_DY_pT_lead_before_RoccoR->SetFillColor(kOrange);
+        h_DY_pT_lead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_pT_lead->SetFillColor(kOrange);
+        h_DY_pT_sublead_before_PUCorr->SetFillColor(kOrange);
+        h_DY_pT_sublead_before_RoccoR->SetFillColor(kOrange);
+        h_DY_pT_sublead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_pT_sublead->SetFillColor(kOrange);
+        h_DY_eta_lead_before_PUCorr->SetFillColor(kOrange);
+        h_DY_eta_lead_before_RoccoR->SetFillColor(kOrange);
+        h_DY_eta_lead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_eta_lead->SetFillColor(kOrange);
+        h_DY_eta_sublead_before_PUCorr->SetFillColor(kOrange);
+        h_DY_eta_sublead_before_RoccoR->SetFillColor(kOrange);
+        h_DY_eta_sublead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_eta_sublead->SetFillColor(kOrange);
+        h_DY_phi_lead_before_PUCorr->SetFillColor(kOrange);
+        h_DY_phi_lead_before_RoccoR->SetFillColor(kOrange);
+        h_DY_phi_lead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_phi_lead->SetFillColor(kOrange);
+        h_DY_phi_sublead_before_PUCorr->SetFillColor(kOrange);
+        h_DY_phi_sublead_before_RoccoR->SetFillColor(kOrange);
+        h_DY_phi_sublead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_phi_sublead->SetFillColor(kOrange);
 
 
-        h_DY_Pt->SetLineColor(kOrange);
-        h_DY_rapi->SetLineColor(kOrange);
         h_DY_pT->SetLineColor(kOrange);
-        h_DY_eta->SetLineColor(kOrange);
-        h_DY_phi->SetLineColor(kOrange);
+        h_DY_rapi->SetLineColor(kOrange);
+        h_DY_pT_lead_before_PUCorr->SetLineColor(kOrange);
+        h_DY_pT_lead_before_RoccoR->SetLineColor(kOrange);
+        h_DY_pT_lead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_pT_lead->SetLineColor(kOrange);
+        h_DY_pT_sublead_before_PUCorr->SetLineColor(kOrange);
+        h_DY_pT_sublead_before_RoccoR->SetLineColor(kOrange);
+        h_DY_pT_sublead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_pT_sublead->SetLineColor(kOrange);
+        h_DY_eta_lead_before_PUCorr->SetLineColor(kOrange);
+        h_DY_eta_lead_before_RoccoR->SetLineColor(kOrange);
+        h_DY_eta_lead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_eta_lead->SetLineColor(kOrange);
+        h_DY_eta_sublead_before_PUCorr->SetLineColor(kOrange);
+        h_DY_eta_sublead_before_RoccoR->SetLineColor(kOrange);
+        h_DY_eta_sublead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_eta_sublead->SetLineColor(kOrange);
+        h_DY_phi_lead_before_PUCorr->SetLineColor(kOrange);
+        h_DY_phi_lead_before_RoccoR->SetLineColor(kOrange);
+        h_DY_phi_lead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_phi_lead->SetLineColor(kOrange);
+        h_DY_phi_sublead_before_PUCorr->SetLineColor(kOrange);
+        h_DY_phi_sublead_before_RoccoR->SetLineColor(kOrange);
+        h_DY_phi_sublead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_phi_sublead->SetLineColor(kOrange);
 
 
-        h_DY_Pt->SetDirectory(0);
-        h_DY_rapi->SetDirectory(0);
         h_DY_pT->SetDirectory(0);
-        h_DY_eta->SetDirectory(0);
-        h_DY_phi->SetDirectory(0);
+        h_DY_rapi->SetDirectory(0);
+        h_DY_pT_lead_before_PUCorr->SetDirectory(0);
+        h_DY_pT_lead_before_RoccoR->SetDirectory(0);
+        h_DY_pT_lead_before_EffCorr->SetDirectory(0);
+        h_DY_pT_lead->SetDirectory(0);
+        h_DY_pT_sublead_before_PUCorr->SetDirectory(0);
+        h_DY_pT_sublead_before_RoccoR->SetDirectory(0);
+        h_DY_pT_sublead_before_EffCorr->SetDirectory(0);
+        h_DY_pT_sublead->SetDirectory(0);
+        h_DY_eta_lead_before_PUCorr->SetDirectory(0);
+        h_DY_eta_lead_before_RoccoR->SetDirectory(0);
+        h_DY_eta_lead_before_EffCorr->SetDirectory(0);
+        h_DY_eta_lead->SetDirectory(0);
+        h_DY_eta_sublead_before_PUCorr->SetDirectory(0);
+        h_DY_eta_sublead_before_RoccoR->SetDirectory(0);
+        h_DY_eta_sublead_before_EffCorr->SetDirectory(0);
+        h_DY_eta_sublead->SetDirectory(0);
+        h_DY_phi_lead_before_PUCorr->SetDirectory(0);
+        h_DY_phi_lead_before_RoccoR->SetDirectory(0);
+        h_DY_phi_lead_before_EffCorr->SetDirectory(0);
+        h_DY_phi_lead->SetDirectory(0);
+        h_DY_phi_sublead_before_PUCorr->SetDirectory(0);
+        h_DY_phi_sublead_before_RoccoR->SetDirectory(0);
+        h_DY_phi_sublead_before_EffCorr->SetDirectory(0);
+        h_DY_phi_sublead->SetDirectory(0);
 
 
-        s_Pt->Add( h_DY_Pt );
-        s_rapi->Add( h_DY_rapi );
         s_pT->Add( h_DY_pT );
-        s_eta->Add( h_DY_eta );
-        s_phi->Add( h_DY_phi );
+        s_rapi->Add( h_DY_rapi );
+        s_pT_lead_before_PUCorr->Add( h_DY_pT_lead_before_PUCorr );
+        s_pT_lead_before_RoccoR->Add( h_DY_pT_lead_before_RoccoR );
+        s_pT_lead_before_EffCorr->Add( h_DY_pT_lead_before_EffCorr );
+        s_pT_lead->Add( h_DY_pT_lead );
+        s_pT_sublead_before_PUCorr->Add( h_DY_pT_sublead_before_PUCorr );
+        s_pT_sublead_before_RoccoR->Add( h_DY_pT_sublead_before_RoccoR );
+        s_pT_sublead_before_EffCorr->Add( h_DY_pT_sublead_before_EffCorr );
+        s_pT_sublead->Add( h_DY_pT_sublead );
+        s_eta_lead_before_PUCorr->Add( h_DY_eta_lead_before_PUCorr );
+        s_eta_lead_before_RoccoR->Add( h_DY_eta_lead_before_RoccoR );
+        s_eta_lead_before_EffCorr->Add( h_DY_eta_lead_before_EffCorr );
+        s_eta_lead->Add( h_DY_eta_lead );
+        s_eta_sublead_before_PUCorr->Add( h_DY_eta_sublead_before_PUCorr );
+        s_eta_sublead_before_RoccoR->Add( h_DY_eta_sublead_before_RoccoR );
+        s_eta_sublead_before_EffCorr->Add( h_DY_eta_sublead_before_EffCorr );
+        s_eta_sublead->Add( h_DY_eta_sublead );
+        s_phi_lead_before_PUCorr->Add( h_DY_phi_lead_before_PUCorr );
+        s_phi_lead_before_RoccoR->Add( h_DY_phi_lead_before_RoccoR );
+        s_phi_lead_before_EffCorr->Add( h_DY_phi_lead_before_EffCorr );
+        s_phi_lead->Add( h_DY_phi_lead );
+        s_phi_sublead_before_PUCorr->Add( h_DY_phi_sublead_before_PUCorr );
+        s_phi_sublead_before_RoccoR->Add( h_DY_phi_sublead_before_RoccoR );
+        s_phi_sublead_before_EffCorr->Add( h_DY_phi_sublead_before_EffCorr );
+        s_phi_sublead->Add( h_DY_phi_sublead );
 
 
 //--------------------------------------- DATA -----------------------------------------------------
 
-        TH1D *h_data_Pt, *h_data_rapi, *h_data_pT, *h_data_eta, *h_data_phi;
+        TH1D *h_data_pT, *h_data_rapi, *h_data_pT_lead_before_PUCorr, *h_data_pT_lead_before_RoccoR, *h_data_pT_lead_before_EffCorr, *h_data_pT_lead,
+             *h_data_pT_sublead_before_PUCorr, *h_data_pT_sublead_before_RoccoR, *h_data_pT_sublead_before_EffCorr, *h_data_pT_sublead,
+             *h_data_eta_lead_before_PUCorr, *h_data_eta_lead_before_RoccoR, *h_data_eta_lead_before_EffCorr, *h_data_eta_lead,
+             *h_data_eta_sublead_before_PUCorr, *h_data_eta_sublead_before_RoccoR, *h_data_eta_sublead_before_EffCorr, *h_data_eta_sublead,
+             *h_data_phi_lead_before_PUCorr, *h_data_phi_lead_before_RoccoR, *h_data_phi_lead_before_EffCorr, *h_data_phi_lead,
+             *h_data_phi_sublead_before_PUCorr, *h_data_phi_sublead_before_RoccoR, *h_data_phi_sublead_before_EffCorr, *h_data_phi_sublead;
 
-        f_data->GetObject( "h_Pt_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_Pt );
-        f_data->GetObject( "h_rapi_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_rapi );
         f_data->GetObject( "h_pT_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_pT );
-        f_data->GetObject( "h_eta_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_eta );
-        f_data->GetObject( "h_phi_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_phi );
+        f_data->GetObject( "h_rapi_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_rapi );
+        f_data_noRC->GetObject( "h_pT_lead_before_PUCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_pT_lead_before_PUCorr );
+        f_data_noRC->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_pT_lead_before_RoccoR );
+        f_data->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_pT_lead_before_EffCorr );
+        f_data->GetObject( "h_pT_lead_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_pT_lead );
+        f_data_noRC->GetObject( "h_pT_sublead_before_PUCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_pT_sublead_before_PUCorr );
+        f_data_noRC->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_pT_sublead_before_RoccoR );
+        f_data->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_pT_sublead_before_EffCorr );
+        f_data->GetObject( "h_pT_sublead_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_pT_sublead );
+        f_data_noRC->GetObject( "h_eta_lead_before_PUCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_eta_lead_before_PUCorr );
+        f_data_noRC->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_eta_lead_before_RoccoR );
+        f_data->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_eta_lead_before_EffCorr );
+        f_data->GetObject( "h_eta_lead_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_eta_lead );
+        f_data_noRC->GetObject( "h_eta_sublead_before_PUCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_eta_sublead_before_PUCorr );
+        f_data_noRC->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_eta_sublead_before_RoccoR );
+        f_data->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_eta_sublead_before_EffCorr );
+        f_data->GetObject( "h_eta_sublead_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_eta_sublead );
+        f_data_noRC->GetObject( "h_phi_lead_before_PUCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_phi_lead_before_PUCorr );
+        f_data_noRC->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_phi_lead_before_RoccoR );
+        f_data->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_phi_lead_before_EffCorr );
+        f_data->GetObject( "h_phi_lead_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_phi_lead );
+        f_data_noRC->GetObject( "h_phi_sublead_before_PUCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_phi_sublead_before_PUCorr );
+        f_data_noRC->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_phi_sublead_before_RoccoR );
+        f_data->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_phi_sublead_before_EffCorr );
+        f_data->GetObject( "h_phi_sublead_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_phi_sublead );
 
 
-        h_data_Pt->SetMarkerStyle(kFullDotLarge);
-        h_data_rapi->SetMarkerStyle(kFullDotLarge);
         h_data_pT->SetMarkerStyle(kFullDotLarge);
-        h_data_eta->SetMarkerStyle(kFullDotLarge);
-        h_data_phi->SetMarkerStyle(kFullDotLarge);
+        h_data_rapi->SetMarkerStyle(kFullDotLarge);
+        h_data_pT_lead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_pT_lead_before_RoccoR->SetMarkerStyle(kFullDotLarge);
+        h_data_pT_lead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_pT_lead->SetMarkerStyle(kFullDotLarge);
+        h_data_pT_sublead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_pT_sublead_before_RoccoR->SetMarkerStyle(kFullDotLarge);
+        h_data_pT_sublead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_pT_sublead->SetMarkerStyle(kFullDotLarge);
+        h_data_eta_lead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_eta_lead_before_RoccoR->SetMarkerStyle(kFullDotLarge);
+        h_data_eta_lead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_eta_lead->SetMarkerStyle(kFullDotLarge);
+        h_data_eta_sublead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_eta_sublead_before_RoccoR->SetMarkerStyle(kFullDotLarge);
+        h_data_eta_sublead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_eta_sublead->SetMarkerStyle(kFullDotLarge);
+        h_data_phi_lead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_phi_lead_before_RoccoR->SetMarkerStyle(kFullDotLarge);
+        h_data_phi_lead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_phi_lead->SetMarkerStyle(kFullDotLarge);
+        h_data_phi_sublead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_phi_sublead_before_RoccoR->SetMarkerStyle(kFullDotLarge);
+        h_data_phi_sublead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_phi_sublead->SetMarkerStyle(kFullDotLarge);
 
 
-        h_data_Pt->SetMarkerColor(kBlack);
-        h_data_rapi->SetMarkerColor(kBlack);
         h_data_pT->SetMarkerColor(kBlack);
-        h_data_eta->SetMarkerColor(kBlack);
-        h_data_phi->SetMarkerColor(kBlack);
+        h_data_rapi->SetMarkerColor(kBlack);
+        h_data_pT_lead_before_PUCorr->SetMarkerColor(kBlack);
+        h_data_pT_lead_before_RoccoR->SetMarkerColor(kBlack);
+        h_data_pT_lead_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_pT_lead->SetMarkerColor(kBlack);
+        h_data_pT_sublead_before_PUCorr->SetMarkerColor(kBlack);
+        h_data_pT_sublead_before_RoccoR->SetMarkerColor(kBlack);
+        h_data_pT_sublead_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_pT_sublead->SetMarkerColor(kBlack);
+        h_data_eta_lead_before_PUCorr->SetMarkerColor(kBlack);
+        h_data_eta_lead_before_RoccoR->SetMarkerColor(kBlack);
+        h_data_eta_lead_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_eta_lead->SetMarkerColor(kBlack);
+        h_data_eta_sublead_before_PUCorr->SetMarkerColor(kBlack);
+        h_data_eta_sublead_before_RoccoR->SetMarkerColor(kBlack);
+        h_data_eta_sublead_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_eta_sublead->SetMarkerColor(kBlack);
+        h_data_phi_lead_before_PUCorr->SetMarkerColor(kBlack);
+        h_data_phi_lead_before_RoccoR->SetMarkerColor(kBlack);
+        h_data_phi_lead_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_phi_lead->SetMarkerColor(kBlack);
+        h_data_phi_sublead_before_PUCorr->SetMarkerColor(kBlack);
+        h_data_phi_sublead_before_RoccoR->SetMarkerColor(kBlack);
+        h_data_phi_sublead_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_phi_sublead->SetMarkerColor(kBlack);
 
 
-        h_data_Pt->SetLineColor(kBlack);
-        h_data_rapi->SetLineColor(kBlack);
         h_data_pT->SetLineColor(kBlack);
-        h_data_eta->SetLineColor(kBlack);
-        h_data_phi->SetLineColor(kBlack);
+        h_data_rapi->SetLineColor(kBlack);
+        h_data_pT_lead_before_PUCorr->SetLineColor(kBlack);
+        h_data_pT_lead_before_RoccoR->SetLineColor(kBlack);
+        h_data_pT_lead_before_EffCorr->SetLineColor(kBlack);
+        h_data_pT_lead->SetLineColor(kBlack);
+        h_data_pT_sublead_before_PUCorr->SetLineColor(kBlack);
+        h_data_pT_sublead_before_RoccoR->SetLineColor(kBlack);
+        h_data_pT_sublead_before_EffCorr->SetLineColor(kBlack);
+        h_data_pT_sublead->SetLineColor(kBlack);
+        h_data_eta_lead_before_PUCorr->SetLineColor(kBlack);
+        h_data_eta_lead_before_RoccoR->SetLineColor(kBlack);
+        h_data_eta_lead_before_EffCorr->SetLineColor(kBlack);
+        h_data_eta_lead->SetLineColor(kBlack);
+        h_data_eta_sublead_before_PUCorr->SetLineColor(kBlack);
+        h_data_eta_sublead_before_RoccoR->SetLineColor(kBlack);
+        h_data_eta_sublead_before_EffCorr->SetLineColor(kBlack);
+        h_data_eta_sublead->SetLineColor(kBlack);
+        h_data_phi_lead_before_PUCorr->SetLineColor(kBlack);
+        h_data_phi_lead_before_RoccoR->SetLineColor(kBlack);
+        h_data_phi_lead_before_EffCorr->SetLineColor(kBlack);
+        h_data_phi_lead->SetLineColor(kBlack);
+        h_data_phi_sublead_before_PUCorr->SetLineColor(kBlack);
+        h_data_phi_sublead_before_RoccoR->SetLineColor(kBlack);
+        h_data_phi_sublead_before_EffCorr->SetLineColor(kBlack);
+        h_data_phi_sublead->SetLineColor(kBlack);
 
 
-        h_data_Pt->SetDirectory(0);
-        h_data_rapi->SetDirectory(0);
         h_data_pT->SetDirectory(0);
-        h_data_eta->SetDirectory(0);
-        h_data_phi->SetDirectory(0);
+        h_data_rapi->SetDirectory(0);
+        h_data_pT_lead_before_PUCorr->SetDirectory(0);
+        h_data_pT_lead_before_RoccoR->SetDirectory(0);
+        h_data_pT_lead_before_EffCorr->SetDirectory(0);
+        h_data_pT_lead->SetDirectory(0);
+        h_data_pT_sublead_before_PUCorr->SetDirectory(0);
+        h_data_pT_sublead_before_RoccoR->SetDirectory(0);
+        h_data_pT_sublead_before_EffCorr->SetDirectory(0);
+        h_data_pT_sublead->SetDirectory(0);
+        h_data_eta_lead_before_PUCorr->SetDirectory(0);
+        h_data_eta_lead_before_RoccoR->SetDirectory(0);
+        h_data_eta_lead_before_EffCorr->SetDirectory(0);
+        h_data_eta_lead->SetDirectory(0);
+        h_data_eta_sublead_before_PUCorr->SetDirectory(0);
+        h_data_eta_sublead_before_RoccoR->SetDirectory(0);
+        h_data_eta_sublead_before_EffCorr->SetDirectory(0);
+        h_data_eta_sublead->SetDirectory(0);
+        h_data_phi_lead_before_PUCorr->SetDirectory(0);
+        h_data_phi_lead_before_RoccoR->SetDirectory(0);
+        h_data_phi_lead_before_EffCorr->SetDirectory(0);
+        h_data_phi_lead->SetDirectory(0);
+        h_data_phi_sublead_before_PUCorr->SetDirectory(0);
+        h_data_phi_sublead_before_RoccoR->SetDirectory(0);
+        h_data_phi_sublead_before_EffCorr->SetDirectory(0);
+        h_data_phi_sublead->SetDirectory(0);
 
 
 //--------------------------------- Ratio Plot --------------------------------------
 
-        myRatioPlot_t *RP_Pt, *RP_rapi, *RP_pT, *RP_eta, *RP_phi;
-        RP_Pt = new myRatioPlot_t( "RP_Pt", s_Pt, h_data_Pt );
-        RP_rapi = new myRatioPlot_t( "RP_rapi", s_rapi, h_data_rapi );
+        myRatioPlot_t *RP_pT, *RP_rapi, *RP_pT_lead_before_PUCorr, *RP_pT_lead_before_RoccoR, *RP_pT_lead_before_EffCorr, *RP_pT_lead,
+                      *RP_pT_sublead_before_PUCorr, *RP_pT_sublead_before_RoccoR, *RP_pT_sublead_before_EffCorr, *RP_pT_sublead,
+                      *RP_eta_lead_before_PUCorr, *RP_eta_lead_before_RoccoR, *RP_eta_lead_before_EffCorr, *RP_eta_lead,
+                      *RP_eta_sublead_before_PUCorr, *RP_eta_sublead_before_RoccoR, *RP_eta_sublead_before_EffCorr, *RP_eta_sublead,
+                      *RP_phi_lead_before_PUCorr, *RP_phi_lead_before_RoccoR, *RP_phi_lead_before_EffCorr, *RP_phi_lead,
+                      *RP_phi_sublead_before_PUCorr, *RP_phi_sublead_before_RoccoR, *RP_phi_sublead_before_EffCorr, *RP_phi_sublead;
         RP_pT = new myRatioPlot_t( "RP_pT", s_pT, h_data_pT );
-        RP_eta = new myRatioPlot_t( "RP_eta", s_eta, h_data_eta );
-        RP_phi = new myRatioPlot_t( "RP_phi", s_phi, h_data_phi );
+        RP_rapi = new myRatioPlot_t( "RP_rapi", s_rapi, h_data_rapi );
+        RP_pT_lead_before_PUCorr = new myRatioPlot_t( "RP_pT_lead_before_PUCorr", s_pT_lead_before_PUCorr, h_data_pT_lead_before_PUCorr );
+        RP_pT_lead_before_RoccoR = new myRatioPlot_t( "RP_pT_lead_before_RoccoR", s_pT_lead_before_RoccoR, h_data_pT_lead_before_RoccoR );
+        RP_pT_lead_before_EffCorr = new myRatioPlot_t( "RP_pT_lead_before_EffCorr", s_pT_lead_before_EffCorr, h_data_pT_lead_before_EffCorr );
+        RP_pT_lead = new myRatioPlot_t( "RP_pT_lead", s_pT_lead, h_data_pT_lead );
+        RP_pT_sublead_before_PUCorr = new myRatioPlot_t( "RP_pT_sublead_before_PUCorr", s_pT_sublead_before_PUCorr, h_data_pT_sublead_before_PUCorr );
+        RP_pT_sublead_before_RoccoR = new myRatioPlot_t( "RP_pT_sublead_before_RoccoR", s_pT_sublead_before_RoccoR, h_data_pT_sublead_before_RoccoR );
+        RP_pT_sublead_before_EffCorr = new myRatioPlot_t( "RP_pT_sublead_before_EffCorr", s_pT_sublead_before_EffCorr, h_data_pT_sublead_before_EffCorr );
+        RP_pT_sublead = new myRatioPlot_t( "RP_pT_sublead", s_pT_sublead, h_data_pT_sublead );
+        RP_eta_lead_before_PUCorr = new myRatioPlot_t( "RP_eta_lead_before_PUCorr", s_eta_lead_before_PUCorr, h_data_eta_lead_before_PUCorr );
+        RP_eta_lead_before_RoccoR = new myRatioPlot_t( "RP_eta_lead_before_RoccoR", s_eta_lead_before_RoccoR, h_data_eta_lead_before_RoccoR );
+        RP_eta_lead_before_EffCorr = new myRatioPlot_t( "RP_eta_lead_before_EffCorr", s_eta_lead_before_EffCorr, h_data_eta_lead_before_EffCorr );
+        RP_eta_lead = new myRatioPlot_t( "RP_eta_lead", s_eta_lead, h_data_eta_lead );
+        RP_eta_sublead_before_PUCorr = new myRatioPlot_t( "RP_eta_sublead_before_PUCorr", s_eta_sublead_before_PUCorr, h_data_eta_sublead_before_PUCorr );
+        RP_eta_sublead_before_RoccoR = new myRatioPlot_t( "RP_eta_sublead_before_RoccoR", s_eta_sublead_before_RoccoR, h_data_eta_sublead_before_RoccoR );
+        RP_eta_sublead_before_EffCorr = new myRatioPlot_t( "RP_eta_sublead_before_EffCorr", s_eta_sublead_before_EffCorr, h_data_eta_sublead_before_EffCorr );
+        RP_eta_sublead = new myRatioPlot_t( "RP_eta_sublead", s_eta_sublead, h_data_eta_sublead );
+        RP_phi_lead_before_PUCorr = new myRatioPlot_t( "RP_phi_lead_before_PUCorr", s_phi_lead_before_PUCorr, h_data_phi_lead_before_PUCorr );
+        RP_phi_lead_before_RoccoR = new myRatioPlot_t( "RP_phi_lead_before_RoccoR", s_phi_lead_before_RoccoR, h_data_phi_lead_before_RoccoR );
+        RP_phi_lead_before_EffCorr = new myRatioPlot_t( "RP_phi_lead_before_EffCorr", s_phi_lead_before_EffCorr, h_data_phi_lead_before_EffCorr );
+        RP_phi_lead = new myRatioPlot_t( "RP_phi_lead", s_phi_lead, h_data_phi_lead );
+        RP_phi_sublead_before_PUCorr = new myRatioPlot_t( "RP_phi_sublead_before_PUCorr", s_phi_sublead_before_PUCorr, h_data_phi_sublead_before_PUCorr );
+        RP_phi_sublead_before_RoccoR = new myRatioPlot_t( "RP_phi_sublead_before_RoccoR", s_phi_sublead_before_RoccoR, h_data_phi_sublead_before_RoccoR );
+        RP_phi_sublead_before_EffCorr = new myRatioPlot_t( "RP_phi_sublead_before_EffCorr", s_phi_sublead_before_EffCorr, h_data_phi_sublead_before_EffCorr );
+        RP_phi_sublead = new myRatioPlot_t( "RP_phi_sublead", s_phi_sublead, h_data_phi_sublead );
 
 
-        RP_Pt->SetPlots("Dimuon p_{T} [GeV/c]", 0, 600);
+        RP_pT->SetPlots("Dimuon p_{T} [GeV/c]", 0, 600);
         RP_rapi->SetPlots("Dimuon rapidity", -3, 3);
-        RP_pT->SetPlots("Muon p_{T} (leading+subleading) [GeV/c]", 0, 600);
-        RP_eta->SetPlots("Muon #eta (leading+subleading)", -3, 3);
-        RP_phi->SetPlots("Muon #phi (leading+subleading)", -3.3, 3.3);
+        RP_pT_lead_before_PUCorr->SetPlots("Leading muon p_{T} [GeV/c] (before PU correction)", 0, 600);
+        RP_pT_lead_before_RoccoR->SetPlots("Leading muon p_{T} [GeV/c] (before Rochester correction)", 0, 600);
+        RP_pT_lead_before_EffCorr->SetPlots("Leading muon p_{T} [GeV/c] (before Efficiency SF)", -3, 3);
+        RP_pT_lead->SetPlots("Leading muon p_{T} [GeV/c]", -3.3, 3.3);
+        RP_pT_sublead_before_PUCorr->SetPlots("Subleading muon p_{T} [GeV/c] (before PU correction)", 0, 600);
+        RP_pT_sublead_before_RoccoR->SetPlots("Subleading muon p_{T} [GeV/c] (before Rochester correction)", 0, 600);
+        RP_pT_sublead_before_EffCorr->SetPlots("Subleading muon p_{T} [GeV/c] (before Efficiency SF)", -3, 3);
+        RP_pT_sublead->SetPlots("Subleading muon p_{T} [GeV/c]", -3.3, 3.3);
+        RP_eta_lead_before_PUCorr->SetPlots("Leading muon #eta (before PU correction)", 0, 600);
+        RP_eta_lead_before_RoccoR->SetPlots("Leading muon #eta (before Rochester correction)", 0, 600);
+        RP_eta_lead_before_EffCorr->SetPlots("Leading muon #eta (before Efficiency SF)", -3, 3);
+        RP_eta_lead->SetPlots("Leading muon #eta", -3.3, 3.3);
+        RP_eta_sublead_before_PUCorr->SetPlots("Subleading muon #eta (before PU correction)", 0, 600);
+        RP_eta_sublead_before_RoccoR->SetPlots("Subleading muon #eta (before Rochester correction)", 0, 600);
+        RP_eta_sublead_before_EffCorr->SetPlots("Subleading muon #eta (before Efficiency SF)", -3, 3);
+        RP_eta_sublead->SetPlots("Subleading muon #eta", -3.3, 3.3);
+        RP_phi_lead_before_PUCorr->SetPlots("Leading muon #phi (before PU correction)", 0, 600);
+        RP_phi_lead_before_RoccoR->SetPlots("Leading muon #phi (before Rochester correction)", 0, 600);
+        RP_phi_lead_before_EffCorr->SetPlots("Leading muon #phi (before Efficiency SF)", -3, 3);
+        RP_phi_lead->SetPlots("Leading muon #phi", -3.3, 3.3);
+        RP_phi_sublead_before_PUCorr->SetPlots("Subleading muon #phi (before PU correction)", 0, 600);
+        RP_phi_sublead_before_RoccoR->SetPlots("Subleading muon #phi (before Rochester correction)", 0, 600);
+        RP_phi_sublead_before_EffCorr->SetPlots("Subleading muon #phi (before Efficiency SF)", -3, 3);
+        RP_phi_sublead->SetPlots("Subleading muon #phi", -3.3, 3.3);
 
 
-        RP_Pt->SetLegend(0.75, 0.4);
-        RP_rapi->SetLegend(0.75, 0.4);
         RP_pT->SetLegend(0.75, 0.4);
-        RP_eta->SetLegend(0.75, 0.4);
-        RP_phi->SetLegend(0.75, 0.4);
+        RP_rapi->SetLegend(0.75, 0.4);
+        RP_pT_lead_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_pT_lead_before_RoccoR->SetLegend(0.75, 0.4);
+        RP_pT_lead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_pT_lead->SetLegend(0.75, 0.4);
+        RP_pT_sublead_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_pT_sublead_before_RoccoR->SetLegend(0.75, 0.4);
+        RP_pT_sublead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_pT_sublead->SetLegend(0.75, 0.4);
+        RP_eta_lead_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_eta_lead_before_RoccoR->SetLegend(0.75, 0.4);
+        RP_eta_lead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_eta_lead->SetLegend(0.75, 0.4);
+        RP_eta_sublead_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_eta_sublead_before_RoccoR->SetLegend(0.75, 0.4);
+        RP_eta_sublead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_eta_sublead->SetLegend(0.75, 0.4);
+        RP_phi_lead_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_phi_lead_before_RoccoR->SetLegend(0.75, 0.4);
+        RP_phi_lead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_phi_lead->SetLegend(0.75, 0.4);
+        RP_phi_sublead_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_phi_sublead_before_RoccoR->SetLegend(0.75, 0.4);
+       RP_phi_sublead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_phi_sublead->SetLegend(0.75, 0.4);
 
 
         // Legend data
-        RP_Pt->AddLegendEntry(h_data_Pt, "Data", "lp");
-        RP_rapi->AddLegendEntry(h_data_rapi, "Data", "lp");
         RP_pT->AddLegendEntry(h_data_pT, "Data", "lp");
-        RP_eta->AddLegendEntry(h_data_eta, "Data", "lp");
-        RP_phi->AddLegendEntry(h_data_phi, "Data", "lp");
+        RP_rapi->AddLegendEntry(h_data_rapi, "Data", "lp");
+        RP_pT_lead_before_PUCorr->AddLegendEntry(h_data_pT_lead_before_PUCorr, "Data", "lp");
+        RP_pT_lead_before_RoccoR->AddLegendEntry(h_data_pT_lead_before_RoccoR, "Data", "lp");
+        RP_pT_lead_before_EffCorr->AddLegendEntry(h_data_pT_lead_before_EffCorr, "Data", "lp");
+        RP_pT_lead->AddLegendEntry(h_data_pT_lead, "Data", "lp");
+        RP_pT_sublead_before_PUCorr->AddLegendEntry(h_data_pT_sublead_before_PUCorr, "Data", "lp");
+        RP_pT_sublead_before_RoccoR->AddLegendEntry(h_data_pT_sublead_before_RoccoR, "Data", "lp");
+        RP_pT_sublead_before_EffCorr->AddLegendEntry(h_data_pT_sublead_before_EffCorr, "Data", "lp");
+        RP_pT_sublead->AddLegendEntry(h_data_pT_sublead, "Data", "lp");
+        RP_eta_lead_before_PUCorr->AddLegendEntry(h_data_eta_lead_before_PUCorr, "Data", "lp");
+        RP_eta_lead_before_RoccoR->AddLegendEntry(h_data_eta_lead_before_RoccoR, "Data", "lp");
+        RP_eta_lead_before_EffCorr->AddLegendEntry(h_data_eta_lead_before_EffCorr, "Data", "lp");
+        RP_eta_lead->AddLegendEntry(h_data_eta_lead, "Data", "lp");
+        RP_eta_sublead_before_PUCorr->AddLegendEntry(h_data_eta_sublead_before_PUCorr, "Data", "lp");
+        RP_eta_sublead_before_RoccoR->AddLegendEntry(h_data_eta_sublead_before_RoccoR, "Data", "lp");
+        RP_eta_sublead_before_EffCorr->AddLegendEntry(h_data_eta_sublead_before_EffCorr, "Data", "lp");
+        RP_eta_sublead->AddLegendEntry(h_data_eta_sublead, "Data", "lp");
+        RP_phi_lead_before_PUCorr->AddLegendEntry(h_data_phi_lead_before_PUCorr, "Data", "lp");
+        RP_phi_lead_before_RoccoR->AddLegendEntry(h_data_phi_lead_before_RoccoR, "Data", "lp");
+        RP_phi_lead_before_EffCorr->AddLegendEntry(h_data_phi_lead_before_EffCorr, "Data", "lp");
+        RP_phi_lead->AddLegendEntry(h_data_phi_lead, "Data", "lp");
+        RP_phi_sublead_before_PUCorr->AddLegendEntry(h_data_phi_sublead_before_PUCorr, "Data", "lp");
+        RP_phi_sublead_before_RoccoR->AddLegendEntry(h_data_phi_sublead_before_RoccoR, "Data", "lp");
+        RP_phi_sublead_before_EffCorr->AddLegendEntry(h_data_phi_sublead_before_EffCorr, "Data", "lp");
+        RP_phi_sublead->AddLegendEntry(h_data_phi_sublead, "Data", "lp");
 
 
         // Legend MC signal
-        RP_Pt->AddLegendEntry(h_DY_Pt, "DY#rightarrow#mu#mu", "f");
-        RP_rapi->AddLegendEntry(h_DY_rapi, "DY#rightarrow#mu#mu", "f");
-        RP_pT->AddLegendEntry(h_DY_pT, "DY#rightarrow#mu#mu", "f");
-        RP_eta->AddLegendEntry(h_DY_eta, "DY#rightarrow#mu#mu", "f");
-        RP_phi->AddLegendEntry(h_DY_phi, "DY#rightarrow#mu#mu", "f");
+        RP_pT->AddLegendEntry(h_DY_pT, "DY#rightarrow #mu#mu", "f");
+        RP_rapi->AddLegendEntry(h_DY_rapi, "DY#rightarrow #mu#mu", "f");
+        RP_pT_lead_before_PUCorr->AddLegendEntry(h_DY_pT_lead_before_PUCorr, "DY#rightarrow #mu#mu", "f");
+        RP_pT_lead_before_RoccoR->AddLegendEntry(h_DY_pT_lead_before_RoccoR, "DY#rightarrow #mu#mu", "f");
+        RP_pT_lead_before_EffCorr->AddLegendEntry(h_DY_pT_lead_before_EffCorr, "DY#rightarrow #mu#mu", "f");
+        RP_pT_lead->AddLegendEntry(h_DY_pT_lead, "DY#rightarrow #mu#mu", "f");
+        RP_pT_sublead_before_PUCorr->AddLegendEntry(h_DY_pT_sublead_before_PUCorr, "DY#rightarrow #mu#mu", "f");
+        RP_pT_sublead_before_RoccoR->AddLegendEntry(h_DY_pT_sublead_before_RoccoR, "DY#rightarrow #mu#mu", "f");
+        RP_pT_sublead_before_EffCorr->AddLegendEntry(h_DY_pT_sublead_before_EffCorr, "DY#rightarrow #mu#mu", "f");
+        RP_pT_sublead->AddLegendEntry(h_DY_pT_sublead, "DY#rightarrow #mu#mu", "f");
+        RP_eta_lead_before_PUCorr->AddLegendEntry(h_DY_eta_lead_before_PUCorr, "DY#rightarrow #mu#mu", "f");
+        RP_eta_lead_before_RoccoR->AddLegendEntry(h_DY_eta_lead_before_RoccoR, "DY#rightarrow #mu#mu", "f");
+        RP_eta_lead_before_EffCorr->AddLegendEntry(h_DY_eta_lead_before_EffCorr, "DY#rightarrow #mu#mu", "f");
+        RP_eta_lead->AddLegendEntry(h_DY_eta_lead, "DY#rightarrow #mu#mu", "f");
+        RP_eta_sublead_before_PUCorr->AddLegendEntry(h_DY_eta_sublead_before_PUCorr, "DY#rightarrow #mu#mu", "f");
+        RP_eta_sublead_before_RoccoR->AddLegendEntry(h_DY_eta_sublead_before_RoccoR, "DY#rightarrow #mu#mu", "f");
+        RP_eta_sublead_before_EffCorr->AddLegendEntry(h_DY_eta_sublead_before_EffCorr, "DY#rightarrow #mu#mu", "f");
+        RP_eta_sublead->AddLegendEntry(h_DY_eta_sublead, "DY#rightarrow #mu#mu", "f");
+        RP_phi_lead_before_PUCorr->AddLegendEntry(h_DY_phi_lead_before_PUCorr, "DY#rightarrow #mu#mu", "f");
+        RP_phi_lead_before_RoccoR->AddLegendEntry(h_DY_phi_lead_before_RoccoR, "DY#rightarrow #mu#mu", "f");
+        RP_phi_lead_before_EffCorr->AddLegendEntry(h_DY_phi_lead_before_EffCorr, "DY#rightarrow #mu#mu", "f");
+        RP_phi_lead->AddLegendEntry(h_DY_phi_lead, "DY#rightarrow #mu#mu", "f");
+        RP_phi_sublead_before_PUCorr->AddLegendEntry(h_DY_phi_sublead_before_PUCorr, "DY#rightarrow #mu#mu", "f");
+        RP_phi_sublead_before_RoccoR->AddLegendEntry(h_DY_phi_sublead_before_RoccoR, "DY#rightarrow #mu#mu", "f");
+        RP_phi_sublead_before_EffCorr->AddLegendEntry(h_DY_phi_sublead_before_EffCorr, "DY#rightarrow #mu#mu", "f");
+        RP_phi_sublead->AddLegendEntry(h_DY_phi_sublead, "DY#rightarrow #mu#mu", "f");
 
 
         // Legend MC BKG
-        RP_Pt->AddLegendEntry(h_bkg_Pt[0], "QCD", "f");
-        RP_rapi->AddLegendEntry(h_bkg_rapi[0], "QCD", "f");
         RP_pT->AddLegendEntry(h_bkg_pT[0], "QCD", "f");
-        RP_eta->AddLegendEntry(h_bkg_eta[0], "QCD", "f");
-        RP_phi->AddLegendEntry(h_bkg_phi[0], "QCD", "f");
-        RP_Pt->AddLegendEntry(h_bkg_Pt[1], "VVnST", "f");
-        RP_rapi->AddLegendEntry(h_bkg_rapi[1], "VVnST", "f");
+        RP_rapi->AddLegendEntry(h_bkg_rapi[0], "QCD", "f");
+        RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[0], "QCD", "f");
+        RP_pT_lead_before_RoccoR->AddLegendEntry(h_bkg_pT_lead_before_RoccoR[0], "QCD", "f");
+        RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[0], "QCD", "f");
+        RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[0], "QCD", "f");
+        RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[0], "QCD", "f");
+        RP_pT_sublead_before_RoccoR->AddLegendEntry(h_bkg_pT_sublead_before_RoccoR[0], "QCD", "f");
+        RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[0], "QCD", "f");
+        RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[0], "QCD", "f");
+        RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[0], "QCD", "f");
+        RP_eta_lead_before_RoccoR->AddLegendEntry(h_bkg_eta_lead_before_RoccoR[0], "QCD", "f");
+        RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[0], "QCD", "f");
+        RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[0], "QCD", "f");
+        RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[0], "QCD", "f");
+        RP_eta_sublead_before_RoccoR->AddLegendEntry(h_bkg_eta_sublead_before_RoccoR[0], "QCD", "f");
+        RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[0], "QCD", "f");
+        RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[0], "QCD", "f");
+        RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[0], "QCD", "f");
+        RP_phi_lead_before_RoccoR->AddLegendEntry(h_bkg_phi_lead_before_RoccoR[0], "QCD", "f");
+        RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[0], "QCD", "f");
+        RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[0], "QCD", "f");
+        RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[0], "QCD", "f");
+        RP_phi_sublead_before_RoccoR->AddLegendEntry(h_bkg_phi_sublead_before_RoccoR[0], "QCD", "f");
+        RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[0], "QCD", "f");
+        RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[0], "QCD", "f");
+
         RP_pT->AddLegendEntry(h_bkg_pT[1], "VVnST", "f");
-        RP_eta->AddLegendEntry(h_bkg_eta[1], "VVnST", "f");
-        RP_phi->AddLegendEntry(h_bkg_phi[1], "VVnST", "f");
-        RP_Pt->AddLegendEntry(h_bkg_Pt[2], "W+Jets", "f");
-        RP_rapi->AddLegendEntry(h_bkg_rapi[2], "W+Jets", "f");
+        RP_rapi->AddLegendEntry(h_bkg_rapi[1], "VVnST", "f");
+        RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[1], "VVnST", "f");
+        RP_pT_lead_before_RoccoR->AddLegendEntry(h_bkg_pT_lead_before_RoccoR[1], "VVnST", "f");
+        RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[1], "VVnST", "f");
+        RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[1], "VVnST", "f");
+        RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[1], "VVnST", "f");
+        RP_pT_sublead_before_RoccoR->AddLegendEntry(h_bkg_pT_sublead_before_RoccoR[1], "VVnST", "f");
+        RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[1], "VVnST", "f");
+        RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[1], "VVnST", "f");
+        RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[1], "VVnST", "f");
+        RP_eta_lead_before_RoccoR->AddLegendEntry(h_bkg_eta_lead_before_RoccoR[1], "VVnST", "f");
+        RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[1], "VVnST", "f");
+        RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[1], "VVnST", "f");
+        RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[1], "VVnST", "f");
+        RP_eta_sublead_before_RoccoR->AddLegendEntry(h_bkg_eta_sublead_before_RoccoR[1], "VVnST", "f");
+        RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[1], "VVnST", "f");
+        RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[1], "VVnST", "f");
+        RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[1], "VVnST", "f");
+        RP_phi_lead_before_RoccoR->AddLegendEntry(h_bkg_phi_lead_before_RoccoR[1], "VVnST", "f");
+        RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[1], "VVnST", "f");
+        RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[1], "VVnST", "f");
+        RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[1], "VVnST", "f");
+        RP_phi_sublead_before_RoccoR->AddLegendEntry(h_bkg_phi_sublead_before_RoccoR[1], "VVnST", "f");
+        RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[1], "VVnST", "f");
+        RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[1], "VVnST", "f");
+
         RP_pT->AddLegendEntry(h_bkg_pT[2], "W+Jets", "f");
-        RP_eta->AddLegendEntry(h_bkg_eta[2], "W+Jets", "f");
-        RP_phi->AddLegendEntry(h_bkg_phi[2], "W+Jets", "f");
-        RP_Pt->AddLegendEntry(h_bkg_Pt[3], "t#bar{t}", "f");
-        RP_rapi->AddLegendEntry(h_bkg_rapi[3], "t#bar{t}", "f");
+        RP_rapi->AddLegendEntry(h_bkg_rapi[2], "W+Jets", "f");
+        RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[2], "W+Jets", "f");
+        RP_pT_lead_before_RoccoR->AddLegendEntry(h_bkg_pT_lead_before_RoccoR[2], "W+Jets", "f");
+        RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[2], "W+Jets", "f");
+        RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[2], "W+Jets", "f");
+        RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[2], "W+Jets", "f");
+        RP_pT_sublead_before_RoccoR->AddLegendEntry(h_bkg_pT_sublead_before_RoccoR[2], "W+Jets", "f");
+        RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[2], "W+Jets", "f");
+        RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[2], "W+Jets", "f");
+        RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[2], "W+Jets", "f");
+        RP_eta_lead_before_RoccoR->AddLegendEntry(h_bkg_eta_lead_before_RoccoR[2], "W+Jets", "f");
+        RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[2], "W+Jets", "f");
+        RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[2], "W+Jets", "f");
+        RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[2], "W+Jets", "f");
+        RP_eta_sublead_before_RoccoR->AddLegendEntry(h_bkg_eta_sublead_before_RoccoR[2], "W+Jets", "f");
+        RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[2], "W+Jets", "f");
+        RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[2], "W+Jets", "f");
+        RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[2], "W+Jets", "f");
+        RP_phi_lead_before_RoccoR->AddLegendEntry(h_bkg_phi_lead_before_RoccoR[2], "W+Jets", "f");
+        RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[2], "W+Jets", "f");
+        RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[2], "W+Jets", "f");
+        RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[2], "W+Jets", "f");
+        RP_phi_sublead_before_RoccoR->AddLegendEntry(h_bkg_phi_sublead_before_RoccoR[2], "W+Jets", "f");
+        RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[2], "W+Jets", "f");
+        RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[2], "W+Jets", "f");
+
         RP_pT->AddLegendEntry(h_bkg_pT[3], "t#bar{t}", "f");
-        RP_eta->AddLegendEntry(h_bkg_eta[3], "t#bar{t}", "f");
-        RP_phi->AddLegendEntry(h_bkg_phi[3], "t#bar{t}", "f");
-        RP_Pt->AddLegendEntry(h_bkg_Pt[4], "DY#rightarrow #tau#tau", "f");
-        RP_rapi->AddLegendEntry(h_bkg_rapi[4], "DY#rightarrow #tau#tau", "f");
+        RP_rapi->AddLegendEntry(h_bkg_rapi[3], "t#bar{t}", "f");
+        RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[3], "t#bar{t}", "f");
+        RP_pT_lead_before_RoccoR->AddLegendEntry(h_bkg_pT_lead_before_RoccoR[3], "t#bar{t}", "f");
+        RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[3], "t#bar{t}", "f");
+        RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[3], "t#bar{t}", "f");
+        RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[3], "t#bar{t}", "f");
+        RP_pT_sublead_before_RoccoR->AddLegendEntry(h_bkg_pT_sublead_before_RoccoR[3], "t#bar{t}", "f");
+        RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[3], "t#bar{t}", "f");
+        RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[3], "t#bar{t}", "f");
+        RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[3], "t#bar{t}", "f");
+        RP_eta_lead_before_RoccoR->AddLegendEntry(h_bkg_eta_lead_before_RoccoR[3], "t#bar{t}", "f");
+        RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[3], "t#bar{t}", "f");
+        RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[3], "t#bar{t}", "f");
+        RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[3], "t#bar{t}", "f");
+        RP_eta_sublead_before_RoccoR->AddLegendEntry(h_bkg_eta_sublead_before_RoccoR[3], "t#bar{t}", "f");
+        RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[3], "t#bar{t}", "f");
+        RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[3], "t#bar{t}", "f");
+        RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[3], "t#bar{t}", "f");
+        RP_phi_lead_before_RoccoR->AddLegendEntry(h_bkg_phi_lead_before_RoccoR[3], "t#bar{t}", "f");
+        RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[3], "t#bar{t}", "f");
+        RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[3], "t#bar{t}", "f");
+        RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[3], "t#bar{t}", "f");
+        RP_phi_sublead_before_RoccoR->AddLegendEntry(h_bkg_phi_sublead_before_RoccoR[3], "t#bar{t}", "f");
+        RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[3], "t#bar{t}", "f");
+        RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[3], "t#bar{t}", "f");
+
         RP_pT->AddLegendEntry(h_bkg_pT[4], "DY#rightarrow #tau#tau", "f");
-        RP_eta->AddLegendEntry(h_bkg_eta[4], "DY#rightarrow #tau#tau", "f");
-        RP_phi->AddLegendEntry(h_bkg_phi[4], "DY#rightarrow #tau#tau", "f");
+        RP_rapi->AddLegendEntry(h_bkg_rapi[4], "DY#rightarrow #tau#tau", "f");
+        RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_pT_lead_before_RoccoR->AddLegendEntry(h_bkg_pT_lead_before_RoccoR[4], "DY#rightarrow #tau#tau", "f");
+        RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[4], "DY#rightarrow #tau#tau", "f");
+        RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_pT_sublead_before_RoccoR->AddLegendEntry(h_bkg_pT_sublead_before_RoccoR[4], "DY#rightarrow #tau#tau", "f");
+        RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[4], "DY#rightarrow #tau#tau", "f");
+        RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_eta_lead_before_RoccoR->AddLegendEntry(h_bkg_eta_lead_before_RoccoR[4], "DY#rightarrow #tau#tau", "f");
+        RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[4], "DY#rightarrow #tau#tau", "f");
+        RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_eta_sublead_before_RoccoR->AddLegendEntry(h_bkg_eta_sublead_before_RoccoR[4], "DY#rightarrow #tau#tau", "f");
+        RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[4], "DY#rightarrow #tau#tau", "f");
+        RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_phi_lead_before_RoccoR->AddLegendEntry(h_bkg_phi_lead_before_RoccoR[4], "DY#rightarrow #tau#tau", "f");
+        RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[4], "DY#rightarrow #tau#tau", "f");
+        RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_phi_sublead_before_RoccoR->AddLegendEntry(h_bkg_phi_sublead_before_RoccoR[4], "DY#rightarrow #tau#tau", "f");
+        RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[4], "DY#rightarrow #tau#tau", "f");
 
-        RP_Pt->Draw(0.5, 3e6, 0);
-        RP_rapi->Draw(0.5, 3e6, 0);
         RP_pT->Draw(0.5, 3e6, 0);
-        RP_eta->Draw(0.5, 3e6, 0);
-        RP_phi->Draw(0.5, 3e6, 0);
-//        Double_t dataerror, MCerror;
-//        Double_t dataintegral = h_data_mass->IntegralAndError(1, h_data_mass->GetSize()-2, dataerror);
-//        Double_t MCintegral = ((TH1D*)(s_mass->GetStack()->Last()))->IntegralAndError(1, h_data_mass->GetSize()-2, MCerror);
-
-//        std::cout << "data events: " << dataintegral << "+-" << dataerror << endl;
-//        std::cout << "MC events: " << MCintegral << "+-" << MCerror << endl;
+        RP_rapi->Draw(0.5, 3e6, 0);
+        RP_pT_lead_before_PUCorr->Draw(0.5, 3e6, 0);
+        RP_pT_lead_before_RoccoR->Draw(0.5, 3e6, 0);
+        RP_pT_lead_before_EffCorr->Draw(0.5, 3e6, 0);
+        RP_pT_lead->Draw(0.5, 3e6, 0);
+        RP_pT_sublead_before_PUCorr->Draw(0.5, 3e6, 0);
+        RP_pT_sublead_before_RoccoR->Draw(0.5, 3e6, 0);
+        RP_pT_sublead_before_EffCorr->Draw(0.5, 3e6, 0);
+        RP_pT_sublead->Draw(0.5, 3e6, 0);
+        RP_eta_lead_before_PUCorr->Draw(0.5, 3e6, 0);
+        RP_eta_lead_before_RoccoR->Draw(0.5, 3e6, 0);
+        RP_eta_lead_before_EffCorr->Draw(0.5, 3e6, 0);
+        RP_eta_lead->Draw(0.5, 3e6, 0);
+        RP_eta_sublead_before_PUCorr->Draw(0.5, 3e6, 0);
+        RP_eta_sublead_before_RoccoR->Draw(0.5, 3e6, 0);
+        RP_eta_sublead_before_EffCorr->Draw(0.5, 3e6, 0);
+        RP_eta_sublead->Draw(0.5, 3e6, 0);
+        RP_phi_lead_before_PUCorr->Draw(0.5, 3e6, 0);
+        RP_phi_lead_before_RoccoR->Draw(0.5, 3e6, 0);
+        RP_phi_lead_before_EffCorr->Draw(0.5, 3e6, 0);
+        RP_phi_lead->Draw(0.5, 3e6, 0);
+        RP_phi_sublead_before_PUCorr->Draw(0.5, 3e6, 0);
+        RP_phi_sublead_before_RoccoR->Draw(0.5, 3e6, 0);
+        RP_phi_sublead_before_EffCorr->Draw(0.5, 3e6, 0);
+        RP_phi_sublead->Draw(0.5, 3e6, 0);
 
     } // End of if(Pt, rapi, pT, eta, phi)
 
-//################################# nPU #################################################
+//################################# nVTX #################################################
 
-    if( whichGraphs=="ALL" || whichGraphs=="NPU" || whichGraphs=="NPV" || whichGraphs.Contains("PILEUP") )
+    if( whichGraphs=="ALL" || whichGraphs=="nVTX" || whichGraphs=="NPV" || whichGraphs.Contains("PILEUP") )
     {
         count_drawn++;
 
-        THStack *s_nPU_before_PUCorr, *s_nPU_before_EffCorr, *s_nPU;
-        s_nPU_before_PUCorr = new THStack("s_nPU_before_PUCorr", "");
-        s_nPU_before_EffCorr = new THStack("s_nPU_before_EffCorr", "");
-        s_nPU = new THStack("s_nPU", "");
+        THStack *s_nVTX_before_PUCorr, *s_nVTX_before_EffCorr, *s_nVTX;
+        s_nVTX_before_PUCorr = new THStack("s_nVTX_before_PUCorr", "");
+        s_nVTX_before_EffCorr = new THStack("s_nVTX_before_EffCorr", "");
+        s_nVTX = new THStack("s_nVTX", "");
 
 //----------------------------------- MC bkg -------------------------------------------------------
-        TH1D *h_bkg_nPU_before_PUCorr[5], *h_bkg_nPU_before_EffCorr[5], *h_bkg_nPU[5];
+        TH1D *h_bkg_nVTX_before_PUCorr[5], *h_bkg_nVTX_before_EffCorr[5], *h_bkg_nVTX[5];
         Int_t iter = 0;
 
         for ( SelProc_t pr = _MuMu_QCDMuEnriched_Full; pr > _MuMu_DY_Full; pr=SelProc_t((int)(pr-1)) )
@@ -1303,48 +2479,48 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
                 break;
             }
 
-            f_bkg->GetObject( "h_nPU_before_PUCorr_"+Mgr.Procname[pr], h_bkg_nPU_before_PUCorr[iter] );
-            f_bkg->GetObject( "h_nPU_before_EffCorr_"+Mgr.Procname[pr], h_bkg_nPU_before_EffCorr[iter] );
-            f_bkg->GetObject( "h_nPU_"+Mgr.Procname[pr], h_bkg_nPU[iter] );
+            f_bkg->GetObject( "h_nVTX_before_PUCorr_"+Mgr.Procname[pr], h_bkg_nVTX_before_PUCorr[iter] );
+            f_bkg->GetObject( "h_nVTX_before_EffCorr_"+Mgr.Procname[pr], h_bkg_nVTX_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_nVTX_"+Mgr.Procname[pr], h_bkg_nVTX[iter] );
 
-            h_bkg_nPU_before_PUCorr[iter]->SetFillColor(iter+2);
-            h_bkg_nPU_before_EffCorr[iter]->SetFillColor(iter+2);
-            h_bkg_nPU[iter]->SetFillColor(iter+2);
+            h_bkg_nVTX_before_PUCorr[iter]->SetFillColor(iter+2);
+            h_bkg_nVTX_before_EffCorr[iter]->SetFillColor(iter+2);
+            h_bkg_nVTX[iter]->SetFillColor(iter+2);
 
-            h_bkg_nPU_before_PUCorr[iter]->SetLineColor(iter+2);
-            h_bkg_nPU_before_EffCorr[iter]->SetLineColor(iter+2);
-            h_bkg_nPU[iter]->SetLineColor(iter+2);
+            h_bkg_nVTX_before_PUCorr[iter]->SetLineColor(iter+2);
+            h_bkg_nVTX_before_EffCorr[iter]->SetLineColor(iter+2);
+            h_bkg_nVTX[iter]->SetLineColor(iter+2);
 
-            h_bkg_nPU_before_PUCorr[iter]->SetDirectory(0);
-            h_bkg_nPU_before_EffCorr[iter]->SetDirectory(0);
-            h_bkg_nPU[iter]->SetDirectory(0);
+            h_bkg_nVTX_before_PUCorr[iter]->SetDirectory(0);
+            h_bkg_nVTX_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_nVTX[iter]->SetDirectory(0);
 
-            s_nPU_before_PUCorr->Add( h_bkg_nPU_before_PUCorr[iter] );
-            s_nPU_before_EffCorr->Add( h_bkg_nPU_before_EffCorr[iter] );
-            s_nPU->Add( h_bkg_nPU[iter] );
+            s_nVTX_before_PUCorr->Add( h_bkg_nVTX_before_PUCorr[iter] );
+            s_nVTX_before_EffCorr->Add( h_bkg_nVTX_before_EffCorr[iter] );
+            s_nVTX->Add( h_bkg_nVTX[iter] );
 
             if ( iter == 1 )
             {   // ---- WJETS ---- //
                 iter++;
-                f_bkg->GetObject( "h_nPU_before_PUCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_nPU_before_PUCorr[iter] );
-                f_bkg->GetObject( "h_nPU_before_EffCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_nPU_before_EffCorr[iter] );
-                f_bkg->GetObject( "h_nPU_"+Mgr.Procname[_MuMu_WJets], h_bkg_nPU[iter] );
+                f_bkg->GetObject( "h_nVTX_before_PUCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_nVTX_before_PUCorr[iter] );
+                f_bkg->GetObject( "h_nVTX_before_EffCorr_"+Mgr.Procname[_MuMu_WJets], h_bkg_nVTX_before_EffCorr[iter] );
+                f_bkg->GetObject( "h_nVTX_"+Mgr.Procname[_MuMu_WJets], h_bkg_nVTX[iter] );
 
-                h_bkg_nPU_before_PUCorr[iter]->SetFillColor(iter+2);
-                h_bkg_nPU_before_EffCorr[iter]->SetFillColor(iter+2);
-                h_bkg_nPU[iter]->SetFillColor(iter+2);
+                h_bkg_nVTX_before_PUCorr[iter]->SetFillColor(iter+2);
+                h_bkg_nVTX_before_EffCorr[iter]->SetFillColor(iter+2);
+                h_bkg_nVTX[iter]->SetFillColor(iter+2);
 
-                h_bkg_nPU_before_PUCorr[iter]->SetLineColor(iter+2);
-                h_bkg_nPU_before_EffCorr[iter]->SetLineColor(iter+2);
-                h_bkg_nPU[iter]->SetLineColor(iter+2);
+                h_bkg_nVTX_before_PUCorr[iter]->SetLineColor(iter+2);
+                h_bkg_nVTX_before_EffCorr[iter]->SetLineColor(iter+2);
+                h_bkg_nVTX[iter]->SetLineColor(iter+2);
 
-                h_bkg_nPU_before_PUCorr[iter]->SetDirectory(0);
-                h_bkg_nPU_before_EffCorr[iter]->SetDirectory(0);
-                h_bkg_nPU[iter]->SetDirectory(0);
+                h_bkg_nVTX_before_PUCorr[iter]->SetDirectory(0);
+                h_bkg_nVTX_before_EffCorr[iter]->SetDirectory(0);
+                h_bkg_nVTX[iter]->SetDirectory(0);
 
-                s_nPU_before_PUCorr->Add( h_bkg_nPU_before_PUCorr[iter] );
-                s_nPU_before_EffCorr->Add( h_bkg_nPU_before_EffCorr[iter] );
-                s_nPU->Add( h_bkg_nPU[iter] );
+                s_nVTX_before_PUCorr->Add( h_bkg_nVTX_before_PUCorr[iter] );
+                s_nVTX_before_EffCorr->Add( h_bkg_nVTX_before_EffCorr[iter] );
+                s_nVTX->Add( h_bkg_nVTX[iter] );
 
             } // End of WJets
 
@@ -1353,100 +2529,87 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
 
 //---------------------------------- MC signal -----------------------------------------------------
 
-        TH1D *h_DY_nPU_before_PUCorr, *h_DY_nPU_before_EffCorr, *h_DY_nPU;
+        TH1D *h_DY_nVTX_before_PUCorr, *h_DY_nVTX_before_EffCorr, *h_DY_nVTX;
 
-        f_DY->GetObject( "h_nPU_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_nPU_before_PUCorr );
-        f_DY->GetObject( "h_nPU_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_nPU_before_EffCorr );
-        f_DY->GetObject( "h_nPU_"+Mgr.Procname[_MuMu_DY_Full], h_DY_nPU );
+        f_DY->GetObject( "h_nVTX_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_nVTX_before_PUCorr );
+        f_DY->GetObject( "h_nVTX_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_nVTX_before_EffCorr );
+        f_DY->GetObject( "h_nVTX_"+Mgr.Procname[_MuMu_DY_Full], h_DY_nVTX );
 
-        h_DY_nPU_before_PUCorr->SetFillColor(kOrange);
-        h_DY_nPU_before_EffCorr->SetFillColor(kOrange);
-        h_DY_nPU->SetFillColor(kOrange);
+        h_DY_nVTX_before_PUCorr->SetFillColor(kOrange);
+        h_DY_nVTX_before_EffCorr->SetFillColor(kOrange);
+        h_DY_nVTX->SetFillColor(kOrange);
 
-        h_DY_nPU_before_PUCorr->SetLineColor(kOrange);
-        h_DY_nPU_before_EffCorr->SetLineColor(kOrange);
-        h_DY_nPU->SetLineColor(kOrange);
+        h_DY_nVTX_before_PUCorr->SetLineColor(kOrange);
+        h_DY_nVTX_before_EffCorr->SetLineColor(kOrange);
+        h_DY_nVTX->SetLineColor(kOrange);
 
-        h_DY_nPU_before_PUCorr->SetDirectory(0);
-        h_DY_nPU_before_EffCorr->SetDirectory(0);
-        h_DY_nPU->SetDirectory(0);
+        h_DY_nVTX_before_PUCorr->SetDirectory(0);
+        h_DY_nVTX_before_EffCorr->SetDirectory(0);
+        h_DY_nVTX->SetDirectory(0);
 
-        s_nPU_before_PUCorr->Add( h_DY_nPU_before_PUCorr );
-        s_nPU_before_EffCorr->Add( h_DY_nPU_before_EffCorr );
-        s_nPU->Add( h_DY_nPU );
+        s_nVTX_before_PUCorr->Add( h_DY_nVTX_before_PUCorr );
+        s_nVTX_before_EffCorr->Add( h_DY_nVTX_before_EffCorr );
+        s_nVTX->Add( h_DY_nVTX );
 
 //--------------------------------------- DATA -----------------------------------------------------
 
-        TH1D *h_data_nPU;
-        TH1D *h_ones = new TH1D( "ones", "", 75, 0, 75 );
-        for ( int i=0; i<=75; i++ )
-        {
-            h_ones->Fill(i);
-        }
+        TH1D *h_data_nVTX;
 
-        f_PileUp->GetObject( "pileup", h_data_nPU );
+        f_data->GetObject( "h_nVTX_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_nVTX );
 
-        h_data_nPU->Multiply( h_ones, h_data_nPU, 1, dataintegral );
+        h_data_nVTX->SetMarkerStyle(kFullDotLarge);
+        h_data_nVTX->SetMarkerColor(kBlack);
+        h_data_nVTX->SetLineColor(kBlack);
 
-        h_data_nPU->SetMarkerStyle(kFullDotLarge);
-        h_data_nPU->SetMarkerColor(kBlack);
-        h_data_nPU->SetLineColor(kBlack);
-
-        h_data_nPU->SetDirectory(0);
+        h_data_nVTX->SetDirectory(0);
 
 //--------------------------------- Ratio Plot --------------------------------------
 
-        myRatioPlot_t *RP_nPU_before_PUCorr, *RP_nPU_before_EffCorr, *RP_nPU;
-        RP_nPU_before_PUCorr = new myRatioPlot_t( "RP_nPU_before_PUCorr", s_nPU_before_PUCorr, h_data_nPU );
-        RP_nPU_before_EffCorr = new myRatioPlot_t( "RP_nPU_before_EffCorr", s_nPU_before_EffCorr, h_data_nPU );
-        RP_nPU = new myRatioPlot_t( "RP_nPU", s_nPU, h_data_nPU );
+        myRatioPlot_t *RP_nVTX_before_PUCorr, *RP_nVTX_before_EffCorr, *RP_nVTX;
+        RP_nVTX_before_PUCorr = new myRatioPlot_t( "RP_nVTX_before_PUCorr", s_nVTX_before_PUCorr, h_data_nVTX );
+        RP_nVTX_before_EffCorr = new myRatioPlot_t( "RP_nVTX_before_EffCorr", s_nVTX_before_EffCorr, h_data_nVTX );
+        RP_nVTX = new myRatioPlot_t( "RP_nVTX", s_nVTX, h_data_nVTX );
 
-        RP_nPU_before_PUCorr->SetPlots("# Primary Vertices (before PU correction)", 0, 50);
-        RP_nPU_before_EffCorr->SetPlots("# Primary Vertices (before Efficiency correction)", 0, 50);
-        RP_nPU->SetPlots("# Primary Vertices", 0, 50);
+        RP_nVTX_before_PUCorr->SetPlots("# Primary Vertices (before PU correction)", 0, 50);
+        RP_nVTX_before_EffCorr->SetPlots("# Primary Vertices (before Efficiency correction)", 0, 50);
+        RP_nVTX->SetPlots("# Primary Vertices", 0, 50);
 
-        RP_nPU_before_PUCorr->SetLegend(0.75, 0.4);
-        RP_nPU_before_EffCorr->SetLegend(0.75, 0.4);
-        RP_nPU->SetLegend(0.75, 0.4);
+        RP_nVTX_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_nVTX_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_nVTX->SetLegend(0.75, 0.4);
 
         // Legend data
-        RP_nPU_before_PUCorr->AddLegendEntry(h_data_nPU, "Data", "lp");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_data_nPU, "Data", "lp");
-        RP_nPU->AddLegendEntry(h_data_nPU, "Data", "lp");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_data_nVTX, "Data", "lp");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_data_nVTX, "Data", "lp");
+        RP_nVTX->AddLegendEntry(h_data_nVTX, "Data", "lp");
 
         // Legend MC signal
-        RP_nPU_before_PUCorr->AddLegendEntry(h_DY_nPU_before_PUCorr, "DY#rightarrow#mu#mu", "f");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_DY_nPU_before_EffCorr, "DY#rightarrow#mu#mu", "f");
-        RP_nPU->AddLegendEntry(h_DY_nPU, "DY#rightarrow#mu#mu", "f");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_DY_nVTX_before_PUCorr, "DY#rightarrow#mu#mu", "f");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_DY_nVTX_before_EffCorr, "DY#rightarrow#mu#mu", "f");
+        RP_nVTX->AddLegendEntry(h_DY_nVTX, "DY#rightarrow#mu#mu", "f");
 
         // Legend MC BKG
-        RP_nPU_before_PUCorr->AddLegendEntry(h_bkg_nPU_before_PUCorr[0], "QCD", "f");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_bkg_nPU_before_EffCorr[0], "QCD", "f");
-        RP_nPU->AddLegendEntry(h_bkg_nPU[0], "QCD", "f");
-        RP_nPU_before_PUCorr->AddLegendEntry(h_bkg_nPU_before_PUCorr[1], "VVnST", "f");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_bkg_nPU_before_EffCorr[1], "VVnST", "f");
-        RP_nPU->AddLegendEntry(h_bkg_nPU[1], "VVnST", "f");
-        RP_nPU_before_PUCorr->AddLegendEntry(h_bkg_nPU_before_PUCorr[2], "W+Jets", "f");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_bkg_nPU_before_EffCorr[2], "W+Jets", "f");
-        RP_nPU->AddLegendEntry(h_bkg_nPU[2], "W+Jets", "f");
-        RP_nPU_before_PUCorr->AddLegendEntry(h_bkg_nPU_before_PUCorr[3], "t#bar{t}", "f");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_bkg_nPU_before_EffCorr[3], "t#bar{t}", "f");
-        RP_nPU->AddLegendEntry(h_bkg_nPU[3], "t#bar{t}", "f");
-        RP_nPU_before_PUCorr->AddLegendEntry(h_bkg_nPU_before_PUCorr[4], "DY#rightarrow #tau#tau", "f");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_bkg_nPU_before_EffCorr[4], "DY#rightarrow #tau#tau", "f");
-        RP_nPU->AddLegendEntry(h_bkg_nPU[4], "DY#rightarrow #tau#tau", "f");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_bkg_nVTX_before_PUCorr[0], "QCD", "f");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_bkg_nVTX_before_EffCorr[0], "QCD", "f");
+        RP_nVTX->AddLegendEntry(h_bkg_nVTX[0], "QCD", "f");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_bkg_nVTX_before_PUCorr[1], "VVnST", "f");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_bkg_nVTX_before_EffCorr[1], "VVnST", "f");
+        RP_nVTX->AddLegendEntry(h_bkg_nVTX[1], "VVnST", "f");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_bkg_nVTX_before_PUCorr[2], "W+Jets", "f");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_bkg_nVTX_before_EffCorr[2], "W+Jets", "f");
+        RP_nVTX->AddLegendEntry(h_bkg_nVTX[2], "W+Jets", "f");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_bkg_nVTX_before_PUCorr[3], "t#bar{t}", "f");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_bkg_nVTX_before_EffCorr[3], "t#bar{t}", "f");
+        RP_nVTX->AddLegendEntry(h_bkg_nVTX[3], "t#bar{t}", "f");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_bkg_nVTX_before_PUCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_bkg_nVTX_before_EffCorr[4], "DY#rightarrow #tau#tau", "f");
+        RP_nVTX->AddLegendEntry(h_bkg_nVTX[4], "DY#rightarrow #tau#tau", "f");
 
-        RP_nPU_before_PUCorr->Draw(0.5, 3e6, 0);
-        RP_nPU_before_EffCorr->Draw(0.5, 3e6, 0);
-        RP_nPU->Draw(0.5, 3e6, 0);
-//        Double_t dataerror, MCerror;
-//        Double_t dataintegral = h_data_mass->IntegralAndError(1, h_data_mass->GetSize()-2, dataerror);
-//        Double_t MCintegral = ((TH1D*)(s_mass->GetStack()->Last()))->IntegralAndError(1, h_data_mass->GetSize()-2, MCerror);
+        RP_nVTX_before_PUCorr->Draw(0.5, 3e6, 0);
+        RP_nVTX_before_EffCorr->Draw(0.5, 3e6, 0);
+        RP_nVTX->Draw(0.5, 3e6, 0);
 
-//        std::cout << "data events: " << dataintegral << "+-" << dataerror << endl;
-//        std::cout << "MC events: " << MCintegral << "+-" << MCerror << endl;
-
-    } // End of if(nPU)
+    } // End of if(nVTX)
 
 } // End of MuMu_HistDrawer()
 
@@ -1463,6 +2626,7 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
     LocalFileMgr Mgr;
 
     Mgr.SetProc( _EMu_Bkg_Full );
+    cout << "Hists location: " << Mgr.HistLocation << endl;
     TString name_bkg = Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root";
     TFile* f_bkg = new TFile( name_bkg, "READ" );
     if (f_bkg->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root" << " opened successfully" << endl;
@@ -1470,10 +2634,16 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
     TString name_data = Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root";
     TFile* f_data = new TFile( name_data, "READ" );
     if (f_data->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root" << " opened successfully" << endl;
-    TString name_PileUp = "./etc/PileUp/80X/ROOTFile_PUReWeight_80X_v20170817_64mb.root";
-    TFile *f_PileUp = new TFile( name_PileUp, "READ" );
-    if (f_PileUp->IsOpen()) std::cout << "File " << "ROOTFile_PUReWeight_80X_v20170817_64mb.root" << " opened successfully" << endl;
 
+    // Files without Rochester correction
+    Mgr.SetProc( _EMu_Bkg_Full );
+    TString name_bkg_noRC = Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root";
+    TFile* f_bkg_noRC = new TFile( name_bkg_noRC, "READ" );
+    if (f_bkg_noRC->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root" << " opened successfully" << endl;
+    Mgr.SetProc( _EMu_SingleMuon_Full );
+    TString name_data_noRC = Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root";
+    TFile* f_data_noRC = new TFile( name_data_noRC, "READ" );
+    if (f_data_noRC->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root" << " opened successfully" << endl;
 
     Double_t dataerror, MCerror, dataintegral=348650, MCintegral;
 
@@ -1510,13 +2680,13 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
                 break;
             }
 
-            f_bkg->GetObject( "h_emu_mass_fine_before_PUCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_PUCorr[iter] );
-            f_bkg->GetObject( "h_emu_mass_fine_before_RoccoR_"+Mgr.Procname[pr], h_bkg_mass_fine_before_RoccoR[iter] );
+            f_bkg_noRC->GetObject( "h_emu_mass_fine_before_PUCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_PUCorr[iter] );
+            f_bkg_noRC->GetObject( "h_emu_mass_fine_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_RoccoR[iter] );
             f_bkg->GetObject( "h_emu_mass_fine_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_EffCorr[iter] );
             f_bkg->GetObject( "h_emu_mass_fine_"+Mgr.Procname[pr], h_bkg_mass_fine[iter] );
             f_bkg->GetObject( "h_emu_mass_"+Mgr.Procname[pr], h_bkg_mass[iter] );
-            f_bkg->GetObject( "h_emuSS_mass_fine_before_PUCorr_"+Mgr.Procname[pr], h_SS_bkg_mass_fine_before_PUCorr[iter] );
-            f_bkg->GetObject( "h_emuSS_mass_fine_before_RoccoR_"+Mgr.Procname[pr], h_SS_bkg_mass_fine_before_RoccoR[iter] );
+            f_bkg_noRC->GetObject( "h_emuSS_mass_fine_before_PUCorr_"+Mgr.Procname[pr], h_SS_bkg_mass_fine_before_PUCorr[iter] );
+            f_bkg_noRC->GetObject( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[pr], h_SS_bkg_mass_fine_before_RoccoR[iter] );
             f_bkg->GetObject( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[pr], h_SS_bkg_mass_fine_before_EffCorr[iter] );
             f_bkg->GetObject( "h_emuSS_mass_fine_"+Mgr.Procname[pr], h_SS_bkg_mass_fine[iter] );
             f_bkg->GetObject( "h_emuSS_mass_"+Mgr.Procname[pr], h_SS_bkg_mass[iter] );
@@ -1568,13 +2738,13 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
             if ( iter == 0 )
             {   // ---- WJETS ---- //
                 iter++;
-                f_bkg->GetObject( "h_emu_mass_fine_before_PUCorr_"+Mgr.Procname[_EMu_WJets], h_bkg_mass_fine_before_PUCorr[iter] );
-                f_bkg->GetObject( "h_emu_mass_fine_before_RoccoR_"+Mgr.Procname[_EMu_WJets], h_bkg_mass_fine_before_RoccoR[iter] );
+                f_bkg_noRC->GetObject( "h_emu_mass_fine_before_PUCorr_"+Mgr.Procname[_EMu_WJets], h_bkg_mass_fine_before_PUCorr[iter] );
+                f_bkg_noRC->GetObject( "h_emu_mass_fine_before_EffCorr_"+Mgr.Procname[_EMu_WJets], h_bkg_mass_fine_before_RoccoR[iter] );
                 f_bkg->GetObject( "h_emu_mass_fine_before_EffCorr_"+Mgr.Procname[_EMu_WJets], h_bkg_mass_fine_before_EffCorr[iter] );
                 f_bkg->GetObject( "h_emu_mass_fine_"+Mgr.Procname[_EMu_WJets], h_bkg_mass_fine[iter] );
                 f_bkg->GetObject( "h_emu_mass_"+Mgr.Procname[_EMu_WJets], h_bkg_mass[iter] );
-                f_bkg->GetObject( "h_emuSS_mass_fine_before_PUCorr_"+Mgr.Procname[_EMu_WJets], h_SS_bkg_mass_fine_before_PUCorr[iter] );
-                f_bkg->GetObject( "h_emuSS_mass_fine_before_RoccoR_"+Mgr.Procname[_EMu_WJets], h_SS_bkg_mass_fine_before_RoccoR[iter] );
+                f_bkg_noRC->GetObject( "h_emuSS_mass_fine_before_PUCorr_"+Mgr.Procname[_EMu_WJets], h_SS_bkg_mass_fine_before_PUCorr[iter] );
+                f_bkg_noRC->GetObject( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[_EMu_WJets], h_SS_bkg_mass_fine_before_RoccoR[iter] );
                 f_bkg->GetObject( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[_EMu_WJets], h_SS_bkg_mass_fine_before_EffCorr[iter] );
                 f_bkg->GetObject( "h_emuSS_mass_fine_"+Mgr.Procname[_EMu_WJets], h_SS_bkg_mass_fine[iter] );
                 f_bkg->GetObject( "h_emuSS_mass_"+Mgr.Procname[_EMu_WJets], h_SS_bkg_mass[iter] );
@@ -1633,13 +2803,13 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
         TH1D *h_data_mass_fine_before_PUCorr, *h_data_mass_fine_before_RoccoR, *h_data_mass_fine_before_EffCorr, *h_data_mass_fine, *h_data_mass,
              *h_SS_data_mass_fine_before_PUCorr, *h_SS_data_mass_fine_before_RoccoR, *h_SS_data_mass_fine_before_EffCorr, *h_SS_data_mass_fine, *h_SS_data_mass;
 
-        f_data->GetObject( "h_emu_mass_fine_before_PUCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_mass_fine_before_PUCorr );
-        f_data->GetObject( "h_emu_mass_fine_before_RoccoR_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_mass_fine_before_RoccoR );
+        f_data_noRC->GetObject( "h_emu_mass_fine_before_PUCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_mass_fine_before_PUCorr );
+        f_data_noRC->GetObject( "h_emu_mass_fine_before_EffCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_mass_fine_before_RoccoR );
         f_data->GetObject( "h_emu_mass_fine_before_EffCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_mass_fine_before_EffCorr );
         f_data->GetObject( "h_emu_mass_fine_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_mass_fine );
         f_data->GetObject( "h_emu_mass_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_mass );
-        f_data->GetObject( "h_emuSS_mass_fine_before_PUCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_SS_data_mass_fine_before_PUCorr );
-        f_data->GetObject( "h_emuSS_mass_fine_before_RoccoR_"+Mgr.Procname[_EMu_SingleMuon_Full], h_SS_data_mass_fine_before_RoccoR );
+        f_data_noRC->GetObject( "h_emuSS_mass_fine_before_PUCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_SS_data_mass_fine_before_PUCorr );
+        f_data_noRC->GetObject( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_SS_data_mass_fine_before_RoccoR );
         f_data->GetObject( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_SS_data_mass_fine_before_EffCorr );
         f_data->GetObject( "h_emuSS_mass_fine_"+Mgr.Procname[_EMu_SingleMuon_Full], h_SS_data_mass_fine );
         f_data->GetObject( "h_emuSS_mass_"+Mgr.Procname[_EMu_SingleMuon_Full], h_SS_data_mass );
@@ -2173,19 +3343,19 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
 
     } // End of if(Pt, rapi, pT, eta, phi)
 
-//################################# nPU #################################################
+//################################# nVTX #################################################
 
-    if( whichGraphs=="ALL" || whichGraphs=="NPU" || whichGraphs=="NPV" || whichGraphs.Contains("PILEUP") )
+    if( whichGraphs=="ALL" || whichGraphs=="nVTX" || whichGraphs=="NPV" || whichGraphs.Contains("PILEUP") )
     {
         count_drawn++;
 
-        THStack *s_nPU_before_PUCorr, *s_nPU_before_EffCorr, *s_nPU;
-        s_nPU_before_PUCorr = new THStack("s_nPU_before_PUCorr", "");
-        s_nPU_before_EffCorr = new THStack("s_nPU_before_EffCorr", "");
-        s_nPU = new THStack("s_nPU", "");
+        THStack *s_nVTX_before_PUCorr, *s_nVTX_before_EffCorr, *s_nVTX;
+        s_nVTX_before_PUCorr = new THStack("s_nVTX_before_PUCorr", "");
+        s_nVTX_before_EffCorr = new THStack("s_nVTX_before_EffCorr", "");
+        s_nVTX = new THStack("s_nVTX", "");
 
 //----------------------------------- MC bkg -------------------------------------------------------
-        TH1D *h_bkg_nPU_before_PUCorr[4], *h_bkg_nPU_before_EffCorr[4], *h_bkg_nPU[4];
+        TH1D *h_bkg_nVTX_before_PUCorr[4], *h_bkg_nVTX_before_EffCorr[4], *h_bkg_nVTX[4];
         Int_t iter = 0;
 
         for ( SelProc_t pr = _EMu_VVnST; pr > _EndOf_EMu_Data_Normal; pr=SelProc_t((int)(pr-1)) )
@@ -2196,48 +3366,48 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
                 break;
             }
 
-            f_bkg->GetObject( "h_nPU_before_PUCorr_"+Mgr.Procname[pr], h_bkg_nPU_before_PUCorr[iter] );
-            f_bkg->GetObject( "h_nPU_before_EffCorr_"+Mgr.Procname[pr], h_bkg_nPU_before_EffCorr[iter] );
-            f_bkg->GetObject( "h_nPU_"+Mgr.Procname[pr], h_bkg_nPU[iter] );
+            f_bkg->GetObject( "h_nVTX_before_PUCorr_"+Mgr.Procname[pr], h_bkg_nVTX_before_PUCorr[iter] );
+            f_bkg->GetObject( "h_nVTX_before_EffCorr_"+Mgr.Procname[pr], h_bkg_nVTX_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_nVTX_"+Mgr.Procname[pr], h_bkg_nVTX[iter] );
 
-            h_bkg_nPU_before_PUCorr[iter]->SetFillColor(iter+2);
-            h_bkg_nPU_before_EffCorr[iter]->SetFillColor(iter+2);
-            h_bkg_nPU[iter]->SetFillColor(iter+2);
+            h_bkg_nVTX_before_PUCorr[iter]->SetFillColor(iter+2);
+            h_bkg_nVTX_before_EffCorr[iter]->SetFillColor(iter+2);
+            h_bkg_nVTX[iter]->SetFillColor(iter+2);
 
-            h_bkg_nPU_before_PUCorr[iter]->SetLineColor(iter+2);
-            h_bkg_nPU_before_EffCorr[iter]->SetLineColor(iter+2);
-            h_bkg_nPU[iter]->SetLineColor(iter+2);
+            h_bkg_nVTX_before_PUCorr[iter]->SetLineColor(iter+2);
+            h_bkg_nVTX_before_EffCorr[iter]->SetLineColor(iter+2);
+            h_bkg_nVTX[iter]->SetLineColor(iter+2);
 
-            h_bkg_nPU_before_PUCorr[iter]->SetDirectory(0);
-            h_bkg_nPU_before_EffCorr[iter]->SetDirectory(0);
-            h_bkg_nPU[iter]->SetDirectory(0);
+            h_bkg_nVTX_before_PUCorr[iter]->SetDirectory(0);
+            h_bkg_nVTX_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_nVTX[iter]->SetDirectory(0);
 
-            s_nPU_before_PUCorr->Add( h_bkg_nPU_before_PUCorr[iter] );
-            s_nPU_before_EffCorr->Add( h_bkg_nPU_before_EffCorr[iter] );
-            s_nPU->Add( h_bkg_nPU[iter] );
+            s_nVTX_before_PUCorr->Add( h_bkg_nVTX_before_PUCorr[iter] );
+            s_nVTX_before_EffCorr->Add( h_bkg_nVTX_before_EffCorr[iter] );
+            s_nVTX->Add( h_bkg_nVTX[iter] );
 
             if ( iter == 1 )
             {   // ---- WJETS ---- //
                 iter++;
-                f_bkg->GetObject( "h_nPU_before_PUCorr_"+Mgr.Procname[_EMu_WJets], h_bkg_nPU_before_PUCorr[iter] );
-                f_bkg->GetObject( "h_nPU_before_EffCorr_"+Mgr.Procname[_EMu_WJets], h_bkg_nPU_before_EffCorr[iter] );
-                f_bkg->GetObject( "h_nPU_"+Mgr.Procname[_EMu_WJets], h_bkg_nPU[iter] );
+                f_bkg->GetObject( "h_nVTX_before_PUCorr_"+Mgr.Procname[_EMu_WJets], h_bkg_nVTX_before_PUCorr[iter] );
+                f_bkg->GetObject( "h_nVTX_before_EffCorr_"+Mgr.Procname[_EMu_WJets], h_bkg_nVTX_before_EffCorr[iter] );
+                f_bkg->GetObject( "h_nVTX_"+Mgr.Procname[_EMu_WJets], h_bkg_nVTX[iter] );
 
-                h_bkg_nPU_before_PUCorr[iter]->SetFillColor(iter+2);
-                h_bkg_nPU_before_EffCorr[iter]->SetFillColor(iter+2);
-                h_bkg_nPU[iter]->SetFillColor(iter+2);
+                h_bkg_nVTX_before_PUCorr[iter]->SetFillColor(iter+2);
+                h_bkg_nVTX_before_EffCorr[iter]->SetFillColor(iter+2);
+                h_bkg_nVTX[iter]->SetFillColor(iter+2);
 
-                h_bkg_nPU_before_PUCorr[iter]->SetLineColor(iter+2);
-                h_bkg_nPU_before_EffCorr[iter]->SetLineColor(iter+2);
-                h_bkg_nPU[iter]->SetLineColor(iter+2);
+                h_bkg_nVTX_before_PUCorr[iter]->SetLineColor(iter+2);
+                h_bkg_nVTX_before_EffCorr[iter]->SetLineColor(iter+2);
+                h_bkg_nVTX[iter]->SetLineColor(iter+2);
 
-                h_bkg_nPU_before_PUCorr[iter]->SetDirectory(0);
-                h_bkg_nPU_before_EffCorr[iter]->SetDirectory(0);
-                h_bkg_nPU[iter]->SetDirectory(0);
+                h_bkg_nVTX_before_PUCorr[iter]->SetDirectory(0);
+                h_bkg_nVTX_before_EffCorr[iter]->SetDirectory(0);
+                h_bkg_nVTX[iter]->SetDirectory(0);
 
-                s_nPU_before_PUCorr->Add( h_bkg_nPU_before_PUCorr[iter] );
-                s_nPU_before_EffCorr->Add( h_bkg_nPU_before_EffCorr[iter] );
-                s_nPU->Add( h_bkg_nPU[iter] );
+                s_nVTX_before_PUCorr->Add( h_bkg_nVTX_before_PUCorr[iter] );
+                s_nVTX_before_EffCorr->Add( h_bkg_nVTX_before_EffCorr[iter] );
+                s_nVTX->Add( h_bkg_nVTX[iter] );
 
             } // End of WJets
 
@@ -2246,67 +3416,54 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
 
 //--------------------------------------- DATA -----------------------------------------------------
 
-        TH1D *h_data_nPU;
-        TH1D *h_ones = new TH1D( "ones", "", 75, 0, 75 );
-        for ( int i=0; i<=75; i++ )
-        {
-            h_ones->Fill(i);
-        }
+        TH1D *h_data_nVTX;
 
-        f_PileUp->GetObject( "pileup", h_data_nPU );
+        f_data->GetObject( "h_nVTX_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_nVTX );
 
-        h_data_nPU->Multiply( h_ones, h_data_nPU, 1, dataintegral );
+        h_data_nVTX->SetMarkerStyle(kFullDotLarge);
+        h_data_nVTX->SetMarkerColor(kBlack);
+        h_data_nVTX->SetLineColor(kBlack);
 
-        h_data_nPU->SetMarkerStyle(kFullDotLarge);
-        h_data_nPU->SetMarkerColor(kBlack);
-        h_data_nPU->SetLineColor(kBlack);
-
-        h_data_nPU->SetDirectory(0);
+        h_data_nVTX->SetDirectory(0);
 
 //--------------------------------- Ratio Plot --------------------------------------
 
-        myRatioPlot_t *RP_nPU_before_PUCorr, *RP_nPU_before_EffCorr, *RP_nPU;
-        RP_nPU_before_PUCorr = new myRatioPlot_t( "RP_nPU_before_PUCorr", s_nPU_before_PUCorr, h_data_nPU );
-        RP_nPU_before_EffCorr = new myRatioPlot_t( "RP_nPU_before_EffCorr", s_nPU_before_EffCorr, h_data_nPU );
-        RP_nPU = new myRatioPlot_t( "RP_nPU", s_nPU, h_data_nPU );
+        myRatioPlot_t *RP_nVTX_before_PUCorr, *RP_nVTX_before_EffCorr, *RP_nVTX;
+        RP_nVTX_before_PUCorr = new myRatioPlot_t( "RP_nVTX_before_PUCorr", s_nVTX_before_PUCorr, h_data_nVTX );
+        RP_nVTX_before_EffCorr = new myRatioPlot_t( "RP_nVTX_before_EffCorr", s_nVTX_before_EffCorr, h_data_nVTX );
+        RP_nVTX = new myRatioPlot_t( "RP_nVTX", s_nVTX, h_data_nVTX );
 
-        RP_nPU_before_PUCorr->SetPlots("# Primary Vertices (before PU correction)", 0, 50);
-        RP_nPU_before_EffCorr->SetPlots("# Primary Vertices (before Efficiency correction)", 0, 50);
-        RP_nPU->SetPlots("# Primary Vertices", 0, 50);
+        RP_nVTX_before_PUCorr->SetPlots("# Primary Vertices (before PU correction)", 0, 50);
+        RP_nVTX_before_EffCorr->SetPlots("# Primary Vertices (before Efficiency correction)", 0, 50);
+        RP_nVTX->SetPlots("# Primary Vertices", 0, 50);
 
-        RP_nPU_before_PUCorr->SetLegend(0.75, 0.4);
-        RP_nPU_before_EffCorr->SetLegend(0.75, 0.4);
-        RP_nPU->SetLegend(0.75, 0.4);
+        RP_nVTX_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_nVTX_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_nVTX->SetLegend(0.75, 0.4);
 
         // Legend data
-        RP_nPU_before_PUCorr->AddLegendEntry(h_data_nPU, "Data", "lp");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_data_nPU, "Data", "lp");
-        RP_nPU->AddLegendEntry(h_data_nPU, "Data", "lp");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_data_nVTX, "Data", "lp");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_data_nVTX, "Data", "lp");
+        RP_nVTX->AddLegendEntry(h_data_nVTX, "Data", "lp");
 
         // Legend MC BKG
-        RP_nPU_before_PUCorr->AddLegendEntry(h_bkg_nPU_before_PUCorr[0], "VVnST", "f");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_bkg_nPU_before_EffCorr[0], "VVnST", "f");
-        RP_nPU->AddLegendEntry(h_bkg_nPU[0], "VVnST", "f");
-        RP_nPU_before_PUCorr->AddLegendEntry(h_bkg_nPU_before_PUCorr[1], "W+Jets", "f");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_bkg_nPU_before_EffCorr[1], "W+Jets", "f");
-        RP_nPU->AddLegendEntry(h_bkg_nPU[1], "W+Jets", "f");
-        RP_nPU_before_PUCorr->AddLegendEntry(h_bkg_nPU_before_PUCorr[2], "t#bar{t}", "f");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_bkg_nPU_before_EffCorr[2], "t#bar{t}", "f");
-        RP_nPU->AddLegendEntry(h_bkg_nPU[2], "t#bar{t}", "f");
-        RP_nPU_before_PUCorr->AddLegendEntry(h_bkg_nPU_before_PUCorr[3], "DY#rightarrow #tau#tau", "f");
-        RP_nPU_before_EffCorr->AddLegendEntry(h_bkg_nPU_before_EffCorr[3], "DY#rightarrow #tau#tau", "f");
-        RP_nPU->AddLegendEntry(h_bkg_nPU[3], "DY#rightarrow #tau#tau", "f");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_bkg_nVTX_before_PUCorr[0], "VVnST", "f");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_bkg_nVTX_before_EffCorr[0], "VVnST", "f");
+        RP_nVTX->AddLegendEntry(h_bkg_nVTX[0], "VVnST", "f");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_bkg_nVTX_before_PUCorr[1], "W+Jets", "f");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_bkg_nVTX_before_EffCorr[1], "W+Jets", "f");
+        RP_nVTX->AddLegendEntry(h_bkg_nVTX[1], "W+Jets", "f");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_bkg_nVTX_before_PUCorr[2], "t#bar{t}", "f");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_bkg_nVTX_before_EffCorr[2], "t#bar{t}", "f");
+        RP_nVTX->AddLegendEntry(h_bkg_nVTX[2], "t#bar{t}", "f");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_bkg_nVTX_before_PUCorr[3], "DY#rightarrow #tau#tau", "f");
+        RP_nVTX_before_EffCorr->AddLegendEntry(h_bkg_nVTX_before_EffCorr[3], "DY#rightarrow #tau#tau", "f");
+        RP_nVTX->AddLegendEntry(h_bkg_nVTX[3], "DY#rightarrow #tau#tau", "f");
 
-        RP_nPU_before_PUCorr->Draw(0.5, 3e6, 0);
-        RP_nPU_before_EffCorr->Draw(0.5, 3e6, 0);
-        RP_nPU->Draw(0.5, 3e6, 0);
-//        Double_t dataerror, MCerror;
-//        Double_t dataintegral = h_data_mass->IntegralAndError(1, h_data_mass->GetSize()-2, dataerror);
-//        Double_t MCintegral = ((TH1D*)(s_mass->GetStack()->Last()))->IntegralAndError(1, h_data_mass->GetSize()-2, MCerror);
+        RP_nVTX_before_PUCorr->Draw(0.5, 3e6, 0);
+        RP_nVTX_before_EffCorr->Draw(0.5, 3e6, 0);
+        RP_nVTX->Draw(0.5, 3e6, 0);
 
-//        std::cout << "data events: " << dataintegral << "+-" << dataerror << endl;
-//        std::cout << "MC events: " << MCintegral << "+-" << MCerror << endl;
-
-    } // End of if(nPU)
+    } // End of if(nVTX)
 
 } // End of EMu_HistDrawer()

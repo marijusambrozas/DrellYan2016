@@ -168,33 +168,33 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         analyzer->SetupEfficiencyScaleFactor_electron();        
 
         // -- Creating Histograms -- //
-        TH1D *h_mass_fine_before_PUCorr = new TH1D("h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000);
-        TH1D *h_mass_fine_before_EffCorr = new TH1D("h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000);
+        TH1D *h_mass_fine_before_PUCorr = new TH1D("h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins);
+        TH1D *h_mass_fine_before_EffCorr = new TH1D("h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins);
         TH1D *h_mass_fine = new TH1D("h_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000);
         TH1D *h_mass = new TH1D("h_mass_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins);
-        TH1D *h_pT = new TH1D("h_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
+        TH1D *h_pT = new TH1D("h_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
         TH1D *h_rapi = new TH1D("h_rapi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5);
 
         TH1D *h_nVTX_before_PUCorr = new TH1D( "h_nVTX_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
         TH1D *h_nVTX_before_EffCorr = new TH1D( "h_nVTX_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
         TH1D *h_nVTX = new TH1D( "h_nVTX_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
 
-        TH1D *h_pT_lead_before_PUCorr = new TH1D("h_pT_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
-        TH1D *h_pT_sublead_before_PUCorr = new TH1D("h_pT_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
+        TH1D *h_pT_lead_before_PUCorr = new TH1D("h_pT_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
+        TH1D *h_pT_sublead_before_PUCorr = new TH1D("h_pT_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
         TH1D *h_eta_lead_before_PUCorr = new TH1D("h_eta_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
         TH1D *h_eta_sublead_before_PUCorr = new TH1D("h_eta_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
         TH1D *h_phi_lead_before_PUCorr = new TH1D("h_phi_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
         TH1D *h_phi_sublead_before_PUCorr = new TH1D("h_phi_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
 
-        TH1D *h_pT_lead_before_EffCorr = new TH1D("h_pT_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
-        TH1D *h_pT_sublead_before_EffCorr = new TH1D("h_pT_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
+        TH1D *h_pT_lead_before_EffCorr = new TH1D("h_pT_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
+        TH1D *h_pT_sublead_before_EffCorr = new TH1D("h_pT_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
         TH1D *h_eta_lead_before_EffCorr = new TH1D("h_eta_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
         TH1D *h_eta_sublead_before_EffCorr = new TH1D("h_eta_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
         TH1D *h_phi_lead_before_EffCorr = new TH1D("h_phi_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
         TH1D *h_phi_sublead_before_EffCorr = new TH1D("h_phi_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
 
-        TH1D *h_pT_lead = new TH1D("h_pT_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
-        TH1D *h_pT_sublead = new TH1D("h_pT_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 200, 0, 1000);
+        TH1D *h_pT_lead = new TH1D("h_pT_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
+        TH1D *h_pT_sublead = new TH1D("h_pT_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
         TH1D *h_eta_lead = new TH1D("h_eta_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
         TH1D *h_eta_sublead = new TH1D("h_eta_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
         TH1D *h_phi_lead = new TH1D("h_phi_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
@@ -453,33 +453,33 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
         analyzer->SetupEfficiencyScaleFactor_GtoH();
 
         // -- Creating Histograms -- //
-        TH1D *h_mass_fine_before_PUCorr = new TH1D( "h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
-        TH1D *h_mass_fine_before_EffCorr = new TH1D( "h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
+        TH1D *h_mass_fine_before_PUCorr = new TH1D( "h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
+        TH1D *h_mass_fine_before_EffCorr = new TH1D( "h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
         TH1D *h_mass_fine = new TH1D( "h_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
         TH1D *h_mass = new TH1D( "h_mass_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
-        TH1D *h_pT = new TH1D( "h_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_pT = new TH1D( "h_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_rapi = new TH1D( "h_rapi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5 );
 
         TH1D *h_nVTX_before_PUCorr = new TH1D( "h_nVTX_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
         TH1D *h_nVTX_before_EffCorr = new TH1D( "h_nVTX_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
         TH1D *h_nVTX = new TH1D( "h_nVTX_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
 
-        TH1D *h_pT_lead_before_PUCorr = new TH1D( "h_pT_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
-        TH1D *h_pT_sublead_before_PUCorr = new TH1D( "h_pT_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_pT_lead_before_PUCorr = new TH1D( "h_pT_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
+        TH1D *h_pT_sublead_before_PUCorr = new TH1D( "h_pT_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_eta_lead_before_PUCorr = new TH1D( "h_eta_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_eta_sublead_before_PUCorr = new TH1D( "h_eta_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_phi_lead_before_PUCorr = new TH1D( "h_phi_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_phi_sublead_before_PUCorr = new TH1D( "h_phi_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
 
-        TH1D *h_pT_lead_before_EffCorr = new TH1D( "h_pT_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
-        TH1D *h_pT_sublead_before_EffCorr = new TH1D( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_pT_lead_before_EffCorr = new TH1D( "h_pT_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
+        TH1D *h_pT_sublead_before_EffCorr = new TH1D( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_eta_lead_before_EffCorr = new TH1D( "h_eta_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_eta_sublead_before_EffCorr = new TH1D( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_phi_lead_before_EffCorr = new TH1D( "h_phi_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_phi_sublead_before_EffCorr = new TH1D( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
 
-        TH1D *h_pT_lead = new TH1D( "h_pT_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
-        TH1D *h_pT_sublead = new TH1D( "h_pT_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_pT_lead = new TH1D( "h_pT_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
+        TH1D *h_pT_sublead = new TH1D( "h_pT_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_eta_lead = new TH1D( "h_eta_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_eta_sublead = new TH1D( "h_eta_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_phi_lead = new TH1D( "h_phi_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
@@ -498,7 +498,8 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
             chain->Add( Mgr.FullLocation[i_tup] );
 
             SelectedMuMu_t *MuMu = new SelectedMuMu_t();
-            MuMu->CreateFromChain( chain );
+            MuMu->CreateFromChain( chain );         
+            MuMu->TurnOffBranches( "Muon_TuneP_pT Muon_TuneP_eta Muon_TuneP_phi nPileUp" );
 
             Int_t NEvents = chain->GetEntries();
             if ( NEvents != Mgr.nEvents[i_tup] ) cout << "\tEvent numbers do not match!!!" << endl;
@@ -509,31 +510,32 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
 
             myProgressBar_t bar( NEvents );
 
-            for(Int_t i=0; i<NEvents; i++)
-            {
+            for(Int_t i=0; i<NEvents/2; i++)
+            {              
                 MuMu->GetEvent(i);
 
-                if ( fabs(MuMu->Muon_eta->at(0)) > 2.4 || fabs(MuMu->Muon_eta->at(1)) > 2.4 )
-                {
-                    cout << "Muon etas:  [0] " << MuMu->Muon_eta->at(0) << "    [1] " << MuMu->Muon_eta->at(1) << endl;
-                    continue;
-                }
-
-                if ( MuMu->Muon_charge->size() != 2 )
-                {
-                    cout << "Charge vector has " << MuMu->Muon_charge->size() << " elements!!!" << endl;
-                    break;
-                }
-                if ( MuMu->Muon_pT->size() != 2 )
-                {
-                    cout << "pT vector has " << MuMu->Muon_pT->size() << " elements!!!" << endl;
-                    break;
-                }
                 if ( MuMu->Muon_eta->size() != 2 )
                 {
                     cout << "eta vector has " << MuMu->Muon_eta->size() << " elements!!!" << endl;
                     break;
                 }
+                else if ( fabs(MuMu->Muon_eta->at(0)) > 2.4 || fabs(MuMu->Muon_eta->at(1)) > 2.4 )
+                {
+                    cout << "Muon etas:  [0] " << MuMu->Muon_eta->at(0) << "    [1] " << MuMu->Muon_eta->at(1) << endl;
+                    continue;
+                }
+                if ( MuMu->Muon_charge->size() != 2 )
+                {
+                    cout << "Charge vector has " << MuMu->Muon_charge->size() << " elements!!!" << endl;
+                    break;
+                }
+                cout << "YOLO" << endl;
+                if ( MuMu->Muon_pT->size() != 2 )
+                {
+                    cout << "pT vector has " << MuMu->Muon_pT->size() << " elements!!!" << endl;
+                    break;
+                }
+
                 if ( MuMu->Muon_phi->size() != 2 )
                 {
                     cout << "phi vector has " << MuMu->Muon_phi->size() << " elements!!!" << endl;
@@ -545,7 +547,7 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
                     break;
                 }                
 
-                Double_t GenWeight = MuMu->GENEvt_weight;
+                Double_t GenWeight = MuMu->GENEvt_weight;            
 
                 // -- Pileup-Reweighting -- //
                 Double_t PUWeight = 1;
@@ -569,7 +571,7 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
                     {
                         weight1 = analyzer->EfficiencySF_EventWeight_HLT_BtoF( MuMu );
                         weight2 = analyzer->EfficiencySF_EventWeight_HLT_GtoH( MuMu );
-                        effweight = (L_B2F*weight1 + L_G2H*weight2)/L_B2H;
+                        effweight = ( L_B2F * weight1 + L_G2H * weight2 ) / L_B2H;
                     }
 
                     Double_t reco_Pt = ( mu1 + mu2 ).Pt();
@@ -776,12 +778,12 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
         analyzer->SetupEfficiencyScaleFactor_electron();
 
         // -- Creating Histograms -- //
-        TH1D *h_emu_mass_fine_before_PUCorr = new TH1D( "h_emu_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
-        TH1D *h_emu_mass_fine_before_EffCorr = new TH1D( "h_emu_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
+        TH1D *h_emu_mass_fine_before_PUCorr = new TH1D( "h_emu_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
+        TH1D *h_emu_mass_fine_before_EffCorr = new TH1D( "h_emu_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
         TH1D *h_emu_mass_fine = new TH1D( "h_emu_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
         TH1D *h_emu_mass = new TH1D( "h_emu_mass_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
-        TH1D *h_emuSS_mass_fine_before_PUCorr = new TH1D( "h_emuSS_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
-        TH1D *h_emuSS_mass_fine_before_EffCorr = new TH1D( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
+        TH1D *h_emuSS_mass_fine_before_PUCorr = new TH1D( "h_emuSS_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
+        TH1D *h_emuSS_mass_fine_before_EffCorr = new TH1D( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
         TH1D *h_emuSS_mass_fine = new TH1D( "h_emuSS_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
         TH1D *h_emuSS_mass = new TH1D( "h_emuSS_mass_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
 
@@ -789,45 +791,45 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
         TH1D *h_nVTX_before_EffCorr = new TH1D( "h_nVTX_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
         TH1D *h_nVTX = new TH1D( "h_nVTX_"+Mgr.Procname[Mgr.CurrentProc], "", 75, 0, 75 );
 
-        TH1D *h_ele_pT_before_PUCorr = new TH1D( "h_ele_pT_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_ele_pT_before_PUCorr = new TH1D( "h_ele_pT_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_ele_eta_before_PUCorr = new TH1D( "h_ele_eta_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_ele_phi_before_PUCorr = new TH1D( "h_ele_phi_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
-        TH1D *h_eleSS_pT_before_PUCorr = new TH1D( "h_eleSS_pT_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_eleSS_pT_before_PUCorr = new TH1D( "h_eleSS_pT_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_eleSS_eta_before_PUCorr = new TH1D( "h_eleSS_eta_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_eleSS_phi_before_PUCorr = new TH1D( "h_eleSS_phi_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
 
-        TH1D *h_ele_pT_before_EffCorr = new TH1D( "h_ele_pT_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_ele_pT_before_EffCorr = new TH1D( "h_ele_pT_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_ele_eta_before_EffCorr = new TH1D( "h_ele_eta_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_ele_phi_before_EffCorr = new TH1D( "h_ele_phi_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
-        TH1D *h_eleSS_pT_before_EffCorr = new TH1D( "h_eleSS_pT_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_eleSS_pT_before_EffCorr = new TH1D( "h_eleSS_pT_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_eleSS_eta_before_EffCorr = new TH1D( "h_eleSS_eta_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_eleSS_phi_before_EffCorr = new TH1D( "h_eleSS_phi_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
 
-        TH1D *h_ele_pT = new TH1D( "h_ele_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_ele_pT = new TH1D( "h_ele_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_ele_eta = new TH1D( "h_ele_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_ele_phi = new TH1D( "h_ele_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
-        TH1D *h_eleSS_pT = new TH1D( "h_eleSS_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_eleSS_pT = new TH1D( "h_eleSS_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_eleSS_eta = new TH1D( "h_eleSS_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_eleSS_phi = new TH1D( "h_eleSS_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
 
-        TH1D *h_mu_pT_before_PUCorr = new TH1D( "h_mu_pT_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_mu_pT_before_PUCorr = new TH1D( "h_mu_pT_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_mu_eta_before_PUCorr = new TH1D( "h_mu_eta_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_mu_phi_before_PUCorr = new TH1D( "h_mu_phi_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
-        TH1D *h_muSS_pT_before_PUCorr = new TH1D( "h_muSS_pT_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_muSS_pT_before_PUCorr = new TH1D( "h_muSS_pT_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_muSS_eta_before_PUCorr = new TH1D( "h_muSS_eta_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_muSS_phi_before_PUCorr = new TH1D( "h_muSS_phi_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
 
-        TH1D *h_mu_pT_before_EffCorr = new TH1D( "h_mu_pT_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_mu_pT_before_EffCorr = new TH1D( "h_mu_pT_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_mu_eta_before_EffCorr = new TH1D( "h_mu_eta_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_mu_phi_before_EffCorr = new TH1D( "h_mu_phi_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
-        TH1D *h_muSS_pT_before_EffCorr = new TH1D( "h_muSS_pT_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_muSS_pT_before_EffCorr = new TH1D( "h_muSS_pT_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_muSS_eta_before_EffCorr = new TH1D( "h_muSS_eta_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_muSS_phi_before_EffCorr = new TH1D( "h_muSS_phi_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
 
-        TH1D *h_mu_pT = new TH1D( "h_mu_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_mu_pT = new TH1D( "h_mu_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_mu_eta = new TH1D( "h_mu_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_mu_phi = new TH1D( "h_mu_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
-        TH1D *h_muSS_pT = new TH1D( "h_muSS_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000 );
+        TH1D *h_muSS_pT = new TH1D( "h_muSS_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_muSS_eta = new TH1D( "h_muSS_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_muSS_phi = new TH1D( "h_muSS_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
 
