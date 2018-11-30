@@ -484,7 +484,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                         }
                         if ( indices.size() > 1 )
                         {
-                            for (Int_t  i=0; i<indices.size(); i++ )
+                            for (Int_t  i=0; i<((int)(indices.size())); i++ )
                             {
                                 if ( ntuple->Muon_pT[indices[i]] > 28 && kinStop == kFALSE )
                                 {
@@ -496,16 +496,24 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                                 if ( Mu.isTightMuon() && tightStop == kFALSE )
                                 {
                                     tightCount++;
-                                    if ( tightCount > 1 && kinStop == kTRUE ) tightStop = kTRUE;
+                                    if ( tightCount > 1 && kinStop == kTRUE )
+                                    {
+                                        tightIDpassed++;
+                                        tightStop = kTRUE;
+                                    }
                                 }
                                 if ( Mu.relPFiso < 0.15 && isoStop == kFALSE )
                                 {
                                     isoCount++;
-                                    if ( isoCount > 1 && kinStop == kTRUE ) isoStop = kTRUE;
+                                    if ( isoCount > 1 && kinStop == kTRUE )
+                                    {
+                                        isoPassed++;
+                                        isoStop = kTRUE;
+                                    }
                                 }
 
                                 if ( ( Mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*") || Mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*") )
-                                     && trigStop == kFALSE && kinStop == kTRUE )
+                                     && trigStop == kFALSE )
                                 {
                                     triggerMatched++;
                                     trigStop = kTRUE;
@@ -513,10 +521,6 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
 
                             }
                         }
-                        if ( kinStop == kTRUE ) kinematicsPassed++;
-                        if ( trigStop == kTRUE ) triggerMatched++;
-                        if ( tightStop == kTRUE ) tightIDpassed++;
-                        if ( isoStop == kTRUE ) isoPassed++;
                     } // End of else (selection not passed)
 
                 } // End of if( isTriggered )
