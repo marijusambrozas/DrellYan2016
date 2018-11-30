@@ -1,4 +1,3 @@
-//  KO GERO GALIMA BUTU MEDZIUI SUKURTI SAKAS SELECTEDX FUNKCIJOS VIDUJE ee.CreateBranches(*Tree)
 #include <TChain.h>
 #include <TTree.h>
 #include <TFile.h>
@@ -16,8 +15,8 @@
 #include <fstream>
 #include <TH1.h>
 #include <TCanvas.h>
+#include <math.h>
 
-// -- Macro for making new data files with only selection-passing events  -- //
 #include "./header/DYAnalyzer.h"
 #include "./header/SelectedX.h"
 #include "./header/myProgressBar_t.h"
@@ -32,76 +31,23 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name, Bool_t Debug );
 void MakeSelectedQCDEM_120to170_merged();
 
 
-void MakeSelectedX ( TString WhichX, TString type = "", TString HLTname = "DEFAULT",  Bool_t RocCorr = kFALSE )
+void CheckMuonSelection ( TString Type = "", TString HLTname = "DEFAULT",  Bool_t RocCorr = kFALSE )
 {
-    TString whichX = WhichX;
-    whichX.ToUpper();
+
+    TString type = Type;
+    type.ToUpper();
     TString HLT;
-    Int_t Xselected = 0;
     Bool_t Debug = kFALSE;
 
-    // for non-interactive status output
-    ofstream fs;
-    fs.open( "./Status/Status_"+whichX+"_"+type+".txt" );
-    fs << "Process MakeSelectedX ( " << whichX << ", " << type << ", " << HLTname << ", " << RocCorr << " ) initiated.\n";
-
-    if ( whichX.Contains("DEBUG") )
+    if ( type.Contains("DEBUG") )
     {
         Debug = kTRUE;
         cout << "DEBUG MODE ON. Running on 100 events only" << endl;
     }
-    if ( whichX.Contains("EE") )
-    {
-        Xselected++;
-        if ( HLTname == "DEFAULT" ) HLT = "Ele23Ele12";
-        else HLT = HLTname;
-        cout << "\n*******      MakeSelectedEE ( " << type << ", " << HLT << " )      *******" << endl;
-        MakeSelectedEE( type, HLT, Debug );
-    }
-    if ( whichX.Contains("MUMU") )
-    {
-        Xselected++;
-        if ( HLTname == "DEFAULT" ) HLT = "IsoMu24_OR_IsoTkMu24";
-        else HLT = HLTname;
-        cout << "\n*****  MakeSelectedMuMu ( " << type << ", " << HLT << " )  *****" << endl;
-        MakeSelectedMuMu( type, HLT, RocCorr, Debug );
-    }
-    if ( whichX.Contains("EMU") )
-    {
-        Xselected++;
-        if ( HLTname == "DEFAULT" ) HLT = "IsoMu24_OR_IsoTkMu24";
-        else HLT = HLTname;
-        cout << "\n*****   MakeSelectedEMu ( " << type << ", " << HLT << " )  *****" << endl;
-        MakeSelectedEMu( type, HLT, RocCorr, Debug );
-    }
-    if ( whichX.Contains("QCDFAIL") )   // To run through QCDEMEnriched_pT120to170 file that crashes
-    {
-        Xselected++;
-        if ( HLTname == "DEFAULT" ) HLT = "Ele23Ele12";
-        else HLT = HLTname;      
-        for ( Int_t name = 1; name <= 316; name++ )
-        {
-            if ( name == 116 ) continue;
-            cout << "\n** MakeSelectedQCDEM_120to170 ( skim_" << name << ", " << HLT << " ) **" << endl;
-            MakeSelectedQCDEM_120to170( HLT, name, Debug );
-        }
-    }
-    if ( whichX.Contains("QCDMERGE") ) // to merge 316-1(that fails) selected QCD files
-    {
-        Xselected++;
-        cout << "\n****   MakeSelectedQCDEM_120to170()   ****" << endl;
-        MakeSelectedQCDEM_120to170_merged();
-    }
-
-    if ( Xselected == 0 ) {
-        cout << "Wrong arument!" << endl;
-        fs << "Process MakeSelectedX ( " << whichX << ", " << type << ", " << HLTname << ", " << RocCorr << " ) FAILED. Wrong arguments!\n";
-    }
-    else fs << "Process MakeSelectedX ( " << whichX << ", " << type << ", " << HLTname << ", " << RocCorr << " ) FINISHED.\n";
-
-    fs.close();
-
-} // End of MakeSelectedX()
+    if ( HLTname == "DEFAULT" ) HLT = "IsoMu24_OR_IsoTkMu24";
+    else HLT = HLTname;
+    MakeSelectedMuMu( type, HLT, RocCorr, Debug );
+} // End of CheckMuonSelection()
 
 
 /// ----------------------------- Electron Channel ------------------------------ ///
@@ -403,55 +349,8 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
             if ( RocCorr == kTRUE ) RocCor = "_roccor";
 
             //Creating a file
-            TString out_base;
-            TString out_dir;
-            TFile* MuonFile;
-            if ( Mgr.Type == "DATA" )
-            {
-//                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/";
-//                out_dir = "Data/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
-
-                out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
-                out_dir = "SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
-            }
-            else if ( Mgr.Type == "SIGNAL" )
-            {
-//                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/";
-//                out_dir = "MC_signal/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
-
-                out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
-                out_dir = "SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
-            }
-            else if ( Mgr.Type == "BKG" )
-            {
-//                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/";
-//                out_dir = "MC_bkg/SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
-
-                out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
-                out_dir = "SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
-            }
-            else if ( Mgr.Type == "TEST")
-            {
-                out_base = "/media/sf_DATA/test/";
-                out_dir = "SelectedMuMu_"+Mgr.Tag[i_tup]+RocCor;
-            }
-            else
-            {
-                cout << "Problems with TYPE." << endl;
-                return;
-            }
-
-            if ( Debug == kTRUE )
-                MuonFile = TFile::Open( out_base+out_dir+"_DEBUG.root", "RECREATE" );
-            else
-                MuonFile = TFile::Open( out_base+out_dir+".root", "RECREATE" );
+            TFile* MuonFile = TFile::Open( "MUON_CHECK_"+Mgr.Tag[i_tup]+".root", "RECREATE" );
             MuonFile->cd();
-
-
-            TTree* MuonTree = new TTree( "DYTree", "DYTree" );
-            // -- Creating SelectedMuMu variables to assign branches -- //
-            SelectedMuMu_t MuMu; MuMu.CreateNew();
-            MuMu.MakeBranches(MuonTree);
 
             TChain *chain = new TChain( Mgr.TreeName[i_tup] );
             chain->Add( Mgr.FullLocation[i_tup] );
@@ -464,15 +363,12 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
             }
             ntuple->TurnOnBranches_Muon();
 
-            Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
-
             Int_t NEvents = chain->GetEntries();
             if ( Debug == kTRUE ) NEvents = 100; // using few events for debugging
 
             cout << "\t[Total Events: " << NEvents << "]" << endl;
             myProgressBar_t bar( NEvents );
             Int_t timesPassed = 0;
-            Int_t isClear = 0; // vectors that are writen into files should be cleared afer each event
 
             std::string RCaddress;
             if ( Mgr.Type == "TEST" )
@@ -480,32 +376,28 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
             else RCaddress = "/cms/ldap_home/mambroza/DrellYan2016/SelectedX/etc/RoccoR/rcdata.2016.v3";
             RoccoR rc( RCaddress );
 
+            // FOR CHECKING
+            vector<int> indices;
+            Int_t triggerFired = 0;
+            Int_t kinematicsPassed = 0;
+            Int_t triggerMatched = 0;
+            Int_t tightIDpassed = 0;
+            Int_t isoPassed = 0;
+            TH1D* h_isolation_pass = new TH1D ( "h_isolation_pass", "", 100, 0, 2 );
+            TH1D* h_vertex_fit_chi2_pass = new TH1D ( "h_vertex_fit_chi2_pass", "", 100, 0, 25 );
+            TH1D* h_angle_pass = new TH1D ( "h_angle_pass", "", 140, 0, 3.5 );
+
             // Loop for all events in the chain
             for ( Int_t i=0; i<NEvents; i++ )
             {
                 ntuple->GetEvent(i);
 
-                // -- Positive/Negative Gen-weights -- //           // IS THIS NECESSARY?
-                ntuple->GENEvt_weight < 0 ? MuMu.GENEvt_weight = -1 : MuMu.GENEvt_weight = 1;
-                SumWeight += MuMu.GENEvt_weight;
-                SumWeightRaw += ntuple->GENEvt_weight;
-
-                // -- Separate DYLL samples -- //
-                Bool_t GenFlag = kFALSE;
-                GenFlag = analyzer->SeparateDYLLSample_isHardProcess( Mgr.Tag[i_tup], ntuple );
-
-                // -- Separate ttbar samples -- //
-                Bool_t GenFlag_top = kFALSE;
-                vector<GenOthers> GenTopCollection;
-                GenFlag_top = analyzer->Separate_ttbarSample( Mgr.Tag[i_tup], ntuple, &GenTopCollection );
-
-                if ( GenFlag == kTRUE && GenFlag_top == kTRUE ) SumWeight_Separated += MuMu.GENEvt_weight;
-
                 Bool_t TriggerFlag = kFALSE;
                 TriggerFlag = ntuple->isTriggered( analyzer->HLT );
 
-                if ( TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE )
+                if ( TriggerFlag == kTRUE )
                 {
+                    triggerFired++;
                     // -- Reco level selection -- //
                     vector< Muon > MuonCollection;
                     Int_t NLeptons = ntuple->nMuon;
@@ -513,9 +405,6 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                     {
                         Muon mu;
                         mu.FillFromNtuple( ntuple, i_reco );
-
-                        // -- Convert to TuneP variables -- //
-//                        analyzer->ConvertToTunePInfo( mu );
 
                         if ( RocCorr == kTRUE )
                         {
@@ -525,35 +414,26 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
 
                             if( Mgr.Tag[i_tup] == "DATA" )
                             {
-//                                SF = rc.kScaleDT(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, s=0, m=0);
                                 SF = rc.kScaleDT(mu.charge, mu.Pt, mu.eta, mu.phi, s=0, m=0);
                             }
                             else
                             {
-//                                SF = rc.kScaleAndSmearMC(mu.charge, mu.TuneP_pT, mu.TuneP_eta, mu.TuneP_phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
                                 SF = rc.kScaleAndSmearMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
                             }
 
-//                            mu.TuneP_pT = SF*mu.TuneP_pT;
                             mu.Pt = SF*mu.Pt;
-
-                            // -- Convert to TuneP variables -- //
-//                            analyzer->ConvertToTunePInfo( mu );
                         }
-
                         MuonCollection.push_back( mu );
-
                     } // End of i_reco iteration
 
                     // -- Event Selection -- //
                     vector< Muon > SelectedMuonCollection;
                     vector< Int_t > Sel_Index;
                     Bool_t isPassEventSelection = kFALSE;
-//                    isPassEventSelection = analyzer->EventSelection_Zdiff_13TeV_HighPt( MuonCollection, ntuple, &SelectedMuonCollection, &Sel_Index );
                     isPassEventSelection = analyzer->EventSelection( MuonCollection, ntuple, &SelectedMuonCollection, &Sel_Index );
 
                     if ( isPassEventSelection == kTRUE )
-                    {                       
+                    {
                         if ( Sel_Index.size()!=2 )
                         {
                             cout << "======== ERROR: The number of muons saved is not 2 ========" << endl;
@@ -568,109 +448,76 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                         else
                         {
                             timesPassed++;
+
+                            kinematicsPassed++;
+                            triggerMatched++;
+                            tightIDpassed++;
+                            isoPassed++;
+
                             Muon mu1 = SelectedMuonCollection[0];
-                            Muon mu2 = SelectedMuonCollection[1];                                                       
+                            Muon mu2 = SelectedMuonCollection[1];
 
-                            MuMu.isSelPassed = kTRUE;
-                            MuMu.nVertices = ntuple->nVertices;
-                            MuMu.nPileUp = ntuple->nPileUp;
-
-                            TLorentzVector mu_temp1, mu_temp2; // Rochester correction changed pT value so the correct value needs to be saved
-
-                            if ( mu1.charge != ntuple->Muon_charge[Sel_Index[0]] )
-                            {
-                                cout << "Event " << i << ": Charges of first selected muon do not match!" << endl;
-                                if ( mu2.charge != ntuple->Muon_charge[Sel_Index[1]] && mu1.charge != mu2.charge && fabs(mu1.charge) == fabs(mu2.charge) )
-                                {
-                                    cout << "Need to swap muons..." << endl;
-                                    mu_temp2.SetPtEtaPhiM( mu1.Pt, mu1.eta, mu1.phi, M_Mu );
-                                    mu_temp1.SetPtEtaPhiM( mu2.Pt, mu2.eta, mu2.phi, M_Mu );
-                                }
-                                else
-                                {
-                                    cout << "******* THIS IS A BIG PROBLEM ********" << endl;
-                                    continue;
-                                }
-                            }
-                            else if ( mu2.charge != ntuple->Muon_charge[Sel_Index[1]] )
-                            {
-                                cout << "Event " << i << ": Charges of second selected muon do not match!" << endl;
-                                if ( mu1.charge != ntuple->Muon_charge[Sel_Index[0]] && mu1.charge != mu2.charge && fabs(mu1.charge) == fabs(mu2.charge) )
-                                {
-                                    cout << "Need to swap muons..." << endl;
-                                    mu_temp2.SetPtEtaPhiM( mu1.Pt, mu1.eta, mu1.phi, M_Mu );
-                                    mu_temp1.SetPtEtaPhiM( mu2.Pt, mu2.eta, mu2.phi, M_Mu );
-                                }
-                                else
-                                {
-                                    cout << "******* THIS IS A BIG PROBLEM ********" << endl;
-                                    cout << "Number of muons in the given event: " << ntuple->nMuon << endl;
-                                    for (int a=0; a<ntuple->nMuon; a++ )
-                                    {
-                                        cout << "Muon" << a << ": \n   pT: " << ntuple->Muon_pT[a] << "  eta: " << ntuple->Muon_eta[a] << endl;
-                                        Double_t iso = ( ntuple->Muon_PfChargedHadronIsoR04[a] + ntuple->Muon_PfNeutralHadronIsoR04[a] + ntuple->Muon_PfGammaIsoR04[a] )
-                                                       / ntuple->Muon_pT[a];
-                                        cout << "   Iso: " << iso << "  charge: " << ntuple->Muon_charge[a] << endl;
-                                    }
-                                    cout << "Selected muons by muon vector:\nMuon 0: \n   pT: " << mu1.Pt << "  eta: " << mu1.eta << endl;
-                                    cout << "   Iso: " << mu1.relPFiso << "  charge: " << mu1.charge << endl;
-                                    cout << "Muon 1: \n   pT: " << mu2.Pt << "  eta: " << mu2.eta << endl;
-                                    cout << "   Iso: " << mu2.relPFiso << "  charge: " << mu2.charge << endl;
-
-                                    cout << "Selected muons by index:\nMuon 0: \n   pT: " << ntuple->Muon_pT[Sel_Index[0]] << "  eta: ";
-                                    cout << ntuple->Muon_eta[Sel_Index[0]] << endl;
-                                    Double_t iso0 = ( ntuple->Muon_PfChargedHadronIsoR04[Sel_Index[0]] + ntuple->Muon_PfNeutralHadronIsoR04[Sel_Index[0]] +
-                                                      ntuple->Muon_PfGammaIsoR04[Sel_Index[0]] ) / ntuple->Muon_pT[Sel_Index[0]];
-                                    cout << "   Iso: " << iso0 << "  charge: " << ntuple->Muon_charge[Sel_Index[0]] << endl;
-                                    cout << "Muon 1: \n   pT: " << ntuple->Muon_pT[Sel_Index[1]] << "  eta: ";
-                                    cout << ntuple->Muon_eta[Sel_Index[1]] << endl;
-                                    Double_t iso1 = ( ntuple->Muon_PfChargedHadronIsoR04[Sel_Index[1]] + ntuple->Muon_PfNeutralHadronIsoR04[Sel_Index[1]] +
-                                                      ntuple->Muon_PfGammaIsoR04[Sel_Index[1]] ) / ntuple->Muon_pT[Sel_Index[1]];
-                                    cout << "   Iso: " << iso1 << "  charge: " << ntuple->Muon_charge[Sel_Index[1]] << endl;
-
-                                    continue;
-                                }
-                            }
-                            else
-                            {
-                                mu_temp1.SetPtEtaPhiM( mu1.Pt, mu1.eta, mu1.phi, M_Mu );
-                                mu_temp2.SetPtEtaPhiM( mu2.Pt, mu2.eta, mu2.phi, M_Mu );
-                            }
-
-                            MuMu.Muon_pT->push_back( mu_temp1.Pt() );
-                            MuMu.Muon_pT->push_back( mu_temp2.Pt() );
-                            MuMu.Muon_Energy->push_back( mu_temp1.E() );
-                            MuMu.Muon_Energy->push_back( mu_temp2.E() );
-                            MuMu.Muon_eta->push_back( mu_temp1.Eta() );
-                            MuMu.Muon_eta->push_back( mu_temp2.Eta() );
-                            MuMu.Muon_phi->push_back( mu_temp1.Eta() );
-                            MuMu.Muon_phi->push_back( mu_temp2.Eta() );
-
-                            MuMu.Muon_InvM = ( mu_temp1 + mu_temp2 ).M();
-
-
-                            for ( UInt_t iter=0; iter<Sel_Index.size(); iter++ )
-                            {
-                                Int_t index = Sel_Index[iter];
-
-                                MuMu.Muon_charge->push_back( ntuple->Muon_charge[index] );
-                                MuMu.Muon_TuneP_pT->push_back( ntuple->Muon_TuneP_pT[index] );
-                                MuMu.Muon_TuneP_eta->push_back( ntuple->Muon_TuneP_eta[index] );
-                                MuMu.Muon_TuneP_phi->push_back( ntuple->Muon_TuneP_phi[index] );
-                                MuMu.Muon_trackerLayers->push_back( ntuple->Muon_trackerLayers[index] );
-                            } // End of vector filling
+                            h_isolation_pass->Fill( SelectedMuonCollection[0].relPFiso );
+                            h_isolation_pass->Fill( SelectedMuonCollection[1].relPFiso );
+                            Double_t VtxProb_temp = -999;
+                            Double_t VtxNormChi2_temp = 999;
+                            analyzer->DimuonVertexProbNormChi2(ntuple, mu1.Inner_pT, mu2.Inner_pT, &VtxProb_temp, &VtxNormChi2_temp);
+                            h_vertex_fit_chi2_pass->Fill( VtxNormChi2_temp );
+                            h_angle_pass->Fill( mu1.Momentum.Angle( mu2.Momentum.Vect() ) );
 
                         } // End of else()
 
-                        MuonTree->Fill();
-                        isClear = MuMu.ClearVectors();
-                        if ( !isClear )
-                        {
-                            cout << "======== ERROR: The vectors were not cleared ========" << endl;
-                            break;
-                        }
-
                     } // End of event selection
+                    else
+                    {
+                        Bool_t kinStop = kFALSE;
+                        Bool_t trigStop = kFALSE;
+                        Int_t tightCount = 0;
+                        Bool_t tightStop = kFALSE;
+                        Int_t isoCount = 0;
+                        Bool_t isoStop = kFALSE;
+
+                        for ( Int_t i=0; i<ntuple->nMuon; i++ )
+                        {
+                            if ( ntuple->Muon_pT[i] > 17 && (ntuple->Muon_eta[i]) < 2.4 )
+                                indices.push_back(i);
+                        }
+                        if ( indices.size() > 1 )
+                        {
+                            for (Int_t  i=0; i<indices.size(); i++ )
+                            {
+                                if ( ntuple->Muon_pT[indices[i]] > 28 && kinStop == kFALSE )
+                                {
+                                    kinematicsPassed++;
+                                    kinStop = kTRUE;
+                                }
+                                Muon Mu;
+                                Mu.FillFromNtuple( ntuple, indices[i] );
+                                if ( Mu.isTightMuon() && tightStop == kFALSE )
+                                {
+                                    tightCount++;
+                                    if ( tightCount > 1 && kinStop == kTRUE ) tightStop = kTRUE;
+                                }
+                                if ( Mu.relPFiso < 0.15 && isoStop == kFALSE )
+                                {
+                                    isoCount++;
+                                    if ( isoCount > 1 && kinStop == kTRUE ) isoStop = kTRUE;
+                                }
+
+                                if ( ( Mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*") || Mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*") )
+                                     && trigStop == kFALSE && kinStop == kTRUE )
+                                {
+                                    triggerMatched++;
+                                    trigStop = kTRUE;
+                                }
+
+                            }
+                        }
+                        if ( kinStop == kTRUE ) kinematicsPassed++;
+                        if ( trigStop == kTRUE ) triggerMatched++;
+                        if ( tightStop == kTRUE ) tightIDpassed++;
+                        if ( isoStop == kTRUE ) isoPassed++;
+                    } // End of else (selection not passed)
 
                 } // End of if( isTriggered )
 
@@ -678,36 +525,32 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
 
             } // End of event iteration
             cout << "\t" << timesPassed << " events have passed the event selection." << endl;
+            cout << "\t" << triggerFired << " events have fired the trigger." << endl;
+            cout << "\t" << kinematicsPassed << " events have passed the kinematic acceptance." << endl;
+            cout << "\t" << tightIDpassed << " events have passed the TightID." << endl;
+            cout << "\t" << isoPassed << " events have passed the isolation criteria." << endl;
+            cout << "\t" << triggerMatched << " events have a trigger matching particle that passes kinematics." << endl;
 
-            if ( Mgr.isMC == kTRUE )
-            {
-                printf( "\tTotal sum of weights: %.1lf\n", SumWeight );
-                printf( "\tSum of weights of Separated events: %.1lf\n", SumWeight_Separated );
-                printf( "\tSum of unchanged (to 1 or -1) weights: %.1lf\n", SumWeightRaw );
-                printf( "\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.nEvents[i_tup] );
-            }
+
 
             Double_t LoopRunTime = looptime.CpuTime();
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
 
             // Writing
             cout << "Writing into file...";
-            Int_t write;
-            write = MuonTree->Write();
-            if ( write )
-            {
-                cout << " Finished." << endl << "Closing a file..." << endl;
-                TString addition = "";
-                if ( Debug == kTRUE ) addition = "_DEBUG";
-                MuonFile->Close();
-                if ( !MuonFile->IsOpen() ) cout << "File SelectedMuMu_" << Mgr.Tag[i_tup]+RocCor+addition << ".root has been closed successfully.\n" << endl;
-                else cout << "FILE SelectedMuMu_" << Mgr.Tag[i_tup]+RocCor+addition << ".root COULD NOT BE CLOSED!\n" << endl;
-            }
-            else
-            {
-                cout << " Writing was NOT successful!\n" << endl;
-                MuonFile->Close();
-            }
+            h_vertex_fit_chi2_pass->SetDirectory(0);
+            h_vertex_fit_chi2_pass->Write();
+            h_angle_pass->SetDirectory(0);
+            h_angle_pass->Write();
+            h_isolation_pass->SetDirectory(0);
+            h_isolation_pass->Write();
+
+            cout << " Finished." << endl << "Closing a file..." << endl;
+            TString addition = "";
+            if ( Debug == kTRUE ) addition = "_DEBUG";
+            MuonFile->Close();
+            if ( !MuonFile->IsOpen() ) cout << "File MUON_CHECK_" << Mgr.Tag[i_tup] << ".root has been closed successfully.\n" << endl;
+            else cout << "FILE MUON_CHECK_" << Mgr.Tag[i_tup] << ".root COULD NOT BE CLOSED!\n" << endl;
 
         } // End of i_tup iteration
 

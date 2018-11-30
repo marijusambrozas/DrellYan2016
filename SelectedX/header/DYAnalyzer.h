@@ -2317,7 +2317,7 @@ Bool_t DYAnalyzer::EventSelection(vector< Muon > MuonCollection, NtupleHandle *n
     for(Int_t i_mu=0; i_mu<(Int_t)QMuonCollection.size(); i_mu++)
     {
             Muon mu = QMuonCollection[i_mu];
-            if( mu.isTrigMatched(ntuple, "HLT_IsoMu20_v*") || mu.isTrigMatched(ntuple, "HLT_IsoTkMu20_v*") )
+            if( mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*") || mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*") )
             {
                     isExistHLTMatchedMuon = kTRUE;
                     break;
@@ -2332,7 +2332,7 @@ Bool_t DYAnalyzer::EventSelection(vector< Muon > MuonCollection, NtupleHandle *n
                     Muon recolep1 = QMuonCollection[0];
                     Muon recolep2 = QMuonCollection[1];
 
-                    // -- Check the Accpetance -- //
+                    // -- Check the Acceptance -- //
                     Bool_t isPassAcc = kFALSE;
                     isPassAcc = isPassAccCondition_Muon(recolep1, recolep2);
 
@@ -2375,7 +2375,7 @@ Bool_t DYAnalyzer::EventSelection(vector< Muon > MuonCollection, NtupleHandle *n
                             Muon Mu = QMuonCollection[i_mu];
 
                             // -- at least 1 muon should be matched with HLT objects in best pair -- //
-                            if( Mu.isTrigMatched(ntuple, "HLT_IsoMu20_v*") || Mu.isTrigMatched(ntuple, "HLT_IsoTkMu20_v*") )
+                            if( Mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*") || Mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*") )
                             {
                                     // -- Mu in this loop: QMuon Matched with HLT object -- //
 

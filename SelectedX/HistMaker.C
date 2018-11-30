@@ -229,6 +229,9 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
                 // -- Bring the weights -- //
                 Double_t GenWeight = EE->GENEvt_weight;
+                if ( GenWeight > 1 ) GenWeight = 1;
+                else if ( GenWeight < -1 ) GenWeight = -1;
+
 
                 // -- Pileup-Reweighting -- //
                 Double_t PUWeight = 1;
@@ -239,13 +242,13 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
                 // -- Normalization -- //
                 Double_t TotWeight = GenWeight;
-                if( Mgr.isMC == kTRUE ) TotWeight = ( L * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup] ) * GenWeight;
+                if ( Mgr.isMC == kTRUE ) TotWeight = ( L * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup] ) * GenWeight;
 
                 if( EE->isSelPassed == kTRUE )
                 {
                     TLorentzVector ele1, ele2;
                     ele1.SetPtEtaPhiE( EE->Electron_pT->at(0), EE->Electron_eta->at(0), EE->Electron_phi->at(0), EE->Electron_Energy->at(0) );
-                    ele1.SetPtEtaPhiE( EE->Electron_pT->at(1), EE->Electron_eta->at(1), EE->Electron_phi->at(1), EE->Electron_Energy->at(1) );
+                    ele2.SetPtEtaPhiE( EE->Electron_pT->at(1), EE->Electron_eta->at(1), EE->Electron_phi->at(1), EE->Electron_Energy->at(1) );
                     Double_t reco_Pt = ( ele1 + ele2 ).Pt();
                     Double_t reco_rapi = ( ele1 + ele2 ).Rapidity();
 
@@ -274,22 +277,28 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
                     h_pT_lead_before_PUCorr->Fill( EE->Electron_pT->at(lead), TotWeight );
                     h_pT_sublead_before_PUCorr->Fill( EE->Electron_pT->at(sublead), TotWeight );
-                    h_eta_lead_before_PUCorr->Fill( EE->Electron_eta->at(lead), TotWeight );
-                    h_eta_sublead_before_PUCorr->Fill( EE->Electron_eta->at(sublead), TotWeight );
+//                    h_eta_lead_before_PUCorr->Fill( EE->Electron_eta->at(lead), TotWeight );
+//                    h_eta_sublead_before_PUCorr->Fill( EE->Electron_eta->at(sublead), TotWeight );
+                    h_eta_lead_before_PUCorr->Fill( EE->Electron_etaSC->at(lead), TotWeight );
+                    h_eta_sublead_before_PUCorr->Fill( EE->Electron_etaSC->at(sublead), TotWeight );
                     h_phi_lead_before_PUCorr->Fill( EE->Electron_phi->at(lead), TotWeight );
                     h_phi_sublead_before_PUCorr->Fill( EE->Electron_phi->at(sublead), TotWeight );
 
                     h_pT_lead_before_EffCorr->Fill( EE->Electron_pT->at(lead), TotWeight * PUWeight );
                     h_pT_sublead_before_EffCorr->Fill( EE->Electron_pT->at(sublead), TotWeight * PUWeight );
-                    h_eta_lead_before_EffCorr->Fill( EE->Electron_eta->at(lead), TotWeight * PUWeight );
-                    h_eta_sublead_before_EffCorr->Fill( EE->Electron_eta->at(sublead), TotWeight * PUWeight );
+//                    h_eta_lead_before_EffCorr->Fill( EE->Electron_eta->at(lead), TotWeight * PUWeight );
+//                    h_eta_sublead_before_EffCorr->Fill( EE->Electron_eta->at(sublead), TotWeight * PUWeight );
+                    h_eta_lead_before_EffCorr->Fill( EE->Electron_etaSC->at(lead), TotWeight * PUWeight );
+                    h_eta_sublead_before_EffCorr->Fill( EE->Electron_etaSC->at(sublead), TotWeight * PUWeight );
                     h_phi_lead_before_EffCorr->Fill( EE->Electron_phi->at(lead), TotWeight * PUWeight );
                     h_phi_sublead_before_EffCorr->Fill( EE->Electron_phi->at(sublead), TotWeight * PUWeight );
 
                     h_pT_lead->Fill( EE->Electron_pT->at(lead), TotWeight * PUWeight * effweight );
                     h_pT_sublead->Fill( EE->Electron_pT->at(sublead), TotWeight * PUWeight * effweight );
-                    h_eta_lead->Fill( EE->Electron_eta->at(lead), TotWeight * PUWeight * effweight );
-                    h_eta_sublead->Fill( EE->Electron_eta->at(sublead), TotWeight * PUWeight * effweight );
+//                    h_eta_lead->Fill( EE->Electron_eta->at(lead), TotWeight * PUWeight * effweight );
+//                    h_eta_sublead->Fill( EE->Electron_eta->at(sublead), TotWeight * PUWeight * effweight );
+                    h_eta_lead->Fill( EE->Electron_etaSC->at(lead), TotWeight * PUWeight * effweight );
+                    h_eta_sublead->Fill( EE->Electron_etaSC->at(sublead), TotWeight * PUWeight * effweight );
                     h_phi_lead->Fill( EE->Electron_phi->at(lead), TotWeight * PUWeight * effweight );
                     h_phi_sublead->Fill( EE->Electron_phi->at(sublead), TotWeight * PUWeight * effweight );
 
@@ -499,7 +508,7 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
 
             SelectedMuMu_t *MuMu = new SelectedMuMu_t();
             MuMu->CreateFromChain( chain );         
-            MuMu->TurnOffBranches( "Muon_TuneP_pT Muon_TuneP_eta Muon_TuneP_phi nPileUp" );
+            MuMu->TurnOffBranches( "Muon_TuneP_pT Muon_TuneP_eta Muon_TuneP_phi" );
 
             Int_t NEvents = chain->GetEntries();
             if ( NEvents != Mgr.nEvents[i_tup] ) cout << "\tEvent numbers do not match!!!" << endl;
@@ -510,7 +519,7 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
 
             myProgressBar_t bar( NEvents );
 
-            for(Int_t i=0; i<NEvents/2; i++)
+            for(Int_t i=0; i<NEvents; i++)
             {              
                 MuMu->GetEvent(i);
 
@@ -529,7 +538,6 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
                     cout << "Charge vector has " << MuMu->Muon_charge->size() << " elements!!!" << endl;
                     break;
                 }
-                cout << "YOLO" << endl;
                 if ( MuMu->Muon_pT->size() != 2 )
                 {
                     cout << "pT vector has " << MuMu->Muon_pT->size() << " elements!!!" << endl;
@@ -576,7 +584,7 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
 
                     Double_t reco_Pt = ( mu1 + mu2 ).Pt();
                     Double_t reco_rapi = ( mu1 + mu2 ).Rapidity();
-                    Double_t reco_mass = ( mu1 + mu2 ).M();
+                    Double_t reco_mass = MuMu->Muon_InvM;
 
                     h_mass_fine_before_PUCorr->Fill( reco_mass, TotWeight );
                     h_mass_fine_before_EffCorr->Fill( reco_mass, TotWeight * PUWeight );
@@ -898,15 +906,15 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
                         h_emu_mass->Fill( reco_mass, TotWeight * PUWeight * effweight );
 
                         h_ele_pT_before_PUCorr->Fill( EMu->Electron_pT, TotWeight );
-                        h_ele_eta_before_PUCorr->Fill( EMu->Electron_eta, TotWeight );
+                        h_ele_eta_before_PUCorr->Fill( EMu->Electron_etaSC, TotWeight );
                         h_ele_phi_before_PUCorr->Fill( EMu->Electron_phi, TotWeight );
 
                         h_ele_pT_before_EffCorr->Fill( EMu->Electron_pT, TotWeight * PUWeight );
-                        h_ele_eta_before_EffCorr->Fill( EMu->Electron_eta, TotWeight * PUWeight );
+                        h_ele_eta_before_EffCorr->Fill( EMu->Electron_etaSC, TotWeight * PUWeight );
                         h_ele_phi_before_EffCorr->Fill( EMu->Electron_phi, TotWeight * PUWeight );
 
                         h_ele_pT->Fill( EMu->Electron_pT, TotWeight * PUWeight * effweight );
-                        h_ele_eta->Fill( EMu->Electron_eta, TotWeight * PUWeight * effweight );
+                        h_ele_eta->Fill( EMu->Electron_etaSC, TotWeight * PUWeight * effweight );
                         h_ele_phi->Fill( EMu->Electron_phi, TotWeight * PUWeight * effweight );
 
                         h_mu_pT_before_PUCorr->Fill( EMu->Muon_pT, TotWeight );
@@ -929,15 +937,15 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
                         h_emuSS_mass->Fill( reco_mass, TotWeight * PUWeight * effweight );
 
                         h_eleSS_pT_before_PUCorr->Fill( EMu->Electron_pT, TotWeight );
-                        h_eleSS_eta_before_PUCorr->Fill( EMu->Electron_eta, TotWeight );
+                        h_eleSS_eta_before_PUCorr->Fill( EMu->Electron_etaSC, TotWeight );
                         h_eleSS_phi_before_PUCorr->Fill( EMu->Electron_phi, TotWeight );
 
                         h_eleSS_pT_before_EffCorr->Fill( EMu->Electron_pT, TotWeight * PUWeight );
-                        h_eleSS_eta_before_EffCorr->Fill( EMu->Electron_eta, TotWeight * PUWeight );
+                        h_eleSS_eta_before_EffCorr->Fill( EMu->Electron_etaSC, TotWeight * PUWeight );
                         h_eleSS_phi_before_EffCorr->Fill( EMu->Electron_phi, TotWeight * PUWeight );
 
                         h_eleSS_pT->Fill( EMu->Electron_pT, TotWeight * PUWeight * effweight );
-                        h_eleSS_eta->Fill( EMu->Electron_eta, TotWeight * PUWeight * effweight );
+                        h_eleSS_eta->Fill( EMu->Electron_etaSC, TotWeight * PUWeight * effweight );
                         h_eleSS_phi->Fill( EMu->Electron_phi, TotWeight * PUWeight * effweight );
 
                         h_muSS_pT_before_PUCorr->Fill( EMu->Muon_TuneP_pT, TotWeight );

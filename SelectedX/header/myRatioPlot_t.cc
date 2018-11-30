@@ -45,6 +45,9 @@ void myRatioPlot_t::SetPlots(TString xAxisName, Double_t xmin, Double_t xmax)
         }
         h1_dataovermc->GetYaxis()->SetRangeUser(minv-0.05, maxv+0.05);
     }
+    // ######### DELETE THIS WHEN NOT NEEDED ########
+    h1_dataovermc->GetYaxis()->SetRangeUser(0.75, 1.25);
+    // ##############################################
 
     h1_dataovermc->GetXaxis()->SetRangeUser(xmin, xmax);
     h1_dataovermc->GetXaxis()->SetLabelSize(0.13);
