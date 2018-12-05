@@ -227,6 +227,8 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
             {
                 ntuple->GetEvent(i);
                 if (ntuple->runNum != 273158) continue;
+                else if (ntuple->evtNum != 96411737) continue;
+                else cout << "RunNum " << ntuple->runNum << "  EvtNum " << ntuple->evtNum << endl;
 
                 // -- Positive/Negative Gen-weights -- //
                 ntuple->GENEvt_weight < 0 ? EE.GENEvt_weight = -1 : EE.GENEvt_weight = 1;
@@ -266,8 +268,9 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
                     isPassEventSelection = analyzer->EventSelection_ElectronChannel( ElectronCollection, ntuple, &SelectedElectronCollection, &Sel_Index );
 
                     if ( isPassEventSelection == kTRUE )
-                    {
-                        cout << "RunNum " << ntuple->runNum << "  EvtNum " << ntuple->evtNum << endl;
+                    {                       
+                        cout << "HOORAY\n";
+                        break;
 
                         timesPassed++;
                         Electron ele1 = SelectedElectronCollection[0];
