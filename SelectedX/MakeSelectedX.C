@@ -227,7 +227,8 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
             {
                 ntuple->GetEvent(i);
                 if (ntuple->runNum != 273158) continue;
-                else if (ntuple->evtNum != 96411737) continue;
+//                else if (ntuple->evtNum != 96411737) continue;
+                else if (ntuple->evtNum != 97682536) continue;
                 else cout << "RunNum " << ntuple->runNum << "  EvtNum " << ntuple->evtNum << endl;
 
                 // -- Positive/Negative Gen-weights -- //
