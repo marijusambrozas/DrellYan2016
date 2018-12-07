@@ -129,7 +129,11 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         Processes.clear();
         Processes.push_back( _EE_DYTauTau_Full );
         Processes.push_back( _EE_ttbar_Full );
-        Processes.push_back( _EE_VVnST );
+        Processes.push_back( _EE_tW );
+        Processes.push_back( _EE_tbarW );
+        Processes.push_back( _EE_WW );
+        Processes.push_back( _EE_WZ );
+        Processes.push_back( _EE_ZZ );
         Processes.push_back( _EE_WJets );
         Processes.push_back( _EE_QCDEMEnriched_Full );
     }
@@ -422,7 +426,11 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
         Processes.clear();
         Processes.push_back( _MuMu_DYTauTau_Full );
         Processes.push_back( _MuMu_ttbar_Full );
-        Processes.push_back( _MuMu_VVnST );
+        Processes.push_back( _MuMu_tW );
+        Processes.push_back( _MuMu_tbarW );
+        Processes.push_back( _MuMu_WW );
+        Processes.push_back( _MuMu_WZ );
+        Processes.push_back( _MuMu_ZZ );
         Processes.push_back( _MuMu_WJets );
         Processes.push_back( _MuMu_QCDMuEnriched_Full );
     }
@@ -745,7 +753,11 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
         Processes.clear();
         Processes.push_back( _EMu_DYTauTau_Full );
         Processes.push_back( _EMu_ttbar_Full );
-        Processes.push_back( _EMu_VVnST );
+        Processes.push_back( _EMu_tW );
+        Processes.push_back( _EMu_tbarW );
+        Processes.push_back( _EMu_WW );
+        Processes.push_back( _EMu_WZ );
+        Processes.push_back( _EMu_ZZ );
         Processes.push_back( _EMu_WJets );
 //        Processes.push_back( _EMu_QCDMuEnriched_Full );
     }

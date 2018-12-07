@@ -2165,7 +2165,7 @@ Bool_t DYAnalyzer::EventSelection(vector< Muon > MuonCollection, NtupleHandle *n
 	for(Int_t j=0; j<(int)MuonCollection.size(); j++)
 	{
 //	    if( MuonCollection[j].isTightMuon() && MuonCollection[j].trkiso < 0.10)
-            if( MuonCollection[j].isTightMuon() && MuonCollection[j].relPFiso < 0.15)
+            if( MuonCollection[j].isTightMuon() && MuonCollection[j].RelPFIso_dBeta < 0.15)
 	        QMuonCollection.push_back( MuonCollection[j] );
 	}
 
@@ -2174,7 +2174,7 @@ Bool_t DYAnalyzer::EventSelection(vector< Muon > MuonCollection, NtupleHandle *n
 	for(Int_t i_mu=0; i_mu<(Int_t)QMuonCollection.size(); i_mu++)
 	{
 		Muon mu = QMuonCollection[i_mu];
-		if( mu.isTrigMatched(ntuple, "HLT_IsoMu20_v*") || mu.isTrigMatched(ntuple, "HLT_IsoTkMu20_v*") )
+                if( mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*") || mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*") )
 		{
 			isExistHLTMatchedMuon = kTRUE;
 			break;
@@ -2229,7 +2229,7 @@ Bool_t DYAnalyzer::EventSelection(vector< Muon > MuonCollection, NtupleHandle *n
 				Muon Mu = QMuonCollection[i_mu];
 
 				// -- at least 1 muon should be matched with HLT objects in best pair -- //
-				if( Mu.isTrigMatched(ntuple, "HLT_IsoMu20_v*") || Mu.isTrigMatched(ntuple, "HLT_IsoTkMu20_v*") )
+                                if( Mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*") || Mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*") )
 				{
 					// -- Mu in this loop: QMuon Matched with HLT object -- //
 
@@ -2277,7 +2277,6 @@ Bool_t DYAnalyzer::EventSelection(vector< Muon > MuonCollection, NtupleHandle *n
 				if( mu1_BestPair.charge != mu2_BestPair.charge ) isOS = kTRUE;
 
                                 if( reco_M > 10 && VtxNormChi2_BestPair < 20 && Angle < TMath::Pi() - 0.005 && isOS == kTRUE )
-//				if( reco_M > 60 && reco_M < 120 && isOS == kTRUE )
 				{
 					isPassEventSelection = kTRUE;
 					SelectedMuonCollection->push_back( mu1_BestPair );
@@ -2305,7 +2304,7 @@ Bool_t DYAnalyzer::EventSelection(vector< Muon > MuonCollection, NtupleHandle *n
     for(Int_t j=0; j<(int)MuonCollection.size(); j++)
     {
 //        if( MuonCollection[j].isTightMuon() && MuonCollection[j].trkiso < 0.10)
-        if( MuonCollection[j].isTightMuon() && MuonCollection[j].relPFiso < 0.15)
+        if( MuonCollection[j].isTightMuon() && MuonCollection[j].RelPFIso_dBeta < 0.15)
         {
             QMuonCollection.push_back( MuonCollection[j] );
             QIndex.push_back( j );

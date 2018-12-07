@@ -1,4 +1,3 @@
-//  KO GERO GALIMA BUTU MEDZIUI SUKURTI SAKAS SELECTEDX FUNKCIJOS VIDUJE ee.CreateBranches(*Tree)
 #include <TChain.h>
 #include <TTree.h>
 #include <TFile.h>
@@ -229,7 +228,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
                 if (ntuple->runNum != 273158) continue;
 //                else if (ntuple->evtNum != 96411737) continue;
                 else if (ntuple->evtNum != 97682536) continue;
-                else cout << "RunNum " << ntuple->runNum << "  EvtNum " << ntuple->evtNum << endl;
+                cout << "RunNum " << ntuple->runNum << "  EvtNum " << ntuple->evtNum << endl;
 
                 // -- Positive/Negative Gen-weights -- //
                 ntuple->GENEvt_weight < 0 ? EE.GENEvt_weight = -1 : EE.GENEvt_weight = 1;
