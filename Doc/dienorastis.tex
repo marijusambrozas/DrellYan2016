@@ -53,6 +53,7 @@
 \newcommand{\pT}{p_{T}}
 \newcommand{\DYtau}{\mathrm{DY}\!\rightarrow\tau\tau}
 \newcommand{\DYee}{\mathrm{DY}\!\rightarrow ee}
+\newcommand{\WJets}{W\! +\!\mathrm{Jets}}
 \newcommand{\QCD}{\mathrm{QCD}}
 \newcommand{\Data}{\mathrm{Data}}
 \newcommand{\MC}{\mathrm{MC}}
@@ -85,74 +86,6 @@
 \date{\textit{Pradėta} 2018-10-09, \textit{Paskutinė versija} \today}
 \maketitle
 \pagebreak
-
-\section{Darbų planas}
-\textbf{Tikslas: Įvertinti Drell-Yan proceso triukšmo įvykių skaičių $e\mu$ metodu. Parašyti kursinį darbą.}
-
-Uždaviniai:
-\begin{enumerate}
-	\item Atrinktų duomenų rinkinių gavimas:
-	\begin{enumerate}
-		\item Nuspręsti, kokius duomenis (dydžius) saugoti. (padaryta, bet dar būtų gerai pasitarti su vadovu)
-		\item Nuspręsti, kokie atrankos kriterijai naudojami. (padaryta)
-		\item Pasiruošti galutines atrankos ir duomenų parsisiuntimo kodų versijas.
-		Įsitikinti, kad viskas veikia. (beveik padaryta)
-		\item Paleisti kodus, gauti ir atsisiųsti duomenis.
-		\item \textit{Parengti instrukciją, kad kiti, naudodamiesi mano kodais galėtų pakartoti tą patį.}
-	\end{enumerate}
-	
-	\item Korekcijų pritaikymas:
-	\begin{enumerate}
-		\item Tiksliai išsiaiškinti, kokių korekcijų kuriems duomenims reikia.
-		(informacijos ieškoti pranešimų skaidrėse, analizės užrašuose, straipsniuose, CMS Twiki)
-		\item Išsiašiktinti, kaip kurios korekcijos daromos:
-		\begin{itemize}
-			\item Pažiūrėti, kaip tai daroma Dalmin'o koduose;
-			\item Informacijos ieškoti pranešimų skaidrėse, analizės užrašuose, straipsniuose, CMS Twiki;
-			\item Reikalui esant klausti vadovo arba rašyti laišką Dalmin'ui;
-		\end{itemize}
-		\item Išsiaiškinti, ar korekcijoms reikalingi turimi failai yra tinkami.
-		(Informacijos ieškoti CMS twiki, arba rašyti laišką Dalmin'ui)
-		\item Pasirašyti ir pritaikyti korekcijų kodus. (jeigu viskas bus gerai, ko gero galima
-		būtų naudoti ir Dalmin'o kodus, svarbu suprasti, kaip veikia ir gebėti paaiškinti)
-	\end{enumerate}
-	
-	\item Matavimo ir modeliavimo pasiskirstymų palyginimas:
-	\begin{enumerate}
-		\item Nuspręsti, kokius kontrolinius dydžius reikia brėžti.
-		(pasižiūrėti pranešimų skaidrėse, analizės užrašuose)
-		\item Gauti grafikus bei turėti galimybes detalesnei analizei.
-		(Turėtų užtekti tik pakoreguoti jau turimą kodą)
-		\item Esant dideliems nesutapimams tarp matavimo ir modeliavimo, aiškintis, kodėl
-		taip yra ir taisyti klaidas / keisti metodikas. (Tartis su vadovu, kitais mokslinės
-		grupės nariais)
-	\end{enumerate}
-	
-	\item Triukšmo įvykių skaičiaus įvertinimas $e\mu$ metodu:
-	\begin{enumerate}
-		\item Išsiaiškinti, kaip įvertinami $e\mu$ $QCD$ triukšmai.
-		(Informacijos ieškoti pranešimų skaidrėse, analizės užrašuose, straipsniuose)
-		\item Įšsiaiškinti, ar $QCD$ triukšmų įvertinimo metodas nesikerta su anksčiau naudotu
-		$W+\mathrm{Jets}$ įvykių \ltq{išprastinimu}, ir nuspręsti, kuriuos metodus taikyti.
-		(Informacijos ieškoti analizės užrašuose, reikalui esant tartis su vadovu ir/arba kitais
-		mokslinės grupės nariais)
-		\item Pasirašyti kodus, kurie atliks įvertinimą $e\mu$ metodu bei palygins gautą rezultatą
-		su modeliuotu įverčiu. (Pasinaudoti Dalmin'o ir savo paties senesniais kodais)
-	\end{enumerate}
-	
-	\item Neapibrėžtumų įvertinimas:
-	\begin{enumerate}
-		\item Išsiaiškinti, koks naudotų pataisų indėlis į neapibrėžtumus. (Informacijos ieškoti
-		pranešimų skaidrėse, analizės užrašuose, straipsniuose, reikalui esant klausti vadovo)
-		\item Nustatyti pagrindinius sisteminių neapibrėžtumų šaltinius. (Informacijos ieškoti
-		Dalmin'o koduose, pranešimų skaidrėse, analizės užrašuose, straipsniuose, reikalui
-		esant klausti vadovo)
-		\item Įvertinti, ar $\emu$ metodo įvertis yra reikšmingas lyginant su apskaičiuotais
-		neapibrėžtumais. (Bandyti pritaikyti savo ankstesnius kodus)
-	\end{enumerate}
-	
-	\item Darbo rašymas
-\end{enumerate}
 
 \section{Spalio 9-10 d. -- CMSDAS ataskaitos taisymas}
 \begin{itemize}
@@ -457,8 +390,8 @@ Uždaviniai:
 
 \section{Lapkričio 13 d. -- darbų plano sudarymas, kodų taisymas}
 \begin{itemize}
-	\item Peržiūrėjau ir šiek tiek koregavau planą. Pasidariau ir tekstinę versiją, kurią įkėliau
-	į šio failo pirmą sekciją.
+	\item Peržiūrėjau ir šiek tiek koregavau planą. Pasidariau ir tekstinę versiją, kuri pateikiama
+	žemiau.
 	\item Pabandžiau dat šiek tiek optimizuoti kodus, pridėdamas į \ttt{SelectedX} klases funkciją
 	\ttt{ClearVectors()}, kuri tą ir daro -- ištuština savyje turimus vektorius. Taip galėjau iš
 	atrankos kodų išmesti eilutes, kurios po kiekvieno medžio užpildymo atranką praėjusio įvykio
@@ -482,6 +415,139 @@ Uždaviniai:
 	Lee github saugyklos, ten iš pradžių taip	buvo sudaryta miuonų atranka, nors vėliau kai
 	peržiūrinėjau pranešimo skaidres, mačiau, kad ten	jau naudojamas kriterijus \ttt{IsTightMuon}, 
 	tad galbūt tokiu atveju naudoti TuneP kintamųjų	nebereikia).
+	\item Prie kintamųjų \ttt{Process\_t} pridėjau dar kelis -- alternatyviai sugeneruotus modeliuotus
+	procesus (Drell-Yan, $\WJets$, dviejų bozonų). Taip pat \ttt{FileMgr} klasėje pridėjau papildomas
+	eilutes, kad šiuos procesus eitų atrasti, užkrauti, bei kad būtų reikiama su jais susijusi inforacija
+	(tik dar neturiu įvykių skaičiaų, svorių sumų, bei reakcijų skerspjūvių).
+\end{itemize}
+
+\textbf{Darbų planas}
+
+\textbf{Tikslas: Įvertinti Drell-Yan proceso triukšmo įvykių skaičių $e\mu$ metodu. Parašyti kursinį darbą.}
+
+Uždaviniai:
+\begin{enumerate}
+	\item Atrinktų duomenų rinkinių gavimas:
+	\begin{enumerate}
+		\item Nuspręsti, kokius duomenis (dydžius) saugoti. (padaryta, bet dar būtų gerai pasitarti su vadovu)
+		\item Nuspręsti, kokie atrankos kriterijai naudojami. (padaryta)
+		\item Pasiruošti galutines atrankos ir duomenų parsisiuntimo kodų versijas.
+		Įsitikinti, kad viskas veikia. (beveik padaryta)
+		\item Paleisti kodus, gauti ir atsisiųsti duomenis.
+		\item \textit{Parengti instrukciją, kad kiti, naudodamiesi mano kodais galėtų pakartoti tą patį.}
+	\end{enumerate}
+	
+	\item Korekcijų pritaikymas:
+	\begin{enumerate}
+		\item Tiksliai išsiaiškinti, kokių korekcijų kuriems duomenims reikia.
+		(informacijos ieškoti pranešimų skaidrėse, analizės užrašuose, straipsniuose, CMS Twiki)
+		\item Išsiaiškinti, kaip kurios korekcijos daromos:
+		\begin{itemize}
+			\item Pažiūrėti, kaip tai daroma Dalmin'o (KyeongPil'o) koduose;
+			\item Informacijos ieškoti pranešimų skaidrėse, analizės užrašuose, straipsniuose, CMS Twiki;
+			\item Reikalui esant klausti vadovo arba rašyti laišką Dalmin'ui;
+		\end{itemize}
+		\item Išsiaiškinti, ar korekcijoms reikalingi turimi failai yra tinkami.
+		(Informacijos ieškoti CMS twiki, arba rašyti laišką Dalmin'ui)
+		\item Pasirašyti ir pritaikyti korekcijų kodus. (jeigu viskas bus gerai, ko gero galima
+		būtų naudoti ir Dalmin'o (KyeongPil'o) kodus, svarbu suprasti, kaip veikia ir gebėti paaiškinti)
+	\end{enumerate}
+	
+	\item Matavimo ir modeliavimo pasiskirstymų palyginimas:
+	\begin{enumerate}
+		\item Nuspręsti, kokius kontrolinius dydžius reikia brėžti.
+		(pasižiūrėti pranešimų skaidrėse, analizės užrašuose)
+		\item Gauti grafikus bei turėti galimybes detalesnei analizei.
+		(Turėtų užtekti tik pakoreguoti jau turimą kodą)
+		\item Esant dideliems nesutapimams tarp matavimo ir modeliavimo, aiškintis, kodėl
+		taip yra ir taisyti klaidas / keisti metodikas. (Tartis su vadovu, kitais mokslinės
+		grupės nariais)
+	\end{enumerate}
+	
+	\item Triukšmo įvykių skaičiaus įvertinimas $e\mu$ metodu:
+	\begin{enumerate}
+		\item Išsiaiškinti, kaip įvertinami $e\mu$ $QCD$ triukšmai.
+		(Informacijos ieškoti pranešimų skaidrėse, analizės užrašuose, straipsniuose)
+		\item Įšsiaiškinti, ar $QCD$ triukšmų įvertinimo metodas nesikerta su anksčiau naudotu
+		$W+\mathrm{Jets}$ įvykių \ltq{išprastinimu}, ir nuspręsti, kuriuos metodus taikyti.
+		(Informacijos ieškoti analizės užrašuose, reikalui esant tartis su vadovu ir/arba kitais
+		mokslinės grupės nariais)
+		\item Pasirašyti kodus, kurie atliks įvertinimą $e\mu$ metodu bei palygins gautą rezultatą
+		su modeliuotu įverčiu. (Pasinaudoti Dalmin'o (KyeongPil'o) ir savo paties senesniais kodais)
+	\end{enumerate}
+	
+	\item Neapibrėžtumų įvertinimas:
+	\begin{enumerate}
+		\item Išsiaiškinti, koks naudotų pataisų indėlis į neapibrėžtumus. (Informacijos ieškoti
+		pranešimų skaidrėse, analizės užrašuose, straipsniuose, reikalui esant klausti vadovo)
+		\item Nustatyti pagrindinius sisteminių neapibrėžtumų šaltinius. (Informacijos ieškoti
+		Dalmin'o (KyeongPil'o) koduose, pranešimų skaidrėse, analizės užrašuose, straipsniuose, reikalui
+		esant klausti vadovo)
+		\item Įvertinti, ar $\emu$ metodo įvertis yra reikšmingas lyginant su apskaičiuotais
+		neapibrėžtumais. (Bandyti pritaikyti savo ankstesnius kodus)
+	\end{enumerate}
+	
+	\item Darbo rašymas
+\end{enumerate}
+
+\section{Lapkričio 14-16 d. -- planų kūrimas, atrinktų duomenų gavimas}
+\begin{itemize}
+	\item Pagal CMS Twiki informaciją (\url{https://twiki.cern.ch/twiki/bin/viewauth/CMS/SNUCMSYooDYntuple})
+	suvedinėjau alternatyvių duomenų rinkinių reakcijų skerspjūvius	ir įvykių skaičius.
+	\item Pabandžiau palesti atrankos kodus su keliais alternatyviais duomenų rinkiniais, kad būtų galima
+	patikrinti, ar ten esantys įvykių skaičiai yra tokie patys, kaip nurodyta Twiki puslapyje (nes kai
+	kurių kitų duomenų rinkinių skaičiai įvykių nesutampa. Teko pataisyti atrankos kodų pateikimo
+	HTCondor sistemai kodus, nes ten kažkas buvo pasikeitę: dabar reikia nurodyti savo
+	\textit{accounting group}, kuri yra \textit{group\_cms}.
+	\item Parodžiau vadovui savo sudėliotus planus -- buvo nuspręsta, kad jie per mažai skiriasi nuo
+	sudaryto praktikos veiklų plano ir jame yra surašyta tai, kas ir taip aišku, todėl reikia sukurti
+	naują, kuris orientuotas į pasiekimą -- pristatymo mokslinei grupei atlikimą. Naujas planas pradėtas
+	dėlioti taip, kad viskas nuosekliai eitų iš to,	ką tam pranešimui reikia paruošti. Pranešimas
+	numatytas lapkričio 30 d. Naują planą galima rasti čia:
+	\url{https://docs.google.com/spreadsheets/d/1VNBFFB9RFZfms1Ut3oA_7mRwbpnGmGVg8CWLj4RIvu0/edit?usp=sharing}
+	\item Pasidariau pranešimo plano pirminę versiją, susidėliojau reikalingų grafikų sąrašą.
+	\item Pasidariau paskutinius pataisymus įvykių atrankos kodams ir juos paleidau.
+\end{itemize}
+
+\section{Lapkričio 19 d. -- duomenų atsisiuntimas}
+\begin{itemize}
+	\item Peržiūrinėjau skaičiavimų išvesties failus, tikrinau, ar viskas gerai, taip pat tikrinau,
+	kaip pasikeitė atrinktų miuonų įvykių skaičius pakeitus atrankos kriterijus, bei suvedinėjau
+	naujus skaičius į \ttt{LocalFileMgr}.
+	\item Pataisiau klaidas $\emu$ atrankos paleidimo koduose (tiek taikant Ročesterio korekciją, tiek ne,
+	buvo išvestis vedama į tą patį failą, kas lėmė, kad pusė išvesties failų pradingo (nes kitas kodas
+	tiesiog viską \ltq{užrašė ant viršaus}.
+	\item Paleidau $\emu$ kodus iš naujo, tačiau gavau klaidų, kad nerandamas failas
+	\ttt{/cvmfs/cms.cern.ch/cmsset\_default.sh}, tikrinau, ar jis nepradingo, išsiaiškinau, kad ne.
+	Vis dėlto vienas iš kodų -- $\WJets$ -- apsimetė, kad veikia -- darbas nesibaigė ilgai, tad jo
+	neatšaukiau ir palikau susiskaičiuoti.
+	\item Taisiau grafikų kūrimo kodus -- pridėjau daugiau grafikų variantų pagal susidarytą grafikų
+	sąrašą, taisiau klaidas.
+	\item Pažiūrėjau, kokios korekcijos yra daromos mano koduose -- elektronams trūksta trigerio SF,
+	jo skaičiavimui net nėra failo. Bandžiau ieškoti reikiamo failo Dalmin'o ir KyeongPil'o github
+	saugyklose, bet neradau. Dalmin'o pristatymo skaidrėse trigerio SF vis dėlto pritaikytas buvo,
+	tad galbūt reikėtų parašyti laišką ir paklausti.
+	
+	Miuonams skaičiuojant ID ir ISO SF buvo naudojamos histogramos, skirtos \ttt{IsHighPTMuon}
+	identifikavimui, tad reikia pataisyti, kad būtų naudojami failai, skirti \ttt{IsTightMuon}
+	identifikavimui.
+	\item Parašiau laišką \textit{CERN service-desk} su klausimu, kodėl negaliu prisijungti prie
+	darbo grupės susirinkimo \textit{Indico} puslapio. Gavau atsakymą, kad nesu įtrauktas į grupę
+	cms-physics-access, todėl negaliu matyti nurodyto puslapio. Tada pagal atsakiusio žmogaus pasiūlymą
+	parašiau laišką į CMS sekretoriatą su prašymu pridėti mane į šią grupę. Atsakymo kol kas negavau.
+\end{itemize}
+
+\section{Lapkričio 20 d. -- korekcijų tvarkymas}
+\begin{itemize}
+	\item Peržiūrėjau vakar paliktos skaičiuotis $\emu$ $\WJets$ atrankos išvesties failus. Pamačiau, kad
+	ir šis skaičiavimas buvo nesėkmingas. Taigi paleidau visus $\emu$ skaičiavimus iš naujo. Panašu, kad
+	šįkart viskas veikia gerai.
+	\item Bandžiau perdaryti kodus, kad būtų daromos reikiamos korekcijos (pagal naudotus atrankos kriterijus).
+	Nemažai užtrukau išsiaiškinti, kurią histogramą rinktis ISO SF skaičiavimui (ten buvo du variantai:
+	\ttt{LooseIso\_TightID} ir \ttt{TightIso\_TightID} ir nežinojau, kuris atitinka reikalavimą
+	$I^{\mathrm{PF}}_{\mathrm{rel.}} < 0.15$. Galiausiai atsakymą radau viename plakate:
+	\url{https://indico.cern.ch/event/681549/contributions/2956802/attachments/1661977/2663023/Poster_TnP-2.pdf}.
+	Taigi sužinojau, kad man reikia imti \ttt{TightIso\_TightID} histogramą.
 \end{itemize}
 
 
