@@ -187,17 +187,17 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
                 return;
             }
 
-//            if ( Debug == kTRUE )
-//                ElectronFile = TFile::Open( out_base+out_dir+"_DEBUG.root", "RECREATE" );
-//            else
-//                ElectronFile = TFile::Open( out_base+out_dir+".root", "RECREATE" );
-//            ElectronFile->cd();
+            if ( Debug == kTRUE )
+                ElectronFile = TFile::Open( out_base+out_dir+"_DEBUG.root", "RECREATE" );
+            else
+                ElectronFile = TFile::Open( out_base+out_dir+".root", "RECREATE" );
+            ElectronFile->cd();
 
 
-//            TTree* ElectronTree = new TTree( "DYTree", "DYTree" );
+            TTree* ElectronTree = new TTree( "DYTree", "DYTree" );
             // -- Creating LongSelectedEE variables to assign branches -- //
             SelectedEE_t EE; EE.CreateNew();
-//            EE.MakeBranches(ElectronTree);
+            EE.MakeBranches(ElectronTree);
 
             TChain *chain = new TChain( Mgr.TreeName[i_tup] );
             chain->Add( Mgr.FullLocation[i_tup] );
@@ -225,10 +225,10 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
             for ( Int_t i=0; i<NEvents; i++ )
             {
                 ntuple->GetEvent(i);
-                if (ntuple->runNum != 273158) continue;
+//                if (ntuple->runNum != 273158) continue;
 //                else if (ntuple->evtNum != 96411737) continue;
-                else if (ntuple->evtNum != 97682536) continue;
-                cout << "RunNum " << ntuple->runNum << "  EvtNum " << ntuple->evtNum << endl;
+//                else if (ntuple->evtNum != 97682536) continue;
+//                cout << "RunNum " << ntuple->runNum << "  EvtNum " << ntuple->evtNum << endl;
 
                 // -- Positive/Negative Gen-weights -- //
                 ntuple->GENEvt_weight < 0 ? EE.GENEvt_weight = -1 : EE.GENEvt_weight = 1;
@@ -269,8 +269,8 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
 
                     if ( isPassEventSelection == kTRUE )
                     {                       
-                        cout << "HOORAY\n";
-                        break;
+//                        cout << "HOORAY\n";
+//                        break;
 
                         timesPassed++;
                         Electron ele1 = SelectedElectronCollection[0];
@@ -300,7 +300,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
 
                         } // End of else()
 
-//                        ElectronTree->Fill();
+                        ElectronTree->Fill();
                         isClear = EE.ClearVectors();
                         if ( !isClear )
                         {
@@ -329,23 +329,23 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
 
             // Writing
-//            cout << "Writing into file...";
-//            Int_t write;
-//            write = ElectronTree->Write();
-//            if ( write )
-//            {
-//                cout << " Finished." << endl << "Closing a file..." << endl;
-//                TString addition = "";
-//                if ( Debug == kTRUE ) addition = "_DEBUG";
-//                ElectronFile->Close();
-//                if ( !ElectronFile->IsOpen() ) cout << "File SelectedEE_" << Mgr.Tag[i_tup]+addition << ".root has been closed successfully.\n" << endl;
-//                else cout << "FILE SelectedEE_" << Mgr.Tag[i_tup]+addition << ".root COULD NOT BE CLOSED!\n" << endl;
-//            }
-//            else
-//            {
-//                cout << " Writing was NOT successful!\n" << endl;
-//                ElectronFile->Close();
-//            }
+            cout << "Writing into file...";
+            Int_t write;
+            write = ElectronTree->Write();
+            if ( write )
+            {
+                cout << " Finished." << endl << "Closing a file..." << endl;
+                TString addition = "";
+                if ( Debug == kTRUE ) addition = "_DEBUG";
+                ElectronFile->Close();
+                if ( !ElectronFile->IsOpen() ) cout << "File SelectedEE_" << Mgr.Tag[i_tup]+addition << ".root has been closed successfully.\n" << endl;
+                else cout << "FILE SelectedEE_" << Mgr.Tag[i_tup]+addition << ".root COULD NOT BE CLOSED!\n" << endl;
+            }
+            else
+            {
+                cout << " Writing was NOT successful!\n" << endl;
+                ElectronFile->Close();
+            }
 
         } // End of i_tup iteration
 
