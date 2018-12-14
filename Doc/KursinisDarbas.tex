@@ -61,11 +61,13 @@
 \newcommand{\ZZ}{Z\! Z}
 \newcommand{\WZ}{W\! Z}
 \newcommand{\emu}{e\mu}
+\newcommand{\mumu}{\mu\mu}
 \newcommand{\gJets}{\gamma\! +\!\mathrm{Jets}}
 \newcommand{\WJets}{W\! +\!\mathrm{Jets}}
 \newcommand{\dtW}{tW\! + \! \bar{t}W}
 \newcommand{\DYee}{\mathrm{DY} \! \rightarrow \! ee}
 \newcommand{\DYtau}{\mathrm{DY} \! \rightarrow \! \tau\tau}
+\newcommand{\DY}{\mathrm{DY}}
 \newcommand{\ltq}[1]{{\quotedblbase{}#1\textquotedblleft{}}}
 \newcommand{\Lumi}{{\cal L}_\mathrm{int}}
 \newcommand{\invfb}{fb$^{-1}$}
@@ -145,14 +147,26 @@ CERN CMS detektoriaus užregistruoti $13$ TeV energijos protonų susidūrimų du
 
 \section{Drell-Yan procesas ir jo tyrimas}
 
-Šio skyriaus tikslas -- trumpai pristatyti didelių energijų fizikos statistikos pagrindus, partonų pasiskirstymo funkcijas, supažindinti su Drell-Yan procesu, jo svarba, aptarti galimus šio proceso triukšmo įvykius. Taip pat šiame skyriuje aptariami Drell-Yan proceso tyrimo pagrindai -- kaip būna įvertinamas triukšmo įvykių skaičius, supažindinama su Didžiuoju hadronų greitintuvu ir CMS detektoriumi, be kurių šio darbo atlikimas nebūtų įmanomas. Aptariami CMS detektoriaus duomenų apdorojimo ir modeliavimo principai bei pagrindinė programinė įranga, kuri tam naudojama.
 
 \subsection{Protono sandara ir Drell-Yan procesas}
 
 \subsubsection{Partonų pasiskirstymo funkcijos}
-Pagal partonų modelį, visi hadronai (nukleonai, mezonai) yra sudaryti iš kvarkų ir gliuonų, kartu vadinamų partonais. Populiariai yra žinoma, kad hadronai susideda iš trijų, o mezonai -- iš dviejų kvarkų. Iš tiesų kvarkų šiose dalelėse yra gerokai daugiau, o šie populiariai žinomi keli kvarkai yra taip vadinamieji valentiniai kvarkai, kurie apibrėžia dalelės kvantinius skaičius. Vidinę hadrono struktūrą galima ištirti pasinaudojant didelių energijų dalelių sklaidos procesais. Paimkime tokią atskaitos sistemą, kurioje hadronas yra taikinys, o kita dalelė (pavyzdžiui, leptonas) yra zondas. Jeigu zondo impulsas lygus $q$, tai galima tarti, kad jo skiriamoji geba bus maždaug $\hbar / q$. Taigi, taikinio struktūrą galima nagrinėti tuo detaliau, kuo $q$ didesnis. Kai zondo $q=100$ GeV (laikant, kad $c=1$), gaunama apytiksliai $0.02$ fm skyra (protono matmenis galima laikyti maždaug $1$ fm eilės), kuri jau yra tinkama \ltq{apžiūrėti} protono vidinę struktūrą. Kita vertus, galima paimti tokią atskaitos sistemą, kurioje prieš tai taikiniu buvęs hadronas juda didžiuliu greičiu. Tokioje atskaitos sistemoje visų partonų impulsas praktiškai lygiagretus bendram hadrono impulsui, tad hadronas gali būti laikomas greitų dalelių srautu, kuriame kiekviena dalelė (partonas) nešasi kažkokią hadrono impulso dalį $x$. Teorinėje dalelių fizikoje hadronų partoninė sudėtis yra aprašoma Partonų pasiskirstymo funkcijomis. Partonų pasiskirstymo funkciją galima apibrėžti kaip tikimybės tankį aptikti partoną su tam tikra hadrono impulso dalimi $x$ atskaitos sistemoje, kurioje hadronas turi kvadratinę energiją $\mu^{2}=-q^{2}$ (čia laikoma $c=1$) \cite{PDFintro}. Kuo $\mu^{2}$ didesnis, tuo didesnė tikimybė aptikti įvairių partonų su mažesniu $x$ ir atvirkščiai -- kuo $\mu^{2}$ mažesnis, tuo labiau dominuoja valentiniai kvarkai. Partonų pasiskirstymo funkcijų pavyzdžiai pateikti \ref{fig:PDFs} pav. Verta atkreipti dėmesį, kaip išaugus energijai padidėja tikimybė aptikti partonus su mažais $x$. Vietomis suintegravus tikimybės tankį būtų galima matyti, kad tam tikrų partonų aptikimo tikimybė viršija $1$. Tai reiškia, kad egzistuoja tikimybė rasti daugiau negu vieną tokio tipo partoną.
+Teorinėje elementariųjų dalelių fizikoje, protonų, kaip ir kitų hadronų, sandara aprašoma
+partonų pasiskirstymo funkcijomis. Tikslus šių funkcijų žinojimas yra ypatingai svarbus
+norint padaryti bet kokius teorinius hadronų greitintuvuose vykstančių įvykių įverčius.
+Partonų pasiskirstymo funkcija $f_{i}(x, Q^{2})$ aprašo tikimybę aptikti protono impulso
+dalį $x$ nešantį $i$ tipo partoną (pavyzdžiui, kylantyjį kvarką -- $u$, krentantyjį
+kvarką -- $d$ ir t.t.), kai \textit{kietojo} susidūrimo (angl. \textit{hard interaction} --
+procesas, kurio metu smarkiai pasikeičia dalelių impulsas) energiją aprašantis dydis lygus $Q$.
+Kai kokia nors dalelė yra sklaidoma hadrono, teoriniai susidūrimo metu galimų reakcijų
+skerspjūviai yra apskaičiuojami kaip partonų pasiskirstymo funkcijos ir sklaidomos dalelės
+sąveikos su tam tikru partonu skerspjūvio kombinacija.
+Partonų pasiskirstymo funkcijos negali būti apskaičiuotos pasinaudojant kvantinės chromodinamikos
+(angl. \textit{quantum chromodynamics} -- QCD) teorija, todėl jos yra apskaičiuojamos
+pasinaudojant įvairių procesų eksperimentinių tyrimų rezultatais \cite{Placakyte:2011az}.
 
-Eksperimentinėje dalelių fizikoje matuojami įvairių dalelių sklaidos procesų reakcijų skerspjūviai. Bet kokio dalelių sklaidos proceso, kurio pradinėje būsenoje dalyvauja hadronai, reakcijos skerspjūvio teoriniai įverčiai gaunami kombinuojant partonų pasiskirstymo funkcijas su pagal perturbacinės kvantinės chromodinamikos (angl.\ \textit{perturbative quantum chromodynamics} -- pQCD) teoriją apskaičiuojamomis partonų tarpusavio saveikų tikimybėmis. Tai reiškia, kad joks iš hadronų greitintuvo gaunamų rezultatų teorinis įvertis negalėtų būti gaunamas be partonų pasiskirstymo funkcijų \cite{PDFs}. Pradėjus veikti Didžiajam hadronų priešpriešinių srautų greitintuvui poreikis turėti kuo tikslesnes partonų pasiskirstymo funkcijas dar labiau išaugo, tačiau tuo pačiu atsirado ir daugiau galimybių jas patikslinti -- didesniu tikslumu ir/arba aukštesnėse energijose tyrinėjant dalelių sklaidos procesus, kurie jau laikomi ganėtinai ištirtais, pavyzdžiui, Drell-Yan procesą.
+Partonų pasiskirstymo funkcijų tikslinimui jau ilgą laiką pasitarnauja Drell-Yan proceso eksperimentinis
+tyrimas. 
 
 \vspace{0.2cm}
 \begin{centering}
@@ -172,19 +186,92 @@ NNPDF partonų pasiskirstymo funkcijų pavyzdžiai \cite{NNPDF}. Kairėje pusėj
 \end{centering}
 
 \subsubsection{Drell-Yan procesas}
-Drell-Yan procesas - tai toks įvykis, kai hadronų susidūrimo metu kvarkas iš vieno hadrono ir antikvarkas iš kito anihiliuoja sukurdami leptono ir antileptono porą. Didžiajame hadronų greitintuve šis procesas vyksta apsikeičiant $Z$ bozonu arba virtualiu fotonu per s-kanalą. Tai galima užrašyti kaip $q\bar{q} \! \rightarrow \! Z/ \gamma^{*} \! \rightarrow \! l^{+}l^{-}$ arba trumpiau $\mathrm{DY} \! \rightarrow \! l^{+}l^{-}$. Drell-Yan proceso Feinmano diagramos pateiktos \ref{fig:dyproc} pav. Teorinis šio proceso tikėtinumas perturbacinėje kvantinėje chromodinamikoje skaičiuojamas antros eilės tikslumu. Eksperimentinis Drell-Yan proceso diferencialinio sklaidos skerspjūvio matavimas teoretikams suteikia galimybes tikslinti ne tik partonų pasiskirstymo funkcijas, bet ir protonų susidūrimo proceso aprašymą (angl.\ \textit{undelying  event}), hadronizacijos modelius, bei teoriškai numatomas aukštesnių eilių pataisas (perturbacinės kvantinės chromodinamikos, elektrosilpnosios sąveikos teorijos) \cite{DY13TeV}. Tam labai svarbu yra kaip įmanoma didesnis eksperimentinių rezultatų tikslumas. Šio darbo metu studijuota Drell-Yan proceso galutinė būsena yra elektrono-pozitrono pora (elektronų kanalas -- $\mathrm{DY} \! \rightarrow \! e^{+}e^{-}$).
+Drell-Yan procesas -- tai toks procesas, kai anihiliavus kvarkui ir antikvarkui (protonų susidūrimo
+metu) sukuriama leptono-antileptono pora.
+Šis procesas vyksta apsikeičiant $Z$ bozonu arba
+virtualiu fotonu per s-kanalą:
+
+\begin{equation*}
+	q\bar{q} \rightarrow Z/ \gamma^{*} \rightarrow l^{+}l^{-}
+\end{equation*}
+
+Toliau bus žymima $\DY \! \rightarrow \! l^{+}l^{-}$. Drell-Yan proceso Feinmano diagrama
+pavaizduota \ref{fig:DYfeyn} paveiksle.
+
+Drell-Yan procesas tapo svarbiu tyrimo objektu nuo pat pirmojo jo aprašymo $1970$-aisiais
+metais, kuriuo S.D.\ Drell ir T.M.\ Yan bandė apibūdinti leptonų-antileptonų porų susidarymą
+hadronų susidūrimų metu \cite{DYoriginal}.
+
+Šiais laikais Drell-Yan procesas naudojantis pertubacine kvantine chromodinamika teoretikų
+gali būti aprašomas trečios eilės perturbacijų tikslumu (angl. \textit{next-to-next-to-leading
+order} -- NNLO).
+Tikslūs eksperimentiniai Drell-Yan proceso diferencialinio skerspjūvio matavimai naudojami
+ne tik partonų pasiskirstymo funkcijoms tikslinti, bet taip pat ir perturbacinės kvantinės
+chromodinamikos, elektrosilpnosios sąveikos teorijoms tikrinti. Taip pat šis procesas yra vienu iš
+pagrindinių triukšmo procesų įvairiuose kituose tyrimuose, todėl tikslūs Drell-Yan proceso matavimai
+įvairiapusiškai prisideda prie kitų didelių energijų fizikos tyrimų rezultatų kokybės.
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.75]{DYprocess.PNG}
 \caption{Drell-Yan proceso Feynman'o diagramos.}
-\label{fig:dyproc}
+\label{fig:DYfeyn}
 \end{figure}
 
-Vienas iš pagrindinių dydžių, matuojamų Drell-Yan proceso tyrime yra diferencialinis sklaidos skerspjūvis $d\sigma/dm$ (čia $m$ -- leptonų (šiuo atveju elektrono-pozitrono) poros \textbf{invariantinė masė}). Brėžiamas diferencialinio sklaidos skerspjūvio grafikas kartais yra vadinamas invariantinės masės spektru. Pagrindinė šio spektro charakteristika yra ta, kad jis yra rezonansinė kreivė -- turi ryškų maksimumą ties $91.2$ GeV ($Z$ bozono masė) ir ties $0$ GeV (fotono masė). Leptonų poros invariantinės masės spektro pavyzdys (kai protonų susidūrimo energija lygi $8$ GeV) pateikiamas \ref{fig:DYeeCS} pav.
+\subsubsection{Skerspjūvis}
 
-Drell-Yan proceso tyrinėjimas taip pat suteikia galimybę ieškoti fizikos už Standartinio modelio ribų, pavyzdžiui, jeigu būtų pastebėtas dar vienas $d\sigma/dm$ maksimumas prie aukštesnių invariantinių masių, būtų galima įtarti $Z'$ bozono egzistavimą ir pan.
-\vspace{0.2cm}
+Drell-Yan proceso, taip pat, kaip ir kitų didelių energijų fizikos procesų tikėtinumo aprašymui
+naudojamas skerspjūvis, kuris dažniausiai matuojamas barnais ($1$ b $= 10^{-28}$ m$^{2}$).
+Pagrindinis skerspjūvio pranašumas prieš bedimensinę tam tikro įvykio tikimybę yra tas, kad
+pastarosios vertė priklauso nuo greitintuvuose lekiančių dalelių spindulių matmenų bei tankių.
+Tuo tarpu skerspjūvio vertė išlieka pastovi, tad galima nesunkiai lyginti tam tikrų įvykių
+skerspjūvius, išmatuotus skirtinguose dalelių greitintuvuose.
+
+Norint labiau pasigilinti į tam tikras tiriamo proceso charakteristikas būna naudojami diferencialiniai
+skerspjūviai $\mathrm{d}\sigma/\mathrm{d}\xi$: funkcijos, apibūdinančios, tikėtinumą, kad mus
+dominantis įvykis ne tik įvyks, bet dar ir mūsų pasirinktas rezultatą apibūdinantis tolydus
+dydis $\xi$ pateks į tam tikrą intervalą $\mathrm{d}\xi$.
+
+Drell-Yan proceso tyrime dažnai matuojamas diferencialinis skerspjūvis, priklausantis nuo
+leptonų poros invariantinės masės, skersinio impulso, arba spartos:
+$\mathrm{d}\sigma / \mathrm{d}m$, $\mathrm{d}\sigma / \mathrm{d}p_{\mathrm{T}}$, arba
+$\mathrm{d}\sigma / \mathrm{d}y$.
+Taip pat galimi ir dvimačio arba trimačio diferencialinio skerspjūvio matavimai,
+priklausantys nuo kelių (arba visų) iš išvardintų dydžių.
+Ganėtinai išsiskiriančią charakteristiką turi nuo leptonų poros invariantinės masės priklausantis
+diferencialinis skerspjūvis, dar vadinamas invariantinės masės spektru -- jis yra rezonansinė
+kreivė, t.y. turi piką ties $Z$ bozono mase (apie $91.2$ GeV).
+Nuo masės priklausančio diferencialinio skerspjūvio pavyzdys pateikiamas \ref{fig:DYeeCS} paveiksle.
+
+\subsubsection*{Invariantinė masė} 
+
+Invariantinė masė -- tai masė, kuri nepriklauso nuo atskaitos sistemos.
+Skaičiuojant vienos dalelės invariantinę masę, ji sutampa su jos rimties mase:
+\begin{equation}
+	m_{0}^{2} = E^{2} - | \vec{p}\, |^{2} \; .
+	\label{eq:invm}
+\end{equation}
+čia $m_{0}$ -- dalelės invariantinė masė, $E$ -- energija, $\vec{p}$ -- impulso vektorius.
+Taip pat šioje formulėje naudojama vienetų sistema, kurioje šviesos greitis prilygintas vienetui.
+Tokioje sistemoje dalelės masė, impulsas ir energija matuojama tais pačiais vienetais, dažniausiu atveju
+gigaelektronvoltais (GeV).
+
+Taip pat galima apskaičiuoti ir kelių dalelių sistemos invariantinę masę.
+Pastaroji nėra lygi dviejų dalelių rimties masių sumai.
+Jeigu dalelės, kurių sistemai skaičiuojame invariantinę masę, yra kažkokios kitos dalelės
+skilimo produktai, tai gauta vertė bus lygi motininės dalelės rimties masei.
+Kelių dalelių sistemos invariantinė masė skaičiuojama taip:
+\begin{equation}
+	m_{\mathrm{sistemos}}^{2} = \left( \sum_{n=1}^{N} E_{n} \right)^{2} -
+	\left| \sum_{m=1}^{N} \vec{p}_{m} \right|^{2} \; .
+	\label{eq:minvm}
+\end{equation}
+Dviejų dalelių atveju:
+\begin{equation}
+	m_{12}^2 = ( E_{1} + E_{2} )^{2} - | \vec{p}_{1} + \vec{p}_{2} |^{2} \; .
+	\label{eq:tinvm}
+\end{equation}
+Būtent taip yra skaičiuojama Drell-Yan proceso metu susidariusių dviejų leptonų invariantinė masė.
 
 \begin{centering}
 \begin{figure}[H]
@@ -192,166 +279,214 @@ Drell-Yan proceso tyrinėjimas taip pat suteikia galimybę ieškoti fizikos už 
 \includegraphics[scale=0.6]{DYeeCS.PNG}
 \vspace{-0.2cm}
 \caption{\label{fig:DYeeCS}
-Drell-Yan proceso invariantinės masės spektras, kai protonų susidūrimo energija lygi $8$ GeV. Mėlyna ištisinė linija žymi teorinį įvertį, apskaičiuotą trečios eilės tikslumu, o juodi taškai -- eksperimentinius duomenis \cite{DYpic}.
+Drell-Yan proceso diferencialinis sklaidos skerspjūvis, priklausantis nuo leptonų poros invariantinės
+masės.
+Protonų susidūrimo energija -- $8$ TeV.
+Juodi taškai žymi eksperimentinio matavimo rezultatus, o mėlyna ištisinė linija -- teoriškai numatytą
+rezultatą \cite{DYpic}.
+% GALIMA ĮDĖTI ŠITĄ https://cds.cern.ch/record/2648776/files/SMP-17-001-paper-v14.pdf
+% 13 TEV, BET ČIA DRAFT VERSIJA
 }
 \end{figure}
 \end{centering}
 
-\paragraph{Invariantinė masė} -- tai objekto (rimties) masė, kuri nepriklauso nuo atskaitos sistemos.
-Reliatyvistinėje mechanikoje bet dalelės pilnutinė energija $E$ su jos impulsu $\vec{p}$ siejasi tokiu sąryšiu:
+\subsubsection*{Šviesis}
+
+Šviesis -- tai dydis, apibūdinantis dalelių, per laiko vienetą pralėkusių mus
+dominantį plotą, skaičius. Šviesis žymimas raide $\mathcal{L}$ (angl. \textit{Luminosity}).
+
+Norint apibūdinti dalelių greitintuvuose vykstančių susidūrimų skaičių, naudojamas šviesio
+laikinis integralas -- integruotas šviesis.
+
 \begin{equation}
-E^{2}=m_{0}^{2}c^{4} + \left| \vec{p} \right|^{2}c^{2} \; \mathrm{,}
-\label{eq:relativity}
+	\Lumi=\int_{t_1}^{t_2} \mathcal{L}\mathrm{d}t =
+	\int_{t_1}^{t_2} \frac{1}{\sigma}\frac{\mathrm{d}N}{\mathrm{d}t} \mathrm{d}t \; .
+\label{eq:lumiInt}
 \end{equation}
-čia $m_{0}$ -- dalelės invariantinė (rimties) masė, $c$ -- šviesos greitis. Prilyginus $c=1$, invariantinė masė bet kokioje atskaitos sistemoje gali būti apskaičiuojama taip:
+
+Iš \eqref{eq:lumiInt} išraiškos galima matyti, kad integruotas šviesis turi atvirkštinio ploto
+dimensiją.
+Didelių energijų fizikos eksperimentatoriai šį dydį matuoja atvirkštiniais barnais -- $b^{-1}$.
+Taip pat galima pastebėti, kad sudauginus integruotą šviesį su tam tikro įvykio skerspjūviu
+galime gauti, kiek kartų tas įvykis turėtų įvykti -- taip pat, kaip ir sudauginus įvykio tikimybę
+su bandymų skaičiumi:
+
 \begin{equation}
-m_{0}^{2}=E^{2}-|\vec{p}|^{2} \; .
-\label{eq:invm}
+	N=\sigma\Lumi \; .
+\label{eq:evno}
 \end{equation}
-Jeigu dalelių daugiau negu viena, jų sistemos invariantinė masė $m_\mathrm{system}$ apskaičiuojama taip:
-\begin{equation}
-m_{\mathrm{system}}^{2}=\left(\sum_{n=1}^{N} E_{n}\right)^{2}-\left|\sum_{m=1}^{N} \vec{p}_{m}\right|^{2} \; .
-\label{eq:minvm}
-\end{equation}
-Dviem dalelėms:
-\begin{equation}
-m_{12}^2=(E_{1}+E_{2})^{2}-|\vec{p_{1}}+\vec{p_{2}}|^{2} \; .
-\label{eq:tinvm}
-\end{equation}
+
+Integruotas šviesis, lyginant su bandymų skaičiumi turi tokius pat privalumus, kaip skerspjūvis,
+lyginant su tikimybe.
+Eksperimentinėje didelių energijų fizikoje labai svarbu tiksliai apskaičiuoti integruotą šviesį,
+nes jis susieja teoriją (įvykio skerspjūvi) su tuo, kas fiksuojama eksperimente (įvykių skaičius).
+
 
 \subsection{Drell-Yan proceso eksperimentinis tyrimas}
 
 \subsubsection{Signalas ir triukšmas}
-Vykstant didelių energijų dalelių susidūrimams susikuria naujos masyvios dalelės, kurios gyvuoja taip trumpai, kad praktiškai iškart skyla į lengvesnes ir stabilesnes daleles. Pavyzdžiui, $Z$ bozono tikėtiniausia gyvavimo trukmė yra maždaug $3\cdot10^{-25}$ s -- net skriedama labai artimu šviesai greičiu dalelė per tiek laiko nespėtų pajudėti nei per atomo branduolio skersmenį. Kadangi kai kurios dalelės skyla taip greitai ir nespėja praktiškai išvis pajudėti nuo pradinės dalelių susidūrimo vietos, neįmanoma sukurti dalelių detektoriaus, kuris gebėtų detektuoti tokias daleles tiesiogiai. Visi šiuolaikiniai dalelių detektoriai registruoja tik po skilimų ir hadronizacijos susidariusias stabilias daleles, arba čiurkšlėmis vadinamus hadronų (susidariusių kvarkų ir gliuonų hadronizacijos proceso metu) ir kitų stabilių dalelių srautus -- taip vadinamą dalelių susidūrimo įvykio galutinę būseną (angl.\ \textit{final state}).
 
-Kadangi yra daug įvairių dalelių sklaidos procesų, kurių galutinės būsenos sutampa, negalima vienareikšmiškai teikti, kad detektoriaus užfiksuotas įvykis yra būtent tas, kuris mus domina (pavyzdžiui, Drell-Yan proceso įvykis). Taip pat yra galimybė, kad net ir galutinės būsenos dalelė bus atpažinta neteisingai. Taigi eksperimentinėje dalelių fizikoje yra labai svarbu atskirti, kas yra signalas, o kas -- triukšmas, ir įvertinti, kaip triukšmai iškraipo rezultatą.
+CERN Didžiajame hadronų greitintuve vykstančių $13$ TeV energijos protonų susidūrimų metu gali
+būti sukurtos labai masyvios ir labai trumpai gyvuojančios dalelės.
+Tokios dalelės skyla nespėjusios pasiekti detektoriaus, todėl fiksuojami yra tik tokių dalelių
+skilimo produktai -- ilgiau gyvuojančios ir mums gerai pažįstamos dalelės (pavyzdžiui,
+elektronai, fotonai, įvairių rūšių hadronai, miuonai).
+Detektoriuje užfiksuojamos dalelės su savo parametrais yra vadinamos įvykio galutine būsena
+(angl. \textit{final state}).
+Ko gero akivaizdu, kad vykdant tokį eksperimentą yra sunku vienareikšmiškai spręsti, kad
+detektoriuje užfiksuotos dalelės yra būtent tam tikros dalelės skilimo produktai.
+Pavyzdžiui, ieškant Higso bozono galima ieškoti įvykio, kurio metu Higso bozonas skilo į du
+$Z$ bozonus, kurie abu skilo į leptonus: $H \rightarrow ZZ \rightarrow l^{+}l^{-}l^{+}l^{-}$.
+Tačiau pamatę detektoriuje užfiksuotus keturis leptonus negalime teigti, kad užfiksavome
+Higso bozono įvykį.
+Daug dažniau protonų susidūrimo metu gali būti sukurti tiesiog du $Z$ bozonai, kurie nėra
+Higso bozono skilimo produktai, tačiau užfiksuotame vaizde gali atrodyti taip pat (užfiksuoti
+keturi leptonai) \cite{HiggsEX}.
+Tokiu atveju sakome, kad Higso bozono įvykis yra signalas, o dviejų $Z$ bozonų įvykis yra
+triukšmas (angl. \textit{background}), į kurio egzistavimą reikia atsižvelgti.
 
-Šiame tyrime signalu yra vadinama elektrono-pozitrono pora, susidariusi Drell-Yan proceso metu. Triukšmo įvykiai yra bet kokie kiti (ne Drell-Yan) įvykiai, kurių galutinė būsena yra tikrų elektronų pora, arba kitokie dalelių rinkiniai, kurie dėl detektoriaus netobulumo gali būti atpažinti kaip elektronų pora. Kai protonų susidūrimo energija lygi $13$ TeV, tikėtiniausi Drell-Yan proceso triukšmo įvykiai yra šie:
-\begin{itemize}
-\item $t\bar{t}$ -- viršūninio kvarko skilimas į gelminį kvarką, pozitroną ir elektroninį neutriną ir antiviršūninio kvarko skilimas į atitinkamas antidaleles;
-\item $tW$ ir $\bar{t}W$ -- viršūninio arba antiviršūninio kvarko skilimas į gelminį kvarką, pozitroną ir elektroninį neutriną (arba jų antidaleles) ir $W$ bozono skilimas į elektroną ir elektroninį antineutriną (arba jų antidaleles);
-\item $\WJets$ -- $W$ bozono skilimas į elektroną\footnote{Toliau dalelės ir antidalelės paprastumo sumetimais bus bendrai vadinamos dalelės vardu, jeigu ir taip pakankamai aišku, kuri dalelė tai turėtų būti. Pavyzdžiui, elektronas ir pozitronas kartu bus vadinami elektronais, nes ir taip aišku, kad $W^{+}$ bozonas skils į pozitroną ir elektroninį antineutriną, o $W^{-}$ bozonas -- atvirkščiai.} ir neutriną bei čiurkšlė kuri buvo klaidingai atpažinta kaip elektronas;
-\item $W^{+}W^{-}$ -- dviejų $W$ bozonų skilimas į du elektronus ir du neutrinus;
-\item $\WZ$ -- dviejų bozonų skilimas į tris krūvį turinčius leptonus (iš kurių du buvo atpažinti kaip elektronai, o vienas liko neaptiktas) ir vieną neutriną;
-\item $\ZZ$ -- dviejų $Z$ bozonų skilimai į keturis leptonus, iš kurių du buvo atpažinti kaip elektronai, o kiti du paliko detektorių neaptikti;
-\item $\QCD$ -- procesas, kurio metu susidarė bent dvi čiurkšlės, kurios buvo klaidingai atpažintos kaip elektronai;
-\item $\gJets$ -- fotonas ir čiurkšlė, kurie abu buvo klaidingai atpažinti kaip elektronas;
-\item $\mathrm{DY} \! \rightarrow \! \tau^{+}\tau^{-}$ -- Drell-Yan proceso taonų kanalas, kai abu taonai skyla į elektronus ir neutrinus.
-\end{itemize}
+Taip pat protonų susidūrimo metu dėl stipriosios sąveikos efektų gali susidaryti dalelių
+srautai, vadinami čiurkšlėmis (angl. \textit{jets}).
+Pasitaiko atvejų, kai detektoriuje užfiksuotos čiurkšlės yra neteisingai atpažįstamos kaip
+kitos dalelės (pavyzdžiui, elektronas).
+Taigi, įvykiai, kurių metu susidaro čiurkšlės taip pat gali būti triukšmo įvykiais net tuo
+atveju, kai signalo proceso galutinėje būsenoje ieškomi tik leptonai.
 
-\subsubsection{Įvykių skaičiaus įvertinimo metodai}
+Šiame darbe signalu yra laikomas Drell-Yan procesas: ieškoma tokių įvykių, kurių galutinė būsena
+susideda iš dviejų užfiksuotų leptonų -- elektronų arba miuonų
+	\footnote{Čia turima omenyje, kad bus užfiksuota elektrono-pozitrono pora,
+	arba miuono-antimiuono pora.
+	Trumpumo sumetimais didelių energijų fizikoje dalelės ir antidalelės dažnai vadinamos tuo
+	pačiu (dalelės) vardu.
+	Taip jos toliau bus vadinamos ir šiame darbe.}. 
+Dviejų taonų galutinė būsena nebuvo tiriama dėl gan smarkiai besiskiriančios tyrimo metodikos
+(taonai skyla į kitas daleles nepasiekę detektoriaus). Įdomu tai, kad šiuo atveju tiek tiriant
+miuonų, tiek elektronų galutines būsenas, Drell-Yan proceso taonų kanalas
+	\footnote{Skirtingos Drell-Yan proceso galutinės būsenos yra vadinamos kanalais:
+	elektronų kanalas, miuonų kanalas ir taonų kanalas.}
+yra triukšmas. Kiti pagrindiniai triukšmai yra šie: viršūninių kvarkų (angl. \textit{top quark})
+poros įvykiai (sutrumpintai bus žymima $t\bar{t}\,$), dviejų bozonų įvykiai ($WW$, $WZ$ ir $ZZ$),
+vieno viršūninio kvarko ir $W$ bozono įvykiai ($tW$), $W$ bozono ir čiurkšlės įvykiai ($\WJets$),
+bei stipriosios sąveikos nulemti keletos čiurkšlių įvykiai (sutrumpintai vadinami $\QCD$).
+Paskutiniai du iš išvarintų triukšmų čia yra todėl, kad čiurkšlė gali būti klaidingai atpažinta.
 
-Didelių energijų fizikos eksperimentų rezultatai priklauso nuo daugybės faktorių, tokių, kaip procesai, vykstantys dalelių susidūrimo metu, detektorių veikimo ypatumai ir pan. Todėl yra būtina kaip įmanoma tiksliau numatyti eksperimento rezultatus pačiam ir tada tikrinti, ar atlikto eksperimento rezultatai sutampa su iškelta hipoteze. Didelių energijų fizikoje matuojami dalelių susidūrimo įvykiai, todėl čia yra svarbūs įvykių skaičiaus įvertinimo metodai, kurie gali būti teoriniai, eksperimentiniai, arba mišrūs, kurie apjungia abi metodikas tiksliausiam rezultatui pasiekti.
+\subsubsection{Įvykių skaičiaus įvertinimas}
 
-\paragraph{Teoriniai įvykių skaičiaus įvertinimo metodai\\}
+Kaip buvo rašoma ankstesniame skyrelyje, norint palyginti eksperimento metu užfiksuotą
+statistiką su teoriškai numatomu rezultatu, svarbu yra įvertinti, kaip smarkiai užregistruoti
+pasiskirstymai yra užteršti triukšmų.
+Kadangi didelių energijų fizikos eksperimentinių duomenų analizė prasideda nuo tam tikrus
+reikalavimus atitinkančių įvykių skaičiaus skaičiavimo, tai yra taikomi įvairūs metodai
+tokius reikalavimus atitinkančių įvykių skaičiaus numatymui.
+Tada galima lyginti, ar išmatuotas rezultatas atitinka numatytąjį.
+Didelių energijų fizikoje pagrindinai yra naudojamos dvi metodikos: Monte Carlo (MC) modeliavimas
+(tiek signalui, tiek triukšmui įvertinti) ir matavimu grįsti metodai (triukšmui įvertinti).
 
-Norint padaryti teorinį įvykių skaičiaus įvertį, reikia turėti teorinį modelį, kuriuo remiantis galima apskaičiuoti mus dominančio įvykio $x$ tikimybės pasiskirstymą: tikimybės tankį $f(x)$, arba diskretaus įvykio tikimybę $P(x)$, kurie tenkintų sąlygas $\int_{-\infty}^{\infty}f(x)\mathrm{d}x=1$ arba $\sum_{n=1}^{m}P(x_{n})=1$. Tačiau vien to neužtenka. Reikia turėti galimybę daug kartų (geriausia tiek pat, kiek buvo atliktas pats eksperimentas, arba daugiau) atlikti virtualų eksperimentą, kurio rezultatai priklausytų nuo teorinio tikimybės pasiskirstymo ir gauti teorinį eksperimento rezultatų (įvykių skaičiaus) įvertį. Tai yra padaroma atliekant \textit{Monte Carlo} simuliacijas.
+\subsubsection*{Monte Carlo modeliavimas}
 
-\textit{Monte Carlo} simuliacija (MC) -- tai toks įvykių modeliavimo būdas, kai kompiuteris daug kartų su vienoda tikimybe generuoja atsitiktinius skaičius, kurių vertės būna priskiriamos prie galimų eksperimento baigčių taip, kad atitiktų norimą teorinio pasiskirstymo funkciją, pavyzdžiui binominį, Puasono, Gauso pasiskirstymą ir pan.\ (daugiau skirtingų atsitiktinai generuojamų skaičių verčių priskiriama prie labiau tikėtinų teorinių verčių ir atvirkščiai). Taip principe galima numatyti kiek norime daug skirtingų eksperimentų baigčių (įvykių), kurios, įvykių skaičiui augant į begalybę, pradeda vis idealiau atitikti teorinį pasiskirstymą.
+Norint gauti teorinį eksperimento rezultatų įvertį galima kiek norima kartų atlikti virtualų
+eksperimentą.
+Kad tokį eksperimentą būtų galima atlikti, reikia turėti teoriją, kuri numato tam tikro mus
+dominančio įvykio tikimybės pasiskirstymą, bei turėti atsitiktinių skaičių generatorių.
+Generuojant atsitiktinius skaičius pagal tam tikrą tikimybės pasiskistymą galima sumodeliuoti
+įvykius, su kuriais darant tas pačias analizės procedūras, kaip ir su eksperimento metu
+užregistruotais įvykiais, galime gauti rezultatą, palyginamą su realybėje išmatuotu
+rezultatu -- teorinį įvykių skaičiaus įvertį.
 
-Žinoma, tikri didelių energijų fizikos eksperimentai yra gerokai sudėtingesni ir jų teorinis įvertinimas susideda iš daug skirtingų tikimybinių vyksmų modeliavimo. Pavyzdžiui dažniausiai pirma yra sumodeliuojama daugybė skirtingų protonų susidūrimų baigčių (kokios dalelės susidarė, kokia kryptimi ir kokiu greičiu nulėkė ir pan.), o po to šių modeliavimų rezultatai panaudojami kitame etape, kuriame modeliuojama, kaip dalelių detektorius sureaguos į tokį įvykį ir kokius rezultatus matys eksperimentatoriai. Tokios metodikos privalumas yra tas, kad iš teorinių modelių galima gauti rezultatus (duomenų rinkinius), kurie iš pažiūros atrodo visiškai taip pat, kaip ir tikri eksperimentiniai duomenys. Taip eksperimentatoriams yra labai patogu lyginti, ar jų atlikto eksperimento rezultatai atitinka kokį nors teorinį modelį.
+Aišku, realybėje didelių energijų protonų sklaidos eksperimentų modeliavimas nėra toks
+tiessmukas.
+Įprastiniu atveju, Didžiajame hadronų greitintuve vykstančių protonų susidūrimo įvykių
+modeliavimas vykdomas keliais etapais.
+Pirmiausia sumodeliuojamas pats protonų susidūrimas, kitaip tariant, sugeneruoti
+atsitiktiniai skaičiai transformuojami į įvykio rezultatą -- kokios dalelės susidarė, bei
+kokie jų parametrai (koordinatė, greitis ir pan.).
+Po to modeliuojamas susidariusių dalelių sklidimas ir sąveika su medžiaga -- dalelių
+detektoriaus komponentais.
+Taip sumodeliuojama, ką galėjo užregistruoti detektorius įvykus būtent tokiam įvykiui.
+Galiausiai gaunamas rezultatas, kuris savo išvaizda nesiskiria nuo tikro eksperimento metu
+užregistruotų duomenų.
+Tokiu būdų eksperimentatoriams yra labai patogu lyginti realiai gautą rezultatą su teoriniu.
 
-\paragraph{Eksperimentiniai įvykių skaičiaus įvertinimo metodai\\}
+Vis dėlto, neretai modeliuotas įvykių skaičiaus įvertis nebūna pakankamai tikslus dėl
+neapibrėžtumų, kuriuos įneša atskirų triukšmo procesų įvykių tikimybės, neidealus detektoriaus
+atsako modeliavimas ir pan.
+Šių problemų gali būti išvengiama triukšmo įvykių skaičiaus įvertinimui naudojant matavimu
+grįstus metodus.
 
-Turime tikrus įvykius, jų skaičius baigtinis, tad ir tikimybė (ar jos pasiskirstymas) gaunamas eksperimentinis, kuris, jei teorija teisinga, turėtų artėti į teorinį, kai bandymų skaičius auga į begalybę:
+\subsubsection*{Matavimu grįsti metodai}
+
+Matavimu grįsti triuškmo įvykių skaičiaus įvertinimo metodai apima ir matavimą, ir modeliavimą.
+Su skirtingos specifikos procesais siejamų įvykių skaičiui įvertinti naudojami skirtingi
+matavimu grįsti metodai, tačiau jie visi remiasi labai panašia ideologija.
+Pagrindinis matavimu grįstų įvykių skaičiaus įvertinimo metodų principas remiasi signalo ir
+kontrolinės sričių apibrėžimais.
+Signalo sritis (angl. \textit{signal region}) -- tai fazinės erdvės dalis, apribota tokiais
+parametrais, kad į ją patektų kuo didesnė dalis signalo įvykių (tačiau neišvengiamai patenka
+ir kažkiek triukšmo įvykių).
+Kontrolinė sritis (angl. \textit{control region}) -- tai fazinės erdvės dalis, apribota
+tokiais parametrais, kad į ją patektų kuo daugiau triukšmo įvykių ir, idealiu atveju, signalo
+įvykių nepatektų išvis.
+Kiekvienas matavimu grįstas metodas turi savo specifinę operaciją, kuria triukšmo įvykių skaičius,
+išmatuotas kontrolinėje srityje, būna transformuojamas į triuškmo įvykių skaičių, patenkantį į
+signalo sritį:
+
 \begin{equation}
-P(x)=\lim_{N\rightarrow \infty} \frac{N_{x}}{N} \; .
-\label{eq:probLim}
+	N_{\mathrm{bkg}}^{\mathrm{signal}} = f( N_{\mathrm{bkg}}^{\mathrm{control}} )
 \end{equation}
-Tačiau taip paprastai įvykių skaičių ar kitus parametrus išmatuoti būtų galima tik tokiu atveju, jei įvykiai matuojami tiesiogiai (kaip kad pavyzdžiui, liniuote matuojame stalą). Deja, didelių energijų fizikos eksperimentuose, kaip ir praktiškai visose šiuolaikinės fizikos šakose, praktiškai niekas nėra matuojama tiesiogiai (pavyzdžiui, pasinaudodami dujiniu detektoriumi išmatuojame ne dalelę, o elektros srovę, kurią tik galbūt sukėlė dujas jonizavusi pralekianti dalelė). Todėl turime konkrečiai žinoti, ką matuojame ir susikurti modelį, pagal kurį nusimatysime, ką maždaug turėtumėme gauti, jei įvyks būtent tai, ko tikimės. Jeigu tai, ką išmatuojame neatitinka susikurto modelio, remiantis logika ieškoma eksperimento arba modelio trūkumų ir jie šalinami. Todėl tyrimo įranga būna išbandoma su ja atliekant eksperimentus, kurių baigtis jau yra iš anksto žinoma (pavyzdžiui, detektoriaus veikimo patikrinimui galima panaudoti kokią etaloninę medžiagą, kuri spinduliuoja tiksliai žinomos rūšies ir energijos spinduliuotę) kad patikrintume, ar įranga tikrai veikia taip, kaip buvo planuota.
 
-\paragraph{Matavimu grįsti įvykių skaičiaus įvertinimo metodai\\}
+Vieni iš populiariausių matavimu grįstų metodu yra klaidingo atpažinimo (angl.
+\textit{fake rate} -- FR) ir ABCD metodai.
+Jie naudojami įvertinti skaičiui tokių triukšmo įvykių, kurių metu susidarė čiurkšlės.
+Tokių triukšmo įvykių, kurių metu gali susidaryti keli vienodų arba skirtingų
+rūšių leptonai, skaičiui įvertinti naudojamas $\emu$ metodas, kuris ir buvo naudojamas šiame
+darbe.
 
-Matavimu grįsti metodai apjungia teorinius ir eksperimentinius metodus. Jie naudojami įvertinti triukšmo įvykių skaičiui (tada signalo įvykių skaičių galima apskaičiuoti iš išmatuoto rezultato atėmus triukšmo įvertį). Naudojant matavimu grįstus metodus neretai galima triukšmo įvykių skaičių įvertinti tiksliau, nei naudojant tik vieną iš ankstesnių variantų. Kaip jau ko gero buvo galima suprasti, matavimu grįsti metodai apima matavimą, modeliavimą ir matematinį mechanizmą, kuris sukombinuoja matavimo ir modeliavimo rezultatus į vieną bendrą įvertį.
-
-Egzistuoja daug skirtingų matavimu grįstų triukšmo įvykių skaičiaus įvertinimo metodų, bet jie visi remiasi tuo pačiu pagrindiniu principu. Bet kuriam metodui reikia tam tikrais parametrais apibrėžti taip vadinamą kontrolinę sritį (angl.\ \textit{control region}), kurioje dėl pasirinktų parametrų idealiu atveju liktų vien tik triukšmo įvykiai. Tada apskaičiavus triukšmo įvykių skaičių kontrolinėje srityje pasinaudojant tam tikromis matematinėmis operacijomis įvykių skaičius kontrolinėje srityje transformuojamas į triuškmo įvykių skaičių signalo srityje. Populiariausi metodai, naudojami triukšmo įvykių, kuriuose susidarė hadronų čiurkšlės, skaičiaus įvertinimui, yra klaidingo atpažinimo (angl.\ \textit{fake rate} -- FR) ir ABCD metodai. Kai reikia įvertinti skaičių triukšmo įvykių, kurių galutinėje būsenoje gali susidaryti tiek tos pačios, tiek skirtingų rūšių leptonai, taikomas $e\mu$ metodas.
-
-\paragraph{Klaidingo atpažinimo metodas\\}
-Idealiu atveju tikimybė, kad mus dominantis objektas (pavyzdžiui, elektronas) bus atpažintas teisingai yra lygi vienetui, o tikimybė, kad koks nors kitas objektas (pavyzdžiui, čiurkšlė) bus atpažintas kaip mus dominantis lygi nuliui:
-\begin{equation}
-\begin{cases}
-P(e|e)=1\\
-P(e|\mathrm{Jet})=0
-\end{cases} \; .
-\label{eq:rfprob}
-\end{equation}
-Realybėje taip nėra -- ne visi \ltq{tikri} objektai atpažįstami kaip tokie. Tokių įvykių skaičiaus įvertinimui naudojamas klaidingo atpažinimo metodas (\textit{fake rate method}) Apibrėžiama klaidingai atpažinta (angl.\ \textit{fake}) dalelė. Klaidingo atpažinimo tikimybė -- tai tikimybė, kad mūsų nedominantis (triukšmo) objektas bus identifikuotas kaip tiriamasis objektas. Skirtingi objektai turi skirtingas klaidingo atpažinimo tikimybes. Pavyzdžiui:
-\begin{equation}
-f_{ej}=P(e|\mathrm{Jet}) \; \mathrm{,}
-\label{eq:fr}
-\end{equation}
-čia $f_{ej}$ -- tikimybė, kad čiurkšlė bus atpažinta kaip elektronas.
-
-Trumpai klaidingo atpažinimo metodo taikymą galima aprašyti taip:
-\begin{enumerate}
-\item Apskaičiuojama klaidingo atpažinimo tikimybė $f$:
-
-Tai gali būti padaroma iš išmatuotų duomenų rinkinio paimant įvykius pagal labai atsakingai parinktus kriterijus. Turi būti kaip įmanoma labiau užtikrinama, kad visi atrinkti įvykiai yra iš vieno konkretaus proceso, kurio teorinės baigtys yra žinomos. Tada matant rezultatus, kurie atitinka atrankos kriterijus, bet matomos galutinės būsenos dalelės yra tokios, kokios negalėtų susidaryti tokio proceso metu, galima teigti, kad kažkuri užfiksuota dalelė buvo klaidingai atpažinta. Pavyzdžiui, tikimybę, kad elektronas bus klaidingai atpažintas kaip fotonas, galima apskaičiuoti iš užfiksuotų $Z$ bozono skilimų. Tokiu atveju reikėtų atrinkti tokius įvykius, kuriuose buvo aptikti du elektronai, kurių invariantinė masė labai artima $Z$ bozono masei -- maždaug $91.2$ GeV (tokių įvykių skaičių pavadinkime $N_{ee}^{Z}$), arba elektronas ir fotonas, kurių invariantinė masė taip pat labai artima $Z$ bozono masei (tokių įvykių skaičių pavadinkime $N_{e\gamma}^{Z}$). Tinkamai parinkus visus atrankos kriterijus galima būtų spręsti, kad beveik visi tokie įvykiai iš tikrųjų buvo $Z$ bozono įvykiai, tik kartais elektronas buvo klaidingai atpažintas kaip fotonas. Tada galima būtų įvertinti klaidingo atpažinimo tikimybę \cite{FakeRateZ}:
-\begin{equation}
-f(\gamma|e) = \frac{N_{e\gamma}^{Z}}{2\cdot N_{ee}^{Z}} \; \mathrm{,}
-\label{eq:frCalc}
-\end{equation}
-čia vardiklyje yra dvejetas, nes bet kuris iš dviejų elekronų gali būti klaidingai atpažintas kaip fotonas.
-\item Apskaičiuota klaidingo atpažinimo tikimybė $f$ pritaikoma išmatuotiems duomenims:
-
-Skirtingoms dalelėms būdingi skirtingi įvairių jas apibūdinančių dydžių pasiskirstymai, todėl galima pakeisti tam tikrus dalelių atrankos kriterijus taip, kad atranką praeitų beveik vien tik tokios dalelės, kurios ankstesniu atveju atranką praeidavo tik dėl to, kad buvo klaidingai atpažintos kaip mus dominančios -- sukuriama kontrolinė sritis iš beveik vien triukšmo įvykių. Jeigu tariame, kad iš viso buvo $N$ triukšmo įvykių, tai $fN$ iš jų patenka signalo sritį (nes $f$ -- tikimybė, kad objektas bus klaidingai atpažintas, t.y., pateks į signalo sritį), o $(1-f)N$ -- į kontrolinę sritį. Išmatavus triukšmo įvykių skaičių kontrolinėje srityje galima apskaičiuoti įvykių skaičių signalo srytyje:
-\begin{equation}
-\begin{cases}
-N_{\mathrm{BkgSignal}}=fN\\
-N_{\mathrm{BkgControl}}=(1-f)N
-\end{cases} \; .
-\label{eq:bkgsc}
-\end{equation}
-Išraiškas padaliname vieną iš kitos:
-\begin{equation}
-\frac{N_{\mathrm{BkgSignal}}}{N_{\mathrm{BkgControl}}}=\frac{f}{1-f} \; .
-\label{eq:frBkg}
-\end{equation}
-Matome, kad pasinaudodami šia formule jau galime transformuoti įvykių skaičių iš kontrolinės srities į triukšmo įvykių skaičių signalo srityje.
-\end{enumerate}
-
-\vspace{-0.25cm}
+% pusiau senas
 \paragraph{$e\mu$ metodas\\}
 
-$e\mu$ metodas skirtas įvertinti skaičių tokių triukšmo įvykių, kuriuose susidaro dvi nestabilios dalelės, kurios skyla nepriklausomai. Abiems nestabilioms dalelėms turi galioti sąlyga, kad jų skilimo produktuose turi būti vienas elektinį krūvį turintis leptonas. Jeigu tokia sąlyga tenkinama, reiškia yra galimi nestabilių dalelių poros nepriklausomi skilimai į skirtingus leptonus, pavyzdžiui: $t\bar{t}\rightarrow e^{+}e^{-}$, $t\bar{t}\rightarrow\mu^{+}\mu^{-}$, $t\bar{t}\rightarrow\mu^{+}e^{-}$, $t\bar{t}\rightarrow e^{+}\mu^{-}$ (čia kiti nestabilių dalelių skilimo produktai nepažymėti, nes taikant $e\mu$ metodą mums rūpi tik tai, kokie leptonai atsiranda skilimo metu). Atlikus Monte Carlo modeliavimą galima nustatyti teorinį $ee$ (tokie įvykiai, kurių galutinėje būsenoje yra du elekronai) ir $e\mu$ (tokie įvykiai, kurių galutinėje būsenoje yra po vieną elektroną ir miuoną) įvykių skaičiaus santykį, pavyzdžiui: $N_{t\bar{t}}^{ee}/N_{t\bar{t}}^{e\mu}$. Pirmos eilės virsmams šis santykis būtų maždaug 1:2, nes kiekvienai masyviai nestabiliai dalelei tikimybės skilti į elektroną ir miuoną yra praktiškai lygios (ir galime aiškiai matyti, kad iš keturių galimų virsmų du duoda $e\mu$, o tik vienas $ee$). Jeigu tariame, kad $N_{t\bar{t}}^{ee}/N_{t\bar{t}}^{e\mu}=const$, tai galime tikėtis, kad ši konstanta bus tokia pati tiek MC simuliacijoje, tiek eksperimente (idealiu atveju):
+$e\mu$ metodas skirtas įvertinti skaičių tokių triukšmo įvykių, kuriuose susidaro dvi
+nestabilios dalelės, kurios skyla nepriklausomai.
+Abiems nestabilioms dalelėms turi galioti sąlyga, kad jų skilimo produktuose turi būti
+vienas elektinį krūvį turintis leptonas.
+Jeigu tokia sąlyga tenkinama, reiškia yra galimi nestabilių dalelių poros nepriklausomi
+skilimai į skirtingus leptonus, pavyzdžiui: $t\bar{t}\rightarrow e^{+}e^{-}$,
+$t\bar{t}\rightarrow\mu^{+}\mu^{-}$, $t\bar{t}\rightarrow\mu^{+}e^{-}$,
+$t\bar{t}\rightarrow e^{+}\mu^{-}$ (čia kiti nestabilių dalelių skilimo produktai
+nepažymėti, nes taikant $e\mu$ metodą mums rūpi tik tai, kokie leptonai atsiranda
+skilimo metu).
+Iš Monte Carlo modeliavimo galima nustatyti teorinį $ee$ (arba $\mumu$) ir $e\mu$
+	\footnote{$ee$, $\mumu$, $\emu$ -- taip sutrupintai bus žymimi įvykiai, kurių
+	metu susidarė elektronų pora, miuonų pora, arba elektronas ir miuonas.}
+įvykių skaičiaus santykį, pavyzdžiui: $N_{t\bar{t}}^{ee}/N_{t\bar{t}}^{e\mu}$.
+Šis santykis būtų maždaug 1:2, nes kiekvienai masyviai nestabiliai dalelei tikimybės
+skilti į elektroną ir miuoną yra beveik lygios.
+Jeigu tariame, kad $N_{t\bar{t}}^{ee}/N_{t\bar{t}}^{e\mu}=const$, tai idealistiniu
+atveju galime tikėtis, kad ši konstanta bus tokia pati tiek MC simuliacijoje, tiek
+
+eksperimente:
 \begin{equation}
-\frac{N_{t\bar{t}}^{ee , \; \mathrm{Data}}}{N_{t\bar{t}}^{e\mu , \; \mathrm{Data}}}=\frac{N_{t\bar{t}}^{ee , \; \mathrm{MC}}}{N_{t\bar{t}}^{e\mu , \; \mathrm{MC}}} \; .
-\label{eq:emuDataMC}
+	\frac{ N_{t\bar{t}}^{ee , \; \mathrm{Data}} } { N_{t\bar{t}}^{e\mu , \; \mathrm{Data}} }
+	= \frac{ N_{t\bar{t}}^{ee , \; \mathrm{MC}} }{ N_{t\bar{t}}^{e\mu , \; \mathrm{MC}} } \; .
+	\label{eq:emuDataMC}
 \end{equation}
-Aiškiai matome, kad padauginę abi lygties puses iš $N_{t\bar{t}}^{e\mu , \; \mathrm{Data}}$, galime įvertinti, koks turėtų būti $N_{t\bar{t}}^{ee , \; \mathrm{Data}}$:
-\begin{equation}
-N_{t\bar{t}}^{ee , \; \mathrm{Data}}=\frac{N_{t\bar{t}}^{ee , \; \mathrm{MC}}}{N_{t\bar{t}}^{e\mu , \; \mathrm{MC}}}\cdot N_{t\bar{t}}^{e\mu , \; \mathrm{Data}} \; \mathrm{,}
-\label{eq:emuDataMCfix0}
-\end{equation}
-tik kadangi taip skaičiuojant $N_{t\bar{t}}^{ee , \; \mathrm{Data}}$ jau iš tikrųjų yra įvykių skaičiaus įvertis, būtų teisingiau jį užrašyti kaip $N_{t\bar{t}}^{ee , \; \mathrm{Įvert.}}$:
+
+Padauginę abi lygties puses iš $N_{t\bar{t}}^{e\mu , \; \mathrm{Data}}$, galime įvertinti,
+koks turėtų būti $N_{t\bar{t}}^{ee , \; \mathrm{Data}}$:
+
 \begin{equation}
 N_{t\bar{t}}^{ee , \; \mathrm{Įvert.}}=\frac{N_{t\bar{t}}^{ee , \; \mathrm{MC}}}{N_{t\bar{t}}^{e\mu , \; \mathrm{MC}}}\cdot N_{t\bar{t}}^{e\mu , \; \mathrm{Data}} \; .
 \label{eq:emuDataMCfix}
 \end{equation}
 
-Kalbant apie šį metodą kaip apie matavimu grįstą įvykių skaičiaus įvertinimo metodą, sakome, kad įvykiai su $e\mu$ galutine būsena yra kontrolinė sritis. Pavyzdžiui, Drell-Yan proceso metu susidaro elektronų pora, todėl $e\mu$ galutinės būsenos įvykių rinkinyje bus vien tik Drell-Yan proceso triukšmo įvykiai. Taigi $e\mu$ įvykiai šiuo atveju gerai atitinka kontrolinės srities apibrėžimą. Kaip jau ko gero aišku, signalo sritis šiuo atveju yra $ee$ įvykiai, o tada \eqref{eq:emuDataMCfix} formulė yra matematinė operacija, kuria triukšmo įvykių skaičius, apskaičiuotas kontrolinėje srityje, transformuojamas į triukšmo įvykių skaičių signalo srityje.
+Kalbant apie šį metodą kaip apie matavimu grįstą įvykių skaičiaus įvertinimo metodą, sakome,
+kad įvykiai su $e\mu$ galutine būsena yra kontrolinė sritis.
+Pavyzdžiui, Drell-Yan proceso metu susidaro elektronų pora, todėl $e\mu$ galutinės būsenos
+įvykių rinkinyje bus vien tik Drell-Yan proceso triukšmo įvykiai.
+Taigi $e\mu$ įvykiai šiuo atveju gerai atitinka kontrolinės srities apibrėžimą. Kaip jau ko
+gero aišku, signalo sritis šiuo atveju yra $ee$ įvykiai, o tada \eqref{eq:emuDataMCfix}
+formulė yra matematinė operacija, kuria triukšmo įvykių skaičius, apskaičiuotas kontrolinėje
+srityje, transformuojamas į triukšmo įvykių skaičių signalo srityje.
 
-\subsubsection{Reakcijos skerspjūvis ir integruotas šviesis}
-
-Didelių energijų fizikoje vietoje įprastos bedimensinės tikimybės ir bandymų skaičiaus dažniau yra naudojami tokie fizikiniai dydžiai, kaip reakcijos skerspjūvis ir integruotas šviesis.
-
-Reakcijos skerspjūvis -- tai ploto matavimo vienetus turintis dydis, apibūdinantis tam tikro įvykio tikėtinumą. Šis dydis nėra priklausomas nuo dalelių spindulio intensyvumo ir sufokusavimo, todėl apskaičiuotus reakcijų skerspjūvius galima tiesiogiai lyginti tarp skirtingų dalelių greitintuvų. Išsamesniuose tyrimuose dažnai skaičiuojami diferencialiniai reakcijos skerspjūviai $\mathrm{d}\sigma/\mathrm{d}x$ -- pasiskirstymai, apibrėžiantys reakcijos skerspjūvio priklausomybę nuo tam tikro įvykį aprašančio parametro. Įprastuose sklaidos eksperimentuose dažniausiai skaičiuojamas diferencialinis sklaidos skerspjūvis $\mathrm{d}\sigma/\mathrm{d}\Omega$ -- tikėtinumas, kad dalelė bus išsklaidyta į tam tikrą sferinio kampo dalį $\mathrm{d}\Omega$. Didelių energijų fizikos tyrimuose dažniausiai skaičiuojami kitokie diferencialiniai skerspjūviai -- pavyzdžiui Drell-Yan proceso tyrime skaičiuojamas $\mathrm{d}\sigma/\mathrm{d}m$ -- tikėtinumas, kad įvyks Drell-Yan proceso įvykis, kurio galutinės būsenos elektronų poros invariantinė masė pateks į intervalą $\mathrm{d}m$. Dalelių fizikoje standartintis skerspjūvio matavimo vienetas yra barnas (žymimas $\mathrm{b}$), kuris lygus $10^{-28}\;\mathrm{m}^{2}$.
-
-Šviesis apibrėžiamas kaip dalelių skaičius, pralėkęs pro tam tikrą plotą per laiko vienetą:
-\begin{equation}
-\mathcal{L}=\frac{1}{\sigma}\frac{\mathrm{d}N}{\mathrm{d}t} \; .
-\label{eq:luminosity}
-\end{equation}
-Suintegravę šviesį per tam tikrą laiką gauname integruotą šviesį: dydį, kuris parodo, kiek dalelių pralėkė tam tikrą plotą per visą eksperimento laiką:
-\begin{equation}
-\Lumi=\int \mathcal{L}\mathrm{d}t \; .
-\label{eq:lumiInt}
-\end{equation}
-Integruotas šviesis didelių energijų fizikoje dažniausiai matuojamas atvirkštiniais barnais ($\mathrm{b}^{-1}$). Jį galima laikyti savotišku bandymų skaičiumi, kuris turi atvirkštinio ploto dimensiją. Tikėtinas įvykių skaičius $N$, kai žinomas įvykio skerspjūvis $\sigma$ ir integruotas šviesis $\Lumi$, apskaičiuojamas taip:
-\begin{equation}
-N=\sigma\Lumi \; .
-\label{eq:evno}
-\end{equation}
 
 \subsubsection{Įvykių modeliavimas}
 Didelių energijų dalelių susidūrimams modeliuoti yra yra sukurta daug įvairių programų, kurios skirtos skirtingų procesų modeliavimui, įvykius modeliuoja skirtingu tikslumu (pirmos, antros eilės ir t.t.) ir pan. Nemažiau svarbu yra ir sumodeliuoti, kaip į tam tikrą įvykį sureaguos dalelių detektorius. Detektoriaus atsako modeliavimui taip pat yra sukurta atskiros programinės įrangos, kuri naudoja protonų susidūrimo modeliavimo rezultatus kaip įvestį. Šiame skyrelyje išvardintos šiam darbui aktualiausios modeliavimo programos ir trumpai aprašyta jų paskirtis.
@@ -426,25 +561,6 @@ Nesunku pamatyti, kad jeigu visų modeliuotų įvykių svoriai būtų lygūs vie
 \Delta N = \sqrt{\sum_{i=1}^{N}1^{2}}=\sqrt{N} \; .
 \label{eq:Useless}
 \end{equation}
-
-\subsubsection{Sisteminių paklaidų įvertinimas}
-
-Sisteminės įvykių skaičiaus paklaidos pagrinde kyla iš riboto žinojimo, kas tiksliai vyksta protonų susidūrimo metu, koks yra tikrasis Drell-Yan proceso ir triukšmo įvykių skaičius, kaip veikia detektorius, koks tikrasis protonų susidūrimų tankis ir pan. Nors ir tiksliai nežinome, kiek darbo metu gauti įvairūs pasiskirstymai nukrypsta nuo realių pasiskirstymų (nes nežinome, kokie turėtų būti realūs pasiskirstymai), tai vistiek reikia kažkaip kiekybiškai įvertinti. Toliau bus paaiškintas sisteminių paklaidų skaičiavimas elektronų poros invariantinės masės pasiskirstymui. 
-
-Įvairių duomenų analizės parametrų ir manipuliavimo duomenimis būdų pasirinkimas gali turėti įtakos gautam tyrimo rezultatui, todėl jame atsiranda sisteminių nukrypimų. Tarkime, kad vykdydami duomenų analizę galime rinktis tarp dviejų parametrų: $x_{0}$ ir $x_{1}$. Sisteminė paklaida gali būti apibrėžiama kaip skirtumas tarp išmatuoto invariantinės masės pasiskirstymo, kurio vertės priklauso nuo parametro $x$ ir tikrojo invariantinės masės pasiskirstymo $\widetilde{f}(m_{ee})$:
-\begin{equation}
-\Delta f \left( m_{ee} | x_{i} \right) = \left| \widetilde{f} \left( m_{ee} \right) -
-f \left( m_{ee} | x_{i} \right) \right| \, \mathrm{,} \; \; i=0\, , \; 1 \, .
-\label{eq:systUncReal}
-\end{equation}
-Kadangi nežinome, koks turėtų būti tikrasis invariantinės masės pasiskirstymas, tai galime tarti, kad esant skirtingiems parametrams invariantinės masės pasiskirstymo sisteminės paklaidos yra lygiavertės. Tokiu atveju galime invariantinės masės pasiskirstymo sisteminę paklaidą įvertinti kaip skirtumą tarp išmatuotų pasiskirstymų esant skirtingiems parametrams:
-
-\begin{equation}
-\Delta f \left( m_{ee} \right) = \left| f \left( m_{ee} | x_{0} \right) - f \left( m_{ee} | x_{1} \right) \right| \; .
-\label{eq:SystUncFinal}
-\end{equation}
-
-Esant skirtingiems sisteminių nuokrypių šaltiniams bendra sisteminė paklaida skaičiuojama kaip kvadratinė šaknis iš paklaidų kvadratų sumos.
 
 \vspace{-0.3cm}
 \subsubsection{Didysis hadronų greitintuvas ir Kompaktiškasis miuonų solenoidas}
