@@ -60,6 +60,8 @@
 \newcommand{\WW}{W\! W}
 \newcommand{\ZZ}{Z\! Z}
 \newcommand{\WZ}{W\! Z}
+\newcommand{\tbarW}{\bar{t}W}
+\newcommand{\ttbar}{t\bar{t}}
 \newcommand{\emu}{e\mu}
 \newcommand{\mumu}{\mu\mu}
 \newcommand{\gJets}{\gamma\! +\!\mathrm{Jets}}
@@ -431,7 +433,8 @@ išmatuotas kontrolinėje srityje, būna transformuojamas į triuškmo įvykių 
 signalo sritį:
 
 \begin{equation}
-	N_{\mathrm{bkg}}^{\mathrm{signal}} = f( N_{\mathrm{bkg}}^{\mathrm{control}} )
+	N_{\mathrm{Bkg}}^{\mathrm{Signal}} = f( N_{\mathrm{Bkg}}^{\mathrm{Control}} )
+	\label{eq:data-driven}
 \end{equation}
 
 Vieni iš populiariausių matavimu grįstų metodu yra klaidingo atpažinimo (angl.
@@ -441,53 +444,53 @@ Tokių triukšmo įvykių, kurių metu gali susidaryti keli vienodų arba skirti
 rūšių leptonai, skaičiui įvertinti naudojamas $\emu$ metodas, kuris ir buvo naudojamas šiame
 darbe.
 
-% pusiau senas
 \paragraph{$e\mu$ metodas\\}
 
-$e\mu$ metodas skirtas įvertinti skaičių tokių triukšmo įvykių, kuriuose susidaro dvi
-nestabilios dalelės, kurios skyla nepriklausomai.
-Abiems nestabilioms dalelėms turi galioti sąlyga, kad jų skilimo produktuose turi būti
-vienas elektinį krūvį turintis leptonas.
-Jeigu tokia sąlyga tenkinama, reiškia yra galimi nestabilių dalelių poros nepriklausomi
-skilimai į skirtingus leptonus, pavyzdžiui: $t\bar{t}\rightarrow e^{+}e^{-}$,
-$t\bar{t}\rightarrow\mu^{+}\mu^{-}$, $t\bar{t}\rightarrow\mu^{+}e^{-}$,
-$t\bar{t}\rightarrow e^{+}\mu^{-}$ (čia kiti nestabilių dalelių skilimo produktai
-nepažymėti, nes taikant $e\mu$ metodą mums rūpi tik tai, kokie leptonai atsiranda
-skilimo metu).
-Iš Monte Carlo modeliavimo galima nustatyti teorinį $ee$ (arba $\mumu$) ir $e\mu$
-	\footnote{$ee$, $\mumu$, $\emu$ -- taip sutrupintai bus žymimi įvykiai, kurių
-	metu susidarė elektronų pora, miuonų pora, arba elektronas ir miuonas.}
-įvykių skaičiaus santykį, pavyzdžiui: $N_{t\bar{t}}^{ee}/N_{t\bar{t}}^{e\mu}$.
-Šis santykis būtų maždaug 1:2, nes kiekvienai masyviai nestabiliai dalelei tikimybės
-skilti į elektroną ir miuoną yra beveik lygios.
-Jeigu tariame, kad $N_{t\bar{t}}^{ee}/N_{t\bar{t}}^{e\mu}=const$, tai idealistiniu
-atveju galime tikėtis, kad ši konstanta bus tokia pati tiek MC simuliacijoje, tiek
+$\emu$ metodas -- tai matavimu grįstas triukšmo įvykių skaičiaus įvertinimo metodas, kuris
+naudojamas dviejų vienodų leptonų (elektronų arba miuonų) galutinės būsenos triukšmams
+įvertinti, pasinaudojant įvykių, kuriuose buvo užfiksuoti skirtingi leptonai (elektronas
+ir miuonas), duomenimis.
+Šis metodas tinkamas įvertinti tokiems triukšmams, kurie siejami su dviejų nestabilių
+dalelių, kurios turi galimybę nepriklausomai viena nuo kitos skilti į leptonus, susidarymu.
+Tokie triukšmo procesai yra: $\WW$, $\WZ$, $\ZZ$, $tW$, $\tbarW$, $\ttbar$, $\DYtau$.
+Galima nesunkiai matyti, kad visuose šiuose procesuose figūruoja dvi sunkios dalelės, kurios
+gali skilti leptoniškai.
 
-eksperimente:
+Kaip pavyzdį $\emu$ metodo veikimui paaiškinti galime paimti $WW$ procesą.
+Jeigu nagrinėjame tik $W$ bozono skilimus į elektroną arba miuoną (kartu su atitinkamais
+neutrinais), tai turėdami įvykį, kurio metu susidaro du $W$ bozonai, galime turėti
+keturias skirtingas galutines būsenas: $WW \! \rightarrow \! e^+e^-$,
+$WW \! \rightarrow \! e^+\mu^-$, $WW \! \rightarrow \! \mu^+e^-$ ir
+$WW \! \rightarrow \! \mu^+\mu^-$.
+Čia dešinėje rodyklės pusėje nerašėme atitinkamų neutrinų, nes $\emu$ metodo skaičiavimuose
+jie nedalyvauja.
+Pasinaudodami Monte Carlo modeliavimu galime įsivertinti $ee$ ir $\emu$ įvykių skaičiaus
+santykį $N_{ee}^{\mathrm{MC}} / N_{\emu}^{\mathrm{MC}}$, nekreipdami dėmesio į elektrono
+ir miuono elektrinius krūvius, tik reikalaudami, kad jie būtų skirtingi.
+Idealiu atveju šis santykis turėtų būti apytiksliai lygus $1:2$, nes tiek elektrono, tiek
+miuono masės santykis su motininės dalelės mase yra labai mažas.
+Tai reiškia, kad nestabili dalelė gali skilti į miuoną arba elektroną su apytiksliai
+vienoda tikimybe.
+Padarius prielaidą, kad šis santykis turėtų būti vienodas tiek eksperimentiniuose, tiek
+modeliuotuose duomenyse, galime įvertinti (angl.\ \textit{estimate}), koks turėtų būti su
+anksčiau minėtais procesais susijusių triukšmo įvykių skaičius $ee$ duomenyse:
+
 \begin{equation}
-	\frac{ N_{t\bar{t}}^{ee , \; \mathrm{Data}} } { N_{t\bar{t}}^{e\mu , \; \mathrm{Data}} }
-	= \frac{ N_{t\bar{t}}^{ee , \; \mathrm{MC}} }{ N_{t\bar{t}}^{e\mu , \; \mathrm{MC}} } \; .
-	\label{eq:emuDataMC}
+	N_{t\bar{t}}^{ee , \; \mathrm{Est}} =
+	\frac{ N_{t\bar{t}}^{ee , \; \mathrm{MC}} }{ N_{t\bar{t}}^{e\mu , \; \mathrm{MC}} }
+	\cdot N_{t\bar{t}}^{e\mu , \; \mathrm{Data}} \; .
+	\label{eq:emuMethod}
 \end{equation}
 
-Padauginę abi lygties puses iš $N_{t\bar{t}}^{e\mu , \; \mathrm{Data}}$, galime įvertinti,
-koks turėtų būti $N_{t\bar{t}}^{ee , \; \mathrm{Data}}$:
+Prisiminus \eqref{eq:data-driven} iraišką ir palyginę ją su \eqref{eq:emuMethod} galime
+sakyti, kad $N_{t\bar{t}}^{ee , \; \mathrm{Data}}$ yra signalo sritis, o
+$N_{t\bar{t}}^{e\mu , \; \mathrm{Data}}$ yra kontrolinė sritis. Joje yra vien tik triukšmo
+įvykiai.
+Triukšmo įvykių skaičiaus signalo srityje įvertį gauname su triukšmo įvykių skaičiumi
+kontrolinėje srityje atlikę paprastą matematinę operaciją -- padauginę jį iš modeliuotų
+$ee$ ir $\emu$ įvykių skaičiaus santykio.
 
-\begin{equation}
-N_{t\bar{t}}^{ee , \; \mathrm{Įvert.}}=\frac{N_{t\bar{t}}^{ee , \; \mathrm{MC}}}{N_{t\bar{t}}^{e\mu , \; \mathrm{MC}}}\cdot N_{t\bar{t}}^{e\mu , \; \mathrm{Data}} \; .
-\label{eq:emuDataMCfix}
-\end{equation}
-
-Kalbant apie šį metodą kaip apie matavimu grįstą įvykių skaičiaus įvertinimo metodą, sakome,
-kad įvykiai su $e\mu$ galutine būsena yra kontrolinė sritis.
-Pavyzdžiui, Drell-Yan proceso metu susidaro elektronų pora, todėl $e\mu$ galutinės būsenos
-įvykių rinkinyje bus vien tik Drell-Yan proceso triukšmo įvykiai.
-Taigi $e\mu$ įvykiai šiuo atveju gerai atitinka kontrolinės srities apibrėžimą. Kaip jau ko
-gero aišku, signalo sritis šiuo atveju yra $ee$ įvykiai, o tada \eqref{eq:emuDataMCfix}
-formulė yra matematinė operacija, kuria triukšmo įvykių skaičius, apskaičiuotas kontrolinėje
-srityje, transformuojamas į triukšmo įvykių skaičių signalo srityje.
-
-
+% senas
 \subsubsection{Įvykių modeliavimas}
 Didelių energijų dalelių susidūrimams modeliuoti yra yra sukurta daug įvairių programų, kurios skirtos skirtingų procesų modeliavimui, įvykius modeliuoja skirtingu tikslumu (pirmos, antros eilės ir t.t.) ir pan. Nemažiau svarbu yra ir sumodeliuoti, kaip į tam tikrą įvykį sureaguos dalelių detektorius. Detektoriaus atsako modeliavimui taip pat yra sukurta atskiros programinės įrangos, kuri naudoja protonų susidūrimo modeliavimo rezultatus kaip įvestį. Šiame skyrelyje išvardintos šiam darbui aktualiausios modeliavimo programos ir trumpai aprašyta jų paskirtis.
 \paragraph{\textsc{Pythia} 8\\}
