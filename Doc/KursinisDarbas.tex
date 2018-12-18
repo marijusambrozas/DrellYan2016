@@ -409,6 +409,40 @@ Galiausiai gaunamas rezultatas, kuris savo išvaizda nesiskiria nuo tikro eksper
 užregistruotų duomenų.
 Tokiu būdų eksperimentatoriams yra labai patogu lyginti realiai gautą rezultatą su teoriniu.
 
+CERN Kompaktiškojo miuonų solenoido (angl.\ \textit{Compact Muon Solenoid} -- CMS) eksperimente
+įvykių modeliavimui dažniausiai naudojami šie programiniai paketai:
+\begin{itemize}
+	\item \textsc{Pythia8} -- tai C++ kalba parašytas programinis paketas, skirtas modeliuoti
+	didelių energijų dalelių susidūrimus.
+	\textsc{Pythia} paskirtis labai plati -- ji tinkama modeliuoti praktiškai bet kokiems žinomiems protonų
+	susidūrimo metu vykstantiems procesams, joje yra įrašyta daug skiritngų teorinių modelių,
+	partonų pasiskirstymo funkcijų.
+	Pagrindinis \textsc{Pythia} trūkumas -- įvykiai modeliuojami tik nulinės eilės (angl.\
+	\textit{leading order} -- LO) perturbacijų tikslumu \cite{pythia82}.
+	
+	\item FEWZ -- tai Fortran pagrindo programinis paketas, skirtas modeliuoti  $W$ ir $Z$
+	bozonų susidarymą hadronų susidūrimo metu, taip pat šių bozonų skilimus į leptonus ir pan.
+	FEWZ taip pat palaiko nemažai skirtingų partonų pasiskirstymo funkcijų bei modeliuoja įvykius
+	antros eilės perturbacijų tikslumu \cite{fewz}.
+	
+	\item \textsc{Geant4} -- tai C++ pagrintdo programinis paketas, skirtas modeliuoti dalelių sąveiką
+	su medžiaga.
+	\textsc{Geant4} yra tinkama modeliuoti praktiškai bet kokių stabilių dalelių sąveikai su kuriuo nors iš
+	realaus dalelių detektoriaus komponentų, taip pat dalelių trekų bei pataikymų į kitus detektoriaus
+	komponentus užfiksavimui \cite{geant4}.
+	Kompaktiškojo miuonų solenodo eksperimente šis programinis paketas naudojamas viso CMS detektoriaus
+	atsako į konkretų (jau sumodeliuotą naudojantis kita programine įranga) protonų susidūrimo įvykį
+	modeliavimui.
+	
+	\item CMSSW (\textit{CMS SoftWare}) -- tai CERN CMS eksperimente visuotinai naudojamas programinės
+	įrangos rinkinys, skirtas ne tik įvykių modeliavimo, bet taip pat ir  visiems reikiamiems duomenų
+	gavimo, apdorojimo ir analizės darbams atlikti.
+	CMSSW išnaudoja bendrą CMS duomenų formatą -- įvykių duomenų modelį (angl.\ \textit{Event Data Model}
+	-- EDM, kuris tinkamas skirtingiems duomenų apdorojimo lygmenims bei analizės etapams.
+	Joje yra tiek protonų susidūrimui, tiek detektoriaus atsakui modeliuoti skirti programiniai paketai
+	(tokie, kaip jau minėti \textsc{Pythia8} ir \textsc{Geant4})
+\end{itemize}
+
 Vis dėlto, neretai modeliuotas įvykių skaičiaus įvertis nebūna pakankamai tikslus dėl
 neapibrėžtumų, kuriuos įneša atskirų triukšmo procesų įvykių tikimybės, neidealus detektoriaus
 atsako modeliavimas ir pan.
@@ -490,57 +524,68 @@ Triukšmo įvykių skaičiaus signalo srityje įvertį gauname su triukšmo įvy
 kontrolinėje srityje atlikę paprastą matematinę operaciją -- padauginę jį iš modeliuotų
 $ee$ ir $\emu$ įvykių skaičiaus santykio.
 
-% senas
-\subsubsection{Įvykių modeliavimas}
-Didelių energijų dalelių susidūrimams modeliuoti yra yra sukurta daug įvairių programų, kurios skirtos skirtingų procesų modeliavimui, įvykius modeliuoja skirtingu tikslumu (pirmos, antros eilės ir t.t.) ir pan. Nemažiau svarbu yra ir sumodeliuoti, kaip į tam tikrą įvykį sureaguos dalelių detektorius. Detektoriaus atsako modeliavimui taip pat yra sukurta atskiros programinės įrangos, kuri naudoja protonų susidūrimo modeliavimo rezultatus kaip įvestį. Šiame skyrelyje išvardintos šiam darbui aktualiausios modeliavimo programos ir trumpai aprašyta jų paskirtis.
-\paragraph{\textsc{Pythia} 8\\}
-\textsc{Pythia} 8 -- tai programa, skirta generuoti didelių energijų dalelių susidūrimų Monte Carlo simuliacijoms. Nuo 8.1 versijos \textsc{Pythia} yra parašyta C++ kalba, visos ankstesnės versijos buvo parašytos Fortran kalba. \textsc{Pythia} suteikia kaip įmanoma tikslesnį viso hadronų susidūrimo vaizdą, savyje turi daug teorinių modelių, partonų pasiskirstymo funkcijų. Su \textsc{Pythia} galima modeliuoti tokius dalykus kaip \ltq{kieti} ir \ltq{minkšti} susidūrimai, pradinės ir galutinės būsenų partonų \ltq{dušai}, daugybinės partonų saveikos, protonų spindulio likučiai, fragmentacija (hadronizacija) ir dalelių skilimai \cite{pythia81}. Pythia turi 16 partonų pasiskirstymo funkcijų, į jas įeina ne tik protonų, bet ir tokių dalelių, kaip pionai, pomeronai ir leptonai partonų pasiskirstymo funkcijos. Šį skaičių galima dar išplėsti naudojantis LHAPDF$5$ ir LHAPDF$6$ bibliotekomis.
-Su Pythia galima kokybiškai modeliuoti dalelių susidūrimus, kurių energija masių centro sistemoje yra didesnė negu $10$ GeV, ir gali siekti iki $100$ TeV ir daugiau. Įvykiai modeliuojami nulinės eilės (angl.\ \textit{leading order} -- LO) tikslumu \cite{pythia82}.
-
-\paragraph{FEWZ -- \textit{Fully Exclusive W and Z Production}\\}
-FEWZ -- tai Fortran pagrindo kodas, skirtas skaičiuoti $W$ ir $Z$ bozonų sukūrimo skerspjūvius hadronų susidūrimuose naudojantis perturbacine kvantine chromodinamika. Jis turi du vykdomuosius failus: FEWZz -- $Z$ procesams ir FEWZw -- $W$ procesams. Į FEWZ taip pat yra įtraukti $W$ ir $Z$ bozonų leptoniniai skilimai su sukinio koreliacijomis, baigtinio pločio efektai, bei $\gamma Z$ interferencija. Į FEWZ yra įtrauktos tokios partonų pasiskirstymo funkcijos, kaip CTEQ, MSTW, ABKM, NNPDF ir kt. FEWZ skaičiuoja įvykius antros eilės perturbacijų tikslumu \cite{fewz}.
-
-\paragraph{GEANT4\\}
-C++ kalba parašytos programinės įrangos rinkinys \textsc{Geant4} yra skirtas modeliuoti dalelių sąveiką su medžiaga. \textsc{Geant4} panaudojimo galimybės labai plačios -- galima modeliuoti elektromagnetinius, hadroninius ir optinius procesus, modeliuoti įvykius su daug skirtingų stabilių dalelių, pasirinkti skirtingas medžiagas, kuriomis tos dalelės sklinda ir pan. Įvykius galima modeliuoti labai plačiame energijų diapazone: nuo maždaug $250$ eV iki kelių TeV ir daugiau. Į \textsc{Geant4} siūlomas galimybes taip pat įeina dalelių trekų, pataikymų į detektorių užfiksavimo modeliavimas, skirtingų geometrijų nustatymas ir skirtingų fizikinių modelių pritaikymas \cite{geant4}. \textsc{Geant4} dažniausiai naudojamas viso iš daug komponentų sudaryto dalelių detektoriaus (pavyzdžiui, CMS) atsako modeliavimui, kai jau turimas sumodeliuotas protonų susidūrimo įvykis.
-
-\paragraph{CMSSW -- \textit{CMS SoftWare}\\}
-Programinės įrangos rinkinys CMSSW, kurį sudaro CERN CMS detektoriaus duomenų analizės sistema (angl.\ \textit{the framework}), apibrėžianti įvykių duomenų modelį, angl.\ \textit{Event Data Model} -- EDM (bendras CMS eksperimento įvykių duomenų formatas) bei visas kitas paslaugas, reikalingas modeliavimo, kalibravimo, išlygiavimo bei įvykių atkūrimo moduliams, kurie generuoja tokius įvykių duomenis, iš kurių fizikai jau gali daryti duomenų analizę. Pirminis šio karkaso ir visos įrangos tikslas -- palengvinti įvykių atkūrimo ir analizės programinės įrangos plėtojimą ir diegimą \cite{cmsswtwiki}.
-
-CMSSW naudojama ne tik įvykių modeliavimui, bet ir tikrų protonų susidūrimų atkūrimui. Įvykių modeliavimui skirtos programinės įrangos CMSSW yra nemažai (tame tarpe ir \textsc{Pythia}), taip pat yra ir programinė įranga, skirta detektoriaus atsako modeliavimui (pavyzdžiui, \textsc{Geant4})\cite{cmsswev}. 
 
 \subsubsection{Modeliuotų įvykių svorio skaičiavimas}\label{sec:MCweight}
 
-Tarkime, kad tiriame įvykį, kurio skerspjūvis $\sigma$. Tada esant integruotam šviesiui $\Lumi$ turėtų įvykti $N_{0}$ įvykių. Pasinaudojus \eqref{eq:evno} formule, $N_{0}$ apskaičiuojamas taip:
+Jeigu kokio nors mus dominančio proceso tikėtinumą aprašo jo skerspjūvis $\sigma$, tai atlikus
+$\Lumi$ integruotą šviesį atitinkančių protonų susidūrimų mus dominanti įvykis teoriškai turėtų
+įvykti $N_{0}$ kartų. Pagal \eqref{eq:evno} formulę:
 \begin{equation}
-\sigma \Lumi=N_{0} \; .
-\label{eq:ilumi}
-\end{equation}
-Kiekvienas realus įvykis turi svorio daugiklį, lygų $1$, tačiau su modeliuotais įvykiais nebūtinai yra taip pat. Susimodeliuoti įvykių galime kiek norime, tik tada reikia jų skaičių sunormuoti į tikrų įvykių skaičių, t.y., kiekvienam modeliuotam įvykiui priskirti po svorio daugiklį. Jeigu turime $N$ sumodeliuotų įvykių, tai kiekvienam iš jų priskyrus po svorio daugiklį ir visus daugiklius susumavus, turėtume gauti jau aptartą įvykių skaičių $N_{0}$:
-\begin{equation}
-\sum_{i=1}^{N}1\cdot \omega_{i}=N_{0} \; .
-\label{eq:wsum}
-\end{equation}
-Jeigu visi įvykiai buvo sumodeliuoti vienodai, tai gali neštis ir vienodus svorio daugiklius. Tada suma iš \eqref{eq:wsum} supaprastėja į:
-\begin{equation}
-\sum_{i=1}^{N}1\cdot \omega_{i}=N\omega \; .
-\label{eq:swsum}
-\end{equation}
-Jeigu \eqref{eq:swsum} lygybė galioja, galime sumodeliuoto įvykio svorį apskaičiuoti pagal formulę:
-\begin{equation}
-\omega=\frac{N_{0}}{N}=\frac{\sigma \Lumi}{N} \; .
-\label{eq:weight}
+	\sigma \Lumi=N_{0} \; .
+	\label{eq:ilumi}
 \end{equation}
 
-Kai įvykiai modeliuojami aukštesnių eilių tikslumu, atskirų įvykių svoriai dažniausiai nebesutampa. Tokiu atveju, norint modeliuotų įvykių skaičių sunormuoti į išmatuotų įvykių skaičių, kiekvienam modeliuotam įvykiui  turi būti priskiriamas toks svorinis daugiklis:
+Išmatuotos mus dominančių įvykių statistikos payginimui su teorija galime susimodeliuoti tiek mus
+dominantį procesą atitinkančių įvykių, kiek jų norime, arba kiek leidžia turimi resursai.
+Bendru atveju sumodeliuotų įvykių skaičius $N$ nesutampa su eksperimente užregistruotų įvykių
+skaičiumi $N_0$, todėl modeliuotus įvykius reikia sunormuoti, kad atitiktų eksperimentinį
+integruotą šviesį.
+Tai yra daroma kiekvienam modeliuotam įvykiui priskiriant po tam tikrą svorį $\omega$:
+
 \begin{equation}
-\omega_{\mathrm{gen}}=\frac{\sigma\Lumi}{\sum_{i=1}^{N}\omega_{i}} \; .
-\label{eq:weightnlo}
-\end{equation}
-Tada pilnutinis kiekvieno įvykio svoris tampa toks:
-\begin{equation}
-\omega_{i}^{\mathrm{Piln.}}=\omega_{i}\frac{\sigma\Lumi}{\sum_{i=1}^{N}\omega_{i}} \; .
+	\sum_{i=1}^{N}1\cdot \omega_{i}=N_{0} \; .
+	\label{eq:wsum}
 \end{equation}
 
+Paprastčiausiu atveju visiems modeliuotiems įvykiams, kurie yra siejami su tuo pačiu procesu,
+galima priskirti vienodus svorius. Tokiu atveju \eqref{eq:wsum} galima perrašyti:
+
+\begin{equation}
+	\sum_{i=1}^{N} 1 \cdot \omega_{i} = N \omega \; ,
+	\label{eq:swsum}
+\end{equation}
+
+o kiekvieno įvykio svoris apskaičiuojamas taip:
+
+\begin{equation}
+	\omega = \frac{ N_{0} }{ N } = \frac{ \sigma \Lumi }{N} \; .
+	\label{eq:weight}
+\end{equation}
+
+Kai naudojama programinė įranga geba modeliuoti įvykius aukštesniu, nei nulinės eilės
+perturbacijų tikslumu, neretai skirtingiems įvykiams pats įvykių generatorius jau iškart
+gali priskirti skirtingus svorius.
+Tokiu atveju \eqref{eq:weight} formulė nebetinka, o ir bendras modeliuotų įvykių skačiaus
+apskaičiavimas nebėra toks trivialus.
+Tokiu atveju bendras įvykių skaičius $N$ modeliuotame duomenų rinkinyje yra apskaičiuojamas
+kaip visų įvykių svorių suma, kuri nėra lygi fiziniam ten esančių įvykių skaičiui $N_{\mathrm{ev}}$:
+
+\begin{equation}
+	N = \sum_{i=1}^{N_{\mathrm{ev}}} \omega_{i} \; ,
+	\label{eq:NLOweight}
+\end{equation}
+
+o svorinis daugilis, priskiriamas kiekvienam įvykiui apskaičiuojamas taip:
+
+\begin{equation}
+	\omega_{i}^{\mathrm{Piln.}} = \omega_{i} \frac{ \sigma\Lumi }{ \sum_{i=1}^{N_{\mathrm{ev}}}\omega_{i} } =
+	\omega_{i} \frac{ \sigma\Lumi }{N} \; .
+\end{equation}
+
+Kalbant apie eksperimento metu užragistruotus įvykius galima sakyti, kad jie turi svorius, lygius vienetui.
+
+
+%senas
 \subsubsection{Statistinių paklaidų įvertinimas}
 Protonų susidūrimo įvykiai, vykstantys Didžiajame hadronų greitintuve yra atsitiktiniai įvykiai, kuriems galioja Puasono pasiskirstymas (sakome \ltq{Puasono įvykiai}). Puasono įvykių skaičiaus paklaida lygi šakniai iš tikėtiniausio įvykių skaičiaus \cite{Poisson}. Kadangi tikėtiniausias įvykių skaičius šiuo atveju nėra žinomas, tai tikrų CMS detektoriumi užfiksuotų įvykių skaičiaus paklaida yra skaičiuojama tiesiog kaip kvadratinė šaknis iš užfiksuotų įvykių skaičiaus:
 \begin{equation}
