@@ -550,6 +550,123 @@ Uždaviniai:
 	Taigi sužinojau, kad man reikia imti \ttt{TightIso\_TightID} histogramą.
 \end{itemize}
 
+\section{Lapkričio 21-23 d. -- korekcijų ir atrankos taisymas}
+
+Pažiūrėjau naujesnę \ttt{DYAnalyzer} kodo versiją, esančią Dalmin'o tier 3 aplanke.
+Parsisiunčiau jo naudotus korekcijų kodus, bei pažiūrėjau, kaip jie naudojami.
+Taisiau savo \ttt{DYAnalyzer} kodą, kad naudotų naujas korekcijas.
+Sužinojau, kad laišką dėl pridėjimo prie e-grupės išsiunčiau ne CMS sekretoriatui, o CMS portalui.
+Parašiau naują laišką sekretoriatui ir gavau atsakymą, kad turiu kreiptis į savo komandos vadovą.
+Parašiau laišką A.\ Bernotui ir gavau prieigą prie cms-physics-access.
+
+\section{Lapkričio 26-27 d. -- pristatymo ruošimas}
+\begin{itemize}
+	\item Pradėjau daryti prezentaciją, susirariau, kad trečiadienį (lapkričio 26 d.) pasirepetuosiu pranešimą
+	pristatydamas jį T.\ Gajdosik'ui.
+	\item Bandžiau išsibrėžti grafikus. Tam teko pataisyti histogramų sukūrimo ir brėžimo kodus. Elektronų grafikai
+	atrodė, kad gaunasi be klaidų (sprendžiant pagal grafikų formas ir tai, kad Data nuo MC nesiskiria daugiau $5\%$).
+	Tuo tarpu miuonų grafikai atrodė labai keistai -- invariantinės masės pasiskirstymo forma buvo netipinė, taip pat
+	skirtumas tarp Data ir MC buvo apie $80\%$.
+	Radau vieną klaidą -- PU normavimas buvo daromas neaktyvavus \ttt{nPileUp} šakos.
+	Tai pataisius invariantinės masės pasiskirstymo forma tapo įprasta, tačiau skirtumas tarp matavimo ir modeliavimo
+	vistiek išliko apie $80\%$. Nusprendžiau, kad pristatyme rodysiu tik elektronų grafikus.
+\end{itemize}
+
+\section{Lapkričio 28 d. -- pristatymo repeticija}
+
+Padariau paskutinius pataisymus skaidrėms prieš ateinant T.\ Gajdosik'ui.
+Padariau pristatymą ir gavau kelias pastabas, pagal kurias galėjau pristatymą pataisyti.
+
+\section{Lapkričio 30 d. -- pristatymas}
+\begin{itemize}
+	\item Pagal pastabas pataisiau pristatymo skaidres.
+	\item Ieškojau problemų su miuonų atranka, tačiau neradau.
+	\item Atsisiunčiau virtualiam susirinkimui reikalingą programinę įrangą (Vidyo Connect).
+	\item Sudalyvavau Drell-Yan darbo grupės susirinkime.
+	Padariau savo pristatymą ir pasiklausiau kitų.
+	Gavau kelis pastebėjimus, į kuriuos verta atkreipti dėmesį:
+	\begin{enumerate}
+		\item Nėra Drell-Yan signalo įvykių ties $m_{ee} > 1000$ GeV, nors turėtų būti.
+		Gal kažką praleidžiu.
+		\item $\emu$ invariantinės masės pasiskirstyme einant link didesnių masių pasikeičiau Data/MC santykis.
+		Verta pasidomėti, kodėl.
+		\item $\emu$ fakes -- ne tik $QCD$, bet ir $\WJets$.
+		Reikėtų pagalvoti, kaip įvertinti, nes darant įvertintimą pagal to paties krūvio elektroną ir miuoną yra
+		daroma prielaida, kad visi triukšmai yra $QCD$.
+		\item Nėra logiška klaidingai atpažintoms čiurkšlėms taikyti \textit{Scale Factor}.
+		Pagalvoti, kaip daryti.
+	\end{enumerate}
+\end{itemize}
+
+\section{Gruodžio 3-5 d. -- klaidų ieškojimas, taisymas}
+\begin{itemize}
+	\item Toliau ieškojau, kodel gali būti problemų su miuonų atranka.
+	Radau vieną galimą problemą -- įvykių atrankai naudojus trigerį \ttt{IsoMu24} arba \ttt{IsoTkMu24}, o
+	vėliau iš atranką praeinančių miuonų ieškau to, kuris aktyvavo ne kažkurį iš šių trigerių, o to, kuris akktyvavo
+	trigerį \ttt{IsoMu20} arba \ttt{IsoTkMu20}. Nors atrodytų gan logiška, kad miuonas su $\pT > 24$ GeV turėtų aktyvuoti
+	abu šiuos trigerius, vadovas sakė, kad galėjo būti nustatytas algoritmas, kuris sumažina trigerio iššovimų skaičių
+	neleisdamas trigeriui iššauti tam tikrą įvykių skaičių po to, kai jau iššovė, ir dėl šio nesutapimo galėjo būti, kad
+	egzistuoja įvykių, kur iššauna trigeris \ttt{IsoMu24} arba \ttt{IsoTkMu24}, bet neiššauna \ttt{IsoMu20} arba \ttt{IsoTkMu20}.
+	\item Pataisiau klaidą ir iš naujo paleidau atrankos kodus.
+	\item Taisiau grafikų brėžimo kodus, kad skirtingi procesai būtų piešiami mažiau akį rėžiančiomis spalvomis.
+	Taip pat padariau, kad dviejų bozonų bei vieno bozono kartu su viršūniniu kvarku procesai būtų piešiami atskirai, o ne
+	vienoje krūvoje.
+\end{itemize}
+
+\section{Gruodžio 7 d. -- miuonų grafikų gavimas}
+\begin{itemize}
+	\item Atsisiunčiau atrinktų miuonų įvykių failus ir išsibrėžiau grafikus.
+	Atranką praėjusių išmatuotų įvykių skaičius labai smarkiai išaugo, tačiau dar vistiek matėsi maždaug $10\%$ skirtumas tarp
+	matavimo ir modeliavimo (išmatuotų įvykių per mažai).
+	\item Pakalbėjęs su vadovu nusprendžiau, kad reikia paklausti Dalmin'o, ar nebuvo susidūręs su panašia problema.
+	\item Pradėjau rašyti kursinį darbą. Kaip pradinį tašką paėmiau savo bakalaurinį darbą.
+\end{itemize}
+
+\section{Gruodžio 10 d. -- kursinio darbo rašymas}
+\begin{itemize}
+	\item Išsiunčiau laišką Dalmin'ui su klausimu, ar buvo susidūręs su panašia problema miuonų atrankoje ir galbūt žino sprendimą.
+	\item Taip pat pastebėjau, kad nebeina prisijungti prie tier 3 tad taip pat paklausiau Dalmin'o, ar žino, kodėl taip yra.
+	\item Toliau rašiau kursinio darbo teorinio įvado dalį.
+\end{itemize}
+
+\section{Gruodžio 11-14 d. -- kursinio darbo rašymas}
+\begin{itemize}
+	\item Toliau rašiau kursinio darbo teorinio įvado dalį.
+	\item Gavau atsakymą iš Dalmin'o: tier 3 neveikia, nes yra perkėlinėjama centro įranga, todėl ten nebus galima nieko daryti apie
+	2 savaites.
+	Taip pat gavau atsakymą dėl miuonų atrankos: mano koduose jis pastebėjo, kad ten, kur esu susirašęs, kiek įvykių yra tam tikruose
+	duomenų rinkiniuose, yra nesutapimų. Pavyzdžiui, rinkinyje \ttt{SingleMuon\_RunB} pas mane yra $108561074$ įvykių, o pas Dalmin'ą --
+	$154033697$ įvykių. Panašiai yra ir su \ttt{SingleMuon\_RunG} bei \ttt{SingleMuon\_RunHver2} rinkiniais. Bendras skirtumas tarp
+	manęs ir Dalmin'o -- apie $10\%$.
+\end{itemize}
+
+\section{Gruodžio 17 d. -- kursinio darbo rašymas}
+\begin{itemize}
+	\item Toliau rašiau kursinio darbo teorinio įvado dalį.
+	\item Gavau naują kompiuterį ir pasidariau pirminius sudiegimus.
+\end{itemize}
+
+\section{Gruodžio 18 d. -- kompiuterio paruošimas darbui, problemų su miuonais aiškinimasis}
+\begin{itemize}
+	\item Persikėliau svarbiausius dalykus iš seno kompiuerio į naują, taip pat susirašiau svarbiausią programinę įrangą (VirtualBox,
+	MS Office, persikėliau virtualios mašinos kloną, duomenų failus).
+	\item Įsijungiau virtualią mašiną ant naujo kompiuterio. Panašu, kad viskas veikia.
+	\item Toliau rašiau kursinį darbą.
+	\item Gavau laišką iš Dalmin'o, kad tier 3 jau veikia.
+	\item Prisiungęs prie tier 3 iškart radau problemą, kuri buvo su miuonų atranka: tie duomenų rinkiniai, iš kurių, pasak Dalmin'o,
+	užkraunu ne visus įvykius, savo viduje turi po du aplankus: \ttt{0000} ir \ttt{0001}, tik to nebuvo parašyta mano turėtuose
+	failų sąrašuose, o pats įdėmiau patikrinti nebuvau sugalvojęs.
+	\item Pataisiau savo \ttt{FileMgr}, kad įtrauktų informaciją ir apie papildomus aplankus. Atrankos kodų iš naujo paleisti negalėjau,
+	nes kažkodėl vėl dingo galimybė prisijungti prie tier 3.
+\end{itemize}
+
+\section{Gruodžio 19 d. -- miuonų atrankos paleidimas}
+\begin{itemize}
+	\item Prisijungiau prie tier 3 ir paleidau miuonų atrankos kodus.
+	\item Toliau perkėlinėjau mažiau svarbius failus iš seno kompiuterio į naują.
+	\item Pagaliau atnaujinau dienoraštį.
+\end{itemize}
+
 
 \bibliography{\jobname}
 \bibliographystyle{unsrt}
