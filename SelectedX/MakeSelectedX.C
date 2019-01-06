@@ -782,13 +782,19 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
             TFile* EMuFile;
             if ( Mgr.Type == "DATA" )
             {
-                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/";
-                out_dir = "Data/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor;
+//                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/";
+//                out_dir = "Data/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor;
+
+                out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
+                out_dir = "SelectedEMu_"+Mgr.Tag[i_tup]+RocCor;
             }
             else if ( Mgr.Type == "BKG" )
             {
-                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/";
-                out_dir = "MC_bkg/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor;
+//                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEMu/";
+//                out_dir = "MC_bkg/SelectedEMu_"+Mgr.Tag[i_tup]+RocCor;
+
+                out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
+                out_dir = "SelectedEMu_"+Mgr.Tag[i_tup]+RocCor;
             }
             else if ( Mgr.Type == "TEST")
             {
