@@ -55,6 +55,7 @@
 \newcommand{\comment}[1]{\newline\textblue{#1}\newline}
 \newcommand{\commentNL}[1]{\textblue{#1}\newline}
 \newcommand{\commentMA}[1]{\textred{#1}\newline}
+\newcommand{\ttt}[1]{\texttt{#1}}
 \newcommand{\pT}{p_{\mathrm{T}}}
 \newcommand{\ET}{E_{\mathrm{T}}}
 \newcommand{\WW}{W\! W}
@@ -864,93 +865,77 @@ detektoriaus informacija.
 % senas
 \subsubsection{Įvykių atranka}
 
-Protonų susidūrimo įvykių duomenų failai neretai būna plačios paskirties -- įrašyti įvykiai gali būti naudojami skirtingų procesų analizėms. Norint atsirinkti vienai konkrečiai analizei aktualius įvykius, bei kuo užtikrinčiau žinoti, kad duomenyse užregistruotos dalelės yra būtent tos, kurios susidarė iš tikrųjų, yra svarbu pasirinkti tinkamus įvykių atrankos kriterijus, pagal kuriuos yra nusprendžiama, ar įvykis bus naudojamas tolimesnei duomenų analizei. Skirtingiems dalelių rinkiniams yra taikomi skirtingi atrankos kriterijai. Toliau bus aprašomi šiame darbe $ee$ ir $e\mu$ įvykiams taikyti atrankos kriterijai.
+Kadangi trigeriai turi veikti greitai, jie dažniausiai būna nesudėtingi, tai yra, jų aktyvavimą nulemia
+nedidelis parametrų skaičius, taip pat jie naudojami įvykiui dar nesant pilnai atkurtam.
+Norint daryti aukštesnio lygio duomenų analizę neužtenka tik atsirinkti įvykius, kurie aktyvavo tam tikrą
+aukšto lygio trigerį.
+Reikia panaudoti daugiau papildomų atrankos kriterijų, kad liktų tik tokie užregistruoti protonų susidūrimo
+įvykiai, kurie yra panašiausi į su tiriamu procesu sietinus įvykius.
+Akivaizdu, kad tiriant skirtingas tam tikro proceso galutines būsenas reikia taikyti ir skirtingus atrankos
+kriterijus.
+Taigi, $ee$ ir $\mumu$ įvykiai, o taip pat ir $e\mu$ įvykiai, naudoti įvertinant Drell-Yan proceso $ee$ ir
+$\mumu$ galutinių būsenų triukšmo įvykių skaičių, buvo atrenkami šiek tiek skirtingai.
 
-\subsubsection*{$ee$ įvykių atranka\\}
-Pirminis atrankos kriterijus elektronų įvykiams buvo ankstesniame skyriuje aprašyto elektrono trigerio suveikimas. Toliau buvo reikalaujama, kad viename įvykyje iš viso būtų aptikti du elektronai, ir kad abu iš jų atitiktų \textit{MediumID} \cite{MediumID8} reikalavimus:
+Dviejų elektronų galutinės būsenos įvykiams buvo taikomi šie atrankos kriterijai:
+\begin{enumerate}
+	\item Aktyvuotas ankstesniame skyrelyje minėtas dviejų elektronų trigeris;
+	\item Užregistruoti lygiai du elektronai, atitinkantys \textit{MediumID} reikalavimus.
+	\item Abu užregistruoti elektronai turi būti pataikę į elektromagnetinio kalorimetro segmentą, kurio
+	pseudospartos absoliučioji vertė neviršija $2.4$.
+	\item Abu užregistruoti elektronai neturėtų būti pataikę į elektromagnetinio kalorimetro cilindrinės ir
+	antgalio dalies sankirtą, kurioje eina detektoriaus elektronikos laidai, sumažinantys detektavimo efektyvumą
+	toje srityje. Ši vieta yra $1.4442<|\eta_{SC}|<1.566$ ruože.
+	\item Greitesniojo iš dviejų užregistruotų elektronų skersinis impulsas turėtų būti didesnis už $28$ GeV, o
+	lėtesniojo -- didesnis už $17$ GeV
+\end{enumerate}
 
-\begin{itemize}
-\item Kalorimetro \ltq{dušo} formą apibūdinantis dydis $\sigma_{i\eta i\eta}$ -- elektromagnetinio kalorimetro scintiliuojančių kristalų klasterio plotis išilgai pseudospartos $\eta$, suskaičiuotas visiems $5\!\times\!5$ bloko kristalams (bloko viduryje būtinai yra kristalas, kuriame užfiksuota didžiausia energija);
-\item Geometrinis sutapimas tarp superklasterio, į kurį teoriškai pagal atkurtus elektrono parametrus viršūnėje (sukūrimo vietoje) turėjo būti pataikyta, padėties ir išmatuotos superklasterio, į kurį iš tikrųjų buvo pataikyta, padėties: $\Delta \phi_{i\eta}$ ir $\Delta\eta_{i\eta}$;
-\item Energijų, paliktų hadronų kalorimetre ir elektromagnetiniame kalorimetre santykis $H/E$;
-\item Elektronų atskirumas, apskaičiuotas naudojantis dalelių srauto algoritmu (pagal \eqref{eq:isolation} formulę);
+Dviejų miuonų galutinės būsenos įvykiams buvo taikomi tokie atrankos reikalavimai:
+\begin{enumerate}
+	\item Aktyvuotas ankstesniame skyrelyje minėtas vieno miuono trigeris;
+	\item Užregistruoti bent du miuonai, atitinkantys \textit{TightID} reikalavimus. Vienas iš šių miuonų turi būti
+	tas, kuris aktyvavo	minėtą trigerį.
+	\item Miuonų atskirumas, apskaičiuotas naudojantis dalelių srauto algoritmu turi neviršyti $15\%$ miuonų skersinio
+	impulso vertės.
+	\item Miuonų pseudospartos absoliutinė vertė turi neviršyti $2.4$.
+	\item Iš visų minėtus kriterijus atitinkančių miuonų atrenkami du, kurių trajektorijas su mažiausiu neapibrėžtumu
+	galima suvesti į vieną viršūnę.
+	\item Iš likusių dviejų miuonų greitesniojo impulsas turi viršyti $28$ GeV, o lėtesniojo -- $17$ GeV.
+	\item Kampas tarp dviejų miuonų lėkimo iš viršūnės krypčių turi būti ne didesnis, kaip $\pi - 0.005$ rad.
+	\item Miuonai turi būti priešingų elektrinių krūvių.
+\end{enumerate}
 
-\item Skirtumas tarp atvirkštinės elektrono energijos ir atvirkštinio impulso $1/E-1/P$;
-\item Elektrono treko smūgio parametrai statmenoje ir lygiagrečioje plokštumoje, apskaičiuoti atsižvelgiant pirminę viršūnę $|d_{0}|$ ir $|d_{z}|$;
-\item Skaičius trekų detektoriaus sluoksnių, kuriuos dalelė praėjo nepalikdama žymių tose vietose, kurios atitinka atkurtą elektrono trajektoriją (trūkstami pataikymai) $N_{e.m.h.}$;
-\item Reikalavimas, kad elektronas nebūtų kilęs iš fotono virsmo, apibūdinamas dvejetainiu dydžiu \texttt{PassConversionVeto}.
-\end{itemize}
-Reikalavimų skaitinės vertės pateiktos \ref{table:eleMediumID} lentelėje.
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|c|c|c|}
-\hline
-Kriterijus & Reikalavimai cilindrui & Reikalavimai antgaliams \\
-\hline \hline
-$\sigma_{i\eta i\eta}$ & $<0.0101$ & $<0.0283$ \\
-\hline
-$\Delta \phi_{i\eta}$ & $<0.0336$ & $<0.114$ \\
-\hline
-$\Delta\eta_{i\eta}$ & $<0.0103$ & $<0.00733$ \\
-\hline
-$H/E$ & $<0.0876$ & $<0.0678$ \\
-\hline
-$I_{rel}^{PF}$ & $<0.0766$ & $<0.0678$ \\
-\hline
-$1/E-1/P$ & $<0.0174 \; \mathrm{GeV}^{-1}$ & $<0.0898 \; \mathrm{GeV}^{-1}$ \\
-\hline
-$|d_{0}|$ & $<0.0118 \; \mathrm{cm}$ & $<0.0739 \; \mathrm{cm}$ \\
-\hline
-$|d_{z}|$ & $<0.373 \; \mathrm{cm}$ & $<0.602 \; \mathrm{cm}$ \\
-\hline
-$N_{e.m.h.}$ & $\leqslant 2$ & $\leqslant 1$ \\
-\hline
-\texttt{PassConversionVeto} & $=$ \texttt{TRUE} & $=$ \texttt{TRUE}\\
-\hline
-\end{tabular}
-\caption{\label{table:eleMediumID}Elektronų atpažinimo \textit{MediumID} reikalavimai $2015$ metų duomenims, kai protonų susidūrimai vyksta kas $25$ ns \cite{MediumID2015}.}
-\end{table}
-Toliau, kadangi elektromagnetinis kalorimetras efektyviai elektronus detektuoja tik pseudospartos diapazone $|\eta_{SC}| \in [0; 1.4442]\cup[1.566; 2.5)$ ($\eta_{SC}$ -- elektromagnetinio kalorimetro scintiliatorių superklasterio pseudospartos koordinatė), tad ir elektronų kandidatams buvo taikomas reikalavimas patekti į nurodytą pseudospartos diapazoną. Ruožas $1.4442<|\eta_{SC}|<1.566$ \ltq{išmetamas} todėl, kad toje vietoje yra perėjimas iš elektromagnetinio kalorimetro cilindrinės dalies į antgalio dalį. Ten yra išvedžioti laidai, kurie sumažina už jų esančių detektorių efektyvumą. Taip pat neimama pseudosparta, didesnė už $2.5$, nes toje vietoje tiesiog baigiasi elektromagnetinis kalorimetras ir toliau elektronai nedetektuojami.\\
-Dar vienas atrankos kriterijus yra elektronų skersinis impulsas: reikalaujama, kad greitesnysis elektronas turėtų skersinį impulsą $p_{\mathrm{T}}^{\mathrm{Gr.}}>30$ GeV, o lėtesnysis -- $p_{\mathrm{T}}^{\mathrm{Lėt.}}>10$ GeV. Nors naudotas elektrono trigeris aktyvuojasi, kai aptinkamas elektronas, kurio $p_{\mathrm{T}}>23$ GeV, jis tai pakankamai efektyviai pradeda daryti tik kai elektronai pasiekia maždaug $p_{\mathrm{T}}^{\mathrm{Gr.}}>30$ GeV impulsą, todėl greitesniajam elektronui (kuris aktyvina trigerį) taikomas būtent toks reikalavimas.
-Reikalavimas, kad apskaičiuoti elektronų krūviai būtinai būtų skirtingi, nebuvo taikomas, nes, ypač, kai energijos didesnės, elektronų trajektorijos tampa labai artimos tiesėms, ir efektyvus dalelės krūvio nustatymas yra praktiškai neįmanomas.
-
-\subsubsection*{$e\mu$ įvykių atranka\\}
-
-Pirminis reikalavimas $e\mu$ įvykiams buvo anksčiau aprašyto elektrono ir miuono trigerio aktyvacija. Taip pat buvo reikalaujama, kad būtų aptikta tik po vieną elektroną ir vieną miuoną. Elektronui toliau buvo taikomi tokie patys atrankos reikalavimai, kaip ir $ee$ įvykių atrankoje, tik dėl naudojamo kitokio trigerio ir kitokio jo veikimo efektyvumo, reikalavimas elektrono skersiniam impulsui buvo pakeistas į $p_{\mathrm{T}}^{e}>25$ GeV.
-
-Miuonas turėjo atitikti \textit{TightID} \cite{TightMuon} reikalavimus:
-\begin{itemize}
-\item Miuonas turi būti globalus: tai reiškia, kad po įvykio atkūrimo, trekeryje užfiksuotas dalelės, panašios į miuono trekas turi susijungti su miuonų detektoriuose užfiksuotu miuonų treku į vieną bendrą treką;
-\item Reikalavimas pagal laisvės laipsnių (angl.\ \textit{degrees of freedom} -- d.o.f.) skaičių normuotam globalaus miuono treko aproksimacijos kokybę apibūdinančiam dydžiui $\chi^{2}/n_{\mathrm{l. \, l.}}<10$;
-\item Bent vienas pataikymas į miuonų detektorius turi patekti į aproksimuotą miuono treką;
-\item Miuonui turi būti priskirti pataikymai į bent du skirtingus miuonų detektoriaus sluoksnius;
-\item Turi būti užkfiksuota bent $6$ miuono pataikymai į skirtingus silicio trekų detektoriaus sluoksnius (iš jų bent vienas į pikselinį detektorių);
-\item Reikalavimas treko smūgio parametrui išilginėje statmenoje plokštumoje, apskaičiuotam atsižvelgiant į pirminę viršūnę: $|d_{z}|<0.5$ cm ir $|d_{xy}|<0.2$ cm;
-\end{itemize}
-Tokie kriterijai gerokai sumažina šansą, kad atranką praeis miuonai, susidarę antrinių procesų metu, taip pat, kad miuonų detektorius pasiekę hadronai, nesustabdyti hadronų kalorimetre, bus klaidingai atpažinti kaip miuonai.
-
-Toliau buvo reikalaujama, kad miuono trekas būtų atskiras: apskaičiuota trekeryje aptiktų dalelių, patenkančių į $\Delta R<0.3$ pločio kūgį, nubrėžtą aplink miuono trajektoriją, impulsų suma neturi viršyti $10\%$ miuono impulso vertės:
-
-\begin{equation*}
-\sum_{\Delta R<0.3}p_{\mathrm{T}}<0.1\cdot p_{\mathrm{T}}(\mu) \; .
-\end{equation*}
-
-Norint dar efektyviau atskirti, kuriuose įvykiuose miuonai susidarė antrinių procesų metu, arba kitos dalelės buvo klaidingai atpažintos kaip miuonai, galima taikyti reikalavimą ir miuono atskirumui, apskaičiuotam naudojantis dalelių srauto algoritmu (žr. \ref{sec:ppReco} skyrelį).
-
-Kadangi miuonų detektoriai baigiasi ties maždaug $|\eta|=2.4$, tai dar vienu atrankos kriterijumi tapo reikalavimas, kad miuono pseudosparta neviršytų šios vertės: $|\eta_{\mu}|<2.4$. Taip pat dėl trigerio efektyvumo buvo įvestas papildomas apribojimas miuono skersiniam impulsui: $p_{\mathrm{T}}^{\mu}>15$ GeV.
-
-Reikalavimas, kad elektrono ir miuono elektriniai krūviai būtų skirtingi, nebuvo taikomas dėl tos pačios priežasties, kuri buvo paminėta prie $ee$ įvykių atrankos.
+Elektrono ir miuono galutinės būsenos įvykiams buvo taikomas anksčiau aprašytų atrankos kriterijų junginys.
+Tai yra, elektronui buvo taikomi tokie atrankos kriterijai, kokie buvo naudojami $ee$ įvykių atrankoje, o miuonui --
+tokie, kokie buvo naudojami $\mumu$ įvykių atrankoje. Reikalavimai, kurie $\mumu$ atrankoje buvo taikomi miuonų poroms,
+šiuo atveju buvo taikomi elektrono-miuono poroms.
+Kadangi dviejų elektronų trigeris, naudotas $ee$ atrankoje, šiuo atveju buvo netinkamas, tai $\emu$ atrankoje buvo naudojamas
+vieno miuono trigeris, aprašytas ankstensiame skyrelyje.
 
 \subsubsection{Duomenų analizės biblioteka ROOT}
 
-\vspace{-0.2cm}
-Šiame darbe CMS detektoriaus užfiksuotų ir modeliuotų protonų susidūrimų duomenų analizei buvo naudojamas programinės įrangos rinkinys ROOT \cite{ROOT}. ROOT yra galingas įrankis, skirtas didelių duomenų kiekių (angl.\ \textit{Big Data}) apdorojimui, statistinei analizei, vizualizacijai, grafikų braižymui, duomenų saugojimui. ROOT yra parašytas daugiausia C++ kalba, tačiau taip pat yra dalinai integruotas ir su kitomis programavimo kalbomis, tokiomis kaip Python ir R. Duomenų analizei su ROOT buvo rašomi C++ kodai, kurie buvo leidžiami ROOT aplinkoje. ROOT suteikia daug įvairių mokslinei duomenų analizei skirtų klasių bei objektų tipų, todėl C++ kodai, skirti leisti ROOT aplinkoje šiek tiek skiriasi nuo įprastinių C++ kodų. Taip pat, nors ROOT Linux operacinėse sistemose yra paleidžiamas per terminalą, jis vistiek turi šiokią tokią grafinę sąsają, kuria naudojantis galima greičiau peržiūrėti, kas yra saugoma duomenų failuose, šiek tiek paredaguoti išbrėžtus grafikus ir pan.
+Atliekant šį darbą buvo naudojamasi CERN mokslininkų plačiai naudojamu programinės įrangos rinkiniu ROOT \cite{ROOT}.
+ROOT yra didelių duomenų kiekių analizei skirta sistema, parašyta daugiausia C++ kalba.
+Naudojantis ROOT galima atlikti įvairaus pobūdžio duomenų apdorojimą, analizę, grafinį atvaizdavimą, didelius duomenų
+kiekius įrašinėti ir skaityti iš stuktūrizuotų failų ir pan.
+Taip pat ROOT suteikia galimybę naudotis daugybe fizikiniams skaičiavimams naudingų klasių.
+Atliekant primityvią duomenų analizę, galima ją daryti tiesiog vedant komandas ROOT aplinkoje bei naudojantis jos
+suteikiama grafine sąsaja, tačiau dibant su didesniais duomenų kiekiais ir norint atlikti labiau struktūrizuotą analizę
+reikia rašyti C++ programinius kodus su ROOT klasėmis ir juos leisti ROOT aplinkoje.
+Būtent taip ir buvo atliekama duomenų analizė šiame darbe.
 
-\subsubsection*{Protonų susidūrimų duomenys\\}
+\subsubsection{Protonų susidūrimų duomenys}
 
-Visi analizei skirti duomenys buvo saugomi \texttt{.root} formato duomenų failuose. Duomenys šiuose failuose yra sudėti į medžio tipo (\texttt{TTree}) klasę. Medis -- tai tarsi duomenų lentelė. Jame yra skirtingos šakos -- reikšmę turinčiais pavadinimais užkoduotos atminties vietos, kuriose laikomi tam tikro tipo duomenys (pavyzdžiui, detektuotų elektronų skaičius, elektronų energijos ir pan.). Medyje visos šakos kartojasi tiek kartų, kiek įvykių jame įrašoma (kiekvienas įvykis turi tą patį šakų rinkinį, tik jose laiko skirtingas vertes), taigi medį galima įsivaizduoti kaip lentelę, kurios stulpeliai yra šakos (skirtingas reikšmes turintys duomenys), o eilutės -- įvykiai (pirmas užfiksuotas įvykis, antras ir t.t.). Duomenims iš \texttt{.root} failuose esančių medžių nuskaityti reikėjo sukurti klasę, kuri medžius sujungia į grandinę (\texttt{TChain}), iš kurios galima imti medžiuose įrašytus įvykius ir skaityti duomenis, įrašytus šakose. Šią klasę ROOT iš dalies sugeneruoja automatiškai.
+Šioje analizėje naudoti 2016 metais CERN CMS detektoriuje užregistruoti protonų susidūrimų duomenys, atitinkantys $35.9$ \invfb
+integruotąjį šviesį, bei įvairių procesų modeliuoti įvykiai buvo saugomi Pietų Korėjos KISTI Tier3 duomenų centre.
+Duomenys buvo laikomi \ttt{.root} formato failuose.
+Bendra visų duomenų rinkinių apimtis -- apie $14$ TB.
+Failuose informacija buvo saugoma ROOT medžiuose (\ttt{TTree} klasė) -- medžio \ltq{šakos} -- tai tam tikri protonų
+susidūrimo įvykį aprašantys kintamieji (pavyzdžiui, užregistruotų elektronų, miuonų skaičius, jų skersiniai impulsai ir pan.),
+o ant šakų esantys \ltq{lapai} -- tų kintamųjų vertės, užregistruotos kiekvienam įvykiui.
+Duomenys skaitomi pasinaudojant ROOT \ttt{TChain} klase, kuri medžius sujungia į grandinę ir leidžia pasiekti kiekvieno įvykio
+informaciją paeiliui.
 
+%senas
 \subsubsection{Statistinių paklaidų įvertinimas}
 Protonų susidūrimo įvykiai, vykstantys Didžiajame hadronų greitintuve yra atsitiktiniai įvykiai, kuriems galioja Puasono pasiskirstymas (sakome \ltq{Puasono įvykiai}). Puasono įvykių skaičiaus paklaida lygi šakniai iš tikėtiniausio įvykių skaičiaus \cite{Poisson}. Kadangi tikėtiniausias įvykių skaičius šiuo atveju nėra žinomas, tai tikrų CMS detektoriumi užfiksuotų įvykių skaičiaus paklaida yra skaičiuojama tiesiog kaip kvadratinė šaknis iš užfiksuotų įvykių skaičiaus:
 \begin{equation}
