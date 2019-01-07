@@ -1,10 +1,13 @@
-/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_B.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_B_0000.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_B_0001.root
 /xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_C.root
 /xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_D.root
 /xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_E.root
 /xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_F.root
-/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_G.root
-/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_Hver2.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_G_0000.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_G_0001.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_Hver2_0000.root
+/xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_Hver2_0001.root
 /xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/Data/SelectedMuMu_SingleMuon_Hver3.root
 
 
