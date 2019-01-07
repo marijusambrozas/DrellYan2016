@@ -2579,7 +2579,7 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
     }
 
     Int_t isWJ = 0;
-//    isWJ = 1; // UNCOMMENT THIS IF YOU WANT TO INCLUDE W+JETS INTO HISTOGRAMS
+    isWJ = 1; // UNCOMMENT THIS IF YOU WANT TO INCLUDE W+JETS INTO HISTOGRAMS
     Int_t count_drawn = 0;
     LocalFileMgr Mgr;
 
@@ -2630,6 +2630,9 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
              *h_SS_bkg_mass_fine_before_RoccoR[8], *h_SS_bkg_mass_fine[8], *h_SS_bkg_mass[8];
         Int_t iter = 0;
 
+        Double_t ratio_WJets_SSvsOS;
+        Double_t avg_ratio_WJets_SSvsOS = 0;
+
         for ( SelProc_t pr = _EMu_WJets; pr > _EndOf_EMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)) )
         {
             if ( !isWJ && pr == _EMu_WJets ) continue;
@@ -2645,6 +2648,19 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
             f_bkg->GetObject( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[pr], h_SS_bkg_mass_fine_before_EffCorr[iter] );
             f_bkg->GetObject( "h_emuSS_mass_fine_"+Mgr.Procname[pr], h_SS_bkg_mass_fine[iter] );
             f_bkg->GetObject( "h_emuSS_mass_"+Mgr.Procname[pr], h_SS_bkg_mass[iter] );
+
+            if ( pr == _EMu_WJets )
+            {
+                ratio_WJets_SSvsOS = h_bkg_mass[iter]->Integral( 1, h_bkg_mass[iter]->GetSize()-2 );
+                ratio_WJets_SSvsOS /= h_SS_bkg_mass[iter]->Integral( 1, h_SS_bkg_mass[iter]->GetSize()-2 );
+
+                for ( Int_t i=1; i<h_bkg_mass[iter]->GetSize()-1; i++ )
+                {
+                    if ( h_SS_bkg_mass[iter]->GetBinContent(i) != 0 )
+                        avg_ratio_WJets_SSvsOS += h_bkg_mass[iter]->GetBinContent(i) / h_SS_bkg_mass[iter]->GetBinContent(i);
+                }
+                avg_ratio_WJets_SSvsOS /= h_SS_bkg_mass[iter]->GetSize()-2;
+            }
 
             h_bkg_mass_fine_before_PUCorr[iter]->SetFillColor(iter+2);
             h_bkg_mass_fine_before_RoccoR[iter]->SetFillColor(iter+2);
@@ -2905,6 +2921,11 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
 
         std::cout << "data events: " << dataintegral << "+-" << dataerror << endl;
         std::cout << "MC events: " << MCintegral << "+-" << MCerror << endl;
+        if ( isWJ )
+        {
+            std::cout << "OS/SS ratio of WJets events: " << ratio_WJets_SSvsOS << endl;
+            std::cout << "Average OS/SS ratio of WJets events per bin: " << avg_ratio_WJets_SSvsOS << endl;
+        }
 
     } // End of if(invm)
 

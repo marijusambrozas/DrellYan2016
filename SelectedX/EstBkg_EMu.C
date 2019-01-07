@@ -1,0 +1,667 @@
+﻿#include "header/LocalFileMgr.h"
+#include "header/myRatioPlot_t.h"
+#include <TChain.h>
+#include <TFile.h>
+#include <TH1D.h>
+#include <TH2D.h>
+#include <TLorentzVector.h>
+#include <TStopwatch.h>
+#include <TTimeStamp.h>
+#include <TString.h>
+#include <TLegend.h>
+#include <THStack.h>
+#include <TPad.h>
+#include <TCanvas.h>
+#include <TColor.h>
+#include <TAttMarker.h>
+#include <TF1.h>
+#include <TStyle.h>
+#include <TROOT.h>
+#include <TApplication.h>
+#include <vector>
+#include <TMath.h>
+#include <THistPainter.h>
+#include <TFormula.h>
+#include <iostream>
+#include <sstream>
+
+void ee_Est();
+void MuMu_Est();
+
+void EstBkg_EMu(TString whichX = "EE")
+{
+    TString WhichX = whichX;
+    WhichX.ToUpper();
+
+    if ( WhichX.Contains("EE") )
+        ee_Est();
+    if ( WhichX.Contains("MUMU") )
+        MuMu_Est();
+}
+
+
+void ee_Est()
+{
+    LocalFileMgr Mgr;
+
+    Mgr.SetProc(_EE_Bkg_Full);
+    cout << "EE Hists location: " << Mgr.HistLocation << endl;
+
+    TFile* f_NeeEst = new TFile( Mgr.HistLocation+"EstBkg_EE.root", "RECREATE" );
+    if ( f_NeeEst->IsOpen() ) std::cout << "File EstBkg_EE.root opened successfully\n";
+    else { std::cout << "File EstBkg_EE.root was not opened\n"; return; }
+
+    TFile* f_Bkg_ee = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_EE_Bkg_Full]+".root", "READ" );
+    if ( f_Bkg_ee->IsOpen() ) std::cout << "File Hist_"+Mgr.Procname[_EE_Bkg_Full]+".root opened successfully\n";
+    else { std::cout << "File Hist_"+Mgr.Procname[_EE_Bkg_Full]+".root was not opened\n"; return; }
+
+    Mgr.SetProc(_EE_DY_Full);
+    TFile* f_DY_ee = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_EE_DY_Full]+".root", "READ" );
+    if ( f_DY_ee->IsOpen() ) std::cout << "File Hist_"+Mgr.Procname[_EE_DY_Full]+".root opened successfully\n";
+    else { std::cout << "File Hist_"+Mgr.Procname[_EE_DY_Full]+".root was not opened\n"; return; }
+
+    Mgr.SetProc(_EE_DoubleEG_Full);
+    TFile* f_Data_ee = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_EE_DY_Full]+".root", "READ" );
+    if ( f_Data_ee->IsOpen() ) std::cout << "File Hist_"+Mgr.Procname[_EE_DY_Full]+".root opened successfully\n";
+    else { std::cout << "File Hist_"+Mgr.Procname[_EE_DY_Full]+".root was not opened\n"; return; }
+
+    Mgr.SetProc(_EMu_Bkg_Full);
+    cout << "EMu Hists location: " << Mgr.HistLocation << endl;
+
+    TFile* f_Bkg_EMu = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root", "READ" );
+    if (f_Bkg_EMu->IsOpen()) std::cout << "File Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root opened successfully\n";
+    else { std::cout << "File Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root was not opened\n"; return; }
+
+    Mgr.SetProc(_EMu_SingleMuon_Full);
+    TFile* f_Data_EMu = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root", "READ" );
+    if (f_Data_EMu->IsOpen()) std::cout << "File Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root opened successfully\n";
+    else { std::cout << "File Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root was not opened\n"; return; }
+
+//********************************* E MU ***********************************************************
+
+//---------------------------------- MC -----------------------------------------------------------
+
+            TH1D* h_EMu_invm[_EndOf_EMu];
+            TH1D* h_EMu_SS_invm[_EndOf_EMu];
+            THStack* s_EMu_invm = new THStack( "s_emu_invm", "" );
+            THStack* s_EMu_SS_invm = new THStack( "s_emu_SS_invm", "" );
+            gStyle->SetOptStat(0);
+
+            Int_t isWJ = 0;
+//            isWJ = 1; // UNCOMMENT THIS IF YOU WANT TO INCLUDE W+JETS
+
+            for ( SelProc_t pr=_EMu_tW; pr<_EMu_VVnST; pr=next(pr) )
+            {
+                Mgr.SetProc(pr);
+                if ( pr>=_EndOf_EMu_MCbkg_Normal && pr<_EMu_DYTauTau_Full ) continue;
+                if ( isWJ == 0 && pr == _EMu_WJets ) continue;
+                f_Bkg_EMu->GetObject( "h_emu_mass_"+Mgr.Procname[pr], h_EMu_invm[pr] );
+
+                Color_t color = kBlack;
+                if ( pr == _EMu_WJets ) color = kRed - 2;
+                if ( pr == _EMu_WW ) color = kMagenta - 5;
+                if ( pr == _EMu_WZ ) color = kMagenta - 2;
+                if ( pr == _EMu_ZZ ) color = kMagenta - 6;
+                if ( pr == _EMu_tbarW ) color = kGreen - 2;
+                if ( pr == _EMu_tW ) color = kGreen + 2;
+                if ( pr == _EMu_ttbar_Full ) color = kCyan + 2;
+                if ( pr == _EMu_DYTauTau_Full ) color = kOrange - 5;
+
+                h_EMu_invm[pr]->SetFillColor(color);
+                h_EMu_invm[pr]->SetLineColor(color);
+                h_EMu_invm[pr]->SetDirectory(0);
+                s_EMu_invm->Add(h_EMu_invm[pr]);
+
+                f_Bkg_EMu->GetObject( "h_emuSS_mass_"+Mgr.Procname[pr], h_EMu_SS_invm[pr] );
+                h_EMu_SS_invm[pr]->SetFillColor(color);
+                h_EMu_SS_invm[pr]->SetLineColor(color);
+                h_EMu_SS_invm[pr]->SetDirectory(0);
+                s_EMu_SS_invm->Add(h_EMu_SS_invm[pr]);
+            }
+
+
+//----------------------------- Data -------------------------------------------------------------
+
+            Mgr.SetProc(_EMu_SingleMuon_Full);
+            TH1D* h_EMu_data_invm;
+            f_Data_EMu->GetObject( "h_emu_mass_"+Mgr.Procname[_EMu_SingleMuon_Full], h_EMu_data_invm );
+            h_EMu_data_invm->SetLineColorAlpha(kBlack, 0);
+            h_EMu_data_invm->SetMarkerStyle(kFullDotLarge);
+            h_EMu_data_invm->SetMarkerColor(kBlack);
+            h_EMu_data_invm->SetDirectory(0);
+
+            TH1D* h_EMu_SS_data_invm;
+            f_Data_EMu->GetObject( "h_emuSS_mass_"+Mgr.Procname[_EMu_SingleMuon_Full], h_EMu_SS_data_invm );
+            h_EMu_SS_data_invm->SetLineColorAlpha(kBlack, 0);
+            h_EMu_SS_data_invm->SetMarkerStyle(kFullDotLarge);
+            h_EMu_SS_data_invm->SetMarkerColor(kBlack);
+            h_EMu_SS_data_invm->SetDirectory(0);
+
+//------------------------------ Est EMu QCD events ---------------------------------------------------
+
+            TH1D* h_EMu_QCD_invm = ( (TH1D*)(h_EMu_SS_data_invm->Clone( "h_emu_mass_QCD" )) );
+            h_EMu_QCD_invm->Add( ((TH1D*)(s_EMu_SS_invm->GetStack()->Last())), -1 );
+            const double RR = 0.57147108645;
+            h_EMu_QCD_invm->Scale(1/RR);
+
+            h_EMu_QCD_invm->SetFillColor(kRed+3);
+            h_EMu_QCD_invm->SetLineColor(kRed+3);
+            h_EMu_QCD_invm->SetDirectory(0);
+
+            THStack* s_EMu_wQCD_invm = new THStack( "s_emu_wQCD_invm", "" );
+            s_EMu_wQCD_invm->Add(h_EMu_QCD_invm);
+            for ( SelProc_t pr=_EMu_tW; pr<_EMu_VVnST; pr=next(pr) )
+            {
+                Mgr.SetProc(pr);
+                if ( pr>=_EndOf_EMu_MCbkg_Normal && pr<_EMu_DYTauTau_Full ) continue;
+                if ( isWJ == 0 && pr == _EMu_WJets ) continue;
+                s_EMu_wQCD_invm->Add(h_EMu_invm[pr]);
+            }
+            myRatioPlot_t* RP_EMu_wQCD_invm = new myRatioPlot_t( "EMu_wQCD_mass", s_EMu_wQCD_invm, h_EMu_data_invm );
+            RP_EMu_wQCD_invm->SetPlots( "e#mu mass [GeV/c^{2}]", 15, 3000 );
+            RP_EMu_wQCD_invm->SetLegend();
+//            RP_EMu_wQCD_invm->SetPlots( "e#mu mas#dot{e} [GeV/c^{2}]", 15, 3000 );
+            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_data_invm, "Data", "lp" );
+//            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_data_invm, "Matavimas", "lp" );
+            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_invm[_EMu_ttbar_Full], "t#bar{t}", "f" );
+            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_invm[_EMu_tbarW], "#bar{t}W", "f" );
+            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_invm[_EMu_tW], "tW", "f" );
+            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_invm[_EMu_DYTauTau_Full], "DY#rightarrow#tau#tau","f" );
+            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_invm[_EMu_WW], "WW", "f" );
+            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_invm[_EMu_WZ], "WZ", "f" );
+            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_invm[_EMu_ZZ], "ZZ", "f" );
+            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_QCD_invm, "QCD", "f" );
+            RP_EMu_wQCD_invm->Draw( 4e-1, 2e4, 1 );
+
+            h_EMu_data_invm->Add( h_EMu_QCD_invm, -1 );
+
+//************************************ E E **********************************************************
+
+            TH1D* h_ee_invm[_EndOf_EMu];
+            THStack* s_ee_invm = new THStack( "s_ee_invm", "" );
+
+            for ( SelProc_t pr=_EE_tW; pr<_EE_VVnST; pr=next(pr) )
+            {
+                Mgr.SetProc(pr);
+                if ( pr>=_EndOf_EE_VVnST_Normal && pr<_EE_DYTauTau_Full ) continue;
+
+                f_Bkg_ee->GetObject( "h_mass_"+Mgr.Procname[pr], h_ee_invm[pr] );
+
+                Color_t color = kBlack;
+                if ( pr == _EE_WW ) color = kMagenta - 5;
+                if ( pr == _EE_WZ ) color = kMagenta - 2;
+                if ( pr == _EE_ZZ ) color = kMagenta - 6;
+                if ( pr == _EE_tbarW ) color = kGreen - 2;
+                if ( pr == _EE_tW ) color = kGreen + 2;
+                if ( pr == _EE_ttbar_Full ) color = kCyan + 2;
+                if ( pr == _EE_DYTauTau_Full ) color = kOrange - 5;
+
+                h_ee_invm[pr]->SetFillColor(color);
+                h_ee_invm[pr]->SetLineColor(color);
+                h_ee_invm[pr]->SetDirectory(0);
+                s_ee_invm->Add(h_ee_invm[pr]);
+            }
+
+//####################################### ALL AT ONCE ###############################################
+
+            TH1D* h_ee_Est_invm = ( (TH1D*)(h_EMu_data_invm->Clone( "h_ee_mass_Est" )) );
+            h_ee_Est_invm->Multiply( ((TH1D*)(s_ee_invm->GetStack()->Last())) );
+            h_ee_Est_invm->Divide( ((TH1D*)(s_EMu_invm->GetStack()->Last())) );
+            h_ee_Est_invm->SetDirectory(0);
+
+            f_NeeEst->cd();
+            h_ee_Est_invm->Write();
+
+            // Error calculation
+            Double_t emuErr_all = 0;
+            Double_t emuInt_all = h_EMu_data_invm->IntegralAndError( 1, h_EMu_data_invm->GetSize()-1, emuErr_all );
+            Double_t emuMCErr_all = 0;
+            Double_t emuMCInt_all = ( (TH1D*)(s_EMu_invm->GetStack()->Last()) )->IntegralAndError( 1, h_EMu_data_invm->GetSize()-1, emuMCErr_all);
+            Double_t eeMCErr_all = 0;
+            Double_t eeMCInt_all = ( (TH1D*)(s_ee_invm->GetStack()->Last()) )->IntegralAndError( 1, h_EMu_data_invm->GetSize()-1, eeMCErr_all );
+            Double_t nEEestErr_all = 0;
+            Double_t nEEestInt_all = h_ee_Est_invm->IntegralAndError( 1, h_ee_Est_invm->GetSize()-1, nEEestErr_all );
+
+            std::cout << setprecision(10) << "\neMu events: " << emuInt_all << " +- " << emuErr_all << " (Stat.)\n";
+            std::cout << "MC eMu events: " << emuMCInt_all << " +- " << emuMCErr_all << " (Stat.)\n";
+            std::cout << "MC ee events: " << eeMCInt_all << " +- " << eeMCErr_all << " (Stat.)\n";
+            std::cout << "ee events estimated from data: " << nEEestInt_all << " +- " << nEEestErr_all << " (Stat.)\n";
+
+//            std::cout << "ee " << h1_fullEE_invm->GetBinContent(1) << "+-" << h1_fullEE_invm->GetBinError(1) <<
+//                         "\nemu " << ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinContent(1) << "+-" <<
+//                         ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinError(1) <<
+//                         "\ndata " << h_EMu_data_invm->GetBinContent(1) << "+-" << h_EMu_data_invm->GetBinError(1) <<
+//                         "\nest " << h_ee_Est_invm->GetBinContent(1) << "+-" << h_ee_Est_invm->GetBinError(1) << endl << endl;
+
+//------------------------- Z PEAK ------------------------------------------------------------------------
+
+            Double_t MCZerr;
+            Double_t MCZint = ( (TH1D*)(s_ee_invm->GetStack()->Last()) )->IntegralAndError( 10, 23, MCZerr );
+            Double_t EMuZerr;
+            Double_t EMuZint = h_ee_Est_invm->IntegralAndError( 10, 23, EMuZerr );
+            std::cout << "MC events around Z: " << MCZint << " +- " << MCZerr << endl;
+            std::cout << "EMuEst events around Z: " << EMuZint << " +- " << EMuZerr << endl;
+
+//------------------------------ Drawing ----------------------------------------------------------
+
+            myRatioPlot_t *RP_invm = new myRatioPlot_t( "DataDriven_InvariantMass", s_ee_invm, h_ee_Est_invm );
+            RP_invm->SetPlots( "Dielectron invariant mass [GeV/c^{2}]", 15, 3000 );
+//            RP_invm->SetPlots( "Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000 );
+            RP_invm->SetLegend();
+            RP_invm->AddLegendEntry( h_ee_Est_invm, "Estimation", "lp" );
+//            RP_invm->AddLegendEntry( h_ee_Est_invm, "Ivertis", "lp" );
+            RP_invm->AddLegendEntry( h_ee_invm[_EE_ttbar_Full], "t#bar{t}", "f" );
+            RP_invm->AddLegendEntry( h_ee_invm[_EE_tbarW], "#bar{t}W", "f" );
+            RP_invm->AddLegendEntry( h_ee_invm[_EE_tW], "tW", "f" );
+            RP_invm->AddLegendEntry( h_ee_invm[_EE_DYTauTau_Full], "DY#rightarrow#tau#tau","f" );
+            RP_invm->AddLegendEntry( h_ee_invm[_EE_WW], "WW", "f" );
+            RP_invm->AddLegendEntry( h_ee_invm[_EE_WZ], "WZ", "f" );
+            RP_invm->AddLegendEntry( h_ee_invm[_EE_ZZ], "ZZ", "f" );
+            RP_invm->Draw( 4e-1, 2e4, 1 );
+
+//######################################## ONE BY ONE #################################################
+
+            TH1D *h_ee_Est_pr_invm[_EndOf_EMu];
+            myRatioPlot_t* RP_ee_invm_pr[_EndOf_EMu];
+            Double_t emuMCInt[_EndOf_EMu], eeMCInt[_EndOf_EMu], nEEestInt[_EndOf_EMu], emuMCEr[_EndOf_EMu], eeMCEr[_EndOf_EMu], nEEestEr[_EndOf_EMu];
+
+            for ( SelProc_t pr=_EE_tW; pr<_EE_VVnST; pr=next(pr) )
+            {
+                if ( pr>=_EndOf_EE_VVnST_Normal && pr<_EE_DYTauTau_Full ) continue;
+
+                Mgr.SetProc(pr);
+                h_ee_Est_pr_invm[pr] = ( (TH1D*)(h_ee_invm[pr]->Clone("h_ee_mass_Est_"+Mgr.Procname[pr])) );
+                h_ee_Est_pr_invm[pr]->Multiply( h_EMu_data_invm );
+                h_ee_Est_pr_invm[pr]->Divide( (TH1D*)(s_EMu_invm->GetStack()->Last()) );
+
+                h_ee_Est_pr_invm[pr]->SetDirectory(0);
+                h_ee_Est_pr_invm[pr]->Write();
+
+                emuMCEr[pr] = 0;
+                if ( pr <= _EE_WW ) // Matching EMu with EE processes
+                    emuMCInt[pr] = h_EMu_invm[pr+52]->IntegralAndError( 1, h_EMu_invm[pr+52]->GetSize()-1, emuMCEr[pr] );
+                else
+                    emuMCInt[pr] = h_EMu_invm[pr+34]->IntegralAndError( 1, h_EMu_invm[pr+34]->GetSize()-1, emuMCEr[pr] );
+                eeMCEr[pr] = 0;
+                eeMCInt[pr] = h_ee_invm[pr]->IntegralAndError( 1, h_ee_invm[pr]->GetSize()-1, eeMCEr[pr] );
+                nEEestEr[pr] = 0;
+                nEEestInt[pr] = h_ee_Est_pr_invm[pr]->IntegralAndError( 1, h_ee_Est_pr_invm[pr]->GetSize()-1, nEEestEr[pr] );
+
+                std::cout << Mgr.Procname[pr] << " MC eMu events: " << emuMCInt[pr] << " +- " << emuMCEr[pr] << " (Stat.)\n";
+                std::cout << Mgr.Procname[pr] << " MC ee events: " << eeMCInt[pr] << " +- " << eeMCEr[pr] << " (Stat.)\n";
+                std::cout << Mgr.Procname[pr] << " ee events estimated from data: " << nEEestInt[pr] << " +- " << nEEestEr[pr] << " (Stat.)\n\n";
+//------------------------------ Drawing ----------------------------------------------------------
+
+                RP_ee_invm_pr[pr] = new myRatioPlot_t( "h_mass_DataDriven_"+Mgr.Procname[pr], h_ee_invm[pr], h_ee_Est_pr_invm[pr] );
+                RP_ee_invm_pr[pr]->SetPlots( "Dielectron invariant mass [GeV/c^{2}]", 15, 3000 );
+//                RP_ee_invm_pr[pr]->SetPlots( "Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000 );
+                RP_ee_invm_pr[pr]->SetLegend( 0.6, 0.7 );
+
+                RP_ee_invm_pr[pr]->AddLegendEntry( h_ee_Est_pr_invm[pr], "Estimation", "lp" );
+//                RP_ee_invm_pr[pr]->AddLegendEntry( h_ee_Est_pr_invm[pr], "Ivertis", "lp" );
+
+                if ( pr==_EE_tW )
+                    RP_ee_invm_pr[pr]->AddLegendEntry( h_ee_invm[pr], "tW (MC)", "f" );
+                else if ( pr==_EE_tbarW )
+                    RP_ee_invm_pr[pr]->AddLegendEntry( h_ee_invm[pr], "#bar{t}W (MC)", "f" );
+                else if ( pr==_EE_ZZ )
+                    RP_ee_invm_pr[pr]->AddLegendEntry( h_ee_invm[pr], "ZZ (MC)", "f" );
+                else if ( pr==_EE_WZ )
+                    RP_ee_invm_pr[pr]->AddLegendEntry( h_ee_invm[pr], "WZ (MC)", "f" );
+                else if ( pr==_EE_WW )
+                    RP_ee_invm_pr[pr]->AddLegendEntry( h_ee_invm[pr], "WW (MC)", "f" );
+                else if ( pr==_EE_ttbar_Full )
+                    RP_ee_invm_pr[pr]->AddLegendEntry( h_ee_invm[pr], "t#bar{t} (MC)", "f" );
+                else if ( pr==_EE_DYTauTau_Full )
+                    RP_ee_invm_pr[pr]->AddLegendEntry( h_ee_invm[pr], "DY#rightarrow#tau#tau (MC)", "f" );
+                else
+                    RP_ee_invm_pr[pr]->AddLegendEntry( h_ee_invm[pr], Mgr.Procname[pr]+" (MC)", "f" );
+
+                RP_ee_invm_pr[pr]->Draw( 4e-1, 1e4, 1 );
+            }
+
+//################################## tW + tbarW #######################################################
+
+            THStack* s_tW_invm = new THStack("s_tW", "");
+            s_tW_invm->Add(h_ee_invm[_EE_tbarW]);
+            s_tW_invm->Add(h_ee_invm[_EE_tW]);
+            TH1D* h1_eeTW_invm_Est = ( (TH1D*)(h_ee_Est_pr_invm[_EE_tW]->Clone("h_mass_eeTW+TbarW_Est")) );
+            h1_eeTW_invm_Est->Add( h_ee_Est_pr_invm[_EE_tbarW] );
+            h1_eeTW_invm_Est->SetDirectory(0);
+            h1_eeTW_invm_Est->Write();
+
+            myRatioPlot_t* RP_tW = new myRatioPlot_t( "tWest", s_tW_invm, h1_eeTW_invm_Est );
+            RP_tW->SetPlots( "Dielectron invariant mass [GeV/c^{2}]", 15, 3000 );
+            RP_tW->SetLegend( 0.6, 0.6 );
+//            RP_tW->SetPlots( "Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000 );
+            RP_tW->AddLegendEntry( h1_eeTW_invm_Est, "Estimation", "lp" );
+//            RP_tW->AddLegendEntry( h1_eeTW_invm_Est, "Ivertis", "lp" );
+            RP_tW->AddLegendEntry( h_ee_invm[_EE_tW], "tW (MC)", "f" );
+            RP_tW->AddLegendEntry( h_ee_invm[_EE_tbarW], "#bar{t}W (MC)", "f" );
+            RP_tW->Draw( 4e-1, 1e4, 1 );
+
+//---------------------------------------------------------------------------------------------------
+
+            f_Bkg_EMu->Close();
+            if ( !f_Bkg_EMu->IsOpen() ) std::cout << "File Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root closed successfully\n";
+            f_Data_EMu->Close();
+            if ( !f_Data_EMu->IsOpen() ) std::cout << "File Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root closed successfully\n";
+            f_Bkg_ee->Close();
+            if ( !f_Bkg_ee->IsOpen() ) std::cout << "File Hist_"+Mgr.Procname[_EE_Bkg_Full]+".root closed successfully\n";
+            f_DY_ee->Close();
+            if( !f_DY_ee->IsOpen() ) std::cout << "File Hist_"+Mgr.Procname[_EE_DY_Full]+".root closed successfully.\n";
+            f_Data_ee->Close();
+            if ( !f_Data_ee->IsOpen() ) std::cout << "File Hist_"+Mgr.Procname[_EE_DoubleEG_Full]+".root closed successfully\n";
+            f_NeeEst->Close();
+            if ( !f_NeeEst->IsOpen() ) std::cout << "File EstBkg_EE.root closed successfully\n\n";
+
+}// End of ee_Est
+
+
+void MuMu_Est()
+{
+    LocalFileMgr Mgr;
+
+    Mgr.SetProc(_MuMu_Bkg_Full);
+    cout << "MuMu Hists location: " << Mgr.HistLocation << endl;
+
+    TFile* f_NMuMuEst = new TFile( Mgr.HistLocation+"EstBkg_MuMU.root", "RECREATE" );
+    if ( f_NMuMuEst->IsOpen() ) std::cout << "File EstBkg_MuMu.root opened successfully\n";
+    else { std::cout << "File EstBkg_MuMu.root was not opened\n"; return; }
+
+    TFile* f_Bkg_MuMu = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root", "READ" );
+    if ( f_Bkg_MuMu->IsOpen() ) std::cout << "File Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root opened successfully\n";
+    else { std::cout << "File Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root was not opened\n"; return; }
+
+    Mgr.SetProc(_MuMu_DY_Full);
+    TFile* f_DY_MuMu = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root", "READ" );
+    if ( f_DY_MuMu->IsOpen() ) std::cout << "File Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root opened successfully\n";
+    else { std::cout << "File Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root was not opened\n"; return; }
+
+    Mgr.SetProc(_EMu_Bkg_Full);
+    cout << "EMu Hists location: " << Mgr.HistLocation << endl;
+
+    TFile* f_Bkg_EMu = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root", "READ" );
+    if (f_Bkg_EMu->IsOpen()) std::cout << "File Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root opened successfully\n";
+    else { std::cout << "File Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root was not opened\n"; return; }
+
+    Mgr.SetProc(_EMu_SingleMuon_Full);
+    TFile* f_Data_EMu = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root", "READ" );
+    if (f_Data_EMu->IsOpen()) std::cout << "File Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root opened successfully\n";
+    else { std::cout << "File Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root was not opened\n"; return; }
+
+//********************************* E MU ***********************************************************
+
+//---------------------------------- MC -----------------------------------------------------------
+
+            TH1D* h_EMu_invm[_EndOf_EMu];
+            TH1D* h_EMu_SS_invm[_EndOf_EMu];
+            THStack* s_EMu_invm = new THStack( "s_emu_invm", "" );
+            THStack* s_EMu_SS_invm = new THStack( "s_emu_SS_invm", "" );
+            gStyle->SetOptStat(0);
+
+            Int_t isWJ = 0;
+//            isWJ = 1; // UNCOMMENT THIS IF YOU WANT TO INCLUDE W+JETS
+
+            for ( SelProc_t pr=_EMu_tW; pr<_EMu_VVnST; pr=next(pr) )
+            {
+                Mgr.SetProc(pr);
+                if ( pr>=_EndOf_EMu_MCbkg_Normal && pr<_EMu_DYTauTau_Full ) continue;
+                if ( isWJ == 0 && pr == _EMu_WJets ) continue;
+                f_Bkg_EMu->GetObject( "h_emu_mass_"+Mgr.Procname[pr], h_EMu_invm[pr] );
+
+                Color_t color = kBlack;
+                if ( pr == _EMu_WJets ) color = kRed - 2;
+                if ( pr == _EMu_WW ) color = kMagenta - 5;
+                if ( pr == _EMu_WZ ) color = kMagenta - 2;
+                if ( pr == _EMu_ZZ ) color = kMagenta - 6;
+                if ( pr == _EMu_tbarW ) color = kGreen - 2;
+                if ( pr == _EMu_tW ) color = kGreen + 2;
+                if ( pr == _EMu_ttbar_Full ) color = kCyan + 2;
+                if ( pr == _EMu_DYTauTau_Full ) color = kOrange - 5;
+
+                h_EMu_invm[pr]->SetFillColor(color);
+                h_EMu_invm[pr]->SetLineColor(color);
+                h_EMu_invm[pr]->SetDirectory(0);
+                s_EMu_invm->Add(h_EMu_invm[pr]);
+
+                f_Bkg_EMu->GetObject( "h_emuSS_mass_"+Mgr.Procname[pr], h_EMu_SS_invm[pr] );
+                h_EMu_SS_invm[pr]->SetFillColor(color);
+                h_EMu_SS_invm[pr]->SetLineColor(color);
+                h_EMu_SS_invm[pr]->SetDirectory(0);
+                s_EMu_SS_invm->Add(h_EMu_SS_invm[pr]);
+            }
+
+//----------------------------- Data -------------------------------------------------------------
+
+            Mgr.SetProc(_EMu_SingleMuon_Full);
+            TH1D* h_EMu_data_invm;
+            f_Data_EMu->GetObject( "h_emu_mass_"+Mgr.Procname[_EMu_SingleMuon_Full], h_EMu_data_invm );
+            h_EMu_data_invm->SetLineColorAlpha(kBlack, 0);
+            h_EMu_data_invm->SetMarkerStyle(kFullDotLarge);
+            h_EMu_data_invm->SetMarkerColor(kBlack);
+            h_EMu_data_invm->SetDirectory(0);
+
+            TH1D* h_EMu_SS_data_invm;
+            f_Data_EMu->GetObject( "h_emuSS_mass_"+Mgr.Procname[_EMu_SingleMuon_Full], h_EMu_SS_data_invm );
+            h_EMu_SS_data_invm->SetLineColorAlpha(kBlack, 0);
+            h_EMu_SS_data_invm->SetMarkerStyle(kFullDotLarge);
+            h_EMu_SS_data_invm->SetMarkerColor(kBlack);
+            h_EMu_SS_data_invm->SetDirectory(0);
+
+//------------------------------ Est EMu QCD events ---------------------------------------------------
+
+            TH1D* h_EMu_QCD_invm = ( (TH1D*)(h_EMu_SS_data_invm->Clone( "h_emu_mass_QCD" )) );
+            h_EMu_QCD_invm->Add( ((TH1D*)(s_EMu_SS_invm->GetStack()->Last())), -1 );
+            const double RR = 0.57147108645;
+            h_EMu_QCD_invm->Scale(1/RR);
+
+            h_EMu_QCD_invm->SetFillColor(kRed+3);
+            h_EMu_QCD_invm->SetLineColor(kRed+3);
+            h_EMu_QCD_invm->SetDirectory(0);
+
+            THStack* s_EMu_wQCD_invm = new THStack( "s_emu_wQCD_invm", "" );
+            s_EMu_wQCD_invm->Add(h_EMu_QCD_invm);
+            for ( SelProc_t pr=_EMu_tW; pr<_EMu_VVnST; pr=next(pr) )
+            {
+                Mgr.SetProc(pr);
+                if ( pr>=_EndOf_EMu_MCbkg_Normal && pr<_EMu_DYTauTau_Full ) continue;
+                if ( isWJ == 0 && pr == _EMu_WJets ) continue;
+                s_EMu_wQCD_invm->Add(h_EMu_invm[pr]);
+            }
+            myRatioPlot_t* RP_EMu_wQCD_invm = new myRatioPlot_t( "EMu_wQCD_mass", s_EMu_wQCD_invm, h_EMu_data_invm );
+            RP_EMu_wQCD_invm->SetPlots( "e#mu mass [GeV/c^{2}]", 15, 3000 );
+            RP_EMu_wQCD_invm->SetLegend();
+//            RP_EMu_wQCD_invm->SetPlots( "e#mu mas#dot{e} [GeV/c^{2}]", 15, 3000 );
+            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_data_invm, "Data", "lp" );
+//            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_data_invm, "Matavimas", "lp" );
+            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_invm[_EMu_ttbar_Full], "t#bar{t}", "f" );
+            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_invm[_EMu_tbarW], "#bar{t}W", "f" );
+            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_invm[_EMu_tW], "tW", "f" );
+            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_invm[_EMu_DYTauTau_Full], "DY#rightarrow#tau#tau","f" );
+            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_invm[_EMu_WW], "WW", "f" );
+            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_invm[_EMu_WZ], "WZ", "f" );
+            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_invm[_EMu_ZZ], "ZZ", "f" );
+            RP_EMu_wQCD_invm->AddLegendEntry( h_EMu_QCD_invm, "QCD", "f" );
+            RP_EMu_wQCD_invm->Draw( 4e-1, 2e4, 1 );
+
+            h_EMu_data_invm->Add( h_EMu_QCD_invm, -1 );
+
+//************************************ MuMu *********************************************************
+
+            TH1D* h_MuMu_invm[_EndOf_EMu];
+            THStack* s_MuMu_invm = new THStack( "s_MuMu_invm", "" );
+
+            for ( SelProc_t pr=_MuMu_tW; pr<_MuMu_VVnST; pr=next(pr) )
+            {
+                Mgr.SetProc(pr);
+                if ( pr>=_EndOf_MuMu_VVnST_Normal && pr<_MuMu_DYTauTau_Full ) continue;
+
+                f_Bkg_MuMu->GetObject( "h_mass_"+Mgr.Procname[pr], h_MuMu_invm[pr] );
+
+                Color_t color = kBlack;
+                if ( pr == _MuMu_WW ) color = kMagenta - 5;
+                if ( pr == _MuMu_WZ ) color = kMagenta - 2;
+                if ( pr == _MuMu_ZZ ) color = kMagenta - 6;
+                if ( pr == _MuMu_tbarW ) color = kGreen - 2;
+                if ( pr == _MuMu_tW ) color = kGreen + 2;
+                if ( pr == _MuMu_ttbar_Full ) color = kCyan + 2;
+                if ( pr == _MuMu_DYTauTau_Full ) color = kOrange - 5;
+
+                h_MuMu_invm[pr]->SetFillColor(color);
+                h_MuMu_invm[pr]->SetLineColor(color);
+                h_MuMu_invm[pr]->SetDirectory(0);
+                s_MuMu_invm->Add(h_MuMu_invm[pr]);
+            }
+
+//####################################### ALL AT ONCE ###############################################
+
+            TH1D* h_MuMu_Est_invm = ( (TH1D*)(h_EMu_data_invm->Clone( "h_MuMu_mass_Est" )) );
+            h_MuMu_Est_invm->Multiply( ((TH1D*)(s_MuMu_invm->GetStack()->Last())) );
+            h_MuMu_Est_invm->Divide( ((TH1D*)(s_EMu_invm->GetStack()->Last())) );
+            h_MuMu_Est_invm->SetDirectory(0);
+
+            f_NMuMuEst->cd();
+            h_MuMu_Est_invm->Write();
+
+            // Error calculation
+            Double_t emuErr_all = 0;
+            Double_t emuInt_all = h_EMu_data_invm->IntegralAndError( 1, h_EMu_data_invm->GetSize()-1, emuErr_all );
+            Double_t emuMCErr_all = 0;
+            Double_t emuMCInt_all = ( (TH1D*)(s_EMu_invm->GetStack()->Last()) )->IntegralAndError( 1, h_EMu_data_invm->GetSize()-1, emuMCErr_all);
+            Double_t MuMuMCErr_all = 0;
+            Double_t MuMuMCInt_all = ( (TH1D*)(s_MuMu_invm->GetStack()->Last()) )->IntegralAndError( 1, h_EMu_data_invm->GetSize()-1, MuMuMCErr_all );
+            Double_t MuMu_estErr_all = 0;
+            Double_t MuMu_estInt_all = h_MuMu_Est_invm->IntegralAndError( 1, h_MuMu_Est_invm->GetSize()-1, MuMu_estErr_all );
+
+            std::cout << setprecision(10) << "\neMu events: " << emuInt_all << " +- " << emuErr_all << " (Stat.)\n";
+            std::cout << "MC EMu events: " << emuMCInt_all << " +- " << emuMCErr_all << " (Stat.)\n";
+            std::cout << "MC MuMu events: " << MuMuMCInt_all << " +- " << MuMuMCErr_all << " (Stat.)\n";
+            std::cout << "MuMu events estimated from data: " << MuMu_estInt_all << " +- " << MuMu_estErr_all << " (Stat.)\n";
+
+//            std::cout << "ee " << h1_fullEE_invm->GetBinContent(1) << "+-" << h1_fullEE_invm->GetBinError(1) <<
+//                         "\nemu " << ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinContent(1) << "+-" <<
+//                         ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinError(1) <<
+//                         "\ndata " << h_EMu_data_invm->GetBinContent(1) << "+-" << h_EMu_data_invm->GetBinError(1) <<
+//                         "\nest " << h_ee_Est_invm->GetBinContent(1) << "+-" << h_ee_Est_invm->GetBinError(1) << endl << endl;
+
+//------------------------- Z PEAK ------------------------------------------------------------------------
+
+            Double_t MCZerr;
+            Double_t MCZint = ( (TH1D*)(s_MuMu_invm->GetStack()->Last()) )->IntegralAndError( 10, 23, MCZerr );
+            Double_t EMuZerr;
+            Double_t EMuZint = h_MuMu_Est_invm->IntegralAndError( 10, 23, EMuZerr );
+            std::cout << "MC events around Z: " << MCZint << " +- " << MCZerr << endl;
+            std::cout << "EMuEst events around Z: " << EMuZint << " +- " << EMuZerr << endl;
+
+//------------------------------ Drawing ----------------------------------------------------------
+
+            myRatioPlot_t *RP_invm = new myRatioPlot_t( "DataDriven_InvariantMass", s_MuMu_invm, h_MuMu_Est_invm );
+            RP_invm->SetPlots( "Dimuon invariant mass [GeV/c^{2}]", 15, 3000 );
+//            RP_invm->SetPlots( "Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000 );
+            RP_invm->SetLegend();
+            RP_invm->AddLegendEntry( h_MuMu_Est_invm, "Estimation", "lp" );
+//            RP_invm->AddLegendEntry( h_MuMu_Est_invm, "Ivertis", "lp" );
+            RP_invm->AddLegendEntry( h_MuMu_invm[_MuMu_ttbar_Full], "t#bar{t}", "f" );
+            RP_invm->AddLegendEntry( h_MuMu_invm[_MuMu_tbarW], "#bar{t}W", "f" );
+            RP_invm->AddLegendEntry( h_MuMu_invm[_MuMu_tW], "tW", "f" );
+            RP_invm->AddLegendEntry( h_MuMu_invm[_MuMu_DYTauTau_Full], "DY#rightarrow#tau#tau","f" );
+            RP_invm->AddLegendEntry( h_MuMu_invm[_MuMu_WW], "WW", "f" );
+            RP_invm->AddLegendEntry( h_MuMu_invm[_MuMu_WZ], "WZ", "f" );
+            RP_invm->AddLegendEntry( h_MuMu_invm[_MuMu_ZZ], "ZZ", "f" );
+            RP_invm->Draw( 4e-1, 2e4, 1 );
+
+//######################################## ONE BY ONE #################################################
+
+            TH1D *h_MuMu_Est_pr_invm[_EndOf_EMu];
+            myRatioPlot_t* RP_MuMu_invm_pr[_EndOf_EMu];
+            Double_t emuMCInt[_EndOf_EMu], MuMuMCInt[_EndOf_EMu], MuMu_estInt[_EndOf_EMu], emuMCEr[_EndOf_EMu], MuMuMCEr[_EndOf_EMu], MuMu_estEr[_EndOf_EMu];
+
+            for ( SelProc_t pr=_MuMu_tW; pr<_MuMu_VVnST; pr=next(pr) )
+            {
+                if ( pr>=_EndOf_MuMu_VVnST_Normal && pr<_MuMu_DYTauTau_Full ) continue;
+
+                Mgr.SetProc(pr);
+                h_MuMu_Est_pr_invm[pr] = ( (TH1D*)(h_MuMu_invm[pr]->Clone("h_MuMu_mass_Est_"+Mgr.Procname[pr])) );
+                h_MuMu_Est_pr_invm[pr]->Multiply( h_EMu_data_invm );
+                h_MuMu_Est_pr_invm[pr]->Divide( (TH1D*)(s_EMu_invm->GetStack()->Last()) );
+
+                h_MuMu_Est_pr_invm[pr]->SetDirectory(0);
+                h_MuMu_Est_pr_invm[pr]->Write();
+
+                emuMCEr[pr] = 0;
+                if ( pr <= _MuMu_WW ) // Matching EMu with EE processes
+                    emuMCInt[pr] = h_EMu_invm[pr+111]->IntegralAndError( 1, h_EMu_invm[pr+111]->GetSize()-1, emuMCEr[pr] );
+                else
+                    emuMCInt[pr] = h_EMu_invm[pr+97]->IntegralAndError( 1, h_EMu_invm[pr+97]->GetSize()-1, emuMCEr[pr] );
+                MuMuMCEr[pr] = 0;
+                MuMuMCInt[pr] = h_MuMu_invm[pr]->IntegralAndError( 1, h_MuMu_invm[pr]->GetSize()-1, MuMuMCEr[pr] );
+                MuMu_estEr[pr] = 0;
+                MuMu_estInt[pr] = h_MuMu_Est_pr_invm[pr]->IntegralAndError( 1, h_MuMu_Est_pr_invm[pr]->GetSize()-1, MuMu_estEr[pr] );
+
+                std::cout << Mgr.Procname[pr] << " MC EMu events: " << emuMCInt[pr] << " +- " << emuMCEr[pr] << " (Stat.)\n";
+                std::cout << Mgr.Procname[pr] << " MC MuMu events: " << MuMuMCInt[pr] << " +- " << MuMuMCEr[pr] << " (Stat.)\n";
+                std::cout << Mgr.Procname[pr] << " MuMu events estimated from data: " << MuMu_estInt[pr] << " +- " << MuMu_estEr[pr] << " (Stat.)\n\n";
+//------------------------------ Drawing ----------------------------------------------------------
+
+                RP_MuMu_invm_pr[pr] = new myRatioPlot_t( "h_mass_DataDriven_"+Mgr.Procname[pr], h_MuMu_invm[pr], h_MuMu_Est_pr_invm[pr] );
+                RP_MuMu_invm_pr[pr]->SetPlots( "Dimuon invariant mass [GeV/c^{2}]", 15, 3000 );
+//                RP_MuMu_invm_pr[pr]->SetPlots( "Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000 );
+                RP_MuMu_invm_pr[pr]->SetLegend( 0.6, 0.7 );
+
+                RP_MuMu_invm_pr[pr]->AddLegendEntry( h_MuMu_Est_pr_invm[pr], "Estimation", "lp" );
+//                RP_MuMu_invm_pr[pr]->AddLegendEntry( h_MuMu_Est_pr_invm[pr], "Ivertis", "lp" );
+
+                if ( pr==_MuMu_tW )
+                    RP_MuMu_invm_pr[pr]->AddLegendEntry( h_MuMu_invm[pr], "tW (MC)", "f" );
+                else if ( pr==_MuMu_tbarW )
+                    RP_MuMu_invm_pr[pr]->AddLegendEntry( h_MuMu_invm[pr], "#bar{t}W (MC)", "f" );
+                else if ( pr==_MuMu_ZZ )
+                    RP_MuMu_invm_pr[pr]->AddLegendEntry( h_MuMu_invm[pr], "ZZ (MC)", "f" );
+                else if ( pr==_MuMu_WZ )
+                    RP_MuMu_invm_pr[pr]->AddLegendEntry( h_MuMu_invm[pr], "WZ (MC)", "f" );
+                else if ( pr==_MuMu_WW )
+                    RP_MuMu_invm_pr[pr]->AddLegendEntry( h_MuMu_invm[pr], "WW (MC)", "f" );
+                else if ( pr==_MuMu_ttbar_Full )
+                    RP_MuMu_invm_pr[pr]->AddLegendEntry( h_MuMu_invm[pr], "t#bar{t} (MC)", "f" );
+                else if ( pr==_MuMu_DYTauTau_Full )
+                    RP_MuMu_invm_pr[pr]->AddLegendEntry( h_MuMu_invm[pr], "DY#rightarrow#tau#tau (MC)", "f" );
+                else
+                    RP_MuMu_invm_pr[pr]->AddLegendEntry( h_MuMu_invm[pr], Mgr.Procname[pr]+" (MC)", "f" );
+
+                RP_MuMu_invm_pr[pr]->Draw( 4e-1, 1e4, 1 );
+            }
+
+//################################## tW + tbarW #######################################################
+
+            THStack* s_tW_invm = new THStack("s_tW", "");
+            s_tW_invm->Add(h_MuMu_invm[_MuMu_tbarW]);
+            s_tW_invm->Add(h_MuMu_invm[_MuMu_tW]);
+            TH1D* h1_MuMuTW_invm_Est = ( (TH1D*)(h_MuMu_Est_pr_invm[_MuMu_tW]->Clone("h_mass_MuMuTW+TbarW_Est")) );
+            h1_MuMuTW_invm_Est->Add( h_MuMu_Est_pr_invm[_MuMu_tbarW] );
+            h1_MuMuTW_invm_Est->SetDirectory(0);
+            h1_MuMuTW_invm_Est->Write();
+
+            myRatioPlot_t* RP_tW = new myRatioPlot_t( "tWest", s_tW_invm, h1_MuMuTW_invm_Est );
+            RP_tW->SetPlots( "Dimuon invariant mass [GeV/c^{2}]", 15, 3000 );
+//            RP_tW->SetPlots( "Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000 );
+            RP_tW->SetLegend( 0.6, 0.6 );
+            RP_tW->AddLegendEntry( h1_MuMuTW_invm_Est, "Estimation", "lp" );
+//            RP_tW->AddLegendEntry( h1_MuMuTW_invm_Est, "Ivertis", "lp" );
+            RP_tW->AddLegendEntry( h_MuMu_invm[_MuMu_tW], "tW (MC)", "f" );
+            RP_tW->AddLegendEntry( h_MuMu_invm[_MuMu_tbarW], "#bar{t}W (MC)", "f" );
+            RP_tW->Draw( 4e-1, 1e4, 1 );
+
+//---------------------------------------------------------------------------------------------------
+
+            f_Bkg_EMu->Close();
+            if ( !f_Bkg_EMu->IsOpen() ) std::cout << "File Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root closed successfully\n";
+            f_Data_EMu->Close();
+            if ( !f_Data_EMu->IsOpen() ) std::cout << "File Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root closed successfully\n";
+            f_Bkg_MuMu->Close();
+            if ( !f_Bkg_MuMu->IsOpen() ) std::cout << "File Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root closed successfully\n";
+            f_DY_MuMu->Close();
+            if( !f_DY_MuMu->IsOpen() ) std::cout << "File Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root closed successfully.\n";
+            f_NMuMuEst->Close();
+            if ( !f_NMuMuEst->IsOpen() ) std::cout << "File EstBkg_MuMu.root closed successfully\n\n";
+}// End of MuMu_Est
