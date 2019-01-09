@@ -111,6 +111,7 @@ Darbo vadovas & dr. Andrius Juodagalvis\tabularnewline[0.5cm]
 \clearpage
 
 \section*{Įvadas} \addcontentsline{toc}{section}{Įvadas}
+
 Dalelių susidūrimai, vykdomi CERN Didžiajame hadronų greitintuve (angl.\
 \textit{Large Hadron Collider} -- LHC), suteikia galimybę vis giliau pažvelgti į mažiausius
 Visatos statybinius blokus bei tarp jų vykstančias sąveikas, taip pat ieškoti atsakymų
@@ -150,11 +151,19 @@ CERN CMS detektoriaus užregistruoti $13$ TeV energijos protonų susidūrimų du
 
 \section{Drell-Yan procesas ir jo tyrimas}
 
+Šiame skyriuje bus trumpai pristatomas Drell-Yan procesas, jo svarba, su kokiomis fizikinėmis
+sąvokomis ir dydžiais dažnai susiduriama, kai kalbama apie šį procesą.
+Taip pat bus pasakojama apie eksperimentinius didelių energijų fizikos tyrimus, Didįjį hadronų
+gretintuvą ir Kompaktiškąjį miuonų solenoidą, bei apie esmines Kompaktiškojo miuonų
+solenoido eksperimente vykdomų fizikinių procesų (tokių, kaip Drell-Yan procesas) tyrimų
+specifikas, supažindinama su didelių energijų fizikos duomenų analizės pagrindais.
+
 
 \subsection{Protono sandara ir Drell-Yan procesas}
 
 
 \subsubsection{Partonų pasiskirstymo funkcijos}
+
 Teorinėje elementariųjų dalelių fizikoje, protonų, kaip ir kitų hadronų, sandara aprašoma
 partonų pasiskirstymo funkcijomis. Tikslus šių funkcijų žinojimas yra ypatingai svarbus
 norint padaryti bet kokius teorinius hadronų greitintuvuose vykstančių įvykių įverčius.
@@ -185,21 +194,24 @@ tyrimas.
 \end{minipage}
 \vspace{-0.3cm}
 \captionof{figure}{ \label{fig:PDFs}
-NNPDF partonų pasiskirstymo funkcijų pavyzdžiai \cite{NNPDF}. Kairėje pusėje matomos protono partonų pasiskirstymo funkcijos, kai kvadratinė energija $\mu^{2}=10 \; \mathrm{GeV}^{2}$ o dešinėje -- kai $\mu^{2}=10000 \; \mathrm{GeV}^{2}$. Ant abscisių ašių vaizduojama partono turima protono impulso dalis $x$, o ant ordinačių ašių -- tikimybės tankio vertė $f(x,\; \mu)$, padauginta iš $x$.
+NNPDF grupės pateikiamos protono partonų pasiskirstymo funkcijos prie skirtingų susidūrimų energijų \cite{NNPDF}.
+Kairėje -- $Q^{2}=10 \; \mathrm{GeV}^{2}$, dešinėje -- $Q^{2}=10000 \; \mathrm{GeV}^{2}$.
+Ant horizontalios ašies vaizduojama protono impulso dalis $x$, o ant vertikalios -- tikimybės tankio $f(x,\, Q^2)$,
+ir $x$ sandauga.
 }
 \end{centering}
 
 
 \subsubsection{Drell-Yan procesas}
+
 Drell-Yan procesas -- tai toks procesas, kai anihiliavus kvarkui ir antikvarkui (protonų susidūrimo
 metu) sukuriama leptono-antileptono pora.
 Šis procesas vyksta apsikeičiant $Z$ bozonu arba
 virtualiu fotonu per s-kanalą:
 
 \begin{equation*}
-	q\bar{q} \rightarrow Z/ \gamma^{*} \rightarrow l^{+}l^{-}
+	q\bar{q} \rightarrow Z/ \gamma^{*} \rightarrow l^{+}l^{-} \; .
 \end{equation*}
-
 Toliau bus žymima $\DY \! \rightarrow \! l^{+}l^{-}$. Drell-Yan proceso Feinmano diagrama
 pavaizduota \ref{fig:DYfeyn} paveiksle.
 
@@ -208,7 +220,7 @@ metais, kuriuo S.D.\ Drell ir T.M.\ Yan bandė apibūdinti leptonų-antileptonų
 hadronų susidūrimų metu \cite{DYoriginal}.
 
 Šiais laikais Drell-Yan procesas naudojantis pertubacine kvantine chromodinamika teoretikų
-gali būti aprašomas trečios eilės perturbacijų tikslumu (angl. \textit{next-to-next-to-leading
+gali būti aprašomas trečios eilės perturbacijų tikslumu (angl.\ \textit{next-to-next-to-leading
 order} -- NNLO).
 Tikslūs eksperimentiniai Drell-Yan proceso diferencialinio skerspjūvio matavimai naudojami
 ne tik partonų pasiskirstymo funkcijoms tikslinti, bet taip pat ir perturbacinės kvantinės
@@ -254,6 +266,7 @@ Nuo masės priklausančio diferencialinio skerspjūvio pavyzdys pateikiamas \ref
 
 Invariantinė masė -- tai masė, kuri nepriklauso nuo atskaitos sistemos.
 Skaičiuojant vienos dalelės invariantinę masę, ji sutampa su jos rimties mase:
+
 \begin{equation}
 	m_{0}^{2} = E^{2} - | \vec{p}\, |^{2} \; .
 	\label{eq:invm}
@@ -286,11 +299,10 @@ Būtent taip yra skaičiuojama Drell-Yan proceso metu susidariusių dviejų lept
 \includegraphics[scale=0.6]{DYeeCS.PNG}
 \vspace{-0.2cm}
 \caption{\label{fig:DYeeCS}
-Drell-Yan proceso diferencialinis sklaidos skerspjūvis, priklausantis nuo leptonų poros invariantinės
-masės.
+Nuo leptonų poros invariantinės masės priklausantis Drell-Yan proceso diferencialinis sklaidos skerspjūvis.
 Protonų susidūrimo energija -- $8$ TeV.
-Juodi taškai žymi eksperimentinio matavimo rezultatus, o mėlyna ištisinė linija -- teoriškai numatytą
-rezultatą \cite{DYpic}.
+Mėlyna ištisinė linija grafike žymi teorinį įvertį, o taškai su neapibrėžtumus žyminčiais brūšniais --
+eksperimentinį rezultatą \cite{DYpic}.
 % GALIMA ĮDĖTI ŠITĄ https://cds.cern.ch/record/2648776/files/SMP-17-001-paper-v14.pdf
 % 13 TEV, BET ČIA DRAFT VERSIJA
 }
@@ -309,24 +321,20 @@ Sparta yra žymima raide $y$ ir apibrėžiama tokia formule:
 	y = \frac{1}{2} \ln{ \left( \frac{E+p_{z}c}{E-p_{z}c} \right) } \; \mathrm{,}
 	\label{eq:rapidity}
 \end{equation}
-
 čia $E$ -- dalelės energija, $p_{z}$ -- dalelės impulso projekciją į $z$ ašį, $c$ -- šviesos greitis.
-
 Kai dalelė juda reliatyvistiniais greičiais ir jos rimties energija, lyginant su pilnutine energija yra labai
 mažas dydis, tai pilnutinę energiją galima aproksimuoti kinetine energija:
 
 \begin{equation}
-	E^2 = m^2c^4 + |\vec{p}|^2c^2 \approx |\vec{p}|^2c^2
+	E^2 = m^2c^4 + |\vec{p}|^2c^2 \approx |\vec{p}|^2c^2 \; .
 	\label{eq:relEnergy}
 \end{equation}
-
 Galima parodyti, kad tokiu atveju spartos apibrėžimas supaprastėja iki tokios išraiškos:
 
 \begin{equation}
 	y_{v\rightarrow c} = -\ln \left( \tan \frac{\theta}{2} \right) = \eta \; \mathrm{,}
 	\label{eq:pseudorapidity}
 \end{equation}
-
 Tokia spartos aproksimacija vadinama pseudosparta ir žymima raide $\eta$.
 Taip pat čia $\theta$ -- kampas, kurį sudaro dalelės impulso vektorius su $z$ ašimi.
 Šiuolaikiniuose dalelių greitintuvuose, kai dalelės juda beveik šviesos greičiu ir kai tiksliai
@@ -337,6 +345,7 @@ begalybei (arba minus begalybei, kai $\theta=\ang{180}$).
 
 
 \subsubsection*{Skersinis impulsas ir skersinė energija}
+
 Kaip kątik buvo paminėta, dalelių detektoriui esant cilindriškai išdėstytam aplink protonų spindulį,
 dalelės impulso projekcijos į $z$ ašį nustatyti yra neįmanoma.
 Todėl šiuolaikiniuose dalelių detektoriuiose, tokiuose kaip CERN CMS yra matuojama tik statmena $z$
@@ -437,7 +446,7 @@ vieno viršūninio kvarko ir $W$ bozono įvykiai ($tW$), $W$ bozono ir čiurkšl
 bei stipriosios sąveikos nulemti keletos čiurkšlių įvykiai (sutrumpintai vadinami $\QCD$).
 Paskutiniai du iš išvarintų triukšmų čia yra todėl, kad čiurkšlė gali būti klaidingai atpažinta.
 
-\subsubsection{Įvykių skaičiaus įvertinimas}
+\subsubsection{Įvykių skaičiaus įvertinimas} \label{sec:estimation}
 
 Kaip buvo rašoma ankstesniame skyrelyje, norint palyginti eksperimento metu užfiksuotą
 statistiką su teoriškai numatomu rezultatu, svarbu yra įvertinti, kaip smarkiai užregistruoti
@@ -482,13 +491,18 @@ CERN Kompaktiškojo miuonų solenoido (angl.\ \textit{Compact Muon Solenoid} -- 
 	\textsc{Pythia} paskirtis labai plati -- ji tinkama modeliuoti praktiškai bet kokiems žinomiems protonų
 	susidūrimo metu vykstantiems procesams, joje yra įrašyta daug skiritngų teorinių modelių,
 	partonų pasiskirstymo funkcijų.
-	Pagrindinis \textsc{Pythia} trūkumas -- įvykiai modeliuojami tik nulinės eilės (angl.\
+	Pagrindinis \textsc{Pythia} trūkumas -- įvykiai modeliuojami tik pirmos eilės (angl.\
 	\textit{leading order} -- LO) perturbacijų tikslumu \cite{pythia82}.
+	
+	\item \ttt{aMC@NLO} -- tai plačios paskirties Python pagrindo programinės įrangos rinkinys,
+	leidžiantis skaičiuoti reakcijų skerspjūvius, modeliuoti didelių energijų dalelių susidūrimus ir pan.
+	Kaip galima suprasti iš pavadinimo, naudojantis šiuo programiniu paketu galima modeliuoti įvykius
+	iki antros eilės perturbacijų (angl.\ \textit{next-to-leading order} -- NLO) tikslumo \cite{amcatnlo}.
 	
 	\item FEWZ -- tai Fortran pagrindo programinis paketas, skirtas modeliuoti  $W$ ir $Z$
 	bozonų susidarymą hadronų susidūrimo metu, taip pat šių bozonų skilimus į leptonus ir pan.
 	FEWZ taip pat palaiko nemažai skirtingų partonų pasiskirstymo funkcijų bei modeliuoja įvykius
-	antros eilės perturbacijų tikslumu \cite{fewz}.
+	trečios eilės perturbacijų tikslumu \cite{fewz}.
 	
 	\item \textsc{Geant4} -- tai C++ pagrintdo programinis paketas, skirtas modeliuoti dalelių sąveiką
 	su medžiaga.
@@ -575,9 +589,9 @@ modeliuotuose duomenyse, galime įvertinti (angl.\ \textit{estimate}), koks tur�
 anksčiau minėtais procesais susijusių triukšmo įvykių skaičius $ee$ duomenyse:
 
 \begin{equation}
-	N_{t\bar{t}}^{ee , \; \mathrm{Est}} =
-	\frac{ N_{t\bar{t}}^{ee , \; \mathrm{MC}} }{ N_{t\bar{t}}^{e\mu , \; \mathrm{MC}} }
-	\cdot N_{t\bar{t}}^{e\mu , \; \mathrm{Data}} \; .
+	N_{ee}^{t\bar{t} , \; \mathrm{Est}} =
+	\frac{ N_{ee}^{t\bar{t} , \; \mathrm{MC}} }{ N_{e\mu}^{t\bar{t} , \; \mathrm{MC}} }
+	\cdot N_{e\mu}^{t\bar{t} , \; \mathrm{Data}} \; .
 	\label{eq:emuMethod}
 \end{equation}
 
@@ -886,7 +900,7 @@ $\mumu$ galutinių būsenų triukšmo įvykių skaičių, buvo atrenkami šiek t
 
 Dviejų elektronų galutinės būsenos įvykiams buvo taikomi šie atrankos kriterijai:
 \begin{enumerate}
-	\item Aktyvuotas ankstesniame skyrelyje minėtas dviejų elektronų trigeris;
+	\item Aktyvuotas ankstesniame skyrelyje minėtas dviejų elektronų trigeris.
 	\item Užregistruoti lygiai du elektronai, atitinkantys \textit{MediumID} reikalavimus.
 	\item Abu užregistruoti elektronai turi būti pataikę į elektromagnetinio kalorimetro segmentą, kurio
 	pseudospartos absoliučioji vertė neviršija $2.4$.
@@ -894,12 +908,12 @@ Dviejų elektronų galutinės būsenos įvykiams buvo taikomi šie atrankos krit
 	antgalio dalies sankirtą, kurioje eina detektoriaus elektronikos laidai, sumažinantys detektavimo efektyvumą
 	toje srityje. Ši vieta yra $1.4442<|\eta_{SC}|<1.566$ ruože.
 	\item Greitesniojo iš dviejų užregistruotų elektronų skersinis impulsas turėtų būti didesnis už $28$ GeV, o
-	lėtesniojo -- didesnis už $17$ GeV
+	lėtesniojo -- didesnis už $17$ GeV.
 \end{enumerate}
 
 Dviejų miuonų galutinės būsenos įvykiams buvo taikomi tokie atrankos reikalavimai:
 \begin{enumerate}
-	\item Aktyvuotas ankstesniame skyrelyje minėtas vieno miuono trigeris;
+	\item Aktyvuotas ankstesniame skyrelyje minėtas vieno miuono trigeris.
 	\item Užregistruoti bent du miuonai, atitinkantys \textit{TightID} reikalavimus. Vienas iš šių miuonų turi būti
 	tas, kuris aktyvavo	minėtą trigerį.
 	\item Miuonų atskirumas, apskaičiuotas naudojantis dalelių srauto algoritmu turi neviršyti $15\%$ miuonų skersinio
@@ -978,9 +992,18 @@ Galima pastebėti, kad, jeigu visi modeliuoti įvykiai turėtų vienetinius svor
 šakniai iš įvykių skaičiaus, kaip ir skaičiuojant neapibrėžtumą eksperimentiniams įvykiams.
 
 \clearpage
-\section{Drell-Yan proceso analizė naudojant 2016 metų CERN CMS duomenis}
+\section{Drell-Yan proceso analizė naudojant 2016 metų CMS duomenis}
+
+Šiame skyriuje trumpai pristatomi pagrindiniai darbo etapai, aptariami naudoti metodai, papasakojama, kodėl jie buvo pasirinkti.
 
 \subsection{Matavimo ir modeliavimo palyginimas}
+
+Norint įvertinti, ar $\emu$ metodo taikymas Drell-Yan proceso tyrime yra naudingas, pirmiausia reikia patikritnti, kaip
+gerai eksperimentinius duomenis galima apibūdinti naudojantis vien tik sumodeliuotu įverčiu.
+Norint palyginti eksperimentinius ir modeliuotus duomenis pirmiausia reikia atlikti įvykių atranką, tada modeliuotus
+įvykius sunormuoti, bei pritaikyti reikalingas korekcijas.
+Tai atlikus galima eksperimentinį ir modeliuotą rezultatą atvaizduoti viename grafike ir įvertinti, ar modeliuotas
+rezultatas yra pakankamai tikslus, ar vertėtų naudoti matavimu grįstus metotus įvertinti triukšmo įvykių skaičiui.
 
 \subsubsection{Įvykių atranka}
 
@@ -1001,8 +1024,8 @@ per $2$-$3$ minutes.
 \subsubsection{Eksperimento ir modeliavimo sąlygų nesutapimai}\label{sec:SFs}
 
 Norint palyginti matavimą su modeliavimu svarbu yra ne tik sunormuoti modeliuotus įvykius pagal išmatuotą integruotąjį šviesį,
-bet ir atsižvelgti į tai, kad pasitaiko nesutapimų tarp matavimo ir modeliavimo sąlygų, bei įvertinti jų įtaką atranką praeinančių
-įvykių skaičiui, o taip pat ir kai kuriems įvykio metu užregistruotiems dydžiams.
+naudojantis \eqref{eq:NLOweight}, bet ir atsižvelgti į tai, kad pasitaiko nesutapimų tarp matavimo ir modeliavimo sąlygų,
+bei įvertinti jų įtaką atranką praeinančių įvykių skaičiui, o taip pat ir kai kuriems įvykio metu užregistruotiems dydžiams.
 Tai padaroma pritaikant įvairias pataisas.
 
 Šiame darbe buvo naudojamos pataisos išmatuotoms elektronų energijos bei miuonų skersinio impulso vertėms.
@@ -1098,91 +1121,71 @@ Vis dėlto, šiuo atveju padaryta prielaida, kad visi $\emu$ triukšmo įvykiai 
 Pakankamai svarų indėlį turi ir triukšmai, susiję su $\WJets$ procesu, todėl ateityje reikėtų pagalvoti apie tikslesnių
 metodų $e\mu$ triukšmams įvertinti naudojimą.
 
-%senas
+
 \section{Drell-Yan proceso triukšmo įvykių skaičiaus įvertinimo rezultatai}
 
-Šiame darbe buvo naudojami $ee$ (arba panašios į $ee$) ir $e\mu$ (arba panašios į $e\mu$) galutinių būsenų tikri 2015 metais CMS detektoriaus užfiksuoti protonų susidūrimo įvykiai, bei modeliuoti įvairių procesų įvykiai. Pagrindinis šio darbo tikslas buvo $e\mu$ metodu įvertinti Drell-Yan proceso triukšmo įvykių, siejamų su $\WW$, $tW$, $\bar{t}W$, $t\bar{t}$, $\DYtau$ procesais, skaičių, kad šį rezultatą sukombinavus su modeliavimu būtų galima tikroviškiau įvertinti bendrą $ee$ įvykių skaičių, nei naudojant vien modeliavimą.
+Pagrindinis šio darbo tikslas buvo iš didelių duomenų rinkinių atrinkti su Drell-Yan procesu siejamus įvykius taip
+sumažinant saugotinų duomenų apimtį bei jų analizės laiką, bei $\emu$ metodu įvertinti, kokią šių įvykių dalį sudaro
+triukšmo įvykiai.
+Tam buvo naudojami 2016 metais CERN CMS detektoriuje užregistruoti duomenys, bei įvairių procesų modeliuoti duomenys,
+daugiausia sumodeliuoti su \ttt{aMC@NLO} ir \textsc{Pythia8}.
+Duomenys buvo saugomi Pietų Korėjos Tier3 duomenų centre.
+Pradinis analizės etapas buvo eksperimento metu užregistruotų bei modeliuotų įvykių atrinkimas bei išrašymas į naujus
+failus tolimesnei analizei.
+Tai buvo atliekama nuotoliniu būdu prisijungus prie Tier3 centro.
+Modeliuotų įvykių normavimas, pataisos, matavimo ir modeliavimo palyginimas bei triukšmo įvykių skaičiaus įvertinimas
+$\emu$ metodu buvo atliekamas atsisiuntus atrinktų duomenų failus į vietinį kompiuterį.
+Šiame skyriuje pristatomi ir aptariami visų šių etapų rezultatai.
 
-\vspace{-0.35cm}
-\subsection{Protonų susidūrimų įvykių atrankos rezultatai} \label{sec:ppResults}
-\vspace{-0.2cm}
 
-Modeliuotų įvykių normavimo procedūros aprašytos \ref{sec:MCweight} ir \ref{sec:PUreweight} skyriuose. Pagal integruotą šviesį įvykiai buvo pernormuoti priskiriant jiems skerspjūvius, išvardintus \ref{table:CrossSections} lentelėje. Išmatuoti integruoti šviesiai $ee$ ir $e\mu$ duomenų rinkiniuose buvo skirtingi: $2.26$ \invfb  $ee$ įvykiams ir $2.32$ \invfb  $e\mu$ įvykiams. \ref{table:CrossSections} lentelėje taip pat yra pateikiami tikėtini įvykių skaičiai esant $2.26$ \invfb integruotam šviesiui, bei atranką praėjusių modeliuotų dviejų leptonų įvykių skaičiai. Iš viso $ee$ įvykių atranką iš viso praėjo $934135$ tikrų ir $956579$ modeliuotų, o $e\mu$ -- $25817$ tikrų ir $26699$ modeliuotų įvykių, tad modeliavimas pervertina įvykių skaičių. Į su $Z$ bozono rezonansu siejamą invariantinės masės sritį ($60$ -- $120$ GeV) patenka $95.5\%$ tikrų ir $95.8\%$ modeliuotų $ee$ įvykių (labai didele dalimi Drell-Yan įvykiai), bei $44.8\%$ tikrų ir $48.08\%$ modeliuotų $e\mu$ įvykių. 
+\subsection{Įvykių atranka}
 
-\vspace{-0.15cm}
+Visi eksperimentinių ir modeliuotų duomenų failai kartu Tier3 centre užėmė apie $14$ TB.
+Įvykių atranka kodus su visais duomenų rinkiniais leidžiant lygiagrečiai užtrunka apie $5$ valandas.
+Eksperimentinių duomenų rinkinyje, kuriame laikomi įvykiai, kuriuose buvo užfiksuotas bent vienas miuonas
+(rinkinio pavadinimas -- \ttt{SingleMuon}), iš viso buvo $7.868 \cdot 10^8$ įvykių, o duomenų rinkinyje su įvykiais,
+kuriuose buvo užfiksuotos bent dvi dalelės, kurios gali būti elektronai arba fotonai (rinkinio pavadinimas --
+\ttt{DoubleEG}), iš viso buvo $4.749 \cdot 10^8$ įvykių.
+Po įvykių atrankos sukurti nauji duomenų rinkiniai užima apie $14$ GB ir tolimesnės analizės programos, iš atrinktų
+duomenų rinkinių sukuriančios grafikus, užtrunka apie $2$-$3$ minutes.
+Iš viso buvo atrinkta $6.578 \cdot 10^7$ $\mumu$ įvykių, arba $8.36\%$ visų \ttt{SingleMuon} rinkinyje buvusių įvykių,
+$1.313 \cdot 10^7$ $ee$ įvykių, arba $2.76\%$ visų \ttt{DoubleEG} rinkinyje buvusių įvykių, ir $3.556 \cdot 10^5$
+$\emu$ įvykių, arba $0.045\%$ visų \ttt{SingleMuon} rinkinyje buvusių įvykių.
+Atrinktų įvykių skaičiaus santykis su įvykių skaičiumi pradiniuose duomenų rinkiniuose nėra lygus atrinktų ir pradinių
+duomenų failų apimčių santykiui (atrinkti duomenys užima apie $1000$ kartų mažiau kompiuterio atminties).
+Taip yra todėl, kad failų dydžių sumažėjimą nulėmė ne tik juose esančių įvykių skaičius, bet ir tai, kad atrinktuose
+duomenų rinkiniuose buvo saugoma tik maža dalis pradiniuose duomenų rinkiniuose buvusios su įvykiu susijusios
+informacijos.
+
+\subsection{Modeliuotų įvykių normavimas, korekcijų pritaikymas} \label{sec:ppResults}
+
+Modeliuoti įvykiai buvo sunormuoti pagal išmatuotą integruotąjį šviesį, lygų $35.9$ \invfb, naudojantis \eqref{eq:NLOweight}
+formule.
+Reakcijos skerspjūviai, naudoti modeliuotų įvykių normavimui, kartu su tikėtinu įvykių, siejamų su tam tikru procesu,
+skaičiumi, pateikiami \ref{table:Xsec} lentelėje.
+
+%tęsti čia
+
 \begin{centering}
 \begin{table}[H]
-\begin{tabular}{|c|c|c|c|c|}
-\hline
-\multirow{2}{*}{Procesas} & Reakcijos & Tikėtinas įvykių  & Atranką praėjusių & Atranką praėjusių\\
-  &  skerspjūvis (pb) & skaičius & $ee$ įvykių skaičius & $e\mu$ įvykių skaičius \\
-\hline\hline
-$\mathrm{DY} \! \rightarrow \! e^{+}e^{-}$ & $8211.73$ & $1.85585\cdot 10^{7}$ & $939228$ & -- \\
-\hline
-$\mathrm{DY} \! \rightarrow \! \tau^{+} \tau^{-}$ & $8211.73$ & $1.85585\cdot 10^{7}$ & $2636$ & $5720$ \\
-\hline
-$t\bar{t}$ & $831.76$ & $1.87978\cdot 10^{6}$ & $7137$ & $17260$ \\
-\hline
-$\dtW$ & $76.18$ & $1.72167\cdot 10^{5}$ & $800$ & $1792$ \\
-\hline
-$\WJets$ & $61526$ & $1.39049\cdot 10^{8}$ & $1319$ & $985$ \\
-\hline
-$\WW$ & $118.7$ & $2.68262\cdot 10^{5}$ & $874$ & $1927$ \\
-\hline
-$\WZ$ & $47.13$ & $1.06514\cdot 10^{5}$ & $975$ & $187$ \\
-\hline
-$\ZZ$ & $16.523$ & $3.7432\cdot 10^{4}$ & $675$ & $24$ \\
-\hline
-$\gJets$ & $3.65896\cdot 10^{5}$ & $8.26925\cdot 10^{8}$ & $86$ & $34$ \\
-\hline
-$\QCD$ & $5.19096\cdot 10^{6}$ & $1.173157\cdot 10^{10}$ & $2847$ & $490$ \\
-\hline
+\begin{tabular}{|c|c|c|} %|p{5cm}|p{4cm}|p{8cm}|p{9cm}|
+	\hline 
+	\multirow{3}{8em}{\centering Procesas} & \multirow{3}{7em}{Reakcijos Skerspjūvis} & \multirow{3}{9em}{Tikėtinas įvykių skaičius} \\
+	& & \\
+	& & \\
+	\hline \hline
+	$\mathrm{DY}\rightarrow ll$ &  &  \\
+	& & \\
+	\hline
+	$ee$ ($\WW$, $tW$, $\bar{t}W$, & \multirow{2}{7em}{\centering\textendash} & \multirow{2}{9em}{\centering $11448 \pm 59 \pm 475$} \\
+	\hline
 \end{tabular}
-\caption{Drell-Yan proceso elektronų kanalo signalas ir pagrindiniai triukšmai, modeliavime naudoti jų reakcijų skerspjūviai, kai protonų susidūrimo energija $\sqrt{s}=13$ TeV, tikėtinas įvykių skaičius, kai protonų susidūrimų integruotas šviesis yra $\Lumi=2.26$~\invfb, bei atranką praėjusių modeliuotų $ee$ ir $e\mu$ įvykių skaičius.}
-\label{table:CrossSections}
+\caption{\label{table:NLOweight} Modeliuotų procesų reakcijų skerspjūviai bei tikėtinas įvykių skaičius, kai integruotasis
+	šviesis lygus $35.9$ \invfb.}
 \end{table}
 \end{centering}
-\vspace{-0.15cm}
 
-Pasinaudojant dalelių srauto algoritmu apskaičiuojamu miuonų atskirumu buvo sumažintas $e\mu$ įvykių atranką praeinančių $\WJets$ triukšmo įvykių skaičius. Rezultatas atsispindi \ref{fig:emuAfter} paveiksle, kuriame $\WJets$ įvykių skaičius vaizduojamas violetiniuose stulpeliuose. Pritaikius apribojimus atskirumui, apskaičiuojamam naudojantis dalelių srauto algoritmu, šių stulpelių aukštis gerokai sumažėjo.
-
-Gautos modeliuotų ir tikrų $ee$ įvykių invariantinės masės histogramos vaizduojamos \ref{fig:eeInvM} pav., o modeliuotų ir tikrų $e\mu$ įvykių -- \ref{fig:emuInvM} pav.
-
-Pats įvykių atrankos vykdymo procesas užėmė daugiausiai šio darbo laiko. Norint atrinkti visus tikrus ir modeliuotus įvykius su įprastu kompiuteriu užtrunka apie $4$ valandas. Ateityje būtų tikslinga įvairiais būdais pabandyti šį laiką sutrumpinti, pavyzdžiui, efektyvinant kodus, skaičiuojant lygiagrečiai ir pan. Taip pat, atranką galima būtų vykdyti keliais etapais. Pavyzdžiui, vieną kartą įvykių atranką atlikti tik remiantis trigerio aktyvavimu ir užfiksuotų dalelių skaičiumi (ir tokią atranką praėjusius įvykius įrašant į atskirą failą). Tada tolimesnei atrankai, kuriai norime išbandyti įvairesnius kriterijus, naudoti tik pirminę atranką praėjusius įvykius.
-
-%\vspace{-1cm}
-\subsubsection{Didelio tikėtinumo įvykiai}
-%\vspace{-0.2cm}
-
-\ref{fig:eeInvM}-\ref{fig:emuInvM} pav.\ galima pastebėti, kad kai kurių procesų modeliuotų įvykių skaičiaus pasiskirstymas yra labai netolygus (matosi pavieniai aukšti histogramos stulpeliai). Taip yra todėl, kad tokie įvykiai, kaip $\QCD$ ir $\gJets$ yra labai didelio tikėtinumo (tai matosi \ref{table:CrossSections} lentelėje -- šių procesų tikėtinumas, lyginant su Drell-Yan proceso tikėtinumu, didesnis smarkiau, nei eile). Modeliuojant didelio tikėtinumo įvykius jiems priskiriami labai dideli svoriai. Didelių svorių priskyrimas įvykiams turi savo kainą. Taikant atrankos kriterijus, kurie labai smarkiai sumažina tokių įvykių atrankos praėjimo tikimybę, vistiek atsiranda bent keli įvykiai, kurie sugeba ją praeiti. Tačiau, kadangi tokių įvykių yra labai mažai, o jų svoriai labai dideli, histogramose matome tik keletą aukštų stulpelių. Taip pat, iš \eqref{eq:w2sumUnc} išraiškos matyti, kad didžiausią statistinę paklaidą įneša įvykiai, kurie turi labai didelius svorius. Taigi beveik visą modeliuotų įvykių skaičiaus statistinę paklaidą sudaro $\QCD$ įvykiai (kurie dar ją ir labai išpučia). $\QCD$ įvykių paklaida beveik lygi pačiam įvykių skaičiui (pavyzdžiui, $ee$ atranką praėjo $2847$ įvykiai, o vien $\QCD$ įvykių skaičiaus statistinė paklaida lygi $2797$).
-
-Norint pamatyti realistiškesnį (tolygesnį) tokių įvykių pasiskirstymą bei gauti mažesnes statistines paklaidas, reikėtų turėti labai didelį skaičių įvykių, kad jiems būtų galima priskirti artimus vienetui svorius (pavyzdžiui, šiame darbe naudoti $\QCD$ įvykiai turi svorius, lygius keletui dešimčių ar net šimtų įvykių). Vis dėlto, labai didelis įvykių skaičius nėra patogus laiko ir kompiuterio atminties atžvilgiu, nes bet kuriuo atveju beveik visi tokie įvykiai atrankos metu yra \ltq{išmetami}.
-
-%\vspace{-0.5cm}
 \subsection{$e\mu$ metodo rezultatai}
-%\vspace{-0.2cm}
-
-\ref{sec:ppResults} skyrelyje buvo paminėta, kad modeliavimas pervertina įvykių skaičių, taigi būtų galima tikėtis, kad, įvertinus įvykių skaičių $e\mu$ metodu, jis turėtų būti sumažintas. Kaip buvo rašoma \ref{sec:emu} skyrelyje, $e\mu$ metodo skaičiavimus buvo bandoma patikslinti įskaitant $\WJets$ ir kitų $e\mu$ triukšmo įvykių įtaką. \ref{table:emu} lentelėje matyti, kad, įvykių skaičius labiausiai sumažinamas, kai įskaitomi visi $e\mu$ triukšmo įvykiai (įvykių skaičiaus sumažėjimas, kai įskaitomi visi triukšmai, ir kai neįskaitomi išvis, skiriasi $2.26$ karto). Vis dėlto, kadangi $\WJets$ yra dominuojantis $e\mu$ triukšmo įvykis, įvykių skaičiaus sumažinimas, kai įskaitoma vien $\WJets$ įtaka, ir kai įskaitomi visi triukšmo procesai, skiriasi tik $15.8\%$. $e\mu$ metodo įverčio, kai atsižvelgiama į visus $e\mu$ triukšmo procesus, palyginimas su modeliavimu pateikiamas \ref{fig:EMuEst} pav. Rezultatas, gaunamas vietoje modeliuotų įvykių įstačius $e\mu$ metodo įverčius, pateikiamas \ref{fig:eeInvMest} pav.
-%Matavimo/įverčio santykiai, gauti, kai buvo naudojamas tik modeliuotas įvertis (\ref{fig:eeInvM} pav.), ir kai buvo naudojamas kombinuotas $e\mu$ metodo bei modeliuotas įverčiai (\ref{fig:eeInvMest} pav.), viename grafike yra pavaizduoti \ref{fig:estChange} pav., kad būtų galima pastebėti santykio pasikeitimą dėl $e\mu$ metodo naudojimo.
-
-\begin{centering}
-\begin{table}[H]
-\begin{tabular}{|c|c|}
-\hline
-Triukšmų įskaitymas & $e\mu$ metodu įvertintas įvykių skaičius \\
-\hline \hline
-Triukšmų įtaka neįskaitoma & $4881\pm 64$ \\
-\hline
-Įskaitomas tik $\WJets$ indėlis & $4715\pm 69$ \\
-\hline
-Įskaitomi visi $e\mu$ triukšmo procesai & \multirow{2}{5em}{\centering $4668\pm 69$} \\
-($\WJets$, $\gJets$, $\QCD$, $\WZ$, $\ZZ$) & \\
-\hline
-\end{tabular}
-\vspace{-0.2cm}
-\caption{\label{table:emu} $e\mu$ metodu įvertintas Drell-Yan proceso triukšmo įvykių skaičius su $Z$ bozono rezonansu siejamoje srityje, kai atsižvelgiama į skirtingą $e\mu$ triukšmo procesų skaičių. Nurodytos tik statistinės paklaidos.}
-\end{table}
-\end{centering}
 
 \begin{centering}
 \begin{table}[H]
