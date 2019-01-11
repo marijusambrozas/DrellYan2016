@@ -1157,138 +1157,214 @@ Taip yra todėl, kad failų dydžių sumažėjimą nulėmė ne tik juose esanči
 duomenų rinkiniuose buvo saugoma tik maža dalis pradiniuose duomenų rinkiniuose buvusios su įvykiu susijusios
 informacijos.
 
-\subsection{Modeliuotų įvykių normavimas, korekcijų pritaikymas} \label{sec:ppResults}
+
+\subsection{Modeliuotų įvykių normavimas, pataisų pritaikymas} \label{sec:ppResults}
 
 Modeliuoti įvykiai buvo sunormuoti pagal išmatuotą integruotąjį šviesį, lygų $35.9$ \invfb, naudojantis \eqref{eq:NLOweight}
 formule.
 Reakcijos skerspjūviai, naudoti modeliuotų įvykių normavimui, kartu su tikėtinu įvykių, siejamų su tam tikru procesu,
 skaičiumi, pateikiami \ref{table:Xsec} lentelėje.
-
-%tęsti čia
+Kadangi visi įvykiai buvo atrenkami pagal \ref{sec:selection} skyrelyje aprašytus kriterijus, tai atranką praėjusių
+įvykių skaičius nesutampa su lentelėje pateikiamais tikėtinais įvykių skaičiais.
 
 \begin{centering}
-\begin{table}[H]
-\begin{tabular}{|c|c|c|} %|p{5cm}|p{4cm}|p{8cm}|p{9cm}|
+\begin{table}
+\begin{tabular}{|c|c|c|}
 	\hline 
-	\multirow{3}{8em}{\centering Procesas} & \multirow{3}{7em}{Reakcijos Skerspjūvis} & \multirow{3}{9em}{Tikėtinas įvykių skaičius} \\
+	\multirow{3}{6em}{\centering Procesas} & \multirow{3}{7em}{\centering Reakcijos Skerspjūvis, pb} & \multirow{3}{7em}{\centering Tikėtinas įvykių skaičius} \\
 	& & \\
 	& & \\
 	\hline \hline
-	$\mathrm{DY}\rightarrow ll$ &  &  \\
-	& & \\
+	$\mathrm{DY}\rightarrow ll$ & $24751$ & $8.886 \cdot 10^8$ \\
 	\hline
-	$ee$ ($\WW$, $tW$, $\bar{t}W$, & \multirow{2}{7em}{\centering\textendash} & \multirow{2}{9em}{\centering $11448 \pm 59 \pm 475$} \\
+	$\ttbar$ & $831.76$ & $2.986 \cdot 10^7$ \\
+	\hline
+	$tW$ & $35.85$ & $1.287 \cdot 10^6$ \\
+	\hline
+	$\tbarW$ & $35.85$ & $1.287 \cdot 10^6$ \\
+	\hline
+	$WW$ & $118.7$ & $4.261 \cdot 10^6$ \\
+	\hline
+	$WZ$ & $47.13$ & $1.692 \cdot 10^6$ \\
+	\hline
+	$ZZ$ & $16.523$ & $5.932 \cdot 10^5$ \\
+	\hline
+	$\WJets$ & $61526.7$ & $2.209 \cdot 10^9$ \\
+	\hline
+	$\QCD$ ($\mu$) & $1.325 \cdot 10^7$ & $4.757 \cdot 10^{11}$ \\
+	\hline
+	$\QCD$ (EM) & $1.860 \cdot 10^7$ & $6.677 \cdot 10^{11}$ \\
 	\hline
 \end{tabular}
-\caption{\label{table:NLOweight} Modeliuotų procesų reakcijų skerspjūviai bei tikėtinas įvykių skaičius, kai integruotasis
+\caption{\label{table:Xsec} Modeliuotų procesų reakcijų skerspjūviai bei tikėtinas įvykių skaičius, kai integruotasis
 	šviesis lygus $35.9$ \invfb.}
 \end{table}
 \end{centering}
 
-\subsection{$e\mu$ metodo rezultatai}
+\ref{fig:nPVee} ir \ref{fig:nPVmumu} paveiksluose pateikiami atranką praėjusiuose įvykiuose atkurtų pirminių viršūnių
+skačiaus histogramos prieš ir po pataisos, įvertinančios protonų susidūrimų tankio pasiskirstymų nesutapimus tarp
+eksperimentinių ir modeliuotų duomenų, pritaikymo.
+Paveikslų apatinėse dalyje pateiktuose eksperimentinio ir modeliuoto rezultatų santykio grafikuose galima pamatyti, kad
+$10$-$30$ pirminių viršūnių skaičiaus srityje, į kurią patenka $90.86\%$ visų $ee$ ir $90.76\%$ visų $\mumu$ įvykių,
+grafikai tampa plokštesni -- šioje srityje pirminių viršūnių skaičiaus pasiskirstymai sutampa labai gerai.
+Išmatuoto ir modeliuoto pasiskirstymo kokybę apibūdinantis dydis $\chi^2$ $ee$ galutinės būsenos įvykiams prieš pataisos
+pritaikymą įgyja vertę $\chi^2 = 9935.55$, o po pataisos pritaikymo -- $\chi^2 = 1058.49$.
+$\mumu$ galutinės būsenos įvykiams: prieš pataisos pritaikymą $\chi^2 = 14190.9$, o pritaikius pataisą -- $\chi^2 = 1797.51$
+(mažesnė vertė reiškia geresnį pasiskirstymų sutapimą).
+Taigi, galima vertinti, kad pritaikius šią pataisą sutapimas tarp išmatuoto ir sumodeliuoto pirminių viršūnių skaičiaus
+pasiskirstymo pagerėjo.
+
+Kitos taikytos pataisos buvo aprašytos \ref{sec:SFs} skyrelyje.
+Elektronų ir miuonų porų invariantinės masės histogramos pateikiamos atitinkamai \ref{fig:eeMassSF} ir \ref{fig:mumuMassSF}
+paveiksluose.
+Juose pateikiamas išmatuoto ir sumodeliuoto rezultato palyginimas prieš ir po minėtų pataisų takymo.
+\ref{fig:eeMassSF} paveiksle prieš korekcijų pritaikymą nesutapimas tarp matavimo ir modeliavimo buvo apie $X\%$, o
+\ref{fig:mumuMassSF} -- apie $Y\%$.
+Po visų pataisų pritaikymo rezultatas akivaizdžiai pagerėjo -- $ee$ įvykiams apie $X\%$, $\mumu$ įvykiams -- apie $Y\%$.
+Taigi, pataisų taikymas buvo naudingas.
+
+
+\subsection{$e\mu$ galutinės būsenos triukšmų įvertinimas}
+
+Drell-Yan proceso triukšmo įvykių skaičiaus įvertinimui $\emu$ metodu buvo atrinti eksperimento metu užregistruoti bei
+modeliuoti elektrono ir miuono galutinės būsenos įvykiai.
+$\emu$ triukšmo -- $\QCD$ -- įvykių skaičius buvo įvertinti pasinaudojant tokiais įvykiais, kuriuose buvo užregistruoti
+vienodą elektrinį krūvį turintys elektronas ir miuonas.
+Priešingus elektrinius krūvius turinčių elektrono ir miuono invariantinės masės histograma vaizduojama \ref{fig:emuOS},
+o vienodus krūvius turinčių elektrono ir miuono -- \ref{fig:emuSS} paveiksle.
+Histogramos pavaizduotos pritaikius tokias pačias pataisas, kaip ir aprašytosios praeitame skyrelyje.
+
+\ref{fig:emuOS} pav.\ histogramoje nesutapimas tarp eksperimento metu užregistruotų ir sumodeliuotų įvykių skaičiaus siekia
+apie $X\%$, o \ref{fig:emuSS} paveiksle, kuriame vaizduojamas įvykių su vienodo krūvio dalelėmis skaičius, šis nesutapimas
+yra žymiai didesnis -- apie $Y\%$.
+To ir buvo tikimasi, nes į minimą histogramą nebuvo įtraukti modeliuoti $\emu$ triukšmo įvykiai.
+Jų skaičiumi ir yra laikomas visas grafike matomas skirtumas tarp matavimo ir modeliavimo.
+Šio skirtumo vertė buvo transformuojama į $\emu$ triukšmo įvykių skaičių priešingo krūvio dalelių (signalo) srityje pagal
+\ref{sec:emu} skyrelyje aprašytą metodiką.
+Priešingus elektrinius krūvius turinčių elektrono ir miuono invariantinės masės histograma, pridėjus iš vienodo krūvio srities
+įvertintus $\QCD$ įvykius, vaizduojama \ref{fig:emuWQCD} paveiksle.
+Šiuo atveju skirtumas tarp matavimo ir modeliavimo, pridėjus $\QCD$ įvykius, siekia apie $X\%$.
+Nors, lyginant su \ref{fig:emuOS} atveju, skirtumas padidėjo, tačiau tai leis gauti teisingesnį rezultatą $\emu$ metodu
+skaičiuojant Drell-Yan proceso triukšmo įvykių skaičių.
+
+
+\subsection{$\emu$ metodo taikymas}
+
+$\emu$ metodu buvo vertinamas Drell-Yan proceso triukšmo įvykių skaičius tiek $ee$, tiek $\mumu$ galutinėse būsenose.
+Skaičiavimai buvo atliekami kievienam histogramos stulpeliui atskirai, naudojantis \eqref{eq:emuFinal} formule.
+Triukšmo įvykių skaičiaus įverčiai, gauti $\emu$ metodu, invariantinės masės histogramų pavidaluose pateikiami
+\ref{fig:eeEst} paveiksle $ee$ kanalui ir \ref{fig:mumuEst} paveiksle $\mumu$ kanalui.
+Šiuose paveiksluose taip pat pateikiami įverčių ir modeliavimo palyginimai.
+Galima pastebėti, kad įverčio ir modeliuoto rezultato santykio, pateikiamo paveiklsų apačiose forma yra vienoda, bei
+sutampa su forma, matoma \ref{fig:emuWQCD} paveiksle.
+Taip yra dėl jau aprašytos \eqref{eq:emuFinal} formulės specifikos.
+Taikant $\emu$ metodą gautų įvykių skaičių neapibrėžtumai buvo įvertinti naudojantis \ref{eq:DerUnc} formule.
+
+\ref{fig:eeMassDataMCest} bei ref{fig:mumuMassDataMCest} paveiksluose pateikiamos leptonų porų invariantinių masių
+histogramos, kuriose $\DYtau$, $\ttbar$, $tW$, $\tbarW$, $WW$, $WZ$ ir $ZZ$ procesų modeliuoti įverčiai yra pakeisti
+į gautuosius naudojant $\emu$ metodą.
+Lyginant su \ref{fig:eeMassSF} ir \ref{fig:mumuMassSF} paveiksluose vaizduojamais rezultatais prieš $\emu$ metodo
+pritaikymą, rezultatas šiek tiek pagerėjo: $ee$ galutinės būsenos įvykiams -- $X\%$, o $\mumu$ -- $Y\%$.
+Šis rezultatas atrodo nežymus, nes $\emu$ metodu įvertinamas ne visų triukšmo įvykių skaičius, o svarbiausia --
+signalo srityje labai didelę dalį įvykių ir sudaro pats signalas: apie $X\%$ visų įvykių.
+Tai ypač smarkiai lemia įvykių skaičius $Z$ bozono rezonanso srityje ($60<m_{ll}<120$ GeV), kurioje Drell-Yan procesas
+visiškai dominuoja -- sudaro $X\%$ visų šioje srityje esančių įvykių.
+
+Skaičiais išreikštas $\emu$ metodo pritaikymo rezultatas kartu su statistiniais neapibrėžtumais pateikiamas
+\ref{table:finalResults} lentelėje. Joje pateikiami įvykių skaičiai visoje tirtoje invariantinės masės srityje
+($15<m_{ll}<3000$ GeV), $Z$ bozono rezonanso aplinkoje, bei visoje srityje, atmetus $Z$ bozono rezonansą.
+Ypatingai trečiuoju atveju galima matyti, kad $\emu$ metodo taikymas buvo prasmingas -- įvykių skaičiaus įvertis
+prie išmatuotojo rezultato priartėjo $X\%$.
+
+Nors $\emu$ metodo naudojimas leido patikslinti Drell-Yan proceso triukšmo įvykių skaičių, tačiau ateityje būtų
+naudinga likusių triukšmo procesų, ypatingai $\WJets$ ir $\QCD$, įvykių skaičių įvertinti kitais matavimu grįstais
+metodais.
 
 \begin{centering}
-\begin{table}[H]
+\begin{table}
 \begin{tabular}{|c|c|c|c|} %|p{5cm}|p{4cm}|p{8cm}|p{9cm}|
-\hline 
-\multirow{3}{8em}{\centering Įvykiai} & \multirow{3}{7em}{\centering CMS užfiksuotų įvykių skaičius} & \multirow{3}{9em}{\centering Modeliuotų įvykių skaičius} & \multirow{3}{10em}{\centering Modeliuotų įvykių skaičius taikant $e\mu$ metodo įvertį} \\
- & & & \\
- & & & \\
-\hline \hline
-\multirow{2}{8em}{\centering $e\mu$} & \multirow{2}{7em}{\centering $25817 \pm 161$} & \multirow{2}{9em}{\centering $26699 \pm 86 \pm 246$ } & \multirow{2}{5em}{\centering \textendash }\\
- & & & \\
-\hline
-$ee$ ($\WW$, $tW$, $\bar{t}W$, & \multirow{2}{7em}{\centering\textendash} & \multirow{2}{9em}{\centering $11448 \pm 59 \pm 475$} & \multirow{2}{9em}{\centering$\mathbf{10613} \pm 107 \pm 469$} \\
-$t\bar{t}$, $\DYtau$) & & & \\
-\hline
-\multirow{2}{8em}{\centering $ee$ (visi procesai)} & \multirow{2}{7em}{\centering $934135\pm 967$} & \multirow{2}{10em}{\centering $956579\pm 2971\pm11632$} & \multirow{2}{10em}{\centering $\mathbf{955745} \pm 2971 \pm 11656$} \\
- & & & \\
-\hline
-\multirow{2}{8em}{\centering $N_{ee}/N_{ee}^{\mathrm{Obs.}}$} & \multirow{2}{7em}{\centering 1} & \multirow{2}{10em}{\centering $1.024 \pm 0.003 \pm 0.012$} & \multirow{2}{10em}{\centering $1.023 \pm 0.003 \pm 0.012$} \\
- & & & \\
-\hline
+	\hline
+	
+	\multirow{3}{8em}{\centering Įvykiai} &
+	\multirow{3}{7em}{\centering CMS užfiksuotų įvykių skaičius} &
+	\multirow{3}{9em}{\centering Modeliuotų įvykių skaičius} &
+	\multirow{3}{10em}{\centering Modeliuotų įvykių skaičius taikant $e\mu$ metodo įvertį} \\
+	
+ 	& & & \\
+ 	& & & \\
+	\hline \hline
+	
+	\multirow{2}{8em}{\centering $e\mu$} &
+	\multirow{2}{7em}{\centering $333684 \pm 578$} &
+	\multirow{2}{9em}{\centering $335871 \pm 544$ } &
+	\multirow{2}{5em}{\centering \textendash }\\
+	
+ 	& & & \\
+	\hline
+	%SENAS
+	$ee$ ($\WW$, $tW$, $\bar{t}W$, &
+	\multirow{2}{7em}{\centering\textendash} &
+	\multirow{2}{9em}{\centering $11448 \pm 59 \pm 475$} &
+	\multirow{2}{9em}{\centering$\mathbf{10613} \pm 107$} \\
+	
+	$t\bar{t}$, $\DYtau$) & & & \\
+	\hline
+	%SENAS
+	\multirow{2}{8em}{\centering $ee$ (visi procesai)} &
+	\multirow{2}{7em}{\centering $1.3107 \cdot 10^7 \pm 3620$} &
+	\multirow{2}{10em}{\centering $1.34398 \cdot 10^7 \pm 7665$}
+	&\multirow{2}{10em}{\centering $\mathbf{kazkiek} \pm 2971$} \\
+	
+ 	& & & \\
+	\hline
+
+	\multirow{2}{8em}{\centering $N_{ee}/N_{ee}^{\mathrm{Obs.}}$} &
+	\multirow{2}{7em}{\centering 1} &
+	\multirow{2}{10em}{\centering $1.0254 \pm 0.00065$} &
+	\multirow{2}{10em}{\centering $kazkiek \pm 0.003$} \\
+	
+ 	& & & \\
+	\hline
+	%SENAS
+	$\mumu$ ($\WW$, $tW$, $\bar{t}W$, &
+	\multirow{2}{7em}{\centering\textendash} &
+	\multirow{2}{9em}{\centering $11448 \pm 59 \pm 475$} &
+	\multirow{2}{9em}{\centering$\mathbf{10613} \pm 107$} \\
+	
+	$t\bar{t}$, $\DYtau$) & & & \\
+	\hline
+	
+	\multirow{2}{8em}{\centering $\mumu$ (visi procesai)} &
+	\multirow{2}{7em}{\centering $2.29166 \cdot 10^7 \pm 4787$} &
+	\multirow{2}{10em}{\centering $2.31485 \cdot 10^7 \pm 10372$}
+	&\multirow{2}{10em}{\centering $\mathbf{kazkiek} \pm 2971$} \\
+	
+ 	& & & \\
+	\hline
+	
+	\multirow{2}{8em}{\centering $N_{\mumu}/N_{\mumu}^{\mathrm{Obs.}}$} &
+	\multirow{2}{7em}{\centering 1} &
+	\multirow{2}{10em}{\centering $1.0101 \pm 0.0005$} &
+	\multirow{2}{10em}{\centering $kazkiek \pm 0.003$} \\
+	
+ 	& & & \\
+	\hline
 \end{tabular}
-\caption{\label{table:finalResults} CMS detektoriumi užregistruotų dviejų leptonų įvykių skaičius tirtame dviejų leptonų invariantinės masės intervale. Jeigu prie rezultato pateikiamos dvi paklaidos, tai pirmoji iš jų yra statistinė, o antroji -- sisteminė paklaida.}
+	\caption{\label{table:finalResults} CMS detektoriaus užregistruotų, modeliuotų, bei $\emu$ metodu įvertintų įvykių skaičiai
+	bei jų statistinės paklaidos.}
 \end{table}
 \end{centering}
 
-\vspace{-0.3cm}
-\begin{centering}
-\begin{table}[H]
-\begin{tabular}{|c|c|c|c|} %|p{5cm}|p{4cm}|p{8cm}|p{9cm}|
-\hline 
-\multirow{3}{8em}{\centering Įvykiai} & \multirow{3}{7em}{\centering CMS užfiksuotų įvykių skaičius} & \multirow{3}{9em}{\centering Modeliuotų įvykių skaičius} & \multirow{3}{10em}{\centering Modeliuotų įvykių skaičius taikant $e\mu$ metodo įvertį} \\
- & & & \\
- & & & \\
-\hline \hline
-\multirow{2}{8em}{\centering $e\mu$} & \multirow{2}{7em}{\centering $11535 \pm 107$} & \multirow{2}{9em}{\centering $12838 \pm 315 \pm 180$ } & \multirow{2}{5em}{\centering \textendash }\\
- & & & \\
-\hline
-$ee$ ($\WW$, $tW$, $\bar{t}W$, & \multirow{2}{7em}{\centering\textendash} & \multirow{2}{9em}{\centering $5013 \pm 38 \pm 173$} & \multirow{2}{9em}{\centering$\mathbf{4668} \pm 69 \pm 209$} \\
-$t\bar{t}$, $\DYtau$) & & & \\
-\hline
-\multirow{2}{8em}{\centering $ee$ (visi procesai)} & \multirow{2}{7em}{\centering $894660\pm 946$} & \multirow{2}{10em}{\centering $913943 \pm 972 \pm 11201$} & \multirow{2}{10em}{\centering $\mathbf{913598} \pm 973 \pm 11233$} \\
- & & & \\
-\hline
-\multirow{2}{8em}{\centering $N_{ee}/N_{ee}^{\mathrm{Obs.}}$} & \multirow{2}{7em}{\centering 1} & \multirow{2}{10em}{\centering $1.022 \pm 0.002 \pm 0.013$} & \multirow{2}{10em}{\centering $1.021 \pm 0.002 \pm 0.013$} \\
- & & & \\
-\hline
-\end{tabular}
-\caption{\label{table:finalResultsZ} CMS detektoriumi užregistruotų ir modeliuotų dviejų leptonų įvykių skaičius $Z$ rezonanso aplinkoje ($60$ -- $120$ GeV) Jeigu prie rezultato pateikiamos dvi paklaidos, tai pirmoji iš jų yra statistinė, o antroji -- sisteminė paklaida.}
-\end{table}
-\end{centering}
 
-%\vspace{-0.3cm}
-Nors triukšmo įvykių skaičius invariantinės masės histogramos stulpeliuose iki $700$ GeV yra sumažinamas iki $20\%$, tačiau lyginant įvykių skaičiaus pasikeitimą su visų $ee$ įvykių skaičiumi, šis sieka $0.1\%$. Taip yra todėl, kad bendras visų įvykių skaičius yra labai didelis, o triukšmų skaičius ganėtinai mažas (dominuoja Drell-Yan procesas), todėl bendrame kontekste toks triukšmo įvykių skaičiaus pasikeitimas sunkiai pastebimas, be to, yra nemažas skaičius triukšmo įvykių (išvardinti \ref{table:CrossSections} lentelėje), kurių $e\mu$ metodu įvertinti negalima.
-%Į laisvės laipsnių skaičių (invariantinės masės histogramos stulpelių skaičių) normuotas sutapimą tarp matavimo ir (modeliuoto arba $e\mu$ metodo) įverčio apibūdinantis dydis $\chi^{2}/n_{\mathrm{l. \, l.}}$ buvo skaičiuojamas pagal tokią formulę:
-%\begin{equation}
-%\chi^{2}/n_{\mathrm{l. \, l.}}=\frac{1}{n_{\mathrm{l. \, l.}}} \sum_{i=1}^{n_{\mathrm{l. \, l.}}} \frac{ \left( \rho_{i}^{\mathrm{Įv.}}-\rho_{i}^{\mathrm{Data}} \right) ^{2} }{\rho_{i}^{\mathrm{Data}}} \; \mathrm{,}
-%\label{eq:chiSquare}
-%\end{equation}
-%čia $\rho_{i}^{\mathrm{Įv.}}$ -- modeliuotas ($\rho_{i}^{\mathrm{MC}}$), arba kombinuotas $e\mu$ metodo bei modeliuotas ($\rho_{i}^{\mathrm{MC}+e\mu \, \mathrm{įv.}}$) įvykių skaičiaus tankio įvertis histogramos stulpelyje. Įvykių skaičiaus tankis skaičiuojamas padalinus įvykių skaičių iš stulpelio pločio.
-%:
-%\begin{equation}
-%\rho_{i}=\frac{N_{i}}{m_{\, i \, 1}-m_{\, i \, 0}} \; \mathrm{,}
-%\label{eq:numDens}
-%\end{equation}
-%čia $m_{\, i \, 0}$ ir $m_{\, i \, 1}$ -- $i$-ojo histogramos stulpelio kairysis ir dešinysis rėžiai.
-%Iš \eqref{eq:chiSquare} išraiškos matyti, kad kuo $\chi^{2}/n_{\mathrm{l. \, l.}}$ vertė mažesnė, tuo geresnis sutapimas tarp matavimo ir įverčio. Šio dydžio vertės buvo gautos tokios: $\chi^{2}_{\mathrm{MC}}/n_{\mathrm{l. \, l.}}=22.44$; $\chi^{2}_{\mathrm{MC}+e\mu \, \mathrm{įv.}}/n_{\mathrm{l. \, l.}}=22.31$ -- kombinuojant modeliuotą ir $e\mu$ metodo įverčius gaunamas maždaug $0.6\%$ geresnis sutapimas, nei naudojant vien tik modeliavimą.
 
-Gauta $e\mu$ metodo įverčio statistinė paklaida yra $1.82$ karto didesnė už modeliuotų įvykių skaičiaus paklaidą\footnote{Čia nagrinėjami rezultatai, gauti su $Z$ bozono rezonansu siejamoje srityje ($60$ -- $120$ GeV).}. Taip yra todėl, kad įvertis gautas iš kelių duomenų rinkinių, kurių visų statistinės paklaidos įeina į įverčio paklaidą pagal \eqref{eq:DerUnc} formulę. Vis dėlto, statistines paklaidas užgožia apskaičiuotos sisteminės paklaidos. $e\mu$ metodo įverčio sisteminė paklaida už modeliuotų įvykių skaičiaus sisteminę paklaidą yra $21\%$ didesnė. Bendrame kontekste statistinė įverčio paklaida yra maža, lyginant su pilna statistine įvykių skaičiaus paklaida (vien $\QCD$ įvykių skaičiaus statistinė paklaida yra apie $13$ kartų didesnė už $e\mu$ metodo įverčio statistinę paklaidą), taip pat, kaip ir sisteminė paklaida, kuri yra labai maža lyginant su bendra sistemine paklaida, priklausančia nuo trigerių pasirinkimo ir normavimo pagal protonų susidūrimų tankį (bendros sisteminės paklaidos dydis yra lygus $11233$, ji apie $54$ kartus didesnė už $e\mu$ įverčio paklaidą). Taigi bendrame kontekste skirtumas tarp modeliavimo ir $e\mu$ metodo rezultato telpa į paklaidas. Kita vertus, jeigu žiūrime tik į tuos procesus, kurių įvykių skaičių buvo galima įvertinti $e\mu$ metodu, tada modeliavimo ir $e\mu$ įverčio rezultatai yra vienas už kito paklaidų ribų (pačios paklaidos persidengia 52 įvykių intervale), tad galime teigti, kad įvykių skaičiaus įvertintimas $e\mu$ metodu buvo tikslingas.
-
-Tyrimų rezultatai yra apibendrinti \ref{table:finalResults} ir \ref{table:finalResultsZ} lentelėse. Pateikti skaičiai atitinka matavimą detektoriaus geometrinėje erdvėje, kai greitesniojo elektrono $\pT^{\mathrm{Gr.}}>30$ GeV, o lėtesniojo $\pT^{\mathrm{Lėt}}>10$ GeV ($ee$ įvykiams), arba kai elektrono $\pT^{e}>25$ GeV, o miuono $\pT^{\mu}>15$ GeV ($e\mu$ įvykiams).
-
-Norint labiau patikslinti visų procesų įvykių skaičiaus įvertį, reikėtų $e\mu$ metodui netinkamų procesų įvykių skaičių įvertinti kokiu nors kitu matavimu grįstu (pavyzdžiui, klaidingo atpažinimo) metodu, bei patikslinti modeliuotų Drell-Yan signalo įvykių skaičių. Taip pat ateityje sisteminių paklaidų skaičiavime būtų galima pabandyti įtraukti ir daugiau galimų sisteminių nuokrypių šaltinių.
-
-Darbe buvo atsižvelgta į šiuos sisteminių paklaidų šaltinius:
-\begin{enumerate}
-%\vspace{-0.25cm}
-\item Modeliuotų įvykių skaičiaus pokytį dėl pernormavimo pagal protonų susidūrimų tankį;
-%\vspace{-0.3cm}
-\item Modeliuotų įvykių skaičiaus nesutapimą, kai įvykių atrankai naudojami skirtingi trigeriai;
-%\vspace{-0.95cm}
-\item Galimai įneštus sisteminius nukrypimus dėl $e\mu$ metodo naudojimo.
-\end{enumerate}
-
-%\vspace{-0.15cm}
-Parašyti vykdytos duomenų analizės programiniai kodai su minimaliais pataisymais gali būti tinkami naudojimui ir su naujesnių metų CMS detektoriaus duomenimis. Tai buvo išbandyta naudojant šiek tiek skirtingus $2015$ metų duomenų rinkinius.
 
 \clearpage
 \section*{Išvados} \addcontentsline{toc}{section}{Išvados}
 \begin{enumerate}
-\item Didelių energijų fizikos duomenų analizės darbas reikalauja daug laiko ir kruopštumo.
-\item Įvertinus Drell-Yan proceso triukšmo įvykių skaičių $e\mu$ metodu, gautas pilnutinis įvykių skaičius buvo artimesnis užregistruotajam CMS detektoriumi, nei naudojant vien tik modeliavimo įvertį ($835$ įvykiais, arba apie $0.1\%$).
-\item Vertinant tik tų procesų, kuriems galima taikyti $e\mu$ metodą, įverčius, $e\mu$ ir modeliavimo įverčiai paklaidų ribose nėra tapatūs (modeliavimo įvertis -- $5013\pm38\pm173$, $e\mu$ metodo įvertis -- $4668\pm69\pm209$), tad $e\mu$ metodo taikymas yra tikslingas.
-\item $e\mu$ metodo skaičiavimuose atsižvelgus į panašių į $e\mu$ procesų (\ltq{$e\mu$ triukšmų}: $\WJets$ $\gJets$, $\QCD$, $\WZ$, $\ZZ$), kurie iškraipo $e\mu$ įvykių skaičių, egzistavimą, galima pagerinti įvertį.
-\item $e\mu$ metodo tikslumas, lyginant su modeliuotu įverčiu, yra žemesnis ($e\mu$ metodu įvertinto įvykių skaičiaus santykinė paklaida -- $4.7\%$, modeliuoto įverčio santykinė paklaida -- $3.6\%$), tačiau gautas įvykių skaičius yra patikimesnis, nes modeliavime yra nežinomų (ir todėl neįskaitomų) neapibrėžtumų.
-\item Labai didelio tikėtinumo triukšmo įvykiai su maža tikimybe praeina atrankos kriterijus, todėl jų pasiskirstymą sunku pakankamai tiksliai modeliuoti. Tai nulemia \ltq{pikų} atsiradimą histogramose.
-\item Pakeitus miuonų atrankos reikalavimus (vietoje trekerio atskirumo naudojant atskirumą, apskaičiuojamą naudojantis dalelių srauto algoritmu) galima sumažinti $e\mu$ atranką praeinančių $\WJets$ įvykių skaičių.
-\item Parašyti protonų susidūrimo įvykių atrankos, $e\mu$ metodo skaičiavimų bei grafikų brėžimo programiniai kodai su minimaliomis korekcijomis galės būti taikomi ir atliekant naujesnių metų CMS duomenų analizę.
+\item 
 \end{enumerate}
 
 \clearpage
-%\addtocounter{section}{1}
-%\addcontentsline{toc}{section}{\protect\numberline{\thesection}Literatūra}
 \addcontentsline{toc}{section}{Literatūros sąrašas}
 \bibliography{\jobname}
 \bibliographystyle{unsrt}
