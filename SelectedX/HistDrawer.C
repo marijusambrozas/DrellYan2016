@@ -27,6 +27,7 @@
 void EE_HistDrawer (  TString whichGraphs, TString type );
 void MuMu_HistDrawer ( TString whichGraphs, TString type );
 void EMu_HistDrawer ( TString whichGraphs, TString type );
+Double_t CompChiSquared ( TH1D *h_data, THStack *s_MC );
 
 // -- Drell-Yan mass bins -- //
 const Double_t massbins[44] = {15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 68, 72, 76, 81, 86, 91, 96, 101, 106, 110, 115, 120, 126,
@@ -230,9 +231,11 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         RP_mass = new myRatioPlot_t( "RP_mass", s_mass, h_data_mass );
 
         RP_mass_fine_before_PUCorr->SetPlots("Dielectron invariant mass [GeV/c^{2}] (before PU correction)", 15, 3000);
-        RP_mass_fine_before_EffCorr->SetPlots("Dielectron invariant mass [GeV/c^{2}] (before Efficiency SF)", 15, 3000);
+//        RP_mass_fine_before_EffCorr->SetPlots("Dielectron invariant mass [GeV/c^{2}] (before Efficiency SF)", 15, 3000);
+        RP_mass_fine_before_EffCorr->SetPlots("Elektronu poros invariantine mase [GeV/c^{2}] (pries pataisu pritaikyma)", 15, 3000);
         RP_mass_fine->SetPlots("Dielectron invariant mass [GeV/c^{2}]", 15, 3000);
-        RP_mass->SetPlots("Dielectron invariant mass [GeV/c^{2}]", 15, 3000);
+//        RP_mass->SetPlots("Dielectron invariant mass [GeV/c^{2}]", 15, 3000);
+        RP_mass->SetPlots("Elektronu poros invariantine mase [GeV/c^{2}] (po pataisu pritaikymo)", 15, 3000);
 
         RP_mass_fine_before_PUCorr->SetLegend(0.75, 0.4);
         RP_mass_fine_before_EffCorr->SetLegend(0.75, 0.4);
@@ -241,9 +244,11 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
 
         // Legend data
         RP_mass_fine_before_PUCorr->AddLegendEntry(h_data_mass_fine_before_PUCorr, "Data", "lp");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_data_mass_fine_before_EffCorr, "Data", "lp");
+//        RP_mass_fine_before_EffCorr->AddLegendEntry(h_data_mass_fine_before_EffCorr, "Data", "lp");
+        RP_mass_fine_before_EffCorr->AddLegendEntry(h_data_mass_fine_before_EffCorr, "Matavimas", "lp");
         RP_mass_fine->AddLegendEntry(h_data_mass_fine, "Data", "lp");
-        RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
+//        RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
+        RP_mass->AddLegendEntry(h_data_mass, "Matavimas", "lp");
 
         // Legend MC signal
         RP_mass_fine_before_PUCorr->AddLegendEntry(h_DY_mass_fine_before_PUCorr, "DY#rightarrow ee", "f");
@@ -1155,18 +1160,22 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         RP_nVTX_before_EffCorr = new myRatioPlot_t( "RP_nVTX_before_EffCorr", s_nVTX_before_EffCorr, h_data_nVTX );
         RP_nVTX = new myRatioPlot_t( "RP_nVTX", s_nVTX, h_data_nVTX );
 
-        RP_nVTX_before_PUCorr->SetPlots("nVTX (before PU correction)", 0, 50);
+//        RP_nVTX_before_PUCorr->SetPlots("nVTX (before PU correction)", 0, 50);
+        RP_nVTX_before_PUCorr->SetPlots("Pirminiu virsuniu skaicius (pries protonu susidurimu tankio pataisa)", 0, 50);
         RP_nVTX_before_EffCorr->SetPlots("nVTX (before Efficiency correction)", 0, 50);
-        RP_nVTX->SetPlots("nVTX", 0, 50);
+//        RP_nVTX->SetPlots("nVTX", 0, 50);
+        RP_nVTX->SetPlots("Pirminiu virsuniu skaicius (pritaikius pataisa)", 0, 50);
 
         RP_nVTX_before_PUCorr->SetLegend(0.75, 0.4);
         RP_nVTX_before_EffCorr->SetLegend(0.75, 0.4);
         RP_nVTX->SetLegend(0.75, 0.4);
 
         // Legend data
-        RP_nVTX_before_PUCorr->AddLegendEntry(h_data_nVTX, "Data", "lp");
+//        RP_nVTX_before_PUCorr->AddLegendEntry(h_data_nVTX, "Data", "lp");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_data_nVTX, "Matavimas", "lp");
         RP_nVTX_before_EffCorr->AddLegendEntry(h_data_nVTX, "Data", "lp");
-        RP_nVTX->AddLegendEntry(h_data_nVTX, "Data", "lp");
+//        RP_nVTX->AddLegendEntry(h_data_nVTX, "Data", "lp");
+        RP_nVTX->AddLegendEntry(h_data_nVTX, "Matavimas", "lp");
 
         // Legend MC signal
         RP_nVTX_before_PUCorr->AddLegendEntry(h_DY_nVTX_before_PUCorr, "DY#rightarrow ee", "f");
@@ -1205,6 +1214,17 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         RP_nVTX_before_PUCorr->Draw(0.5, 3e6, 0);
         RP_nVTX_before_EffCorr->Draw(0.5, 3e6, 0);
         RP_nVTX->Draw(0.5, 3e6, 0);
+
+        cout << "nVTX Chi^2 before PU reweight: " << CompChiSquared(h_data_nVTX, s_nVTX_before_PUCorr) << endl;
+        cout << "nVTX Chi^2 after PU reweight: " << CompChiSquared(h_data_nVTX, s_nVTX) << endl;
+
+        Double_t EvtPercentage = 0;
+        for (Int_t i=11; i<32; i++)
+        {
+            EvtPercentage += h_data_nVTX->GetBinContent(i);
+        }
+        EvtPercentage /= h_data_nVTX->Integral(1, h_data_nVTX->GetSize()-2) * 0.01;
+        cout << "There are " << EvtPercentage << "% of events in 10-30 nVTX range" << endl;
 
     } // End of if(nVTX)
 
@@ -1405,10 +1425,12 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_mass = new myRatioPlot_t( "RP_mass", s_mass, h_data_mass );
 
         RP_mass_fine_before_PUCorr->SetPlots("Dimuon invariant mass [GeV/c^{2}] (before PU correction)", 15, 3000);
-        RP_mass_fine_before_RoccoR->SetPlots("Dimuon invariant mass [GeV/c^{2}] (before Rochester correction)", 15, 3000);
+//        RP_mass_fine_before_RoccoR->SetPlots("Dimuon invariant mass [GeV/c^{2}] (before Rochester correction)", 15, 3000);
+        RP_mass_fine_before_RoccoR->SetPlots("Miuonu poros invariantine mase [GeV/c^{2}] (pries pataisu pritaikyma)", 15, 3000);
         RP_mass_fine_before_EffCorr->SetPlots("Dimuon invariant mass [GeV/c^{2}] (before Efficiency SF)", 15, 3000);
         RP_mass_fine->SetPlots("Dimuon invariant mass [GeV/c^{2}]", 15, 3000);
-        RP_mass->SetPlots("Dimuon invariant mass [GeV/c^{2}]", 15, 3000);
+//        RP_mass->SetPlots("Dimuon invariant mass [GeV/c^{2}]", 15, 3000);
+        RP_mass->SetPlots("Miuonu poros invariantine mase [GeV/c^{2}] (pritaikius pataisas)", 15, 3000);
 
         RP_mass_fine_before_PUCorr->SetLegend(0.75, 0.4);
         RP_mass_fine_before_RoccoR->SetLegend(0.75, 0.4);
@@ -1418,10 +1440,12 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
 
         // Legend data
         RP_mass_fine_before_PUCorr->AddLegendEntry(h_data_mass_fine_before_PUCorr, "Data", "lp");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_data_mass_fine_before_RoccoR, "Data", "lp");
+//        RP_mass_fine_before_RoccoR->AddLegendEntry(h_data_mass_fine_before_RoccoR, "Data", "lp");
+        RP_mass_fine_before_RoccoR->AddLegendEntry(h_data_mass_fine_before_RoccoR, "Matavimas", "lp");
         RP_mass_fine_before_EffCorr->AddLegendEntry(h_data_mass_fine_before_EffCorr, "Data", "lp");
         RP_mass_fine->AddLegendEntry(h_data_mass_fine, "Data", "lp");
-        RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
+//        RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
+        RP_mass->AddLegendEntry(h_data_mass, "Matavimas", "lp");
 
         // Legend MC signal
         RP_mass_fine_before_PUCorr->AddLegendEntry(h_DY_mass_fine_before_PUCorr, "DY#rightarrow#mu#mu", "f");
@@ -2514,18 +2538,22 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_nVTX_before_EffCorr = new myRatioPlot_t( "RP_nVTX_before_EffCorr", s_nVTX_before_EffCorr, h_data_nVTX );
         RP_nVTX = new myRatioPlot_t( "RP_nVTX", s_nVTX, h_data_nVTX );
 
-        RP_nVTX_before_PUCorr->SetPlots("# Primary Vertices (before PU correction)", 0, 50);
-        RP_nVTX_before_EffCorr->SetPlots("# Primary Vertices (before Efficiency SF)", 0, 50);
-        RP_nVTX->SetPlots("# Primary Vertices", 0, 50);
+//        RP_nVTX_before_PUCorr->SetPlots("nVTX (before PU correction)", 0, 50);
+        RP_nVTX_before_PUCorr->SetPlots("Pirminiu virsuniu skaicius (pries protonu susidurimu tankio pataisa)", 0, 50);
+        RP_nVTX_before_EffCorr->SetPlots("nVTX (before Efficiency SF)", 0, 50);
+//        RP_nVTX->SetPlots("nVTX", 0, 50);
+        RP_nVTX->SetPlots("Pirminiu virsuniu skaicius (pritaikius pataisa)", 0, 50);
 
         RP_nVTX_before_PUCorr->SetLegend(0.75, 0.4);
         RP_nVTX_before_EffCorr->SetLegend(0.75, 0.4);
         RP_nVTX->SetLegend(0.75, 0.4);
 
         // Legend data
-        RP_nVTX_before_PUCorr->AddLegendEntry(h_data_nVTX, "Data", "lp");
+//        RP_nVTX_before_PUCorr->AddLegendEntry(h_data_nVTX, "Data", "lp");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_data_nVTX, "Matavimas", "lp");
         RP_nVTX_before_EffCorr->AddLegendEntry(h_data_nVTX, "Data", "lp");
-        RP_nVTX->AddLegendEntry(h_data_nVTX, "Data", "lp");
+//        RP_nVTX->AddLegendEntry(h_data_nVTX, "Data", "lp");
+        RP_nVTX->AddLegendEntry(h_data_nVTX, "Matavimas", "lp");
 
         // Legend MC signal
         RP_nVTX_before_PUCorr->AddLegendEntry(h_DY_nVTX_before_PUCorr, "DY#rightarrow#mu#mu", "f");
@@ -2565,6 +2593,17 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_nVTX_before_EffCorr->Draw(0.5, 3e6, 0);
         RP_nVTX->Draw(0.5, 3e6, 0);
 
+        cout << "nVTX Chi^2 before PU reweight: " << CompChiSquared(h_data_nVTX, s_nVTX_before_PUCorr) << endl;
+        cout << "nVTX Chi^2 after PU reweight: " << CompChiSquared(h_data_nVTX, s_nVTX) << endl;
+
+        Double_t EvtPercentage = 0;
+        for (Int_t i=11; i<32; i++)
+        {
+            EvtPercentage += h_data_nVTX->GetBinContent(i);
+        }
+        EvtPercentage /= h_data_nVTX->Integral(1, h_data_nVTX->GetSize()-2) * 0.01;
+        cout << "There are " << EvtPercentage << "% of events in 10-30 nVTX range" << endl;
+
     } // End of if(nVTX)
 
 } // End of MuMu_HistDrawer()
@@ -2579,7 +2618,7 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
     }
 
     Int_t isWJ = 0;
-    isWJ = 1; // UNCOMMENT THIS IF YOU WANT TO INCLUDE W+JETS INTO HISTOGRAMS
+//    isWJ = 1; // UNCOMMENT THIS IF YOU WANT TO INCLUDE W+JETS INTO HISTOGRAMS
     Int_t count_drawn = 0;
     LocalFileMgr Mgr;
 
@@ -2662,27 +2701,37 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
                 avg_ratio_WJets_SSvsOS /= h_SS_bkg_mass[iter]->GetSize()-2;
             }
 
-            h_bkg_mass_fine_before_PUCorr[iter]->SetFillColor(iter+2);
-            h_bkg_mass_fine_before_RoccoR[iter]->SetFillColor(iter+2);
-            h_bkg_mass_fine_before_EffCorr[iter]->SetFillColor(iter+2);
-            h_bkg_mass_fine[iter]->SetFillColor(iter+2);
-            h_bkg_mass[iter]->SetFillColor(iter+2);
-            h_SS_bkg_mass_fine_before_PUCorr[iter]->SetFillColor(iter+2);
-            h_SS_bkg_mass_fine_before_RoccoR[iter]->SetFillColor(iter+2);
-            h_SS_bkg_mass_fine_before_EffCorr[iter]->SetFillColor(iter+2);
-            h_SS_bkg_mass_fine[iter]->SetFillColor(iter+2);
-            h_SS_bkg_mass[iter]->SetFillColor(iter+2);
+            Color_t color = kBlack;
+            if ( pr == _EMu_WJets ) color = kRed - 2;
+            if ( pr == _EMu_WW ) color = kMagenta - 5;
+            if ( pr == _EMu_WZ ) color = kMagenta - 2;
+            if ( pr == _EMu_ZZ ) color = kMagenta - 6;
+            if ( pr == _EMu_tbarW ) color = kGreen - 2;
+            if ( pr == _EMu_tW ) color = kGreen + 2;
+            if ( pr == _EMu_ttbar_Full ) color = kCyan + 2;
+            if ( pr == _EMu_DYTauTau_Full ) color = kOrange - 5;
 
-            h_bkg_mass_fine_before_PUCorr[iter]->SetLineColor(iter+2);
-            h_bkg_mass_fine_before_RoccoR[iter]->SetLineColor(iter+2);
-            h_bkg_mass_fine_before_EffCorr[iter]->SetLineColor(iter+2);
-            h_bkg_mass_fine[iter]->SetLineColor(iter+2);
-            h_bkg_mass[iter]->SetLineColor(iter+2);
-            h_SS_bkg_mass_fine_before_PUCorr[iter]->SetLineColor(iter+2);
-            h_SS_bkg_mass_fine_before_RoccoR[iter]->SetLineColor(iter+2);
-            h_SS_bkg_mass_fine_before_EffCorr[iter]->SetLineColor(iter+2);
-            h_SS_bkg_mass_fine[iter]->SetLineColor(iter+2);
-            h_SS_bkg_mass[iter]->SetLineColor(iter+2);
+            h_bkg_mass_fine_before_PUCorr[iter]->SetFillColor(color);
+            h_bkg_mass_fine_before_RoccoR[iter]->SetFillColor(color);
+            h_bkg_mass_fine_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_mass_fine[iter]->SetFillColor(color);
+            h_bkg_mass[iter]->SetFillColor(color);
+            h_SS_bkg_mass_fine_before_PUCorr[iter]->SetFillColor(color);
+            h_SS_bkg_mass_fine_before_RoccoR[iter]->SetFillColor(color);
+            h_SS_bkg_mass_fine_before_EffCorr[iter]->SetFillColor(color);
+            h_SS_bkg_mass_fine[iter]->SetFillColor(color);
+            h_SS_bkg_mass[iter]->SetFillColor(color);
+
+            h_bkg_mass_fine_before_PUCorr[iter]->SetLineColor(color);
+            h_bkg_mass_fine_before_RoccoR[iter]->SetLineColor(color);
+            h_bkg_mass_fine_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_mass_fine[iter]->SetLineColor(color);
+            h_bkg_mass[iter]->SetLineColor(color);
+            h_SS_bkg_mass_fine_before_PUCorr[iter]->SetLineColor(color);
+            h_SS_bkg_mass_fine_before_RoccoR[iter]->SetLineColor(color);
+            h_SS_bkg_mass_fine_before_EffCorr[iter]->SetLineColor(color);
+            h_SS_bkg_mass_fine[iter]->SetLineColor(color);
+            h_SS_bkg_mass[iter]->SetLineColor(color);
 
             h_bkg_mass_fine_before_PUCorr[iter]->SetDirectory(0);
             h_bkg_mass_fine_before_RoccoR[iter]->SetDirectory(0);
@@ -2795,12 +2844,14 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
         RP_mass_fine_before_RoccoR->SetPlots("e#mu mass [GeV/c^{2}] (before Rochester correction)", 15, 3000);
         RP_mass_fine_before_EffCorr->SetPlots("e#mu mass [GeV/c^{2}] (before Efficiency correction)", 15, 3000);
         RP_mass_fine->SetPlots("e#mu mass [GeV/c^{2}]", 15, 3000);
-        RP_mass->SetPlots("e#mu mass [GeV/c^{2}]", 15, 3000);
+//        RP_mass->SetPlots("e#mu mass [GeV/c^{2}]", 15, 3000);
+        RP_mass->SetPlots("e#mu (priesingu kruviu) invariantine mase [GeV/c^{2}]", 15, 3000);
         RP_SS_mass_fine_before_PUCorr->SetPlots("e#mu (same-signed) mass [GeV/c^{2}] (before PU correction)", 15, 3000);
         RP_SS_mass_fine_before_RoccoR->SetPlots("e#mu (same-signed) mass [GeV/c^{2}] (before Rochester correction)", 15, 3000);
         RP_SS_mass_fine_before_EffCorr->SetPlots("e#mu (same-signed) mass [GeV/c^{2}] (before Efficiency correction)", 15, 3000);
         RP_SS_mass_fine->SetPlots("e#mu (same-signed) mass [GeV/c^{2}]", 15, 3000);
-        RP_SS_mass->SetPlots("e#mu (same-signed) mass [GeV/c^{2}]", 15, 3000);
+//        RP_SS_mass->SetPlots("e#mu (same-signed) mass [GeV/c^{2}]", 15, 3000);
+        RP_SS_mass->SetPlots("e#mu (vienodu kruviu) invariantine mase [GeV/c^{2}]", 15, 3000);
 
         RP_mass_fine_before_PUCorr->SetLegend(0.75, 0.4);
         RP_mass_fine_before_RoccoR->SetLegend(0.75, 0.4);
@@ -2818,12 +2869,14 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
         RP_mass_fine_before_RoccoR->AddLegendEntry(h_data_mass_fine_before_RoccoR, "Data", "lp");
         RP_mass_fine_before_EffCorr->AddLegendEntry(h_data_mass_fine_before_EffCorr, "Data", "lp");
         RP_mass_fine->AddLegendEntry(h_data_mass_fine, "Data", "lp");
-        RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
+//        RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
+        RP_mass->AddLegendEntry(h_data_mass, "Matavimas", "lp");
         RP_SS_mass_fine_before_PUCorr->AddLegendEntry(h_SS_data_mass_fine_before_PUCorr, "Data", "lp");
         RP_SS_mass_fine_before_RoccoR->AddLegendEntry(h_SS_data_mass_fine_before_RoccoR, "Data", "lp");
         RP_SS_mass_fine_before_EffCorr->AddLegendEntry(h_SS_data_mass_fine_before_EffCorr, "Data", "lp");
         RP_SS_mass_fine->AddLegendEntry(h_SS_data_mass_fine, "Data", "lp");
-        RP_SS_mass->AddLegendEntry(h_SS_data_mass, "Data", "lp");
+//        RP_SS_mass->AddLegendEntry(h_SS_data_mass, "Data", "lp");
+        RP_SS_mass->AddLegendEntry(h_SS_data_mass, "Matavimas", "lp");
 
         // Legend MC BKG        
         RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[6+isWJ], "DY#rightarrow #tau#tau", "f");
@@ -2974,31 +3027,41 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
             f_bkg->GetObject( "h_muSS_eta_"+Mgr.Procname[pr], h_bkg_eta_muSS[iter] );
             f_bkg->GetObject( "h_muSS_phi_"+Mgr.Procname[pr], h_bkg_phi_muSS[iter] );
 
-            h_bkg_pT_ele[iter]->SetFillColor(iter+2);
-            h_bkg_eta_ele[iter]->SetFillColor(iter+2);
-            h_bkg_phi_ele[iter]->SetFillColor(iter+2);
-            h_bkg_pT_mu[iter]->SetFillColor(iter+2);
-            h_bkg_eta_mu[iter]->SetFillColor(iter+2);
-            h_bkg_phi_mu[iter]->SetFillColor(iter+2);
-            h_bkg_pT_eleSS[iter]->SetFillColor(iter+2);
-            h_bkg_eta_eleSS[iter]->SetFillColor(iter+2);
-            h_bkg_phi_eleSS[iter]->SetFillColor(iter+2);
-            h_bkg_pT_muSS[iter]->SetFillColor(iter+2);
-            h_bkg_eta_muSS[iter]->SetFillColor(iter+2);
-            h_bkg_phi_muSS[iter]->SetFillColor(iter+2);
+            Color_t color = kBlack;
+            if ( pr == _EMu_WJets ) color = kRed - 2;
+            if ( pr == _EMu_WW ) color = kMagenta - 5;
+            if ( pr == _EMu_WZ ) color = kMagenta - 2;
+            if ( pr == _EMu_ZZ ) color = kMagenta - 6;
+            if ( pr == _EMu_tbarW ) color = kGreen - 2;
+            if ( pr == _EMu_tW ) color = kGreen + 2;
+            if ( pr == _EMu_ttbar_Full ) color = kCyan + 2;
+            if ( pr == _EMu_DYTauTau_Full ) color = kOrange - 5;
 
-            h_bkg_pT_ele[iter]->SetLineColor(iter+2);
-            h_bkg_eta_ele[iter]->SetLineColor(iter+2);
-            h_bkg_phi_ele[iter]->SetLineColor(iter+2);
-            h_bkg_pT_mu[iter]->SetLineColor(iter+2);
-            h_bkg_eta_mu[iter]->SetLineColor(iter+2);
-            h_bkg_phi_mu[iter]->SetLineColor(iter+2);
-            h_bkg_pT_eleSS[iter]->SetLineColor(iter+2);
-            h_bkg_eta_eleSS[iter]->SetLineColor(iter+2);
-            h_bkg_phi_eleSS[iter]->SetLineColor(iter+2);
-            h_bkg_pT_muSS[iter]->SetLineColor(iter+2);
-            h_bkg_eta_muSS[iter]->SetLineColor(iter+2);
-            h_bkg_phi_muSS[iter]->SetLineColor(iter+2);
+            h_bkg_pT_ele[iter]->SetFillColor(color);
+            h_bkg_eta_ele[iter]->SetFillColor(color);
+            h_bkg_phi_ele[iter]->SetFillColor(color);
+            h_bkg_pT_mu[iter]->SetFillColor(color);
+            h_bkg_eta_mu[iter]->SetFillColor(color);
+            h_bkg_phi_mu[iter]->SetFillColor(color);
+            h_bkg_pT_eleSS[iter]->SetFillColor(color);
+            h_bkg_eta_eleSS[iter]->SetFillColor(color);
+            h_bkg_phi_eleSS[iter]->SetFillColor(color);
+            h_bkg_pT_muSS[iter]->SetFillColor(color);
+            h_bkg_eta_muSS[iter]->SetFillColor(color);
+            h_bkg_phi_muSS[iter]->SetFillColor(color);
+
+            h_bkg_pT_ele[iter]->SetLineColor(color);
+            h_bkg_eta_ele[iter]->SetLineColor(color);
+            h_bkg_phi_ele[iter]->SetLineColor(color);
+            h_bkg_pT_mu[iter]->SetLineColor(color);
+            h_bkg_eta_mu[iter]->SetLineColor(color);
+            h_bkg_phi_mu[iter]->SetLineColor(color);
+            h_bkg_pT_eleSS[iter]->SetLineColor(color);
+            h_bkg_eta_eleSS[iter]->SetLineColor(color);
+            h_bkg_phi_eleSS[iter]->SetLineColor(color);
+            h_bkg_pT_muSS[iter]->SetLineColor(color);
+            h_bkg_eta_muSS[iter]->SetLineColor(color);
+            h_bkg_phi_muSS[iter]->SetLineColor(color);
 
             h_bkg_pT_ele[iter]->SetDirectory(0);
             h_bkg_eta_ele[iter]->SetDirectory(0);
@@ -3310,13 +3373,23 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
             f_bkg->GetObject( "h_nVTX_before_EffCorr_"+Mgr.Procname[pr], h_bkg_nVTX_before_EffCorr[iter] );
             f_bkg->GetObject( "h_nVTX_"+Mgr.Procname[pr], h_bkg_nVTX[iter] );
 
-            h_bkg_nVTX_before_PUCorr[iter]->SetFillColor(iter+2);
-            h_bkg_nVTX_before_EffCorr[iter]->SetFillColor(iter+2);
-            h_bkg_nVTX[iter]->SetFillColor(iter+2);
+            Color_t color = kBlack;
+            if ( pr == _EMu_WJets ) color = kRed - 2;
+            if ( pr == _EMu_WW ) color = kMagenta - 5;
+            if ( pr == _EMu_WZ ) color = kMagenta - 2;
+            if ( pr == _EMu_ZZ ) color = kMagenta - 6;
+            if ( pr == _EMu_tbarW ) color = kGreen - 2;
+            if ( pr == _EMu_tW ) color = kGreen + 2;
+            if ( pr == _EMu_ttbar_Full ) color = kCyan + 2;
+            if ( pr == _EMu_DYTauTau_Full ) color = kOrange - 5;
 
-            h_bkg_nVTX_before_PUCorr[iter]->SetLineColor(iter+2);
-            h_bkg_nVTX_before_EffCorr[iter]->SetLineColor(iter+2);
-            h_bkg_nVTX[iter]->SetLineColor(iter+2);
+            h_bkg_nVTX_before_PUCorr[iter]->SetFillColor(color);
+            h_bkg_nVTX_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_nVTX[iter]->SetFillColor(color);
+
+            h_bkg_nVTX_before_PUCorr[iter]->SetLineColor(color);
+            h_bkg_nVTX_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_nVTX[iter]->SetLineColor(color);
 
             h_bkg_nVTX_before_PUCorr[iter]->SetDirectory(0);
             h_bkg_nVTX_before_EffCorr[iter]->SetDirectory(0);
@@ -3354,9 +3427,9 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
         RP_nVTX_before_EffCorr = new myRatioPlot_t( "RP_nVTX_before_EffCorr", s_nVTX_before_EffCorr, h_data_nVTX );
         RP_nVTX = new myRatioPlot_t( "RP_nVTX", s_nVTX, h_data_nVTX );
 
-        RP_nVTX_before_PUCorr->SetPlots("# Primary Vertices (before PU correction)", 0, 50);
-        RP_nVTX_before_EffCorr->SetPlots("# Primary Vertices (before Efficiency correction)", 0, 50);
-        RP_nVTX->SetPlots("# Primary Vertices", 0, 50);
+        RP_nVTX_before_PUCorr->SetPlots("nVTX (before PU correction)", 0, 50);
+        RP_nVTX_before_EffCorr->SetPlots("nVTX (before Efficiency correction)", 0, 50);
+        RP_nVTX->SetPlots("nVTX", 0, 50);
 
         RP_nVTX_before_PUCorr->SetLegend(0.75, 0.4);
         RP_nVTX_before_EffCorr->SetLegend(0.75, 0.4);
@@ -3396,12 +3469,34 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
             RP_nVTX->AddLegendEntry(h_bkg_nVTX[0], "W+Jets", "f");
         }
 
-
-
         RP_nVTX_before_PUCorr->Draw(0.5, 3e6, 0);
         RP_nVTX_before_EffCorr->Draw(0.5, 3e6, 0);
         RP_nVTX->Draw(0.5, 3e6, 0);
 
+        cout << "nVTX Chi^2 before PU reweight: " << CompChiSquared(h_data_nVTX, s_nVTX_before_PUCorr) << endl;
+        cout << "nVTX Chi^2 after PU reweight: " << CompChiSquared(h_data_nVTX, s_nVTX) << endl;
+
     } // End of if(nVTX)
 
 } // End of EMu_HistDrawer()
+
+Double_t CompChiSquared(TH1D *h_data, THStack *s_MC)
+{
+    Double_t ChiSquared = 0;
+    Int_t size_data = h_data->GetSize();
+    Int_t size_MC = ((TH1D*)(s_MC->GetStack()->Last()))->GetSize();
+    Int_t temp_data, temp_MC;
+    if ( size_data != size_MC )
+    {
+        cout << "CompChiSquared: Sizes do not match!" << endl;
+        return -999;
+    }
+    else for ( Int_t i=1; i<size_data-1; i++ )
+    {
+        temp_data = h_data->GetBinContent(i);
+        temp_MC = ((TH1D*)(s_MC->GetStack()->Last()))->GetBinContent(i);
+        if ( temp_data != 0 )
+            ChiSquared += ((temp_MC - temp_data) * (temp_MC - temp_data)) / temp_data;
+    }
+    return ChiSquared / (size_data - 2);
+} // End of CompChiSquared()

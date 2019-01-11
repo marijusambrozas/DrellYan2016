@@ -30,7 +30,9 @@ void myRatioPlot_t::SetPlots(TString xAxisName, Double_t xmin, Double_t xmax)
     h1_dataovermc->SetMarkerColor(kBlack);
     h1_dataovermc->SetTitle(" ");
     h1_dataovermc->GetXaxis()->SetTitle(xAxisName);
-    h1_dataovermc->GetYaxis()->SetTitle("Data/MC");
+    h1_dataovermc->GetYaxis()->SetTitleOffset(2);
+//    h1_dataovermc->GetYaxis()->SetTitle("Data/MC");
+    h1_dataovermc->GetYaxis()->SetTitle("Eksp./Mod.");
     h1_dataovermc->GetXaxis()->SetNoExponent(1);
     h1_dataovermc->GetXaxis()->SetMoreLogLabels(1);    
     if (h1_dataovermc->GetBinContent(h1_dataovermc->GetMinimumBin())>0.3 && h1_dataovermc->GetBinContent(h1_dataovermc->GetMaximumBin())<2) {
@@ -73,8 +75,8 @@ void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX)
         pad1->Draw();
         pad1->cd();
         s_stackedProcesses->Draw("HIST");
-        s_stackedProcesses->GetYaxis()->SetTitle("Number of events");
-//        s_stackedProcesses->GetYaxis()->SetTitle("Ivykiu skai#check{c}ius");
+//        s_stackedProcesses->GetYaxis()->SetTitle("Number of events");
+        s_stackedProcesses->GetYaxis()->SetTitle("Ivykiu skai#check{c}ius");
         s_stackedProcesses->GetYaxis()->SetTitleOffset(0.75);
         s_stackedProcesses->GetYaxis()->SetTitleSize(0.04);
         s_stackedProcesses->GetXaxis()->SetNoExponent(1);
