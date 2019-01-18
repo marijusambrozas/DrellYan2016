@@ -32,7 +32,9 @@ void myRatioPlot_t::SetPlots(TString xAxisName, Double_t xmin, Double_t xmax)
     h1_dataovermc->GetXaxis()->SetTitle(xAxisName);
     h1_dataovermc->GetYaxis()->SetTitleOffset(2);
 //    h1_dataovermc->GetYaxis()->SetTitle("Data/MC");
-    h1_dataovermc->GetYaxis()->SetTitle("Eksp./Mod.");
+//    h1_dataovermc->GetYaxis()->SetTitle("Eksp./Mod.");
+    h1_dataovermc->GetYaxis()->SetTitle("Eksp./Ivert.");
+//    h1_dataovermc->GetYaxis()->SetTitle("Ivert./Mod.");
     h1_dataovermc->GetXaxis()->SetNoExponent(1);
     h1_dataovermc->GetXaxis()->SetMoreLogLabels(1);    
     if (h1_dataovermc->GetBinContent(h1_dataovermc->GetMinimumBin())>0.3 && h1_dataovermc->GetBinContent(h1_dataovermc->GetMaximumBin())<2) {
@@ -70,6 +72,8 @@ void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX)
 {
     if(PlotsSet==1) {
         canvas = new TCanvas(CanvasName, CanvasName, 1000, 1000);
+//        canvas = new TCanvas(CanvasName, CanvasName, 700, 1000);
+//        canvas = new TCanvas(CanvasName, CanvasName, 2000, 1000);
         TPad* pad1 = new TPad("pad1", "pad1", 0, 0.255, 1, 1);
         pad1->SetBottomMargin(0.001);
         pad1->Draw();

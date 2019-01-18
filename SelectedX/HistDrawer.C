@@ -27,7 +27,9 @@
 void EE_HistDrawer (  TString whichGraphs, TString type );
 void MuMu_HistDrawer ( TString whichGraphs, TString type );
 void EMu_HistDrawer ( TString whichGraphs, TString type );
+void Est_HistDrawer ();
 Double_t CompChiSquared ( TH1D *h_data, THStack *s_MC );
+Double_t CompAvgDataMCDifference ( TH1D *h_data, THStack *s_MC );
 
 // -- Drell-Yan mass bins -- //
 const Double_t massbins[44] = {15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 68, 72, 76, 81, 86, 91, 96, 101, 106, 110, 115, 120, 126,
@@ -59,12 +61,20 @@ void HistDrawer ( TString WhichX = "", TString WhichGraphs = "ALL", TString type
         cout << "\n*****   EMu_HistDrawer ( " << whichGraphs << " " << type << " )  *****" << endl;
         EMu_HistDrawer( whichGraphs, type );
     }
+    if ( whichX.Contains("EST") )
+    {
+        Xselected++;
+        cout << "\n*****   Est_HistDrawer ()  *****" << endl;
+        Est_HistDrawer();
+    }
     if ( Xselected == 0 ) cout << "Wrong arument!" << endl;
 
 } // End of HistDrawer()
 
 
+/// ############################################################################# ///
 /// ----------------------------- Electron Channel ------------------------------ ///
+/// ############################################################################# ///
 void EE_HistDrawer ( TString whichGraphs, TString type )
 {
     if ( !whichGraphs.Length() )
@@ -90,8 +100,6 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
     TString name_data = Mgr.HistLocation+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root";
     TFile* f_data = new TFile( name_data, "READ" );
     if (f_data->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root" << " opened successfully" << endl;
-
-    Double_t dataerror, MCerror, dataintegral=1.3107e+07, MCintegral;
 
 //################################# INVARIANT MASS #################################################
 
@@ -299,11 +307,53 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         RP_mass_fine->Draw(0.5, 3e6, 1);
         RP_mass->Draw(0.5, 3e6, 1);
 
-        dataintegral = h_data_mass->IntegralAndError(1, h_data_mass->GetSize()-2, dataerror);
-        MCintegral = ((TH1D*)(s_mass->GetStack()->Last()))->IntegralAndError(1, h_data_mass->GetSize()-2, MCerror);
+        Double_t dataerror, MCerror, MCerror_noSF, DYerror, dataintegral=1.3107e+07, MCintegral, MCintegral_noSF, DYintegral;
+        Double_t dataerrorZ, MCerrorZ, DYerrorZ, dataintegralZ=1.3107e+07, MCintegralZ, DYintegralZ;
+        Double_t dataerror_noZ=0, MCerror_noZ=0, DYerror_noZ=0, dataintegral_noZ=1.3107e+07, MCintegral_noZ, DYintegral_noZ, temp_noZ;
 
-        std::cout << "data events: " << dataintegral << "+-" << dataerror << endl;
+        dataintegral = h_data_mass->IntegralAndError( 1, h_data_mass->GetSize()-2, dataerror );
+        MCintegral = ( (TH1D*)(s_mass->GetStack()->Last()) )->IntegralAndError( 1, h_data_mass->GetSize()-2, MCerror );
+        MCintegral_noSF = ( (TH1D*)(s_mass_fine_before_EffCorr->GetStack()->Last()) )->IntegralAndError( 1, h_data_mass->GetSize()-2, MCerror_noSF );
+        DYintegral = h_DY_mass->IntegralAndError( 1, h_DY_mass->GetSize()-2, DYerror );
+
+        dataintegralZ = h_data_mass->IntegralAndError( 10, 22, dataerrorZ );
+        MCintegralZ = ( (TH1D*)(s_mass->GetStack()->Last()) )->IntegralAndError( 10, 22, MCerrorZ );
+        DYintegralZ = h_DY_mass->IntegralAndError( 10, 22, DYerrorZ );
+
+        dataintegral_noZ = h_data_mass->IntegralAndError( 1, 9, temp_noZ );
+        dataerror_noZ += temp_noZ * temp_noZ;
+        dataintegral_noZ += h_data_mass->IntegralAndError( 23, h_data_mass->GetSize()-2, temp_noZ );
+        dataerror_noZ += temp_noZ * temp_noZ;
+        dataerror_noZ = sqrt(dataerror_noZ);
+
+        MCintegral_noZ = ( (TH1D*)(s_mass->GetStack()->Last()) )->IntegralAndError( 1, 9, temp_noZ );
+        MCerror_noZ += temp_noZ * temp_noZ;
+        MCintegral_noZ += ( (TH1D*)(s_mass->GetStack()->Last()) )->IntegralAndError( 23, h_data_mass->GetSize()-2, temp_noZ );
+        MCerror_noZ += temp_noZ * temp_noZ;
+        MCerror_noZ = sqrt(MCerror_noZ);
+
+        DYintegral_noZ = h_DY_mass->IntegralAndError( 1, 9, temp_noZ );
+        DYerror_noZ += temp_noZ * temp_noZ;
+        DYintegral_noZ += h_DY_mass->IntegralAndError( 23, h_DY_mass->GetSize()-2, temp_noZ );
+        DYerror_noZ += temp_noZ * temp_noZ;
+        DYerror_noZ = sqrt(DYerror_noZ);
+
+        std::cout << "Data events: " << dataintegral << "+-" << dataerror << endl;
         std::cout << "MC events: " << MCintegral << "+-" << MCerror << endl;
+        std::cout << "MC/Obs: " << MCintegral / dataintegral << "+-" <<
+                     sqrt( (dataerror / dataintegral) * (dataerror / dataintegral) +
+                           (MCerror / MCintegral) * (MCerror / MCintegral) ) << endl;
+        std::cout << "MC events before corrections: " << MCintegral_noSF << "+-" << MCerror_noSF << endl;
+        std::cout << "MC DY events: " << DYintegral << "+-" << DYerror << endl;
+        std::cout << "Avg. Data and MC relative difference: " << CompAvgDataMCDifference( h_data_mass, s_mass ) << endl;
+        std::cout << "Chi^2: " << CompChiSquared( h_data_mass, s_mass ) << endl << endl;
+
+        std::cout << "Data events around Z: " << dataintegralZ << "+-" << dataerrorZ << endl;
+        std::cout << "MC events around Z: " << MCintegralZ << "+-" << MCerrorZ << endl;
+        std::cout << "DY events around Z: " << DYintegralZ << "+-" << DYerrorZ << endl << endl;
+        std::cout << "Data events outside Z: " << dataintegral_noZ << "+-" << dataerror_noZ << endl;
+        std::cout << "MC events outside Z: " << MCintegral_noZ << "+-" << MCerror_noZ << endl;
+        std::cout << "DY events outside Z: " << DYintegral_noZ << "+-" << DYerror_noZ << endl << endl;
 
     } // End of if(invm)
 
@@ -1228,10 +1278,16 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
 
     } // End of if(nVTX)
 
+    f_DY->Close();
+    f_bkg->Close();
+    f_data->Close();
+
 } // End of EE_HistDrawer()
 
 
+/// ################################################################################## ///
 /// -------------------------------- Muon Channel ------------------------------------ ///
+/// ################################################################################## ///
 void MuMu_HistDrawer ( TString whichGraphs , TString type)
 {
     if ( !whichGraphs.Length() )
@@ -1270,8 +1326,6 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
     TString name_data_noRC = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+".root";
     TFile* f_data_noRC = new TFile( name_data_noRC, "READ" );
     if (f_data_noRC->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+".root" << " opened successfully" << endl;
-
-    Double_t dataerror, MCerror, dataintegral=2.25081e+07, MCintegral;
 
 //################################# INVARIANT MASS #################################################
 
@@ -1507,11 +1561,54 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_mass_fine->Draw(0.5, 3e6, 1);
         RP_mass->Draw(0.5, 1e7, 1);
 
-        dataintegral = h_data_mass->IntegralAndError(1, h_data_mass->GetSize()-2, dataerror);
-        MCintegral = ((TH1D*)(s_mass->GetStack()->Last()))->IntegralAndError(1, h_data_mass->GetSize()-2, MCerror);
+        Double_t dataerror, MCerror, MCerror_noSF, DYerror, dataintegral=2.25081e+07, MCintegral, MCintegral_noSF, DYintegral;
+        Double_t dataerrorZ, MCerrorZ, DYerrorZ, dataintegralZ=2.25081e+07, MCintegralZ, DYintegralZ;
+        Double_t dataerror_noZ=0, MCerror_noZ=0, DYerror_noZ=0, dataintegral_noZ=2.25081e+07, MCintegral_noZ, DYintegral_noZ, temp_noZ;
 
-        std::cout << "data events: " << dataintegral << "+-" << dataerror << endl;
+        dataintegral = h_data_mass->IntegralAndError( 1, h_data_mass->GetSize()-2, dataerror );
+        MCintegral = ( (TH1D*)(s_mass->GetStack()->Last()) )->IntegralAndError( 1, h_data_mass->GetSize()-2, MCerror );
+        MCintegral_noSF = ( (TH1D*)(s_mass_fine_before_RoccoR->GetStack()->Last()) )->IntegralAndError( 1, h_data_mass->GetSize()-2, MCerror_noSF );
+        DYintegral = h_DY_mass->IntegralAndError( 1, h_DY_mass->GetSize()-2, DYerror );
+
+        dataintegralZ = h_data_mass->IntegralAndError( 10, 22, dataerrorZ );
+        MCintegralZ = ( (TH1D*)(s_mass->GetStack()->Last()) )->IntegralAndError( 10, 22, MCerrorZ );
+        DYintegralZ = h_DY_mass->IntegralAndError( 10, 22, DYerrorZ );
+
+        dataintegral_noZ = h_data_mass->IntegralAndError( 1, 9, temp_noZ );
+        dataerror_noZ += temp_noZ * temp_noZ;
+        dataintegral_noZ += h_data_mass->IntegralAndError( 23, h_data_mass->GetSize()-2, temp_noZ );
+        dataerror_noZ += temp_noZ * temp_noZ;
+        dataerror_noZ = sqrt(dataerror_noZ);
+
+        MCintegral_noZ = ( (TH1D*)(s_mass->GetStack()->Last()) )->IntegralAndError( 1, 9, temp_noZ );
+        MCerror_noZ += temp_noZ * temp_noZ;
+        MCintegral_noZ += ( (TH1D*)(s_mass->GetStack()->Last()) )->IntegralAndError( 23, h_data_mass->GetSize()-2, temp_noZ );
+        MCerror_noZ += temp_noZ * temp_noZ;
+        MCerror_noZ = sqrt(MCerror_noZ);
+
+        DYintegral_noZ = h_DY_mass->IntegralAndError( 1, 9, temp_noZ );
+        DYerror_noZ += temp_noZ * temp_noZ;
+        DYintegral_noZ += h_DY_mass->IntegralAndError( 23, h_DY_mass->GetSize()-2, temp_noZ );
+        DYerror_noZ += temp_noZ * temp_noZ;
+        DYerror_noZ = sqrt(DYerror_noZ);
+
+        std::cout << "Data events: " << dataintegral << "+-" << dataerror << endl;
         std::cout << "MC events: " << MCintegral << "+-" << MCerror << endl;
+        std::cout << "MC/Obs: " << MCintegral / dataintegral << "+-" <<
+                     sqrt( (dataerror / dataintegral) * (dataerror / dataintegral) +
+                           (MCerror / MCintegral) * (MCerror / MCintegral) ) << endl;
+        std::cout << "MC events before corrections: " << MCintegral_noSF << "+-" << MCerror_noSF << endl;
+        std::cout << "DY events: " << DYintegral << "+-" << DYerror << endl;
+        std::cout << "Avg. Data and MC relative difference: " << CompAvgDataMCDifference( h_data_mass, s_mass ) << endl;
+        std::cout << "Chi^2: " << CompChiSquared( h_data_mass, s_mass ) << endl << endl;
+
+        std::cout << "Data events around Z: " << dataintegralZ << "+-" << dataerrorZ << endl;
+        std::cout << "MC events around Z: " << MCintegralZ << "+-" << MCerrorZ << endl;
+        std::cout << "DY events around Z: " << DYintegralZ << "+-" << DYerrorZ << endl << endl;
+        std::cout << "Data events outside Z: " << dataintegral_noZ << "+-" << dataerror_noZ << endl;
+        std::cout << "MC events outside Z: " << MCintegral_noZ << "+-" << MCerror_noZ << endl;
+        std::cout << "DY events outside Z: " << DYintegral_noZ << "+-" << DYerror_noZ << endl << endl;
+
 
     } // End of if(invm)
 
@@ -2606,9 +2703,16 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
 
     } // End of if(nVTX)
 
+    f_DY->Close();
+    f_bkg->Close();
+    f_data->Close();
+
 } // End of MuMu_HistDrawer()
 
+
+/// ################################################################################ ///
 /// -------------------------------- EMu events ------------------------------------ ///
+/// ################################################################################ ///
 void EMu_HistDrawer ( TString whichGraphs , TString type)
 {
     if ( !whichGraphs.Length() )
@@ -2640,9 +2744,7 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
     Mgr.SetProc( _EMu_SingleMuon_Full );
     TString name_data_noRC = Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root";
     TFile* f_data_noRC = new TFile( name_data_noRC, "READ" );
-    if (f_data_noRC->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root" << " opened successfully" << endl;
-
-    Double_t dataerror, MCerror, dataintegral=348650, MCintegral;
+    if (f_data_noRC->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root" << " opened successfully" << endl;    
 
 //################################# INVARIANT MASS #################################################
 
@@ -2969,15 +3071,57 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
         RP_SS_mass_fine->Draw(0.5, 1e6, 1);
         RP_SS_mass->Draw(0.5, 1e6, 1);
 
+        Double_t dataerror, MCerror, MCerror_noSF, dataintegral=348650, MCintegral, MCintegral_noSF;
+        Double_t dataerrorSS, MCerrorSS, MCerrorSS_noSF, dataintegralSS=348650, MCintegralSS, MCintegralSS_noSF;
+        Double_t dataerrorZ, MCerrorZ, dataintegralZ=2.25081e+07, MCintegralZ;
+        Double_t dataerror_noZ=0, MCerror_noZ=0, dataintegral_noZ=2.25081e+07, MCintegral_noZ, temp_noZ;
+
         dataintegral = h_data_mass->IntegralAndError(1, h_data_mass->GetSize()-2, dataerror);
         MCintegral = ((TH1D*)(s_mass->GetStack()->Last()))->IntegralAndError(1, h_data_mass->GetSize()-2, MCerror);
+        MCintegral_noSF = ((TH1D*)(s_mass_fine_before_RoccoR->GetStack()->Last()))->IntegralAndError(1, h_data_mass->GetSize()-2, MCerror_noSF);
+        dataintegralSS = h_SS_data_mass->IntegralAndError(1, h_SS_data_mass->GetSize()-2, dataerrorSS);
+        MCintegralSS = ((TH1D*)(s_SS_mass->GetStack()->Last()))->IntegralAndError(1, h_SS_data_mass->GetSize()-2, MCerrorSS);
+        MCintegralSS_noSF = ((TH1D*)(s_SS_mass_fine_before_RoccoR->GetStack()->Last()))->IntegralAndError(1, h_SS_data_mass->GetSize()-2, MCerrorSS_noSF);
 
-        std::cout << "data events: " << dataintegral << "+-" << dataerror << endl;
+        dataintegralZ = h_data_mass->IntegralAndError( 10, 22, dataerrorZ );
+        MCintegralZ = ( (TH1D*)(s_mass->GetStack()->Last()) )->IntegralAndError( 10, 22, MCerrorZ );
+
+        dataintegral_noZ = h_data_mass->IntegralAndError( 1, 9, temp_noZ );
+        dataerror_noZ += temp_noZ * temp_noZ;
+        dataintegral_noZ += h_data_mass->IntegralAndError( 23, h_data_mass->GetSize()-2, temp_noZ );
+        dataerror_noZ += temp_noZ * temp_noZ;
+        dataerror_noZ = sqrt(dataerror_noZ);
+
+        MCintegral_noZ = ( (TH1D*)(s_mass->GetStack()->Last()) )->IntegralAndError( 1, 9, temp_noZ );
+        MCerror_noZ += temp_noZ * temp_noZ;
+        MCintegral_noZ += ( (TH1D*)(s_mass->GetStack()->Last()) )->IntegralAndError( 23, h_data_mass->GetSize()-2, temp_noZ );
+        MCerror_noZ += temp_noZ * temp_noZ;
+        MCerror_noZ = sqrt(MCerror_noZ);
+
+        std::cout << "Data events: " << dataintegral << "+-" << dataerror << endl;
         std::cout << "MC events: " << MCintegral << "+-" << MCerror << endl;
+        std::cout << "MC/Obs: " << MCintegral / dataintegral << "+-" <<
+                     sqrt( (dataerror / dataintegral) * (dataerror / dataintegral) +
+                           (MCerror / MCintegral) * (MCerror / MCintegral) ) << endl;
+        std::cout << "MC events before corrections: " << MCintegral_noSF << "+-" << MCerror_noSF << endl;
+        std::cout << "Avg. Data and MC relative difference: " << CompAvgDataMCDifference( h_data_mass, s_mass ) << endl;
+
+        std::cout << "Same-sign data events: " << dataintegralSS << "+-" << dataerrorSS << endl;
+        std::cout << "Same-sign MC events: " << MCintegralSS << "+-" << MCerrorSS << endl;
+        std::cout << "Same-sign MC/Obs: " << MCintegralSS / dataintegralSS << "+-" <<
+                     sqrt( (dataerrorSS / dataintegralSS) * (dataerrorSS / dataintegralSS) +
+                           (MCerrorSS / MCintegralSS) * (MCerrorSS / MCintegralSS) ) << endl;
+        std::cout << "Same-sign MC events before corrections: " << MCintegralSS_noSF << "+-" << MCerrorSS_noSF << endl << endl;
+
+        std::cout << "Data events around Z: " << dataintegralZ << "+-" << dataerrorZ << endl;
+        std::cout << "MC events around Z: " << MCintegralZ << "+-" << MCerrorZ << endl;
+        std::cout << "Data events outside Z: " << dataintegral_noZ << "+-" << dataerror_noZ << endl;
+        std::cout << "MC events outside Z: " << MCintegral_noZ << "+-" << MCerror_noZ << endl;
+
         if ( isWJ )
         {
             std::cout << "OS/SS ratio of WJets events: " << ratio_WJets_SSvsOS << endl;
-            std::cout << "Average OS/SS ratio of WJets events per bin: " << avg_ratio_WJets_SSvsOS << endl;
+            std::cout << "Average OS/SS ratio of WJets events per bin: " << avg_ratio_WJets_SSvsOS << endl << endl;
         }
 
     } // End of if(invm)
@@ -3480,7 +3624,333 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
 
 } // End of EMu_HistDrawer()
 
-Double_t CompChiSquared(TH1D *h_data, THStack *s_MC)
+
+/// ############################################################################### ///
+/// ----------------------------- BKG ESTIMATIONS --------------------------------- ///
+/// ############################################################################### ///
+void Est_HistDrawer()
+{
+    LocalFileMgr Mgr;
+
+//############################ ELECTRON CHANNEL #####################################
+
+    Mgr.SetProc( _EE_DY_Full );
+    TString name_DY_ee = Mgr.HistLocation+"Hist_"+Mgr.Procname[_EE_DY_Full]+".root";
+    TFile* f_DY_ee = new TFile( name_DY_ee, "READ" );
+    cout << "Hists location: " << Mgr.HistLocation << endl;
+    if (f_DY_ee->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_EE_DY_Full]+".root" << " opened successfully" << endl;
+    Mgr.SetProc( _EE_Bkg_Full );
+    TString name_bkg_ee = Mgr.HistLocation+"Hist_"+Mgr.Procname[_EE_Bkg_Full]+".root";
+    TFile* f_bkg_ee = new TFile( name_bkg_ee, "READ" );
+    if (f_bkg_ee->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_EE_Bkg_Full]+".root" << " opened successfully" << endl;
+    TString name_bkg_est_ee = Mgr.HistLocation+"EstBkg_EE.root";
+    TFile* f_bkg_est_ee = new TFile( name_bkg_est_ee, "READ" );
+    if (f_bkg_est_ee->IsOpen()) std::cout << "File " << "EstBkg_EE.root" << " opened successfully" << endl;
+    Mgr.SetProc( _EE_DoubleEG_Full );
+    TString name_data_ee = Mgr.HistLocation+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root";
+    TFile* f_data_ee = new TFile( name_data_ee, "READ" );
+    if (f_data_ee->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root" << " opened successfully" << endl;
+
+    THStack *s_mass_ee = new THStack("s_mass_ee", "");
+
+//----------------------------------- MC bkg -------------------------------------------------------
+    TH1D *h_bkg_mass_ee[9];
+    Int_t iter = 0;
+
+    for ( SelProc_t pr = _EE_QCDEMEnriched_Full; pr > _EndOf_EE_ttbar_Normal; pr=SelProc_t((int)(pr-1)) )
+    {
+        if ( pr == _EE_WJets || pr == _EE_QCDEMEnriched_Full )
+//        if ( pr == _EE_WJets || pr == _EE_QCDEMEnriched_Full || pr == _EE_WZ || pr == _EE_ZZ )
+            f_bkg_ee->GetObject( "h_mass_"+Mgr.Procname[pr], h_bkg_mass_ee[iter] );
+        else
+            f_bkg_est_ee->GetObject( "h_ee_mass_Est_"+Mgr.Procname[pr], h_bkg_mass_ee[iter] );
+
+        Color_t color = kBlack;
+        if ( pr == _EE_QCDEMEnriched_Full ) color = kRed + 3;
+        if ( pr == _EE_WJets ) color = kRed - 2;
+        if ( pr == _EE_WW ) color = kMagenta - 5;
+        if ( pr == _EE_WZ ) color = kMagenta - 2;
+        if ( pr == _EE_ZZ ) color = kMagenta - 6;
+        if ( pr == _EE_tbarW ) color = kGreen - 2;
+        if ( pr == _EE_tW ) color = kGreen + 2;
+        if ( pr == _EE_ttbar_Full ) color = kCyan + 2;
+        if ( pr == _EE_DYTauTau_Full ) color = kOrange - 5;
+
+        h_bkg_mass_ee[iter]->SetFillColor(color);
+        h_bkg_mass_ee[iter]->SetLineColor(color);
+        h_bkg_mass_ee[iter]->SetDirectory(0);
+        s_mass_ee->Add( h_bkg_mass_ee[iter] );
+
+        iter++;
+
+        if ( pr == _EE_QCDEMEnriched_Full ) // next - WJets
+            pr = _EndOf_EE_WJets;
+        if ( pr == _EE_WJets ) // next - WW
+            pr = _EndOf_EE_VVnST_Normal;
+        if ( pr == _EE_tW ) // next -- ttbar
+            pr = _EE_VVnST;
+        if ( pr == _EE_DYTauTau_Full ) // last
+            break;
+
+    } // End of for(bkg)
+
+//---------------------------------- MC signal -----------------------------------------------------
+
+    TH1D *h_DY_mass_ee;
+    f_DY_ee->GetObject( "h_mass_"+Mgr.Procname[_EE_DY_Full], h_DY_mass_ee );
+    h_DY_mass_ee->SetFillColor(kOrange);
+    h_DY_mass_ee->SetLineColor(kOrange);
+    h_DY_mass_ee->SetDirectory(0);
+    s_mass_ee->Add( h_DY_mass_ee );
+
+//--------------------------------------- DATA -----------------------------------------------------
+
+    TH1D *h_data_mass_ee;
+
+    Mgr.SetProc(_EE_DoubleEG_Full);
+    f_data_ee->GetObject( "h_mass_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass_ee );
+    h_data_mass_ee->SetMarkerStyle(kFullDotLarge);
+    h_data_mass_ee->SetMarkerColor(kBlack);
+    h_data_mass_ee->SetLineColor(kBlack);
+    h_data_mass_ee->SetDirectory(0);
+
+//--------------------------------- Ratio Plot --------------------------------------
+
+    myRatioPlot_t *RP_mass_ee = new myRatioPlot_t( "RP_mass_ee", s_mass_ee, h_data_mass_ee );
+//        RP_mass->SetPlots("Dielectron invariant mass [GeV/c^{2}]", 15, 3000);
+    RP_mass_ee->SetPlots("Elektronu poros invariantine mase [GeV/c^{2}]", 15, 3000);
+    RP_mass_ee->SetLegend(0.75, 0.4);
+
+    // Legend data
+//        RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
+    RP_mass_ee->AddLegendEntry(h_data_mass_ee, "Matavimas", "lp");
+
+    // Legend MC signal
+    RP_mass_ee->AddLegendEntry(h_DY_mass_ee, "DY#rightarrow ee (MC)", "f");
+
+    // Legend MC BKG (EN)
+//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (D-D)", "f");
+//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[7], "t#bar{t} (D-D)", "f");
+//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[6], "tW (D-D)", "f");
+//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[5], "#bar{t}W (D-D)", "f");
+//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[4], "ZZ (D-D)", "f");
+//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[3], "WZ (D-D)", "f");
+//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[2], "WW (D_D)", "f");
+//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[1], "W+Jets (MC)", "f");
+//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[0], "QCD (MC)", "f");
+
+    // Legend MC BKG (LT)
+    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (e#mu iv.)", "f");
+    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[7], "t#bar{t} (e#mu iv.)", "f");
+    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[6], "tW (e#mu iv.)", "f");
+    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[5], "#bar{t}W (e#mu iv.)", "f");
+    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[4], "ZZ (e#mu iv.)", "f");
+    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[3], "WZ (e#mu iv.)", "f");
+    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[2], "WW (e#mu iv.)", "f");
+    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[1], "W+Jets (MC)", "f");
+    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[0], "QCD (MC)", "f");
+
+    RP_mass_ee->Draw(0.5, 3e6, 1);
+
+    Double_t dataerror_ee, MCerror_ee, dataintegral_ee=1.3107e+07, MCintegral_ee;
+    Double_t dataerrorZ_ee, MCerrorZ_ee, DYerrorZ_ee, dataintegralZ_ee, MCintegralZ_ee, DYintegralZ_ee;
+    Double_t dataerror_noZ_ee=0, MCerror_noZ_ee=0, dataintegral_noZ_ee=0, MCintegral_noZ_ee, temp_noZ_ee;
+
+    dataintegral_ee = h_data_mass_ee->IntegralAndError(1, h_data_mass_ee->GetSize()-2, dataerror_ee);
+    MCintegral_ee = ((TH1D*)(s_mass_ee->GetStack()->Last()))->IntegralAndError(1, h_data_mass_ee->GetSize()-2, MCerror_ee);
+
+    dataintegralZ_ee = h_data_mass_ee->IntegralAndError( 10, 22, dataerrorZ_ee );
+    MCintegralZ_ee = ( (TH1D*)(s_mass_ee->GetStack()->Last()) )->IntegralAndError( 10, 22, MCerrorZ_ee );
+
+    dataintegral_noZ_ee = h_data_mass_ee->IntegralAndError( 1, 9, temp_noZ_ee );
+    dataerror_noZ_ee += temp_noZ_ee * temp_noZ_ee;
+    dataintegral_noZ_ee += h_data_mass_ee->IntegralAndError( 23, h_data_mass_ee->GetSize()-2, temp_noZ_ee );
+    dataerror_noZ_ee += temp_noZ_ee * temp_noZ_ee;
+    dataerror_noZ_ee = sqrt(dataerror_noZ_ee);
+
+    MCintegral_noZ_ee = ( (TH1D*)(s_mass_ee->GetStack()->Last()) )->IntegralAndError( 1, 9, temp_noZ_ee );
+    MCerror_noZ_ee += temp_noZ_ee * temp_noZ_ee;
+    MCintegral_noZ_ee += ( (TH1D*)(s_mass_ee->GetStack()->Last()) )->IntegralAndError( 23, h_data_mass_ee->GetSize()-2, temp_noZ_ee );
+    MCerror_noZ_ee += temp_noZ_ee * temp_noZ_ee;
+    MCerror_noZ_ee = sqrt(MCerror_noZ_ee);
+
+    std::cout << "ee Data events: " << dataintegral_ee << "+-" << dataerror_ee << endl;
+    std::cout << "ee MC+DD events: " << MCintegral_ee << "+-" << MCerror_ee << endl;
+    std::cout << "ee MC/Obs: " << MCintegral_ee/dataintegral_ee << "+-" <<
+                 sqrt( (dataerror_ee / dataintegral_ee) * (dataerror_ee / dataintegral_ee) +
+                       (MCerror_ee / MCintegral_ee) * (MCerror_ee / MCintegral_ee) ) << endl;
+    std::cout << "ee Avg. Data and Est relative difference: " << CompAvgDataMCDifference( h_data_mass_ee, s_mass_ee ) << endl;
+    std::cout << "ee Chi^2: " << CompChiSquared(h_data_mass_ee, s_mass_ee) << endl << endl;
+
+    std::cout << "ee Data events around Z: " << dataintegralZ_ee << "+-" << dataerrorZ_ee << endl;
+    std::cout << "ee MC events around Z: " << MCintegralZ_ee << "+-" << MCerrorZ_ee << endl;
+    std::cout << "ee Data events outside Z: " << dataintegral_noZ_ee << "+-" << dataerror_noZ_ee << endl;
+    std::cout << "ee MC events outside Z: " << MCintegral_noZ_ee << "+-" << MCerror_noZ_ee << endl;
+
+//############################## MUON CHANNEL ###############################################
+
+    Mgr.SetProc( _MuMu_DY_Full );
+    TString name_DY_mumu = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_DY_Full]+"_roccor.root";
+    TFile* f_DY_mumu = new TFile( name_DY_mumu, "READ" );
+    cout << "Hists location: " << Mgr.HistLocation << endl;
+    if (f_DY_mumu->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_DY_Full]+"_roccor.root" << " opened successfully" << endl;
+    Mgr.SetProc( _MuMu_Bkg_Full );
+    TString name_bkg_mumu = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+"_roccor.root";
+    TFile* f_bkg_mumu = new TFile( name_bkg_mumu, "READ" );
+    if (f_bkg_mumu->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+"_roccor.root" << " opened successfully" << endl;
+    TString name_bkg_est_mumu = Mgr.HistLocation+"EstBkg_MuMu.root";
+    TFile* f_bkg_est_mumu = new TFile( name_bkg_est_mumu, "READ" );
+    if (f_bkg_est_mumu->IsOpen()) std::cout << "File " << "EstBkg_MuMu.root" << " opened successfully" << endl;
+    Mgr.SetProc( _MuMu_SingleMuon_Full );
+    TString name_data_mumu = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+"_roccor.root";
+    TFile* f_data_mumu = new TFile( name_data_mumu, "READ" );
+    if (f_data_mumu->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+"_roccor.root" << " opened successfully" << endl;
+
+    THStack *s_mass_mumu = new THStack("s_mass_mumu", "");
+
+//----------------------------------- MC bkg -------------------------------------------------------
+    TH1D *h_bkg_mass_mumu[9];
+    iter = 0;
+
+    for ( SelProc_t pr = _MuMu_QCDMuEnriched_Full; pr > _EndOf_MuMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)) )
+    {
+        if ( pr == _MuMu_WJets || pr == _MuMu_QCDMuEnriched_Full )
+//        if ( pr == _MuMu_WJets || pr == _MuMu_QCDMuEnriched_Full || pr == _MuMu_WZ || pr == _MuMu_ZZ )
+            f_bkg_mumu->GetObject( "h_mass_"+Mgr.Procname[pr], h_bkg_mass_mumu[iter] );
+        else
+            f_bkg_est_mumu->GetObject( "h_MuMu_mass_Est_"+Mgr.Procname[pr], h_bkg_mass_mumu[iter] );
+
+        Color_t color = kBlack;
+        if ( pr == _MuMu_QCDMuEnriched_Full ) color = kRed + 3;
+        if ( pr == _MuMu_WJets ) color = kRed - 2;
+        if ( pr == _MuMu_WW ) color = kMagenta - 5;
+        if ( pr == _MuMu_WZ ) color = kMagenta - 2;
+        if ( pr == _MuMu_ZZ ) color = kMagenta - 6;
+        if ( pr == _MuMu_tbarW ) color = kGreen - 2;
+        if ( pr == _MuMu_tW ) color = kGreen + 2;
+        if ( pr == _MuMu_ttbar_Full ) color = kCyan + 2;
+        if ( pr == _MuMu_DYTauTau_Full ) color = kOrange - 5;
+
+        h_bkg_mass_mumu[iter]->SetFillColor(color);
+        h_bkg_mass_mumu[iter]->SetLineColor(color);
+        h_bkg_mass_mumu[iter]->SetDirectory(0);
+        s_mass_mumu->Add( h_bkg_mass_mumu[iter] );
+
+        iter++;
+
+        if ( pr == _MuMu_QCDMuEnriched_Full )
+            pr = _EndOf_MuMu_WJets; // next - WJets
+        if ( pr == _MuMu_WJets )
+            pr = _EndOf_MuMu_VVnST_Normal; // next - WW
+        if ( pr == _MuMu_tW )
+            pr = _MuMu_VVnST; // next - ttbar
+        if ( pr == _MuMu_DYTauTau_Full ) // last
+            break;
+
+    } // End of for(bkg)
+
+//---------------------------------- MC signal -----------------------------------------------------
+
+    TH1D *h_DY_mass_mumu;
+    f_DY_mumu->GetObject( "h_mass_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_mumu );
+    h_DY_mass_mumu->SetFillColor(kOrange);
+    h_DY_mass_mumu->SetLineColor(kOrange);
+    h_DY_mass_mumu->SetDirectory(0);
+    s_mass_mumu->Add( h_DY_mass_mumu );
+
+//--------------------------------------- DATA -----------------------------------------------------
+
+    TH1D *h_data_mass_mumu;
+    f_data_mumu->GetObject( "h_mass_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_mumu );
+    h_data_mass_mumu->SetMarkerStyle(kFullDotLarge);
+    h_data_mass_mumu->SetMarkerColor(kBlack);
+    h_data_mass_mumu->SetLineColor(kBlack);
+    h_data_mass_mumu->SetDirectory(0);
+
+//--------------------------------- Ratio Plot --------------------------------------
+
+    myRatioPlot_t *RP_mass_mumu = new myRatioPlot_t( "RP_mass_mumu", s_mass_mumu, h_data_mass_mumu );
+//        RP_mass->SetPlots("Dimuon invariant mass [GeV/c^{2}]", 15, 3000);
+    RP_mass_mumu->SetPlots("Miuonu poros invariantine mase [GeV/c^{2}]", 15, 3000);
+    RP_mass_mumu->SetLegend(0.75, 0.4);
+
+    // Legend (EN)
+//    RP_mass_mumu->AddLegendEntry(h_data_mass_mumu, "Data", "lp");
+//    RP_mass_mumu->AddLegendEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
+//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (D-D)", "f");
+//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[7], "t#bar{t} (D-D)", "f");
+//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[6], "tW (D-D)", "f");
+//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[5], "#bar{t}W (D-D)", "f");
+//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[4], "ZZ (D-D)", "f");
+//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[3], "WZ (D-D)", "f");
+//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[2], "WW (D-D)", "f");
+//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[1], "W+Jets (MC)", "f");
+//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[0], "QCD (MC)", "f");
+
+    // Legend (LT)
+    RP_mass_mumu->AddLegendEntry(h_data_mass_mumu, "Matavimas", "lp");
+    RP_mass_mumu->AddLegendEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
+    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (e#mu iv.)", "f");
+    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[7], "t#bar{t} (e#mu iv.)", "f");
+    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[6], "tW (e#mu iv.)", "f");
+    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[5], "#bar{t}W (e#mu iv.)", "f");
+    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[4], "ZZ (e#mu iv.)", "f");
+    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[3], "WZ (e#mu iv.)", "f");
+    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[2], "WW (e#mu iv.)", "f");
+    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[1], "W+Jets (MC)", "f");
+    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[0], "QCD (MC)", "f");
+
+    RP_mass_mumu->Draw(0.5, 1e7, 1);
+
+    Double_t dataerror_mumu, MCerror_mumu, dataintegral_mumu=2.25081e+07, MCintegral_mumu;
+    Double_t dataerrorZ_mumu, MCerrorZ_mumu, DYerrorZ_mumu, dataintegralZ_mumu, MCintegralZ_mumu, DYintegralZ_mumu;
+    Double_t dataerror_noZ_mumu=0, MCerror_noZ_mumu=0, dataintegral_noZ_mumu=0, MCintegral_noZ_mumu, temp_noZ_mumu;
+
+    dataintegral_mumu = h_data_mass_mumu->IntegralAndError(1, h_data_mass_mumu->GetSize()-2, dataerror_mumu);
+    MCintegral_mumu = ((TH1D*)(s_mass_mumu->GetStack()->Last()))->IntegralAndError(1, h_data_mass_mumu->GetSize()-2, MCerror_mumu);
+
+    dataintegralZ_mumu = h_data_mass_mumu->IntegralAndError( 10, 22, dataerrorZ_mumu );
+    MCintegralZ_mumu = ( (TH1D*)(s_mass_mumu->GetStack()->Last()) )->IntegralAndError( 10, 22, MCerrorZ_mumu );
+
+    dataintegral_noZ_mumu = h_data_mass_mumu->IntegralAndError( 1, 9, temp_noZ_mumu );
+    dataerror_noZ_mumu += temp_noZ_mumu * temp_noZ_mumu;
+    dataintegral_noZ_mumu += h_data_mass_mumu->IntegralAndError( 23, h_data_mass_mumu->GetSize()-2, temp_noZ_mumu );
+    dataerror_noZ_mumu += temp_noZ_mumu * temp_noZ_mumu;
+    dataerror_noZ_mumu = sqrt(dataerror_noZ_mumu);
+
+    MCintegral_noZ_mumu = ( (TH1D*)(s_mass_mumu->GetStack()->Last()) )->IntegralAndError( 1, 9, temp_noZ_mumu );
+    MCerror_noZ_mumu += temp_noZ_mumu * temp_noZ_mumu;
+    MCintegral_noZ_mumu += ( (TH1D*)(s_mass_mumu->GetStack()->Last()) )->IntegralAndError( 23, h_data_mass_mumu->GetSize()-2, temp_noZ_mumu );
+    MCerror_noZ_mumu += temp_noZ_mumu * temp_noZ_mumu;
+    MCerror_noZ_mumu = sqrt(MCerror_noZ_mumu);
+
+    std::cout << "MuMu Data events: " << dataintegral_mumu << "+-" << dataerror_mumu << endl;
+    std::cout << "MuMu MC+DD events: " << MCintegral_mumu << "+-" << MCerror_mumu << endl;
+    std::cout << "MuMu MC/Obs: " << MCintegral_mumu/dataintegral_mumu << "+-" <<
+                 sqrt( (dataerror_mumu / dataintegral_mumu) * (dataerror_mumu / dataintegral_mumu) +
+                       (MCerror_mumu / MCintegral_mumu) * (MCerror_mumu / MCintegral_mumu) ) << endl;
+    std::cout << "MuMu Avg. Data and Est relative difference: " << CompAvgDataMCDifference( h_data_mass_mumu, s_mass_mumu ) << endl;
+    std::cout << "MuMu Chi^2: " << CompChiSquared(h_data_mass_mumu, s_mass_mumu) << endl << endl;
+
+    std::cout << "MuMu Data events around Z: " << dataintegralZ_mumu << "+-" << dataerrorZ_mumu << endl;
+    std::cout << "MuMu MC events around Z: " << MCintegralZ_mumu << "+-" << MCerrorZ_mumu << endl;
+    std::cout << "MuMu Data events outside Z: " << dataintegral_noZ_mumu << "+-" << dataerror_noZ_mumu << endl;
+    std::cout << "MuMu MC events outside Z: " << MCintegral_noZ_mumu << "+-" << MCerror_noZ_mumu << endl;
+
+    f_DY_ee->Close();
+    f_DY_mumu->Close();
+    f_bkg_ee->Close();
+    f_bkg_mumu->Close();
+    f_bkg_est_ee->Close();
+    f_bkg_est_mumu->Close();
+    f_data_ee->Close();
+    f_data_mumu->Close();
+
+} // End of Est_HistDrawer()
+
+
+/// ------------------------------- COMP CHI^2 ---------------------------------- ///
+Double_t CompChiSquared ( TH1D *h_data, THStack *s_MC )
 {
     Double_t ChiSquared = 0;
     Int_t size_data = h_data->GetSize();
@@ -3500,3 +3970,26 @@ Double_t CompChiSquared(TH1D *h_data, THStack *s_MC)
     }
     return ChiSquared / (size_data - 2);
 } // End of CompChiSquared()
+
+
+/// ------------------------------- COMP AVG |DATA/MC-1| ---------------------------------- ///
+Double_t CompAvgDataMCDifference ( TH1D *h_data, THStack *s_MC )
+{
+    TH1D* h_MC = ( (TH1D*)(s_MC->GetStack()->Last()) );
+    Double_t AvgDataMCRatio = 0;
+    Int_t size_data = h_data->GetSize();
+    Int_t size_MC = h_MC->GetSize();
+    if ( size_data != size_MC )
+    {
+        cout << "CompAvgDataMCDifference: Sizes do not match!" << endl;
+        return -999;
+    }
+    else for ( Int_t i=1; i<size_data-1; i++ )
+    {
+        if ( h_MC->GetBinContent(i) != 0 )
+            AvgDataMCRatio += fabs( h_data->GetBinContent(i) / h_MC->GetBinContent(i) - 1 );
+        else size_MC--;
+    }
+    return AvgDataMCRatio / (size_MC - 2);
+} // End of CompChiSquared()
+
