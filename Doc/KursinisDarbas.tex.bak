@@ -81,7 +81,7 @@
 \setlength\q{\dimexpr .5\textwidth -2\tabcolsep}
 
 \begin{document}
-%\linenumbers
+\linenumbers
 
 \begin{titlepage}
 \centering

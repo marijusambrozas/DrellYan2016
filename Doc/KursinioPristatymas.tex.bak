@@ -460,7 +460,6 @@
 			\hline
 		\end{tabular}
 	\end{table}
-	\vspace{-0.2cm}
 	\small Įvykiai sumodeliuoti su \textsc{aMC@NLO}, \textsc{Powheg}, \textsc{Pythia8} įvykių generatoriais.
 \end{frame}
 
