@@ -1,6 +1,6 @@
 \documentclass[xcolor=dvipsnames]{beamer}
 \usetheme{Madrid}
-\definecolor{VUdarkred}{rgb}{0.41, 0, 0.21}
+\definecolor{VUdarkred}{rgb}{0.415, 0, 0.22}
 \definecolor{VUlightgray}{rgb}{0.863, 0.863, 0.863}
 \definecolor{VUdarkgray}{rgb}{0.255, 0.255, 0.255}
 \definecolor{VUwhite}{rgb}{1, 1, 1}
@@ -105,6 +105,34 @@
 \end{frame}
 }
 
+\begin{frame}
+	\section{LHC}
+	\frametitle{Didysis hadronų greitintuvas}
+	\begin{itemize}
+		\item CERN Didžiajame hadronų greitintuve (LHC) kas $25 \; \mathrm{ns}$ vyksta $13 \; \mathrm{TeV}$ energijos protonų susidūrimai;
+		\item Kompaktiškasis miuonų solenoidas (CMS) -- vienas iš keturių didžiausių LHC eksperimentų.
+	\end{itemize}
+	\centering
+	\includegraphics[width=0.6\textwidth]{LHC.jpg}
+\end{frame}
+
+
+\begin{frame}
+	\section{CMS detektorius}
+	\frametitle{Kompaktiškasis miuonų solenoidas}
+	\begin{figure}
+		\includegraphics[width=\textwidth]{CMSslice_LT.png}
+	\end{figure}
+\end{frame}
+
+
+\begin{frame}
+	\section{Standartinis modelis}
+	\frametitle{Standartinis modelis}
+	\centering
+	\includegraphics[width=0.8\textwidth]{SM.jpg}
+\end{frame}
+
 
 \begin{frame}
 	\section{Drell-Yan procesas}
@@ -120,7 +148,7 @@
 			\includegraphics[width=\textwidth]{DYprocess.PNG}
 		\end{figure}
 		\begin{itemize}
-			\item \small Vienas iš matuojamų pasiskirstymų -- diferencialinis sklaidos skerspjūvis
+			\item \small Vienas iš matuojamų pasiskirstymų -- diferencialinis reakcijos skerspjūvis
 			$\mathrm{d}\sigma/\mathrm{d}\mathit{m}_{\mathit{ll}}$.;
 		\end{itemize}
 	\end{minipage}
@@ -131,14 +159,14 @@
 			\includegraphics[width=0.8\textwidth]{DYeeCS.PNG}
 		\end{figure}
 		\vspace{-0.4cm}
-		\tiny\centering(CMS Collaboration. CMS-PAS-SMP-14-003, 2014.)
+		\tiny\centering(CMS Collaboration. Eur.Phys.J. C75 (2015) no.4, 147, 2014.)
 	\end{minipage}
 \end{frame}
 
 
 \begin{frame}
-	\subsection{Drell-Yan proceso triukšmo įvykiai}
-	\frametitle{Drell-Yan proceso triukšmo įvykiai}
+	\section{Drell-Yan proceso triukšmai}
+	\frametitle{Drell-Yan proceso triukšmai}
 	Dalelių detektoriai registruoja ilgai gyvuojančias po protonų susidūrimo susidariusias daleles.
 
 	\medskip
@@ -152,76 +180,15 @@
 		\item Pagrindiniai triukšmai:\\
 		$\mathit{ZZ}$, $\mathit{tW}$, $\bar{\mathit{t}}\mathit{W}$, $\mathit{WZ}$, $\mathit{WW}$, $\mathit{t}\bar{\mathit{t}}$,
 		$\mathrm{DY}\!\rightarrow\!\mathit{\tau^{+\,}\!\tau^{-}}$, $\WJets$, $\mathit{QCD}$;
-		\smallskip
+		\medskip
 		\item Triukšmo įvykių skaičiaus įvertinimo būdai:
 		\begin{enumerate}
 			\item Monte Carlo (MC) modeliavimas;
-			\item Matavimu grįsti metodai ($\emu$ metodas).
+			\item Matavimu grįsti metodai (pvz., $\emu$ metodas).
 		\end{enumerate}
 	\end{itemize}
-
-	\medskip
-
-	Siekiant išvengti su matavimu tiesiogiai nesusijusių neapibrėžtumų yra naudojami matavimu grįsti metodai.
-	% Pvz., dėl prastai sumodeliuoto detektoriaus atsako
 \end{frame}
 
-
-\begin{frame}
-	\section{Darbo tikslas}
-	\frametitle{Darbo tikslas}
-	Šio darbo tikslas:
-	\begin{itemize}
-		\item Iš didelio duomenų rinkinio išrinkti su Drell-Yan procesu siejamus įvykius;
-		\item Palyginti, kaip gerai modeliuotas leptonų poros invariantinės masės pasiskirstymas atitinka išmatuotąjį;
-		\item $\emu$ metodu įvertinti Drell-Yan proceso triukšmo įvykių skaičių.
-	\end{itemize}
-	\vspace{0.5cm}
-	\small Darbe buvo naudojami $2016$ metais CERN CMS detektoriaus užregistruoti $13 \; \mathrm{TeV}$ energijos
-	protonų susidūrimų duomenys, atitinkantys $35.9 \; \mathrm{fb}^{-1}$ integruotąjį šviesį.
-\end{frame}
-
-
-\begin{frame}
-	\section{Darbo schema}
-	\frametitle{Darbo schema}
-	\begin{enumerate}
-		\item Įvykių atranka;
-		\item Modeliuotų įvykių normavimas ir pataisų pritaikymas;
-		\item Matavimo ir modeliavimo palyginimas;
-		\item $\emu$ metodo taikymas.
-	\end{enumerate}
-\end{frame}
-
-\begin{frame}
-	\section{Įvykių atranka}
-	\frametitle{Įvykių atranka}
-	\vspace{-0.2cm}
-	\small
-	\begin{itemize}
-		\item Pradiniai eksperimentinių ir modeliuotų duomenų rinkiniai užima $14\; \mathrm{TB}$ ir yra saugomi
-		Pietų korėjos \textit{Tier3} duomenų centre;
-		\item Atranka buvo vykdoma pagal tokius kriterijus, kad ją praėję įvykiai būtų 	kuo panašesni į Drell-Yan procesą.
-	\end{itemize}
-	\vspace{-0.25cm}
-	\centering	
-	\includegraphics[width=0.65\textwidth]{Duomenu_panaudojimo_schema.png}	
-\end{frame}		
-		
-		
-\begin{frame}
-\frametitle{Įvykių skaičiaus normavimas, pataisos}
-	\begin{itemize}		
-		\item Su atrinktais modeliuotais duomenimis buvo atliekamos šios operacijos:
-		\begin{enumerate}
-			\item Normavimas pagal išmatuotą integruotą šviesį;
-			\item Normavimas pagal protonų susidūrimų tankį;
-			\item Trigerių suveikimo, leptonų atpažinimo, atkūrimo, bei miuonų trajektorijų atskirumo įvertinimo pataisos;
-		\end{enumerate}
-		\item Eksperimentiniams ir modeliuotiems įvykiams buvo pritaikytos elektronų energijos matavimo skalės bei miuonų
-		skersinio impulso skalės pataisos.
-	\end{itemize}
-\end{frame}
 
 \begin{frame}
 	\section{emu metodo veikimo principas}
@@ -237,8 +204,6 @@
 		$\WWpm\!\!\rightarrow\!\mathit{e^{+}\!e^{-}}$, $\WWpm\!\!\rightarrow\!\mathit{e^{+}\!\mu^{-}}$,
 		$\WWpm\!\!\rightarrow\!\mathit{\mu^{+}\!e^{-}}$, $\WWpm\!\!\rightarrow\!\mu^{+}\!\mu^{-}$;
 		\vspace{0.3cm}
-		\item Iš modeliavimo galima apskaičiuoti $\ee$ ir $\emu$ įvykių santykį $\mathit{N}_{\ee}^{\,\MC}/\mathit{N}_{\emu}^{\,\MC}$;
-		\medskip
 		\item Tikėdamiesi, kad $\mathit{N}_{\ee}^{\,\MC}/\mathit{N}_{\emu}^{\,\MC}=\mathit{N}_{\ee}^{\,\Data}/\mathit{N}_{\emu}^{\,\Data}$,
 		galime įvertinti $\mathit{N}_{\ee}^{\,\Data}$:
 		\begin{equation*}
@@ -248,6 +213,48 @@
 		Tas pats galioja ir $\mumu$ įvykiams.
 	\end{itemize}
 \end{frame}
+
+
+\begin{frame}
+	\section{Darbo tikslas}
+	\frametitle{Darbo tikslas}
+	Šio darbo tikslas:
+	\begin{itemize}
+		\item Iš didelio duomenų rinkinio išrinkti Drell-Yan proceso įvykius;
+		\item Palyginti modeliuotą ir išmatuotą leptonų poros invariantinės masės pasiskirstymus;
+		\item $\emu$ metodu įvertinti Drell-Yan proceso triukšmo įvykių skaičių.
+	\end{itemize}
+	\vspace{0.5cm}
+	\small Darbe buvo naudojami $2016$ metais CERN CMS detektoriaus užregistruoti $13 \; \mathrm{TeV}$ energijos
+	protonų susidūrimų duomenys, atitinkantys $35.9 \; \mathrm{fb}^{-1}$ integruotąjį šviesį.
+\end{frame}
+
+
+\begin{frame}
+	\section{Darbo schema}
+	\frametitle{Darbo schema}
+	\begin{enumerate}
+		\item Įvykių atranka:
+		\begin{itemize}
+			\item Atranką praėję įvykiai panašūs į Drell-Yan procesą;
+		\end{itemize}
+		\item Modeliuotų įvykių normavimas ir pataisų pritaikymas:
+		\begin{itemize}
+			\item Normavimas pagal išmatuotą integruotąjį šviesį;
+			\item Pataisos dėl eksperimento ir modeliavimo sąlygų nesutapimo;
+		\end{itemize}
+		\item Matavimo ir modeliavimo palyginimas;
+		\item $\emu$ metodo taikymas triukšmo įvykių įvertinimui.
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}
+	\section{Duomenų ir kodo tvarkymo schema}
+	\frametitle{Duomenų ir kodo tvarkymo schema}
+	\centering	
+	\includegraphics[width=0.8\textwidth]{Duomenu_panaudojimo_schema.png}	
+\end{frame}		
+
 
 \begin{frame}
 	\section{Įvykių atrankos rezultatai}
@@ -266,53 +273,60 @@
 \begin{frame}
 	\section{Matavimo ir modeliavimo palyginimas}
 	\frametitle{Matavimo ir modeliavimo palyginimas}
-	CMS detektoriaus užregistruotų ir modeliuotų $\ee$ bei $\mumu$ invariantinės masės pasiskirstymų palyginimas:\\
 	\begin{minipage}{0.49\textwidth}
+		\centering
+		$\ee$
+		
 		\includegraphics[width=\linewidth]{eeMassAfter_SMALL.png}
 	\end{minipage}
 	\hfill
 	\begin{minipage}{0.49\textwidth}
+		\centering
+		$\mumu$
+		
 		\includegraphics[width=\linewidth]{mumuMassAfter_SMALL.png}
 	\end{minipage}
 \end{frame}
 
-\begin{frame}
-	\section{Triukšmų įskaitymas}
-	\frametitle{$\emu$ metodo taikymas\\ \normalsize Panašių į $\emu$ įvykių (\ltq{$\emu$ triukšmų}) įskaitymas}
-	Netikrų $\emu$ įvykių skaičius buvo įvertinamas pasinaudojant įvykiais, kuriuose elektronas ir miuonas buvo vienodo krūvio:
-	\begin{minipage}{0.44\textwidth}
-		\includegraphics[width=\linewidth]{emuMassOS_SMALL.png}
-	\end{minipage}
-	\hfill
-	\begin{minipage}{0.44\textwidth}
-		\includegraphics[width=\linewidth]{emuMassSS_SMALL.png}
-	\end{minipage}
-\end{frame}
 
 \begin{frame}
-	\frametitle{$\emu$ metodo taikymas\\ \normalsize Panašių į $\emu$ įvykių (\ltq{$\emu$ triukšmų}) įskaitymas}
-	\begin{minipage}{0.46\textwidth}
-		Prieš netikrų $\emu$ įvykių įvertinimą:
-		\includegraphics[width=\linewidth]{emuMassOS_SMALL.png}
-	\end{minipage}
-	\hfill
-	\begin{minipage}{0.46\textwidth}
-		Po netikrų $\emu$ įvykių įvertinimo:
-		\includegraphics[width=\linewidth]{emuWQCD_SMALL.png}
-	\end{minipage}
-\end{frame}
-
-
-\begin{frame}
-	\section{emu metodo rezultatai}
-	\frametitle{$\emu$ metodo taikymas}
-	$\emu$ metodu įvertinti Drell-Yan triukšmo procesų $\ee$ ir $\mumu$ galutinių būsenų invariantinių masių pasiskirstymai.
+	\frametitle{Pasiruošimas $\emu$ metodo taikymui}
+	\vspace{-0.01cm}
+	$\emu$ metodas turi savo triukšmą.
 	
+	\small	
+	$\phantom{.}\circ$ Netikrų $\mathit{e}^{\pm}\mu^{\mp}$ įvykių skaičius įvertinamas pasinaudojant $\mathit{e}^{\pm}\mu^{\pm}$ įvykiais\\
+	\vspace{0.3cm}
 	\begin{minipage}{0.46\textwidth}
+		\centering \small
+		Prieš netikrų $\emu$ įvykių įvertinimą
+		
+		\includegraphics[width=0.9\linewidth]{emuMassOS_SMALL.png}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.46\textwidth}
+		\centering \small
+		Po netikrų $\emu$ įvykių įvertinimo
+		
+		\includegraphics[width=0.9\linewidth]{emuWQCD_SMALL.png}
+	\end{minipage}
+\end{frame}
+
+
+\begin{frame}
+	\section{$\emu$ metodu įvertinti Drell-Yan triukšmo įvykiai}
+	\frametitle{$\emu$ metodu įvertinti Drell-Yan triukšmo įvykiai}
+	\begin{minipage}{0.46\textwidth}
+		\centering
+		$\ee$ 
+		
 		\includegraphics[width=\linewidth]{eeMassEst_SMALL.png}
 	\end{minipage}
 	\hfill
 	\begin{minipage}{0.46\textwidth}
+		\centering
+		$\mumu$
+		
 		\includegraphics[width=\linewidth]{mumuMassEst_SMALL.png}
 	\end{minipage}
 \end{frame}
@@ -322,7 +336,7 @@
 	\section{Galutinis rezultatas}
 	\frametitle{Išmatuoti invariantinės masės pasiskirstymai}
 	Galutinis rezultatas: CMS detektoriaus užregistruotų, modeliuotų, bei $\emu$ metodu įvertintų $\ee$ ir $\mumu$ įvykių
-	invariantinių masių pasiskirstymai:
+	invariantinių masių pasiskirstymai
 	\begin{minipage}{0.49\textwidth}
 		\includegraphics[width=\textwidth]{eeMassFinal_SMALL.png}
 	\end{minipage}
@@ -337,17 +351,16 @@
 	\section{Išvados}
 	\frametitle{Išvados}
 	\begin{itemize}
-		\item Duomenų rinkinių, talpinančių tik atranką praėjusius įvykius, sukūrimas gerokai sutrumpina tolimesnės duomenų analizės
+		\item Duomenų rinkinių sukūrimas, saugant tik atranką praėjusius įvykius, gerokai sutrumpina tolimesnės duomenų analizės
 		laiką bei supaprastina duomenų saugojimą;
 		\smallskip
-		\item Pataisų, įskaitančių eksperimento ir modeliavimo sąlygų nesutapimus, pritaikymas padeda sumažinti	atranką praeinančių
+		\item Eksperimento ir modeliavimo sąlygų nesutapimų pataisos padeda sumažinti atranką praeinančių
 		išmatuotų ir modeliuotų įvykių skaičiaus neatitikimus;
 		\smallskip
-		\item Drell-Yan proceso triukšmo įvykių skaičius, įvertintas $\emu$ metodu, yra $7\%$ mažesnis už modeliuotą triukšmo
-		įvykių skaičių, o pilnutinis įvykių skaičiaus įvertis priartėjo prie išmatuoto rezultato, taigi, $\emu$ metodo taikymas yra
-		naudingas;
+		\item Iš matavimo duomenų įvertinus netikrus $\emu$ įvykius galima geriau įvertinti $\emu$ įvykių skaičių, tačiau pritaikytas
+		metodas nepasiteisino ir turi būti peržiūrėtas;
 		\smallskip
-		\item Iš matavimo įvertinus netikrų $\emu$ įvykių skaičių galima gauti realistiškesnį $\emu$ metodo įvertį.
+		\item $\emu$ metodas leidžia įvertinti Drell-Yan proceso triukšmo įvykių skaičių, bet galutinę metodiką dar reikia patobulinti.
 	\end{itemize}
 \end{frame}
 
@@ -369,14 +382,77 @@
 \section{Papildoma informacija}
 
 \begin{frame}
-	\subsection{CMS detektorius}
-	\frametitle{Papildoma informacija\\ \small CMS detektorius}
-	\begin{figure}
-		\includegraphics[width=\textwidth]{CMSslice_LT.png}
-		\tiny (http://ippog.org/resources/2011/cms-slice-july-2010-version)
-	\end{figure}
-\end{frame}
+	\subsection{Įvykių skaičių lentelė}
+	\frametitle{Galutinių rezultatų lentelė}
+	\centering \scriptsize
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+	
+	\multirow{2}{7em}{\centering Įvykiai} &
+	\multirow{2}{9em}{\centering CMS užregistruoti} &
+	\multirow{2}{9em}{\centering Modeliuoti} &
+	\multirow{2}{10em}{\centering Įvertinti $e\mu$ metodu} \\
+	
+ 	& & & \\
+	\hline \hline
+	
+	\multirow{2}{7em}{\centering $e\mu$} &
+	\multirow{2}{9em}{\centering $(3.110 \pm 0.006) \cdot 10^5$} &
+	\multirow{2}{10em}{\centering $(3.359 \pm 0.005) \cdot 10^5$} &
+	\multirow{2}{10em}{\centering \textendash }\\
+	
+ 	& & & \\
+	\hline
+	
+	$ee$ ($\WW$, $tW$, &
+	\multirow{2}{9em}{\centering\textendash} &
+	\multirow{2}{9em}{\centering $(1.883 \pm 0.004) \cdot 10^5$} &
+	\multirow{2}{10em}{\centering$\mathbf{(1.749 \pm 0.006) \cdot 10^5}$} \\
+	
+	$\bar{t}W$, $t\bar{t}$, $\DYtau$) & & & \\
+	\hline
+	
+	\multirow{2}{7em}{\centering $ee$ (visi procesai)} &
+	\multirow{2}{9em}{\centering $(1.311 \pm 0) \cdot 10^7$} &
+	\multirow{2}{9em}{\centering $(1.344 \pm 0.001) \cdot 10^7$} &
+	\multirow{2}{10em}{\centering $\mathbf{(1.343 \pm 0.001) \cdot 10^7}$} \\
+	
+ 	& & & \\
+	\hline
 
+	\multirow{2}{7em}{\centering $N_{ee}/N_{ee}^{\mathrm{Obs.}}$} &
+	\multirow{2}{9em}{\centering \textendash} &
+	\multirow{2}{9em}{\centering $1.0254 \pm 0.0006$} &
+	\multirow{2}{10em}{\centering $1.0243 \pm 0.0006$} \\
+	
+ 	& & & \\
+	\hline
+
+	$\mumu$ ($\WW$, $tW$, &
+	\multirow{2}{9em}{\centering\textendash} &
+	\multirow{2}{9em}{\centering $(2.931 \pm 0.005) \cdot 10^5$} &
+	\multirow{2}{10em}{\centering$\mathbf{(2.724 \pm 0.009) \cdot 10^5}$} \\
+	
+	$\bar{t}W$, $t\bar{t}$, $\DYtau$) & & & \\
+	\hline
+	
+	\multirow{2}{7em}{\centering $\mumu$ (visi procesai)} &
+	\multirow{2}{9em}{\centering $(2.292 \pm 0) \cdot 10^7$} &
+	\multirow{2}{9em}{\centering $(2.315 \pm 0.001) \cdot 10^7$} &
+	\multirow{2}{10em}{\centering $\mathbf{(2.313 \pm 0.001) \cdot 10^7}$} \\
+	
+ 	& & & \\
+	\hline
+	
+	\multirow{2}{7em}{\centering $N_{\mumu}/N_{\mumu}^{\mathrm{Obs.}}$} &
+	\multirow{2}{9em}{\centering \textendash} &
+	\multirow{2}{9em}{\centering $1.0101 \pm 0.0005$} &
+	\multirow{2}{10em}{\centering $1.0092 \pm 0.0005$} \\
+	
+ 	& & & \\
+	\hline
+	\end{tabular}
+\end{frame}
 
 \begin{frame}
 \subsection{Partonų pasiskirstymo funkcijos}
@@ -419,11 +495,40 @@
 \begin{frame}
 	\subsection{Skersinis impulsas, pseudosparta}
 	\frametitle{Papildoma informacija\\ \small Skersinis impulsas, pseudosparta}
+	\begin{minipage}{0.49\textwidth}
+		\begin{itemize}
+			\item Detektorius yra išdėstytas cilindriškai aplink protonų spindulį ($\mathit{z}$ ašį);
+			\item Matuojamos tik statmenos $\mathit{z}$ ašiai dalelių impulso ir energijos dedamosios --
+			$\pT$ ir $\ET$;
+			\item Dalelės judėjimo kryptis nusakoma \textit{pseudosparta}:
+			\begin{equation*}
+				\eta = - \ln \left( \tan \frac{\theta}{2} \right) \; ,
+			\end{equation*}
+			$\theta$ -- kampas tarp $\mathit{z}$ ašies ir dalelės judėjimo krypties.
+		\end{itemize}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.48\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{theta-eta.png}
+	\end{minipage}	
 \end{frame}
 
 \begin{frame}
 	\subsection{Reakcijos skerspjūvis, integruotasis šviesis}
 	\frametitle{Papildoma informacija\\ \small Reakcijos skerspjūvis, integruotasis šviesis}
+	\begin{itemize}
+		\item LHC vykstančių procesų tikėtinumas yra nusakomas reakcijos skerspjūviu $\sigma$, arba
+		diferencialiniu reakcijos skerspjūviu $\mathrm{d}\sigma / \mathrm{d}\xi$;
+		\item Dalelių skaičius, per laiko vienetą pralekiantis tam tikrą plotą, apibūdinamas šviesiu $\mathcal{L}$;
+		\item Norint aprašyti greitintuve vykstančių protonų susidūrimų skaičių naudojamas integruotasis šviesis:
+		\begin{equation*}
+			\Lumi=\int_{\mathit{t}_1}^{\mathit{t}_2} \mathcal{L}\mathrm{d}\mathit{t} =
+			\int_{\mathit{t}_1}^{\mathit{t}_2} \frac{1}{\sigma}\frac{\mathrm{d}\mathit{N}}{\mathrm{d}\mathit{t}} \mathrm{d}\mathit{t} \; ;
+		\end{equation*}
+		\item Sudauginę integruotąjį šviesį su tam tikro proceso reakcijos skerspjūviu galime įvertinti, kiek kartų
+		greitintuve per tam tikrą laikotarpį turėjo įvykti mus dominantis procesas.
+	\end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -460,6 +565,7 @@
 			\hline
 		\end{tabular}
 	\end{table}
+	\vspace{-0.2cm}
 	\small Įvykiai sumodeliuoti su \textsc{aMC@NLO}, \textsc{Powheg}, \textsc{Pythia8} įvykių generatoriais.
 \end{frame}
 
@@ -525,8 +631,8 @@
 	\frametitle{Papildoma informacija\\ \small Pataisų taikymas I}
 	Tarp eksperimento ir modeliavimo nesutapo šios sąlygos:
 	\begin{itemize}
-		\item Protonų susidūrimų tankis;
-		\item Elektronų energijos ir miuonų skersinio impulso matavimo skalės;
+		\item Protonų susidūrimų skaičiaus tikimybė;
+		\item Elektronų energijos bei miuonų skersinio impulso matavimo skalės;
 		\item Trigerių suveikimo efektyvumai;
 		\item Leptonų atpažinimo ir jų trajektorijų atkūrimo efektyvumai;
 		\item Miuonų trajektorijos atskirumo įvertinimo efektyvumas.
@@ -556,12 +662,12 @@
 	CMS detektoriaus užregistruotas ir modeliuotas $\ee$ invariantinės masės pasiskirstymai prieš ir po pataisų pritaikymo:
 	\begin{minipage}{0.49\textwidth}
 		\centering
-		\includegraphics[width=0.9\linewidth]{mumuMassBefore_SMALL.png}
+		\includegraphics[width=0.9\linewidth]{eeMassBefore_SMALL.png}
 	\end{minipage}
 	\hfill
 	\begin{minipage}{0.49\textwidth}
 		\centering
-		\includegraphics[width=0.9\linewidth]{mumuMassAfter_SMALL.png}
+		\includegraphics[width=0.9\linewidth]{eeMassAfter_SMALL.png}
 	\end{minipage}
 \end{frame}
 
@@ -630,7 +736,20 @@
 
 
 \begin{frame}
+	\section{Triukšmų įskaitymas}
 	\frametitle{Papildoma informacija\\ \small Netikrų $\emu$ įvykių įskaitymas taikant $\emu$ metodą II}
+	\begin{minipage}{0.44\textwidth}
+		\includegraphics[width=\linewidth]{emuMassOS_SMALL.png}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.44\textwidth}
+		\includegraphics[width=\linewidth]{emuMassSS_SMALL.png}
+	\end{minipage}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Papildoma informacija\\ \small Netikrų $\emu$ įvykių įskaitymas taikant $\emu$ metodą III}
 	\begin{itemize}
 		\item Gautasis įvykių skaičius transformuojamas į netikrų priešingo krūvio $\emu$ įvykių skaičių, panaudojant teoriškai apskaičiuojamą
 		daugiklį $\mathit{R} \approx 0.5715$:
