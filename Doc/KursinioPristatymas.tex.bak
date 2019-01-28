@@ -118,19 +118,19 @@
 
 
 \begin{frame}
+	\section{Standartinis modelis}
+	\frametitle{Standartinis modelis}
+	\centering
+	\includegraphics[width=0.8\textwidth]{SM.jpg}
+\end{frame}
+
+
+\begin{frame}
 	\section{CMS detektorius}
 	\frametitle{Kompaktiškasis miuonų solenoidas}
 	\begin{figure}
 		\includegraphics[width=\textwidth]{CMSslice_LT.png}
 	\end{figure}
-\end{frame}
-
-
-\begin{frame}
-	\section{Standartinis modelis}
-	\frametitle{Standartinis modelis}
-	\centering
-	\includegraphics[width=0.8\textwidth]{SM.jpg}
 \end{frame}
 
 
@@ -255,20 +255,6 @@
 	\includegraphics[width=0.8\textwidth]{Duomenu_panaudojimo_schema.png}	
 \end{frame}		
 
-
-\begin{frame}
-	\section{Įvykių atrankos rezultatai}
-	\frametitle{Įvykių atrankos rezultatai}
-	\begin{itemize}
-		\item Atranką praėję įvykiai buvo įrašyti į naujus duomenų failus;
-		\medskip
-		\item Atrankos procesas trunka apie $5$ valandas;
-		\medskip
-		\item Atrinkti duomenų failai bendrai užima apie $14 \; \mathrm{GB}$;
-		\medskip
-		\item Tolimesni skaičiavimai ir grafikų gavimas iš atrinktų duomenų failų užtrunka $2-3$ minutes.
-	\end{itemize}
-\end{frame}
 
 \begin{frame}
 	\section{Matavimo ir modeliavimo palyginimas}
