@@ -18,13 +18,13 @@
 #include "./header/myProgressBar_t.h"
 #include "./header/FileMgr.h"
 
-void FileTest ( TString type = "" )
+void FileTest()
 {
     FileMgr fm(_SingleMuon_B);
     TChain *ch_full = new TChain(fm.TreeName[0]);
     ch_full->Add(fm.FullLocation[0]);
     ch_full->Add(fm.FullLocation[1]);
-    UInt_t EvtNo_full = ch->GetEntries();
+    UInt_t EvtNo_full = ch_full->GetEntries();
     UInt_t EvtNo_separate = 0;
 
     myProgressBar_t bar(1317);
