@@ -1014,7 +1014,7 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
 }// End of MakeSelectedEMu
 
 
-/// ----------------------------- For QCD file that fails ------------------------------ ///
+/// ----------------------------- For QCD dataset that fails ------------------------------ ///
 void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name, Bool_t Debug )
 {
     TStopwatch totaltime;

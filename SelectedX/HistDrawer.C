@@ -239,11 +239,11 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         RP_mass = new myRatioPlot_t( "RP_mass", s_mass, h_data_mass );
 
         RP_mass_fine_before_PUCorr->SetPlots("Dielectron invariant mass [GeV/c^{2}] (before PU correction)", 15, 3000);
-//        RP_mass_fine_before_EffCorr->SetPlots("Dielectron invariant mass [GeV/c^{2}] (before Efficiency SF)", 15, 3000);
-        RP_mass_fine_before_EffCorr->SetPlots("Elektronu poros invariantine mase [GeV/c^{2}] (pries pataisu pritaikyma)", 15, 3000);
+        RP_mass_fine_before_EffCorr->SetPlots("Dielectron invariant mass [GeV/c^{2}] (before Efficiency SF)", 15, 3000);
+//        RP_mass_fine_before_EffCorr->SetPlots("Elektronu poros invariantine mase [GeV/c^{2}] (pries pataisu pritaikyma)", 15, 3000);
         RP_mass_fine->SetPlots("Dielectron invariant mass [GeV/c^{2}]", 15, 3000);
-//        RP_mass->SetPlots("Dielectron invariant mass [GeV/c^{2}]", 15, 3000);
-        RP_mass->SetPlots("Elektronu poros invariantine mase [GeV/c^{2}] (po pataisu pritaikymo)", 15, 3000);
+        RP_mass->SetPlots("Dielectron invariant mass [GeV/c^{2}]", 15, 3000);
+//        RP_mass->SetPlots("Elektronu poros invariantine mase [GeV/c^{2}] (po pataisu pritaikymo)", 15, 3000);
 
         RP_mass_fine_before_PUCorr->SetLegend(0.75, 0.4);
         RP_mass_fine_before_EffCorr->SetLegend(0.75, 0.4);
@@ -252,11 +252,11 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
 
         // Legend data
         RP_mass_fine_before_PUCorr->AddLegendEntry(h_data_mass_fine_before_PUCorr, "Data", "lp");
-//        RP_mass_fine_before_EffCorr->AddLegendEntry(h_data_mass_fine_before_EffCorr, "Data", "lp");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_data_mass_fine_before_EffCorr, "Matavimas", "lp");
+        RP_mass_fine_before_EffCorr->AddLegendEntry(h_data_mass_fine_before_EffCorr, "Data", "lp");
+//        RP_mass_fine_before_EffCorr->AddLegendEntry(h_data_mass_fine_before_EffCorr, "Matavimas", "lp");
         RP_mass_fine->AddLegendEntry(h_data_mass_fine, "Data", "lp");
-//        RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
-        RP_mass->AddLegendEntry(h_data_mass, "Matavimas", "lp");
+        RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
+//        RP_mass->AddLegendEntry(h_data_mass, "Matavimas", "lp");
 
         // Legend MC signal
         RP_mass_fine_before_PUCorr->AddLegendEntry(h_DY_mass_fine_before_PUCorr, "DY#rightarrow ee", "f");
@@ -302,10 +302,10 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[0], "QCD", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[0], "QCD", "f");
 
-        RP_mass_fine_before_PUCorr->Draw(0.5, 3e6, 1);
-        RP_mass_fine_before_EffCorr->Draw(0.5, 3e6, 1);
-        RP_mass_fine->Draw(0.5, 3e6, 1);
-        RP_mass->Draw(0.5, 3e6, 1);
+        RP_mass_fine_before_PUCorr->Draw(0.5, 1e7, 1);
+        RP_mass_fine_before_EffCorr->Draw(0.5, 1e7, 1);
+        RP_mass_fine->Draw(0.5, 1e7, 1);
+        RP_mass->Draw(0.5, 1e7, 1);
 
         Double_t dataerror, MCerror, MCerror_noSF, DYerror, dataintegral=1.3107e+07, MCintegral, MCintegral_noSF, DYintegral;
         Double_t dataerrorZ, MCerrorZ, DYerrorZ, dataintegralZ=1.3107e+07, MCintegralZ, DYintegralZ;
@@ -1210,22 +1210,22 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         RP_nVTX_before_EffCorr = new myRatioPlot_t( "RP_nVTX_before_EffCorr", s_nVTX_before_EffCorr, h_data_nVTX );
         RP_nVTX = new myRatioPlot_t( "RP_nVTX", s_nVTX, h_data_nVTX );
 
-//        RP_nVTX_before_PUCorr->SetPlots("nVTX (before PU correction)", 0, 50);
-        RP_nVTX_before_PUCorr->SetPlots("Pirminiu virsuniu skaicius (pries protonu susidurimu tankio pataisa)", 0, 50);
+        RP_nVTX_before_PUCorr->SetPlots("nVTX (before PU correction)", 0, 50);
+//        RP_nVTX_before_PUCorr->SetPlots("Pirminiu virsuniu skaicius (pries protonu susidurimu tankio pataisa)", 0, 50);
         RP_nVTX_before_EffCorr->SetPlots("nVTX (before Efficiency correction)", 0, 50);
-//        RP_nVTX->SetPlots("nVTX", 0, 50);
-        RP_nVTX->SetPlots("Pirminiu virsuniu skaicius (pritaikius pataisa)", 0, 50);
+        RP_nVTX->SetPlots("nVTX", 0, 50);
+//        RP_nVTX->SetPlots("Pirminiu virsuniu skaicius (pritaikius pataisa)", 0, 50);
 
         RP_nVTX_before_PUCorr->SetLegend(0.75, 0.4);
         RP_nVTX_before_EffCorr->SetLegend(0.75, 0.4);
         RP_nVTX->SetLegend(0.75, 0.4);
 
         // Legend data
-//        RP_nVTX_before_PUCorr->AddLegendEntry(h_data_nVTX, "Data", "lp");
-        RP_nVTX_before_PUCorr->AddLegendEntry(h_data_nVTX, "Matavimas", "lp");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_data_nVTX, "Data", "lp");
+//        RP_nVTX_before_PUCorr->AddLegendEntry(h_data_nVTX, "Matavimas", "lp");
         RP_nVTX_before_EffCorr->AddLegendEntry(h_data_nVTX, "Data", "lp");
-//        RP_nVTX->AddLegendEntry(h_data_nVTX, "Data", "lp");
-        RP_nVTX->AddLegendEntry(h_data_nVTX, "Matavimas", "lp");
+        RP_nVTX->AddLegendEntry(h_data_nVTX, "Data", "lp");
+//        RP_nVTX->AddLegendEntry(h_data_nVTX, "Matavimas", "lp");
 
         // Legend MC signal
         RP_nVTX_before_PUCorr->AddLegendEntry(h_DY_nVTX_before_PUCorr, "DY#rightarrow ee", "f");
@@ -1479,12 +1479,12 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_mass = new myRatioPlot_t( "RP_mass", s_mass, h_data_mass );
 
         RP_mass_fine_before_PUCorr->SetPlots("Dimuon invariant mass [GeV/c^{2}] (before PU correction)", 15, 3000);
-//        RP_mass_fine_before_RoccoR->SetPlots("Dimuon invariant mass [GeV/c^{2}] (before Rochester correction)", 15, 3000);
-        RP_mass_fine_before_RoccoR->SetPlots("Miuonu poros invariantine mase [GeV/c^{2}] (pries pataisu pritaikyma)", 15, 3000);
+        RP_mass_fine_before_RoccoR->SetPlots("Dimuon invariant mass [GeV/c^{2}] (before Rochester correction)", 15, 3000);
+//        RP_mass_fine_before_RoccoR->SetPlots("Miuonu poros invariantine mase [GeV/c^{2}] (pries pataisu pritaikyma)", 15, 3000);
         RP_mass_fine_before_EffCorr->SetPlots("Dimuon invariant mass [GeV/c^{2}] (before Efficiency SF)", 15, 3000);
         RP_mass_fine->SetPlots("Dimuon invariant mass [GeV/c^{2}]", 15, 3000);
-//        RP_mass->SetPlots("Dimuon invariant mass [GeV/c^{2}]", 15, 3000);
-        RP_mass->SetPlots("Miuonu poros invariantine mase [GeV/c^{2}] (pritaikius pataisas)", 15, 3000);
+        RP_mass->SetPlots("Dimuon invariant mass [GeV/c^{2}]", 15, 3000);
+//        RP_mass->SetPlots("Miuonu poros invariantine mase [GeV/c^{2}] (pritaikius pataisas)", 15, 3000);
 
         RP_mass_fine_before_PUCorr->SetLegend(0.75, 0.4);
         RP_mass_fine_before_RoccoR->SetLegend(0.75, 0.4);
@@ -1494,12 +1494,12 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
 
         // Legend data
         RP_mass_fine_before_PUCorr->AddLegendEntry(h_data_mass_fine_before_PUCorr, "Data", "lp");
-//        RP_mass_fine_before_RoccoR->AddLegendEntry(h_data_mass_fine_before_RoccoR, "Data", "lp");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_data_mass_fine_before_RoccoR, "Matavimas", "lp");
+        RP_mass_fine_before_RoccoR->AddLegendEntry(h_data_mass_fine_before_RoccoR, "Data", "lp");
+//        RP_mass_fine_before_RoccoR->AddLegendEntry(h_data_mass_fine_before_RoccoR, "Matavimas", "lp");
         RP_mass_fine_before_EffCorr->AddLegendEntry(h_data_mass_fine_before_EffCorr, "Data", "lp");
         RP_mass_fine->AddLegendEntry(h_data_mass_fine, "Data", "lp");
-//        RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
-        RP_mass->AddLegendEntry(h_data_mass, "Matavimas", "lp");
+        RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
+//        RP_mass->AddLegendEntry(h_data_mass, "Matavimas", "lp");
 
         // Legend MC signal
         RP_mass_fine_before_PUCorr->AddLegendEntry(h_DY_mass_fine_before_PUCorr, "DY#rightarrow#mu#mu", "f");
@@ -1555,10 +1555,10 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[0], "QCD", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[0], "QCD", "f");
 
-        RP_mass_fine_before_PUCorr->Draw(0.5, 3e6, 1);
-        RP_mass_fine_before_RoccoR->Draw(0.5, 3e6, 1);
-        RP_mass_fine_before_EffCorr->Draw(0.5, 3e6, 1);
-        RP_mass_fine->Draw(0.5, 3e6, 1);
+        RP_mass_fine_before_PUCorr->Draw(0.5, 1e7, 1);
+        RP_mass_fine_before_RoccoR->Draw(0.5, 1e7, 1);
+        RP_mass_fine_before_EffCorr->Draw(0.5, 1e7, 1);
+        RP_mass_fine->Draw(0.5, 1e7, 1);
         RP_mass->Draw(0.5, 1e7, 1);
 
         Double_t dataerror, MCerror, MCerror_noSF, DYerror, dataintegral=2.25081e+07, MCintegral, MCintegral_noSF, DYintegral;
@@ -2635,22 +2635,22 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_nVTX_before_EffCorr = new myRatioPlot_t( "RP_nVTX_before_EffCorr", s_nVTX_before_EffCorr, h_data_nVTX );
         RP_nVTX = new myRatioPlot_t( "RP_nVTX", s_nVTX, h_data_nVTX );
 
-//        RP_nVTX_before_PUCorr->SetPlots("nVTX (before PU correction)", 0, 50);
-        RP_nVTX_before_PUCorr->SetPlots("Pirminiu virsuniu skaicius (pries protonu susidurimu tankio pataisa)", 0, 50);
+        RP_nVTX_before_PUCorr->SetPlots("nVTX (before PU correction)", 0, 50);
+//        RP_nVTX_before_PUCorr->SetPlots("Pirminiu virsuniu skaicius (pries protonu susidurimu tankio pataisa)", 0, 50);
         RP_nVTX_before_EffCorr->SetPlots("nVTX (before Efficiency SF)", 0, 50);
-//        RP_nVTX->SetPlots("nVTX", 0, 50);
-        RP_nVTX->SetPlots("Pirminiu virsuniu skaicius (pritaikius pataisa)", 0, 50);
+        RP_nVTX->SetPlots("nVTX", 0, 50);
+//        RP_nVTX->SetPlots("Pirminiu virsuniu skaicius (pritaikius pataisa)", 0, 50);
 
         RP_nVTX_before_PUCorr->SetLegend(0.75, 0.4);
         RP_nVTX_before_EffCorr->SetLegend(0.75, 0.4);
         RP_nVTX->SetLegend(0.75, 0.4);
 
         // Legend data
-//        RP_nVTX_before_PUCorr->AddLegendEntry(h_data_nVTX, "Data", "lp");
-        RP_nVTX_before_PUCorr->AddLegendEntry(h_data_nVTX, "Matavimas", "lp");
+        RP_nVTX_before_PUCorr->AddLegendEntry(h_data_nVTX, "Data", "lp");
+//        RP_nVTX_before_PUCorr->AddLegendEntry(h_data_nVTX, "Matavimas", "lp");
         RP_nVTX_before_EffCorr->AddLegendEntry(h_data_nVTX, "Data", "lp");
-//        RP_nVTX->AddLegendEntry(h_data_nVTX, "Data", "lp");
-        RP_nVTX->AddLegendEntry(h_data_nVTX, "Matavimas", "lp");
+        RP_nVTX->AddLegendEntry(h_data_nVTX, "Data", "lp");
+//        RP_nVTX->AddLegendEntry(h_data_nVTX, "Matavimas", "lp");
 
         // Legend MC signal
         RP_nVTX_before_PUCorr->AddLegendEntry(h_DY_nVTX_before_PUCorr, "DY#rightarrow#mu#mu", "f");
@@ -2946,14 +2946,14 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
         RP_mass_fine_before_RoccoR->SetPlots("e#mu mass [GeV/c^{2}] (before Rochester correction)", 15, 3000);
         RP_mass_fine_before_EffCorr->SetPlots("e#mu mass [GeV/c^{2}] (before Efficiency correction)", 15, 3000);
         RP_mass_fine->SetPlots("e#mu mass [GeV/c^{2}]", 15, 3000);
-//        RP_mass->SetPlots("e#mu mass [GeV/c^{2}]", 15, 3000);
-        RP_mass->SetPlots("e#mu (priesingu kruviu) invariantine mase [GeV/c^{2}]", 15, 3000);
+        RP_mass->SetPlots("e#mu mass [GeV/c^{2}]", 15, 3000);
+//        RP_mass->SetPlots("e#mu (priesingu kruviu) invariantine mase [GeV/c^{2}]", 15, 3000);
         RP_SS_mass_fine_before_PUCorr->SetPlots("e#mu (same-signed) mass [GeV/c^{2}] (before PU correction)", 15, 3000);
         RP_SS_mass_fine_before_RoccoR->SetPlots("e#mu (same-signed) mass [GeV/c^{2}] (before Rochester correction)", 15, 3000);
         RP_SS_mass_fine_before_EffCorr->SetPlots("e#mu (same-signed) mass [GeV/c^{2}] (before Efficiency correction)", 15, 3000);
         RP_SS_mass_fine->SetPlots("e#mu (same-signed) mass [GeV/c^{2}]", 15, 3000);
-//        RP_SS_mass->SetPlots("e#mu (same-signed) mass [GeV/c^{2}]", 15, 3000);
-        RP_SS_mass->SetPlots("e#mu (vienodu kruviu) invariantine mase [GeV/c^{2}]", 15, 3000);
+        RP_SS_mass->SetPlots("e#mu (same-signed) mass [GeV/c^{2}]", 15, 3000);
+//        RP_SS_mass->SetPlots("e#mu (vienodu kruviu) invariantine mase [GeV/c^{2}]", 15, 3000);
 
         RP_mass_fine_before_PUCorr->SetLegend(0.75, 0.4);
         RP_mass_fine_before_RoccoR->SetLegend(0.75, 0.4);
@@ -2971,14 +2971,14 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
         RP_mass_fine_before_RoccoR->AddLegendEntry(h_data_mass_fine_before_RoccoR, "Data", "lp");
         RP_mass_fine_before_EffCorr->AddLegendEntry(h_data_mass_fine_before_EffCorr, "Data", "lp");
         RP_mass_fine->AddLegendEntry(h_data_mass_fine, "Data", "lp");
-//        RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
-        RP_mass->AddLegendEntry(h_data_mass, "Matavimas", "lp");
+        RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
+//        RP_mass->AddLegendEntry(h_data_mass, "Matavimas", "lp");
         RP_SS_mass_fine_before_PUCorr->AddLegendEntry(h_SS_data_mass_fine_before_PUCorr, "Data", "lp");
         RP_SS_mass_fine_before_RoccoR->AddLegendEntry(h_SS_data_mass_fine_before_RoccoR, "Data", "lp");
         RP_SS_mass_fine_before_EffCorr->AddLegendEntry(h_SS_data_mass_fine_before_EffCorr, "Data", "lp");
         RP_SS_mass_fine->AddLegendEntry(h_SS_data_mass_fine, "Data", "lp");
-//        RP_SS_mass->AddLegendEntry(h_SS_data_mass, "Data", "lp");
-        RP_SS_mass->AddLegendEntry(h_SS_data_mass, "Matavimas", "lp");
+        RP_SS_mass->AddLegendEntry(h_SS_data_mass, "Data", "lp");
+//        RP_SS_mass->AddLegendEntry(h_SS_data_mass, "Matavimas", "lp");
 
         // Legend MC BKG        
         RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[6+isWJ], "DY#rightarrow #tau#tau", "f");
@@ -3659,8 +3659,8 @@ void Est_HistDrawer()
 
     for ( SelProc_t pr = _EE_QCDEMEnriched_Full; pr > _EndOf_EE_ttbar_Normal; pr=SelProc_t((int)(pr-1)) )
     {
-        if ( pr == _EE_WJets || pr == _EE_QCDEMEnriched_Full )
-//        if ( pr == _EE_WJets || pr == _EE_QCDEMEnriched_Full || pr == _EE_WZ || pr == _EE_ZZ )
+//        if ( pr == _EE_WJets || pr == _EE_QCDEMEnriched_Full )
+        if ( pr == _EE_WJets || pr == _EE_QCDEMEnriched_Full || pr == _EE_WZ || pr == _EE_ZZ )
             f_bkg_ee->GetObject( "h_mass_"+Mgr.Procname[pr], h_bkg_mass_ee[iter] );
         else
             f_bkg_est_ee->GetObject( "h_ee_mass_Est_"+Mgr.Procname[pr], h_bkg_mass_ee[iter] );
@@ -3717,40 +3717,42 @@ void Est_HistDrawer()
 //--------------------------------- Ratio Plot --------------------------------------
 
     myRatioPlot_t *RP_mass_ee = new myRatioPlot_t( "RP_mass_ee", s_mass_ee, h_data_mass_ee );
-//        RP_mass->SetPlots("Dielectron invariant mass [GeV/c^{2}]", 15, 3000);
-    RP_mass_ee->SetPlots("Elektronu poros invariantine mase [GeV/c^{2}]", 15, 3000);
+    RP_mass_ee->SetPlots("Dielectron invariant mass [GeV/c^{2}]", 15, 3000);
+//    RP_mass_ee->SetPlots("Elektronu poros invariantine mase [GeV/c^{2}]", 15, 3000);
     RP_mass_ee->SetLegend(0.75, 0.4);
 
     // Legend data
-//        RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
-    RP_mass_ee->AddLegendEntry(h_data_mass_ee, "Matavimas", "lp");
+        RP_mass_ee->AddLegendEntry(h_data_mass_ee, "Data", "lp");
+//    RP_mass_ee->AddLegendEntry(h_data_mass_ee, "Matavimas", "lp");
 
     // Legend MC signal
     RP_mass_ee->AddLegendEntry(h_DY_mass_ee, "DY#rightarrow ee (MC)", "f");
 
     // Legend MC BKG (EN)
-//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (D-D)", "f");
-//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[7], "t#bar{t} (D-D)", "f");
-//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[6], "tW (D-D)", "f");
-//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[5], "#bar{t}W (D-D)", "f");
+    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (D-D)", "f");
+    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[7], "t#bar{t} (D-D)", "f");
+    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[6], "tW (D-D)", "f");
+    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[5], "#bar{t}W (D-D)", "f");
 //    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[4], "ZZ (D-D)", "f");
 //    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[3], "WZ (D-D)", "f");
-//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[2], "WW (D_D)", "f");
-//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[1], "W+Jets (MC)", "f");
-//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[0], "QCD (MC)", "f");
-
-    // Legend MC BKG (LT)
-    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (e#mu iv.)", "f");
-    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[7], "t#bar{t} (e#mu iv.)", "f");
-    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[6], "tW (e#mu iv.)", "f");
-    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[5], "#bar{t}W (e#mu iv.)", "f");
-    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[4], "ZZ (e#mu iv.)", "f");
-    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[3], "WZ (e#mu iv.)", "f");
-    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[2], "WW (e#mu iv.)", "f");
+    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[4], "ZZ (MC)", "f");
+    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[3], "WZ (MC)", "f");
+    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[2], "WW (D-D)", "f");
     RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[1], "W+Jets (MC)", "f");
     RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[0], "QCD (MC)", "f");
 
-    RP_mass_ee->Draw(0.5, 3e6, 1);
+    // Legend MC BKG (LT)
+//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (e#mu iv.)", "f");
+//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[7], "t#bar{t} (e#mu iv.)", "f");
+//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[6], "tW (e#mu iv.)", "f");
+//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[5], "#bar{t}W (e#mu iv.)", "f");
+//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[4], "ZZ (e#mu iv.)", "f");
+//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[3], "WZ (e#mu iv.)", "f");
+//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[2], "WW (e#mu iv.)", "f");
+//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[1], "W+Jets (MC)", "f");
+//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[0], "QCD (MC)", "f");
+
+    RP_mass_ee->Draw(0.5, 1e7, 1);
 
     Double_t dataerror_ee, MCerror_ee, dataintegral_ee=1.3107e+07, MCintegral_ee;
     Double_t dataerrorZ_ee, MCerrorZ_ee, DYerrorZ_ee, dataintegralZ_ee, MCintegralZ_ee, DYintegralZ_ee;
@@ -3814,8 +3816,8 @@ void Est_HistDrawer()
 
     for ( SelProc_t pr = _MuMu_QCDMuEnriched_Full; pr > _EndOf_MuMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)) )
     {
-        if ( pr == _MuMu_WJets || pr == _MuMu_QCDMuEnriched_Full )
-//        if ( pr == _MuMu_WJets || pr == _MuMu_QCDMuEnriched_Full || pr == _MuMu_WZ || pr == _MuMu_ZZ )
+//        if ( pr == _MuMu_WJets || pr == _MuMu_QCDMuEnriched_Full )
+        if ( pr == _MuMu_WJets || pr == _MuMu_QCDMuEnriched_Full || pr == _MuMu_WZ || pr == _MuMu_ZZ )
             f_bkg_mumu->GetObject( "h_mass_"+Mgr.Procname[pr], h_bkg_mass_mumu[iter] );
         else
             f_bkg_est_mumu->GetObject( "h_MuMu_mass_Est_"+Mgr.Procname[pr], h_bkg_mass_mumu[iter] );
@@ -3870,35 +3872,37 @@ void Est_HistDrawer()
 //--------------------------------- Ratio Plot --------------------------------------
 
     myRatioPlot_t *RP_mass_mumu = new myRatioPlot_t( "RP_mass_mumu", s_mass_mumu, h_data_mass_mumu );
-//        RP_mass->SetPlots("Dimuon invariant mass [GeV/c^{2}]", 15, 3000);
-    RP_mass_mumu->SetPlots("Miuonu poros invariantine mase [GeV/c^{2}]", 15, 3000);
+    RP_mass_mumu->SetPlots("Dimuon invariant mass [GeV/c^{2}]", 15, 3000);
+//    RP_mass_mumu->SetPlots("Miuonu poros invariantine mase [GeV/c^{2}]", 15, 3000);
     RP_mass_mumu->SetLegend(0.75, 0.4);
 
     // Legend (EN)
-//    RP_mass_mumu->AddLegendEntry(h_data_mass_mumu, "Data", "lp");
-//    RP_mass_mumu->AddLegendEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
-//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (D-D)", "f");
-//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[7], "t#bar{t} (D-D)", "f");
-//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[6], "tW (D-D)", "f");
-//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[5], "#bar{t}W (D-D)", "f");
+    RP_mass_mumu->AddLegendEntry(h_data_mass_mumu, "Data", "lp");
+    RP_mass_mumu->AddLegendEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
+    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (D-D)", "f");
+    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[7], "t#bar{t} (D-D)", "f");
+    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[6], "tW (D-D)", "f");
+    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[5], "#bar{t}W (D-D)", "f");
 //    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[4], "ZZ (D-D)", "f");
 //    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[3], "WZ (D-D)", "f");
-//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[2], "WW (D-D)", "f");
-//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[1], "W+Jets (MC)", "f");
-//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[0], "QCD (MC)", "f");
-
-    // Legend (LT)
-    RP_mass_mumu->AddLegendEntry(h_data_mass_mumu, "Matavimas", "lp");
-    RP_mass_mumu->AddLegendEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
-    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (e#mu iv.)", "f");
-    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[7], "t#bar{t} (e#mu iv.)", "f");
-    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[6], "tW (e#mu iv.)", "f");
-    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[5], "#bar{t}W (e#mu iv.)", "f");
-    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[4], "ZZ (e#mu iv.)", "f");
-    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[3], "WZ (e#mu iv.)", "f");
-    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[2], "WW (e#mu iv.)", "f");
+    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[4], "ZZ (MC)", "f");
+    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[3], "WZ (MC)", "f");
+    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[2], "WW (D-D)", "f");
     RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[1], "W+Jets (MC)", "f");
     RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[0], "QCD (MC)", "f");
+
+    // Legend (LT)
+//    RP_mass_mumu->AddLegendEntry(h_data_mass_mumu, "Matavimas", "lp");
+//    RP_mass_mumu->AddLegendEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
+//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (e#mu iv.)", "f");
+//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[7], "t#bar{t} (e#mu iv.)", "f");
+//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[6], "tW (e#mu iv.)", "f");
+//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[5], "#bar{t}W (e#mu iv.)", "f");
+//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[4], "ZZ (e#mu iv.)", "f");
+//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[3], "WZ (e#mu iv.)", "f");
+//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[2], "WW (e#mu iv.)", "f");
+//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[1], "W+Jets (MC)", "f");
+//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[0], "QCD (MC)", "f");
 
     RP_mass_mumu->Draw(0.5, 1e7, 1);
 

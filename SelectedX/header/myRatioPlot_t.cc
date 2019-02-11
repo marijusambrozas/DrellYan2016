@@ -30,10 +30,9 @@ void myRatioPlot_t::SetPlots(TString xAxisName, Double_t xmin, Double_t xmax)
     h1_dataovermc->SetMarkerColor(kBlack);
     h1_dataovermc->SetTitle(" ");
     h1_dataovermc->GetXaxis()->SetTitle(xAxisName);
-    h1_dataovermc->GetYaxis()->SetTitleOffset(2);
-//    h1_dataovermc->GetYaxis()->SetTitle("Data/MC");
+    h1_dataovermc->GetYaxis()->SetTitle("Data/MC");
 //    h1_dataovermc->GetYaxis()->SetTitle("Eksp./Mod.");
-    h1_dataovermc->GetYaxis()->SetTitle("Eksp./Ivert.");
+//    h1_dataovermc->GetYaxis()->SetTitle("Eksp./Ivert.");
 //    h1_dataovermc->GetYaxis()->SetTitle("Ivert./Mod.");
     h1_dataovermc->GetXaxis()->SetNoExponent(1);
     h1_dataovermc->GetXaxis()->SetMoreLogLabels(1);    
@@ -59,7 +58,7 @@ void myRatioPlot_t::SetPlots(TString xAxisName, Double_t xmin, Double_t xmax)
     h1_dataovermc->GetXaxis()->SetTitleOffset(0.75);
     h1_dataovermc->GetYaxis()->SetLabelSize(0.11);
     h1_dataovermc->GetYaxis()->SetTitleSize(0.11);
-    h1_dataovermc->GetYaxis()->SetTitleOffset(0.2);
+    h1_dataovermc->GetYaxis()->SetTitleOffset(0.3);
     h1_dataovermc->GetYaxis()->CenterTitle();
     h1_dataovermc->GetYaxis()->SetNdivisions(8);
     h1_dataovermc->GetXaxis()->SetTickLength(0.01);
@@ -71,17 +70,17 @@ void myRatioPlot_t::SetPlots(TString xAxisName, Double_t xmin, Double_t xmax)
 void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX)
 {
     if(PlotsSet==1) {
-        canvas = new TCanvas(CanvasName, CanvasName, 1000, 1000);
-//        canvas = new TCanvas(CanvasName, CanvasName, 700, 1000);
-//        canvas = new TCanvas(CanvasName, CanvasName, 2000, 1000);
+//        canvas = new TCanvas(CanvasName, CanvasName, 1000, 1000);
+        canvas = new TCanvas(CanvasName, CanvasName, 850, 1000);
+//        canvas = new TCanvas(CanvasName, CanvasName, 1500, 1000);
         TPad* pad1 = new TPad("pad1", "pad1", 0, 0.255, 1, 1);
         pad1->SetBottomMargin(0.001);
         pad1->Draw();
         pad1->cd();
         s_stackedProcesses->Draw("HIST");
-//        s_stackedProcesses->GetYaxis()->SetTitle("Number of events");
-        s_stackedProcesses->GetYaxis()->SetTitle("Ivykiu skai#check{c}ius");
-        s_stackedProcesses->GetYaxis()->SetTitleOffset(0.75);
+        s_stackedProcesses->GetYaxis()->SetTitle("Number of events");
+//        s_stackedProcesses->GetYaxis()->SetTitle("Ivykiu skai#check{c}ius");
+        s_stackedProcesses->GetYaxis()->SetTitleOffset(1);
         s_stackedProcesses->GetYaxis()->SetTitleSize(0.04);
         s_stackedProcesses->GetXaxis()->SetNoExponent(1);
         s_stackedProcesses->SetMinimum(ymin);

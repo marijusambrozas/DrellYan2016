@@ -157,6 +157,7 @@ void ee_Est()
             {               
                 if ( pr == _EndOf_EMu_VVnST_Normal ) continue;
                 if ( isWJ == 0 && pr == _EMu_WJets ) continue;
+//                if ( pr == _EMu_WZ || pr == _EMu_ZZ ) continue;
                 Mgr.SetProc(pr);
                 s_EMu_wQCD_invm->Add( h_EMu_invm[pr] );
                 if ( pr == _EMu_tW ) pr = _EMu_VVnST; // next -- ttbar
@@ -220,6 +221,7 @@ void ee_Est()
 
             for ( SelProc_t pr=_EE_WW; pr<=_EE_VVnST; pr=SelProc_t((int)(pr-1)) )
             {
+                if ( pr == _EE_WZ || pr == _EE_ZZ ) continue;
                 Mgr.SetProc(pr);
 
                 f_Bkg_ee->GetObject( "h_mass_"+Mgr.Procname[pr], h_ee_invm[pr] );
@@ -295,18 +297,18 @@ void ee_Est()
 //------------------------------ Drawing ----------------------------------------------------------
 
             myRatioPlot_t *RP_invm = new myRatioPlot_t( "DataDriven_InvariantMass", s_ee_invm, h_ee_Est_invm );
-//            RP_invm->SetPlots( "Dielectron invariant mass [GeV/c^{2}]", 15, 3000 );
-            RP_invm->SetPlots( "Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000 );
+            RP_invm->SetPlots( "Dielectron invariant mass [GeV/c^{2}]", 15, 3000 );
+//            RP_invm->SetPlots( "Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000 );
             RP_invm->SetLegend();
-//            RP_invm->AddLegendEntry( h_ee_Est_invm, "Estimation", "lp" );
-            RP_invm->AddLegendEntry( h_ee_Est_invm, "Ivertis", "lp" );
+            RP_invm->AddLegendEntry( h_ee_Est_invm, "Estimation", "lp" );
+//            RP_invm->AddLegendEntry( h_ee_Est_invm, "Ivertis", "lp" );
             RP_invm->AddLegendEntry( h_ee_invm[_EE_ttbar_Full], "t#bar{t}", "f" );
             RP_invm->AddLegendEntry( h_ee_invm[_EE_tbarW], "#bar{t}W", "f" );
             RP_invm->AddLegendEntry( h_ee_invm[_EE_tW], "tW", "f" );
             RP_invm->AddLegendEntry( h_ee_invm[_EE_DYTauTau_Full], "DY#rightarrow#tau#tau","f" );
             RP_invm->AddLegendEntry( h_ee_invm[_EE_WW], "WW", "f" );
-            RP_invm->AddLegendEntry( h_ee_invm[_EE_WZ], "WZ", "f" );
-            RP_invm->AddLegendEntry( h_ee_invm[_EE_ZZ], "ZZ", "f" );
+//            RP_invm->AddLegendEntry( h_ee_invm[_EE_WZ], "WZ", "f" );
+//            RP_invm->AddLegendEntry( h_ee_invm[_EE_ZZ], "ZZ", "f" );
             RP_invm->Draw( 4e-1, 2e4, 1 );
 
 //######################################## ONE BY ONE #################################################
@@ -318,6 +320,7 @@ void ee_Est()
             for ( SelProc_t pr=_EE_tW; pr<_EE_VVnST; pr=next(pr) )
             {
                 if ( pr>=_EndOf_EE_VVnST_Normal && pr<_EE_DYTauTau_Full ) continue;
+                if ( pr == _EE_WZ || pr == _EE_ZZ ) continue;
 
                 Mgr.SetProc(pr);
                 h_ee_Est_pr_invm[pr] = ( (TH1D*)(h_ee_invm[pr]->Clone("h_ee_mass_Est_"+Mgr.Procname[pr])) );
@@ -343,12 +346,12 @@ void ee_Est()
 //------------------------------ Drawing ----------------------------------------------------------
 
                 RP_ee_invm_pr[pr] = new myRatioPlot_t( "h_mass_DataDriven_"+Mgr.Procname[pr], h_ee_invm[pr], h_ee_Est_pr_invm[pr] );
-//                RP_ee_invm_pr[pr]->SetPlots( "Dielectron invariant mass [GeV/c^{2}]", 15, 3000 );
-                RP_ee_invm_pr[pr]->SetPlots( "Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000 );
+                RP_ee_invm_pr[pr]->SetPlots( "Dielectron invariant mass [GeV/c^{2}]", 15, 3000 );
+//                RP_ee_invm_pr[pr]->SetPlots( "Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000 );
                 RP_ee_invm_pr[pr]->SetLegend( 0.6, 0.7 );
 
-//                RP_ee_invm_pr[pr]->AddLegendEntry( h_ee_Est_pr_invm[pr], "Estimation", "lp" );
-                RP_ee_invm_pr[pr]->AddLegendEntry( h_ee_Est_pr_invm[pr], "Ivertis", "lp" );
+                RP_ee_invm_pr[pr]->AddLegendEntry( h_ee_Est_pr_invm[pr], "Estimation", "lp" );
+//                RP_ee_invm_pr[pr]->AddLegendEntry( h_ee_Est_pr_invm[pr], "Ivertis", "lp" );
 
                 if ( pr==_EE_tW )
                     RP_ee_invm_pr[pr]->AddLegendEntry( h_ee_invm[pr], "tW (MC)", "f" );
@@ -381,11 +384,11 @@ void ee_Est()
             h1_eeTW_invm_Est->Write();
 
             myRatioPlot_t* RP_tW = new myRatioPlot_t( "tWest", s_tW_invm, h1_eeTW_invm_Est );
-//            RP_tW->SetPlots( "Dielectron invariant mass [GeV/c^{2}]", 15, 3000 );
-            RP_tW->SetPlots( "Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000 );
+            RP_tW->SetPlots( "Dielectron invariant mass [GeV/c^{2}]", 15, 3000 );
+//            RP_tW->SetPlots( "Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000 );
             RP_tW->SetLegend( 0.6, 0.6 );
-//            RP_tW->AddLegendEntry( h1_eeTW_invm_Est, "Estimation", "lp" );
-            RP_tW->AddLegendEntry( h1_eeTW_invm_Est, "Ivertis", "lp" );
+            RP_tW->AddLegendEntry( h1_eeTW_invm_Est, "Estimation", "lp" );
+//            RP_tW->AddLegendEntry( h1_eeTW_invm_Est, "Ivertis", "lp" );
             RP_tW->AddLegendEntry( h_ee_invm[_EE_tW], "tW (MC)", "f" );
             RP_tW->AddLegendEntry( h_ee_invm[_EE_tbarW], "#bar{t}W (MC)", "f" );
             RP_tW->Draw( 4e-1, 1e4, 1 );
@@ -584,6 +587,7 @@ void MuMu_Est()
 
             for ( SelProc_t pr=_MuMu_WW; pr<=_MuMu_VVnST; pr=SelProc_t((int)(pr-1)) )
             {
+                if ( pr == _MuMu_WZ || pr == _MuMu_ZZ ) continue;
                 Mgr.SetProc(pr);
 
                 f_Bkg_MuMu->GetObject( "h_mass_"+Mgr.Procname[pr], h_MuMu_invm[pr] );
@@ -658,18 +662,18 @@ void MuMu_Est()
 //------------------------------ Drawing ----------------------------------------------------------
 
             myRatioPlot_t *RP_invm = new myRatioPlot_t( "DataDriven_InvariantMass", s_MuMu_invm, h_MuMu_Est_invm );
-//            RP_invm->SetPlots( "Dimuon invariant mass [GeV/c^{2}]", 15, 3000 );
-            RP_invm->SetPlots( "Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000 );
+            RP_invm->SetPlots( "Dimuon invariant mass [GeV/c^{2}]", 15, 3000 );
+//            RP_invm->SetPlots( "Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000 );
             RP_invm->SetLegend();
-//            RP_invm->AddLegendEntry( h_MuMu_Est_invm, "Estimation", "lp" );
-            RP_invm->AddLegendEntry( h_MuMu_Est_invm, "Ivertis", "lp" );
+            RP_invm->AddLegendEntry( h_MuMu_Est_invm, "Estimation", "lp" );
+//            RP_invm->AddLegendEntry( h_MuMu_Est_invm, "Ivertis", "lp" );
             RP_invm->AddLegendEntry( h_MuMu_invm[_MuMu_ttbar_Full], "t#bar{t}", "f" );
             RP_invm->AddLegendEntry( h_MuMu_invm[_MuMu_tbarW], "#bar{t}W", "f" );
             RP_invm->AddLegendEntry( h_MuMu_invm[_MuMu_tW], "tW", "f" );
             RP_invm->AddLegendEntry( h_MuMu_invm[_MuMu_DYTauTau_Full], "DY#rightarrow#tau#tau","f" );
             RP_invm->AddLegendEntry( h_MuMu_invm[_MuMu_WW], "WW", "f" );
-            RP_invm->AddLegendEntry( h_MuMu_invm[_MuMu_WZ], "WZ", "f" );
-            RP_invm->AddLegendEntry( h_MuMu_invm[_MuMu_ZZ], "ZZ", "f" );
+//            RP_invm->AddLegendEntry( h_MuMu_invm[_MuMu_WZ], "WZ", "f" );
+//            RP_invm->AddLegendEntry( h_MuMu_invm[_MuMu_ZZ], "ZZ", "f" );
             RP_invm->Draw( 4e-1, 2e4, 1 );
 
 //######################################## ONE BY ONE #################################################
@@ -681,6 +685,7 @@ void MuMu_Est()
             for ( SelProc_t pr=_MuMu_tW; pr<_MuMu_VVnST; pr=next(pr) )
             {
                 if ( pr>=_EndOf_MuMu_VVnST_Normal && pr<_MuMu_DYTauTau_Full ) continue;
+                if ( pr == _MuMu_WZ || pr == _MuMu_ZZ ) continue;
 
                 Mgr.SetProc(pr);
                 h_MuMu_Est_pr_invm[pr] = ( (TH1D*)(h_MuMu_invm[pr]->Clone("h_MuMu_mass_Est_"+Mgr.Procname[pr])) );
@@ -706,12 +711,12 @@ void MuMu_Est()
 //------------------------------ Drawing ----------------------------------------------------------
 
                 RP_MuMu_invm_pr[pr] = new myRatioPlot_t( "h_mass_DataDriven_"+Mgr.Procname[pr], h_MuMu_invm[pr], h_MuMu_Est_pr_invm[pr] );
-//                RP_MuMu_invm_pr[pr]->SetPlots( "Dimuon invariant mass [GeV/c^{2}]", 15, 3000 );
-                RP_MuMu_invm_pr[pr]->SetPlots( "Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000 );
+                RP_MuMu_invm_pr[pr]->SetPlots( "Dimuon invariant mass [GeV/c^{2}]", 15, 3000 );
+//                RP_MuMu_invm_pr[pr]->SetPlots( "Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000 );
                 RP_MuMu_invm_pr[pr]->SetLegend( 0.6, 0.7 );
 
-//                RP_MuMu_invm_pr[pr]->AddLegendEntry( h_MuMu_Est_pr_invm[pr], "Estimation", "lp" );
-                RP_MuMu_invm_pr[pr]->AddLegendEntry( h_MuMu_Est_pr_invm[pr], "Ivertis", "lp" );
+                RP_MuMu_invm_pr[pr]->AddLegendEntry( h_MuMu_Est_pr_invm[pr], "Estimation", "lp" );
+//                RP_MuMu_invm_pr[pr]->AddLegendEntry( h_MuMu_Est_pr_invm[pr], "Ivertis", "lp" );
 
                 if ( pr==_MuMu_tW )
                     RP_MuMu_invm_pr[pr]->AddLegendEntry( h_MuMu_invm[pr], "tW (MC)", "f" );
@@ -744,8 +749,8 @@ void MuMu_Est()
             h1_MuMuTW_invm_Est->Write();
 
             myRatioPlot_t* RP_tW = new myRatioPlot_t( "tWest", s_tW_invm, h1_MuMuTW_invm_Est );
-//            RP_tW->SetPlots( "Dimuon invariant mass [GeV/c^{2}]", 15, 3000 );
-            RP_tW->SetPlots( "Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000 );
+            RP_tW->SetPlots( "Dimuon invariant mass [GeV/c^{2}]", 15, 3000 );
+//            RP_tW->SetPlots( "Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000 );
             RP_tW->SetLegend( 0.6, 0.6 );
             RP_tW->AddLegendEntry( h1_MuMuTW_invm_Est, "Estimation", "lp" );
 //            RP_tW->AddLegendEntry( h1_MuMuTW_invm_Est, "Ivertis", "lp" );

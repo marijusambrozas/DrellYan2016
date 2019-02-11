@@ -1901,7 +1901,7 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_emu_BtoF(Muon mu, Electron ele)
 
     // -- Electron2 -- //
     Double_t Pt2 = ele.Pt;
-    //Double_t eta2 = ele.eta;
+//    Double_t eta2 = ele.eta;
     Double_t eta2 = ele.etaSC;
 
     Int_t ptbin2_Reco = Find_electron_PtBin_Reco( Pt2 );
@@ -1970,7 +1970,7 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_emu_BtoF(SelectedEMu_t *EMu)
 
     // -- Electron2 -- //
     Double_t Pt2 = EMu->Electron_pT;
-    //Double_t eta2 = EMu->Electron_eta;
+//    Double_t eta2 = EMu->Electron_eta;
     Double_t eta2 = EMu->Electron_etaSC;
 
     Int_t ptbin2_Reco = Find_electron_PtBin_Reco( Pt2 );
@@ -2039,7 +2039,7 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_emu_GtoH(Muon mu, Electron ele)
 
     // -- Electron2 -- //
     Double_t Pt2 = ele.Pt;
-    //Double_t eta2 = ele.eta;
+//    Double_t eta2 = ele.eta;
     Double_t eta2 = ele.etaSC;
 
     Int_t ptbin2_Reco = Find_electron_PtBin_Reco( Pt2 );
@@ -2108,7 +2108,7 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_emu_GtoH(SelectedEMu_t *EMu)
 
     // -- Electron2 -- //
     Double_t Pt2 = EMu->Electron_pT;
-    //Double_t eta2 = EMu->Electron_eta;
+//    Double_t eta2 = EMu->Electron_eta;
     Double_t eta2 = EMu->Electron_etaSC;
 
     Int_t ptbin2_Reco = Find_electron_PtBin_Reco( Pt2 );
@@ -4875,7 +4875,6 @@ Bool_t DYAnalyzer::EventSelection_emu_method(vector< Muon > MuonCollection, vect
     Muon mu_BestPair;
     Electron el_BestPair;
 
-    // -- Select muon with highest pT -- //
     if ( nQMuons == nQIndicesMu && nQElectrons == nQIndicesEle )
     {
         for(Int_t i_mu=0; i_mu<nQMuons; i_mu++)
