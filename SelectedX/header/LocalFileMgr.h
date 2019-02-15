@@ -1958,11 +1958,11 @@ void LocalFileMgr::SetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedEE/Histos/";
 
-        Tag.push_back( "SelectedEE_WJetsToLNu" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 200 ); // I get Wsum=137540054
+        Tag.push_back( "SelectedEE_WJetsToLNu" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 137540054.0 ); nEvents.push_back( 200 ); // I get Wsum=137540054 Dalmin gets Wsum=86731698
         Location = "SelectedEE/MC_bkg/SelectedEE_WJetsToLNu.root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEE_WJetsToLNu_ext" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 1338 );
+        Tag.push_back( "SelectedEE_WJetsToLNu_ext" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 137540054.0 ); nEvents.push_back( 1338 );
         Location = "SelectedEE/MC_bkg/SelectedEE_WJetsToLNu_ext.root";        // There also is madgraph version
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
@@ -2168,11 +2168,11 @@ void LocalFileMgr::SetProc ( SelProc_t pr, Bool_t ClearOld )
         Location = "SelectedEE/MC_bkg/SelectedEE_WW.root";                  // NOT SURE (there also is WWTo2L2Nu), but probably ok
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEE_WJetsToLNu" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 200 ); // I get Wsum=137540054
+        Tag.push_back( "SelectedEE_WJetsToLNu" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 137540054.0 ); nEvents.push_back( 200 ); // I get Wsum=137540054
         Location = "SelectedEE/MC_bkg/SelectedEE_WJetsToLNu.root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEE_WJetsToLNu_ext" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 1338 );
+        Tag.push_back( "SelectedEE_WJetsToLNu_ext" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 137540054.0 ); nEvents.push_back( 1338 );
         Location = "SelectedEE/MC_bkg/SelectedEE_WJetsToLNu_ext.root";        // There also is madgraph version
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );       
 

@@ -516,7 +516,6 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
 
             SelectedMuMu_t *MuMu = new SelectedMuMu_t();
             MuMu->CreateFromChain( chain );         
-            MuMu->TurnOffBranches( "Muon_TuneP_pT Muon_TuneP_eta Muon_TuneP_phi" );
 
             Int_t NEvents = chain->GetEntries();
             if ( NEvents != Mgr.nEvents[i_tup] ) cout << "\tEvent numbers do not match!!!" << endl;
@@ -551,7 +550,6 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
                     cout << "pT vector has " << MuMu->Muon_pT->size() << " elements!!!" << endl;
                     break;
                 }
-
                 if ( MuMu->Muon_phi->size() != 2 )
                 {
                     cout << "phi vector has " << MuMu->Muon_phi->size() << " elements!!!" << endl;
@@ -561,7 +559,23 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
                 {
                     cout << "Energy vector has " << MuMu->Muon_Energy->size() << " elements!!!" << endl;
                     break;
-                }                
+                }
+                if ( MuMu->Muon_TuneP_pT->size() != 2 )
+                {
+                    cout << "TuneP_pT vector has " << MuMu->Muon_TuneP_pT->size() << " elements!!!" << endl;
+                    break;
+                }
+                if ( MuMu->Muon_TuneP_eta->size() != 2 )
+                {
+                    cout << "TuneP_eta vector has " << MuMu->Muon_TuneP_eta->size() << " elements!!!" << endl;
+                    break;
+                }
+                if ( MuMu->Muon_TuneP_phi->size() != 2 )
+                {
+                    cout << "TuneP_phi vector has " << MuMu->Muon_TuneP_phi->size() << " elements!!!" << endl;
+                    break;
+                }
+
 
                 Double_t GenWeight = MuMu->GENEvt_weight;            
 
@@ -579,8 +593,9 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
                 if( MuMu->isSelPassed == kTRUE )
                 {
                     TLorentzVector mu1, mu2;
-                    mu1.SetPtEtaPhiE( MuMu->Muon_pT->at(0), MuMu->Muon_eta->at(0), MuMu->Muon_phi->at(0), MuMu->Muon_Energy->at(0) );
-                    mu2.SetPtEtaPhiE( MuMu->Muon_pT->at(1), MuMu->Muon_eta->at(1), MuMu->Muon_phi->at(1), MuMu->Muon_Energy->at(1) );
+                    // Temporarily using TuneP_phi instead of Phi, because of the bug (wrote eta into phi)
+                    mu1.SetPtEtaPhiE( MuMu->Muon_pT->at(0), MuMu->Muon_eta->at(0), MuMu->Muon_TuneP_phi->at(0), MuMu->Muon_Energy->at(0) );
+                    mu2.SetPtEtaPhiE( MuMu->Muon_pT->at(1), MuMu->Muon_eta->at(1), MuMu->Muon_TuneP_phi->at(1), MuMu->Muon_Energy->at(1) );
 
                     // -- Apply efficiency scale factor -- //
                     if( Mgr.isMC == kTRUE )
@@ -616,22 +631,22 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
                     h_pT_sublead_before_PUCorr->Fill( MuMu->Muon_pT->at(sublead), TotWeight );
                     h_eta_lead_before_PUCorr->Fill( MuMu->Muon_eta->at(lead), TotWeight );
                     h_eta_sublead_before_PUCorr->Fill( MuMu->Muon_eta->at(sublead), TotWeight );
-                    h_phi_lead_before_PUCorr->Fill( MuMu->Muon_phi->at(lead), TotWeight );
-                    h_phi_sublead_before_PUCorr->Fill( MuMu->Muon_phi->at(sublead), TotWeight );
+                    h_phi_lead_before_PUCorr->Fill( MuMu->Muon_TuneP_phi->at(lead), TotWeight );
+                    h_phi_sublead_before_PUCorr->Fill( MuMu->Muon_TuneP_phi->at(sublead), TotWeight );
 
                     h_pT_lead_before_EffCorr->Fill( MuMu->Muon_pT->at(lead), TotWeight * PUWeight );
                     h_pT_sublead_before_EffCorr->Fill( MuMu->Muon_pT->at(sublead), TotWeight * PUWeight );
                     h_eta_lead_before_EffCorr->Fill( MuMu->Muon_eta->at(lead), TotWeight * PUWeight );
                     h_eta_sublead_before_EffCorr->Fill( MuMu->Muon_eta->at(sublead), TotWeight * PUWeight );
-                    h_phi_lead_before_EffCorr->Fill( MuMu->Muon_phi->at(lead), TotWeight * PUWeight );
-                    h_phi_sublead_before_EffCorr->Fill( MuMu->Muon_phi->at(sublead), TotWeight * PUWeight );
+                    h_phi_lead_before_EffCorr->Fill( MuMu->Muon_TuneP_phi->at(lead), TotWeight * PUWeight );
+                    h_phi_sublead_before_EffCorr->Fill( MuMu->Muon_TuneP_phi->at(sublead), TotWeight * PUWeight );
 
                     h_pT_lead->Fill( MuMu->Muon_pT->at(lead), TotWeight * PUWeight * effweight );
                     h_pT_sublead->Fill( MuMu->Muon_pT->at(sublead), TotWeight * PUWeight * effweight );
                     h_eta_lead->Fill( MuMu->Muon_eta->at(lead), TotWeight * PUWeight * effweight );
                     h_eta_sublead->Fill( MuMu->Muon_eta->at(sublead), TotWeight * PUWeight * effweight );
-                    h_phi_lead->Fill( MuMu->Muon_phi->at(lead), TotWeight * PUWeight * effweight );
-                    h_phi_sublead->Fill( MuMu->Muon_phi->at(sublead), TotWeight * PUWeight * effweight );
+                    h_phi_lead->Fill( MuMu->Muon_TuneP_phi->at(lead), TotWeight * PUWeight * effweight );
+                    h_phi_sublead->Fill( MuMu->Muon_TuneP_phi->at(sublead), TotWeight * PUWeight * effweight );
 
                 }// End of event selection
                 bar.Draw(i);
@@ -717,6 +732,7 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
     // -- Run2016 luminosity [/pb] -- //
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
     L = L_B2H;
+    Int_t nWJetsSS=0, nWJetsSS_weighted=0;
 
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
@@ -971,6 +987,8 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
                         h_muSS_pT->Fill( EMu->Muon_TuneP_pT, TotWeight * PUWeight * effweight );
                         h_muSS_eta->Fill( EMu->Muon_TuneP_eta, TotWeight * PUWeight * effweight );
                         h_muSS_phi->Fill( EMu->Muon_TuneP_phi, TotWeight * PUWeight * effweight );
+
+                        if ( Mgr.CurrentProc == _EMu_WJets ) { nWJetsSS++; nWJetsSS_weighted += TotWeight * PUWeight * effweight; }
                     }
                     h_nVTX_before_PUCorr->Fill( EMu->nVertices, TotWeight );
                     h_nVTX_before_EffCorr->Fill( EMu->nVertices, TotWeight * PUWeight );
@@ -987,6 +1005,9 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
 
         }// End of i_tup iteration
+
+        cout << "Physical SS WJets events: " << nWJetsSS << endl;
+        cout << "Weighted SS WJets events: " << nWJetsSS_weighted << endl;
 
         f->cd();
         cout << "\tWriting into file...";

@@ -649,8 +649,8 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                             MuMu.Muon_Energy->push_back( mu_temp2.E() );
                             MuMu.Muon_eta->push_back( mu_temp1.Eta() );
                             MuMu.Muon_eta->push_back( mu_temp2.Eta() );
-                            MuMu.Muon_phi->push_back( mu_temp1.Eta() );
-                            MuMu.Muon_phi->push_back( mu_temp2.Eta() );
+                            MuMu.Muon_phi->push_back( mu_temp1.Phi() );
+                            MuMu.Muon_phi->push_back( mu_temp2.Phi() );
 
                             MuMu.Muon_InvM = ( mu_temp1 + mu_temp2 ).M();
 

@@ -55,10 +55,10 @@ void myRatioPlot_t::SetPlots(TString xAxisName, Double_t xmin, Double_t xmax)
     h1_dataovermc->GetXaxis()->SetRangeUser(xmin, xmax);
     h1_dataovermc->GetXaxis()->SetLabelSize(0.13);
     h1_dataovermc->GetXaxis()->SetTitleSize(0.17);
-    h1_dataovermc->GetXaxis()->SetTitleOffset(0.75);
+    h1_dataovermc->GetXaxis()->SetTitleOffset(0.8);
     h1_dataovermc->GetYaxis()->SetLabelSize(0.11);
     h1_dataovermc->GetYaxis()->SetTitleSize(0.11);
-    h1_dataovermc->GetYaxis()->SetTitleOffset(0.3);
+    h1_dataovermc->GetYaxis()->SetTitleOffset(0.35);
     h1_dataovermc->GetYaxis()->CenterTitle();
     h1_dataovermc->GetYaxis()->SetNdivisions(8);
     h1_dataovermc->GetXaxis()->SetTickLength(0.01);
@@ -71,7 +71,7 @@ void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX)
 {
     if(PlotsSet==1) {
 //        canvas = new TCanvas(CanvasName, CanvasName, 1000, 1000);
-        canvas = new TCanvas(CanvasName, CanvasName, 850, 1000);
+        canvas = new TCanvas(CanvasName, CanvasName, 1000, 900);
 //        canvas = new TCanvas(CanvasName, CanvasName, 1500, 1000);
         TPad* pad1 = new TPad("pad1", "pad1", 0, 0.255, 1, 1);
         pad1->SetBottomMargin(0.001);
@@ -80,7 +80,7 @@ void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX)
         s_stackedProcesses->Draw("HIST");
         s_stackedProcesses->GetYaxis()->SetTitle("Number of events");
 //        s_stackedProcesses->GetYaxis()->SetTitle("Ivykiu skai#check{c}ius");
-        s_stackedProcesses->GetYaxis()->SetTitleOffset(1);
+        s_stackedProcesses->GetYaxis()->SetTitleOffset(1.1);
         s_stackedProcesses->GetYaxis()->SetTitleSize(0.04);
         s_stackedProcesses->GetXaxis()->SetNoExponent(1);
         s_stackedProcesses->SetMinimum(ymin);
