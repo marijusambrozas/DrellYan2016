@@ -19,7 +19,7 @@
 // -- Macro for making new data files with only selection-passing events  -- //
 #include "./header/DYAnalyzer.h"
 #include "./header/SelectedX.h"
-#include "./header/myProgressBar_t.h"
+//#include "./header/myProgressBar_t.h"
 #include "./header/FileMgr.h"
 #include "./etc/RoccoR/RoccoR.cc"
 
@@ -219,7 +219,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
             Int_t timesPassed = 0;           
             Int_t isClear = 0; // vectors that are writen into files should be cleared afer each event
 
-            myProgressBar_t bar( NEvents );
+//            myProgressBar_t bar( NEvents );
 
             // Loop for all events in the chain
             for ( Int_t i=0; i<NEvents; i++ )
@@ -312,7 +312,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
 
                 } // End of if( isTriggered )
 
-                bar.Draw(i);
+//                bar.Draw(i);
             } // End of event iteration
 
             cout << "\t" << timesPassed << " events have passed the event selection." << endl;
@@ -476,7 +476,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
             if ( Debug == kTRUE ) NEvents = 100; // using few events for debugging
 
             cout << "\t[Total Events: " << NEvents << "]" << endl;
-            myProgressBar_t bar( NEvents );
+//            myProgressBar_t bar( NEvents );
             Int_t timesPassed = 0;
             Int_t isClear = 0; // vectors that are writen into files should be cleared afer each event
 
@@ -680,7 +680,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
 
                 } // End of if( isTriggered )
 
-                bar.Draw(i);
+//                bar.Draw(i);
 
             } // End of event iteration
             cout << "\t" << timesPassed << " events have passed the event selection." << endl;
@@ -837,7 +837,7 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
             if ( Debug == kTRUE ) NEvents = 100; // using few events for debugging
 
             cout << "\t[Total Events: " << NEvents << "]" << endl;
-            myProgressBar_t bar( NEvents );
+//            myProgressBar_t bar( NEvents );
             Int_t timesPassed = 0;
 
             RoccoR rc("./etc/RoccoR/rcdata.2016.v3");
@@ -966,7 +966,7 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
 
                 } // End of if( isTriggered )
 
-                bar.Draw(i);
+//                bar.Draw(i);
             } // End of event iteration
 
             cout << "\t" << timesPassed << " events have passed the event selection." << endl;
@@ -1079,7 +1079,7 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name, Bool_t Debug )
     Int_t NEvents = chain->GetEntries();
     if ( Debug == kTRUE ) NEvents = 100; // using few events for debugging
 
-    myProgressBar_t bar( NEvents );
+//    myProgressBar_t bar( NEvents );
     cout << "\tNumber of events: " << NEvents << endl;
 
     // Loop for all events in the chain
@@ -1168,7 +1168,7 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name, Bool_t Debug )
 
         } // End of if( isTriggered )
 
-        bar.Draw(i);
+//        bar.Draw(i);
     } // End of event iteration
 
     cout << "\t" << timesPassed << " events have passed the event selection." << endl;
@@ -1239,7 +1239,7 @@ void MakeSelectedQCDEM_120to170_merged()
     QCD_EE->CreateFromChain( chain );
 
     Int_t NEvents = chain->GetEntries();
-    myProgressBar_t bar( NEvents );
+//    myProgressBar_t bar( NEvents );
     cout << "\tNumber of events: " << NEvents << endl;
 
     // Loop for all events in the chain
@@ -1284,7 +1284,7 @@ void MakeSelectedQCDEM_120to170_merged()
 
         } // End of event selection
 
-        bar.Draw(i);
+//        bar.Draw(i);
     } // End of event iteration
 
     // Writing
