@@ -9,25 +9,25 @@
 void myProgressBar_t::Draw(UInt_t iEntry)
 {
     if(isSet) {
-        if (!iEntry && !deno) {std::cout << "0 events selected.\n"; return;}
+        if (!iEntry && !deno) {cout << "0 events selected.\n"; return;}
         nume = iEntry;
-        if (deno<nume || nume<0) {std::cout << "Wrong iEntry.\n"; return;}
+        if (deno<nume || nume<0) {cout << "Wrong iEntry.\n"; return;}
         else {
             progress = 51*nume/deno;
-//            std::cout << progress << endl;
+//            cout << progress << endl;
             if(progress-51/deno<round(progress) && progress>=round(progress)) { // Checks progress so it doesnt redraw the same picture over and over
-//                std::cout << progress-51/deno << "   " << round(progress) << "   " << progress;
-                std::cout << "\r|";
+//                cout << progress-51/deno << "   " << round(progress) << "   " << progress;
+                cout << "\r|";
                 for (int n=1; n<=50; n++){
-                    if (n<=progress) { std::cout << "+";}
-                    else std::cout << "-";
+                    if (n<=progress) { cout << "+";}
+                    else cout << "-";
                 }
-                std::cout << "|  " << round(progress*1.97) << "% ";
-                std::cout.flush();
+                cout << "|  " << round(progress*1.97) << "% ";
+                cout.flush();
             }
-//            else std::cout << "\r";
-            if (nume==deno-1) std::cout << "\r        Finished.                                                         \n";
+//            else cout << "\r";
+            if (nume==deno-1) cout << "\r        Finished.                                                         \n";
         }
     }
-    else { std::cout << "Progress bar was not set.\n"; return; }
+    else { cout << "Progress bar was not set.\n"; return; }
 }
