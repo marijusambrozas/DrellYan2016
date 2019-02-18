@@ -10,17 +10,23 @@ WhichX=$1
 Trigger=$3
 #echo $Trigger
 
-source /cvmfs/cms.cern.ch/cmsset_default.sh
-scram p CMSSW CMSSW_8_0_6&
-wait %1
-cd CMSSW_8_0_6/src
-eval `scram runtime -sh`
-cd /cms/ldap_home/mambroza/DrellYan2016/SelectedX/
+#source /cvmfs/cms.cern.ch/cmsset_default.sh
+#source /cms/ldap_home/mambroza/DrellYan2016/SelectedX/Execute/cmsset_default.sh&
+#wait %1
+#scram p CMSSW CMSSW_8_0_6&
+#wait %1
+#cd CMSSW_8_4_0/src
+#eval `scram runtime -sh`&
+#wait %1
+/cms/ldap_home/mambroza/DrellYan2016/SelectedX/Execute/setup.sh
 
+cd /cms/ldap_home/mambroza/DrellYan2016/SelectedX/
+#ls
 #voms-proxy-init --voms cms
 
 Process=$2
-root -l -q -b MakeSelectedX.C'("'$WhichX'", "'$Process'", "'$Trigger'")'
+root -l -q -b MakeSelectedX.C'("'$WhichX'", "'$Process'", "'$Trigger'")'&
+wait %1
 if [[ $Process == *'QCDEM_120to170'* ]] ; then
     root -l -q -b MakeSelectedX.C'("QCDfail", "", "'$Trigger'")'&
     wait %1

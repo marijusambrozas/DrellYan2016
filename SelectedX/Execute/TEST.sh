@@ -1,4 +1,3 @@
 #!/bin/bash
 
-cd /cvmfs/cms.cern.ch/
-ls
+/cms/ldap_home/mambroza/DrellYan2016/SelectedX/Execute/setup.sh

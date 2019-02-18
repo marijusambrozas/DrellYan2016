@@ -10,3 +10,10 @@ QCDMuEnriched_470to600
 QCDMuEnriched_600to800
 QCDMuEnriched_800to1000
 QCDMuEnriched_1000toInf
+QCDEMEnriched_20to30
+QCDEMEnriched_30to50
+QCDEMEnriched_50to80
+QCDEMEnriched_80to120
+QCDEMEnriched_120to170
+QCDEMEnriched_170to300
+QCDEMEnriched_300toInf
