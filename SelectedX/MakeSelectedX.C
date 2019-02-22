@@ -19,7 +19,7 @@
 // -- Macro for making new data files with only selection-passing events  -- //
 #include "./header/DYAnalyzer.h"
 #include "./header/SelectedX.h"
-//#include "./header/myProgressBar_t.h"
+#include "./header/myProgressBar_t.h"
 #include "./header/FileMgr.h"
 #include "./etc/RoccoR/RoccoR.cc"
 
@@ -104,7 +104,6 @@ void MakeSelectedX ( TString WhichX, TString type = "", TString HLTname = "DEFAU
 
 
 /// ----------------------------- Electron Channel ------------------------------ ///
-//void MakeSelectedEE ( Int_t type, Int_t Num = 100, Int_t isTopPtReweighting = 0, TString HLTname = "Ele23Ele12" )
 void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
 {
     // -- Run2016 luminosity [/pb] -- //
@@ -219,16 +218,12 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
             Int_t timesPassed = 0;           
             Int_t isClear = 0; // vectors that are writen into files should be cleared afer each event
 
-//            myProgressBar_t bar( NEvents );
+            myProgressBar_t bar( NEvents );
 
             // Loop for all events in the chain
             for ( Int_t i=0; i<NEvents; i++ )
             {
                 ntuple->GetEvent(i);
-//                if (ntuple->runNum != 273158) continue;
-//                else if (ntuple->evtNum != 96411737) continue;
-//                else if (ntuple->evtNum != 97682536) continue;
-//                cout << "RunNum " << ntuple->runNum << "  EvtNum " << ntuple->evtNum << endl;
 
                 // -- Positive/Negative Gen-weights -- //
                 ntuple->GENEvt_weight < 0 ? EE.GENEvt_weight = -1 : EE.GENEvt_weight = 1;
@@ -269,9 +264,6 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
 
                     if ( isPassEventSelection == kTRUE )
                     {                       
-//                        cout << "HOORAY\n";
-//                        break;
-
                         timesPassed++;
                         Electron ele1 = SelectedElectronCollection[0];
                         Electron ele2 = SelectedElectronCollection[1];
@@ -279,6 +271,10 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
                         EE.isSelPassed = kTRUE;
                         EE.nVertices = ntuple->nVertices;
                         EE.nPileUp = ntuple->nPileUp;
+                        EE._prefiringweight = ntuple->_prefiringweight;
+                        EE._prefiringweightup = ntuple->_prefiringweightup;
+                        EE._prefiringweightdown = ntuple->_prefiringweightdown;
+                        EE.PVz = ntuple->PVz;
                         EE.Electron_InvM = ( ele1.Momentum + ele2.Momentum ).M();
 
                         if ( Sel_Index.size() != 2 ) cout << "======== ERROR: The number of electrons saved is not 2 ========" << endl;
@@ -312,7 +308,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
 
                 } // End of if( isTriggered )
 
-//                bar.Draw(i);
+                bar.Draw(i);
             } // End of event iteration
 
             cout << "\t" << timesPassed << " events have passed the event selection." << endl;
@@ -476,7 +472,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
             if ( Debug == kTRUE ) NEvents = 100; // using few events for debugging
 
             cout << "\t[Total Events: " << NEvents << "]" << endl;
-//            myProgressBar_t bar( NEvents );
+            myProgressBar_t bar( NEvents );
             Int_t timesPassed = 0;
             Int_t isClear = 0; // vectors that are writen into files should be cleared afer each event
 
@@ -580,6 +576,10 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
                             MuMu.isSelPassed = kTRUE;
                             MuMu.nVertices = ntuple->nVertices;
                             MuMu.nPileUp = ntuple->nPileUp;
+                            MuMu._prefiringweight = ntuple->_prefiringweight;
+                            MuMu._prefiringweightup = ntuple->_prefiringweightup;
+                            MuMu._prefiringweightdown = ntuple->_prefiringweightdown;
+                            MuMu.PVz = ntuple->PVz;
 
                             TLorentzVector mu_temp1, mu_temp2; // Rochester correction changed pT value so the correct value needs to be saved
 
@@ -680,7 +680,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t RocCorr , Bool_t De
 
                 } // End of if( isTriggered )
 
-//                bar.Draw(i);
+                bar.Draw(i);
 
             } // End of event iteration
             cout << "\t" << timesPassed << " events have passed the event selection." << endl;
@@ -837,7 +837,7 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
             if ( Debug == kTRUE ) NEvents = 100; // using few events for debugging
 
             cout << "\t[Total Events: " << NEvents << "]" << endl;
-//            myProgressBar_t bar( NEvents );
+            myProgressBar_t bar( NEvents );
             Int_t timesPassed = 0;
 
             RoccoR rc("./etc/RoccoR/rcdata.2016.v3");
@@ -938,6 +938,10 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
                         EMu.Muon_Energy = mu_temp.E();
                         EMu.EMu_InvM = ( mu_temp + ele.Momentum ).M();
 
+                        EMu._prefiringweight = ntuple->_prefiringweight;
+                        EMu._prefiringweightup = ntuple->_prefiringweightup;
+                        EMu._prefiringweightdown = ntuple->_prefiringweightdown;
+                        EMu.PVz = ntuple->PVz;
 
                         EMu.isSelPassed = kTRUE;
                         EMu.nVertices = ntuple->nVertices;
@@ -966,7 +970,7 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
 
                 } // End of if( isTriggered )
 
-//                bar.Draw(i);
+                bar.Draw(i);
             } // End of event iteration
 
             cout << "\t" << timesPassed << " events have passed the event selection." << endl;
@@ -1079,7 +1083,7 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name, Bool_t Debug )
     Int_t NEvents = chain->GetEntries();
     if ( Debug == kTRUE ) NEvents = 100; // using few events for debugging
 
-//    myProgressBar_t bar( NEvents );
+    myProgressBar_t bar( NEvents );
     cout << "\tNumber of events: " << NEvents << endl;
 
     // Loop for all events in the chain
@@ -1168,7 +1172,7 @@ void MakeSelectedQCDEM_120to170 ( TString HLTname, Int_t name, Bool_t Debug )
 
         } // End of if( isTriggered )
 
-//        bar.Draw(i);
+        bar.Draw(i);
     } // End of event iteration
 
     cout << "\t" << timesPassed << " events have passed the event selection." << endl;
@@ -1239,7 +1243,7 @@ void MakeSelectedQCDEM_120to170_merged()
     QCD_EE->CreateFromChain( chain );
 
     Int_t NEvents = chain->GetEntries();
-//    myProgressBar_t bar( NEvents );
+    myProgressBar_t bar( NEvents );
     cout << "\tNumber of events: " << NEvents << endl;
 
     // Loop for all events in the chain
@@ -1284,7 +1288,7 @@ void MakeSelectedQCDEM_120to170_merged()
 
         } // End of event selection
 
-//        bar.Draw(i);
+        bar.Draw(i);
     } // End of event iteration
 
     // Writing

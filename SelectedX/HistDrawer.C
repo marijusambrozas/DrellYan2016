@@ -3125,8 +3125,8 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
 
         if ( isWJ )
         {
-            std::cout << "OS WJets events: " << h_bkg_mass[iter]->Integral( 1, h_bkg_mass[iter]->GetSize()-2 ); << endl;
-            std::cout << "SS WJets events: " << h_bkg_mass[iter]->Integral( 1, h_bkg_mass[iter]->GetSize()-2 ); << endl;
+            std::cout << "OS WJets events: " << h_bkg_mass[iter]->Integral( 1, h_bkg_mass[iter]->GetSize()-2 ) << endl;
+            std::cout << "SS WJets events: " << h_bkg_mass[iter]->Integral( 1, h_bkg_mass[iter]->GetSize()-2 ) << endl;
             std::cout << "OS/SS ratio of WJets events: " << ratio_WJets_SSvsOS << endl;
             std::cout << "Average OS/SS ratio of WJets events per bin: " << avg_ratio_WJets_SSvsOS << endl << endl;
         }

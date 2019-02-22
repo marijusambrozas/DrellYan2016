@@ -67,6 +67,11 @@ public:
         Double_t Eff_HLT_Leg2_data[20][7];
         Double_t Eff_HLT_Leg2_MC[20][7];
 
+        // -- L1 prefiring -- //
+        Double_t L1_Prefiring_photon[32][9];
+        Double_t L1_Prefiring_jet[32][13];
+        Double_t L1_Prefiring_jetEM[32][13];
+
 	// -- Constructor -- //
 	DYAnalyzer(TString HLTname);
 
@@ -94,7 +99,19 @@ public:
 	Double_t PileUpWeightValue_80X(Int_t PileUp_MC);
 
 
-	/////////////////////////////////////////
+        void SetupL1PrefiringWeights();
+        Int_t Find_EtaBin_L1_photon(Double_t eta);
+        Int_t Find_EtaBin_L1_jet(Double_t eta);
+        Int_t Find_EtaBin_L1_jetEM(Double_t eta);
+        Int_t Find_PtBin_L1_photon(Double_t Pt);
+        Int_t Find_PtBin_L1_jet(Double_t Pt);
+        Int_t Find_PtBin_L1_jetEM(Double_t Pt);
+        Double_t L1PrefiringWeight_photon(Double_t Pt1, Double_t eta1, Double_t Pt2, Double_t eta2);
+        Double_t L1PrefiringWeight_jet(Double_t Pt1, Double_t eta1, Double_t Pt2, Double_t eta2);
+        Double_t L1PrefiringWeight_jetEM(Double_t Pt1, Double_t eta1, Double_t Pt2, Double_t eta2);
+
+
+        /////////////////////////////////////////
 	// -- Setup Efficiency scale factor -- //
 	/////////////////////////////////////////
         // MUONS
@@ -1219,6 +1236,46 @@ void DYAnalyzer::SetupEfficiencyScaleFactor_electron()
 }
 
 
+void DYAnalyzer::SetupL1PrefiringWeights()
+{
+    TString Location = "./etc/L1PrefiringMaps_new.root";
+    std::cout << "[L1 Prefiring weights are from " << Location << "]" << endl;
+
+    TFile *f_L1 = new TFile( Location );
+    TH2F *h2_L1_Prefire_photon = (TH2F*)f_L1->Get("L1prefiring_photonptvseta_2016BtoH");
+    TH2F *h2_L1_Prefire_jet = (TH2F*)f_L1->Get("L1prefiring_jetptvseta_2016BtoH");
+    TH2F *h2_L1_Prefire_jetEM = (TH2F*)f_L1->Get("L1prefiring_jetemptvseta_2016BtoH");
+
+    Int_t nEtaBins_photon = h2_L1_Prefire_photon->GetNbinsX();
+    Int_t nPtBins_photon = h2_L1_Prefire_photon->GetNbinsY();
+    Int_t nEtaBins_jet = h2_L1_Prefire_jet->GetNbinsX();
+    Int_t nPtBins_jet = h2_L1_Prefire_jet->GetNbinsY();
+    Int_t nEtaBins_jetEM = h2_L1_Prefire_jetEM->GetNbinsX();
+    Int_t nPtBins_jetEM = h2_L1_Prefire_jetEM->GetNbinsY();
+
+    for( Int_t iter_x = 0; iter_x < nEtaBins_jetEM; iter_x++ )
+    {
+        for( Int_t iter_y = 0; iter_y < nPtBins_jetEM; iter_y++ )
+        {
+            Int_t i_etabin = iter_x + 1;
+            Int_t i_ptbin = iter_y + 1;
+
+            if ( iter_y < 9 )
+            {
+                Double_t Pprefire_photon = h2_L1_Prefire_photon->GetBinContent(i_etabin, i_ptbin);
+                L1_Prefiring_jet[iter_x][iter_y] = Pprefire_photon;
+            }
+            Double_t Pprefire_jet = h2_L1_Prefire_jet->GetBinContent(i_etabin, i_ptbin);
+            Double_t Pprefire_jetEM = h2_L1_Prefire_jetEM->GetBinContent(i_etabin, i_ptbin);
+            L1_Prefiring_jet[iter_x][iter_y] = Pprefire_jet;
+            L1_Prefiring_jetEM[iter_x][iter_y] = Pprefire_jetEM;
+        }
+    }
+
+    std::cout << "Setting for L1 prefiring probabilities (BtoH) is completed" << endl;
+}
+
+
 Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF(Muon mu1, Muon mu2)
 {
     Double_t weight = -999;
@@ -2153,6 +2210,90 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_emu_GtoH(SelectedEMu_t *EMu)
     return weight;
 
 } // End of EfficiencySF_EventWeight_emu_GtoH(SelectedEMu_t)
+
+
+Double_t DYAnalyzer::L1PrefiringWeight_photon(Double_t Pt1, Double_t eta1, Double_t Pt2, Double_t eta2)
+{
+    Double_t Weight = -999;
+    Int_t ptbin1 = Find_PtBin_L1_photon( Pt1 );
+    Int_t etabin1 = Find_EtaBin_L1_photon( eta1 );
+
+    Int_t ptbin2 = Find_PtBin_L1_photon( Pt2 );
+    Int_t etabin2 = Find_EtaBin_L1_photon( eta2 );
+
+    //Check about bin settings
+    if( ptbin1 == 9999 || etabin1 == 9999 || ptbin2 == 9999 || etabin2 == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ...");
+        return -999;
+    }
+
+    //Muon1
+    Double_t Weight1 = L1_Prefiring_photon[etabin1][ptbin1];
+    Double_t Weight2 = L1_Prefiring_photon[etabin2][ptbin2];
+
+    Weight = (1 - Weight1) * (1 - Weight2);
+
+    if( Weight > 2 || Weight < 0.5 ) printf("[SF] Weight = %.3lf\n", Weight);
+    return Weight;
+
+}// End of L1PrefiringWeight_photon(Pt1 Eta1 Pt2 Eta2)
+
+
+Double_t DYAnalyzer::L1PrefiringWeight_jet(Double_t Pt1, Double_t eta1, Double_t Pt2, Double_t eta2)
+{
+    Double_t Weight = -999;
+    Int_t ptbin1 = Find_PtBin_L1_jet( Pt1 );
+    Int_t etabin1 = Find_EtaBin_L1_jet( eta1 );
+
+    Int_t ptbin2 = Find_PtBin_L1_jet( Pt2 );
+    Int_t etabin2 = Find_EtaBin_L1_jet( eta2 );
+
+    //Check about bin settings
+    if( ptbin1 == 9999 || etabin1 == 9999 || ptbin2 == 9999 || etabin2 == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ...");
+        return -999;
+    }
+
+    //Muon1
+    Double_t Weight1 = L1_Prefiring_jet[etabin1][ptbin1];
+    Double_t Weight2 = L1_Prefiring_jet[etabin2][ptbin2];
+
+    Weight = (1 - Weight1) * (1 - Weight2);
+
+    if( Weight > 2 || Weight < 0.5 ) printf("[SF] Weight = %.3lf\n", Weight);
+    return Weight;
+
+}// End of L1PrefiringWeight_jet(Pt1 Eta1 Pt2 Eta2)
+
+
+Double_t DYAnalyzer::L1PrefiringWeight_jetEM(Double_t Pt1, Double_t eta1, Double_t Pt2, Double_t eta2)
+{
+    Double_t Weight = -999;
+    Int_t ptbin1 = Find_PtBin_L1_jetEM( Pt1 );
+    Int_t etabin1 = Find_EtaBin_L1_jetEM( eta1 );
+
+    Int_t ptbin2 = Find_PtBin_L1_jetEM( Pt2 );
+    Int_t etabin2 = Find_EtaBin_L1_jetEM( eta2 );
+
+    //Check about bin settings
+    if( ptbin1 == 9999 || etabin1 == 9999 || ptbin2 == 9999 || etabin2 == 9999 )
+    {
+        printf("ERROR! Wrong assigned bin number ...");
+        return -999;
+    }
+
+    //Muon1
+    Double_t Weight1 = L1_Prefiring_jetEM[etabin1][ptbin1];
+    Double_t Weight2 = L1_Prefiring_jetEM[etabin2][ptbin2];
+
+    Weight = (1 - Weight1) * (1 - Weight2);
+
+    if( Weight > 2 || Weight < 0.5 ) printf("[SF] Weight = %.3lf\n", Weight);
+    return Weight;
+
+}// End of L1PrefiringWeight_jetEM(Pt1 Eta1 Pt2 Eta2)
 
 
 Bool_t DYAnalyzer::EventSelection(vector< Muon > MuonCollection, NtupleHandle *ntuple, // -- input: All muons in a event & NtupleHandle -- //
@@ -6822,6 +6963,154 @@ Int_t DYAnalyzer::Find_electron_EtaBin_Trig(Double_t eta)
         }
 
         return etabin;
+}
+
+
+Int_t DYAnalyzer::Find_EtaBin_L1_photon(Double_t eta)
+{
+        const Int_t nEtaBins = 32;
+        Double_t EtaBinEdges[nEtaBins+1] = {-5, -4, -3.5, -3.1, -3, -2.75, -2.5, -2.25, -2, -1.75, -1.5, -1.25, -1, -0.75, -0.5, -0.25, 0,
+                                            0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.1, 3.5, 4, 5};
+
+        Int_t etabin = 9999;
+
+        for(Int_t i=0; i<nEtaBins; i++)
+        {
+                if( eta >= EtaBinEdges[i] && eta < EtaBinEdges[i+1] )
+//                if( fabs(eta) > EtaBinEdges[i] && fabs(eta) < EtaBinEdges[i+1] )
+                {
+                        etabin = i;
+                        break;
+                }
+        }
+
+        return etabin;
+}
+
+
+Int_t DYAnalyzer::Find_EtaBin_L1_jet(Double_t eta)
+{
+        const Int_t nEtaBins = 32;
+        Double_t EtaBinEdges[nEtaBins+1] = {-5, -4, -3.5, -3.1, -3, -2.75, -2.5, -2.25, -2, -1.75, -1.5, -1.25, -1, -0.75, -0.5, -0.25, 0,
+                                            0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.1, 3.5, 4, 5};
+
+        Int_t etabin = 9999;
+
+        for(Int_t i=0; i<nEtaBins; i++)
+        {
+                if( eta >= EtaBinEdges[i] && eta < EtaBinEdges[i+1] )
+//                if( fabs(eta) > EtaBinEdges[i] && fabs(eta) < EtaBinEdges[i+1] )
+                {
+                        etabin = i;
+                        break;
+                }
+        }
+
+        return etabin;
+}
+
+
+
+Int_t DYAnalyzer::Find_EtaBin_L1_jetEM(Double_t eta)
+{
+        const Int_t nEtaBins = 32;
+        Double_t EtaBinEdges[nEtaBins+1] = {-5, -4, -3.5, -3.1, -3, -2.75, -2.5, -2.25, -2, -1.75, -1.5, -1.25, -1, -0.75, -0.5, -0.25, 0,
+                                            0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.1, 3.5, 4, 5};
+
+        Int_t etabin = 9999;
+
+        for(Int_t i=0; i<nEtaBins; i++)
+        {
+                if( eta >= EtaBinEdges[i] && eta < EtaBinEdges[i+1] )
+//                if( fabs(eta) > EtaBinEdges[i] && fabs(eta) < EtaBinEdges[i+1] )
+                {
+                        etabin = i;
+                        break;
+                }
+        }
+
+        return etabin;
+}
+
+
+Int_t DYAnalyzer::Find_PtBin_L1_photon(Double_t Pt)
+{
+    const Int_t nPtBins = 9;
+    Double_t PtBinEdges[nPtBins+1] = {20, 25, 30, 35, 40, 50, 70, 100, 200, 500};
+
+    Int_t ptbin = 9999;
+
+    // -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- //
+    if( Pt > PtBinEdges[nPtBins] ) ptbin = nPtBins-1;
+    // -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- //
+    else if( Pt < PtBinEdges[0] ) ptbin = 0;
+    else
+    {
+        for(Int_t i=0; i<nPtBins; i++)
+        {
+            if( Pt >= PtBinEdges[i] && Pt < PtBinEdges[i+1] )
+            {
+                ptbin = i;
+                break;
+            }
+        }
+    }
+
+    return ptbin;
+}
+
+
+Int_t DYAnalyzer::Find_PtBin_L1_jet(Double_t Pt)
+{
+    const Int_t nPtBins = 13;
+    Double_t PtBinEdges[nPtBins+1] = {10, 15, 20, 25, 30, 35, 40, 50, 70, 100, 150, 200, 300, 500};
+
+    Int_t ptbin = 9999;
+
+    // -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- //
+    if( Pt > PtBinEdges[nPtBins] ) ptbin = nPtBins-1;
+    // -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- //
+    else if( Pt < PtBinEdges[0] ) ptbin = 0;
+    else
+    {
+        for(Int_t i=0; i<nPtBins; i++)
+        {
+            if( Pt >= PtBinEdges[i] && Pt < PtBinEdges[i+1] )
+            {
+                ptbin = i;
+                break;
+            }
+        }
+    }
+
+    return ptbin;
+}
+
+
+Int_t DYAnalyzer::Find_PtBin_L1_jetEM(Double_t Pt)
+{
+    const Int_t nPtBins = 13;
+    Double_t PtBinEdges[nPtBins+1] = {10, 15, 20, 25, 30, 35, 40, 50, 70, 100, 150, 200, 300, 500};
+
+    Int_t ptbin = 9999;
+
+    // -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- //
+    if( Pt > PtBinEdges[nPtBins] ) ptbin = nPtBins-1;
+    // -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- //
+    else if( Pt < PtBinEdges[0] ) ptbin = 0;
+    else
+    {
+        for(Int_t i=0; i<nPtBins; i++)
+        {
+            if( Pt >= PtBinEdges[i] && Pt < PtBinEdges[i+1] )
+            {
+                ptbin = i;
+                break;
+            }
+        }
+    }
+
+    return ptbin;
 }
 
 

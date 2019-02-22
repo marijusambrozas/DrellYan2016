@@ -1,12 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// -- 2015.04.02: Remove duplicated declaration of gen-variables & Trigger
-// -- 2016.01.02: Cleaning & Add Electron, Jet and MET informaiton
-// -- 2017.04.27: Adding "Electron_passMediumID" (by Dalmin Pai)
-// -- 2017.07.19: Updating Electron variables with EGM corrections (by Dalmin Pai)
-// -- 2017.07.26: Varialbe type of "Electron_passConvVeto" and "Electron_passMediumID" were changed to "Bool_t" (by Dalmin Pai)
-// -- 2017.10.31: Changing Electron variables (by Dalmin Pai)
-// -- 2018.01.24: Add "Muon_PFSumPUIsoR04" to use "RelPFIso_dBeta" in muon
-/////////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
 #define MaxN 50000
@@ -19,13 +10,15 @@ class NtupleHandle
 public:
 	TChain *chain;
 
-    //Event Informations
+    //Event Information
     Int_t nVertices;
     Int_t runNum;
     Int_t lumiBlock;
-    //Int_t evtNum;
     unsigned long long evtNum;
     Int_t nPileUp;
+    Double_t _prefiringweight;
+    Double_t _prefiringweightup;
+    Double_t _prefiringweightdown;
 
     //Trigger variables
     Int_t HLT_ntrig;
@@ -86,6 +79,13 @@ public:
     Int_t GenOthers_fromHardProcessDecayed[MaxN];
     Int_t GenOthers_fromHardProcessFinalState[MaxN];
 
+    // Vertex information
+    Double_t PVx;
+    Double_t PVy;
+    Double_t PVz;
+    Double_t PVchi2;
+    Double_t PVndof;
+    Double_t PVnormalizedChi2;
 
     //////////////////////////////
     // -- Electron Variables -- //
@@ -111,10 +111,10 @@ public:
     Double_t Electron_etaWidth[MaxN];
     Double_t Electron_phiWidth[MaxN];
     Double_t Electron_dEtaIn[MaxN];
-    Double_t Electron_dEtaInSeed[MaxN]; // updated at 19 Jul. 2017 by Dalmin
+    Double_t Electron_dEtaInSeed[MaxN];
     Double_t Electron_dPhiIn[MaxN];
     Double_t Electron_sigmaIEtaIEta[MaxN];
-    Double_t Electron_Full5x5_SigmaIEtaIEta[MaxN]; // updated at 19 Jul. 2017 by Dalmin
+    Double_t Electron_Full5x5_SigmaIEtaIEta[MaxN];
     Double_t Electron_HoverE[MaxN];
     Double_t Electron_fbrem[MaxN];
     Double_t Electron_eOverP[MaxN];
@@ -141,17 +141,16 @@ public:
     Double_t Electron_RelPFIso_Rho[MaxN];
     Double_t Electron_r9[MaxN];
     Int_t Electron_ecalDriven[MaxN];
-//    Int_t Electron_passConvVeto[MaxN];
-    Bool_t Electron_passConvVeto[MaxN]; // modified at 26 Jul. 2017 by Dalmin
-//    Int_t Electron_passMediumID[MaxN]; // updated at 27 Apr. 2017 by Dalmin
-    Bool_t Electron_passMediumID[MaxN]; // modified at 26 Jul. 2017 by Dalmin
+    Bool_t Electron_passConvVeto[MaxN];
+    Bool_t Electron_passMediumID[MaxN];
 
     // Probably not necessary in DY selection
-//    Bool_t Electron_passLooseID[MaxN];
-//    Bool_t Electron_passTightID[MaxN];
-//    Bool_t Electron_passMVAID_WP80[MaxN];
-//    Bool_t Electron_passMVAID_WP90[MaxN];
-//    Bool_t Electron_passHEEPID[MaxN];
+    Bool_t Electron_passVetoID[MaxN];
+    Bool_t Electron_passLooseID[MaxN];
+    Bool_t Electron_passTightID[MaxN];
+    Bool_t Electron_passMVAID_WP80[MaxN];
+    Bool_t Electron_passMVAID_WP90[MaxN];
+    Bool_t Electron_passHEEPID[MaxN];
 
     // -- Uncorrected Electrons -- //
     Int_t nUnCorrElectron;
@@ -190,6 +189,10 @@ public:
     Int_t isPFmuon[MaxN];
     Int_t isTRKmuon[MaxN];
     Int_t nMuon;
+    Bool_t Muon_passLooseID[MaxN];
+    Bool_t Muon_passMediumID[MaxN];
+    Bool_t Muon_passTightID[MaxN];
+    Bool_t Muon_passHighPtID[MaxN];
     
     // -- for invariant mass calculation -- //
     Double_t Muon_Px[MaxN];
@@ -205,7 +208,7 @@ public:
     Double_t Muon_PfGammaIsoR04[MaxN];
     Double_t Muon_PFSumPUIsoR04[MaxN];
 
-    //Dimuon variables
+    //Particle pair variables
     std::vector<double> *CosAngle;
     std::vector<double> *vtxTrkChi2;
     std::vector<double> *vtxTrkProb;
@@ -325,12 +328,18 @@ public:
         chain->SetBranchStatus("lumiBlock", 1);
         chain->SetBranchStatus("evtNum", 1);
     	chain->SetBranchStatus("nPileUp", 1);
+        chain->SetBranchStatus("_prefiringweight", 1);
+        chain->SetBranchStatus("_prefiringweightup", 1);
+        chain->SetBranchStatus("_prefiringweightdown", 1);
 
     	chain->SetBranchAddress("nVertices", &nVertices);
     	chain->SetBranchAddress("runNum", &runNum);
         chain->SetBranchAddress("lumiBlock", &lumiBlock);
         chain->SetBranchAddress("evtNum", &evtNum);
     	chain->SetBranchAddress("nPileUp", &nPileUp);
+        chain->SetBranchAddress("_prefiringweight", &_prefiringweight);
+        chain->SetBranchAddress("_prefiringweightup", &_prefiringweightup);
+        chain->SetBranchAddress("_prefiringweightdown", &_prefiringweightdown);
 
     	// -- Trigger Information -- //
     	chain->SetBranchStatus("HLT_trigName", 1);
@@ -345,6 +354,20 @@ public:
     	chain->SetBranchAddress("HLT_trigEta", &HLT_trigEta);
     	chain->SetBranchAddress("HLT_trigPhi", &HLT_trigPhi);
 
+        // -- Vertex information -- //
+        chain->SetBranchStatus("PVx", 1);
+        chain->SetBranchStatus("PVy", 1);
+        chain->SetBranchStatus("PVz", 1);
+        chain->SetBranchStatus("PVchi2", 1);
+        chain->SetBranchStatus("PVndof", 1);
+        chain->SetBranchStatus("PVnormalizedChi2", 1);
+
+        chain->SetBranchAddress("PVx", &PVx);
+        chain->SetBranchAddress("PVy", &PVy);
+        chain->SetBranchAddress("PVz", &PVz);
+        chain->SetBranchAddress("PVchi2", &PVchi2);
+        chain->SetBranchAddress("PVndof", &PVndof);
+        chain->SetBranchAddress("PVnormalizedChi2", &PVnormalizedChi2);
 
     	// this->TurnOnBranches_GenLepton();
     	// this->TurnOnBranches_Muon();
@@ -552,6 +575,10 @@ public:
         chain->SetBranchStatus("Muon_TuneP_Py", 1);
         chain->SetBranchStatus("Muon_TuneP_Pz", 1);
 
+        chain->SetBranchStatus("Muon_passLooseID", 1);
+        chain->SetBranchStatus("Muon_passMediumID", 1);
+        chain->SetBranchStatus("Muon_passTightID", 1);
+        chain->SetBranchStatus("Muon_passHighPtID", 1);
 
     	chain->SetBranchAddress("nMuon", &nMuon);
     	chain->SetBranchAddress("Muon_pT", Muon_pT);
@@ -637,6 +664,11 @@ public:
     	chain->SetBranchAddress("Muon_TuneP_Pz", &Muon_TuneP_Pz);
     	chain->SetBranchAddress("Muon_TuneP_eta", &Muon_TuneP_eta);
     	chain->SetBranchAddress("Muon_TuneP_phi", &Muon_TuneP_phi);
+
+        chain->SetBranchAddress("Muon_passLooseID", &Muon_passLooseID);
+        chain->SetBranchAddress("Muon_passMediumID", &Muon_passMediumID);
+        chain->SetBranchAddress("Muon_passTightID", &Muon_passTightID);
+        chain->SetBranchAddress("Muon_passHighPtID", &Muon_passHighPtID);
     }
 
     void TurnOnBranches_Electron()
@@ -694,14 +726,13 @@ public:
         chain->SetBranchStatus("Electron_r9", 1);
         chain->SetBranchStatus("Electron_ecalDriven", 1);
         chain->SetBranchStatus("Electron_passConvVeto", 1);
-        chain->SetBranchStatus("Electron_passMediumID", 1); // updated at 27 Apr. 2017 by Dalmin]
+        chain->SetBranchStatus("Electron_passMediumID", 1);
 
-        // Probably not necessary in DY selection
-//        chain->SetBranchStatus("Electron_passLooseID", 1);
-//        chain->SetBranchStatus("Electron_passTightID", 1);
-//        chain->SetBranchStatus("Electron_passMVAID_WP80", 1);
-//        chain->SetBranchStatus("Electron_passMVAID_WP90", 1);
-//        chain->SetBranchStatus("Electron_passHEEPID", 1);
+        chain->SetBranchStatus("Electron_passLooseID", 1);
+        chain->SetBranchStatus("Electron_passTightID", 1);
+        chain->SetBranchStatus("Electron_passMVAID_WP80", 1);
+        chain->SetBranchStatus("Electron_passMVAID_WP90", 1);
+        chain->SetBranchStatus("Electron_passHEEPID", 1);
 
     	// -- Uncorrected Electrons -- //
     	chain->SetBranchStatus("nUnCorrElectron", 1);
@@ -735,10 +766,10 @@ public:
     	chain->SetBranchAddress("Electron_etaWidth", &Electron_etaWidth);
     	chain->SetBranchAddress("Electron_phiWidth", &Electron_phiWidth);
     	chain->SetBranchAddress("Electron_dEtaIn", &Electron_dEtaIn);
-    	chain->SetBranchAddress("Electron_dEtaInSeed", &Electron_dEtaInSeed); // updated at 19 Jul. 2017 by Dalmin
+        chain->SetBranchAddress("Electron_dEtaInSeed", &Electron_dEtaInSeed);
     	chain->SetBranchAddress("Electron_dPhiIn", &Electron_dPhiIn);
     	chain->SetBranchAddress("Electron_sigmaIEtaIEta", &Electron_sigmaIEtaIEta);
-    	chain->SetBranchAddress("Electron_Full5x5_SigmaIEtaIEta", &Electron_Full5x5_SigmaIEtaIEta); // updated at 19 Jul. 2017 by Dalmin
+        chain->SetBranchAddress("Electron_Full5x5_SigmaIEtaIEta", &Electron_Full5x5_SigmaIEtaIEta);
     	chain->SetBranchAddress("Electron_HoverE", &Electron_HoverE);
     	chain->SetBranchAddress("Electron_fbrem", &Electron_fbrem);
     	chain->SetBranchAddress("Electron_eOverP", &Electron_eOverP);
@@ -767,14 +798,13 @@ public:
     	chain->SetBranchAddress("Electron_r9", &Electron_r9);
     	chain->SetBranchAddress("Electron_ecalDriven", &Electron_ecalDriven);
         chain->SetBranchAddress("Electron_passConvVeto", &Electron_passConvVeto);
-        chain->SetBranchAddress("Electron_passMediumID", &Electron_passMediumID); // updated at 27 Apr. 2017 by Dalmin
+        chain->SetBranchAddress("Electron_passMediumID", &Electron_passMediumID);
 
-        // Probably not necessary in DY selection
-//        chain->SetBranchAddress("Electron_passLooseID", &Electron_passLooseID);
-//        chain->SetBranchAddress("Electron_passTightID", &Electron_passTightID);
-//        chain->SetBranchAddress("Electron_passMVAID_WP80", &Electron_passMVAID_WP80);
-//        chain->SetBranchAddress("Electron_passMVAID_WP90", &Electron_passMVAID_WP80);
-//        chain->SetBranchAddress("Electron_passHEEPID", &Electron_passHEEPID);
+        chain->SetBranchAddress("Electron_passLooseID", &Electron_passLooseID);
+        chain->SetBranchAddress("Electron_passTightID", &Electron_passTightID);
+        chain->SetBranchAddress("Electron_passMVAID_WP80", &Electron_passMVAID_WP80);
+        chain->SetBranchAddress("Electron_passMVAID_WP90", &Electron_passMVAID_WP80);
+        chain->SetBranchAddress("Electron_passHEEPID", &Electron_passHEEPID);
 
     	// -- Uncorrected Electrons -- //
     	chain->SetBranchAddress("nUnCorrElectron", &nUnCorrElectron);
