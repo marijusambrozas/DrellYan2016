@@ -165,7 +165,8 @@ void FileMgr::SetProc ( Process_t pr, Bool_t ClearOld )
     TString Location;
     CurrentProc = pr;
 
-    BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6";
+    if ( pr != _None )
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/";
 
     if ( pr == _DY_10to50 )
     {
