@@ -140,6 +140,8 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
         // Loop for all samples in a process
         for ( Int_t i_tup = 0; i_tup<Ntup; i_tup++ )
         {           
+            if ( Mgr.CurrentProc == _WJets ) i_tup = 2;
+
             TStopwatch looptime;
             looptime.Start();
 
@@ -770,6 +772,8 @@ void MakeSelectedEMu ( TString type, TString HLTname, Bool_t RocCorr, Bool_t Deb
         // Loop for all samples in a process
         for ( Int_t i_tup = 0; i_tup<Ntup; i_tup++ )
         {
+            if ( Mgr.CurrentProc == _WJets ) i_tup = 2;
+
             TStopwatch looptime;
             looptime.Start();
 
