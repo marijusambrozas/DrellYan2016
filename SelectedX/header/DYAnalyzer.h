@@ -72,6 +72,9 @@ public:
         Double_t L1_Prefiring_jet[32][13];
         Double_t L1_Prefiring_jetEM[32][13];
 
+        // -- PVz weights -- //
+        Double_t PVzWeight[80];
+
 	// -- Constructor -- //
 	DYAnalyzer(TString HLTname);
 
@@ -98,7 +101,7 @@ public:
 	void SetupPileUpReWeighting_80X( Bool_t isMC, TString ROOTFileName );
 	Double_t PileUpWeightValue_80X(Int_t PileUp_MC);
 
-
+        // -- L1 prefiring (the code is not correct) -- //
         void SetupL1PrefiringWeights();
         Int_t Find_EtaBin_L1_photon(Double_t eta);
         Int_t Find_EtaBin_L1_jet(Double_t eta);
@@ -106,10 +109,14 @@ public:
         Int_t Find_PtBin_L1_photon(Double_t Pt);
         Int_t Find_PtBin_L1_jet(Double_t Pt);
         Int_t Find_PtBin_L1_jetEM(Double_t Pt);
+        // WRONG!!!
         Double_t L1PrefiringWeight_photon(Double_t Pt1, Double_t eta1, Double_t Pt2, Double_t eta2);
         Double_t L1PrefiringWeight_jet(Double_t Pt1, Double_t eta1, Double_t Pt2, Double_t eta2);
         Double_t L1PrefiringWeight_jetEM(Double_t Pt1, Double_t eta1, Double_t Pt2, Double_t eta2);
 
+        // -- For PVz reweighting -- //
+        void SetupPVzWeights(Bool_t isMC, TString whichX, TString fileName);
+        Double_t PVzWeightValue(Double_t PVz);
 
         /////////////////////////////////////////
 	// -- Setup Efficiency scale factor -- //
@@ -2294,6 +2301,68 @@ Double_t DYAnalyzer::L1PrefiringWeight_jetEM(Double_t Pt1, Double_t eta1, Double
     return Weight;
 
 }// End of L1PrefiringWeight_jetEM(Pt1 Eta1 Pt2 Eta2)
+
+
+void DYAnalyzer::SetupPVzWeights(Bool_t isMC, TString whichX, TString fileName)
+{
+    if( isMC == kFALSE )
+        {
+            for(Int_t i=0; i<80; i++)
+                PVzWeight[i] = 1;
+            return;
+        }
+    // -- MC only -- //
+    TFile *f = new TFile(fileName, "READ");
+    TString WhichX = whichX;
+    WhichX.ToLower();
+    if (WhichX!="ee" && WhichX!="mumu" && WhichX!="emu")
+    {
+        cout << "ERROR! Wrong name for the final state!" << endl;
+//        return;
+    }
+    TH1D *h_PVzWeights = (TH1D*)f->Get("h_PVzWeights_"+WhichX);
+    if( h_PVzWeights == NULL )
+    {
+        cout << "ERROR! No Weight histogram!"<< endl;
+        return;
+    }
+    for(Int_t i=0; i<80; i++)
+    {
+        Int_t i_bin = i+1;
+        PVzWeight[i] = h_PVzWeights->GetBinContent(i_bin);
+    }
+    return;
+}
+
+
+Double_t DYAnalyzer::PVzWeightValue(Double_t PVz)
+{
+    if( PVz < -20 || PVz >= 20 )
+        return 0;
+
+    Double_t binEdges[81];
+    for(int i=0; i<=80; i++)
+        binEdges[i] = -20 + 0.5 * i;
+
+    Int_t PVz_bin = 9999;
+
+    for(Int_t i=0; i<80; i++)
+    {
+        if( binEdges[i] <= PVz && PVz < binEdges[i+1] )
+        {
+            PVz_bin = i;
+            break;
+        }
+    }
+
+    if( PVz_bin == 9999 )
+    {
+        cout << "ERROR: Could not find the PVz bin! (PVz value: " << PVz << ")" << endl;
+        return 0;
+    }
+
+    return PVzWeight[PVz_bin];
+}
 
 
 Bool_t DYAnalyzer::EventSelection(vector< Muon > MuonCollection, NtupleHandle *ntuple, // -- input: All muons in a event & NtupleHandle -- //

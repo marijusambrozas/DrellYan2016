@@ -169,11 +169,18 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         analyzer->SetupPileUpReWeighting_80X( Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root" );
 
         // -- For efficiency SF -- //
-        analyzer->SetupEfficiencyScaleFactor_electron();        
+        analyzer->SetupEfficiencyScaleFactor_electron();
+
+        // -- For PVz reweighting -- //
+//        analyzer->SetupPVzWeights(Mgr.isMC, "ee", "./etc/PVzWeights.root");
+        analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
+
 
         // -- Creating Histograms -- //
-        TH1D *h_mass_fine_before_PUCorr = new TH1D("h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins);
-        TH1D *h_mass_fine_before_EffCorr = new TH1D("h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins);
+        TH1D *h_mass_before_PUCorr = new TH1D("h_mass_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins);
+        TH1D *h_mass_before_EffCorr = new TH1D("h_mass_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins);
+        TH1D *h_mass_before_PVzCorr = new TH1D("h_mass_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins);
+        TH1D *h_mass_before_L1Corr = new TH1D("h_mass_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins);
         TH1D *h_mass_fine = new TH1D("h_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000);
         TH1D *h_mass = new TH1D("h_mass_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins);
         TH1D *h_pT = new TH1D("h_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
@@ -196,6 +203,20 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         TH1D *h_eta_sublead_before_EffCorr = new TH1D("h_eta_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
         TH1D *h_phi_lead_before_EffCorr = new TH1D("h_phi_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
         TH1D *h_phi_sublead_before_EffCorr = new TH1D("h_phi_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+
+        TH1D *h_pT_lead_before_PVzCorr = new TH1D("h_pT_lead_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
+        TH1D *h_pT_sublead_before_PVzCorr = new TH1D("h_pT_sublead_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
+        TH1D *h_eta_lead_before_PVzCorr = new TH1D("h_eta_lead_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        TH1D *h_eta_sublead_before_PVzCorr = new TH1D("h_eta_sublead_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        TH1D *h_phi_lead_before_PVzCorr = new TH1D("h_phi_lead_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        TH1D *h_phi_sublead_before_PVzCorr = new TH1D("h_phi_sublead_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+
+        TH1D *h_pT_lead_before_L1Corr = new TH1D("h_pT_lead_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
+        TH1D *h_pT_sublead_before_L1Corr = new TH1D("h_pT_sublead_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
+        TH1D *h_eta_lead_before_L1Corr = new TH1D("h_eta_lead_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        TH1D *h_eta_sublead_before_L1Corr = new TH1D("h_eta_sublead_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        TH1D *h_phi_lead_before_L1Corr = new TH1D("h_phi_lead_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
+        TH1D *h_phi_sublead_before_L1Corr = new TH1D("h_phi_sublead_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4);
 
         TH1D *h_pT_lead = new TH1D("h_pT_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
         TH1D *h_pT_sublead = new TH1D("h_pT_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
@@ -244,6 +265,16 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
                 // -- efficiency weights -- //
                 Double_t effweight = 1;
 
+                // -- PVz weights -- //
+                Double_t PVzWeight = 1;
+                if( Mgr.isMC == kTRUE ) PVzWeight = analyzer->PVzWeightValue( EE->PVz );
+
+                // -- L1 prefiring weights -- //
+                Double_t L1weight = 1;
+//                if ( Mgr.isMC == kTRUE ) L1weight = EE->_prefiringweight;
+//                if ( Mgr.isMC == kTRUE ) L1weight = EE->_prefiringweightup;
+                if ( Mgr.isMC == kTRUE ) L1weight = EE->_prefiringweightdown;
+
                 // -- Normalization -- //
                 Double_t TotWeight = GenWeight;
                 if ( Mgr.isMC == kTRUE ) TotWeight = ( L * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup] ) * GenWeight;
@@ -261,16 +292,18 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
                             effweight = analyzer->EfficiencySF_EventWeight_electron( EE );
 //                    cout << effweight << endl;
 
-                    h_mass_fine_before_PUCorr->Fill( EE->Electron_InvM, TotWeight );
-                    h_mass_fine_before_EffCorr->Fill( EE->Electron_InvM, TotWeight * PUWeight );
-                    h_mass_fine->Fill( EE->Electron_InvM, TotWeight * PUWeight * effweight );
-                    h_mass->Fill( EE->Electron_InvM, TotWeight * PUWeight * effweight );
-                    h_pT->Fill( reco_Pt, TotWeight * PUWeight * effweight );
-                    h_rapi->Fill( reco_rapi, TotWeight * PUWeight * effweight );
+                    h_mass_before_PUCorr->Fill( EE->Electron_InvM, TotWeight );
+                    h_mass_before_EffCorr->Fill( EE->Electron_InvM, TotWeight * PUWeight );
+                    h_mass_before_PVzCorr->Fill( EE->Electron_InvM, TotWeight * PUWeight * effweight );
+                    h_mass_before_L1Corr->Fill( EE->Electron_InvM, TotWeight * PUWeight * effweight * PVzWeight );
+                    h_mass_fine->Fill( EE->Electron_InvM, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                    h_mass->Fill( EE->Electron_InvM, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                    h_pT->Fill( reco_Pt, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                    h_rapi->Fill( reco_rapi, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
 
                     h_nVTX_before_PUCorr->Fill( EE->nVertices, TotWeight );
                     h_nVTX_before_EffCorr->Fill( EE->nVertices, TotWeight * PUWeight );
-                    h_nVTX->Fill( EE->nVertices, TotWeight * PUWeight * effweight );
+                    h_nVTX->Fill( EE->nVertices, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
 
                     int lead=0, sublead=1;
                     if ( EE->Electron_pT->at(0) < EE->Electron_pT->at(1) )
@@ -297,14 +330,32 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
                     h_phi_lead_before_EffCorr->Fill( EE->Electron_phi->at(lead), TotWeight * PUWeight );
                     h_phi_sublead_before_EffCorr->Fill( EE->Electron_phi->at(sublead), TotWeight * PUWeight );
 
-                    h_pT_lead->Fill( EE->Electron_pT->at(lead), TotWeight * PUWeight * effweight );
-                    h_pT_sublead->Fill( EE->Electron_pT->at(sublead), TotWeight * PUWeight * effweight );
-//                    h_eta_lead->Fill( EE->Electron_eta->at(lead), TotWeight * PUWeight * effweight );
-//                    h_eta_sublead->Fill( EE->Electron_eta->at(sublead), TotWeight * PUWeight * effweight );
-                    h_eta_lead->Fill( EE->Electron_etaSC->at(lead), TotWeight * PUWeight * effweight );
-                    h_eta_sublead->Fill( EE->Electron_etaSC->at(sublead), TotWeight * PUWeight * effweight );
-                    h_phi_lead->Fill( EE->Electron_phi->at(lead), TotWeight * PUWeight * effweight );
-                    h_phi_sublead->Fill( EE->Electron_phi->at(sublead), TotWeight * PUWeight * effweight );
+                    h_pT_lead_before_PVzCorr->Fill( EE->Electron_pT->at(lead), TotWeight * PUWeight * effweight );
+                    h_pT_sublead_before_PVzCorr->Fill( EE->Electron_pT->at(sublead), TotWeight * PUWeight * effweight );
+//                    h_eta_lead_before_PVzCorr->Fill( EE->Electron_eta->at(lead), TotWeight * PUWeight * effweight );
+//                    h_eta_sublead_before_PVzCorr->Fill( EE->Electron_eta->at(sublead), TotWeight * PUWeight * effweight );
+                    h_eta_lead_before_PVzCorr->Fill( EE->Electron_etaSC->at(lead), TotWeight * PUWeight * effweight );
+                    h_eta_sublead_before_PVzCorr->Fill( EE->Electron_etaSC->at(sublead), TotWeight * PUWeight * effweight );
+                    h_phi_lead_before_PVzCorr->Fill( EE->Electron_phi->at(lead), TotWeight * PUWeight * effweight );
+                    h_phi_sublead_before_PVzCorr->Fill( EE->Electron_phi->at(sublead), TotWeight * PUWeight * effweight );
+
+                    h_pT_lead_before_L1Corr->Fill( EE->Electron_pT->at(lead), TotWeight * PUWeight * effweight * PVzWeight );
+                    h_pT_sublead_before_L1Corr->Fill( EE->Electron_pT->at(sublead), TotWeight * PUWeight * effweight * PVzWeight );
+//                    h_eta_lead_before_L1Corr->Fill( EE->Electron_eta->at(lead), TotWeight * PUWeight * effweight * PVzWeight );
+//                    h_eta_sublead_before_L1Corr->Fill( EE->Electron_eta->at(sublead), TotWeight * PUWeight * effweight * PVzWeight );
+                    h_eta_lead_before_L1Corr->Fill( EE->Electron_etaSC->at(lead), TotWeight * PUWeight * effweight * PVzWeight );
+                    h_eta_sublead_before_L1Corr->Fill( EE->Electron_etaSC->at(sublead), TotWeight * PUWeight * effweight * PVzWeight );
+                    h_phi_lead_before_L1Corr->Fill( EE->Electron_phi->at(lead), TotWeight * PUWeight * effweight * PVzWeight );
+                    h_phi_sublead_before_L1Corr->Fill( EE->Electron_phi->at(sublead), TotWeight * PUWeight * effweight * PVzWeight );
+
+                    h_pT_lead->Fill( EE->Electron_pT->at(lead), TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                    h_pT_sublead->Fill( EE->Electron_pT->at(sublead), TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+//                    h_eta_lead->Fill( EE->Electron_eta->at(lead), TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+//                    h_eta_sublead->Fill( EE->Electron_eta->at(sublead), TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                    h_eta_lead->Fill( EE->Electron_etaSC->at(lead), TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                    h_eta_sublead->Fill( EE->Electron_etaSC->at(sublead), TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                    h_phi_lead->Fill( EE->Electron_phi->at(lead), TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                    h_phi_sublead->Fill( EE->Electron_phi->at(sublead), TotWeight * PUWeight * effweight * PVzWeight * L1weight );
 
                 } // End of event selection
                 bar.Draw(i);
@@ -321,8 +372,10 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         f->cd();
         cout << "\tWriting into file...";
 
-        h_mass_fine_before_PUCorr->Write();
-        h_mass_fine_before_EffCorr->Write();
+        h_mass_before_PUCorr->Write();
+        h_mass_before_EffCorr->Write();
+        h_mass_before_PVzCorr->Write();
+        h_mass_before_L1Corr->Write();
         h_mass_fine->Write();
         h_mass->Write();
         h_pT->Write();
@@ -345,6 +398,20 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         h_eta_sublead_before_EffCorr->Write();
         h_phi_lead_before_EffCorr->Write();
         h_phi_sublead_before_EffCorr->Write();
+
+        h_pT_lead_before_PVzCorr->Write();
+        h_pT_sublead_before_PVzCorr->Write();
+        h_eta_lead_before_PVzCorr->Write();
+        h_eta_sublead_before_PVzCorr->Write();
+        h_phi_lead_before_PVzCorr->Write();
+        h_phi_sublead_before_PVzCorr->Write();
+
+        h_pT_lead_before_L1Corr->Write();
+        h_pT_sublead_before_L1Corr->Write();
+        h_eta_lead_before_L1Corr->Write();
+        h_eta_sublead_before_L1Corr->Write();
+        h_phi_lead_before_L1Corr->Write();
+        h_phi_sublead_before_L1Corr->Write();
 
         h_pT_lead->Write();
         h_pT_sublead->Write();
@@ -469,9 +536,14 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
         analyzer->SetupEfficiencyScaleFactor_BtoF();
         analyzer->SetupEfficiencyScaleFactor_GtoH();
 
+        // -- For PVz reweighting -- //
+        analyzer->SetupPVzWeights( Mgr.isMC, "mumu", "./etc/PVzWeights.root");
+
         // -- Creating Histograms -- //
-        TH1D *h_mass_fine_before_PUCorr = new TH1D( "h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
-        TH1D *h_mass_fine_before_EffCorr = new TH1D( "h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
+        TH1D *h_mass_before_PUCorr = new TH1D( "h_mass_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
+        TH1D *h_mass_before_EffCorr = new TH1D( "h_mass_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
+        TH1D *h_mass_before_PVzCorr = new TH1D( "h_mass_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
+        TH1D *h_mass_before_L1Corr = new TH1D( "h_mass_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
         TH1D *h_mass_fine = new TH1D( "h_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
         TH1D *h_mass = new TH1D( "h_mass_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
         TH1D *h_pT = new TH1D( "h_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
@@ -494,6 +566,20 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
         TH1D *h_eta_sublead_before_EffCorr = new TH1D( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_phi_lead_before_EffCorr = new TH1D( "h_phi_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_phi_sublead_before_EffCorr = new TH1D( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+
+        TH1D *h_pT_lead_before_PVzCorr = new TH1D( "h_pT_lead_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
+        TH1D *h_pT_sublead_before_PVzCorr = new TH1D( "h_pT_sublead_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
+        TH1D *h_eta_lead_before_PVzCorr = new TH1D( "h_eta_lead_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_eta_sublead_before_PVzCorr = new TH1D( "h_eta_sublead_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_phi_lead_before_PVzCorr = new TH1D( "h_phi_lead_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_phi_sublead_before_PVzCorr = new TH1D( "h_phi_sublead_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+
+        TH1D *h_pT_lead_before_L1Corr = new TH1D( "h_pT_lead_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
+        TH1D *h_pT_sublead_before_L1Corr = new TH1D( "h_pT_sublead_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
+        TH1D *h_eta_lead_before_L1Corr = new TH1D( "h_eta_lead_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_eta_sublead_before_L1Corr = new TH1D( "h_eta_sublead_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_phi_lead_before_L1Corr = new TH1D( "h_phi_lead_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_phi_sublead_before_L1Corr = new TH1D( "h_phi_sublead_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
 
         TH1D *h_pT_lead = new TH1D( "h_pT_lead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_pT_sublead = new TH1D( "h_pT_sublead_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
@@ -586,6 +672,16 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
                 // -- efficiency weights -- //
                 Double_t weight1 = 0, weight2 = 0, effweight = 1;
 
+                // -- PVz weights -- //
+                Double_t PVzWeight = 1;
+                if ( Mgr.isMC == kTRUE ) PVzWeight = analyzer->PVzWeightValue( MuMu->PVz );
+
+                // -- L1 prefiring weights -- //
+                Double_t L1weight = 1;
+//                if ( Mgr.isMC == kTRUE ) L1weight = MuMu->_prefiringweight;
+//                if ( Mgr.isMC == kTRUE ) L1weight = MuMu->_prefiringweightup;
+                if ( Mgr.isMC == kTRUE ) L1weight = MuMu->_prefiringweightdown;
+
                 // -- Normalization -- //
                 Double_t TotWeight = GenWeight;
                 if( Mgr.isMC == kTRUE ) TotWeight = ( L * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup] ) * GenWeight;
@@ -609,16 +705,18 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
                     Double_t reco_rapi = ( mu1 + mu2 ).Rapidity();
                     Double_t reco_mass = MuMu->Muon_InvM;
 
-                    h_mass_fine_before_PUCorr->Fill( reco_mass, TotWeight );
-                    h_mass_fine_before_EffCorr->Fill( reco_mass, TotWeight * PUWeight );
-                    h_mass_fine->Fill( reco_mass, TotWeight * PUWeight * effweight );
-                    h_mass->Fill( reco_mass, TotWeight * PUWeight * effweight );
-                    h_pT->Fill( reco_Pt, TotWeight * PUWeight * effweight );
-                    h_rapi->Fill( reco_rapi, TotWeight * PUWeight * effweight );
+                    h_mass_before_PUCorr->Fill( reco_mass, TotWeight );
+                    h_mass_before_EffCorr->Fill( reco_mass, TotWeight * PUWeight );
+                    h_mass_before_PVzCorr->Fill( reco_mass, TotWeight * PUWeight * effweight );
+                    h_mass_before_L1Corr->Fill( reco_mass, TotWeight * PUWeight * effweight * PVzWeight );
+                    h_mass_fine->Fill( reco_mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                    h_mass->Fill( reco_mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                    h_pT->Fill( reco_Pt, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                    h_rapi->Fill( reco_rapi, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
 
                     h_nVTX_before_PUCorr->Fill( MuMu->nVertices, TotWeight );
                     h_nVTX_before_EffCorr->Fill( MuMu->nVertices, TotWeight * PUWeight );
-                    h_nVTX->Fill( MuMu->nVertices, TotWeight * PUWeight * effweight );
+                    h_nVTX->Fill( MuMu->nVertices, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
 
                     int lead=0, sublead=1;
                     if ( MuMu->Muon_pT->at(0) < MuMu->Muon_pT->at(1) )
@@ -641,12 +739,26 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
                     h_phi_lead_before_EffCorr->Fill( MuMu->Muon_TuneP_phi->at(lead), TotWeight * PUWeight );
                     h_phi_sublead_before_EffCorr->Fill( MuMu->Muon_TuneP_phi->at(sublead), TotWeight * PUWeight );
 
-                    h_pT_lead->Fill( MuMu->Muon_pT->at(lead), TotWeight * PUWeight * effweight );
-                    h_pT_sublead->Fill( MuMu->Muon_pT->at(sublead), TotWeight * PUWeight * effweight );
-                    h_eta_lead->Fill( MuMu->Muon_eta->at(lead), TotWeight * PUWeight * effweight );
-                    h_eta_sublead->Fill( MuMu->Muon_eta->at(sublead), TotWeight * PUWeight * effweight );
-                    h_phi_lead->Fill( MuMu->Muon_TuneP_phi->at(lead), TotWeight * PUWeight * effweight );
-                    h_phi_sublead->Fill( MuMu->Muon_TuneP_phi->at(sublead), TotWeight * PUWeight * effweight );
+                    h_pT_lead_before_PVzCorr->Fill( MuMu->Muon_pT->at(lead), TotWeight * PUWeight * effweight );
+                    h_pT_sublead_before_PVzCorr->Fill( MuMu->Muon_pT->at(sublead), TotWeight * PUWeight * effweight );
+                    h_eta_lead_before_PVzCorr->Fill( MuMu->Muon_eta->at(lead), TotWeight * PUWeight * effweight );
+                    h_eta_sublead_before_PVzCorr->Fill( MuMu->Muon_eta->at(sublead), TotWeight * PUWeight * effweight );
+                    h_phi_lead_before_PVzCorr->Fill( MuMu->Muon_TuneP_phi->at(lead), TotWeight * PUWeight * effweight );
+                    h_phi_sublead_before_PVzCorr->Fill( MuMu->Muon_TuneP_phi->at(sublead), TotWeight * PUWeight * effweight );
+
+                    h_pT_lead_before_L1Corr->Fill( MuMu->Muon_pT->at(lead), TotWeight * PUWeight * effweight * PVzWeight );
+                    h_pT_sublead_before_L1Corr->Fill( MuMu->Muon_pT->at(sublead), TotWeight * PUWeight * effweight * PVzWeight );
+                    h_eta_lead_before_L1Corr->Fill( MuMu->Muon_eta->at(lead), TotWeight * PUWeight * effweight * PVzWeight );
+                    h_eta_sublead_before_L1Corr->Fill( MuMu->Muon_eta->at(sublead), TotWeight * PUWeight * effweight * PVzWeight );
+                    h_phi_lead_before_L1Corr->Fill( MuMu->Muon_TuneP_phi->at(lead), TotWeight * PUWeight * effweight * PVzWeight );
+                    h_phi_sublead_before_L1Corr->Fill( MuMu->Muon_TuneP_phi->at(sublead), TotWeight * PUWeight * effweight * PVzWeight );
+
+                    h_pT_lead->Fill( MuMu->Muon_pT->at(lead), TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                    h_pT_sublead->Fill( MuMu->Muon_pT->at(sublead), TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                    h_eta_lead->Fill( MuMu->Muon_eta->at(lead), TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                    h_eta_sublead->Fill( MuMu->Muon_eta->at(sublead), TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                    h_phi_lead->Fill( MuMu->Muon_TuneP_phi->at(lead), TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                    h_phi_sublead->Fill( MuMu->Muon_TuneP_phi->at(sublead), TotWeight * PUWeight * effweight * PVzWeight * L1weight );
 
                 }// End of event selection
                 bar.Draw(i);
@@ -663,8 +775,10 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
         f->cd();
         cout << "\tWriting into file...";
 
-        h_mass_fine_before_PUCorr->Write();
-        h_mass_fine_before_EffCorr->Write();
+        h_mass_before_PUCorr->Write();
+        h_mass_before_EffCorr->Write();
+        h_mass_before_PVzCorr->Write();
+        h_mass_before_L1Corr->Write();
         h_mass_fine->Write();
         h_mass->Write();
         h_pT->Write();
@@ -687,6 +801,20 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
         h_eta_sublead_before_EffCorr->Write();
         h_phi_lead_before_EffCorr->Write();
         h_phi_sublead_before_EffCorr->Write();
+
+        h_pT_lead_before_PVzCorr->Write();
+        h_pT_sublead_before_PVzCorr->Write();
+        h_eta_lead_before_PVzCorr->Write();
+        h_eta_sublead_before_PVzCorr->Write();
+        h_phi_lead_before_PVzCorr->Write();
+        h_phi_sublead_before_PVzCorr->Write();
+
+        h_pT_lead_before_L1Corr->Write();
+        h_pT_sublead_before_L1Corr->Write();
+        h_eta_lead_before_L1Corr->Write();
+        h_eta_sublead_before_L1Corr->Write();
+        h_phi_lead_before_L1Corr->Write();
+        h_phi_sublead_before_L1Corr->Write();
 
         h_pT_lead->Write();
         h_pT_sublead->Write();
@@ -813,13 +941,20 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
         analyzer->SetupEfficiencyScaleFactor_GtoH();
         analyzer->SetupEfficiencyScaleFactor_electron();
 
+        // -- For PVz reweighting -- //
+        analyzer->SetupPVzWeights( Mgr.isMC, "emu", "./etc/PVzWeights.root");
+
         // -- Creating Histograms -- //
-        TH1D *h_emu_mass_fine_before_PUCorr = new TH1D( "h_emu_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
-        TH1D *h_emu_mass_fine_before_EffCorr = new TH1D( "h_emu_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
+        TH1D *h_emu_mass_before_PUCorr = new TH1D( "h_emu_mass_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
+        TH1D *h_emu_mass_before_EffCorr = new TH1D( "h_emu_mass_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
+        TH1D *h_emu_mass_before_PVzCorr = new TH1D( "h_emu_mass_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
+        TH1D *h_emu_mass_before_L1Corr = new TH1D( "h_emu_mass_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
         TH1D *h_emu_mass_fine = new TH1D( "h_emu_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
         TH1D *h_emu_mass = new TH1D( "h_emu_mass_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
-        TH1D *h_emuSS_mass_fine_before_PUCorr = new TH1D( "h_emuSS_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
-        TH1D *h_emuSS_mass_fine_before_EffCorr = new TH1D( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
+        TH1D *h_emuSS_mass_before_PUCorr = new TH1D( "h_emuSS_mass_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
+        TH1D *h_emuSS_mass_before_EffCorr = new TH1D( "h_emuSS_mass_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
+        TH1D *h_emuSS_mass_before_PVzCorr = new TH1D( "h_emuSS_mass_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
+        TH1D *h_emuSS_mass_before_L1Corr = new TH1D( "h_emuSS_mass_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
         TH1D *h_emuSS_mass_fine = new TH1D( "h_emuSS_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], "", 10000, 0, 10000 );
         TH1D *h_emuSS_mass = new TH1D( "h_emuSS_mass_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
 
@@ -841,6 +976,20 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
         TH1D *h_eleSS_eta_before_EffCorr = new TH1D( "h_eleSS_eta_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_eleSS_phi_before_EffCorr = new TH1D( "h_eleSS_phi_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
 
+        TH1D *h_ele_pT_before_PVzCorr = new TH1D( "h_ele_pT_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
+        TH1D *h_ele_eta_before_PVzCorr = new TH1D( "h_ele_eta_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_ele_phi_before_PVzCorr = new TH1D( "h_ele_phi_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_eleSS_pT_before_PVzCorr = new TH1D( "h_eleSS_pT_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
+        TH1D *h_eleSS_eta_before_PVzCorr = new TH1D( "h_eleSS_eta_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_eleSS_phi_before_PVzCorr = new TH1D( "h_eleSS_phi_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+
+        TH1D *h_ele_pT_before_L1Corr = new TH1D( "h_ele_pT_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
+        TH1D *h_ele_eta_before_L1Corr = new TH1D( "h_ele_eta_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_ele_phi_before_L1Corr = new TH1D( "h_ele_phi_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_eleSS_pT_before_L1Corr = new TH1D( "h_eleSS_pT_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
+        TH1D *h_eleSS_eta_before_L1Corr = new TH1D( "h_eleSS_eta_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_eleSS_phi_before_L1Corr = new TH1D( "h_eleSS_phi_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+
         TH1D *h_ele_pT = new TH1D( "h_ele_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_ele_eta = new TH1D( "h_ele_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_ele_phi = new TH1D( "h_ele_phi_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
@@ -861,6 +1010,20 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
         TH1D *h_muSS_pT_before_EffCorr = new TH1D( "h_muSS_pT_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_muSS_eta_before_EffCorr = new TH1D( "h_muSS_eta_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
         TH1D *h_muSS_phi_before_EffCorr = new TH1D( "h_muSS_phi_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+
+        TH1D *h_mu_pT_before_PVzCorr = new TH1D( "h_mu_pT_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
+        TH1D *h_mu_eta_before_PVzCorr = new TH1D( "h_mu_eta_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_mu_phi_before_PVzCorr = new TH1D( "h_mu_phi_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_muSS_pT_before_PVzCorr = new TH1D( "h_muSS_pT_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
+        TH1D *h_muSS_eta_before_PVzCorr = new TH1D( "h_muSS_eta_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_muSS_phi_before_PVzCorr = new TH1D( "h_muSS_phi_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+
+        TH1D *h_mu_pT_before_L1Corr = new TH1D( "h_mu_pT_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
+        TH1D *h_mu_eta_before_L1Corr = new TH1D( "h_mu_eta_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_mu_phi_before_L1Corr = new TH1D( "h_mu_phi_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_muSS_pT_before_L1Corr = new TH1D( "h_muSS_pT_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
+        TH1D *h_muSS_eta_before_L1Corr = new TH1D( "h_muSS_eta_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
+        TH1D *h_muSS_phi_before_L1Corr = new TH1D( "h_muSS_phi_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
 
         TH1D *h_mu_pT = new TH1D( "h_mu_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000 );
         TH1D *h_mu_eta = new TH1D( "h_mu_eta_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -4, 4 );
@@ -906,6 +1069,16 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
                 // -- efficiency weights -- //
                 Double_t weight1 = 0, weight2 = 0, effweight = 1;
 
+                // -- PVz weights -- //
+                Double_t PVzWeight = 1;
+                if( Mgr.isMC == kTRUE ) PVzWeight = analyzer->PVzWeightValue( EMu->PVz );
+
+                // -- L1 weights --//
+                Double_t L1weight = 1;
+//                if( Mgr.isMC == kTRUE ) L1weight = EMu->_prefiringweight;
+//                if( Mgr.isMC == kTRUE ) L1weight = EMu->_prefiringweightup;
+                if( Mgr.isMC == kTRUE ) L1weight = EMu->_prefiringweightdown;
+
                 // -- Normalization -- //
                 Double_t TotWeight = GenWeight;
                 if( Mgr.isMC == kTRUE ) TotWeight = ( L * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup] ) * GenWeight;
@@ -928,10 +1101,12 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
 
                     if ( EMu->Electron_charge != EMu->Muon_charge )
                     {
-                        h_emu_mass_fine_before_PUCorr->Fill( reco_mass, TotWeight );
-                        h_emu_mass_fine_before_EffCorr->Fill( reco_mass, TotWeight * PUWeight );
-                        h_emu_mass_fine->Fill( reco_mass, TotWeight * PUWeight * effweight );
-                        h_emu_mass->Fill( reco_mass, TotWeight * PUWeight * effweight );
+                        h_emu_mass_before_PUCorr->Fill( reco_mass, TotWeight );
+                        h_emu_mass_before_EffCorr->Fill( reco_mass, TotWeight * PUWeight );
+                        h_emu_mass_before_PVzCorr->Fill( reco_mass, TotWeight * PUWeight * effweight );
+                        h_emu_mass_before_L1Corr->Fill( reco_mass, TotWeight * PUWeight * effweight * PVzWeight );
+                        h_emu_mass_fine->Fill( reco_mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                        h_emu_mass->Fill( reco_mass, TotWeight * PUWeight * effweight* PVzWeight * L1weight );
 
                         h_ele_pT_before_PUCorr->Fill( EMu->Electron_pT, TotWeight );
                         h_ele_eta_before_PUCorr->Fill( EMu->Electron_etaSC, TotWeight );
@@ -941,9 +1116,17 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
                         h_ele_eta_before_EffCorr->Fill( EMu->Electron_etaSC, TotWeight * PUWeight );
                         h_ele_phi_before_EffCorr->Fill( EMu->Electron_phi, TotWeight * PUWeight );
 
-                        h_ele_pT->Fill( EMu->Electron_pT, TotWeight * PUWeight * effweight );
-                        h_ele_eta->Fill( EMu->Electron_etaSC, TotWeight * PUWeight * effweight );
-                        h_ele_phi->Fill( EMu->Electron_phi, TotWeight * PUWeight * effweight );
+                        h_ele_pT_before_PVzCorr->Fill( EMu->Electron_pT, TotWeight * PUWeight * effweight );
+                        h_ele_eta_before_PVzCorr->Fill( EMu->Electron_etaSC, TotWeight * PUWeight * effweight );
+                        h_ele_phi_before_PVzCorr->Fill( EMu->Electron_phi, TotWeight * PUWeight * effweight );
+
+                        h_ele_pT_before_L1Corr->Fill( EMu->Electron_pT, TotWeight * PUWeight * effweight * PVzWeight );
+                        h_ele_eta_before_L1Corr->Fill( EMu->Electron_etaSC, TotWeight * PUWeight * effweight * PVzWeight );
+                        h_ele_phi_before_L1Corr->Fill( EMu->Electron_phi, TotWeight * PUWeight * effweight * PVzWeight );
+
+                        h_ele_pT->Fill( EMu->Electron_pT, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                        h_ele_eta->Fill( EMu->Electron_etaSC, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                        h_ele_phi->Fill( EMu->Electron_phi, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
 
                         h_mu_pT_before_PUCorr->Fill( EMu->Muon_pT, TotWeight );
                         h_mu_eta_before_PUCorr->Fill( EMu->Muon_eta, TotWeight );
@@ -953,16 +1136,26 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
                         h_mu_eta_before_EffCorr->Fill( EMu->Muon_eta, TotWeight * PUWeight );
                         h_mu_phi_before_EffCorr->Fill( EMu->Muon_phi, TotWeight * PUWeight );
 
-                        h_mu_pT->Fill( EMu->Muon_pT, TotWeight * PUWeight * effweight );
-                        h_mu_eta->Fill( EMu->Muon_eta, TotWeight * PUWeight * effweight );
-                        h_mu_phi->Fill( EMu->Muon_phi, TotWeight * PUWeight * effweight );
+                        h_mu_pT_before_PVzCorr->Fill( EMu->Muon_pT, TotWeight * PUWeight * effweight );
+                        h_mu_eta_before_PVzCorr->Fill( EMu->Muon_eta, TotWeight * PUWeight * effweight );
+                        h_mu_phi_before_PVzCorr->Fill( EMu->Muon_phi, TotWeight * PUWeight * effweight );
+
+                        h_mu_pT_before_L1Corr->Fill( EMu->Muon_pT, TotWeight * PUWeight * effweight * PVzWeight );
+                        h_mu_eta_before_L1Corr->Fill( EMu->Muon_eta, TotWeight * PUWeight * effweight * PVzWeight );
+                        h_mu_phi_before_L1Corr->Fill( EMu->Muon_phi, TotWeight * PUWeight * effweight * PVzWeight );
+
+                        h_mu_pT->Fill( EMu->Muon_pT, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                        h_mu_eta->Fill( EMu->Muon_eta, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                        h_mu_phi->Fill( EMu->Muon_phi, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
                     }
                     else
                     {
-                        h_emuSS_mass_fine_before_PUCorr->Fill( reco_mass, TotWeight );
-                        h_emuSS_mass_fine_before_EffCorr->Fill( reco_mass, TotWeight * PUWeight );
-                        h_emuSS_mass_fine->Fill( reco_mass, TotWeight * PUWeight * effweight );
-                        h_emuSS_mass->Fill( reco_mass, TotWeight * PUWeight * effweight );
+                        h_emuSS_mass_before_PUCorr->Fill( reco_mass, TotWeight );
+                        h_emuSS_mass_before_EffCorr->Fill( reco_mass, TotWeight * PUWeight );
+                        h_emuSS_mass_before_PVzCorr->Fill( reco_mass, TotWeight * PUWeight * effweight );
+                        h_emuSS_mass_before_L1Corr->Fill( reco_mass, TotWeight * PUWeight * effweight * PVzWeight );
+                        h_emuSS_mass_fine->Fill( reco_mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                        h_emuSS_mass->Fill( reco_mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
 
                         h_eleSS_pT_before_PUCorr->Fill( EMu->Electron_pT, TotWeight );
                         h_eleSS_eta_before_PUCorr->Fill( EMu->Electron_etaSC, TotWeight );
@@ -972,9 +1165,17 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
                         h_eleSS_eta_before_EffCorr->Fill( EMu->Electron_etaSC, TotWeight * PUWeight );
                         h_eleSS_phi_before_EffCorr->Fill( EMu->Electron_phi, TotWeight * PUWeight );
 
-                        h_eleSS_pT->Fill( EMu->Electron_pT, TotWeight * PUWeight * effweight );
-                        h_eleSS_eta->Fill( EMu->Electron_etaSC, TotWeight * PUWeight * effweight );
-                        h_eleSS_phi->Fill( EMu->Electron_phi, TotWeight * PUWeight * effweight );
+                        h_eleSS_pT_before_PVzCorr->Fill( EMu->Electron_pT, TotWeight * PUWeight * effweight );
+                        h_eleSS_eta_before_PVzCorr->Fill( EMu->Electron_etaSC, TotWeight * PUWeight * effweight );
+                        h_eleSS_phi_before_PVzCorr->Fill( EMu->Electron_phi, TotWeight * PUWeight * effweight );
+
+                        h_eleSS_pT_before_L1Corr->Fill( EMu->Electron_pT, TotWeight * PUWeight * effweight * PVzWeight );
+                        h_eleSS_eta_before_L1Corr->Fill( EMu->Electron_etaSC, TotWeight * PUWeight * effweight * PVzWeight );
+                        h_eleSS_phi_before_L1Corr->Fill( EMu->Electron_phi, TotWeight * PUWeight * effweight * PVzWeight );
+
+                        h_eleSS_pT->Fill( EMu->Electron_pT, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                        h_eleSS_eta->Fill( EMu->Electron_etaSC, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                        h_eleSS_phi->Fill( EMu->Electron_phi, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
 
                         h_muSS_pT_before_PUCorr->Fill( EMu->Muon_TuneP_pT, TotWeight );
                         h_muSS_eta_before_PUCorr->Fill( EMu->Muon_TuneP_eta, TotWeight );
@@ -984,15 +1185,23 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
                         h_muSS_eta_before_EffCorr->Fill( EMu->Muon_TuneP_eta, TotWeight * PUWeight );
                         h_muSS_phi_before_EffCorr->Fill( EMu->Muon_TuneP_phi, TotWeight * PUWeight );
 
-                        h_muSS_pT->Fill( EMu->Muon_TuneP_pT, TotWeight * PUWeight * effweight );
-                        h_muSS_eta->Fill( EMu->Muon_TuneP_eta, TotWeight * PUWeight * effweight );
-                        h_muSS_phi->Fill( EMu->Muon_TuneP_phi, TotWeight * PUWeight * effweight );
+                        h_muSS_pT_before_PVzCorr->Fill( EMu->Muon_TuneP_pT, TotWeight * PUWeight * effweight );
+                        h_muSS_eta_before_PVzCorr->Fill( EMu->Muon_TuneP_eta, TotWeight * PUWeight * effweight );
+                        h_muSS_phi_before_PVzCorr->Fill( EMu->Muon_TuneP_phi, TotWeight * PUWeight * effweight );
 
-                        if ( Mgr.CurrentProc == _EMu_WJets ) { nWJetsSS++; nWJetsSS_weighted += TotWeight * PUWeight * effweight; }
+                        h_muSS_pT_before_L1Corr->Fill( EMu->Muon_TuneP_pT, TotWeight * PUWeight * effweight * PVzWeight );
+                        h_muSS_eta_before_L1Corr->Fill( EMu->Muon_TuneP_eta, TotWeight * PUWeight * effweight * PVzWeight );
+                        h_muSS_phi_before_L1Corr->Fill( EMu->Muon_TuneP_phi, TotWeight * PUWeight * effweight * PVzWeight );
+
+                        h_muSS_pT->Fill( EMu->Muon_TuneP_pT, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                        h_muSS_eta->Fill( EMu->Muon_TuneP_eta, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+                        h_muSS_phi->Fill( EMu->Muon_TuneP_phi, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
+
+                        if ( Mgr.CurrentProc == _EMu_WJets ) { nWJetsSS++; nWJetsSS_weighted += TotWeight * PUWeight * effweight * PVzWeight * L1weight; }
                     }
                     h_nVTX_before_PUCorr->Fill( EMu->nVertices, TotWeight );
                     h_nVTX_before_EffCorr->Fill( EMu->nVertices, TotWeight * PUWeight );
-                    h_nVTX->Fill( EMu->nVertices, TotWeight * PUWeight * effweight );
+                    h_nVTX->Fill( EMu->nVertices, TotWeight * PUWeight * effweight * PVzWeight * L1weight );
 
                 }// End of event selection
                 bar.Draw(i);
@@ -1012,12 +1221,16 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
         f->cd();
         cout << "\tWriting into file...";
 
-        h_emu_mass_fine_before_PUCorr->Write();
-        h_emu_mass_fine_before_EffCorr->Write();
+        h_emu_mass_before_PUCorr->Write();
+        h_emu_mass_before_EffCorr->Write();
+        h_emu_mass_before_PVzCorr->Write();
+        h_emu_mass_before_L1Corr->Write();
         h_emu_mass_fine->Write();
         h_emu_mass->Write();
-        h_emuSS_mass_fine_before_PUCorr->Write();
-        h_emuSS_mass_fine_before_EffCorr->Write();
+        h_emuSS_mass_before_PUCorr->Write();
+        h_emuSS_mass_before_EffCorr->Write();
+        h_emuSS_mass_before_PVzCorr->Write();
+        h_emuSS_mass_before_L1Corr->Write();
         h_emuSS_mass_fine->Write();
         h_emuSS_mass->Write();
 
@@ -1038,6 +1251,20 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
         h_eleSS_pT_before_EffCorr->Write();
         h_eleSS_eta_before_EffCorr->Write();
         h_eleSS_phi_before_EffCorr->Write();
+
+        h_ele_pT_before_PVzCorr->Write();
+        h_ele_eta_before_PVzCorr->Write();
+        h_ele_phi_before_PVzCorr->Write();
+        h_eleSS_pT_before_PVzCorr->Write();
+        h_eleSS_eta_before_PVzCorr->Write();
+        h_eleSS_phi_before_PVzCorr->Write();
+
+        h_ele_pT_before_L1Corr->Write();
+        h_ele_eta_before_L1Corr->Write();
+        h_ele_phi_before_L1Corr->Write();
+        h_eleSS_pT_before_L1Corr->Write();
+        h_eleSS_eta_before_L1Corr->Write();
+        h_eleSS_phi_before_L1Corr->Write();
 
         h_ele_pT->Write();
         h_ele_eta->Write();
@@ -1060,6 +1287,19 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
         h_muSS_eta_before_EffCorr->Write();
         h_muSS_phi_before_EffCorr->Write();
 
+        h_mu_pT_before_PVzCorr->Write();
+        h_mu_eta_before_PVzCorr->Write();
+        h_mu_phi_before_PVzCorr->Write();
+        h_muSS_pT_before_PVzCorr->Write();
+        h_muSS_eta_before_PVzCorr->Write();
+        h_muSS_phi_before_PVzCorr->Write();
+
+        h_mu_pT_before_L1Corr->Write();
+        h_mu_eta_before_L1Corr->Write();
+        h_mu_phi_before_L1Corr->Write();
+        h_muSS_pT_before_L1Corr->Write();
+        h_muSS_eta_before_L1Corr->Write();
+        h_muSS_phi_before_L1Corr->Write();
 
         h_mu_pT->Write();
         h_mu_eta->Write();
@@ -1094,23 +1334,24 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
 } // End of EMu_HistMaker()
 
 
+// ######################## NOT NEEDED ############################## //
 /// ----------------------- MuMu_merge ----------------------------- ///
 void MuMu_merge()
 {
     LocalFileMgr Mgr;
 
-    TH1D *h_mass_fine_before_PUCorr[7], *h_mass_fine_before_RoccoR[7], *h_mass_fine_before_EffCorr[7], *h_mass_fine[7], *h_mass[7], *h_Pt[7], *h_rapi[7],
+    TH1D *h_mass_before_PUCorr[7], *h_mass_before_RoccoR[7], *h_mass_before_EffCorr[7], *h_mass_fine[7], *h_mass[7], *h_Pt[7], *h_rapi[7],
          *h_nPU_before_PUCorr[7], *h_nPU_before_EffCorr[7], *h_nPU[7], *h_nVTX_before_PUCorr[7], *h_nVTX_before_EffCorr[7], *h_nVTX[7], *h_pT[7], *h_eta[7], *h_phi[7];
 
     TFile* files[7];
     Mgr.SetProc(_MuMu_SingleMuon_Full);
 
-    TH1D *h_mass_fine_before_PUCorr_full  = new TH1D( "h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc],
-                                                      "h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], 10000, 0, 10000 );
-    TH1D *h_mass_fine_before_RoccoR_full  = new TH1D( "h_mass_fine_before_RoccoR_"+Mgr.Procname[Mgr.CurrentProc],
-                                                      "h_mass_fine_before_RoccoR_"+Mgr.Procname[Mgr.CurrentProc], 10000, 0, 10000 );
-    TH1D *h_mass_fine_before_EffCorr_full = new TH1D( "h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc],
-                                                      "h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], 10000, 0, 10000 );
+    TH1D *h_mass_before_PUCorr_full  = new TH1D( "h_mass_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc],
+                                                      "h_mass_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], 10000, 0, 10000 );
+    TH1D *h_mass_before_RoccoR_full  = new TH1D( "h_mass_before_RoccoR_"+Mgr.Procname[Mgr.CurrentProc],
+                                                      "h_mass_before_RoccoR_"+Mgr.Procname[Mgr.CurrentProc], 10000, 0, 10000 );
+    TH1D *h_mass_before_EffCorr_full = new TH1D( "h_mass_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc],
+                                                      "h_mass_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], 10000, 0, 10000 );
     TH1D *h_mass_fine_full                = new TH1D( "h_mass_fine_"+Mgr.Procname[Mgr.CurrentProc],
                                                       "h_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], 10000, 0, 10000 );
     TH1D *h_mass_full                     = new TH1D( "h_mass_"+Mgr.Procname[Mgr.CurrentProc],
@@ -1147,9 +1388,9 @@ void MuMu_merge()
         Mgr.SetProc(pr);
         files[iter] = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root", "READ" );
 
-        files[iter]->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc],  h_mass_fine_before_PUCorr[iter] );
-        files[iter]->GetObject( "h_mass_fine_before_RoccoR_"+Mgr.Procname[Mgr.CurrentProc],  h_mass_fine_before_RoccoR[iter] );
-        files[iter]->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], h_mass_fine_before_EffCorr[iter] );
+        files[iter]->GetObject( "h_mass_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc],  h_mass_before_PUCorr[iter] );
+        files[iter]->GetObject( "h_mass_before_RoccoR_"+Mgr.Procname[Mgr.CurrentProc],  h_mass_before_RoccoR[iter] );
+        files[iter]->GetObject( "h_mass_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], h_mass_before_EffCorr[iter] );
         files[iter]->GetObject( "h_mass_fine_"+Mgr.Procname[Mgr.CurrentProc],                h_mass_fine[iter] );
         files[iter]->GetObject( "h_mass_"+Mgr.Procname[Mgr.CurrentProc],                     h_mass[iter] );
         files[iter]->GetObject( "h_Pt_"+Mgr.Procname[Mgr.CurrentProc],                       h_Pt[iter] );
@@ -1164,9 +1405,9 @@ void MuMu_merge()
         files[iter]->GetObject( "h_eta_"+Mgr.Procname[Mgr.CurrentProc],                      h_eta[iter] );
         files[iter]->GetObject( "h_phi_"+Mgr.Procname[Mgr.CurrentProc],                      h_phi[iter] );
 
-        h_mass_fine_before_PUCorr[iter] ->SetDirectory(0);
-        h_mass_fine_before_RoccoR[iter] ->SetDirectory(0);
-        h_mass_fine_before_EffCorr[iter]->SetDirectory(0);
+        h_mass_before_PUCorr[iter] ->SetDirectory(0);
+        h_mass_before_RoccoR[iter] ->SetDirectory(0);
+        h_mass_before_EffCorr[iter]->SetDirectory(0);
         h_mass_fine[iter]               ->SetDirectory(0);
         h_mass[iter]                    ->SetDirectory(0);
         h_Pt[iter]                      ->SetDirectory(0);
@@ -1181,9 +1422,9 @@ void MuMu_merge()
         h_eta[iter]                     ->SetDirectory(0);
         h_phi[iter]                     ->SetDirectory(0);
 
-        h_mass_fine_before_PUCorr_full ->Add( h_mass_fine_before_PUCorr[iter] );
-        h_mass_fine_before_RoccoR_full ->Add( h_mass_fine_before_RoccoR[iter] );
-        h_mass_fine_before_EffCorr_full->Add( h_mass_fine_before_EffCorr[iter] );
+        h_mass_before_PUCorr_full ->Add( h_mass_before_PUCorr[iter] );
+        h_mass_before_RoccoR_full ->Add( h_mass_before_RoccoR[iter] );
+        h_mass_before_EffCorr_full->Add( h_mass_before_EffCorr[iter] );
         h_mass_fine_full               ->Add( h_mass_fine[iter] );
         h_mass_full                    ->Add( h_mass[iter] );
         h_Pt_full                      ->Add( h_Pt[iter] );
@@ -1202,9 +1443,9 @@ void MuMu_merge()
     }// End of for(SingleMuon_BtoH)
 
     newFile->cd();
-    h_mass_fine_before_PUCorr_full  ->Write();
-    h_mass_fine_before_RoccoR_full  ->Write();
-    h_mass_fine_before_EffCorr_full ->Write();
+    h_mass_before_PUCorr_full  ->Write();
+    h_mass_before_RoccoR_full  ->Write();
+    h_mass_before_EffCorr_full ->Write();
     h_mass_fine_full                ->Write();
     h_mass_full                     ->Write();
     h_Pt_full                       ->Write();

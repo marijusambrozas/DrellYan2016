@@ -107,21 +107,25 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
     {
         count_drawn++;
 
-        THStack *s_mass_fine_before_PUCorr, *s_mass_fine_before_EffCorr, *s_mass_fine, *s_mass;
-        s_mass_fine_before_PUCorr = new THStack("s_mass_fine_before_PUCorr", "");
-        s_mass_fine_before_EffCorr = new THStack("s_mass_fine_before_EffCorr", "");
+        THStack *s_mass_before_PUCorr, *s_mass_before_EffCorr, *s_mass_before_PVzCorr, *s_mass_before_L1Corr, *s_mass_fine, *s_mass;
+        s_mass_before_PUCorr = new THStack("s_mass_before_PUCorr", "");
+        s_mass_before_EffCorr = new THStack("s_mass_before_EffCorr", "");
+        s_mass_before_PVzCorr = new THStack("s_mass_before_PVzCorr", "");
+        s_mass_before_L1Corr = new THStack("s_mass_before_L1Corr", "");
         s_mass_fine = new THStack("s_mass_fine", "");
         s_mass = new THStack("s_mass", "");
 
 //----------------------------------- MC bkg -------------------------------------------------------
-        TH1D *h_bkg_mass_fine_before_PUCorr[9], *h_bkg_mass_fine_before_EffCorr[9],
+        TH1D *h_bkg_mass_before_PUCorr[9], *h_bkg_mass_before_EffCorr[9], *h_bkg_mass_before_PVzCorr[9], *h_bkg_mass_before_L1Corr[9],
              *h_bkg_mass_fine[9], *h_bkg_mass[9];
         Int_t iter = 0;
 
         for ( SelProc_t pr = _EE_QCDEMEnriched_Full; pr > _EndOf_EE_ttbar_Normal; pr=SelProc_t((int)(pr-1)) )
         {
-            f_bkg->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_PUCorr[iter] );
-            f_bkg->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_mass_before_PUCorr_"+Mgr.Procname[pr], h_bkg_mass_before_PUCorr[iter] );
+            f_bkg->GetObject( "h_mass_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_mass_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_mass_before_PVzCorr[iter] );
+            f_bkg->GetObject( "h_mass_before_L1Corr_"+Mgr.Procname[pr], h_bkg_mass_before_L1Corr[iter] );
             f_bkg->GetObject( "h_mass_fine_"+Mgr.Procname[pr], h_bkg_mass_fine[iter] );
             f_bkg->GetObject( "h_mass_"+Mgr.Procname[pr], h_bkg_mass[iter] );
 
@@ -136,23 +140,31 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
             if ( pr == _EE_ttbar_Full ) color = kCyan + 2;
             if ( pr == _EE_DYTauTau_Full ) color = kOrange - 5;
 
-            h_bkg_mass_fine_before_PUCorr[iter]->SetFillColor(color);
-            h_bkg_mass_fine_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_mass_before_PUCorr[iter]->SetFillColor(color);
+            h_bkg_mass_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_mass_before_PVzCorr[iter]->SetFillColor(color);
+            h_bkg_mass_before_L1Corr[iter]->SetFillColor(color);
             h_bkg_mass_fine[iter]->SetFillColor(color);
             h_bkg_mass[iter]->SetFillColor(color);
 
-            h_bkg_mass_fine_before_PUCorr[iter]->SetLineColor(color);
-            h_bkg_mass_fine_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_mass_before_PUCorr[iter]->SetLineColor(color);
+            h_bkg_mass_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_mass_before_PVzCorr[iter]->SetLineColor(color);
+            h_bkg_mass_before_L1Corr[iter]->SetLineColor(color);
             h_bkg_mass_fine[iter]->SetLineColor(color);
             h_bkg_mass[iter]->SetLineColor(color);
 
-            h_bkg_mass_fine_before_PUCorr[iter]->SetDirectory(0);
-            h_bkg_mass_fine_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_mass_before_PUCorr[iter]->SetDirectory(0);
+            h_bkg_mass_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_mass_before_PVzCorr[iter]->SetDirectory(0);
+            h_bkg_mass_before_L1Corr[iter]->SetDirectory(0);
             h_bkg_mass_fine[iter]->SetDirectory(0);
             h_bkg_mass[iter]->SetDirectory(0);
 
-            s_mass_fine_before_PUCorr->Add( h_bkg_mass_fine_before_PUCorr[iter] );
-            s_mass_fine_before_EffCorr->Add( h_bkg_mass_fine_before_EffCorr[iter] );
+            s_mass_before_PUCorr->Add( h_bkg_mass_before_PUCorr[iter] );
+            s_mass_before_EffCorr->Add( h_bkg_mass_before_EffCorr[iter] );
+            s_mass_before_PVzCorr->Add( h_bkg_mass_before_PVzCorr[iter] );
+            s_mass_before_L1Corr->Add( h_bkg_mass_before_L1Corr[iter] );
             s_mass_fine->Add( h_bkg_mass_fine[iter] );
             s_mass->Add( h_bkg_mass[iter] );
 
@@ -171,139 +183,198 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
 
 //---------------------------------- MC signal -----------------------------------------------------
 
-        TH1D *h_DY_mass_fine_before_PUCorr, *h_DY_mass_fine_before_EffCorr, *h_DY_mass_fine, *h_DY_mass;
+        TH1D *h_DY_mass_before_PUCorr, *h_DY_mass_before_EffCorr, *h_DY_mass_before_PVzCorr, *h_DY_mass_before_L1Corr, *h_DY_mass_fine, *h_DY_mass;
 
-        f_DY->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_mass_fine_before_PUCorr );
-        f_DY->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_mass_fine_before_EffCorr );
+        f_DY->GetObject( "h_mass_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_mass_before_PUCorr );
+        f_DY->GetObject( "h_mass_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_mass_before_EffCorr );
+        f_DY->GetObject( "h_mass_before_PVzCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_mass_before_PVzCorr );
+        f_DY->GetObject( "h_mass_before_L1Corr_"+Mgr.Procname[_EE_DY_Full], h_DY_mass_before_L1Corr );
         f_DY->GetObject( "h_mass_fine_"+Mgr.Procname[_EE_DY_Full], h_DY_mass_fine );
         f_DY->GetObject( "h_mass_"+Mgr.Procname[_EE_DY_Full], h_DY_mass );
 
-        h_DY_mass_fine_before_PUCorr->SetFillColor(kOrange);
-        h_DY_mass_fine_before_EffCorr->SetFillColor(kOrange);
+        h_DY_mass_before_PUCorr->SetFillColor(kOrange);
+        h_DY_mass_before_EffCorr->SetFillColor(kOrange);
+        h_DY_mass_before_PVzCorr->SetFillColor(kOrange);
+        h_DY_mass_before_L1Corr->SetFillColor(kOrange);
         h_DY_mass_fine->SetFillColor(kOrange);
         h_DY_mass->SetFillColor(kOrange);
 
-        h_DY_mass_fine_before_PUCorr->SetLineColor(kOrange);
-        h_DY_mass_fine_before_EffCorr->SetLineColor(kOrange);
+        h_DY_mass_before_PUCorr->SetLineColor(kOrange);
+        h_DY_mass_before_EffCorr->SetLineColor(kOrange);
+        h_DY_mass_before_PVzCorr->SetLineColor(kOrange);
+        h_DY_mass_before_L1Corr->SetLineColor(kOrange);
         h_DY_mass_fine->SetLineColor(kOrange);
         h_DY_mass->SetLineColor(kOrange);
 
-        h_DY_mass_fine_before_PUCorr->SetDirectory(0);
-        h_DY_mass_fine_before_EffCorr->SetDirectory(0);
+        h_DY_mass_before_PUCorr->SetDirectory(0);
+        h_DY_mass_before_EffCorr->SetDirectory(0);
+        h_DY_mass_before_PVzCorr->SetDirectory(0);
+        h_DY_mass_before_L1Corr->SetDirectory(0);
         h_DY_mass_fine->SetDirectory(0);
         h_DY_mass->SetDirectory(0);
 
-        s_mass_fine_before_PUCorr->Add( h_DY_mass_fine_before_PUCorr );
-        s_mass_fine_before_EffCorr->Add( h_DY_mass_fine_before_EffCorr );
+        s_mass_before_PUCorr->Add( h_DY_mass_before_PUCorr );
+        s_mass_before_EffCorr->Add( h_DY_mass_before_EffCorr );
+        s_mass_before_PVzCorr->Add( h_DY_mass_before_PVzCorr );
+        s_mass_before_L1Corr->Add( h_DY_mass_before_L1Corr );
         s_mass_fine->Add( h_DY_mass_fine );
         s_mass->Add( h_DY_mass );
 
 //--------------------------------------- DATA -----------------------------------------------------
 
-        TH1D *h_data_mass_fine_before_PUCorr, *h_data_mass_fine_before_EffCorr, *h_data_mass_fine, *h_data_mass;
+        TH1D *h_data_mass_before_PUCorr, *h_data_mass_before_EffCorr, *h_data_mass_before_PVzCorr, *h_data_mass_before_L1Corr,
+             *h_data_mass_fine, *h_data_mass;
 
         Mgr.SetProc(_EE_DoubleEG_Full);
 //        Mgr.SetProc(_EE_SingleElectron_Full);
 
-        f_data->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass_fine_before_PUCorr );
-        f_data->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass_fine_before_EffCorr );
+        f_data->GetObject( "h_mass_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass_before_PUCorr );
+        f_data->GetObject( "h_mass_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass_before_EffCorr );
+        f_data->GetObject( "h_mass_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass_before_PVzCorr );
+        f_data->GetObject( "h_mass_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass_before_L1Corr );
         f_data->GetObject( "h_mass_fine_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass_fine );
         f_data->GetObject( "h_mass_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass );
 
-        h_data_mass_fine_before_PUCorr->SetMarkerStyle(kFullDotLarge);
-        h_data_mass_fine_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_mass_before_PUCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_mass_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_mass_before_PVzCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_mass_before_L1Corr->SetMarkerStyle(kFullDotLarge);
         h_data_mass_fine->SetMarkerStyle(kFullDotLarge);
         h_data_mass->SetMarkerStyle(kFullDotLarge);
 
-        h_data_mass_fine_before_PUCorr->SetMarkerColor(kBlack);
-        h_data_mass_fine_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_mass_before_PUCorr->SetMarkerColor(kBlack);
+        h_data_mass_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_mass_before_PVzCorr->SetMarkerColor(kBlack);
+        h_data_mass_before_L1Corr->SetMarkerColor(kBlack);
         h_data_mass_fine->SetMarkerColor(kBlack);
         h_data_mass->SetMarkerColor(kBlack);
 
-        h_data_mass_fine_before_PUCorr->SetLineColor(kBlack);
-        h_data_mass_fine_before_EffCorr->SetLineColor(kBlack);
+        h_data_mass_before_PUCorr->SetLineColor(kBlack);
+        h_data_mass_before_EffCorr->SetLineColor(kBlack);
+        h_data_mass_before_PVzCorr->SetLineColor(kBlack);
+        h_data_mass_before_L1Corr->SetLineColor(kBlack);
         h_data_mass_fine->SetLineColor(kBlack);
         h_data_mass->SetLineColor(kBlack);
 
-        h_data_mass_fine_before_PUCorr->SetDirectory(0);
-        h_data_mass_fine_before_EffCorr->SetDirectory(0);
+        h_data_mass_before_PUCorr->SetDirectory(0);
+        h_data_mass_before_EffCorr->SetDirectory(0);
+        h_data_mass_before_PVzCorr->SetDirectory(0);
+        h_data_mass_before_L1Corr->SetDirectory(0);
         h_data_mass_fine->SetDirectory(0);
         h_data_mass->SetDirectory(0);
 
 //--------------------------------- Ratio Plot --------------------------------------
 
-        myRatioPlot_t *RP_mass_fine_before_PUCorr, *RP_mass_fine_before_EffCorr, *RP_mass_fine, *RP_mass;
-        RP_mass_fine_before_PUCorr = new myRatioPlot_t( "RP_mass_fine_before_PUCorr", s_mass_fine_before_PUCorr, h_data_mass_fine_before_PUCorr );
-        RP_mass_fine_before_EffCorr = new myRatioPlot_t( "RP_mass_fine_before_EffCorr", s_mass_fine_before_EffCorr, h_data_mass_fine_before_EffCorr );
+        myRatioPlot_t *RP_mass_before_PUCorr, *RP_mass_before_EffCorr, *RP_mass_before_PVzCorr, *RP_mass_before_L1Corr, *RP_mass_fine, *RP_mass;
+        RP_mass_before_PUCorr = new myRatioPlot_t( "RP_mass_before_PUCorr", s_mass_before_PUCorr, h_data_mass_before_PUCorr );
+        RP_mass_before_EffCorr = new myRatioPlot_t( "RP_mass_before_EffCorr", s_mass_before_EffCorr, h_data_mass_before_EffCorr );
+        RP_mass_before_PVzCorr = new myRatioPlot_t( "RP_mass_before_PVzCorr", s_mass_before_PVzCorr, h_data_mass_before_PVzCorr );
+        RP_mass_before_L1Corr = new myRatioPlot_t( "RP_mass_before_L1Corr", s_mass_before_L1Corr, h_data_mass_before_L1Corr );
         RP_mass_fine = new myRatioPlot_t( "RP_mass_fine", s_mass_fine, h_data_mass_fine );
         RP_mass = new myRatioPlot_t( "RP_mass", s_mass, h_data_mass );
 
-        RP_mass_fine_before_PUCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] before PU correction", 15, 3000);
-        RP_mass_fine_before_EffCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] before Efficiency SF", 15, 3000);
-//        RP_mass_fine_before_EffCorr->SetPlots("Elektronu poros invariantine mase [GeV/c^{2}] (pries pataisu pritaikyma)", 15, 3000);
+        RP_mass_before_PUCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] before PU correction", 15, 3000);
+        RP_mass_before_EffCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] before Efficiency SF", 15, 3000);
+//        RP_mass_before_EffCorr->SetPlots("Elektronu poros invariantine mase [GeV/c^{2}] (pries pataisu pritaikyma)", 15, 3000);
+        RP_mass_before_PVzCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] before PVz correction", 15, 3000);
+        RP_mass_before_L1Corr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] before L1 prefiring correction", 15, 3000);
         RP_mass_fine->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000);
         RP_mass->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000);
 //        RP_mass->SetPlots("Elektronu poros invariantine mase [GeV/c^{2}] (po pataisu pritaikymo)", 15, 3000);
 
-        RP_mass_fine_before_PUCorr->SetLegend(0.75, 0.4);
-        RP_mass_fine_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_mass_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_mass_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_mass_before_PVzCorr->SetLegend(0.75, 0.4);
+        RP_mass_before_L1Corr->SetLegend(0.75, 0.4);
         RP_mass_fine->SetLegend(0.75, 0.4);
         RP_mass->SetLegend(0.75, 0.4);
 
         // Legend data
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_data_mass_fine_before_PUCorr, "Data", "lp");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_data_mass_fine_before_EffCorr, "Data", "lp");
-//        RP_mass_fine_before_EffCorr->AddLegendEntry(h_data_mass_fine_before_EffCorr, "Matavimas", "lp");
+        RP_mass_before_PUCorr->AddLegendEntry(h_data_mass_before_PUCorr, "Data", "lp");
+        RP_mass_before_EffCorr->AddLegendEntry(h_data_mass_before_EffCorr, "Data", "lp");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_data_mass_before_PVzCorr, "Data", "lp");
+        RP_mass_before_L1Corr->AddLegendEntry(h_data_mass_before_L1Corr, "Data", "lp");
+//        RP_mass_before_EffCorr->AddLegendEntry(h_data_mass_before_EffCorr, "Matavimas", "lp");
         RP_mass_fine->AddLegendEntry(h_data_mass_fine, "Data", "lp");
         RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
 //        RP_mass->AddLegendEntry(h_data_mass, "Matavimas", "lp");
 
         // Legend MC signal
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_DY_mass_fine_before_PUCorr, "DY#rightarrow #font[12]{ee}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_DY_mass_fine_before_EffCorr, "DY#rightarrow #font[12]{ee}", "f");
+        RP_mass_before_PUCorr->AddLegendEntry(h_DY_mass_before_PUCorr, "DY#rightarrow #font[12]{ee}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_DY_mass_before_EffCorr, "DY#rightarrow #font[12]{ee}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_DY_mass_before_PVzCorr, "DY#rightarrow #font[12]{ee}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_DY_mass_before_L1Corr, "DY#rightarrow #font[12]{ee}", "f");
         RP_mass_fine->AddLegendEntry(h_DY_mass_fine, "DY#rightarrow #font[12]{ee}", "f");
         RP_mass->AddLegendEntry(h_DY_mass, "DY#rightarrow #font[12]{ee}", "f");
 
         // Legend MC BKG
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[8], "DY#rightarrow #tau#tau", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[8], "DY#rightarrow #tau#tau", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[8], "DY#rightarrow #tau#tau", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[8], "DY#rightarrow #tau#tau", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[3], "#font[12]{#scale[1.1]{WZ}}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[2], "#font[12]{#scale[1.1]{WW}}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[0], "#font[12]{#scale[1.1]{QCD}}", "f");
 
-        RP_mass_fine_before_PUCorr->Draw(0.5, 1e7, 1);
-        RP_mass_fine_before_EffCorr->Draw(0.5, 1e7, 1);
+        RP_mass_before_PUCorr->Draw(0.5, 1e7, 1);
+        RP_mass_before_EffCorr->Draw(0.5, 1e7, 1);
+        RP_mass_before_PVzCorr->Draw(0.5, 1e7, 1);
+        RP_mass_before_L1Corr->Draw(0.5, 1e7, 1);
         RP_mass_fine->Draw(0.5, 1e7, 1);
         RP_mass->Draw(0.5, 1e7, 1);
 
@@ -313,7 +384,7 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
 
         dataintegral = h_data_mass->IntegralAndError( 1, h_data_mass->GetSize()-2, dataerror );
         MCintegral = ( (TH1D*)(s_mass->GetStack()->Last()) )->IntegralAndError( 1, h_data_mass->GetSize()-2, MCerror );
-        MCintegral_noSF = ( (TH1D*)(s_mass_fine_before_EffCorr->GetStack()->Last()) )->IntegralAndError( 1, h_data_mass->GetSize()-2, MCerror_noSF );
+        MCintegral_noSF = ( (TH1D*)(s_mass_before_EffCorr->GetStack()->Last()) )->IntegralAndError( 1, h_data_mass->GetSize()-2, MCerror_noSF );
         DYintegral = h_DY_mass->IntegralAndError( 1, h_DY_mass->GetSize()-2, DYerror );
 
         dataintegralZ = h_data_mass->IntegralAndError( 10, 22, dataerrorZ );
@@ -381,6 +452,20 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         THStack *s_phi_lead_before_EffCorr = new THStack( "s_phi_lead_before_EffCorr", "" );
         THStack *s_phi_sublead_before_EffCorr = new THStack( "s_phi_sublead_before_EffCorr", "" );
 
+        THStack *s_pT_lead_before_PVzCorr = new THStack( "s_pT_lead_before_PVzCorr", "" );
+        THStack *s_pT_sublead_before_PVzCorr = new THStack( "s_pT_sublead_before_PVzCorr", "" );
+        THStack *s_eta_lead_before_PVzCorr = new THStack( "s_eta_lead_before_PVzCorr", "" );
+        THStack *s_eta_sublead_before_PVzCorr = new THStack( "s_eta_sublead_before_PVzCorr", "" );
+        THStack *s_phi_lead_before_PVzCorr = new THStack( "s_phi_lead_before_PVzCorr", "" );
+        THStack *s_phi_sublead_before_PVzCorr = new THStack( "s_phi_sublead_before_PVzCorr", "" );
+
+        THStack *s_pT_lead_before_L1Corr = new THStack( "s_pT_lead_before_L1Corr", "" );
+        THStack *s_pT_sublead_before_L1Corr = new THStack( "s_pT_sublead_before_L1Corr", "" );
+        THStack *s_eta_lead_before_L1Corr = new THStack( "s_eta_lead_before_L1Corr", "" );
+        THStack *s_eta_sublead_before_L1Corr = new THStack( "s_eta_sublead_before_L1Corr", "" );
+        THStack *s_phi_lead_before_L1Corr = new THStack( "s_phi_lead_before_L1Corr", "" );
+        THStack *s_phi_sublead_before_L1Corr = new THStack( "s_phi_sublead_before_L1Corr", "" );
+
         THStack *s_pT_lead = new THStack( "s_pT_lead", "" );
         THStack *s_pT_sublead = new THStack( "s_pT_sublead", "" );
         THStack *s_eta_lead = new THStack( "s_eta_lead", "" );
@@ -390,12 +475,18 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
 
 
 //----------------------------------- MC bkg -------------------------------------------------------
-        TH1D *h_bkg_pT[9], *h_bkg_rapi[9], *h_bkg_pT_lead_before_PUCorr[9], *h_bkg_pT_lead_before_EffCorr[9], *h_bkg_pT_lead[9],
-             *h_bkg_pT_sublead_before_PUCorr[9], *h_bkg_pT_sublead_before_EffCorr[9], *h_bkg_pT_sublead[9],
-             *h_bkg_eta_lead_before_PUCorr[9], *h_bkg_eta_lead_before_EffCorr[9], *h_bkg_eta_lead[9],
-             *h_bkg_eta_sublead_before_PUCorr[9], *h_bkg_eta_sublead_before_EffCorr[9], *h_bkg_eta_sublead[9],
-             *h_bkg_phi_lead_before_PUCorr[9], *h_bkg_phi_lead_before_EffCorr[9], *h_bkg_phi_lead[9],
-             *h_bkg_phi_sublead_before_PUCorr[9], *h_bkg_phi_sublead_before_EffCorr[9], *h_bkg_phi_sublead[9];
+        TH1D *h_bkg_pT[9], *h_bkg_rapi[9], *h_bkg_pT_lead_before_PUCorr[9], *h_bkg_pT_lead_before_EffCorr[9],
+             *h_bkg_pT_lead_before_PVzCorr[9], *h_bkg_pT_lead_before_L1Corr[9], *h_bkg_pT_lead[9],
+             *h_bkg_pT_sublead_before_PUCorr[9], *h_bkg_pT_sublead_before_EffCorr[9],
+             *h_bkg_pT_sublead_before_PVzCorr[9], *h_bkg_pT_sublead_before_L1Corr[9], *h_bkg_pT_sublead[9],
+             *h_bkg_eta_lead_before_PUCorr[9], *h_bkg_eta_lead_before_EffCorr[9],
+             *h_bkg_eta_lead_before_PVzCorr[9], *h_bkg_eta_lead_before_L1Corr[9], *h_bkg_eta_lead[9],
+             *h_bkg_eta_sublead_before_PUCorr[9], *h_bkg_eta_sublead_before_EffCorr[9],
+             *h_bkg_eta_sublead_before_PVzCorr[9], *h_bkg_eta_sublead_before_L1Corr[9], *h_bkg_eta_sublead[9],
+             *h_bkg_phi_lead_before_PUCorr[9], *h_bkg_phi_lead_before_EffCorr[9],
+             *h_bkg_phi_lead_before_PVzCorr[9], *h_bkg_phi_lead_before_L1Corr[9], *h_bkg_phi_lead[9],
+             *h_bkg_phi_sublead_before_PUCorr[9], *h_bkg_phi_sublead_before_EffCorr[9],
+             *h_bkg_phi_sublead_before_PVzCorr[9], *h_bkg_phi_sublead_before_L1Corr[9], *h_bkg_phi_sublead[9];
         Int_t iter = 0;
 
         for ( SelProc_t pr = _EE_QCDEMEnriched_Full; pr > _EndOf_EE_ttbar_Normal; pr=SelProc_t((int)(pr-1)) )
@@ -404,21 +495,33 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
             f_bkg->GetObject( "h_rapi_"+Mgr.Procname[pr], h_bkg_rapi[iter] );
             f_bkg->GetObject( "h_pT_lead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_pT_lead_before_PUCorr[iter] );
             f_bkg->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_pT_lead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_pT_lead_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_pT_lead_before_PVzCorr[iter] );
+            f_bkg->GetObject( "h_pT_lead_before_L1Corr_"+Mgr.Procname[pr], h_bkg_pT_lead_before_L1Corr[iter] );
             f_bkg->GetObject( "h_pT_lead_"+Mgr.Procname[pr], h_bkg_pT_lead[iter] );
             f_bkg->GetObject( "h_pT_sublead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_pT_sublead_before_PUCorr[iter] );
             f_bkg->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_pT_sublead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_pT_sublead_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_pT_sublead_before_PVzCorr[iter] );
+            f_bkg->GetObject( "h_pT_sublead_before_L1Corr_"+Mgr.Procname[pr], h_bkg_pT_sublead_before_L1Corr[iter] );
             f_bkg->GetObject( "h_pT_sublead_"+Mgr.Procname[pr], h_bkg_pT_sublead[iter] );
             f_bkg->GetObject( "h_eta_lead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_eta_lead_before_PUCorr[iter] );
             f_bkg->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_eta_lead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_eta_lead_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_eta_lead_before_PVzCorr[iter] );
+            f_bkg->GetObject( "h_eta_lead_before_L1Corr_"+Mgr.Procname[pr], h_bkg_eta_lead_before_L1Corr[iter] );
             f_bkg->GetObject( "h_eta_lead_"+Mgr.Procname[pr], h_bkg_eta_lead[iter] );
             f_bkg->GetObject( "h_eta_sublead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_PUCorr[iter] );
             f_bkg->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_eta_sublead_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_PVzCorr[iter] );
+            f_bkg->GetObject( "h_eta_sublead_before_L1Corr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_L1Corr[iter] );
             f_bkg->GetObject( "h_eta_sublead_"+Mgr.Procname[pr], h_bkg_eta_sublead[iter] );
             f_bkg->GetObject( "h_phi_lead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_PUCorr[iter] );
             f_bkg->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_phi_lead_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_PVzCorr[iter] );
+            f_bkg->GetObject( "h_phi_lead_before_L1Corr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_L1Corr[iter] );
             f_bkg->GetObject( "h_phi_lead_"+Mgr.Procname[pr], h_bkg_phi_lead[iter] );
             f_bkg->GetObject( "h_phi_sublead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_PUCorr[iter] );
             f_bkg->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_phi_sublead_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_PVzCorr[iter] );
+            f_bkg->GetObject( "h_phi_sublead_before_L1Corr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_L1Corr[iter] );
             f_bkg->GetObject( "h_phi_sublead_"+Mgr.Procname[pr], h_bkg_phi_sublead[iter] );
 
             Color_t color = kBlack;
@@ -436,42 +539,66 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
             h_bkg_rapi[iter]->SetFillColor(color);
             h_bkg_pT_lead_before_PUCorr[iter]->SetFillColor(color);
             h_bkg_pT_lead_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_pT_lead_before_PVzCorr[iter]->SetFillColor(color);
+            h_bkg_pT_lead_before_L1Corr[iter]->SetFillColor(color);
             h_bkg_pT_lead[iter]->SetFillColor(color);
             h_bkg_pT_sublead_before_PUCorr[iter]->SetFillColor(color);
             h_bkg_pT_sublead_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_pT_sublead_before_PVzCorr[iter]->SetFillColor(color);
+            h_bkg_pT_sublead_before_L1Corr[iter]->SetFillColor(color);
             h_bkg_pT_sublead[iter]->SetFillColor(color);
             h_bkg_eta_lead_before_PUCorr[iter]->SetFillColor(color);
             h_bkg_eta_lead_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_eta_lead_before_PVzCorr[iter]->SetFillColor(color);
+            h_bkg_eta_lead_before_L1Corr[iter]->SetFillColor(color);
             h_bkg_eta_lead[iter]->SetFillColor(color);
             h_bkg_eta_sublead_before_PUCorr[iter]->SetFillColor(color);
             h_bkg_eta_sublead_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_eta_sublead_before_PVzCorr[iter]->SetFillColor(color);
+            h_bkg_eta_sublead_before_L1Corr[iter]->SetFillColor(color);
             h_bkg_eta_sublead[iter]->SetFillColor(color);
             h_bkg_phi_lead_before_PUCorr[iter]->SetFillColor(color);
             h_bkg_phi_lead_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_phi_lead_before_PVzCorr[iter]->SetFillColor(color);
+            h_bkg_phi_lead_before_L1Corr[iter]->SetFillColor(color);
             h_bkg_phi_lead[iter]->SetFillColor(color);
             h_bkg_phi_sublead_before_PUCorr[iter]->SetFillColor(color);
             h_bkg_phi_sublead_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_phi_sublead_before_PVzCorr[iter]->SetFillColor(color);
+            h_bkg_phi_sublead_before_L1Corr[iter]->SetFillColor(color);
             h_bkg_phi_sublead[iter]->SetFillColor(color);
 
             h_bkg_pT[iter]->SetLineColor(color);
             h_bkg_rapi[iter]->SetLineColor(color);
             h_bkg_pT_lead_before_PUCorr[iter]->SetLineColor(color);
             h_bkg_pT_lead_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_pT_lead_before_PVzCorr[iter]->SetLineColor(color);
+            h_bkg_pT_lead_before_L1Corr[iter]->SetLineColor(color);
             h_bkg_pT_lead[iter]->SetLineColor(color);
             h_bkg_pT_sublead_before_PUCorr[iter]->SetLineColor(color);
             h_bkg_pT_sublead_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_pT_sublead_before_PVzCorr[iter]->SetLineColor(color);
+            h_bkg_pT_sublead_before_L1Corr[iter]->SetLineColor(color);
             h_bkg_pT_sublead[iter]->SetLineColor(color);
             h_bkg_eta_lead_before_PUCorr[iter]->SetLineColor(color);
             h_bkg_eta_lead_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_eta_lead_before_PVzCorr[iter]->SetLineColor(color);
+            h_bkg_eta_lead_before_L1Corr[iter]->SetLineColor(color);
             h_bkg_eta_lead[iter]->SetLineColor(color);
             h_bkg_eta_sublead_before_PUCorr[iter]->SetLineColor(color);
             h_bkg_eta_sublead_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_eta_sublead_before_PVzCorr[iter]->SetLineColor(color);
+            h_bkg_eta_sublead_before_L1Corr[iter]->SetLineColor(color);
             h_bkg_eta_sublead[iter]->SetLineColor(color);
             h_bkg_phi_lead_before_PUCorr[iter]->SetLineColor(color);
             h_bkg_phi_lead_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_phi_lead_before_PVzCorr[iter]->SetLineColor(color);
+            h_bkg_phi_lead_before_L1Corr[iter]->SetLineColor(color);
             h_bkg_phi_lead[iter]->SetLineColor(color);
             h_bkg_phi_sublead_before_PUCorr[iter]->SetLineColor(color);
             h_bkg_phi_sublead_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_phi_sublead_before_PVzCorr[iter]->SetLineColor(color);
+            h_bkg_phi_sublead_before_L1Corr[iter]->SetLineColor(color);
             h_bkg_phi_sublead[iter]->SetLineColor(color);
 
 
@@ -479,21 +606,33 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
             h_bkg_rapi[iter]->SetDirectory(0);
             h_bkg_pT_lead_before_PUCorr[iter]->SetDirectory(0);
             h_bkg_pT_lead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_pT_lead_before_PVzCorr[iter]->SetDirectory(0);
+            h_bkg_pT_lead_before_L1Corr[iter]->SetDirectory(0);
             h_bkg_pT_lead[iter]->SetDirectory(0);
             h_bkg_pT_sublead_before_PUCorr[iter]->SetDirectory(0);
             h_bkg_pT_sublead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_pT_sublead_before_PVzCorr[iter]->SetDirectory(0);
+            h_bkg_pT_sublead_before_L1Corr[iter]->SetDirectory(0);
             h_bkg_pT_sublead[iter]->SetDirectory(0);
             h_bkg_eta_lead_before_PUCorr[iter]->SetDirectory(0);
             h_bkg_eta_lead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_eta_lead_before_PVzCorr[iter]->SetDirectory(0);
+            h_bkg_eta_lead_before_L1Corr[iter]->SetDirectory(0);
             h_bkg_eta_lead[iter]->SetDirectory(0);
             h_bkg_eta_sublead_before_PUCorr[iter]->SetDirectory(0);
             h_bkg_eta_sublead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_eta_sublead_before_PVzCorr[iter]->SetDirectory(0);
+            h_bkg_eta_sublead_before_L1Corr[iter]->SetDirectory(0);
             h_bkg_eta_sublead[iter]->SetDirectory(0);
             h_bkg_phi_lead_before_PUCorr[iter]->SetDirectory(0);
             h_bkg_phi_lead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_phi_lead_before_PVzCorr[iter]->SetDirectory(0);
+            h_bkg_phi_lead_before_L1Corr[iter]->SetDirectory(0);
             h_bkg_phi_lead[iter]->SetDirectory(0);
             h_bkg_phi_sublead_before_PUCorr[iter]->SetDirectory(0);
             h_bkg_phi_sublead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_phi_sublead_before_PVzCorr[iter]->SetDirectory(0);
+            h_bkg_phi_sublead_before_L1Corr[iter]->SetDirectory(0);
             h_bkg_phi_sublead[iter]->SetDirectory(0);
 
 
@@ -501,21 +640,33 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
             s_rapi->Add( h_bkg_rapi[iter] );
             s_pT_lead_before_PUCorr->Add( h_bkg_pT_lead_before_PUCorr[iter] );
             s_pT_lead_before_EffCorr->Add( h_bkg_pT_lead_before_EffCorr[iter] );
+            s_pT_lead_before_PVzCorr->Add( h_bkg_pT_lead_before_PVzCorr[iter] );
+            s_pT_lead_before_L1Corr->Add( h_bkg_pT_lead_before_L1Corr[iter] );
             s_pT_lead->Add( h_bkg_pT_lead[iter] );
             s_pT_sublead_before_PUCorr->Add( h_bkg_pT_sublead_before_PUCorr[iter] );
             s_pT_sublead_before_EffCorr->Add( h_bkg_pT_sublead_before_EffCorr[iter] );
+            s_pT_sublead_before_PVzCorr->Add( h_bkg_pT_sublead_before_PVzCorr[iter] );
+            s_pT_sublead_before_L1Corr->Add( h_bkg_pT_sublead_before_L1Corr[iter] );
             s_pT_sublead->Add( h_bkg_pT_sublead[iter] );
             s_eta_lead_before_PUCorr->Add( h_bkg_eta_lead_before_PUCorr[iter] );
             s_eta_lead_before_EffCorr->Add( h_bkg_eta_lead_before_EffCorr[iter] );
+            s_eta_lead_before_PVzCorr->Add( h_bkg_eta_lead_before_PVzCorr[iter] );
+            s_eta_lead_before_L1Corr->Add( h_bkg_eta_lead_before_L1Corr[iter] );
             s_eta_lead->Add( h_bkg_eta_lead[iter] );
             s_eta_sublead_before_PUCorr->Add( h_bkg_eta_sublead_before_PUCorr[iter] );
             s_eta_sublead_before_EffCorr->Add( h_bkg_eta_sublead_before_EffCorr[iter] );
+            s_eta_sublead_before_PVzCorr->Add( h_bkg_eta_sublead_before_PVzCorr[iter] );
+            s_eta_sublead_before_L1Corr->Add( h_bkg_eta_sublead_before_L1Corr[iter] );
             s_eta_sublead->Add( h_bkg_eta_sublead[iter] );
             s_phi_lead_before_PUCorr->Add( h_bkg_phi_lead_before_PUCorr[iter] );
             s_phi_lead_before_EffCorr->Add( h_bkg_phi_lead_before_EffCorr[iter] );
+            s_phi_lead_before_PVzCorr->Add( h_bkg_phi_lead_before_PVzCorr[iter] );
+            s_phi_lead_before_L1Corr->Add( h_bkg_phi_lead_before_L1Corr[iter] );
             s_phi_lead->Add( h_bkg_phi_lead[iter] );
             s_phi_sublead_before_PUCorr->Add( h_bkg_phi_sublead_before_PUCorr[iter] );
             s_phi_sublead_before_EffCorr->Add( h_bkg_phi_sublead_before_EffCorr[iter] );
+            s_phi_sublead_before_PVzCorr->Add( h_bkg_phi_sublead_before_PVzCorr[iter] );
+            s_phi_sublead_before_L1Corr->Add( h_bkg_phi_sublead_before_L1Corr[iter] );
             s_phi_sublead->Add( h_bkg_phi_sublead[iter] );
 
             iter++;
@@ -533,32 +684,50 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
 
 //---------------------------------- MC signal -----------------------------------------------------
 
-        TH1D *h_DY_pT, *h_DY_rapi, *h_DY_pT_lead_before_PUCorr, *h_DY_pT_lead_before_EffCorr, *h_DY_pT_lead,
-             *h_DY_pT_sublead_before_PUCorr, *h_DY_pT_sublead_before_EffCorr, *h_DY_pT_sublead,
-             *h_DY_eta_lead_before_PUCorr, *h_DY_eta_lead_before_EffCorr, *h_DY_eta_lead,
-             *h_DY_eta_sublead_before_PUCorr, *h_DY_eta_sublead_before_EffCorr, *h_DY_eta_sublead,
-             *h_DY_phi_lead_before_PUCorr, *h_DY_phi_lead_before_EffCorr, *h_DY_phi_lead,
-             *h_DY_phi_sublead_before_PUCorr, *h_DY_phi_sublead_before_EffCorr, *h_DY_phi_sublead;
+        TH1D *h_DY_pT, *h_DY_rapi, *h_DY_pT_lead_before_PUCorr, *h_DY_pT_lead_before_EffCorr,
+             *h_DY_pT_lead_before_PVzCorr, *h_DY_pT_lead_before_L1Corr, *h_DY_pT_lead,
+             *h_DY_pT_sublead_before_PUCorr, *h_DY_pT_sublead_before_EffCorr,
+             *h_DY_pT_sublead_before_PVzCorr, *h_DY_pT_sublead_before_L1Corr, *h_DY_pT_sublead,
+             *h_DY_eta_lead_before_PUCorr, *h_DY_eta_lead_before_EffCorr,
+             *h_DY_eta_lead_before_PVzCorr, *h_DY_eta_lead_before_L1Corr, *h_DY_eta_lead,
+             *h_DY_eta_sublead_before_PUCorr, *h_DY_eta_sublead_before_EffCorr,
+             *h_DY_eta_sublead_before_PVzCorr, *h_DY_eta_sublead_before_L1Corr, *h_DY_eta_sublead,
+             *h_DY_phi_lead_before_PUCorr, *h_DY_phi_lead_before_EffCorr,
+             *h_DY_phi_lead_before_PVzCorr, *h_DY_phi_lead_before_L1Corr, *h_DY_phi_lead,
+             *h_DY_phi_sublead_before_PUCorr, *h_DY_phi_sublead_before_EffCorr,
+             *h_DY_phi_sublead_before_PVzCorr, *h_DY_phi_sublead_before_L1Corr, *h_DY_phi_sublead;
 
         f_DY->GetObject( "h_pT_"+Mgr.Procname[_EE_DY_Full], h_DY_pT );
         f_DY->GetObject( "h_rapi_"+Mgr.Procname[_EE_DY_Full], h_DY_rapi );
         f_DY->GetObject( "h_pT_lead_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_lead_before_PUCorr );
         f_DY->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_lead_before_EffCorr );
+        f_DY->GetObject( "h_pT_lead_before_PVzCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_lead_before_PVzCorr );
+        f_DY->GetObject( "h_pT_lead_before_L1Corr_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_lead_before_L1Corr );
         f_DY->GetObject( "h_pT_lead_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_lead );
         f_DY->GetObject( "h_pT_sublead_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_sublead_before_PUCorr );
         f_DY->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_sublead_before_EffCorr );
+        f_DY->GetObject( "h_pT_sublead_before_PVzCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_sublead_before_PVzCorr );
+        f_DY->GetObject( "h_pT_sublead_before_L1Corr_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_sublead_before_L1Corr );
         f_DY->GetObject( "h_pT_sublead_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_sublead );
         f_DY->GetObject( "h_eta_lead_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_lead_before_PUCorr );
         f_DY->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_lead_before_EffCorr );
+        f_DY->GetObject( "h_eta_lead_before_PVzCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_lead_before_PVzCorr );
+        f_DY->GetObject( "h_eta_lead_before_L1Corr_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_lead_before_L1Corr );
         f_DY->GetObject( "h_eta_lead_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_lead );
         f_DY->GetObject( "h_eta_sublead_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_sublead_before_PUCorr );
         f_DY->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_sublead_before_EffCorr );
+        f_DY->GetObject( "h_eta_sublead_before_PVzCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_sublead_before_PVzCorr );
+        f_DY->GetObject( "h_eta_sublead_before_L1Corr_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_sublead_before_L1Corr );
         f_DY->GetObject( "h_eta_sublead_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_sublead );
         f_DY->GetObject( "h_phi_lead_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_lead_before_PUCorr );
         f_DY->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_lead_before_EffCorr );
+        f_DY->GetObject( "h_phi_lead_before_PVzCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_lead_before_PVzCorr );
+        f_DY->GetObject( "h_phi_lead_before_L1Corr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_lead_before_L1Corr );
         f_DY->GetObject( "h_phi_lead_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_lead );
         f_DY->GetObject( "h_phi_sublead_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_sublead_before_PUCorr );
         f_DY->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_sublead_before_EffCorr );
+        f_DY->GetObject( "h_phi_sublead_before_PVzCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_sublead_before_PVzCorr );
+        f_DY->GetObject( "h_phi_sublead_before_L1Corr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_sublead_before_L1Corr );
         f_DY->GetObject( "h_phi_sublead_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_sublead );
 
 
@@ -566,21 +735,33 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         h_DY_rapi->SetFillColor(kOrange);
         h_DY_pT_lead_before_PUCorr->SetFillColor(kOrange);
         h_DY_pT_lead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_pT_lead_before_PVzCorr->SetFillColor(kOrange);
+        h_DY_pT_lead_before_L1Corr->SetFillColor(kOrange);
         h_DY_pT_lead->SetFillColor(kOrange);
         h_DY_pT_sublead_before_PUCorr->SetFillColor(kOrange);
         h_DY_pT_sublead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_pT_sublead_before_PVzCorr->SetFillColor(kOrange);
+        h_DY_pT_sublead_before_L1Corr->SetFillColor(kOrange);
         h_DY_pT_sublead->SetFillColor(kOrange);
         h_DY_eta_lead_before_PUCorr->SetFillColor(kOrange);
         h_DY_eta_lead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_eta_lead_before_PVzCorr->SetFillColor(kOrange);
+        h_DY_eta_lead_before_L1Corr->SetFillColor(kOrange);
         h_DY_eta_lead->SetFillColor(kOrange);
         h_DY_eta_sublead_before_PUCorr->SetFillColor(kOrange);
         h_DY_eta_sublead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_eta_sublead_before_PVzCorr->SetFillColor(kOrange);
+        h_DY_eta_sublead_before_L1Corr->SetFillColor(kOrange);
         h_DY_eta_sublead->SetFillColor(kOrange);
         h_DY_phi_lead_before_PUCorr->SetFillColor(kOrange);
         h_DY_phi_lead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_phi_lead_before_PVzCorr->SetFillColor(kOrange);
+        h_DY_phi_lead_before_L1Corr->SetFillColor(kOrange);
         h_DY_phi_lead->SetFillColor(kOrange);
         h_DY_phi_sublead_before_PUCorr->SetFillColor(kOrange);
         h_DY_phi_sublead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_phi_sublead_before_PVzCorr->SetFillColor(kOrange);
+        h_DY_phi_sublead_before_L1Corr->SetFillColor(kOrange);
         h_DY_phi_sublead->SetFillColor(kOrange);
 
 
@@ -588,21 +769,33 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         h_DY_rapi->SetLineColor(kOrange);
         h_DY_pT_lead_before_PUCorr->SetLineColor(kOrange);
         h_DY_pT_lead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_pT_lead_before_PVzCorr->SetLineColor(kOrange);
+        h_DY_pT_lead_before_L1Corr->SetLineColor(kOrange);
         h_DY_pT_lead->SetLineColor(kOrange);
         h_DY_pT_sublead_before_PUCorr->SetLineColor(kOrange);
         h_DY_pT_sublead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_pT_sublead_before_PVzCorr->SetLineColor(kOrange);
+        h_DY_pT_sublead_before_L1Corr->SetLineColor(kOrange);
         h_DY_pT_sublead->SetLineColor(kOrange);
         h_DY_eta_lead_before_PUCorr->SetLineColor(kOrange);
         h_DY_eta_lead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_eta_lead_before_PVzCorr->SetLineColor(kOrange);
+        h_DY_eta_lead_before_L1Corr->SetLineColor(kOrange);
         h_DY_eta_lead->SetLineColor(kOrange);
         h_DY_eta_sublead_before_PUCorr->SetLineColor(kOrange);
         h_DY_eta_sublead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_eta_sublead_before_PVzCorr->SetLineColor(kOrange);
+        h_DY_eta_sublead_before_L1Corr->SetLineColor(kOrange);
         h_DY_eta_sublead->SetLineColor(kOrange);
         h_DY_phi_lead_before_PUCorr->SetLineColor(kOrange);
         h_DY_phi_lead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_phi_lead_before_PVzCorr->SetLineColor(kOrange);
+        h_DY_phi_lead_before_L1Corr->SetLineColor(kOrange);
         h_DY_phi_lead->SetLineColor(kOrange);
         h_DY_phi_sublead_before_PUCorr->SetLineColor(kOrange);
         h_DY_phi_sublead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_phi_sublead_before_PVzCorr->SetLineColor(kOrange);
+        h_DY_phi_sublead_before_L1Corr->SetLineColor(kOrange);
         h_DY_phi_sublead->SetLineColor(kOrange);
 
 
@@ -610,21 +803,33 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         h_DY_rapi->SetDirectory(0);
         h_DY_pT_lead_before_PUCorr->SetDirectory(0);
         h_DY_pT_lead_before_EffCorr->SetDirectory(0);
+        h_DY_pT_lead_before_PVzCorr->SetDirectory(0);
+        h_DY_pT_lead_before_L1Corr->SetDirectory(0);
         h_DY_pT_lead->SetDirectory(0);
         h_DY_pT_sublead_before_PUCorr->SetDirectory(0);
         h_DY_pT_sublead_before_EffCorr->SetDirectory(0);
+        h_DY_pT_sublead_before_PVzCorr->SetDirectory(0);
+        h_DY_pT_sublead_before_L1Corr->SetDirectory(0);
         h_DY_pT_sublead->SetDirectory(0);
         h_DY_eta_lead_before_PUCorr->SetDirectory(0);
         h_DY_eta_lead_before_EffCorr->SetDirectory(0);
+        h_DY_eta_lead_before_PVzCorr->SetDirectory(0);
+        h_DY_eta_lead_before_L1Corr->SetDirectory(0);
         h_DY_eta_lead->SetDirectory(0);
         h_DY_eta_sublead_before_PUCorr->SetDirectory(0);
         h_DY_eta_sublead_before_EffCorr->SetDirectory(0);
+        h_DY_eta_sublead_before_PVzCorr->SetDirectory(0);
+        h_DY_eta_sublead_before_L1Corr->SetDirectory(0);
         h_DY_eta_sublead->SetDirectory(0);
         h_DY_phi_lead_before_PUCorr->SetDirectory(0);
         h_DY_phi_lead_before_EffCorr->SetDirectory(0);
+        h_DY_phi_lead_before_PVzCorr->SetDirectory(0);
+        h_DY_phi_lead_before_L1Corr->SetDirectory(0);
         h_DY_phi_lead->SetDirectory(0);
         h_DY_phi_sublead_before_PUCorr->SetDirectory(0);
         h_DY_phi_sublead_before_EffCorr->SetDirectory(0);
+        h_DY_phi_sublead_before_PVzCorr->SetDirectory(0);
+        h_DY_phi_sublead_before_L1Corr->SetDirectory(0);
         h_DY_phi_sublead->SetDirectory(0);
 
 
@@ -632,55 +837,85 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         s_rapi->Add( h_DY_rapi );
         s_pT_lead_before_PUCorr->Add( h_DY_pT_lead_before_PUCorr );
         s_pT_lead_before_EffCorr->Add( h_DY_pT_lead_before_EffCorr );
+        s_pT_lead_before_PVzCorr->Add( h_DY_pT_lead_before_PVzCorr );
+        s_pT_lead_before_L1Corr->Add( h_DY_pT_lead_before_L1Corr );
         s_pT_lead->Add( h_DY_pT_lead );
         s_pT_sublead_before_PUCorr->Add( h_DY_pT_sublead_before_PUCorr );
         s_pT_sublead_before_EffCorr->Add( h_DY_pT_sublead_before_EffCorr );
+        s_pT_sublead_before_PVzCorr->Add( h_DY_pT_sublead_before_PVzCorr );
+        s_pT_sublead_before_L1Corr->Add( h_DY_pT_sublead_before_L1Corr );
         s_pT_sublead->Add( h_DY_pT_sublead );
         s_eta_lead_before_PUCorr->Add( h_DY_eta_lead_before_PUCorr );
         s_eta_lead_before_EffCorr->Add( h_DY_eta_lead_before_EffCorr );
+        s_eta_lead_before_PVzCorr->Add( h_DY_eta_lead_before_PVzCorr );
+        s_eta_lead_before_L1Corr->Add( h_DY_eta_lead_before_L1Corr );
         s_eta_lead->Add( h_DY_eta_lead );
         s_eta_sublead_before_PUCorr->Add( h_DY_eta_sublead_before_PUCorr );
         s_eta_sublead_before_EffCorr->Add( h_DY_eta_sublead_before_EffCorr );
+        s_eta_sublead_before_PVzCorr->Add( h_DY_eta_sublead_before_PVzCorr );
+        s_eta_sublead_before_L1Corr->Add( h_DY_eta_sublead_before_L1Corr );
         s_eta_sublead->Add( h_DY_eta_sublead );
         s_phi_lead_before_PUCorr->Add( h_DY_phi_lead_before_PUCorr );
         s_phi_lead_before_EffCorr->Add( h_DY_phi_lead_before_EffCorr );
+        s_phi_lead_before_PVzCorr->Add( h_DY_phi_lead_before_PVzCorr );
+        s_phi_lead_before_L1Corr->Add( h_DY_phi_lead_before_L1Corr );
         s_phi_lead->Add( h_DY_phi_lead );
         s_phi_sublead_before_PUCorr->Add( h_DY_phi_sublead_before_PUCorr );
         s_phi_sublead_before_EffCorr->Add( h_DY_phi_sublead_before_EffCorr );
+        s_phi_sublead_before_PVzCorr->Add( h_DY_phi_sublead_before_PVzCorr );
+        s_phi_sublead_before_L1Corr->Add( h_DY_phi_sublead_before_L1Corr );
         s_phi_sublead->Add( h_DY_phi_sublead );
 
 
 //--------------------------------------- DATA -----------------------------------------------------
 
-        TH1D *h_data_pT, *h_data_rapi, *h_data_pT_lead_before_PUCorr, *h_data_pT_lead_before_EffCorr, *h_data_pT_lead,
-             *h_data_pT_sublead_before_PUCorr, *h_data_pT_sublead_before_EffCorr, *h_data_pT_sublead,
-             *h_data_eta_lead_before_PUCorr, *h_data_eta_lead_before_EffCorr, *h_data_eta_lead,
-             *h_data_eta_sublead_before_PUCorr, *h_data_eta_sublead_before_EffCorr, *h_data_eta_sublead,
-             *h_data_phi_lead_before_PUCorr, *h_data_phi_lead_before_EffCorr, *h_data_phi_lead,
-             *h_data_phi_sublead_before_PUCorr, *h_data_phi_sublead_before_EffCorr, *h_data_phi_sublead;
+        TH1D *h_data_pT, *h_data_rapi, *h_data_pT_lead_before_PUCorr, *h_data_pT_lead_before_EffCorr,
+             *h_data_pT_lead_before_PVzCorr, *h_data_pT_lead_before_L1Corr, *h_data_pT_lead,
+             *h_data_pT_sublead_before_PUCorr, *h_data_pT_sublead_before_EffCorr,
+             *h_data_pT_sublead_before_PVzCorr, *h_data_pT_sublead_before_L1Corr, *h_data_pT_sublead,
+             *h_data_eta_lead_before_PUCorr, *h_data_eta_lead_before_EffCorr,
+             *h_data_eta_lead_before_PVzCorr, *h_data_eta_lead_before_L1Corr, *h_data_eta_lead,
+             *h_data_eta_sublead_before_PUCorr, *h_data_eta_sublead_before_EffCorr,
+             *h_data_eta_sublead_before_PVzCorr, *h_data_eta_sublead_before_L1Corr, *h_data_eta_sublead,
+             *h_data_phi_lead_before_PUCorr, *h_data_phi_lead_before_EffCorr,
+             *h_data_phi_lead_before_PVzCorr, *h_data_phi_lead_before_L1Corr, *h_data_phi_lead,
+             *h_data_phi_sublead_before_PUCorr, *h_data_phi_sublead_before_EffCorr,
+             *h_data_phi_sublead_before_PVzCorr, *h_data_phi_sublead_before_L1Corr, *h_data_phi_sublead;
 
         Mgr.SetProc(_EE_DoubleEG_Full);
 //        Mgr.SetProc(_EE_SingleElectron_Full);
 
         f_data->GetObject( "h_pT_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT );
         f_data->GetObject( "h_rapi_"+Mgr.Procname[Mgr.CurrentProc], h_data_rapi );
-        f_data->GetObject( "h_pT_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_lead_before_PUCorr );
-        f_data->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_lead_before_EffCorr );
+        f_data->GetObject( "h_pT_lead_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_lead_before_PUCorr );
+        f_data->GetObject( "h_pT_lead_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_lead_before_EffCorr );
+        f_data->GetObject( "h_pT_lead_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_lead_before_PVzCorr );
+        f_data->GetObject( "h_pT_lead_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_lead_before_L1Corr );
         f_data->GetObject( "h_pT_lead_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_lead );
-        f_data->GetObject( "h_pT_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_sublead_before_PUCorr );
-        f_data->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_sublead_before_EffCorr );
+        f_data->GetObject( "h_pT_sublead_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_sublead_before_PUCorr );
+        f_data->GetObject( "h_pT_sublead_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_sublead_before_EffCorr );
+        f_data->GetObject( "h_pT_sublead_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_sublead_before_PVzCorr );
+        f_data->GetObject( "h_pT_sublead_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_sublead_before_L1Corr );
         f_data->GetObject( "h_pT_sublead_"+Mgr.Procname[Mgr.CurrentProc], h_data_pT_sublead );
-        f_data->GetObject( "h_eta_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_lead_before_PUCorr );
-        f_data->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_lead_before_EffCorr );
+        f_data->GetObject( "h_eta_lead_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_lead_before_PUCorr );
+        f_data->GetObject( "h_eta_lead_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_lead_before_EffCorr );
+        f_data->GetObject( "h_eta_lead_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_lead_before_PVzCorr );
+        f_data->GetObject( "h_eta_lead_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_lead_before_L1Corr );
         f_data->GetObject( "h_eta_lead_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_lead );
-        f_data->GetObject( "h_eta_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_sublead_before_PUCorr );
-        f_data->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_sublead_before_EffCorr );
+        f_data->GetObject( "h_eta_sublead_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_sublead_before_PUCorr );
+        f_data->GetObject( "h_eta_sublead_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_sublead_before_EffCorr );
+        f_data->GetObject( "h_eta_sublead_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_sublead_before_PVzCorr );
+        f_data->GetObject( "h_eta_sublead_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_sublead_before_L1Corr );
         f_data->GetObject( "h_eta_sublead_"+Mgr.Procname[Mgr.CurrentProc], h_data_eta_sublead );
-        f_data->GetObject( "h_phi_lead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_lead_before_PUCorr );
-        f_data->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_lead_before_EffCorr );
+        f_data->GetObject( "h_phi_lead_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_lead_before_PUCorr );
+        f_data->GetObject( "h_phi_lead_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_lead_before_EffCorr );
+        f_data->GetObject( "h_phi_lead_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_lead_before_PVzCorr );
+        f_data->GetObject( "h_phi_lead_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_lead_before_L1Corr );
         f_data->GetObject( "h_phi_lead_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_lead );
-        f_data->GetObject( "h_phi_sublead_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_sublead_before_PUCorr );
-        f_data->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_sublead_before_EffCorr );
+        f_data->GetObject( "h_phi_sublead_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_sublead_before_PUCorr );
+        f_data->GetObject( "h_phi_sublead_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_sublead_before_EffCorr );
+        f_data->GetObject( "h_phi_sublead_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_sublead_before_PVzCorr );
+        f_data->GetObject( "h_phi_sublead_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_sublead_before_L1Corr );
         f_data->GetObject( "h_phi_sublead_"+Mgr.Procname[Mgr.CurrentProc], h_data_phi_sublead );
 
 
@@ -688,21 +923,33 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         h_data_rapi->SetMarkerStyle(kFullDotLarge);
         h_data_pT_lead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
         h_data_pT_lead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_pT_lead_before_PVzCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_pT_lead_before_L1Corr->SetMarkerStyle(kFullDotLarge);
         h_data_pT_lead->SetMarkerStyle(kFullDotLarge);
         h_data_pT_sublead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
         h_data_pT_sublead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_pT_sublead_before_PVzCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_pT_sublead_before_L1Corr->SetMarkerStyle(kFullDotLarge);
         h_data_pT_sublead->SetMarkerStyle(kFullDotLarge);
         h_data_eta_lead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
         h_data_eta_lead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_eta_lead_before_PVzCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_eta_lead_before_L1Corr->SetMarkerStyle(kFullDotLarge);
         h_data_eta_lead->SetMarkerStyle(kFullDotLarge);
         h_data_eta_sublead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
         h_data_eta_sublead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_eta_sublead_before_PVzCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_eta_sublead_before_L1Corr->SetMarkerStyle(kFullDotLarge);
         h_data_eta_sublead->SetMarkerStyle(kFullDotLarge);
         h_data_phi_lead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
         h_data_phi_lead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_phi_lead_before_PVzCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_phi_lead_before_L1Corr->SetMarkerStyle(kFullDotLarge);
         h_data_phi_lead->SetMarkerStyle(kFullDotLarge);
         h_data_phi_sublead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
         h_data_phi_sublead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_phi_sublead_before_PVzCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_phi_sublead_before_L1Corr->SetMarkerStyle(kFullDotLarge);
         h_data_phi_sublead->SetMarkerStyle(kFullDotLarge);
 
 
@@ -710,21 +957,33 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         h_data_rapi->SetMarkerColor(kBlack);
         h_data_pT_lead_before_PUCorr->SetMarkerColor(kBlack);
         h_data_pT_lead_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_pT_lead_before_PVzCorr->SetMarkerColor(kBlack);
+        h_data_pT_lead_before_L1Corr->SetMarkerColor(kBlack);
         h_data_pT_lead->SetMarkerColor(kBlack);
         h_data_pT_sublead_before_PUCorr->SetMarkerColor(kBlack);
         h_data_pT_sublead_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_pT_sublead_before_PVzCorr->SetMarkerColor(kBlack);
+        h_data_pT_sublead_before_L1Corr->SetMarkerColor(kBlack);
         h_data_pT_sublead->SetMarkerColor(kBlack);
         h_data_eta_lead_before_PUCorr->SetMarkerColor(kBlack);
         h_data_eta_lead_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_eta_lead_before_PVzCorr->SetMarkerColor(kBlack);
+        h_data_eta_lead_before_L1Corr->SetMarkerColor(kBlack);
         h_data_eta_lead->SetMarkerColor(kBlack);
         h_data_eta_sublead_before_PUCorr->SetMarkerColor(kBlack);
         h_data_eta_sublead_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_eta_sublead_before_PVzCorr->SetMarkerColor(kBlack);
+        h_data_eta_sublead_before_L1Corr->SetMarkerColor(kBlack);
         h_data_eta_sublead->SetMarkerColor(kBlack);
         h_data_phi_lead_before_PUCorr->SetMarkerColor(kBlack);
         h_data_phi_lead_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_phi_lead_before_PVzCorr->SetMarkerColor(kBlack);
+        h_data_phi_lead_before_L1Corr->SetMarkerColor(kBlack);
         h_data_phi_lead->SetMarkerColor(kBlack);
         h_data_phi_sublead_before_PUCorr->SetMarkerColor(kBlack);
         h_data_phi_sublead_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_phi_sublead_before_PVzCorr->SetMarkerColor(kBlack);
+        h_data_phi_sublead_before_L1Corr->SetMarkerColor(kBlack);
         h_data_phi_sublead->SetMarkerColor(kBlack);
 
 
@@ -732,21 +991,33 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         h_data_rapi->SetLineColor(kBlack);
         h_data_pT_lead_before_PUCorr->SetLineColor(kBlack);
         h_data_pT_lead_before_EffCorr->SetLineColor(kBlack);
+        h_data_pT_lead_before_PVzCorr->SetLineColor(kBlack);
+        h_data_pT_lead_before_L1Corr->SetLineColor(kBlack);
         h_data_pT_lead->SetLineColor(kBlack);
         h_data_pT_sublead_before_PUCorr->SetLineColor(kBlack);
         h_data_pT_sublead_before_EffCorr->SetLineColor(kBlack);
+        h_data_pT_sublead_before_PVzCorr->SetLineColor(kBlack);
+        h_data_pT_sublead_before_L1Corr->SetLineColor(kBlack);
         h_data_pT_sublead->SetLineColor(kBlack);
         h_data_eta_lead_before_PUCorr->SetLineColor(kBlack);
         h_data_eta_lead_before_EffCorr->SetLineColor(kBlack);
+        h_data_eta_lead_before_PVzCorr->SetLineColor(kBlack);
+        h_data_eta_lead_before_L1Corr->SetLineColor(kBlack);
         h_data_eta_lead->SetLineColor(kBlack);
         h_data_eta_sublead_before_PUCorr->SetLineColor(kBlack);
         h_data_eta_sublead_before_EffCorr->SetLineColor(kBlack);
+        h_data_eta_sublead_before_PVzCorr->SetLineColor(kBlack);
+        h_data_eta_sublead_before_L1Corr->SetLineColor(kBlack);
         h_data_eta_sublead->SetLineColor(kBlack);
         h_data_phi_lead_before_PUCorr->SetLineColor(kBlack);
         h_data_phi_lead_before_EffCorr->SetLineColor(kBlack);
+        h_data_phi_lead_before_PVzCorr->SetLineColor(kBlack);
+        h_data_phi_lead_before_L1Corr->SetLineColor(kBlack);
         h_data_phi_lead->SetLineColor(kBlack);
         h_data_phi_sublead_before_PUCorr->SetLineColor(kBlack);
         h_data_phi_sublead_before_EffCorr->SetLineColor(kBlack);
+        h_data_phi_sublead_before_PVzCorr->SetLineColor(kBlack);
+        h_data_phi_sublead_before_L1Corr->SetLineColor(kBlack);
         h_data_phi_sublead->SetLineColor(kBlack);
 
 
@@ -754,51 +1025,81 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         h_data_rapi->SetDirectory(0);
         h_data_pT_lead_before_PUCorr->SetDirectory(0);
         h_data_pT_lead_before_EffCorr->SetDirectory(0);
+        h_data_pT_lead_before_PUCorr->SetDirectory(0);
+        h_data_pT_lead_before_L1Corr->SetDirectory(0);
         h_data_pT_lead->SetDirectory(0);
         h_data_pT_sublead_before_PUCorr->SetDirectory(0);
         h_data_pT_sublead_before_EffCorr->SetDirectory(0);
+        h_data_pT_sublead_before_PVzCorr->SetDirectory(0);
+        h_data_pT_sublead_before_L1Corr->SetDirectory(0);
         h_data_pT_sublead->SetDirectory(0);
         h_data_eta_lead_before_PUCorr->SetDirectory(0);
         h_data_eta_lead_before_EffCorr->SetDirectory(0);
+        h_data_eta_lead_before_PVzCorr->SetDirectory(0);
+        h_data_eta_lead_before_L1Corr->SetDirectory(0);
         h_data_eta_lead->SetDirectory(0);
         h_data_eta_sublead_before_PUCorr->SetDirectory(0);
         h_data_eta_sublead_before_EffCorr->SetDirectory(0);
+        h_data_eta_sublead_before_PVzCorr->SetDirectory(0);
+        h_data_eta_sublead_before_L1Corr->SetDirectory(0);
         h_data_eta_sublead->SetDirectory(0);
         h_data_phi_lead_before_PUCorr->SetDirectory(0);
         h_data_phi_lead_before_EffCorr->SetDirectory(0);
+        h_data_phi_lead_before_PVzCorr->SetDirectory(0);
+        h_data_phi_lead_before_L1Corr->SetDirectory(0);
         h_data_phi_lead->SetDirectory(0);
         h_data_phi_sublead_before_PUCorr->SetDirectory(0);
         h_data_phi_sublead_before_EffCorr->SetDirectory(0);
+        h_data_phi_sublead_before_PVzCorr->SetDirectory(0);
+        h_data_phi_sublead_before_L1Corr->SetDirectory(0);
         h_data_phi_sublead->SetDirectory(0);
 
 
 //--------------------------------- Ratio Plot --------------------------------------
 
-        myRatioPlot_t *RP_pT, *RP_rapi, *RP_pT_lead_before_PUCorr, *RP_pT_lead_before_EffCorr, *RP_pT_lead,
-                      *RP_pT_sublead_before_PUCorr, *RP_pT_sublead_before_EffCorr, *RP_pT_sublead,
-                      *RP_eta_lead_before_PUCorr, *RP_eta_lead_before_EffCorr, *RP_eta_lead,
-                      *RP_eta_sublead_before_PUCorr, *RP_eta_sublead_before_EffCorr, *RP_eta_sublead,
-                      *RP_phi_lead_before_PUCorr, *RP_phi_lead_before_EffCorr, *RP_phi_lead,
-                      *RP_phi_sublead_before_PUCorr, *RP_phi_sublead_before_EffCorr, *RP_phi_sublead;
+        myRatioPlot_t *RP_pT, *RP_rapi, *RP_pT_lead_before_PUCorr, *RP_pT_lead_before_EffCorr,
+                      *RP_pT_lead_before_PVzCorr, *RP_pT_lead_before_L1Corr, *RP_pT_lead,
+                      *RP_pT_sublead_before_PUCorr, *RP_pT_sublead_before_EffCorr,
+                      *RP_pT_sublead_before_PVzCorr, *RP_pT_sublead_before_L1Corr, *RP_pT_sublead,
+                      *RP_eta_lead_before_PUCorr, *RP_eta_lead_before_EffCorr,
+                      *RP_eta_lead_before_PVzCorr, *RP_eta_lead_before_L1Corr, *RP_eta_lead,
+                      *RP_eta_sublead_before_PUCorr, *RP_eta_sublead_before_EffCorr,
+                      *RP_eta_sublead_before_PVzCorr, *RP_eta_sublead_before_L1Corr, *RP_eta_sublead,
+                      *RP_phi_lead_before_PUCorr, *RP_phi_lead_before_EffCorr,
+                      *RP_phi_lead_before_PVzCorr, *RP_phi_lead_before_L1Corr, *RP_phi_lead,
+                      *RP_phi_sublead_before_PUCorr, *RP_phi_sublead_before_EffCorr,
+                      *RP_phi_sublead_before_PVzCorr, *RP_phi_sublead_before_L1Corr, *RP_phi_sublead;
         RP_pT = new myRatioPlot_t( "RP_pT", s_pT, h_data_pT );
         RP_rapi = new myRatioPlot_t( "RP_rapi", s_rapi, h_data_rapi );
         RP_pT_lead_before_PUCorr = new myRatioPlot_t( "RP_pT_lead_before_PUCorr", s_pT_lead_before_PUCorr, h_data_pT_lead_before_PUCorr );
         RP_pT_lead_before_EffCorr = new myRatioPlot_t( "RP_pT_lead_before_EffCorr", s_pT_lead_before_EffCorr, h_data_pT_lead_before_EffCorr );
+        RP_pT_lead_before_PVzCorr = new myRatioPlot_t( "RP_pT_lead_before_PVzCorr", s_pT_lead_before_PVzCorr, h_data_pT_lead_before_PVzCorr );
+        RP_pT_lead_before_L1Corr = new myRatioPlot_t( "RP_pT_lead_before_L1Corr", s_pT_lead_before_L1Corr, h_data_pT_lead_before_L1Corr );
         RP_pT_lead = new myRatioPlot_t( "RP_pT_lead", s_pT_lead, h_data_pT_lead );
         RP_pT_sublead_before_PUCorr = new myRatioPlot_t( "RP_pT_sublead_before_PUCorr", s_pT_sublead_before_PUCorr, h_data_pT_sublead_before_PUCorr );
         RP_pT_sublead_before_EffCorr = new myRatioPlot_t( "RP_pT_sublead_before_EffCorr", s_pT_sublead_before_EffCorr, h_data_pT_sublead_before_EffCorr );
+        RP_pT_sublead_before_PVzCorr = new myRatioPlot_t( "RP_pT_sublead_before_PVzCorr", s_pT_sublead_before_PVzCorr, h_data_pT_sublead_before_PVzCorr );
+        RP_pT_sublead_before_L1Corr = new myRatioPlot_t( "RP_pT_sublead_before_L1Corr", s_pT_sublead_before_L1Corr, h_data_pT_sublead_before_L1Corr );
         RP_pT_sublead = new myRatioPlot_t( "RP_pT_sublead", s_pT_sublead, h_data_pT_sublead );
         RP_eta_lead_before_PUCorr = new myRatioPlot_t( "RP_eta_lead_before_PUCorr", s_eta_lead_before_PUCorr, h_data_eta_lead_before_PUCorr );
         RP_eta_lead_before_EffCorr = new myRatioPlot_t( "RP_eta_lead_before_EffCorr", s_eta_lead_before_EffCorr, h_data_eta_lead_before_EffCorr );
+        RP_eta_lead_before_PVzCorr = new myRatioPlot_t( "RP_eta_lead_before_PVzCorr", s_eta_lead_before_PVzCorr, h_data_eta_lead_before_PVzCorr );
+        RP_eta_lead_before_L1Corr = new myRatioPlot_t( "RP_eta_lead_before_L1Corr", s_eta_lead_before_L1Corr, h_data_eta_lead_before_L1Corr );
         RP_eta_lead = new myRatioPlot_t( "RP_eta_lead", s_eta_lead, h_data_eta_lead );
         RP_eta_sublead_before_PUCorr = new myRatioPlot_t( "RP_eta_sublead_before_PUCorr", s_eta_sublead_before_PUCorr, h_data_eta_sublead_before_PUCorr );
         RP_eta_sublead_before_EffCorr = new myRatioPlot_t( "RP_eta_sublead_before_EffCorr", s_eta_sublead_before_EffCorr, h_data_eta_sublead_before_EffCorr );
+        RP_eta_sublead_before_PVzCorr = new myRatioPlot_t( "RP_eta_sublead_before_PVzCorr", s_eta_sublead_before_PVzCorr, h_data_eta_sublead_before_PVzCorr );
+        RP_eta_sublead_before_L1Corr = new myRatioPlot_t( "RP_eta_sublead_before_L1Corr", s_eta_sublead_before_L1Corr, h_data_eta_sublead_before_L1Corr );
         RP_eta_sublead = new myRatioPlot_t( "RP_eta_sublead", s_eta_sublead, h_data_eta_sublead );
         RP_phi_lead_before_PUCorr = new myRatioPlot_t( "RP_phi_lead_before_PUCorr", s_phi_lead_before_PUCorr, h_data_phi_lead_before_PUCorr );
         RP_phi_lead_before_EffCorr = new myRatioPlot_t( "RP_phi_lead_before_EffCorr", s_phi_lead_before_EffCorr, h_data_phi_lead_before_EffCorr );
+        RP_phi_lead_before_PVzCorr = new myRatioPlot_t( "RP_phi_lead_before_PVzCorr", s_phi_lead_before_PVzCorr, h_data_phi_lead_before_PVzCorr );
+        RP_phi_lead_before_L1Corr = new myRatioPlot_t( "RP_phi_lead_before_L1Corr", s_phi_lead_before_L1Corr, h_data_phi_lead_before_L1Corr );
         RP_phi_lead = new myRatioPlot_t( "RP_phi_lead", s_phi_lead, h_data_phi_lead );
         RP_phi_sublead_before_PUCorr = new myRatioPlot_t( "RP_phi_sublead_before_PUCorr", s_phi_sublead_before_PUCorr, h_data_phi_sublead_before_PUCorr );
         RP_phi_sublead_before_EffCorr = new myRatioPlot_t( "RP_phi_sublead_before_EffCorr", s_phi_sublead_before_EffCorr, h_data_phi_sublead_before_EffCorr );
+        RP_phi_sublead_before_PVzCorr = new myRatioPlot_t( "RP_phi_sublead_before_PVzCorr", s_phi_sublead_before_PVzCorr, h_data_phi_sublead_before_PVzCorr );
+        RP_phi_sublead_before_L1Corr = new myRatioPlot_t( "RP_phi_sublead_before_L1Corr", s_phi_sublead_before_L1Corr, h_data_phi_sublead_before_L1Corr );
         RP_phi_sublead = new myRatioPlot_t( "RP_phi_sublead", s_phi_sublead, h_data_phi_sublead );
 
 
@@ -806,21 +1107,33 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         RP_rapi->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}}", -4, 4);
         RP_pT_lead_before_PUCorr->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{lead}}) [GeV/c] before PU correction", 0, 1000);
         RP_pT_lead_before_EffCorr->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{lead}}) [GeV/c] before Efficiency SF", 0, 1000);
+        RP_pT_lead_before_PVzCorr->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{lead}}) [GeV/c] before PVz correction", 0, 1000);
+        RP_pT_lead_before_L1Corr->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{lead}}) [GeV/c] before L1 prefiring correction", 0, 1000);
         RP_pT_lead->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{lead}}) [GeV/c]", 0, 1000);
         RP_pT_sublead_before_PUCorr->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{sublead}}) [GeV/c] before PU correction", 0, 1000);
         RP_pT_sublead_before_EffCorr->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{sublead}}) [GeV/c] before Efficiency SF", 0, 1000);
+        RP_pT_sublead_before_PVzCorr->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{sublead}}) [GeV/c] before PVz correction", 0, 1000);
+        RP_pT_sublead_before_L1Corr->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{sublead}}) [GeV/c] before L1 prefiring correction", 0, 1000);
         RP_pT_sublead->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{sublead}}) [GeV/c]", 0, 1000);
         RP_eta_lead_before_PUCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{lead}}) before PU correction", -3.5, 3.5);
         RP_eta_lead_before_EffCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{lead}}) before Efficiency SF", -3.5, 3.5);
+        RP_eta_lead_before_PVzCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{lead}}) before PVz correction", -3.5, 3.5);
+        RP_eta_lead_before_L1Corr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{lead}}) before L1 prefiring correction", -3.5, 3.5);
         RP_eta_lead->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{lead}})", -3.5, 3.5);
         RP_eta_sublead_before_PUCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{sublead}}) before PU correction", -3.5, 3.5);
         RP_eta_sublead_before_EffCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{sublead}}) before Efficiency SF", -3.5, 3.5);
+        RP_eta_sublead_before_PVzCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{sublead}}) before PVz correction", -3.5, 3.5);
+        RP_eta_sublead_before_L1Corr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{sublead}}) before L1 prefiring correction", -3.5, 3.5);
         RP_eta_sublead->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{sublead}})", -3.5, 3.5);
         RP_phi_lead_before_PUCorr->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{lead}}) before PU correction", -4, 4);
         RP_phi_lead_before_EffCorr->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{lead}}) before Efficiency SF", -4, 4);
+        RP_phi_lead_before_PVzCorr->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{lead}}) before PVz correction", -4, 4);
+        RP_phi_lead_before_L1Corr->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{lead}}) before L1 prefiring correction", -4, 4);
         RP_phi_lead->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{lead}})", -4, 4);
         RP_phi_sublead_before_PUCorr->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{sublead}}) before PU correction", -4, 4);
         RP_phi_sublead_before_EffCorr->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{sublead}}) before Efficiency SF", -4, 4);
+        RP_phi_sublead_before_PVzCorr->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{sublead}}) before PVz correction", -4, 4);
+        RP_phi_sublead_before_L1Corr->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{sublead}}) before L1 prefiring correction", -4, 4);
         RP_phi_sublead->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{sublead}})", -4, 4);
 
 
@@ -828,21 +1141,33 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         RP_rapi->SetLegend(0.75, 0.4);
         RP_pT_lead_before_PUCorr->SetLegend(0.75, 0.4);
         RP_pT_lead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_pT_lead_before_PVzCorr->SetLegend(0.75, 0.4);
+        RP_pT_lead_before_L1Corr->SetLegend(0.75, 0.4);
         RP_pT_lead->SetLegend(0.75, 0.4);
         RP_pT_sublead_before_PUCorr->SetLegend(0.75, 0.4);
         RP_pT_sublead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_pT_sublead_before_PVzCorr->SetLegend(0.75, 0.4);
+        RP_pT_sublead_before_L1Corr->SetLegend(0.75, 0.4);
         RP_pT_sublead->SetLegend(0.75, 0.4);
         RP_eta_lead_before_PUCorr->SetLegend(0.75, 0.4);
         RP_eta_lead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_eta_lead_before_PVzCorr->SetLegend(0.75, 0.4);
+        RP_eta_lead_before_L1Corr->SetLegend(0.75, 0.4);
         RP_eta_lead->SetLegend(0.75, 0.4);
         RP_eta_sublead_before_PUCorr->SetLegend(0.75, 0.4);
         RP_eta_sublead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_eta_sublead_before_PVzCorr->SetLegend(0.75, 0.4);
+        RP_eta_sublead_before_L1Corr->SetLegend(0.75, 0.4);
         RP_eta_sublead->SetLegend(0.75, 0.4);
         RP_phi_lead_before_PUCorr->SetLegend(0.75, 0.4);
         RP_phi_lead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_phi_lead_before_PVzCorr->SetLegend(0.75, 0.4);
+        RP_phi_lead_before_L1Corr->SetLegend(0.75, 0.4);
         RP_phi_lead->SetLegend(0.75, 0.4);
         RP_phi_sublead_before_PUCorr->SetLegend(0.75, 0.4);
         RP_phi_sublead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_phi_sublead_before_PVzCorr->SetLegend(0.75, 0.4);
+        RP_phi_sublead_before_L1Corr->SetLegend(0.75, 0.4);
         RP_phi_sublead->SetLegend(0.75, 0.4);
 
 
@@ -851,21 +1176,33 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         RP_rapi->AddLegendEntry(h_data_rapi, "Data", "lp");
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_data_pT_lead_before_PUCorr, "Data", "lp");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_data_pT_lead_before_EffCorr, "Data", "lp");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_data_pT_lead_before_PVzCorr, "Data", "lp");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_data_pT_lead_before_L1Corr, "Data", "lp");
         RP_pT_lead->AddLegendEntry(h_data_pT_lead, "Data", "lp");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_data_pT_sublead_before_PUCorr, "Data", "lp");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_data_pT_sublead_before_EffCorr, "Data", "lp");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_data_pT_sublead_before_PVzCorr, "Data", "lp");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_data_pT_sublead_before_L1Corr, "Data", "lp");
         RP_pT_sublead->AddLegendEntry(h_data_pT_sublead, "Data", "lp");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_data_eta_lead_before_PUCorr, "Data", "lp");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_data_eta_lead_before_EffCorr, "Data", "lp");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_data_eta_lead_before_PVzCorr, "Data", "lp");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_data_eta_lead_before_L1Corr, "Data", "lp");
         RP_eta_lead->AddLegendEntry(h_data_eta_lead, "Data", "lp");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_data_eta_sublead_before_PUCorr, "Data", "lp");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_data_eta_sublead_before_EffCorr, "Data", "lp");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_data_eta_sublead_before_PVzCorr, "Data", "lp");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_data_eta_sublead_before_L1Corr, "Data", "lp");
         RP_eta_sublead->AddLegendEntry(h_data_eta_sublead, "Data", "lp");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_data_phi_lead_before_PUCorr, "Data", "lp");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_data_phi_lead_before_EffCorr, "Data", "lp");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_data_phi_lead_before_PVzCorr, "Data", "lp");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_data_phi_lead_before_L1Corr, "Data", "lp");
         RP_phi_lead->AddLegendEntry(h_data_phi_lead, "Data", "lp");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_data_phi_sublead_before_PUCorr, "Data", "lp");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_data_phi_sublead_before_EffCorr, "Data", "lp");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_data_phi_sublead_before_PVzCorr, "Data", "lp");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_data_phi_sublead_before_L1Corr, "Data", "lp");
         RP_phi_sublead->AddLegendEntry(h_data_phi_sublead, "Data", "lp");
 
 
@@ -874,21 +1211,33 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         RP_rapi->AddLegendEntry(h_DY_rapi, "DY#rightarrow #font[12]{ee}", "f");
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_DY_pT_lead_before_PUCorr, "DY#rightarrow #font[12]{ee}", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_DY_pT_lead_before_EffCorr, "DY#rightarrow #font[12]{ee}", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_DY_pT_lead_before_PVzCorr, "DY#rightarrow #font[12]{ee}", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_DY_pT_lead_before_L1Corr, "DY#rightarrow #font[12]{ee}", "f");
         RP_pT_lead->AddLegendEntry(h_DY_pT_lead, "DY#rightarrow #font[12]{ee}", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_DY_pT_sublead_before_PUCorr, "DY#rightarrow #font[12]{ee}", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_DY_pT_sublead_before_EffCorr, "DY#rightarrow #font[12]{ee}", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_DY_pT_sublead_before_PVzCorr, "DY#rightarrow #font[12]{ee}", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_DY_pT_sublead_before_L1Corr, "DY#rightarrow #font[12]{ee}", "f");
         RP_pT_sublead->AddLegendEntry(h_DY_pT_sublead, "DY#rightarrow #font[12]{ee}", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_DY_eta_lead_before_PUCorr, "DY#rightarrow #font[12]{ee}", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_DY_eta_lead_before_EffCorr, "DY#rightarrow #font[12]{ee}", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_DY_eta_lead_before_PVzCorr, "DY#rightarrow #font[12]{ee}", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_DY_eta_lead_before_L1Corr, "DY#rightarrow #font[12]{ee}", "f");
         RP_eta_lead->AddLegendEntry(h_DY_eta_lead, "DY#rightarrow #font[12]{ee}", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_DY_eta_sublead_before_PUCorr, "DY#rightarrow #font[12]{ee}", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_DY_eta_sublead_before_EffCorr, "DY#rightarrow #font[12]{ee}", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_DY_eta_sublead_before_PVzCorr, "DY#rightarrow #font[12]{ee}", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_DY_eta_sublead_before_L1Corr, "DY#rightarrow #font[12]{ee}", "f");
         RP_eta_sublead->AddLegendEntry(h_DY_eta_sublead, "DY#rightarrow #font[12]{ee}", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_DY_phi_lead_before_PUCorr, "DY#rightarrow #font[12]{ee}", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_DY_phi_lead_before_EffCorr, "DY#rightarrow #font[12]{ee}", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_DY_phi_lead_before_PVzCorr, "DY#rightarrow #font[12]{ee}", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_DY_phi_lead_before_L1Corr, "DY#rightarrow #font[12]{ee}", "f");
         RP_phi_lead->AddLegendEntry(h_DY_phi_lead, "DY#rightarrow #font[12]{ee}", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_DY_phi_sublead_before_PUCorr, "DY#rightarrow #font[12]{ee}", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_DY_phi_sublead_before_EffCorr, "DY#rightarrow #font[12]{ee}", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_DY_phi_sublead_before_PVzCorr, "DY#rightarrow #font[12]{ee}", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_DY_phi_sublead_before_L1Corr, "DY#rightarrow #font[12]{ee}", "f");
         RP_phi_sublead->AddLegendEntry(h_DY_phi_sublead, "DY#rightarrow #font[12]{ee}", "f");
 
 
@@ -897,210 +1246,330 @@ void EE_HistDrawer ( TString whichGraphs, TString type )
         RP_rapi->AddLegendEntry(h_bkg_rapi[8], "DY#rightarrow #tau#tau", "f");
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[8], "DY#rightarrow #tau#tau", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_bkg_pT_lead_before_PVzCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_bkg_pT_lead_before_L1Corr[8], "DY#rightarrow #tau#tau", "f");
         RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[8], "DY#rightarrow #tau#tau", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[8], "DY#rightarrow #tau#tau", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_bkg_pT_sublead_before_PVzCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_bkg_pT_sublead_before_L1Corr[8], "DY#rightarrow #tau#tau", "f");
         RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[8], "DY#rightarrow #tau#tau", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[8], "DY#rightarrow #tau#tau", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_bkg_eta_lead_before_PVzCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_bkg_eta_lead_before_L1Corr[8], "DY#rightarrow #tau#tau", "f");
         RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[8], "DY#rightarrow #tau#tau", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[8], "DY#rightarrow #tau#tau", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_bkg_eta_sublead_before_PVzCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_bkg_eta_sublead_before_L1Corr[8], "DY#rightarrow #tau#tau", "f");
         RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[8], "DY#rightarrow #tau#tau", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[8], "DY#rightarrow #tau#tau", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_bkg_phi_lead_before_PVzCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_bkg_phi_lead_before_L1Corr[8], "DY#rightarrow #tau#tau", "f");
         RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[8], "DY#rightarrow #tau#tau", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[8], "DY#rightarrow #tau#tau", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_bkg_phi_sublead_before_PVzCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_bkg_phi_sublead_before_L1Corr[8], "DY#rightarrow #tau#tau", "f");
         RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[8], "DY#rightarrow #tau#tau", "f");
 
         RP_pT->AddLegendEntry(h_bkg_pT[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_rapi->AddLegendEntry(h_bkg_rapi[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_bkg_pT_lead_before_PVzCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_bkg_pT_lead_before_L1Corr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_bkg_pT_sublead_before_PVzCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_bkg_pT_sublead_before_L1Corr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_bkg_eta_lead_before_PVzCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_bkg_eta_lead_before_L1Corr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_bkg_eta_sublead_before_PVzCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_bkg_eta_sublead_before_L1Corr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_bkg_phi_lead_before_PVzCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_bkg_phi_lead_before_L1Corr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_bkg_phi_sublead_before_PVzCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_bkg_phi_sublead_before_L1Corr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
 
         RP_pT->AddLegendEntry(h_bkg_pT[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_rapi->AddLegendEntry(h_bkg_rapi[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_bkg_pT_lead_before_PVzCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_bkg_pT_lead_before_L1Corr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_bkg_pT_sublead_before_PVzCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_bkg_pT_sublead_before_L1Corr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_bkg_eta_lead_before_PVzCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_bkg_eta_lead_before_L1Corr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_bkg_eta_sublead_before_PVzCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_bkg_eta_sublead_before_L1Corr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_bkg_phi_lead_before_PVzCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_bkg_phi_lead_before_L1Corr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_bkg_phi_sublead_before_PVzCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_bkg_phi_sublead_before_L1Corr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
 
         RP_pT->AddLegendEntry(h_bkg_pT[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_rapi->AddLegendEntry(h_bkg_rapi[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_bkg_pT_lead_before_PVzCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_bkg_pT_lead_before_L1Corr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_bkg_pT_sublead_before_PVzCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_bkg_pT_sublead_before_L1Corr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_bkg_eta_lead_before_PVzCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_bkg_eta_lead_before_L1Corr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_bkg_eta_sublead_before_PVzCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_bkg_eta_sublead_before_L1Corr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_bkg_phi_lead_before_PVzCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_bkg_phi_lead_before_L1Corr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_bkg_phi_sublead_before_PVzCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_bkg_phi_sublead_before_L1Corr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
 
         RP_pT->AddLegendEntry(h_bkg_pT[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_rapi->AddLegendEntry(h_bkg_rapi[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_bkg_pT_lead_before_PVzCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_bkg_pT_lead_before_L1Corr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_bkg_pT_sublead_before_PVzCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_bkg_pT_sublead_before_L1Corr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_bkg_eta_lead_before_PVzCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_bkg_eta_lead_before_L1Corr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[1], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_bkg_eta_sublead_before_PVzCorr[1], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_bkg_eta_sublead_before_L1Corr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_bkg_phi_lead_before_PVzCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_bkg_phi_lead_before_L1Corr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_bkg_phi_sublead_before_PVzCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_bkg_phi_sublead_before_L1Corr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
 
         RP_pT->AddLegendEntry(h_bkg_pT[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_rapi->AddLegendEntry(h_bkg_rapi[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_bkg_pT_lead_before_PVzCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_bkg_pT_lead_before_L1Corr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_bkg_pT_sublead_before_PVzCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_bkg_pT_sublead_before_L1Corr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_bkg_eta_lead_before_PVzCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_bkg_eta_lead_before_L1Corr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_bkg_eta_sublead_before_PVzCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_bkg_eta_sublead_before_L1Corr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_bkg_phi_lead_before_PVzCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_bkg_phi_lead_before_L1Corr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_bkg_phi_sublead_before_PVzCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_bkg_phi_sublead_before_L1Corr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[3], "#font[12]{#scale[1.1]{WZ}}", "f");
 
         RP_pT->AddLegendEntry(h_bkg_pT[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_rapi->AddLegendEntry(h_bkg_rapi[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_bkg_pT_lead_before_PVzCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_bkg_pT_lead_before_L1Corr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_bkg_pT_sublead_before_PVzCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_bkg_pT_sublead_before_L1Corr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_bkg_eta_lead_before_PVzCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_bkg_eta_lead_before_L1Corr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_bkg_eta_sublead_before_PVzCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_bkg_eta_sublead_before_L1Corr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_bkg_phi_lead_before_PVzCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_bkg_phi_lead_before_L1Corr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_bkg_phi_sublead_before_PVzCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_bkg_phi_sublead_before_L1Corr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[2], "#font[12]{#scale[1.1]{WW}}", "f");
 
         RP_pT->AddLegendEntry(h_bkg_pT[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_rapi->AddLegendEntry(h_bkg_rapi[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_bkg_pT_lead_before_PVzCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_bkg_pT_lead_before_L1Corr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_bkg_pT_sublead_before_PVzCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_bkg_pT_sublead_before_L1Corr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_bkg_eta_lead_before_PVzCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_bkg_eta_lead_before_L1Corr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_bkg_eta_sublead_before_PVzCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_bkg_eta_sublead_before_L1Corr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_bkg_phi_lead_before_PVzCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_bkg_phi_lead_before_L1Corr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_bkg_phi_sublead_before_PVzCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_bkg_phi_sublead_before_L1Corr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
 
         RP_pT->AddLegendEntry(h_bkg_pT[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_rapi->AddLegendEntry(h_bkg_rapi[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_bkg_pT_lead_before_PVzCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_bkg_pT_lead_before_L1Corr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_bkg_pT_sublead_before_PVzCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_bkg_pT_sublead_before_L1Corr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_bkg_eta_lead_before_PVzCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_bkg_eta_lead_before_L1Corr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_bkg_eta_sublead_before_PVzCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_bkg_eta_sublead_before_L1Corr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_bkg_phi_lead_before_PVzCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_bkg_phi_lead_before_L1Corr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_bkg_phi_sublead_before_PVzCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_bkg_phi_sublead_before_L1Corr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[0], "#font[12]{#scale[1.1]{QCD}}", "f");
 
         RP_pT->Draw(0.5, 8e6, 0);
         RP_rapi->Draw(0.5, 8e6, 0);
         RP_pT_lead_before_PUCorr->Draw(0.5, 8e6, 0);
         RP_pT_lead_before_EffCorr->Draw(0.5, 8e6, 0);
+        RP_pT_lead_before_PVzCorr->Draw(0.5, 8e6, 0);
+        RP_pT_lead_before_L1Corr->Draw(0.5, 8e6, 0);
         RP_pT_lead->Draw(0.5, 8e6, 0);
         RP_pT_sublead_before_PUCorr->Draw(0.5, 8e6, 0);
         RP_pT_sublead_before_EffCorr->Draw(0.5, 8e6, 0);
+        RP_pT_sublead_before_PVzCorr->Draw(0.5, 8e6, 0);
+        RP_pT_sublead_before_L1Corr->Draw(0.5, 8e6, 0);
         RP_pT_sublead->Draw(0.5, 8e6, 0);
         RP_eta_lead_before_PUCorr->Draw(0.5, 8e6, 0);
         RP_eta_lead_before_EffCorr->Draw(0.5, 8e6, 0);
+        RP_eta_lead_before_PVzCorr->Draw(0.5, 8e6, 0);
+        RP_eta_lead_before_L1Corr->Draw(0.5, 8e6, 0);
         RP_eta_lead->Draw(0.5, 8e6, 0);
         RP_eta_sublead_before_PUCorr->Draw(0.5, 8e6, 0);
         RP_eta_sublead_before_EffCorr->Draw(0.5, 8e6, 0);
+        RP_eta_sublead_before_PVzCorr->Draw(0.5, 8e6, 0);
+        RP_eta_sublead_before_L1Corr->Draw(0.5, 8e6, 0);
         RP_eta_sublead->Draw(0.5, 8e6, 0);
         RP_phi_lead_before_PUCorr->Draw(0.5, 8e6, 0);
         RP_phi_lead_before_EffCorr->Draw(0.5, 8e6, 0);
+        RP_phi_lead_before_PVzCorr->Draw(0.5, 8e6, 0);
+        RP_phi_lead_before_L1Corr->Draw(0.5, 8e6, 0);
         RP_phi_lead->Draw(0.5, 8e6, 0);
         RP_phi_sublead_before_PUCorr->Draw(0.5, 8e6, 0);
         RP_phi_sublead_before_EffCorr->Draw(0.5, 8e6, 0);
+        RP_phi_sublead_before_PVzCorr->Draw(0.5, 8e6, 0);
+        RP_phi_sublead_before_L1Corr->Draw(0.5, 8e6, 0);
         RP_phi_sublead->Draw(0.5, 8e6, 0);
 
     } // End of if(Pt, rapi, pT, eta, phi)
@@ -1333,23 +1802,28 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
     {
         count_drawn++;
 
-        THStack *s_mass_fine_before_PUCorr, *s_mass_fine_before_RoccoR, *s_mass_fine_before_EffCorr, *s_mass_fine, *s_mass;
-        s_mass_fine_before_PUCorr = new THStack("s_mass_fine_before_PUCorr", "");
-        s_mass_fine_before_RoccoR = new THStack("s_mass_fine_before_RoccoR", "");
-        s_mass_fine_before_EffCorr = new THStack("s_mass_fine_before_EffCorr", "");
+        THStack *s_mass_before_PUCorr, *s_mass_before_RoccoR, *s_mass_before_EffCorr,
+                *s_mass_before_PVzCorr, *s_mass_before_L1Corr, *s_mass_fine, *s_mass;
+        s_mass_before_PUCorr = new THStack("s_mass_before_PUCorr", "");
+        s_mass_before_RoccoR = new THStack("s_mass_before_RoccoR", "");
+        s_mass_before_EffCorr = new THStack("s_mass_before_EffCorr", "");
+        s_mass_before_PVzCorr = new THStack("s_mass_before_PVzCorr", "");
+        s_mass_before_L1Corr = new THStack("s_mass_before_L1Corr", "");
         s_mass_fine = new THStack("s_mass_fine", "");
         s_mass = new THStack("s_mass", "");
 
 //----------------------------------- MC bkg -------------------------------------------------------
-        TH1D *h_bkg_mass_fine_before_PUCorr[9], *h_bkg_mass_fine_before_RoccoR[9], *h_bkg_mass_fine_before_EffCorr[9],
-             *h_bkg_mass_fine[9], *h_bkg_mass[9];
+        TH1D *h_bkg_mass_before_PUCorr[9], *h_bkg_mass_before_RoccoR[9], *h_bkg_mass_before_EffCorr[9],
+             *h_bkg_mass_before_PVzCorr[9], *h_bkg_mass_before_L1Corr[9], *h_bkg_mass_fine[9], *h_bkg_mass[9];
         Int_t iter = 0;
 
         for ( SelProc_t pr = _MuMu_QCDMuEnriched_Full; pr > _EndOf_MuMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)) )
         {
-            f_bkg_noRC->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_PUCorr[iter] );
-            f_bkg_noRC->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_RoccoR[iter] );
-            f_bkg->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_EffCorr[iter] );
+            f_bkg_noRC->GetObject( "h_mass_before_PUCorr_"+Mgr.Procname[pr], h_bkg_mass_before_PUCorr[iter] );
+            f_bkg_noRC->GetObject( "h_mass_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_before_RoccoR[iter] );
+            f_bkg->GetObject( "h_mass_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_mass_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_mass_before_PVzCorr[iter] );
+            f_bkg->GetObject( "h_mass_before_L1Corr_"+Mgr.Procname[pr], h_bkg_mass_before_L1Corr[iter] );
             f_bkg->GetObject( "h_mass_fine_"+Mgr.Procname[pr], h_bkg_mass_fine[iter] );
             f_bkg->GetObject( "h_mass_"+Mgr.Procname[pr], h_bkg_mass[iter] );
 
@@ -1364,27 +1838,35 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
             if ( pr == _MuMu_ttbar_Full ) color = kCyan + 2;
             if ( pr == _MuMu_DYTauTau_Full ) color = kOrange - 5;
 
-            h_bkg_mass_fine_before_PUCorr[iter]->SetFillColor(color);
-            h_bkg_mass_fine_before_RoccoR[iter]->SetFillColor(color);
-            h_bkg_mass_fine_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_mass_before_PUCorr[iter]->SetFillColor(color);
+            h_bkg_mass_before_RoccoR[iter]->SetFillColor(color);
+            h_bkg_mass_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_mass_before_PVzCorr[iter]->SetFillColor(color);
+            h_bkg_mass_before_L1Corr[iter]->SetFillColor(color);
             h_bkg_mass_fine[iter]->SetFillColor(color);
             h_bkg_mass[iter]->SetFillColor(color);
 
-            h_bkg_mass_fine_before_PUCorr[iter]->SetLineColor(color);
-            h_bkg_mass_fine_before_RoccoR[iter]->SetLineColor(color);
-            h_bkg_mass_fine_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_mass_before_PUCorr[iter]->SetLineColor(color);
+            h_bkg_mass_before_RoccoR[iter]->SetLineColor(color);
+            h_bkg_mass_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_mass_before_PVzCorr[iter]->SetLineColor(color);
+            h_bkg_mass_before_L1Corr[iter]->SetLineColor(color);
             h_bkg_mass_fine[iter]->SetLineColor(color);
             h_bkg_mass[iter]->SetLineColor(color);
 
-            h_bkg_mass_fine_before_PUCorr[iter]->SetDirectory(0);
-            h_bkg_mass_fine_before_RoccoR[iter]->SetDirectory(0);
-            h_bkg_mass_fine_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_mass_before_PUCorr[iter]->SetDirectory(0);
+            h_bkg_mass_before_RoccoR[iter]->SetDirectory(0);
+            h_bkg_mass_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_mass_before_PVzCorr[iter]->SetDirectory(0);
+            h_bkg_mass_before_L1Corr[iter]->SetDirectory(0);
             h_bkg_mass_fine[iter]->SetDirectory(0);
             h_bkg_mass[iter]->SetDirectory(0);
 
-            s_mass_fine_before_PUCorr->Add( h_bkg_mass_fine_before_PUCorr[iter] );
-            s_mass_fine_before_RoccoR->Add( h_bkg_mass_fine_before_RoccoR[iter] );
-            s_mass_fine_before_EffCorr->Add( h_bkg_mass_fine_before_EffCorr[iter] );
+            s_mass_before_PUCorr->Add( h_bkg_mass_before_PUCorr[iter] );
+            s_mass_before_RoccoR->Add( h_bkg_mass_before_RoccoR[iter] );
+            s_mass_before_EffCorr->Add( h_bkg_mass_before_EffCorr[iter] );
+            s_mass_before_PVzCorr->Add( h_bkg_mass_before_PVzCorr[iter] );
+            s_mass_before_L1Corr->Add( h_bkg_mass_before_L1Corr[iter] );
             s_mass_fine->Add( h_bkg_mass_fine[iter] );
             s_mass->Add( h_bkg_mass[iter] );
 
@@ -1403,161 +1885,201 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
 
 //---------------------------------- MC signal -----------------------------------------------------
 
-        TH1D *h_DY_mass_fine_before_PUCorr, *h_DY_mass_fine_before_RoccoR, *h_DY_mass_fine_before_EffCorr, *h_DY_mass_fine, *h_DY_mass;
+        TH1D *h_DY_mass_before_PUCorr, *h_DY_mass_before_RoccoR, *h_DY_mass_before_EffCorr,
+             *h_DY_mass_before_PVzCorr, *h_DY_mass_before_L1Corr, *h_DY_mass_fine, *h_DY_mass;
 
-        f_DY_noRC->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_fine_before_PUCorr );
-        f_DY_noRC->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_fine_before_RoccoR );
-        f_DY->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_fine_before_EffCorr );
+        f_DY_noRC->GetObject( "h_mass_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_before_PUCorr );
+        f_DY_noRC->GetObject( "h_mass_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_before_RoccoR );
+        f_DY->GetObject( "h_mass_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_before_EffCorr );
+        f_DY->GetObject( "h_mass_before_PVzCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_before_PVzCorr );
+        f_DY->GetObject( "h_mass_before_L1Corr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_before_L1Corr );
         f_DY->GetObject( "h_mass_fine_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_fine );
         f_DY->GetObject( "h_mass_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass );
 
-        h_DY_mass_fine_before_PUCorr->SetFillColor(kOrange);
-        h_DY_mass_fine_before_RoccoR->SetFillColor(kOrange);
-        h_DY_mass_fine_before_EffCorr->SetFillColor(kOrange);
+        h_DY_mass_before_PUCorr->SetFillColor(kOrange);
+        h_DY_mass_before_RoccoR->SetFillColor(kOrange);
+        h_DY_mass_before_EffCorr->SetFillColor(kOrange);
+        h_DY_mass_before_PVzCorr->SetFillColor(kOrange);
+        h_DY_mass_before_L1Corr->SetFillColor(kOrange);
         h_DY_mass_fine->SetFillColor(kOrange);
         h_DY_mass->SetFillColor(kOrange);
 
-        h_DY_mass_fine_before_PUCorr->SetLineColor(kOrange);
-        h_DY_mass_fine_before_RoccoR->SetLineColor(kOrange);
-        h_DY_mass_fine_before_EffCorr->SetLineColor(kOrange);
+        h_DY_mass_before_PUCorr->SetLineColor(kOrange);
+        h_DY_mass_before_RoccoR->SetLineColor(kOrange);
+        h_DY_mass_before_EffCorr->SetLineColor(kOrange);
+        h_DY_mass_before_PVzCorr->SetLineColor(kOrange);
+        h_DY_mass_before_L1Corr->SetLineColor(kOrange);
         h_DY_mass_fine->SetLineColor(kOrange);
         h_DY_mass->SetLineColor(kOrange);
 
-        h_DY_mass_fine_before_PUCorr->SetDirectory(0);
-        h_DY_mass_fine_before_RoccoR->SetDirectory(0);
-        h_DY_mass_fine_before_EffCorr->SetDirectory(0);
+        h_DY_mass_before_PUCorr->SetDirectory(0);
+        h_DY_mass_before_RoccoR->SetDirectory(0);
+        h_DY_mass_before_EffCorr->SetDirectory(0);
+        h_DY_mass_before_PVzCorr->SetDirectory(0);
+        h_DY_mass_before_L1Corr->SetDirectory(0);
         h_DY_mass_fine->SetDirectory(0);
         h_DY_mass->SetDirectory(0);
 
-        s_mass_fine_before_PUCorr->Add( h_DY_mass_fine_before_PUCorr );
-        s_mass_fine_before_RoccoR->Add( h_DY_mass_fine_before_RoccoR );
-        s_mass_fine_before_EffCorr->Add( h_DY_mass_fine_before_EffCorr );
+        s_mass_before_PUCorr->Add( h_DY_mass_before_PUCorr );
+        s_mass_before_RoccoR->Add( h_DY_mass_before_RoccoR );
+        s_mass_before_EffCorr->Add( h_DY_mass_before_EffCorr );
+        s_mass_before_PVzCorr->Add( h_DY_mass_before_PVzCorr );
+        s_mass_before_L1Corr->Add( h_DY_mass_before_L1Corr );
         s_mass_fine->Add( h_DY_mass_fine );
         s_mass->Add( h_DY_mass );
 
 //--------------------------------------- DATA -----------------------------------------------------
 
-        TH1D *h_data_mass_fine_before_PUCorr, *h_data_mass_fine_before_RoccoR, *h_data_mass_fine_before_EffCorr, *h_data_mass_fine, *h_data_mass;
+        TH1D *h_data_mass_before_RoccoR, *h_data_mass_fine, *h_data_mass;
 
-        f_data_noRC->GetObject( "h_mass_fine_before_PUCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_fine_before_PUCorr );
-        f_data_noRC->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_fine_before_RoccoR );
-        f_data->GetObject( "h_mass_fine_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_fine_before_EffCorr );
+        f_data_noRC->GetObject( "h_mass_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_before_RoccoR );
         f_data->GetObject( "h_mass_fine_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_fine );
         f_data->GetObject( "h_mass_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass );
 
-        h_data_mass_fine_before_PUCorr->SetMarkerStyle(kFullDotLarge);
-        h_data_mass_fine_before_RoccoR->SetMarkerStyle(kFullDotLarge);
-        h_data_mass_fine_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_mass_before_RoccoR->SetMarkerStyle(kFullDotLarge);
         h_data_mass_fine->SetMarkerStyle(kFullDotLarge);
         h_data_mass->SetMarkerStyle(kFullDotLarge);
 
-        h_data_mass_fine_before_PUCorr->SetMarkerColor(kBlack);
-        h_data_mass_fine_before_RoccoR->SetMarkerColor(kBlack);
-        h_data_mass_fine_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_mass_before_RoccoR->SetMarkerColor(kBlack);
         h_data_mass_fine->SetMarkerColor(kBlack);
         h_data_mass->SetMarkerColor(kBlack);
 
-        h_data_mass_fine_before_PUCorr->SetLineColor(kBlack);
-        h_data_mass_fine_before_RoccoR->SetLineColor(kBlack);
-        h_data_mass_fine_before_EffCorr->SetLineColor(kBlack);
+        h_data_mass_before_RoccoR->SetLineColor(kBlack);
         h_data_mass_fine->SetLineColor(kBlack);
         h_data_mass->SetLineColor(kBlack);
 
-        h_data_mass_fine_before_PUCorr->SetDirectory(0);
-        h_data_mass_fine_before_RoccoR->SetDirectory(0);
-        h_data_mass_fine_before_EffCorr->SetDirectory(0);
+        h_data_mass_before_RoccoR->SetDirectory(0);
         h_data_mass_fine->SetDirectory(0);
         h_data_mass->SetDirectory(0);
 
 //--------------------------------- Ratio Plot --------------------------------------
 
-        myRatioPlot_t *RP_mass_fine_before_PUCorr, *RP_mass_fine_before_RoccoR, *RP_mass_fine_before_EffCorr, *RP_mass_fine, *RP_mass;
-        RP_mass_fine_before_PUCorr = new myRatioPlot_t( "RP_mass_fine_before_PUCorr", s_mass_fine_before_PUCorr, h_data_mass_fine_before_PUCorr );
-        RP_mass_fine_before_RoccoR = new myRatioPlot_t( "RP_mass_fine_before_RoccoR", s_mass_fine_before_RoccoR, h_data_mass_fine_before_RoccoR );
-        RP_mass_fine_before_EffCorr = new myRatioPlot_t( "RP_mass_fine_before_EffCorr", s_mass_fine_before_EffCorr, h_data_mass_fine_before_EffCorr );
+        myRatioPlot_t *RP_mass_before_PUCorr, *RP_mass_before_RoccoR, *RP_mass_before_EffCorr,
+                      *RP_mass_before_PVzCorr, *RP_mass_before_L1Corr, *RP_mass_fine, *RP_mass;
+        RP_mass_before_PUCorr = new myRatioPlot_t( "RP_mass_before_PUCorr", s_mass_before_PUCorr, h_data_mass_before_RoccoR );
+        RP_mass_before_RoccoR = new myRatioPlot_t( "RP_mass_before_RoccoR", s_mass_before_RoccoR, h_data_mass_before_RoccoR );
+        RP_mass_before_EffCorr = new myRatioPlot_t( "RP_mass_before_EffCorr", s_mass_before_EffCorr, h_data_mass );
+        RP_mass_before_PVzCorr = new myRatioPlot_t( "RP_mass_before_PVzCorr", s_mass_before_PVzCorr, h_data_mass );
+        RP_mass_before_L1Corr = new myRatioPlot_t( "RP_mass_before_L1Corr", s_mass_before_L1Corr, h_data_mass );
         RP_mass_fine = new myRatioPlot_t( "RP_mass_fine", s_mass_fine, h_data_mass_fine );
         RP_mass = new myRatioPlot_t( "RP_mass", s_mass, h_data_mass );
 
-        RP_mass_fine_before_PUCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before PU correction", 15, 3000);
-        RP_mass_fine_before_RoccoR->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before Rochester correction", 15, 3000);
-//        RP_mass_fine_before_RoccoR->SetPlots("Miuonu poros invariantine mase [GeV/c^{2}] (pries pataisu pritaikyma)", 15, 3000);
-        RP_mass_fine_before_EffCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before Efficiency SF", 15, 3000);
+        RP_mass_before_PUCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before PU correction", 15, 3000);
+        RP_mass_before_RoccoR->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before Rochester correction", 15, 3000);
+//        RP_mass_before_RoccoR->SetPlots("Miuonu poros invariantine mase [GeV/c^{2}] (pries pataisu pritaikyma)", 15, 3000);
+        RP_mass_before_EffCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before Efficiency SF", 15, 3000);
+        RP_mass_before_PVzCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before PVz correction", 15, 3000);
+        RP_mass_before_L1Corr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before L1 prefiring correction", 15, 3000);
         RP_mass_fine->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
         RP_mass->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
 //        RP_mass->SetPlots("Miuonu poros invariantine mase [GeV/c^{2}] (pritaikius pataisas)", 15, 3000);
 
-        RP_mass_fine_before_PUCorr->SetLegend(0.75, 0.4);
-        RP_mass_fine_before_RoccoR->SetLegend(0.75, 0.4);
-        RP_mass_fine_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_mass_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_mass_before_RoccoR->SetLegend(0.75, 0.4);
+        RP_mass_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_mass_before_PVzCorr->SetLegend(0.75, 0.4);
+        RP_mass_before_L1Corr->SetLegend(0.75, 0.4);
         RP_mass_fine->SetLegend(0.75, 0.4);
         RP_mass->SetLegend(0.75, 0.4);
 
         // Legend data
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_data_mass_fine_before_PUCorr, "Data", "lp");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_data_mass_fine_before_RoccoR, "Data", "lp");
-//        RP_mass_fine_before_RoccoR->AddLegendEntry(h_data_mass_fine_before_RoccoR, "Matavimas", "lp");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_data_mass_fine_before_EffCorr, "Data", "lp");
+        RP_mass_before_PUCorr->AddLegendEntry(h_data_mass_before_RoccoR, "Data", "lp");
+        RP_mass_before_RoccoR->AddLegendEntry(h_data_mass_before_RoccoR, "Data", "lp");
+//        RP_mass_before_RoccoR->AddLegendEntry(h_data_mass_before_RoccoR, "Matavimas", "lp");
+        RP_mass_before_EffCorr->AddLegendEntry(h_data_mass, "Data", "lp");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_data_mass, "Data", "lp");
+        RP_mass_before_L1Corr->AddLegendEntry(h_data_mass, "Data", "lp");
         RP_mass_fine->AddLegendEntry(h_data_mass_fine, "Data", "lp");
         RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
 //        RP_mass->AddLegendEntry(h_data_mass, "Matavimas", "lp");
 
         // Legend MC signal
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_DY_mass_fine_before_PUCorr, "DY#rightarrow#mu#mu", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_DY_mass_fine_before_RoccoR, "DY#rightarrow#mu#mu", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_DY_mass_fine_before_EffCorr, "DY#rightarrow#mu#mu", "f");
+        RP_mass_before_PUCorr->AddLegendEntry(h_DY_mass_before_PUCorr, "DY#rightarrow#mu#mu", "f");
+        RP_mass_before_RoccoR->AddLegendEntry(h_DY_mass_before_RoccoR, "DY#rightarrow#mu#mu", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_DY_mass_before_EffCorr, "DY#rightarrow#mu#mu", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_DY_mass_before_PVzCorr, "DY#rightarrow#mu#mu", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_DY_mass_before_L1Corr, "DY#rightarrow#mu#mu", "f");
         RP_mass_fine->AddLegendEntry(h_DY_mass_fine, "DY#rightarrow#mu#mu", "f");
         RP_mass->AddLegendEntry(h_DY_mass, "DY#rightarrow#mu#mu", "f");
 
         // Legend MC BKG
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[8], "DY#rightarrow #tau#tau", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[8], "DY#rightarrow #tau#tau", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_mass_before_RoccoR->AddLegendEntry(h_bkg_mass_before_RoccoR[8], "DY#rightarrow #tau#tau", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[8], "DY#rightarrow #tau#tau", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[8], "DY#rightarrow #tau#tau", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[8], "DY#rightarrow #tau#tau", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_mass_before_RoccoR->AddLegendEntry(h_bkg_mass_before_RoccoR[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_mass_before_RoccoR->AddLegendEntry(h_bkg_mass_before_RoccoR[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_mass_before_RoccoR->AddLegendEntry(h_bkg_mass_before_RoccoR[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_mass_before_RoccoR->AddLegendEntry(h_bkg_mass_before_RoccoR[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[3], "#font[12]{#scale[1.1]{WZ}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_mass_before_RoccoR->AddLegendEntry(h_bkg_mass_before_RoccoR[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[3], "#font[12]{#scale[1.1]{WZ}}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[2], "#font[12]{#scale[1.1]{WW}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_mass_before_RoccoR->AddLegendEntry(h_bkg_mass_before_RoccoR[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[2], "#font[12]{#scale[1.1]{WW}}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_mass_before_RoccoR->AddLegendEntry(h_bkg_mass_before_RoccoR[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[0], "#font[12]{#scale[1.1]{QCD}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_mass_before_RoccoR->AddLegendEntry(h_bkg_mass_before_RoccoR[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[0], "#font[12]{#scale[1.1]{QCD}}", "f");
 
-        RP_mass_fine_before_PUCorr->Draw(0.5, 1e7, 1);
-        RP_mass_fine_before_RoccoR->Draw(0.5, 1e7, 1);
-        RP_mass_fine_before_EffCorr->Draw(0.5, 1e7, 1);
+        RP_mass_before_PUCorr->Draw(0.5, 1e7, 1);
+        RP_mass_before_RoccoR->Draw(0.5, 1e7, 1);
+        RP_mass_before_EffCorr->Draw(0.5, 1e7, 1);
+        RP_mass_before_PVzCorr->Draw(0.5, 1e7, 1);
+        RP_mass_before_L1Corr->Draw(0.5, 1e7, 1);
         RP_mass_fine->Draw(0.5, 1e7, 1);
         RP_mass->Draw(0.5, 1e7, 1);
 
@@ -1567,7 +2089,7 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
 
         dataintegral = h_data_mass->IntegralAndError( 1, h_data_mass->GetSize()-2, dataerror );
         MCintegral = ( (TH1D*)(s_mass->GetStack()->Last()) )->IntegralAndError( 1, h_data_mass->GetSize()-2, MCerror );
-        MCintegral_noSF = ( (TH1D*)(s_mass_fine_before_RoccoR->GetStack()->Last()) )->IntegralAndError( 1, h_data_mass->GetSize()-2, MCerror_noSF );
+        MCintegral_noSF = ( (TH1D*)(s_mass_before_RoccoR->GetStack()->Last()) )->IntegralAndError( 1, h_data_mass->GetSize()-2, MCerror_noSF );
         DYintegral = h_DY_mass->IntegralAndError( 1, h_DY_mass->GetSize()-2, DYerror );
 
         dataintegralZ = h_data_mass->IntegralAndError( 10, 22, dataerrorZ );
@@ -1643,6 +2165,20 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         THStack *s_phi_lead_before_EffCorr = new THStack( "s_phi_lead_before_EffCorr", "" );
         THStack *s_phi_sublead_before_EffCorr = new THStack( "s_phi_sublead_before_EffCorr", "" );
 
+        THStack *s_pT_lead_before_PVzCorr = new THStack( "s_pT_lead_before_PVzCorr", "" );
+        THStack *s_pT_sublead_before_PVzCorr = new THStack( "s_pT_sublead_before_PVzCorr", "" );
+        THStack *s_eta_lead_before_PVzCorr = new THStack( "s_eta_lead_before_PVzCorr", "" );
+        THStack *s_eta_sublead_before_PVzCorr = new THStack( "s_eta_sublead_before_PVzCorr", "" );
+        THStack *s_phi_lead_before_PVzCorr = new THStack( "s_phi_lead_before_PVzCorr", "" );
+        THStack *s_phi_sublead_before_PVzCorr = new THStack( "s_phi_sublead_before_PVzCorr", "" );
+
+        THStack *s_pT_lead_before_L1Corr = new THStack( "s_pT_lead_before_L1Corr", "" );
+        THStack *s_pT_sublead_before_L1Corr = new THStack( "s_pT_sublead_before_L1Corr", "" );
+        THStack *s_eta_lead_before_L1Corr = new THStack( "s_eta_lead_before_L1Corr", "" );
+        THStack *s_eta_sublead_before_L1Corr = new THStack( "s_eta_sublead_before_L1Corr", "" );
+        THStack *s_phi_lead_before_L1Corr = new THStack( "s_phi_lead_before_L1Corr", "" );
+        THStack *s_phi_sublead_before_L1Corr = new THStack( "s_phi_sublead_before_L1Corr", "" );
+
         THStack *s_pT_lead = new THStack( "s_pT_lead", "" );
         THStack *s_pT_sublead = new THStack( "s_pT_sublead", "" );
         THStack *s_eta_lead = new THStack( "s_eta_lead", "" );
@@ -1652,12 +2188,18 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
 
 //----------------------------------- MC bkg -------------------------------------------------------
 
-        TH1D *h_bkg_pT[9], *h_bkg_rapi[9], *h_bkg_pT_lead_before_PUCorr[9], *h_bkg_pT_lead_before_RoccoR[9], *h_bkg_pT_lead_before_EffCorr[9], *h_bkg_pT_lead[9],
-             *h_bkg_pT_sublead_before_PUCorr[9],*h_bkg_pT_sublead_before_RoccoR[9],  *h_bkg_pT_sublead_before_EffCorr[9], *h_bkg_pT_sublead[9],
-             *h_bkg_eta_lead_before_PUCorr[9], *h_bkg_eta_lead_before_RoccoR[9], *h_bkg_eta_lead_before_EffCorr[9], *h_bkg_eta_lead[9],
-             *h_bkg_eta_sublead_before_PUCorr[9], *h_bkg_eta_sublead_before_RoccoR[9], *h_bkg_eta_sublead_before_EffCorr[9], *h_bkg_eta_sublead[9],
-             *h_bkg_phi_lead_before_PUCorr[9], *h_bkg_phi_lead_before_RoccoR[9], *h_bkg_phi_lead_before_EffCorr[9], *h_bkg_phi_lead[9],
-             *h_bkg_phi_sublead_before_PUCorr[9], *h_bkg_phi_sublead_before_RoccoR[9], *h_bkg_phi_sublead_before_EffCorr[9], *h_bkg_phi_sublead[9];
+        TH1D *h_bkg_pT[9], *h_bkg_rapi[9], *h_bkg_pT_lead_before_PUCorr[9], *h_bkg_pT_lead_before_RoccoR[9], *h_bkg_pT_lead_before_EffCorr[9],
+             *h_bkg_pT_lead_before_PVzCorr[9], *h_bkg_pT_lead_before_L1Corr[9], *h_bkg_pT_lead[9],
+             *h_bkg_pT_sublead_before_PUCorr[9],*h_bkg_pT_sublead_before_RoccoR[9],  *h_bkg_pT_sublead_before_EffCorr[9],
+             *h_bkg_pT_sublead_before_PVzCorr[9], *h_bkg_pT_sublead_before_L1Corr[9], *h_bkg_pT_sublead[9],
+             *h_bkg_eta_lead_before_PUCorr[9], *h_bkg_eta_lead_before_RoccoR[9], *h_bkg_eta_lead_before_EffCorr[9],
+             *h_bkg_eta_lead_before_PVzCorr[9], *h_bkg_eta_lead_before_L1Corr[9], *h_bkg_eta_lead[9],
+             *h_bkg_eta_sublead_before_PUCorr[9], *h_bkg_eta_sublead_before_RoccoR[9], *h_bkg_eta_sublead_before_EffCorr[9],
+             *h_bkg_eta_sublead_before_PVzCorr[9], *h_bkg_eta_sublead_before_L1Corr[9], *h_bkg_eta_sublead[9],
+             *h_bkg_phi_lead_before_PUCorr[9], *h_bkg_phi_lead_before_RoccoR[9], *h_bkg_phi_lead_before_EffCorr[9],
+             *h_bkg_phi_lead_before_PVzCorr[9], *h_bkg_phi_lead_before_L1Corr[9], *h_bkg_phi_lead[9],
+             *h_bkg_phi_sublead_before_PUCorr[9], *h_bkg_phi_sublead_before_RoccoR[9], *h_bkg_phi_sublead_before_EffCorr[9],
+             *h_bkg_phi_sublead_before_PVzCorr[9], *h_bkg_phi_sublead_before_L1Corr[9], *h_bkg_phi_sublead[9];
         Int_t iter = 0;
 
         for ( SelProc_t pr = _MuMu_QCDMuEnriched_Full; pr > _EndOf_MuMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)) )
@@ -1667,26 +2209,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
             f_bkg_noRC->GetObject( "h_pT_lead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_pT_lead_before_PUCorr[iter] );
             f_bkg_noRC->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_pT_lead_before_RoccoR[iter] );
             f_bkg->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_pT_lead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_pT_lead_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_pT_lead_before_PVzCorr[iter] );
+            f_bkg->GetObject( "h_pT_lead_before_L1Corr_"+Mgr.Procname[pr], h_bkg_pT_lead_before_L1Corr[iter] );
             f_bkg->GetObject( "h_pT_lead_"+Mgr.Procname[pr], h_bkg_pT_lead[iter] );
             f_bkg_noRC->GetObject( "h_pT_sublead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_pT_sublead_before_PUCorr[iter] );
             f_bkg_noRC->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_pT_sublead_before_RoccoR[iter] );
             f_bkg->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_pT_sublead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_pT_sublead_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_pT_sublead_before_PVzCorr[iter] );
+            f_bkg->GetObject( "h_pT_sublead_before_L1Corr_"+Mgr.Procname[pr], h_bkg_pT_sublead_before_L1Corr[iter] );
             f_bkg->GetObject( "h_pT_sublead_"+Mgr.Procname[pr], h_bkg_pT_sublead[iter] );
             f_bkg_noRC->GetObject( "h_eta_lead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_eta_lead_before_PUCorr[iter] );
             f_bkg_noRC->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_eta_lead_before_RoccoR[iter] );
             f_bkg->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_eta_lead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_eta_lead_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_eta_lead_before_PVzCorr[iter] );
+            f_bkg->GetObject( "h_eta_lead_before_L1Corr_"+Mgr.Procname[pr], h_bkg_eta_lead_before_L1Corr[iter] );
             f_bkg->GetObject( "h_eta_lead_"+Mgr.Procname[pr], h_bkg_eta_lead[iter] );
             f_bkg_noRC->GetObject( "h_eta_sublead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_PUCorr[iter] );
             f_bkg_noRC->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_RoccoR[iter] );
             f_bkg->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_eta_sublead_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_PVzCorr[iter] );
+            f_bkg->GetObject( "h_eta_sublead_before_L1Corr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_L1Corr[iter] );
             f_bkg->GetObject( "h_eta_sublead_"+Mgr.Procname[pr], h_bkg_eta_sublead[iter] );
             f_bkg_noRC->GetObject( "h_phi_lead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_PUCorr[iter] );
             f_bkg_noRC->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_RoccoR[iter] );
             f_bkg->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_phi_lead_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_PVzCorr[iter] );
+            f_bkg->GetObject( "h_phi_lead_before_L1Corr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_L1Corr[iter] );
             f_bkg->GetObject( "h_phi_lead_"+Mgr.Procname[pr], h_bkg_phi_lead[iter] );
             f_bkg_noRC->GetObject( "h_phi_sublead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_PUCorr[iter] );
             f_bkg_noRC->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_RoccoR[iter] );
             f_bkg->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_phi_sublead_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_PVzCorr[iter] );
+            f_bkg->GetObject( "h_phi_sublead_before_L1Corr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_L1Corr[iter] );
             f_bkg->GetObject( "h_phi_sublead_"+Mgr.Procname[pr], h_bkg_phi_sublead[iter] );
 
             Color_t color = kBlack;
@@ -1705,26 +2259,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
             h_bkg_pT_lead_before_PUCorr[iter]->SetFillColor(color);
             h_bkg_pT_lead_before_RoccoR[iter]->SetFillColor(color);
             h_bkg_pT_lead_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_pT_lead_before_PVzCorr[iter]->SetFillColor(color);
+            h_bkg_pT_lead_before_L1Corr[iter]->SetFillColor(color);
             h_bkg_pT_lead[iter]->SetFillColor(color);
             h_bkg_pT_sublead_before_PUCorr[iter]->SetFillColor(color);
             h_bkg_pT_sublead_before_RoccoR[iter]->SetFillColor(color);
             h_bkg_pT_sublead_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_pT_sublead_before_PVzCorr[iter]->SetFillColor(color);
+            h_bkg_pT_sublead_before_L1Corr[iter]->SetFillColor(color);
             h_bkg_pT_sublead[iter]->SetFillColor(color);
             h_bkg_eta_lead_before_PUCorr[iter]->SetFillColor(color);
             h_bkg_eta_lead_before_RoccoR[iter]->SetFillColor(color);
             h_bkg_eta_lead_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_eta_lead_before_PVzCorr[iter]->SetFillColor(color);
+            h_bkg_eta_lead_before_L1Corr[iter]->SetFillColor(color);
             h_bkg_eta_lead[iter]->SetFillColor(color);
             h_bkg_eta_sublead_before_PUCorr[iter]->SetFillColor(color);
             h_bkg_eta_sublead_before_RoccoR[iter]->SetFillColor(color);
             h_bkg_eta_sublead_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_eta_sublead_before_PVzCorr[iter]->SetFillColor(color);
+            h_bkg_eta_sublead_before_L1Corr[iter]->SetFillColor(color);
             h_bkg_eta_sublead[iter]->SetFillColor(color);
             h_bkg_phi_lead_before_PUCorr[iter]->SetFillColor(color);
             h_bkg_phi_lead_before_RoccoR[iter]->SetFillColor(color);
             h_bkg_phi_lead_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_phi_lead_before_PVzCorr[iter]->SetFillColor(color);
+            h_bkg_phi_lead_before_L1Corr[iter]->SetFillColor(color);
             h_bkg_phi_lead[iter]->SetFillColor(color);
             h_bkg_phi_sublead_before_PUCorr[iter]->SetFillColor(color);
             h_bkg_phi_sublead_before_RoccoR[iter]->SetFillColor(color);
             h_bkg_phi_sublead_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_phi_sublead_before_PVzCorr[iter]->SetFillColor(color);
+            h_bkg_phi_sublead_before_L1Corr[iter]->SetFillColor(color);
             h_bkg_phi_sublead[iter]->SetFillColor(color);
 
             h_bkg_pT[iter]->SetLineColor(color);
@@ -1732,26 +2298,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
             h_bkg_pT_lead_before_PUCorr[iter]->SetLineColor(color);
             h_bkg_pT_lead_before_RoccoR[iter]->SetLineColor(color);
             h_bkg_pT_lead_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_pT_lead_before_PVzCorr[iter]->SetLineColor(color);
+            h_bkg_pT_lead_before_L1Corr[iter]->SetLineColor(color);
             h_bkg_pT_lead[iter]->SetLineColor(color);
             h_bkg_pT_sublead_before_PUCorr[iter]->SetLineColor(color);
             h_bkg_pT_sublead_before_RoccoR[iter]->SetLineColor(color);
             h_bkg_pT_sublead_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_pT_sublead_before_PVzCorr[iter]->SetLineColor(color);
+            h_bkg_pT_sublead_before_L1Corr[iter]->SetLineColor(color);
             h_bkg_pT_sublead[iter]->SetLineColor(color);
             h_bkg_eta_lead_before_PUCorr[iter]->SetLineColor(color);
             h_bkg_eta_lead_before_RoccoR[iter]->SetLineColor(color);
             h_bkg_eta_lead_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_eta_lead_before_PVzCorr[iter]->SetLineColor(color);
+            h_bkg_eta_lead_before_L1Corr[iter]->SetLineColor(color);
             h_bkg_eta_lead[iter]->SetLineColor(color);
             h_bkg_eta_sublead_before_PUCorr[iter]->SetLineColor(color);
             h_bkg_eta_sublead_before_RoccoR[iter]->SetLineColor(color);
             h_bkg_eta_sublead_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_eta_sublead_before_PVzCorr[iter]->SetLineColor(color);
+            h_bkg_eta_sublead_before_L1Corr[iter]->SetLineColor(color);
             h_bkg_eta_sublead[iter]->SetLineColor(color);
             h_bkg_phi_lead_before_PUCorr[iter]->SetLineColor(color);
             h_bkg_phi_lead_before_RoccoR[iter]->SetLineColor(color);
             h_bkg_phi_lead_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_phi_lead_before_PVzCorr[iter]->SetLineColor(color);
+            h_bkg_phi_lead_before_L1Corr[iter]->SetLineColor(color);
             h_bkg_phi_lead[iter]->SetLineColor(color);
             h_bkg_phi_sublead_before_PUCorr[iter]->SetLineColor(color);
             h_bkg_phi_sublead_before_RoccoR[iter]->SetLineColor(color);
             h_bkg_phi_sublead_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_phi_sublead_before_PVzCorr[iter]->SetLineColor(color);
+            h_bkg_phi_sublead_before_L1Corr[iter]->SetLineColor(color);
             h_bkg_phi_sublead[iter]->SetLineColor(color);
 
             h_bkg_pT[iter]->SetDirectory(0);
@@ -1759,26 +2337,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
             h_bkg_pT_lead_before_PUCorr[iter]->SetDirectory(0);
             h_bkg_pT_lead_before_RoccoR[iter]->SetDirectory(0);
             h_bkg_pT_lead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_pT_lead_before_PVzCorr[iter]->SetDirectory(0);
+            h_bkg_pT_lead_before_L1Corr[iter]->SetDirectory(0);
             h_bkg_pT_lead[iter]->SetDirectory(0);
             h_bkg_pT_sublead_before_PUCorr[iter]->SetDirectory(0);
             h_bkg_pT_sublead_before_RoccoR[iter]->SetDirectory(0);
             h_bkg_pT_sublead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_pT_sublead_before_PVzCorr[iter]->SetDirectory(0);
+            h_bkg_pT_sublead_before_L1Corr[iter]->SetDirectory(0);
             h_bkg_pT_sublead[iter]->SetDirectory(0);
             h_bkg_eta_lead_before_PUCorr[iter]->SetDirectory(0);
             h_bkg_eta_lead_before_RoccoR[iter]->SetDirectory(0);
             h_bkg_eta_lead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_eta_lead_before_PVzCorr[iter]->SetDirectory(0);
+            h_bkg_eta_lead_before_L1Corr[iter]->SetDirectory(0);
             h_bkg_eta_lead[iter]->SetDirectory(0);
             h_bkg_eta_sublead_before_PUCorr[iter]->SetDirectory(0);
             h_bkg_eta_sublead_before_RoccoR[iter]->SetDirectory(0);
             h_bkg_eta_sublead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_eta_sublead_before_PVzCorr[iter]->SetDirectory(0);
+            h_bkg_eta_sublead_before_L1Corr[iter]->SetDirectory(0);
             h_bkg_eta_sublead[iter]->SetDirectory(0);
             h_bkg_phi_lead_before_PUCorr[iter]->SetDirectory(0);
             h_bkg_phi_lead_before_RoccoR[iter]->SetDirectory(0);
             h_bkg_phi_lead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_phi_lead_before_PVzCorr[iter]->SetDirectory(0);
+            h_bkg_phi_lead_before_L1Corr[iter]->SetDirectory(0);
             h_bkg_phi_lead[iter]->SetDirectory(0);
             h_bkg_phi_sublead_before_PUCorr[iter]->SetDirectory(0);
             h_bkg_phi_sublead_before_RoccoR[iter]->SetDirectory(0);
             h_bkg_phi_sublead_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_phi_sublead_before_PVzCorr[iter]->SetDirectory(0);
+            h_bkg_phi_sublead_before_L1Corr[iter]->SetDirectory(0);
             h_bkg_phi_sublead[iter]->SetDirectory(0);
 
             s_pT->Add( h_bkg_pT[iter] );
@@ -1786,26 +2376,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
             s_pT_lead_before_PUCorr->Add( h_bkg_pT_lead_before_PUCorr[iter] );
             s_pT_lead_before_RoccoR->Add( h_bkg_pT_lead_before_RoccoR[iter] );
             s_pT_lead_before_EffCorr->Add( h_bkg_pT_lead_before_EffCorr[iter] );
+            s_pT_lead_before_PVzCorr->Add( h_bkg_pT_lead_before_PVzCorr[iter] );
+            s_pT_lead_before_L1Corr->Add( h_bkg_pT_lead_before_L1Corr[iter] );
             s_pT_lead->Add( h_bkg_pT_lead[iter] );
             s_pT_sublead_before_PUCorr->Add( h_bkg_pT_sublead_before_PUCorr[iter] );
             s_pT_sublead_before_RoccoR->Add( h_bkg_pT_sublead_before_RoccoR[iter] );
             s_pT_sublead_before_EffCorr->Add( h_bkg_pT_sublead_before_EffCorr[iter] );
+            s_pT_sublead_before_PVzCorr->Add( h_bkg_pT_sublead_before_PVzCorr[iter] );
+            s_pT_sublead_before_L1Corr->Add( h_bkg_pT_sublead_before_L1Corr[iter] );
             s_pT_sublead->Add( h_bkg_pT_sublead[iter] );
             s_eta_lead_before_PUCorr->Add( h_bkg_eta_lead_before_PUCorr[iter] );
             s_eta_lead_before_RoccoR->Add( h_bkg_eta_lead_before_RoccoR[iter] );
             s_eta_lead_before_EffCorr->Add( h_bkg_eta_lead_before_EffCorr[iter] );
+            s_eta_lead_before_PVzCorr->Add( h_bkg_eta_lead_before_PVzCorr[iter] );
+            s_eta_lead_before_L1Corr->Add( h_bkg_eta_lead_before_L1Corr[iter] );
             s_eta_lead->Add( h_bkg_eta_lead[iter] );
             s_eta_sublead_before_PUCorr->Add( h_bkg_eta_sublead_before_PUCorr[iter] );
             s_eta_sublead_before_RoccoR->Add( h_bkg_eta_sublead_before_RoccoR[iter] );
             s_eta_sublead_before_EffCorr->Add( h_bkg_eta_sublead_before_EffCorr[iter] );
+            s_eta_sublead_before_PVzCorr->Add( h_bkg_eta_sublead_before_PVzCorr[iter] );
+            s_eta_sublead_before_L1Corr->Add( h_bkg_eta_sublead_before_L1Corr[iter] );
             s_eta_sublead->Add( h_bkg_eta_sublead[iter] );
             s_phi_lead_before_PUCorr->Add( h_bkg_phi_lead_before_PUCorr[iter] );
             s_phi_lead_before_RoccoR->Add( h_bkg_phi_lead_before_RoccoR[iter] );
             s_phi_lead_before_EffCorr->Add( h_bkg_phi_lead_before_EffCorr[iter] );
+            s_phi_lead_before_PVzCorr->Add( h_bkg_phi_lead_before_PVzCorr[iter] );
+            s_phi_lead_before_L1Corr->Add( h_bkg_phi_lead_before_L1Corr[iter] );
             s_phi_lead->Add( h_bkg_phi_lead[iter] );
             s_phi_sublead_before_PUCorr->Add( h_bkg_phi_sublead_before_PUCorr[iter] );
             s_phi_sublead_before_RoccoR->Add( h_bkg_phi_sublead_before_RoccoR[iter] );
             s_phi_sublead_before_EffCorr->Add( h_bkg_phi_sublead_before_EffCorr[iter] );
+            s_phi_sublead_before_PVzCorr->Add( h_bkg_phi_sublead_before_PVzCorr[iter] );
+            s_phi_sublead_before_L1Corr->Add( h_bkg_phi_sublead_before_L1Corr[iter] );
             s_phi_sublead->Add( h_bkg_phi_sublead[iter] );
 
             iter++;
@@ -1823,38 +2425,56 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
 
 //---------------------------------- MC signal -----------------------------------------------------
 
-        TH1D *h_DY_pT, *h_DY_rapi, *h_DY_pT_lead_before_PUCorr, *h_DY_pT_lead_before_RoccoR, *h_DY_pT_lead_before_EffCorr, *h_DY_pT_lead,
-             *h_DY_pT_sublead_before_PUCorr, *h_DY_pT_sublead_before_RoccoR, *h_DY_pT_sublead_before_EffCorr, *h_DY_pT_sublead,
-             *h_DY_eta_lead_before_PUCorr, *h_DY_eta_lead_before_RoccoR, *h_DY_eta_lead_before_EffCorr, *h_DY_eta_lead,
-             *h_DY_eta_sublead_before_PUCorr, *h_DY_eta_sublead_before_RoccoR,*h_DY_eta_sublead_before_EffCorr, *h_DY_eta_sublead,
-             *h_DY_phi_lead_before_PUCorr, *h_DY_phi_lead_before_RoccoR, *h_DY_phi_lead_before_EffCorr, *h_DY_phi_lead,
-             *h_DY_phi_sublead_before_PUCorr, *h_DY_phi_sublead_before_RoccoR, *h_DY_phi_sublead_before_EffCorr, *h_DY_phi_sublead;
+        TH1D *h_DY_pT, *h_DY_rapi, *h_DY_pT_lead_before_PUCorr, *h_DY_pT_lead_before_RoccoR, *h_DY_pT_lead_before_EffCorr,
+             *h_DY_pT_lead_before_PVzCorr, *h_DY_pT_lead_before_L1Corr, *h_DY_pT_lead,
+             *h_DY_pT_sublead_before_PUCorr, *h_DY_pT_sublead_before_RoccoR, *h_DY_pT_sublead_before_EffCorr,
+             *h_DY_pT_sublead_before_PVzCorr, *h_DY_pT_sublead_before_L1Corr, *h_DY_pT_sublead,
+             *h_DY_eta_lead_before_PUCorr, *h_DY_eta_lead_before_RoccoR, *h_DY_eta_lead_before_EffCorr,
+             *h_DY_eta_lead_before_PVzCorr, *h_DY_eta_lead_before_L1Corr, *h_DY_eta_lead,
+             *h_DY_eta_sublead_before_PUCorr, *h_DY_eta_sublead_before_RoccoR, *h_DY_eta_sublead_before_EffCorr,
+             *h_DY_eta_sublead_before_PVzCorr, *h_DY_eta_sublead_before_L1Corr, *h_DY_eta_sublead,
+             *h_DY_phi_lead_before_PUCorr, *h_DY_phi_lead_before_RoccoR, *h_DY_phi_lead_before_EffCorr,
+             *h_DY_phi_lead_before_PVzCorr, *h_DY_phi_lead_before_L1Corr, *h_DY_phi_lead,
+             *h_DY_phi_sublead_before_PUCorr, *h_DY_phi_sublead_before_RoccoR, *h_DY_phi_sublead_before_EffCorr,
+             *h_DY_phi_sublead_before_PVzCorr, *h_DY_phi_sublead_before_L1Corr, *h_DY_phi_sublead;
 
         f_DY->GetObject( "h_pT_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT );
         f_DY->GetObject( "h_rapi_"+Mgr.Procname[_MuMu_DY_Full], h_DY_rapi );
         f_DY_noRC->GetObject( "h_pT_lead_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_lead_before_PUCorr );
         f_DY_noRC->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_lead_before_RoccoR );
         f_DY->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_lead_before_EffCorr );
+        f_DY->GetObject( "h_pT_lead_before_PVzCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_lead_before_PVzCorr );
+        f_DY->GetObject( "h_pT_lead_before_L1Corr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_lead_before_L1Corr );
         f_DY->GetObject( "h_pT_lead_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_lead );
         f_DY_noRC->GetObject( "h_pT_sublead_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_sublead_before_PUCorr );
         f_DY_noRC->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_sublead_before_RoccoR );
         f_DY->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_sublead_before_EffCorr );
+        f_DY->GetObject( "h_pT_sublead_before_PVzCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_sublead_before_PVzCorr );
+        f_DY->GetObject( "h_pT_sublead_before_L1Corr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_sublead_before_L1Corr );
         f_DY->GetObject( "h_pT_sublead_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_sublead );
         f_DY_noRC->GetObject( "h_eta_lead_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_lead_before_PUCorr );
         f_DY_noRC->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_lead_before_RoccoR );
         f_DY->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_lead_before_EffCorr );
+        f_DY->GetObject( "h_eta_lead_before_PVzCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_lead_before_PVzCorr );
+        f_DY->GetObject( "h_eta_lead_before_L1Corr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_lead_before_L1Corr );
         f_DY->GetObject( "h_eta_lead_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_lead );
         f_DY_noRC->GetObject( "h_eta_sublead_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_sublead_before_PUCorr );
         f_DY_noRC->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_sublead_before_RoccoR );
         f_DY->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_sublead_before_EffCorr );
+        f_DY->GetObject( "h_eta_sublead_before_PVzCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_sublead_before_PVzCorr );
+        f_DY->GetObject( "h_eta_sublead_before_L1Corr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_sublead_before_L1Corr );
         f_DY->GetObject( "h_eta_sublead_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_sublead );
         f_DY_noRC->GetObject( "h_phi_lead_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_lead_before_PUCorr );
         f_DY_noRC->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_lead_before_RoccoR );
         f_DY->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_lead_before_EffCorr );
+        f_DY->GetObject( "h_phi_lead_before_PVzCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_lead_before_PVzCorr );
+        f_DY->GetObject( "h_phi_lead_before_L1Corr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_lead_before_L1Corr );
         f_DY->GetObject( "h_phi_lead_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_lead );
         f_DY_noRC->GetObject( "h_phi_sublead_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_sublead_before_PUCorr );
         f_DY_noRC->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_sublead_before_RoccoR );
         f_DY->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_sublead_before_EffCorr );
+        f_DY->GetObject( "h_phi_sublead_before_PVzCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_sublead_before_PVzCorr );
+        f_DY->GetObject( "h_phi_sublead_before_L1Corr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_sublead_before_L1Corr );
         f_DY->GetObject( "h_phi_sublead_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_sublead );
 
         h_DY_pT->SetFillColor(kOrange);
@@ -1862,26 +2482,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         h_DY_pT_lead_before_PUCorr->SetFillColor(kOrange);
         h_DY_pT_lead_before_RoccoR->SetFillColor(kOrange);
         h_DY_pT_lead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_pT_lead_before_PVzCorr->SetFillColor(kOrange);
+        h_DY_pT_lead_before_L1Corr->SetFillColor(kOrange);
         h_DY_pT_lead->SetFillColor(kOrange);
         h_DY_pT_sublead_before_PUCorr->SetFillColor(kOrange);
         h_DY_pT_sublead_before_RoccoR->SetFillColor(kOrange);
         h_DY_pT_sublead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_pT_sublead_before_PVzCorr->SetFillColor(kOrange);
+        h_DY_pT_sublead_before_L1Corr->SetFillColor(kOrange);
         h_DY_pT_sublead->SetFillColor(kOrange);
         h_DY_eta_lead_before_PUCorr->SetFillColor(kOrange);
         h_DY_eta_lead_before_RoccoR->SetFillColor(kOrange);
         h_DY_eta_lead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_eta_lead_before_PVzCorr->SetFillColor(kOrange);
+        h_DY_eta_lead_before_L1Corr->SetFillColor(kOrange);
         h_DY_eta_lead->SetFillColor(kOrange);
         h_DY_eta_sublead_before_PUCorr->SetFillColor(kOrange);
         h_DY_eta_sublead_before_RoccoR->SetFillColor(kOrange);
         h_DY_eta_sublead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_eta_sublead_before_PVzCorr->SetFillColor(kOrange);
+        h_DY_eta_sublead_before_L1Corr->SetFillColor(kOrange);
         h_DY_eta_sublead->SetFillColor(kOrange);
         h_DY_phi_lead_before_PUCorr->SetFillColor(kOrange);
         h_DY_phi_lead_before_RoccoR->SetFillColor(kOrange);
         h_DY_phi_lead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_phi_lead_before_PVzCorr->SetFillColor(kOrange);
+        h_DY_phi_lead_before_L1Corr->SetFillColor(kOrange);
         h_DY_phi_lead->SetFillColor(kOrange);
         h_DY_phi_sublead_before_PUCorr->SetFillColor(kOrange);
         h_DY_phi_sublead_before_RoccoR->SetFillColor(kOrange);
         h_DY_phi_sublead_before_EffCorr->SetFillColor(kOrange);
+        h_DY_phi_sublead_before_PVzCorr->SetFillColor(kOrange);
+        h_DY_phi_sublead_before_L1Corr->SetFillColor(kOrange);
         h_DY_phi_sublead->SetFillColor(kOrange);
 
         h_DY_pT->SetLineColor(kOrange);
@@ -1889,26 +2521,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         h_DY_pT_lead_before_PUCorr->SetLineColor(kOrange);
         h_DY_pT_lead_before_RoccoR->SetLineColor(kOrange);
         h_DY_pT_lead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_pT_lead_before_PVzCorr->SetLineColor(kOrange);
+        h_DY_pT_lead_before_L1Corr->SetLineColor(kOrange);
         h_DY_pT_lead->SetLineColor(kOrange);
         h_DY_pT_sublead_before_PUCorr->SetLineColor(kOrange);
         h_DY_pT_sublead_before_RoccoR->SetLineColor(kOrange);
         h_DY_pT_sublead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_pT_sublead_before_PVzCorr->SetLineColor(kOrange);
+        h_DY_pT_sublead_before_L1Corr->SetLineColor(kOrange);
         h_DY_pT_sublead->SetLineColor(kOrange);
         h_DY_eta_lead_before_PUCorr->SetLineColor(kOrange);
         h_DY_eta_lead_before_RoccoR->SetLineColor(kOrange);
         h_DY_eta_lead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_eta_lead_before_PVzCorr->SetLineColor(kOrange);
+        h_DY_eta_lead_before_L1Corr->SetLineColor(kOrange);
         h_DY_eta_lead->SetLineColor(kOrange);
         h_DY_eta_sublead_before_PUCorr->SetLineColor(kOrange);
         h_DY_eta_sublead_before_RoccoR->SetLineColor(kOrange);
         h_DY_eta_sublead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_eta_sublead_before_PVzCorr->SetLineColor(kOrange);
+        h_DY_eta_sublead_before_L1Corr->SetLineColor(kOrange);
         h_DY_eta_sublead->SetLineColor(kOrange);
         h_DY_phi_lead_before_PUCorr->SetLineColor(kOrange);
         h_DY_phi_lead_before_RoccoR->SetLineColor(kOrange);
         h_DY_phi_lead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_phi_lead_before_PVzCorr->SetLineColor(kOrange);
+        h_DY_phi_lead_before_L1Corr->SetLineColor(kOrange);
         h_DY_phi_lead->SetLineColor(kOrange);
         h_DY_phi_sublead_before_PUCorr->SetLineColor(kOrange);
         h_DY_phi_sublead_before_RoccoR->SetLineColor(kOrange);
         h_DY_phi_sublead_before_EffCorr->SetLineColor(kOrange);
+        h_DY_phi_sublead_before_PVzCorr->SetLineColor(kOrange);
+        h_DY_phi_sublead_before_L1Corr->SetLineColor(kOrange);
         h_DY_phi_sublead->SetLineColor(kOrange);
 
         h_DY_pT->SetDirectory(0);
@@ -1916,26 +2560,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         h_DY_pT_lead_before_PUCorr->SetDirectory(0);
         h_DY_pT_lead_before_RoccoR->SetDirectory(0);
         h_DY_pT_lead_before_EffCorr->SetDirectory(0);
+        h_DY_pT_lead_before_PVzCorr->SetDirectory(0);
+        h_DY_pT_lead_before_L1Corr->SetDirectory(0);
         h_DY_pT_lead->SetDirectory(0);
         h_DY_pT_sublead_before_PUCorr->SetDirectory(0);
         h_DY_pT_sublead_before_RoccoR->SetDirectory(0);
         h_DY_pT_sublead_before_EffCorr->SetDirectory(0);
+        h_DY_pT_sublead_before_PVzCorr->SetDirectory(0);
+        h_DY_pT_sublead_before_L1Corr->SetDirectory(0);
         h_DY_pT_sublead->SetDirectory(0);
         h_DY_eta_lead_before_PUCorr->SetDirectory(0);
         h_DY_eta_lead_before_RoccoR->SetDirectory(0);
         h_DY_eta_lead_before_EffCorr->SetDirectory(0);
+        h_DY_eta_lead_before_PVzCorr->SetDirectory(0);
+        h_DY_eta_lead_before_L1Corr->SetDirectory(0);
         h_DY_eta_lead->SetDirectory(0);
         h_DY_eta_sublead_before_PUCorr->SetDirectory(0);
         h_DY_eta_sublead_before_RoccoR->SetDirectory(0);
         h_DY_eta_sublead_before_EffCorr->SetDirectory(0);
+        h_DY_eta_sublead_before_PVzCorr->SetDirectory(0);
+        h_DY_eta_sublead_before_L1Corr->SetDirectory(0);
         h_DY_eta_sublead->SetDirectory(0);
         h_DY_phi_lead_before_PUCorr->SetDirectory(0);
         h_DY_phi_lead_before_RoccoR->SetDirectory(0);
         h_DY_phi_lead_before_EffCorr->SetDirectory(0);
+        h_DY_phi_lead_before_PVzCorr->SetDirectory(0);
+        h_DY_phi_lead_before_L1Corr->SetDirectory(0);
         h_DY_phi_lead->SetDirectory(0);
         h_DY_phi_sublead_before_PUCorr->SetDirectory(0);
         h_DY_phi_sublead_before_RoccoR->SetDirectory(0);
         h_DY_phi_sublead_before_EffCorr->SetDirectory(0);
+        h_DY_phi_sublead_before_PVzCorr->SetDirectory(0);
+        h_DY_phi_sublead_before_L1Corr->SetDirectory(0);
         h_DY_phi_sublead->SetDirectory(0);
 
         s_pT->Add( h_DY_pT );
@@ -1943,206 +2599,176 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         s_pT_lead_before_PUCorr->Add( h_DY_pT_lead_before_PUCorr );
         s_pT_lead_before_RoccoR->Add( h_DY_pT_lead_before_RoccoR );
         s_pT_lead_before_EffCorr->Add( h_DY_pT_lead_before_EffCorr );
+        s_pT_lead_before_PVzCorr->Add( h_DY_pT_lead_before_PVzCorr );
+        s_pT_lead_before_L1Corr->Add( h_DY_pT_lead_before_L1Corr );
         s_pT_lead->Add( h_DY_pT_lead );
         s_pT_sublead_before_PUCorr->Add( h_DY_pT_sublead_before_PUCorr );
         s_pT_sublead_before_RoccoR->Add( h_DY_pT_sublead_before_RoccoR );
         s_pT_sublead_before_EffCorr->Add( h_DY_pT_sublead_before_EffCorr );
+        s_pT_sublead_before_PVzCorr->Add( h_DY_pT_sublead_before_PVzCorr );
+        s_pT_sublead_before_L1Corr->Add( h_DY_pT_sublead_before_L1Corr );
         s_pT_sublead->Add( h_DY_pT_sublead );
         s_eta_lead_before_PUCorr->Add( h_DY_eta_lead_before_PUCorr );
         s_eta_lead_before_RoccoR->Add( h_DY_eta_lead_before_RoccoR );
         s_eta_lead_before_EffCorr->Add( h_DY_eta_lead_before_EffCorr );
+        s_eta_lead_before_PVzCorr->Add( h_DY_eta_lead_before_PVzCorr );
+        s_eta_lead_before_L1Corr->Add( h_DY_eta_lead_before_L1Corr );
         s_eta_lead->Add( h_DY_eta_lead );
         s_eta_sublead_before_PUCorr->Add( h_DY_eta_sublead_before_PUCorr );
         s_eta_sublead_before_RoccoR->Add( h_DY_eta_sublead_before_RoccoR );
         s_eta_sublead_before_EffCorr->Add( h_DY_eta_sublead_before_EffCorr );
+        s_eta_sublead_before_PVzCorr->Add( h_DY_eta_sublead_before_PVzCorr );
+        s_eta_sublead_before_L1Corr->Add( h_DY_eta_sublead_before_L1Corr );
         s_eta_sublead->Add( h_DY_eta_sublead );
         s_phi_lead_before_PUCorr->Add( h_DY_phi_lead_before_PUCorr );
         s_phi_lead_before_RoccoR->Add( h_DY_phi_lead_before_RoccoR );
         s_phi_lead_before_EffCorr->Add( h_DY_phi_lead_before_EffCorr );
+        s_phi_lead_before_PVzCorr->Add( h_DY_phi_lead_before_PVzCorr );
+        s_phi_lead_before_L1Corr->Add( h_DY_phi_lead_before_L1Corr );
         s_phi_lead->Add( h_DY_phi_lead );
         s_phi_sublead_before_PUCorr->Add( h_DY_phi_sublead_before_PUCorr );
         s_phi_sublead_before_RoccoR->Add( h_DY_phi_sublead_before_RoccoR );
         s_phi_sublead_before_EffCorr->Add( h_DY_phi_sublead_before_EffCorr );
+        s_phi_sublead_before_PVzCorr->Add( h_DY_phi_sublead_before_PVzCorr );
+        s_phi_sublead_before_L1Corr->Add( h_DY_phi_sublead_before_L1Corr );
         s_phi_sublead->Add( h_DY_phi_sublead );
 
 
 //--------------------------------------- DATA -----------------------------------------------------
 
-        TH1D *h_data_pT, *h_data_rapi, *h_data_pT_lead_before_PUCorr, *h_data_pT_lead_before_RoccoR, *h_data_pT_lead_before_EffCorr, *h_data_pT_lead,
-             *h_data_pT_sublead_before_PUCorr, *h_data_pT_sublead_before_RoccoR, *h_data_pT_sublead_before_EffCorr, *h_data_pT_sublead,
-             *h_data_eta_lead_before_PUCorr, *h_data_eta_lead_before_RoccoR, *h_data_eta_lead_before_EffCorr, *h_data_eta_lead,
-             *h_data_eta_sublead_before_PUCorr, *h_data_eta_sublead_before_RoccoR, *h_data_eta_sublead_before_EffCorr, *h_data_eta_sublead,
-             *h_data_phi_lead_before_PUCorr, *h_data_phi_lead_before_RoccoR, *h_data_phi_lead_before_EffCorr, *h_data_phi_lead,
-             *h_data_phi_sublead_before_PUCorr, *h_data_phi_sublead_before_RoccoR, *h_data_phi_sublead_before_EffCorr, *h_data_phi_sublead;
+        TH1D *h_data_pT, *h_data_rapi, *h_data_pT_lead_before_RoccoR, *h_data_pT_lead,
+             *h_data_pT_sublead_before_RoccoR, *h_data_pT_sublead,
+             *h_data_eta_lead_before_RoccoR, *h_data_eta_lead,
+             *h_data_eta_sublead_before_RoccoR, *h_data_eta_sublead,
+             *h_data_phi_lead_before_RoccoR, *h_data_phi_lead,
+             *h_data_phi_sublead_before_RoccoR, *h_data_phi_sublead;
 
         f_data->GetObject( "h_pT_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_pT );
         f_data->GetObject( "h_rapi_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_rapi );
-        f_data_noRC->GetObject( "h_pT_lead_before_PUCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_pT_lead_before_PUCorr );
         f_data_noRC->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_pT_lead_before_RoccoR );
-        f_data->GetObject( "h_pT_lead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_pT_lead_before_EffCorr );
         f_data->GetObject( "h_pT_lead_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_pT_lead );
-        f_data_noRC->GetObject( "h_pT_sublead_before_PUCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_pT_sublead_before_PUCorr );
         f_data_noRC->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_pT_sublead_before_RoccoR );
-        f_data->GetObject( "h_pT_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_pT_sublead_before_EffCorr );
         f_data->GetObject( "h_pT_sublead_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_pT_sublead );
-        f_data_noRC->GetObject( "h_eta_lead_before_PUCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_eta_lead_before_PUCorr );
         f_data_noRC->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_eta_lead_before_RoccoR );
-        f_data->GetObject( "h_eta_lead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_eta_lead_before_EffCorr );
         f_data->GetObject( "h_eta_lead_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_eta_lead );
-        f_data_noRC->GetObject( "h_eta_sublead_before_PUCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_eta_sublead_before_PUCorr );
         f_data_noRC->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_eta_sublead_before_RoccoR );
-        f_data->GetObject( "h_eta_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_eta_sublead_before_EffCorr );
         f_data->GetObject( "h_eta_sublead_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_eta_sublead );
-        f_data_noRC->GetObject( "h_phi_lead_before_PUCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_phi_lead_before_PUCorr );
         f_data_noRC->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_phi_lead_before_RoccoR );
-        f_data->GetObject( "h_phi_lead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_phi_lead_before_EffCorr );
         f_data->GetObject( "h_phi_lead_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_phi_lead );
-        f_data_noRC->GetObject( "h_phi_sublead_before_PUCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_phi_sublead_before_PUCorr );
         f_data_noRC->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_phi_sublead_before_RoccoR );
-        f_data->GetObject( "h_phi_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_phi_sublead_before_EffCorr );
         f_data->GetObject( "h_phi_sublead_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_phi_sublead );
 
         h_data_pT->SetMarkerStyle(kFullDotLarge);
         h_data_rapi->SetMarkerStyle(kFullDotLarge);
-        h_data_pT_lead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
         h_data_pT_lead_before_RoccoR->SetMarkerStyle(kFullDotLarge);
-        h_data_pT_lead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
         h_data_pT_lead->SetMarkerStyle(kFullDotLarge);
-        h_data_pT_sublead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
         h_data_pT_sublead_before_RoccoR->SetMarkerStyle(kFullDotLarge);
-        h_data_pT_sublead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
         h_data_pT_sublead->SetMarkerStyle(kFullDotLarge);
-        h_data_eta_lead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
         h_data_eta_lead_before_RoccoR->SetMarkerStyle(kFullDotLarge);
-        h_data_eta_lead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
         h_data_eta_lead->SetMarkerStyle(kFullDotLarge);
-        h_data_eta_sublead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
         h_data_eta_sublead_before_RoccoR->SetMarkerStyle(kFullDotLarge);
-        h_data_eta_sublead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
         h_data_eta_sublead->SetMarkerStyle(kFullDotLarge);
-        h_data_phi_lead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
         h_data_phi_lead_before_RoccoR->SetMarkerStyle(kFullDotLarge);
-        h_data_phi_lead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
         h_data_phi_lead->SetMarkerStyle(kFullDotLarge);
-        h_data_phi_sublead_before_PUCorr->SetMarkerStyle(kFullDotLarge);
         h_data_phi_sublead_before_RoccoR->SetMarkerStyle(kFullDotLarge);
-        h_data_phi_sublead_before_EffCorr->SetMarkerStyle(kFullDotLarge);
         h_data_phi_sublead->SetMarkerStyle(kFullDotLarge);
 
         h_data_pT->SetMarkerColor(kBlack);
         h_data_rapi->SetMarkerColor(kBlack);
-        h_data_pT_lead_before_PUCorr->SetMarkerColor(kBlack);
         h_data_pT_lead_before_RoccoR->SetMarkerColor(kBlack);
-        h_data_pT_lead_before_EffCorr->SetMarkerColor(kBlack);
         h_data_pT_lead->SetMarkerColor(kBlack);
-        h_data_pT_sublead_before_PUCorr->SetMarkerColor(kBlack);
         h_data_pT_sublead_before_RoccoR->SetMarkerColor(kBlack);
-        h_data_pT_sublead_before_EffCorr->SetMarkerColor(kBlack);
         h_data_pT_sublead->SetMarkerColor(kBlack);
-        h_data_eta_lead_before_PUCorr->SetMarkerColor(kBlack);
         h_data_eta_lead_before_RoccoR->SetMarkerColor(kBlack);
-        h_data_eta_lead_before_EffCorr->SetMarkerColor(kBlack);
         h_data_eta_lead->SetMarkerColor(kBlack);
-        h_data_eta_sublead_before_PUCorr->SetMarkerColor(kBlack);
         h_data_eta_sublead_before_RoccoR->SetMarkerColor(kBlack);
-        h_data_eta_sublead_before_EffCorr->SetMarkerColor(kBlack);
         h_data_eta_sublead->SetMarkerColor(kBlack);
-        h_data_phi_lead_before_PUCorr->SetMarkerColor(kBlack);
         h_data_phi_lead_before_RoccoR->SetMarkerColor(kBlack);
-        h_data_phi_lead_before_EffCorr->SetMarkerColor(kBlack);
         h_data_phi_lead->SetMarkerColor(kBlack);
-        h_data_phi_sublead_before_PUCorr->SetMarkerColor(kBlack);
         h_data_phi_sublead_before_RoccoR->SetMarkerColor(kBlack);
-        h_data_phi_sublead_before_EffCorr->SetMarkerColor(kBlack);
         h_data_phi_sublead->SetMarkerColor(kBlack);
 
         h_data_pT->SetLineColor(kBlack);
         h_data_rapi->SetLineColor(kBlack);
-        h_data_pT_lead_before_PUCorr->SetLineColor(kBlack);
         h_data_pT_lead_before_RoccoR->SetLineColor(kBlack);
-        h_data_pT_lead_before_EffCorr->SetLineColor(kBlack);
         h_data_pT_lead->SetLineColor(kBlack);
-        h_data_pT_sublead_before_PUCorr->SetLineColor(kBlack);
         h_data_pT_sublead_before_RoccoR->SetLineColor(kBlack);
-        h_data_pT_sublead_before_EffCorr->SetLineColor(kBlack);
         h_data_pT_sublead->SetLineColor(kBlack);
-        h_data_eta_lead_before_PUCorr->SetLineColor(kBlack);
         h_data_eta_lead_before_RoccoR->SetLineColor(kBlack);
-        h_data_eta_lead_before_EffCorr->SetLineColor(kBlack);
         h_data_eta_lead->SetLineColor(kBlack);
-        h_data_eta_sublead_before_PUCorr->SetLineColor(kBlack);
         h_data_eta_sublead_before_RoccoR->SetLineColor(kBlack);
-        h_data_eta_sublead_before_EffCorr->SetLineColor(kBlack);
         h_data_eta_sublead->SetLineColor(kBlack);
-        h_data_phi_lead_before_PUCorr->SetLineColor(kBlack);
         h_data_phi_lead_before_RoccoR->SetLineColor(kBlack);
-        h_data_phi_lead_before_EffCorr->SetLineColor(kBlack);
         h_data_phi_lead->SetLineColor(kBlack);
-        h_data_phi_sublead_before_PUCorr->SetLineColor(kBlack);
         h_data_phi_sublead_before_RoccoR->SetLineColor(kBlack);
-        h_data_phi_sublead_before_EffCorr->SetLineColor(kBlack);
         h_data_phi_sublead->SetLineColor(kBlack);
 
         h_data_pT->SetDirectory(0);
         h_data_rapi->SetDirectory(0);
-        h_data_pT_lead_before_PUCorr->SetDirectory(0);
         h_data_pT_lead_before_RoccoR->SetDirectory(0);
-        h_data_pT_lead_before_EffCorr->SetDirectory(0);
         h_data_pT_lead->SetDirectory(0);
-        h_data_pT_sublead_before_PUCorr->SetDirectory(0);
         h_data_pT_sublead_before_RoccoR->SetDirectory(0);
-        h_data_pT_sublead_before_EffCorr->SetDirectory(0);
         h_data_pT_sublead->SetDirectory(0);
-        h_data_eta_lead_before_PUCorr->SetDirectory(0);
         h_data_eta_lead_before_RoccoR->SetDirectory(0);
-        h_data_eta_lead_before_EffCorr->SetDirectory(0);
         h_data_eta_lead->SetDirectory(0);
-        h_data_eta_sublead_before_PUCorr->SetDirectory(0);
         h_data_eta_sublead_before_RoccoR->SetDirectory(0);
-        h_data_eta_sublead_before_EffCorr->SetDirectory(0);
         h_data_eta_sublead->SetDirectory(0);
-        h_data_phi_lead_before_PUCorr->SetDirectory(0);
         h_data_phi_lead_before_RoccoR->SetDirectory(0);
-        h_data_phi_lead_before_EffCorr->SetDirectory(0);
         h_data_phi_lead->SetDirectory(0);
-        h_data_phi_sublead_before_PUCorr->SetDirectory(0);
         h_data_phi_sublead_before_RoccoR->SetDirectory(0);
-        h_data_phi_sublead_before_EffCorr->SetDirectory(0);
         h_data_phi_sublead->SetDirectory(0);
 
 //--------------------------------- Ratio Plot --------------------------------------
 
-        myRatioPlot_t *RP_pT, *RP_rapi, *RP_pT_lead_before_PUCorr, *RP_pT_lead_before_RoccoR, *RP_pT_lead_before_EffCorr, *RP_pT_lead,
-                      *RP_pT_sublead_before_PUCorr, *RP_pT_sublead_before_RoccoR, *RP_pT_sublead_before_EffCorr, *RP_pT_sublead,
-                      *RP_eta_lead_before_PUCorr, *RP_eta_lead_before_RoccoR, *RP_eta_lead_before_EffCorr, *RP_eta_lead,
-                      *RP_eta_sublead_before_PUCorr, *RP_eta_sublead_before_RoccoR, *RP_eta_sublead_before_EffCorr, *RP_eta_sublead,
-                      *RP_phi_lead_before_PUCorr, *RP_phi_lead_before_RoccoR, *RP_phi_lead_before_EffCorr, *RP_phi_lead,
-                      *RP_phi_sublead_before_PUCorr, *RP_phi_sublead_before_RoccoR, *RP_phi_sublead_before_EffCorr, *RP_phi_sublead;
+        myRatioPlot_t *RP_pT, *RP_rapi, *RP_pT_lead_before_PUCorr, *RP_pT_lead_before_RoccoR, *RP_pT_lead_before_EffCorr,
+                      *RP_pT_lead_before_PVzCorr, *RP_pT_lead_before_L1Corr, *RP_pT_lead,
+                      *RP_pT_sublead_before_PUCorr, *RP_pT_sublead_before_RoccoR, *RP_pT_sublead_before_EffCorr,
+                      *RP_pT_sublead_before_PVzCorr, *RP_pT_sublead_before_L1Corr, *RP_pT_sublead,
+                      *RP_eta_lead_before_PUCorr, *RP_eta_lead_before_RoccoR, *RP_eta_lead_before_EffCorr,
+                      *RP_eta_lead_before_PVzCorr, *RP_eta_lead_before_L1Corr, *RP_eta_lead,
+                      *RP_eta_sublead_before_PUCorr, *RP_eta_sublead_before_RoccoR, *RP_eta_sublead_before_EffCorr,
+                      *RP_eta_sublead_before_PVzCorr, *RP_eta_sublead_before_L1Corr, *RP_eta_sublead,
+                      *RP_phi_lead_before_PUCorr, *RP_phi_lead_before_RoccoR, *RP_phi_lead_before_EffCorr,
+                      *RP_phi_lead_before_PVzCorr, *RP_phi_lead_before_L1Corr, *RP_phi_lead,
+                      *RP_phi_sublead_before_PUCorr, *RP_phi_sublead_before_RoccoR, *RP_phi_sublead_before_EffCorr,
+                      *RP_phi_sublead_before_PVzCorr, *RP_phi_sublead_before_L1Corr, *RP_phi_sublead;
         RP_pT = new myRatioPlot_t( "RP_pT", s_pT, h_data_pT );
         RP_rapi = new myRatioPlot_t( "RP_rapi", s_rapi, h_data_rapi );
-        RP_pT_lead_before_PUCorr = new myRatioPlot_t( "RP_pT_lead_before_PUCorr", s_pT_lead_before_PUCorr, h_data_pT_lead_before_PUCorr );
+        RP_pT_lead_before_PUCorr = new myRatioPlot_t( "RP_pT_lead_before_PUCorr", s_pT_lead_before_PUCorr, h_data_pT_lead_before_RoccoR );
         RP_pT_lead_before_RoccoR = new myRatioPlot_t( "RP_pT_lead_before_RoccoR", s_pT_lead_before_RoccoR, h_data_pT_lead_before_RoccoR );
-        RP_pT_lead_before_EffCorr = new myRatioPlot_t( "RP_pT_lead_before_EffCorr", s_pT_lead_before_EffCorr, h_data_pT_lead_before_EffCorr );
+        RP_pT_lead_before_EffCorr = new myRatioPlot_t( "RP_pT_lead_before_EffCorr", s_pT_lead_before_EffCorr, h_data_pT_lead );
+        RP_pT_lead_before_PVzCorr = new myRatioPlot_t( "RP_pT_lead_before_PVzCorr", s_pT_lead_before_PVzCorr, h_data_pT_lead );
+        RP_pT_lead_before_L1Corr = new myRatioPlot_t( "RP_pT_lead_before_L1Corr", s_pT_lead_before_L1Corr, h_data_pT_lead );
         RP_pT_lead = new myRatioPlot_t( "RP_pT_lead", s_pT_lead, h_data_pT_lead );
-        RP_pT_sublead_before_PUCorr = new myRatioPlot_t( "RP_pT_sublead_before_PUCorr", s_pT_sublead_before_PUCorr, h_data_pT_sublead_before_PUCorr );
+        RP_pT_sublead_before_PUCorr = new myRatioPlot_t( "RP_pT_sublead_before_PUCorr", s_pT_sublead_before_PUCorr, h_data_pT_sublead_before_RoccoR );
         RP_pT_sublead_before_RoccoR = new myRatioPlot_t( "RP_pT_sublead_before_RoccoR", s_pT_sublead_before_RoccoR, h_data_pT_sublead_before_RoccoR );
-        RP_pT_sublead_before_EffCorr = new myRatioPlot_t( "RP_pT_sublead_before_EffCorr", s_pT_sublead_before_EffCorr, h_data_pT_sublead_before_EffCorr );
+        RP_pT_sublead_before_EffCorr = new myRatioPlot_t( "RP_pT_sublead_before_EffCorr", s_pT_sublead_before_EffCorr, h_data_pT_sublead );
+        RP_pT_sublead_before_PVzCorr = new myRatioPlot_t( "RP_pT_sublead_before_PVzCorr", s_pT_sublead_before_PVzCorr, h_data_pT_sublead );
+        RP_pT_sublead_before_L1Corr = new myRatioPlot_t( "RP_pT_sublead_before_L1Corr", s_pT_sublead_before_L1Corr, h_data_pT_sublead );
         RP_pT_sublead = new myRatioPlot_t( "RP_pT_sublead", s_pT_sublead, h_data_pT_sublead );
-        RP_eta_lead_before_PUCorr = new myRatioPlot_t( "RP_eta_lead_before_PUCorr", s_eta_lead_before_PUCorr, h_data_eta_lead_before_PUCorr );
+        RP_eta_lead_before_PUCorr = new myRatioPlot_t( "RP_eta_lead_before_PUCorr", s_eta_lead_before_PUCorr, h_data_eta_lead_before_RoccoR );
         RP_eta_lead_before_RoccoR = new myRatioPlot_t( "RP_eta_lead_before_RoccoR", s_eta_lead_before_RoccoR, h_data_eta_lead_before_RoccoR );
-        RP_eta_lead_before_EffCorr = new myRatioPlot_t( "RP_eta_lead_before_EffCorr", s_eta_lead_before_EffCorr, h_data_eta_lead_before_EffCorr );
+        RP_eta_lead_before_EffCorr = new myRatioPlot_t( "RP_eta_lead_before_EffCorr", s_eta_lead_before_EffCorr, h_data_eta_lead );
+        RP_eta_lead_before_PVzCorr = new myRatioPlot_t( "RP_eta_lead_before_PVzCorr", s_eta_lead_before_PVzCorr, h_data_eta_lead );
+        RP_eta_lead_before_L1Corr = new myRatioPlot_t( "RP_eta_lead_before_L1Corr", s_eta_lead_before_L1Corr, h_data_eta_lead );
         RP_eta_lead = new myRatioPlot_t( "RP_eta_lead", s_eta_lead, h_data_eta_lead );
-        RP_eta_sublead_before_PUCorr = new myRatioPlot_t( "RP_eta_sublead_before_PUCorr", s_eta_sublead_before_PUCorr, h_data_eta_sublead_before_PUCorr );
+        RP_eta_sublead_before_PUCorr = new myRatioPlot_t( "RP_eta_sublead_before_PUCorr", s_eta_sublead_before_PUCorr, h_data_eta_sublead_before_RoccoR );
         RP_eta_sublead_before_RoccoR = new myRatioPlot_t( "RP_eta_sublead_before_RoccoR", s_eta_sublead_before_RoccoR, h_data_eta_sublead_before_RoccoR );
-        RP_eta_sublead_before_EffCorr = new myRatioPlot_t( "RP_eta_sublead_before_EffCorr", s_eta_sublead_before_EffCorr, h_data_eta_sublead_before_EffCorr );
+        RP_eta_sublead_before_EffCorr = new myRatioPlot_t( "RP_eta_sublead_before_EffCorr", s_eta_sublead_before_EffCorr, h_data_eta_sublead );
+        RP_eta_sublead_before_PVzCorr = new myRatioPlot_t( "RP_eta_sublead_before_PVzCorr", s_eta_sublead_before_PVzCorr, h_data_eta_sublead );
+        RP_eta_sublead_before_L1Corr = new myRatioPlot_t( "RP_eta_sublead_before_L1Corr", s_eta_sublead_before_L1Corr, h_data_eta_sublead );
         RP_eta_sublead = new myRatioPlot_t( "RP_eta_sublead", s_eta_sublead, h_data_eta_sublead );
-        RP_phi_lead_before_PUCorr = new myRatioPlot_t( "RP_phi_lead_before_PUCorr", s_phi_lead_before_PUCorr, h_data_phi_lead_before_PUCorr );
+        RP_phi_lead_before_PUCorr = new myRatioPlot_t( "RP_phi_lead_before_PUCorr", s_phi_lead_before_PUCorr, h_data_phi_lead_before_RoccoR );
         RP_phi_lead_before_RoccoR = new myRatioPlot_t( "RP_phi_lead_before_RoccoR", s_phi_lead_before_RoccoR, h_data_phi_lead_before_RoccoR );
-        RP_phi_lead_before_EffCorr = new myRatioPlot_t( "RP_phi_lead_before_EffCorr", s_phi_lead_before_EffCorr, h_data_phi_lead_before_EffCorr );
+        RP_phi_lead_before_EffCorr = new myRatioPlot_t( "RP_phi_lead_before_EffCorr", s_phi_lead_before_EffCorr, h_data_phi_lead );
+        RP_phi_lead_before_PVzCorr = new myRatioPlot_t( "RP_phi_lead_before_PVzCorr", s_phi_lead_before_PVzCorr, h_data_phi_lead );
+        RP_phi_lead_before_L1Corr = new myRatioPlot_t( "RP_phi_lead_before_L1Corr", s_phi_lead_before_L1Corr, h_data_phi_lead );
         RP_phi_lead = new myRatioPlot_t( "RP_phi_lead", s_phi_lead, h_data_phi_lead );
-        RP_phi_sublead_before_PUCorr = new myRatioPlot_t( "RP_phi_sublead_before_PUCorr", s_phi_sublead_before_PUCorr, h_data_phi_sublead_before_PUCorr );
+        RP_phi_sublead_before_PUCorr = new myRatioPlot_t( "RP_phi_sublead_before_PUCorr", s_phi_sublead_before_PUCorr, h_data_phi_sublead_before_RoccoR );
         RP_phi_sublead_before_RoccoR = new myRatioPlot_t( "RP_phi_sublead_before_RoccoR", s_phi_sublead_before_RoccoR, h_data_phi_sublead_before_RoccoR );
-        RP_phi_sublead_before_EffCorr = new myRatioPlot_t( "RP_phi_sublead_before_EffCorr", s_phi_sublead_before_EffCorr, h_data_phi_sublead_before_EffCorr );
+        RP_phi_sublead_before_EffCorr = new myRatioPlot_t( "RP_phi_sublead_before_EffCorr", s_phi_sublead_before_EffCorr, h_data_phi_sublead );
+        RP_phi_sublead_before_PVzCorr = new myRatioPlot_t( "RP_phi_sublead_before_PVzCorr", s_phi_sublead_before_PVzCorr, h_data_phi_sublead );
+        RP_phi_sublead_before_L1Corr = new myRatioPlot_t( "RP_phi_sublead_before_L1Corr", s_phi_sublead_before_L1Corr, h_data_phi_sublead );
         RP_phi_sublead = new myRatioPlot_t( "RP_phi_sublead", s_phi_sublead, h_data_phi_sublead );
 
         RP_pT->SetPlots("p_{#lower[-0.25]{T #scale[1.2]{#mu#mu}}} [GeV/c]", 0, 1000);
@@ -2150,26 +2776,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_pT_lead_before_PUCorr->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{lead}}) [GeV/c] before PU correction", 0, 1000);
         RP_pT_lead_before_RoccoR->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{lead}}) [GeV/c] before Rochester correction", 0, 1000);
         RP_pT_lead_before_EffCorr->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{lead}}) [GeV/c] before Efficiency SF", 0, 1000);
+        RP_pT_lead_before_PVzCorr->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{lead}}) [GeV/c] before PVz correction", 0, 1000);
+        RP_pT_lead_before_L1Corr->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{lead}}) [GeV/c] before  L1 prefiring correction", 0, 1000);
         RP_pT_lead->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{lead}}) [GeV/c]", 0, 1000);
         RP_pT_sublead_before_PUCorr->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{sublead}}) [GeV/c] before PU correction", 0, 1000);
         RP_pT_sublead_before_RoccoR->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{sublead}}) [GeV/c] before Rochester correction", 0, 1000);
         RP_pT_sublead_before_EffCorr->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{sublead}}) [GeV/c] before Efficiency SF", 0, 1000);
+        RP_pT_sublead_before_PVzCorr->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{sublead}}) [GeV/c] before PVz correction", 0, 1000);
+        RP_pT_sublead_before_L1Corr->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{sublead}}) [GeV/c] before  L1 prefiring correction", 0, 1000);
         RP_pT_sublead->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{sublead}}) [GeV/c]", 0, 1000);
         RP_eta_lead_before_PUCorr->SetPlots("#eta (#mu_{#lower[-0.4]{lead}}) before PU correction", -4, 4);
         RP_eta_lead_before_RoccoR->SetPlots("#eta (#mu_{#lower[-0.4]{lead}}) before Rochester correction", -4, 4);
         RP_eta_lead_before_EffCorr->SetPlots("#eta (#mu_{#lower[-0.4]{lead}}) before Efficiency SF", -4, 4);
+        RP_eta_lead_before_PVzCorr->SetPlots("#eta (#mu_{#lower[-0.4]{lead}}) before PVz correction", -4, 4);
+        RP_eta_lead_before_L1Corr->SetPlots("#eta (#mu_{#lower[-0.4]{lead}}) before Efficiency SF", -4, 4);
         RP_eta_lead->SetPlots("#eta (#mu_{#lower[-0.4]{lead}})", -4, 4);
         RP_eta_sublead_before_PUCorr->SetPlots("#eta (#mu_{#lower[-0.4]{sublead}}) before PU correction", -4, 4);
         RP_eta_sublead_before_RoccoR->SetPlots("#eta (#mu_{#lower[-0.4]{sublead}}) before Rochester correction", -4, 4);
         RP_eta_sublead_before_EffCorr->SetPlots("#eta (#mu_{#lower[-0.4]{sublead}}) before Efficiency SF", -4, 4);
+        RP_eta_sublead_before_PVzCorr->SetPlots("#eta (#mu_{#lower[-0.4]{sublead}}) before PVz correction", -4, 4);
+        RP_eta_sublead_before_L1Corr->SetPlots("#eta (#mu_{#lower[-0.4]{sublead}}) before  L1 prefiring correction", -4, 4);
         RP_eta_sublead->SetPlots("#eta (#mu_{#lower[-0.4]{sublead}})", -4, 4);
         RP_phi_lead_before_PUCorr->SetPlots("#phi (#mu_{#lower[-0.4]{lead}}) before PU correction", -4, 4);
         RP_phi_lead_before_RoccoR->SetPlots("#phi (#mu_{#lower[-0.4]{lead}}) before Rochester correction", -4, 4);
         RP_phi_lead_before_EffCorr->SetPlots("#phi (#mu_{#lower[-0.4]{lead}}) before Efficiency SF", -4, 4);
+        RP_phi_lead_before_PVzCorr->SetPlots("#phi (#mu_{#lower[-0.4]{lead}}) before PVz correction", -4, 4);
+        RP_phi_lead_before_L1Corr->SetPlots("#phi (#mu_{#lower[-0.4]{lead}}) before  L1 prefiring correction", -4, 4);
         RP_phi_lead->SetPlots("#phi (#mu_{#lower[-0.4]{lead}})", -4, 4);
         RP_phi_sublead_before_PUCorr->SetPlots("#phi (#mu_{#lower[-0.4]{sublead}}) before PU correction", -4, 4);
         RP_phi_sublead_before_RoccoR->SetPlots("#phi (#mu_{#lower[-0.4]{sublead}}) before Rochester correction", -4, 4);
         RP_phi_sublead_before_EffCorr->SetPlots("#phi (#mu_{#lower[-0.4]{sublead}}) before Efficiency SF", -4, 4);
+        RP_phi_sublead_before_PVzCorr->SetPlots("#phi (#mu_{#lower[-0.4]{sublead}}) before PVz correction", -4, 4);
+        RP_phi_sublead_before_L1Corr->SetPlots("#phi (#mu_{#lower[-0.4]{sublead}}) before L1 prefiring correction", -4, 4);
         RP_phi_sublead->SetPlots("#phi (#mu_{#lower[-0.4]{sublead}})", -4, 4);
 
         RP_pT->SetLegend(0.75, 0.4);
@@ -2177,55 +2815,79 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_pT_lead_before_PUCorr->SetLegend(0.75, 0.4);
         RP_pT_lead_before_RoccoR->SetLegend(0.75, 0.4);
         RP_pT_lead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_pT_lead_before_PVzCorr->SetLegend(0.75, 0.4);
+        RP_pT_lead_before_L1Corr->SetLegend(0.75, 0.4);
         RP_pT_lead->SetLegend(0.75, 0.4);
         RP_pT_sublead_before_PUCorr->SetLegend(0.75, 0.4);
         RP_pT_sublead_before_RoccoR->SetLegend(0.75, 0.4);
         RP_pT_sublead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_pT_sublead_before_PVzCorr->SetLegend(0.75, 0.4);
+        RP_pT_sublead_before_L1Corr->SetLegend(0.75, 0.4);
         RP_pT_sublead->SetLegend(0.75, 0.4);
         RP_eta_lead_before_PUCorr->SetLegend(0.75, 0.4);
         RP_eta_lead_before_RoccoR->SetLegend(0.75, 0.4);
         RP_eta_lead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_eta_lead_before_PVzCorr->SetLegend(0.75, 0.4);
+        RP_eta_lead_before_L1Corr->SetLegend(0.75, 0.4);
         RP_eta_lead->SetLegend(0.75, 0.4);
         RP_eta_sublead_before_PUCorr->SetLegend(0.75, 0.4);
         RP_eta_sublead_before_RoccoR->SetLegend(0.75, 0.4);
         RP_eta_sublead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_eta_sublead_before_PVzCorr->SetLegend(0.75, 0.4);
+        RP_eta_sublead_before_L1Corr->SetLegend(0.75, 0.4);
         RP_eta_sublead->SetLegend(0.75, 0.4);
         RP_phi_lead_before_PUCorr->SetLegend(0.75, 0.4);
         RP_phi_lead_before_RoccoR->SetLegend(0.75, 0.4);
         RP_phi_lead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_phi_lead_before_PVzCorr->SetLegend(0.75, 0.4);
+        RP_phi_lead_before_L1Corr->SetLegend(0.75, 0.4);
         RP_phi_lead->SetLegend(0.75, 0.4);
         RP_phi_sublead_before_PUCorr->SetLegend(0.75, 0.4);
         RP_phi_sublead_before_RoccoR->SetLegend(0.75, 0.4);
         RP_phi_sublead_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_phi_sublead_before_PVzCorr->SetLegend(0.75, 0.4);
+        RP_phi_sublead_before_L1Corr->SetLegend(0.75, 0.4);
         RP_phi_sublead->SetLegend(0.75, 0.4);
 
 
         // Legend data
         RP_pT->AddLegendEntry(h_data_pT, "Data", "lp");
         RP_rapi->AddLegendEntry(h_data_rapi, "Data", "lp");
-        RP_pT_lead_before_PUCorr->AddLegendEntry(h_data_pT_lead_before_PUCorr, "Data", "lp");
+        RP_pT_lead_before_PUCorr->AddLegendEntry(h_data_pT_lead_before_RoccoR, "Data", "lp");
         RP_pT_lead_before_RoccoR->AddLegendEntry(h_data_pT_lead_before_RoccoR, "Data", "lp");
-        RP_pT_lead_before_EffCorr->AddLegendEntry(h_data_pT_lead_before_EffCorr, "Data", "lp");
+        RP_pT_lead_before_EffCorr->AddLegendEntry(h_data_pT_lead, "Data", "lp");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_data_pT_lead, "Data", "lp");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_data_pT_lead, "Data", "lp");
         RP_pT_lead->AddLegendEntry(h_data_pT_lead, "Data", "lp");
-        RP_pT_sublead_before_PUCorr->AddLegendEntry(h_data_pT_sublead_before_PUCorr, "Data", "lp");
+        RP_pT_sublead_before_PUCorr->AddLegendEntry(h_data_pT_sublead_before_RoccoR, "Data", "lp");
         RP_pT_sublead_before_RoccoR->AddLegendEntry(h_data_pT_sublead_before_RoccoR, "Data", "lp");
-        RP_pT_sublead_before_EffCorr->AddLegendEntry(h_data_pT_sublead_before_EffCorr, "Data", "lp");
+        RP_pT_sublead_before_EffCorr->AddLegendEntry(h_data_pT_sublead, "Data", "lp");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_data_pT_sublead, "Data", "lp");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_data_pT_sublead, "Data", "lp");
         RP_pT_sublead->AddLegendEntry(h_data_pT_sublead, "Data", "lp");
-        RP_eta_lead_before_PUCorr->AddLegendEntry(h_data_eta_lead_before_PUCorr, "Data", "lp");
+        RP_eta_lead_before_PUCorr->AddLegendEntry(h_data_eta_lead_before_RoccoR, "Data", "lp");
         RP_eta_lead_before_RoccoR->AddLegendEntry(h_data_eta_lead_before_RoccoR, "Data", "lp");
-        RP_eta_lead_before_EffCorr->AddLegendEntry(h_data_eta_lead_before_EffCorr, "Data", "lp");
+        RP_eta_lead_before_EffCorr->AddLegendEntry(h_data_eta_lead, "Data", "lp");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_data_eta_lead, "Data", "lp");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_data_eta_lead, "Data", "lp");
         RP_eta_lead->AddLegendEntry(h_data_eta_lead, "Data", "lp");
-        RP_eta_sublead_before_PUCorr->AddLegendEntry(h_data_eta_sublead_before_PUCorr, "Data", "lp");
+        RP_eta_sublead_before_PUCorr->AddLegendEntry(h_data_eta_sublead_before_RoccoR, "Data", "lp");
         RP_eta_sublead_before_RoccoR->AddLegendEntry(h_data_eta_sublead_before_RoccoR, "Data", "lp");
-        RP_eta_sublead_before_EffCorr->AddLegendEntry(h_data_eta_sublead_before_EffCorr, "Data", "lp");
+        RP_eta_sublead_before_EffCorr->AddLegendEntry(h_data_eta_sublead, "Data", "lp");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_data_eta_sublead, "Data", "lp");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_data_eta_sublead, "Data", "lp");
         RP_eta_sublead->AddLegendEntry(h_data_eta_sublead, "Data", "lp");
-        RP_phi_lead_before_PUCorr->AddLegendEntry(h_data_phi_lead_before_PUCorr, "Data", "lp");
+        RP_phi_lead_before_PUCorr->AddLegendEntry(h_data_phi_lead_before_RoccoR, "Data", "lp");
         RP_phi_lead_before_RoccoR->AddLegendEntry(h_data_phi_lead_before_RoccoR, "Data", "lp");
-        RP_phi_lead_before_EffCorr->AddLegendEntry(h_data_phi_lead_before_EffCorr, "Data", "lp");
+        RP_phi_lead_before_EffCorr->AddLegendEntry(h_data_phi_lead, "Data", "lp");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_data_phi_lead, "Data", "lp");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_data_phi_lead, "Data", "lp");
         RP_phi_lead->AddLegendEntry(h_data_phi_lead, "Data", "lp");
-        RP_phi_sublead_before_PUCorr->AddLegendEntry(h_data_phi_sublead_before_PUCorr, "Data", "lp");
+        RP_phi_sublead_before_PUCorr->AddLegendEntry(h_data_phi_sublead_before_RoccoR, "Data", "lp");
         RP_phi_sublead_before_RoccoR->AddLegendEntry(h_data_phi_sublead_before_RoccoR, "Data", "lp");
-        RP_phi_sublead_before_EffCorr->AddLegendEntry(h_data_phi_sublead_before_EffCorr, "Data", "lp");
+        RP_phi_sublead_before_EffCorr->AddLegendEntry(h_data_phi_sublead, "Data", "lp");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_data_phi_sublead, "Data", "lp");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_data_phi_sublead, "Data", "lp");
         RP_phi_sublead->AddLegendEntry(h_data_phi_sublead, "Data", "lp");
 
 
@@ -2235,26 +2897,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_DY_pT_lead_before_PUCorr, "DY#rightarrow #mu#mu", "f");
         RP_pT_lead_before_RoccoR->AddLegendEntry(h_DY_pT_lead_before_RoccoR, "DY#rightarrow #mu#mu", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_DY_pT_lead_before_EffCorr, "DY#rightarrow #mu#mu", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_DY_pT_lead_before_PVzCorr, "DY#rightarrow #mu#mu", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_DY_pT_lead_before_L1Corr, "DY#rightarrow #mu#mu", "f");
         RP_pT_lead->AddLegendEntry(h_DY_pT_lead, "DY#rightarrow #mu#mu", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_DY_pT_sublead_before_PUCorr, "DY#rightarrow #mu#mu", "f");
         RP_pT_sublead_before_RoccoR->AddLegendEntry(h_DY_pT_sublead_before_RoccoR, "DY#rightarrow #mu#mu", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_DY_pT_sublead_before_EffCorr, "DY#rightarrow #mu#mu", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_DY_pT_sublead_before_PVzCorr, "DY#rightarrow #mu#mu", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_DY_pT_sublead_before_L1Corr, "DY#rightarrow #mu#mu", "f");
         RP_pT_sublead->AddLegendEntry(h_DY_pT_sublead, "DY#rightarrow #mu#mu", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_DY_eta_lead_before_PUCorr, "DY#rightarrow #mu#mu", "f");
         RP_eta_lead_before_RoccoR->AddLegendEntry(h_DY_eta_lead_before_RoccoR, "DY#rightarrow #mu#mu", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_DY_eta_lead_before_EffCorr, "DY#rightarrow #mu#mu", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_DY_eta_lead_before_PVzCorr, "DY#rightarrow #mu#mu", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_DY_eta_lead_before_L1Corr, "DY#rightarrow #mu#mu", "f");
         RP_eta_lead->AddLegendEntry(h_DY_eta_lead, "DY#rightarrow #mu#mu", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_DY_eta_sublead_before_PUCorr, "DY#rightarrow #mu#mu", "f");
         RP_eta_sublead_before_RoccoR->AddLegendEntry(h_DY_eta_sublead_before_RoccoR, "DY#rightarrow #mu#mu", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_DY_eta_sublead_before_EffCorr, "DY#rightarrow #mu#mu", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_DY_eta_sublead_before_PVzCorr, "DY#rightarrow #mu#mu", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_DY_eta_sublead_before_L1Corr, "DY#rightarrow #mu#mu", "f");
         RP_eta_sublead->AddLegendEntry(h_DY_eta_sublead, "DY#rightarrow #mu#mu", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_DY_phi_lead_before_PUCorr, "DY#rightarrow #mu#mu", "f");
         RP_phi_lead_before_RoccoR->AddLegendEntry(h_DY_phi_lead_before_RoccoR, "DY#rightarrow #mu#mu", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_DY_phi_lead_before_EffCorr, "DY#rightarrow #mu#mu", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_DY_phi_lead_before_PVzCorr, "DY#rightarrow #mu#mu", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_DY_phi_lead_before_L1Corr, "DY#rightarrow #mu#mu", "f");
         RP_phi_lead->AddLegendEntry(h_DY_phi_lead, "DY#rightarrow #mu#mu", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_DY_phi_sublead_before_PUCorr, "DY#rightarrow #mu#mu", "f");
         RP_phi_sublead_before_RoccoR->AddLegendEntry(h_DY_phi_sublead_before_RoccoR, "DY#rightarrow #mu#mu", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_DY_phi_sublead_before_EffCorr, "DY#rightarrow #mu#mu", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_DY_phi_sublead_before_PVzCorr, "DY#rightarrow #mu#mu", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_DY_phi_sublead_before_L1Corr, "DY#rightarrow #mu#mu", "f");
         RP_phi_sublead->AddLegendEntry(h_DY_phi_sublead, "DY#rightarrow #mu#mu", "f");
 
 
@@ -2264,26 +2938,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[8], "DY#rightarrow #tau#tau", "f");
         RP_pT_lead_before_RoccoR->AddLegendEntry(h_bkg_pT_lead_before_RoccoR[8], "DY#rightarrow #tau#tau", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_bkg_pT_lead_before_PVzCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_bkg_pT_lead_before_L1Corr[8], "DY#rightarrow #tau#tau", "f");
         RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[8], "DY#rightarrow #tau#tau", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[8], "DY#rightarrow #tau#tau", "f");
         RP_pT_sublead_before_RoccoR->AddLegendEntry(h_bkg_pT_sublead_before_RoccoR[8], "DY#rightarrow #tau#tau", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_bkg_pT_sublead_before_PVzCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_bkg_pT_sublead_before_L1Corr[8], "DY#rightarrow #tau#tau", "f");
         RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[8], "DY#rightarrow #tau#tau", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[8], "DY#rightarrow #tau#tau", "f");
         RP_eta_lead_before_RoccoR->AddLegendEntry(h_bkg_eta_lead_before_RoccoR[8], "DY#rightarrow #tau#tau", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_bkg_eta_lead_before_PVzCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_bkg_eta_lead_before_L1Corr[8], "DY#rightarrow #tau#tau", "f");
         RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[8], "DY#rightarrow #tau#tau", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[8], "DY#rightarrow #tau#tau", "f");
         RP_eta_sublead_before_RoccoR->AddLegendEntry(h_bkg_eta_sublead_before_RoccoR[8], "DY#rightarrow #tau#tau", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_bkg_eta_sublead_before_PVzCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_bkg_eta_sublead_before_L1Corr[8], "DY#rightarrow #tau#tau", "f");
         RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[8], "DY#rightarrow #tau#tau", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[8], "DY#rightarrow #tau#tau", "f");
         RP_phi_lead_before_RoccoR->AddLegendEntry(h_bkg_phi_lead_before_RoccoR[8], "DY#rightarrow #tau#tau", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_bkg_phi_lead_before_PVzCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_bkg_phi_lead_before_L1Corr[8], "DY#rightarrow #tau#tau", "f");
         RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[8], "DY#rightarrow #tau#tau", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[8], "DY#rightarrow #tau#tau", "f");
         RP_phi_sublead_before_RoccoR->AddLegendEntry(h_bkg_phi_sublead_before_RoccoR[8], "DY#rightarrow #tau#tau", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_bkg_phi_sublead_before_PVzCorr[8], "DY#rightarrow #tau#tau", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_bkg_phi_sublead_before_L1Corr[8], "DY#rightarrow #tau#tau", "f");
         RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[8], "DY#rightarrow #tau#tau", "f");
 
         RP_pT->AddLegendEntry(h_bkg_pT[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
@@ -2291,26 +2977,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_pT_lead_before_RoccoR->AddLegendEntry(h_bkg_pT_lead_before_RoccoR[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_bkg_pT_lead_before_PVzCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_bkg_pT_lead_before_L1Corr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_pT_sublead_before_RoccoR->AddLegendEntry(h_bkg_pT_sublead_before_RoccoR[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_bkg_pT_sublead_before_PVzCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_bkg_pT_sublead_before_L1Corr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_eta_lead_before_RoccoR->AddLegendEntry(h_bkg_eta_lead_before_RoccoR[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_bkg_eta_lead_before_PVzCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_bkg_eta_lead_before_L1Corr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_eta_sublead_before_RoccoR->AddLegendEntry(h_bkg_eta_sublead_before_RoccoR[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_bkg_eta_sublead_before_PVzCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_bkg_eta_sublead_before_L1Corr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_phi_lead_before_RoccoR->AddLegendEntry(h_bkg_phi_lead_before_RoccoR[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_bkg_phi_lead_before_PVzCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_bkg_phi_lead_before_L1Corr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_phi_sublead_before_RoccoR->AddLegendEntry(h_bkg_phi_sublead_before_RoccoR[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_bkg_phi_sublead_before_PVzCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_bkg_phi_sublead_before_L1Corr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
 
         RP_pT->AddLegendEntry(h_bkg_pT[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
@@ -2318,26 +3016,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_pT_lead_before_RoccoR->AddLegendEntry(h_bkg_pT_lead_before_RoccoR[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_bkg_pT_lead_before_PVzCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_bkg_pT_lead_before_L1Corr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_pT_sublead_before_RoccoR->AddLegendEntry(h_bkg_pT_sublead_before_RoccoR[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_bkg_pT_sublead_before_PVzCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_bkg_pT_sublead_before_L1Corr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_eta_lead_before_RoccoR->AddLegendEntry(h_bkg_eta_lead_before_RoccoR[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_bkg_eta_lead_before_PVzCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_bkg_eta_lead_before_L1Corr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_eta_sublead_before_RoccoR->AddLegendEntry(h_bkg_eta_sublead_before_RoccoR[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_bkg_eta_sublead_before_PVzCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_bkg_eta_sublead_before_L1Corr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_phi_lead_before_RoccoR->AddLegendEntry(h_bkg_phi_lead_before_RoccoR[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_bkg_phi_lead_before_PVzCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_bkg_phi_lead_before_L1Corr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_phi_sublead_before_RoccoR->AddLegendEntry(h_bkg_phi_sublead_before_RoccoR[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_bkg_phi_sublead_before_PVzCorr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_bkg_phi_sublead_before_L1Corr[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
 
         RP_pT->AddLegendEntry(h_bkg_pT[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
@@ -2345,26 +3055,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_pT_lead_before_RoccoR->AddLegendEntry(h_bkg_pT_lead_before_RoccoR[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_bkg_pT_lead_before_PVzCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_bkg_pT_lead_before_L1Corr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_pT_sublead_before_RoccoR->AddLegendEntry(h_bkg_pT_sublead_before_RoccoR[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_bkg_pT_sublead_before_PVzCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_bkg_pT_sublead_before_L1Corr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_eta_lead_before_RoccoR->AddLegendEntry(h_bkg_eta_lead_before_RoccoR[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_bkg_eta_lead_before_PVzCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_bkg_eta_lead_before_L1Corr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_eta_sublead_before_RoccoR->AddLegendEntry(h_bkg_eta_sublead_before_RoccoR[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_bkg_eta_sublead_before_PVzCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_bkg_eta_sublead_before_L1Corr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_phi_lead_before_RoccoR->AddLegendEntry(h_bkg_phi_lead_before_RoccoR[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_bkg_phi_lead_before_PVzCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_bkg_phi_lead_before_L1Corr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_phi_sublead_before_RoccoR->AddLegendEntry(h_bkg_phi_sublead_before_RoccoR[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_bkg_phi_sublead_before_PVzCorr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_bkg_phi_sublead_before_L1Corr[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
 
         RP_pT->AddLegendEntry(h_bkg_pT[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
@@ -2372,26 +3094,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_pT_lead_before_RoccoR->AddLegendEntry(h_bkg_pT_lead_before_RoccoR[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_bkg_pT_lead_before_PVzCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_bkg_pT_lead_before_L1Corr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_pT_sublead_before_RoccoR->AddLegendEntry(h_bkg_pT_sublead_before_RoccoR[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_bkg_pT_sublead_before_PVzCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_bkg_pT_sublead_before_L1Corr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_eta_lead_before_RoccoR->AddLegendEntry(h_bkg_eta_lead_before_RoccoR[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_bkg_eta_lead_before_PVzCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_bkg_eta_lead_before_L1Corr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_eta_sublead_before_RoccoR->AddLegendEntry(h_bkg_eta_sublead_before_RoccoR[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_bkg_eta_sublead_before_PVzCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_bkg_eta_sublead_before_L1Corr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_phi_lead_before_RoccoR->AddLegendEntry(h_bkg_phi_lead_before_RoccoR[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_bkg_phi_lead_before_PVzCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_bkg_phi_lead_before_L1Corr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_phi_sublead_before_RoccoR->AddLegendEntry(h_bkg_phi_sublead_before_RoccoR[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_bkg_phi_sublead_before_PVzCorr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_bkg_phi_sublead_before_L1Corr[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
 
         RP_pT->AddLegendEntry(h_bkg_pT[3], "#font[12]{#scale[1.1]{WZ}}", "f");
@@ -2399,26 +3133,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_pT_lead_before_RoccoR->AddLegendEntry(h_bkg_pT_lead_before_RoccoR[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_bkg_pT_lead_before_PVzCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_bkg_pT_lead_before_L1Corr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_pT_sublead_before_RoccoR->AddLegendEntry(h_bkg_pT_sublead_before_RoccoR[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_bkg_pT_sublead_before_PVzCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_bkg_pT_sublead_before_L1Corr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_eta_lead_before_RoccoR->AddLegendEntry(h_bkg_eta_lead_before_RoccoR[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_bkg_eta_lead_before_PVzCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_bkg_eta_lead_before_L1Corr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_eta_sublead_before_RoccoR->AddLegendEntry(h_bkg_eta_sublead_before_RoccoR[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_bkg_eta_sublead_before_PVzCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_bkg_eta_sublead_before_L1Corr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_phi_lead_before_RoccoR->AddLegendEntry(h_bkg_phi_lead_before_RoccoR[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_bkg_phi_lead_before_PVzCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_bkg_phi_lead_before_L1Corr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_phi_sublead_before_RoccoR->AddLegendEntry(h_bkg_phi_sublead_before_RoccoR[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_bkg_phi_sublead_before_PVzCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_bkg_phi_sublead_before_L1Corr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[3], "#font[12]{#scale[1.1]{WZ}}", "f");
 
         RP_pT->AddLegendEntry(h_bkg_pT[2], "#font[12]{#scale[1.1]{WW}}", "f");
@@ -2426,26 +3172,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_pT_lead_before_RoccoR->AddLegendEntry(h_bkg_pT_lead_before_RoccoR[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_bkg_pT_lead_before_PVzCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_bkg_pT_lead_before_L1Corr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_pT_sublead_before_RoccoR->AddLegendEntry(h_bkg_pT_sublead_before_RoccoR[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_bkg_pT_sublead_before_PVzCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_bkg_pT_sublead_before_L1Corr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_eta_lead_before_RoccoR->AddLegendEntry(h_bkg_eta_lead_before_RoccoR[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_bkg_eta_lead_before_PVzCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_bkg_eta_lead_before_L1Corr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_eta_sublead_before_RoccoR->AddLegendEntry(h_bkg_eta_sublead_before_RoccoR[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_bkg_eta_sublead_before_PVzCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_bkg_eta_sublead_before_L1Corr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_phi_lead_before_RoccoR->AddLegendEntry(h_bkg_phi_lead_before_RoccoR[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_bkg_phi_lead_before_PVzCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_bkg_phi_lead_before_L1Corr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_phi_sublead_before_RoccoR->AddLegendEntry(h_bkg_phi_sublead_before_RoccoR[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_bkg_phi_sublead_before_PVzCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_bkg_phi_sublead_before_L1Corr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[2], "#font[12]{#scale[1.1]{WW}}", "f");
 
         RP_pT->AddLegendEntry(h_bkg_pT[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
@@ -2453,26 +3211,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_pT_lead_before_RoccoR->AddLegendEntry(h_bkg_pT_lead_before_RoccoR[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_bkg_pT_lead_before_PVzCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_bkg_pT_lead_before_L1Corr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_pT_sublead_before_RoccoR->AddLegendEntry(h_bkg_pT_sublead_before_RoccoR[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_bkg_pT_sublead_before_PVzCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_bkg_pT_sublead_before_L1Corr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_eta_lead_before_RoccoR->AddLegendEntry(h_bkg_eta_lead_before_RoccoR[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_bkg_eta_lead_before_PVzCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_bkg_eta_lead_before_L1Corr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_eta_sublead_before_RoccoR->AddLegendEntry(h_bkg_eta_sublead_before_RoccoR[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_bkg_eta_sublead_before_PVzCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_bkg_eta_sublead_before_L1Corr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_phi_lead_before_RoccoR->AddLegendEntry(h_bkg_phi_lead_before_RoccoR[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_bkg_phi_lead_before_PVzCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_bkg_phi_lead_before_L1Corr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_phi_sublead_before_RoccoR->AddLegendEntry(h_bkg_phi_sublead_before_RoccoR[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_bkg_phi_sublead_before_PVzCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_bkg_phi_sublead_before_L1Corr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
 
         RP_pT->AddLegendEntry(h_bkg_pT[0], "#font[12]{#scale[1.1]{QCD}}", "f");
@@ -2480,26 +3250,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_pT_lead_before_PUCorr->AddLegendEntry(h_bkg_pT_lead_before_PUCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_pT_lead_before_RoccoR->AddLegendEntry(h_bkg_pT_lead_before_RoccoR[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_pT_lead_before_EffCorr->AddLegendEntry(h_bkg_pT_lead_before_EffCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_pT_lead_before_PVzCorr->AddLegendEntry(h_bkg_pT_lead_before_PVzCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_pT_lead_before_L1Corr->AddLegendEntry(h_bkg_pT_lead_before_L1Corr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_pT_lead->AddLegendEntry(h_bkg_pT_lead[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_pT_sublead_before_PUCorr->AddLegendEntry(h_bkg_pT_sublead_before_PUCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_pT_sublead_before_RoccoR->AddLegendEntry(h_bkg_pT_sublead_before_RoccoR[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_pT_sublead_before_EffCorr->AddLegendEntry(h_bkg_pT_sublead_before_EffCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_pT_sublead_before_PVzCorr->AddLegendEntry(h_bkg_pT_sublead_before_PVzCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_pT_sublead_before_L1Corr->AddLegendEntry(h_bkg_pT_sublead_before_L1Corr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_pT_sublead->AddLegendEntry(h_bkg_pT_sublead[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_eta_lead_before_PUCorr->AddLegendEntry(h_bkg_eta_lead_before_PUCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_eta_lead_before_RoccoR->AddLegendEntry(h_bkg_eta_lead_before_RoccoR[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_eta_lead_before_EffCorr->AddLegendEntry(h_bkg_eta_lead_before_EffCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_eta_lead_before_PVzCorr->AddLegendEntry(h_bkg_eta_lead_before_PVzCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_eta_lead_before_L1Corr->AddLegendEntry(h_bkg_eta_lead_before_L1Corr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_eta_lead->AddLegendEntry(h_bkg_eta_lead[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_eta_sublead_before_PUCorr->AddLegendEntry(h_bkg_eta_sublead_before_PUCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_eta_sublead_before_RoccoR->AddLegendEntry(h_bkg_eta_sublead_before_RoccoR[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_eta_sublead_before_EffCorr->AddLegendEntry(h_bkg_eta_sublead_before_EffCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_eta_sublead_before_PVzCorr->AddLegendEntry(h_bkg_eta_sublead_before_PVzCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_eta_sublead_before_L1Corr->AddLegendEntry(h_bkg_eta_sublead_before_L1Corr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_eta_sublead->AddLegendEntry(h_bkg_eta_sublead[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_phi_lead_before_PUCorr->AddLegendEntry(h_bkg_phi_lead_before_PUCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_phi_lead_before_RoccoR->AddLegendEntry(h_bkg_phi_lead_before_RoccoR[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_phi_lead_before_EffCorr->AddLegendEntry(h_bkg_phi_lead_before_EffCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_phi_lead_before_PVzCorr->AddLegendEntry(h_bkg_phi_lead_before_PVzCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_phi_lead_before_L1Corr->AddLegendEntry(h_bkg_phi_lead_before_L1Corr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_phi_lead->AddLegendEntry(h_bkg_phi_lead[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_phi_sublead_before_PUCorr->AddLegendEntry(h_bkg_phi_sublead_before_PUCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_phi_sublead_before_RoccoR->AddLegendEntry(h_bkg_phi_sublead_before_RoccoR[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_phi_sublead_before_EffCorr->AddLegendEntry(h_bkg_phi_sublead_before_EffCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_phi_sublead_before_PVzCorr->AddLegendEntry(h_bkg_phi_sublead_before_PVzCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        RP_phi_sublead_before_L1Corr->AddLegendEntry(h_bkg_phi_sublead_before_L1Corr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
         RP_phi_sublead->AddLegendEntry(h_bkg_phi_sublead[0], "#font[12]{#scale[1.1]{QCD}}", "f");
 
         RP_pT->Draw(0.5, 8e6, 0);
@@ -2507,26 +3289,38 @@ void MuMu_HistDrawer ( TString whichGraphs , TString type)
         RP_pT_lead_before_PUCorr->Draw(0.5, 8e6, 0);
         RP_pT_lead_before_RoccoR->Draw(0.5, 8e6, 0);
         RP_pT_lead_before_EffCorr->Draw(0.5, 8e6, 0);
+        RP_pT_lead_before_PVzCorr->Draw(0.5, 8e6, 0);
+        RP_pT_lead_before_L1Corr->Draw(0.5, 8e6, 0);
         RP_pT_lead->Draw(0.5, 8e6, 0);
         RP_pT_sublead_before_PUCorr->Draw(0.5, 8e6, 0);
         RP_pT_sublead_before_RoccoR->Draw(0.5, 8e6, 0);
         RP_pT_sublead_before_EffCorr->Draw(0.5, 8e6, 0);
+        RP_pT_sublead_before_PVzCorr->Draw(0.5, 8e6, 0);
+        RP_pT_sublead_before_L1Corr->Draw(0.5, 8e6, 0);
         RP_pT_sublead->Draw(0.5, 8e6, 0);
         RP_eta_lead_before_PUCorr->Draw(0.5, 8e6, 0);
         RP_eta_lead_before_RoccoR->Draw(0.5, 8e6, 0);
         RP_eta_lead_before_EffCorr->Draw(0.5, 8e6, 0);
+        RP_eta_lead_before_PVzCorr->Draw(0.5, 8e6, 0);
+        RP_eta_lead_before_L1Corr->Draw(0.5, 8e6, 0);
         RP_eta_lead->Draw(0.5, 8e6, 0);
         RP_eta_sublead_before_PUCorr->Draw(0.5, 8e6, 0);
         RP_eta_sublead_before_RoccoR->Draw(0.5, 8e6, 0);
         RP_eta_sublead_before_EffCorr->Draw(0.5, 8e6, 0);
+        RP_eta_sublead_before_PVzCorr->Draw(0.5, 8e6, 0);
+        RP_eta_sublead_before_L1Corr->Draw(0.5, 8e6, 0);
         RP_eta_sublead->Draw(0.5, 8e6, 0);
         RP_phi_lead_before_PUCorr->Draw(0.5, 8e6, 0);
         RP_phi_lead_before_RoccoR->Draw(0.5, 8e6, 0);
         RP_phi_lead_before_EffCorr->Draw(0.5, 8e6, 0);
+        RP_phi_lead_before_PVzCorr->Draw(0.5, 8e6, 0);
+        RP_phi_lead_before_L1Corr->Draw(0.5, 8e6, 0);
         RP_phi_lead->Draw(0.5, 8e6, 0);
         RP_phi_sublead_before_PUCorr->Draw(0.5, 8e6, 0);
         RP_phi_sublead_before_RoccoR->Draw(0.5, 8e6, 0);
         RP_phi_sublead_before_EffCorr->Draw(0.5, 8e6, 0);
+        RP_phi_sublead_before_PVzCorr->Draw(0.5, 8e6, 0);
+        RP_phi_sublead_before_L1Corr->Draw(0.5, 8e6, 0);
         RP_phi_sublead->Draw(0.5, 8e6, 0);
 
     } // End of if(Pt, rapi, pT, eta, phi)
@@ -2752,23 +3546,30 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
     {
         count_drawn++;
 
-        THStack *s_mass_fine_before_PUCorr, *s_mass_fine_before_RoccoR, *s_mass_fine_before_EffCorr, *s_mass_fine, *s_mass,
-                *s_SS_mass_fine_before_PUCorr, *s_SS_mass_fine_before_RoccoR, *s_SS_mass_fine_before_EffCorr, *s_SS_mass_fine, *s_SS_mass;
-        s_mass_fine_before_PUCorr = new THStack("s_mass_fine_before_PUCorr", "");
-        s_mass_fine_before_RoccoR = new THStack("s_mass_fine_before_RoccoR", "");
-        s_mass_fine_before_EffCorr = new THStack("s_mass_fine_before_EffCorr", "");
+        THStack *s_mass_before_PUCorr, *s_mass_before_RoccoR, *s_mass_before_EffCorr,
+                *s_mass_before_PVzCorr, *s_mass_before_L1Corr, *s_mass_fine, *s_mass,
+                *s_SS_mass_before_PUCorr, *s_SS_mass_before_RoccoR, *s_SS_mass_before_EffCorr,
+                *s_SS_mass_before_PVzCorr, *s_SS_mass_before_L1Corr, *s_SS_mass_fine, *s_SS_mass;
+        s_mass_before_PUCorr = new THStack("s_mass_before_PUCorr", "");
+        s_mass_before_RoccoR = new THStack("s_mass_before_RoccoR", "");
+        s_mass_before_EffCorr = new THStack("s_mass_before_EffCorr", "");
+        s_mass_before_PVzCorr = new THStack("s_mass_before_PVzCorr", "");
+        s_mass_before_L1Corr = new THStack("s_mass_before_L1Corr", "");
         s_mass_fine = new THStack("s_mass_fine", "");
         s_mass = new THStack("s_mass", "");
-        s_SS_mass_fine_before_PUCorr = new THStack("s_SS_mass_fine_before_PUCorr", "");
-        s_SS_mass_fine_before_RoccoR = new THStack("s_SS_mass_fine_before_RoccoR", "");
-        s_SS_mass_fine_before_EffCorr = new THStack("s_SS_mass_fine_before_EffCorr", "");
+        s_SS_mass_before_PUCorr = new THStack("s_SS_mass_before_PUCorr", "");
+        s_SS_mass_before_RoccoR = new THStack("s_SS_mass_before_RoccoR", "");
+        s_SS_mass_before_EffCorr = new THStack("s_SS_mass_before_EffCorr", "");
+        s_SS_mass_before_PVzCorr = new THStack("s_SS_mass_before_PVzCorr", "");
+        s_SS_mass_before_L1Corr = new THStack("s_SS_mass_before_L1Corr", "");
         s_SS_mass_fine = new THStack("s_SS_mass_fine", "");
         s_SS_mass = new THStack("s_SS_mass", "");
 
 //----------------------------------- MC bkg -------------------------------------------------------
-        TH1D *h_bkg_mass_fine_before_PUCorr[8], *h_bkg_mass_fine_before_EffCorr[8], *h_bkg_mass_fine_before_RoccoR[8],
-             *h_bkg_mass_fine[8], *h_bkg_mass[8], *h_SS_bkg_mass_fine_before_PUCorr[8], *h_SS_bkg_mass_fine_before_EffCorr[8],
-             *h_SS_bkg_mass_fine_before_RoccoR[8], *h_SS_bkg_mass_fine[8], *h_SS_bkg_mass[8];
+        TH1D *h_bkg_mass_before_PUCorr[8], *h_bkg_mass_before_RoccoR[8], *h_bkg_mass_before_EffCorr[8],
+             *h_bkg_mass_before_PVzCorr[8], *h_bkg_mass_before_L1Corr[8], *h_bkg_mass_fine[8], *h_bkg_mass[8],
+             *h_SS_bkg_mass_before_PUCorr[8], *h_SS_bkg_mass_before_RoccoR[8], *h_SS_bkg_mass_before_EffCorr[8],
+             *h_SS_bkg_mass_before_PVzCorr[8], *h_SS_bkg_mass_before_L1Corr[8], *h_SS_bkg_mass_fine[8], *h_SS_bkg_mass[8];
         Int_t iter = 0;
 
         Double_t ratio_WJets_SSvsOS;
@@ -2779,14 +3580,18 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
             if ( !isWJ && pr == _EMu_WJets ) continue;
             if ( pr == _EndOf_EMu_VVnST_Normal ) continue;
 
-            f_bkg_noRC->GetObject( "h_emu_mass_fine_before_PUCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_PUCorr[iter] );
-            f_bkg_noRC->GetObject( "h_emu_mass_fine_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_RoccoR[iter] );
-            f_bkg->GetObject( "h_emu_mass_fine_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_fine_before_EffCorr[iter] );
+            f_bkg_noRC->GetObject( "h_emu_mass_before_PUCorr_"+Mgr.Procname[pr], h_bkg_mass_before_PUCorr[iter] );
+            f_bkg_noRC->GetObject( "h_emu_mass_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_before_RoccoR[iter] );
+            f_bkg->GetObject( "h_emu_mass_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_emu_mass_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_mass_before_PVzCorr[iter] );
+            f_bkg->GetObject( "h_emu_mass_before_L1Corr_"+Mgr.Procname[pr], h_bkg_mass_before_L1Corr[iter] );
             f_bkg->GetObject( "h_emu_mass_fine_"+Mgr.Procname[pr], h_bkg_mass_fine[iter] );
             f_bkg->GetObject( "h_emu_mass_"+Mgr.Procname[pr], h_bkg_mass[iter] );
-            f_bkg_noRC->GetObject( "h_emuSS_mass_fine_before_PUCorr_"+Mgr.Procname[pr], h_SS_bkg_mass_fine_before_PUCorr[iter] );
-            f_bkg_noRC->GetObject( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[pr], h_SS_bkg_mass_fine_before_RoccoR[iter] );
-            f_bkg->GetObject( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[pr], h_SS_bkg_mass_fine_before_EffCorr[iter] );
+            f_bkg_noRC->GetObject( "h_emuSS_mass_before_PUCorr_"+Mgr.Procname[pr], h_SS_bkg_mass_before_PUCorr[iter] );
+            f_bkg_noRC->GetObject( "h_emuSS_mass_before_EffCorr_"+Mgr.Procname[pr], h_SS_bkg_mass_before_RoccoR[iter] );
+            f_bkg->GetObject( "h_emuSS_mass_before_EffCorr_"+Mgr.Procname[pr], h_SS_bkg_mass_before_EffCorr[iter] );
+            f_bkg->GetObject( "h_emuSS_mass_before_PVzCorr_"+Mgr.Procname[pr], h_SS_bkg_mass_before_PVzCorr[iter] );
+            f_bkg->GetObject( "h_emuSS_mass_before_L1Corr_"+Mgr.Procname[pr], h_SS_bkg_mass_before_L1Corr[iter] );
             f_bkg->GetObject( "h_emuSS_mass_fine_"+Mgr.Procname[pr], h_SS_bkg_mass_fine[iter] );
             f_bkg->GetObject( "h_emuSS_mass_"+Mgr.Procname[pr], h_SS_bkg_mass[iter] );
 
@@ -2813,47 +3618,63 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
             if ( pr == _EMu_ttbar_Full ) color = kCyan + 2;
             if ( pr == _EMu_DYTauTau_Full ) color = kOrange - 5;
 
-            h_bkg_mass_fine_before_PUCorr[iter]->SetFillColor(color);
-            h_bkg_mass_fine_before_RoccoR[iter]->SetFillColor(color);
-            h_bkg_mass_fine_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_mass_before_PUCorr[iter]->SetFillColor(color);
+            h_bkg_mass_before_RoccoR[iter]->SetFillColor(color);
+            h_bkg_mass_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_mass_before_PVzCorr[iter]->SetFillColor(color);
+            h_bkg_mass_before_L1Corr[iter]->SetFillColor(color);
             h_bkg_mass_fine[iter]->SetFillColor(color);
             h_bkg_mass[iter]->SetFillColor(color);
-            h_SS_bkg_mass_fine_before_PUCorr[iter]->SetFillColor(color);
-            h_SS_bkg_mass_fine_before_RoccoR[iter]->SetFillColor(color);
-            h_SS_bkg_mass_fine_before_EffCorr[iter]->SetFillColor(color);
+            h_SS_bkg_mass_before_PUCorr[iter]->SetFillColor(color);
+            h_SS_bkg_mass_before_RoccoR[iter]->SetFillColor(color);
+            h_SS_bkg_mass_before_EffCorr[iter]->SetFillColor(color);
+            h_SS_bkg_mass_before_PVzCorr[iter]->SetFillColor(color);
+            h_SS_bkg_mass_before_L1Corr[iter]->SetFillColor(color);
             h_SS_bkg_mass_fine[iter]->SetFillColor(color);
             h_SS_bkg_mass[iter]->SetFillColor(color);
 
-            h_bkg_mass_fine_before_PUCorr[iter]->SetLineColor(color);
-            h_bkg_mass_fine_before_RoccoR[iter]->SetLineColor(color);
-            h_bkg_mass_fine_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_mass_before_PUCorr[iter]->SetLineColor(color);
+            h_bkg_mass_before_RoccoR[iter]->SetLineColor(color);
+            h_bkg_mass_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_mass_before_PVzCorr[iter]->SetLineColor(color);
+            h_bkg_mass_before_L1Corr[iter]->SetLineColor(color);
             h_bkg_mass_fine[iter]->SetLineColor(color);
             h_bkg_mass[iter]->SetLineColor(color);
-            h_SS_bkg_mass_fine_before_PUCorr[iter]->SetLineColor(color);
-            h_SS_bkg_mass_fine_before_RoccoR[iter]->SetLineColor(color);
-            h_SS_bkg_mass_fine_before_EffCorr[iter]->SetLineColor(color);
+            h_SS_bkg_mass_before_PUCorr[iter]->SetLineColor(color);
+            h_SS_bkg_mass_before_RoccoR[iter]->SetLineColor(color);
+            h_SS_bkg_mass_before_EffCorr[iter]->SetLineColor(color);
+            h_SS_bkg_mass_before_PVzCorr[iter]->SetLineColor(color);
+            h_SS_bkg_mass_before_L1Corr[iter]->SetLineColor(color);
             h_SS_bkg_mass_fine[iter]->SetLineColor(color);
             h_SS_bkg_mass[iter]->SetLineColor(color);
 
-            h_bkg_mass_fine_before_PUCorr[iter]->SetDirectory(0);
-            h_bkg_mass_fine_before_RoccoR[iter]->SetDirectory(0);
-            h_bkg_mass_fine_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_mass_before_PUCorr[iter]->SetDirectory(0);
+            h_bkg_mass_before_RoccoR[iter]->SetDirectory(0);
+            h_bkg_mass_before_EffCorr[iter]->SetDirectory(0);
+            h_bkg_mass_before_PVzCorr[iter]->SetDirectory(0);
+            h_bkg_mass_before_L1Corr[iter]->SetDirectory(0);
             h_bkg_mass_fine[iter]->SetDirectory(0);
             h_bkg_mass[iter]->SetDirectory(0);
-            h_SS_bkg_mass_fine_before_PUCorr[iter]->SetDirectory(0);
-            h_SS_bkg_mass_fine_before_RoccoR[iter]->SetDirectory(0);
-            h_SS_bkg_mass_fine_before_EffCorr[iter]->SetDirectory(0);
+            h_SS_bkg_mass_before_PUCorr[iter]->SetDirectory(0);
+            h_SS_bkg_mass_before_RoccoR[iter]->SetDirectory(0);
+            h_SS_bkg_mass_before_EffCorr[iter]->SetDirectory(0);
+            h_SS_bkg_mass_before_PVzCorr[iter]->SetDirectory(0);
+            h_SS_bkg_mass_before_L1Corr[iter]->SetDirectory(0);
             h_SS_bkg_mass_fine[iter]->SetDirectory(0);
             h_SS_bkg_mass[iter]->SetDirectory(0);
 
-            s_mass_fine_before_PUCorr->Add( h_bkg_mass_fine_before_PUCorr[iter] );
-            s_mass_fine_before_RoccoR->Add( h_bkg_mass_fine_before_RoccoR[iter] );
-            s_mass_fine_before_EffCorr->Add( h_bkg_mass_fine_before_EffCorr[iter] );
+            s_mass_before_PUCorr->Add( h_bkg_mass_before_PUCorr[iter] );
+            s_mass_before_RoccoR->Add( h_bkg_mass_before_RoccoR[iter] );
+            s_mass_before_EffCorr->Add( h_bkg_mass_before_EffCorr[iter] );
+            s_mass_before_PVzCorr->Add( h_bkg_mass_before_PVzCorr[iter] );
+            s_mass_before_L1Corr->Add( h_bkg_mass_before_L1Corr[iter] );
             s_mass_fine->Add( h_bkg_mass_fine[iter] );
             s_mass->Add( h_bkg_mass[iter] );
-            s_SS_mass_fine_before_PUCorr->Add( h_SS_bkg_mass_fine_before_PUCorr[iter] );
-            s_SS_mass_fine_before_RoccoR->Add( h_SS_bkg_mass_fine_before_RoccoR[iter] );
-            s_SS_mass_fine_before_EffCorr->Add( h_SS_bkg_mass_fine_before_EffCorr[iter] );
+            s_SS_mass_before_PUCorr->Add( h_SS_bkg_mass_before_PUCorr[iter] );
+            s_SS_mass_before_RoccoR->Add( h_SS_bkg_mass_before_RoccoR[iter] );
+            s_SS_mass_before_EffCorr->Add( h_SS_bkg_mass_before_EffCorr[iter] );
+            s_SS_mass_before_PVzCorr->Add( h_SS_bkg_mass_before_L1Corr[iter] );
+            s_SS_mass_before_L1Corr->Add( h_SS_bkg_mass_before_EffCorr[iter] );
             s_SS_mass_fine->Add( h_SS_bkg_mass_fine[iter] );
             s_SS_mass->Add( h_SS_bkg_mass[iter] );
 
@@ -2868,211 +3689,260 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
 
 //--------------------------------------- DATA -----------------------------------------------------
 
-        TH1D *h_data_mass_fine_before_PUCorr, *h_data_mass_fine_before_RoccoR, *h_data_mass_fine_before_EffCorr, *h_data_mass_fine, *h_data_mass,
-             *h_SS_data_mass_fine_before_PUCorr, *h_SS_data_mass_fine_before_RoccoR, *h_SS_data_mass_fine_before_EffCorr, *h_SS_data_mass_fine, *h_SS_data_mass;
+        TH1D *h_data_mass_before_RoccoR, *h_data_mass_fine, *h_data_mass,
+             *h_SS_data_mass_before_RoccoR, *h_SS_data_mass_fine, *h_SS_data_mass;
 
-        f_data_noRC->GetObject( "h_emu_mass_fine_before_PUCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_mass_fine_before_PUCorr );
-        f_data_noRC->GetObject( "h_emu_mass_fine_before_EffCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_mass_fine_before_RoccoR );
-        f_data->GetObject( "h_emu_mass_fine_before_EffCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_mass_fine_before_EffCorr );
+        f_data_noRC->GetObject( "h_emu_mass_before_EffCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_mass_before_RoccoR );
         f_data->GetObject( "h_emu_mass_fine_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_mass_fine );
         f_data->GetObject( "h_emu_mass_"+Mgr.Procname[_EMu_SingleMuon_Full], h_data_mass );
-        f_data_noRC->GetObject( "h_emuSS_mass_fine_before_PUCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_SS_data_mass_fine_before_PUCorr );
-        f_data_noRC->GetObject( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_SS_data_mass_fine_before_RoccoR );
-        f_data->GetObject( "h_emuSS_mass_fine_before_EffCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_SS_data_mass_fine_before_EffCorr );
+        f_data_noRC->GetObject( "h_emuSS_mass_before_EffCorr_"+Mgr.Procname[_EMu_SingleMuon_Full], h_SS_data_mass_before_RoccoR );
         f_data->GetObject( "h_emuSS_mass_fine_"+Mgr.Procname[_EMu_SingleMuon_Full], h_SS_data_mass_fine );
         f_data->GetObject( "h_emuSS_mass_"+Mgr.Procname[_EMu_SingleMuon_Full], h_SS_data_mass );
 
-        h_data_mass_fine_before_PUCorr->SetMarkerStyle(kFullDotLarge);
-        h_data_mass_fine_before_RoccoR->SetMarkerStyle(kFullDotLarge);
-        h_data_mass_fine_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_data_mass_before_RoccoR->SetMarkerStyle(kFullDotLarge);
         h_data_mass_fine->SetMarkerStyle(kFullDotLarge);
         h_data_mass->SetMarkerStyle(kFullDotLarge);
-        h_SS_data_mass_fine_before_PUCorr->SetMarkerStyle(kFullDotLarge);
-        h_SS_data_mass_fine_before_RoccoR->SetMarkerStyle(kFullDotLarge);
-        h_SS_data_mass_fine_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+        h_SS_data_mass_before_RoccoR->SetMarkerStyle(kFullDotLarge);
         h_SS_data_mass_fine->SetMarkerStyle(kFullDotLarge);
         h_SS_data_mass->SetMarkerStyle(kFullDotLarge);
 
-        h_data_mass_fine_before_PUCorr->SetMarkerColor(kBlack);
-        h_data_mass_fine_before_RoccoR->SetMarkerColor(kBlack);
-        h_data_mass_fine_before_EffCorr->SetMarkerColor(kBlack);
+        h_data_mass_before_RoccoR->SetMarkerColor(kBlack);
         h_data_mass_fine->SetMarkerColor(kBlack);
         h_data_mass->SetMarkerColor(kBlack);
-        h_SS_data_mass_fine_before_PUCorr->SetMarkerColor(kBlack);
-        h_SS_data_mass_fine_before_RoccoR->SetMarkerColor(kBlack);
-        h_SS_data_mass_fine_before_EffCorr->SetMarkerColor(kBlack);
+        h_SS_data_mass_before_RoccoR->SetMarkerColor(kBlack);
         h_SS_data_mass_fine->SetMarkerColor(kBlack);
         h_SS_data_mass->SetMarkerColor(kBlack);
 
-        h_data_mass_fine_before_PUCorr->SetLineColor(kBlack);
-        h_data_mass_fine_before_RoccoR->SetLineColor(kBlack);
-        h_data_mass_fine_before_EffCorr->SetLineColor(kBlack);
+        h_data_mass_before_RoccoR->SetLineColor(kBlack);
         h_data_mass_fine->SetLineColor(kBlack);
         h_data_mass->SetLineColor(kBlack);
-        h_SS_data_mass_fine_before_PUCorr->SetLineColor(kBlack);
-        h_SS_data_mass_fine_before_RoccoR->SetLineColor(kBlack);
-        h_SS_data_mass_fine_before_EffCorr->SetLineColor(kBlack);
+        h_SS_data_mass_before_RoccoR->SetLineColor(kBlack);
         h_SS_data_mass_fine->SetLineColor(kBlack);
         h_SS_data_mass->SetLineColor(kBlack);
 
-        h_data_mass_fine_before_PUCorr->SetDirectory(0);
-        h_data_mass_fine_before_RoccoR->SetDirectory(0);
-        h_data_mass_fine_before_EffCorr->SetDirectory(0);
+        h_data_mass_before_RoccoR->SetDirectory(0);
         h_data_mass_fine->SetDirectory(0);
         h_data_mass->SetDirectory(0);
-        h_SS_data_mass_fine_before_PUCorr->SetDirectory(0);
-        h_SS_data_mass_fine_before_RoccoR->SetDirectory(0);
-        h_SS_data_mass_fine_before_EffCorr->SetDirectory(0);
+        h_SS_data_mass_before_RoccoR->SetDirectory(0);
         h_SS_data_mass_fine->SetDirectory(0);
         h_SS_data_mass->SetDirectory(0);
 
 //--------------------------------- Ratio Plot --------------------------------------
 
-        myRatioPlot_t *RP_mass_fine_before_PUCorr, *RP_mass_fine_before_RoccoR, *RP_mass_fine_before_EffCorr, *RP_mass_fine, *RP_mass,
-                      *RP_SS_mass_fine_before_PUCorr, *RP_SS_mass_fine_before_RoccoR, *RP_SS_mass_fine_before_EffCorr, *RP_SS_mass_fine, *RP_SS_mass;
+        myRatioPlot_t *RP_mass_before_PUCorr, *RP_mass_before_RoccoR, *RP_mass_before_EffCorr,
+                      *RP_mass_before_PVzCorr, *RP_mass_before_L1Corr, *RP_mass_fine, *RP_mass,
+                      *RP_SS_mass_before_PUCorr, *RP_SS_mass_before_RoccoR, *RP_SS_mass_before_EffCorr,
+                      *RP_SS_mass_before_PVzCorr, *RP_SS_mass_before_L1Corr, *RP_SS_mass_fine, *RP_SS_mass;
 
-        RP_mass_fine_before_PUCorr = new myRatioPlot_t( "RP_mass_fine_before_PUCorr", s_mass_fine_before_PUCorr, h_data_mass_fine_before_PUCorr );
-        RP_mass_fine_before_RoccoR = new myRatioPlot_t( "RP_mass_fine_before_RoccoR", s_mass_fine_before_RoccoR, h_data_mass_fine_before_RoccoR );
-        RP_mass_fine_before_EffCorr = new myRatioPlot_t( "RP_mass_fine_before_EffCorr", s_mass_fine_before_EffCorr, h_data_mass_fine_before_EffCorr );
+        RP_mass_before_PUCorr = new myRatioPlot_t( "RP_mass_before_PUCorr", s_mass_before_PUCorr, h_data_mass_before_RoccoR );
+        RP_mass_before_RoccoR = new myRatioPlot_t( "RP_mass_before_RoccoR", s_mass_before_RoccoR, h_data_mass_before_RoccoR );
+        RP_mass_before_EffCorr = new myRatioPlot_t( "RP_mass_before_EffCorr", s_mass_before_EffCorr, h_data_mass );
+        RP_mass_before_PVzCorr = new myRatioPlot_t( "RP_mass_before_PVzCorr", s_mass_before_PVzCorr, h_data_mass );
+        RP_mass_before_L1Corr = new myRatioPlot_t( "RP_mass_before_L1Corr", s_mass_before_L1Corr, h_data_mass );
         RP_mass_fine = new myRatioPlot_t( "RP_mass_fine", s_mass_fine, h_data_mass_fine );
         RP_mass = new myRatioPlot_t( "RP_mass", s_mass, h_data_mass );
-        RP_SS_mass_fine_before_PUCorr = new myRatioPlot_t( "RP_SS_mass_fine_before_PUCorr", s_SS_mass_fine_before_PUCorr, h_SS_data_mass_fine_before_PUCorr );
-        RP_SS_mass_fine_before_RoccoR = new myRatioPlot_t( "RP_SS_mass_fine_before_RoccoR", s_SS_mass_fine_before_RoccoR, h_SS_data_mass_fine_before_RoccoR );
-        RP_SS_mass_fine_before_EffCorr = new myRatioPlot_t( "RP_SS_mass_fine_before_EffCorr", s_SS_mass_fine_before_EffCorr, h_SS_data_mass_fine_before_EffCorr );
+        RP_SS_mass_before_PUCorr = new myRatioPlot_t( "RP_SS_mass_before_PUCorr", s_SS_mass_before_PUCorr, h_SS_data_mass_before_RoccoR );
+        RP_SS_mass_before_RoccoR = new myRatioPlot_t( "RP_SS_mass_before_RoccoR", s_SS_mass_before_RoccoR, h_SS_data_mass_before_RoccoR );
+        RP_SS_mass_before_EffCorr = new myRatioPlot_t( "RP_SS_mass_before_EffCorr", s_SS_mass_before_EffCorr, h_SS_data_mass );
+        RP_SS_mass_before_PVzCorr = new myRatioPlot_t( "RP_SS_mass_before_PVzCorr", s_SS_mass_before_PVzCorr, h_SS_data_mass );
+        RP_SS_mass_before_L1Corr = new myRatioPlot_t( "RP_SS_mass_before_L1Corr", s_SS_mass_before_L1Corr, h_SS_data_mass );
         RP_SS_mass_fine = new myRatioPlot_t( "RP_SS_mass_fine", s_SS_mass_fine, h_SS_data_mass_fine );
         RP_SS_mass = new myRatioPlot_t( "RP_SS_mass", s_SS_mass, h_SS_data_mass );
 
-        RP_mass_fine_before_PUCorr->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e#mu}}}} [GeV/c^{2}] before PU correction", 15, 3000);
-        RP_mass_fine_before_RoccoR->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} [GeV/c^{2}] before Rochester correction", 15, 3000);
-        RP_mass_fine_before_EffCorr->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} [GeV/c^{2}] before Efficiency correction", 15, 3000);
+        RP_mass_before_PUCorr->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e#mu}}}} [GeV/c^{2}] before PU correction", 15, 3000);
+        RP_mass_before_RoccoR->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} [GeV/c^{2}] before Rochester correction", 15, 3000);
+        RP_mass_before_EffCorr->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} [GeV/c^{2}] before Efficiency SF", 15, 3000);
+        RP_mass_before_PVzCorr->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} [GeV/c^{2}] before PVz correction", 15, 3000);
+        RP_mass_before_L1Corr->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} [GeV/c^{2}] before L1 prefiring correction", 15, 3000);
         RP_mass_fine->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
         RP_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
 //        RP_mass->SetPlots("e#mu (priesingu kruviu) invariantine mase [GeV/c^{2}]", 15, 3000);
-        RP_SS_mass_fine_before_PUCorr->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}] before PU correction", 15, 3000);
-        RP_SS_mass_fine_before_RoccoR->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}] before Rochester correction", 15, 3000);
-        RP_SS_mass_fine_before_EffCorr->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}] before Efficiency correction", 15, 3000);
+        RP_SS_mass_before_PUCorr->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}] before PU correction", 15, 3000);
+        RP_SS_mass_before_RoccoR->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}] before Rochester correction", 15, 3000);
+        RP_SS_mass_before_EffCorr->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}] before Efficiency SF", 15, 3000);
+        RP_SS_mass_before_PVzCorr->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}] before PVz correction", 15, 3000);
+        RP_SS_mass_before_L1Corr->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}] before L1 prefiring correction", 15, 3000);
         RP_SS_mass_fine->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}]", 15, 3000);
         RP_SS_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}]", 15, 3000);
 //        RP_SS_mass->SetPlots("e#mu (vienodu kruviu) invariantine mase [GeV/c^{2}]", 15, 3000);
 
-        RP_mass_fine_before_PUCorr->SetLegend(0.75, 0.4);
-        RP_mass_fine_before_RoccoR->SetLegend(0.75, 0.4);
-        RP_mass_fine_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_mass_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_mass_before_RoccoR->SetLegend(0.75, 0.4);
+        RP_mass_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_mass_before_PVzCorr->SetLegend(0.75, 0.4);
+        RP_mass_before_L1Corr->SetLegend(0.75, 0.4);
         RP_mass_fine->SetLegend(0.75, 0.4);
         RP_mass->SetLegend(0.75, 0.4);
-        RP_SS_mass_fine_before_PUCorr->SetLegend(0.75, 0.4);
-        RP_SS_mass_fine_before_RoccoR->SetLegend(0.75, 0.4);
-        RP_SS_mass_fine_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_SS_mass_before_PUCorr->SetLegend(0.75, 0.4);
+        RP_SS_mass_before_RoccoR->SetLegend(0.75, 0.4);
+        RP_SS_mass_before_EffCorr->SetLegend(0.75, 0.4);
+        RP_SS_mass_before_PVzCorr->SetLegend(0.75, 0.4);
+        RP_SS_mass_before_L1Corr->SetLegend(0.75, 0.4);
         RP_SS_mass_fine->SetLegend(0.75, 0.4);
         RP_SS_mass->SetLegend(0.75, 0.4);
 
         // Legend data
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_data_mass_fine_before_PUCorr, "Data", "lp");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_data_mass_fine_before_RoccoR, "Data", "lp");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_data_mass_fine_before_EffCorr, "Data", "lp");
+        RP_mass_before_PUCorr->AddLegendEntry(h_data_mass_before_RoccoR, "Data", "lp");
+        RP_mass_before_RoccoR->AddLegendEntry(h_data_mass_before_RoccoR, "Data", "lp");
+        RP_mass_before_EffCorr->AddLegendEntry(h_data_mass, "Data", "lp");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_data_mass, "Data", "lp");
+        RP_mass_before_L1Corr->AddLegendEntry(h_data_mass, "Data", "lp");
         RP_mass_fine->AddLegendEntry(h_data_mass_fine, "Data", "lp");
         RP_mass->AddLegendEntry(h_data_mass, "Data", "lp");
 //        RP_mass->AddLegendEntry(h_data_mass, "Matavimas", "lp");
-        RP_SS_mass_fine_before_PUCorr->AddLegendEntry(h_SS_data_mass_fine_before_PUCorr, "Data", "lp");
-        RP_SS_mass_fine_before_RoccoR->AddLegendEntry(h_SS_data_mass_fine_before_RoccoR, "Data", "lp");
-        RP_SS_mass_fine_before_EffCorr->AddLegendEntry(h_SS_data_mass_fine_before_EffCorr, "Data", "lp");
+        RP_SS_mass_before_PUCorr->AddLegendEntry(h_SS_data_mass_before_RoccoR, "Data", "lp");
+        RP_SS_mass_before_RoccoR->AddLegendEntry(h_SS_data_mass_before_RoccoR, "Data", "lp");
+        RP_SS_mass_before_EffCorr->AddLegendEntry(h_SS_data_mass, "Data", "lp");
+        RP_SS_mass_before_PVzCorr->AddLegendEntry(h_SS_data_mass, "Data", "lp");
+        RP_SS_mass_before_L1Corr->AddLegendEntry(h_SS_data_mass, "Data", "lp");
         RP_SS_mass_fine->AddLegendEntry(h_SS_data_mass_fine, "Data", "lp");
         RP_SS_mass->AddLegendEntry(h_SS_data_mass, "Data", "lp");
 //        RP_SS_mass->AddLegendEntry(h_SS_data_mass, "Matavimas", "lp");
 
         // Legend MC BKG        
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[6+isWJ], "DY#rightarrow #tau#tau", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[6+isWJ], "DY#rightarrow #tau#tau", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[6+isWJ], "DY#rightarrow #tau#tau", "f");
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[6+isWJ], "DY#rightarrow #tau#tau", "f");
+        RP_mass_before_RoccoR->AddLegendEntry(h_bkg_mass_before_RoccoR[6+isWJ], "DY#rightarrow #tau#tau", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[6+isWJ], "DY#rightarrow #tau#tau", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[6+isWJ], "DY#rightarrow #tau#tau", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[6+isWJ], "DY#rightarrow #tau#tau", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[6+isWJ], "DY#rightarrow #tau#tau", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[6+isWJ], "DY#rightarrow #tau#tau", "f");
-        RP_SS_mass_fine_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_PUCorr[6+isWJ], "DY#rightarrow #tau#tau", "f");
-        RP_SS_mass_fine_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_fine_before_RoccoR[6+isWJ], "DY#rightarrow #tau#tau", "f");
-        RP_SS_mass_fine_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_EffCorr[6+isWJ], "DY#rightarrow #tau#tau", "f");
+
+        RP_SS_mass_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_before_PUCorr[6+isWJ], "DY#rightarrow #tau#tau", "f");
+        RP_SS_mass_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_before_RoccoR[6+isWJ], "DY#rightarrow #tau#tau", "f");
+        RP_SS_mass_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_before_EffCorr[6+isWJ], "DY#rightarrow #tau#tau", "f");
+        RP_SS_mass_before_PVzCorr->AddLegendEntry(h_SS_bkg_mass_before_PVzCorr[6+isWJ], "DY#rightarrow #tau#tau", "f");
+        RP_SS_mass_before_L1Corr->AddLegendEntry(h_SS_bkg_mass_before_L1Corr[6+isWJ], "DY#rightarrow #tau#tau", "f");
         RP_SS_mass_fine->AddLegendEntry(h_SS_bkg_mass_fine[6+isWJ], "DY#rightarrow #tau#tau", "f");
         RP_SS_mass->AddLegendEntry(h_SS_bkg_mass[6+isWJ], "DY#rightarrow #tau#tau", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_mass_before_RoccoR->AddLegendEntry(h_bkg_mass_before_RoccoR[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
-        RP_SS_mass_fine_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_PUCorr[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
-        RP_SS_mass_fine_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_fine_before_RoccoR[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
-        RP_SS_mass_fine_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_EffCorr[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+
+        RP_SS_mass_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_before_PUCorr[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_SS_mass_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_before_RoccoR[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_SS_mass_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_before_EffCorr[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_SS_mass_before_PVzCorr->AddLegendEntry(h_SS_bkg_mass_before_PVzCorr[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        RP_SS_mass_before_L1Corr->AddLegendEntry(h_SS_bkg_mass_before_L1Corr[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_SS_mass_fine->AddLegendEntry(h_SS_bkg_mass_fine[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         RP_SS_mass->AddLegendEntry(h_SS_bkg_mass[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_mass_before_RoccoR->AddLegendEntry(h_bkg_mass_before_RoccoR[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
-        RP_SS_mass_fine_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_PUCorr[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
-        RP_SS_mass_fine_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_fine_before_RoccoR[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
-        RP_SS_mass_fine_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_EffCorr[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+
+        RP_SS_mass_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_before_PUCorr[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_SS_mass_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_before_RoccoR[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_SS_mass_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_before_EffCorr[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_SS_mass_before_PVzCorr->AddLegendEntry(h_SS_bkg_mass_before_PVzCorr[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        RP_SS_mass_before_L1Corr->AddLegendEntry(h_SS_bkg_mass_before_L1Corr[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_SS_mass_fine->AddLegendEntry(h_SS_bkg_mass_fine[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
         RP_SS_mass->AddLegendEntry(h_SS_bkg_mass[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_mass_before_RoccoR->AddLegendEntry(h_bkg_mass_before_RoccoR[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
-        RP_SS_mass_fine_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_PUCorr[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
-        RP_SS_mass_fine_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_fine_before_RoccoR[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
-        RP_SS_mass_fine_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_EffCorr[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+
+        RP_SS_mass_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_before_PUCorr[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_SS_mass_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_before_RoccoR[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_SS_mass_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_before_EffCorr[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_SS_mass_before_PVzCorr->AddLegendEntry(h_SS_bkg_mass_before_PVzCorr[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        RP_SS_mass_before_L1Corr->AddLegendEntry(h_SS_bkg_mass_before_L1Corr[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_SS_mass_fine->AddLegendEntry(h_SS_bkg_mass_fine[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
         RP_SS_mass->AddLegendEntry(h_SS_bkg_mass[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_mass_before_RoccoR->AddLegendEntry(h_bkg_mass_before_RoccoR[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
-        RP_SS_mass_fine_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_PUCorr[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
-        RP_SS_mass_fine_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_fine_before_RoccoR[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
-        RP_SS_mass_fine_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_EffCorr[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+
+        RP_SS_mass_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_before_PUCorr[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_SS_mass_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_before_RoccoR[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_SS_mass_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_before_EffCorr[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_SS_mass_before_PVzCorr->AddLegendEntry(h_SS_bkg_mass_before_PVzCorr[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        RP_SS_mass_before_L1Corr->AddLegendEntry(h_SS_bkg_mass_before_L1Corr[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_SS_mass_fine->AddLegendEntry(h_SS_bkg_mass_fine[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
         RP_SS_mass->AddLegendEntry(h_SS_bkg_mass[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_mass_before_RoccoR->AddLegendEntry(h_bkg_mass_before_RoccoR[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
-        RP_SS_mass_fine_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_PUCorr[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
-        RP_SS_mass_fine_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_fine_before_RoccoR[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
-        RP_SS_mass_fine_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_EffCorr[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
+
+        RP_SS_mass_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_before_PUCorr[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_SS_mass_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_before_RoccoR[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_SS_mass_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_before_EffCorr[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_SS_mass_before_PVzCorr->AddLegendEntry(h_SS_bkg_mass_before_PVzCorr[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
+        RP_SS_mass_before_L1Corr->AddLegendEntry(h_SS_bkg_mass_before_L1Corr[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_SS_mass_fine->AddLegendEntry(h_SS_bkg_mass_fine[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
         RP_SS_mass->AddLegendEntry(h_SS_bkg_mass[1+isWJ], "#font[12]{#scale[1.1]{WZ}}", "f");
-        RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
-        RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
-        RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
+
+        RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_mass_before_RoccoR->AddLegendEntry(h_bkg_mass_before_RoccoR[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_mass->AddLegendEntry(h_bkg_mass[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
-        RP_SS_mass_fine_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_PUCorr[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
-        RP_SS_mass_fine_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_fine_before_RoccoR[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
-        RP_SS_mass_fine_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_EffCorr[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
+
+        RP_SS_mass_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_before_PUCorr[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_SS_mass_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_before_RoccoR[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_SS_mass_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_before_EffCorr[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_SS_mass_before_PVzCorr->AddLegendEntry(h_SS_bkg_mass_before_PVzCorr[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
+        RP_SS_mass_before_L1Corr->AddLegendEntry(h_SS_bkg_mass_before_L1Corr[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_SS_mass_fine->AddLegendEntry(h_SS_bkg_mass_fine[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
         RP_SS_mass->AddLegendEntry(h_SS_bkg_mass[0+isWJ], "#font[12]{#scale[1.1]{WW}}", "f");
+
         if ( isWJ )
         {
-            RP_mass_fine_before_PUCorr->AddLegendEntry(h_bkg_mass_fine_before_PUCorr[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
-            RP_mass_fine_before_RoccoR->AddLegendEntry(h_bkg_mass_fine_before_RoccoR[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
-            RP_mass_fine_before_EffCorr->AddLegendEntry(h_bkg_mass_fine_before_EffCorr[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+            RP_mass_before_PUCorr->AddLegendEntry(h_bkg_mass_before_PUCorr[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+            RP_mass_before_RoccoR->AddLegendEntry(h_bkg_mass_before_RoccoR[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+            RP_mass_before_EffCorr->AddLegendEntry(h_bkg_mass_before_EffCorr[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+            RP_mass_before_PVzCorr->AddLegendEntry(h_bkg_mass_before_PVzCorr[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+            RP_mass_before_L1Corr->AddLegendEntry(h_bkg_mass_before_L1Corr[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
             RP_mass_fine->AddLegendEntry(h_bkg_mass_fine[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
             RP_mass->AddLegendEntry(h_bkg_mass[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
-            RP_SS_mass_fine_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_PUCorr[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
-            RP_SS_mass_fine_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_fine_before_RoccoR[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
-            RP_SS_mass_fine_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_fine_before_EffCorr[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+
+            RP_SS_mass_before_PUCorr->AddLegendEntry(h_SS_bkg_mass_before_PUCorr[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+            RP_SS_mass_before_RoccoR->AddLegendEntry(h_SS_bkg_mass_before_RoccoR[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+            RP_SS_mass_before_EffCorr->AddLegendEntry(h_SS_bkg_mass_before_EffCorr[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+            RP_SS_mass_before_PVzCorr->AddLegendEntry(h_SS_bkg_mass_before_PVzCorr[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+            RP_SS_mass_before_L1Corr->AddLegendEntry(h_SS_bkg_mass_before_L1Corr[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
             RP_SS_mass_fine->AddLegendEntry(h_SS_bkg_mass_fine[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
             RP_SS_mass->AddLegendEntry(h_SS_bkg_mass[0], "#font[12]{#scale[1.1]{W}}+Jets", "f");
         }
 
-        RP_mass_fine_before_PUCorr->Draw( 4e-1, 2e4, 1 );
-        RP_mass_fine_before_RoccoR->Draw( 4e-1, 2e4, 1 );
-        RP_mass_fine_before_EffCorr->Draw( 4e-1, 2e4, 1 );
+        RP_mass_before_PUCorr->Draw( 4e-1, 2e4, 1 );
+        RP_mass_before_RoccoR->Draw( 4e-1, 2e4, 1 );
+        RP_mass_before_EffCorr->Draw( 4e-1, 2e4, 1 );
+        RP_mass_before_PVzCorr->Draw( 4e-1, 2e4, 1 );
+        RP_mass_before_L1Corr->Draw( 4e-1, 2e4, 1 );
         RP_mass_fine->Draw( 4e-1, 2e4, 1 );
         RP_mass->Draw( 4e-1, 2e4, 1 );
-        RP_SS_mass_fine_before_PUCorr->Draw( 4e-1, 2e4, 1 );
-        RP_SS_mass_fine_before_RoccoR->Draw( 4e-1, 2e4, 1 );
-        RP_SS_mass_fine_before_EffCorr->Draw( 4e-1, 2e4, 1 );
+        RP_SS_mass_before_PUCorr->Draw( 4e-1, 2e4, 1 );
+        RP_SS_mass_before_RoccoR->Draw( 4e-1, 2e4, 1 );
+        RP_SS_mass_before_EffCorr->Draw( 4e-1, 2e4, 1 );
+        RP_SS_mass_before_PVzCorr->Draw( 4e-1, 2e4, 1 );
+        RP_SS_mass_before_L1Corr->Draw( 4e-1, 2e4, 1 );
         RP_SS_mass_fine->Draw( 4e-1, 2e4, 1 );
         RP_SS_mass->Draw( 4e-1, 2e4, 1 );
 
@@ -3083,10 +3953,10 @@ void EMu_HistDrawer ( TString whichGraphs , TString type)
 
         dataintegral = h_data_mass->IntegralAndError(1, h_data_mass->GetSize()-2, dataerror);
         MCintegral = ((TH1D*)(s_mass->GetStack()->Last()))->IntegralAndError(1, h_data_mass->GetSize()-2, MCerror);
-        MCintegral_noSF = ((TH1D*)(s_mass_fine_before_RoccoR->GetStack()->Last()))->IntegralAndError(1, h_data_mass->GetSize()-2, MCerror_noSF);
+        MCintegral_noSF = ((TH1D*)(s_mass_before_RoccoR->GetStack()->Last()))->IntegralAndError(1, h_data_mass->GetSize()-2, MCerror_noSF);
         dataintegralSS = h_SS_data_mass->IntegralAndError(1, h_SS_data_mass->GetSize()-2, dataerrorSS);
         MCintegralSS = ((TH1D*)(s_SS_mass->GetStack()->Last()))->IntegralAndError(1, h_SS_data_mass->GetSize()-2, MCerrorSS);
-        MCintegralSS_noSF = ((TH1D*)(s_SS_mass_fine_before_RoccoR->GetStack()->Last()))->IntegralAndError(1, h_SS_data_mass->GetSize()-2, MCerrorSS_noSF);
+        MCintegralSS_noSF = ((TH1D*)(s_SS_mass_before_RoccoR->GetStack()->Last()))->IntegralAndError(1, h_SS_data_mass->GetSize()-2, MCerrorSS_noSF);
 
         dataintegralZ = h_data_mass->IntegralAndError( 10, 22, dataerrorZ );
         MCintegralZ = ( (TH1D*)(s_mass->GetStack()->Last()) )->IntegralAndError( 10, 22, MCerrorZ );
