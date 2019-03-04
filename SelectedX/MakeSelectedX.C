@@ -94,9 +94,9 @@ void MakeSelectedX (TString WhichX, TString type = "", TString HLTname = "DEFAUL
 
     if (Xselected == 0) {
         cout << "Wrong arument!" << endl;
-        fs << "Process MakeSelectedX (" << whichX << ", " << type << ", " << HLTname << ", " << RocCorr << ") FAILED. Wrong arguments!\n";
+        fs << "Process MakeSelectedX (" << whichX << ", " << type << ", " << HLTname << ") FAILED. Wrong arguments!\n";
     }
-    else fs << "Process MakeSelectedX (" << whichX << ", " << type << ", " << HLTname << ", " << RocCorr << ") FINISHED.\n";
+    else fs << "Process MakeSelectedX (" << whichX << ", " << type << ", " << HLTname << ") FINISHED.\n";
 
     fs.close();
 
@@ -556,7 +556,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t Debug)
 
                     if (isPassEventSelection == kTRUE || isPassEventSelection_noRocCorr == kTRUE)
                     {                       
-                        else if (fabs(SelectedMuonCollection[0].eta) >= 2.4 || fabs(SelectedMuonCollection[1].eta) >= 2.4)
+                        if (fabs(SelectedMuonCollection[0].eta) >= 2.4 || fabs(SelectedMuonCollection[1].eta) >= 2.4)
                         {
                             cout << "ERROR: Evt " << i << ":    etas of selected muons are:\n[0]  " << SelectedMuonCollection[0].eta;
                             cout << "\n[1]  " << SelectedMuonCollection[1].eta << endl;
