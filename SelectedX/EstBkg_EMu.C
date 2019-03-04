@@ -68,13 +68,13 @@ void ee_Est()
     Mgr.SetProc(_EMu_Bkg_Full);
     cout << "EMu Hists location: " << Mgr.HistLocation << endl;
 
-    TFile* f_Bkg_EMu = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root", "READ" );
-    if (f_Bkg_EMu->IsOpen()) std::cout << "File Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root opened successfully\n";
+    TFile* f_Bkg_EMu = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_Bkg_Full]+"_roccor.root", "READ" );
+    if (f_Bkg_EMu->IsOpen()) std::cout << "File Hist_"+Mgr.Procname[_EMu_Bkg_Full]+"_roccor.root opened successfully\n";
     else { std::cout << "File Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root was not opened\n"; return; }
 
     Mgr.SetProc(_EMu_SingleMuon_Full);
-    TFile* f_Data_EMu = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root", "READ" );
-    if (f_Data_EMu->IsOpen()) std::cout << "File Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root opened successfully\n";
+    TFile* f_Data_EMu = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+"_roccor.root", "READ" );
+    if (f_Data_EMu->IsOpen()) std::cout << "File Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+"_roccor.root opened successfully\n";
     else { std::cout << "File Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root was not opened\n"; return; }
 
 //********************************* E MU ***********************************************************
@@ -88,7 +88,7 @@ void ee_Est()
             gStyle->SetOptStat(0);
 
             Int_t isWJ = 0;
-            isWJ = 1; // UNCOMMENT THIS IF YOU WANT TO INCLUDE W+JETS
+//            isWJ = 1; // UNCOMMENT THIS IF YOU WANT TO INCLUDE W+JETS
 
             for ( SelProc_t pr=_EMu_WJets; pr<=_EMu_VVnST; pr=SelProc_t((int)(pr-1)) )
             {
@@ -428,26 +428,26 @@ void MuMu_Est()
     if ( f_NMuMuEst->IsOpen() ) std::cout << "File EstBkg_MuMu.root opened successfully\n";
     else { std::cout << "File EstBkg_MuMu.root was not opened\n"; return; }
 
-    TFile* f_Bkg_MuMu = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root", "READ" );
-    if ( f_Bkg_MuMu->IsOpen() ) std::cout << "File Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root opened successfully\n";
-    else { std::cout << "File Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root was not opened\n"; return; }
+    TFile* f_Bkg_MuMu = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+"_roccor.root", "READ" );
+    if ( f_Bkg_MuMu->IsOpen() ) std::cout << "File Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+"_roccor.root opened successfully\n";
+    else { std::cout << "File Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+"_roccor.root was not opened\n"; return; }
 
     Mgr.SetProc(_MuMu_DY_Full);
-    TFile* f_DY_MuMu = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root", "READ" );
-    if ( f_DY_MuMu->IsOpen() ) std::cout << "File Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root opened successfully\n";
-    else { std::cout << "File Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root was not opened\n"; return; }
+    TFile* f_DY_MuMu = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_DY_Full]+"_roccor.root", "READ" );
+    if ( f_DY_MuMu->IsOpen() ) std::cout << "File Hist_"+Mgr.Procname[_MuMu_DY_Full]+"_roccor.root opened successfully\n";
+    else { std::cout << "File Hist_"+Mgr.Procname[_MuMu_DY_Full]+"_roccor.root was not opened\n"; return; }
 
     Mgr.SetProc(_EMu_Bkg_Full);
     cout << "EMu Hists location: " << Mgr.HistLocation << endl;
 
-    TFile* f_Bkg_EMu = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root", "READ" );
-    if (f_Bkg_EMu->IsOpen()) std::cout << "File Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root opened successfully\n";
-    else { std::cout << "File Hist_"+Mgr.Procname[_EMu_Bkg_Full]+".root was not opened\n"; return; }
+    TFile* f_Bkg_EMu = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_Bkg_Full]+"_roccor.root", "READ" );
+    if (f_Bkg_EMu->IsOpen()) std::cout << "File Hist_"+Mgr.Procname[_EMu_Bkg_Full]+"_roccor.root opened successfully\n";
+    else { std::cout << "File Hist_"+Mgr.Procname[_EMu_Bkg_Full]+"_roccor.root was not opened\n"; return; }
 
     Mgr.SetProc(_EMu_SingleMuon_Full);
-    TFile* f_Data_EMu = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root", "READ" );
-    if (f_Data_EMu->IsOpen()) std::cout << "File Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root opened successfully\n";
-    else { std::cout << "File Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+".root was not opened\n"; return; }
+    TFile* f_Data_EMu = new TFile( Mgr.HistLocation+"Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+"_roccor.root", "READ" );
+    if (f_Data_EMu->IsOpen()) std::cout << "File Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+"_roccor.root opened successfully\n";
+    else { std::cout << "File Hist_"+Mgr.Procname[_EMu_SingleMuon_Full]+"_roccor.root was not opened\n"; return; }
 
 //********************************* E MU ***********************************************************
 

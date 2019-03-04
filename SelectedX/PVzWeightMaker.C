@@ -262,15 +262,15 @@ void PVzWeightMaker ( Bool_t SwitchROCCORR = kFALSE )
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 // -------------------------------------- MC --------------------------------------------//
-/*
+
     for ( SelProc_t pr=_EMu_DYTauTau_10to50; pr<_EndOf_EMu_WJets; pr=next(pr) )
     {
-        Mgr.SetProc( Processes[i_proc] );
+        Mgr.SetProc( pr );
 
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
         cout << "Type: " << Mgr.Type << endl;
 
-        DYAnalyzer *analyzer = new DYAnalyzer( HLTname );
+        DYAnalyzer *analyzer = new DYAnalyzer( "IsoMu24_OR_IsoTkMu24" );
 
         // -- For PU re-weighting -- //
         analyzer->SetupPileUpReWeighting_80X( Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root" );
@@ -328,7 +328,7 @@ void PVzWeightMaker ( Bool_t SwitchROCCORR = kFALSE )
 
     for ( SelProc_t pr=_EMu_SingleMuon_B; pr<_EndOf_EMu_Data_Normal; pr=next(pr) )
     {
-        Mgr.SetProc( Processes[i_proc] );
+        Mgr.SetProc( pr );
 
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
         cout << "Type: " << Mgr.Type << endl;
@@ -361,7 +361,7 @@ void PVzWeightMaker ( Bool_t SwitchROCCORR = kFALSE )
             }// End of event iteration
         }// End of i_tup iteration
     }// End of process iteration
-*/
+
 // ------------------------------------ FINAL STEPS -------------------------------------//
 
     // -- Scaling histograms to have integral equal to 1 -- //
@@ -369,17 +369,17 @@ void PVzWeightMaker ( Bool_t SwitchROCCORR = kFALSE )
 //    h_PVz_Data_ee->Scale( 1/h_PVz_Data_ee->Integral(1, h_PVz_Data_ee->GetSize()-2) );
     h_PVz_MC_mumu->Scale( 1/h_PVz_MC_mumu->Integral(1, h_PVz_MC_mumu->GetSize()-2) );
     h_PVz_Data_mumu->Scale( 1/h_PVz_Data_mumu->Integral(1, h_PVz_Data_mumu->GetSize()-2) );
-//    h_PVz_MC_emu->Scale( 1/h_PVz_MC_emu->Integral(1, h_PVz_MC_emu->GetSize()-2) );
-//    h_PVz_Data_emu->Scale( 1/h_PVz_Data_emu->Integral(1, h_PVz_Data_emu->GetSize()-2) );
+    h_PVz_MC_emu->Scale( 1/h_PVz_MC_emu->Integral(1, h_PVz_MC_emu->GetSize()-2) );
+    h_PVz_Data_emu->Scale( 1/h_PVz_Data_emu->Integral(1, h_PVz_Data_emu->GetSize()-2) );
 
     // -- Creating weight histograms -- //
 //    TH1D* h_PVzWeights_ee = ( (TH1D*)(h_PVz_Data_ee->Clone("h_PVzWeights_ee")) );
     TH1D* h_PVzWeights_mumu = ( (TH1D*)(h_PVz_Data_mumu->Clone("h_PVzWeights_mumu")) );
-//    TH1D* h_PVzWeights_emu = ( (TH1D*)(h_PVz_Data_emu->Clone("h_PVzWeights_emu")) );
+    TH1D* h_PVzWeights_emu = ( (TH1D*)(h_PVz_Data_emu->Clone("h_PVzWeights_emu")) );
 
 //    h_PVzWeights_ee->Divide( h_PVz_MC_ee );
     h_PVzWeights_mumu->Divide( h_PVz_MC_mumu );
-//    h_PVzWeights_emu->Divide( h_PVz_MC_emu );
+    h_PVzWeights_emu->Divide( h_PVz_MC_emu );
 
     // -- Drawing -- //
 //    TCanvas *c_ee = new TCanvas("ee", "ee", 800, 800);
@@ -388,7 +388,7 @@ void PVzWeightMaker ( Bool_t SwitchROCCORR = kFALSE )
 //    h_PVz_MC_ee->SetMarkerColor( kRed );
 //    h_PVz_Data_ee->SetMarkerStyle( kBlack );
 //    h_PVz_MC_ee->Draw();
-//    h_PVz_Data_ee->Draw("SAMEAXIS");
+//    h_PVz_Data_ee->Draw("SAME");
 //    c_ee->Update();
 
     TCanvas *c_mumu = new TCanvas("mumu", "mumu", 800, 800);
@@ -400,36 +400,36 @@ void PVzWeightMaker ( Bool_t SwitchROCCORR = kFALSE )
     h_PVz_Data_mumu->Draw("SAME");
     c_mumu->Update();
 
-//    TCanvas *c_emu = new TCanvas("emu", "emu", 800, 800);
-//    h_PVz_MC_emu->SetMarkerStyle( kFullDotLarge );
-//    h_PVz_Data_emu->SetMarkerStyle( kFullDotLarge );
-//    h_PVz_MC_emu->SetMarkerColor( kRed );
-//    h_PVz_Data_emu->SetMarkerStyle( kBlack );
-//    h_PVz_MC_emu->Draw();
-//    h_PVz_Data_emu->Draw("SAMEAXIS");
-//    c_emu->Update();
+    TCanvas *c_emu = new TCanvas("emu", "emu", 800, 800);
+    h_PVz_MC_emu->SetMarkerStyle( kFullDotLarge );
+    h_PVz_Data_emu->SetMarkerStyle( kFullDotLarge );
+    h_PVz_MC_emu->SetMarkerColor( kRed );
+    h_PVz_Data_emu->SetMarkerStyle( kBlack );
+    h_PVz_MC_emu->Draw();
+    h_PVz_Data_emu->Draw("SAME");
+    c_emu->Update();
 
     TCanvas *c_weights = new TCanvas("weights", "weights", 800, 800);
 //    h_PVzWeights_ee->SetMarkerStyle( kFullDotLarge );
     h_PVzWeights_mumu->SetMarkerStyle( kFullDotLarge );
-//    h_PVzWeights_emu->SetMarkerStyle( kFullDotLarge );
+    h_PVzWeights_emu->SetMarkerStyle( kFullDotLarge );
 //    h_PVzWeights_ee->SetMarkerColor( kBlack );
     h_PVzWeights_mumu->SetMarkerColor( kRed );
-//    h_PVzWeights_emu->SetMarkerColor( kBlue );
+    h_PVzWeights_emu->SetMarkerColor( kBlue );
 //    h_PVzWeights_ee->Draw();
-    h_PVzWeights_mumu->Draw("SAMEAXIS");
-//    h_PVzWeights_emu->Draw("SAMEAXIS");
+    h_PVzWeights_mumu->Draw();
+    h_PVzWeights_emu->Draw("SAME");
     c_weights->Update();
 
 //    h_PVzWeights_ee->SetDirectory(0);
     h_PVzWeights_mumu->SetDirectory(0);
-//    h_PVzWeights_emu->SetDirectory(0);
+    h_PVzWeights_emu->SetDirectory(0);
 //    h_PVz_MC_ee->SetDirectory(0);
 //    h_PVz_Data_ee->SetDirectory(0);
     h_PVz_MC_mumu->SetDirectory(0);
     h_PVz_Data_mumu->SetDirectory(0);
-//    h_PVz_MC_emu->SetDirectory(0);
-//    h_PVz_Data_emu->SetDirectory(0);
+    h_PVz_MC_emu->SetDirectory(0);
+    h_PVz_Data_emu->SetDirectory(0);
 
     // -- Writing -- //
     f->cd();
@@ -437,11 +437,11 @@ void PVzWeightMaker ( Bool_t SwitchROCCORR = kFALSE )
 //    h_PVz_Data_ee->Write();
     h_PVz_MC_mumu->Write();
     h_PVz_Data_mumu->Write();
-//    h_PVz_MC_emu->Write();
-//    h_PVz_Data_emu->Write();
+    h_PVz_MC_emu->Write();
+    h_PVz_Data_emu->Write();
 //    h_PVzWeights_ee->Write();
     h_PVzWeights_mumu->Write();
-//    h_PVzWeights_emu->Write();
+    h_PVzWeights_emu->Write();
     f->Close();
 
     if ( !f->IsOpen() ) cout << "File PVzWeights.root has been closed successfully.\n" << endl;

@@ -2535,7 +2535,7 @@ void LocalFileMgr::SetProc ( SelProc_t pr, Bool_t ClearOld )
         if ( ROCCORR == kTRUE ) nEvents.push_back( 326098 );
         else nEvents.push_back( 326098 );
         Wsum.push_back( 38487178.0 );                                       //It is not sure. (https://twiki.cern.ch/twiki/bin/viewauth/CMS/B2GMonteCarlo)
-        Location = "SelectedEMu/MC_bkg/SelectedEMu_SelectedMuMu_ttbar_M700to1000"+RocCorr+".root";
+        Location = "SelectedEMu/MC_bkg/SelectedEMu_ttbar_M700to1000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _EMu_ttbar_1000toInf )
@@ -2685,21 +2685,21 @@ void LocalFileMgr::SetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "BKG";
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
-        Tag.push_back( "SelectedEMu_WJetsToLNu" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 16433848+161144203+253691042 );
+        Tag.push_back( "SelectedEMu_WJetsToLNu" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 16433848+161144203+253933112 );
         if ( ROCCORR == kTRUE ) nEvents.push_back( 274 );
         else nEvents.push_back( 274 );
         Location = "SelectedEMu/MC_bkg/SelectedEMu_WJetsToLNu"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEMu_WJetsToLNu_ext" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 16433848+161144203+253691042 );
+        Tag.push_back( "SelectedEMu_WJetsToLNu_ext" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 16433848+161144203+253933112 );
         if ( ROCCORR == kTRUE ) nEvents.push_back( 2602 );
         else nEvents.push_back( 2602 );
         Location = "SelectedEMu/MC_bkg/SelectedEMu_WJetsToLNu_ext"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEMu_WJetsToLNu_ext2v5" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 16433848+161144203+253691042 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 2602 );
-        else nEvents.push_back( 2602 );
+        Tag.push_back( "SelectedEMu_WJetsToLNu_ext2v5" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 16433848+161144203+253933112 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 4103 );
+        else nEvents.push_back( 4103 );
         Location = "SelectedEMu/MC_bkg/SelectedEMu_WJetsToLNu_ext2v5"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
@@ -2790,21 +2790,21 @@ void LocalFileMgr::SetProc ( SelProc_t pr, Bool_t ClearOld )
         Location = "SelectedEMu/MC_bkg/SelectedEMu_WW"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEMu_WJetsToLNu" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 16433848+161144203+253691042 );
+        Tag.push_back( "SelectedEMu_WJetsToLNu" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 16433848+161144203+253933112 );
         if ( ROCCORR == kTRUE ) nEvents.push_back( 274 );
         else nEvents.push_back( 274 );
         Location = "SelectedEMu/MC_bkg/SelectedEMu_WJetsToLNu"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEMu_WJetsToLNu_ext" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 16433848+161144203+253691042 );
+        Tag.push_back( "SelectedEMu_WJetsToLNu_ext" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 16433848+161144203+253933112 );
         if ( ROCCORR == kTRUE ) nEvents.push_back( 2602 );
         else nEvents.push_back( 2602 );
         Location = "SelectedEMu/MC_bkg/SelectedEMu_WJetsToLNu_ext"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEMu_WJetsToLNu_ext2v5" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 16433848+161144203+253691042 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 2602 );
-        else nEvents.push_back( 2602 );
+        Tag.push_back( "SelectedEMu_WJetsToLNu_ext2v5" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 16433848+161144203+253933112 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 4103 );
+        else nEvents.push_back( 4103 );
         Location = "SelectedEMu/MC_bkg/SelectedEMu_WJetsToLNu_ext2v5"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
@@ -2915,17 +2915,17 @@ void LocalFileMgr::SetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "DATA";
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
-        Tag.push_back( "SelectedEMu_SingleMuon_B_0000" ); Wsum.push_back( 108561074 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 49756 );
-        else nEvents.push_back( 49749 );
+        Tag.push_back( "SelectedEMu_SingleMuon_B_0000" ); Wsum.push_back( 154033697 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 60094 );
+        else nEvents.push_back( 60094 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_B_0000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEMu_SingleMuon_B_0001" ); Wsum.push_back( 108561074 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 49756 );
-        else nEvents.push_back( 49749 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_B_0001"+RocCorr+".root";
-        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+//        Tag.push_back( "SelectedEMu_SingleMuon_B_0001" ); Wsum.push_back( 108561074 );
+//        if ( ROCCORR == kTRUE ) nEvents.push_back( 49756 );
+//        else nEvents.push_back( 49749 );
+//        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_B_0001"+RocCorr+".root";
+//        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_SingleMuon_C )
     {
@@ -2934,8 +2934,8 @@ void LocalFileMgr::SetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_C" ); Wsum.push_back( 64715287 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 29763 );
-        else nEvents.push_back( 29758 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 25104 );
+        else nEvents.push_back( 25104 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_C"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
@@ -2946,8 +2946,8 @@ void LocalFileMgr::SetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_D" ); Wsum.push_back( 96652779 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 49397 );
-        else nEvents.push_back( 49393 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 41770 );
+        else nEvents.push_back( 41770 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_D"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
@@ -2958,8 +2958,8 @@ void LocalFileMgr::SetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_E" ); Wsum.push_back( 87358348 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 44041 );
-        else nEvents.push_back( 44030 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 37155 );
+        else nEvents.push_back( 37155 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_E"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
@@ -2970,8 +2970,8 @@ void LocalFileMgr::SetProc ( SelProc_t pr, Bool_t ClearOld )
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
         Tag.push_back( "SelectedEMu_SingleMuon_F" ); Wsum.push_back( 64986568 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 34504 );
-        else nEvents.push_back( 34498 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 29019 );
+        else nEvents.push_back( 29019 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_F"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
@@ -2981,17 +2981,17 @@ void LocalFileMgr::SetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "DATA";
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
-        Tag.push_back( "SelectedEMu_SingleMuon_G_0000" ); Wsum.push_back( 138710659 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 84902 );
-        else nEvents.push_back( 84896 );
+        Tag.push_back( "SelectedEMu_SingleMuon_G_0000" ); Wsum.push_back( 147937361 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 76472 );
+        else nEvents.push_back( 76472 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_G_0000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEMu_SingleMuon_G_0001" ); Wsum.push_back( 138710659 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 84902 );
-        else nEvents.push_back( 84896 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_G_0001"+RocCorr+".root";
-        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+//        Tag.push_back( "SelectedEMu_SingleMuon_G_0001" ); Wsum.push_back( 138710659 );
+//        if ( ROCCORR == kTRUE ) nEvents.push_back( 84902 );
+//        else nEvents.push_back( 84896 );
+//        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_G_0001"+RocCorr+".root";
+//        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if ( pr == _EMu_SingleMuon_H )
     {
@@ -2999,21 +2999,21 @@ void LocalFileMgr::SetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "DATA";
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
-        Tag.push_back( "SelectedEMu_SingleMuon_Hver2_0000" ); Wsum.push_back( 141936183 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 85368 );
-        else nEvents.push_back( 85351 );
+        Tag.push_back( "SelectedEMu_SingleMuon_Hver2_0000" ); Wsum.push_back( 166695051 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 84092 );
+        else nEvents.push_back( 84092 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_Hver2_0000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEMu_SingleMuon_Hver2_0001" ); Wsum.push_back( 141936183 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 85368 );
-        else nEvents.push_back( 85351 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_Hver2_0001"+RocCorr+".root";
-        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+//        Tag.push_back( "SelectedEMu_SingleMuon_Hver2_0001" ); Wsum.push_back( 141936183 );
+//        if ( ROCCORR == kTRUE ) nEvents.push_back( 85368 );
+//        else nEvents.push_back( 85351 );
+//        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_Hver2_0001"+RocCorr+".root";
+//        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_SingleMuon_Hver3" ); Wsum.push_back( 4386928 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 2603 );
-        else nEvents.push_back( 2604 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2226 );
+        else nEvents.push_back( 2226 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_Hver3"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
@@ -3023,69 +3023,69 @@ void LocalFileMgr::SetProc ( SelProc_t pr, Bool_t ClearOld )
         Type = "DATA";
         HistLocation = "/media/sf_DATA/SelectedEMu/Histos/";
 
-        Tag.push_back( "SelectedEMu_SingleMuon_B_0000" ); Wsum.push_back( 108561074 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 49756 );
-        else nEvents.push_back( 49749 );
+        Tag.push_back( "SelectedEMu_SingleMuon_B_0000" ); Wsum.push_back( 154033697 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 60094 );
+        else nEvents.push_back( 60094 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_B_0000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEMu_SingleMuon_B_0001" ); Wsum.push_back( 108561074 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 49756 );
-        else nEvents.push_back( 49749 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_B_0001"+RocCorr+".root";
-        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+//        Tag.push_back( "SelectedEMu_SingleMuon_B_0001" ); Wsum.push_back( 108561074 );
+//        if ( ROCCORR == kTRUE ) nEvents.push_back( 49756 );
+//        else nEvents.push_back( 49749 );
+//        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_B_0001"+RocCorr+".root";
+//        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_SingleMuon_C" ); Wsum.push_back( 64715287 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 29763 );
-        else nEvents.push_back( 29758 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 25104 );
+        else nEvents.push_back( 25104 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_C"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_SingleMuon_D" ); Wsum.push_back( 96652779 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 49397 );
-        else nEvents.push_back( 49393 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 41770 );
+        else nEvents.push_back( 41770 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_D"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_SingleMuon_E" ); Wsum.push_back( 87358348 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 44041 );
-        else nEvents.push_back( 44030 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 37155 );
+        else nEvents.push_back( 37155 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_E"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_SingleMuon_F" ); Wsum.push_back( 64986568 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 34504 );
-        else nEvents.push_back( 34498 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 29019 );
+        else nEvents.push_back( 29019 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_F"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEMu_SingleMuon_G_0000" ); Wsum.push_back( 138710659 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 84902 );
-        else nEvents.push_back( 84896 );
+        Tag.push_back( "SelectedEMu_SingleMuon_G_0000" ); Wsum.push_back( 147937361 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 76472 );
+        else nEvents.push_back( 76472 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_G_0000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEMu_SingleMuon_G_0001" ); Wsum.push_back( 138710659 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 84902 );
-        else nEvents.push_back( 84896 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_G_0001"+RocCorr+".root";
-        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+//        Tag.push_back( "SelectedEMu_SingleMuon_G_0001" ); Wsum.push_back( 138710659 );
+//        if ( ROCCORR == kTRUE ) nEvents.push_back( 84902 );
+//        else nEvents.push_back( 84896 );
+//        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_G_0001"+RocCorr+".root";
+//        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEMu_SingleMuon_Hver2_0000" ); Wsum.push_back( 141936183 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 85368 );
-        else nEvents.push_back( 85351 );
+        Tag.push_back( "SelectedEMu_SingleMuon_Hver2_0000" ); Wsum.push_back( 166695051 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 84092 );
+        else nEvents.push_back( 84092 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_Hver2_0000"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
-        Tag.push_back( "SelectedEMu_SingleMuon_Hver2_0001" ); Wsum.push_back( 141936183 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 85368 );
-        else nEvents.push_back( 85351 );
-        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_Hver2_0001"+RocCorr+".root";
-        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+//        Tag.push_back( "SelectedEMu_SingleMuon_Hver2_0001" ); Wsum.push_back( 141936183 );
+//        if ( ROCCORR == kTRUE ) nEvents.push_back( 85368 );
+//        else nEvents.push_back( 85351 );
+//        Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_Hver2_0001"+RocCorr+".root";
+//        TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "SelectedEMu_SingleMuon_Hver3" ); Wsum.push_back( 4386928 );
-        if ( ROCCORR == kTRUE ) nEvents.push_back( 2603 );
-        else nEvents.push_back( 2604 );
+        if ( ROCCORR == kTRUE ) nEvents.push_back( 2226 );
+        else nEvents.push_back( 2226 );
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_Hver3"+RocCorr+".root";
         TreeName.push_back( "DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }

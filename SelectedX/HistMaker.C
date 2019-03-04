@@ -271,9 +271,9 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
                 // -- L1 prefiring weights -- //
                 Double_t L1weight = 1;
-//                if ( Mgr.isMC == kTRUE ) L1weight = EE->_prefiringweight;
+                if ( Mgr.isMC == kTRUE ) L1weight = EE->_prefiringweight;
 //                if ( Mgr.isMC == kTRUE ) L1weight = EE->_prefiringweightup;
-                if ( Mgr.isMC == kTRUE ) L1weight = EE->_prefiringweightdown;
+//                if ( Mgr.isMC == kTRUE ) L1weight = EE->_prefiringweightdown;
 
                 // -- Normalization -- //
                 Double_t TotWeight = GenWeight;
@@ -678,9 +678,9 @@ void MuMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_
 
                 // -- L1 prefiring weights -- //
                 Double_t L1weight = 1;
-//                if ( Mgr.isMC == kTRUE ) L1weight = MuMu->_prefiringweight;
+                if ( Mgr.isMC == kTRUE ) L1weight = MuMu->_prefiringweight;
 //                if ( Mgr.isMC == kTRUE ) L1weight = MuMu->_prefiringweightup;
-                if ( Mgr.isMC == kTRUE ) L1weight = MuMu->_prefiringweightdown;
+//                if ( Mgr.isMC == kTRUE ) L1weight = MuMu->_prefiringweightdown;
 
                 // -- Normalization -- //
                 Double_t TotWeight = GenWeight;
@@ -942,7 +942,7 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
         analyzer->SetupEfficiencyScaleFactor_electron();
 
         // -- For PVz reweighting -- //
-        analyzer->SetupPVzWeights( Mgr.isMC, "emu", "./etc/PVzWeights.root");
+        analyzer->SetupPVzWeights( Mgr.isMC, "mumu", "./etc/PVzWeights.root");
 
         // -- Creating Histograms -- //
         TH1D *h_emu_mass_before_PUCorr = new TH1D( "h_emu_mass_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 43, massbins );
@@ -1075,9 +1075,9 @@ void EMu_HistMaker (TString type, Bool_t SwitchROCCORR, TString HLTname , Bool_t
 
                 // -- L1 weights --//
                 Double_t L1weight = 1;
-//                if( Mgr.isMC == kTRUE ) L1weight = EMu->_prefiringweight;
+                if( Mgr.isMC == kTRUE ) L1weight = EMu->_prefiringweight;
 //                if( Mgr.isMC == kTRUE ) L1weight = EMu->_prefiringweightup;
-                if( Mgr.isMC == kTRUE ) L1weight = EMu->_prefiringweightdown;
+//                if( Mgr.isMC == kTRUE ) L1weight = EMu->_prefiringweightdown;
 
                 // -- Normalization -- //
                 Double_t TotWeight = GenWeight;
