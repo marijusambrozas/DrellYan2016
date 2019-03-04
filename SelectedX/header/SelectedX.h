@@ -366,11 +366,11 @@ public:
         chain->SetBranchAddress("isPFmuon", &isPFmuon);
         chain->SetBranchAddress("isGLBmuon", &isGLBmuon);
         chain->SetBranchAddress("isTRKmuon", &isTRKmuon);
-        chain->SetBranchAddress("Muon_Px", &Muon_Px );
-        chain->SetBranchAddress("Muon_Py", &Muon_Py );
-        chain->SetBranchAddress("Muon_Pz", &Muon_Pz );
+        chain->SetBranchAddress("Muon_Px", &Muon_Px);
+        chain->SetBranchAddress("Muon_Py", &Muon_Py);
+        chain->SetBranchAddress("Muon_Pz", &Muon_Pz);
 
-//        chain->SetBranchAddress("Muon_dB", Muon_dB );
+//        chain->SetBranchAddress("Muon_dB", Muon_dB);
 
         chain->SetBranchAddress("Muon_PfChargedHadronIsoR04", &Muon_PfChargedHadronIsoR04);
         chain->SetBranchAddress("Muon_PfNeutralHadronIsoR04", &Muon_PfNeutralHadronIsoR04);
@@ -628,7 +628,7 @@ public:
         Muon_passTightID->clear();
         Muon_passHighPtID->clear();
 
-//        if ( !HLT_trigFired->size() && !HLT_trigName->size() && !HLT_trigEta->size() && !HLT_trigPhi->size() && !Muon_pT->size() && !Muon_eta->size() &&
+//        if (!HLT_trigFired->size() && !HLT_trigName->size() && !HLT_trigEta->size() && !HLT_trigPhi->size() && !Muon_pT->size() && !Muon_eta->size() &&
 //             !Muon_phi->size() && !isGLBmuon->size() && !isPFmuon->size() && !isTRKmuon->size() && !Muon_charge->size() && !Muon_chi2dof->size() &&
 //             !Muon_muonHits->size() && !Muon_nSegments->size() && !Muon_nMatches->size() && !Muon_trackerLayers->size() && !Muon_pixelHits->size() &&
 //             !Muon_dxyVTX->size() && !Muon_dzVTX->size() && !Muon_trkiso->size() && !Muon_PfChargedHadronIsoR04->size() && !Muon_PfNeutralHadronIsoR04->size() &&
@@ -640,7 +640,7 @@ public:
 //             !Muon_Outer_phi->size() && !Muon_GLB_pT->size() && !Muon_GLB_pTError->size() && !Muon_GLB_Px->size() && !Muon_GLB_Py->size() &&
 //             !Muon_GLB_Pz->size() && !Muon_GLB_eta->size() && !Muon_GLB_phi->size() && !Muon_TuneP_pT->size() && !Muon_TuneP_pTError->size() &&
 //             !Muon_TuneP_Px->size() && !Muon_TuneP_Py->size() && !Muon_TuneP_Pz->size() && !Muon_TuneP_eta->size() && !Muon_TuneP_phi->size() &&
-//             !CosAngle->size() && !vtxTrkChi2->size() && !vtxTrkProb->size() && !vtxTrkNdof->size() && !vtxTrkCkt1Pt->size() && !vtxTrkCkt2Pt->size() )
+//             !CosAngle->size() && !vtxTrkChi2->size() && !vtxTrkProb->size() && !vtxTrkNdof->size() && !vtxTrkCkt1Pt->size() && !vtxTrkCkt2Pt->size())
 //            return 1;
 //        else return 0;
     }
@@ -870,13 +870,13 @@ public:
     Bool_t isTriggered(TString HLT)
     {
         Bool_t isTrigger = false;
-        if( HLT == "HLT_IsoMu20_v* || HLT_IsoTkMu20_v*" )
+        if(HLT == "HLT_IsoMu20_v* || HLT_IsoTkMu20_v*")
         {
-            for( Int_t k = 0; k < HLT_ntrig; k++ )
+            for(Int_t k = 0; k < HLT_ntrig; k++)
             {
-                if( (HLT_trigName->at((unsigned int)k)) == "HLT_IsoMu20_v*" || (HLT_trigName->at((unsigned int)k)) == "HLT_IsoTkMu20_v*" )
+                if((HLT_trigName->at((unsigned int)k)) == "HLT_IsoMu20_v*" || (HLT_trigName->at((unsigned int)k)) == "HLT_IsoTkMu20_v*")
                 {
-                    if( HLT_trigFired->at(k) == 1 )
+                    if(HLT_trigFired->at(k) == 1)
                     {
                         isTrigger = true;
                         break;
@@ -884,13 +884,13 @@ public:
                 }
             }
         }
-        else if( HLT == "HLT_IsoMu27_v* || HLT_IsoTkMu27_v*" )
+        else if(HLT == "HLT_IsoMu27_v* || HLT_IsoTkMu27_v*")
         {
-            for( Int_t k = 0; k < HLT_ntrig; k++ )
+            for(Int_t k = 0; k < HLT_ntrig; k++)
             {
-                if( (HLT_trigName->at((unsigned int)k)) == "HLT_IsoMu27_v*" || (HLT_trigName->at((unsigned int)k)) == "HLT_IsoTkMu27_v*" )
+                if((HLT_trigName->at((unsigned int)k)) == "HLT_IsoMu27_v*" || (HLT_trigName->at((unsigned int)k)) == "HLT_IsoTkMu27_v*")
                 {
-                    if( HLT_trigFired->at(k) == 1 )
+                    if(HLT_trigFired->at(k) == 1)
                     {
                         isTrigger = true;
                         break;
@@ -898,13 +898,13 @@ public:
                 }
             }
         }
-        else if( HLT == "HLT_IsoMu24_v* || HLT_IsoTkMu24_v*" )
+        else if(HLT == "HLT_IsoMu24_v* || HLT_IsoTkMu24_v*")
         {
-            for( Int_t k = 0; k < HLT_ntrig; k++ )
+            for(Int_t k = 0; k < HLT_ntrig; k++)
             {
-                if( (HLT_trigName->at((unsigned int)k)) == "HLT_IsoMu24_v*" || (HLT_trigName->at((unsigned int)k)) == "HLT_IsoTkMu24_v*" )
+                if((HLT_trigName->at((unsigned int)k)) == "HLT_IsoMu24_v*" || (HLT_trigName->at((unsigned int)k)) == "HLT_IsoTkMu24_v*")
                 {
-                    if( HLT_trigFired->at(k) == 1 )
+                    if(HLT_trigFired->at(k) == 1)
                     {
                         isTrigger = true;
                         break;
@@ -912,13 +912,13 @@ public:
                 }
             }
         }
-        else if( HLT == "HLT_Mu50_v* || HLT_TkMu50_v*" )
+        else if(HLT == "HLT_Mu50_v* || HLT_TkMu50_v*")
         {
-            for( Int_t k = 0; k < HLT_ntrig; k++ )
+            for(Int_t k = 0; k < HLT_ntrig; k++)
             {
-                if( (HLT_trigName->at((unsigned int)k)) == "HLT_Mu50_v*" || (HLT_trigName->at((unsigned int)k)) == "HLT_TkMu50_v*" )
+                if((HLT_trigName->at((unsigned int)k)) == "HLT_Mu50_v*" || (HLT_trigName->at((unsigned int)k)) == "HLT_TkMu50_v*")
                 {
-                    if( HLT_trigFired->at(k) == 1 )
+                    if(HLT_trigFired->at(k) == 1)
                     {
                         isTrigger = true;
                         break;
@@ -928,11 +928,11 @@ public:
         }
         else
         {
-            for( Int_t k = 0; k < HLT_ntrig; k++ )
+            for(Int_t k = 0; k < HLT_ntrig; k++)
             {
-                if( (HLT_trigName->at((unsigned int)k)) == HLT )
+                if((HLT_trigName->at((unsigned int)k)) == HLT)
                 {
-                    if( HLT_trigFired->at(k) == 1 )
+                    if(HLT_trigFired->at(k) == 1)
                     {
                         isTrigger = true;
                         break;
@@ -1067,26 +1067,26 @@ public:
 
     void MakeBranches(TTree *tree)
     {
-        tree->Branch( "isSelPassed", &this->isSelPassed );
-        tree->Branch( "nVertices", &this->nVertices );
-        tree->Branch( "nPileUp", &this->nPileUp );
-        tree->Branch( "GENEvt_weight", &this->GENEvt_weight );
-        tree->Branch( "_topPtWeight", &this->_topPtWeight);
-        tree->Branch( "_prefiringweight", &this->_prefiringweight );
-        tree->Branch( "_prefiringweightup", &this->_prefiringweightup );
-        tree->Branch( "_prefiringweightdown", &this->_prefiringweightdown );
-        tree->Branch( "PVz", &this->PVz );
-        tree->Branch( "Muon_pT", &this->Muon_pT );
-        tree->Branch( "Muon_eta", &this->Muon_eta );
-        tree->Branch( "Muon_phi", &this->Muon_phi );
-        tree->Branch( "Muon_charge", &this->Muon_charge );
-        tree->Branch( "Muon_Energy", &this->Muon_Energy );
-        tree->Branch( "Muon_InvM", &this->Muon_InvM );
-        tree->Branch( "Muon_TuneP_pT", &this->Muon_TuneP_pT );
-        tree->Branch( "Muon_pT_uncorr", &this->Muon_pT_uncorr);
-        tree->Branch( "Muon_eta_uncorr", &this->Muon_eta_uncorr );
-        tree->Branch( "Muon_phi_uncorr", &this->Muon_phi_uncorr );
-        tree->Branch( "Muon_charge_uncorr", &this->Muon_charge_uncorr );
+        tree->Branch("isSelPassed", &this->isSelPassed);
+        tree->Branch("nVertices", &this->nVertices);
+        tree->Branch("nPileUp", &this->nPileUp);
+        tree->Branch("GENEvt_weight", &this->GENEvt_weight);
+        tree->Branch("_topPtWeight", &this->_topPtWeight);
+        tree->Branch("_prefiringweight", &this->_prefiringweight);
+        tree->Branch("_prefiringweightup", &this->_prefiringweightup);
+        tree->Branch("_prefiringweightdown", &this->_prefiringweightdown);
+        tree->Branch("PVz", &this->PVz);
+        tree->Branch("Muon_pT", &this->Muon_pT);
+        tree->Branch("Muon_eta", &this->Muon_eta);
+        tree->Branch("Muon_phi", &this->Muon_phi);
+        tree->Branch("Muon_charge", &this->Muon_charge);
+        tree->Branch("Muon_Energy", &this->Muon_Energy);
+        tree->Branch("Muon_InvM", &this->Muon_InvM);
+        tree->Branch("Muon_TuneP_pT", &this->Muon_TuneP_pT);
+        tree->Branch("Muon_pT_uncorr", &this->Muon_pT_uncorr);
+        tree->Branch("Muon_eta_uncorr", &this->Muon_eta_uncorr);
+        tree->Branch("Muon_phi_uncorr", &this->Muon_phi_uncorr);
+        tree->Branch("Muon_charge_uncorr", &this->Muon_charge_uncorr);
     }
 
     int ClearVectors()
@@ -1102,8 +1102,8 @@ public:
         Muon_phi_uncorr->clear();
         Muon_charge_uncorr->clear();
 
-        if ( !Muon_pT->size() && !Muon_eta->size() && !Muon_phi->size() && !Muon_charge->size() && !Muon_Energy->size() &&
-             !Muon_TuneP_pT->size() && !Muon_pT_uncorr->size() && !Muon_eta_uncorr->size() && !Muon_phi_uncorr->size() && !Muon_charge_uncorr->size() )
+        if (!Muon_pT->size() && !Muon_eta->size() && !Muon_phi->size() && !Muon_charge->size() && !Muon_Energy->size() &&
+             !Muon_TuneP_pT->size() && !Muon_pT_uncorr->size() && !Muon_eta_uncorr->size() && !Muon_phi_uncorr->size() && !Muon_charge_uncorr->size())
             return 1;
         else return 0;
     }
@@ -1647,7 +1647,7 @@ public:
         Electron_passMVAID_WP90->clear();
         Electron_passHEEPID->clear();
 
-//        if ( !HLT_trigFired->size() && !HLT_trigEta->size() && !HLT_trigPhi->size() && !HLT_trigName->size() && !Electron_pT->size() && !Electron_eta->size() &&
+//        if (!HLT_trigFired->size() && !HLT_trigEta->size() && !HLT_trigPhi->size() && !HLT_trigName->size() && !Electron_pT->size() && !Electron_eta->size() &&
 //             !Electron_phi->size() && !Electron_Energy->size() && !Electron_charge->size() && !Electron_gsfpT->size() && !Electron_gsfPx->size() &&
 //             !Electron_gsfPy->size() && !Electron_gsfPz->size() && !Electron_gsfEta->size() && !Electron_gsfPhi->size() && !Electron_gsfCharge->size() &&
 //             !Electron_etaSC->size() && !Electron_phiSC->size() && !Electron_etaWidth->size() && !Electron_phiWidth->size() && !Electron_dEtaIn->size() &&
@@ -1658,7 +1658,7 @@ public:
 //             !Electron_rawEnergySC->size() && !Electron_etSC->size() && !Electron_E15->size() && !Electron_E25->size() && !Electron_E55->size() &&
 //             !Electron_RelPFIso_dBeta->size() && !Electron_RelPFIso_Rho->size() && !Electron_r9->size() && !Electron_ecalDriven->size() &&
 //             !Electron_passConvVeto->size() && !Electron_passMediumID->size() /*&& !Electron_passLooseID->size() && !Electron_passTightID->size() &&
-//             !Electron_passMVAID_WP80->size() && !Electron_passMVAID_WP90->size() && !Electron_passHEEPID->size() */ )
+//             !Electron_passMVAID_WP80->size() && !Electron_passMVAID_WP90->size() && !Electron_passHEEPID->size() */)
 //            return 1;
 //        else return 0;
     }
@@ -1833,11 +1833,11 @@ public:
     Bool_t isTriggered(TString HLT)
     {
         Bool_t isTrigger = false;
-        for( Int_t k = 0; k < HLT_ntrig; k++ )
+        for(Int_t k = 0; k < HLT_ntrig; k++)
         {
-            if( (HLT_trigName->at((unsigned int)k)) == HLT )
+            if((HLT_trigName->at((unsigned int)k)) == HLT)
             {
-                if( HLT_trigFired->at(k) == 1 )
+                if(HLT_trigFired->at(k) == 1)
                 {
                     isTrigger = true;
                     break;
@@ -1992,8 +1992,8 @@ public:
         Electron_phiSC->clear();
         Electron_Energy_uncorr->clear();
 
-        if ( !Electron_pT->size() && !Electron_eta->size() && !Electron_phi->size() && !Electron_Energy->size() &&
-             !Electron_charge->size() && !Electron_etaSC->size() && !Electron_phiSC->size() )
+        if (!Electron_pT->size() && !Electron_eta->size() && !Electron_phi->size() && !Electron_Energy->size() &&
+             !Electron_charge->size() && !Electron_etaSC->size() && !Electron_phiSC->size())
             return 1;
         else return 0;
     }
@@ -2413,10 +2413,10 @@ public:
         chain->SetBranchAddress("isPFmuon", &isPFmuon);
         chain->SetBranchAddress("isGLBmuon", &isGLBmuon);
         chain->SetBranchAddress("isTRKmuon", &isTRKmuon);
-        chain->SetBranchAddress("Muon_Px", &Muon_Px );
-        chain->SetBranchAddress("Muon_Py", &Muon_Py );
-        chain->SetBranchAddress("Muon_Pz", &Muon_Pz );
-//        chain->SetBranchAddress("Muon_dB", Muon_dB );
+        chain->SetBranchAddress("Muon_Px", &Muon_Px);
+        chain->SetBranchAddress("Muon_Py", &Muon_Py);
+        chain->SetBranchAddress("Muon_Pz", &Muon_Pz);
+//        chain->SetBranchAddress("Muon_dB", Muon_dB);
 
         chain->SetBranchAddress("Muon_PfChargedHadronIsoR04", &Muon_PfChargedHadronIsoR04);
         chain->SetBranchAddress("Muon_PfNeutralHadronIsoR04", &Muon_PfNeutralHadronIsoR04);
@@ -2710,7 +2710,7 @@ public:
         HLT_trigEta->clear();
         HLT_trigPhi->clear();
 
-//        if ( !HLT_trigFired->size() && !HLT_trigName->size() && HLT_trigEta->size() && HLT_trigPhi->size() )
+//        if (!HLT_trigFired->size() && !HLT_trigName->size() && HLT_trigEta->size() && HLT_trigPhi->size())
 //            return 1;
 //        else return 0;
     }
@@ -2986,13 +2986,13 @@ public:
     Bool_t isTriggered(TString HLT)
     {
         Bool_t isTrigger = false;
-        if( HLT == "HLT_IsoMu20_v* || HLT_IsoTkMu20_v*" )
+        if(HLT == "HLT_IsoMu20_v* || HLT_IsoTkMu20_v*")
         {
-            for( Int_t k = 0; k < HLT_ntrig; k++ )
+            for(Int_t k = 0; k < HLT_ntrig; k++)
             {
-                if( (HLT_trigName->at((unsigned int)k)) == "HLT_IsoMu20_v*" || (HLT_trigName->at((unsigned int)k)) == "HLT_IsoTkMu20_v*" )
+                if((HLT_trigName->at((unsigned int)k)) == "HLT_IsoMu20_v*" || (HLT_trigName->at((unsigned int)k)) == "HLT_IsoTkMu20_v*")
                 {
-                    if( HLT_trigFired->at(k) == 1 )
+                    if(HLT_trigFired->at(k) == 1)
                     {
                         isTrigger = true;
                         break;
@@ -3000,13 +3000,13 @@ public:
                 }
             }
         }
-        else if( HLT == "HLT_IsoMu27_v* || HLT_IsoTkMu27_v*" )
+        else if(HLT == "HLT_IsoMu27_v* || HLT_IsoTkMu27_v*")
         {
-            for( Int_t k = 0; k < HLT_ntrig; k++ )
+            for(Int_t k = 0; k < HLT_ntrig; k++)
             {
-                if( (HLT_trigName->at((unsigned int)k)) == "HLT_IsoMu27_v*" || (HLT_trigName->at((unsigned int)k)) == "HLT_IsoTkMu27_v*" )
+                if((HLT_trigName->at((unsigned int)k)) == "HLT_IsoMu27_v*" || (HLT_trigName->at((unsigned int)k)) == "HLT_IsoTkMu27_v*")
                 {
-                    if( HLT_trigFired->at(k) == 1 )
+                    if(HLT_trigFired->at(k) == 1)
                     {
                         isTrigger = true;
                         break;
@@ -3014,13 +3014,13 @@ public:
                 }
             }
         }
-        else if( HLT == "HLT_IsoMu24_v* || HLT_IsoTkMu24_v*" )
+        else if(HLT == "HLT_IsoMu24_v* || HLT_IsoTkMu24_v*")
         {
-            for( Int_t k = 0; k < HLT_ntrig; k++ )
+            for(Int_t k = 0; k < HLT_ntrig; k++)
             {
-                if( (HLT_trigName->at((unsigned int)k)) == "HLT_IsoMu24_v*" || (HLT_trigName->at((unsigned int)k)) == "HLT_IsoTkMu24_v*" )
+                if((HLT_trigName->at((unsigned int)k)) == "HLT_IsoMu24_v*" || (HLT_trigName->at((unsigned int)k)) == "HLT_IsoTkMu24_v*")
                 {
-                    if( HLT_trigFired->at(k) == 1 )
+                    if(HLT_trigFired->at(k) == 1)
                     {
                         isTrigger = true;
                         break;
@@ -3028,13 +3028,13 @@ public:
                 }
             }
         }
-        else if( HLT == "HLT_Mu50_v* || HLT_TkMu50_v*" )
+        else if(HLT == "HLT_Mu50_v* || HLT_TkMu50_v*")
         {
-            for( Int_t k = 0; k < HLT_ntrig; k++ )
+            for(Int_t k = 0; k < HLT_ntrig; k++)
             {
-                if( (HLT_trigName->at((unsigned int)k)) == "HLT_Mu50_v*" || (HLT_trigName->at((unsigned int)k)) == "HLT_TkMu50_v*" )
+                if((HLT_trigName->at((unsigned int)k)) == "HLT_Mu50_v*" || (HLT_trigName->at((unsigned int)k)) == "HLT_TkMu50_v*")
                 {
-                    if( HLT_trigFired->at(k) == 1 )
+                    if(HLT_trigFired->at(k) == 1)
                     {
                         isTrigger = true;
                         break;
@@ -3044,11 +3044,11 @@ public:
         }
         else
         {
-            for( Int_t k = 0; k < HLT_ntrig; k++ )
+            for(Int_t k = 0; k < HLT_ntrig; k++)
             {
-                if( (HLT_trigName->at((unsigned int)k)) == HLT )
+                if((HLT_trigName->at((unsigned int)k)) == HLT)
                 {
-                    if( HLT_trigFired->at(k) == 1 )
+                    if(HLT_trigFired->at(k) == 1)
                     {
                         isTrigger = true;
                         break;
@@ -3200,34 +3200,34 @@ public:
 
     void MakeBranches(TTree *tree)
     {
-        tree->Branch( "isSelPassed", &this->isSelPassed );
-        tree->Branch( "nVertices", &this->nVertices );
-        tree->Branch( "nPileUp", &this->nPileUp );
-        tree->Branch( "GENEvt_weight", &this->GENEvt_weight );
-        tree->Branch( "_topPtWeight", &this->_topPtWeight);
-        tree->Branch( "_prefiringweight", &this->_prefiringweight);
-        tree->Branch( "_prefiringweightup", &this->_prefiringweightup);
-        tree->Branch( "_prefiringweightdown", &this->_prefiringweightdown);
-        tree->Branch( "PVz", &this->PVz);
-        tree->Branch( "EMu_InvM", &this->EMu_InvM );
-        tree->Branch( "Muon_pT", &this->Muon_pT );
-        tree->Branch( "Muon_eta", &this->Muon_eta );
-        tree->Branch( "Muon_phi", &this->Muon_phi );
-        tree->Branch( "Muon_charge", &this->Muon_charge );
-        tree->Branch( "Muon_Energy", &this->Muon_Energy );
-        tree->Branch( "Muon_TuneP_pT", &this->Muon_TuneP_pT );
-        tree->Branch( "Muon_pT_uncorr", &this->Muon_pT_uncorr );
-        tree->Branch( "Muon_eta_uncorr", &this->Muon_eta_uncorr );
-        tree->Branch( "Muon_phi_uncorr", &this->Muon_phi_uncorr );
-        tree->Branch( "Muon_charge_uncorr", &this->Muon_charge_uncorr );
-        tree->Branch( "Electron_pT", &this->Electron_pT );
-        tree->Branch( "Electron_eta", &this->Electron_eta );
-        tree->Branch( "Electron_phi", &this->Electron_phi );
-        tree->Branch( "Electron_Energy", &this->Electron_Energy );
-        tree->Branch( "Electron_charge", &this->Electron_charge );
-        tree->Branch( "Electron_etaSC", &this->Electron_etaSC );
-        tree->Branch( "Electron_phiSC", &this->Electron_phiSC );
-        tree->Branch( "Electron_Energy_uncorr", &this->Electron_Energy_uncorr );
+        tree->Branch("isSelPassed", &this->isSelPassed);
+        tree->Branch("nVertices", &this->nVertices);
+        tree->Branch("nPileUp", &this->nPileUp);
+        tree->Branch("GENEvt_weight", &this->GENEvt_weight);
+        tree->Branch("_topPtWeight", &this->_topPtWeight);
+        tree->Branch("_prefiringweight", &this->_prefiringweight);
+        tree->Branch("_prefiringweightup", &this->_prefiringweightup);
+        tree->Branch("_prefiringweightdown", &this->_prefiringweightdown);
+        tree->Branch("PVz", &this->PVz);
+        tree->Branch("EMu_InvM", &this->EMu_InvM);
+        tree->Branch("Muon_pT", &this->Muon_pT);
+        tree->Branch("Muon_eta", &this->Muon_eta);
+        tree->Branch("Muon_phi", &this->Muon_phi);
+        tree->Branch("Muon_charge", &this->Muon_charge);
+        tree->Branch("Muon_Energy", &this->Muon_Energy);
+        tree->Branch("Muon_TuneP_pT", &this->Muon_TuneP_pT);
+        tree->Branch("Muon_pT_uncorr", &this->Muon_pT_uncorr);
+        tree->Branch("Muon_eta_uncorr", &this->Muon_eta_uncorr);
+        tree->Branch("Muon_phi_uncorr", &this->Muon_phi_uncorr);
+        tree->Branch("Muon_charge_uncorr", &this->Muon_charge_uncorr);
+        tree->Branch("Electron_pT", &this->Electron_pT);
+        tree->Branch("Electron_eta", &this->Electron_eta);
+        tree->Branch("Electron_phi", &this->Electron_phi);
+        tree->Branch("Electron_Energy", &this->Electron_Energy);
+        tree->Branch("Electron_charge", &this->Electron_charge);
+        tree->Branch("Electron_etaSC", &this->Electron_etaSC);
+        tree->Branch("Electron_phiSC", &this->Electron_phiSC);
+        tree->Branch("Electron_Energy_uncorr", &this->Electron_Energy_uncorr);
     }
 
     void Ready()

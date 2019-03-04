@@ -75,11 +75,11 @@ public:
 		charge 	= ntuple->GenLepton_charge[index];
 		Status 	= ntuple->GenLepton_status[index];
 		
-		if( ID == -11 || ID == 11 )
+                if(ID == -11 || ID == 11)
 		    Mass = M_Elec;
-		else if( ID == -13 || ID == 13 )
+                else if(ID == -13 || ID == 13)
 		    Mass = M_Mu;
-		else if( ID == -15 || ID == 15 )
+                else if(ID == -15 || ID == 15)
 		    Mass = M_Tau;
 
 		Double_t E = sqrt(Px*Px + Py*Py + Pz*Pz + Mass*Mass);
@@ -103,7 +103,7 @@ public:
 	Bool_t isElectron()
 	{
 		Bool_t isElec = kFALSE;
-		if( abs(ID) == 11 )
+                if(abs(ID) == 11)
 			isElec = kTRUE;
 
 		return isElec;
@@ -112,7 +112,7 @@ public:
 	Bool_t isMuon()
 	{
 		Bool_t isMu = kFALSE;
-		if( abs(ID) == 13 )
+                if(abs(ID) == 13)
 			isMu = kTRUE;
 
 		return isMu;
@@ -121,7 +121,7 @@ public:
 	Bool_t isMotherZ()
 	{
 		Bool_t isZ = kFALSE;
-		if( Mother == 23 )
+                if(Mother == 23)
 			isZ = kTRUE;
 
 		return isZ;
@@ -169,9 +169,9 @@ public:
 		charge  = ntuple->GenOthers_charge[index];
 		Status  = ntuple->GenOthers_status[index];
 		
-		if( abs(ID) == 22 ) // -- Photon -- //
+                if(abs(ID) == 22) // -- Photon -- //
 		    Mass = 0;
-		else if( ID == -6 || ID == 6 )
+                else if(ID == -6 || ID == 6)
 		    Mass = M_Top;
 
 		Double_t E = sqrt(Px*Px + Py*Py + Pz*Pz + Mass*Mass);
@@ -427,14 +427,14 @@ public:
 
 		Bool_t isBarrel = kFALSE;
 		Bool_t isEndcap = kFALSE;
-		if( fabs(etaSC) <= 1.479 )
+                if(fabs(etaSC) <= 1.479)
 			isBarrel = kTRUE;
-		else if( fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5 )
+                else if(fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5)
 			isEndcap = kTRUE;
 
-		if( isBarrel == kTRUE )
+                if(isBarrel == kTRUE)
 		{
-			if( Full5x5_SigmaIEtaIEta < 0.00998
+                        if(Full5x5_SigmaIEtaIEta < 0.00998
 				&& fabs(dEtaInSeed) < 0.00311
 				&& fabs(dPhiIn) < 0.103
 				&& HoverE < 0.253
@@ -447,9 +447,9 @@ public:
 				)
 				isPass = kTRUE;
 		}
-		else if( isEndcap == kTRUE )
+                else if(isEndcap == kTRUE)
 		{
-			if( Full5x5_SigmaIEtaIEta < 0.0298
+                        if(Full5x5_SigmaIEtaIEta < 0.0298
 				&& fabs(dEtaInSeed) < 0.00609
 				&& fabs(dPhiIn) < 0.045
 				&& HoverE < 0.0878
@@ -472,15 +472,15 @@ public:
 
 		Bool_t isBarrel = kFALSE;
 		Bool_t isEndcap = kFALSE;
-		if( fabs(etaSC) <= 1.479 )
+                if(fabs(etaSC) <= 1.479)
 			isBarrel = kTRUE;
-		else if( fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5 )
+                else if(fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5)
 			isEndcap = kTRUE;
 
-		if( isBarrel == kTRUE )
+                if(isBarrel == kTRUE)
 		{
-//			if( Full5x5_SigmaIEtaIEta < 0.00998
-				if( fabs(dEtaInSeed) < 0.00311
+//			if(Full5x5_SigmaIEtaIEta < 0.00998
+                                if(fabs(dEtaInSeed) < 0.00311
 				&& fabs(dPhiIn) < 0.103
 				&& HoverE < 0.253
 				&& RelPFIso_Rho < 0.0695
@@ -492,10 +492,10 @@ public:
 				)
 				isPass = kTRUE;
 		}
-		else if( isEndcap == kTRUE )
+                else if(isEndcap == kTRUE)
 		{
-//			if( Full5x5_SigmaIEtaIEta < 0.0298
-				if( fabs(dEtaInSeed) < 0.00609
+//			if(Full5x5_SigmaIEtaIEta < 0.0298
+                                if(fabs(dEtaInSeed) < 0.00609
 				&& fabs(dPhiIn) < 0.045
 				&& HoverE < 0.0878
 				&& RelPFIso_Rho < 0.0821
@@ -517,14 +517,14 @@ public:
 
 		Bool_t isBarrel = kFALSE;
 		Bool_t isEndcap = kFALSE;
-		if( fabs(etaSC) <= 1.479 )
+                if(fabs(etaSC) <= 1.479)
 			isBarrel = kTRUE;
-		else if( fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5 )
+                else if(fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5)
 			isEndcap = kTRUE;
 
-		if( isBarrel == kTRUE )
+                if(isBarrel == kTRUE)
 		{
-			if( Full5x5_SigmaIEtaIEta < 0.00998
+                        if(Full5x5_SigmaIEtaIEta < 0.00998
 //				&& fabs(dEtaInSeed) < 0.00311
 				&& fabs(dPhiIn) < 0.103
 				&& HoverE < 0.253
@@ -537,9 +537,9 @@ public:
 				)
 				isPass = kTRUE;
 		}
-		else if( isEndcap == kTRUE )
+                else if(isEndcap == kTRUE)
 		{
-			if( Full5x5_SigmaIEtaIEta < 0.0298
+                        if(Full5x5_SigmaIEtaIEta < 0.0298
 //				&& fabs(dEtaInSeed) < 0.00609
 				&& fabs(dPhiIn) < 0.045
 				&& HoverE < 0.0878
@@ -562,14 +562,14 @@ public:
 
 		Bool_t isBarrel = kFALSE;
 		Bool_t isEndcap = kFALSE;
-		if( fabs(etaSC) <= 1.479 )
+                if(fabs(etaSC) <= 1.479)
 			isBarrel = kTRUE;
-		else if( fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5 )
+                else if(fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5)
 			isEndcap = kTRUE;
 
-		if( isBarrel == kTRUE )
+                if(isBarrel == kTRUE)
 		{
-			if( Full5x5_SigmaIEtaIEta < 0.00998
+                        if(Full5x5_SigmaIEtaIEta < 0.00998
 				&& fabs(dEtaInSeed) < 0.00311
 //				&& fabs(dPhiIn) < 0.103
 				&& HoverE < 0.253
@@ -582,9 +582,9 @@ public:
 				)
 				isPass = kTRUE;
 		}
-		else if( isEndcap == kTRUE )
+                else if(isEndcap == kTRUE)
 		{
-			if( Full5x5_SigmaIEtaIEta < 0.0298
+                        if(Full5x5_SigmaIEtaIEta < 0.0298
 				&& fabs(dEtaInSeed) < 0.00609
 //				&& fabs(dPhiIn) < 0.045
 				&& HoverE < 0.0878
@@ -607,14 +607,14 @@ public:
 
 		Bool_t isBarrel = kFALSE;
 		Bool_t isEndcap = kFALSE;
-		if( fabs(etaSC) <= 1.479 )
+                if(fabs(etaSC) <= 1.479)
 			isBarrel = kTRUE;
-		else if( fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5 )
+                else if(fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5)
 			isEndcap = kTRUE;
 
-		if( isBarrel == kTRUE )
+                if(isBarrel == kTRUE)
 		{
-			if( Full5x5_SigmaIEtaIEta < 0.00998
+                        if(Full5x5_SigmaIEtaIEta < 0.00998
 				&& fabs(dEtaInSeed) < 0.00311
 				&& fabs(dPhiIn) < 0.103
 //				&& HoverE < 0.253
@@ -627,9 +627,9 @@ public:
 				)
 				isPass = kTRUE;
 		}
-		else if( isEndcap == kTRUE )
+                else if(isEndcap == kTRUE)
 		{
-			if( Full5x5_SigmaIEtaIEta < 0.0298
+                        if(Full5x5_SigmaIEtaIEta < 0.0298
 				&& fabs(dEtaInSeed) < 0.00609
 				&& fabs(dPhiIn) < 0.045
 //				&& HoverE < 0.0878
@@ -652,14 +652,14 @@ public:
 
 		Bool_t isBarrel = kFALSE;
 		Bool_t isEndcap = kFALSE;
-		if( fabs(etaSC) <= 1.479 )
+                if(fabs(etaSC) <= 1.479)
 			isBarrel = kTRUE;
-		else if( fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5 )
+                else if(fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5)
 			isEndcap = kTRUE;
 
-		if( isBarrel == kTRUE )
+                if(isBarrel == kTRUE)
 		{
-			if( Full5x5_SigmaIEtaIEta < 0.00998
+                        if(Full5x5_SigmaIEtaIEta < 0.00998
 				&& fabs(dEtaInSeed) < 0.00311
 				&& fabs(dPhiIn) < 0.103
 				&& HoverE < 0.253
@@ -672,9 +672,9 @@ public:
 				)
 				isPass = kTRUE;
 		}
-		else if( isEndcap == kTRUE )
+                else if(isEndcap == kTRUE)
 		{
-			if( Full5x5_SigmaIEtaIEta < 0.0298
+                        if(Full5x5_SigmaIEtaIEta < 0.0298
 				&& fabs(dEtaInSeed) < 0.00609
 				&& fabs(dPhiIn) < 0.045
 				&& HoverE < 0.0878
@@ -697,14 +697,14 @@ public:
 
 		Bool_t isBarrel = kFALSE;
 		Bool_t isEndcap = kFALSE;
-		if( fabs(etaSC) <= 1.479 )
+                if(fabs(etaSC) <= 1.479)
 			isBarrel = kTRUE;
-		else if( fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5 )
+                else if(fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5)
 			isEndcap = kTRUE;
 
-		if( isBarrel == kTRUE )
+                if(isBarrel == kTRUE)
 		{
-			if( Full5x5_SigmaIEtaIEta < 0.00998
+                        if(Full5x5_SigmaIEtaIEta < 0.00998
 				&& fabs(dEtaInSeed) < 0.00311
 				&& fabs(dPhiIn) < 0.103
 				&& HoverE < 0.253
@@ -717,9 +717,9 @@ public:
 				)
 				isPass = kTRUE;
 		}
-		else if( isEndcap == kTRUE )
+                else if(isEndcap == kTRUE)
 		{
-			if( Full5x5_SigmaIEtaIEta < 0.0298
+                        if(Full5x5_SigmaIEtaIEta < 0.0298
 				&& fabs(dEtaInSeed) < 0.00609
 				&& fabs(dPhiIn) < 0.045
 				&& HoverE < 0.0878
@@ -742,14 +742,14 @@ public:
 
 		Bool_t isBarrel = kFALSE;
 		Bool_t isEndcap = kFALSE;
-		if( fabs(etaSC) <= 1.479 )
+                if(fabs(etaSC) <= 1.479)
 			isBarrel = kTRUE;
-		else if( fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5 )
+                else if(fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5)
 			isEndcap = kTRUE;
 
-		if( isBarrel == kTRUE )
+                if(isBarrel == kTRUE)
 		{
-			if( Full5x5_SigmaIEtaIEta < 0.00998
+                        if(Full5x5_SigmaIEtaIEta < 0.00998
 				&& fabs(dEtaInSeed) < 0.00311
 				&& fabs(dPhiIn) < 0.103
 				&& HoverE < 0.253
@@ -762,9 +762,9 @@ public:
 				)
 				isPass = kTRUE;
 		}
-		else if( isEndcap == kTRUE )
+                else if(isEndcap == kTRUE)
 		{
-			if( Full5x5_SigmaIEtaIEta < 0.0298
+                        if(Full5x5_SigmaIEtaIEta < 0.0298
 				&& fabs(dEtaInSeed) < 0.00609
 				&& fabs(dPhiIn) < 0.045
 				&& HoverE < 0.0878
@@ -787,14 +787,14 @@ public:
 
 		Bool_t isBarrel = kFALSE;
 		Bool_t isEndcap = kFALSE;
-		if( fabs(etaSC) <= 1.479 )
+                if(fabs(etaSC) <= 1.479)
 			isBarrel = kTRUE;
-		else if( fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5 )
+                else if(fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5)
 			isEndcap = kTRUE;
 
-		if( isBarrel == kTRUE )
+                if(isBarrel == kTRUE)
 		{
-			if( Full5x5_SigmaIEtaIEta < 0.00998
+                        if(Full5x5_SigmaIEtaIEta < 0.00998
 				&& fabs(dEtaInSeed) < 0.00311
 				&& fabs(dPhiIn) < 0.103
 				&& HoverE < 0.253
@@ -807,9 +807,9 @@ public:
 				)
 				isPass = kTRUE;
 		}
-		else if( isEndcap == kTRUE )
+                else if(isEndcap == kTRUE)
 		{
-			if( Full5x5_SigmaIEtaIEta < 0.0298
+                        if(Full5x5_SigmaIEtaIEta < 0.0298
 				&& fabs(dEtaInSeed) < 0.00609
 				&& fabs(dPhiIn) < 0.045
 				&& HoverE < 0.0878
@@ -833,14 +833,14 @@ public:
 
 		Bool_t isBarrel = kFALSE;
 		Bool_t isEndcap = kFALSE;
-		if( fabs(etaSC) <= 1.479 )
+                if(fabs(etaSC) <= 1.479)
 			isBarrel = kTRUE;
-		else if( fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5 )
+                else if(fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5)
 			isEndcap = kTRUE;
 
-		if( isBarrel == kTRUE )
+                if(isBarrel == kTRUE)
 		{
-			if( sigmaIEtaIEta < 0.0101
+                        if(sigmaIEtaIEta < 0.0101
 				&& fabs(dEtaIn) < 0.0103
 				&& fabs(dPhiIn) < 0.0336
 				&& HoverE < 0.0876
@@ -853,9 +853,9 @@ public:
 				)
 				isPass = kTRUE;
 		}
-		else if( isEndcap == kTRUE )
+                else if(isEndcap == kTRUE)
 		{
-			if( sigmaIEtaIEta < 0.0283
+                        if(sigmaIEtaIEta < 0.0283
 				&& fabs(dEtaIn) < 0.00733
 				&& fabs(dPhiIn) < 0.114
 				&& HoverE < 0.0678
@@ -878,14 +878,14 @@ public:
 
 		Bool_t isBarrel = kFALSE;
 		Bool_t isEndcap = kFALSE;
-		if( fabs(etaSC) <= 1.479 )
+                if(fabs(etaSC) <= 1.479)
 			isBarrel = kTRUE;
-		else if( fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5 )
+                else if(fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5)
 			isEndcap = kTRUE;
 
-		if( isBarrel == kTRUE )
+                if(isBarrel == kTRUE)
 		{
-			if( sigmaIEtaIEta < 0.0101
+                        if(sigmaIEtaIEta < 0.0101
 				&& fabs(dEtaIn) < 0.0103
 				&& fabs(dPhiIn) < 0.0336
 				&& HoverE < 0.0876
@@ -898,9 +898,9 @@ public:
 				)
 				isPass = kTRUE;
 		}
-		else if( isEndcap == kTRUE )
+                else if(isEndcap == kTRUE)
 		{
-			if( sigmaIEtaIEta < 0.0283
+                        if(sigmaIEtaIEta < 0.0283
 				&& fabs(dEtaIn) < 0.00733
 				&& fabs(dPhiIn) < 0.114
 				&& HoverE < 0.0678
@@ -923,17 +923,17 @@ public:
 		Int_t hlt_ntrig = nh->HLT_ntrig;
 
 		Bool_t isTrigMatch = false;
-		for( Int_t k = 0; k < hlt_ntrig; k++ )
+                for(Int_t k = 0; k < hlt_ntrig; k++)
 		{
-			if( (hlt_trigName->at((unsigned int)k)) == HLT )
+                        if((hlt_trigName->at((unsigned int)k)) == HLT)
 			{
 				Double_t Lepton_eta = this->eta;
 				Double_t Lepton_phi = this->phi;
 				Double_t Trig_eta = nh->HLT_trigEta[k];
 				Double_t Trig_phi = nh->HLT_trigPhi[k];
 
-				Double_t dR = sqrt( (Lepton_eta - Trig_eta)*(Lepton_eta - Trig_eta) + (Lepton_phi - Trig_phi)*(Lepton_phi - Trig_phi) );
-				if( dR < 0.3 && fabs( Lepton_eta ) < 2.5 )
+                                Double_t dR = sqrt((Lepton_eta - Trig_eta)*(Lepton_eta - Trig_eta) + (Lepton_phi - Trig_phi)*(Lepton_phi - Trig_phi));
+                                if(dR < 0.3 && fabs(Lepton_eta) < 2.5)
 				{
 					isTrigMatch = true;
 					break;
@@ -1010,6 +1010,12 @@ public:
 	Double_t TuneP_eta;
 	Double_t TuneP_phi;
 
+        // Muon ID flags
+        Bool_t passLooseID;
+        Bool_t passMediumID;
+        Bool_t passTightID;
+        Bool_t passHighPtID;
+
 	void FillFromNtuple(NtupleHandle *ntuple, Int_t index)
 	{
 		Pt = ntuple->Muon_pT[index];
@@ -1036,12 +1042,12 @@ public:
 		relPFiso = (pfChargedIso + pfNeutralIso + pfGammaIso) / ntuple->Muon_pT[index];
 
 		Double_t pfSumPUPt = ntuple->Muon_PFSumPUIsoR04[index];
-		this->RelPFIso_dBeta = ( pfChargedIso + max(0.0, pfNeutralIso + pfGammaIso - 0.5*pfSumPUPt) ) / this->Pt;
+                this->RelPFIso_dBeta = (pfChargedIso + max(0.0, pfNeutralIso + pfGammaIso - 0.5*pfSumPUPt)) / this->Pt;
 
 		Double_t px = ntuple->Muon_Px[index];
 		Double_t py = ntuple->Muon_Py[index];
 		Double_t pz = ntuple->Muon_Pz[index];
-		Double_t Mu_E = sqrt( px*px + py*py + pz*pz + M_Mu*M_Mu );
+                Double_t Mu_E = sqrt(px*px + py*py + pz*pz + M_Mu*M_Mu);
 		TLorentzVector v;
 		v.SetPxPyPzE(px, py, pz, Mu_E);
 		Momentum = v;
@@ -1063,7 +1069,7 @@ public:
 		Inner_phi = ntuple->Muon_Inner_phi[index];
 
 		TLorentzVector v_inner;
-		Double_t Mu_Inner_E = sqrt( Inner_Px*Inner_Px + Inner_Py*Inner_Py + Inner_Pz*Inner_Pz + M_Mu*M_Mu );
+                Double_t Mu_Inner_E = sqrt(Inner_Px*Inner_Px + Inner_Py*Inner_Py + Inner_Pz*Inner_Pz + M_Mu*M_Mu);
 		v_inner.SetPxPyPzE(Inner_Px, Inner_Py, Inner_Pz, Mu_Inner_E);
 		Momentum_Inner =  v_inner;
 
@@ -1090,6 +1096,12 @@ public:
 		TuneP_Pz = ntuple->Muon_TuneP_Pz[index];
 		TuneP_eta = ntuple->Muon_TuneP_eta[index];
 		TuneP_phi = ntuple->Muon_TuneP_phi[index];
+
+                // Muon ID flags
+                passLooseID = ntuple->Muon_passLooseID[index];
+                passMediumID = ntuple->Muon_passMediumID[index];
+                passTightID = ntuple->Muon_passTightID[index];
+                passHighPtID = ntuple->Muon_passHighPtID[index];
 	}
 
         void FillFromSelectedX(LongSelectedMuMu_t *ntuple, Int_t index)
@@ -1118,12 +1130,12 @@ public:
                 relPFiso = (pfChargedIso + pfNeutralIso + pfGammaIso) / ntuple->Muon_pT->at(index);
 
                 Double_t pfSumPUPt = ntuple->Muon_PFSumPUIsoR04->at(index);
-                this->RelPFIso_dBeta = ( pfChargedIso + max(0.0, pfNeutralIso + pfGammaIso - 0.5*pfSumPUPt) ) / this->Pt;
+                this->RelPFIso_dBeta = (pfChargedIso + max(0.0, pfNeutralIso + pfGammaIso - 0.5*pfSumPUPt)) / this->Pt;
 
                 Double_t px = ntuple->Muon_Px->at(index);
                 Double_t py = ntuple->Muon_Py->at(index);
                 Double_t pz = ntuple->Muon_Pz->at(index);
-                Double_t Mu_E = sqrt( px*px + py*py + pz*pz + M_Mu*M_Mu );
+                Double_t Mu_E = sqrt(px*px + py*py + pz*pz + M_Mu*M_Mu);
                 TLorentzVector v;
                 v.SetPxPyPzE(px, py, pz, Mu_E);
                 Momentum = v;
@@ -1145,7 +1157,7 @@ public:
                 Inner_phi = ntuple->Muon_Inner_phi->at(index);
 
                 TLorentzVector v_inner;
-                Double_t Mu_Inner_E = sqrt( Inner_Px*Inner_Px + Inner_Py*Inner_Py + Inner_Pz*Inner_Pz + M_Mu*M_Mu );
+                Double_t Mu_Inner_E = sqrt(Inner_Px*Inner_Px + Inner_Py*Inner_Py + Inner_Pz*Inner_Pz + M_Mu*M_Mu);
                 v_inner.SetPxPyPzE(Inner_Px, Inner_Py, Inner_Pz, Mu_Inner_E);
                 Momentum_Inner =  v_inner;
 
@@ -1172,6 +1184,12 @@ public:
                 TuneP_Pz = ntuple->Muon_TuneP_Pz->at(index);
                 TuneP_eta = ntuple->Muon_TuneP_eta->at(index);
                 TuneP_phi = ntuple->Muon_TuneP_phi->at(index);
+
+                // Muon ID flags
+                passLooseID = ntuple->Muon_passLooseID->at(index);
+                passMediumID = ntuple->Muon_passMediumID->at(index);
+                passTightID = ntuple->Muon_passTightID->at(index);
+                passHighPtID = ntuple->Muon_passHighPtID->at(index);
         }
 
         void FillFromSelectedX(LongSelectedEMu_t *ntuple)
@@ -1200,12 +1218,12 @@ public:
                 relPFiso = (pfChargedIso + pfNeutralIso + pfGammaIso) / ntuple->Muon_pT;
 
                 Double_t pfSumPUPt = ntuple->Muon_PFSumPUIsoR04;
-                this->RelPFIso_dBeta = ( pfChargedIso + max(0.0, pfNeutralIso + pfGammaIso - 0.5*pfSumPUPt) ) / this->Pt;
+                this->RelPFIso_dBeta = (pfChargedIso + max(0.0, pfNeutralIso + pfGammaIso - 0.5*pfSumPUPt)) / this->Pt;
 
                 Double_t px = ntuple->Muon_Px;
                 Double_t py = ntuple->Muon_Py;
                 Double_t pz = ntuple->Muon_Pz;
-                Double_t Mu_E = sqrt( px*px + py*py + pz*pz + M_Mu*M_Mu );
+                Double_t Mu_E = sqrt(px*px + py*py + pz*pz + M_Mu*M_Mu);
                 TLorentzVector v;
                 v.SetPxPyPzE(px, py, pz, Mu_E);
                 Momentum = v;
@@ -1227,7 +1245,7 @@ public:
                 Inner_phi = ntuple->Muon_Inner_phi;
 
                 TLorentzVector v_inner;
-                Double_t Mu_Inner_E = sqrt( Inner_Px*Inner_Px + Inner_Py*Inner_Py + Inner_Pz*Inner_Pz + M_Mu*M_Mu );
+                Double_t Mu_Inner_E = sqrt(Inner_Px*Inner_Px + Inner_Py*Inner_Py + Inner_Pz*Inner_Pz + M_Mu*M_Mu);
                 v_inner.SetPxPyPzE(Inner_Px, Inner_Py, Inner_Pz, Mu_Inner_E);
                 Momentum_Inner =  v_inner;
 
@@ -1254,39 +1272,14 @@ public:
                 TuneP_Pz = ntuple->Muon_TuneP_Pz;
                 TuneP_eta = ntuple->Muon_TuneP_eta;
                 TuneP_phi = ntuple->Muon_TuneP_phi;
+
+                // Muon ID flags
+                passLooseID = ntuple->Muon_passLooseID;
+                passMediumID = ntuple->Muon_passMediumID;
+                passTightID = ntuple->Muon_passTightID;
+                passHighPtID = ntuple->Muon_passHighPtID;
         }
 
-	// void ApplyRochCorr(rochcor2015 *rmcor, Int_t type)
-	// {
-	// 	float qter = 1.0;
-
-	// 	if (type == 0 ) // -- MC -- //
-	// 	  rmcor->momcor_mc(Momentum, charge, 0, qter);
-
-	// 	else if (type == 1) // -- Data -- //
-	// 	  rmcor->momcor_data(Momentum, charge, 0, qter);
-
-	// 	// -- Change Muon pT, eta and phi with updated(corrected) one -- //
-	// 	Pt = Momentum.Pt();
-	// 	eta = Momentum.Eta();
-	// 	phi = Momentum.Phi();
-	// }
-
-	// void ApplyRochCorr2(rochcor2015 &rmcor, Int_t type)
-	// {
-	// 	float qter = 1.0;
-
-	// 	if (type == 0 ) // -- MC -- //
-	// 	  rmcor.momcor_mc(Momentum, charge, 0, qter);
-
-	// 	else if (type == 1) // -- Data -- //
-	// 	  rmcor.momcor_data(Momentum, charge, 0, qter);
-
-	// 	// -- Change Muon pT, eta and phi with updated(corrected) one -- //
-	// 	Pt = Momentum.Pt();
-	// 	eta = Momentum.Eta();
-	// 	phi = Momentum.Phi();
-	// }
 
 	Bool_t isTrigMatched(NtupleHandle *nh, TString HLT)
 	{
@@ -1294,17 +1287,17 @@ public:
 		Int_t hlt_ntrig = nh->HLT_ntrig;
 
 		Bool_t isTrigMatch = false;
-		for( Int_t k = 0; k < hlt_ntrig; k++ )
+                for(Int_t k = 0; k < hlt_ntrig; k++)
 		{
-			if( (hlt_trigName->at((unsigned int)k)) == HLT )
+                        if((hlt_trigName->at((unsigned int)k)) == HLT)
 			{
 				Double_t Lepton_eta = this->eta;
 				Double_t Lepton_phi = this->phi;
 				Double_t Trig_eta = nh->HLT_trigEta[k];
 				Double_t Trig_phi = nh->HLT_trigPhi[k];
 
-				Double_t dR = sqrt( (Lepton_eta - Trig_eta)*(Lepton_eta - Trig_eta) + (Lepton_phi - Trig_phi)*(Lepton_phi - Trig_phi) );
-				if( dR < 0.3 && fabs( Lepton_eta ) < 2.4 )
+                                Double_t dR = sqrt((Lepton_eta - Trig_eta)*(Lepton_eta - Trig_eta) + (Lepton_phi - Trig_phi)*(Lepton_phi - Trig_phi));
+                                if(dR < 0.3 && fabs(Lepton_eta) < 2.4)
 				{
 					isTrigMatch = true;
 					break;
@@ -1320,17 +1313,17 @@ public:
                 Int_t hlt_ntrig = nh->HLT_ntrig;
 
                 Bool_t isTrigMatch = false;
-                for( Int_t k = 0; k < hlt_ntrig; k++ )
+                for(Int_t k = 0; k < hlt_ntrig; k++)
                 {
-                        if( (hlt_trigName->at((unsigned int)k)) == HLT )
+                        if((hlt_trigName->at((unsigned int)k)) == HLT)
                         {
                                 Double_t Lepton_eta = this->eta;
                                 Double_t Lepton_phi = this->phi;
                                 Double_t Trig_eta = nh->HLT_trigEta->at(k);
                                 Double_t Trig_phi = nh->HLT_trigPhi->at(k);
 
-                                Double_t dR = sqrt( (Lepton_eta - Trig_eta)*(Lepton_eta - Trig_eta) + (Lepton_phi - Trig_phi)*(Lepton_phi - Trig_phi) );
-                                if( dR < 0.3 && fabs( Lepton_eta ) < 2.4 )
+                                Double_t dR = sqrt((Lepton_eta - Trig_eta)*(Lepton_eta - Trig_eta) + (Lepton_phi - Trig_phi)*(Lepton_phi - Trig_phi));
+                                if(dR < 0.3 && fabs(Lepton_eta) < 2.4)
                                 {
                                         isTrigMatch = true;
                                         break;
@@ -1346,17 +1339,17 @@ public:
                 Int_t hlt_ntrig = nh->HLT_ntrig;
 
                 Bool_t isTrigMatch = false;
-                for( Int_t k = 0; k < hlt_ntrig; k++ )
+                for(Int_t k = 0; k < hlt_ntrig; k++)
                 {
-                        if( (hlt_trigName->at((unsigned int)k)) == HLT )
+                        if((hlt_trigName->at((unsigned int)k)) == HLT)
                         {
                                 Double_t Lepton_eta = this->eta;
                                 Double_t Lepton_phi = this->phi;
                                 Double_t Trig_eta = nh->HLT_trigEta->at(k);
                                 Double_t Trig_phi = nh->HLT_trigPhi->at(k);
 
-                                Double_t dR = sqrt( (Lepton_eta - Trig_eta)*(Lepton_eta - Trig_eta) + (Lepton_phi - Trig_phi)*(Lepton_phi - Trig_phi) );
-                                if( dR < 0.3 && fabs( Lepton_eta ) < 2.4 )
+                                Double_t dR = sqrt((Lepton_eta - Trig_eta)*(Lepton_eta - Trig_eta) + (Lepton_phi - Trig_phi)*(Lepton_phi - Trig_phi));
+                                if(dR < 0.3 && fabs(Lepton_eta) < 2.4)
                                 {
                                         isTrigMatch = true;
                                         break;
@@ -1368,14 +1361,14 @@ public:
 
 	Bool_t isHighPtMuon()
 	{
-		if(   this->isGLB == 1
+                if(  this->isGLB == 1
 			&& this->muonHits > 0
 			&& this->nMatches > 1
-			&& (this->Best_pTError / this->Best_pT ) < 0.3
+                        && (this->Best_pTError / this->Best_pT) < 0.3
 			&& fabs(this->dxyVTX) < 0.2
 			&& fabs(this->dzVTX) < 0.5
 			&& this->pixelHits > 0
-			&& this->trackerLayers > 5 )
+                        && this->trackerLayers > 5)
 		{
 			return 1;
 		}
@@ -1385,14 +1378,14 @@ public:
 
 	Bool_t isHighPtMuon_minus_isGLB()
 	{
-		if(   //this->isGLB == 1
+                if(  //this->isGLB == 1
 			this->muonHits > 0
 			&& this->nMatches > 1
-			&& (this->Best_pTError / this->Best_pT ) < 0.3
+                        && (this->Best_pTError / this->Best_pT) < 0.3
 			&& fabs(this->dxyVTX) < 0.2
 			&& fabs(this->dzVTX) < 0.5
 			&& this->pixelHits > 0
-			&& this->trackerLayers > 5 )
+                        && this->trackerLayers > 5)
 		{
 			return 1;
 		}
@@ -1402,14 +1395,14 @@ public:
 
 	Bool_t isHighPtMuon_minus_muonHits()
 	{
-		if(   this->isGLB == 1
+                if(  this->isGLB == 1
 			//&& this->muonHits > 0
 			&& this->nMatches > 1
-			&& (this->Best_pTError / this->Best_pT ) < 0.3
+                        && (this->Best_pTError / this->Best_pT) < 0.3
 			&& fabs(this->dxyVTX) < 0.2
 			&& fabs(this->dzVTX) < 0.5
 			&& this->pixelHits > 0
-			&& this->trackerLayers > 5 )
+                        && this->trackerLayers > 5)
 		{
 			return 1;
 		}
@@ -1419,14 +1412,14 @@ public:
 
 	Bool_t isHighPtMuon_minus_nMatches()
 	{
-		if(   this->isGLB == 1
+                if(  this->isGLB == 1
 			&& this->muonHits > 0
 			//&& this->nMatches > 1
-			&& (this->Best_pTError / this->Best_pT ) < 0.3
+                        && (this->Best_pTError / this->Best_pT) < 0.3
 			&& fabs(this->dxyVTX) < 0.2
 			&& fabs(this->dzVTX) < 0.5
 			&& this->pixelHits > 0
-			&& this->trackerLayers > 5 )
+                        && this->trackerLayers > 5)
 		{
 			return 1;
 		}
@@ -1436,14 +1429,14 @@ public:
 
 	Bool_t isHighPtMuon_minus_dpT_over_pT()
 	{
-		if(   this->isGLB == 1
+                if(  this->isGLB == 1
 			&& this->muonHits > 0
 			&& this->nMatches > 1
-			//&& (this->Best_pTError / this->Best_pT ) < 0.3
+                        //&& (this->Best_pTError / this->Best_pT) < 0.3
 			&& fabs(this->dxyVTX) < 0.2
 			&& fabs(this->dzVTX) < 0.5
 			&& this->pixelHits > 0
-			&& this->trackerLayers > 5 )
+                        && this->trackerLayers > 5)
 		{
 			return 1;
 		}
@@ -1453,14 +1446,14 @@ public:
 
 	Bool_t isHighPtMuon_minus_dxyVTX()
 	{
-		if(   this->isGLB == 1
+                if(  this->isGLB == 1
 			&& this->muonHits > 0
 			&& this->nMatches > 1
-			&& (this->Best_pTError / this->Best_pT ) < 0.3
+                        && (this->Best_pTError / this->Best_pT) < 0.3
 //			&& fabs(this->dxyVTX) < 0.2
 			&& fabs(this->dzVTX) < 0.5
 			&& this->pixelHits > 0
-			&& this->trackerLayers > 5 )
+                        && this->trackerLayers > 5)
 		{
 			return 1;
 		}
@@ -1470,14 +1463,14 @@ public:
 
 	Bool_t isHighPtMuon_minus_dzVTX()
 	{
-		if(   this->isGLB == 1
+                if(  this->isGLB == 1
 			&& this->muonHits > 0
 			&& this->nMatches > 1
-			&& (this->Best_pTError / this->Best_pT ) < 0.3
+                        && (this->Best_pTError / this->Best_pT) < 0.3
 			&& fabs(this->dxyVTX) < 0.2
 //			&& fabs(this->dzVTX) < 0.5
 			&& this->pixelHits > 0
-			&& this->trackerLayers > 5 )
+                        && this->trackerLayers > 5)
 		{
 			return 1;
 		}
@@ -1487,14 +1480,14 @@ public:
 
 	Bool_t isHighPtMuon_minus_pixelHits()
 	{
-		if(   this->isGLB == 1
+                if(  this->isGLB == 1
 			&& this->muonHits > 0
 			&& this->nMatches > 1
-			&& (this->Best_pTError / this->Best_pT ) < 0.3
+                        && (this->Best_pTError / this->Best_pT) < 0.3
 			&& fabs(this->dxyVTX) < 0.2
 			&& fabs(this->dzVTX) < 0.5
 //			&& this->pixelHits > 0
-			&& this->trackerLayers > 5 )
+                        && this->trackerLayers > 5)
 		{
 			return 1;
 		}
@@ -1504,10 +1497,10 @@ public:
 
 	Bool_t isHighPtMuon_minus_trackerLayers()
 	{
-		if(   this->isGLB == 1
+                if(  this->isGLB == 1
 			&& this->muonHits > 0
 			&& this->nMatches > 1
-			&& (this->Best_pTError / this->Best_pT ) < 0.3
+                        && (this->Best_pTError / this->Best_pT) < 0.3
 			&& fabs(this->dxyVTX) < 0.2
 			&& fabs(this->dzVTX) < 0.5
 			&& this->pixelHits > 0
@@ -1522,7 +1515,7 @@ public:
 
 	Bool_t isTightMuon()
 	{
-		if(   this->isGLB == 1
+                if(  this->isGLB == 1
 			&& this->isPF == 1
 			&& this->chi2dof < 10
 			&& this->muonHits > 0
@@ -1530,7 +1523,7 @@ public:
 			&& fabs(this->dxyVTX) < 0.2
 			&& fabs(this->dzVTX) < 0.5
 			&& this->pixelHits > 0
-			&& this->trackerLayers > 5 )
+                        && this->trackerLayers > 5)
 		{
 			return 1;
 		}
@@ -1540,7 +1533,7 @@ public:
 
 	Bool_t isTightMuon_minus_isGLB()
 	{
-		if(   // this->isGLB == 1
+                if(  // this->isGLB == 1
 			this->isPF == 1
 			&& this->chi2dof < 10
 			&& this->muonHits > 0
@@ -1548,7 +1541,7 @@ public:
 			&& fabs(this->dxyVTX) < 0.2
 			&& fabs(this->dzVTX) < 0.5
 			&& this->pixelHits > 0
-			&& this->trackerLayers > 5 )
+                        && this->trackerLayers > 5)
 		{
 			return 1;
 		}
@@ -1558,7 +1551,7 @@ public:
 
 	Bool_t isTightMuon_minus_isPF()
 	{
-		if(   this->isGLB == 1
+                if(  this->isGLB == 1
 			// && this->isPF == 1
 			&& this->chi2dof < 10
 			&& this->muonHits > 0
@@ -1566,7 +1559,7 @@ public:
 			&& fabs(this->dxyVTX) < 0.2
 			&& fabs(this->dzVTX) < 0.5
 			&& this->pixelHits > 0
-			&& this->trackerLayers > 5 )
+                        && this->trackerLayers > 5)
 		{
 			return 1;
 		}
@@ -1576,7 +1569,7 @@ public:
 
 	Bool_t isTightMuon_minus_chi2dof()
 	{
-		if(   this->isGLB == 1
+                if(  this->isGLB == 1
 			&& this->isPF == 1
 			// && this->chi2dof < 10
 			&& this->muonHits > 0
@@ -1584,7 +1577,7 @@ public:
 			&& fabs(this->dxyVTX) < 0.2
 			&& fabs(this->dzVTX) < 0.5
 			&& this->pixelHits > 0
-			&& this->trackerLayers > 5 )
+                        && this->trackerLayers > 5)
 		{
 			return 1;
 		}
@@ -1594,7 +1587,7 @@ public:
 
 	Bool_t isTightMuon_minus_muonHits()
 	{
-		if(   this->isGLB == 1
+                if(  this->isGLB == 1
 			&& this->isPF == 1
 			&& this->chi2dof < 10
 			// && this->muonHits > 0
@@ -1602,7 +1595,7 @@ public:
 			&& fabs(this->dxyVTX) < 0.2
 			&& fabs(this->dzVTX) < 0.5
 			&& this->pixelHits > 0
-			&& this->trackerLayers > 5 )
+                        && this->trackerLayers > 5)
 		{
 			return 1;
 		}
@@ -1612,7 +1605,7 @@ public:
 
 	Bool_t isTightMuon_minus_nMatches()
 	{
-		if(   this->isGLB == 1
+                if(  this->isGLB == 1
 			&& this->isPF == 1
 			&& this->chi2dof < 10
 			&& this->muonHits > 0
@@ -1620,7 +1613,7 @@ public:
 			&& fabs(this->dxyVTX) < 0.2
 			&& fabs(this->dzVTX) < 0.5
 			&& this->pixelHits > 0
-			&& this->trackerLayers > 5 )
+                        && this->trackerLayers > 5)
 		{
 			return 1;
 		}
@@ -1630,7 +1623,7 @@ public:
 
 	Bool_t isTightMuon_minus_dxyVTX()
 	{
-		if(   this->isGLB == 1
+                if(  this->isGLB == 1
 			&& this->isPF == 1
 			&& this->chi2dof < 10
 			&& this->muonHits > 0
@@ -1638,7 +1631,7 @@ public:
 			// && fabs(this->dxyVTX) < 0.2
 			&& fabs(this->dzVTX) < 0.5
 			&& this->pixelHits > 0
-			&& this->trackerLayers > 5 )
+                        && this->trackerLayers > 5)
 		{
 			return 1;
 		}
@@ -1648,7 +1641,7 @@ public:
 
 	Bool_t isTightMuon_minus_dzVTX()
 	{
-		if(   this->isGLB == 1
+                if(  this->isGLB == 1
 			&& this->isPF == 1
 			&& this->chi2dof < 10
 			&& this->muonHits > 0
@@ -1656,7 +1649,7 @@ public:
 			&& fabs(this->dxyVTX) < 0.2
 			// && fabs(this->dzVTX) < 0.5
 			&& this->pixelHits > 0
-			&& this->trackerLayers > 5 )
+                        && this->trackerLayers > 5)
 		{
 			return 1;
 		}
@@ -1666,7 +1659,7 @@ public:
 
 	Bool_t isTightMuon_minus_pixelHits()
 	{
-		if(   this->isGLB == 1
+                if(  this->isGLB == 1
 			&& this->isPF == 1
 			&& this->chi2dof < 10
 			&& this->muonHits > 0
@@ -1674,7 +1667,7 @@ public:
 			&& fabs(this->dxyVTX) < 0.2
 			&& fabs(this->dzVTX) < 0.5
 			// && this->pixelHits > 0
-			&& this->trackerLayers > 5 )
+                        && this->trackerLayers > 5)
 		{
 			return 1;
 		}
@@ -1684,7 +1677,7 @@ public:
 
 	Bool_t isTightMuon_minus_trackerLayers()
 	{
-		if(   this->isGLB == 1
+                if(  this->isGLB == 1
 			&& this->isPF == 1
 			&& this->chi2dof < 10
 			&& this->muonHits > 0
@@ -1743,27 +1736,27 @@ public:
 
 		Bool_t isBarrel = kFALSE;
 		Bool_t isEndcap = kFALSE;
-		if( fabs(etaSC) <= 1.479 )
+                if(fabs(etaSC) <= 1.479)
 			isBarrel = kTRUE;
-		else if( fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5 )
+                else if(fabs(etaSC) > 1.479 && fabs(etaSC) < 2.5)
 			isEndcap = kTRUE;
 
-		if( isBarrel == kTRUE )
+                if(isBarrel == kTRUE)
 		{
-			if( HoverE < 0.05
+                        if(HoverE < 0.05
 				&& Full5x5_SigmaIEtaIEta < 0.0102
 				&& ChIso < 1.37
 				&& NhIsoWithEA < 1.06 + 0.014*Pt + 0.000019*Pt*Pt
-				&& PhIsoWithEA < 0.28 + 0.0053*Pt )
+                                && PhIsoWithEA < 0.28 + 0.0053*Pt)
 				isPass = kTRUE;
 		}
-		else if( isEndcap == kTRUE )
+                else if(isEndcap == kTRUE)
 		{
-			if( HoverE < 0.05
+                        if(HoverE < 0.05
 				&& Full5x5_SigmaIEtaIEta < 0.0268
 				&& ChIso < 1.10
 				&& NhIsoWithEA < 2.69 + 0.0139*Pt + 0.000025*Pt*Pt
-				&& PhIsoWithEA < 0.39 + 0.0034*Pt  )
+                                && PhIsoWithEA < 0.39 + 0.0034*Pt )
 				isPass = kTRUE;
 		}
 
