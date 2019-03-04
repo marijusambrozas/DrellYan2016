@@ -888,15 +888,15 @@ void MakeSelectedEMu (TString type, TString HLTname, Bool_t Debug)
 
                     if (isPassEventSelection == kTRUE || isPassEventSelection_noRocCorr == kTRUE)
                     {
-                        Muon mu = SelectedMuonCollection[0];
-                        Muon mu_noRC = SelectedMuonCollection_noRocCorr[0];
-                        Electron ele = SelectedElectronCollection[0];
-                        Electron ele_noRC = SelectedElectronCollection_noRocCorr[0];
-
                         if (isPassEventSelection == kTRUE && isPassEventSelection_noRocCorr == kTRUE)
                         {
                             timesPassed++;
                             EMu.isSelPassed = 1;
+
+                            Muon mu = SelectedMuonCollection[0];
+                            Muon mu_noRC = SelectedMuonCollection_noRocCorr[0];
+                            Electron ele = SelectedElectronCollection[0];
+                            Electron ele_noRC = SelectedElectronCollection_noRocCorr[0];
 
                             EMu.EMu_InvM = (mu.Momentum + ele.Momentum).M();
 
@@ -927,6 +927,9 @@ void MakeSelectedEMu (TString type, TString HLTname, Bool_t Debug)
                             timesPassed++;
                             EMu.isSelPassed = 2;
 
+                            Muon mu = SelectedMuonCollection[0];
+                            Electron ele = SelectedElectronCollection[0];
+
                             EMu.EMu_InvM = (mu.Momentum + ele.Momentum).M();
 
                             EMu.Muon_pT = mu.Pt;
@@ -954,6 +957,9 @@ void MakeSelectedEMu (TString type, TString HLTname, Bool_t Debug)
                         else if (isPassEventSelection == kFALSE && isPassEventSelection_noRocCorr == kTRUE)
                         {
                             EMu.isSelPassed = 3;
+
+                            Muon mu_noRC = SelectedMuonCollection_noRocCorr[0];
+                            Electron ele_noRC = SelectedElectronCollection_noRocCorr[0];
 
                             EMu.EMu_InvM = (mu_noRC.Momentum + ele_noRC.Momentum).M();
 
