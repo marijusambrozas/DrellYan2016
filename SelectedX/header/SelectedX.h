@@ -19,6 +19,7 @@ public:
     Double_t GENEvt_weight;
     Int_t nPileUp;
     Int_t nVertices;
+    Double_t _topPtWeight;
     Double_t _prefiringweight;
     Double_t _prefiringweightup;
     Double_t _prefiringweightdown;
@@ -84,6 +85,12 @@ public:
     std::vector<double> *Muon_phi;
     std::vector<double> *Muon_Energy;
     std::vector<int> *Muon_charge;
+
+    std::vector<double> *Muon_pT_uncorr;
+    std::vector<double> *Muon_eta_uncorr;
+    std::vector<double> *Muon_phi_uncorr;
+    std::vector<int> *Muon_charge_uncorr;
+
 
     // -- Cut variables -- //
 //    std::vector<int> *Muon_muonType;
@@ -200,7 +207,9 @@ public:
         Muon_phi = new std::vector<double>;
         Muon_Energy = new std::vector<double>;
         Muon_charge = new std::vector<int>;
-
+        Muon_pT_uncorr = new std::vector<double>;
+        Muon_eta_uncorr = new std::vector<double>;
+        Muon_phi_uncorr = new std::vector<double>;
 //        Muon_muonType = new std::vector<int>;
         Muon_chi2dof = new std::vector<double>;
         Muon_muonHits = new std::vector<int>;
@@ -312,6 +321,7 @@ public:
         chain->SetBranchAddress("nPileUp", &nPileUp);
         chain->SetBranchAddress("isHardProcess", &isHardProcess);
         chain->SetBranchAddress("GENEvt_weight", &GENEvt_weight);
+        chain->SetBranchAddress("_topPtWeight", &_topPtWeight);
         chain->SetBranchAddress("_prefiringweight", &_prefiringweight);
         chain->SetBranchAddress("_prefiringweightup", &_prefiringweightup);
         chain->SetBranchAddress("_prefiringweightdown", &_prefiringweightdown);
@@ -337,6 +347,10 @@ public:
         chain->SetBranchAddress("Muon_phi", &Muon_phi);
         chain->SetBranchAddress("Muon_Energy", &Muon_Energy);
         chain->SetBranchAddress("Muon_charge", &Muon_charge);
+        chain->SetBranchAddress("Muon_pT_uncorr", &Muon_pT_uncorr);
+        chain->SetBranchAddress("Muon_eta_uncorr", &Muon_eta_uncorr);
+        chain->SetBranchAddress("Muon_phi_uncorr", &Muon_phi_uncorr);
+        chain->SetBranchAddress("Muon_chargr_uncorr", &Muon_charge_uncorr);
 //        chain->SetBranchAddress("Muon_muonType", &Muon_muonType);
         chain->SetBranchAddress("Muon_chi2dof", &Muon_chi2dof);
         chain->SetBranchAddress("Muon_muonHits", &Muon_muonHits);
@@ -440,6 +454,7 @@ public:
         tree->Branch("evtNum", &this->evtNum);
         tree->Branch("nPileUp", &this->nPileUp);
         tree->Branch("GENEvt_weight", &this->GENEvt_weight);
+        tree->Branch("_topPtWeight", &this->_topPtWeight);
         tree->Branch("_prefiringweight", &this->_prefiringweight);
         tree->Branch("_prefiringweightup", &this->_prefiringweightup);
         tree->Branch("_prefiringweightdown", &this->_prefiringweightdown);
@@ -463,6 +478,10 @@ public:
         tree->Branch("isPFmuon", &this->isPFmuon);
         tree->Branch("isTRKmuon", &this->isTRKmuon);
         tree->Branch("Muon_charge", &this->Muon_charge);
+        tree->Branch("Muon_pT_uncorr", &this->Muon_pT_uncorr);
+        tree->Branch("Muon_eta_uncorr", &this->Muon_eta_uncorr);
+        tree->Branch("Muon_phi_uncorr", &this->Muon_phi_uncorr);
+        tree->Branch("Muon_charge_uncorr", &this->Muon_charge_uncorr);
         tree->Branch("Muon_chi2dof", &this->Muon_chi2dof);
         tree->Branch("Muon_muonHits", &this->Muon_muonHits);
         tree->Branch("Muon_nSegments", &this->Muon_nSegments);
@@ -542,6 +561,10 @@ public:
         isPFmuon->clear();
         isTRKmuon->clear();
         Muon_charge->clear();
+        Muon_pT_uncorr->clear();
+        Muon_eta_uncorr->clear();
+        Muon_phi_uncorr->clear();
+        Muon_charge_uncorr->clear();
         Muon_chi2dof->clear();
         Muon_muonHits->clear();
         Muon_nSegments->clear();
@@ -646,6 +669,7 @@ public:
         chain->SetBranchStatus("nPileUp", 1);
         chain->SetBranchStatus("isHardProcess", 1);
         chain->SetBranchStatus("GENEvt_weight", 1);
+        chain->SetBranchStatus("_topPtWeight", 1);
         chain->SetBranchStatus("_prefiringweight", 1);
         chain->SetBranchStatus("_prefiringweightup", 1);
         chain->SetBranchStatus("_prefiringweightdown", 1);
@@ -691,6 +715,10 @@ public:
         chain->SetBranchStatus("Muon_phi", 1);
         chain->SetBranchStatus("Muon_Energy", 1);
         chain->SetBranchStatus("Muon_charge", 1);
+        chain->SetBranchStatus("Muon_pT_uncorr", 1);
+        chain->SetBranchStatus("Muon_eta_uncorr", 1);
+        chain->SetBranchStatus("Muon_phi_uncorr", 1);
+        chain->SetBranchStatus("Muon_charge_uncorr", 1);
 //        chain->SetBranchStatus("Muon_muonType", 1);
         chain->SetBranchStatus("Muon_chi2dof", 1);
         chain->SetBranchStatus("Muon_muonHits", 1);
@@ -947,7 +975,11 @@ public:
 class SelectedMuMu_t : public SelectedX
 {
 public:
-    Bool_t isSelPassed;
+    Int_t isSelPassed;
+    // 0 if the event did not pass the selection
+    // 1 if the event passes selection both with and without applying Rochester correction
+    // 2 if the event passes selection only when Rochester correction was applied
+    // 3 if the event passes selection only when Rochester correction was not applied
 
     Double_t Muon_InvM;
     std::vector<double> *Muon_pT;
@@ -956,9 +988,10 @@ public:
     std::vector<double> *Muon_Energy;
     std::vector<int> *Muon_charge;
     std::vector<double> *Muon_TuneP_pT;
-    std::vector<double> *Muon_TuneP_eta;
-    std::vector<double> *Muon_TuneP_phi;
-    std::vector<int> *Muon_trackerLayers;
+    std::vector<double> *Muon_pT_uncorr;
+    std::vector<double> *Muon_eta_uncorr;
+    std::vector<double> *Muon_phi_uncorr;
+    std::vector<int> *Muon_charge_uncorr;
 
     // -- Constructor -- //
     void CreateNew()
@@ -968,12 +1001,11 @@ public:
         Muon_phi = new std::vector<double>;
         Muon_Energy = new std::vector<double>;
         Muon_charge = new std::vector<int>;
-
         Muon_TuneP_pT = new std::vector<double>;
-        Muon_TuneP_eta = new std::vector<double>;
-        Muon_TuneP_phi = new std::vector<double>;
-
-        Muon_trackerLayers = new std::vector<int>;
+        Muon_pT_uncorr = new std::vector<double>;
+        Muon_eta_uncorr = new std::vector<double>;
+        Muon_phi_uncorr = new std::vector<double>;
+        Muon_charge_uncorr = new std::vector<int>;
     }
 
     // -- Constructor with chain -- //
@@ -987,6 +1019,7 @@ public:
         chain->SetBranchAddress("nVertices", &nVertices);
         chain->SetBranchAddress("GENEvt_weight", &GENEvt_weight);
         chain->SetBranchAddress("nPileUp", &nPileUp);
+        chain->SetBranchAddress("_topPtWeight", &_topPtWeight);
         chain->SetBranchAddress("_prefiringweight", &_prefiringweight);
         chain->SetBranchAddress("_prefiringweightup", &_prefiringweightup);
         chain->SetBranchAddress("_prefiringweightdown", &_prefiringweightdown);
@@ -999,9 +1032,10 @@ public:
         chain->SetBranchAddress("Muon_Energy", &Muon_Energy);
         chain->SetBranchAddress("Muon_charge", &Muon_charge);
         chain->SetBranchAddress("Muon_TuneP_pT", &Muon_TuneP_pT);
-        chain->SetBranchAddress("Muon_TuneP_eta", &Muon_TuneP_eta);
-        chain->SetBranchAddress("Muon_TuneP_phi", &Muon_TuneP_phi);
-        chain->SetBranchAddress("Muon_trackerLayers", &Muon_trackerLayers);
+        chain->SetBranchAddress("Muon_pT_uncorr", &Muon_pT_uncorr);
+        chain->SetBranchAddress("Muon_eta_uncorr", &Muon_eta_uncorr);
+        chain->SetBranchAddress("Muon_phi_uncorr", &Muon_phi_uncorr);
+        chain->SetBranchAddress("Muon_charge_uncorr", &Muon_charge_uncorr);
 
         File_Given = kTRUE;
     }
@@ -1011,6 +1045,7 @@ public:
         GENEvt_weight = Mu->GENEvt_weight;
         nVertices = Mu->nVertices;
         nPileUp = Mu->nPileUp;
+        _topPtWeight = Mu->_topPtWeight;
         _prefiringweight = Mu->_prefiringweight;
         _prefiringweightup = Mu->_prefiringweightup;
         _prefiringweightdown = Mu->_prefiringweightdown;
@@ -1024,9 +1059,10 @@ public:
         Muon_Energy = Mu->Muon_Energy;
         Muon_charge = Mu->Muon_charge;
         Muon_TuneP_pT = Mu->Muon_TuneP_pT;
-        Muon_TuneP_eta = Mu->Muon_TuneP_eta;
-        Muon_TuneP_phi = Mu->Muon_TuneP_phi;
-        Muon_trackerLayers = Mu->Muon_trackerLayers;
+        Muon_pT_uncorr = Mu->Muon_pT_uncorr;
+        Muon_eta_uncorr = Mu->Muon_eta_uncorr;
+        Muon_phi_uncorr = Mu->Muon_phi_uncorr;
+        Muon_charge_uncorr = Mu->Muon_charge_uncorr;
     }
 
     void MakeBranches(TTree *tree)
@@ -1035,6 +1071,7 @@ public:
         tree->Branch( "nVertices", &this->nVertices );
         tree->Branch( "nPileUp", &this->nPileUp );
         tree->Branch( "GENEvt_weight", &this->GENEvt_weight );
+        tree->Branch( "_topPtWeight", &this->_topPtWeight);
         tree->Branch( "_prefiringweight", &this->_prefiringweight );
         tree->Branch( "_prefiringweightup", &this->_prefiringweightup );
         tree->Branch( "_prefiringweightdown", &this->_prefiringweightdown );
@@ -1046,9 +1083,10 @@ public:
         tree->Branch( "Muon_Energy", &this->Muon_Energy );
         tree->Branch( "Muon_InvM", &this->Muon_InvM );
         tree->Branch( "Muon_TuneP_pT", &this->Muon_TuneP_pT );
-        tree->Branch( "Muon_TuneP_eta", &this->Muon_TuneP_eta );
-        tree->Branch( "Muon_TuneP_phi", &this->Muon_TuneP_phi );
-        tree->Branch( "Muon_trackerLayers", &this->Muon_trackerLayers );
+        tree->Branch( "Muon_pT_uncorr", &this->Muon_pT_uncorr);
+        tree->Branch( "Muon_eta_uncorr", &this->Muon_eta_uncorr );
+        tree->Branch( "Muon_phi_uncorr", &this->Muon_phi_uncorr );
+        tree->Branch( "Muon_charge_uncorr", &this->Muon_charge_uncorr );
     }
 
     int ClearVectors()
@@ -1058,13 +1096,14 @@ public:
         Muon_phi->clear();
         Muon_charge->clear();
         Muon_Energy->clear();
-        Muon_TuneP_pT->clear();;
-        Muon_TuneP_eta->clear();
-        Muon_TuneP_phi->clear();
-        Muon_trackerLayers->clear();
+        Muon_TuneP_pT->clear();
+        Muon_pT_uncorr->clear();
+        Muon_eta_uncorr->clear();
+        Muon_phi_uncorr->clear();
+        Muon_charge_uncorr->clear();
 
         if ( !Muon_pT->size() && !Muon_eta->size() && !Muon_phi->size() && !Muon_charge->size() && !Muon_Energy->size() &&
-             !Muon_TuneP_pT->size() && !Muon_TuneP_eta->size() && !Muon_TuneP_phi->size() && !Muon_trackerLayers->size() )
+             !Muon_TuneP_pT->size() && !Muon_pT_uncorr->size() && !Muon_eta_uncorr->size() && !Muon_phi_uncorr->size() && !Muon_charge_uncorr->size() )
             return 1;
         else return 0;
     }
@@ -1089,6 +1128,7 @@ public:
         chain->SetBranchStatus("nVertices", 1);
         chain->SetBranchStatus("GENEvt_weight", 1);
         chain->SetBranchStatus("nPileUp", 1);
+        chain->SetBranchStatus("_topPtWeight", 1);
         chain->SetBranchStatus("_prefiringweight", 1);
         chain->SetBranchStatus("_prefiringweightup", 1);
         chain->SetBranchStatus("_prefiringweightdown", 1);
@@ -1101,9 +1141,10 @@ public:
         chain->SetBranchStatus("Muon_Energy", 1);
         chain->SetBranchStatus("Muon_charge", 1);
         chain->SetBranchStatus("Muon_TuneP_pT", 1);
-        chain->SetBranchStatus("Muon_TuneP_eta", 1);
-        chain->SetBranchStatus("Muon_TuneP_phi", 1);
-        chain->SetBranchStatus("Muon_trackerLayers", 1);
+        chain->SetBranchStatus("Muon_pT_uncorr", 1);
+        chain->SetBranchStatus("Muon_eta_uncorr", 1);
+        chain->SetBranchStatus("Muon_phi_uncorr", 1);
+        chain->SetBranchStatus("Muon_charge_uncorr", 1);
     }
 
     void TurnOffAllBranches()
@@ -1242,6 +1283,8 @@ public:
     std::vector<double> *Electron_Energy;
     std::vector<int> *Electron_charge;
 
+    std::vector<double> * Electron_Energy_uncorr;
+
     std::vector<double> *Electron_gsfpT;
     std::vector<double> *Electron_gsfPx;
     std::vector<double> *Electron_gsfPy;
@@ -1310,6 +1353,8 @@ public:
         Electron_Energy = new std::vector<double>;
         Electron_charge = new std::vector<int>;
 
+        Electron_Energy_uncorr = new std::vector<double>;
+
         Electron_gsfpT = new std::vector<double>;
         Electron_gsfPx = new std::vector<double>;
         Electron_gsfPy = new std::vector<double>;
@@ -1377,6 +1422,7 @@ public:
         chain->SetBranchAddress("lumiBlock", &lumiBlock);
         chain->SetBranchAddress("evtNum", &evtNum);
         chain->SetBranchAddress("nPileUp", &nPileUp);
+        chain->SetBranchAddress("_topPtWeight", &_topPtWeight);
         chain->SetBranchAddress("_prefiringweight", &_prefiringweight);
         chain->SetBranchAddress("_prefiringweightup", &_prefiringweightup);
         chain->SetBranchAddress("_prefiringweightdown", &_prefiringweightdown);
@@ -1401,6 +1447,7 @@ public:
         chain->SetBranchAddress("Electron_phi", &Electron_phi);
         chain->SetBranchAddress("Electron_Energy", &Electron_Energy);
         chain->SetBranchAddress("Electron_charge", &Electron_charge);
+        chain->SetBranchAddress("Electron_Energy_uncorr", &Electron_Energy_uncorr);
         chain->SetBranchAddress("Electron_gsfpT", &Electron_gsfpT);
         chain->SetBranchAddress("Electron_gsfPx", &Electron_gsfPx);
         chain->SetBranchAddress("Electron_gsfPy", &Electron_gsfPy);
@@ -1462,6 +1509,7 @@ public:
         tree->Branch("evtNum", &this->evtNum);
         tree->Branch("nPileUp", &this->nPileUp);
         tree->Branch("GENEvt_weight", &this->GENEvt_weight);
+        tree->Branch("_topPtWeight", &this->_topPtWeight);
         tree->Branch("_prefiringweight", &this->_prefiringweight);
         tree->Branch("_prefiringweightup", &this->_prefiringweightup);
         tree->Branch("_prefiringweightdown", &this->_prefiringweightdown);
@@ -1484,6 +1532,7 @@ public:
         tree->Branch("Electron_phi", &this->Electron_phi);
         tree->Branch("Electron_Energy", &this->Electron_Energy);
         tree->Branch("Electron_charge", &this->Electron_charge);
+        tree->Branch("Electron_Energy_uncorr", &this->Electron_Energy_uncorr);
         tree->Branch("Electron_gsfpT", &this->Electron_gsfpT);
         tree->Branch("Electron_gsfPx", &this->Electron_gsfPx);
         tree->Branch("Electron_gsfPy", &this->Electron_gsfPy);
@@ -1547,6 +1596,7 @@ public:
         Electron_phi->clear();
         Electron_Energy->clear();
         Electron_charge->clear();
+        Electron_Energy_uncorr->clear();
         Electron_gsfpT->clear();
         Electron_gsfPx->clear();
         Electron_gsfPy->clear();
@@ -1636,6 +1686,7 @@ public:
         chain->SetBranchStatus("evtNum", 1);
         chain->SetBranchStatus("nPileUp", 1);
 
+        chain->SetBranchStatus("_topPtWeight", 1);
         chain->SetBranchStatus("_prefiringweight", 1);
         chain->SetBranchStatus("_prefiringweightup", 1);
         chain->SetBranchStatus("_prefiringweightdown", 1);
@@ -1663,6 +1714,7 @@ public:
         chain->SetBranchStatus("Electron_phi", 1);
         chain->SetBranchStatus("Electron_Energy", 1);
         chain->SetBranchStatus("Electron_charge", 1);
+        chain->SetBranchStatus("Electron_Energy_uncorr", 1);
         chain->SetBranchStatus("Electron_gsfpT", 1);
         chain->SetBranchStatus("Electron_gsfPx", 1);
         chain->SetBranchStatus("Electron_gsfPy", 1);
@@ -1825,7 +1877,10 @@ public:
 class SelectedEE_t : public SelectedX
 {
 public:
-    Bool_t isSelPassed;
+    Int_t isSelPassed;
+    // 0 if the event did not pass the selection
+    // 1 if the event did pass the selection
+
 
     Double_t Electron_InvM;
     std::vector<double> *Electron_pT;
@@ -1835,6 +1890,7 @@ public:
     std::vector<int> *Electron_charge;
     std::vector<double> *Electron_etaSC;
     std::vector<double> *Electron_phiSC;
+    std::vector<double> *Electron_Energy_uncorr;
 
     // -- Default constructor -- //
     void CreateNew()
@@ -1846,6 +1902,7 @@ public:
         Electron_charge = new std::vector<int>;
         Electron_etaSC = new std::vector<double>;
         Electron_phiSC = new std::vector<double>;
+        Electron_Energy_uncorr = new std::vector<double>;
     }
 
     // -- Constructor with chain -- //
@@ -1859,6 +1916,7 @@ public:
         chain->SetBranchAddress("nVertices", &nVertices);
         chain->SetBranchAddress("GENEvt_weight", &GENEvt_weight);
         chain->SetBranchAddress("nPileUp", &nPileUp);
+        chain->SetBranchAddress("_topPtWeight", &_topPtWeight);
         chain->SetBranchAddress("_prefiringweight", &_prefiringweight);
         chain->SetBranchAddress("_prefiringweightup", &_prefiringweightup);
         chain->SetBranchAddress("_prefiringweightdown", &_prefiringweightdown);
@@ -1872,6 +1930,7 @@ public:
         chain->SetBranchAddress("Electron_charge", &Electron_charge);
         chain->SetBranchAddress("Electron_etaSC", &Electron_etaSC);
         chain->SetBranchAddress("Electron_phiSC", &Electron_phiSC);
+        chain->SetBranchAddress("Electron_Energy_uncorr", &Electron_Energy_uncorr);
 
         File_Given = kTRUE;
     }
@@ -1884,6 +1943,7 @@ public:
         isSelPassed = SelPassed;
         Electron_InvM = Ele->Electron_InvM;
 
+        _topPtWeight = Ele->_topPtWeight;
         _prefiringweight = Ele->_prefiringweight;
         _prefiringweightup = Ele->_prefiringweightup;
         _prefiringweightdown = Ele->_prefiringweightdown;
@@ -1896,26 +1956,29 @@ public:
         Electron_charge = Ele->Electron_charge;
         Electron_etaSC = Ele->Electron_etaSC;
         Electron_phiSC = Ele->Electron_phiSC;
+        Electron_Energy_uncorr = Ele->Electron_Energy_uncorr;
     }
 
     void MakeBranches(TTree *tree)
     {
-        tree->Branch( "isSelPassed", &this->isSelPassed );
-        tree->Branch( "nVertices", &this->nVertices );
-        tree->Branch( "nPileUp", &this->nPileUp );
-        tree->Branch( "_prefiringweight", &this->_prefiringweight );
-        tree->Branch( "_prefiringweightup", &this->_prefiringweightup );
-        tree->Branch( "_prefiringweightdown", &this->_prefiringweightdown );
-        tree->Branch( "PVz", &this->PVz );
-        tree->Branch( "GENEvt_weight", &this->GENEvt_weight );
-        tree->Branch( "Electron_InvM", &this->Electron_InvM );
-        tree->Branch( "Electron_pT", &this->Electron_pT );
-        tree->Branch( "Electron_eta", &this->Electron_eta );
-        tree->Branch( "Electron_phi", &this->Electron_phi );
-        tree->Branch( "Electron_Energy", &this->Electron_Energy );
-        tree->Branch( "Electron_charge", &this->Electron_charge );
-        tree->Branch( "Electron_etaSC", &this->Electron_etaSC );
-        tree->Branch( "Electron_phiSC", &this->Electron_phiSC );
+        tree->Branch("isSelPassed", &this->isSelPassed);
+        tree->Branch("nVertices", &this->nVertices);
+        tree->Branch("nPileUp", &this->nPileUp);
+        tree->Branch("_topPtWeight", &this->_topPtWeight);
+        tree->Branch("_prefiringweight", &this->_prefiringweight);
+        tree->Branch("_prefiringweightup", &this->_prefiringweightup);
+        tree->Branch("_prefiringweightdown", &this->_prefiringweightdown);
+        tree->Branch("PVz", &this->PVz);
+        tree->Branch("GENEvt_weight", &this->GENEvt_weight);
+        tree->Branch("Electron_InvM", &this->Electron_InvM);
+        tree->Branch("Electron_pT", &this->Electron_pT);
+        tree->Branch("Electron_eta", &this->Electron_eta);
+        tree->Branch("Electron_phi", &this->Electron_phi);
+        tree->Branch("Electron_Energy", &this->Electron_Energy);
+        tree->Branch("Electron_charge", &this->Electron_charge);
+        tree->Branch("Electron_etaSC", &this->Electron_etaSC);
+        tree->Branch("Electron_phiSC", &this->Electron_phiSC);
+        tree->Branch("Electron_Energy_uncorr", &this->Electron_Energy_uncorr);
     }
 
     int ClearVectors()
@@ -1927,6 +1990,7 @@ public:
         Electron_charge->clear();
         Electron_etaSC->clear();
         Electron_phiSC->clear();
+        Electron_Energy_uncorr->clear();
 
         if ( !Electron_pT->size() && !Electron_eta->size() && !Electron_phi->size() && !Electron_Energy->size() &&
              !Electron_charge->size() && !Electron_etaSC->size() && !Electron_phiSC->size() )
@@ -1954,6 +2018,7 @@ public:
         chain->SetBranchStatus("nVertices", 1);
         chain->SetBranchStatus("GENEvt_weight", 1);
         chain->SetBranchStatus("nPileUp", 1);
+        chain->SetBranchStatus("_topPtWeight", 1);
         chain->SetBranchStatus("_prefiringweight", 1);
         chain->SetBranchStatus("_prefiringweightup", 1);
         chain->SetBranchStatus("_prefiringweightdown", 1);
@@ -1966,6 +2031,7 @@ public:
         chain->SetBranchStatus("Electron_charge", 1);
         chain->SetBranchStatus("Electron_etaSC", 1);
         chain->SetBranchStatus("Electron_phiSC", 1);
+        chain->SetBranchStatus("Electron_Energy_uncorr", 1);
     }
 
     void TurnOffAllBranches()
@@ -2091,6 +2157,10 @@ public:
     Double_t Muon_phi;
     Double_t Muon_Energy;
     Int_t Muon_charge;
+    Double_t Muon_pT_uncorr;
+    Double_t Muon_eta_uncorr;
+    Double_t Muon_phi_uncorr;
+    Int_t Muon_charge_uncorr;
 
     // -- Cut variables -- //
 //    Int_t Muon_muonType;
@@ -2199,6 +2269,7 @@ public:
     Double_t Electron_phi;
     Double_t Electron_Energy;
     Int_t Electron_charge;
+    Double_t Electron_Energy_uncorr;
 
     Double_t Electron_gsfpT;
     Double_t Electron_gsfPx;
@@ -2296,6 +2367,7 @@ public:
         chain->SetBranchAddress("isHardProcess", &isHardProcess);
         chain->SetBranchAddress("GENEvt_weight", &GENEvt_weight);
 
+        chain->SetBranchAddress("_topPtWeight", &_topPtWeight);
         chain->SetBranchAddress("_prefiringweight", &_prefiringweight);
         chain->SetBranchAddress("_prefiringweightup", &_prefiringweightup);
         chain->SetBranchAddress("_prefiringweightdown", &_prefiringweightdown);
@@ -2322,6 +2394,10 @@ public:
         chain->SetBranchAddress("Muon_phi", &Muon_phi);
         chain->SetBranchAddress("Muon_Energy", &Muon_Energy);
         chain->SetBranchAddress("Muon_charge", &Muon_charge);
+        chain->SetBranchAddress("Muon_pT_uncorr", &Muon_pT_uncorr);
+        chain->SetBranchAddress("Muon_eta_uncorr", &Muon_eta_uncorr);
+        chain->SetBranchAddress("Muon_phi_uncorr", &Muon_phi_uncorr);
+        chain->SetBranchAddress("Muon_charge_uncorr", &Muon_phi_uncorr);
 //        chain->SetBranchAddress("Muon_muonType", &Muon_muonType);
         chain->SetBranchAddress("Muon_chi2dof", &Muon_chi2dof);
         chain->SetBranchAddress("Muon_muonHits", &Muon_muonHits);
@@ -2417,6 +2493,7 @@ public:
         chain->SetBranchAddress("Electron_eta", &Electron_eta);
         chain->SetBranchAddress("Electron_phi", &Electron_phi);
         chain->SetBranchAddress("Electron_charge", &Electron_charge);
+        chain->SetBranchAddress("Electron_Energy_uncorr", &Electron_Energy_uncorr);
         chain->SetBranchAddress("Electron_gsfpT", &Electron_gsfpT);
         chain->SetBranchAddress("Electron_gsfPx", &Electron_gsfPx);
         chain->SetBranchAddress("Electron_gsfPy", &Electron_gsfPy);
@@ -2478,6 +2555,7 @@ public:
         tree->Branch("evtNum", &this->evtNum);
         tree->Branch("nPileUp", &this->nPileUp);
         tree->Branch("GENEvt_weight", &this->GENEvt_weight);
+        tree->Branch("_topPtWeight", &this->_topPtWeight);
         tree->Branch("_prefiringweight", &this->_prefiringweight);
         tree->Branch("_prefiringweightup", &this->_prefiringweightup);
         tree->Branch("_prefiringweightdown", &this->_prefiringweightdown);
@@ -2498,6 +2576,10 @@ public:
         tree->Branch("Muon_pT", &this->Muon_pT);
         tree->Branch("Muon_eta", &this->Muon_eta);
         tree->Branch("Muon_phi", &this->Muon_phi);
+        tree->Branch("Muon_pT_uncorr", &this->Muon_pT_uncorr);
+        tree->Branch("Muon_eta_uncorr", &this->Muon_eta_uncorr);
+        tree->Branch("Muon_phi_uncorr", &this->Muon_phi_uncorr);
+        tree->Branch("Muon_charge_uncorr", &this->Muon_charge_uncorr);
         tree->Branch("isGLBmuon", &this->isGLBmuon);
         tree->Branch("isPFmuon", &this->isPFmuon);
         tree->Branch("isTRKmuon", &this->isTRKmuon);
@@ -2568,6 +2650,7 @@ public:
         tree->Branch("Electron_phi", &this->Electron_phi);
         tree->Branch("Electron_Energy", &this->Electron_Energy);
         tree->Branch("Electron_charge", &this->Electron_charge);
+        tree->Branch("Electron_Energy_uncorr", &this->Electron_Energy_uncorr);
         tree->Branch("Electron_gsfpT", &this->Electron_gsfpT);
         tree->Branch("Electron_gsfPx", &this->Electron_gsfPx);
         tree->Branch("Electron_gsfPy", &this->Electron_gsfPy);
@@ -2654,6 +2737,7 @@ public:
         chain->SetBranchStatus("lumiBlock", 1);
         chain->SetBranchStatus("evtNum", 1);
         chain->SetBranchStatus("nPileUp", 1);
+        chain->SetBranchStatus("_topPtWeight", 1);
         chain->SetBranchStatus("_prefiringweight", 1);
         chain->SetBranchStatus("_prefiringweightup", 1);
         chain->SetBranchStatus("_prefiringweightdown", 1);
@@ -2701,6 +2785,10 @@ public:
         chain->SetBranchStatus("Muon_phi", 1);
         chain->SetBranchStatus("Muon_Energy", 1);
         chain->SetBranchStatus("Muon_charge", 1);
+        chain->SetBranchStatus("Muon_pT_uncorr", 1);
+        chain->SetBranchStatus("Muon_eta_uncorr", 1);
+        chain->SetBranchStatus("Muon_phi_uncorr", 1);
+        chain->SetBranchStatus("Muon_charge_uncorr", 1);
 //        chain->SetBranchStatus("Muon_muonType", 1);
         chain->SetBranchStatus("Muon_chi2dof", 1);
         chain->SetBranchStatus("Muon_muonHits", 1);
@@ -2769,6 +2857,7 @@ public:
         chain->SetBranchStatus("Electron_phi", 1);
         chain->SetBranchStatus("Electron_Energy", 1);
         chain->SetBranchStatus("Electron_charge", 1);
+        chain->SetBranchStatus("Electron_Energy_uncorr", 1);
         chain->SetBranchStatus("Electron_gsfpT", 1);
         chain->SetBranchStatus("Electron_gsfPx", 1);
         chain->SetBranchStatus("Electron_gsfPy", 1);
@@ -3001,7 +3090,11 @@ public:
 class SelectedEMu_t : public SelectedX
 {
 public:
-    Bool_t isSelPassed;
+    Int_t isSelPassed;
+    // 0 if the event did not pass the selection
+    // 1 if the event passes selection both with and without applying Rochester correction
+    // 2 if the event passes selection only when Rochester correction was applied
+    // 3 if the event passes selection only when Rochester correction was not applied
 
     Double_t EMu_InvM;
 
@@ -3012,6 +3105,7 @@ public:
     Int_t Electron_charge;
     Double_t Electron_etaSC;
     Double_t Electron_phiSC;
+    Double_t Electron_Energy_uncorr;
 
     Double_t Muon_pT;
     Double_t Muon_eta;
@@ -3019,9 +3113,10 @@ public:
     Double_t Muon_Energy;
     Int_t Muon_charge;
     Double_t Muon_TuneP_pT;
-    Double_t Muon_TuneP_eta;
-    Double_t Muon_TuneP_phi;
-    Int_t Muon_trackerLayers;
+    Double_t Muon_pT_uncorr;
+    Double_t Muon_eta_uncorr;
+    Double_t Muon_phi_uncorr;
+    Int_t Muon_charge_uncorr;
 
     // -- Useless constructor -- //
     void CreateNew()
@@ -3040,6 +3135,7 @@ public:
         chain->SetBranchAddress("nVertices", &nVertices);
         chain->SetBranchAddress("GENEvt_weight", &GENEvt_weight);
         chain->SetBranchAddress("nPileUp", &nPileUp);
+        chain->SetBranchAddress("_topPtWeight", &_topPtWeight);
         chain->SetBranchAddress("_prefiringweight", &_prefiringweight);
         chain->SetBranchAddress("_prefiringweightup", &_prefiringweightup);
         chain->SetBranchAddress("_prefiringweightdown", &_prefiringweightdown);
@@ -3053,15 +3149,17 @@ public:
         chain->SetBranchAddress("Electron_charge", &Electron_charge);
         chain->SetBranchAddress("Electron_etaSC", &Electron_etaSC);
         chain->SetBranchAddress("Electron_phiSC", &Electron_phiSC);
+        chain->SetBranchAddress("Electron_Energy_uncorr", &Electron_Energy_uncorr);
         chain->SetBranchAddress("Muon_pT", &Muon_pT);
         chain->SetBranchAddress("Muon_eta", &Muon_eta);
         chain->SetBranchAddress("Muon_phi", &Muon_phi);
         chain->SetBranchAddress("Muon_charge", &Muon_charge);
         chain->SetBranchAddress("Muon_Energy", &Muon_Energy);
         chain->SetBranchAddress("Muon_TuneP_pT", &Muon_TuneP_pT);
-        chain->SetBranchAddress("Muon_TuneP_eta", &Muon_TuneP_eta);
-        chain->SetBranchAddress("Muon_TuneP_phi", &Muon_TuneP_phi);
-        chain->SetBranchAddress("Muon_trackerLayers", &Muon_trackerLayers);
+        chain->SetBranchAddress("Muon_pT_uncorr", &Muon_pT_uncorr);
+        chain->SetBranchAddress("Muon_eta_uncorr", &Muon_eta_uncorr);
+        chain->SetBranchAddress("Muon_phi_uncorr", &Muon_phi_uncorr);
+        chain->SetBranchAddress("Muon_charge_uncorr", &Muon_charge_uncorr);
 
         File_Given = kTRUE;
     }
@@ -3071,6 +3169,7 @@ public:
         nVertices = EMu->nVertices;
         GENEvt_weight = EMu->GENEvt_weight;
         nPileUp = EMu->nPileUp;
+        _topPtWeight = EMu->_topPtWeight;
         _prefiringweight = EMu->_prefiringweight;
         _prefiringweightup = EMu->_prefiringweightup;
         _prefiringweightdown = EMu->_prefiringweightdown;
@@ -3084,9 +3183,10 @@ public:
         Muon_Energy = EMu->Muon_Energy;
         Muon_charge = EMu->Muon_charge;
         Muon_TuneP_pT = EMu->Muon_TuneP_pT;
-        Muon_TuneP_eta = EMu->Muon_TuneP_eta;
-        Muon_TuneP_phi = EMu->Muon_TuneP_phi;
-        Muon_trackerLayers = EMu->Muon_trackerLayers;
+        Muon_pT_uncorr = EMu->Muon_pT_uncorr;
+        Muon_eta_uncorr = EMu->Muon_eta_uncorr;
+        Muon_phi_uncorr = EMu->Muon_phi_uncorr;
+        Muon_charge_uncorr = EMu->Muon_charge_uncorr;
 
         Electron_pT = EMu->Electron_pT;
         Electron_eta = EMu->Electron_eta;
@@ -3095,6 +3195,7 @@ public:
         Electron_charge = EMu->Electron_charge;
         Electron_etaSC = EMu->Electron_etaSC;
         Electron_phiSC = EMu->Electron_phiSC;
+        Electron_Energy_uncorr = EMu->Electron_Energy_uncorr;
     }
 
     void MakeBranches(TTree *tree)
@@ -3103,6 +3204,7 @@ public:
         tree->Branch( "nVertices", &this->nVertices );
         tree->Branch( "nPileUp", &this->nPileUp );
         tree->Branch( "GENEvt_weight", &this->GENEvt_weight );
+        tree->Branch( "_topPtWeight", &this->_topPtWeight);
         tree->Branch( "_prefiringweight", &this->_prefiringweight);
         tree->Branch( "_prefiringweightup", &this->_prefiringweightup);
         tree->Branch( "_prefiringweightdown", &this->_prefiringweightdown);
@@ -3114,9 +3216,10 @@ public:
         tree->Branch( "Muon_charge", &this->Muon_charge );
         tree->Branch( "Muon_Energy", &this->Muon_Energy );
         tree->Branch( "Muon_TuneP_pT", &this->Muon_TuneP_pT );
-        tree->Branch( "Muon_TuneP_eta", &this->Muon_TuneP_eta );
-        tree->Branch( "Muon_TuneP_phi", &this->Muon_TuneP_phi );
-        tree->Branch( "Muon_trackerLayers", &this->Muon_trackerLayers );
+        tree->Branch( "Muon_pT_uncorr", &this->Muon_pT_uncorr );
+        tree->Branch( "Muon_eta_uncorr", &this->Muon_eta_uncorr );
+        tree->Branch( "Muon_phi_uncorr", &this->Muon_phi_uncorr );
+        tree->Branch( "Muon_charge_uncorr", &this->Muon_charge_uncorr );
         tree->Branch( "Electron_pT", &this->Electron_pT );
         tree->Branch( "Electron_eta", &this->Electron_eta );
         tree->Branch( "Electron_phi", &this->Electron_phi );
@@ -3124,6 +3227,7 @@ public:
         tree->Branch( "Electron_charge", &this->Electron_charge );
         tree->Branch( "Electron_etaSC", &this->Electron_etaSC );
         tree->Branch( "Electron_phiSC", &this->Electron_phiSC );
+        tree->Branch( "Electron_Energy_uncorr", &this->Electron_Energy_uncorr );
     }
 
     void Ready()
@@ -3146,6 +3250,7 @@ public:
         chain->SetBranchStatus("nVertices", 1);
         chain->SetBranchStatus("GENEvt_weight", 1);
         chain->SetBranchStatus("nPileUp", 1);
+        chain->SetBranchStatus("_topPtWeight", 1);
         chain->SetBranchStatus("_prefiringweights", 1);
         chain->SetBranchStatus("_prefiringweightsup", 1);
         chain->SetBranchStatus("_prefiringweightsdown", 1);
@@ -3159,15 +3264,17 @@ public:
         chain->SetBranchStatus("Electron_charge", 1);
         chain->SetBranchStatus("Electron_etaSC", 1);
         chain->SetBranchStatus("Electron_phiSC", 1);
+        chain->SetBranchStatus("Electron_Energy_uncorr", 1);
         chain->SetBranchStatus("Muon_pT", 1);
         chain->SetBranchStatus("Muon_eta", 1);
         chain->SetBranchStatus("Muon_phi", 1);
         chain->SetBranchStatus("Muon_charge", 1);
         chain->SetBranchStatus("Muon_Energy", 1);
         chain->SetBranchStatus("Muon_TuneP_pT", 1);
-        chain->SetBranchStatus("Muon_TuneP_eta", 1);
-        chain->SetBranchStatus("Muon_TuneP_phi", 1);
-        chain->SetBranchStatus("Muon_trackerLayers", 1);
+        chain->SetBranchStatus("Muon_pT_uncorr", 1);
+        chain->SetBranchStatus("Muon_eta_uncorr", 1);
+        chain->SetBranchStatus("Muon_phi_uncorr", 1);
+        chain->SetBranchStatus("Muon_charge_uncorr", 1);
     }
 
     void TurnOffAllBranches()

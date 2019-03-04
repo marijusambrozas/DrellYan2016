@@ -32,7 +32,7 @@ enum Process_t
     _DYTauTau_10to50, _DYTauTau_50toInf, _EndOf_DYTauTau_Normal,
     _ttbar, _ttbar_700to1000, _ttbar_1000toInf, _EndOf_ttbar_Normal,
     _tW, _tbarW, _ZZ, _WZ, _WW, _EndOf_VVnST_Normal,
-    _WJets, _EndOf_WJets,
+    _WJets, _WJets_ext2v5, _EndOf_WJets_Normal,
     _QCDMuEnriched_15to20, _QCDMuEnriched_20to30, _QCDMuEnriched_30to50, _QCDMuEnriched_50to80, _QCDMuEnriched_80to120, _QCDMuEnriched_120to170,
     _QCDMuEnriched_170to300, _QCDMuEnriched_300to470, _QCDMuEnriched_470to600, _QCDMuEnriched_600to800, _QCDMuEnriched_800to1000, _QCDMuEnriched_1000toInf,
     _EndOf_QCDMuEnriched_Normal,
@@ -49,7 +49,7 @@ enum Process_t
     // "Special" processes - similar processes are combined
     _DY_Full, _DYMuMu_Full, _DYEE_Full,
     _EndOf_MCsignal_Special,
-    _DYTauTau_Full, _ttbar_Full, _VVnST, _QCDMuEnriched_Full, _QCDEMEnriched_Full, _bkg_Full,
+    _DYTauTau_Full, _ttbar_Full, _VVnST, _WJets_Full, _QCDMuEnriched_Full, _QCDEMEnriched_Full, _bkg_Full,
     _EndOf_MCbkg_Special, // there is no WJets in bkgSpecial
     _DoubleEG_Full, _SingleMuon_Full, _SingleElectron_Full,
     _EndOf_Data_Special,
@@ -71,7 +71,7 @@ Process_t next ( Process_t pr )    // Processes that begin with "EndOf" will be 
   else if ( pr == _DYEE_2000to3000 || pr == _QCDEMEnriched_300toInf || pr == _SingleElectron_H )
       return Process_t(int(pr)+3);
   else if ( pr == _DY_2000to3000 || pr == _DYMuMu_2000to3000 || pr == _EndOf_DYEE_Normal || pr == _DYTauTau_50toInf || pr == _ttbar_1000toInf ||
-            pr == _WW || pr == _WJets || pr == _QCDMuEnriched_1000toInf || pr == _EndOf_QCDEMEnriched_Normal || pr == _DoubleEG_H ||
+            pr == _WW || pr == _WJets_ext2v5 || pr == _QCDMuEnriched_1000toInf || pr == _EndOf_QCDEMEnriched_Normal || pr == _DoubleEG_H ||
             pr == _SingleMuon_H || pr == _EndOf_SingleElectron_Normal || pr == _DYEE_Full || pr == _bkg_Full || pr == _SingleElectron_Full ||
             pr == _Test_EMu || pr == _A_DY_650toInf || pr == _A_WW )
       return Process_t(int(pr)+2);
@@ -1030,15 +1030,40 @@ void FileMgr::SetProc ( Process_t pr, Bool_t ClearOld )
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
 
         Tag.push_back( "WJetsToLNu_ext" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 177139200 );
-//        Location = "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo_ext/180326_144652/0000/*.root";        // There also is madgraph version
+//        Location = "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo_ext/180326_144652/0000/*.root";
         Location = "WJetsToLNu_amcatnlo_ext/*.root"; // v2.6 location
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+    }
+    else if (pr == _WJets_ext2v5)
+    {
+        isMC = kTRUE;
+        Type = "BKG";
 
         // This is new in v2.6
         Tag.push_back( "WJetsToLNu_ext2v5"); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 177139200 );
         Location = "WJetsToLNu_amcatnlo_ext2v5/*.root"; // v2.6 location
         TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+    }
+    else if( pr == _WJets_Full ) // amcatnlo
+    {
+        isMC = kTRUE;
+        Type = "BKG";
+//        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
+        Tag.push_back( "WJetsToLNu" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 23944342 );
+//        Location = "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo/180326_144617/0000/*.root";
+        Location = "WJetsToLNu_amcatnlo/*.root"; // v2.6 location
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
+
+        Tag.push_back( "WJetsToLNu_ext" ); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 177139200 );
+//        Location = "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo_ext/180326_144652/0000/*.root";
+        Location = "WJetsToLNu_amcatnlo_ext/*.root"; // v2.6 location
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );;
+
+        // This is new in v2.6
+        Tag.push_back( "WJetsToLNu_ext2v5"); Xsec.push_back( 61526.7 ); Wsum.push_back( 86731698.0 ); nEvents.push_back( 177139200 );
+        Location = "WJetsToLNu_amcatnlo_ext2v5/*.root"; // v2.6 location
+        TreeName.push_back( "recoTree/DYTree" ); FileLocation.push_back( Location ); FullLocation.push_back( BaseLocation+Location );
     }
     else if( pr == _QCDMuEnriched_15to20 )
     {
@@ -2978,8 +3003,21 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
         }
         else
         {
-            Result.push_back(_WJets);
-            if ( notify == kTRUE ) cout << Procname[_WJets] << "." << endl;
+            if (srch.Contains("FULL"))
+            {
+                Result.push_back(_WJets_Full);
+                if ( notify == kTRUE ) cout << Procname[_WJets_Full] << "." << endl;
+            }
+            else if (srch.Contains("EXT"))
+            {
+                Result.push_back(_WJets_ext2v5);
+                if ( notify == kTRUE ) cout << Procname[_WJets_ext2v5] << "." << endl;
+            }
+            else
+            {
+                Result.push_back(_WJets);
+                if ( notify == kTRUE ) cout << Procname[_WJets] << "." << endl;
+            }
         }
     }
 
@@ -3041,7 +3079,7 @@ vector<Process_t> FileMgr::FindProc ( TString search, Bool_t notify, Bool_t inst
             else if ( srch.Contains("TO20") )
                 last = _QCDMuEnriched_15to20;
             else if ( srch.Contains("TO15") )
-                last = _EndOf_WJets;
+                last = _EndOf_WJets_Normal;
 
             // Swapping first with last if necessary
             if ( int(first)>int(last) && last!=_None )
@@ -3583,7 +3621,8 @@ void FileMgr::PrepareProcNames ()
     Procname[_WW] = "WW";
     Procname[_EndOf_VVnST_Normal] = "EndOf_VVnST_Normal";
     Procname[_WJets] = "WJets";
-    Procname[_EndOf_WJets] = "EndOf_WJets";
+    Procname[_WJets_ext2v5] = "WJets_ext2v5";
+    Procname[_EndOf_WJets_Normal] = "EndOf_WJets";
     Procname[_QCDMuEnriched_15to20] = "QCDMuEnriched_15to20";
     Procname[_QCDMuEnriched_20to30] = "QCDMuEnriched_20to30";
     Procname[_QCDMuEnriched_30to50] = "QCDMuEnriched_30to50";
@@ -3638,6 +3677,7 @@ void FileMgr::PrepareProcNames ()
     Procname[_DYTauTau_Full] = "DYTauTau_Full";
     Procname[_ttbar_Full] = "ttbar_Full";
     Procname[_VVnST] = "VVnST";
+    Procname[_WJets_Full] = "WJets_Full";
     Procname[_QCDMuEnriched_Full] = "QCDMuEnriched_Full";
     Procname[_QCDEMEnriched_Full] = "QCDEMEnriched_Full";
     Procname[_bkg_Full] = "bkg_Full";

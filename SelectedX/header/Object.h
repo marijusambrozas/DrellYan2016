@@ -198,6 +198,7 @@ class Electron : public Object
 {
 public:
 	Double_t Energy;
+        Double_t Energy_uncorr;
 	Int_t charge;
 	Double_t gsfpT;
 	Double_t gsfPx;
@@ -248,6 +249,7 @@ public:
 	void FillFromNtuple(NtupleHandle *ntuple, Int_t index)
 	{
 		Energy = ntuple->Electron_Energy[index];
+                Energy_uncorr = ntuple->Electron_EnergyUnCorr[index];
 		Pt = ntuple->Electron_pT[index];
 		eta = ntuple->Electron_eta[index];
 		phi = ntuple->Electron_phi[index];
@@ -305,6 +307,7 @@ public:
         void FillFromSelectedX(LongSelectedEE_t *ntuple, Int_t index)   // added at 2018.08.06 by Marijus Ambrozas
         {
                 Energy = ntuple->Electron_Energy->at(index);
+                Energy_uncorr = ntuple->Electron_Energy_uncorr->at(index);
                 Pt = ntuple->Electron_pT->at(index);
                 eta = ntuple->Electron_eta->at(index);
                 phi = ntuple->Electron_phi->at(index);
@@ -362,6 +365,7 @@ public:
         void FillFromSelectedX(LongSelectedEMu_t *ntuple)   // added at 2018.08.07 by Marijus Ambrozas
         {
                 Energy = ntuple->Electron_Energy;
+                Energy_uncorr = ntuple->Electron_Energy_uncorr;
                 Pt = ntuple->Electron_pT;
                 eta = ntuple->Electron_eta;
                 phi = ntuple->Electron_phi;
