@@ -19,7 +19,7 @@
 // -- Macro for making new data files with only selection-passing events  -- //
 #include "./header/DYAnalyzer.h"
 #include "./header/SelectedX.h"
-#include "./header/myProgressBar_t.h"
+#include "./header/myProgressBar_t.cc"
 #include "./header/FileMgr.h"
 #include "./etc/RoccoR/RoccoR.cc"
 
@@ -555,22 +555,16 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t Debug)
                     isPassEventSelection_noRocCorr = analyzer->EventSelection(MuonCollection_noRocCorr, ntuple, &SelectedMuonCollection_noRocCorr);
 
                     if (isPassEventSelection == kTRUE || isPassEventSelection_noRocCorr == kTRUE)
-                    {                       
-                        if (fabs(SelectedMuonCollection[0].eta) >= 2.4 || fabs(SelectedMuonCollection[1].eta) >= 2.4)
-                        {
-                            cout << "ERROR: Evt " << i << ":    etas of selected muons are:\n[0]  " << SelectedMuonCollection[0].eta;
-                            cout << "\n[1]  " << SelectedMuonCollection[1].eta << endl;
-                            continue;
-                        }
-                        Muon mu1 = SelectedMuonCollection[0];
-                        Muon mu2 = SelectedMuonCollection[1];
-                        Muon mu1_noRC = SelectedMuonCollection_noRocCorr[0];
-                        Muon mu2_noRC = SelectedMuonCollection_noRocCorr[1];
-
+                    {                     
                         if (isPassEventSelection == kTRUE && isPassEventSelection_noRocCorr == kTRUE)
                         {
                             timesPassed++;
                             MuMu.isSelPassed = 1;
+
+                            Muon mu1 = SelectedMuonCollection[0];
+                            Muon mu2 = SelectedMuonCollection[1];
+                            Muon mu1_noRC = SelectedMuonCollection_noRocCorr[0];
+                            Muon mu2_noRC = SelectedMuonCollection_noRocCorr[1];
 
                             MuMu.Muon_pT->push_back(mu1.Pt);
                             MuMu.Muon_pT->push_back(mu2.Pt);
@@ -600,6 +594,9 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t Debug)
                             timesPassed++;
                             MuMu.isSelPassed = 2;
 
+                            Muon mu1 = SelectedMuonCollection[0];
+                            Muon mu2 = SelectedMuonCollection[1];
+
                             MuMu.Muon_pT->push_back(mu1.Pt);
                             MuMu.Muon_pT->push_back(mu2.Pt);
                             MuMu.Muon_Energy->push_back(mu1.Momentum.E());
@@ -618,6 +615,8 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t Debug)
                         else if (isPassEventSelection == kFALSE && isPassEventSelection_noRocCorr == kTRUE)
                         {
                             MuMu.isSelPassed = 3;
+                            Muon mu1_noRC = SelectedMuonCollection_noRocCorr[0];
+                            Muon mu2_noRC = SelectedMuonCollection_noRocCorr[1];
 
                             MuMu.Muon_pT_uncorr->push_back(mu1_noRC.Pt);
                             MuMu.Muon_pT_uncorr->push_back(mu2_noRC.Pt);
