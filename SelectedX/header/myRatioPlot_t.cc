@@ -143,7 +143,7 @@ void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX)
 void myRatioPlot_t::SetLegend(Double_t xb, Double_t yb, Double_t xe, Double_t ye) {
     if(xb>=0 && yb>=0 && xe<=1 && ye<=1 && xb<xe && yb<ye) {
         legend = new TLegend(xb, yb, xe, ye);
-        legendSet++;
+        legendSet = 1;
     }
 }
 
@@ -153,6 +153,24 @@ void myRatioPlot_t::AddLegendEntry(TH1D *h, TString name, TString option) {
         legendEntries++;
     }
     else return;
+}
+
+void myRatioPlot_t::ImportLegend(TLegend *newLegend, Int_t overwrite) {
+    if (legendSet==1) {
+        if (!overwrite) {
+            std::cout << "myRatioPlot_t::ImportLegend Error: The Legend is already set! Aborting to avoid overwriting.." << endl;
+            return;
+        }
+        else {
+            std::cout << "myRatioPlot_t::ImportLegend: The Legend was already set! Overwriting.." << endl;
+            legend = newLegend;
+        }
+    }
+    else {
+        legend = newLegend;
+        legendSet = 1;
+        legendEntries = legend->GetNColumns()*legend->GetNRows();
+    }
 }
 
 

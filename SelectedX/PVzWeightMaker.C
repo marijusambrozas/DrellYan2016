@@ -28,7 +28,7 @@
 #include "./header/myProgressBar_t.h"
 #include "./header/LocalFileMgr.h"
 
-void PVzWeightMaker ( Bool_t SwitchROCCORR = kFALSE )
+void PVzWeightMaker ()
 {
     // -- Run2016 luminosity [/pb] -- //
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
@@ -40,8 +40,6 @@ void PVzWeightMaker ( Bool_t SwitchROCCORR = kFALSE )
     totaltime.Start();
 
     LocalFileMgr Mgr;
-    if ( SwitchROCCORR == kTRUE )
-        Mgr.SwitchROCCORR();  // If kTRUE, this will go through events that were selected without Rochester correction applied
 
     TFile *f = new TFile( "./etc/PVzWeights.root", "RECREATE" );
 

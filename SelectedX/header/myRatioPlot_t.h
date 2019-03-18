@@ -40,6 +40,7 @@ public :
    void SetPlots(TString xAxisName, Double_t xmin, Double_t xmax);
    void SetLegend(Double_t xb=0.7, Double_t yb=0.5, Double_t xe=0.9, Double_t ye=0.9);
    void AddLegendEntry(TH1D *h, TString name, TString option);
+   void ImportLegend(TLegend *newLegend, Int_t overwrite=0);
 };
 
 #endif

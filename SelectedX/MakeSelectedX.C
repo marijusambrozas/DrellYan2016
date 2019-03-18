@@ -270,6 +270,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
                     // -- Event Selection -- //
                     vector< Electron > SelectedElectronCollection;
                     Bool_t isPassEventSelection = kFALSE;
+                    EE.isSelPassed = 0;
                     isPassEventSelection = analyzer->EventSelection_ElectronChannel(ElectronCollection, ntuple, &SelectedElectronCollection);
 
                     if (isPassEventSelection == kTRUE)
@@ -278,7 +279,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
                         Electron ele1 = SelectedElectronCollection[0];
                         Electron ele2 = SelectedElectronCollection[1];
 
-                        EE.isSelPassed = kTRUE;
+                        EE.isSelPassed = 1;
                         EE.nVertices = ntuple->nVertices;
                         EE.nPileUp = ntuple->nPileUp;
                         EE._prefiringweight = ntuple->_prefiringweight;
@@ -551,6 +552,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t Debug)
                     vector< Muon > SelectedMuonCollection, SelectedMuonCollection_noRocCorr;
                     Bool_t isPassEventSelection = kFALSE;
                     Bool_t isPassEventSelection_noRocCorr = kFALSE;
+                    MuMu.isSelPassed = 0;
                     isPassEventSelection = analyzer->EventSelection(MuonCollection, ntuple, &SelectedMuonCollection);
                     isPassEventSelection_noRocCorr = analyzer->EventSelection(MuonCollection_noRocCorr, ntuple, &SelectedMuonCollection_noRocCorr);
 
@@ -881,6 +883,7 @@ void MakeSelectedEMu (TString type, TString HLTname, Bool_t Debug)
                     vector< Electron > SelectedElectronCollection, SelectedElectronCollection_noRocCorr;
                     Bool_t isPassEventSelection = kFALSE;
                     Bool_t isPassEventSelection_noRocCorr = kFALSE;
+                    EMu.isSelPassed = 0;
                     isPassEventSelection = analyzer->EventSelection_emu_method(MuonCollection, ElectronCollection, ntuple, &SelectedMuonCollection,
                                                                                &SelectedElectronCollection);
                     isPassEventSelection_noRocCorr = analyzer->EventSelection_emu_method(MuonCollection_noRocCorr, ElectronCollection, ntuple,
