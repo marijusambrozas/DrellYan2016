@@ -551,7 +551,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t Debug)
                                 SF = rc.kScaleAndSmearMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
                         }
                         mu.Pt = SF*mu.Pt;
-                        mu.Momentum = SetPtEtaPhiM(mu.Pt, mu.eta, mu.phi, M_Mu);
+                        mu.Momentum.SetPtEtaPhiM(mu.Pt, mu.eta, mu.phi, M_Mu);
 
                         MuonCollection.push_back(mu);
 
