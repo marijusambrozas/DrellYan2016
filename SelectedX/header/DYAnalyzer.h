@@ -1992,11 +1992,6 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF_new(Muon mu1, Muon mu2)
     Int_t ptbin1_Trig = Find_muon_PtBin_Trig_new(Pt1);
     Int_t etabin1_Trig = Find_muon_EtaBin_Trig(eta1);
 
-    if(ptbin1_Reco == 9999 || etabin1_Reco == 9999)
-    {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d)\n", ptbin1_Reco, etabin1_Reco);
-        return -999;
-    }
     if(ptbin1_ID == 9999 || etabin1_ID == 9999)
     {
         printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d)\n", ptbin1_ID, etabin1_ID);
@@ -2029,11 +2024,6 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF_new(Muon mu1, Muon mu2)
     Int_t ptbin2_Trig = Find_muon_PtBin_Trig_new(Pt2);
     Int_t etabin2_Trig = Find_muon_EtaBin_Trig(eta2);
 
-    if(ptbin2_Reco == 9999 || etabin2_Reco == 9999)
-    {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d)\n", ptbin2_Reco, etabin2_Reco);
-        return -999;
-    }
     if(ptbin2_ID == 9999 || etabin2_ID == 9999)
     {
         printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d)\n", ptbin2_ID, etabin2_ID);
@@ -2075,16 +2065,16 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF_new(Muon mu1, Muon mu2)
         printf("(pt1, eta1, pt2, eta2): (%.3lf, %.3lf, %.3lf, %.3lf)\n", Pt1, eta1, Pt2, eta2);
 
         printf("[Data]\n");
-        printf("\t[Muon1] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_ID_data_BtoF_lead[etabin1_ID][ptbin1_ID],
+        printf("\t[Muon1] (ID, Iso): %.3lf, %.3lf)\n", Eff_ID_data_BtoF_lead[etabin1_ID][ptbin1_ID],
                Eff_Iso_data_BtoF_lead[etabin1_Iso][ptbin1_Iso]);
-        printf("\t[Muon2] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_ID_data_BtoF_sublead[etabin2_ID][ptbin2_ID],
+        printf("\t[Muon2] (ID, Iso): (%.3lf, %.3lf)\n", Eff_ID_data_BtoF_sublead[etabin2_ID][ptbin2_ID],
                Eff_Iso_data_BtoF_sublead[etabin2_Iso][ptbin2_Iso]);
         printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_data, Eff_data_all);
 
         printf("[MC]\n");
-        printf("\t[Muon1] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_ID_MC_BtoF_lead[etabin1_ID][ptbin1_ID],
+        printf("\t[Muon1] (ID, Iso): (%.3lf, %.3lf)\n", Eff_ID_MC_BtoF_lead[etabin1_ID][ptbin1_ID],
                Eff_Iso_MC_BtoF_lead[etabin1_Iso][ptbin1_Iso]);
-        printf("\t[Muon2] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_ID_MC_BtoF_sublead[etabin2_ID][ptbin2_ID],
+        printf("\t[Muon2] (ID, Iso): (%.3lf, %.3lf)\n", Eff_ID_MC_BtoF_sublead[etabin2_ID][ptbin2_ID],
                Eff_Iso_MC_BtoF_sublead[etabin2_Iso][ptbin2_Iso]);
         printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_MC, Eff_MC_all);
 
@@ -2372,11 +2362,6 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH_new(Muon mu1, Muon mu2)
     Int_t ptbin1_Trig = Find_muon_PtBin_Trig_new(Pt1);
     Int_t etabin1_Trig = Find_muon_EtaBin_Trig(eta1);
 
-    if(ptbin1_Reco == 9999 || etabin1_Reco == 9999)
-    {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d)\n", ptbin1_Reco, etabin1_Reco);
-        return -999;
-    }
     if(ptbin1_ID == 9999 || etabin1_ID == 9999)
     {
         printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d)\n", ptbin1_ID, etabin1_ID);
@@ -2409,11 +2394,6 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH_new(Muon mu1, Muon mu2)
     Int_t ptbin2_Trig = Find_muon_PtBin_Trig_new(Pt2);
     Int_t etabin2_Trig = Find_muon_EtaBin_Trig(eta2);
 
-    if(ptbin2_Reco == 9999 || etabin2_Reco == 9999)
-    {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d)\n", ptbin2_Reco, etabin2_Reco);
-        return -999;
-    }
     if(ptbin2_ID == 9999 || etabin2_ID == 9999)
     {
         printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d)\n", ptbin2_ID, etabin2_ID);
@@ -2455,16 +2435,16 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH_new(Muon mu1, Muon mu2)
         printf("(pt1, eta1, pt2, eta2): (%.3lf, %.3lf, %.3lf, %.3lf)\n", Pt1, eta1, Pt2, eta2);
 
         printf("[Data]\n");
-        printf("\t[Muon1] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_ID_data_GtoH_lead[etabin1_ID][ptbin1_ID],
+        printf("\t[Muon1] (ID, Iso): %.3lf, %.3lf)\n", Eff_ID_data_GtoH_lead[etabin1_ID][ptbin1_ID],
                Eff_Iso_data_GtoH_lead[etabin1_Iso][ptbin1_Iso]);
-        printf("\t[Muon2] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_ID_data_GtoH_sublead[etabin2_ID][ptbin2_ID],
+        printf("\t[Muon2] (ID, Iso): (%.3lf, %.3lf)\n", Eff_ID_data_GtoH_sublead[etabin2_ID][ptbin2_ID],
                Eff_Iso_data_GtoH_sublead[etabin2_Iso][ptbin2_Iso]);
         printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_data, Eff_data_all);
 
         printf("[MC]\n");
-        printf("\t[Muon1] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_ID_MC_GtoH_lead[etabin1_ID][ptbin1_ID],
+        printf("\t[Muon1] (ID, Iso): (%.3lf, %.3lf)\n", Eff_ID_MC_GtoH_lead[etabin1_ID][ptbin1_ID],
                Eff_Iso_MC_GtoH_lead[etabin1_Iso][ptbin1_Iso]);
-        printf("\t[Muon2] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_ID_MC_GtoH_sublead[etabin2_ID][ptbin2_ID],
+        printf("\t[Muon2] (ID, Iso): (%.3lf, %.3lf)\n", Eff_ID_MC_GtoH_sublead[etabin2_ID][ptbin2_ID],
                Eff_Iso_MC_GtoH_sublead[etabin2_Iso][ptbin2_Iso]);
         printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_MC, Eff_MC_all);
 
