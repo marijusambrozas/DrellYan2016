@@ -15,6 +15,8 @@
 #include <fstream>
 #include <TH1.h>
 #include <TCanvas.h>
+#include <TGraphAsymmErrors.h>
+
 
 // -- Macro for making new data files with only selection-passing events  -- //
 #include "./header/DYAnalyzer.h"
