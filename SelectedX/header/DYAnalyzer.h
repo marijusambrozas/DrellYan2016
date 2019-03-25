@@ -15,8 +15,10 @@
 #include <iostream>
 
 #define Lumi 35867 // -- from Run2016B to Run2016H, JSON. unit: /pb, Updated at 2017.07.30 -- //
-#define Lumi_HLTv4p2 865.919 // -- integrated luminosity before Run 257933 -- //
+#define Lumi_BtoF 19721 // -- from Run2016B to Run2016F, JSON. unit: /pb, Updated at 2018.05.17 -- //
+#define Lumi_GtoH 16146 // -- from Run2016G to Run2016H, JSON. unit: /pb, Updated at 2018.05.17 -- //
 #define nMassBin 43
+#define nMassBin2 86
 
 class DYAnalyzer
 {
@@ -44,6 +46,21 @@ public:
 	Double_t Eff_HLT_data_BtoF[4][7];
 	Double_t Eff_HLT_MC_BtoF[4][7];
 
+        Double_t Eff_ID_data_BtoF_lead[4][6];
+        Double_t Eff_ID_MC_BtoF_lead[4][6];
+        Double_t Eff_ID_data_BtoF_sublead[4][6];
+        Double_t Eff_ID_MC_BtoF_sublead[4][6];
+
+        Double_t Eff_Iso_data_BtoF_lead[4][6];
+        Double_t Eff_Iso_MC_BtoF_lead[4][6];
+        Double_t Eff_Iso_data_BtoF_sublead[4][6];
+        Double_t Eff_Iso_MC_BtoF_sublead[4][6];
+
+        Double_t Eff_HLT_data_BtoF_lead[4][8];
+        Double_t Eff_HLT_MC_BtoF_lead[4][8];
+        Double_t Eff_HLT_data_BtoF_sublead[4][8];
+        Double_t Eff_HLT_MC_BtoF_sublead[4][8];
+
 	// -- For efficiency SF of GtoH -- //
         Double_t Eff_Reco_data_GtoH[15][1];
         Double_t Eff_Reco_MC_GtoH[15][1];
@@ -56,6 +73,21 @@ public:
 
 	Double_t Eff_HLT_data_GtoH[4][7];
 	Double_t Eff_HLT_MC_GtoH[4][7];
+
+        Double_t Eff_ID_data_GtoH_lead[4][6];
+        Double_t Eff_ID_MC_GtoH_lead[4][6];
+        Double_t Eff_ID_data_GtoH_sublead[4][6];
+        Double_t Eff_ID_MC_GtoH_sublead[4][6];
+
+        Double_t Eff_Iso_data_GtoH_lead[4][6];
+        Double_t Eff_Iso_MC_GtoH_lead[4][6];
+        Double_t Eff_Iso_data_GtoH_sublead[4][6];
+        Double_t Eff_Iso_MC_GtoH_sublead[4][6];
+
+        Double_t Eff_HLT_data_GtoH_lead[4][8];
+        Double_t Eff_HLT_MC_GtoH_lead[4][8];
+        Double_t Eff_HLT_data_GtoH_sublead[4][8];
+        Double_t Eff_HLT_MC_GtoH_sublead[4][8];
 
 	// -- For efficiency SF of electron -- //
 	Double_t Eff_Reco_data[30][1];
@@ -102,14 +134,19 @@ public:
         // MUONS
         void SetupEfficiencyScaleFactor_BtoF();
 	void SetupEfficiencyScaleFactor_GtoH();
+        void SetupEfficiencyScaleFactor_BtoF_new();
+        void SetupEfficiencyScaleFactor_GtoH_new();
         Double_t EfficiencySF_EventWeight_HLT_BtoF(Muon mu1, Muon mu2);
         Double_t EfficiencySF_EventWeight_HLT_BtoF(SelectedMuMu_t *MuMu);
+        Double_t EfficiencySF_EventWeight_HLT_BtoF_new(Muon mu1, Muon mu2);
         Double_t EfficiencySF_EventWeight_HLT_GtoH(Muon mu1, Muon mu2);
         Double_t EfficiencySF_EventWeight_HLT_GtoH(SelectedMuMu_t *MuMu);
+        Double_t EfficiencySF_EventWeight_HLT_GtoH_new(Muon mu1, Muon mu2);
         Int_t Find_muon_PtBin_Reco(Double_t Pt);
         Int_t Find_muon_PtBin_ID(Double_t Pt);
         Int_t Find_muon_PtBin_Iso(Double_t Pt);
         Int_t Find_muon_PtBin_Trig(Double_t Pt);
+        Int_t Find_muon_PtBin_Trig_new(Double_t Pt);
         Int_t Find_muon_EtaBin_Reco(Double_t eta);
         Int_t Find_muon_EtaBin_ID(Double_t eta);
         Int_t Find_muon_EtaBin_Iso(Double_t eta);
@@ -202,6 +239,7 @@ public:
 	void GenMatching(TString MuonType, NtupleHandle* ntuple, vector<Muon>* MuonCollection);
         void ConvertToTunePInfo(Muon &mu);
         void PrintOutDoubleMuInfo(Muon mu1, Muon mu2);
+        Double_t GenMuonPt(TString MuonType, NtupleHandle* ntuple, Muon reco_mu);
 
 	// -- emu method -- //
         Bool_t EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple,
@@ -868,7 +906,322 @@ void DYAnalyzer::SetupEfficiencyScaleFactor_BtoF()
                 }
         }
         std::cout << "Setting for efficiency correction factors (BtoF) is completed" << endl;
-}
+} // End of SetupEfficiencyScaleFactor_BtoF
+
+
+void DYAnalyzer::SetupEfficiencyScaleFactor_BtoF_new()
+{
+    TString Location = "./etc/effSF/effSF_muon/";
+    TFile *f1 = new TFile(Location+"New_SF_RunBtoF.root");
+    std::cout << "[Tag&Probe efficiency is from " << Location+"New_SF_RunBtoF.root" << "]" << endl;
+
+
+//    // RECO
+//    TFile *f_reco = new TFile(Location+"Tracking_SF_RunBtoF.root");
+//    TGraphAsymmErrors *h_Reco_ratio = (TGraphAsymmErrors*)f_reco->Get("ratio_eff_eta3_dr030e030_corr");
+//    Int_t nEtaBins_reco = h_Reco_ratio->GetN();
+//    Int_t nPtBins_reco = 1;
+
+//    Double_t eta_reco[15]; Double_t eta_reco_ordered[15];
+//    Double_t SF_reco[15]; Double_t SF_reco_ordered[15];
+
+//    for(Int_t iter_y = 0; iter_y < nPtBins_reco; iter_y++) // in this case (2d distribution): x=eta, y=pT
+//    {
+//            for(Int_t i=0; i<nEtaBins_reco; i++)
+//            {
+//                    h_Reco_ratio->GetPoint(i, eta_reco[i], SF_reco[i]); // in this case: x=eta, y=SF
+//            }
+
+//            // -- Rearrangement in order of x (eta) values -- //
+//            Double_t etamin; // the minimum value in given iteration
+//            Double_t etalow = -9999; // the minimum value of the previous iteration
+//            for(Int_t j=0; j<nEtaBins_reco; j++)
+//            {
+//                    Int_t jj = -9999;
+
+//                    etamin = 9999;
+//                    for(Int_t k=0; k<nEtaBins_reco; k++)
+//                    {
+//                            if(etalow < eta_reco[k] && eta_reco[k] < etamin) // the lowest number but higher than the one from previos iteration
+//                            {
+//                                    jj = k;
+//                                    etamin = eta_reco[k];
+//                            }
+//                    }
+//                    eta_reco_ordered[j] = eta_reco[jj];
+//                    SF_reco_ordered[j] = SF_reco[jj];
+
+//                    etalow = etamin;
+//            } // End of rearrangement
+
+//            for(Int_t iter_x = 0; iter_x < nEtaBins_reco; iter_x++)
+//            {
+//                    Eff_Reco_data_BtoF[iter_x][iter_y] = SF_reco_ordered[iter_x]; // actually, it is the scale factor.
+//                    Eff_Reco_MC_BtoF[iter_x][iter_y] = 1;
+//            }
+//    }
+
+    // ID
+    TGraphAssymErrors *h_data_lead_ID_eff[4];
+    TGraphAssymErrors *h_data_sublead_ID_eff[4];
+    TGraphAssymErrors *h_mc_lead_ID_eff[4];
+    TGraphAssymErrors *h_mc_sublead_ID_eff[4];
+
+    h_data_lead_ID_eff[0] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta0");
+    h_data_lead_ID_eff[1] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta1");
+    h_data_lead_ID_eff[2] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta2");
+    h_data_lead_ID_eff[3] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta3");
+
+    h_data_sublead_ID_eff[0] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta0");
+    h_data_sublead_ID_eff[1] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta1");
+    h_data_sublead_ID_eff[2] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta2");
+    h_data_sublead_ID_eff[3] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta3");
+
+    h_mc_lead_ID_eff[0] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta0");
+    h_mc_lead_ID_eff[1] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta1");
+    h_mc_lead_ID_eff[2] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta2");
+    h_mc_lead_ID_eff[3] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta3");
+
+    h_mc_sublead_ID_eff[0] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta0");
+    h_mc_sublead_ID_eff[1] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta1");
+    h_mc_sublead_ID_eff[2] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta2");
+    h_mc_sublead_ID_eff[3] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta3");
+
+    Int_t nEtaBins_ID = 4;
+    Int_t nPtBins_ID = 6;
+
+    Double_t x_data_lead_ID[6];
+    Double_t y_data_lead_ID[6];
+
+    Double_t x_data_sublead_ID[6];
+    Double_t y_data_sublead_ID[6];
+
+    Double_t x_mc_lead_ID[6];
+    Double_t y_mc_lead_ID[6];
+
+    Double_t x_mc_sublead_ID[6];
+    Double_t y_mc_sublead_ID[6];
+
+    TGraphAsymmErrors *h_Data_lead_ID_eff;
+    TGraphAsymmErrors *h_Data_sublead_ID_eff;
+    TGraphAsymmErrors *h_MC_lead_ID_eff;
+    TGraphAsymmErrors *h_MC_sublead_ID_eff;
+
+    for(Int_t iter_x = 0; iter_x < nEtaBins_ID; iter_x++)
+    {
+        h_Data_lead_ID_eff = (TGraphAsymmErrors*)h_data_lead_ID_eff[iter_x]->Clone();
+        h_Data_sublead_ID_eff = (TGraphAsymmErrors*)h_data_sublead_ID_eff[iter_x]->Clone();
+        h_MC_lead_ID_eff = (TGraphAsymmErrors*)h_mc_lead_ID_eff[iter_x]->Clone();
+        h_MC_sublead_ID_eff = (TGraphAsymmErrors*)h_mc_sublead_ID_eff[iter_x]->Clone();
+
+        for(Int_t i = 0; i < nPtBins_ID; i++)
+        {
+            h_Data_sublead_ID_eff->GetPoint(i, x_data_sublead_ID[i], y_data_sublead_ID[i]);
+            h_MC_sublead_ID_eff->GetPoint(i, x_mc_sublead_ID[i], y_mc_sublead_ID[i]);
+
+            if(i == 0)
+            {
+                //It is just to initialize. They don't work in SF
+                x_data_lead_ID[0] = 1;
+                y_data_lead_ID[0] = 1;
+
+                x_mc_lead_ID[0] = 1;
+                y_mc_lead_ID[0] = 1;
+
+                continue;
+            }
+
+            h_Data_lead_ID_eff->GetPoint(i-1, x_data_lead_ID[i], y_data_lead_ID[i]);
+            h_MC_lead_ID_eff->GetPoint(i-1, x_mc_lead_ID[i], y_mc_lead_ID[i]);
+        }
+
+        for(Int_t iter_y = 0; iter_y < nPtBins_ID; iter_y++)
+        {
+            Eff_ID_data_BtoF_lead[iter_x][iter_y] = y_data_lead_ID[iter_y];
+            Eff_ID_MC_BtoF_lead[iter_x][iter_y] = y_mc_lead_ID[iter_y];
+
+            Eff_ID_data_BtoF_sublead[iter_x][iter_y] = y_data_sublead_ID[iter_y];
+            Eff_ID_MC_BtoF_sublead[iter_x][iter_y] = y_mc_sublead_ID[iter_y];
+        }
+    }
+
+    // ISO
+    TGraphAsymmErrors *h_data_lead_iso_eff[4];
+    TGraphAsymmErrors *h_data_sublead_iso_eff[4];
+    TGraphAsymmErrors *h_mc_lead_iso_eff[4];
+    TGraphAsymmErrors *h_mc_sublead_iso_eff[4];
+
+    h_data_lead_iso_eff[0] = (TGraphAsymmErrors*)f1->Get("Data_dBeta_015_from_Tight2012_and_Leading_pteta_abseta0");
+    h_data_lead_iso_eff[1] = (TGraphAsymmErrors*)f1->Get("Data_dBeta_015_from_Tight2012_and_Leading_pteta_abseta1");
+    h_data_lead_iso_eff[2] = (TGraphAsymmErrors*)f1->Get("Data_dBeta_015_from_Tight2012_and_Leading_pteta_abseta2");
+    h_data_lead_iso_eff[3] = (TGraphAsymmErrors*)f1->Get("Data_dBeta_015_from_Tight2012_and_Leading_pteta_abseta3");
+
+    h_data_sublead_iso_eff[0] = (TGraphAsymmErrors*)f1->Get("Data_dBeta_015_from_Tight2012_and_Subleading_pteta_abseta0");
+    h_data_sublead_iso_eff[1] = (TGraphAsymmErrors*)f1->Get("Data_dBeta_015_from_Tight2012_and_Subleading_pteta_abseta1");
+    h_data_sublead_iso_eff[2] = (TGraphAsymmErrors*)f1->Get("Data_dBeta_015_from_Tight2012_and_Subleading_pteta_abseta2");
+    h_data_sublead_iso_eff[3] = (TGraphAsymmErrors*)f1->Get("Data_dBeta_015_from_Tight2012_and_Subleading_pteta_abseta3");
+
+    h_mc_lead_iso_eff[0] = (TGraphAsymmErrors*)f1->Get("MC_weight_dBeta_015_from_Tight2012_and_Leading_pteta_abseta0");
+    h_mc_lead_iso_eff[1] = (TGraphAsymmErrors*)f1->Get("MC_weight_dBeta_015_from_Tight2012_and_Leading_pteta_abseta1");
+    h_mc_lead_iso_eff[2] = (TGraphAsymmErrors*)f1->Get("MC_weight_dBeta_015_from_Tight2012_and_Leading_pteta_abseta2");
+    h_mc_lead_iso_eff[3] = (TGraphAsymmErrors*)f1->Get("MC_weight_dBeta_015_from_Tight2012_and_Leading_pteta_abseta3");
+
+    h_mc_sublead_iso_eff[0] = (TGraphAsymmErrors*)f1->Get("MC_weight_dBeta_015_from_Tight2012_and_Subleading_pteta_abseta0");
+    h_mc_sublead_iso_eff[1] = (TGraphAsymmErrors*)f1->Get("MC_weight_dBeta_015_from_Tight2012_and_Subleading_pteta_abseta1");
+    h_mc_sublead_iso_eff[2] = (TGraphAsymmErrors*)f1->Get("MC_weight_dBeta_015_from_Tight2012_and_Subleading_pteta_abseta2");
+    h_mc_sublead_iso_eff[3] = (TGraphAsymmErrors*)f1->Get("MC_weight_dBeta_015_from_Tight2012_and_Subleading_pteta_abseta3");
+
+    Int_t nEtaBins_iso = 4;
+    Int_t nPtBins_iso = 6;
+
+    Double_t x_data_lead_iso[6];
+    Double_t y_data_lead_iso[6];
+
+    Double_t x_data_sublead_iso[6];
+    Double_t y_data_sublead_iso[6];
+
+    Double_t x_mc_lead_iso[6];
+    Double_t y_mc_lead_iso[6];
+
+    Double_t x_mc_sublead_iso[6];
+    Double_t y_mc_sublead_iso[6];
+
+    TGraphAsymmErrors *h_Data_lead_iso_eff;
+    TGraphAsymmErrors *h_Data_sublead_iso_eff;
+    TGraphAsymmErrors *h_MC_lead_iso_eff;
+    TGraphAsymmErrors *h_MC_sublead_iso_eff;
+
+    for(Int_t iter_x = 0; iter_x < nEtaBins_iso; iter_x++)
+    {
+        h_Data_lead_iso_eff = (TGraphAsymmErrors*)h_data_lead_iso_eff[iter_x]->Clone();
+        h_Data_sublead_iso_eff = (TGraphAsymmErrors*)h_data_sublead_iso_eff[iter_x]->Clone();
+        h_MC_lead_iso_eff = (TGraphAsymmErrors*)h_mc_lead_iso_eff[iter_x]->Clone();
+        h_MC_sublead_iso_eff = (TGraphAsymmErrors*)h_mc_sublead_iso_eff[iter_x]->Clone();
+
+        for(Int_t i=0; i<nPtBins_iso; i++) //0 to 5
+        {
+            h_Data_sublead_iso_eff->GetPoint(i, x_data_sublead_iso[i], y_data_sublead_iso[i]);
+            h_MC_sublead_iso_eff->GetPoint(i, x_mc_sublead_iso[i], y_mc_sublead_iso[i]);
+
+            if(i == 0)
+            {
+                //It is just to initialize. They don't work in SF
+                x_data_lead_iso[0] = 1;
+                y_data_lead_iso[0] = 1;
+
+                x_mc_lead_iso[0] = 1;
+                y_mc_lead_iso[0] = 1;
+
+                continue;
+            }
+
+            h_Data_lead_iso_eff->GetPoint(i-1, x_data_lead_iso[i], y_data_lead_iso[i]);
+            h_MC_lead_iso_eff->GetPoint(i-1, x_mc_lead_iso[i], y_mc_lead_iso[i]);
+        }
+
+        for(Int_t iter_y = 0; iter_y < nPtBins_iso; iter_y++)
+        {
+            Eff_Iso_data_BtoF_lead[iter_x][iter_y] = y_data_lead_iso[iter_y];
+            Eff_Iso_MC_BtoF_lead[iter_x][iter_y] = y_mc_lead_iso[iter_y];
+
+            Eff_Iso_data_BtoF_sublead[iter_x][iter_y] = y_data_sublead_iso[iter_y];
+            Eff_Iso_MC_BtoF_sublead[iter_x][iter_y] = y_mc_sublead_iso[iter_y];
+        }
+    }
+
+    // TRIGGER
+    TGraphAsymmErrors *h_data_lead_trig_eff[4];
+    TGraphAsymmErrors *h_data_sublead_trig_eff[4];
+    TGraphAsymmErrors *h_mc_lead_trig_eff[4];
+    TGraphAsymmErrors *h_mc_sublead_trig_eff[4];
+
+    h_data_lead_trig_eff[0] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta0");
+    h_data_lead_trig_eff[1] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta1");
+    h_data_lead_trig_eff[2] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta2");
+    h_data_lead_trig_eff[3] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta3");
+
+    h_data_sublead_trig_eff[0] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta0");
+    h_data_sublead_trig_eff[1] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta1");
+    h_data_sublead_trig_eff[2] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta2");
+    h_data_sublead_trig_eff[3] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta3");
+
+    h_mc_lead_trig_eff[0] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta0");
+    h_mc_lead_trig_eff[1] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta1");
+    h_mc_lead_trig_eff[2] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta2");
+    h_mc_lead_trig_eff[3] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta3");
+
+    h_mc_sublead_trig_eff[0] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta0");
+    h_mc_sublead_trig_eff[1] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta1");
+    h_mc_sublead_trig_eff[2] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta2");
+    h_mc_sublead_trig_eff[3] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta3");
+
+    Int_t nEtaBins_HLT = 4;
+    Int_t nPtBins_HLT = 8;
+
+    Double_t x_data_lead_trig[8];
+    Double_t y_data_lead_trig[8];
+
+    Double_t x_data_sublead_trig[8];
+    Double_t y_data_sublead_trig[8];
+
+    Double_t x_mc_lead_trig[8];
+    Double_t y_mc_lead_trig[8];
+
+    Double_t x_mc_sublead_trig[8];
+    Double_t y_mc_sublead_trig[8];
+
+    TGraphAsymmErrors *h_Data_lead_trig_eff;
+    TGraphAsymmErrors *h_Data_sublead_trig_eff;
+    TGraphAsymmErrors *h_MC_lead_trig_eff;
+    TGraphAsymmErrors *h_MC_sublead_trig_eff;
+
+    for(Int_t iter_x = 0; iter_x < nEtaBins_HLT; iter_x++)
+    {
+        h_Data_lead_trig_eff = (TGraphAsymmErrors*)h_data_lead_trig_eff[iter_x]->Clone();
+        h_Data_sublead_trig_eff = (TGraphAsymmErrors*)h_data_sublead_trig_eff[iter_x]->Clone();
+        h_MC_lead_trig_eff = (TGraphAsymmErrors*)h_mc_lead_trig_eff[iter_x]->Clone();
+        h_MC_sublead_trig_eff = (TGraphAsymmErrors*)h_mc_sublead_trig_eff[iter_x]->Clone();
+
+        for(Int_t i=0; i<nPtBins_HLT; i++)
+        {
+            h_Data_lead_trig_eff->GetPoint(i, x_data_lead_trig[i], y_data_lead_trig[i]);
+            h_MC_lead_trig_eff->GetPoint(i, x_mc_lead_trig[i], y_mc_lead_trig[i]);
+
+            if(iter_x == 2 && i == 7)
+            {
+                h_Data_sublead_trig_eff->GetPoint(i, x_data_sublead_trig[i], y_data_sublead_trig[i]);
+
+                x_mc_sublead_trig[i] = 1;
+                y_mc_sublead_trig[i] = y_data_sublead_trig[i-1];
+
+                continue;
+            }
+            else if(iter_x == 3 && i >= 6)
+            {
+                x_data_sublead_trig[i] = 1;
+                y_data_sublead_trig[i] = y_data_sublead_trig[i-1];
+
+                x_mc_sublead_trig[i] = 1;
+                y_mc_sublead_trig[i] = y_data_sublead_trig[i-1];
+
+                continue;
+            }
+
+            h_Data_sublead_trig_eff->GetPoint(i, x_data_sublead_trig[i], y_data_sublead_trig[i]);
+            h_MC_sublead_trig_eff->GetPoint(i, x_mc_sublead_trig[i], y_mc_sublead_trig[i]);
+        }
+
+        for(Int_t iter_y = 0; iter_y < nPtBins_HLT; iter_y++)
+        {
+            Eff_HLT_data_BtoF_lead[iter_x][iter_y] = y_data_lead_trig[iter_y];
+            Eff_HLT_MC_BtoF_lead[iter_x][iter_y] = y_mc_lead_trig[iter_y];
+
+            Eff_HLT_data_BtoF_sublead[iter_x][iter_y] = y_data_sublead_trig[iter_y];
+            Eff_HLT_MC_BtoF_sublead[iter_x][iter_y] = y_mc_sublead_trig[iter_y];
+        }
+    }
+    std::cout << "Setting for efficiency correction factors (BtoF) is completed" << endl;
+} // End of SetupEfficiencyScaleFactor_BtoF_new
 
 void DYAnalyzer::SetupEfficiencyScaleFactor_GtoH()
 {
@@ -993,7 +1346,321 @@ void DYAnalyzer::SetupEfficiencyScaleFactor_GtoH()
                 }
         }
         std::cout << "Setting for efficiency correction factors (GtoH) is completed" << endl;
-}
+} // End of SetupEfficiencyScaleFactor_GtoH
+
+void DYAnalyzer::SetupEfficiencyScaleFactor_GtoH_new()
+{
+    TString Location = "./etc/effSF/effSF_muon/";
+    TFile *f1 = new TFile(Location+"New_SF_RunGtoH.root");
+    std::cout << "[Tag&Probe efficiency is from " << Location+"New_SF_RunGtoH.root" << "]" << endl;
+
+
+//    // RECO
+//    TFile *f_reco = new TFile(Location+"Tracking_SF_RunBtoF.root");
+//    TGraphAsymmErrors *h_Reco_ratio = (TGraphAsymmErrors*)f_reco->Get("ratio_eff_eta3_dr030e030_corr");
+//    Int_t nEtaBins_reco = h_Reco_ratio->GetN();
+//    Int_t nPtBins_reco = 1;
+
+//    Double_t eta_reco[15]; Double_t eta_reco_ordered[15];
+//    Double_t SF_reco[15]; Double_t SF_reco_ordered[15];
+
+//    for(Int_t iter_y = 0; iter_y < nPtBins_reco; iter_y++) // in this case (2d distribution): x=eta, y=pT
+//    {
+//            for(Int_t i=0; i<nEtaBins_reco; i++)
+//            {
+//                    h_Reco_ratio->GetPoint(i, eta_reco[i], SF_reco[i]); // in this case: x=eta, y=SF
+//            }
+
+//            // -- Rearrangement in order of x (eta) values -- //
+//            Double_t etamin; // the minimum value in given iteration
+//            Double_t etalow = -9999; // the minimum value of the previous iteration
+//            for(Int_t j=0; j<nEtaBins_reco; j++)
+//            {
+//                    Int_t jj = -9999;
+
+//                    etamin = 9999;
+//                    for(Int_t k=0; k<nEtaBins_reco; k++)
+//                    {
+//                            if(etalow < eta_reco[k] && eta_reco[k] < etamin) // the lowest number but higher than the one from previos iteration
+//                            {
+//                                    jj = k;
+//                                    etamin = eta_reco[k];
+//                            }
+//                    }
+//                    eta_reco_ordered[j] = eta_reco[jj];
+//                    SF_reco_ordered[j] = SF_reco[jj];
+
+//                    etalow = etamin;
+//            } // End of rearrangement
+
+//            for(Int_t iter_x = 0; iter_x < nEtaBins_reco; iter_x++)
+//            {
+//                    Eff_Reco_data_BtoF[iter_x][iter_y] = SF_reco_ordered[iter_x]; // actually, it is the scale factor.
+//                    Eff_Reco_MC_BtoF[iter_x][iter_y] = 1;
+//            }
+//    }
+
+    // ID
+    TGraphAssymErrors *h_data_lead_ID_eff[4];
+    TGraphAssymErrors *h_data_sublead_ID_eff[4];
+    TGraphAssymErrors *h_mc_lead_ID_eff[4];
+    TGraphAssymErrors *h_mc_sublead_ID_eff[4];
+
+    h_data_lead_ID_eff[0] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta0");
+    h_data_lead_ID_eff[1] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta1");
+    h_data_lead_ID_eff[2] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta2");
+    h_data_lead_ID_eff[3] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta3");
+
+    h_data_sublead_ID_eff[0] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta0");
+    h_data_sublead_ID_eff[1] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta1");
+    h_data_sublead_ID_eff[2] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta2");
+    h_data_sublead_ID_eff[3] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta3");
+
+    h_mc_lead_ID_eff[0] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta0");
+    h_mc_lead_ID_eff[1] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta1");
+    h_mc_lead_ID_eff[2] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta2");
+    h_mc_lead_ID_eff[3] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta3");
+
+    h_mc_sublead_ID_eff[0] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta0");
+    h_mc_sublead_ID_eff[1] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta1");
+    h_mc_sublead_ID_eff[2] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta2");
+    h_mc_sublead_ID_eff[3] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta3");
+
+    Int_t nEtaBins_ID = 4;
+    Int_t nPtBins_ID = 6;
+
+    Double_t x_data_lead_ID[6];
+    Double_t y_data_lead_ID[6];
+
+    Double_t x_data_sublead_ID[6];
+    Double_t y_data_sublead_ID[6];
+
+    Double_t x_mc_lead_ID[6];
+    Double_t y_mc_lead_ID[6];
+
+    Double_t x_mc_sublead_ID[6];
+    Double_t y_mc_sublead_ID[6];
+
+    TGraphAsymmErrors *h_Data_lead_ID_eff;
+    TGraphAsymmErrors *h_Data_sublead_ID_eff;
+    TGraphAsymmErrors *h_MC_lead_ID_eff;
+    TGraphAsymmErrors *h_MC_sublead_ID_eff;
+
+    for(Int_t iter_x = 0; iter_x < nEtaBins_ID; iter_x++)
+    {
+        h_Data_lead_ID_eff = (TGraphAsymmErrors*)h_data_lead_ID_eff[iter_x]->Clone();
+        h_Data_sublead_ID_eff = (TGraphAsymmErrors*)h_data_sublead_ID_eff[iter_x]->Clone();
+        h_MC_lead_ID_eff = (TGraphAsymmErrors*)h_mc_lead_ID_eff[iter_x]->Clone();
+        h_MC_sublead_ID_eff = (TGraphAsymmErrors*)h_mc_sublead_ID_eff[iter_x]->Clone();
+
+        for(Int_t i = 0; i < nPtBins_ID; i++)
+        {
+            h_Data_sublead_ID_eff->GetPoint(i, x_data_sublead_ID[i], y_data_sublead_ID[i]);
+            h_MC_sublead_ID_eff->GetPoint(i, x_mc_sublead_ID[i], y_mc_sublead_ID[i]);
+
+            if(i == 0)
+            {
+                //It is just to initialize. They don't work in SF
+                x_data_lead_ID[0] = 1;
+                y_data_lead_ID[0] = 1;
+
+                x_mc_lead_ID[0] = 1;
+                y_mc_lead_ID[0] = 1;
+
+                continue;
+            }
+
+            h_Data_lead_ID_eff->GetPoint(i-1, x_data_lead_ID[i], y_data_lead_ID[i]);
+            h_MC_lead_ID_eff->GetPoint(i-1, x_mc_lead_ID[i], y_mc_lead_ID[i]);
+        }
+
+        for(Int_t iter_y = 0; iter_y < nPtBins_ID; iter_y++)
+        {
+            Eff_ID_data_GtoH_lead[iter_x][iter_y] = y_data_lead_ID[iter_y];
+            Eff_ID_MC_GtoH_lead[iter_x][iter_y] = y_mc_lead_ID[iter_y];
+
+            Eff_ID_data_GtoH_sublead[iter_x][iter_y] = y_data_sublead_ID[iter_y];
+            Eff_ID_MC_GtoH_sublead[iter_x][iter_y] = y_mc_sublead_ID[iter_y];
+        }
+    }
+
+    // ISO
+    TGraphAsymmErrors *h_data_lead_iso_eff[4];
+    TGraphAsymmErrors *h_data_sublead_iso_eff[4];
+    TGraphAsymmErrors *h_mc_lead_iso_eff[4];
+    TGraphAsymmErrors *h_mc_sublead_iso_eff[4];
+
+    h_data_lead_iso_eff[0] = (TGraphAsymmErrors*)f1->Get("Data_dBeta_015_from_Tight2012_and_Leading_pteta_abseta0");
+    h_data_lead_iso_eff[1] = (TGraphAsymmErrors*)f1->Get("Data_dBeta_015_from_Tight2012_and_Leading_pteta_abseta1");
+    h_data_lead_iso_eff[2] = (TGraphAsymmErrors*)f1->Get("Data_dBeta_015_from_Tight2012_and_Leading_pteta_abseta2");
+    h_data_lead_iso_eff[3] = (TGraphAsymmErrors*)f1->Get("Data_dBeta_015_from_Tight2012_and_Leading_pteta_abseta3");
+
+    h_data_sublead_iso_eff[0] = (TGraphAsymmErrors*)f1->Get("Data_dBeta_015_from_Tight2012_and_Subleading_pteta_abseta0");
+    h_data_sublead_iso_eff[1] = (TGraphAsymmErrors*)f1->Get("Data_dBeta_015_from_Tight2012_and_Subleading_pteta_abseta1");
+    h_data_sublead_iso_eff[2] = (TGraphAsymmErrors*)f1->Get("Data_dBeta_015_from_Tight2012_and_Subleading_pteta_abseta2");
+    h_data_sublead_iso_eff[3] = (TGraphAsymmErrors*)f1->Get("Data_dBeta_015_from_Tight2012_and_Subleading_pteta_abseta3");
+
+    h_mc_lead_iso_eff[0] = (TGraphAsymmErrors*)f1->Get("MC_weight_dBeta_015_from_Tight2012_and_Leading_pteta_abseta0");
+    h_mc_lead_iso_eff[1] = (TGraphAsymmErrors*)f1->Get("MC_weight_dBeta_015_from_Tight2012_and_Leading_pteta_abseta1");
+    h_mc_lead_iso_eff[2] = (TGraphAsymmErrors*)f1->Get("MC_weight_dBeta_015_from_Tight2012_and_Leading_pteta_abseta2");
+    h_mc_lead_iso_eff[3] = (TGraphAsymmErrors*)f1->Get("MC_weight_dBeta_015_from_Tight2012_and_Leading_pteta_abseta3");
+
+    h_mc_sublead_iso_eff[0] = (TGraphAsymmErrors*)f1->Get("MC_weight_dBeta_015_from_Tight2012_and_Subleading_pteta_abseta0");
+    h_mc_sublead_iso_eff[1] = (TGraphAsymmErrors*)f1->Get("MC_weight_dBeta_015_from_Tight2012_and_Subleading_pteta_abseta1");
+    h_mc_sublead_iso_eff[2] = (TGraphAsymmErrors*)f1->Get("MC_weight_dBeta_015_from_Tight2012_and_Subleading_pteta_abseta2");
+    h_mc_sublead_iso_eff[3] = (TGraphAsymmErrors*)f1->Get("MC_weight_dBeta_015_from_Tight2012_and_Subleading_pteta_abseta3");
+
+    Int_t nEtaBins_iso = 4;
+    Int_t nPtBins_iso = 6;
+
+    Double_t x_data_lead_iso[6];
+    Double_t y_data_lead_iso[6];
+
+    Double_t x_data_sublead_iso[6];
+    Double_t y_data_sublead_iso[6];
+
+    Double_t x_mc_lead_iso[6];
+    Double_t y_mc_lead_iso[6];
+
+    Double_t x_mc_sublead_iso[6];
+    Double_t y_mc_sublead_iso[6];
+
+    TGraphAsymmErrors *h_Data_lead_iso_eff;
+    TGraphAsymmErrors *h_Data_sublead_iso_eff;
+    TGraphAsymmErrors *h_MC_lead_iso_eff;
+    TGraphAsymmErrors *h_MC_sublead_iso_eff;
+
+    for(Int_t iter_x = 0; iter_x < nEtaBins_iso; iter_x++)
+    {
+        h_Data_lead_iso_eff = (TGraphAsymmErrors*)h_data_lead_iso_eff[iter_x]->Clone();
+        h_Data_sublead_iso_eff = (TGraphAsymmErrors*)h_data_sublead_iso_eff[iter_x]->Clone();
+        h_MC_lead_iso_eff = (TGraphAsymmErrors*)h_mc_lead_iso_eff[iter_x]->Clone();
+        h_MC_sublead_iso_eff = (TGraphAsymmErrors*)h_mc_sublead_iso_eff[iter_x]->Clone();
+
+        for(Int_t i=0; i<nPtBins_iso; i++) //0 to 5
+        {
+            h_Data_sublead_iso_eff->GetPoint(i, x_data_sublead_iso[i], y_data_sublead_iso[i]);
+            h_MC_sublead_iso_eff->GetPoint(i, x_mc_sublead_iso[i], y_mc_sublead_iso[i]);
+
+            if(i == 0)
+            {
+                //It is just to initialize. They don't work in SF
+                x_data_lead_iso[0] = 1;
+                y_data_lead_iso[0] = 1;
+
+                x_mc_lead_iso[0] = 1;
+                y_mc_lead_iso[0] = 1;
+
+                continue;
+            }
+
+            h_Data_lead_iso_eff->GetPoint(i-1, x_data_lead_iso[i], y_data_lead_iso[i]);
+            h_MC_lead_iso_eff->GetPoint(i-1, x_mc_lead_iso[i], y_mc_lead_iso[i]);
+        }
+
+        for(Int_t iter_y = 0; iter_y < nPtBins_iso; iter_y++)
+        {
+            Eff_Iso_data_GtoH_lead[iter_x][iter_y] = y_data_lead_iso[iter_y];
+            Eff_Iso_MC_GtoH_lead[iter_x][iter_y] = y_mc_lead_iso[iter_y];
+
+            Eff_Iso_data_GtoH_sublead[iter_x][iter_y] = y_data_sublead_iso[iter_y];
+            Eff_Iso_MC_GtoH_sublead[iter_x][iter_y] = y_mc_sublead_iso[iter_y];
+        }
+    }
+
+    // TRIGGER
+    TGraphAsymmErrors *h_data_lead_trig_eff[4];
+    TGraphAsymmErrors *h_data_sublead_trig_eff[4];
+    TGraphAsymmErrors *h_mc_lead_trig_eff[4];
+    TGraphAsymmErrors *h_mc_sublead_trig_eff[4];
+
+    h_data_lead_trig_eff[0] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta0");
+    h_data_lead_trig_eff[1] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta1");
+    h_data_lead_trig_eff[2] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta2");
+    h_data_lead_trig_eff[3] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta3");
+
+    h_data_sublead_trig_eff[0] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta0");
+    h_data_sublead_trig_eff[1] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta1");
+    h_data_sublead_trig_eff[2] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta2");
+    h_data_sublead_trig_eff[3] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta3");
+
+    h_mc_lead_trig_eff[0] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta0");
+    h_mc_lead_trig_eff[1] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta1");
+    h_mc_lead_trig_eff[2] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta2");
+    h_mc_lead_trig_eff[3] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta3");
+
+    h_mc_sublead_trig_eff[0] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta0");
+    h_mc_sublead_trig_eff[1] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta1");
+    h_mc_sublead_trig_eff[2] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta2");
+    h_mc_sublead_trig_eff[3] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta3");
+
+    Int_t nEtaBins_HLT = 4;
+    Int_t nPtBins_HLT = 8;
+
+    Double_t x_data_lead_trig[8];
+    Double_t y_data_lead_trig[8];
+
+    Double_t x_data_sublead_trig[8];
+    Double_t y_data_sublead_trig[8];
+
+    Double_t x_mc_lead_trig[8];
+    Double_t y_mc_lead_trig[8];
+
+    Double_t x_mc_sublead_trig[8];
+    Double_t y_mc_sublead_trig[8];
+
+    TGraphAsymmErrors *h_Data_lead_trig_eff;
+    TGraphAsymmErrors *h_Data_sublead_trig_eff;
+    TGraphAsymmErrors *h_MC_lead_trig_eff;
+    TGraphAsymmErrors *h_MC_sublead_trig_eff;
+
+    for(Int_t iter_x = 0; iter_x < nEtaBins_HLT; iter_x++)
+    {
+        h_Data_lead_trig_eff = (TGraphAsymmErrors*)h_data_lead_trig_eff[iter_x]->Clone();
+        h_Data_sublead_trig_eff = (TGraphAsymmErrors*)h_data_sublead_trig_eff[iter_x]->Clone();
+        h_MC_lead_trig_eff = (TGraphAsymmErrors*)h_mc_lead_trig_eff[iter_x]->Clone();
+        h_MC_sublead_trig_eff = (TGraphAsymmErrors*)h_mc_sublead_trig_eff[iter_x]->Clone();
+
+        for(Int_t i=0; i<nPtBins_HLT; i++)
+        {
+            h_Data_lead_trig_eff->GetPoint(i, x_data_lead_trig[i], y_data_lead_trig[i]);
+            h_MC_lead_trig_eff->GetPoint(i, x_mc_lead_trig[i], y_mc_lead_trig[i]);
+
+            if(iter_x == 2 && i == 7)
+            {
+                h_Data_sublead_trig_eff->GetPoint(i, x_data_sublead_trig[i], y_data_sublead_trig[i]);
+
+                x_mc_sublead_trig[i] = 1;
+                y_mc_sublead_trig[i] = y_data_sublead_trig[i-1];
+
+                continue;
+            }
+            else if(iter_x == 3 && i >= 6)
+            {
+                x_data_sublead_trig[i] = 1;
+                y_data_sublead_trig[i] = y_data_sublead_trig[i-1];
+
+                x_mc_sublead_trig[i] = 1;
+                y_mc_sublead_trig[i] = y_data_sublead_trig[i-1];
+
+                continue;
+            }
+
+            h_Data_sublead_trig_eff->GetPoint(i, x_data_sublead_trig[i], y_data_sublead_trig[i]);
+            h_MC_sublead_trig_eff->GetPoint(i, x_mc_sublead_trig[i], y_mc_sublead_trig[i]);
+        }
+
+        for(Int_t iter_y = 0; iter_y < nPtBins_HLT; iter_y++)
+        {
+            Eff_HLT_data_GtoH_lead[iter_x][iter_y] = y_data_lead_trig[iter_y];
+            Eff_HLT_MC_GtoH_lead[iter_x][iter_y] = y_mc_lead_trig[iter_y];
+
+            Eff_HLT_data_GtoH_sublead[iter_x][iter_y] = y_data_sublead_trig[iter_y];
+            Eff_HLT_MC_GtoH_sublead[iter_x][iter_y] = y_mc_sublead_trig[iter_y];
+        }
+    }
+    std::cout << "Setting for efficiency correction factors (BtoF) is completed" << endl;
+} // End of SetupEfficiencyScaleFactor_GtoH_new
 
 void DYAnalyzer::SetupEfficiencyScaleFactor_electron()
 {
@@ -1308,6 +1975,125 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF(Muon mu1, Muon mu2)
 
 }// End of EfficiencySF_EventWeight_HLT_BtoF(mu1, mu2)
 
+Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF_new(Muon mu1, Muon mu2)
+{
+    Double_t weight = -999;
+
+    // -- Muon1 LEADING -- //
+    Double_t Pt1 = mu1.Pt;
+    Double_t eta1 = mu1.eta;
+
+    Int_t ptbin1_ID = Find_muon_PtBin_ID(Pt1);
+    Int_t etabin1_ID = Find_muon_EtaBin_ID(eta1);
+
+    Int_t ptbin1_Iso = Find_muon_PtBin_Iso(Pt1);
+    Int_t etabin1_Iso = Find_muon_EtaBin_Iso(eta1);
+
+    Int_t ptbin1_Trig = Find_muon_PtBin_Trig_new(Pt1);
+    Int_t etabin1_Trig = Find_muon_EtaBin_Trig(eta1);
+
+    if(ptbin1_Reco == 9999 || etabin1_Reco == 9999)
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d)\n", ptbin1_Reco, etabin1_Reco);
+        return -999;
+    }
+    if(ptbin1_ID == 9999 || etabin1_ID == 9999)
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d)\n", ptbin1_ID, etabin1_ID);
+        return -999;
+    }
+    if(ptbin1_Iso == 9999 || etabin1_Iso == 9999)
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d)\n", ptbin1_Iso, etabin1_Iso);
+        return -999;
+    }
+    if(ptbin1_Trig == 9999 || etabin1_Trig == 9999)
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d)\n", ptbin1_Trig, etabin1_Trig);
+        return -999;
+    }
+
+    Double_t Eff_muon1_data = Eff_ID_data_BtoF_lead[etabin1_ID][ptbin1_ID] * Eff_Iso_data_BtoF_lead[etabin1_Iso][ptbin1_Iso];
+    Double_t Eff_muon1_MC = Eff_ID_MC_BtoF_sublead[etabin1_ID][ptbin1_ID] * Eff_Iso_MC_BtoF_sublead[etabin1_Iso][ptbin1_Iso];
+
+    // -- Muon2 SUBLEADING -- //
+    Double_t Pt2 = mu2.Pt;
+    Double_t eta2 = mu2.eta;
+
+    Int_t ptbin2_ID = Find_muon_PtBin_ID(Pt2);
+    Int_t etabin2_ID = Find_muon_EtaBin_ID(eta2);
+
+    Int_t ptbin2_Iso = Find_muon_PtBin_Iso(Pt2);
+    Int_t etabin2_Iso = Find_muon_EtaBin_Iso(eta2);
+
+    Int_t ptbin2_Trig = Find_muon_PtBin_Trig_new(Pt2);
+    Int_t etabin2_Trig = Find_muon_EtaBin_Trig(eta2);
+
+    if(ptbin2_Reco == 9999 || etabin2_Reco == 9999)
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d)\n", ptbin2_Reco, etabin2_Reco);
+        return -999;
+    }
+    if(ptbin2_ID == 9999 || etabin2_ID == 9999)
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d)\n", ptbin2_ID, etabin2_ID);
+        return -999;
+    }
+    if(ptbin2_Iso == 9999 || etabin2_Iso == 9999)
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d)\n", ptbin2_Iso, etabin2_Iso);
+        return -999;
+    }
+    if(ptbin2_Trig == 9999 || etabin2_Trig == 9999)
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d)\n", ptbin2_Trig, etabin2_Trig);
+        return -999;
+    }
+
+    Double_t Eff_muon2_data = Eff_ID_data_BtoF_lead[etabin2_ID][ptbin2_ID] * Eff_Iso_data_BtoF_lead[etabin2_Iso][ptbin2_Iso];
+    Double_t Eff_muon2_MC = Eff_ID_MC_BtoF_sublead[etabin2_ID][ptbin2_ID] * Eff_Iso_MC_BtoF_sublead[etabin2_Iso][ptbin2_Iso];
+
+    // Trigger SF
+    Double_t Eff_EventTrig_data = 0;
+    Double_t Eff_EventTrig_MC = 0;
+
+    Double_t Eff_Trig_muon1_data = Eff_HLT_data_BtoF_lead[etabin1_Trig][ptbin1_Trig];
+    Double_t Eff_Trig_muon2_data = Eff_HLT_data_BtoF_sublead[etabin2_Trig][ptbin2_Trig];
+    Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
+
+    Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_BtoF_lead[etabin1_Trig][ptbin1_Trig];
+    Double_t Eff_Trig_muon2_MC = Eff_HLT_MC_BtoF_sublead[etabin2_Trig][ptbin2_Trig];
+    Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;
+
+    Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
+    Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
+
+    weight = Eff_data_all / Eff_MC_all;
+
+    if(weight > 2)
+    {
+        printf("(pt1, eta1, pt2, eta2): (%.3lf, %.3lf, %.3lf, %.3lf)\n", Pt1, eta1, Pt2, eta2);
+
+        printf("[Data]\n");
+        printf("\t[Muon1] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_ID_data_BtoF_lead[etabin1_ID][ptbin1_ID],
+               Eff_Iso_data_BtoF_lead[etabin1_Iso][ptbin1_Iso]);
+        printf("\t[Muon2] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_ID_data_BtoF_sublead[etabin2_ID][ptbin2_ID],
+               Eff_Iso_data_BtoF_sublead[etabin2_Iso][ptbin2_Iso]);
+        printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_data, Eff_data_all);
+
+        printf("[MC]\n");
+        printf("\t[Muon1] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_ID_MC_BtoF_lead[etabin1_ID][ptbin1_ID],
+               Eff_Iso_MC_BtoF_lead[etabin1_Iso][ptbin1_Iso]);
+        printf("\t[Muon2] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_ID_MC_BtoF_sublead[etabin2_ID][ptbin2_ID],
+               Eff_Iso_MC_BtoF_sublead[etabin2_Iso][ptbin2_Iso]);
+        printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_MC, Eff_MC_all);
+
+        printf("[SF] Weight = %.3lf\n", weight);
+    }
+    return weight;
+
+}// End of EfficiencySF_EventWeight_HLT_BtoF_new(mu1, mu2)
+
 
 Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF(SelectedMuMu_t *MuMu)
 {
@@ -1567,6 +2353,126 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH(Muon mu1, Muon mu2)
     return weight;
 
 }// End of EfficiencySF_EventWeight_HLT_GtoH(mu1, mu2)
+
+
+Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH_new(Muon mu1, Muon mu2)
+{
+    Double_t weight = -999;
+
+    // -- Muon1 LEADING -- //
+    Double_t Pt1 = mu1.Pt;
+    Double_t eta1 = mu1.eta;
+
+    Int_t ptbin1_ID = Find_muon_PtBin_ID(Pt1);
+    Int_t etabin1_ID = Find_muon_EtaBin_ID(eta1);
+
+    Int_t ptbin1_Iso = Find_muon_PtBin_Iso(Pt1);
+    Int_t etabin1_Iso = Find_muon_EtaBin_Iso(eta1);
+
+    Int_t ptbin1_Trig = Find_muon_PtBin_Trig_new(Pt1);
+    Int_t etabin1_Trig = Find_muon_EtaBin_Trig(eta1);
+
+    if(ptbin1_Reco == 9999 || etabin1_Reco == 9999)
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d)\n", ptbin1_Reco, etabin1_Reco);
+        return -999;
+    }
+    if(ptbin1_ID == 9999 || etabin1_ID == 9999)
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d)\n", ptbin1_ID, etabin1_ID);
+        return -999;
+    }
+    if(ptbin1_Iso == 9999 || etabin1_Iso == 9999)
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d)\n", ptbin1_Iso, etabin1_Iso);
+        return -999;
+    }
+    if(ptbin1_Trig == 9999 || etabin1_Trig == 9999)
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d)\n", ptbin1_Trig, etabin1_Trig);
+        return -999;
+    }
+
+    Double_t Eff_muon1_data = Eff_ID_data_GtoH_lead[etabin1_ID][ptbin1_ID] * Eff_Iso_data_GtoH_lead[etabin1_Iso][ptbin1_Iso];
+    Double_t Eff_muon1_MC = Eff_ID_MC_GtoH_sublead[etabin1_ID][ptbin1_ID] * Eff_Iso_MC_GtoH_sublead[etabin1_Iso][ptbin1_Iso];
+
+    // -- Muon2 SUBLEADING -- //
+    Double_t Pt2 = mu2.Pt;
+    Double_t eta2 = mu2.eta;
+
+    Int_t ptbin2_ID = Find_muon_PtBin_ID(Pt2);
+    Int_t etabin2_ID = Find_muon_EtaBin_ID(eta2);
+
+    Int_t ptbin2_Iso = Find_muon_PtBin_Iso(Pt2);
+    Int_t etabin2_Iso = Find_muon_EtaBin_Iso(eta2);
+
+    Int_t ptbin2_Trig = Find_muon_PtBin_Trig_new(Pt2);
+    Int_t etabin2_Trig = Find_muon_EtaBin_Trig(eta2);
+
+    if(ptbin2_Reco == 9999 || etabin2_Reco == 9999)
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d)\n", ptbin2_Reco, etabin2_Reco);
+        return -999;
+    }
+    if(ptbin2_ID == 9999 || etabin2_ID == 9999)
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d)\n", ptbin2_ID, etabin2_ID);
+        return -999;
+    }
+    if(ptbin2_Iso == 9999 || etabin2_Iso == 9999)
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d)\n", ptbin2_Iso, etabin2_Iso);
+        return -999;
+    }
+    if(ptbin2_Trig == 9999 || etabin2_Trig == 9999)
+    {
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d)\n", ptbin2_Trig, etabin2_Trig);
+        return -999;
+    }
+
+    Double_t Eff_muon2_data = Eff_ID_data_GtoH_lead[etabin2_ID][ptbin2_ID] * Eff_Iso_data_GtoH_lead[etabin2_Iso][ptbin2_Iso];
+    Double_t Eff_muon2_MC = Eff_ID_MC_GtoH_sublead[etabin2_ID][ptbin2_ID] * Eff_Iso_MC_GtoH_sublead[etabin2_Iso][ptbin2_Iso];
+
+    // Trigger SF
+    Double_t Eff_EventTrig_data = 0;
+    Double_t Eff_EventTrig_MC = 0;
+
+    Double_t Eff_Trig_muon1_data = Eff_HLT_data_GtoH_lead[etabin1_Trig][ptbin1_Trig];
+    Double_t Eff_Trig_muon2_data = Eff_HLT_data_GtoH_sublead[etabin2_Trig][ptbin2_Trig];
+    Eff_EventTrig_data = Eff_Trig_muon1_data + Eff_Trig_muon2_data - Eff_Trig_muon1_data * Eff_Trig_muon2_data;
+
+    Double_t Eff_Trig_muon1_MC = Eff_HLT_MC_GtoH_lead[etabin1_Trig][ptbin1_Trig];
+    Double_t Eff_Trig_muon2_MC = Eff_HLT_MC_GtoH_sublead[etabin2_Trig][ptbin2_Trig];
+    Eff_EventTrig_MC = Eff_Trig_muon1_MC + Eff_Trig_muon2_MC - Eff_Trig_muon1_MC * Eff_Trig_muon2_MC;
+
+    Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
+    Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
+
+    weight = Eff_data_all / Eff_MC_all;
+
+    if(weight > 2)
+    {
+        printf("(pt1, eta1, pt2, eta2): (%.3lf, %.3lf, %.3lf, %.3lf)\n", Pt1, eta1, Pt2, eta2);
+
+        printf("[Data]\n");
+        printf("\t[Muon1] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_ID_data_GtoH_lead[etabin1_ID][ptbin1_ID],
+               Eff_Iso_data_GtoH_lead[etabin1_Iso][ptbin1_Iso]);
+        printf("\t[Muon2] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_ID_data_GtoH_sublead[etabin2_ID][ptbin2_ID],
+               Eff_Iso_data_GtoH_sublead[etabin2_Iso][ptbin2_Iso]);
+        printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_data, Eff_data_all);
+
+        printf("[MC]\n");
+        printf("\t[Muon1] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_ID_MC_GtoH_lead[etabin1_ID][ptbin1_ID],
+               Eff_Iso_MC_GtoH_lead[etabin1_Iso][ptbin1_Iso]);
+        printf("\t[Muon2] (Reco, ID, Iso): (%.3lf, %.3lf, %.3lf)\n", Eff_ID_MC_GtoH_sublead[etabin2_ID][ptbin2_ID],
+               Eff_Iso_MC_GtoH_sublead[etabin2_Iso][ptbin2_Iso]);
+        printf("\t[Event] (TrigEvent, Total): (%.3lf, %.3lf)\n", Eff_EventTrig_MC, Eff_MC_all);
+
+        printf("[SF] Weight = %.3lf\n", weight);
+    }
+    return weight;
+
+}// End of EfficiencySF_EventWeight_HLT_GtoH_new(mu1, mu2)
 
 
 Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH(SelectedMuMu_t *MuMu)
@@ -6117,6 +7023,73 @@ void DYAnalyzer::PrintOutDoubleMuInfo(Muon mu1, Muon mu2)
 
 }
 
+Double_t DYAnalyzer::GenMuonPt(TString muonType, NtupleHandle* ntuple, Muon reco_mu)
+{
+        Double_t GenMuonPt = 0;
+
+        TString MuonType = muonType;
+        MuonType.ToLower();
+
+        vector<GenLepton> GenLeptonCollection;
+        Int_t NGenLeptons = ntuple->gnpair;
+
+        if(MuonType == "fromhardprocessfinalstate")
+        {
+                for(Int_t i_gen=0; i_gen<NGenLeptons; i_gen++)
+                {
+                        GenLepton genlep;
+                        genlep.FillFromNtuple(ntuple, i_gen);
+                        if(genlep.isMuon() && genlep.fromHardProcessFinalState)
+                                GenLeptonCollection.push_back(genlep);
+                }
+        }
+        else
+        {
+                cout << "Incorrect MuonType!" << endl;
+                return GenMuonPt;
+        }
+
+        //Give Acceptance Cuts
+        if(GenLeptonCollection.size() >= 2)
+        {
+                GenLepton leadGenLep, subGenLep;
+                CompareGenLepton(&GenLeptonCollection[0], &GenLeptonCollection[1], &leadGenLep, &subGenLep);
+                if(!(leadGenLep.Pt > LeadPtCut && subGenLep.Pt > SubPtCut && abs(leadGenLep.eta) < LeadEtaCut && abs(subGenLep.eta) < SubEtaCut))
+                        GenLeptonCollection.clear();
+        }
+
+
+        Double_t reco_Pt = reco_mu.Pt;
+        Double_t reco_eta = reco_mu.eta;
+        Double_t reco_phi = reco_mu.phi;
+        Double_t dPtMin = 1e10;
+
+        Int_t NGen = (Int_t)GenLeptonCollection.size();
+        for(Int_t i_gen=0; i_gen<NGen; i_gen++)
+        {
+                GenLepton genlep = GenLeptonCollection[i_gen];
+                Double_t gen_Pt = genlep.Pt;
+                Double_t gen_eta = genlep.eta;
+                Double_t gen_phi = genlep.phi;
+
+                Double_t dR = sqrt((gen_eta-reco_eta)*(gen_eta-reco_eta) + (gen_phi-reco_phi)*(gen_phi-reco_phi));
+                Double_t dPt = fabs(gen_Pt - reco_Pt);
+
+                if(dR < 0.2)
+                {
+                        if(dPt < dPtMin)
+                        {
+                                GenMuonPt = gen_Pt;
+                                dPtMin = dPt;
+                        }
+                }
+
+        }
+
+        return GenMuonPt;
+}
+
+
 Bool_t DYAnalyzer::EventSelection_Dijet(vector< Muon > MuonCollection, NtupleHandle *ntuple, // -- input: All muons in a event & NtupleHandle -- //
 						vector< Muon >* SelectedMuonCollection) // -- output: 2 muons passing event selection conditions -- //
 {
@@ -6467,35 +7440,35 @@ Int_t DYAnalyzer::Find_muon_PtBin_Reco(Double_t Pt)
 
 Int_t DYAnalyzer::Find_muon_PtBin_ID(Double_t Pt)
 {
-        // -- HighPtID & TrkIso -- //
-        //const Int_t nPtBins = 7;
-        //Double_t PtBinEdges[nPtBins+1] = {20, 25, 30, 40, 50, 55, 60, 120};
+    // -- HighPtID & TrkIso -- //
+    //const Int_t nPtBins = 7;
+    //Double_t PtBinEdges[nPtBins+1] = {20, 25, 30, 40, 50, 55, 60, 120};
 
-        // -- TightID & PFIso -- //
-        const Int_t nPtBins = 6;
-        Double_t PtBinEdges[nPtBins+1] = {20, 25, 30, 40, 50, 60, 120};
+    // -- TightID & PFIso -- //
+    const Int_t nPtBins = 6;
+    Double_t PtBinEdges[nPtBins+1] = {20, 25, 30, 40, 50, 60, 120};
 
-        Int_t ptbin = 9999;
+    Int_t ptbin = 9999;
 
-        // -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- //
-        if(Pt > PtBinEdges[nPtBins])
-                ptbin = nPtBins-1;
-        // -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- // updated at 14 Apr. 2017 by Dalmin Pai
-        else if(Pt < PtBinEdges[0])
-                ptbin = 0;
-        else
+    // -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- //
+    if(Pt > PtBinEdges[nPtBins])
+            ptbin = nPtBins-1;
+    // -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- // updated at 14 Apr. 2017 by Dalmin Pai
+    else if(Pt <= PtBinEdges[0])
+            ptbin = 0;
+    else
+    {
+        for(Int_t i=0; i<nPtBins; i++)
         {
-                for(Int_t i=0; i<nPtBins; i++)
-                {
-                        if(Pt >= PtBinEdges[i] && Pt < PtBinEdges[i+1])
-                        {
-                                ptbin = i;
-                                break;
-                        }
-                }
+            if(Pt > PtBinEdges[i] && Pt <= PtBinEdges[i+1])
+            {
+                ptbin = i;
+                break;
+            }
         }
+    }
 
-        return ptbin;
+    return ptbin;
 }
 
 
@@ -6515,13 +7488,13 @@ Int_t DYAnalyzer::Find_muon_PtBin_Iso(Double_t Pt)
         if(Pt > PtBinEdges[nPtBins])
                 ptbin = nPtBins-1;
         // -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- // updated at 14 Apr. 2017 by Dalmin Pai
-        else if(Pt < PtBinEdges[0])
+        else if(Pt <= PtBinEdges[0])
                 ptbin = 0;
         else
         {
                 for(Int_t i=0; i<nPtBins; i++)
                 {
-                        if(Pt >= PtBinEdges[i] && Pt < PtBinEdges[i+1])
+                        if(Pt > PtBinEdges[i] && Pt <= PtBinEdges[i+1])
                         {
                                 ptbin = i;
                                 break;
@@ -6535,31 +7508,62 @@ Int_t DYAnalyzer::Find_muon_PtBin_Iso(Double_t Pt)
 
 Int_t DYAnalyzer::Find_muon_PtBin_Trig(Double_t Pt)
 {
-        // -- IsoMu24_OR_IsoTkMu24 -- //
-        const Int_t nPtBins = 7;
-        Double_t PtBinEdges[nPtBins+1] = {26, 30, 40, 50, 60, 120, 200, 500};
+    // -- IsoMu24_OR_IsoTkMu24 -- //
+    const Int_t nPtBins = 7;
+    Double_t PtBinEdges[nPtBins+1] = {26, 30, 40, 50, 60, 120, 200, 500};
 
-        Int_t ptbin = 9999;
+    Int_t ptbin = 9999;
 
-        // -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- //
-        if(Pt > PtBinEdges[nPtBins])
-                ptbin = nPtBins-1;
-        // -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- // updated at 14 Apr. 2017 by Dalmin Pai
-        else if(Pt < PtBinEdges[0])
-                ptbin = 0;
-        else
+    // -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- //
+    if(Pt > PtBinEdges[nPtBins])
+            ptbin = nPtBins-1;
+    // -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- // updated at 14 Apr. 2017 by Dalmin Pai
+    else if(Pt <= PtBinEdges[0])
+            ptbin = 0;
+    else
+    {
+        for(Int_t i=0; i<nPtBins; i++)
         {
-                for(Int_t i=0; i<nPtBins; i++)
-                {
-                        if(Pt >= PtBinEdges[i] && Pt < PtBinEdges[i+1])
-                        {
-                                ptbin = i;
-                                break;
-                        }
-                }
+            if(Pt > PtBinEdges[i] && Pt <= PtBinEdges[i+1])
+            {
+                ptbin = i;
+                break;
+            }
         }
+    }
 
-        return ptbin;
+    return ptbin;
+}
+
+
+Int_t DYAnalyzer::Find_muon_PtBin_Trig_new(Double_t Pt)
+{
+    // -- IsoMu24_OR_IsoTkMu24 -- //
+    const Int_t nPtBins = 8;
+    Double_t PtBinEdges[nPtBins+1] = {26, 30, 40, 50, 60, 80, 120, 200, 500};
+
+    Int_t ptbin = 9999;
+
+    // -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- //
+    if(Pt > PtBinEdges[nPtBins])
+            ptbin = nPtBins-1;
+    // -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- //
+    else if(Pt <= PtBinEdges[0])
+            ptbin = 0;
+    else
+    {
+        for(Int_t i=0; i<nPtBins; i++)
+        {
+            //if(Pt > PtBinEdges[i] && Pt < PtBinEdges[i+1])
+            if(Pt > PtBinEdges[i] && Pt <= PtBinEdges[i+1])
+            {
+                ptbin = i;
+                break;
+            }
+        }
+    }
+
+    return ptbin;
 }
 
 
