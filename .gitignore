@@ -58,6 +58,7 @@ Local/
 *.out
 *.ps
 *#
+*.bak
 # temporary ROOT files
 *.pcm
 *.nav
