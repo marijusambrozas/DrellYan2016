@@ -4767,22 +4767,35 @@ void Est_HistDrawer()
     if (f_data_ee->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[Mgr.CurrentProc]+".root" << " opened successfully" << endl;
 
     THStack *s_mass_ee = new THStack("s_mass_ee", "");
+    THStack *s_mass_ee2 = new THStack("s_mass_ee2", "");
 
 //----------------------------------- MC bkg -------------------------------------------------------
-    TH1D *h_bkg_mass_ee[9];
+    TH1D *h_bkg_mass_ee[9], *h_bkg_mass_ee2[9];
     Int_t iter = 0;
 
     for (SelProc_t pr = _EE_QCDEMEnriched_Full; pr > _EndOf_EE_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
     {
-//        if (pr == _EE_WJets || pr == _EE_QCDEMEnriched_Full)
-        if (pr == _EE_WJets || pr == _EE_QCDEMEnriched_Full || pr == _EE_WZ || pr == _EE_ZZ)
+        if (pr == _EE_QCDEMEnriched_Full)
+        {
+            iter++;
+            continue;
+        }
+
+//        if (pr == _EE_WJets_Full || pr == _EE_QCDEMEnriched_Full)
+        if (pr == _EE_WJets_Full || pr == _EE_QCDEMEnriched_Full || pr == _EE_WZ || pr == _EE_ZZ)
+        {
             f_bkg_ee->GetObject("h_mass_"+Mgr.Procname[pr], h_bkg_mass_ee[iter]);
+            f_bkg_ee->GetObject("h_mass2_"+Mgr.Procname[pr], h_bkg_mass_ee2[iter]);
+        }
         else
+        {
             f_bkg_est_ee->GetObject("h_ee_mass_Est_"+Mgr.Procname[pr], h_bkg_mass_ee[iter]);
+            f_bkg_est_ee->GetObject("h_ee_mass_Est2_"+Mgr.Procname[pr], h_bkg_mass_ee2[iter]);
+        }
 
         Color_t color = kBlack;
         if (pr == _EE_QCDEMEnriched_Full) color = kRed + 3;
-        if (pr == _EE_WJets) color = kRed - 2;
+        if (pr == _EE_WJets_Full) color = kRed - 2;
         if (pr == _EE_WW) color = kMagenta - 5;
         if (pr == _EE_WZ) color = kMagenta - 2;
         if (pr == _EE_ZZ) color = kMagenta - 6;
@@ -4795,6 +4808,11 @@ void Est_HistDrawer()
         h_bkg_mass_ee[iter]->SetLineColor(color);
         h_bkg_mass_ee[iter]->SetDirectory(0);
         s_mass_ee->Add(h_bkg_mass_ee[iter]);
+        h_bkg_mass_ee2[iter]->SetFillColor(color);
+        h_bkg_mass_ee2[iter]->SetLineColor(color);
+        h_bkg_mass_ee2[iter]->SetDirectory(0);
+        s_mass_ee2->Add(h_bkg_mass_ee2[iter]);
+
 
         iter++;
 
@@ -4809,63 +4827,76 @@ void Est_HistDrawer()
 
 //---------------------------------- MC signal -----------------------------------------------------
 
-    TH1D *h_DY_mass_ee;
+    TH1D *h_DY_mass_ee, *h_DY_mass_ee2;
     f_DY_ee->GetObject("h_mass_"+Mgr.Procname[_EE_DY_Full], h_DY_mass_ee);
+    f_DY_ee->GetObject("h_mass2_"+Mgr.Procname[_EE_DY_Full], h_DY_mass_ee2);
     h_DY_mass_ee->SetFillColor(kOrange);
     h_DY_mass_ee->SetLineColor(kOrange);
     h_DY_mass_ee->SetDirectory(0);
     s_mass_ee->Add(h_DY_mass_ee);
+    h_DY_mass_ee2->SetFillColor(kOrange);
+    h_DY_mass_ee2->SetLineColor(kOrange);
+    h_DY_mass_ee2->SetDirectory(0);
+    s_mass_ee2->Add(h_DY_mass_ee2);
 
 //--------------------------------------- DATA -----------------------------------------------------
 
-    TH1D *h_data_mass_ee;
+    TH1D *h_data_mass_ee, *h_data_mass_ee2;
 
     Mgr.SetProc(_EE_DoubleEG_Full);
     f_data_ee->GetObject("h_mass_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass_ee);
+    f_data_ee->GetObject("h_mass2_"+Mgr.Procname[Mgr.CurrentProc], h_data_mass_ee2);
     h_data_mass_ee->SetMarkerStyle(kFullDotLarge);
     h_data_mass_ee->SetMarkerColor(kBlack);
     h_data_mass_ee->SetLineColor(kBlack);
     h_data_mass_ee->SetDirectory(0);
+    h_data_mass_ee2->SetMarkerStyle(kFullDotLarge);
+    h_data_mass_ee2->SetMarkerColor(kBlack);
+    h_data_mass_ee2->SetLineColor(kBlack);
+    h_data_mass_ee2->SetDirectory(0);
 
 //--------------------------------- Ratio Plot --------------------------------------
 
     myRatioPlot_t *RP_mass_ee = new myRatioPlot_t("RP_mass_ee", s_mass_ee, h_data_mass_ee);
+    myRatioPlot_t *RP_mass_ee2 = new myRatioPlot_t("RP_mass_ee2", s_mass_ee2, h_data_mass_ee2);
     RP_mass_ee->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000);
 //    RP_mass_ee->SetPlots("Elektronu poros invariantine mase [GeV/c^{2}]", 15, 3000);
-    RP_mass_ee->SetLegend(0.75, 0.4);
+    RP_mass_ee2->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000);
+//    RP_mass_ee2->SetPlots("Elektronu poros invariantine mase [GeV/c^{2}]", 15, 3000);
 
-    // Legend data
-        RP_mass_ee->AddLegendEntry(h_data_mass_ee, "Data", "lp");
-//    RP_mass_ee->AddLegendEntry(h_data_mass_ee, "Matavimas", "lp");
+    TLegend *legend_ee = new TLegend(0.75, 0.4, 0.9, 0.9);
 
-    // Legend MC signal
-    RP_mass_ee->AddLegendEntry(h_DY_mass_ee, "DY#rightarrow #font[12]{ee} (MC)", "f");
-
+    legend_ee->AddEntry(h_data_mass_ee, "Data", "lp");
+//    legend_ee->AddEntry(h_data_mass_ee, "Matavimas", "lp");
+    legend_ee->AddEntry(h_DY_mass_ee, "DY#rightarrow #font[12]{ee} (MC)", "f");
     // Legend MC BKG (EN)
-    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (D-D)", "f");
-    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (D-D)", "f");
-    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (D-D)", "f");
-    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (D-D)", "f");
-//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (D-D)", "f");
-//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[3], "#font[12]{#scale[1.1]{WZ}} (D-D)", "f");
-    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
-    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
-    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[2], "#font[12]{#scale[1.1]{WW}} (D-D)", "f");
-    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[1], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
-    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[0], "#font[12]{#scale[1.1]{QCD}} (MC)", "f");
+    legend_ee->AddEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (D-D)", "f");
+    legend_ee->AddEntry(h_bkg_mass_ee[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (D-D)", "f");
+    legend_ee->AddEntry(h_bkg_mass_ee[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (D-D)", "f");
+    legend_ee->AddEntry(h_bkg_mass_ee[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (D-D)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (D-D)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[3], "#font[12]{#scale[1.1]{WZ}} (D-D)", "f");
+    legend_ee->AddEntry(h_bkg_mass_ee[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
+    legend_ee->AddEntry(h_bkg_mass_ee[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
+    legend_ee->AddEntry(h_bkg_mass_ee[2], "#font[12]{#scale[1.1]{WW}} (D-D)", "f");
+    legend_ee->AddEntry(h_bkg_mass_ee[1], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[0], "#font[12]{#scale[1.1]{QCD}} (MC)", "f");
 
     // Legend MC BKG (LT)
-//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (e#mu iv.)", "f");
-//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (e#mu iv.)", "f");
-//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[6], "tW (e#mu iv.)", "f");
-//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (e#mu iv.)", "f");
-//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[4], "ZZ (e#mu iv.)", "f");
-//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[3], "WZ (e#mu iv.)", "f");
-//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[2], "WW (e#mu iv.)", "f");
-//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[1], "W+Jets (MC)", "f");
-//    RP_mass_ee->AddLegendEntry(h_bkg_mass_ee[0], "QCD (MC)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (e#mu iv.)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (e#mu iv.)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[6], "tW (e#mu iv.)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (e#mu iv.)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[4], "ZZ (e#mu iv.)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[3], "WZ (e#mu iv.)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[2], "WW (e#mu iv.)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[1], "W+Jets (MC)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[0], "QCD (MC)", "f");
 
+    RP_mass_ee->ImportLegend(legend_ee);
+    RP_mass_ee2->ImportLegend(legend_ee);
     RP_mass_ee->Draw(0.5, 1e7, 1);
+    RP_mass_ee2->Draw(0.5, 1e7, 1);
 
     Double_t dataerror_ee, MCerror_ee, dataintegral_ee=1.3107e+07, MCintegral_ee;
     Double_t dataerrorZ_ee, MCerrorZ_ee, DYerrorZ_ee, dataintegralZ_ee, MCintegralZ_ee, DYintegralZ_ee;
@@ -4900,44 +4931,57 @@ void Est_HistDrawer()
     std::cout << "ee Data events around Z: " << dataintegralZ_ee << "+-" << dataerrorZ_ee << endl;
     std::cout << "ee MC events around Z: " << MCintegralZ_ee << "+-" << MCerrorZ_ee << endl;
     std::cout << "ee Data events outside Z: " << dataintegral_noZ_ee << "+-" << dataerror_noZ_ee << endl;
-    std::cout << "ee MC events outside Z: " << MCintegral_noZ_ee << "+-" << MCerror_noZ_ee << endl;
+    std::cout << "ee MC events outside Z: " << MCintegral_noZ_ee << "+-" << MCerror_noZ_ee << endl << endl;
 
 //############################## MUON CHANNEL ###############################################
 
     Mgr.SetProc(_MuMu_DY_Full);
-    TString name_DY_mumu = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_DY_Full]+"_roccor.root";
+    TString name_DY_mumu = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root";
     TFile* f_DY_mumu = new TFile(name_DY_mumu, "READ");
     cout << "Hists location: " << Mgr.HistLocation << endl;
-    if (f_DY_mumu->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_DY_Full]+"_roccor.root" << " opened successfully" << endl;
+    if (f_DY_mumu->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root" << " opened successfully" << endl;
     Mgr.SetProc(_MuMu_Bkg_Full);
-    TString name_bkg_mumu = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+"_roccor.root";
+    TString name_bkg_mumu = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root";
     TFile* f_bkg_mumu = new TFile(name_bkg_mumu, "READ");
-    if (f_bkg_mumu->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+"_roccor.root" << " opened successfully" << endl;
+    if (f_bkg_mumu->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root" << " opened successfully" << endl;
     TString name_bkg_est_mumu = Mgr.HistLocation+"EstBkg_MuMu.root";
     TFile* f_bkg_est_mumu = new TFile(name_bkg_est_mumu, "READ");
     if (f_bkg_est_mumu->IsOpen()) std::cout << "File " << "EstBkg_MuMu.root" << " opened successfully" << endl;
     Mgr.SetProc(_MuMu_SingleMuon_Full);
-    TString name_data_mumu = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+"_roccor.root";
+    TString name_data_mumu = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+".root";
     TFile* f_data_mumu = new TFile(name_data_mumu, "READ");
-    if (f_data_mumu->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+"_roccor.root" << " opened successfully" << endl;
+    if (f_data_mumu->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+".root" << " opened successfully" << endl;
 
     THStack *s_mass_mumu = new THStack("s_mass_mumu", "");
+    THStack *s_mass_mumu2 = new THStack("s_mass_mumu2", "");
 
 //----------------------------------- MC bkg -------------------------------------------------------
-    TH1D *h_bkg_mass_mumu[9];
+    TH1D *h_bkg_mass_mumu[9], *h_bkg_mass_mumu2[9];
     iter = 0;
 
     for (SelProc_t pr = _MuMu_QCDMuEnriched_Full; pr > _EndOf_MuMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
     {
+        if (pr == _MuMu_QCDMuEnriched_Full)
+        {
+            iter++;
+            continue;
+        }
+
 //        if (pr == _MuMu_WJets || pr == _MuMu_QCDMuEnriched_Full)
-        if (pr == _MuMu_WJets || pr == _MuMu_QCDMuEnriched_Full || pr == _MuMu_WZ || pr == _MuMu_ZZ)
+        if (pr == _MuMu_WJets_Full || pr == _MuMu_QCDMuEnriched_Full || pr == _MuMu_WZ || pr == _MuMu_ZZ)
+        {
             f_bkg_mumu->GetObject("h_mass_"+Mgr.Procname[pr], h_bkg_mass_mumu[iter]);
+            f_bkg_mumu->GetObject("h_mass2_"+Mgr.Procname[pr], h_bkg_mass_mumu2[iter]);
+        }
         else
+        {
             f_bkg_est_mumu->GetObject("h_MuMu_mass_Est_"+Mgr.Procname[pr], h_bkg_mass_mumu[iter]);
+            f_bkg_est_mumu->GetObject("h_MuMu_mass_Est2_"+Mgr.Procname[pr], h_bkg_mass_mumu2[iter]);
+        }
 
         Color_t color = kBlack;
         if (pr == _MuMu_QCDMuEnriched_Full) color = kRed + 3;
-        if (pr == _MuMu_WJets) color = kRed - 2;
+        if (pr == _MuMu_WJets_Full) color = kRed - 2;
         if (pr == _MuMu_WW) color = kMagenta - 5;
         if (pr == _MuMu_WZ) color = kMagenta - 2;
         if (pr == _MuMu_ZZ) color = kMagenta - 6;
@@ -4950,6 +4994,10 @@ void Est_HistDrawer()
         h_bkg_mass_mumu[iter]->SetLineColor(color);
         h_bkg_mass_mumu[iter]->SetDirectory(0);
         s_mass_mumu->Add(h_bkg_mass_mumu[iter]);
+        h_bkg_mass_mumu2[iter]->SetFillColor(color);
+        h_bkg_mass_mumu2[iter]->SetLineColor(color);
+        h_bkg_mass_mumu2[iter]->SetDirectory(0);
+        s_mass_mumu2->Add(h_bkg_mass_mumu2[iter]);
 
         iter++;
 
@@ -4964,58 +5012,78 @@ void Est_HistDrawer()
 
 //---------------------------------- MC signal -----------------------------------------------------
 
-    TH1D *h_DY_mass_mumu;
+    TH1D *h_DY_mass_mumu, *h_DY_mass_mumu2;
     f_DY_mumu->GetObject("h_mass_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_mumu);
+    f_DY_mumu->GetObject("h_mass2_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_mumu2);
+
     h_DY_mass_mumu->SetFillColor(kOrange);
     h_DY_mass_mumu->SetLineColor(kOrange);
     h_DY_mass_mumu->SetDirectory(0);
     s_mass_mumu->Add(h_DY_mass_mumu);
+    h_DY_mass_mumu2->SetFillColor(kOrange);
+    h_DY_mass_mumu2->SetLineColor(kOrange);
+    h_DY_mass_mumu2->SetDirectory(0);
+    s_mass_mumu2->Add(h_DY_mass_mumu2);
 
 //--------------------------------------- DATA -----------------------------------------------------
 
-    TH1D *h_data_mass_mumu;
+    TH1D *h_data_mass_mumu, *h_data_mass_mumu2;
     f_data_mumu->GetObject("h_mass_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_mumu);
+    f_data_mumu->GetObject("h_mass2_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_mumu2);
+
     h_data_mass_mumu->SetMarkerStyle(kFullDotLarge);
     h_data_mass_mumu->SetMarkerColor(kBlack);
     h_data_mass_mumu->SetLineColor(kBlack);
     h_data_mass_mumu->SetDirectory(0);
+    h_data_mass_mumu2->SetMarkerStyle(kFullDotLarge);
+    h_data_mass_mumu2->SetMarkerColor(kBlack);
+    h_data_mass_mumu2->SetLineColor(kBlack);
+    h_data_mass_mumu2->SetDirectory(0);
 
 //--------------------------------- Ratio Plot --------------------------------------
 
     myRatioPlot_t *RP_mass_mumu = new myRatioPlot_t("RP_mass_mumu", s_mass_mumu, h_data_mass_mumu);
+    myRatioPlot_t *RP_mass_mumu2 = new myRatioPlot_t("RP_mass_mumu2", s_mass_mumu2, h_data_mass_mumu2);
+
     RP_mass_mumu->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
 //    RP_mass_mumu->SetPlots("Miuonu poros invariantine mase [GeV/c^{2}]", 15, 3000);
-    RP_mass_mumu->SetLegend(0.75, 0.4);
+    RP_mass_mumu2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
+//    RP_mass_mumu2->SetPlots("Miuonu poros invariantine mase [GeV/c^{2}]", 15, 3000);
+
+    TLegend *legend_mumu = new TLegend(0.75, 0.4, 0.9, 0.9);
 
     // Legend (EN)
-    RP_mass_mumu->AddLegendEntry(h_data_mass_mumu, "Data", "lp");
-    RP_mass_mumu->AddLegendEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
-    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (D-D)", "f");
-    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (D-D)", "f");
-    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (D-D)", "f");
-    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (D-D)", "f");
-//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (D-D)", "f");
-//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[3], "#font[12]{#scale[1.1]{WZ}} (D-D)", "f");
-    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
-    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
-    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[2], "#font[12]{#scale[1.1]{WW}} (D-D)", "f");
-    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[1], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
-    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[0], "#font[12]{#scale[1.1]{QCD}} (MC)", "f");
+    legend_mumu->AddEntry(h_data_mass_mumu, "Data", "lp");
+    legend_mumu->AddEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (D-D)", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (D-D)", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (D-D)", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (D-D)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (D-D)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[3], "#font[12]{#scale[1.1]{WZ}} (D-D)", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[2], "#font[12]{#scale[1.1]{WW}} (D-D)", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[1], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[0], "#font[12]{#scale[1.1]{QCD}} (MC)", "f");
 
     // Legend (LT)
-//    RP_mass_mumu->AddLegendEntry(h_data_mass_mumu, "Matavimas", "lp");
-//    RP_mass_mumu->AddLegendEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
-//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (e#mu iv.)", "f");
-//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (e#mu iv.)", "f");
-//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[6], "tW (e#mu iv.)", "f");
-//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (e#mu iv.)", "f");
-//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[4], "ZZ (e#mu iv.)", "f");
-//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[3], "WZ (e#mu iv.)", "f");
-//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[2], "WW (e#mu iv.)", "f");
-//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[1], "W+Jets (MC)", "f");
-//    RP_mass_mumu->AddLegendEntry(h_bkg_mass_mumu[0], "QCD (MC)", "f");
+//    legend_mumu->AddEntry(h_data_mass_mumu, "Matavimas", "lp");
+//    legend_mumu->AddEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (e#mu iv.)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (e#mu iv.)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[6], "tW (e#mu iv.)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (e#mu iv.)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[4], "ZZ (e#mu iv.)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[3], "WZ (e#mu iv.)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[2], "WW (e#mu iv.)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[1], "W+Jets (MC)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[0], "QCD (MC)", "f");
 
+    RP_mass_mumu->ImportLegend(legend_mumu);
+    RP_mass_mumu2->ImportLegend(legend_mumu);
     RP_mass_mumu->Draw(0.5, 1e7, 1);
+    RP_mass_mumu2->Draw(0.5, 1e7, 1);
 
     Double_t dataerror_mumu, MCerror_mumu, dataintegral_mumu=2.25081e+07, MCintegral_mumu;
     Double_t dataerrorZ_mumu, MCerrorZ_mumu, DYerrorZ_mumu, dataintegralZ_mumu, MCintegralZ_mumu, DYintegralZ_mumu;
@@ -5050,7 +5118,7 @@ void Est_HistDrawer()
     std::cout << "MuMu Data events around Z: " << dataintegralZ_mumu << "+-" << dataerrorZ_mumu << endl;
     std::cout << "MuMu MC events around Z: " << MCintegralZ_mumu << "+-" << MCerrorZ_mumu << endl;
     std::cout << "MuMu Data events outside Z: " << dataintegral_noZ_mumu << "+-" << dataerror_noZ_mumu << endl;
-    std::cout << "MuMu MC events outside Z: " << MCintegral_noZ_mumu << "+-" << MCerror_noZ_mumu << endl;
+    std::cout << "MuMu MC events outside Z: " << MCintegral_noZ_mumu << "+-" << MCerror_noZ_mumu << endl << endl;
 
     f_DY_ee->Close();
     f_DY_mumu->Close();

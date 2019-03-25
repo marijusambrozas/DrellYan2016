@@ -802,8 +802,17 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
                     }
 
                     TLorentzVector mu1, mu2;
-                    mu1.SetPtEtaPhiM(MuMu->Muon_pT_uncorr->at(0), MuMu->Muon_eta_uncorr->at(0), MuMu->Muon_phi_uncorr->at(0), M_Mu);
-                    mu2.SetPtEtaPhiM(MuMu->Muon_pT_uncorr->at(1), MuMu->Muon_eta_uncorr->at(1), MuMu->Muon_phi_uncorr->at(1), M_Mu);
+                    if (MuMu->Muon_pT_uncorr->at(0) > MuMu->Muon_pT_uncorr->at(1))
+                    {
+                        mu1.SetPtEtaPhiM(MuMu->Muon_pT_uncorr->at(0), MuMu->Muon_eta_uncorr->at(0), MuMu->Muon_phi_uncorr->at(0), M_Mu);
+                        mu2.SetPtEtaPhiM(MuMu->Muon_pT_uncorr->at(1), MuMu->Muon_eta_uncorr->at(1), MuMu->Muon_phi_uncorr->at(1), M_Mu);
+                    }
+                    else
+                    {
+                        mu1.SetPtEtaPhiM(MuMu->Muon_pT_uncorr->at(1), MuMu->Muon_eta_uncorr->at(1), MuMu->Muon_phi_uncorr->at(1), M_Mu);
+                        mu2.SetPtEtaPhiM(MuMu->Muon_pT_uncorr->at(0), MuMu->Muon_eta_uncorr->at(0), MuMu->Muon_phi_uncorr->at(0), M_Mu);
+                    }
+
 
                     Double_t reco_Pt = (mu1 + mu2).Pt();
                     Double_t reco_rapi = (mu1 + mu2).Rapidity();
@@ -851,8 +860,16 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
                     }
 
                     TLorentzVector mu1, mu2;
-                    mu1.SetPtEtaPhiE(MuMu->Muon_pT->at(0), MuMu->Muon_eta->at(0), MuMu->Muon_phi->at(0), MuMu->Muon_Energy->at(0));
-                    mu2.SetPtEtaPhiE(MuMu->Muon_pT->at(1), MuMu->Muon_eta->at(1), MuMu->Muon_phi->at(1), MuMu->Muon_Energy->at(1));
+                    if (MuMu->Muon_pT->at(0) > MuMu->Muon_pT->at(1))
+                    {
+                        mu1.SetPtEtaPhiM(MuMu->Muon_pT->at(0), MuMu->Muon_eta->at(0), MuMu->Muon_phi->at(0), M_Mu);
+                        mu2.SetPtEtaPhiM(MuMu->Muon_pT->at(1), MuMu->Muon_eta->at(1), MuMu->Muon_phi->at(1), M_Mu);
+                    }
+                    else
+                    {
+                        mu1.SetPtEtaPhiM(MuMu->Muon_pT->at(1), MuMu->Muon_eta->at(1), MuMu->Muon_phi->at(1), M_Mu);
+                        mu2.SetPtEtaPhiM(MuMu->Muon_pT->at(0), MuMu->Muon_eta->at(0), MuMu->Muon_phi->at(0), M_Mu);
+                    }
 
                     Double_t reco_Pt = (mu1 + mu2).Pt();
                     Double_t reco_rapi = (mu1 + mu2).Rapidity();
