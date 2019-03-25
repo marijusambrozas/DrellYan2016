@@ -962,30 +962,30 @@ void DYAnalyzer::SetupEfficiencyScaleFactor_BtoF_new()
 //    }
 
     // ID
-    TGraphAssymErrors *h_data_lead_ID_eff[4];
-    TGraphAssymErrors *h_data_sublead_ID_eff[4];
-    TGraphAssymErrors *h_mc_lead_ID_eff[4];
-    TGraphAssymErrors *h_mc_sublead_ID_eff[4];
+    TGraphAsymmErrors *h_data_lead_ID_eff[4];
+    TGraphAsymmErrors *h_data_sublead_ID_eff[4];
+    TGraphAsymmErrors *h_mc_lead_ID_eff[4];
+    TGraphAsymmErrors *h_mc_sublead_ID_eff[4];
 
-    h_data_lead_ID_eff[0] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta0");
-    h_data_lead_ID_eff[1] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta1");
-    h_data_lead_ID_eff[2] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta2");
-    h_data_lead_ID_eff[3] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta3");
+    h_data_lead_ID_eff[0] = (TGraphAsymmErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta0");
+    h_data_lead_ID_eff[1] = (TGraphAsymmErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta1");
+    h_data_lead_ID_eff[2] = (TGraphAsymmErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta2");
+    h_data_lead_ID_eff[3] = (TGraphAsymmErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta3");
 
-    h_data_sublead_ID_eff[0] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta0");
-    h_data_sublead_ID_eff[1] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta1");
-    h_data_sublead_ID_eff[2] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta2");
-    h_data_sublead_ID_eff[3] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta3");
+    h_data_sublead_ID_eff[0] = (TGraphAsymmErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta0");
+    h_data_sublead_ID_eff[1] = (TGraphAsymmErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta1");
+    h_data_sublead_ID_eff[2] = (TGraphAsymmErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta2");
+    h_data_sublead_ID_eff[3] = (TGraphAsymmErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta3");
 
-    h_mc_lead_ID_eff[0] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta0");
-    h_mc_lead_ID_eff[1] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta1");
-    h_mc_lead_ID_eff[2] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta2");
-    h_mc_lead_ID_eff[3] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta3");
+    h_mc_lead_ID_eff[0] = (TGraphAsymmErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta0");
+    h_mc_lead_ID_eff[1] = (TGraphAsymmErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta1");
+    h_mc_lead_ID_eff[2] = (TGraphAsymmErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta2");
+    h_mc_lead_ID_eff[3] = (TGraphAsymmErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta3");
 
-    h_mc_sublead_ID_eff[0] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta0");
-    h_mc_sublead_ID_eff[1] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta1");
-    h_mc_sublead_ID_eff[2] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta2");
-    h_mc_sublead_ID_eff[3] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta3");
+    h_mc_sublead_ID_eff[0] = (TGraphAsymmErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta0");
+    h_mc_sublead_ID_eff[1] = (TGraphAsymmErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta1");
+    h_mc_sublead_ID_eff[2] = (TGraphAsymmErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta2");
+    h_mc_sublead_ID_eff[3] = (TGraphAsymmErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta3");
 
     Int_t nEtaBins_ID = 4;
     Int_t nPtBins_ID = 6;
@@ -1401,30 +1401,30 @@ void DYAnalyzer::SetupEfficiencyScaleFactor_GtoH_new()
 //    }
 
     // ID
-    TGraphAssymErrors *h_data_lead_ID_eff[4];
-    TGraphAssymErrors *h_data_sublead_ID_eff[4];
-    TGraphAssymErrors *h_mc_lead_ID_eff[4];
-    TGraphAssymErrors *h_mc_sublead_ID_eff[4];
+    TGraphAsymmErrors *h_data_lead_ID_eff[4];
+    TGraphAsymmErrors *h_data_sublead_ID_eff[4];
+    TGraphAsymmErrors *h_mc_lead_ID_eff[4];
+    TGraphAsymmErrors *h_mc_sublead_ID_eff[4];
 
-    h_data_lead_ID_eff[0] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta0");
-    h_data_lead_ID_eff[1] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta1");
-    h_data_lead_ID_eff[2] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta2");
-    h_data_lead_ID_eff[3] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta3");
+    h_data_lead_ID_eff[0] = (TGraphAsymmErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta0");
+    h_data_lead_ID_eff[1] = (TGraphAsymmErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta1");
+    h_data_lead_ID_eff[2] = (TGraphAsymmErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta2");
+    h_data_lead_ID_eff[3] = (TGraphAsymmErrors*)f1->Get("Data_Tight2012_from_Leading_pteta_abseta3");
 
-    h_data_sublead_ID_eff[0] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta0");
-    h_data_sublead_ID_eff[1] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta1");
-    h_data_sublead_ID_eff[2] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta2");
-    h_data_sublead_ID_eff[3] = (TGraphAssymErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta3");
+    h_data_sublead_ID_eff[0] = (TGraphAsymmErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta0");
+    h_data_sublead_ID_eff[1] = (TGraphAsymmErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta1");
+    h_data_sublead_ID_eff[2] = (TGraphAsymmErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta2");
+    h_data_sublead_ID_eff[3] = (TGraphAsymmErrors*)f1->Get("Data_Tight2012_from_Subleading_pteta_abseta3");
 
-    h_mc_lead_ID_eff[0] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta0");
-    h_mc_lead_ID_eff[1] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta1");
-    h_mc_lead_ID_eff[2] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta2");
-    h_mc_lead_ID_eff[3] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta3");
+    h_mc_lead_ID_eff[0] = (TGraphAsymmErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta0");
+    h_mc_lead_ID_eff[1] = (TGraphAsymmErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta1");
+    h_mc_lead_ID_eff[2] = (TGraphAsymmErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta2");
+    h_mc_lead_ID_eff[3] = (TGraphAsymmErrors*)f1->Get("MC_weight_Tight2012_from_Leading_pteta_abseta3");
 
-    h_mc_sublead_ID_eff[0] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta0");
-    h_mc_sublead_ID_eff[1] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta1");
-    h_mc_sublead_ID_eff[2] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta2");
-    h_mc_sublead_ID_eff[3] = (TGraphAssymErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta3");
+    h_mc_sublead_ID_eff[0] = (TGraphAsymmErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta0");
+    h_mc_sublead_ID_eff[1] = (TGraphAsymmErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta1");
+    h_mc_sublead_ID_eff[2] = (TGraphAsymmErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta2");
+    h_mc_sublead_ID_eff[3] = (TGraphAsymmErrors*)f1->Get("MC_weight_Tight2012_from_Subleading_pteta_abseta3");
 
     Int_t nEtaBins_ID = 4;
     Int_t nPtBins_ID = 6;
