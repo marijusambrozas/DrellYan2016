@@ -37,7 +37,7 @@ public :
    int GetAutoCleanUp() const { return autoCleanUp; }
 
    void Draw(Double_t ymin, Double_t ymax, UInt_t logX=0);
-   void SetPlots(TString xAxisName, Double_t xmin, Double_t xmax);
+   void SetPlots(TString xAxisName, Double_t xmin, Double_t xmax, TString DataMCname="Data/MC");
    void SetLegend(Double_t xb=0.7, Double_t yb=0.5, Double_t xe=0.9, Double_t ye=0.9);
    void AddLegendEntry(TH1D *h, TString name, TString option);
    void ImportLegend(TLegend *newLegend, Int_t overwrite=0);

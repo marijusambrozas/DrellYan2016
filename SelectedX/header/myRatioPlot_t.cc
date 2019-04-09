@@ -13,7 +13,7 @@
 #include <TF1.h>
 #include <TLatex.h>
 
-void myRatioPlot_t::SetPlots(TString xAxisName, Double_t xmin, Double_t xmax)
+void myRatioPlot_t::SetPlots(TString xAxisName, Double_t xmin, Double_t xmax, TString DataMCname)
 {
     x1=xmin; x2=xmax;
     // Calculating data/MC
@@ -30,10 +30,10 @@ void myRatioPlot_t::SetPlots(TString xAxisName, Double_t xmin, Double_t xmax)
     h1_dataovermc->SetMarkerColor(kBlack);
     h1_dataovermc->SetTitle(" ");
     h1_dataovermc->GetXaxis()->SetTitle(xAxisName);
-    h1_dataovermc->GetYaxis()->SetTitle("Data/MC");
-//    h1_dataovermc->GetYaxis()->SetTitle("Eksp./Mod.");
-//    h1_dataovermc->GetYaxis()->SetTitle("Eksp./Ivert.");
-//    h1_dataovermc->GetYaxis()->SetTitle("Ivert./Mod.");
+    if (!DataMCname.Length())
+        h1_dataovermc->GetYaxis()->SetTitle("Data/MC");
+    else
+        h1_dataovermc->GetYaxis()->SetTitle(DataMCname);
     h1_dataovermc->GetXaxis()->SetNoExponent(1);
     h1_dataovermc->GetXaxis()->SetMoreLogLabels(1);    
     if (h1_dataovermc->GetBinContent(h1_dataovermc->GetMinimumBin())>0.3 && h1_dataovermc->GetBinContent(h1_dataovermc->GetMaximumBin())<2) {
@@ -53,10 +53,10 @@ void myRatioPlot_t::SetPlots(TString xAxisName, Double_t xmin, Double_t xmax)
     // ##############################################
 
     h1_dataovermc->GetXaxis()->SetRangeUser(xmin, xmax);
-    h1_dataovermc->GetXaxis()->SetLabelSize(0.13);
-    h1_dataovermc->GetXaxis()->SetTitleSize(0.17);
-    h1_dataovermc->GetXaxis()->SetTitleOffset(0.8);
-    h1_dataovermc->GetYaxis()->SetLabelSize(0.11);
+    h1_dataovermc->GetXaxis()->SetLabelSize(0.12);
+    h1_dataovermc->GetXaxis()->SetTitleSize(0.13);
+    h1_dataovermc->GetXaxis()->SetTitleOffset(0.9);
+    h1_dataovermc->GetYaxis()->SetLabelSize(0.10);
     h1_dataovermc->GetYaxis()->SetTitleSize(0.11);
     h1_dataovermc->GetYaxis()->SetTitleOffset(0.35);
     h1_dataovermc->GetYaxis()->CenterTitle();
@@ -71,18 +71,21 @@ void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX)
 {
     if(PlotsSet==1) {
 //        canvas = new TCanvas(CanvasName, CanvasName, 1000, 1000);
-        canvas = new TCanvas(CanvasName, CanvasName, 1000, 900);
+        canvas = new TCanvas(CanvasName, CanvasName, 750, 850);
 //        canvas = new TCanvas(CanvasName, CanvasName, 1500, 1000);
-        TPad* pad1 = new TPad("pad1", "pad1", 0, 0.255, 1, 1);
-        pad1->SetBottomMargin(0.001);
+        TPad* pad1 = new TPad("pad1", "pad1", 0, 0.28, 1, 1);
+        pad1->SetBottomMargin(0.008);
+        pad1->SetTopMargin(0.05);
+        pad1->SetRightMargin(0.05);
         pad1->Draw();
         pad1->cd();
         s_stackedProcesses->Draw("HIST");
-        s_stackedProcesses->GetYaxis()->SetTitle("Number of events");
-//        s_stackedProcesses->GetYaxis()->SetTitle("Ivykiu skai#check{c}ius");
+//        s_stackedProcesses->GetYaxis()->SetTitle("Number of events");
+        s_stackedProcesses->GetYaxis()->SetTitle("I_{#kern[-0.9]{#lower[0.1]{#scale[0.7]{c}}}}vykiu_{#kern[-0.8]{#lower[-0.34]{#scale[0.7]{c}}}} skai#check{c}ius");
         s_stackedProcesses->GetYaxis()->SetTitleOffset(1.1);
         s_stackedProcesses->GetYaxis()->SetTitleSize(0.04);
         s_stackedProcesses->GetXaxis()->SetNoExponent(1);
+        s_stackedProcesses->GetXaxis()->SetTitleOffset(10);
         s_stackedProcesses->SetMinimum(ymin);
         s_stackedProcesses->SetMaximum(ymax);
         if(logX) s_stackedProcesses->GetXaxis()->SetMoreLogLabels(1);
@@ -105,7 +108,7 @@ void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX)
         pad1->SetTicky(1);
         pad1->SetGridx(1);
         pad1->SetGridy(1);
-//        text = new TText (.1, .91, "CMS Preliminary");
+//        text = new TText (.1, .91, "CMS Work in progress");
 //        text->SetTextAlign(11);
 //        text->SetTextSize(0.05);
 //        text->SetNDC(true);
@@ -113,12 +116,14 @@ void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX)
         pad1->Update();
         canvas->cd();
 
-        pad2 = new TPad("pad2", "pad2", 0, 0, 1, 0.24);
+        pad2 = new TPad("pad2", "pad2", 0, 0, 1, 0.27);
         pad2->SetTopMargin(0);
+        pad2->SetBottomMargin(0.15);
+        pad2->SetRightMargin(0.05);
         pad2->Draw();
         pad2->cd();
         h1_dataovermc->Draw("E");
-        h1_dataovermc->SetDirectory(0);        
+        h1_dataovermc->SetDirectory(0);
         if(logX) l_one = new TLine(x1, 1, x2+5, 1);
         else l_one = new TLine (x1, 1, x2, 1);
         l_one->SetLineColor(kRed);

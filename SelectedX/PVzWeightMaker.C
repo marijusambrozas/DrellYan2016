@@ -157,7 +157,7 @@ void PVzWeightMaker ()
 
 // -------------------------------------- MC --------------------------------------------//
 
-    for ( SelProc_t pr=_MuMu_DY_10to50; pr<_EndOf_MuMu_WJets; pr=next(pr) )
+    for ( SelProc_t pr=_MuMu_DY_10to50; pr<_EndOf_MuMu_WJets_Normal; pr=next(pr) )
     {
         Mgr.SetProc(pr);
 
@@ -261,7 +261,7 @@ void PVzWeightMaker ()
 
 // -------------------------------------- MC --------------------------------------------//
 
-    for ( SelProc_t pr=_EMu_DYTauTau_10to50; pr<_EndOf_EMu_WJets; pr=next(pr) )
+    for ( SelProc_t pr=_EMu_DYTauTau_10to50; pr<_EndOf_EMu_WJets_Normal; pr=next(pr) )
     {
         Mgr.SetProc( pr );
 

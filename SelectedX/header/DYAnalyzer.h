@@ -138,10 +138,10 @@ public:
         void SetupEfficiencyScaleFactor_GtoH_new();
         Double_t EfficiencySF_EventWeight_HLT_BtoF(Muon mu1, Muon mu2);
         Double_t EfficiencySF_EventWeight_HLT_BtoF(SelectedMuMu_t *MuMu);
-        Double_t EfficiencySF_EventWeight_HLT_BtoF_new(Muon mu1, Muon mu2);
+        Double_t EfficiencySF_EventWeight_HLT_BtoF_new(SelectedMuMu_t *MuMu);
         Double_t EfficiencySF_EventWeight_HLT_GtoH(Muon mu1, Muon mu2);
         Double_t EfficiencySF_EventWeight_HLT_GtoH(SelectedMuMu_t *MuMu);
-        Double_t EfficiencySF_EventWeight_HLT_GtoH_new(Muon mu1, Muon mu2);
+        Double_t EfficiencySF_EventWeight_HLT_GtoH_new(SelectedMuMu_t *MuMu);
         Int_t Find_muon_PtBin_Reco(Double_t Pt);
         Int_t Find_muon_PtBin_ID(Double_t Pt);
         Int_t Find_muon_PtBin_Iso(Double_t Pt);
@@ -1574,25 +1574,25 @@ void DYAnalyzer::SetupEfficiencyScaleFactor_GtoH_new()
     TGraphAsymmErrors *h_mc_lead_trig_eff[4];
     TGraphAsymmErrors *h_mc_sublead_trig_eff[4];
 
-    h_data_lead_trig_eff[0] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta0");
-    h_data_lead_trig_eff[1] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta1");
-    h_data_lead_trig_eff[2] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta2");
-    h_data_lead_trig_eff[3] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta3");
+    h_data_lead_trig_eff[0] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_Leading_pteta_abseta0");
+    h_data_lead_trig_eff[1] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_Leading_pteta_abseta1");
+    h_data_lead_trig_eff[2] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_Leading_pteta_abseta2");
+    h_data_lead_trig_eff[3] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_Leading_pteta_abseta3");
 
-    h_data_sublead_trig_eff[0] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta0");
-    h_data_sublead_trig_eff[1] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta1");
-    h_data_sublead_trig_eff[2] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta2");
-    h_data_sublead_trig_eff[3] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta3");
+    h_data_sublead_trig_eff[0] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_Subleading_pteta_abseta0");
+    h_data_sublead_trig_eff[1] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_Subleading_pteta_abseta1");
+    h_data_sublead_trig_eff[2] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_Subleading_pteta_abseta2");
+    h_data_sublead_trig_eff[3] = (TGraphAsymmErrors*)f1->Get("Data_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_Subleading_pteta_abseta3");
 
-    h_mc_lead_trig_eff[0] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta0");
-    h_mc_lead_trig_eff[1] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta1");
-    h_mc_lead_trig_eff[2] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta2");
-    h_mc_lead_trig_eff[3] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Leading_pteta_abseta3");
+    h_mc_lead_trig_eff[0] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_Leading_pteta_abseta0");
+    h_mc_lead_trig_eff[1] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_Leading_pteta_abseta1");
+    h_mc_lead_trig_eff[2] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_Leading_pteta_abseta2");
+    h_mc_lead_trig_eff[3] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_Leading_pteta_abseta3");
 
-    h_mc_sublead_trig_eff[0] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta0");
-    h_mc_sublead_trig_eff[1] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta1");
-    h_mc_sublead_trig_eff[2] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta2");
-    h_mc_sublead_trig_eff[3] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_pair_dPhiPrimeDeg70_and_Subleading_pteta_abseta3");
+    h_mc_sublead_trig_eff[0] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_Subleading_pteta_abseta0");
+    h_mc_sublead_trig_eff[1] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_Subleading_pteta_abseta1");
+    h_mc_sublead_trig_eff[2] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_Subleading_pteta_abseta2");
+    h_mc_sublead_trig_eff[3] = (TGraphAsymmErrors*)f1->Get("MC_weight_IsoMu24_OR_IsoTkMu24_from_Tight2012_and_dBeta_015_and_Subleading_pteta_abseta3");
 
     Int_t nEtaBins_HLT = 4;
     Int_t nPtBins_HLT = 8;
@@ -1975,14 +1975,30 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF(Muon mu1, Muon mu2)
 
 }// End of EfficiencySF_EventWeight_HLT_BtoF(mu1, mu2)
 
-Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF_new(Muon mu1, Muon mu2)
+Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF_new(SelectedMuMu_t *MuMu)
 {
     Double_t weight = -999;
+    Double_t Pt1 = 0;
+    Double_t eta1 = -9999;
+    Double_t Pt2 = 0;
+    Double_t eta2 = -9999;
+
+    if (MuMu->Muon_pT->at(0) >= MuMu->Muon_pT->at(1))
+    {
+        Pt1 = MuMu->Muon_pT->at(0);
+        eta1 = MuMu->Muon_eta->at(0);
+        Pt2 = MuMu->Muon_pT->at(1);
+        eta2 = MuMu->Muon_eta->at(1);
+    }
+    else
+    {
+        Pt1 = MuMu->Muon_pT->at(1);
+        eta1 = MuMu->Muon_eta->at(1);
+        Pt2 = MuMu->Muon_pT->at(0);
+        eta2 = MuMu->Muon_eta->at(0);
+    }
 
     // -- Muon1 LEADING -- //
-    Double_t Pt1 = mu1.Pt;
-    Double_t eta1 = mu1.eta;
-
     Int_t ptbin1_ID = Find_muon_PtBin_ID(Pt1);
     Int_t etabin1_ID = Find_muon_EtaBin_ID(eta1);
 
@@ -2009,12 +2025,9 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF_new(Muon mu1, Muon mu2)
     }
 
     Double_t Eff_muon1_data = Eff_ID_data_BtoF_lead[etabin1_ID][ptbin1_ID] * Eff_Iso_data_BtoF_lead[etabin1_Iso][ptbin1_Iso];
-    Double_t Eff_muon1_MC = Eff_ID_MC_BtoF_sublead[etabin1_ID][ptbin1_ID] * Eff_Iso_MC_BtoF_sublead[etabin1_Iso][ptbin1_Iso];
+    Double_t Eff_muon1_MC = Eff_ID_MC_BtoF_lead[etabin1_ID][ptbin1_ID] * Eff_Iso_MC_BtoF_lead[etabin1_Iso][ptbin1_Iso];
 
     // -- Muon2 SUBLEADING -- //
-    Double_t Pt2 = mu2.Pt;
-    Double_t eta2 = mu2.eta;
-
     Int_t ptbin2_ID = Find_muon_PtBin_ID(Pt2);
     Int_t etabin2_ID = Find_muon_EtaBin_ID(eta2);
 
@@ -2040,7 +2053,7 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF_new(Muon mu1, Muon mu2)
         return -999;
     }
 
-    Double_t Eff_muon2_data = Eff_ID_data_BtoF_lead[etabin2_ID][ptbin2_ID] * Eff_Iso_data_BtoF_lead[etabin2_Iso][ptbin2_Iso];
+    Double_t Eff_muon2_data = Eff_ID_data_BtoF_sublead[etabin2_ID][ptbin2_ID] * Eff_Iso_data_BtoF_sublead[etabin2_Iso][ptbin2_Iso];
     Double_t Eff_muon2_MC = Eff_ID_MC_BtoF_sublead[etabin2_ID][ptbin2_ID] * Eff_Iso_MC_BtoF_sublead[etabin2_Iso][ptbin2_Iso];
 
     // Trigger SF
@@ -2058,6 +2071,9 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF_new(Muon mu1, Muon mu2)
     Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
     Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
 
+//    weight = (Eff_ID_data_BtoF_lead[etabin1_ID][ptbin1_ID] * Eff_ID_data_BtoF_sublead[etabin2_ID][ptbin2_ID]) /
+//             (Eff_ID_MC_BtoF_lead[etabin1_ID][ptbin1_ID] * Eff_ID_MC_BtoF_sublead[etabin2_ID][ptbin2_ID]); // ONLY ID
+//    weight = (Eff_muon1_data * Eff_muon2_data) / (Eff_muon1_MC * Eff_muon2_MC); // ID + ISO
     weight = Eff_data_all / Eff_MC_all;
 
     if(weight > 2)
@@ -2345,14 +2361,30 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH(Muon mu1, Muon mu2)
 }// End of EfficiencySF_EventWeight_HLT_GtoH(mu1, mu2)
 
 
-Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH_new(Muon mu1, Muon mu2)
+Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH_new(SelectedMuMu_t *MuMu)
 {
     Double_t weight = -999;
+    Double_t Pt1 = 0;
+    Double_t eta1 = -9999;
+    Double_t Pt2 = 0;
+    Double_t eta2 = -9999;
+
+    if (MuMu->Muon_pT->at(0) >= MuMu->Muon_pT->at(1))
+    {
+        Pt1 = MuMu->Muon_pT->at(0);
+        eta1 = MuMu->Muon_eta->at(0);
+        Pt2 = MuMu->Muon_pT->at(1);
+        eta2 = MuMu->Muon_eta->at(1);
+    }
+    else
+    {
+        Pt1 = MuMu->Muon_pT->at(1);
+        eta1 = MuMu->Muon_eta->at(1);
+        Pt2 = MuMu->Muon_pT->at(0);
+        eta2 = MuMu->Muon_eta->at(0);
+    }
 
     // -- Muon1 LEADING -- //
-    Double_t Pt1 = mu1.Pt;
-    Double_t eta1 = mu1.eta;
-
     Int_t ptbin1_ID = Find_muon_PtBin_ID(Pt1);
     Int_t etabin1_ID = Find_muon_EtaBin_ID(eta1);
 
@@ -2379,12 +2411,9 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH_new(Muon mu1, Muon mu2)
     }
 
     Double_t Eff_muon1_data = Eff_ID_data_GtoH_lead[etabin1_ID][ptbin1_ID] * Eff_Iso_data_GtoH_lead[etabin1_Iso][ptbin1_Iso];
-    Double_t Eff_muon1_MC = Eff_ID_MC_GtoH_sublead[etabin1_ID][ptbin1_ID] * Eff_Iso_MC_GtoH_sublead[etabin1_Iso][ptbin1_Iso];
+    Double_t Eff_muon1_MC = Eff_ID_MC_GtoH_lead[etabin1_ID][ptbin1_ID] * Eff_Iso_MC_GtoH_lead[etabin1_Iso][ptbin1_Iso];
 
     // -- Muon2 SUBLEADING -- //
-    Double_t Pt2 = mu2.Pt;
-    Double_t eta2 = mu2.eta;
-
     Int_t ptbin2_ID = Find_muon_PtBin_ID(Pt2);
     Int_t etabin2_ID = Find_muon_EtaBin_ID(eta2);
 
@@ -2410,7 +2439,7 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH_new(Muon mu1, Muon mu2)
         return -999;
     }
 
-    Double_t Eff_muon2_data = Eff_ID_data_GtoH_lead[etabin2_ID][ptbin2_ID] * Eff_Iso_data_GtoH_lead[etabin2_Iso][ptbin2_Iso];
+    Double_t Eff_muon2_data = Eff_ID_data_GtoH_sublead[etabin2_ID][ptbin2_ID] * Eff_Iso_data_GtoH_sublead[etabin2_Iso][ptbin2_Iso];
     Double_t Eff_muon2_MC = Eff_ID_MC_GtoH_sublead[etabin2_ID][ptbin2_ID] * Eff_Iso_MC_GtoH_sublead[etabin2_Iso][ptbin2_Iso];
 
     // Trigger SF
@@ -2428,6 +2457,9 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH_new(Muon mu1, Muon mu2)
     Double_t Eff_data_all = Eff_muon1_data * Eff_muon2_data * Eff_EventTrig_data;
     Double_t Eff_MC_all = Eff_muon1_MC * Eff_muon2_MC * Eff_EventTrig_MC;
 
+//    weight = (Eff_ID_data_GtoH_lead[etabin1_ID][ptbin1_ID] * Eff_ID_data_GtoH_sublead[etabin2_ID][ptbin2_ID]) /
+//             (Eff_ID_MC_GtoH_lead[etabin1_ID][ptbin1_ID] * Eff_ID_MC_GtoH_sublead[etabin2_ID][ptbin2_ID]); // ONLY ID
+//    weight = (Eff_muon1_data * Eff_muon2_data) / (Eff_muon1_MC * Eff_muon2_MC); // ID + ISO
     weight = Eff_data_all / Eff_MC_all;
 
     if(weight > 2)

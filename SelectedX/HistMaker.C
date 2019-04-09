@@ -105,10 +105,6 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         return;
     }
 
-    // -- Run2016 luminosity [/pb] -- //
-    Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
-    L = L_B2H;
-
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
     TStopwatch totaltime;
@@ -309,7 +305,7 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
                 // -- Normalization -- //
                 Double_t TotWeight = GenWeight;
-                if (Mgr.isMC == kTRUE) TotWeight = (L * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup]) * GenWeight;
+                if (Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup]) * GenWeight;
 
                 if(EE->isSelPassed == kTRUE)
                 {
@@ -415,7 +411,7 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
             } // End of event iteration
 
-            if(Mgr.isMC == kTRUE) printf("\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup]);
+            if(Mgr.isMC == kTRUE) printf("\tNormalization factor: %.8f\n", Lumi*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup]);
 
             Double_t LoopRunTime = looptime.CpuTime();
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
@@ -528,10 +524,6 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         return;
     }
 
-    // -- Run2016 luminosity [/pb] -- //
-    Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
-    L = L_B2H;
-
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
     TStopwatch totaltime;
@@ -604,6 +596,8 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         // -- For efficiency SF -- //
         analyzer->SetupEfficiencyScaleFactor_BtoF();
         analyzer->SetupEfficiencyScaleFactor_GtoH();
+//        analyzer->SetupEfficiencyScaleFactor_BtoF_new();
+//        analyzer->SetupEfficiencyScaleFactor_GtoH_new();
 
         // -- For PVz reweighting -- //
         analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
@@ -691,6 +685,9 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         const Int_t Ntup = Mgr.FileLocation.size();
         for(Int_t i_tup = 0; i_tup<Ntup; i_tup++)
         {
+            // FOR TESTING
+//            if (Processes[i_proc] == _MuMu_SingleMuon_Full && i_tup <= 4) continue;
+
             TStopwatch looptime;
             looptime.Start();
 
@@ -791,7 +788,8 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
                 // -- Normalization -- //
                 Double_t TotWeight = GenWeight;
-                if(Mgr.isMC == kTRUE) TotWeight = (L * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup]) * GenWeight;
+//                if(Mgr.isMC == kTRUE) TotWeight = (Lumi_GtoH * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup]) * GenWeight;
+                if(Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup]) * GenWeight;
 
                 if(MuMu->isSelPassed == 1 || MuMu->isSelPassed == 3) // Before RC
                 {
@@ -851,14 +849,6 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
                         continue;
                     }
 
-                    // -- Efficiency scale factor -- //
-                    if(Mgr.isMC == kTRUE)
-                    {
-                        weight1 = analyzer->EfficiencySF_EventWeight_HLT_BtoF(MuMu);
-                        weight2 = analyzer->EfficiencySF_EventWeight_HLT_GtoH(MuMu);
-                        effweight = (L_B2F * weight1 + L_G2H * weight2) / L_B2H;
-                    }
-
                     TLorentzVector mu1, mu2;
                     if (MuMu->Muon_pT->at(0) > MuMu->Muon_pT->at(1))
                     {
@@ -869,6 +859,17 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
                     {
                         mu1.SetPtEtaPhiM(MuMu->Muon_pT->at(1), MuMu->Muon_eta->at(1), MuMu->Muon_phi->at(1), M_Mu);
                         mu2.SetPtEtaPhiM(MuMu->Muon_pT->at(0), MuMu->Muon_eta->at(0), MuMu->Muon_phi->at(0), M_Mu);
+                    }
+
+                    // -- Efficiency scale factor -- //
+                    if(Mgr.isMC == kTRUE)
+                    {
+                        weight1 = analyzer->EfficiencySF_EventWeight_HLT_BtoF(MuMu);
+                        weight2 = analyzer->EfficiencySF_EventWeight_HLT_GtoH(MuMu);
+//                        weight1 = analyzer->EfficiencySF_EventWeight_HLT_BtoF_new(MuMu);
+//                        weight2 = analyzer->EfficiencySF_EventWeight_HLT_GtoH_new(MuMu);
+                        effweight = (Lumi_BtoF * weight1 + Lumi_GtoH * weight2) / Lumi;
+//                        effweight = weight2;
                     }
 
                     Double_t reco_Pt = (mu1 + mu2).Pt();
@@ -939,7 +940,7 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
             }// End of event iteration
 
-            if(Mgr.isMC == kTRUE) printf("\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup]);
+            if(Mgr.isMC == kTRUE) printf("\tNormalization factor: %.8f\n", Lumi*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup]);
 
             Double_t LoopRunTime = looptime.CpuTime();
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
@@ -1062,9 +1063,6 @@ void EMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         return;
     }
 
-    // -- Run2016 luminosity [/pb] -- //
-    Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
-    L = L_B2H;
     Int_t nWJetsSS=0, nWJetsSS_weighted=0;
 
     TTimeStamp ts_start;
@@ -1313,7 +1311,7 @@ void EMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
                 // -- Normalization -- //
                 Double_t TotWeight = GenWeight;
-                if (Mgr.isMC == kTRUE) TotWeight = (L * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup]) * GenWeight;
+                if (Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup]) * GenWeight;
 
                 if (EMu->isSelPassed == 1 || EMu->isSelPassed == 3) // Before RocCorr
                 {
@@ -1368,7 +1366,7 @@ void EMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
                     {
                         weight1 = analyzer->EfficiencySF_EventWeight_emu_BtoF(EMu);
                         weight2 = analyzer->EfficiencySF_EventWeight_emu_GtoH(EMu);
-                        effweight = (L_B2F*weight1 + L_G2H*weight2)/L_B2H;
+                        effweight = (Lumi_BtoF*weight1 + Lumi_GtoH*weight2)/Lumi;
                     }
 
                     TLorentzVector mu, ele;
@@ -1491,7 +1489,7 @@ void EMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
             }// End of event iteration
 
-            if(Mgr.isMC == kTRUE) printf("\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup]);
+            if(Mgr.isMC == kTRUE) printf("\tNormalization factor: %.8f\n", Lumi*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup]);
 
             Double_t LoopRunTime = looptime.CpuTime();
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;

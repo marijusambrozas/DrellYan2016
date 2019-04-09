@@ -212,13 +212,13 @@ void ee_Est()
             }
             myRatioPlot_t* RP_EMu_wQCD_invm = new myRatioPlot_t("EMu_wQCD_mass", s_EMu_wQCD_invm, h_EMu_data_invm);
             myRatioPlot_t* RP_EMu_wQCD_invm2 = new myRatioPlot_t("EMu_wQCD_mass2", s_EMu_wQCD_invm2, h_EMu_data_invm2);
-            RP_EMu_wQCD_invm->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
+//            RP_EMu_wQCD_invm->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
             RP_EMu_wQCD_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
-//            RP_EMu_wQCD_invm->SetPlots("e#mu (priesingu kruviu) invariantine mase [GeV/c^{2}]", 15, 3000);
+            RP_EMu_wQCD_invm->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (prie#check{s}ingu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}} [GeV/c^{2}]", 15, 3000, "Eksp./MC");
 //            RP_EMu_wQCD_invm2->SetPlots("e#mu (priesingu kruviu) invariantine mase [GeV/c^{2}]", 15, 3000);
-            TLegend *legend_EMu = new TLegend(0.75, 0.4, 0.9, 0.9);
-            legend_EMu->AddEntry(h_EMu_data_invm, "Data", "lp");
-//            legend_EMu->AddEntry(h_EMu_data_invm, "Matavimas", "lp");
+            TLegend *legend_EMu = new TLegend(0.77, 0.5, 0.95, 0.95);
+//            legend_EMu->AddEntry(h_EMu_data_invm, "Data", "lp");
+            legend_EMu->AddEntry(h_EMu_data_invm, "Matavimas", "lp");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_DYTauTau_Full], "DY#rightarrow#tau#tau (MC)","f");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_ttbar_Full], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (MC)", "f");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_tW], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (MC)", "f");
@@ -227,7 +227,8 @@ void ee_Est()
             legend_EMu->AddEntry(h_EMu_invm[_EMu_WZ], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_WW], "#font[12]{#scale[1.1]{WW}} (MC)", "f");
             if (isWJ) legend_EMu->AddEntry(h_EMu_invm[_EMu_WJets_Full], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
-            legend_EMu->AddEntry(h_EMu_QCD_invm, "#font[12]{#scale[1.1]{QCD}} (est)", "f");
+//            legend_EMu->AddEntry(h_EMu_QCD_invm, "#font[12]{#scale[1.1]{QCD}} (est)", "f");
+            legend_EMu->AddEntry(h_EMu_QCD_invm, "#font[12]{#scale[1.1]{QCD}} (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
 
             RP_EMu_wQCD_invm->ImportLegend(legend_EMu);
             RP_EMu_wQCD_invm2->ImportLegend(legend_EMu);
@@ -368,14 +369,14 @@ void ee_Est()
 
             myRatioPlot_t *RP_invm = new myRatioPlot_t("DataDriven_InvariantMass", s_ee_invm, h_ee_Est_invm);
             myRatioPlot_t *RP_invm2 = new myRatioPlot_t("DataDriven_InvariantMass2", s_ee_invm2, h_ee_Est_invm2);
-            RP_invm->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000);
+            RP_invm->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000, "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC");
             RP_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000);
 //            RP_invm->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
-//            RP_invm2->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
+//            RP_invm2->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000, "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC");
 
-            TLegend *legend = new TLegend(0.75, 0.4, 0.9, 0.9);
-            legend->AddEntry(h_ee_Est_invm, "Estimation", "lp");
-//            legend->AddEntry(h_ee_Est_invm, "Ivertis", "lp");
+            TLegend *legend = new TLegend(0.77, 0.5, 0.95, 0.95);
+//            legend->AddEntry(h_ee_Est_invm, "Estimation", "lp");
+            legend->AddEntry(h_ee_Est_invm, "I_{#kern[-0.7]{#lower[0.03]{#scale[0.68]{c}}}}vertis", "lp");
             legend->AddEntry(h_ee_invm[_EE_DYTauTau_Full], "DY#rightarrow#tau#tau","f");
             legend->AddEntry(h_ee_invm[_EE_ttbar_Full], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
             legend->AddEntry(h_ee_invm[_EE_tW], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
@@ -437,7 +438,7 @@ void ee_Est()
                 RP_ee_invm_pr2[pr]->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000);
 //                RP_ee_invm_pr2[pr]->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
 
-                TLegend *legend_pr = new TLegend(0.6, 0.7, 0.9, 0.9);
+                TLegend *legend_pr = new TLegend(0.65, 0.75, 0.95, 0.95);
 
                 legend_pr->AddEntry(h_ee_Est_pr_invm[pr], "Estimation", "lp");
 //                RP_ee_invm_pr[pr]->AddLegendEntry(h_ee_Est_pr_invm[pr], "Ivertis", "lp");
@@ -488,7 +489,7 @@ void ee_Est()
 //            RP_tW->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
             RP_tW2->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000);
 //            RP_tW2->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
-            TLegend *legend_tw = new TLegend(0.6, 0.6, 0.9, 0.9);
+            TLegend *legend_tw = new TLegend(0.65, 0.65, 0.95, 0.95);
             legend_tw->AddEntry(h1_eeTW_invm_Est, "Estimation", "lp");
 //            legend_tw->AddEntry(h1_eeTW_invm_Est, "Ivertis", "lp");
             legend_tw->AddEntry(h_ee_invm[_EE_tW], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (MC)", "f");
@@ -683,14 +684,14 @@ void MuMu_Est()
             }
             myRatioPlot_t* RP_EMu_wQCD_invm = new myRatioPlot_t("EMu_wQCD_mass", s_EMu_wQCD_invm, h_EMu_data_invm);
             myRatioPlot_t* RP_EMu_wQCD_invm2 = new myRatioPlot_t("EMu_wQCD_mass2", s_EMu_wQCD_invm2, h_EMu_data_invm2);
-            RP_EMu_wQCD_invm->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
-//            RP_EMu_wQCD_invm->SetPlots("e#mu mas#dot{e} [GeV/c^{2}]", 15, 3000);
+//            RP_EMu_wQCD_invm->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
+            RP_EMu_wQCD_invm->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (prie#check{s}ingu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}} [GeV/c^{2}]", 15, 3000, "Eksp./MC");
             RP_EMu_wQCD_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
-//            RP_EMu_wQCD_invm2->SetPlots("e#mu mas#dot{e} [GeV/c^{2}]", 15, 3000);
+//            RP_EMu_wQCD_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (prie#check{s}ingu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}} [GeV/c^{2}]", 15, 3000, "Eksp./MC");
 
-            TLegend *legend_EMu = new TLegend(0.75, 0.4, 0.9, 0.9);
-            legend_EMu->AddEntry(h_EMu_data_invm, "Data", "lp");
-//            legend_EMu->AddEntry(h_EMu_data_invm, "Matavimas", "lp");
+            TLegend *legend_EMu = new TLegend(0.77, 0.5, 0.95, 0.95);
+//            legend_EMu->AddEntry(h_EMu_data_invm, "Data", "lp");
+            legend_EMu->AddEntry(h_EMu_data_invm, "Matavimas", "lp");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_DYTauTau_Full], "DY#rightarrow#tau#tau (MC)","f");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_ttbar_Full], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (MC)", "f");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_tW], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (MC)", "f");
@@ -699,7 +700,8 @@ void MuMu_Est()
             legend_EMu->AddEntry(h_EMu_invm[_EMu_WZ], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_WW], "#font[12]{#scale[1.1]{WW}} (MC)", "f");
             if (isWJ) legend_EMu->AddEntry(h_EMu_invm[_EMu_WJets_Full], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
-            legend_EMu->AddEntry(h_EMu_QCD_invm, "#font[12]{#scale[1.1]{QCD}} (est)", "f");
+//            legend_EMu->AddEntry(h_EMu_QCD_invm, "#font[12]{#scale[1.1]{QCD}} (est)", "f");
+            legend_EMu->AddEntry(h_EMu_QCD_invm, "#font[12]{#scale[1.1]{QCD}} (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
 
             RP_EMu_wQCD_invm->ImportLegend(legend_EMu);
             RP_EMu_wQCD_invm2->ImportLegend(legend_EMu);
@@ -837,14 +839,14 @@ void MuMu_Est()
 
             myRatioPlot_t *RP_invm = new myRatioPlot_t("DataDriven_InvariantMass", s_MuMu_invm, h_MuMu_Est_invm);
             myRatioPlot_t *RP_invm2 = new myRatioPlot_t("DataDriven_InvariantMass2", s_MuMu_invm2, h_MuMu_Est_invm2);
-            RP_invm->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
-//            RP_invm->SetPlots("Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
+//            RP_invm->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
+            RP_invm->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC");
             RP_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
-//            RP_invm2->SetPlots("Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
+//            RP_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC");
 
-            TLegend *legend = new TLegend(0.75, 0.4, 0.9, 0.9);
-            legend->AddEntry(h_MuMu_Est_invm, "Estimation", "lp");
-//            legend->AddEntry(h_MuMu_Est_invm, "Ivertis", "lp");
+            TLegend *legend = new TLegend(0.77, 0.5, 0.95, 0.95);
+//            legend->AddEntry(h_MuMu_Est_invm, "Estimation", "lp");
+            legend->AddEntry(h_MuMu_Est_invm, "I_{#kern[-0.7]{#lower[0.03]{#scale[0.68]{c}}}}vertis", "lp");
             legend->AddEntry(h_MuMu_invm[_MuMu_DYTauTau_Full], "DY#rightarrow#tau#tau","f");
             legend->AddEntry(h_MuMu_invm[_MuMu_ttbar_Full], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
             legend->AddEntry(h_MuMu_invm[_MuMu_tW], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
@@ -905,7 +907,7 @@ void MuMu_Est()
                 RP_MuMu_invm_pr2[pr]->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
 //                RP_MuMu_invm_pr2[pr]->SetPlots("Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
 
-                TLegend *legend_pr = new TLegend(0.6, 0.7, 0.9, 0.9);
+                TLegend *legend_pr = new TLegend(0.65, 0.75, 0.95, 0.95);
 
                 legend_pr->AddEntry(h_MuMu_Est_pr_invm[pr], "Estimation", "lp");
 //                legend_pr->AddEntry(h_MuMu_Est_pr_invm[pr], "Ivertis", "lp");
@@ -958,7 +960,7 @@ void MuMu_Est()
             RP_tW2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
 //            RP_tW2->SetPlots("Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
 
-            TLegend *legend_tW = new TLegend(0.6, 0.6, 0.9, 0.9);
+            TLegend *legend_tW = new TLegend(0.65, 0.65, 0.95, 0.95);
             legend_tW->AddEntry(h1_MuMuTW_invm_Est, "Estimation", "lp");
 //            legend_tW->AddEntry(h1_MuMuTW_invm_Est, "Ivertis", "lp");
             legend_tW->AddEntry(h_MuMu_invm[_MuMu_tW], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (MC)", "f");
