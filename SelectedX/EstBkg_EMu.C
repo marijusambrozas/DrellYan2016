@@ -235,6 +235,7 @@ void ee_Est()
             RP_EMu_wQCD_invm->Draw(4e-1, 2e4, 1);
             RP_EMu_wQCD_invm2->Draw(4e-1, 2e4, 1);
 
+            TH1D * h_EMu_data_invm_old = ((TH1D*)(h_EMu_data_invm->Clone("h_emu_data_invm_old")));
             h_EMu_data_invm->Add(h_EMu_QCD_invm, -1);
             h_EMu_data_invm2->Add(h_EMu_QCD_invm2, -1);
 
@@ -322,6 +323,142 @@ void ee_Est()
             h_ee_Est_invm2->SetDirectory(0);
 
 
+/// ############################# Statistical uncertainties (by hand) ##################################### ///
+
+            TH1D* h_UNC_eeMC = ((TH1D*)(h_EMu_data_invm->Clone("h_UNC_eeMC")));
+            TH1D* h_UNC_eeMC2 = ((TH1D*)(h_EMu_data_invm2->Clone("h_UNC_eeMC2")));
+            TH1D* h_UNC_emuMC = ((TH1D*)(h_EMu_data_invm->Clone("h_UNC_emuMC")));
+            TH1D* h_UNC_emuMC2 = ((TH1D*)(h_EMu_data_invm2->Clone("h_UNC_emuMC2")));
+            TH1D* h_UNC_emuData = ((TH1D*)(h_EMu_data_invm->Clone("h_UNC_emuData")));
+            TH1D* h_UNC_emuData2 = ((TH1D*)(h_EMu_data_invm2->Clone("h_UNC_emuData2")));
+            Double_t UNC_eeMC[43], UNC_emuMC[43], UNC_emuData[43], UNC_eeEst[43];
+            Double_t tmp = 0;
+            for (int i=1; i<44; i++)
+            {
+                // emuMC (N2)
+                UNC_emuMC[i-1] = ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinError(i);
+                tmp = 0;
+                for (SelProc_t pr=_EMu_WJets_Full; pr>_EndOf_EMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
+                {
+                    Mgr.SetProc(pr);
+                    if (pr==_EndOf_EMu_VVnST_Normal) continue;
+                    if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
+
+                    tmp += h_EMu_invm[pr]->GetBinError(i) * h_EMu_invm[pr]->GetBinError(i);
+
+                    if (pr == _EMu_WJets_Full) // next - WW
+                        pr = _EndOf_EMu_VVnST_Normal;
+                    if (pr == _EMu_tW) pr = _EMu_VVnST; // next -- ttbar
+                    if (pr == _EMu_DYTauTau_Full) break;
+                }
+                if ((UNC_emuMC[i-1]-tmp)/tmp > 0.0001)
+                {
+                    cout << "EMU errors from THStack and TH1D sum do not match!!" << endl;
+                    cout << "Bin " << i << endl;
+                    cout << "From THStack: " << UNC_emuMC[i-1] << "   From TH1D sum: " << tmp << endl;
+                    break;
+                }
+
+                // eeMC (N1)
+                UNC_eeMC[i-1] = ((TH1D*)(s_ee_invm->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_ee_invm->GetStack()->Last()))->GetBinError(i);
+                tmp = 0;
+                for (SelProc_t pr=_EE_WW; pr<=_EE_VVnST; pr=SelProc_t((int)(pr-1)))
+                {
+                    if (pr == _EE_WZ || pr == _EE_ZZ) continue;
+                    Mgr.SetProc(pr);
+
+                    tmp += h_ee_invm[pr]->GetBinError(i) * h_ee_invm[pr]->GetBinError(i);
+
+                    if (pr == _EE_tW) pr = _EE_VVnST; // next -- ttbar
+                    if (pr == _EE_DYTauTau_Full) break;
+                }
+                if ((UNC_eeMC[i-1]-tmp)/tmp > 0.0001)
+                {
+                    cout << "EE errors from THStack and TH1D sum do not match!!" << endl;
+                    cout << "Bin " << i << endl;
+                    cout << "From THStack: " << UNC_eeMC[i-1] << "   From TH1D sum: " << tmp << endl;
+                    break;
+                }
+
+                // emuData (N3)
+                UNC_emuData[i-1] = ((TH1D*)(s_EMu_SS_invm->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_EMu_SS_invm->GetStack()->Last()))->GetBinError(i);
+                tmp = 0;
+                for (SelProc_t pr=_EMu_WJets_Full; pr>_EndOf_EMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
+                {
+                    Mgr.SetProc(pr);
+                    if (pr==_EndOf_EMu_VVnST_Normal) continue;
+                    if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
+
+                    tmp += h_EMu_SS_invm[pr]->GetBinError(i) * h_EMu_SS_invm[pr]->GetBinError(i);
+
+                    if (pr == _EMu_WJets_Full) // next - WW
+                        pr = _EndOf_EMu_VVnST_Normal;
+                    if (pr == _EMu_tW) pr = _EMu_VVnST; // next -- ttbar
+                    if (pr == _EMu_DYTauTau_Full) break;
+                }
+                if ((UNC_emuData[i-1]-tmp)/tmp > 0.0001)
+                {
+                    cout << "EMU SS errors from THStack and TH1D sum do not match!!" << endl;
+                    cout << "Bin " << i << endl;
+                    cout << "From THStack: " << UNC_emuData[i-1] << "   From TH1D sum: " << tmp << endl;
+                    break;
+                }
+                UNC_emuData[i-1] *= 1/(RR*RR);
+                UNC_emuData[i-1] += h_EMu_SS_data_invm->GetBinError(i) * h_EMu_SS_data_invm->GetBinError(i) / (RR*RR);
+                UNC_emuData[i-1] += h_EMu_data_invm_old->GetBinError(i) * h_EMu_data_invm_old->GetBinError(i);
+                tmp = h_EMu_data_invm->GetBinError(i) * h_EMu_data_invm->GetBinError(i);
+                if ((UNC_emuData[i-1]-tmp)/tmp > 0.0001)
+                {
+                    cout << "EMU DATA errors from automatic and manual counting do not match!!" << endl;
+                    cout << "Bin " << i << endl;
+                    cout << "From automatic: " << UNC_emuData[i-1] << "   From manual: " << tmp << endl;
+                    break;
+                }
+
+                // FULL UNC
+                tmp = UNC_eeMC[i-1] / (((TH1D*)(s_ee_invm->GetStack()->Last()))->GetBinContent(i) * ((TH1D*)(s_ee_invm->GetStack()->Last()))->GetBinContent(i));
+                tmp += UNC_emuMC[i-1] / (((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinContent(i) * ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinContent(i));
+                tmp += UNC_emuData[i-1] / (h_EMu_data_invm->GetBinContent(i) * h_EMu_data_invm->GetBinContent(i));
+                UNC_eeEst[i-1] = sqrt(tmp) * fabs(h_ee_Est_invm->GetBinContent(i));
+                tmp = h_ee_Est_invm->GetBinError(i) * h_ee_Est_invm->GetBinError(i);
+                if ((UNC_eeEst[i-1]-tmp)/tmp > 0.0001)
+                {
+                    cout << "EE EST errors from automatic and manual counting do not match!!" << endl;
+                    cout << "Bin " << i << endl;
+                    cout << "From automatic: " << UNC_eeEst[i-1] << "   From manual: " << tmp << endl;
+                    break;
+                }
+            }
+//            cout << "Manually calculated errors:" << endl;
+//            for (int i=0; i<43; i++)
+//            {
+//                cout << UNC_eeEst[i] << "  ";
+//            }
+//            cout << "\nAutomatically calculated errors:" << endl;
+//            for (int i=1; i<=43; i++)
+//            {
+//                cout << h_ee_Est_invm->GetBinError(i) << "  ";
+//            }
+//            cout << endl;
+
+// ############################# Systematics (DataDriven - MC) ##################################### //
+
+            Double_t systematics[h_ee_Est_invm->GetSize()-2], systematics2[h_ee_Est_invm2->GetSize()-2], systerr=0;
+            for (int i=1; i<h_ee_Est_invm2->GetSize()-1; i++)
+            {
+                if (i < h_ee_Est_invm->GetSize()-1)
+                {
+                    systematics[i-1] = fabs(h_ee_Est_invm->GetBinContent(i) - ((TH1D*)(s_ee_invm->GetStack()->Last()))->GetBinContent(i));
+                    systematics[i-1] /= fabs(((TH1D*)(s_ee_invm->GetStack()->Last()))->GetBinContent(i));
+                    cout << *(systematics+i-1) << "  ";
+                    systerr += systematics[i-1] * systematics[i-1];
+                }
+                systematics2[i-1] = fabs(h_ee_Est_invm2->GetBinContent(i) - ((TH1D*)(s_ee_invm2->GetStack()->Last()))->GetBinContent(i));
+                systematics2[i-1] /= fabs(((TH1D*)(s_ee_invm2->GetStack()->Last()))->GetBinContent(i));
+            }
+
+// ###################################### Writing ###################################### //
+
             f_NeeEst->cd();
             h_ee_Est_invm->Write();
             h_ee_Est_invm2->Write();
@@ -348,8 +485,10 @@ void ee_Est()
             esterror_noZ += temp_noZ * temp_noZ;
             esterror_noZ = sqrt(esterror_noZ);
 
+            systerr = sqrt(systerr);
+
             std::cout << "ee MC events: " << MCintegral << "+-" << MCerror << endl;
-            std::cout << "ee Est. events: " << estintegral << "+-" << esterror << endl << endl;
+            std::cout << "ee Est. events: " << estintegral << "+-" << esterror << "+-" << systerr << endl << endl;
 
             std::cout << "ee MC events around Z: " << MCintegralZ << "+-" << MCerrorZ << endl;
             std::cout << "ee Est. events around Z: " << estintegralZ << "+-" << esterrorZ << endl;
@@ -369,8 +508,9 @@ void ee_Est()
 
             myRatioPlot_t *RP_invm = new myRatioPlot_t("DataDriven_InvariantMass", s_ee_invm, h_ee_Est_invm);
             myRatioPlot_t *RP_invm2 = new myRatioPlot_t("DataDriven_InvariantMass2", s_ee_invm2, h_ee_Est_invm2);
-            RP_invm->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000, "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC");
-            RP_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000);
+            RP_invm->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000,
+                              "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC", systematics);
+            RP_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000, "Est./MC", systematics2);
 //            RP_invm->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
 //            RP_invm2->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000, "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC");
 
@@ -708,6 +848,7 @@ void MuMu_Est()
             RP_EMu_wQCD_invm->Draw(4e-1, 2e4, 1);
             RP_EMu_wQCD_invm2->Draw(4e-1, 2e4, 1);
 
+            TH1D *h_EMu_data_invm_old = ((TH1D*)(h_EMu_data_invm->Clone("h_EMu_data_invm_old")));
             h_EMu_data_invm->Add(h_EMu_QCD_invm, -1);
             h_EMu_data_invm2->Add(h_EMu_QCD_invm2, -1);
 
@@ -791,6 +932,120 @@ void MuMu_Est()
             h_MuMu_Est_invm2->Multiply(((TH1D*)(s_MuMu_invm2->GetStack()->Last())));
             h_MuMu_Est_invm2->Divide(((TH1D*)(s_EMu_invm2->GetStack()->Last())));
             h_MuMu_Est_invm2->SetDirectory(0);
+
+/// ################################# Uncertainties (by hand) ######################################### ///
+
+            Double_t UNC_MuMuMC[43], UNC_emuMC[43], UNC_emuData[43], UNC_MuMuEst[43];
+            Double_t tmp = 0;
+            for (int i=1; i<44; i++)
+            {
+                // emuMC (N2)
+                UNC_emuMC[i-1] = ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinError(i);
+                tmp = 0;
+                for (SelProc_t pr=_EMu_WJets_Full; pr>_EndOf_EMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
+                {
+                    Mgr.SetProc(pr);
+                    if (pr==_EndOf_EMu_VVnST_Normal) continue;
+                    if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
+
+                    tmp += h_EMu_invm[pr]->GetBinError(i) * h_EMu_invm[pr]->GetBinError(i);
+
+                    if (pr == _EMu_WJets_Full) // next - WW
+                        pr = _EndOf_EMu_VVnST_Normal;
+                    if (pr == _EMu_tW) pr = _EMu_VVnST; // next -- ttbar
+                    if (pr == _EMu_DYTauTau_Full) break;
+                }
+                if ((UNC_emuMC[i-1]-tmp)/tmp > 0.0001)
+                {
+                    cout << "EMU errors from THStack and TH1D sum do not match!!" << endl;
+                    cout << "Bin " << i << endl;
+                    cout << "From THStack: " << UNC_emuMC[i-1] << "   From TH1D sum: " << tmp << endl;
+                    break;
+                }
+
+                // MuMuMC (N1)
+                UNC_MuMuMC[i-1] = ((TH1D*)(s_MuMu_invm->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_MuMu_invm->GetStack()->Last()))->GetBinError(i);
+                tmp = 0;
+                for (SelProc_t pr=_MuMu_WW; pr<=_MuMu_VVnST; pr=SelProc_t((int)(pr-1)))
+                {
+                    if (pr == _MuMu_WZ || pr == _MuMu_ZZ) continue;
+                    Mgr.SetProc(pr);
+
+                    tmp += h_MuMu_invm[pr]->GetBinError(i) * h_MuMu_invm[pr]->GetBinError(i);
+
+                    if (pr == _MuMu_tW) pr = _MuMu_VVnST; // next -- ttbar
+                    if (pr == _MuMu_DYTauTau_Full) break;
+                }
+                if ((UNC_MuMuMC[i-1]-tmp)/tmp > 0.0001)
+                {
+                    cout << "MuMu errors from THStack and TH1D sum do not match!!" << endl;
+                    cout << "Bin " << i << endl;
+                    cout << "From THStack: " << UNC_MuMuMC[i-1] << "   From TH1D sum: " << tmp << endl;
+                    break;
+                }
+
+                // emuData (N3)
+                UNC_emuData[i-1] = ((TH1D*)(s_EMu_SS_invm->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_EMu_SS_invm->GetStack()->Last()))->GetBinError(i);
+                tmp = 0;
+                for (SelProc_t pr=_EMu_WJets_Full; pr>_EndOf_EMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
+                {
+                    Mgr.SetProc(pr);
+                    if (pr==_EndOf_EMu_VVnST_Normal) continue;
+                    if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
+
+                    tmp += h_EMu_SS_invm[pr]->GetBinError(i) * h_EMu_SS_invm[pr]->GetBinError(i);
+
+                    if (pr == _EMu_WJets_Full) // next - WW
+                        pr = _EndOf_EMu_VVnST_Normal;
+                    if (pr == _EMu_tW) pr = _EMu_VVnST; // next -- ttbar
+                    if (pr == _EMu_DYTauTau_Full) break;
+                }
+                if ((UNC_emuData[i-1]-tmp)/tmp > 0.0001)
+                {
+                    cout << "EMU SS errors from THStack and TH1D sum do not match!!" << endl;
+                    cout << "Bin " << i << endl;
+                    cout << "From THStack: " << UNC_emuData[i-1] << "   From TH1D sum: " << tmp << endl;
+                    break;
+                }
+                UNC_emuData[i-1] *= 1/(RR*RR);
+                UNC_emuData[i-1] += h_EMu_SS_data_invm->GetBinError(i) * h_EMu_SS_data_invm->GetBinError(i) / (RR*RR);
+                UNC_emuData[i-1] += h_EMu_data_invm_old->GetBinError(i) * h_EMu_data_invm_old->GetBinError(i);
+                tmp = h_EMu_data_invm->GetBinError(i) * h_EMu_data_invm->GetBinError(i);
+                if ((UNC_emuData[i-1]-tmp)/tmp > 0.0001)
+                {
+                    cout << "EMU DATA errors from automatic and manual counting do not match!!" << endl;
+                    cout << "Bin " << i << endl;
+                    cout << "From automatic: " << UNC_emuData[i-1] << "   From manual: " << tmp << endl;
+                    break;
+                }
+
+                // FULL UNC
+                tmp = UNC_MuMuMC[i-1] / (((TH1D*)(s_MuMu_invm->GetStack()->Last()))->GetBinContent(i) * ((TH1D*)(s_MuMu_invm->GetStack()->Last()))->GetBinContent(i));
+                tmp += UNC_emuMC[i-1] / (((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinContent(i) * ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinContent(i));
+                tmp += UNC_emuData[i-1] / (h_EMu_data_invm->GetBinContent(i) * h_EMu_data_invm->GetBinContent(i));
+                UNC_MuMuEst[i-1] = sqrt(tmp) * fabs(h_MuMu_Est_invm->GetBinContent(i));
+                tmp = h_MuMu_Est_invm->GetBinError(i) * h_MuMu_Est_invm->GetBinError(i);
+                if ((UNC_MuMuEst[i-1]-tmp)/tmp > 0.0001)
+                {
+                    cout << "MuMu EST errors from automatic and manual counting do not match!!" << endl;
+                    cout << "Bin " << i << endl;
+                    cout << "From automatic: " << UNC_MuMuEst[i-1] << "   From manual: " << tmp << endl;
+                    break;
+                }
+            }
+            cout << "Manually calculated errors:" << endl;
+            for (int i=0; i<43; i++)
+            {
+                cout << UNC_MuMuEst[i] << "  ";
+            }
+            cout << "\nAutomatically calculated errors:" << endl;
+            for (int i=1; i<=43; i++)
+            {
+                cout << h_MuMu_Est_invm->GetBinError(i) << "  ";
+            }
+            cout << endl;
+
+// ###################################### Writing ######################################### //
 
             f_NMuMuEst->cd();
             h_MuMu_Est_invm->Write();

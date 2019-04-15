@@ -596,8 +596,8 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         // -- For efficiency SF -- //
         analyzer->SetupEfficiencyScaleFactor_BtoF();
         analyzer->SetupEfficiencyScaleFactor_GtoH();
-//        analyzer->SetupEfficiencyScaleFactor_BtoF_new();
-//        analyzer->SetupEfficiencyScaleFactor_GtoH_new();
+        analyzer->SetupEfficiencyScaleFactor_BtoF_new();
+        analyzer->SetupEfficiencyScaleFactor_GtoH_new();
 
         // -- For PVz reweighting -- //
         analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
@@ -864,10 +864,10 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
                     // -- Efficiency scale factor -- //
                     if(Mgr.isMC == kTRUE)
                     {
-                        weight1 = analyzer->EfficiencySF_EventWeight_HLT_BtoF(MuMu);
-                        weight2 = analyzer->EfficiencySF_EventWeight_HLT_GtoH(MuMu);
-//                        weight1 = analyzer->EfficiencySF_EventWeight_HLT_BtoF_new(MuMu);
-//                        weight2 = analyzer->EfficiencySF_EventWeight_HLT_GtoH_new(MuMu);
+//                        weight1 = analyzer->EfficiencySF_EventWeight_HLT_BtoF(MuMu);
+//                        weight2 = analyzer->EfficiencySF_EventWeight_HLT_GtoH(MuMu);
+                        weight1 = analyzer->EfficiencySF_EventWeight_HLT_BtoF_new(MuMu);
+                        weight2 = analyzer->EfficiencySF_EventWeight_HLT_GtoH_new(MuMu);
                         effweight = (Lumi_BtoF * weight1 + Lumi_GtoH * weight2) / Lumi;
 //                        effweight = weight2;
                     }
