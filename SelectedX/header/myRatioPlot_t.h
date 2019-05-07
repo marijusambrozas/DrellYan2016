@@ -17,7 +17,7 @@
 
 class myRatioPlot_t {
 public :
-   TH1D *h1_data, *h1_dataovermc, *h1_systunc;
+   TH1D *h1_data, *h1_dataovermc, *h1_fullunc;
    THStack *s_stackedProcesses;
    TLegend *legend;
    TCanvas *canvas;
@@ -26,7 +26,7 @@ public :
    TText *text;
    TString CanvasName;
    Double_t x1, x2;
-   Int_t legendSet, legendEntries, PlotsSet;
+   Int_t legendSet, legendEntries, PlotsSet, systSet;
    int autoCleanUp;
 
    myRatioPlot_t(TString cName=" ", const THStack *stack=NULL, const TH1D *hist=NULL);
@@ -37,10 +37,11 @@ public :
    int GetAutoCleanUp() const { return autoCleanUp; }
 
    void Draw(Double_t ymin, Double_t ymax, UInt_t logX=0);
-   void SetPlots(TString xAxisName, Double_t xmin, Double_t xmax, TString DataMCname="Data/MC", Double_t *systematics=NULL, Double_t *statunc=NULL);
+   void SetPlots(TString xAxisName, Double_t xmin, Double_t xmax, TString DataMCname="Data/MC", Double_t *statunc=NULL);
    void SetLegend(Double_t xb=0.7, Double_t yb=0.5, Double_t xe=0.9, Double_t ye=0.9);
    void AddLegendEntry(TH1D *h, TString name, TString option);
    void ImportLegend(TLegend *newLegend, Int_t overwrite=0);
+   void SetSystematics(Double_t *dataSystematics=NULL, Double_t *MCsystematics=NULL, Double_t *dataOverMCsystematics=NULL);
 };
 
 #endif
@@ -48,10 +49,10 @@ public :
 #ifdef myRatioPlot_t_cxx
 
 myRatioPlot_t::myRatioPlot_t(TString cName, const THStack *stack, const TH1D *hist) :
-    h1_data(0), h1_dataovermc(0), h1_systunc(0),
+    h1_data(0), h1_dataovermc(0), h1_fullunc(0),
     s_stackedProcesses(0), legend(0),
     canvas(0), pad1(0), pad2(0), l_one(0),
-      x1(0.), x2(0.), legendSet(0), legendEntries(0), PlotsSet(0),
+      x1(0.), x2(0.), legendSet(0), legendEntries(0), PlotsSet(0), systSet(0),
       autoCleanUp(1)
 {
     if (!cName || !stack || !hist) return;
@@ -62,10 +63,10 @@ myRatioPlot_t::myRatioPlot_t(TString cName, const THStack *stack, const TH1D *hi
 }
 
 myRatioPlot_t::myRatioPlot_t(TString cName, const TH1D *stack, const TH1D *hist) :
-    h1_data(0), h1_dataovermc(0), h1_systunc(0),
+    h1_data(0), h1_dataovermc(0), h1_fullunc(0),
     s_stackedProcesses(0), legend(0),
     canvas(0), pad1(0), pad2(0), l_one(0),
-      x1(0.), x2(0.), legendSet(0), legendEntries(0), PlotsSet(0),
+      x1(0.), x2(0.), legendSet(0), legendEntries(0), PlotsSet(0), systSet(0),
       autoCleanUp(1)
 {
     if (!cName || !stack || !hist) return;
@@ -84,7 +85,7 @@ myRatioPlot_t::~myRatioPlot_t()
    if (autoCleanUp) {
      delete h1_data;
      delete h1_dataovermc;
-     delete h1_systunc;
+     delete h1_fullunc;
      delete s_stackedProcesses;
      delete legend;
      delete canvas;

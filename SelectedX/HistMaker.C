@@ -318,7 +318,7 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
                     // -- Apply efficiency correcion -- //
                     if(Mgr.isMC == kTRUE)
                             effweight = analyzer->EfficiencySF_EventWeight_electron(EE);
-//                    cout << effweight << endl;
+//                    if(i%10000 == 0) cout << effweight << endl;
 
                     h_mass_before_PUCorr->Fill(EE->Electron_InvM, TotWeight);
                     h_mass_before_EffCorr->Fill(EE->Electron_InvM, TotWeight * PUWeight);

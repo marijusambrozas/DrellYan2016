@@ -15,6 +15,7 @@
 #include <TFormula.h>
 #include <iostream>
 #include <sstream>
+#include <TVectorT.h>
 
 // -- Customized Analyzer for Drel-Yan Analysis -- //
 #include "./header/DYAnalyzer.h"
@@ -30,6 +31,7 @@ void EMu_HistDrawer (TString whichGraphs, TString type);
 void Est_HistDrawer ();
 Double_t CompChiSquared (TH1D *h_data, THStack *s_MC);
 Double_t CompAvgDataMCDifference (TH1D *h_data, THStack *s_MC);
+void removeNegativeBins(TH1D *h);
 
 // -- Drell-Yan mass bins -- //
 const Int_t binnum = 43;
@@ -146,6 +148,14 @@ void EE_HistDrawer (TString whichGraphs, TString type)
             f_bkg->GetObject("h_mass_fine_"+Mgr.Procname[pr], h_bkg_mass_fine[iter]);
             f_bkg->GetObject("h_mass_"+Mgr.Procname[pr], h_bkg_mass[iter]);
             f_bkg->GetObject("h_mass2_"+Mgr.Procname[pr], h_bkg_mass2[iter]);
+            removeNegativeBins(h_bkg_mass_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_mass_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_mass_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_mass_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_mass_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_mass_fine[iter]);
+            removeNegativeBins(h_bkg_mass[iter]);
+            removeNegativeBins(h_bkg_mass2[iter]);
 
             Color_t color = kBlack;
             if (pr == _EE_QCDEMEnriched_Full) color = kRed + 3;
@@ -222,6 +232,14 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         f_DY->GetObject("h_mass_fine_"+Mgr.Procname[_EE_DY_Full], h_DY_mass_fine);
         f_DY->GetObject("h_mass_"+Mgr.Procname[_EE_DY_Full], h_DY_mass);
         f_DY->GetObject("h_mass2_"+Mgr.Procname[_EE_DY_Full], h_DY_mass2);
+        removeNegativeBins(h_DY_mass_before_PUCorr);
+        removeNegativeBins(h_DY_mass_before_EffCorr);
+        removeNegativeBins(h_DY_mass_before_PVzCorr);
+        removeNegativeBins(h_DY_mass_before_L1Corr);
+        removeNegativeBins(h_DY_mass_before_TopPtCorr);
+        removeNegativeBins(h_DY_mass_fine);
+        removeNegativeBins(h_DY_mass);
+        removeNegativeBins(h_DY_mass2);
 
         h_DY_mass_before_PUCorr->SetFillColor(kOrange);
         h_DY_mass_before_PUCorr->SetLineColor(kOrange);
@@ -301,7 +319,8 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         myRatioPlot_t *RP_mass = new myRatioPlot_t("RP_mass", s_mass, h_data_mass);
         myRatioPlot_t *RP_mass2 = new myRatioPlot_t("RP_mass2", s_mass2, h_data_mass2);
 
-        RP_mass_before_PUCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] before PU correction", 15, 3000);
+//        RP_mass_before_PUCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] before PU correction", 15, 3000);
+        RP_mass_before_PUCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] prie#check{s} visas pataisas", 15, 3000, "Eksp./MC");
 //        RP_mass_before_EffCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] before Efficiency SF", 15, 3000);
         RP_mass_before_EffCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] prie#check{s} efektyvumo pataisas", 15, 3000, "Eksp./MC");
         RP_mass_before_PVzCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] before PVz correction", 15, 3000);
@@ -492,6 +511,14 @@ void EE_HistDrawer (TString whichGraphs, TString type)
             f_bkg->GetObject("h_eta_sublead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_PUCorr[iter]);
             f_bkg->GetObject("h_phi_lead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_PUCorr[iter]);
             f_bkg->GetObject("h_phi_sublead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_pT_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_rapi_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_pT_lead_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_pT_sublead_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_eta_lead_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_eta_sublead_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_phi_lead_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_phi_sublead_before_PUCorr[iter]);
 
             f_bkg->GetObject("h_pT_before_EffCorr_"+Mgr.Procname[pr], h_bkg_pT_before_EffCorr[iter]);
             f_bkg->GetObject("h_rapi_before_EffCorr_"+Mgr.Procname[pr], h_bkg_rapi_before_EffCorr[iter]);
@@ -501,6 +528,14 @@ void EE_HistDrawer (TString whichGraphs, TString type)
             f_bkg->GetObject("h_eta_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_EffCorr[iter]);
             f_bkg->GetObject("h_phi_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_EffCorr[iter]);
             f_bkg->GetObject("h_phi_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_pT_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_rapi_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_pT_lead_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_pT_sublead_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_eta_lead_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_eta_sublead_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_phi_lead_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_phi_sublead_before_EffCorr[iter]);
 
             f_bkg->GetObject("h_pT_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_pT_before_PVzCorr[iter]);
             f_bkg->GetObject("h_rapi_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_rapi_before_PVzCorr[iter]);
@@ -510,6 +545,14 @@ void EE_HistDrawer (TString whichGraphs, TString type)
             f_bkg->GetObject("h_eta_sublead_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_PVzCorr[iter]);
             f_bkg->GetObject("h_phi_lead_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_PVzCorr[iter]);
             f_bkg->GetObject("h_phi_sublead_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_pT_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_rapi_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_pT_lead_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_pT_sublead_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_eta_lead_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_eta_sublead_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_phi_lead_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_phi_sublead_before_PVzCorr[iter]);
 
             f_bkg->GetObject("h_pT_before_L1Corr_"+Mgr.Procname[pr], h_bkg_pT_before_L1Corr[iter]);
             f_bkg->GetObject("h_rapi_before_L1Corr_"+Mgr.Procname[pr], h_bkg_rapi_before_L1Corr[iter]);
@@ -519,6 +562,14 @@ void EE_HistDrawer (TString whichGraphs, TString type)
             f_bkg->GetObject("h_eta_sublead_before_L1Corr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_L1Corr[iter]);
             f_bkg->GetObject("h_phi_lead_before_L1Corr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_L1Corr[iter]);
             f_bkg->GetObject("h_phi_sublead_before_L1Corr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_pT_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_rapi_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_pT_lead_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_pT_sublead_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_eta_lead_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_eta_sublead_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_phi_lead_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_phi_sublead_before_L1Corr[iter]);
 
             f_bkg->GetObject("h_pT_before_TopPtCorr_"+Mgr.Procname[pr], h_bkg_pT_before_TopPtCorr[iter]);
             f_bkg->GetObject("h_rapi_before_TopPtCorr_"+Mgr.Procname[pr], h_bkg_rapi_before_TopPtCorr[iter]);
@@ -528,6 +579,14 @@ void EE_HistDrawer (TString whichGraphs, TString type)
             f_bkg->GetObject("h_eta_sublead_before_TopPtCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_TopPtCorr[iter]);
             f_bkg->GetObject("h_phi_lead_before_TopPtCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_TopPtCorr[iter]);
             f_bkg->GetObject("h_phi_sublead_before_TopPtCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_pT_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_rapi_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_pT_lead_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_pT_sublead_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_eta_lead_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_eta_sublead_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_phi_lead_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_phi_sublead_before_TopPtCorr[iter]);
 
             f_bkg->GetObject("h_pT_"+Mgr.Procname[pr], h_bkg_pT[iter]);
             f_bkg->GetObject("h_rapi_"+Mgr.Procname[pr], h_bkg_rapi[iter]);
@@ -537,6 +596,14 @@ void EE_HistDrawer (TString whichGraphs, TString type)
             f_bkg->GetObject("h_eta_sublead_"+Mgr.Procname[pr], h_bkg_eta_sublead[iter]);
             f_bkg->GetObject("h_phi_lead_"+Mgr.Procname[pr], h_bkg_phi_lead[iter]);
             f_bkg->GetObject("h_phi_sublead_"+Mgr.Procname[pr], h_bkg_phi_sublead[iter]);
+            removeNegativeBins(h_bkg_pT[iter]);
+            removeNegativeBins(h_bkg_rapi[iter]);
+            removeNegativeBins(h_bkg_pT_lead[iter]);
+            removeNegativeBins(h_bkg_pT_sublead[iter]);
+            removeNegativeBins(h_bkg_eta_lead[iter]);
+            removeNegativeBins(h_bkg_eta_sublead[iter]);
+            removeNegativeBins(h_bkg_phi_lead[iter]);
+            removeNegativeBins(h_bkg_phi_sublead[iter]);
 
             Color_t color = kBlack;
             if (pr == _EE_QCDEMEnriched_Full) color = kRed + 3;
@@ -809,6 +876,14 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         f_DY->GetObject("h_eta_sublead_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_sublead_before_PUCorr);
         f_DY->GetObject("h_phi_lead_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_lead_before_PUCorr);
         f_DY->GetObject("h_phi_sublead_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_sublead_before_PUCorr);
+        removeNegativeBins(h_DY_pT_before_PUCorr);
+        removeNegativeBins(h_DY_rapi_before_PUCorr);
+        removeNegativeBins(h_DY_pT_lead_before_PUCorr);
+        removeNegativeBins(h_DY_pT_sublead_before_PUCorr);
+        removeNegativeBins(h_DY_eta_lead_before_PUCorr);
+        removeNegativeBins(h_DY_eta_sublead_before_PUCorr);
+        removeNegativeBins(h_DY_phi_lead_before_PUCorr);
+        removeNegativeBins(h_DY_phi_sublead_before_PUCorr);
         //
         f_DY->GetObject("h_pT_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_before_EffCorr);
         f_DY->GetObject("h_rapi_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_rapi_before_EffCorr);
@@ -818,6 +893,14 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         f_DY->GetObject("h_eta_sublead_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_sublead_before_EffCorr);
         f_DY->GetObject("h_phi_lead_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_lead_before_EffCorr);
         f_DY->GetObject("h_phi_sublead_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_sublead_before_EffCorr);
+        removeNegativeBins(h_DY_pT_before_EffCorr);
+        removeNegativeBins(h_DY_rapi_before_EffCorr);
+        removeNegativeBins(h_DY_pT_lead_before_EffCorr);
+        removeNegativeBins(h_DY_pT_sublead_before_EffCorr);
+        removeNegativeBins(h_DY_eta_lead_before_EffCorr);
+        removeNegativeBins(h_DY_eta_sublead_before_EffCorr);
+        removeNegativeBins(h_DY_phi_lead_before_EffCorr);
+        removeNegativeBins(h_DY_phi_sublead_before_EffCorr);
         //
         f_DY->GetObject("h_pT_before_PVzCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_before_PVzCorr);
         f_DY->GetObject("h_rapi_before_PVzCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_rapi_before_PVzCorr);
@@ -827,6 +910,14 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         f_DY->GetObject("h_eta_sublead_before_PVzCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_sublead_before_PVzCorr);
         f_DY->GetObject("h_phi_lead_before_PVzCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_lead_before_PVzCorr);
         f_DY->GetObject("h_phi_sublead_before_PVzCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_sublead_before_PVzCorr);
+        removeNegativeBins(h_DY_pT_before_PVzCorr);
+        removeNegativeBins(h_DY_rapi_before_PVzCorr);
+        removeNegativeBins(h_DY_pT_lead_before_PVzCorr);
+        removeNegativeBins(h_DY_pT_sublead_before_PVzCorr);
+        removeNegativeBins(h_DY_eta_lead_before_PVzCorr);
+        removeNegativeBins(h_DY_eta_sublead_before_PVzCorr);
+        removeNegativeBins(h_DY_phi_lead_before_PVzCorr);
+        removeNegativeBins(h_DY_phi_sublead_before_PVzCorr);
         //
         f_DY->GetObject("h_pT_before_L1Corr_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_before_L1Corr);
         f_DY->GetObject("h_rapi_before_L1Corr_"+Mgr.Procname[_EE_DY_Full], h_DY_rapi_before_L1Corr);
@@ -836,6 +927,14 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         f_DY->GetObject("h_eta_sublead_before_L1Corr_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_sublead_before_L1Corr);
         f_DY->GetObject("h_phi_lead_before_L1Corr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_lead_before_L1Corr);
         f_DY->GetObject("h_phi_sublead_before_L1Corr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_sublead_before_L1Corr);
+        removeNegativeBins(h_DY_pT_before_L1Corr);
+        removeNegativeBins(h_DY_rapi_before_L1Corr);
+        removeNegativeBins(h_DY_pT_lead_before_L1Corr);
+        removeNegativeBins(h_DY_pT_sublead_before_L1Corr);
+        removeNegativeBins(h_DY_eta_lead_before_L1Corr);
+        removeNegativeBins(h_DY_eta_sublead_before_L1Corr);
+        removeNegativeBins(h_DY_phi_lead_before_L1Corr);
+        removeNegativeBins(h_DY_phi_sublead_before_L1Corr);
         //
         f_DY->GetObject("h_pT_before_TopPtCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_pT_before_TopPtCorr);
         f_DY->GetObject("h_rapi_before_TopPtCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_rapi_before_TopPtCorr);
@@ -845,6 +944,14 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         f_DY->GetObject("h_eta_sublead_before_TopPtCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_sublead_before_TopPtCorr);
         f_DY->GetObject("h_phi_lead_before_TopPtCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_lead_before_TopPtCorr);
         f_DY->GetObject("h_phi_sublead_before_TopPtCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_sublead_before_TopPtCorr);
+        removeNegativeBins(h_DY_pT_before_TopPtCorr);
+        removeNegativeBins(h_DY_rapi_before_TopPtCorr);
+        removeNegativeBins(h_DY_pT_lead_before_TopPtCorr);
+        removeNegativeBins(h_DY_pT_sublead_before_TopPtCorr);
+        removeNegativeBins(h_DY_eta_lead_before_TopPtCorr);
+        removeNegativeBins(h_DY_eta_sublead_before_TopPtCorr);
+        removeNegativeBins(h_DY_phi_lead_before_TopPtCorr);
+        removeNegativeBins(h_DY_phi_sublead_before_TopPtCorr);
         //
         f_DY->GetObject("h_pT_"+Mgr.Procname[_EE_DY_Full], h_DY_pT);
         f_DY->GetObject("h_rapi_"+Mgr.Procname[_EE_DY_Full], h_DY_rapi);
@@ -854,6 +961,14 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         f_DY->GetObject("h_eta_sublead_"+Mgr.Procname[_EE_DY_Full], h_DY_eta_sublead);
         f_DY->GetObject("h_phi_lead_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_lead);
         f_DY->GetObject("h_phi_sublead_"+Mgr.Procname[_EE_DY_Full], h_DY_phi_sublead);
+        removeNegativeBins(h_DY_pT);
+        removeNegativeBins(h_DY_rapi);
+        removeNegativeBins(h_DY_pT_lead);
+        removeNegativeBins(h_DY_pT_sublead);
+        removeNegativeBins(h_DY_eta_lead);
+        removeNegativeBins(h_DY_eta_sublead);
+        removeNegativeBins(h_DY_phi_lead);
+        removeNegativeBins(h_DY_phi_sublead);
 
         h_DY_pT_before_PUCorr->SetFillColor(kOrange);
         h_DY_rapi_before_PUCorr->SetFillColor(kOrange);
@@ -1196,11 +1311,14 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         RP_phi_sublead = new myRatioPlot_t("RP_phi_sublead", s_phi_sublead, h_data_phi_sublead);
 
         RP_pT_before_PUCorr->SetPlots("p_{#lower[-0.2]{T} #lower[-0.3]{#font[12]{#scale[1.3]{ee}}}} [GeV/c] before PU correction", 0, 1000);
-        RP_rapi_before_PUCorr->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} before PU correction", -3, 3);
+//        RP_rapi_before_PUCorr->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} before PU correction", -3, 3);
+        RP_rapi_before_PUCorr->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} prie#check{s} visas pataisas", -3, 3, "Eksp./MC");
         RP_pT_lead_before_PUCorr->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{lead}}) [GeV/c] before PU correction", 0, 1000);
         RP_pT_sublead_before_PUCorr->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{sublead}}) [GeV/c] before PU correction", 0, 1000);
-        RP_eta_lead_before_PUCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{lead}}) before PU correction", -3.5, 3.5);
-        RP_eta_sublead_before_PUCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{sublead}}) before PU correction", -3.5, 3.5);
+//        RP_eta_lead_before_PUCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{lead}}) before PU correction", -3.5, 3.5);
+        RP_eta_lead_before_PUCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{1}}) prie#check{s} visas pataisas", -3.5, 3.5, "Eksp./MC");
+//        RP_eta_sublead_before_PUCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{sublead}}) before PU correction", -3.5, 3.5);
+        RP_eta_sublead_before_PUCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{2}}) prie#check{s} visas pataisas", -3.5, 3.5, "Eksp./MC");
         RP_phi_lead_before_PUCorr->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{lead}}) before PU correction", -4, 4);
         RP_phi_sublead_before_PUCorr->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{sublead}}) before PU correction", -4, 4);
 
@@ -1258,7 +1376,7 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         RP_phi_lead->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{lead}})", -4, 4);
         RP_phi_sublead->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{sublead}})", -4, 4);
 
-        TLegend *legend = new TLegend(0.62, 0.77, 0.95, 0.95);
+        TLegend *legend = new TLegend(0.5, 0.7, 0.95, 0.95);
         legend->SetNColumns(2);
 //        legend->AddEntry(h_data_pT, "Data", "lp");
         legend->AddEntry(h_data_pT, "Matavimas", "lp");
@@ -1322,54 +1440,54 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         RP_phi_lead->ImportLegend(legend);
         RP_phi_sublead->ImportLegend(legend);
 
-        RP_pT_before_PUCorr->Draw(0.5, 8e6, 0);
-        RP_rapi_before_PUCorr->Draw(0.5, 8e6, 0);
-        RP_pT_lead_before_PUCorr->Draw(0.5, 8e6, 0);
-        RP_pT_sublead_before_PUCorr->Draw(0.5, 8e6, 0);
-        RP_eta_lead_before_PUCorr->Draw(0.5, 8e6, 0);
-        RP_eta_sublead_before_PUCorr->Draw(0.5, 8e6, 0);
-        RP_phi_lead_before_PUCorr->Draw(0.5, 8e6, 0);
-        RP_phi_sublead_before_PUCorr->Draw(0.5, 8e6, 0);
-        RP_pT_before_EffCorr->Draw(0.5, 8e6, 0);
-        RP_rapi_before_EffCorr->Draw(0.5, 8e6, 0);
-        RP_pT_lead_before_EffCorr->Draw(0.5, 8e6, 0);
-        RP_pT_sublead_before_EffCorr->Draw(0.5, 8e6, 0);
-        RP_eta_lead_before_EffCorr->Draw(0.5, 8e6, 0);
-        RP_eta_sublead_before_EffCorr->Draw(0.5, 8e6, 0);
-        RP_phi_lead_before_EffCorr->Draw(0.5, 8e6, 0);
-        RP_phi_sublead_before_EffCorr->Draw(0.5, 8e6, 0);
-        RP_pT_before_PVzCorr->Draw(0.5, 8e6, 0);
-        RP_rapi_before_PVzCorr->Draw(0.5, 8e6, 0);
-        RP_pT_lead_before_PVzCorr->Draw(0.5, 8e6, 0);
-        RP_pT_sublead_before_PVzCorr->Draw(0.5, 8e6, 0);
-        RP_eta_lead_before_PVzCorr->Draw(0.5, 8e6, 0);
-        RP_eta_sublead_before_PVzCorr->Draw(0.5, 8e6, 0);
-        RP_phi_lead_before_PVzCorr->Draw(0.5, 8e6, 0);
-        RP_phi_sublead_before_PVzCorr->Draw(0.5, 8e6, 0);
-        RP_pT_before_L1Corr->Draw(0.5, 8e6, 0);
-        RP_rapi_before_L1Corr->Draw(0.5, 8e6, 0);
-        RP_pT_lead_before_L1Corr->Draw(0.5, 8e6, 0);
-        RP_pT_sublead_before_L1Corr->Draw(0.5, 8e6, 0);
-        RP_eta_lead_before_L1Corr->Draw(0.5, 8e6, 0);
-        RP_eta_sublead_before_L1Corr->Draw(0.5, 8e6, 0);
-        RP_phi_lead_before_L1Corr->Draw(0.5, 8e6, 0);
-        RP_phi_sublead_before_L1Corr->Draw(0.5, 8e6, 0);
-        RP_pT_before_TopPtCorr->Draw(0.5, 8e6, 0);
-        RP_rapi_before_TopPtCorr->Draw(0.5, 8e6, 0);
-        RP_pT_lead_before_TopPtCorr->Draw(0.5, 8e6, 0);
-        RP_pT_sublead_before_TopPtCorr->Draw(0.5, 8e6, 0);
-        RP_eta_lead_before_TopPtCorr->Draw(0.5, 8e6, 0);
-        RP_eta_sublead_before_TopPtCorr->Draw(0.5, 8e6, 0);
-        RP_phi_lead_before_TopPtCorr->Draw(0.5, 8e6, 0);
-        RP_phi_sublead_before_TopPtCorr->Draw(0.5, 8e6, 0);
-        RP_pT->Draw(0.5, 8e6, 0);
-        RP_rapi->Draw(0.5, 8e6, 0);
-        RP_pT_lead->Draw(0.5, 8e6, 0);
-        RP_pT_sublead->Draw(0.5, 8e6, 0);
-        RP_eta_lead->Draw(0.5, 8e6, 0);
-        RP_eta_sublead->Draw(0.5, 8e6, 0);
-        RP_phi_lead->Draw(0.5, 8e6, 0);
-        RP_phi_sublead->Draw(0.5, 8e6, 0);
+        RP_pT_before_PUCorr->Draw(0.8, 6e7, 0);
+        RP_rapi_before_PUCorr->Draw(0.8, 6e7, 0);
+        RP_pT_lead_before_PUCorr->Draw(0.8, 6e7, 0);
+        RP_pT_sublead_before_PUCorr->Draw(0.8, 6e7, 0);
+        RP_eta_lead_before_PUCorr->Draw(0.8, 6e7, 0);
+        RP_eta_sublead_before_PUCorr->Draw(0.8, 6e7, 0);
+        RP_phi_lead_before_PUCorr->Draw(0.8, 6e7, 0);
+        RP_phi_sublead_before_PUCorr->Draw(0.8, 6e7, 0);
+        RP_pT_before_EffCorr->Draw(0.8, 6e7, 0);
+        RP_rapi_before_EffCorr->Draw(0.8, 6e7, 0);
+        RP_pT_lead_before_EffCorr->Draw(0.8, 6e7, 0);
+        RP_pT_sublead_before_EffCorr->Draw(0.8, 6e7, 0);
+        RP_eta_lead_before_EffCorr->Draw(0.8, 6e7, 0);
+        RP_eta_sublead_before_EffCorr->Draw(0.8, 6e7, 0);
+        RP_phi_lead_before_EffCorr->Draw(0.8, 6e7, 0);
+        RP_phi_sublead_before_EffCorr->Draw(0.8, 6e7, 0);
+        RP_pT_before_PVzCorr->Draw(0.8, 6e7, 0);
+        RP_rapi_before_PVzCorr->Draw(0.8, 6e7, 0);
+        RP_pT_lead_before_PVzCorr->Draw(0.8, 6e7, 0);
+        RP_pT_sublead_before_PVzCorr->Draw(0.8, 6e7, 0);
+        RP_eta_lead_before_PVzCorr->Draw(0.8, 6e7, 0);
+        RP_eta_sublead_before_PVzCorr->Draw(0.8, 6e7, 0);
+        RP_phi_lead_before_PVzCorr->Draw(0.8, 6e7, 0);
+        RP_phi_sublead_before_PVzCorr->Draw(0.8, 6e7, 0);
+        RP_pT_before_L1Corr->Draw(0.8, 6e7, 0);
+        RP_rapi_before_L1Corr->Draw(0.8, 6e7, 0);
+        RP_pT_lead_before_L1Corr->Draw(0.8, 6e7, 0);
+        RP_pT_sublead_before_L1Corr->Draw(0.8, 6e7, 0);
+        RP_eta_lead_before_L1Corr->Draw(0.8, 6e7, 0);
+        RP_eta_sublead_before_L1Corr->Draw(0.8, 6e7, 0);
+        RP_phi_lead_before_L1Corr->Draw(0.8, 4e7, 0);
+        RP_phi_sublead_before_L1Corr->Draw(0.8, 6e7, 0);
+        RP_pT_before_TopPtCorr->Draw(0.8, 6e7, 0);
+        RP_rapi_before_TopPtCorr->Draw(0.8, 6e7, 0);
+        RP_pT_lead_before_TopPtCorr->Draw(0.8, 6e7, 0);
+        RP_pT_sublead_before_TopPtCorr->Draw(0.8, 6e7, 0);
+        RP_eta_lead_before_TopPtCorr->Draw(0.8, 6e7, 0);
+        RP_eta_sublead_before_TopPtCorr->Draw(0.8, 6e7, 0);
+        RP_phi_lead_before_TopPtCorr->Draw(0.8, 6e7, 0);
+        RP_phi_sublead_before_TopPtCorr->Draw(0.8, 6e7, 0);
+        RP_pT->Draw(0.8, 6e7, 0);
+        RP_rapi->Draw(0.8, 6e7, 0);
+        RP_pT_lead->Draw(0.8, 6e7, 0);
+        RP_pT_sublead->Draw(0.8, 6e7, 0);
+        RP_eta_lead->Draw(0.8, 6e7, 0);
+        RP_eta_sublead->Draw(0.8, 6e7, 0);
+        RP_phi_lead->Draw(0.8, 6e7, 0);
+        RP_phi_sublead->Draw(0.8, 6e7, 0);
 
     } // End of if(Pt, rapi, pT, eta, phi)
 
@@ -1398,6 +1516,9 @@ void EE_HistDrawer (TString whichGraphs, TString type)
             f_bkg->GetObject("h_nVTX_before_PUCorr_"+Mgr.Procname[pr], h_bkg_nVTX_before_PUCorr[iter]);
             f_bkg->GetObject("h_nVTX_before_EffCorr_"+Mgr.Procname[pr], h_bkg_nVTX_before_EffCorr[iter]);
             f_bkg->GetObject("h_nVTX_"+Mgr.Procname[pr], h_bkg_nVTX[iter]);
+            removeNegativeBins(h_bkg_nVTX_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_nVTX_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_nVTX[iter]);
 
             Color_t color = kBlack;
             if (pr == _EE_QCDEMEnriched_Full) color = kRed + 3;
@@ -1442,6 +1563,9 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         f_DY->GetObject("h_nVTX_before_PUCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_nVTX_before_PUCorr);
         f_DY->GetObject("h_nVTX_before_EffCorr_"+Mgr.Procname[_EE_DY_Full], h_DY_nVTX_before_EffCorr);
         f_DY->GetObject("h_nVTX_"+Mgr.Procname[_EE_DY_Full], h_DY_nVTX);
+        removeNegativeBins(h_DY_nVTX_before_PUCorr);
+        removeNegativeBins(h_DY_nVTX_before_EffCorr);
+        removeNegativeBins(h_DY_nVTX);
 
         h_DY_nVTX_before_PUCorr->SetFillColor(kOrange);
         h_DY_nVTX_before_PUCorr->SetLineColor(kOrange);
@@ -1504,9 +1628,9 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         RP_nVTX_before_EffCorr->ImportLegend(legend);
         RP_nVTX->ImportLegend(legend);
 
-        RP_nVTX_before_PUCorr->Draw(0.5, 3e6, 0);
-        RP_nVTX_before_EffCorr->Draw(0.5, 3e6, 0);
-        RP_nVTX->Draw(0.5, 3e6, 0);
+        RP_nVTX_before_PUCorr->Draw(0.5, 3e7, 0);
+        RP_nVTX_before_EffCorr->Draw(0.5, 3e7, 0);
+        RP_nVTX->Draw(0.5, 3e7, 0);
 
         cout << "nVTX Chi^2 before PU reweight: " << CompChiSquared(h_data_nVTX, s_nVTX_before_PUCorr) << endl;
         cout << "nVTX Chi^2 after PU reweight: " << CompChiSquared(h_data_nVTX, s_nVTX) << endl;
@@ -1592,6 +1716,16 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
             f_bkg->GetObject("h_mass_fine_"+Mgr.Procname[pr], h_bkg_mass_fine[iter]);
             f_bkg->GetObject("h_mass_"+Mgr.Procname[pr], h_bkg_mass[iter]);
             f_bkg->GetObject("h_mass2_"+Mgr.Procname[pr], h_bkg_mass2[iter]);
+            removeNegativeBins(h_bkg_mass_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_mass_before_RoccoR[iter]);
+            removeNegativeBins(h_bkg_mass_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_mass_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_mass_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_mass_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_mass_fine[iter]);
+            removeNegativeBins(h_bkg_mass[iter]);
+            removeNegativeBins(h_bkg_mass2[iter]);
+
 
             Color_t color = kBlack;
             if (pr == _MuMu_QCDMuEnriched_Full) color = kRed + 3;
@@ -1674,6 +1808,16 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         f_DY->GetObject("h_mass_fine_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_fine);
         f_DY->GetObject("h_mass_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass);
         f_DY->GetObject("h_mass2_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass2);
+        removeNegativeBins(h_DY_mass_before_PUCorr);
+        removeNegativeBins(h_DY_mass_before_RoccoR);
+        removeNegativeBins(h_DY_mass_before_EffCorr);
+        removeNegativeBins(h_DY_mass_before_PVzCorr);
+        removeNegativeBins(h_DY_mass_before_L1Corr);
+        removeNegativeBins(h_DY_mass_before_TopPtCorr);
+        removeNegativeBins(h_DY_mass_fine);
+        removeNegativeBins(h_DY_mass);
+        removeNegativeBins(h_DY_mass2);
+
 
         h_DY_mass_before_PUCorr->SetFillColor(kOrange);
         h_DY_mass_before_PUCorr->SetLineColor(kOrange);
@@ -1763,7 +1907,8 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         RP_mass = new myRatioPlot_t("RP_mass", s_mass, h_data_mass);
         RP_mass2 = new myRatioPlot_t("RP_mass2", s_mass2, h_data_mass2);
 
-        RP_mass_before_PUCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before PU correction", 15, 3000);
+//        RP_mass_before_PUCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before PU correction", 15, 3000);
+        RP_mass_before_PUCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] prie#check{s} visas pataisas", 15, 3000, "Eksp./MC");
         RP_mass_before_RoccoR->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before Rochester correction", 15, 3000);
 //        RP_mass_before_EffCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before Efficiency SF", 15, 3000);
         RP_mass_before_EffCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] prie#check{s} efektyvumo pataisas", 15, 3000, "Eksp./MC");
@@ -1965,6 +2110,14 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
             f_bkg->GetObject("h_eta_sublead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_PUCorr[iter]);
             f_bkg->GetObject("h_phi_lead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_PUCorr[iter]);
             f_bkg->GetObject("h_phi_sublead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_pT_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_rapi_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_pT_lead_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_pT_sublead_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_eta_lead_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_eta_sublead_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_phi_lead_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_phi_sublead_before_PUCorr[iter]);
 
             f_bkg->GetObject("h_pT_before_RocCorr_"+Mgr.Procname[pr], h_bkg_pT_before_RoccoR[iter]);
             f_bkg->GetObject("h_rapi_before_RocCorr_"+Mgr.Procname[pr], h_bkg_rapi_before_RoccoR[iter]);
@@ -1974,6 +2127,14 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
             f_bkg->GetObject("h_eta_sublead_before_RocCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_RoccoR[iter]);
             f_bkg->GetObject("h_phi_lead_before_RocCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_RoccoR[iter]);
             f_bkg->GetObject("h_phi_sublead_before_RocCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_RoccoR[iter]);
+            removeNegativeBins(h_bkg_pT_before_RoccoR[iter]);
+            removeNegativeBins(h_bkg_rapi_before_RoccoR[iter]);
+            removeNegativeBins(h_bkg_pT_lead_before_RoccoR[iter]);
+            removeNegativeBins(h_bkg_pT_sublead_before_RoccoR[iter]);
+            removeNegativeBins(h_bkg_eta_lead_before_RoccoR[iter]);
+            removeNegativeBins(h_bkg_eta_sublead_before_RoccoR[iter]);
+            removeNegativeBins(h_bkg_phi_lead_before_RoccoR[iter]);
+            removeNegativeBins(h_bkg_phi_sublead_before_RoccoR[iter]);
 
             f_bkg->GetObject("h_pT_before_EffCorr_"+Mgr.Procname[pr], h_bkg_pT_before_EffCorr[iter]);
             f_bkg->GetObject("h_rapi_before_EffCorr_"+Mgr.Procname[pr], h_bkg_rapi_before_EffCorr[iter]);
@@ -1983,6 +2144,14 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
             f_bkg->GetObject("h_eta_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_EffCorr[iter]);
             f_bkg->GetObject("h_phi_lead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_EffCorr[iter]);
             f_bkg->GetObject("h_phi_sublead_before_EffCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_pT_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_rapi_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_pT_lead_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_pT_sublead_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_eta_lead_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_eta_sublead_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_phi_lead_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_phi_sublead_before_EffCorr[iter]);
 
             f_bkg->GetObject("h_pT_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_pT_before_PVzCorr[iter]);
             f_bkg->GetObject("h_rapi_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_rapi_before_PVzCorr[iter]);
@@ -1992,6 +2161,14 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
             f_bkg->GetObject("h_eta_sublead_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_PVzCorr[iter]);
             f_bkg->GetObject("h_phi_lead_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_PVzCorr[iter]);
             f_bkg->GetObject("h_phi_sublead_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_pT_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_rapi_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_pT_lead_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_pT_sublead_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_eta_lead_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_eta_sublead_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_phi_lead_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_phi_sublead_before_PVzCorr[iter]);
 
             f_bkg->GetObject("h_pT_before_L1Corr_"+Mgr.Procname[pr], h_bkg_pT_before_L1Corr[iter]);
             f_bkg->GetObject("h_rapi_before_L1Corr_"+Mgr.Procname[pr], h_bkg_rapi_before_L1Corr[iter]);
@@ -2001,6 +2178,14 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
             f_bkg->GetObject("h_eta_sublead_before_L1Corr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_L1Corr[iter]);
             f_bkg->GetObject("h_phi_lead_before_L1Corr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_L1Corr[iter]);
             f_bkg->GetObject("h_phi_sublead_before_L1Corr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_pT_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_rapi_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_pT_lead_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_pT_sublead_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_eta_lead_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_eta_sublead_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_phi_lead_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_phi_sublead_before_L1Corr[iter]);
 
             f_bkg->GetObject("h_pT_before_TopPtCorr_"+Mgr.Procname[pr], h_bkg_pT_before_TopPtCorr[iter]);
             f_bkg->GetObject("h_rapi_before_TopPtCorr_"+Mgr.Procname[pr], h_bkg_rapi_before_TopPtCorr[iter]);
@@ -2010,6 +2195,14 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
             f_bkg->GetObject("h_eta_sublead_before_TopPtCorr_"+Mgr.Procname[pr], h_bkg_eta_sublead_before_TopPtCorr[iter]);
             f_bkg->GetObject("h_phi_lead_before_TopPtCorr_"+Mgr.Procname[pr], h_bkg_phi_lead_before_TopPtCorr[iter]);
             f_bkg->GetObject("h_phi_sublead_before_TopPtCorr_"+Mgr.Procname[pr], h_bkg_phi_sublead_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_pT_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_rapi_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_pT_lead_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_pT_sublead_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_eta_lead_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_eta_sublead_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_phi_lead_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_phi_sublead_before_TopPtCorr[iter]);
 
             f_bkg->GetObject("h_pT_"+Mgr.Procname[pr], h_bkg_pT[iter]);
             f_bkg->GetObject("h_rapi_"+Mgr.Procname[pr], h_bkg_rapi[iter]);
@@ -2019,6 +2212,14 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
             f_bkg->GetObject("h_eta_sublead_"+Mgr.Procname[pr], h_bkg_eta_sublead[iter]);
             f_bkg->GetObject("h_phi_lead_"+Mgr.Procname[pr], h_bkg_phi_lead[iter]);
             f_bkg->GetObject("h_phi_sublead_"+Mgr.Procname[pr], h_bkg_phi_sublead[iter]);
+            removeNegativeBins(h_bkg_pT[iter]);
+            removeNegativeBins(h_bkg_rapi[iter]);
+            removeNegativeBins(h_bkg_pT_lead[iter]);
+            removeNegativeBins(h_bkg_pT_sublead[iter]);
+            removeNegativeBins(h_bkg_eta_lead[iter]);
+            removeNegativeBins(h_bkg_eta_sublead[iter]);
+            removeNegativeBins(h_bkg_phi_lead[iter]);
+            removeNegativeBins(h_bkg_phi_sublead[iter]);
 
             Color_t color = kBlack;
             if (pr == _MuMu_QCDMuEnriched_Full) color = kRed + 3;
@@ -2322,6 +2523,14 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         f_DY->GetObject("h_eta_sublead_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_sublead_before_PUCorr);
         f_DY->GetObject("h_phi_lead_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_lead_before_PUCorr);
         f_DY->GetObject("h_phi_sublead_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_sublead_before_PUCorr);
+        removeNegativeBins(h_DY_pT_before_PUCorr);
+        removeNegativeBins(h_DY_rapi_before_PUCorr);
+        removeNegativeBins(h_DY_pT_lead_before_PUCorr);
+        removeNegativeBins(h_DY_pT_sublead_before_PUCorr);
+        removeNegativeBins(h_DY_eta_lead_before_PUCorr);
+        removeNegativeBins(h_DY_eta_sublead_before_PUCorr);
+        removeNegativeBins(h_DY_phi_lead_before_PUCorr);
+        removeNegativeBins(h_DY_phi_sublead_before_PUCorr);
 
         f_DY->GetObject("h_pT_before_RocCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_before_RoccoR);
         f_DY->GetObject("h_rapi_before_RocCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_rapi_before_RoccoR);
@@ -2331,6 +2540,14 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         f_DY->GetObject("h_eta_sublead_before_RocCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_sublead_before_RoccoR);
         f_DY->GetObject("h_phi_lead_before_RocCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_lead_before_RoccoR);
         f_DY->GetObject("h_phi_sublead_before_RocCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_sublead_before_RoccoR);
+        removeNegativeBins(h_DY_pT_before_RoccoR);
+        removeNegativeBins(h_DY_rapi_before_RoccoR);
+        removeNegativeBins(h_DY_pT_lead_before_RoccoR);
+        removeNegativeBins(h_DY_pT_sublead_before_RoccoR);
+        removeNegativeBins(h_DY_eta_lead_before_RoccoR);
+        removeNegativeBins(h_DY_eta_sublead_before_RoccoR);
+        removeNegativeBins(h_DY_phi_lead_before_RoccoR);
+        removeNegativeBins(h_DY_phi_sublead_before_RoccoR);
 
         f_DY->GetObject("h_pT_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_before_EffCorr);
         f_DY->GetObject("h_rapi_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_rapi_before_EffCorr);
@@ -2340,6 +2557,14 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         f_DY->GetObject("h_eta_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_sublead_before_EffCorr);
         f_DY->GetObject("h_phi_lead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_lead_before_EffCorr);
         f_DY->GetObject("h_phi_sublead_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_sublead_before_EffCorr);
+        removeNegativeBins(h_DY_pT_before_EffCorr);
+        removeNegativeBins(h_DY_rapi_before_EffCorr);
+        removeNegativeBins(h_DY_pT_lead_before_EffCorr);
+        removeNegativeBins(h_DY_pT_sublead_before_EffCorr);
+        removeNegativeBins(h_DY_eta_lead_before_EffCorr);
+        removeNegativeBins(h_DY_eta_sublead_before_EffCorr);
+        removeNegativeBins(h_DY_phi_lead_before_EffCorr);
+        removeNegativeBins(h_DY_phi_sublead_before_EffCorr);
 
         f_DY->GetObject("h_pT_before_PVzCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_before_PVzCorr);
         f_DY->GetObject("h_rapi_before_PVzCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_rapi_before_PVzCorr);
@@ -2349,6 +2574,14 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         f_DY->GetObject("h_eta_sublead_before_PVzCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_sublead_before_PVzCorr);
         f_DY->GetObject("h_phi_lead_before_PVzCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_lead_before_PVzCorr);
         f_DY->GetObject("h_phi_sublead_before_PVzCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_sublead_before_PVzCorr);
+        removeNegativeBins(h_DY_pT_before_PVzCorr);
+        removeNegativeBins(h_DY_rapi_before_PVzCorr);
+        removeNegativeBins(h_DY_pT_lead_before_PVzCorr);
+        removeNegativeBins(h_DY_pT_sublead_before_PVzCorr);
+        removeNegativeBins(h_DY_eta_lead_before_PVzCorr);
+        removeNegativeBins(h_DY_eta_sublead_before_PVzCorr);
+        removeNegativeBins(h_DY_phi_lead_before_PVzCorr);
+        removeNegativeBins(h_DY_phi_sublead_before_PVzCorr);
 
         f_DY->GetObject("h_pT_before_L1Corr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_before_L1Corr);
         f_DY->GetObject("h_rapi_before_L1Corr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_rapi_before_L1Corr);
@@ -2358,6 +2591,14 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         f_DY->GetObject("h_eta_sublead_before_L1Corr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_sublead_before_L1Corr);
         f_DY->GetObject("h_phi_lead_before_L1Corr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_lead_before_L1Corr);
         f_DY->GetObject("h_phi_sublead_before_L1Corr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_sublead_before_L1Corr);
+        removeNegativeBins(h_DY_pT_before_L1Corr);
+        removeNegativeBins(h_DY_rapi_before_L1Corr);
+        removeNegativeBins(h_DY_pT_lead_before_L1Corr);
+        removeNegativeBins(h_DY_pT_sublead_before_L1Corr);
+        removeNegativeBins(h_DY_eta_lead_before_L1Corr);
+        removeNegativeBins(h_DY_eta_sublead_before_L1Corr);
+        removeNegativeBins(h_DY_phi_lead_before_L1Corr);
+        removeNegativeBins(h_DY_phi_sublead_before_L1Corr);
 
         f_DY->GetObject("h_pT_before_TopPtCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT_before_TopPtCorr);
         f_DY->GetObject("h_rapi_before_TopPtCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_rapi_before_TopPtCorr);
@@ -2367,6 +2608,14 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         f_DY->GetObject("h_eta_sublead_before_TopPtCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_sublead_before_TopPtCorr);
         f_DY->GetObject("h_phi_lead_before_TopPtCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_lead_before_TopPtCorr);
         f_DY->GetObject("h_phi_sublead_before_TopPtCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_sublead_before_TopPtCorr);
+        removeNegativeBins(h_DY_pT_before_TopPtCorr);
+        removeNegativeBins(h_DY_rapi_before_TopPtCorr);
+        removeNegativeBins(h_DY_pT_lead_before_TopPtCorr);
+        removeNegativeBins(h_DY_pT_sublead_before_TopPtCorr);
+        removeNegativeBins(h_DY_eta_lead_before_TopPtCorr);
+        removeNegativeBins(h_DY_eta_sublead_before_TopPtCorr);
+        removeNegativeBins(h_DY_phi_lead_before_TopPtCorr);
+        removeNegativeBins(h_DY_phi_sublead_before_TopPtCorr);
 
         f_DY->GetObject("h_pT_"+Mgr.Procname[_MuMu_DY_Full], h_DY_pT);
         f_DY->GetObject("h_rapi_"+Mgr.Procname[_MuMu_DY_Full], h_DY_rapi);
@@ -2376,6 +2625,14 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         f_DY->GetObject("h_eta_sublead_"+Mgr.Procname[_MuMu_DY_Full], h_DY_eta_sublead);
         f_DY->GetObject("h_phi_lead_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_lead);
         f_DY->GetObject("h_phi_sublead_"+Mgr.Procname[_MuMu_DY_Full], h_DY_phi_sublead);
+        removeNegativeBins(h_DY_pT);
+        removeNegativeBins(h_DY_rapi);
+        removeNegativeBins(h_DY_pT_lead);
+        removeNegativeBins(h_DY_pT_sublead);
+        removeNegativeBins(h_DY_eta_lead);
+        removeNegativeBins(h_DY_eta_sublead);
+        removeNegativeBins(h_DY_phi_lead);
+        removeNegativeBins(h_DY_phi_sublead);
 
         h_DY_pT_before_PUCorr->SetFillColor(kOrange);
         h_DY_rapi_before_PUCorr->SetFillColor(kOrange);
@@ -2749,8 +3006,8 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
                       *RP_phi_sublead_before_PUCorr, *RP_phi_sublead_before_RoccoR, *RP_phi_sublead_before_EffCorr,
                       *RP_phi_sublead_before_PVzCorr, *RP_phi_sublead_before_L1Corr, *RP_phi_sublead_before_TopPtCorr, *RP_phi_sublead;
 
-        RP_pT_before_PUCorr = new myRatioPlot_t("RP_pT_before_PUCorr", s_pT, h_data_pT_before_RoccoR);
-        RP_rapi_before_PUCorr = new myRatioPlot_t("RP_rapi_before_PUCorr", s_rapi, h_data_rapi_before_RoccoR);
+        RP_pT_before_PUCorr = new myRatioPlot_t("RP_pT_before_PUCorr", s_pT_before_PUCorr, h_data_pT_before_RoccoR);
+        RP_rapi_before_PUCorr = new myRatioPlot_t("RP_rapi_before_PUCorr", s_rapi_before_PUCorr, h_data_rapi_before_RoccoR);
         RP_pT_lead_before_PUCorr = new myRatioPlot_t("RP_pT_lead_before_PUCorr", s_pT_lead_before_PUCorr, h_data_pT_lead_before_RoccoR);
         RP_pT_sublead_before_PUCorr = new myRatioPlot_t("RP_pT_sublead_before_PUCorr", s_pT_sublead_before_PUCorr, h_data_pT_sublead_before_RoccoR);
         RP_eta_lead_before_PUCorr = new myRatioPlot_t("RP_eta_lead_before_PUCorr", s_eta_lead_before_PUCorr, h_data_eta_lead_before_RoccoR);
@@ -2813,11 +3070,14 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         RP_phi_sublead = new myRatioPlot_t("RP_phi_sublead", s_phi_sublead, h_data_phi_sublead);
 
         RP_pT_before_PUCorr->SetPlots("p_{#lower[-0.25]{T #scale[1.2]{#mu#mu}}} [GeV/c] before PU correction", 0, 1000);
-        RP_rapi_before_PUCorr->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} before PU correction", -3, 3);
+//        RP_rapi_before_PUCorr->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} before PU correction", -3, 3);
+        RP_rapi_before_PUCorr->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} prie#check{s} visas pataisas", -3, 3, "Eksp./MC");
         RP_pT_lead_before_PUCorr->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{lead}}) [GeV/c] before PU correction", 0, 1000);
         RP_pT_sublead_before_PUCorr->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{sublead}}) [GeV/c] before PU correction", 0, 1000);
-        RP_eta_lead_before_PUCorr->SetPlots("#eta (#mu_{#lower[-0.4]{lead}}) before PU correction", -3.5, 3.5);
-        RP_eta_sublead_before_PUCorr->SetPlots("#eta (#mu_{#lower[-0.4]{sublead}}) before PU correction", -3.5, 3.5);
+//        RP_eta_lead_before_PUCorr->SetPlots("#eta (#mu_{#lower[-0.4]{lead}}) before PU correction", -3.5, 3.5);
+        RP_eta_lead_before_PUCorr->SetPlots("#eta (#mu_{#lower[-0.4]{1}}) prie#check{s} visas pataisas", -3.5, 3.5, "Eksp./MC");
+//        RP_eta_sublead_before_PUCorr->SetPlots("#eta (#mu_{#lower[-0.4]{sublead}}) before PU correction", -3.5, 3.5);
+        RP_eta_sublead_before_PUCorr->SetPlots("#eta (#mu_{#lower[-0.4]{2}}) prie#check{s} visas pataisas", -3.5, 3.5, "Eksp./MC");
         RP_phi_lead_before_PUCorr->SetPlots("#phi (#mu_{#lower[-0.4]{lead}}) before PU correction", -4, 4);
         RP_phi_sublead_before_PUCorr->SetPlots("#phi (#mu_{#lower[-0.4]{sublead}}) before PU correction", -4, 4);
 
@@ -2884,7 +3144,7 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         RP_phi_lead->SetPlots("#phi (#mu_{#lower[-0.4]{lead}})", -4, 4);
         RP_phi_sublead->SetPlots("#phi (#mu_{#lower[-0.4]{sublead}})", -4, 4);
 
-        TLegend *legend = new TLegend(0.62, 0.77, 0.95, 0.95);
+        TLegend *legend = new TLegend(0.55, 0.72, 0.95, 0.95);
         legend->SetNColumns(2);
 //        legend->AddEntry(h_data_pT, "Data", "lp");
         legend->AddEntry(h_data_pT, "Matavimas", "lp");
@@ -2956,62 +3216,62 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         RP_phi_lead->ImportLegend(legend);
         RP_phi_sublead->ImportLegend(legend);
 
-        RP_pT_before_PUCorr->Draw(0.5, 8e6, 0);
-        RP_rapi_before_PUCorr->Draw(0.5, 8e6, 0);
-        RP_pT_lead_before_PUCorr->Draw(0.5, 8e6, 0);
-        RP_pT_sublead_before_PUCorr->Draw(0.5, 8e6, 0);
-        RP_eta_lead_before_PUCorr->Draw(0.5, 8e6, 0);
-        RP_eta_sublead_before_PUCorr->Draw(0.5, 8e6, 0);
-        RP_phi_lead_before_PUCorr->Draw(0.5, 8e6, 0);
-        RP_phi_sublead_before_PUCorr->Draw(0.5, 8e6, 0);
-        RP_pT_before_RoccoR->Draw(0.5, 8e6, 0);
-        RP_rapi_before_RoccoR->Draw(0.5, 8e6, 0);
-        RP_pT_lead_before_RoccoR->Draw(0.5, 8e6, 0);
-        RP_pT_sublead_before_RoccoR->Draw(0.5, 8e6, 0);
-        RP_eta_lead_before_RoccoR->Draw(0.5, 8e6, 0);
-        RP_eta_sublead_before_RoccoR->Draw(0.5, 8e6, 0);
-        RP_phi_lead_before_RoccoR->Draw(0.5, 8e6, 0);
-        RP_phi_sublead_before_RoccoR->Draw(0.5, 8e6, 0);
-        RP_pT_before_EffCorr->Draw(0.5, 8e6, 0);
-        RP_rapi_before_EffCorr->Draw(0.5, 8e6, 0);
-        RP_pT_lead_before_EffCorr->Draw(0.5, 8e6, 0);
-        RP_pT_sublead_before_EffCorr->Draw(0.5, 8e6, 0);
-        RP_eta_lead_before_EffCorr->Draw(0.5, 8e6, 0);
-        RP_eta_sublead_before_EffCorr->Draw(0.5, 8e6, 0);
-        RP_phi_lead_before_EffCorr->Draw(0.5, 8e6, 0);
-        RP_phi_sublead_before_EffCorr->Draw(0.5, 8e6, 0);
-        RP_pT_before_PVzCorr->Draw(0.5, 8e6, 0);
-        RP_rapi_before_PVzCorr->Draw(0.5, 8e6, 0);
-        RP_pT_lead_before_PVzCorr->Draw(0.5, 8e6, 0);
-        RP_pT_sublead_before_PVzCorr->Draw(0.5, 8e6, 0);
-        RP_eta_lead_before_PVzCorr->Draw(0.5, 8e6, 0);
-        RP_eta_sublead_before_PVzCorr->Draw(0.5, 8e6, 0);
-        RP_phi_lead_before_PVzCorr->Draw(0.5, 8e6, 0);
-        RP_phi_sublead_before_PVzCorr->Draw(0.5, 8e6, 0);
-        RP_pT_before_L1Corr->Draw(0.5, 8e6, 0);
-        RP_rapi_before_L1Corr->Draw(0.5, 8e6, 0);
-        RP_pT_lead_before_L1Corr->Draw(0.5, 8e6, 0);
-        RP_pT_sublead_before_L1Corr->Draw(0.5, 8e6, 0);
-        RP_eta_lead_before_L1Corr->Draw(0.5, 8e6, 0);
-        RP_eta_sublead_before_L1Corr->Draw(0.5, 8e6, 0);
-        RP_phi_lead_before_L1Corr->Draw(0.5, 8e6, 0);
-        RP_phi_sublead_before_L1Corr->Draw(0.5, 8e6, 0);
-        RP_pT_before_TopPtCorr->Draw(0.5, 8e6, 0);
-        RP_rapi_before_TopPtCorr->Draw(0.5, 8e6, 0);
-        RP_pT_lead_before_TopPtCorr->Draw(0.5, 8e6, 0);
-        RP_pT_sublead_before_TopPtCorr->Draw(0.5, 8e6, 0);
-        RP_eta_lead_before_TopPtCorr->Draw(0.5, 8e6, 0);
-        RP_eta_sublead_before_TopPtCorr->Draw(0.5, 8e6, 0);
-        RP_phi_lead_before_TopPtCorr->Draw(0.5, 8e6, 0);
-        RP_phi_sublead_before_TopPtCorr->Draw(0.5, 8e6, 0);
-        RP_pT->Draw(0.5, 8e6, 0);
-        RP_rapi->Draw(0.5, 8e6, 0);
-        RP_pT_lead->Draw(0.5, 8e6, 0);
-        RP_pT_sublead->Draw(0.5, 8e6, 0);
-        RP_eta_lead->Draw(0.5, 8e6, 0);
-        RP_eta_sublead->Draw(0.5, 8e6, 0);
-        RP_phi_lead->Draw(0.5, 8e6, 0);
-        RP_phi_sublead->Draw(0.5, 8e6, 0);
+        RP_pT_before_PUCorr->Draw(0.8, 6e7, 0);
+        RP_rapi_before_PUCorr->Draw(0.8, 6e7, 0);
+        RP_pT_lead_before_PUCorr->Draw(0.8, 6e7, 0);
+        RP_pT_sublead_before_PUCorr->Draw(0.8, 6e7, 0);
+        RP_eta_lead_before_PUCorr->Draw(0.8, 6e7, 0);
+        RP_eta_sublead_before_PUCorr->Draw(0.8, 6e7, 0);
+        RP_phi_lead_before_PUCorr->Draw(0.8, 6e7, 0);
+        RP_phi_sublead_before_PUCorr->Draw(0.8, 6e7, 0);
+        RP_pT_before_RoccoR->Draw(0.8, 6e7, 0);
+        RP_rapi_before_RoccoR->Draw(0.8, 6e7, 0);
+        RP_pT_lead_before_RoccoR->Draw(0.8, 6e7, 0);
+        RP_pT_sublead_before_RoccoR->Draw(0.8, 6e7, 0);
+        RP_eta_lead_before_RoccoR->Draw(0.8, 6e7, 0);
+        RP_eta_sublead_before_RoccoR->Draw(0.8, 6e7, 0);
+        RP_phi_lead_before_RoccoR->Draw(0.8, 6e7, 0);
+        RP_phi_sublead_before_RoccoR->Draw(0.8, 6e7, 0);
+        RP_pT_before_EffCorr->Draw(0.8, 6e7, 0);
+        RP_rapi_before_EffCorr->Draw(0.8, 6e7, 0);
+        RP_pT_lead_before_EffCorr->Draw(0.8, 6e7, 0);
+        RP_pT_sublead_before_EffCorr->Draw(0.8, 6e7, 0);
+        RP_eta_lead_before_EffCorr->Draw(0.8, 6e7, 0);
+        RP_eta_sublead_before_EffCorr->Draw(0.8, 6e7, 0);
+        RP_phi_lead_before_EffCorr->Draw(0.8, 6e7, 0);
+        RP_phi_sublead_before_EffCorr->Draw(0.8, 6e7, 0);
+        RP_pT_before_PVzCorr->Draw(0.8, 6e7, 0);
+        RP_rapi_before_PVzCorr->Draw(0.8, 6e7, 0);
+        RP_pT_lead_before_PVzCorr->Draw(0.8, 6e7, 0);
+        RP_pT_sublead_before_PVzCorr->Draw(0.8, 6e7, 0);
+        RP_eta_lead_before_PVzCorr->Draw(0.8, 6e7, 0);
+        RP_eta_sublead_before_PVzCorr->Draw(0.8, 6e7, 0);
+        RP_phi_lead_before_PVzCorr->Draw(0.8, 6e7, 0);
+        RP_phi_sublead_before_PVzCorr->Draw(0.8, 6e7, 0);
+        RP_pT_before_L1Corr->Draw(0.8, 6e7, 0);
+        RP_rapi_before_L1Corr->Draw(0.8, 6e7, 0);
+        RP_pT_lead_before_L1Corr->Draw(0.8, 6e7, 0);
+        RP_pT_sublead_before_L1Corr->Draw(0.8, 6e7, 0);
+        RP_eta_lead_before_L1Corr->Draw(0.8, 6e7, 0);
+        RP_eta_sublead_before_L1Corr->Draw(0.8, 6e7, 0);
+        RP_phi_lead_before_L1Corr->Draw(0.8, 6e7, 0);
+        RP_phi_sublead_before_L1Corr->Draw(0.8, 6e7, 0);
+        RP_pT_before_TopPtCorr->Draw(0.8, 6e7, 0);
+        RP_rapi_before_TopPtCorr->Draw(0.8, 6e7, 0);
+        RP_pT_lead_before_TopPtCorr->Draw(0.8, 1e7, 0);
+        RP_pT_sublead_before_TopPtCorr->Draw(0.8, 6e7, 0);
+        RP_eta_lead_before_TopPtCorr->Draw(0.8, 6e7, 0);
+        RP_eta_sublead_before_TopPtCorr->Draw(0.8, 6e7, 0);
+        RP_phi_lead_before_TopPtCorr->Draw(0.8, 6e7, 0);
+        RP_phi_sublead_before_TopPtCorr->Draw(0.8, 6e7, 0);
+        RP_pT->Draw(0.8, 6e7, 0);
+        RP_rapi->Draw(0.8, 6e7, 0);
+        RP_pT_lead->Draw(0.8, 6e7, 0);
+        RP_pT_sublead->Draw(0.8, 6e7, 0);
+        RP_eta_lead->Draw(0.8, 6e7, 0);
+        RP_eta_sublead->Draw(0.8, 6e7, 0);
+        RP_phi_lead->Draw(0.8, 6e7, 0);
+        RP_phi_sublead->Draw(0.8, 6e7, 0);
 
     } // End of if(Pt, rapi, pT, eta, phi)
 
@@ -3040,6 +3300,9 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
             f_bkg->GetObject("h_nVTX_before_PUCorr_"+Mgr.Procname[pr], h_bkg_nVTX_before_PUCorr[iter]);
             f_bkg->GetObject("h_nVTX_before_EffCorr_"+Mgr.Procname[pr], h_bkg_nVTX_before_EffCorr[iter]);
             f_bkg->GetObject("h_nVTX_"+Mgr.Procname[pr], h_bkg_nVTX[iter]);
+            removeNegativeBins(h_bkg_nVTX_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_nVTX_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_nVTX[iter]);
 
             Color_t color = kBlack;
             if (pr == _MuMu_QCDMuEnriched_Full) color = kRed + 3;
@@ -3085,6 +3348,9 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         f_DY->GetObject("h_nVTX_before_PUCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_nVTX_before_PUCorr);
         f_DY->GetObject("h_nVTX_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_nVTX_before_EffCorr);
         f_DY->GetObject("h_nVTX_"+Mgr.Procname[_MuMu_DY_Full], h_DY_nVTX);
+        removeNegativeBins(h_DY_nVTX_before_PUCorr);
+        removeNegativeBins(h_DY_nVTX_before_EffCorr);
+        removeNegativeBins(h_DY_nVTX);
 
         h_DY_nVTX_before_PUCorr->SetFillColor(kOrange);
         h_DY_nVTX_before_PUCorr->SetLineColor(kOrange);
@@ -3145,9 +3411,9 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         RP_nVTX_before_EffCorr->ImportLegend(legend);
         RP_nVTX->ImportLegend(legend);
 
-        RP_nVTX_before_PUCorr->Draw(0.5, 3e6, 0);
-        RP_nVTX_before_EffCorr->Draw(0.5, 3e6, 0);
-        RP_nVTX->Draw(0.5, 3e6, 0);
+        RP_nVTX_before_PUCorr->Draw(0.5, 3e7, 0);
+        RP_nVTX_before_EffCorr->Draw(0.5, 3e7, 0);
+        RP_nVTX->Draw(0.5, 3e7, 0);
 
         cout << "nVTX Chi^2 before PU reweight: " << CompChiSquared(h_data_nVTX, s_nVTX_before_PUCorr) << endl;
         cout << "nVTX Chi^2 after PU reweight: " << CompChiSquared(h_data_nVTX, s_nVTX) << endl;
@@ -3255,6 +3521,24 @@ void EMu_HistDrawer (TString whichGraphs , TString type)
             f_bkg->GetObject("h_emuSS_mass_"+Mgr.Procname[pr], h_SS_bkg_mass[iter]);
             f_bkg->GetObject("h_emu_mass2_"+Mgr.Procname[pr], h_bkg_mass2[iter]);
             f_bkg->GetObject("h_emuSS_mass2_"+Mgr.Procname[pr], h_SS_bkg_mass2[iter]);
+            removeNegativeBins(h_bkg_mass_before_PUCorr[iter]);
+            removeNegativeBins(h_SS_bkg_mass_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_mass_before_RoccoR[iter]);
+            removeNegativeBins(h_SS_bkg_mass_before_RoccoR[iter]);
+            removeNegativeBins(h_bkg_mass_before_EffCorr[iter]);
+            removeNegativeBins(h_SS_bkg_mass_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_mass_before_PVzCorr[iter]);
+            removeNegativeBins(h_SS_bkg_mass_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_mass_before_L1Corr[iter]);
+            removeNegativeBins(h_SS_bkg_mass_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_mass_before_TopPtCorr[iter]);
+            removeNegativeBins(h_SS_bkg_mass_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_mass_fine[iter]);
+            removeNegativeBins(h_SS_bkg_mass_fine[iter]);
+            removeNegativeBins(h_bkg_mass[iter]);
+            removeNegativeBins(h_SS_bkg_mass[iter]);
+            removeNegativeBins(h_bkg_mass2[iter]);
+            removeNegativeBins(h_SS_bkg_mass2[iter]);
 
             if (pr == _EMu_WJets_Full)
             {
@@ -3464,7 +3748,7 @@ void EMu_HistDrawer (TString whichGraphs , TString type)
         RP_mass_fine->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} [GeV/c^{2}]", 60, 120);
         RP_SS_mass_fine->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}]", 60, 120);
 //        RP_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
-        RP_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (prie#check{s}ingu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}} [GeV/c^{2}]", 15, 3000, "Eksp./MC");
+        RP_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (prie#check{s}ingu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}) [GeV/c^{2}]", 15, 3000, "Eksp./MC");
 //        RP_SS_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}]", 15, 3000);
         RP_SS_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (vienodu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}) [GeV/c^{2}]", 15, 3000, "Eksp./MC");
         RP_mass2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
@@ -3505,24 +3789,24 @@ void EMu_HistDrawer (TString whichGraphs , TString type)
         RP_mass2->ImportLegend(legend);
         RP_SS_mass2->ImportLegend(legend);
 
-        RP_mass_before_PUCorr->Draw(4e-1, 2e4, 1);
-        RP_SS_mass_before_PUCorr->Draw(4e-1, 2e4, 1);
-        RP_mass_before_RoccoR->Draw(4e-1, 2e4, 1);
-        RP_SS_mass_before_RoccoR->Draw(4e-1, 2e4, 1);
-        RP_mass_before_EffCorr->Draw(4e-1, 2e4, 1);
-        RP_SS_mass_before_EffCorr->Draw(4e-1, 2e4, 1);
-        RP_mass_before_PVzCorr->Draw(4e-1, 2e4, 1);
-        RP_SS_mass_before_PVzCorr->Draw(4e-1, 2e4, 1);
-        RP_mass_before_L1Corr->Draw(4e-1, 2e4, 1);
-        RP_SS_mass_before_L1Corr->Draw(4e-1, 2e4, 1);
-        RP_mass_before_TopPtCorr->Draw(4e-1, 2e4, 1);
-        RP_SS_mass_before_TopPtCorr->Draw(4e-1, 2e4, 1);
-        RP_mass_fine->Draw(4e-1, 2e4, 0);
-        RP_SS_mass_fine->Draw(4e-1, 2e4, 0);
-        RP_mass->Draw(4e-1, 2e4, 1);
-        RP_SS_mass->Draw(4e-1, 2e4, 1);
-        RP_mass2->Draw(4e-1, 2e4, 1);
-        RP_SS_mass2->Draw(4e-1, 2e4, 1);
+        RP_mass_before_PUCorr->Draw(4e-1, 7e4, 1);
+        RP_SS_mass_before_PUCorr->Draw(4e-1, 7e4, 1);
+        RP_mass_before_RoccoR->Draw(4e-1, 7e4, 1);
+        RP_SS_mass_before_RoccoR->Draw(4e-1, 7e4, 1);
+        RP_mass_before_EffCorr->Draw(4e-1, 7e4, 1);
+        RP_SS_mass_before_EffCorr->Draw(4e-1, 7e4, 1);
+        RP_mass_before_PVzCorr->Draw(4e-1, 7e4, 1);
+        RP_SS_mass_before_PVzCorr->Draw(4e-1, 7e4, 1);
+        RP_mass_before_L1Corr->Draw(4e-1, 7e4, 1);
+        RP_SS_mass_before_L1Corr->Draw(4e-1, 7e4, 1);
+        RP_mass_before_TopPtCorr->Draw(4e-1, 7e4, 1);
+        RP_SS_mass_before_TopPtCorr->Draw(4e-1,7e4, 1);
+        RP_mass_fine->Draw(4e-1, 7e4, 0);
+        RP_SS_mass_fine->Draw(4e-1, 7e4, 0);
+        RP_mass->Draw(4e-1, 7e4, 1);
+        RP_SS_mass->Draw(4e-1, 7e4, 1);
+        RP_mass2->Draw(4e-1, 7e4, 1);
+        RP_SS_mass2->Draw(4e-1, 7e4, 1);
 
         Double_t dataerror, MCerror, MCerror_noSF, dataintegral=348650, MCintegral, MCintegral_noSF;
         Double_t dataerrorSS, MCerrorSS, MCerrorSS_noSF, dataintegralSS=348650, MCintegralSS, MCintegralSS_noSF;
@@ -3724,6 +4008,18 @@ void EMu_HistDrawer (TString whichGraphs , TString type)
             f_bkg->GetObject("h_muSS_pT_before_PUCorr_"+Mgr.Procname[pr], h_bkg_pT_muSS_before_PUCorr[iter]);
             f_bkg->GetObject("h_muSS_eta_before_PUCorr_"+Mgr.Procname[pr], h_bkg_eta_muSS_before_PUCorr[iter]);
             f_bkg->GetObject("h_muSS_phi_before_PUCorr_"+Mgr.Procname[pr], h_bkg_phi_muSS_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_pT_ele_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_eta_ele_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_phi_ele_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_pT_mu_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_eta_mu_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_phi_mu_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_pT_eleSS_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_eta_eleSS_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_phi_eleSS_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_pT_muSS_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_eta_muSS_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_phi_muSS_before_PUCorr[iter]);
 
             f_bkg->GetObject("h_mu_pT_before_RocCorr_"+Mgr.Procname[pr], h_bkg_pT_mu_before_RoccoR[iter]);
             f_bkg->GetObject("h_mu_eta_before_RocCorr_"+Mgr.Procname[pr], h_bkg_eta_mu_before_RoccoR[iter]);
@@ -3731,6 +4027,12 @@ void EMu_HistDrawer (TString whichGraphs , TString type)
             f_bkg->GetObject("h_muSS_pT_before_RocCorr_"+Mgr.Procname[pr], h_bkg_pT_muSS_before_RoccoR[iter]);
             f_bkg->GetObject("h_muSS_eta_before_RocCorr_"+Mgr.Procname[pr], h_bkg_eta_muSS_before_RoccoR[iter]);
             f_bkg->GetObject("h_muSS_phi_before_RocCorr_"+Mgr.Procname[pr], h_bkg_phi_muSS_before_RoccoR[iter]);
+            removeNegativeBins(h_bkg_pT_mu_before_RoccoR[iter]);
+            removeNegativeBins(h_bkg_eta_mu_before_RoccoR[iter]);
+            removeNegativeBins(h_bkg_phi_mu_before_RoccoR[iter]);
+            removeNegativeBins(h_bkg_pT_muSS_before_RoccoR[iter]);
+            removeNegativeBins(h_bkg_eta_muSS_before_RoccoR[iter]);
+            removeNegativeBins(h_bkg_phi_muSS_before_RoccoR[iter]);
 
             f_bkg->GetObject("h_ele_pT_before_EffCorr_"+Mgr.Procname[pr], h_bkg_pT_ele_before_EffCorr[iter]);
             f_bkg->GetObject("h_ele_eta_before_EffCorr_"+Mgr.Procname[pr], h_bkg_eta_ele_before_EffCorr[iter]);
@@ -3744,6 +4046,18 @@ void EMu_HistDrawer (TString whichGraphs , TString type)
             f_bkg->GetObject("h_muSS_pT_before_EffCorr_"+Mgr.Procname[pr], h_bkg_pT_muSS_before_EffCorr[iter]);
             f_bkg->GetObject("h_muSS_eta_before_EffCorr_"+Mgr.Procname[pr], h_bkg_eta_muSS_before_EffCorr[iter]);
             f_bkg->GetObject("h_muSS_phi_before_EffCorr_"+Mgr.Procname[pr], h_bkg_phi_muSS_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_pT_ele_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_eta_ele_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_phi_ele_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_pT_mu_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_eta_mu_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_phi_mu_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_pT_eleSS_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_eta_eleSS_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_phi_eleSS_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_pT_muSS_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_eta_muSS_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_phi_muSS_before_EffCorr[iter]);
 
             f_bkg->GetObject("h_ele_pT_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_pT_ele_before_PVzCorr[iter]);
             f_bkg->GetObject("h_ele_eta_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_eta_ele_before_PVzCorr[iter]);
@@ -3757,6 +4071,18 @@ void EMu_HistDrawer (TString whichGraphs , TString type)
             f_bkg->GetObject("h_muSS_pT_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_pT_muSS_before_PVzCorr[iter]);
             f_bkg->GetObject("h_muSS_eta_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_eta_muSS_before_PVzCorr[iter]);
             f_bkg->GetObject("h_muSS_phi_before_PVzCorr_"+Mgr.Procname[pr], h_bkg_phi_muSS_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_pT_ele_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_eta_ele_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_phi_ele_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_pT_mu_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_eta_mu_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_phi_mu_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_pT_eleSS_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_eta_eleSS_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_phi_eleSS_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_pT_muSS_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_eta_muSS_before_PVzCorr[iter]);
+            removeNegativeBins(h_bkg_phi_muSS_before_PVzCorr[iter]);
 
             f_bkg->GetObject("h_ele_pT_before_L1Corr_"+Mgr.Procname[pr], h_bkg_pT_ele_before_L1Corr[iter]);
             f_bkg->GetObject("h_ele_eta_before_L1Corr_"+Mgr.Procname[pr], h_bkg_eta_ele_before_L1Corr[iter]);
@@ -3770,6 +4096,18 @@ void EMu_HistDrawer (TString whichGraphs , TString type)
             f_bkg->GetObject("h_muSS_pT_before_L1Corr_"+Mgr.Procname[pr], h_bkg_pT_muSS_before_L1Corr[iter]);
             f_bkg->GetObject("h_muSS_eta_before_L1Corr_"+Mgr.Procname[pr], h_bkg_eta_muSS_before_L1Corr[iter]);
             f_bkg->GetObject("h_muSS_phi_before_L1Corr_"+Mgr.Procname[pr], h_bkg_phi_muSS_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_pT_ele_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_eta_ele_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_phi_ele_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_pT_mu_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_eta_mu_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_phi_mu_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_pT_eleSS_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_eta_eleSS_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_phi_eleSS_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_pT_muSS_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_eta_muSS_before_L1Corr[iter]);
+            removeNegativeBins(h_bkg_phi_muSS_before_L1Corr[iter]);
 
             f_bkg->GetObject("h_ele_pT_before_TopPtCorr_"+Mgr.Procname[pr], h_bkg_pT_ele_before_TopPtCorr[iter]);
             f_bkg->GetObject("h_ele_eta_before_TopPtCorr_"+Mgr.Procname[pr], h_bkg_eta_ele_before_TopPtCorr[iter]);
@@ -3783,6 +4121,18 @@ void EMu_HistDrawer (TString whichGraphs , TString type)
             f_bkg->GetObject("h_muSS_pT_before_TopPtCorr_"+Mgr.Procname[pr], h_bkg_pT_muSS_before_TopPtCorr[iter]);
             f_bkg->GetObject("h_muSS_eta_before_TopPtCorr_"+Mgr.Procname[pr], h_bkg_eta_muSS_before_TopPtCorr[iter]);
             f_bkg->GetObject("h_muSS_phi_before_TopPtCorr_"+Mgr.Procname[pr], h_bkg_phi_muSS_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_pT_ele_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_eta_ele_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_phi_ele_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_pT_mu_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_eta_mu_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_phi_mu_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_pT_eleSS_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_eta_eleSS_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_phi_eleSS_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_pT_muSS_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_eta_muSS_before_TopPtCorr[iter]);
+            removeNegativeBins(h_bkg_phi_muSS_before_TopPtCorr[iter]);
 
             f_bkg->GetObject("h_ele_pT_"+Mgr.Procname[pr], h_bkg_pT_ele[iter]);
             f_bkg->GetObject("h_ele_eta_"+Mgr.Procname[pr], h_bkg_eta_ele[iter]);
@@ -3796,6 +4146,18 @@ void EMu_HistDrawer (TString whichGraphs , TString type)
             f_bkg->GetObject("h_muSS_pT_"+Mgr.Procname[pr], h_bkg_pT_muSS[iter]);
             f_bkg->GetObject("h_muSS_eta_"+Mgr.Procname[pr], h_bkg_eta_muSS[iter]);
             f_bkg->GetObject("h_muSS_phi_"+Mgr.Procname[pr], h_bkg_phi_muSS[iter]);
+            removeNegativeBins(h_bkg_pT_ele[iter]);
+            removeNegativeBins(h_bkg_eta_el[iter]);
+            removeNegativeBins(h_bkg_phi_ele[iter]);
+            removeNegativeBins(h_bkg_pT_mu[iter]);
+            removeNegativeBins(h_bkg_eta_mu[iter]);
+            removeNegativeBins(h_bkg_phi_mu[iter]);
+            removeNegativeBins(h_bkg_pT_eleSS[iter]);
+            removeNegativeBins(h_bkg_eta_eleSS[iter]);
+            removeNegativeBins(h_bkg_phi_eleSS[iter]);
+            removeNegativeBins(h_bkg_pT_muSS[iter]);
+            removeNegativeBins(h_bkg_eta_muSS[iter]);
+            removeNegativeBins(h_bkg_phi_muSS[iter]);
 
             Color_t color = kBlack;
             if (pr == _EMu_WJets_Full) color = kRed - 2;
@@ -4685,6 +5047,10 @@ void EMu_HistDrawer (TString whichGraphs , TString type)
             f_bkg->GetObject("h_nVTX_before_PUCorr_"+Mgr.Procname[pr], h_bkg_nVTX_before_PUCorr[iter]);
             f_bkg->GetObject("h_nVTX_before_EffCorr_"+Mgr.Procname[pr], h_bkg_nVTX_before_EffCorr[iter]);
             f_bkg->GetObject("h_nVTX_"+Mgr.Procname[pr], h_bkg_nVTX[iter]);
+            removeNegativeBins(h_bkg_nVTX_before_PUCorr[iter]);
+            removeNegativeBins(h_bkg_nVTX_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_nVTX[iter]);
+
 
             Color_t color = kBlack;
             if (pr == _EMu_WJets_Full) color = kRed - 2;
@@ -4829,6 +5195,8 @@ void Est_HistDrawer()
             f_bkg_est_ee->GetObject("h_ee_mass_Est_"+Mgr.Procname[pr], h_bkg_mass_ee[iter]);
             f_bkg_est_ee->GetObject("h_ee_mass_Est2_"+Mgr.Procname[pr], h_bkg_mass_ee2[iter]);
         }
+        removeNegativeBins(h_bkg_mass_ee[iter]);
+        removeNegativeBins(h_bkg_mass_ee2[iter]);
 
         Color_t color = kBlack;
         if (pr == _EE_QCDEMEnriched_Full) color = kRed + 3;
@@ -4867,6 +5235,8 @@ void Est_HistDrawer()
     TH1D *h_DY_mass_ee, *h_DY_mass_ee2;
     f_DY_ee->GetObject("h_mass_"+Mgr.Procname[_EE_DY_Full], h_DY_mass_ee);
     f_DY_ee->GetObject("h_mass2_"+Mgr.Procname[_EE_DY_Full], h_DY_mass_ee2);
+    removeNegativeBins(h_DY_mass_ee);
+    removeNegativeBins(h_DY_mass_ee2);
     h_DY_mass_ee->SetFillColor(kOrange);
     h_DY_mass_ee->SetLineColor(kOrange);
     h_DY_mass_ee->SetDirectory(0);
@@ -4894,12 +5264,30 @@ void Est_HistDrawer()
 
 //--------------------------------- Ratio Plot --------------------------------------
 
+// SYSTEMATICS
+    TVectorD estSyst_ee = *((TVectorD*)(f_bkg_est_ee->Get("estSystematics")));
+    TVectorD estSyst_ee2 = *((TVectorD*)(f_bkg_est_ee->Get("estSystematics2")));
+    Double_t systematics_ee[43], systematics_ee2[86], estSystematics_ee[43], estSystematics_ee2[86];
+    for (int i=0; i<86; i++)
+    {
+        if (i < 43)
+        {
+            estSystematics_ee[i] = estSyst_ee[i];
+            systematics_ee[i] = estSyst_ee[i] / ((TH1D*)(s_mass_ee->GetStack()->Last()))->GetBinContent(i+1);
+        }
+        systematics_ee2[i] = estSyst_ee2[i] / ((TH1D*)(s_mass_ee2->GetStack()->Last()))->GetBinContent(i+1);
+        estSystematics_ee2[i] = estSyst_ee2[i];
+    }
+
+
     myRatioPlot_t *RP_mass_ee = new myRatioPlot_t("RP_mass_ee", s_mass_ee, h_data_mass_ee);
     myRatioPlot_t *RP_mass_ee2 = new myRatioPlot_t("RP_mass_ee2", s_mass_ee2, h_data_mass_ee2);
-//    RP_mass_ee->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+DD)");
-    RP_mass_ee->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000, "Eksp./(MC+i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}v.)");
-    RP_mass_ee2->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+DD)");
-//    RP_mass_ee2->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000, "Eksp./(MC+i_{#kern[-0.8]{#lower[-0.3]{#scale[0.7]{c}}}}v.)");
+//    RP_mass_ee->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+DD)   ");
+    RP_mass_ee->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000, "Eksp./(MC+i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}v.)      ");
+    RP_mass_ee2->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+DD)   ");
+//    RP_mass_ee2->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000, "Eksp./(MC+i_{#kern[-0.8]{#lower[-0.3]{#scale[0.7]{c}}}}v.)     ");
+    RP_mass_ee->SetSystematics(NULL, estSystematics_ee, systematics_ee);
+    RP_mass_ee2->SetSystematics(NULL, estSystematics_ee2, systematics_ee2);
 
     TLegend *legend_ee = new TLegend(0.8, 0.45, 0.95, 0.95);
 
@@ -5015,6 +5403,8 @@ void Est_HistDrawer()
             f_bkg_est_mumu->GetObject("h_MuMu_mass_Est_"+Mgr.Procname[pr], h_bkg_mass_mumu[iter]);
             f_bkg_est_mumu->GetObject("h_MuMu_mass_Est2_"+Mgr.Procname[pr], h_bkg_mass_mumu2[iter]);
         }
+        removeNegativeBins(h_bkg_mass_mumu[iter]);
+        removeNegativeBins(h_bkg_mass_mumu2[iter]);
 
         Color_t color = kBlack;
         if (pr == _MuMu_QCDMuEnriched_Full) color = kRed + 3;
@@ -5052,7 +5442,8 @@ void Est_HistDrawer()
     TH1D *h_DY_mass_mumu, *h_DY_mass_mumu2;
     f_DY_mumu->GetObject("h_mass_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_mumu);
     f_DY_mumu->GetObject("h_mass2_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_mumu2);
-
+    removeNegativeBins(h_DY_mass_mumu);
+    removeNegativeBins(h_DY_mass_mumu2);
     h_DY_mass_mumu->SetFillColor(kOrange);
     h_DY_mass_mumu->SetLineColor(kOrange);
     h_DY_mass_mumu->SetDirectory(0);
@@ -5079,13 +5470,30 @@ void Est_HistDrawer()
 
 //--------------------------------- Ratio Plot --------------------------------------
 
+// SYSTEMATICS
+    TVectorD estSyst_mumu = *((TVectorD*)(f_bkg_est_mumu->Get("estSystematics")));
+    TVectorD estSyst_mumu2 = *((TVectorD*)(f_bkg_est_mumu->Get("estSystematics2")));
+    Double_t systematics_mumu[43], systematics_mumu2[86], estSystematics_mumu[43], estSystematics_mumu2[86];
+    for (int i=0; i<86; i++)
+    {
+        if (i < 43)
+        {
+            estSystematics_mumu[i] = estSyst_mumu[i];
+            systematics_mumu[i] = estSyst_mumu[i] / ((TH1D*)(s_mass_mumu->GetStack()->Last()))->GetBinContent(i+1);
+        }
+        systematics_mumu2[i] = estSyst_mumu2[i] / ((TH1D*)(s_mass_mumu2->GetStack()->Last()))->GetBinContent(i+1);
+        estSystematics_mumu2[i] = estSyst_mumu2[i];
+    }
+
     myRatioPlot_t *RP_mass_mumu = new myRatioPlot_t("RP_mass_mumu", s_mass_mumu, h_data_mass_mumu);
     myRatioPlot_t *RP_mass_mumu2 = new myRatioPlot_t("RP_mass_mumu2", s_mass_mumu2, h_data_mass_mumu2);
 
-//    RP_mass_mumu->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+DD)");
-    RP_mass_mumu->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Eksp./(MC+i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}v.)");
-    RP_mass_mumu2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+DD)");
+//    RP_mass_mumu->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+DD)   ");
+    RP_mass_mumu->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Eksp./(MC+i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}v.)     ");
+    RP_mass_mumu2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+DD)    ");
 //    RP_mass_mumu2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Eksp./(MC+i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}v.)");
+    RP_mass_mumu->SetSystematics(NULL, estSystematics_mumu, systematics_mumu);
+    RP_mass_mumu2->SetSystematics(NULL, estSystematics_mumu2, systematics_mumu2);
 
     TLegend *legend_mumu = new TLegend(0.8, 0.45, 0.95, 0.95);
 
@@ -5213,3 +5621,15 @@ Double_t CompAvgDataMCDifference (TH1D *h_data, THStack *s_MC)
     return AvgDataMCRatio / (size_MC - 2);
 } // End of CompChiSquared()
 
+
+void removeNegativeBins(TH1D *h)
+{
+    for (int i=0; i<h->GetSize(); i++)
+    {
+        if (h->GetBinContent(i) < 0)
+        {
+            h->SetBinContent(i, 0);
+            h->SetBinError(i, 0);
+        }
+    }
+}

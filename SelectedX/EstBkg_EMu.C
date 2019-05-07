@@ -24,9 +24,11 @@
 #include <TFormula.h>
 #include <iostream>
 #include <sstream>
+#include <TVectorT.h>
 
 void ee_Est();
 void MuMu_Est();
+void removeNegativeBins(TH1D *h);
 
 void EstBkg_EMu(TString whichX = "EE")
 {
@@ -101,6 +103,8 @@ void ee_Est()
                 if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
                 f_Bkg_EMu->GetObject("h_emu_mass_"+Mgr.Procname[pr], h_EMu_invm[pr]);
                 f_Bkg_EMu->GetObject("h_emu_mass2_"+Mgr.Procname[pr], h_EMu_invm2[pr]);
+                removeNegativeBins(h_EMu_invm[pr]);
+                removeNegativeBins(h_EMu_invm2[pr]);
 
                 Color_t color = kBlack;
                 if (pr == _EMu_WJets_Full) color = kRed - 2;
@@ -123,6 +127,8 @@ void ee_Est()
 
                 f_Bkg_EMu->GetObject("h_emuSS_mass_"+Mgr.Procname[pr], h_EMu_SS_invm[pr]);
                 f_Bkg_EMu->GetObject("h_emuSS_mass2_"+Mgr.Procname[pr], h_EMu_SS_invm2[pr]);
+                removeNegativeBins(h_EMu_SS_invm[pr]);
+                removeNegativeBins(h_EMu_SS_invm2[pr]);
                 h_EMu_SS_invm[pr]->SetFillColor(color);
                 h_EMu_SS_invm[pr]->SetLineColor(color);
                 h_EMu_SS_invm[pr]->SetDirectory(0);
@@ -175,6 +181,8 @@ void ee_Est()
             const double RR = 0.57147108645;
             h_EMu_QCD_invm->Scale(1/RR);
             h_EMu_QCD_invm2->Scale(1/RR);
+            removeNegativeBins(h_EMu_QCD_invm);
+            removeNegativeBins(h_EMu_QCD_invm2);
 
             for (Int_t i=1; i<h_EMu_QCD_invm->GetSize()-1; i++)
             {
@@ -232,12 +240,15 @@ void ee_Est()
 
             RP_EMu_wQCD_invm->ImportLegend(legend_EMu);
             RP_EMu_wQCD_invm2->ImportLegend(legend_EMu);
-            RP_EMu_wQCD_invm->Draw(4e-1, 2e4, 1);
-            RP_EMu_wQCD_invm2->Draw(4e-1, 2e4, 1);
+            RP_EMu_wQCD_invm->Draw(4e-1, 7e4, 1);
+            RP_EMu_wQCD_invm2->Draw(4e-1, 7e4, 1);
 
             TH1D * h_EMu_data_invm_old = ((TH1D*)(h_EMu_data_invm->Clone("h_emu_data_invm_old")));
+            TH1D * h_EMu_data_invm_old2 = ((TH1D*)(h_EMu_data_invm2->Clone("h_emu_data_invm_old2")));
             h_EMu_data_invm->Add(h_EMu_QCD_invm, -1);
             h_EMu_data_invm2->Add(h_EMu_QCD_invm2, -1);
+            removeNegativeBins(h_EMu_QCD_invm);
+            removeNegativeBins(h_EMu_QCD_invm2);
 
             Double_t dataerror_emu, MCerror_emu, dataintegral_emu=2.25081e+07, MCintegral_emu;
             Double_t dataerrorZ_emu, MCerrorZ_emu, dataintegralZ_emu=2.25081e+07, MCintegralZ_emu;
@@ -285,6 +296,8 @@ void ee_Est()
 
                 f_Bkg_ee->GetObject("h_mass_"+Mgr.Procname[pr], h_ee_invm[pr]);
                 f_Bkg_ee->GetObject("h_mass2_"+Mgr.Procname[pr], h_ee_invm2[pr]);
+                removeNegativeBins(h_ee_invm[pr]);
+                removeNegativeBins(h_ee_invm2[pr]);
 
                 Color_t color = kBlack;
                 if (pr == _EE_WW) color = kMagenta - 5;
@@ -315,28 +328,124 @@ void ee_Est()
             TH1D* h_ee_Est_invm = ((TH1D*)(h_EMu_data_invm->Clone("h_ee_mass_Est")));
             h_ee_Est_invm->Multiply(((TH1D*)(s_ee_invm->GetStack()->Last())));
             h_ee_Est_invm->Divide(((TH1D*)(s_EMu_invm->GetStack()->Last())));
+            removeNegativeBins(h_ee_Est_invm);
             h_ee_Est_invm->SetDirectory(0);
 
             TH1D* h_ee_Est_invm2 = ((TH1D*)(h_EMu_data_invm2->Clone("h_ee_mass_Est2")));
             h_ee_Est_invm2->Multiply(((TH1D*)(s_ee_invm2->GetStack()->Last())));
             h_ee_Est_invm2->Divide(((TH1D*)(s_EMu_invm2->GetStack()->Last())));
+            removeNegativeBins(h_ee_Est_invm2);
             h_ee_Est_invm2->SetDirectory(0);
 
 
 /// ############################# Statistical uncertainties (by hand) ##################################### ///
 
-            TH1D* h_UNC_eeMC = ((TH1D*)(h_EMu_data_invm->Clone("h_UNC_eeMC")));
-            TH1D* h_UNC_eeMC2 = ((TH1D*)(h_EMu_data_invm2->Clone("h_UNC_eeMC2")));
-            TH1D* h_UNC_emuMC = ((TH1D*)(h_EMu_data_invm->Clone("h_UNC_emuMC")));
-            TH1D* h_UNC_emuMC2 = ((TH1D*)(h_EMu_data_invm2->Clone("h_UNC_emuMC2")));
-            TH1D* h_UNC_emuData = ((TH1D*)(h_EMu_data_invm->Clone("h_UNC_emuData")));
-            TH1D* h_UNC_emuData2 = ((TH1D*)(h_EMu_data_invm2->Clone("h_UNC_emuData2")));
-            Double_t UNC_eeMC[43], UNC_emuMC[43], UNC_emuData[43], UNC_eeEst[43];
+            Double_t UNC_eeMC[43], UNC_emuMC[43], UNC_emuData[43], UNC_eeEst[43], UNC_ee_EstOverMC[43];
+            Double_t UNC_eeMC2[86], UNC_emuMC2[86], UNC_emuData2[86], UNC_eeEst2[86], UNC_ee_EstOverMC2[86];
             Double_t tmp = 0;
-            for (int i=1; i<44; i++)
+            for (int i=1; i<87; i++)
             {
+                if (i < 44)
+                {
+                    // emuMC (N2)
+                    UNC_emuMC[i-1] = ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinError(i);
+                    tmp = 0;
+                    for (SelProc_t pr=_EMu_WJets_Full; pr>_EndOf_EMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
+                    {
+                        Mgr.SetProc(pr);
+                        if (pr==_EndOf_EMu_VVnST_Normal) continue;
+                        if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
+
+                        tmp += h_EMu_invm[pr]->GetBinError(i) * h_EMu_invm[pr]->GetBinError(i);
+
+                        if (pr == _EMu_WJets_Full) // next - WW
+                            pr = _EndOf_EMu_VVnST_Normal;
+                        if (pr == _EMu_tW) pr = _EMu_VVnST; // next -- ttbar
+                        if (pr == _EMu_DYTauTau_Full) break;
+                    }
+                    if ((UNC_emuMC[i-1]-tmp)/tmp > 0.0001)
+                    {
+                        cout << "EMU errors from THStack and TH1D sum do not match!!" << endl;
+                        cout << "Bin " << i << endl;
+                        cout << "From THStack: " << UNC_emuMC[i-1] << "   From TH1D sum: " << tmp << endl;
+                        break;
+                    }
+
+                    // eeMC (N1)
+                    UNC_eeMC[i-1] = ((TH1D*)(s_ee_invm->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_ee_invm->GetStack()->Last()))->GetBinError(i);
+                    tmp = 0;
+                    for (SelProc_t pr=_EE_WW; pr<=_EE_VVnST; pr=SelProc_t((int)(pr-1)))
+                    {
+                        if (pr == _EE_WZ || pr == _EE_ZZ) continue;
+                        Mgr.SetProc(pr);
+
+                        tmp += h_ee_invm[pr]->GetBinError(i) * h_ee_invm[pr]->GetBinError(i);
+
+                        if (pr == _EE_tW) pr = _EE_VVnST; // next -- ttbar
+                        if (pr == _EE_DYTauTau_Full) break;
+                    }
+                    if ((UNC_eeMC[i-1]-tmp)/tmp > 0.0001)
+                    {
+                        cout << "EE errors from THStack and TH1D sum do not match!!" << endl;
+                        cout << "Bin " << i << endl;
+                        cout << "From THStack: " << UNC_eeMC[i-1] << "   From TH1D sum: " << tmp << endl;
+                        break;
+                    }
+
+                    // emuData (N3)
+                    UNC_emuData[i-1] = ((TH1D*)(s_EMu_SS_invm->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_EMu_SS_invm->GetStack()->Last()))->GetBinError(i);
+                    tmp = 0;
+                    for (SelProc_t pr=_EMu_WJets_Full; pr>_EndOf_EMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
+                    {
+                        Mgr.SetProc(pr);
+                        if (pr==_EndOf_EMu_VVnST_Normal) continue;
+                        if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
+
+                        tmp += h_EMu_SS_invm[pr]->GetBinError(i) * h_EMu_SS_invm[pr]->GetBinError(i);
+
+                        if (pr == _EMu_WJets_Full) // next - WW
+                            pr = _EndOf_EMu_VVnST_Normal;
+                        if (pr == _EMu_tW) pr = _EMu_VVnST; // next -- ttbar
+                        if (pr == _EMu_DYTauTau_Full) break;
+                    }
+                    if ((UNC_emuData[i-1]-tmp)/tmp > 0.0001)
+                    {
+                        cout << "EMU SS errors from THStack and TH1D sum do not match!!" << endl;
+                        cout << "Bin " << i << endl;
+                        cout << "From THStack: " << UNC_emuData[i-1] << "   From TH1D sum: " << tmp << endl;
+                        break;
+                    }
+                    UNC_emuData[i-1] *= 1/(RR*RR);
+                    UNC_emuData[i-1] += h_EMu_SS_data_invm->GetBinError(i) * h_EMu_SS_data_invm->GetBinError(i) / (RR*RR);
+                    UNC_emuData[i-1] += h_EMu_data_invm_old->GetBinError(i) * h_EMu_data_invm_old->GetBinError(i);
+                    tmp = h_EMu_data_invm->GetBinError(i) * h_EMu_data_invm->GetBinError(i);
+                    if ((UNC_emuData[i-1]-tmp)/tmp > 0.0001)
+                    {
+                        cout << "EMU DATA errors from automatic and manual counting do not match!!" << endl;
+                        cout << "Bin " << i << endl;
+                        cout << "From automatic: " << UNC_emuData[i-1] << "   From manual: " << tmp << endl;
+                        break;
+                    }
+
+                    // FULL UNC
+                    tmp = UNC_eeMC[i-1] / (((TH1D*)(s_ee_invm->GetStack()->Last()))->GetBinContent(i) * ((TH1D*)(s_ee_invm->GetStack()->Last()))->GetBinContent(i));
+                    tmp += UNC_emuMC[i-1] / (((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinContent(i) * ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinContent(i));
+                    tmp += UNC_emuData[i-1] / (h_EMu_data_invm->GetBinContent(i) * h_EMu_data_invm->GetBinContent(i));
+                    UNC_eeEst[i-1] = sqrt(tmp) * fabs(h_ee_Est_invm->GetBinContent(i));
+                    tmp = h_ee_Est_invm->GetBinError(i) * h_ee_Est_invm->GetBinError(i);
+                    if ((UNC_eeEst[i-1]-tmp)/tmp > 0.0001)
+                    {
+                        cout << "EE EST errors from automatic and manual counting do not match!!" << endl;
+                        cout << "Bin " << i << endl;
+                        cout << "From automatic: " << UNC_eeEst[i-1] << "   From manual: " << tmp << endl;
+                        break;
+                    }
+
+                } // End of if(i<44)
+
+                // FINER BINNING
                 // emuMC (N2)
-                UNC_emuMC[i-1] = ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinError(i);
+                UNC_emuMC2[i-1] = ((TH1D*)(s_EMu_invm2->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_EMu_invm2->GetStack()->Last()))->GetBinError(i);
                 tmp = 0;
                 for (SelProc_t pr=_EMu_WJets_Full; pr>_EndOf_EMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
                 {
@@ -344,44 +453,44 @@ void ee_Est()
                     if (pr==_EndOf_EMu_VVnST_Normal) continue;
                     if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
 
-                    tmp += h_EMu_invm[pr]->GetBinError(i) * h_EMu_invm[pr]->GetBinError(i);
+                    tmp += h_EMu_invm2[pr]->GetBinError(i) * h_EMu_invm2[pr]->GetBinError(i);
 
                     if (pr == _EMu_WJets_Full) // next - WW
                         pr = _EndOf_EMu_VVnST_Normal;
                     if (pr == _EMu_tW) pr = _EMu_VVnST; // next -- ttbar
                     if (pr == _EMu_DYTauTau_Full) break;
                 }
-                if ((UNC_emuMC[i-1]-tmp)/tmp > 0.0001)
+                if ((UNC_emuMC2[i-1]-tmp)/tmp > 0.0001)
                 {
-                    cout << "EMU errors from THStack and TH1D sum do not match!!" << endl;
+                    cout << "EMU2 errors from THStack and TH1D sum do not match!!" << endl;
                     cout << "Bin " << i << endl;
-                    cout << "From THStack: " << UNC_emuMC[i-1] << "   From TH1D sum: " << tmp << endl;
+                    cout << "From THStack: " << UNC_emuMC2[i-1] << "   From TH1D sum: " << tmp << endl;
                     break;
                 }
 
                 // eeMC (N1)
-                UNC_eeMC[i-1] = ((TH1D*)(s_ee_invm->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_ee_invm->GetStack()->Last()))->GetBinError(i);
+                UNC_eeMC2[i-1] = ((TH1D*)(s_ee_invm2->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_ee_invm2->GetStack()->Last()))->GetBinError(i);
                 tmp = 0;
                 for (SelProc_t pr=_EE_WW; pr<=_EE_VVnST; pr=SelProc_t((int)(pr-1)))
                 {
                     if (pr == _EE_WZ || pr == _EE_ZZ) continue;
                     Mgr.SetProc(pr);
 
-                    tmp += h_ee_invm[pr]->GetBinError(i) * h_ee_invm[pr]->GetBinError(i);
+                    tmp += h_ee_invm2[pr]->GetBinError(i) * h_ee_invm2[pr]->GetBinError(i);
 
                     if (pr == _EE_tW) pr = _EE_VVnST; // next -- ttbar
                     if (pr == _EE_DYTauTau_Full) break;
                 }
-                if ((UNC_eeMC[i-1]-tmp)/tmp > 0.0001)
+                if ((UNC_eeMC2[i-1]-tmp)/tmp > 0.0001)
                 {
-                    cout << "EE errors from THStack and TH1D sum do not match!!" << endl;
+                    cout << "EE2 errors from THStack and TH1D sum do not match!!" << endl;
                     cout << "Bin " << i << endl;
-                    cout << "From THStack: " << UNC_eeMC[i-1] << "   From TH1D sum: " << tmp << endl;
+                    cout << "From THStack: " << UNC_eeMC2[i-1] << "   From TH1D sum: " << tmp << endl;
                     break;
                 }
 
                 // emuData (N3)
-                UNC_emuData[i-1] = ((TH1D*)(s_EMu_SS_invm->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_EMu_SS_invm->GetStack()->Last()))->GetBinError(i);
+                UNC_emuData2[i-1] = ((TH1D*)(s_EMu_SS_invm2->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_EMu_SS_invm2->GetStack()->Last()))->GetBinError(i);
                 tmp = 0;
                 for (SelProc_t pr=_EMu_WJets_Full; pr>_EndOf_EMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
                 {
@@ -389,46 +498,47 @@ void ee_Est()
                     if (pr==_EndOf_EMu_VVnST_Normal) continue;
                     if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
 
-                    tmp += h_EMu_SS_invm[pr]->GetBinError(i) * h_EMu_SS_invm[pr]->GetBinError(i);
+                    tmp += h_EMu_SS_invm2[pr]->GetBinError(i) * h_EMu_SS_invm2[pr]->GetBinError(i);
 
                     if (pr == _EMu_WJets_Full) // next - WW
                         pr = _EndOf_EMu_VVnST_Normal;
                     if (pr == _EMu_tW) pr = _EMu_VVnST; // next -- ttbar
                     if (pr == _EMu_DYTauTau_Full) break;
                 }
-                if ((UNC_emuData[i-1]-tmp)/tmp > 0.0001)
+                if ((UNC_emuData2[i-1]-tmp)/tmp > 0.0001)
                 {
-                    cout << "EMU SS errors from THStack and TH1D sum do not match!!" << endl;
+                    cout << "EMU2 SS errors from THStack and TH1D sum do not match!!" << endl;
                     cout << "Bin " << i << endl;
-                    cout << "From THStack: " << UNC_emuData[i-1] << "   From TH1D sum: " << tmp << endl;
+                    cout << "From THStack: " << UNC_emuData2[i-1] << "   From TH1D sum: " << tmp << endl;
                     break;
                 }
-                UNC_emuData[i-1] *= 1/(RR*RR);
-                UNC_emuData[i-1] += h_EMu_SS_data_invm->GetBinError(i) * h_EMu_SS_data_invm->GetBinError(i) / (RR*RR);
-                UNC_emuData[i-1] += h_EMu_data_invm_old->GetBinError(i) * h_EMu_data_invm_old->GetBinError(i);
-                tmp = h_EMu_data_invm->GetBinError(i) * h_EMu_data_invm->GetBinError(i);
-                if ((UNC_emuData[i-1]-tmp)/tmp > 0.0001)
+                UNC_emuData2[i-1] *= 1/(RR*RR);
+                UNC_emuData2[i-1] += h_EMu_SS_data_invm2->GetBinError(i) * h_EMu_SS_data_invm2->GetBinError(i) / (RR*RR);
+                UNC_emuData2[i-1] += h_EMu_data_invm_old2->GetBinError(i) * h_EMu_data_invm_old2->GetBinError(i);
+                tmp = h_EMu_data_invm2->GetBinError(i) * h_EMu_data_invm2->GetBinError(i);
+                if ((UNC_emuData2[i-1]-tmp)/tmp > 0.0001)
                 {
-                    cout << "EMU DATA errors from automatic and manual counting do not match!!" << endl;
+                    cout << "EMU2 DATA errors from automatic and manual counting do not match!!" << endl;
                     cout << "Bin " << i << endl;
-                    cout << "From automatic: " << UNC_emuData[i-1] << "   From manual: " << tmp << endl;
+                    cout << "From automatic: " << UNC_emuData2[i-1] << "   From manual: " << tmp << endl;
                     break;
                 }
 
                 // FULL UNC
-                tmp = UNC_eeMC[i-1] / (((TH1D*)(s_ee_invm->GetStack()->Last()))->GetBinContent(i) * ((TH1D*)(s_ee_invm->GetStack()->Last()))->GetBinContent(i));
-                tmp += UNC_emuMC[i-1] / (((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinContent(i) * ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinContent(i));
-                tmp += UNC_emuData[i-1] / (h_EMu_data_invm->GetBinContent(i) * h_EMu_data_invm->GetBinContent(i));
-                UNC_eeEst[i-1] = sqrt(tmp) * fabs(h_ee_Est_invm->GetBinContent(i));
-                tmp = h_ee_Est_invm->GetBinError(i) * h_ee_Est_invm->GetBinError(i);
-                if ((UNC_eeEst[i-1]-tmp)/tmp > 0.0001)
+                tmp = UNC_eeMC2[i-1] / (((TH1D*)(s_ee_invm2->GetStack()->Last()))->GetBinContent(i) * ((TH1D*)(s_ee_invm2->GetStack()->Last()))->GetBinContent(i));
+                tmp += UNC_emuMC2[i-1] / (((TH1D*)(s_EMu_invm2->GetStack()->Last()))->GetBinContent(i) * ((TH1D*)(s_EMu_invm2->GetStack()->Last()))->GetBinContent(i));
+                tmp += UNC_emuData2[i-1] / (h_EMu_data_invm2->GetBinContent(i) * h_EMu_data_invm2->GetBinContent(i));
+                UNC_eeEst2[i-1] = sqrt(tmp) * fabs(h_ee_Est_invm2->GetBinContent(i));
+                tmp = h_ee_Est_invm2->GetBinError(i) * h_ee_Est_invm2->GetBinError(i);
+                if ((UNC_eeEst2[i-1]-tmp)/tmp > 0.0001)
                 {
-                    cout << "EE EST errors from automatic and manual counting do not match!!" << endl;
+                    cout << "EE2 EST errors from automatic and manual counting do not match!!" << endl;
                     cout << "Bin " << i << endl;
-                    cout << "From automatic: " << UNC_eeEst[i-1] << "   From manual: " << tmp << endl;
+                    cout << "From automatic: " << UNC_eeEst2[i-1] << "   From manual: " << tmp << endl;
                     break;
                 }
-            }
+
+            } // End of for(bins)
 //            cout << "Manually calculated errors:" << endl;
 //            for (int i=0; i<43; i++)
 //            {
@@ -441,20 +551,38 @@ void ee_Est()
 //            }
 //            cout << endl;
 
+            // DATA/MC UNC (probably smaller than given automatically)
+            for (int i=0; i<86; i++)
+            {
+                if (i < 43)
+                {
+                    UNC_ee_EstOverMC[i] = ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinError(i+1) / ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinContent(i+1); // N2
+                    UNC_ee_EstOverMC[i] *= UNC_ee_EstOverMC[i];
+                    tmp = h_EMu_data_invm->GetBinError(i+1) / h_EMu_data_invm->GetBinContent(i+1); // N3
+                    tmp *= tmp;
+                    UNC_ee_EstOverMC[i] = sqrt(UNC_ee_EstOverMC[i] + tmp);
+                }
+                UNC_ee_EstOverMC2[i] = ((TH1D*)(s_EMu_invm2->GetStack()->Last()))->GetBinError(i+1) / ((TH1D*)(s_EMu_invm2->GetStack()->Last()))->GetBinContent(i+1); // N2
+                UNC_ee_EstOverMC2[i] *= UNC_ee_EstOverMC2[i];
+                tmp = h_EMu_data_invm2->GetBinError(i+1) / h_EMu_data_invm2->GetBinContent(i+1); // N3
+                tmp *= tmp;
+                UNC_ee_EstOverMC2[i] = sqrt(UNC_ee_EstOverMC2[i] + tmp);
+            }
+
 // ############################# Systematics (DataDriven - MC) ##################################### //
 
-            Double_t systematics[h_ee_Est_invm->GetSize()-2], systematics2[h_ee_Est_invm2->GetSize()-2], systerr=0;
+            Double_t systematics[h_ee_Est_invm->GetSize()-2], systematics2[h_ee_Est_invm2->GetSize()-2], systerr=0,
+                     estSystematics[h_ee_Est_invm->GetSize()-2], estSystematics2[h_ee_Est_invm2->GetSize()-2];
             for (int i=1; i<h_ee_Est_invm2->GetSize()-1; i++)
             {
                 if (i < h_ee_Est_invm->GetSize()-1)
                 {
-                    systematics[i-1] = fabs(h_ee_Est_invm->GetBinContent(i) - ((TH1D*)(s_ee_invm->GetStack()->Last()))->GetBinContent(i));
-                    systematics[i-1] /= fabs(((TH1D*)(s_ee_invm->GetStack()->Last()))->GetBinContent(i));
-                    cout << *(systematics+i-1) << "  ";
-                    systerr += systematics[i-1] * systematics[i-1];
+                    estSystematics[i-1] = fabs(h_ee_Est_invm->GetBinContent(i) - ((TH1D*)(s_ee_invm->GetStack()->Last()))->GetBinContent(i));
+                    systematics[i-1] = estSystematics[i-1] / fabs(((TH1D*)(s_ee_invm->GetStack()->Last()))->GetBinContent(i));
+                    systerr += estSystematics[i-1] * estSystematics[i-1];
                 }
-                systematics2[i-1] = fabs(h_ee_Est_invm2->GetBinContent(i) - ((TH1D*)(s_ee_invm2->GetStack()->Last()))->GetBinContent(i));
-                systematics2[i-1] /= fabs(((TH1D*)(s_ee_invm2->GetStack()->Last()))->GetBinContent(i));
+                estSystematics2[i-1] = fabs(h_ee_Est_invm2->GetBinContent(i) - ((TH1D*)(s_ee_invm2->GetStack()->Last()))->GetBinContent(i));
+                systematics2[i-1] = estSystematics2[i-1] / fabs(((TH1D*)(s_ee_invm2->GetStack()->Last()))->GetBinContent(i));
             }
 
 // ###################################### Writing ###################################### //
@@ -462,6 +590,11 @@ void ee_Est()
             f_NeeEst->cd();
             h_ee_Est_invm->Write();
             h_ee_Est_invm2->Write();
+            TVectorD estSyst(43, estSystematics);
+            TVectorD estSyst2(86, estSystematics);
+
+            estSyst.Write("estSystematics");
+            estSyst2.Write("estSystematics2");
 
             Double_t MCerror, esterror, MCintegral, estintegral;
             Double_t MCerrorZ, esterrorZ, MCintegralZ, estintegralZ;
@@ -509,10 +642,12 @@ void ee_Est()
             myRatioPlot_t *RP_invm = new myRatioPlot_t("DataDriven_InvariantMass", s_ee_invm, h_ee_Est_invm);
             myRatioPlot_t *RP_invm2 = new myRatioPlot_t("DataDriven_InvariantMass2", s_ee_invm2, h_ee_Est_invm2);
             RP_invm->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000,
-                              "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC", systematics);
-            RP_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000, "Est./MC", systematics2);
+                              "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC", UNC_ee_EstOverMC);
+            RP_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000, "Est./MC", UNC_ee_EstOverMC2);
 //            RP_invm->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
 //            RP_invm2->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000, "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC");
+            RP_invm->SetSystematics(estSystematics, NULL, systematics);
+            RP_invm2->SetSystematics(estSystematics2, NULL, systematics2);
 
             TLegend *legend = new TLegend(0.77, 0.5, 0.95, 0.95);
 //            legend->AddEntry(h_ee_Est_invm, "Estimation", "lp");
@@ -543,16 +678,24 @@ void ee_Est()
 
                 Mgr.SetProc(pr);
                 h_ee_Est_pr_invm[pr] = ((TH1D*)(h_ee_invm[pr]->Clone("h_ee_mass_Est_"+Mgr.Procname[pr])));
+                removeNegativeBins(h_ee_Est_pr_invm[pr]);
                 h_ee_Est_pr_invm[pr]->Multiply(h_EMu_data_invm);
+                removeNegativeBins(h_ee_Est_pr_invm[pr]);
                 h_ee_Est_pr_invm[pr]->Divide((TH1D*)(s_EMu_invm->GetStack()->Last()));
+                removeNegativeBins(h_ee_Est_pr_invm[pr]);
 
+                h_ee_Est_pr_invm[pr]->SetLineColor(kBlack);
                 h_ee_Est_pr_invm[pr]->SetDirectory(0);
                 h_ee_Est_pr_invm[pr]->Write();
 
                 h_ee_Est_pr_invm2[pr] = ((TH1D*)(h_ee_invm2[pr]->Clone("h_ee_mass_Est2_"+Mgr.Procname[pr])));
+                removeNegativeBins(h_ee_Est_pr_invm2[pr]);
                 h_ee_Est_pr_invm2[pr]->Multiply(h_EMu_data_invm2);
+                removeNegativeBins(h_ee_Est_pr_invm2[pr]);
                 h_ee_Est_pr_invm2[pr]->Divide((TH1D*)(s_EMu_invm2->GetStack()->Last()));
+                removeNegativeBins(h_ee_Est_pr_invm2[pr]);
 
+                h_ee_Est_pr_invm2[pr]->SetLineColor(kBlack);
                 h_ee_Est_pr_invm2[pr]->SetDirectory(0);
                 h_ee_Est_pr_invm2[pr]->Write();
 
@@ -573,10 +716,12 @@ void ee_Est()
 
                 RP_ee_invm_pr[pr] = new myRatioPlot_t("h_mass_DataDriven_"+Mgr.Procname[pr], h_ee_invm[pr], h_ee_Est_pr_invm[pr]);
                 RP_ee_invm_pr2[pr] = new myRatioPlot_t("h_mass_DataDriven2_"+Mgr.Procname[pr], h_ee_invm2[pr], h_ee_Est_pr_invm2[pr]);
-                RP_ee_invm_pr[pr]->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000);
+                RP_ee_invm_pr[pr]->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000, "Est./MC", UNC_ee_EstOverMC);
 //                RP_ee_invm_pr[pr]->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
-                RP_ee_invm_pr2[pr]->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000);
+                RP_ee_invm_pr2[pr]->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000, "Est./MC", UNC_ee_EstOverMC2);
 //                RP_ee_invm_pr2[pr]->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
+                RP_ee_invm_pr[pr]->SetSystematics(NULL, NULL, systematics);
+                RP_ee_invm_pr2[pr]->SetSystematics(NULL, NULL, systematics2);
 
                 TLegend *legend_pr = new TLegend(0.65, 0.75, 0.95, 0.95);
 
@@ -625,10 +770,13 @@ void ee_Est()
 
             myRatioPlot_t* RP_tW = new myRatioPlot_t("tWest", s_tW_invm, h1_eeTW_invm_Est);
             myRatioPlot_t* RP_tW2 = new myRatioPlot_t("tWest2", s_tW_invm2, h1_eeTW_invm_Est2);
-            RP_tW->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000);
+            RP_tW->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000, "Est./MC", UNC_ee_EstOverMC);
 //            RP_tW->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
-            RP_tW2->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000);
+            RP_tW2->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000, "Est./MC", UNC_ee_EstOverMC2);
 //            RP_tW2->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
+            RP_tW->SetSystematics(NULL, NULL, systematics);
+            RP_tW2->SetSystematics(NULL, NULL, systematics2);
+
             TLegend *legend_tw = new TLegend(0.65, 0.65, 0.95, 0.95);
             legend_tw->AddEntry(h1_eeTW_invm_Est, "Estimation", "lp");
 //            legend_tw->AddEntry(h1_eeTW_invm_Est, "Ivertis", "lp");
@@ -713,6 +861,8 @@ void MuMu_Est()
               if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
               f_Bkg_EMu->GetObject("h_emu_mass_"+Mgr.Procname[pr], h_EMu_invm[pr]);
               f_Bkg_EMu->GetObject("h_emu_mass2_"+Mgr.Procname[pr], h_EMu_invm2[pr]);
+              removeNegativeBins(h_EMu_invm[pr]);
+              removeNegativeBins(h_EMu_invm2[pr]);
 
               Color_t color = kBlack;
               if (pr == _EMu_WJets_Full) color = kRed - 2;
@@ -735,6 +885,8 @@ void MuMu_Est()
 
               f_Bkg_EMu->GetObject("h_emuSS_mass_"+Mgr.Procname[pr], h_EMu_SS_invm[pr]);
               f_Bkg_EMu->GetObject("h_emuSS_mass2_"+Mgr.Procname[pr], h_EMu_SS_invm2[pr]);
+              removeNegativeBins(h_EMu_SS_invm[pr]);
+              removeNegativeBins(h_EMu_SS_invm2[pr]);
 
               h_EMu_SS_invm[pr]->SetFillColor(color);
               h_EMu_SS_invm[pr]->SetLineColor(color);
@@ -787,17 +939,8 @@ void MuMu_Est()
             h_EMu_QCD_invm->Scale(1/RR);
             h_EMu_QCD_invm2->Add(((TH1D*)(s_EMu_SS_invm2->GetStack()->Last())), -1);
             h_EMu_QCD_invm2->Scale(1/RR);
-
-            for (Int_t i=1; i<h_EMu_QCD_invm->GetSize()-1; i++)
-            {
-                if (h_EMu_QCD_invm->GetBinContent(i) < 0)
-                    h_EMu_QCD_invm->SetBinContent(i, 0);
-            }
-            for (Int_t i=1; i<h_EMu_QCD_invm2->GetSize()-1; i++)
-            {
-                if (h_EMu_QCD_invm2->GetBinContent(i) < 0)
-                    h_EMu_QCD_invm2->SetBinContent(i, 0);
-            }
+            removeNegativeBins(h_EMu_QCD_invm);
+            removeNegativeBins(h_EMu_QCD_invm2);
 
             h_EMu_QCD_invm->SetFillColor(kRed+3);
             h_EMu_QCD_invm->SetLineColor(kRed+3);
@@ -805,7 +948,6 @@ void MuMu_Est()
             h_EMu_QCD_invm2->SetFillColor(kRed+3);
             h_EMu_QCD_invm2->SetLineColor(kRed+3);
             h_EMu_QCD_invm2->SetDirectory(0);
-
 
             THStack* s_EMu_wQCD_invm = new THStack("s_emu_wQCD_invm", "");
             THStack* s_EMu_wQCD_invm2 = new THStack("s_emu_wQCD_invm2", "");
@@ -849,8 +991,11 @@ void MuMu_Est()
             RP_EMu_wQCD_invm2->Draw(4e-1, 2e4, 1);
 
             TH1D *h_EMu_data_invm_old = ((TH1D*)(h_EMu_data_invm->Clone("h_EMu_data_invm_old")));
+            TH1D *h_EMu_data_invm_old2 = ((TH1D*)(h_EMu_data_invm2->Clone("h_EMu_data_invm_old2")));
             h_EMu_data_invm->Add(h_EMu_QCD_invm, -1);
             h_EMu_data_invm2->Add(h_EMu_QCD_invm2, -1);
+            removeNegativeBins(h_EMu_QCD_invm);
+            removeNegativeBins(h_EMu_QCD_invm2);
 
             Double_t dataerror_emu, MCerror_emu, dataintegral_emu=2.25081e+07, MCintegral_emu;
             Double_t dataerrorZ_emu, MCerrorZ_emu, dataintegralZ_emu=2.25081e+07, MCintegralZ_emu;
@@ -899,6 +1044,8 @@ void MuMu_Est()
 
                 f_Bkg_MuMu->GetObject("h_mass_"+Mgr.Procname[pr], h_MuMu_invm[pr]);
                 f_Bkg_MuMu->GetObject("h_mass2_"+Mgr.Procname[pr], h_MuMu_invm2[pr]);
+                removeNegativeBins(h_MuMu_invm[pr]);
+                removeNegativeBins(h_MuMu_invm2[pr]);
 
                 Color_t color = kBlack;
                 if (pr == _MuMu_WW) color = kMagenta - 5;
@@ -928,19 +1075,120 @@ void MuMu_Est()
             h_MuMu_Est_invm->Multiply(((TH1D*)(s_MuMu_invm->GetStack()->Last())));
             h_MuMu_Est_invm->Divide(((TH1D*)(s_EMu_invm->GetStack()->Last())));
             h_MuMu_Est_invm->SetDirectory(0);
+            removeNegativeBins(h_MuMu_Est_invm);
             TH1D* h_MuMu_Est_invm2 = ((TH1D*)(h_EMu_data_invm2->Clone("h_MuMu_mass_Est2")));
             h_MuMu_Est_invm2->Multiply(((TH1D*)(s_MuMu_invm2->GetStack()->Last())));
             h_MuMu_Est_invm2->Divide(((TH1D*)(s_EMu_invm2->GetStack()->Last())));
             h_MuMu_Est_invm2->SetDirectory(0);
+            removeNegativeBins(h_MuMu_Est_invm2);
 
 /// ################################# Uncertainties (by hand) ######################################### ///
 
-            Double_t UNC_MuMuMC[43], UNC_emuMC[43], UNC_emuData[43], UNC_MuMuEst[43];
+            Double_t UNC_MuMuMC[43], UNC_emuMC[43], UNC_emuData[43], UNC_MuMuEst[43], UNC_MuMu_EstOverMC[43],
+                     UNC_MuMuMC2[86], UNC_emuMC2[86], UNC_emuData2[86], UNC_MuMuEst2[86], UNC_MuMu_EstOverMC2[86];
             Double_t tmp = 0;
-            for (int i=1; i<44; i++)
+            for (int i=1; i<87; i++)
             {
+                if (i < 44)
+                {
+                    // emuMC (N2)
+                    UNC_emuMC[i-1] = ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinError(i);
+                    tmp = 0;
+                    for (SelProc_t pr=_EMu_WJets_Full; pr>_EndOf_EMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
+                    {
+                        Mgr.SetProc(pr);
+                        if (pr==_EndOf_EMu_VVnST_Normal) continue;
+                        if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
+
+                        tmp += h_EMu_invm[pr]->GetBinError(i) * h_EMu_invm[pr]->GetBinError(i);
+
+                        if (pr == _EMu_WJets_Full) // next - WW
+                            pr = _EndOf_EMu_VVnST_Normal;
+                        if (pr == _EMu_tW) pr = _EMu_VVnST; // next -- ttbar
+                        if (pr == _EMu_DYTauTau_Full) break;
+                    }
+                    if ((UNC_emuMC[i-1]-tmp)/tmp > 0.0001)
+                    {
+                        cout << "EMU errors from THStack and TH1D sum do not match!!" << endl;
+                        cout << "Bin " << i << endl;
+                        cout << "From THStack: " << UNC_emuMC[i-1] << "   From TH1D sum: " << tmp << endl;
+                        break;
+                    }
+
+                    // MuMuMC (N1)
+                    UNC_MuMuMC[i-1] = ((TH1D*)(s_MuMu_invm->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_MuMu_invm->GetStack()->Last()))->GetBinError(i);
+                    tmp = 0;
+                    for (SelProc_t pr=_MuMu_WW; pr<=_MuMu_VVnST; pr=SelProc_t((int)(pr-1)))
+                    {
+                        if (pr == _MuMu_WZ || pr == _MuMu_ZZ) continue;
+                        Mgr.SetProc(pr);
+
+                        tmp += h_MuMu_invm[pr]->GetBinError(i) * h_MuMu_invm[pr]->GetBinError(i);
+
+                        if (pr == _MuMu_tW) pr = _MuMu_VVnST; // next -- ttbar
+                        if (pr == _MuMu_DYTauTau_Full) break;
+                    }
+                    if ((UNC_MuMuMC[i-1]-tmp)/tmp > 0.0001)
+                    {
+                        cout << "MuMu errors from THStack and TH1D sum do not match!!" << endl;
+                        cout << "Bin " << i << endl;
+                        cout << "From THStack: " << UNC_MuMuMC[i-1] << "   From TH1D sum: " << tmp << endl;
+                        break;
+                    }
+
+                    // emuData (N3)
+                    UNC_emuData[i-1] = ((TH1D*)(s_EMu_SS_invm->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_EMu_SS_invm->GetStack()->Last()))->GetBinError(i);
+                    tmp = 0;
+                    for (SelProc_t pr=_EMu_WJets_Full; pr>_EndOf_EMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
+                    {
+                        Mgr.SetProc(pr);
+                        if (pr==_EndOf_EMu_VVnST_Normal) continue;
+                        if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
+
+                        tmp += h_EMu_SS_invm[pr]->GetBinError(i) * h_EMu_SS_invm[pr]->GetBinError(i);
+
+                        if (pr == _EMu_WJets_Full) // next - WW
+                            pr = _EndOf_EMu_VVnST_Normal;
+                        if (pr == _EMu_tW) pr = _EMu_VVnST; // next -- ttbar
+                        if (pr == _EMu_DYTauTau_Full) break;
+                    }
+                    if ((UNC_emuData[i-1]-tmp)/tmp > 0.0001)
+                    {
+                        cout << "EMU SS errors from THStack and TH1D sum do not match!!" << endl;
+                        cout << "Bin " << i << endl;
+                        cout << "From THStack: " << UNC_emuData[i-1] << "   From TH1D sum: " << tmp << endl;
+                        break;
+                    }
+                    UNC_emuData[i-1] *= 1/(RR*RR);
+                    UNC_emuData[i-1] += h_EMu_SS_data_invm->GetBinError(i) * h_EMu_SS_data_invm->GetBinError(i) / (RR*RR);
+                    UNC_emuData[i-1] += h_EMu_data_invm_old->GetBinError(i) * h_EMu_data_invm_old->GetBinError(i);
+                    tmp = h_EMu_data_invm->GetBinError(i) * h_EMu_data_invm->GetBinError(i);
+                    if ((UNC_emuData[i-1]-tmp)/tmp > 0.0001)
+                    {
+                        cout << "EMU DATA errors from automatic and manual counting do not match!!" << endl;
+                        cout << "Bin " << i << endl;
+                        cout << "From automatic: " << UNC_emuData[i-1] << "   From manual: " << tmp << endl;
+                        break;
+                    }
+
+                    // FULL UNC
+                    tmp = UNC_MuMuMC[i-1] / (((TH1D*)(s_MuMu_invm->GetStack()->Last()))->GetBinContent(i) * ((TH1D*)(s_MuMu_invm->GetStack()->Last()))->GetBinContent(i));
+                    tmp += UNC_emuMC[i-1] / (((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinContent(i) * ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinContent(i));
+                    tmp += UNC_emuData[i-1] / (h_EMu_data_invm->GetBinContent(i) * h_EMu_data_invm->GetBinContent(i));
+                    UNC_MuMuEst[i-1] = sqrt(tmp) * fabs(h_MuMu_Est_invm->GetBinContent(i));
+                    tmp = h_MuMu_Est_invm->GetBinError(i) * h_MuMu_Est_invm->GetBinError(i);
+                    if ((UNC_MuMuEst[i-1]-tmp)/tmp > 0.0001)
+                    {
+                        cout << "MuMu EST errors from automatic and manual counting do not match!!" << endl;
+                        cout << "Bin " << i << endl;
+                        cout << "From automatic: " << UNC_MuMuEst[i-1] << "   From manual: " << tmp << endl;
+                        break;
+                    }
+
+                } // End of if(i<44)
+
                 // emuMC (N2)
-                UNC_emuMC[i-1] = ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinError(i);
+                UNC_emuMC2[i-1] = ((TH1D*)(s_EMu_invm2->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_EMu_invm2->GetStack()->Last()))->GetBinError(i);
                 tmp = 0;
                 for (SelProc_t pr=_EMu_WJets_Full; pr>_EndOf_EMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
                 {
@@ -948,44 +1196,44 @@ void MuMu_Est()
                     if (pr==_EndOf_EMu_VVnST_Normal) continue;
                     if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
 
-                    tmp += h_EMu_invm[pr]->GetBinError(i) * h_EMu_invm[pr]->GetBinError(i);
+                    tmp += h_EMu_invm2[pr]->GetBinError(i) * h_EMu_invm2[pr]->GetBinError(i);
 
                     if (pr == _EMu_WJets_Full) // next - WW
                         pr = _EndOf_EMu_VVnST_Normal;
                     if (pr == _EMu_tW) pr = _EMu_VVnST; // next -- ttbar
                     if (pr == _EMu_DYTauTau_Full) break;
                 }
-                if ((UNC_emuMC[i-1]-tmp)/tmp > 0.0001)
+                if ((UNC_emuMC2[i-1]-tmp)/tmp > 0.0001)
                 {
-                    cout << "EMU errors from THStack and TH1D sum do not match!!" << endl;
+                    cout << "EMU2 errors from THStack and TH1D sum do not match!!" << endl;
                     cout << "Bin " << i << endl;
-                    cout << "From THStack: " << UNC_emuMC[i-1] << "   From TH1D sum: " << tmp << endl;
+                    cout << "From THStack: " << UNC_emuMC2[i-1] << "   From TH1D sum: " << tmp << endl;
                     break;
                 }
 
                 // MuMuMC (N1)
-                UNC_MuMuMC[i-1] = ((TH1D*)(s_MuMu_invm->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_MuMu_invm->GetStack()->Last()))->GetBinError(i);
+                UNC_MuMuMC2[i-1] = ((TH1D*)(s_MuMu_invm2->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_MuMu_invm2->GetStack()->Last()))->GetBinError(i);
                 tmp = 0;
                 for (SelProc_t pr=_MuMu_WW; pr<=_MuMu_VVnST; pr=SelProc_t((int)(pr-1)))
                 {
                     if (pr == _MuMu_WZ || pr == _MuMu_ZZ) continue;
                     Mgr.SetProc(pr);
 
-                    tmp += h_MuMu_invm[pr]->GetBinError(i) * h_MuMu_invm[pr]->GetBinError(i);
+                    tmp += h_MuMu_invm2[pr]->GetBinError(i) * h_MuMu_invm2[pr]->GetBinError(i);
 
                     if (pr == _MuMu_tW) pr = _MuMu_VVnST; // next -- ttbar
                     if (pr == _MuMu_DYTauTau_Full) break;
                 }
-                if ((UNC_MuMuMC[i-1]-tmp)/tmp > 0.0001)
+                if ((UNC_MuMuMC2[i-1]-tmp)/tmp > 0.0001)
                 {
-                    cout << "MuMu errors from THStack and TH1D sum do not match!!" << endl;
+                    cout << "MuMu2 errors from THStack and TH1D sum do not match!!" << endl;
                     cout << "Bin " << i << endl;
-                    cout << "From THStack: " << UNC_MuMuMC[i-1] << "   From TH1D sum: " << tmp << endl;
+                    cout << "From THStack: " << UNC_MuMuMC2[i-1] << "   From TH1D sum: " << tmp << endl;
                     break;
                 }
 
                 // emuData (N3)
-                UNC_emuData[i-1] = ((TH1D*)(s_EMu_SS_invm->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_EMu_SS_invm->GetStack()->Last()))->GetBinError(i);
+                UNC_emuData2[i-1] = ((TH1D*)(s_EMu_SS_invm2->GetStack()->Last()))->GetBinError(i) * ((TH1D*)(s_EMu_SS_invm2->GetStack()->Last()))->GetBinError(i);
                 tmp = 0;
                 for (SelProc_t pr=_EMu_WJets_Full; pr>_EndOf_EMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
                 {
@@ -993,63 +1241,101 @@ void MuMu_Est()
                     if (pr==_EndOf_EMu_VVnST_Normal) continue;
                     if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
 
-                    tmp += h_EMu_SS_invm[pr]->GetBinError(i) * h_EMu_SS_invm[pr]->GetBinError(i);
+                    tmp += h_EMu_SS_invm2[pr]->GetBinError(i) * h_EMu_SS_invm2[pr]->GetBinError(i);
 
                     if (pr == _EMu_WJets_Full) // next - WW
                         pr = _EndOf_EMu_VVnST_Normal;
                     if (pr == _EMu_tW) pr = _EMu_VVnST; // next -- ttbar
                     if (pr == _EMu_DYTauTau_Full) break;
                 }
-                if ((UNC_emuData[i-1]-tmp)/tmp > 0.0001)
+                if ((UNC_emuData2[i-1]-tmp)/tmp > 0.0001)
                 {
-                    cout << "EMU SS errors from THStack and TH1D sum do not match!!" << endl;
+                    cout << "EMU2 SS errors from THStack and TH1D sum do not match!!" << endl;
                     cout << "Bin " << i << endl;
-                    cout << "From THStack: " << UNC_emuData[i-1] << "   From TH1D sum: " << tmp << endl;
+                    cout << "From THStack: " << UNC_emuData2[i-1] << "   From TH1D sum: " << tmp << endl;
                     break;
                 }
-                UNC_emuData[i-1] *= 1/(RR*RR);
-                UNC_emuData[i-1] += h_EMu_SS_data_invm->GetBinError(i) * h_EMu_SS_data_invm->GetBinError(i) / (RR*RR);
-                UNC_emuData[i-1] += h_EMu_data_invm_old->GetBinError(i) * h_EMu_data_invm_old->GetBinError(i);
-                tmp = h_EMu_data_invm->GetBinError(i) * h_EMu_data_invm->GetBinError(i);
-                if ((UNC_emuData[i-1]-tmp)/tmp > 0.0001)
+                UNC_emuData2[i-1] *= 1/(RR*RR);
+                UNC_emuData2[i-1] += h_EMu_SS_data_invm2->GetBinError(i) * h_EMu_SS_data_invm2->GetBinError(i) / (RR*RR);
+                UNC_emuData2[i-1] += h_EMu_data_invm_old2->GetBinError(i) * h_EMu_data_invm_old2->GetBinError(i);
+                tmp = h_EMu_data_invm2->GetBinError(i) * h_EMu_data_invm2->GetBinError(i);
+                if ((UNC_emuData2[i-1]-tmp)/tmp > 0.0001)
                 {
-                    cout << "EMU DATA errors from automatic and manual counting do not match!!" << endl;
+                    cout << "EMU2 DATA errors from automatic and manual counting do not match!!" << endl;
                     cout << "Bin " << i << endl;
-                    cout << "From automatic: " << UNC_emuData[i-1] << "   From manual: " << tmp << endl;
+                    cout << "From automatic: " << UNC_emuData2[i-1] << "   From manual: " << tmp << endl;
                     break;
                 }
 
                 // FULL UNC
-                tmp = UNC_MuMuMC[i-1] / (((TH1D*)(s_MuMu_invm->GetStack()->Last()))->GetBinContent(i) * ((TH1D*)(s_MuMu_invm->GetStack()->Last()))->GetBinContent(i));
-                tmp += UNC_emuMC[i-1] / (((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinContent(i) * ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinContent(i));
-                tmp += UNC_emuData[i-1] / (h_EMu_data_invm->GetBinContent(i) * h_EMu_data_invm->GetBinContent(i));
-                UNC_MuMuEst[i-1] = sqrt(tmp) * fabs(h_MuMu_Est_invm->GetBinContent(i));
-                tmp = h_MuMu_Est_invm->GetBinError(i) * h_MuMu_Est_invm->GetBinError(i);
-                if ((UNC_MuMuEst[i-1]-tmp)/tmp > 0.0001)
+                tmp = UNC_MuMuMC2[i-1] / (((TH1D*)(s_MuMu_invm2->GetStack()->Last()))->GetBinContent(i) * ((TH1D*)(s_MuMu_invm2->GetStack()->Last()))->GetBinContent(i));
+                tmp += UNC_emuMC2[i-1] / (((TH1D*)(s_EMu_invm2->GetStack()->Last()))->GetBinContent(i) * ((TH1D*)(s_EMu_invm2->GetStack()->Last()))->GetBinContent(i));
+                tmp += UNC_emuData2[i-1] / (h_EMu_data_invm2->GetBinContent(i) * h_EMu_data_invm2->GetBinContent(i));
+                UNC_MuMuEst2[i-1] = sqrt(tmp) * fabs(h_MuMu_Est_invm2->GetBinContent(i));
+                tmp = h_MuMu_Est_invm2->GetBinError(i) * h_MuMu_Est_invm2->GetBinError(i);
+                if ((UNC_MuMuEst2[i-1]-tmp)/tmp > 0.0001)
                 {
-                    cout << "MuMu EST errors from automatic and manual counting do not match!!" << endl;
+                    cout << "MuMu2 EST errors from automatic and manual counting do not match!!" << endl;
                     cout << "Bin " << i << endl;
-                    cout << "From automatic: " << UNC_MuMuEst[i-1] << "   From manual: " << tmp << endl;
+                    cout << "From automatic: " << UNC_MuMuEst2[i-1] << "   From manual: " << tmp << endl;
                     break;
                 }
             }
-            cout << "Manually calculated errors:" << endl;
-            for (int i=0; i<43; i++)
+//            cout << "Manually calculated errors:" << endl;
+//            for (int i=0; i<43; i++)
+//            {
+//                cout << UNC_MuMuEst[i] << "  ";
+//            }
+//            cout << "\nAutomatically calculated errors:" << endl;
+//            for (int i=1; i<=43; i++)
+//            {
+//                cout << h_MuMu_Est_invm->GetBinError(i) << "  ";
+//            }
+//            cout << endl;
+
+            // DATA/MC UNC (probably smaller than given automatically)
+            for (int i=0; i<86; i++)
             {
-                cout << UNC_MuMuEst[i] << "  ";
+                if (i < 43)
+                {
+                    UNC_MuMu_EstOverMC[i] = ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinError(i+1) / ((TH1D*)(s_EMu_invm->GetStack()->Last()))->GetBinContent(i+1); // N2
+                    UNC_MuMu_EstOverMC[i] *= UNC_MuMu_EstOverMC[i];
+                    tmp = h_EMu_data_invm->GetBinError(i+1) / h_EMu_data_invm->GetBinContent(i+1); // N3
+                    tmp *= tmp;
+                    UNC_MuMu_EstOverMC[i] = sqrt(UNC_MuMu_EstOverMC[i] + tmp);
+                }
+                UNC_MuMu_EstOverMC2[i] = ((TH1D*)(s_EMu_invm2->GetStack()->Last()))->GetBinError(i+1) / ((TH1D*)(s_EMu_invm2->GetStack()->Last()))->GetBinContent(i+1); // N2
+                UNC_MuMu_EstOverMC2[i] *= UNC_MuMu_EstOverMC2[i];
+                tmp = h_EMu_data_invm2->GetBinError(i+1) / h_EMu_data_invm2->GetBinContent(i+1); // N3
+                tmp *= tmp;
+                UNC_MuMu_EstOverMC2[i] = sqrt(UNC_MuMu_EstOverMC2[i] + tmp);
             }
-            cout << "\nAutomatically calculated errors:" << endl;
-            for (int i=1; i<=43; i++)
+
+// ############################# Systematics (DataDriven - MC) ##################################### //
+
+            Double_t systematics[h_MuMu_Est_invm->GetSize()-2], systematics2[h_MuMu_Est_invm2->GetSize()-2], systerr=0,
+                     estSystematics[h_MuMu_Est_invm->GetSize()-2], estSystematics2[h_MuMu_Est_invm2->GetSize()-2];
+            for (int i=1; i<h_MuMu_Est_invm2->GetSize()-1; i++)
             {
-                cout << h_MuMu_Est_invm->GetBinError(i) << "  ";
+                if (i < h_MuMu_Est_invm->GetSize()-1)
+                {
+                    estSystematics[i-1] = fabs(h_MuMu_Est_invm->GetBinContent(i) - ((TH1D*)(s_MuMu_invm->GetStack()->Last()))->GetBinContent(i));
+                    systematics[i-1] = estSystematics[i-1] / fabs(((TH1D*)(s_MuMu_invm->GetStack()->Last()))->GetBinContent(i));
+                    systerr += systematics[i-1] * systematics[i-1];
+                }
+                estSystematics2[i-1] = fabs(h_MuMu_Est_invm2->GetBinContent(i) - ((TH1D*)(s_MuMu_invm2->GetStack()->Last()))->GetBinContent(i));
+                systematics2[i-1] = estSystematics2[i-1] / fabs(((TH1D*)(s_MuMu_invm2->GetStack()->Last()))->GetBinContent(i));
             }
-            cout << endl;
 
 // ###################################### Writing ######################################### //
 
             f_NMuMuEst->cd();
             h_MuMu_Est_invm->Write();
             h_MuMu_Est_invm2->Write();
+            TVectorD estSyst(43, estSystematics);
+            TVectorD estSyst2(86, estSystematics);
+            estSyst.Write("estSystematics");
+            estSyst2.Write("estSystematics2");
 
             Double_t MCerror, esterror, MCintegral, estintegral;
             Double_t MCerrorZ, esterrorZ, MCintegralZ, estintegralZ;
@@ -1074,7 +1360,7 @@ void MuMu_Est()
             esterror_noZ = sqrt(esterror_noZ);
 
             std::cout << "MuMu MC events: " << MCintegral << "+-" << MCerror << endl;
-            std::cout << "MuMu Est. events: " << estintegral << "+-" << esterror << endl << endl;
+            std::cout << "MuMu Est. events: " << estintegral << "+-" << esterror << "+-" << systerr << endl << endl;
 
             std::cout << "MuMu MC events around Z: " << MCintegralZ << "+-" << MCerrorZ << endl;
             std::cout << "MuMu Est. events around Z: " << estintegralZ << "+-" << esterrorZ << endl;
@@ -1094,10 +1380,12 @@ void MuMu_Est()
 
             myRatioPlot_t *RP_invm = new myRatioPlot_t("DataDriven_InvariantMass", s_MuMu_invm, h_MuMu_Est_invm);
             myRatioPlot_t *RP_invm2 = new myRatioPlot_t("DataDriven_InvariantMass2", s_MuMu_invm2, h_MuMu_Est_invm2);
-//            RP_invm->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
-            RP_invm->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC");
-            RP_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
-//            RP_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC");
+//            RP_invm->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, UNC_MuMuEstoverMC);
+            RP_invm->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC", UNC_MuMu_EstOverMC);
+            RP_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Est./MC", UNC_MuMu_EstOverMC2);
+//            RP_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC", UNC_MuMu_EstOverMC2);
+            RP_invm->SetSystematics(estSystematics, NULL, systematics);
+            RP_invm2->SetSystematics(estSystematics2, NULL, systematics2);
 
             TLegend *legend = new TLegend(0.77, 0.5, 0.95, 0.95);
 //            legend->AddEntry(h_MuMu_Est_invm, "Estimation", "lp");
@@ -1131,12 +1419,14 @@ void MuMu_Est()
                 h_MuMu_Est_pr_invm[pr] = ((TH1D*)(h_MuMu_invm[pr]->Clone("h_MuMu_mass_Est_"+Mgr.Procname[pr])));
                 h_MuMu_Est_pr_invm[pr]->Multiply(h_EMu_data_invm);
                 h_MuMu_Est_pr_invm[pr]->Divide((TH1D*)(s_EMu_invm->GetStack()->Last()));
+                h_MuMu_Est_pr_invm[pr]->SetLineColor(kBlack);
                 h_MuMu_Est_pr_invm[pr]->SetDirectory(0);
                 h_MuMu_Est_pr_invm[pr]->Write();
 
                 h_MuMu_Est_pr_invm2[pr] = ((TH1D*)(h_MuMu_invm2[pr]->Clone("h_MuMu_mass_Est2_"+Mgr.Procname[pr])));
                 h_MuMu_Est_pr_invm2[pr]->Multiply(h_EMu_data_invm2);
                 h_MuMu_Est_pr_invm2[pr]->Divide((TH1D*)(s_EMu_invm2->GetStack()->Last()));
+                h_MuMu_Est_pr_invm2[pr]->SetLineColor(kBlack);
                 h_MuMu_Est_pr_invm2[pr]->SetDirectory(0);
                 h_MuMu_Est_pr_invm2[pr]->Write();
 
@@ -1157,10 +1447,12 @@ void MuMu_Est()
 
                 RP_MuMu_invm_pr[pr] = new myRatioPlot_t("h_mass_DataDriven_"+Mgr.Procname[pr], h_MuMu_invm[pr], h_MuMu_Est_pr_invm[pr]);
                 RP_MuMu_invm_pr2[pr] = new myRatioPlot_t("h_mass_DataDriven2_"+Mgr.Procname[pr], h_MuMu_invm2[pr], h_MuMu_Est_pr_invm2[pr]);
-                RP_MuMu_invm_pr[pr]->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
-//                RP_MuMu_invm_pr[pr]->SetPlots("Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
-                RP_MuMu_invm_pr2[pr]->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
-//                RP_MuMu_invm_pr2[pr]->SetPlots("Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
+                RP_MuMu_invm_pr[pr]->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Est./MC", UNC_MuMu_EstOverMC);
+//                RP_MuMu_invm_pr[pr]->SetPlots("Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000, UNC_MuMu_EstOverMC);
+                RP_MuMu_invm_pr2[pr]->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Est./MC", UNC_MuMu_EstOverMC2);
+//                RP_MuMu_invm_pr2[pr]->SetPlots("Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000, UNC_MuMu_EstOverMC2);
+                RP_MuMu_invm_pr[pr]->SetSystematics(NULL, NULL, systematics);
+                RP_MuMu_invm_pr2[pr]->SetSystematics(NULL, NULL, systematics2);
 
                 TLegend *legend_pr = new TLegend(0.65, 0.75, 0.95, 0.95);
 
@@ -1210,10 +1502,12 @@ void MuMu_Est()
 
             myRatioPlot_t* RP_tW = new myRatioPlot_t("tWest", s_tW_invm, h1_MuMuTW_invm_Est);
             myRatioPlot_t* RP_tW2 = new myRatioPlot_t("tWest2", s_tW_invm2, h1_MuMuTW_invm_Est2);
-            RP_tW->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
+            RP_tW->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Est./MC");
 //            RP_tW->SetPlots("Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
-            RP_tW2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
+            RP_tW2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Est./MC");
 //            RP_tW2->SetPlots("Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
+            RP_tW->SetSystematics(NULL, NULL, systematics);
+            RP_tW2->SetSystematics(NULL, NULL, systematics2);
 
             TLegend *legend_tW = new TLegend(0.65, 0.65, 0.95, 0.95);
             legend_tW->AddEntry(h1_MuMuTW_invm_Est, "Estimation", "lp");
@@ -1239,3 +1533,15 @@ void MuMu_Est()
             f_NMuMuEst->Close();
             if (!f_NMuMuEst->IsOpen()) std::cout << "File EstBkg_MuMu.root closed successfully\n\n";
 }// End of MuMu_Est
+
+void removeNegativeBins(TH1D *h)
+{
+    for (int i=0; i<h->GetSize(); i++)
+    {
+        if (h->GetBinContent(i) < 0)
+        {
+            h->SetBinContent(i, 0);
+            h->SetBinError(i, 0);
+        }
+    }
+}
