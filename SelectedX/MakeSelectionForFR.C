@@ -556,7 +556,8 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
 //                    isPassEventSelection_noRocCorr = analyzer->EventSelection(MuonCollection_noRocCorr, ntuple, &SelectedMuonCollection_noRocCorr_nume, &SelectedMuonCollection_noRocCorr_deno);
 
                     if (isPassEventSelection == kTRUE)
-                    {                     
+                    {
+                        timesPassed++;
                         p_T->clear();
                         eta->clear();
                         charge->clear();
@@ -571,9 +572,10 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             int weight = 1;
                             if (Mgr.isMC)
                                 weight = evt_weight*L*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup];
+                                cout << weight << endl;
 
                             h_eta_deno->Fill(SelectedMuonCollection_deno[i].eta, weight);
-                            if (SelectedMuonCollection_deno[i].eta < 1.2)
+                            if (fabs(SelectedMuonCollection_deno[i].eta) < 1.2)
                             {
                                 h_pT_barrel_deno->Fill(SelectedMuonCollection_deno[i].Pt, weight);
                                 h_iso_barrel_deno->Fill(SelectedMuonCollection_deno[i].RelPFIso_dBeta, weight);
@@ -586,7 +588,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             if (i < SelectedMuonCollection_nume.size())
                             {
                                 h_eta_nume->Fill(SelectedMuonCollection_nume[i].eta, weight);
-                                if (SelectedMuonCollection_nume[i].eta < 1.2)
+                                if (fabs(SelectedMuonCollection_nume[i].eta) < 1.2)
                                 {
                                     h_pT_barrel_nume->Fill(SelectedMuonCollection_nume[i].Pt, weight);
                                     h_iso_barrel_nume->Fill(SelectedMuonCollection_nume[i].RelPFIso_dBeta, weight);
