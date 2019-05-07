@@ -81,7 +81,7 @@
 \setlength\q{\dimexpr .5\textwidth -2\tabcolsep}
 
 \begin{document}
-\linenumbers
+%\linenumbers
 
 \begin{titlepage}
 \centering
@@ -1421,7 +1421,7 @@ skirtumas tarp pilnutinio (suintegruoto visoje tirtoje invariantinės masės sri
 signalo srityje labai didelę dalį įvykių ir sudaro pats signalas: apie $98.5\%$ visų įvykių.
 Vis dėlto, kadangi $\emu$ metodu įvertintas Drell-Yan triukšmo įvykių skaičius yra net $8\%$ mažesnis už modeliuotų triukšmo įvykių
 skaičių, galima manyti, kad $\emu$ metodas įvykių skaičių sumažino per smarkiai.
-Tokį įvykių skaičiaus pasikeitimą nulėmė išbandyta netikrų $\emu$ įvykių įvertinimo metodika, kuri šiuo atveju pasirodė netinkama.
+Tokį įvykių skaičiaus pasikeitimą nulėmė išbandyta netikrų $\emu$ įvykių skaičiaus įvertinimo metodika, kuri šiuo atveju pasirodė netinkama.
 
 \begin{figure}
 	\includegraphics[width=\linewidth]{eeMassFinal_BIG.png}
