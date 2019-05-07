@@ -571,8 +571,8 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
 
                             int weight = 1;
                             if (Mgr.isMC)
-                                weight = evt_weight*L*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup];
-                            cout << evt_weight << endl;
+                                weight = evt_weight*L_B2H*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup];
+                            cout << weight << endl;
 
                             h_eta_deno->Fill(SelectedMuonCollection_deno[i].eta, weight);
                             if (fabs(SelectedMuonCollection_deno[i].eta) < 1.2)
