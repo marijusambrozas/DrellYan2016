@@ -5687,7 +5687,7 @@ Bool_t DYAnalyzer::EventSelection_FR(vector< Muon > MuonCollection, NtupleHandle
     Bool_t isPassEventSelection = kFALSE;
     for(Int_t j=0; j<(int)MuonCollection.size(); j++)
     {
-        if(MuonCollection[j].Pt > 52 && MuonCollection[j].eta < 2.4 && MuonCollection[j].passTightID)
+        if(MuonCollection[j].Pt > 52 && MuonCollection[j].eta < 2.4 && MuonCollection[j].isTightMuon())
         {
             isPassEventSelection = kTRUE;
             SelectedMuonCollection_deno->push_back(MuonCollection[j]);
