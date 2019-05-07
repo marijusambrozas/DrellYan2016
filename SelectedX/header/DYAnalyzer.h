@@ -198,6 +198,8 @@ public:
 	Bool_t EventSelection_Zdiff_13TeV_HighPt10(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection);
 	Bool_t EventSelection_Zdiff_13TeV_HighPt11(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection);
 
+        Bool_t EventSelection_FR(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection_nume, vector< Muon >* SelectedMuonCollection_deno); // -- output: muons passing numerator and denominator selection -- //
+
 	Bool_t isPassAccCondition_Muon(Muon Mu1, Muon Mu2);
 	Bool_t isPassAccCondition_GenLepton(GenLepton genlep1, GenLepton genlep2);
 	void CompareMuon(Muon *Mu1, Muon *Mu2, Muon *leadMu, Muon *subMu);
@@ -3375,7 +3377,7 @@ Bool_t DYAnalyzer::EventSelection(vector< Muon > MuonCollection, NtupleHandle *n
     } // -- End of if(isExistHLTMatchedMuon == kTRUE) -- //
 
     return isPassEventSelection;
-}
+} // End of EventSelection(SelectedMuon, index)
 
 
 // -- Test using the trigger without isolation condition: HLT_Mu50_v* -- //
@@ -5677,6 +5679,23 @@ Bool_t DYAnalyzer::EventSelection_Zdiff_13TeV_HighPt11(vector< Muon > MuonCollec
         } // -- End of else if(nQMuons > 2) -- //
 
 	return isPassEventSelection;
+}
+
+Bool_t DYAnalyzer::EventSelection_FR(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection_nume,
+                                     vector< Muon >* SelectedMuonCollection_deno)
+{
+    Bool_t isPassEventSelection = kFALSE;
+    for(Int_t j=0; j<(int)MuonCollection.size(); j++)
+    {
+        if(MuonCollection[j].Pt > 52 && MuonCollection[j].eta < 2.4 && MuonCollection[j].passTightID)
+        {
+            isPassEventSelection = kTRUE;
+            SelectedMuonCollection_deno->push_back(MuonCollection[j]);
+            if (MuonCollection[j].RelPFIso_dBeta < 0.15)
+                SelectedMuonCollection_nume->push_back(MuonCollection[j]);
+        }
+    }
+    return isPassEventSelection;
 }
 
 Bool_t DYAnalyzer::EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple,
