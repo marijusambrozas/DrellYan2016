@@ -613,7 +613,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                 printf("\tTotal sum of weights: %.1lf\n", SumWeight);
                 printf("\tSum of weights of Separated events: %.1lf\n", SumWeight_Separated);
                 printf("\tSum of unchanged (to 1 or -1) weights: %.1lf\n", SumWeightRaw);
-                printf("\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.nEvents[i_tup]);
+                printf("\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup]);
             }
 
             Double_t LoopRunTime = looptime.CpuTime();
@@ -625,6 +625,18 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         cout << "Writing into files...";
         Int_t write;
         write = MuonTree->Write();
+
+        h_pT_barrel_deno->SetDirectory(0); h_pT_barrel_deno->Write();
+        h_pT_endcap_deno->SetDirectory(0); h_pT_endcap_deno->Write();
+        h_pT_barrel_nume->SetDirectory(0); h_pT_barrel_nume->Write();
+        h_pT_endcap_nume->SetDirectory(0); h_pT_endcap_nume->Write();
+        h_iso_barrel_deno->SetDirectory(0); h_iso_barrel_deno->Write();
+        h_iso_endcap_deno->SetDirectory(0); h_iso_endcap_deno->Write();
+        h_iso_barrel_nume->SetDirectory(0); h_iso_barrel_nume->Write();
+        h_iso_endcap_nume->SetDirectory(0); h_iso_endcap_nume->Write();
+        h_eta_deno->SetDirectory(0); h_eta_deno->Write();
+        h_eta_nume->SetDirectory(0); h_eta_nume->Write();
+
         TString addition = "";
         if (Debug == kTRUE) addition = "_DEBUG";
         if (write)
@@ -640,23 +652,23 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
             MuonFile->Close();
         }
 
-        TFile * file_h = new TFile(out_base+"FRhists_"+Mgr.Procname[Mgr.CurrentProc]+addition+".root", "RECREATE");
-        file_h->cd();
-        h_pT_barrel_deno->SetDirectory(0); h_pT_barrel_deno->Write();
-        h_pT_endcap_deno->SetDirectory(0); h_pT_endcap_deno->Write();
-        h_pT_barrel_nume->SetDirectory(0); h_pT_barrel_nume->Write();
-        h_pT_endcap_nume->SetDirectory(0); h_pT_endcap_nume->Write();
-        h_iso_barrel_deno->SetDirectory(0); h_iso_barrel_deno->Write();
-        h_iso_endcap_deno->SetDirectory(0); h_iso_endcap_deno->Write();
-        h_iso_barrel_nume->SetDirectory(0); h_iso_barrel_nume->Write();
-        h_iso_endcap_nume->SetDirectory(0); h_iso_endcap_nume->Write();
-        h_eta_deno->SetDirectory(0); h_eta_deno->Write();
-        h_eta_nume->SetDirectory(0); h_eta_nume->Write();
+//        TFile * file_h = new TFile(out_base+"FRhists_"+Mgr.Procname[Mgr.CurrentProc]+addition+".root", "RECREATE");
+//        file_h->cd();
+//        h_pT_barrel_deno->SetDirectory(0); h_pT_barrel_deno->Write();
+//        h_pT_endcap_deno->SetDirectory(0); h_pT_endcap_deno->Write();
+//        h_pT_barrel_nume->SetDirectory(0); h_pT_barrel_nume->Write();
+//        h_pT_endcap_nume->SetDirectory(0); h_pT_endcap_nume->Write();
+//        h_iso_barrel_deno->SetDirectory(0); h_iso_barrel_deno->Write();
+//        h_iso_endcap_deno->SetDirectory(0); h_iso_endcap_deno->Write();
+//        h_iso_barrel_nume->SetDirectory(0); h_iso_barrel_nume->Write();
+//        h_iso_endcap_nume->SetDirectory(0); h_iso_endcap_nume->Write();
+//        h_eta_deno->SetDirectory(0); h_eta_deno->Write();
+//        h_eta_nume->SetDirectory(0); h_eta_nume->Write();
 
-        cout << " Histogram writing finished." << endl << "Closing a file..." << endl;
-        file_h->Close();
-        if (!file_h->IsOpen()) cout << "File FRhists_" << Mgr.Procname[Mgr.CurrentProc]+addition << ".root has been closed successfully.\n" << endl;
-        else cout << "FILE FRhists_" << Mgr.Procname[Mgr.CurrentProc]+addition << ".root COULD NOT BE CLOSED!\n" << endl;
+//        cout << " Histogram writing finished." << endl << "Closing a file..." << endl;
+//        file_h->Close();
+//        if (!file_h->IsOpen()) cout << "File FRhists_" << Mgr.Procname[Mgr.CurrentProc]+addition << ".root has been closed successfully.\n" << endl;
+//        else cout << "FILE FRhists_" << Mgr.Procname[Mgr.CurrentProc]+addition << ".root COULD NOT BE CLOSED!\n" << endl;
 
     } // End of i_proc iteration
 
