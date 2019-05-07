@@ -52,7 +52,7 @@ void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "D
 //        if (HLTname == "DEFAULT") HLT = "Ele23Ele12";
 //        else HLT = HLTname;
 //        cout << "\n*******      MakeSelectionForFR_E (" << type << ", " << HLT << ")      *******" << endl;
-//        MakeSelectedEE(type, HLT, Debug);
+//        MakeSelectionForFR_E(type, HLT, Debug);
 //    }
     if (whichX.Contains("MU"))
     {
@@ -60,7 +60,7 @@ void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "D
         if (HLTname == "DEFAULT") HLT = "Mu50";
         else HLT = HLTname;
         cout << "\n*****  MakeSelectionForFR_Mu (" << type << ", " << HLT << ")  *****" << endl;
-        MakeSelectedMuMu(type, HLT, Debug);
+        MakeSelectionForFR_Mu(type, HLT, Debug);
     }
 
     if (Xselected == 0) {
@@ -439,13 +439,13 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         TH1D* h_iso_barrel_deno = new TH1D("h_iso_barrel_deno", "", 100, 0, 5); h_iso_barrel_deno->Sumw2();
         TH1D* h_iso_endcap_deno = new TH1D("h_iso_endcap_deno", "", 100, 0, 5); h_iso_endcap_deno->Sumw2();
 
-        TTree* MuonTree = new TTree("DYTree", "DYTree");
+        TTree* MuonTree = new TTree("FRTree", "FRTree");
         // -- Creating SelectedMuMu variables to assign branches -- //
-        tree->Branch("p_T", &p_T);
-        tree->Branch("eta", &eta);
-        tree->Branch("charge", &charge);
-        tree->Branch("relPFiso", &relPFiso);
-        tree->Branch("evt_weight", &evt_weight);
+        MuonTree->Branch("p_T", &p_T);
+        MuonTree->Branch("eta", &eta);
+        MuonTree->Branch("charge", &charge);
+        MuonTree->Branch("relPFiso", &relPFiso);
+        MuonTree->Branch("evt_weight", &evt_weight);
 
         // Loop for all samples in a process
         for (Int_t i_tup = 0; i_tup<Ntup; i_tup++)
