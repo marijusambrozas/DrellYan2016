@@ -569,12 +569,10 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             charge->push_back(SelectedMuonCollection_deno[i].charge);
                             relPFiso->push_back(SelectedMuonCollection_deno[i].RelPFIso_dBeta);
 
-                            int weight = 1;
+                            Double_t weight = 1;
                             if (Mgr.isMC)
                                 weight = evt_weight*L_B2H*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup];
                             cout << weight << endl;
-                            cout << evt_weight*L_B2H*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup] << endl;
-
                             h_eta_deno->Fill(SelectedMuonCollection_deno[i].eta, weight);
                             if (fabs(SelectedMuonCollection_deno[i].eta) < 1.2)
                             {
