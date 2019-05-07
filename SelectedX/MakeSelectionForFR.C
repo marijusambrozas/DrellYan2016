@@ -428,16 +428,16 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         const int ptbinnum = 17;
         double ptbin[ptbinnum+1] = {47,52,60,70,80,90,100,120,140,160,180,200,250,300,350,400,450,500};
 
-        TH1D* h_pT_barrel_nume = new TH1D("h_pT_barrel_nume", "", ptbinnum, ptbin); h_pT_barrel_nume->Sumw2();
-        TH1D* h_pT_endcap_nume = new TH1D("h_pT_endcap_nume", "", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_nume->Sumw2();
-        TH1D* h_pT_barrel_deno = new TH1D("h_pT_barrel_deno", "", ptbinnum, ptbin); h_pT_barrel_deno->Sumw2();
-        TH1D* h_pT_endcap_deno = new TH1D("h_pT_endcap_deno", "", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_deno->Sumw2();
-        TH1D* h_eta_nume = new TH1D("h_eta_nume", "", 48, -2.4, 2.4); h_eta_nume->Sumw2();
-        TH1D* h_eta_deno = new TH1D("h_eta_deno", "", 48, -2.4, 2.4); h_eta_deno->Sumw2();
-        TH1D* h_iso_barrel_nume = new TH1D("h_iso_barrel_nume", "", 100, 0, 5); h_iso_barrel_nume->Sumw2();
-        TH1D* h_iso_endcap_nume = new TH1D("h_iso_endcap_nume", "", 100, 0, 5); h_iso_endcap_nume->Sumw2();
-        TH1D* h_iso_barrel_deno = new TH1D("h_iso_barrel_deno", "", 100, 0, 5); h_iso_barrel_deno->Sumw2();
-        TH1D* h_iso_endcap_deno = new TH1D("h_iso_endcap_deno", "", 100, 0, 5); h_iso_endcap_deno->Sumw2();
+        TH1D* h_pT_barrel_nume = new TH1D("h_pT_barrel_nume", "h_pT_barrel_nume", ptbinnum, ptbin); h_pT_barrel_nume->Sumw2();
+        TH1D* h_pT_endcap_nume = new TH1D("h_pT_endcap_nume", "h_pT_endcap_nume", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_nume->Sumw2();
+        TH1D* h_pT_barrel_deno = new TH1D("h_pT_barrel_deno", "h_pT_barrel_deno", ptbinnum, ptbin); h_pT_barrel_deno->Sumw2();
+        TH1D* h_pT_endcap_deno = new TH1D("h_pT_endcap_deno", "h_pT_endcap_deno", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_deno->Sumw2();
+        TH1D* h_eta_nume = new TH1D("h_eta_nume", "h_eta_nume", 48, -2.4, 2.4); h_eta_nume->Sumw2();
+        TH1D* h_eta_deno = new TH1D("h_eta_deno", "h_eta_deno", 48, -2.4, 2.4); h_eta_deno->Sumw2();
+        TH1D* h_iso_barrel_nume = new TH1D("h_iso_barrel_nume", "h_iso_barrel_nume", 100, 0, 5); h_iso_barrel_nume->Sumw2();
+        TH1D* h_iso_endcap_nume = new TH1D("h_iso_endcap_nume", "h_iso_endcap_nume", 100, 0, 5); h_iso_endcap_nume->Sumw2();
+        TH1D* h_iso_barrel_deno = new TH1D("h_iso_barrel_deno", "h_iso_barrel_deno", 100, 0, 5); h_iso_barrel_deno->Sumw2();
+        TH1D* h_iso_endcap_deno = new TH1D("h_iso_endcap_deno", "h_iso_endcap_deno", 100, 0, 5); h_iso_endcap_deno->Sumw2();
 
         TTree* MuonTree = new TTree("FRTree", "FRTree");
         // -- Creating SelectedMuMu variables to assign branches -- //
@@ -561,7 +561,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         eta->clear();
                         charge->clear();
                         relPFiso->clear();
-                        for (Int_t i=0; i<SelectedMuonCollection_deno.size(); i++)
+                        for (UInt_t i=0; i<SelectedMuonCollection_deno.size(); i++)
                         {
                             p_T->push_back(SelectedMuonCollection_deno[i].Pt);
                             eta->push_back(SelectedMuonCollection_deno[i].eta);
@@ -631,8 +631,8 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         {
             cout << " Tree writing finished." << endl << "Closing a file..." << endl;
             MuonFile->Close();
-            if (!MuonFile->IsOpen()) cout << "File SelectedForFR_Mu_" << Mgr.Procname[Mgr.CurrentProc] << ".root has been closed successfully.\n" << endl;
-            else cout << "FILE SelectedForFR_Mu_" << Mgr.Procname[Mgr.CurrentProc] << ".root COULD NOT BE CLOSED!\n" << endl;
+            if (!MuonFile->IsOpen()) cout << "File SelectedForFR_Mu_" << Mgr.Procname[Mgr.CurrentProc]+addition << ".root has been closed successfully.\n" << endl;
+            else cout << "FILE SelectedForFR_Mu_" << Mgr.Procname[Mgr.CurrentProc]+addition << ".root COULD NOT BE CLOSED!\n" << endl;
         }
         else
         {
@@ -640,7 +640,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
             MuonFile->Close();
         }
 
-        TFile * file_h = new TFile(out_base+"FRhists_"+Mgr.Procname[Mgr.CurrentProc]+".root", "RECREATE");
+        TFile * file_h = new TFile(out_base+"FRhists_"+Mgr.Procname[Mgr.CurrentProc]+addition+".root", "RECREATE");
         file_h->cd();
         h_pT_barrel_deno->SetDirectory(0); h_pT_barrel_deno->Write();
         h_pT_endcap_deno->SetDirectory(0); h_pT_endcap_deno->Write();
@@ -655,8 +655,8 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
 
         cout << " Histogram writing finished." << endl << "Closing a file..." << endl;
         file_h->Close();
-        if (!file_h->IsOpen()) cout << "File FRhists_" << Mgr.Procname[Mgr.CurrentProc] << ".root has been closed successfully.\n" << endl;
-        else cout << "FILE FRhists_" << Mgr.Procname[Mgr.CurrentProc] << ".root COULD NOT BE CLOSED!\n" << endl;
+        if (!file_h->IsOpen()) cout << "File FRhists_" << Mgr.Procname[Mgr.CurrentProc]+addition << ".root has been closed successfully.\n" << endl;
+        else cout << "FILE FRhists_" << Mgr.Procname[Mgr.CurrentProc]+addition << ".root COULD NOT BE CLOSED!\n" << endl;
 
     } // End of i_proc iteration
 
