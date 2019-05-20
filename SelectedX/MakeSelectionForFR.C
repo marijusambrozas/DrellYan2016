@@ -421,7 +421,10 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         std::vector<double> *eta = new std::vector<double>;
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
-        double evt_weight;
+        std::vector<double> *TRKiso = new std::vector<double>;
+        Int_t nPU;
+        Int_t nVTX;
+        Double_t evt_weight;
 
         const int ptbinnum_endcap = 9;
         double ptbin_endcap[ptbinnum_endcap+1] = {47,52,60,70,80,90,100,150,200,500};
@@ -434,10 +437,16 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         TH1D* h_pT_endcap_deno = new TH1D("h_pT_endcap_deno", "h_pT_endcap_deno", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_deno->Sumw2();
         TH1D* h_eta_nume = new TH1D("h_eta_nume", "h_eta_nume", 48, -2.4, 2.4); h_eta_nume->Sumw2();
         TH1D* h_eta_deno = new TH1D("h_eta_deno", "h_eta_deno", 48, -2.4, 2.4); h_eta_deno->Sumw2();
-        TH1D* h_iso_barrel_nume = new TH1D("h_iso_barrel_nume", "h_iso_barrel_nume", 100, 0, 5); h_iso_barrel_nume->Sumw2();
-        TH1D* h_iso_endcap_nume = new TH1D("h_iso_endcap_nume", "h_iso_endcap_nume", 100, 0, 5); h_iso_endcap_nume->Sumw2();
-        TH1D* h_iso_barrel_deno = new TH1D("h_iso_barrel_deno", "h_iso_barrel_deno", 100, 0, 5); h_iso_barrel_deno->Sumw2();
-        TH1D* h_iso_endcap_deno = new TH1D("h_iso_endcap_deno", "h_iso_endcap_deno", 100, 0, 5); h_iso_endcap_deno->Sumw2();
+        TH1D* h_PFiso_barrel_nume = new TH1D("h_PFiso_barrel_nume", "h_PFiso_barrel_nume", 100, 0, 5); h_PFiso_barrel_nume->Sumw2();
+        TH1D* h_PFiso_endcap_nume = new TH1D("h_PFiso_endcap_nume", "h_PFiso_endcap_nume", 100, 0, 5); h_PFiso_endcap_nume->Sumw2();
+        TH1D* h_PFiso_barrel_deno = new TH1D("h_PFiso_barrel_deno", "h_PFiso_barrel_deno", 100, 0, 5); h_PFiso_barrel_deno->Sumw2();
+        TH1D* h_PFiso_endcap_deno = new TH1D("h_PFiso_endcap_deno", "h_PFiso_endcap_deno", 100, 0, 5); h_PFiso_endcap_deno->Sumw2();
+        TH1D* h_TRKiso_barrel_nume = new TH1D("h_TRKiso_barrel_nume", "h_TRKiso_barrel_nume", 100, 0, 5); h_TRKiso_barrel_nume->Sumw2();
+        TH1D* h_TRKiso_endcap_nume = new TH1D("h_TRKiso_endcap_nume", "h_TRKiso_endcap_nume", 100, 0, 5); h_TRKiso_endcap_nume->Sumw2();
+        TH1D* h_TRKiso_barrel_deno = new TH1D("h_TRKiso_barrel_deno", "h_TRKiso_barrel_deno", 100, 0, 5); h_TRKiso_barrel_deno->Sumw2();
+        TH1D* h_TRKiso_endcap_deno = new TH1D("h_TRKiso_endcap_deno", "h_TRKiso_endcap_deno", 100, 0, 5); h_TRKiso_endcap_deno->Sumw2();
+        TH1D* h_nVTX = new TH1D("h_nVTX", "h_nVTX", 50, 0, 50); h_nVTX->Sumw2();
+
 
         TTree* MuonTree = new TTree("FRTree", "FRTree");
         // -- Creating SelectedMuMu variables to assign branches -- //
@@ -445,7 +454,13 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("eta", &eta);
         MuonTree->Branch("charge", &charge);
         MuonTree->Branch("relPFiso", &relPFiso);
+        MuonTree->Branch("TRKiso", &TRKiso);
+        MuonTree->Branch("nPU", &nPU);
+        MuonTree->Branch("nVTX", &nVTX);
         MuonTree->Branch("evt_weight", &evt_weight);
+
+        // -- For PU re-weighting -- //
+        analyzer->SetupPileUpReWeighting_80X(Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root");
 
         // Loop for all samples in a process
         for (Int_t i_tup = 0; i_tup<Ntup; i_tup++)
@@ -492,6 +507,11 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                 ntuple->GENEvt_weight < 0 ? evt_weight = -1 : evt_weight = 1;
                 SumWeight += evt_weight;
                 SumWeightRaw += ntuple->GENEvt_weight;
+
+                // -- Pileup-Reweighting -- //
+                Double_t PUWeight = 1;
+                nPU = ntuple->nPileUp;
+                if(Mgr.isMC == kTRUE) PUWeight = analyzer->PileUpWeightValue_80X(nPU);
 
                 // -- Separate DYLL samples -- //
                 Bool_t GenFlag = kTRUE;//kFALSE;
@@ -562,27 +582,43 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         eta->clear();
                         charge->clear();
                         relPFiso->clear();
+                        TRKiso->clear();
+
+                        Double_t weight = 1;
+                        if (Mgr.isMC)
+                        {
+                            if (Mgr.CurrentProc == _ttbar) // inclusive
+                                weight = PUWeight * evt_weight * L_B2H * 831.76 / 154948878;
+                            else if (Mgr.CurrentProc == _WJets) // just two files
+                                weight = PUWeight * evt_weight * L_B2H * 61526 / 162787688;
+                            else if (Mgr.CurrentProc == _DY_50to100) // it is actually 50 to Inf (inclusive)
+                                weight = PUWeight * evt_weight * L_B2H * 3 * 1952.68432327 / 81780984;
+                            else
+                                weight = PUweight * evt_weight * L_B2H * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup];
+                        }
+
+                        nVTX = ntuple->nVertices;
+                        h_nVTX->Fill(nVTX, weight);
                         for (UInt_t i=0; i<SelectedMuonCollection_deno.size(); i++)
                         {
                             p_T->push_back(SelectedMuonCollection_deno[i].Pt);
                             eta->push_back(SelectedMuonCollection_deno[i].eta);
                             charge->push_back(SelectedMuonCollection_deno[i].charge);
                             relPFiso->push_back(SelectedMuonCollection_deno[i].RelPFIso_dBeta);
-
-                            Double_t weight = 1;
-                            if (Mgr.isMC)
-                                weight = evt_weight*L_B2H*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup];
+                            TRKiso->push_back(SelectedMuonCollection_deno[i].trkiso);
 
                             h_eta_deno->Fill(SelectedMuonCollection_deno[i].eta, weight);
                             if (fabs(SelectedMuonCollection_deno[i].eta) < 1.2)
                             {
                                 h_pT_barrel_deno->Fill(SelectedMuonCollection_deno[i].Pt, weight);
-                                h_iso_barrel_deno->Fill(SelectedMuonCollection_deno[i].RelPFIso_dBeta, weight);
+                                h_PFiso_barrel_deno->Fill(SelectedMuonCollection_deno[i].RelPFIso_dBeta, weight);
+                                h_TRKiso_barrel_deno->Fill(SelectedMuonCollection_deno[i].trkiso, weight);
                             }
                             else
                             {
                                 h_pT_endcap_deno->Fill(SelectedMuonCollection_deno[i].Pt, weight);
-                                h_iso_endcap_deno->Fill(SelectedMuonCollection_deno[i].RelPFIso_dBeta, weight);
+                                h_PFiso_endcap_deno->Fill(SelectedMuonCollection_deno[i].RelPFIso_dBeta, weight);
+                                h_TRKiso_endcap_deno->Fill(SelectedMuonCollection_deno[i].trkiso, weight);
                             }
                             if (i < SelectedMuonCollection_nume.size())
                             {
@@ -590,12 +626,14 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                                 if (fabs(SelectedMuonCollection_nume[i].eta) < 1.2)
                                 {
                                     h_pT_barrel_nume->Fill(SelectedMuonCollection_nume[i].Pt, weight);
-                                    h_iso_barrel_nume->Fill(SelectedMuonCollection_nume[i].RelPFIso_dBeta, weight);
+                                    h_PFiso_barrel_nume->Fill(SelectedMuonCollection_nume[i].RelPFIso_dBeta, weight);
+                                    h_TRKiso_barrel_nume->Fill(SelectedMuonCollection_nume[i].trkiso, weight);
                                 }
                                 else
                                 {
                                     h_pT_endcap_nume->Fill(SelectedMuonCollection_nume[i].Pt, weight);
-                                    h_iso_endcap_nume->Fill(SelectedMuonCollection_nume[i].RelPFIso_dBeta, weight);
+                                    h_PFiso_endcap_nume->Fill(SelectedMuonCollection_nume[i].RelPFIso_dBeta, weight);
+                                    h_TRKiso_endcap_nume->Fill(SelectedMuonCollection_nume[i].trkiso, weight);
                                 }
                             }
                         }
@@ -631,12 +669,17 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         h_pT_endcap_deno->SetDirectory(0); h_pT_endcap_deno->Write();
         h_pT_barrel_nume->SetDirectory(0); h_pT_barrel_nume->Write();
         h_pT_endcap_nume->SetDirectory(0); h_pT_endcap_nume->Write();
-        h_iso_barrel_deno->SetDirectory(0); h_iso_barrel_deno->Write();
-        h_iso_endcap_deno->SetDirectory(0); h_iso_endcap_deno->Write();
-        h_iso_barrel_nume->SetDirectory(0); h_iso_barrel_nume->Write();
-        h_iso_endcap_nume->SetDirectory(0); h_iso_endcap_nume->Write();
+        h_PFiso_barrel_deno->SetDirectory(0); h_PFiso_barrel_deno->Write();
+        h_PFiso_endcap_deno->SetDirectory(0); h_PFiso_endcap_deno->Write();
+        h_PFiso_barrel_nume->SetDirectory(0); h_PFiso_barrel_nume->Write();
+        h_PFiso_endcap_nume->SetDirectory(0); h_PFiso_endcap_nume->Write();
+        h_TRKiso_barrel_deno->SetDirectory(0); h_TRKiso_barrel_deno->Write();
+        h_TRKiso_endcap_deno->SetDirectory(0); h_TRKiso_endcap_deno->Write();
+        h_TRKiso_barrel_nume->SetDirectory(0); h_TRKiso_barrel_nume->Write();
+        h_TRKiso_endcap_nume->SetDirectory(0); h_TRKiso_endcap_nume->Write();
         h_eta_deno->SetDirectory(0); h_eta_deno->Write();
         h_eta_nume->SetDirectory(0); h_eta_nume->Write();
+        h_nVTX->SetDirectory(0); h_nVTX->Write();
 
         TString addition = "";
         if (Debug == kTRUE) addition = "_DEBUG";
@@ -652,24 +695,6 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
             cout << " Writing was NOT successful!\n" << endl;
             MuonFile->Close();
         }
-
-//        TFile * file_h = new TFile(out_base+"FRhists_"+Mgr.Procname[Mgr.CurrentProc]+addition+".root", "RECREATE");
-//        file_h->cd();
-//        h_pT_barrel_deno->SetDirectory(0); h_pT_barrel_deno->Write();
-//        h_pT_endcap_deno->SetDirectory(0); h_pT_endcap_deno->Write();
-//        h_pT_barrel_nume->SetDirectory(0); h_pT_barrel_nume->Write();
-//        h_pT_endcap_nume->SetDirectory(0); h_pT_endcap_nume->Write();
-//        h_iso_barrel_deno->SetDirectory(0); h_iso_barrel_deno->Write();
-//        h_iso_endcap_deno->SetDirectory(0); h_iso_endcap_deno->Write();
-//        h_iso_barrel_nume->SetDirectory(0); h_iso_barrel_nume->Write();
-//        h_iso_endcap_nume->SetDirectory(0); h_iso_endcap_nume->Write();
-//        h_eta_deno->SetDirectory(0); h_eta_deno->Write();
-//        h_eta_nume->SetDirectory(0); h_eta_nume->Write();
-
-//        cout << " Histogram writing finished." << endl << "Closing a file..." << endl;
-//        file_h->Close();
-//        if (!file_h->IsOpen()) cout << "File FRhists_" << Mgr.Procname[Mgr.CurrentProc]+addition << ".root has been closed successfully.\n" << endl;
-//        else cout << "FILE FRhists_" << Mgr.Procname[Mgr.CurrentProc]+addition << ".root COULD NOT BE CLOSED!\n" << endl;
 
     } // End of i_proc iteration
 
