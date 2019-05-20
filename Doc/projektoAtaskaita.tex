@@ -169,8 +169,17 @@ CMS \ltq{širdis} -- didžiausias pasaulyje solenoidinis elektromagnetas.
 Tai -- iki superlaidumo temperatūros atšaldoma ritė, kuria darbo metu teka maždaug $19.1$ kA stiprio
 elektros srovė, ir kurios viduje sukuriamas iki $4$ T siekiantis magnetinis laukas.
 
+\vspace{0.2cm}
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{CMSslice_LT.png}
+	\caption{\label{fig:CMSslice}Skersinis CMS detektoriaus pjūvis \cite{CMSslice}.
+	Skirtingos linijos žymi skirtingų dalelių, išlekiančių iš protonų susidūrimo vietos, trajektorijas.
+	Trūki linija žymi elektriškai neutralios dalelės trajektoriją, kuri silicio trekų detektoriuje
+	neužfiksuojama.}
+\end{figure}
+
 CMS detektoriaus sluoksnius galima pamatyti \ref{fig:CMSslice} paveiksle.
-Kiekvienas subdtetektorius turi vieną cilindrinę ir dvi antgalių dalis, kurios yra sluoksniškai išdėstytos
+Kiekvienas subdetektorius turi vieną cilindrinę ir dvi antgalių dalis, kurios yra sluoksniškai išdėstytos
 aplink protonų susidūrimo vietą.
 Kiekvienas subdetektorių sluosknis yra skirtingas ir turi savo paskirtį \cite{CMSexperiment}.
 
@@ -195,20 +204,48 @@ detektorius, taip nustatydamas, kokios dalelės susidarė bei kokie jų parametr
 skersinė energija, pseudosparta ir pan.).
 Tokiu būdu gaunamas platus įvykio galutinių produktų sąrašas, leidžiantis pamatyti pilną įvykio vaizdą.
 
-\begin{figure}
-	\includegraphics[width=\textwidth]{CMSslice_LT.png}
-	\caption{\label{fig:CMSslice}Skersinis CMS detektoriaus pjūvis \cite{CMSslice}.
-	Skirtingos linijos žymi skirtingų dalelių, išlekiančių iš protonų susidūrimo vietos, trajektorijas.
-	Trūki linija žymi elektriškai neutralios dalelės trajektoriją, kuri silicio trekų detektoriuje
-	neužfiksuojama.}
-\end{figure}
+\subsection{Signalas ir triukšmas}
 
-\vspace{-0.2cm}
+Drell-Yan proceso metu susidaro du priešingo krūvio leptonai.
+Tokia pora gali susidaryti ir kitų procesų metu.
+Tai -- \ltq{triukšmo įvykiai}.
+Pagrindiniai Drell-Yan proceso triukšmai yra šie: viršūninių kvarkų poros ($t\bar{t}\,$) įvykiai, dviejų bozonų
+įvykiai ($WW$, $WZ$ ir $ZZ$), vieno viršūninio kvarko ir $W$ bozono įvykiai ($tW$ arba $\bar{t}W$), $W$ bozono
+ir čiurkšlės įvykiai ($\WJets$) bei stipriosios sąveikos nulemti kelių čiurkšlių įvykiai (sutrumpintai vadinami $\QCD$).
+Taip pat tiriant Drell-Yan proceso elektronų ir miuonų kanalus vienas iš svarbių triukšmų yra
+to paties Drell-Yan proceso taonų kanalas $\DYtau$, kai taonai skyla į elektronus arba miuonus.
+Stengiantis išskirti, kokią dalį detektoriaus registruojamuose pasiskirstymuose sudaro signalo (Drell-Yan),
+o kokią -- triukšmo įvykiai, yra pasitelkiamas Monte Carlo (MC) modeliavimas ir/arba matavimu grįsti metodai.
+
+Monte Carlo modeliavimas -- tai Monte Carlo metodu sumodeliuoti protonų susidūrimo įvykiai.
+Įvykių modeliavimas atliekamas keliais lygmenimis.
+Pirmiausia sumodeliuojamas pats protonų susidūrimas ir gaunama, kokios dalelės susidarė jo metu.
+Tada modeliuojami po susidūrimo vykstantys antriniai procesai, tokie, kaip hadronizacija, spinduliavimas ir dalelių skilimai.
+Galiausiai modeliuojama detektoriaus sąveika su visais įvykio produktais.
+Tokį virtualų eksperimentą kartojant daug kartų galima gauti vidutinį rezultatą, kuris yra palyginamas su eksperimentu.
+Vis dėlto, sumodeliuoti įvykius taip, kad virtualaus eksperimento sąlygos idealiai atitiktų realaus eksperimento sąlygas,
+yra praktiškai neįmanoma.
+Norint atsižvelgti į kai kuriuos iš neatitikimų modeliuotiems įvykiams galima pritaikyti tam tikras pataisas.
+Tačiau vis tiek egzistuoja neapibrėžtumų, tokių, kaip nepakankamos žinios apie atskirų triukšmo procesų įvykių tikėtinumus,
+neidealus detektoriaus atsako modeliavimas, papildomi protonų susidūrimai ir pan., kurie kenkia įverčio kokybei.
+Šių problemų gali būti išvengiama triukšmo įvykių skaičiaus įvertinimui naudojant matavimu grįstus metodus.
+
+Matavimu grįsti metodai apjungia matavimą ir modeliavimą, kad būtų gautas kuo tikroviškesnis įvykių skaičiaus įvertis.
+Pagrindinis matavimu grįstų įvykių skaičiaus įvertinimo metodų principas remiasi signalo ir kontrolinės sričių apibrėžimais.
+Signalo sritis -- tai sritis, pasirinkta taip, kad į ją patektų kuo daugiau signalo ir kuo mažiau triukšmo įvykių.
+Kontrolinė sritis -- tai taip pasirinkta sritis, kad į ją patektų kuo daugiau triukšmo ir kuo mažiau signalo įvykių.
+Šios dvi sritys turi būti nepersiklojančios.
+Skirtingi matavimu grįsti metodai įvairiais būdais transformuoja triukšmo įvykių skaičių, apskaičiuotą kontrolinėje
+srityje, į triukšmo įvykių skaičių, patenkantį į signalo sritį.
+Eksperimentinėje didelių energijų fizikoje ganėtinai populiarūs yra klaidingo fizikinio objekto atpažinimo ir ABCD metodai.
+Jie naudojami įvertinti skaičiui tokių triukšmo įvykių, kurių metu susidarė čiurkšlės.
+Triukšmų, siejamų su procesais, kurių metu susidariusios dvi nestabilios dalelės skyla į leptonus nepriklausomai ir su
+vienodomis tikimybėmis, indėliui įvertinti naudojamas $\emu$ metodas, kuris ir buvo taikomas šiame darbe.
+
 \subsection{Duomenų rinkiniai}
-\vspace{-0.2cm}
 
 Šiame darbe buvo naudojami dalinai apdoroti CERN CMS detektoriaus 2016 metais užregistruoti $13$ TeV
-energijos protonų susidūrimų duomenys, atitinkantys $35.9$ \invfb integruotąjį šviesį, arba maždaug
+energijos protonų susidūrimų duomenys, atitinkantys $35.9$ \invfb inte-gruotąjį šviesį, arba maždaug
 $2 \cdot 10^{15}$ protonų susidūrimų.
 Tai yra virš $10$ kartų daugiau įvykių, nei užregistruota $2015$-aisiais metais \cite{DY2018}.
 
@@ -240,8 +277,29 @@ eksperimentinių duomenų rinkinius, o adresų vektorius laiko skirtingų modeli
 duomenų registravimo laikotarpių pirminių duomenų rinkinių adresus.
 Pagrindinių kodo elementų sąsajos su duomenų išdėstymu schematiškai pavaizduotos \ref{fig:duomKod} pav.
 
-Duomenų analizė vykdyta dviem etapais: pirmiausia buvo atliekama įvykių atranka nuotoliniu būdu prisijungus
-prie skaičiavimo centro.
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{Duomenu_schema_DataMC_v2.png}
+	\caption{\label{fig:duomSchem} Duomenų saugojimo schema.}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{medis_praplestas_spalvotas.png}
+	\caption{\label{fig:duomKod} Išplėstinė duomenų saugojimo schema. Spalvoti blokai žymi sąsajas su loginiais
+	kodo elementais.}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[width=0.7\textwidth]{Duomenu_panaudojimo_schema.png}
+	\captionof{figure}{\label{fig:duomVald} Duomenų panaudojimo (viršuje) ir kompiuterinio kodo versijų valdymo (apačioje) schemos.}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{atrinktu_duomenu_schema_v1.png}
+	\captionof{figure}{\label{fig:selectedX} Atrinktų duomenų loginė schema.}
+\end{figure}
+
+Duomenų analizė vykdyta dviem etapais: pirmiausia buvo atliekama išmatuotų ir modeliuotų įvykių atranka nuotoliniu
+būdu prisijungus prie skaičiavimo centro.
 Svarbiausia su atrinktais įvykiais susijusi informacija buvo įrašoma į naujus duomenų failus, kurie užima tik
 apie $8$ GB.
 Naujai sukurti failai buvo parsisiunčiami į vietinį kompiuterį tolimesnei analizei.
@@ -254,27 +312,6 @@ jo parametrus) ir failų versijas.
 Sumažintų duomenų rinkinių loginio išdėstymo schema pateikta \ref{fig:selectedX} pav.
 Programinio kodo versijos buvo tvarkomos naudojantis \textit{Github} versijų valdymo sistema.
 Apibendrintos duomenų naudojimo ir kodo versijų valdymo schemos yra pavaizduotos \ref{fig:duomVald} pav.
-
-\begin{figure}
-	\includegraphics[width=\textwidth]{Duomenu_schema_DataMC_v2.png}
-	\caption{\label{fig:duomSchem} Duomenų saugojimo schema.}
-\end{figure}
-
-\begin{figure}
-	\includegraphics[width=\textwidth]{medis_praplestas_spalvotas.png}
-	\caption{\label{fig:duomKod} Išplėstinė duomenų saugojimo schema. Spalvoti blokai žymi sąsajas su loginiais
-	kodo elementais.}
-\end{figure}
-
-\begin{figure}
-	\includegraphics[width=0.7\textwidth]{Duomenu_panaudojimo_schema.png}
-	\captionof{figure}{\label{fig:duomVald} Duomenų panaudojimo (viršuje) ir kompiuterinio kodo versijų valdymo (apačioje) schemos.}
-\end{figure}
-
-\begin{figure}
-	\includegraphics[width=\textwidth]{atrinktu_duomenu_schema_v1.png}
-	\captionof{figure}{\label{fig:selectedX} Atrinktų duomenų loginė schema.}
-\end{figure}
 
 \subsection{Įvykių atranka}\label{sec:selection}
 Iš $2016$-aisiais metais CMS detektoriaus užregistruotų duomenų buvo stengiamasi išrinkti tokius įvykius, kurie
@@ -351,14 +388,6 @@ Išmatuoti ir modeliuoti atkurtų pirminių viršūnių skaičiaus pasiskirstyma
 prieš ir po pataisos pateikiami \ref{fig:PUba} pav.
 Miuonų poros įvykiams grafikų forma yra analogiška, tik skiriasi suminis įvykių skaičius.
 
-\begin{figure}[tbp]
-	\includegraphics[width=0.48\textwidth]{nVTXee_before.png}
-	\includegraphics[width=0.48\textwidth]{nVTXee_after.png}
-	\caption{\label{fig:PUba} Pirminių viršūnių skaičiaus pasiskirstymai atranką praėjusiuose elektronų poros
-		įvykiuose prieš (kairėje) ir po (dešinėje) pataisos pritaikymo.
-		Juodi taškai vaizduoja CMS detektoriumi išmatuotą, o spalvoti stulpeliai -- modeliuotus pasiskirstymus.}
-\end{figure}
-
 Paveikslų apatinėse dalyje pateiktuose eksperimentinio ir modeliuoto rezultatų santykio grafikuose galima pamatyti, kad
 $10$-$30$ pirminių viršūnių skaičiaus srityje, į kurią patenka apie $91\%$ visų įvykių, grafikai tampa plokštesni --
 šioje srityje pirminių viršūnių skaičiaus pasiskirstymai sutampa labai gerai (skirtumas $\leqslant 9\%$).
@@ -368,6 +397,14 @@ tikslumas, o miuonų poros invariantinei masei -- miuonų skersinio impulso mata
 Dėl to visiems užregistruotiems elektronams buvo pritaikytos standartinės CMS elektronų energijos skalės
 pataisų procedūros \cite{Ecorr}, o miuonams -- Ročesterio mokslinės grupės pateikiamos miuonų impulso
 skalės pataisos \cite{RocCorr}.
+
+\begin{figure}[tbp]
+	\includegraphics[width=0.48\textwidth]{nVTXee_before.png}
+	\includegraphics[width=0.48\textwidth]{nVTXee_after.png}
+	\caption{\label{fig:PUba} Pirminių viršūnių skaičiaus pasiskirstymai atranką praėjusiuose elektronų poros
+		įvykiuose prieš (kairėje) ir po (dešinėje) pataisos pritaikymo.
+		Juodi taškai vaizduoja CMS detektoriumi išmatuotą, o spalvoti stulpeliai -- modeliuotus pasiskirstymus.}
+\end{figure}
 
 \begin{figure}[tbp]
 	\includegraphics[width=0.48\textwidth]{ee_mass_beforeSF.png}
@@ -420,21 +457,7 @@ vertėmis ir priartino modeliuotus rezultatus prie išmatuotųjų.
 Tipinės pataisų vertės vienam įvykiui siekė apie $0.98$ ir mažiau įvykiams, kuriuose buvo užfiksuoti objektai su
 $|\eta|>2$.
 
-
-\subsection{Triukšmų indėlio įvertinimas}\label{sec:SignalBkg}
-	 
-Drell-Yan proceso metu susidaro du priešingo krūvio leptonai.
-Tokia pora gali susidaryti ir kitų procesų metu.
-Tai -- \ltq{triukšmo įvykiai}.
-Pagrindiniai Drell-Yan proceso triukšmai yra šie: viršūninių kvarkų poros ($t\bar{t}\,$) įvykiai, dviejų bozonų
-įvykiai ($WW$, $WZ$ ir $ZZ$), vieno viršūninio kvarko ir $W$ bozono įvykiai ($tW$ arba $\bar{t}W$), $W$ bozono
-ir čiurkšlės įvykiai ($\WJets$) bei stipriosios sąveikos nulemti kelių čiurkšlių įvykiai (sutrumpintai vadinami $\QCD$).
-Taip pat tiriant Drell-Yan proceso elektronų ir miuonų kanalus vienas iš svarbių triukšmų yra
-to paties Drell-Yan proceso taonų kanalas $\DYtau$, kai taonai skyla į elektronus arba miuonus.
-Pagrindiniai triukšmo įvykių skaičiaus įvertinimo būdai yra Monte Carlo (MC) modeliavimas ir
-matavimu grįsti metodai.
-
-\begin{figure}[tbp]
+\begin{figure}[H]
 	\includegraphics[width=0.48\textwidth]{ee_rapi_beforePVZ.png}
 	\includegraphics[width=0.48\textwidth]{mumu_rapi_beforePVZ.png}
 	\caption{\label{fig:rapibPVZ} Elektronų (kairėje) ir miuonų (dešinėje) porų spartos pasiskirstymai
@@ -442,7 +465,7 @@ matavimu grįsti metodai.
 		Atkreiptinas dėmesys į eksperimento ir modeliavimo santykio pasiskirstymo asimetriškumą.}
 \end{figure}
 
-\begin{figure}[tbp]
+\begin{figure}[H]
 	\includegraphics[width=0.48\textwidth]{ee_rapi_beforeL1.png}
 	\includegraphics[width=0.48\textwidth]{mumu_rapi_beforeL1.png}
 	\caption{\label{fig:rapibL1} Elektronų (kairėje) ir miuonų (dešinėje) porų spartos pasiskirstymai,
@@ -450,37 +473,14 @@ matavimu grįsti metodai.
 		trigerio suveikimo pataisos.}
 \end{figure}
 
-\begin{figure}[tbp]
+\begin{figure}[H]
 	\includegraphics[width=0.48\textwidth]{ee_rapi_after.png}
 	\includegraphics[width=0.48\textwidth]{mumu_rapi_after.png}
 	\caption{\label{fig:rapia} Elektronų (kairėje) ir miuonų (dešinėje) porų spartos pasiskirstymai,
 		gauti pritaikius visas pataisas.}
 \end{figure}
 
-Monte Carlo modeliavimas -- tai Monte Carlo metodu sumodeliuoti protonų susidūrimo įvykiai.
-Įvykių modeliavimas atliekamas keliais lygmenimis.
-Pirmiausia sumodeliuojamas pats protonų susidūrimas ir gaunama, kokios dalelės susidarė jo metu.
-Tada modeliuojami po susidūrimo vykstantys antriniai procesai, tokie, kaip hadronizacija, spinduliavimas ir dalelių skilimai.
-Galiausiai modeliuojama detektoriaus sąveika su visais įvykio produktais.
-Tokį virtualų eksperimentą kartojant daug kartų galima gauti vidutinį rezultatą, kuris yra palyginamas su eksperimentu.
-Vis dėlto, sumodeliuoti įvykius taip, kad virtualaus eksperimento sąlygos idealiai atitiktų realaus eksperimento sąlygas,
-yra praktiškai neįmanoma.
-Norint atsižvelgti į kai kuriuos iš neatitikimų modeliuotiems įvykiams galima pritaikyti tam tikras pataisas.
-Tačiau vis tiek egzistuoja neapibrėžtumų, tokių, kaip nepakankamos žinios apie atskirų triukšmo procesų įvykių tikėtinumus,
-neidealus detektoriaus atsako modeliavimas, papildomi $pp$ susidūrimai ir pan., kurie kenkia įverčio kokybei.
-Šių problemų gali būti išvengiama triukšmo įvykių skaičiaus įvertinimui naudojant matavimu grįstus metodus.
-
-Matavimu grįsti metodai apjungia matavimą ir modeliavimą, kad būtų gautas kuo tikroviškesnis įvykių skaičiaus įvertis.
-Pagrindinis matavimu grįstų įvykių skaičiaus įvertinimo metodų principas remiasi signalo ir kontrolinės sričių apibrėžimais.
-Signalo sritis -- tai sritis, pasirinkta taip, kad į ją patektų kuo daugiau signalo ir kuo mažiau triukšmo įvykių.
-Kontrolinė sritis -- tai taip pasirinkta sritis, kad į ją patektų kuo daugiau triukšmo ir kuo mažiau signalo įvykių.
-Šios dvi sritys turi būti nepersiklojančios.
-Skirtingi matavimu grįsti metodai įvairiais būdais transformuoja triukšmo įvykių skaičių, apskaičiuotą kontrolinėje
-srityje, į triukšmo įvykių skaičių, patenkantį į signalo sritį.
-Eksperimentinėje didelių energijų fizikoje ganėtinai populiarūs yra klaidingo fizikinio objekto atpažinimo ir ABCD metodai.
-Jie naudojami įvertinti skaičiui tokių triukšmo įvykių, kurių metu susidarė čiurkšlės.
-Triukšmų, siejamų su procesais, kurių metu susidariusios dvi nestabilios dalelės skyla į leptonus nepriklausomai ir su
-vienodomis tikimybėmis, indėliui įvertinti naudojamas $\emu$ metodas, kuris ir buvo taikomas šiame darbe.
+\subsection{Triukšmų indėlio įvertinimas}\label{sec:SignalBkg}
 
 $\emu$ metodu buvo įvertinti šie triukšmai: $\DYtau$, $t\bar{t}\,$, $WW$, $tW$, $\bar{t}W$.
 Kitų triukšmo procesų indėlis buvo įvertintas modeliavimu, išskyrus $QCD$ įvykius, kurių modeliavimas neaprašo pakankamai
