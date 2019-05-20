@@ -594,7 +594,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             else if (Mgr.CurrentProc == _DY_50to100) // it is actually 50 to Inf (inclusive)
                                 weight = PUWeight * evt_weight * L_B2H * 3 * 1952.68432327 / 81780984;
                             else
-                                weight = PUweight * evt_weight * L_B2H * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup];
+                                weight = PUWeight * evt_weight * L_B2H * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup];
                         }
 
                         nVTX = ntuple->nVertices;
