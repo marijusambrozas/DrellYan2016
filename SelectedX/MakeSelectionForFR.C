@@ -662,6 +662,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
 
         // Writing
         cout << "Writing into files...";
+        MuonFile->cd();
         Int_t write;
         write = MuonTree->Write();
 
