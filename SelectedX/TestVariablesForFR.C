@@ -1,0 +1,525 @@
+﻿#include <TFile.h>
+#include <TH2.h>
+#include <TCanvas.h>
+#include <TStyle.h>
+#include <TGraph.h>
+#include <TString.h>
+#include <TLegend.h>
+#include <THStack.h>
+#include <TPad.h>
+#include <TLine.h>
+#include <TColor.h>
+#include <TF1.h>
+#include <vector>
+#include <TMath.h>
+#include <TFormula.h>
+#include <iostream>
+#include <sstream>
+#include <TVectorT.h>
+
+// -- Customized Analyzer for Drel-Yan Analysis -- //
+#include "./header/DYAnalyzer.h"
+#include "./header/SelectedX.h"
+#include "./header/myProgressBar_t.h"
+#include "./header/FileMgr.h"
+#include "./header/myRatioPlot_t.h"
+#include "./etc/RoccoR/RoccoR.cc"
+
+void E_HistDrawer ();
+void Mu_HistDrawer ();
+Double_t CompChiSquared (TH1D *h_data, THStack *s_MC);
+Double_t CompAvgDataMCDifference (TH1D *h_data, THStack *s_MC);
+void removeNegativeBins(TH1D *h);
+
+// -- Drell-Yan mass bins -- //
+const Int_t binnum = 43;
+const Double_t massbins[44] = {15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 68, 72, 76, 81, 86, 91, 96, 101, 106, 110, 115, 120, 126,
+                               133, 141, 150, 160, 171, 185, 200, 220, 243, 273, 320, 380, 440, 510, 600, 700, 830, 1000, 1500, 3000};
+
+// -- Mass bins for background estimation -- //
+const Int_t binnum2 = 86;
+const Double_t massbins2[87] = {15, 17.5, 20, 22.5, 25, 27.5, 30, 32.5, 35, 37.5, 40, 42.5, 45, 47.5, 50, 52.5, 55, 57.5, 60, 62, 64,
+                                66, 68, 70, 72, 74, 76, 78.5, 81, 83.5, 86, 88.5, 91, 93.5, 96, 98.5, 101, 103.5, 106, 108, 110, 112.5,
+                                115, 117.5, 120, 123, 126, 129.5, 133, 137, 141, 145.5, 150, 155, 160, 165.5, 171, 178, 185, 192.5, 200,
+                                210, 220, 231.5, 243, 258, 273, 296.5, 320, 350, 380, 410, 440, 475, 510, 555, 600, 650, 700, 765, 830,
+                                915, 1000, 1250, 1500, 2250, 3000};
+const Double_t L_B2F = 19721.0;
+const Double_t L_G2H = 16146.0;
+const Double_t L_B2H = 35867.0;
+
+void TestVariablesForFR (TString WhichX = "")
+{
+    TString whichX = WhichX;
+    whichX.ToUpper();
+    Int_t Xselected = 0;
+    if (whichX.Contains("E"))
+    {
+        Xselected++;
+        cout << "\n*******      EE_HistDrawer()      *******" << endl;
+        E_HistDrawer();
+    }
+    if (whichX.Contains("MU"))
+    {
+        Xselected++;
+        cout << "\n*******     MuMu_HistDrawer()     *******" << endl;
+        Mu_HistDrawer();
+    }
+    if (Xselected == 0) cout << "Wrong arument!" << endl;
+
+} // End of HistDrawer()
+
+
+/// ############################################################################# ///
+/// ----------------------------- Electron Channel ------------------------------ ///
+/// ############################################################################# ///
+void E_HistDrawer ()
+{
+   return; // NOT READY YET
+} // End of EE_HistDrawer()
+
+
+/// ################################################################################## ///
+/// -------------------------------- Muon Channel ------------------------------------ ///
+/// ################################################################################## ///
+void Mu_HistDrawer()
+{
+    FileMgr fm;
+    THStack *s_PFiso_barrel = new THStack("s_PFiso_barrel", "");
+    THStack *s_PFiso_endcap = new THStack("s_PFiso_endcap", "");
+    THStack *s_TRKiso_barrel = new THStack("s_TRKiso_barrel", "");
+    THStack *s_TRKiso_endcap = new THStack("s_TRKiso_endcap", "");
+    THStack *s_pT_barrel = new THStack("s_mass_befs_pT_barrelore_EffCorr", "");
+    THStack *s_pT_endcap = new THStack("s_pT_endcap", "");
+    THStack *s_eta = new THStack("s_eta", "");
+    THStack *s_nVTX = new THStack("s_nVTX", "");
+
+    TH1D *h_PFiso_barrel_MC[_EndOf_Data_Special], *h_PFiso_endcap_MC[_EndOf_Data_Special],
+         *h_TRKiso_barrel_MC[_EndOf_Data_Special], *h_TRKiso_endcap_MC[_EndOf_Data_Special],
+         *h_pT_barrel_MC[_EndOf_Data_Special], *h_pT_endcap_MC[_EndOf_Data_Special],
+         *h_eta_MC[_EndOf_Data_Special], *h_nVTX_MC[_EndOf_Data_Special],
+         *h_PFiso_barrel_data, *h_PFiso_endcap_data, *h_TRKiso_barrel_data, *h_TRKiso_endcap_data,
+         *h_pT_barrel_data, *h_pT_endcap_data, *h_eta_data, *h_nVTX_data;
+
+//----------------------------------- MC bkg -------------------------------------------------------
+
+    // Other MC
+    Int_t stop = 0;
+    Process_t pr1 = _WW;
+    while (!stop)
+    {
+        TFile *file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr1]+".root", "READ");
+        file->GetObject("h_PFiso_barrel_deno", h_PFiso_barrel_MC[pr1]);
+        file->GetObject("h_PFiso_endcap_deno", h_PFiso_endcap_MC[pr1]);
+        file->GetObject("h_TRKiso_barrel_deno", h_TRKiso_barrel_MC[pr1]);
+        file->GetObject("h_TRKiso_endcap_deno", h_TRKiso_endcap_MC[pr1]);
+        file->GetObject("h_pT_barrel_deno", h_pT_barrel_MC[pr1]);
+        file->GetObject("h_pT_endcap_deno", h_pT_endcap_MC[pr1]);
+        file->GetObject("h_eta_deno", h_eta_MC[pr1]);
+        file->GetObject("h_nVTX", h_nVTX_MC[pr1]);
+
+        removeNegativeBins(h_PFiso_barrel_MC[pr1]);
+        removeNegativeBins(h_PFiso_endcap_MC[pr1]);
+        removeNegativeBins(h_TRKiso_barrel_MC[pr1]);
+        removeNegativeBins(h_TRKiso_endcap_MC[pr1]);
+        removeNegativeBins(h_pT_barrel_MC[pr1]);
+        removeNegativeBins(h_pT_endcap_MC[pr1]);
+        removeNegativeBins(h_eta_MC[pr1]);
+        removeNegativeBins(h_nVTX_MC[pr1]);
+
+//        if (pr1 == _ttbar)
+//        {
+//            fm.SetProc(_ttbar);
+//            Double_t scale = (L_B2H*831.76/154948878) / (L_B2H*fm.Xsec[0] / fm.Wsum[0]);
+//            h_PFiso_barrel_MC[pr1]->Scale(scale);
+//            h_PFiso_endcap_MC[pr1]->Scale(scale);
+//            h_pT_barrel_MC[pr1]->Scale(scale);
+//            h_pT_endcap_MC[pr1]->Scale(scale);
+//            h_eta_MC[pr1]->Scale(scale);
+//            cout << scale << endl;
+//        }
+//        if (pr1 == _WJets)
+//        {
+//            fm.SetProc(_WJets);
+//            Double_t scale = (L_B2H*61526/162787688) / (L_B2H*fm.Xsec[0] / fm.Wsum[0]);
+//            h_PFiso_barrel_MC[pr1]->Scale(scale);
+//            h_PFiso_endcap_MC[pr1]->Scale(scale);
+//            h_pT_barrel_MC[pr1]->Scale(scale);
+//            h_pT_endcap_MC[pr1]->Scale(scale);
+//            h_eta_MC[pr1]->Scale(scale);
+//            cout << scale << endl;
+//        }
+//        if (pr1 == _DY_50to100)
+//        {
+//            fm.SetProc(_DY_50to100);
+//            Double_t scale = (L_B2H*3*1952.68432327/81780984) / (L_B2H*fm.Xsec[0] / fm.Wsum[0]);
+//            h_PFiso_barrel_MC[pr1]->Scale(scale);
+//            h_PFiso_endcap_MC[pr1]->Scale(scale);
+//            h_pT_barrel_MC[pr1]->Scale(scale);
+//            h_pT_endcap_MC[pr1]->Scale(scale);
+//            h_eta_MC[pr1]->Scale(scale);
+//            cout << scale << endl;
+//        }
+
+        Color_t color = kBlack;
+        if (pr1 == _WJets) color = kRed - 2;
+        if (pr1 == _VVnST) color = kMagenta - 5;
+        if (pr1 == _WW) color = kMagenta - 5;
+        if (pr1 == _WZ) color = kMagenta - 2;
+        if (pr1 == _ZZ) color = kMagenta - 6;
+        if (pr1 == _tbarW) color = kGreen - 2;
+        if (pr1 == _tW) color = kGreen + 2;
+        if (pr1 == _ttbar) color = kCyan + 2;
+        if (pr1 == _DY_50to100) color = kOrange - 5;
+
+        h_PFiso_barrel_MC[pr1]->SetFillColor(color);
+        h_PFiso_endcap_MC[pr1]->SetFillColor(color);
+        h_TRKiso_barrel_MC[pr1]->SetFillColor(color);
+        h_TRKiso_endcap_MC[pr1]->SetFillColor(color);
+        h_pT_barrel_MC[pr1]->SetFillColor(color);
+        h_pT_endcap_MC[pr1]->SetFillColor(color);
+        h_eta_MC[pr1]->SetFillColor(color);
+        h_nVTX_MC[pr1]->SetFillColor(color);
+        h_PFiso_barrel_MC[pr1]->SetLineColor(color);
+        h_PFiso_endcap_MC[pr1]->SetLineColor(color);
+        h_TRKiso_barrel_MC[pr1]->SetLineColor(color);
+        h_TRKiso_endcap_MC[pr1]->SetLineColor(color);
+        h_pT_barrel_MC[pr1]->SetLineColor(color);
+        h_pT_endcap_MC[pr1]->SetLineColor(color);
+        h_eta_MC[pr1]->SetLineColor(color);
+        h_nVTX_MC[pr1]->SetLineColor(color);
+        h_PFiso_barrel_MC[pr1]->SetDirectory(0);
+        h_PFiso_endcap_MC[pr1]->SetDirectory(0);
+        h_TRKiso_barrel_MC[pr1]->SetDirectory(0);
+        h_TRKiso_endcap_MC[pr1]->SetDirectory(0);
+        h_pT_barrel_MC[pr1]->SetDirectory(0);
+        h_pT_endcap_MC[pr1]->SetDirectory(0);
+        h_eta_MC[pr1]->SetDirectory(0);
+        h_nVTX_MC[pr1]->SetDirectory(0);
+
+        s_PFiso_barrel->Add(h_PFiso_barrel_MC[pr1]);
+        s_PFiso_endcap->Add(h_PFiso_endcap_MC[pr1]);
+        s_TRKiso_barrel->Add(h_TRKiso_barrel_MC[pr1]);
+        s_TRKiso_endcap->Add(h_TRKiso_endcap_MC[pr1]);
+        s_pT_barrel->Add(h_pT_barrel_MC[pr1]);
+        s_pT_endcap->Add(h_pT_endcap_MC[pr1]);
+        s_eta->Add(h_eta_MC[pr1]);
+        s_nVTX->Add(h_nVTX_MC[pr1]);
+
+        file->Close();
+
+//        if (pr1 == _VVnST) {pr1 = _ttbar; continue;}
+        if (pr1 == _WW) {pr1 = _WZ; continue;}
+        if (pr1 == _WZ) {pr1 = _ZZ; continue;}
+        if (pr1 == _ZZ) {pr1 = _tbarW; continue;}
+        if (pr1 == _tbarW) {pr1 = _tW; continue;}
+        if (pr1 == _tW) {pr1 = _ttbar; continue;}
+        if (pr1 == _ttbar) {pr1 = _DY_50to100; continue;} // this is actually 50toInf (just a misleading filename)
+        if (pr1 == _DY_50to100) {pr1 = _WJets; continue;}
+        if (pr1 == _WJets) {stop = 1;}
+    }
+
+    // QCD
+    for (Process_t pr = _QCDMuEnriched_15to20; pr <= _QCDMuEnriched_1000toInf; pr=next(pr))
+    {
+        TFile *file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
+        file->GetObject("h_PFiso_barrel_deno", h_PFiso_barrel_MC[pr]);
+        file->GetObject("h_PFiso_endcap_deno", h_PFiso_endcap_MC[pr]);
+        file->GetObject("h_TRKiso_barrel_deno", h_TRKiso_barrel_MC[pr]);
+        file->GetObject("h_TRKiso_endcap_deno", h_TRKiso_endcap_MC[pr]);
+        file->GetObject("h_pT_barrel_deno", h_pT_barrel_MC[pr]);
+        file->GetObject("h_pT_endcap_deno", h_pT_endcap_MC[pr]);
+        file->GetObject("h_eta_deno", h_eta_MC[pr]);
+        file->GetObject("h_nVTX", h_nVTX_MC[pr]);
+        removeNegativeBins(h_PFiso_barrel_MC[pr]);
+        removeNegativeBins(h_PFiso_endcap_MC[pr]);
+        removeNegativeBins(h_TRKiso_barrel_MC[pr]);
+        removeNegativeBins(h_TRKiso_endcap_MC[pr]);
+        removeNegativeBins(h_pT_barrel_MC[pr]);
+        removeNegativeBins(h_pT_endcap_MC[pr]);
+        removeNegativeBins(h_eta_MC[pr]);
+        removeNegativeBins(h_nVTX_MC[pr]);
+
+        if (pr == _QCDMuEnriched_15to20)
+        {
+            h_PFiso_barrel_MC[_QCDMuEnriched_Full] = ((TH1D*)(h_PFiso_barrel_MC[pr]->Clone("h_PFiso_barrel_deno_QCD")));
+            h_PFiso_endcap_MC[_QCDMuEnriched_Full] = ((TH1D*)(h_PFiso_endcap_MC[pr]->Clone("h_PFiso_endcap_deno_QCD")));
+            h_TRKiso_barrel_MC[_QCDMuEnriched_Full] = ((TH1D*)(h_TRKiso_barrel_MC[pr]->Clone("h_TRKiso_barrel_deno_QCD")));
+            h_TRKiso_endcap_MC[_QCDMuEnriched_Full] = ((TH1D*)(h_TRKiso_endcap_MC[pr]->Clone("h_TRKiso_endcap_deno_QCD")));
+            h_pT_barrel_MC[_QCDMuEnriched_Full] = ((TH1D*)(h_pT_barrel_MC[pr]->Clone("h_pT_barrel_deno_QCD")));
+            h_pT_endcap_MC[_QCDMuEnriched_Full] = ((TH1D*)(h_pT_endcap_MC[pr]->Clone("h_pT_endcap_deno_QCD")));
+            h_eta_MC[_QCDMuEnriched_Full] = ((TH1D*)(h_eta_MC[pr]->Clone("h_eta_deno_QCD")));
+            h_nVTX_MC[_QCDMuEnriched_Full] = ((TH1D*)(h_nVTX_MC[pr]->Clone("h_nVTX_QCD")));
+            h_PFiso_barrel_MC[_QCDMuEnriched_Full]->SetDirectory(0);
+            h_PFiso_endcap_MC[_QCDMuEnriched_Full]->SetDirectory(0);
+            h_TRKiso_barrel_MC[_QCDMuEnriched_Full]->SetDirectory(0);
+            h_TRKiso_endcap_MC[_QCDMuEnriched_Full]->SetDirectory(0);
+            h_pT_barrel_MC[_QCDMuEnriched_Full]->SetDirectory(0);
+            h_pT_endcap_MC[_QCDMuEnriched_Full]->SetDirectory(0);
+            h_eta_MC[_QCDMuEnriched_Full]->SetDirectory(0);
+            h_nVTX_MC[_QCDMuEnriched_Full]->SetDirectory(0);
+        }
+        else
+        {
+            h_PFiso_barrel_MC[_QCDMuEnriched_Full]->Add(h_PFiso_barrel_MC[pr]);
+            h_PFiso_endcap_MC[_QCDMuEnriched_Full]->Add(h_PFiso_endcap_MC[pr]);
+            h_TRKiso_barrel_MC[_QCDMuEnriched_Full]->Add(h_TRKiso_barrel_MC[pr]);
+            h_TRKiso_endcap_MC[_QCDMuEnriched_Full]->Add(h_TRKiso_endcap_MC[pr]);
+            h_pT_barrel_MC[_QCDMuEnriched_Full]->Add(h_pT_barrel_MC[pr]);
+            h_pT_endcap_MC[_QCDMuEnriched_Full]->Add(h_pT_endcap_MC[pr]);
+            h_eta_MC[_QCDMuEnriched_Full]->Add(h_eta_MC[pr]);
+            h_nVTX_MC[_QCDMuEnriched_Full]->Add(h_nVTX_MC[pr]);
+        }
+
+        Color_t color = kRed + 3;
+        h_PFiso_barrel_MC[pr]->SetFillColor(color);
+        h_PFiso_endcap_MC[pr]->SetFillColor(color);
+        h_TRKiso_barrel_MC[pr]->SetFillColor(color);
+        h_TRKiso_endcap_MC[pr]->SetFillColor(color);
+        h_pT_barrel_MC[pr]->SetFillColor(color);
+        h_pT_endcap_MC[pr]->SetFillColor(color);
+        h_eta_MC[pr]->SetFillColor(color);
+        h_nVTX_MC[pr]->SetFillColor(color);
+        h_PFiso_barrel_MC[pr]->SetLineColor(color);
+        h_PFiso_endcap_MC[pr]->SetLineColor(color);
+        h_TRKiso_barrel_MC[pr]->SetLineColor(color);
+        h_TRKiso_endcap_MC[pr]->SetLineColor(color);
+        h_pT_barrel_MC[pr]->SetLineColor(color);
+        h_pT_endcap_MC[pr]->SetLineColor(color);
+        h_eta_MC[pr]->SetLineColor(color);
+        h_nVTX_MC[pr]->SetLineColor(color);
+        h_PFiso_barrel_MC[pr]->SetDirectory(0);
+        h_PFiso_endcap_MC[pr]->SetDirectory(0);
+        h_TRKiso_barrel_MC[pr]->SetDirectory(0);
+        h_TRKiso_endcap_MC[pr]->SetDirectory(0);
+        h_pT_barrel_MC[pr]->SetDirectory(0);
+        h_pT_endcap_MC[pr]->SetDirectory(0);
+        h_eta_MC[pr]->SetDirectory(0);
+        h_nVTX_MC[pr]->SetDirectory(0);
+
+        s_PFiso_barrel->Add(h_PFiso_barrel_MC[pr]);
+        s_PFiso_endcap->Add(h_PFiso_endcap_MC[pr]);
+        s_TRKiso_barrel->Add(h_TRKiso_barrel_MC[pr]);
+        s_TRKiso_endcap->Add(h_TRKiso_endcap_MC[pr]);
+        s_pT_barrel->Add(h_pT_barrel_MC[pr]);
+        s_pT_endcap->Add(h_pT_endcap_MC[pr]);
+        s_eta->Add(h_eta_MC[pr]);
+        s_nVTX->Add(h_nVTX_MC[pr]);
+
+        file->Close();
+    }
+
+//--------------------------------------- DATA -----------------------------------------------------
+
+    for (Process_t pr=_SingleMuon_B; pr<=_SingleMuon_H; pr=next(pr))
+    {
+        TFile *file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
+        TH1D *h_temp[8];
+        if (pr == _SingleMuon_B)
+        {
+            file->GetObject("h_PFiso_barrel_deno", h_PFiso_barrel_data);
+            file->GetObject("h_PFiso_endcap_deno", h_PFiso_endcap_data);
+            file->GetObject("h_TRKiso_barrel_deno", h_TRKiso_barrel_data);
+            file->GetObject("h_TRKiso_endcap_deno", h_TRKiso_endcap_data);
+            file->GetObject("h_pT_barrel_deno", h_pT_barrel_data);
+            file->GetObject("h_pT_endcap_deno", h_pT_endcap_data);
+            file->GetObject("h_eta_deno", h_eta_data);
+            file->GetObject("h_nVTX", h_nVTX_data);
+            removeNegativeBins(h_PFiso_barrel_data);
+            removeNegativeBins(h_PFiso_endcap_data);
+            removeNegativeBins(h_TRKiso_barrel_data);
+            removeNegativeBins(h_TRKiso_endcap_data);
+            removeNegativeBins(h_pT_barrel_data);
+            removeNegativeBins(h_pT_endcap_data);
+            removeNegativeBins(h_eta_data);
+            removeNegativeBins(h_nVTX_data);
+        }
+        else
+        {
+            file->GetObject("h_PFiso_barrel_deno", h_temp[0]);
+            file->GetObject("h_PFiso_endcap_deno", h_temp[1]);
+            file->GetObject("h_TRKiso_barrel_deno", h_temp[2]);
+            file->GetObject("h_TRKiso_endcap_deno", h_temp[3]);
+            file->GetObject("h_pT_barrel_deno", h_temp[4]);
+            file->GetObject("h_pT_endcap_deno", h_temp[5]);
+            file->GetObject("h_eta_deno", h_temp[6]);
+            file->GetObject("h_nVTX", h_temp[7]);
+            removeNegativeBins(h_temp[0]);
+            removeNegativeBins(h_temp[1]);
+            removeNegativeBins(h_temp[2]);
+            removeNegativeBins(h_temp[3]);
+            removeNegativeBins(h_temp[4]);
+            removeNegativeBins(h_temp[5]);
+            removeNegativeBins(h_temp[6]);
+            removeNegativeBins(h_temp[7]);
+            h_PFiso_barrel_data->Add(h_temp[0]);
+            h_PFiso_endcap_data->Add(h_temp[1]);
+            h_TRKiso_barrel_data->Add(h_temp[2]);
+            h_TRKiso_endcap_data->Add(h_temp[3]);
+            h_pT_barrel_data->Add(h_temp[4]);
+            h_pT_endcap_data->Add(h_temp[5]);
+            h_eta_data->Add(h_temp[6]);
+            h_nVTX_data->Add(h_temp[7]);
+        }
+    }
+
+    h_PFiso_barrel_data->SetMarkerStyle(kFullDotLarge);
+    h_PFiso_endcap_data->SetMarkerStyle(kFullDotLarge);
+    h_TRKiso_barrel_data->SetMarkerStyle(kFullDotLarge);
+    h_TRKiso_endcap_data->SetMarkerStyle(kFullDotLarge);
+    h_pT_barrel_data->SetMarkerStyle(kFullDotLarge);
+    h_pT_endcap_data->SetMarkerStyle(kFullDotLarge);
+    h_eta_data->SetMarkerStyle(kFullDotLarge);
+    h_nVTX_data->SetMarkerStyle(kFullDotLarge);
+    h_PFiso_barrel_data->SetMarkerColor(kBlack);
+    h_PFiso_endcap_data->SetMarkerColor(kBlack);
+    h_TRKiso_barrel_data->SetMarkerColor(kBlack);
+    h_TRKiso_endcap_data->SetMarkerColor(kBlack);
+    h_pT_barrel_data->SetMarkerColor(kBlack);
+    h_pT_endcap_data->SetMarkerColor(kBlack);
+    h_eta_data->SetMarkerColor(kBlack);
+    h_nVTX_data->SetMarkerColor(kBlack);
+    h_PFiso_barrel_data->SetLineColor(kBlack);
+    h_PFiso_endcap_data->SetLineColor(kBlack);
+    h_TRKiso_barrel_data->SetLineColor(kBlack);
+    h_TRKiso_endcap_data->SetLineColor(kBlack);
+    h_pT_barrel_data->SetLineColor(kBlack);
+    h_pT_endcap_data->SetLineColor(kBlack);
+    h_eta_data->SetLineColor(kBlack);
+    h_nVTX_data->SetLineColor(kBlack);
+    h_PFiso_barrel_data->SetDirectory(0);
+    h_PFiso_endcap_data->SetDirectory(0);
+    h_TRKiso_barrel_data->SetDirectory(0);
+    h_TRKiso_endcap_data->SetDirectory(0);
+    h_pT_barrel_data->SetDirectory(0);
+    h_pT_endcap_data->SetDirectory(0);
+    h_eta_data->SetDirectory(0);
+    h_nVTX_data->SetDirectory(0);
+
+//--------------------------------- Ratio Plots --------------------------------------
+
+    myRatioPlot_t *RP_PFiso_barrel = new myRatioPlot_t("RP_PFiso_barrel", s_PFiso_barrel, h_PFiso_barrel_data);
+    myRatioPlot_t *RP_PFiso_endcap = new myRatioPlot_t("RP_PFiso_endcap", s_PFiso_endcap, h_PFiso_endcap_data);
+    myRatioPlot_t *RP_TRKiso_barrel = new myRatioPlot_t("RP_TRKiso_barrel", s_TRKiso_barrel, h_TRKiso_barrel_data);
+    myRatioPlot_t *RP_TRKiso_endcap = new myRatioPlot_t("RP_TRKiso_endcap", s_TRKiso_endcap, h_TRKiso_endcap_data);
+    myRatioPlot_t *RP_pT_barrel = new myRatioPlot_t("RP_pT_barrel", s_pT_barrel, h_pT_barrel_data);
+    myRatioPlot_t *RP_pT_endcap = new myRatioPlot_t("RP_pT_endcap", s_pT_endcap, h_pT_endcap_data);
+    myRatioPlot_t *RP_eta = new myRatioPlot_t("RP_eta", s_eta, h_eta_data);
+    myRatioPlot_t *RP_nVTX = new myRatioPlot_t("RP_nVTX", s_nVTX, h_nVTX_data);
+
+    RP_PFiso_barrel->SetPlots("I_{PF}^{rel.} (#mu_{#lower[-0.4]{barrel}})", 0, 5);
+    RP_PFiso_endcap->SetPlots("I_{PF}^{rel.} (#mu_{#lower[-0.4]{endcap}})", 0, 5);
+    RP_TRKiso_barrel->SetPlots("I_{TRK}^{rel.} (#mu_{#lower[-0.4]{barrel}})", 0, 5);
+    RP_TRKiso_endcap->SetPlots("I_{TRK}^{rel.} (#mu_{#lower[-0.4]{endcap}})", 0, 5);
+    RP_pT_barrel->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{barrel}}) [GeV/c]", 50, 500);
+    RP_pT_endcap->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{endcap}})", 50, 500);
+    RP_eta->SetPlots("#eta (#mu)", -3, 3);
+    RP_nVTX->SetPlots("N_{#lower[-0.25]{VTX}} (#mu)", 0, 50);
+
+
+    TLegend *legend = new TLegend(0.5, 0.65, 0.95, 0.95);
+
+    legend->AddEntry(h_eta_data, "Data", "lp");
+//    legend->AddEntry(h_eta_data, "Matavimas", "lp");
+    legend->AddEntry(h_eta_MC[_DY_50to100], "DY", "f");
+    legend->AddEntry(h_eta_MC[_ttbar], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+    legend->AddEntry(h_eta_MC[_tW], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+    legend->AddEntry(h_eta_MC[_tbarW], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+    legend->AddEntry(h_eta_MC[_ZZ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+    legend->AddEntry(h_eta_MC[_WZ], "#font[12]{#scale[1.1]{WZ}}", "f");
+    legend->AddEntry(h_eta_MC[_WW], "#font[12]{#scale[1.1]{WW}}", "f");
+//    legend->AddEntry(h_eta_MC[_VVnST], "Diboson+#font[12]{#scale[1.1]{tW}}+#font[12]{#scale[1.1]{#bar{t}W}}", "f");
+    legend->AddEntry(h_eta_MC[_WJets], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+    legend->AddEntry(h_eta_MC[_QCDMuEnriched_15to20], "#font[12]{#scale[1.1]{QCD}}", "f");
+    legend->SetNColumns(2);
+
+    RP_PFiso_barrel->ImportLegend(legend);
+    RP_PFiso_endcap->ImportLegend(legend);
+    RP_TRKiso_barrel->ImportLegend(legend);
+    RP_TRKiso_endcap->ImportLegend(legend);
+    RP_pT_barrel->ImportLegend(legend);
+    RP_pT_endcap->ImportLegend(legend);
+    RP_eta->ImportLegend(legend);
+    RP_nVTX->ImportLegend(legend);
+
+    RP_PFiso_barrel->Draw(1, 1e8, 0);
+    RP_PFiso_endcap->Draw(1, 1e8, 0);
+    RP_TRKiso_barrel->Draw(1, 1e8, 0);
+    RP_TRKiso_endcap->Draw(1, 1e8, 0);
+    RP_pT_barrel->Draw(1, 1e8, 0);
+    RP_pT_endcap->Draw(1, 1e8, 0);
+    RP_eta->Draw(1, 1e8, 0);
+    RP_nVTX->Draw(1, 1e8, 0);
+
+    cout << "MC PFiso integral: " << ((TH1D*)(s_PFiso_barrel->GetStack()->Last()))->Integral(1, h_PFiso_barrel_data->GetSize()-2) +
+                                     ((TH1D*)(s_PFiso_endcap->GetStack()->Last()))->Integral(1, h_PFiso_endcap_data->GetSize()-2) << endl;
+    cout << "Data PFiso integral: " << h_PFiso_barrel_data->Integral(1, h_PFiso_barrel_data->GetSize()-2) +
+                                       h_PFiso_endcap_data->Integral(1, h_PFiso_endcap_data->GetSize()-2) << endl;
+
+    cout << "QCD % in PFiso<0.15 (barrel)   " << h_PFiso_barrel_MC[_QCDMuEnriched_Full]->Integral(1, 3) /
+                                                 ((TH1D*)(s_PFiso_barrel->GetStack()->Last()))->Integral(1, 3) << endl;
+    cout << "QCD % in PFiso>0.15 (barrel)   " << h_PFiso_barrel_MC[_QCDMuEnriched_Full]->Integral(4, h_PFiso_barrel_data->GetSize()-2) /
+                                                 ((TH1D*)(s_PFiso_barrel->GetStack()->Last()))->Integral(4, h_PFiso_barrel_data->GetSize()-2) << endl;
+    cout << "QCD % in TRKiso<0.10 (barrel)   " << h_TRKiso_barrel_MC[_QCDMuEnriched_Full]->Integral(1, 2) /
+                                                 ((TH1D*)(s_TRKiso_barrel->GetStack()->Last()))->Integral(1, 2) << endl;
+    cout << "QCD % in TRKiso>0.10 (barrel)   " << h_TRKiso_barrel_MC[_QCDMuEnriched_Full]->Integral(3, h_TRKiso_barrel_data->GetSize()-2) /
+                                                 ((TH1D*)(s_TRKiso_barrel->GetStack()->Last()))->Integral(3, h_TRKiso_barrel_data->GetSize()-2) << endl;
+
+} // End of Mu_HistDrawer
+
+
+/// ------------------------------- COMP CHI^2 ---------------------------------- ///
+Double_t CompChiSquared (TH1D *h_data, THStack *s_MC)
+{
+    Double_t ChiSquared = 0;
+    Int_t size_data = h_data->GetSize();
+    Int_t size_MC = ((TH1D*)(s_MC->GetStack()->Last()))->GetSize();
+    Int_t temp_data, temp_MC;
+    if (size_data != size_MC)
+    {
+        cout << "CompChiSquared: Sizes do not match!" << endl;
+        return -999;
+    }
+    else for (Int_t i=1; i<size_data-1; i++)
+    {
+        temp_data = h_data->GetBinContent(i);
+        temp_MC = ((TH1D*)(s_MC->GetStack()->Last()))->GetBinContent(i);
+        if (temp_data != 0)
+            ChiSquared += ((temp_MC - temp_data) * (temp_MC - temp_data)) / temp_data;
+    }
+    return ChiSquared / (size_data - 2);
+} // End of CompChiSquared()
+
+
+/// ------------------------------- COMP AVG |DATA/MC-1| ---------------------------------- ///
+Double_t CompAvgDataMCDifference (TH1D *h_data, THStack *s_MC)
+{
+    TH1D* h_MC = ((TH1D*)(s_MC->GetStack()->Last()));
+    Double_t AvgDataMCRatio = 0;
+    Int_t size_data = h_data->GetSize();
+    Int_t size_MC = h_MC->GetSize();
+    if (size_data != size_MC)
+    {
+        cout << "CompAvgDataMCDifference: Sizes do not match!" << endl;
+        return -999;
+    }
+    else for (Int_t i=1; i<size_data-1; i++)
+    {
+        if (h_MC->GetBinContent(i) != 0)
+            AvgDataMCRatio += fabs(h_data->GetBinContent(i) / h_MC->GetBinContent(i) - 1);
+        else size_MC--;
+    }
+    return AvgDataMCRatio / (size_MC - 2);
+} // End of CompChiSquared()
+
+
+void removeNegativeBins(TH1D *h)
+{
+    for (int i=0; i<h->GetSize(); i++)
+    {
+        if (h->GetBinContent(i) < 0)
+        {
+            h->SetBinContent(i, 0);
+            h->SetBinError(i, 0);
+        }
+    }
+}
