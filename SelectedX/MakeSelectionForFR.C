@@ -437,12 +437,12 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         TH1D* h_pT_endcap_deno = new TH1D("h_pT_endcap_deno", "h_pT_endcap_deno", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_deno->Sumw2();
         TH1D* h_eta_nume = new TH1D("h_eta_nume", "h_eta_nume", 48, -2.4, 2.4); h_eta_nume->Sumw2();
         TH1D* h_eta_deno = new TH1D("h_eta_deno", "h_eta_deno", 48, -2.4, 2.4); h_eta_deno->Sumw2();
-        TH1D* h_PFiso_barrel_nume = new TH1D("h_PFiso_barrel_nume", "h_PFiso_barrel_nume", 100, 0, 5); h_PFiso_barrel_nume->Sumw2();
-        TH1D* h_PFiso_endcap_nume = new TH1D("h_PFiso_endcap_nume", "h_PFiso_endcap_nume", 100, 0, 5); h_PFiso_endcap_nume->Sumw2();
+        TH1D* h_PFiso_barrel_nume = new TH1D("h_PFiso_barrel_nume", "h_PFiso_barrel_nume", 30, 0, 0.15); h_PFiso_barrel_nume->Sumw2();
+        TH1D* h_PFiso_endcap_nume = new TH1D("h_PFiso_endcap_nume", "h_PFiso_endcap_nume", 30, 0, 0.15); h_PFiso_endcap_nume->Sumw2();
         TH1D* h_PFiso_barrel_deno = new TH1D("h_PFiso_barrel_deno", "h_PFiso_barrel_deno", 100, 0, 5); h_PFiso_barrel_deno->Sumw2();
         TH1D* h_PFiso_endcap_deno = new TH1D("h_PFiso_endcap_deno", "h_PFiso_endcap_deno", 100, 0, 5); h_PFiso_endcap_deno->Sumw2();
-        TH1D* h_TRKiso_barrel_nume = new TH1D("h_TRKiso_barrel_nume", "h_TRKiso_barrel_nume", 100, 0, 5); h_TRKiso_barrel_nume->Sumw2();
-        TH1D* h_TRKiso_endcap_nume = new TH1D("h_TRKiso_endcap_nume", "h_TRKiso_endcap_nume", 100, 0, 5); h_TRKiso_endcap_nume->Sumw2();
+        TH1D* h_TRKiso_barrel_nume = new TH1D("h_TRKiso_barrel_nume", "h_TRKiso_barrel_nume", 50, 0, 1); h_TRKiso_barrel_nume->Sumw2();
+        TH1D* h_TRKiso_endcap_nume = new TH1D("h_TRKiso_endcap_nume", "h_TRKiso_endcap_nume", 50, 0, 1); h_TRKiso_endcap_nume->Sumw2();
         TH1D* h_TRKiso_barrel_deno = new TH1D("h_TRKiso_barrel_deno", "h_TRKiso_barrel_deno", 100, 0, 5); h_TRKiso_barrel_deno->Sumw2();
         TH1D* h_TRKiso_endcap_deno = new TH1D("h_TRKiso_endcap_deno", "h_TRKiso_endcap_deno", 100, 0, 5); h_TRKiso_endcap_deno->Sumw2();
         TH1D* h_nVTX = new TH1D("h_nVTX", "h_nVTX", 50, 0, 50); h_nVTX->Sumw2();
