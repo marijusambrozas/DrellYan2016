@@ -529,13 +529,13 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
 
                 if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
                 {
-//                    if (Mgr.Tag[i_tup].Contains("ttbar"))
-//                    {
-//                        // -- Top pT reweighting -- //
-//                        Double_t SF0 = exp(0.0615 - (0.0005 * GenTopCollection[0].Pt));
-//                        Double_t SF1 = exp(0.0615 - (0.0005 * GenTopCollection[1].Pt));
-//                        evt_weight *= sqrt(SF0 * SF1);
-//                    }
+                    if (Mgr.Tag[i_tup].Contains("ttbar"))
+                    {
+                        // -- Top pT reweighting -- //
+                        Double_t SF0 = exp(0.0615 - (0.0005 * GenTopCollection[0].Pt));
+                        Double_t SF1 = exp(0.0615 - (0.0005 * GenTopCollection[1].Pt));
+                        evt_weight *= sqrt(SF0 * SF1);
+                    }
 
                     // -- Reco level selection -- //
                     vector< Muon > MuonCollection;
@@ -590,7 +590,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             if (Mgr.CurrentProc == _ttbar) // inclusive
                                 weight = PUWeight * evt_weight * L_B2H * 831.76 / 154948878;
                             else if (Mgr.CurrentProc == _WJets) // just two files
-                                weight = PUWeight * evt_weight * L_B2H * 61526 / 162787688;
+                                weight = PUWeight * evt_weight * L_B2H * 61526 / 177578051;
                             else if (Mgr.CurrentProc == _DY_50to100) // it is actually 50 to Inf (inclusive)
                                 weight = PUWeight * evt_weight * L_B2H * 3 * 1952.68432327 / 81780984;
                             else
