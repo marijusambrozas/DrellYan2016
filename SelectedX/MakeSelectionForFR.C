@@ -515,27 +515,27 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
 
                 // -- Separate DYLL samples -- //
                 Bool_t GenFlag = kTRUE;//kFALSE;
-//                GenFlag = analyzer->SeparateDYLLSample_isHardProcess(Mgr.Tag[i_tup], ntuple);
+                GenFlag = analyzer->SeparateDYLLSample_isHardProcess(Mgr.Tag[i_tup], ntuple);
 
-                // -- Separate ttbar samples -- //
+                // -- Get GenTopCollection -- //
                 Bool_t GenFlag_top = kTRUE;//kFALSE;
                 vector<GenOthers> GenTopCollection;
                 GenFlag_top = analyzer->Separate_ttbarSample(Mgr.Tag[i_tup], ntuple, &GenTopCollection);
 
-//                if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += MuMu.GENEvt_weight;
+                if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += MuMu.GENEvt_weight;
 
                 Bool_t TriggerFlag = kFALSE;
                 TriggerFlag = ntuple->isTriggered(analyzer->HLT);
 
-                if (TriggerFlag == kTRUE)
+                if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
                 {
-                    if (Mgr.Tag[i_tup].Contains("ttbar"))
-                    {
-                        // -- Top pT reweighting -- //
-                        Double_t SF0 = exp(0.0615 - (0.0005 * GenTopCollection[0].Pt));
-                        Double_t SF1 = exp(0.0615 - (0.0005 * GenTopCollection[1].Pt));
-                        evt_weight *= sqrt(SF0 * SF1);
-                    }
+//                    if (Mgr.Tag[i_tup].Contains("ttbar"))
+//                    {
+//                        // -- Top pT reweighting -- //
+//                        Double_t SF0 = exp(0.0615 - (0.0005 * GenTopCollection[0].Pt));
+//                        Double_t SF1 = exp(0.0615 - (0.0005 * GenTopCollection[1].Pt));
+//                        evt_weight *= sqrt(SF0 * SF1);
+//                    }
 
                     // -- Reco level selection -- //
                     vector< Muon > MuonCollection;
@@ -587,14 +587,15 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         Double_t weight = 1;
                         if (Mgr.isMC)
                         {
-                            if (Mgr.CurrentProc == _ttbar) // inclusive
-                                weight = PUWeight * evt_weight * L_B2H * 831.76 / 154948878;
-                            else if (Mgr.CurrentProc == _WJets) // just two files
-                                weight = PUWeight * evt_weight * L_B2H * 61526 / 177578051;
-                            else if (Mgr.CurrentProc == _DY_50to100) // it is actually 50 to Inf (inclusive)
-                                weight = PUWeight * evt_weight * L_B2H * 3 * 1952.68432327 / 81780984;
-                            else
-                                weight = PUWeight * evt_weight * L_B2H * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup];
+//                            if (Mgr.CurrentProc == _ttbar) // inclusive
+//                                weight = PUWeight * evt_weight * L_B2H * 831.76 / 154948878;
+//                            else if (Mgr.CurrentProc == _WJets) // just two files
+//                                weight = PUWeight * evt_weight * L_B2H * 61526 / 177578051;
+//                            else if (Mgr.CurrentProc == _DY_50to100) // it is actually 50 to Inf (inclusive)
+//                                weight = PUWeight * evt_weight * L_B2H * 3 * 1952.68432327 / 81780984;
+//                            else
+//                                weight = PUWeight * evt_weight * L_B2H * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup];
+                            weight = PUWeight * evt_weight;
                         }
 
                         nVTX = ntuple->nVertices;
@@ -607,33 +608,39 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             relPFiso->push_back(SelectedMuonCollection_deno[i].RelPFIso_dBeta);
                             TRKiso->push_back(SelectedMuonCollection_deno[i].trkiso);
 
-                            h_eta_deno->Fill(SelectedMuonCollection_deno[i].eta, weight);
-                            if (fabs(SelectedMuonCollection_deno[i].eta) < 1.2)
+                            if (SelectedMuonCollection_deno[i].Pt < 500)
                             {
-                                h_pT_barrel_deno->Fill(SelectedMuonCollection_deno[i].Pt, weight);
-                                h_PFiso_barrel_deno->Fill(SelectedMuonCollection_deno[i].RelPFIso_dBeta, weight);
-                                h_TRKiso_barrel_deno->Fill(SelectedMuonCollection_deno[i].trkiso, weight);
-                            }
-                            else
-                            {
-                                h_pT_endcap_deno->Fill(SelectedMuonCollection_deno[i].Pt, weight);
-                                h_PFiso_endcap_deno->Fill(SelectedMuonCollection_deno[i].RelPFIso_dBeta, weight);
-                                h_TRKiso_endcap_deno->Fill(SelectedMuonCollection_deno[i].trkiso, weight);
-                            }
-                            if (i < SelectedMuonCollection_nume.size())
-                            {
-                                h_eta_nume->Fill(SelectedMuonCollection_nume[i].eta, weight);
-                                if (fabs(SelectedMuonCollection_nume[i].eta) < 1.2)
+                                h_eta_deno->Fill(SelectedMuonCollection_deno[i].eta, weight);
+                                if (fabs(SelectedMuonCollection_deno[i].eta) < 1.2)
                                 {
-                                    h_pT_barrel_nume->Fill(SelectedMuonCollection_nume[i].Pt, weight);
-                                    h_PFiso_barrel_nume->Fill(SelectedMuonCollection_nume[i].RelPFIso_dBeta, weight);
-                                    h_TRKiso_barrel_nume->Fill(SelectedMuonCollection_nume[i].trkiso, weight);
+                                    h_pT_barrel_deno->Fill(SelectedMuonCollection_deno[i].Pt, weight);
+                                    h_PFiso_barrel_deno->Fill(SelectedMuonCollection_deno[i].RelPFIso_dBeta, weight);
+                                    h_TRKiso_barrel_deno->Fill(SelectedMuonCollection_deno[i].trkiso, weight);
                                 }
                                 else
                                 {
-                                    h_pT_endcap_nume->Fill(SelectedMuonCollection_nume[i].Pt, weight);
-                                    h_PFiso_endcap_nume->Fill(SelectedMuonCollection_nume[i].RelPFIso_dBeta, weight);
-                                    h_TRKiso_endcap_nume->Fill(SelectedMuonCollection_nume[i].trkiso, weight);
+                                    h_pT_endcap_deno->Fill(SelectedMuonCollection_deno[i].Pt, weight);
+                                    h_PFiso_endcap_deno->Fill(SelectedMuonCollection_deno[i].RelPFIso_dBeta, weight);
+                                    h_TRKiso_endcap_deno->Fill(SelectedMuonCollection_deno[i].trkiso, weight);
+                                }
+                            }
+                            if (i < SelectedMuonCollection_nume.size())
+                            {
+                                if (SelectedMuonCollection_nume[i].Pt < 500)
+                                {
+                                    h_eta_nume->Fill(SelectedMuonCollection_nume[i].eta, weight);
+                                    if (fabs(SelectedMuonCollection_nume[i].eta) < 1.2)
+                                    {
+                                        h_pT_barrel_nume->Fill(SelectedMuonCollection_nume[i].Pt, weight);
+                                        h_PFiso_barrel_nume->Fill(SelectedMuonCollection_nume[i].RelPFIso_dBeta, weight);
+                                        h_TRKiso_barrel_nume->Fill(SelectedMuonCollection_nume[i].trkiso, weight);
+                                    }
+                                    else
+                                    {
+                                        h_pT_endcap_nume->Fill(SelectedMuonCollection_nume[i].Pt, weight);
+                                        h_PFiso_endcap_nume->Fill(SelectedMuonCollection_nume[i].RelPFIso_dBeta, weight);
+                                        h_TRKiso_endcap_nume->Fill(SelectedMuonCollection_nume[i].trkiso, weight);
+                                    }
                                 }
                             }
                         }
