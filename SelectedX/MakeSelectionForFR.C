@@ -529,13 +529,13 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
 
                 if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
                 {
-//                    if (Mgr.Tag[i_tup].Contains("ttbar"))
-//                    {
-//                        // -- Top pT reweighting -- //
-//                        Double_t SF0 = exp(0.0615 - (0.0005 * GenTopCollection[0].Pt));
-//                        Double_t SF1 = exp(0.0615 - (0.0005 * GenTopCollection[1].Pt));
-//                        evt_weight *= sqrt(SF0 * SF1);
-//                    }
+                    if (Mgr.Tag[i_tup].Contains("ttbar"))
+                    {
+                        // -- Top pT reweighting -- //
+                        Double_t SF0 = exp(0.0615 - (0.0005 * GenTopCollection[0].Pt));
+                        Double_t SF1 = exp(0.0615 - (0.0005 * GenTopCollection[1].Pt));
+                        evt_weight *= sqrt(SF0 * SF1);
+                    }
 
                     // -- Reco level selection -- //
                     vector< Muon > MuonCollection;
