@@ -522,7 +522,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                 vector<GenOthers> GenTopCollection;
                 GenFlag_top = analyzer->Separate_ttbarSample(Mgr.Tag[i_tup], ntuple, &GenTopCollection);
 
-                if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += MuMu.GENEvt_weight;
+                if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += ntuple->GENEvt_weight;
 
                 Bool_t TriggerFlag = kFALSE;
                 TriggerFlag = ntuple->isTriggered(analyzer->HLT);
