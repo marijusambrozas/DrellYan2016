@@ -87,7 +87,8 @@ void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX)
 //        canvas = new TCanvas(CanvasName, CanvasName, 1000, 1000);
         canvas = new TCanvas(CanvasName, CanvasName, 750, 850);
 //        canvas = new TCanvas(CanvasName, CanvasName, 1500, 1000);
-        TPad* pad1 = new TPad("pad1", "pad1", 0, 0.36, 1, 1);
+        pad1 = new TPad("pad1", "pad1", 0, 0.36, 1, 1);
+        pad1->SetNumber(1);
         pad1->SetBottomMargin(0.008);
         pad1->SetTopMargin(0.05);
         pad1->SetRightMargin(0.05);
@@ -132,6 +133,7 @@ void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX)
         canvas->cd();
 
         pad2 = new TPad("pad2", "pad2", 0, 0, 1, 0.355);
+        pad2->SetNumber(2);
         pad2->SetTopMargin(0);
         pad2->SetBottomMargin(0.4/*3*/);
         pad2->SetRightMargin(0.05);
@@ -280,3 +282,11 @@ void myRatioPlot_t::SetSystematics(Double_t *dataSystematics, Double_t *MCsystem
     systSet++;
 }
 
+void myRatioPlot_t::DrawOnTop(TH1D* h1_onTop)
+{
+    pad1->cd();
+    h1_onTop->Draw("samehist");
+    pad1->Update();
+    canvas->cd();
+    canvas->Update();
+}
