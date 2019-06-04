@@ -88,6 +88,10 @@ void Mu_HistDrawer()
     THStack *s_PFiso_endcap_deno = new THStack("s_PFiso_endcap_deno", "");
     THStack *s_TRKiso_barrel_deno = new THStack("s_TRKiso_barrel_deno", "");
     THStack *s_TRKiso_endcap_deno = new THStack("s_TRKiso_endcap_deno", "");
+    THStack *s_PFiso_barrel_nume = new THStack("s_PFiso_barrel_nume", "");
+    THStack *s_PFiso_endcap_nume = new THStack("s_PFiso_endcap_nume", "");
+    THStack *s_TRKiso_barrel_nume = new THStack("s_TRKiso_barrel_nume", "");
+    THStack *s_TRKiso_endcap_nume = new THStack("s_TRKiso_endcap_nume", "");
     THStack *s_pT_barrel = new THStack("s_pT_barrel", "");
     THStack *s_pT_endcap = new THStack("s_pT_endcap", "");
     THStack *s_eta = new THStack("s_eta", "");
@@ -185,21 +189,21 @@ void Mu_HistDrawer()
         h_eta_MC[pr1]->SetDirectory(0);
         h_nVTX_MC[pr1]->SetDirectory(0);
 
-        if (pr1==_WJets)
-        {
-            h_PFiso_barrel_MC_deno[pr1]->Scale(162787688 / 177578051);
-            h_PFiso_endcap_MC_deno[pr1]->Scale(162787688 / 177578051);
-            h_TRKiso_barrel_MC_deno[pr1]->Scale(162787688 / 177578051);
-            h_TRKiso_endcap_MC_deno[pr1]->Scale(162787688 / 177578051);
-            h_PFiso_barrel_MC_nume[pr1]->Scale(162787688 / 177578051);
-            h_PFiso_endcap_MC_nume[pr1]->Scale(162787688 / 177578051);
-            h_TRKiso_barrel_MC_nume[pr1]->Scale(162787688 / 177578051);
-            h_TRKiso_endcap_MC_nume[pr1]->Scale(162787688 / 177578051);
-            h_pT_barrel_MC[pr1]->Scale(162787688 / 177578051);
-            h_pT_endcap_MC[pr1]->Scale(162787688 / 177578051);
-            h_eta_MC[pr1]->Scale(162787688 / 177578051);
-            h_nVTX_MC[pr1]->Scale(162787688 / 177578051);
-        }
+//        if (pr1==_WJets)
+//        {
+//            h_PFiso_barrel_MC_deno[pr1]->Scale(0.916710636); // 162787688/177578051
+//            h_PFiso_endcap_MC_deno[pr1]->Scale(0.916710636);
+//            h_TRKiso_barrel_MC_deno[pr1]->Scale(0.916710636);
+//            h_TRKiso_endcap_MC_deno[pr1]->Scale(0.916710636);
+//            h_PFiso_barrel_MC_nume[pr1]->Scale(0.916710636);
+//            h_PFiso_endcap_MC_nume[pr1]->Scale(0.916710636);
+//            h_TRKiso_barrel_MC_nume[pr1]->Scale(0.916710636);
+//            h_TRKiso_endcap_MC_nume[pr1]->Scale(0.916710636);
+//            h_pT_barrel_MC[pr1]->Scale(0.916710636);
+//            h_pT_endcap_MC[pr1]->Scale(0.916710636);
+//            h_eta_MC[pr1]->Scale(0.916710636);
+//            h_nVTX_MC[pr1]->Scale(0.916710636);
+//        }
 
         s_PFiso_barrel_deno->Add(h_PFiso_barrel_MC_deno[pr1]);
         s_PFiso_endcap_deno->Add(h_PFiso_endcap_MC_deno[pr1]);
@@ -352,6 +356,43 @@ void Mu_HistDrawer()
 
         file->Close();
     }
+
+     h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full]->SetFillColor(kGray);
+     h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full]->SetFillColor(kGray);
+    h_TRKiso_barrel_MC_deno[_QCDMuEnriched_Full]->SetFillColor(kGray);
+    h_TRKiso_endcap_MC_deno[_QCDMuEnriched_Full]->SetFillColor(kGray);
+     h_PFiso_barrel_MC_nume[_QCDMuEnriched_Full]->SetFillColor(kGray);
+     h_PFiso_endcap_MC_nume[_QCDMuEnriched_Full]->SetFillColor(kGray);
+    h_TRKiso_barrel_MC_nume[_QCDMuEnriched_Full]->SetFillColor(kGray);
+    h_TRKiso_endcap_MC_nume[_QCDMuEnriched_Full]->SetFillColor(kGray);
+             h_pT_barrel_MC[_QCDMuEnriched_Full]->SetFillColor(kGray);
+             h_pT_endcap_MC[_QCDMuEnriched_Full]->SetFillColor(kGray);
+                   h_eta_MC[_QCDMuEnriched_Full]->SetFillColor(kGray);
+                  h_nVTX_MC[_QCDMuEnriched_Full]->SetFillColor(kGray);
+     h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full]->SetFillStyle(3002);
+     h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full]->SetFillStyle(3002);
+    h_TRKiso_barrel_MC_deno[_QCDMuEnriched_Full]->SetFillStyle(3002);
+    h_TRKiso_endcap_MC_deno[_QCDMuEnriched_Full]->SetFillStyle(3002);
+     h_PFiso_barrel_MC_nume[_QCDMuEnriched_Full]->SetFillStyle(3002);
+     h_PFiso_endcap_MC_nume[_QCDMuEnriched_Full]->SetFillStyle(3002);
+    h_TRKiso_barrel_MC_nume[_QCDMuEnriched_Full]->SetFillStyle(3002);
+    h_TRKiso_endcap_MC_nume[_QCDMuEnriched_Full]->SetFillStyle(3002);
+             h_pT_barrel_MC[_QCDMuEnriched_Full]->SetFillStyle(3002);
+             h_pT_endcap_MC[_QCDMuEnriched_Full]->SetFillStyle(3002);
+                   h_eta_MC[_QCDMuEnriched_Full]->SetFillStyle(3002);
+                  h_nVTX_MC[_QCDMuEnriched_Full]->SetFillStyle(3002);
+     h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full]->SetLineColor(kRed);
+     h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full]->SetLineColor(kRed);
+    h_TRKiso_barrel_MC_deno[_QCDMuEnriched_Full]->SetLineColor(kRed);
+    h_TRKiso_endcap_MC_deno[_QCDMuEnriched_Full]->SetLineColor(kRed);
+     h_PFiso_barrel_MC_nume[_QCDMuEnriched_Full]->SetLineColor(kRed);
+     h_PFiso_endcap_MC_nume[_QCDMuEnriched_Full]->SetLineColor(kRed);
+    h_TRKiso_barrel_MC_nume[_QCDMuEnriched_Full]->SetLineColor(kRed);
+    h_TRKiso_endcap_MC_nume[_QCDMuEnriched_Full]->SetLineColor(kRed);
+             h_pT_barrel_MC[_QCDMuEnriched_Full]->SetLineColor(kRed);
+             h_pT_endcap_MC[_QCDMuEnriched_Full]->SetLineColor(kRed);
+                   h_eta_MC[_QCDMuEnriched_Full]->SetLineColor(kRed);
+                  h_nVTX_MC[_QCDMuEnriched_Full]->SetLineColor(kRed);
 
 //--------------------------------------- DATA -----------------------------------------------------
 
@@ -535,15 +576,35 @@ void Mu_HistDrawer()
     RP_nVTX->ImportLegend(legend);
 
     RP_PFiso_barrel_deno->Draw(1, 1e8, 0);
+    RP_PFiso_barrel_deno->DrawOnTop(h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full]);
+
     RP_PFiso_endcap_deno->Draw(1, 1e8, 0);
+    RP_PFiso_endcap_deno->DrawOnTop(h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full]);
+
     RP_TRKiso_barrel_deno->Draw(1, 1e8, 0);
+    RP_TRKiso_barrel_deno->DrawOnTop(h_TRKiso_barrel_MC_deno[_QCDMuEnriched_Full]);
+
     RP_TRKiso_endcap_deno->Draw(1, 1e8, 0);
+    RP_TRKiso_endcap_deno->DrawOnTop(h_TRKiso_endcap_MC_deno[_QCDMuEnriched_Full]);
+
     RP_PFiso_barrel_nume->Draw(1, 1e8, 0);
+    RP_PFiso_barrel_nume->DrawOnTop(h_PFiso_barrel_MC_nume[_QCDMuEnriched_Full]);
+
     RP_PFiso_endcap_nume->Draw(1, 1e8, 0);
+    RP_PFiso_endcap_nume->DrawOnTop(h_PFiso_endcap_MC_nume[_QCDMuEnriched_Full]);
+
     RP_TRKiso_barrel_nume->Draw(1, 1e8, 0);
+    RP_TRKiso_barrel_nume->DrawOnTop(h_TRKiso_barrel_MC_nume[_QCDMuEnriched_Full]);
+
     RP_TRKiso_endcap_nume->Draw(1, 1e8, 0);
+    RP_TRKiso_endcap_nume->DrawOnTop(h_TRKiso_endcap_MC_nume[_QCDMuEnriched_Full]);
+
     RP_pT_barrel->Draw(1, 1e8, 0);
+    RP_pT_barrel->DrawOnTop(h_pT_barrel_MC[_QCDMuEnriched_Full]);
+
     RP_pT_endcap->Draw(1, 1e8, 0);
+    RP_pT_endcap->DrawOnTop(h_pT_endcap_MC[_QCDMuEnriched_Full]);
+
     RP_eta->Draw(1, 1e8, 0);
     RP_nVTX->Draw(1, 1e8, 0);
 
@@ -554,6 +615,10 @@ void Mu_HistDrawer()
     cout << "Barrel deno   " << h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full]->Integral() << endl;
     cout << "Endcap nume   " << h_PFiso_endcap_MC_nume[_QCDMuEnriched_Full]->Integral() << endl;
     cout << "Endcap deno   " << h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full]->Integral() << endl;
+    cout << "--------\nWJets PFiso integral:\nBarrel nume   " << h_PFiso_barrel_MC_nume[_WJets]->Integral() << endl;
+    cout << "Barrel deno   " << h_PFiso_barrel_MC_deno[_WJets]->Integral() << endl;
+    cout << "Endcap nume   " << h_PFiso_endcap_MC_nume[_WJets]->Integral() << endl;
+    cout << "Endcap deno   " << h_PFiso_endcap_MC_deno[_WJets]->Integral() << endl;
 
 } // End of Mu_HistDrawer
 

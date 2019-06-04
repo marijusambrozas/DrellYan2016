@@ -225,7 +225,7 @@ void Mu_Tfit()
 // ######################## MODEL BUILDING ##########################
 
     // Making RooDataHist
-    RooRealVar iso_nume("iso", "PFiso/p_{T}", 0, 5/*0.15*/);
+    RooRealVar iso_nume("iso", "PFiso/p_{T}", 0, 0.15);
     RooRealVar iso_deno("iso", "PFiso/p_{T}", 0, 5);
 
     RooDataHist *rh_barrel_nume_QCD = new RooDataHist("rh_barrel_nume_QCD", "RooHist_barrel_nume_QCD", iso_nume, h_barrel_MC_nume[_QCDMuEnriched_Full]);
@@ -463,10 +463,10 @@ void Mu_Tfit()
     Double_t Nnorm_endcap_deno_QCD = N_endcap_deno_QCD * h_endcap_data_deno->Integral() / N_endcap_deno_total;
 
     // Fit constraints
-    RooRealVar n_barrel_nume_ttbar("n_barrel_nume_ttbar", "n_barrel_nume_ttbar", Nnorm_barrel_nume_ttbar, Nnorm_barrel_nume_ttbar*0.95, Nnorm_barrel_nume_ttbar*1.05);
-    RooRealVar n_endcap_nume_ttbar("n_endcap_nume_ttbar", "n_endcap_nume_ttbar", Nnorm_endcap_nume_ttbar, Nnorm_endcap_nume_ttbar*0.95, Nnorm_endcap_nume_ttbar*1.05);
-    RooRealVar n_barrel_deno_ttbar("n_barrel_deno_ttbar", "n_barrel_deno_ttbar", Nnorm_barrel_deno_ttbar, Nnorm_barrel_deno_ttbar*0.95, Nnorm_barrel_deno_ttbar*1.05);
-    RooRealVar n_endcap_deno_ttbar("n_endcap_deno_ttbar", "n_endcap_deno_ttbar", Nnorm_endcap_deno_ttbar, Nnorm_endcap_deno_ttbar*0.95, Nnorm_endcap_deno_ttbar*1.05);
+    RooRealVar n_barrel_nume_ttbar("n_barrel_nume_ttbar", "n_barrel_nume_ttbar", Nnorm_barrel_nume_ttbar*0.92, Nnorm_barrel_nume_ttbar*0.95*0.92, Nnorm_barrel_nume_ttbar*1.05*0.92);
+    RooRealVar n_endcap_nume_ttbar("n_endcap_nume_ttbar", "n_endcap_nume_ttbar", Nnorm_endcap_nume_ttbar*0.92, Nnorm_endcap_nume_ttbar*0.95*0.92, Nnorm_endcap_nume_ttbar*1.05*0.92);
+    RooRealVar n_barrel_deno_ttbar("n_barrel_deno_ttbar", "n_barrel_deno_ttbar", Nnorm_barrel_deno_ttbar*0.92, Nnorm_barrel_deno_ttbar*0.95*0.92, Nnorm_barrel_deno_ttbar*1.05*0.92);
+    RooRealVar n_endcap_deno_ttbar("n_endcap_deno_ttbar", "n_endcap_deno_ttbar", Nnorm_endcap_deno_ttbar*0.92, Nnorm_endcap_deno_ttbar*0.95*0.92, Nnorm_endcap_deno_ttbar*1.05*0.92);
 
     RooRealVar n_barrel_nume_WJets("n_barrel_nume_WJets", "n_barrel_nume_WJets", Nnorm_barrel_nume_WJets, Nnorm_barrel_nume_WJets*0.95, Nnorm_barrel_nume_WJets*1.05);
     RooRealVar n_endcap_nume_WJets("n_endcap_nume_WJets", "n_endcap_nume_WJets", Nnorm_endcap_nume_WJets, Nnorm_endcap_nume_WJets*0.95, Nnorm_endcap_nume_WJets*1.05);
