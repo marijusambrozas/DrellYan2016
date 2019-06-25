@@ -366,6 +366,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
     for (Int_t i_proc=0; i_proc<Nproc; i_proc++)
     {
         Mgr.SetProc(Processes[i_proc], kTRUE);
+        cout << "===========================================================" << endl;
         cout << "Type: " << Mgr.Type << endl;
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
         cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
@@ -700,9 +701,10 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         }
         else
         {
-            cout << " Writing was NOT successful!\n" << endl;
+            cout << " Writing was NOT successful!" << endl;
             MuonFile->Close();
         }
+        cout << "===========================================================\n" << endl;
 
     } // End of i_proc iteration
 
