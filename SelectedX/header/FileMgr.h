@@ -1721,136 +1721,167 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+//        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/"; // v2.6 location
+
 
         Tag.push_back("DoubleEG_B_0000"); nEvents.push_back(103625724);
-        Location = "DoubleEG/crab_DoubleEG_RunB/180326_143532/0000/*.root";
+//        Location = "DoubleEG/crab_DoubleEG_RunB/180326_143532/0000/*.root";
+        Location = "DoubleEG_Run2016B/*.root"; // v2.6 location
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("DoubleEG_B_0001"); nEvents.push_back(33031246);
-        Location = "DoubleEG/crab_DoubleEG_RunB/180326_143532/0001/*.root";
-        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+        // There is just one directory in v2.6
+//        Tag.push_back("DoubleEG_B_0001"); nEvents.push_back(33031246);
+//        Location = "DoubleEG/crab_DoubleEG_RunB/180326_143532/0001/*.root";
+//        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _DoubleEG_C)
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+//        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/"; // v2.6 location
 
         Tag.push_back("DoubleEG_C"); nEvents.push_back(45521797);
-        Location = "DoubleEG/crab_DoubleEG_RunC/180326_143612/0000/*.root";
+//        Location = "DoubleEG/crab_DoubleEG_RunC/180326_143612/0000/*.root";
+        Location = "DoubleEG_Run2016C/*.root"; // v2.6 location
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _DoubleEG_D)
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+//        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/"; // v2.6 location
 
         Tag.push_back("DoubleEG_D"); nEvents.push_back(52422569);
-        Location = "DoubleEG/crab_DoubleEG_RunD/180326_143654/0000/*.root";
+//        Location = "DoubleEG/crab_DoubleEG_RunD/180326_143654/0000/*.root";
+        Location = "DoubleEG_Run2016D/*.root"; // v2.6 location
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _DoubleEG_E)
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+//        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/"; // v2.6 location
 
         Tag.push_back("DoubleEG_E"); nEvents.push_back(47326656);
-        Location = "DoubleEG/crab_DoubleEG_RunE/180326_143750/0000/*.root";
+//        Location = "DoubleEG/crab_DoubleEG_RunE/180326_143750/0000/*.root";
+        Location = "DoubleEG_Run2016E/*.root"; // v2.6 location
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _DoubleEG_F)
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+//        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/"; // v2.6 location
 
         Tag.push_back("DoubleEG_F"); nEvents.push_back(33943052);
-        Location = "DoubleEG/crab_DoubleEG_RunF/180326_143846/0000/*.root";
+//        Location = "DoubleEG/crab_DoubleEG_RunF/180326_143846/0000/*.root";
+        Location = "DoubleEG_Run2016F/*.root"; // v2.6 location
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _DoubleEG_G)
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+//        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/"; // v2.6 location
 
         Tag.push_back("DoubleEG_G_0000"); nEvents.push_back(71864512);
-        Location = "DoubleEG/crab_DoubleEG_RunG/180326_144559/0000/*.root";
+//        Location = "DoubleEG/crab_DoubleEG_RunG/180326_144559/0000/*.root";
+        Location = "DoubleEG_Run2016G/*.root"; // v2.6 location
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("DoubleEG_G_0001"); nEvents.push_back(4669958);
-        Location = "DoubleEG/crab_DoubleEG_RunG/180326_144559/0001/*.root";
-        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+        // There is just one directory in v2.6
+//        Tag.push_back("DoubleEG_G_0001"); nEvents.push_back(4669958);
+//        Location = "DoubleEG/crab_DoubleEG_RunG/180326_144559/0001/*.root";
+//        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _DoubleEG_H)
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+//        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/"; // v2.6 location
 
         Tag.push_back("DoubleEG_Hver2_0000"); nEvents.push_back(68821231);
-        Location = "DoubleEG/crab_DoubleEG_RunHver2/180326_144638/0000/*.root";
+//        Location = "DoubleEG/crab_DoubleEG_RunHver2/180326_144638/0000/*.root";
+        Location = "DoubleEG_Run2016Hver2/*.root"; // v2.6 location
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("DoubleEG_Hver2_0001"); nEvents.push_back(11645108);
-        Location = "DoubleEG/crab_DoubleEG_RunHver2/180326_144638/0001/*.root";
-        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+        // There is just one directory in v2.6
+//        Tag.push_back("DoubleEG_Hver2_0001"); nEvents.push_back(11645108);
+//        Location = "DoubleEG/crab_DoubleEG_RunHver2/180326_144638/0001/*.root";
+//        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DoubleEG_Hver3"); nEvents.push_back(2021309);
-        Location = "DoubleEG/crab_DoubleEG_RunHver3/180326_144719/0000/*.root";
+//        Location = "DoubleEG/crab_DoubleEG_RunHver3/180326_144719/0000/*.root";
+        Location = "DoubleEG_Run2016Hver3/*.root"; // v2.6 location
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _DoubleEG_Full)
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+//        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/"; // v2.6 location
 
         Tag.push_back("DoubleEG_B_0000"); nEvents.push_back(103625724);
-        Location = "DoubleEG/crab_DoubleEG_RunB/180326_143532/0000/*.root";
+//        Location = "DoubleEG/crab_DoubleEG_RunB/180326_143532/0000/*.root";
+        Location = "DoubleEG_Run2016B/*.root"; // v2.6 location
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("DoubleEG_B_0001"); nEvents.push_back(33031246);
-        Location = "DoubleEG/crab_DoubleEG_RunB/180326_143532/0001/*.root";
-        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+        // There is just one directory in v2.6
+//        Tag.push_back("DoubleEG_B_0001"); nEvents.push_back(33031246);
+//        Location = "DoubleEG/crab_DoubleEG_RunB/180326_143532/0001/*.root";
+//        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DoubleEG_C"); nEvents.push_back(45521797);
-        Location = "DoubleEG/crab_DoubleEG_RunC/180326_143612/0000/*.root";
+//        Location = "DoubleEG/crab_DoubleEG_RunC/180326_143612/0000/*.root";
+        Location = "DoubleEG_Run2016C/*.root"; // v2.6 location
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DoubleEG_D"); nEvents.push_back(52422569);
-        Location = "DoubleEG/crab_DoubleEG_RunD/180326_143654/0000/*.root";
+//        Location = "DoubleEG/crab_DoubleEG_RunD/180326_143654/0000/*.root";
+        Location = "DoubleEG_Run2016D/*.root"; // v2.6 location
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DoubleEG_E"); nEvents.push_back(47326656);
-        Location = "DoubleEG/crab_DoubleEG_RunE/180326_143750/0000/*.root";
+//        Location = "DoubleEG/crab_DoubleEG_RunE/180326_143750/0000/*.root";
+        Location = "DoubleEG_Run2016E/*.root"; // v2.6 location
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DoubleEG_F"); nEvents.push_back(33943052);
-        Location = "DoubleEG/crab_DoubleEG_RunF/180326_143846/0000/*.root";
+//        Location = "DoubleEG/crab_DoubleEG_RunF/180326_143846/0000/*.root";
+        Location = "DoubleEG_Run2016F/*.root"; // v2.6 location
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DoubleEG_G_0000"); nEvents.push_back(71864512);
-        Location = "DoubleEG/crab_DoubleEG_RunG/180326_144559/0000/*.root";
+//        Location = "DoubleEG/crab_DoubleEG_RunG/180326_144559/0000/*.root";
+        Location = "DoubleEG_Run2016G/*.root"; // v2.6 location
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("DoubleEG_G_0001"); nEvents.push_back(4669958);
-        Location = "DoubleEG/crab_DoubleEG_RunG/180326_144559/0001/*.root";
-        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+        // There is just one directory in v2.6
+//        Tag.push_back("DoubleEG_G_0001"); nEvents.push_back(4669958);
+//        Location = "DoubleEG/crab_DoubleEG_RunG/180326_144559/0001/*.root";
+//        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DoubleEG_Hver2_0000"); nEvents.push_back(68821231);
-        Location = "DoubleEG/crab_DoubleEG_RunHver2/180326_144638/0000/*.root";
+//        Location = "DoubleEG/crab_DoubleEG_RunHver2/180326_144638/0000/*.root";
+        Location = "DoubleEG_Run2016Hver2/*.root"; // v2.6 location
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("DoubleEG_Hver2_0001"); nEvents.push_back(11645108);
-        Location = "DoubleEG/crab_DoubleEG_RunHver2/180326_144638/0001/*.root";
-        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+        // There is just one directory in v2.6
+//        Tag.push_back("DoubleEG_Hver2_0001"); nEvents.push_back(11645108);
+//        Location = "DoubleEG/crab_DoubleEG_RunHver2/180326_144638/0001/*.root";
+//        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DoubleEG_Hver3"); nEvents.push_back(2021309);
-        Location = "DoubleEG/crab_DoubleEG_RunHver3/180326_144719/0000/*.root";
+//        Location = "DoubleEG/crab_DoubleEG_RunHver3/180326_144719/0000/*.root";
+        Location = "DoubleEG_Run2016Hver3/*.root"; // v2.6 location
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _SingleMuon_B)
