@@ -867,7 +867,7 @@ void MakeSelectedEMu (TString type, TString HLTname, Bool_t Debug)
                         // -- Rochester correction -- //
                         Double_t rndm[2], SF=0; r1->RndmArray(2, rndm);
                         Int_t s, m;
-                        if(Mgr.Tag[i_tup] == "DATA")
+                        if(Mgr.isMC == kFALSE)
                             SF = rc.kScaleDT(mu.charge, mu.Pt, mu.eta, mu.phi, s=0, m=0);
                         else
                         {
