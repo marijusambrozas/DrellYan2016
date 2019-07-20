@@ -25,10 +25,11 @@
 #include "./header/myRatioPlot_t.h"
 #include "./etc/RoccoR/RoccoR.cc"
 
-void EE_HistDrawer ( TString whichGraphs, TString type);
+void EE_HistDrawer (TString whichGraphs, TString type);
 void MuMu_HistDrawer (TString whichGraphs, TString type);
 void EMu_HistDrawer (TString whichGraphs, TString type);
 void Est_HistDrawer ();
+void Test_RocCorr ();
 Double_t CompChiSquared (TH1D *h_data, THStack *s_MC);
 Double_t CompAvgDataMCDifference (TH1D *h_data, THStack *s_MC);
 void removeNegativeBins(TH1D *h);
@@ -72,11 +73,17 @@ void HistDrawer (TString WhichX = "", TString WhichGraphs = "ALL", TString type 
         cout << "\n*****   EMu_HistDrawer (" << whichGraphs << " " << type << ")  *****" << endl;
         EMu_HistDrawer(whichGraphs, type);
     }
-    if (whichX.Contains("EST"))
+    if (whichX.Contains("EST") && !whichX.Contains("TEST"))
     {
         Xselected++;
         cout << "\n*****   Est_HistDrawer ()  *****" << endl;
         Est_HistDrawer();
+    }
+    if (whichX.Contains("TEST"))
+    {
+        Xselected++;
+        cout << "\n*****   Test_RocCorr ()  *****" << endl;
+        Test_RocCorr();
     }
     if (Xselected == 0) cout << "Wrong arument!" << endl;
 
@@ -319,23 +326,23 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         myRatioPlot_t *RP_mass = new myRatioPlot_t("RP_mass", s_mass, h_data_mass);
         myRatioPlot_t *RP_mass2 = new myRatioPlot_t("RP_mass2", s_mass2, h_data_mass2);
 
-//        RP_mass_before_PUCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] before PU correction", 15, 3000);
-        RP_mass_before_PUCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] prie#check{s} visas pataisas", 15, 3000, "Eksp./MC");
-//        RP_mass_before_EffCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] before Efficiency SF", 15, 3000);
-        RP_mass_before_EffCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] prie#check{s} efektyvumo pataisas", 15, 3000, "Eksp./MC");
+        RP_mass_before_PUCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] before PU correction", 15, 3000);
+//        RP_mass_before_PUCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] prie#check{s} visas pataisas", 15, 3000, "Eksp./MC");
+        RP_mass_before_EffCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] before Efficiency SF", 15, 3000);
+//        RP_mass_before_EffCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] prie#check{s} efektyvumo pataisas", 15, 3000, "Eksp./MC");
         RP_mass_before_PVzCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] before PVz correction", 15, 3000);
         RP_mass_before_L1Corr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] before L1 prefiring correction", 15, 3000);
         RP_mass_before_TopPtCorr->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] before Top quark p_{T} reweighting", 15, 3000);
         RP_mass_fine->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 60, 120);
-//        RP_mass->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000);
-        RP_mass->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] pritaikius pataisas", 15, 3000, "Eksp./MC");
+        RP_mass->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000);
+//        RP_mass->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}] pritaikius pataisas", 15, 3000, "Eksp./MC");
         RP_mass2->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000);
 
         // Legend
         TLegend *legend = new TLegend(0.8, 0.45, 0.95, 0.95);
 
-//        legend->AddEntry(h_data_mass, "Data", "lp");
-        legend->AddEntry(h_data_mass, "Matavimas", "lp");
+        legend->AddEntry(h_data_mass, "Data", "lp");
+//        legend->AddEntry(h_data_mass, "Matavimas", "lp");
         legend->AddEntry(h_DY_mass, "DY#rightarrow #font[12]{ee}", "f");
         legend->AddEntry(h_bkg_mass[8], "DY#rightarrow #tau#tau", "f");
         legend->AddEntry(h_bkg_mass[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
@@ -1311,14 +1318,14 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         RP_phi_sublead = new myRatioPlot_t("RP_phi_sublead", s_phi_sublead, h_data_phi_sublead);
 
         RP_pT_before_PUCorr->SetPlots("p_{#lower[-0.2]{T} #lower[-0.3]{#font[12]{#scale[1.3]{ee}}}} [GeV/c] before PU correction", 0, 1000);
-//        RP_rapi_before_PUCorr->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} before PU correction", -3, 3);
-        RP_rapi_before_PUCorr->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} prie#check{s} visas pataisas", -3, 3, "Eksp./MC");
+        RP_rapi_before_PUCorr->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} before PU correction", -3, 3);
+//        RP_rapi_before_PUCorr->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} prie#check{s} visas pataisas", -3, 3, "Eksp./MC");
         RP_pT_lead_before_PUCorr->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{lead}}) [GeV/c] before PU correction", 0, 1000);
         RP_pT_sublead_before_PUCorr->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{sublead}}) [GeV/c] before PU correction", 0, 1000);
-//        RP_eta_lead_before_PUCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{lead}}) before PU correction", -3.5, 3.5);
-        RP_eta_lead_before_PUCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{1}}) prie#check{s} visas pataisas", -3.5, 3.5, "Eksp./MC");
-//        RP_eta_sublead_before_PUCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{sublead}}) before PU correction", -3.5, 3.5);
-        RP_eta_sublead_before_PUCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{2}}) prie#check{s} visas pataisas", -3.5, 3.5, "Eksp./MC");
+        RP_eta_lead_before_PUCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{lead}}) before PU correction", -3.5, 3.5);
+//        RP_eta_lead_before_PUCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{1}}) prie#check{s} visas pataisas", -3.5, 3.5, "Eksp./MC");
+        RP_eta_sublead_before_PUCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{sublead}}) before PU correction", -3.5, 3.5);
+//        RP_eta_sublead_before_PUCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{2}}) prie#check{s} visas pataisas", -3.5, 3.5, "Eksp./MC");
         RP_phi_lead_before_PUCorr->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{lead}}) before PU correction", -4, 4);
         RP_phi_sublead_before_PUCorr->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{sublead}}) before PU correction", -4, 4);
 
@@ -1332,26 +1339,26 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         RP_phi_sublead_before_EffCorr->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{sublead}}) before Efficiency SF", -4, 4);
 
         RP_pT_before_PVzCorr->SetPlots("p_{#lower[-0.2]{T} #lower[-0.3]{#font[12]{#scale[1.3]{ee}}}} [GeV/c] before PVz correction", 0, 1000);
-//        RP_rapi_before_PVzCorr->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} before PVz correction", -3, 3);
-        RP_rapi_before_PVzCorr->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} prie#check{s} PVz pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3, 3, "Eksp./MC");
+        RP_rapi_before_PVzCorr->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} before PVz correction", -3, 3);
+//        RP_rapi_before_PVzCorr->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} prie#check{s} PVz pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3, 3, "Eksp./MC");
         RP_pT_lead_before_PVzCorr->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{lead}}) [GeV/c] before PVz correction", 0, 1000);
         RP_pT_sublead_before_PVzCorr->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{sublead}}) [GeV/c] before PVz correction", 0, 1000);
-//        RP_eta_lead_before_PVzCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{lead}}) before PVz correction", -3.5, 3.5);
-        RP_eta_lead_before_PVzCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{1}}) prie#check{s} PVz pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3.5, 3.5, "Eksp./MC");
-//        RP_eta_sublead_before_PVzCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{sublead}}) before PVz correction", -3.5, 3.5);
-        RP_eta_sublead_before_PVzCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{2}}) prie#check{s} PVz pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3.5, 3.5, "Eksp./MC");
+        RP_eta_lead_before_PVzCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{lead}}) before PVz correction", -3.5, 3.5);
+//        RP_eta_lead_before_PVzCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{1}}) prie#check{s} PVz pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3.5, 3.5, "Eksp./MC");
+        RP_eta_sublead_before_PVzCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{sublead}}) before PVz correction", -3.5, 3.5);
+//        RP_eta_sublead_before_PVzCorr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{2}}) prie#check{s} PVz pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3.5, 3.5, "Eksp./MC");
         RP_phi_lead_before_PVzCorr->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{lead}}) before PVz correction", -4, 4);
         RP_phi_sublead_before_PVzCorr->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{sublead}}) before PVz correction", -4, 4);
 
         RP_pT_before_L1Corr->SetPlots("p_{#lower[-0.2]{T} #lower[-0.3]{#font[12]{#scale[1.3]{ee}}}} [GeV/c] before L1 prefiring correction", 0, 1000);
-//        RP_rapi_before_L1Corr->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} before L1 prefiring correction", -3, 3);
-        RP_rapi_before_L1Corr->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} prie#check{s} trigerio pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3, 3, "Eksp./MC");
+        RP_rapi_before_L1Corr->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} before L1 prefiring correction", -3, 3);
+//        RP_rapi_before_L1Corr->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} prie#check{s} trigerio pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3, 3, "Eksp./MC");
         RP_pT_lead_before_L1Corr->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{lead}}) [GeV/c] before L1 prefiring correction", 0, 1000);
         RP_pT_sublead_before_L1Corr->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{sublead}}) [GeV/c] before L1 prefiring correction", 0, 1000);
-//        RP_eta_lead_before_L1Corr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{lead}}) before L1 prefiring correction", -3.5, 3.5);
-        RP_eta_lead_before_L1Corr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{1}}) prie#check{s} trigerio pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3.5, 3.5, "Eksp./MC");
-//        RP_eta_sublead_before_L1Corr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{sublead}}) before L1 prefiring correction", -3.5, 3.5);
-        RP_eta_sublead_before_L1Corr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{2}}) prie#check{s} trigerio pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3.5, 3.5, "Eksp./MC");
+        RP_eta_lead_before_L1Corr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{lead}}) before L1 prefiring correction", -3.5, 3.5);
+//        RP_eta_lead_before_L1Corr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{1}}) prie#check{s} trigerio pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3.5, 3.5, "Eksp./MC");
+        RP_eta_sublead_before_L1Corr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{sublead}}) before L1 prefiring correction", -3.5, 3.5);
+//        RP_eta_sublead_before_L1Corr->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{2}}) prie#check{s} trigerio pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3.5, 3.5, "Eksp./MC");
         RP_phi_lead_before_L1Corr->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{lead}}) before L1 prefiring correction", -4, 4);
         RP_phi_sublead_before_L1Corr->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{sublead}}) before L1 prefiring correction", -4, 4);
 
@@ -1365,21 +1372,21 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         RP_phi_sublead_before_TopPtCorr->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{sublead}}) before top p_{#lower[-0.2]{T}} reweighting", -4, 4);
 
         RP_pT->SetPlots("p_{#lower[-0.2]{T} #lower[-0.3]{#font[12]{#scale[1.3]{ee}}}} [GeV/c]", 0, 1000);
-//        RP_rapi->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}}", -3, 3);
-        RP_rapi->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} pritaikius pataisas", -3, 3, "Eksp./MC");
+        RP_rapi->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}}", -3, 3);
+//        RP_rapi->SetPlots("y_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} pritaikius pataisas", -3, 3, "Eksp./MC");
         RP_pT_lead->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{lead}}) [GeV/c]", 0, 1000);
         RP_pT_sublead->SetPlots("p_{#lower[-0.2]{T}} (#font[12]{e}_{#lower[-0.2]{sublead}}) [GeV/c]", 0, 1000);
-//        RP_eta_lead->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{lead}})", -3.5, 3.5);
-        RP_eta_lead->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{1}}) pritaikius pataisas", -3.5, 3.5, "Eksp./MC");
-//        RP_eta_sublead->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{sublead}})", -3.5, 3.5);
-        RP_eta_sublead->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{2}}) pritaikius pataisas", -3.5, 3.5, "Eksp./MC");
+        RP_eta_lead->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{lead}})", -3.5, 3.5);
+//        RP_eta_lead->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{1}}) pritaikius pataisas", -3.5, 3.5, "Eksp./MC");
+        RP_eta_sublead->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{sublead}})", -3.5, 3.5);
+//        RP_eta_sublead->SetPlots("#eta_{#lower[-0.3]{SC}} (#font[12]{e}_{#lower[-0.2]{2}}) pritaikius pataisas", -3.5, 3.5, "Eksp./MC");
         RP_phi_lead->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{lead}})", -4, 4);
         RP_phi_sublead->SetPlots("#phi (#font[12]{e}_{#lower[-0.4]{sublead}})", -4, 4);
 
         TLegend *legend = new TLegend(0.5, 0.7, 0.95, 0.95);
         legend->SetNColumns(2);
-//        legend->AddEntry(h_data_pT, "Data", "lp");
-        legend->AddEntry(h_data_pT, "Matavimas", "lp");
+        legend->AddEntry(h_data_pT, "Data", "lp");
+//        legend->AddEntry(h_data_pT, "Matavimas", "lp");
         legend->AddEntry(h_DY_pT, "DY#rightarrow #font[12]{ee}", "f");
         legend->AddEntry(h_bkg_pT[8], "DY#rightarrow #tau#tau", "f");
         legend->AddEntry(h_bkg_pT[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
@@ -1603,16 +1610,16 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         RP_nVTX_before_EffCorr = new myRatioPlot_t("RP_nVTX_before_EffCorr", s_nVTX_before_EffCorr, h_data_nVTX);
         RP_nVTX = new myRatioPlot_t("RP_nVTX", s_nVTX, h_data_nVTX);
 
-//        RP_nVTX_before_PUCorr->SetPlots("N_{#lower[-0.2]{VTX} #lower[-0.3]{#font[12]{#scale[1.2]{ee}}}} before PU correction", 0, 50);
-        RP_nVTX_before_PUCorr->SetPlots("N_{#lower[-0.2]{PV} #lower[-0.3]{#font[12]{#scale[1.2]{ee}}}} prie#check{s} pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", 0, 50, "Eksp./MC");
+        RP_nVTX_before_PUCorr->SetPlots("N_{#lower[-0.2]{VTX} #lower[-0.3]{#font[12]{#scale[1.2]{ee}}}} before PU correction", 0, 50);
+//        RP_nVTX_before_PUCorr->SetPlots("N_{#lower[-0.2]{PV} #lower[-0.3]{#font[12]{#scale[1.2]{ee}}}} prie#check{s} pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", 0, 50, "Eksp./MC");
         RP_nVTX_before_EffCorr->SetPlots("N_{#lower[-0.2]{VTX} #lower[-0.3]{#font[12]{#scale[1.2]{ee}}}} before Efficiency correction", 0, 50);
-//        RP_nVTX->SetPlots("N_{#lower[-0.2]{VTX} #lower[-0.3]{#font[12]{#scale[1.2]{ee}}}}", 0, 50);
-        RP_nVTX->SetPlots("N_{#lower[-0.2]{PV} #lower[-0.3]{#font[12]{#scale[1.2]{ee}}}}  pritaikius pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", 0, 50, "Eksp./MC");
+        RP_nVTX->SetPlots("N_{#lower[-0.2]{VTX} #lower[-0.3]{#font[12]{#scale[1.2]{ee}}}}", 0, 50);
+//        RP_nVTX->SetPlots("N_{#lower[-0.2]{PV} #lower[-0.3]{#font[12]{#scale[1.2]{ee}}}}  pritaikius pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", 0, 50, "Eksp./MC");
 
         TLegend *legend = new TLegend(0.6, 0.75, 0.95, 0.95);
         legend->SetNColumns(2);
-//        legend->AddEntry(h_data_nVTX, "Data", "lp");;
-        legend->AddEntry(h_data_nVTX, "Matavimas", "lp");;
+        legend->AddEntry(h_data_nVTX, "Data", "lp");;
+//        legend->AddEntry(h_data_nVTX, "Matavimas", "lp");;
         legend->AddEntry(h_DY_nVTX, "DY#rightarrow #font[12]{ee}", "f");
         legend->AddEntry(h_bkg_nVTX[8], "DY#rightarrow #tau#tau", "f");
         legend->AddEntry(h_bkg_nVTX[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
@@ -1907,23 +1914,23 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         RP_mass = new myRatioPlot_t("RP_mass", s_mass, h_data_mass);
         RP_mass2 = new myRatioPlot_t("RP_mass2", s_mass2, h_data_mass2);
 
-//        RP_mass_before_PUCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before PU correction", 15, 3000);
-        RP_mass_before_PUCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] prie#check{s} visas pataisas", 15, 3000, "Eksp./MC");
+        RP_mass_before_PUCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before PU correction", 15, 3000);
+//        RP_mass_before_PUCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] prie#check{s} visas pataisas", 15, 3000, "Eksp./MC");
         RP_mass_before_RoccoR->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before Rochester correction", 15, 3000);
-//        RP_mass_before_EffCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before Efficiency SF", 15, 3000);
-        RP_mass_before_EffCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] prie#check{s} efektyvumo pataisas", 15, 3000, "Eksp./MC");
+        RP_mass_before_EffCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before Efficiency SF", 15, 3000);
+//        RP_mass_before_EffCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] prie#check{s} efektyvumo pataisas", 15, 3000, "Eksp./MC");
         RP_mass_before_PVzCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before PVz correction", 15, 3000);
         RP_mass_before_L1Corr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before L1 prefiring correction", 15, 3000);
         RP_mass_before_TopPtCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before top p_{#lower[-0.2]{T}} reweighting", 15, 3000);
         RP_mass_fine->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}]", 60, 120);
-//        RP_mass->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
-        RP_mass->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] pritaikius pataisas", 15, 3000, "Eksp./MC");
+        RP_mass->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
+//        RP_mass->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] pritaikius pataisas", 15, 3000, "Eksp./MC");
         RP_mass2->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
 
         TLegend *legend = new TLegend(0.8, 0.45, 0.95, 0.95);
 
-//        legend->AddEntry(h_data_mass, "Data", "lp");
-        legend->AddEntry(h_data_mass, "Matavimas", "lp");
+        legend->AddEntry(h_data_mass, "Data", "lp");
+//        legend->AddEntry(h_data_mass, "Matavimas", "lp");
         legend->AddEntry(h_DY_mass, "DY#rightarrow#mu#mu", "f");
         legend->AddEntry(h_bkg_mass[8], "DY#rightarrow #tau#tau", "f");
         legend->AddEntry(h_bkg_mass[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
@@ -2007,7 +2014,7 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
     } // End of if(invm)
 
 //################################# Pt, RAPI, pT, ETA, PHI #################################################
-
+/*
     if (whichGraphs=="ALL" || whichGraphs.Contains("PT") || whichGraphs.Contains("ETA") || whichGraphs.Contains("PHI") || whichGraphs.Contains("RAPI"))
     {
         count_drawn++;
@@ -3070,14 +3077,14 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         RP_phi_sublead = new myRatioPlot_t("RP_phi_sublead", s_phi_sublead, h_data_phi_sublead);
 
         RP_pT_before_PUCorr->SetPlots("p_{#lower[-0.25]{T #scale[1.2]{#mu#mu}}} [GeV/c] before PU correction", 0, 1000);
-//        RP_rapi_before_PUCorr->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} before PU correction", -3, 3);
-        RP_rapi_before_PUCorr->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} prie#check{s} visas pataisas", -3, 3, "Eksp./MC");
+        RP_rapi_before_PUCorr->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} before PU correction", -3, 3);
+//        RP_rapi_before_PUCorr->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} prie#check{s} visas pataisas", -3, 3, "Eksp./MC");
         RP_pT_lead_before_PUCorr->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{lead}}) [GeV/c] before PU correction", 0, 1000);
         RP_pT_sublead_before_PUCorr->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{sublead}}) [GeV/c] before PU correction", 0, 1000);
-//        RP_eta_lead_before_PUCorr->SetPlots("#eta (#mu_{#lower[-0.4]{lead}}) before PU correction", -3.5, 3.5);
-        RP_eta_lead_before_PUCorr->SetPlots("#eta (#mu_{#lower[-0.4]{1}}) prie#check{s} visas pataisas", -3.5, 3.5, "Eksp./MC");
-//        RP_eta_sublead_before_PUCorr->SetPlots("#eta (#mu_{#lower[-0.4]{sublead}}) before PU correction", -3.5, 3.5);
-        RP_eta_sublead_before_PUCorr->SetPlots("#eta (#mu_{#lower[-0.4]{2}}) prie#check{s} visas pataisas", -3.5, 3.5, "Eksp./MC");
+        RP_eta_lead_before_PUCorr->SetPlots("#eta (#mu_{#lower[-0.4]{lead}}) before PU correction", -3.5, 3.5);
+//        RP_eta_lead_before_PUCorr->SetPlots("#eta (#mu_{#lower[-0.4]{1}}) prie#check{s} visas pataisas", -3.5, 3.5, "Eksp./MC");
+        RP_eta_sublead_before_PUCorr->SetPlots("#eta (#mu_{#lower[-0.4]{sublead}}) before PU correction", -3.5, 3.5);
+//        RP_eta_sublead_before_PUCorr->SetPlots("#eta (#mu_{#lower[-0.4]{2}}) prie#check{s} visas pataisas", -3.5, 3.5, "Eksp./MC");
         RP_phi_lead_before_PUCorr->SetPlots("#phi (#mu_{#lower[-0.4]{lead}}) before PU correction", -4, 4);
         RP_phi_sublead_before_PUCorr->SetPlots("#phi (#mu_{#lower[-0.4]{sublead}}) before PU correction", -4, 4);
 
@@ -3100,26 +3107,26 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         RP_phi_sublead_before_EffCorr->SetPlots("#phi (#mu_{#lower[-0.4]{sublead}}) before Efficiency SF", -4, 4);
 
         RP_pT_before_PVzCorr->SetPlots("p_{#lower[-0.25]{T #scale[1.2]{#mu#mu}}} [GeV/c] before PVz correction", 0, 1000);
-//        RP_rapi_before_PVzCorr->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} before PVz correction", -3, 3);
-        RP_rapi_before_PVzCorr->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} prie#check{s} PVz pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3, 3, "Eksp./MC");
+        RP_rapi_before_PVzCorr->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} before PVz correction", -3, 3);
+//        RP_rapi_before_PVzCorr->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} prie#check{s} PVz pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3, 3, "Eksp./MC");
         RP_pT_lead_before_PVzCorr->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{lead}}) [GeV/c] before PVz correction", 0, 1000);
         RP_pT_sublead_before_PVzCorr->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{sublead}}) [GeV/c] before PVz correction", 0, 1000);
-//        RP_eta_lead_before_PVzCorr->SetPlots("#eta (#mu_{#lower[-0.4]{lead}}) before PVz correction", -3.5, 3.5);
-        RP_eta_lead_before_PVzCorr->SetPlots("#eta (#mu_{#lower[-0.4]{1}}) prie#check{s} PVz pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3.5, 3.5, "Eksp./MC");
-//        RP_eta_sublead_before_PVzCorr->SetPlots("#eta (#mu_{#lower[-0.4]{sublead}}) before PVz correction", -3.5, 3.5);
-        RP_eta_sublead_before_PVzCorr->SetPlots("#eta (#mu_{#lower[-0.4]{2}}) prie#check{s} PVz pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3.5, 3.5, "Eksp./MC");
+        RP_eta_lead_before_PVzCorr->SetPlots("#eta (#mu_{#lower[-0.4]{lead}}) before PVz correction", -3.5, 3.5);
+//        RP_eta_lead_before_PVzCorr->SetPlots("#eta (#mu_{#lower[-0.4]{1}}) prie#check{s} PVz pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3.5, 3.5, "Eksp./MC");
+        RP_eta_sublead_before_PVzCorr->SetPlots("#eta (#mu_{#lower[-0.4]{sublead}}) before PVz correction", -3.5, 3.5);
+//        RP_eta_sublead_before_PVzCorr->SetPlots("#eta (#mu_{#lower[-0.4]{2}}) prie#check{s} PVz pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3.5, 3.5, "Eksp./MC");
         RP_phi_lead_before_PVzCorr->SetPlots("#phi (#mu_{#lower[-0.4]{lead}}) before PVz correction", -4, 4);
         RP_phi_sublead_before_PVzCorr->SetPlots("#phi (#mu_{#lower[-0.4]{sublead}}) before PVz correction", -4, 4);
 
         RP_pT_before_L1Corr->SetPlots("p_{#lower[-0.25]{T #scale[1.2]{#mu#mu}}} [GeV/c] before L1 prefiring correction", 0, 1000);
-//        RP_rapi_before_L1Corr->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} before L1 prefiring correction", -3, 3);
-        RP_rapi_before_L1Corr->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} prie#check{s} trigerio pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3, 3, "Eksp./MC");
+        RP_rapi_before_L1Corr->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} before L1 prefiring correction", -3, 3);
+//        RP_rapi_before_L1Corr->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} prie#check{s} trigerio pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3, 3, "Eksp./MC");
         RP_pT_lead_before_L1Corr->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{lead}}) [GeV/c] before  L1 prefiring correction", 0, 1000);
         RP_pT_sublead_before_L1Corr->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{sublead}}) [GeV/c] before  L1 prefiring correction", 0, 1000);
-//        RP_eta_lead_before_L1Corr->SetPlots("#eta (#mu_{#lower[-0.4]{lead}}) before L1 prefiring correction", -3.5, 3.5);
-        RP_eta_lead_before_L1Corr->SetPlots("#eta (#mu_{#lower[-0.4]{1}}) prie#check{s} trigerio pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3.5, 3.5, "Eksp./MC");
-//        RP_eta_sublead_before_L1Corr->SetPlots("#eta (#mu_{#lower[-0.4]{sublead}}) before  L1 prefiring correction", -3.5, 3.5);
-        RP_eta_sublead_before_L1Corr->SetPlots("#eta (#mu_{#lower[-0.4]{2}}) prie#check{s} trigerio pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3.5, 3.5, "Eksp./MC");
+        RP_eta_lead_before_L1Corr->SetPlots("#eta (#mu_{#lower[-0.4]{lead}}) before L1 prefiring correction", -3.5, 3.5);
+//        RP_eta_lead_before_L1Corr->SetPlots("#eta (#mu_{#lower[-0.4]{1}}) prie#check{s} trigerio pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3.5, 3.5, "Eksp./MC");
+        RP_eta_sublead_before_L1Corr->SetPlots("#eta (#mu_{#lower[-0.4]{sublead}}) before  L1 prefiring correction", -3.5, 3.5);
+//        RP_eta_sublead_before_L1Corr->SetPlots("#eta (#mu_{#lower[-0.4]{2}}) prie#check{s} trigerio pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", -3.5, 3.5, "Eksp./MC");
         RP_phi_lead_before_L1Corr->SetPlots("#phi (#mu_{#lower[-0.4]{lead}}) before  L1 prefiring correction", -4, 4);
         RP_phi_sublead_before_L1Corr->SetPlots("#phi (#mu_{#lower[-0.4]{sublead}}) before L1 prefiring correction", -4, 4);
 
@@ -3133,12 +3140,12 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         RP_phi_sublead_before_TopPtCorr->SetPlots("#phi (#mu_{#lower[-0.4]{sublead}}) before top p_{#lower[-0.25]{T}} reweighting", -4, 4);
 
         RP_pT->SetPlots("p_{#lower[-0.25]{T #scale[1.2]{#mu#mu}}} [GeV/c]", 0, 1000);
-//        RP_rapi->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}}", -3, 3);
-        RP_rapi->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} pritaikius pataisas", -3, 3, "Eksp./MC");
+        RP_rapi->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}}", -3, 3);
+//        RP_rapi->SetPlots("y_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} pritaikius pataisas", -3, 3, "Eksp./MC");
         RP_pT_lead->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{lead}}) [GeV/c]", 0, 1000);
         RP_pT_sublead->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{sublead}}) [GeV/c]", 0, 1000);
-//        RP_eta_lead->SetPlots("#eta (#mu_{#lower[-0.4]{lead}})", -3.5, 3.5);
-        RP_eta_lead->SetPlots("#eta (#mu_{#lower[-0.4]{1}}) pritaikius pataisas", -3.5, 3.5, "Eksp./MC");
+        RP_eta_lead->SetPlots("#eta (#mu_{#lower[-0.4]{lead}})", -3.5, 3.5);
+//        RP_eta_lead->SetPlots("#eta (#mu_{#lower[-0.4]{1}}) pritaikius pataisas", -3.5, 3.5, "Eksp./MC");
 //        RP_eta_sublead->SetPlots("#eta (#mu_{#lower[-0.4]{sublead}})", -3.5, 3.5);
         RP_eta_sublead->SetPlots("#eta (#mu_{#lower[-0.4]{2}}) pritaikius pataisas", -3.5, 3.5, "Eksp./MC");
         RP_phi_lead->SetPlots("#phi (#mu_{#lower[-0.4]{lead}})", -4, 4);
@@ -3146,8 +3153,8 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
 
         TLegend *legend = new TLegend(0.55, 0.72, 0.95, 0.95);
         legend->SetNColumns(2);
-//        legend->AddEntry(h_data_pT, "Data", "lp");
-        legend->AddEntry(h_data_pT, "Matavimas", "lp");
+        legend->AddEntry(h_data_pT, "Data", "lp");
+//        legend->AddEntry(h_data_pT, "Matavimas", "lp");
         legend->AddEntry(h_DY_pT, "DY#rightarrow #mu#mu", "f");
         legend->AddEntry(h_bkg_pT[8], "DY#rightarrow #tau#tau", "f");
         legend->AddEntry(h_bkg_pT[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
@@ -3386,16 +3393,16 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         RP_nVTX_before_EffCorr = new myRatioPlot_t("RP_nVTX_before_EffCorr", s_nVTX_before_EffCorr, h_data_nVTX);
         RP_nVTX = new myRatioPlot_t("RP_nVTX", s_nVTX, h_data_nVTX);
 
-//        RP_nVTX_before_PUCorr->SetPlots("N_{#lower[-0.2]{VTX} #lower[-0.25]{#scale[1.15]{#mu#mu}}} before PU correction", 0, 50);
-        RP_nVTX_before_PUCorr->SetPlots("N_{#lower[-0.2]{PV} #lower[-0.25]{#scale[1.15]{#mu#mu}}} prie#check{s} pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", 0, 50, "Eksp./MC");
+        RP_nVTX_before_PUCorr->SetPlots("N_{#lower[-0.2]{VTX} #lower[-0.25]{#scale[1.15]{#mu#mu}}} before PU correction", 0, 50);
+//        RP_nVTX_before_PUCorr->SetPlots("N_{#lower[-0.2]{PV} #lower[-0.25]{#scale[1.15]{#mu#mu}}} prie#check{s} pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", 0, 50, "Eksp./MC");
         RP_nVTX_before_EffCorr->SetPlots("N_{#lower[-0.2]{VTX} #lower[-0.25]{#scale[1.15]{#mu#mu}}} before Efficiency SF", 0, 50);
-//        RP_nVTX->SetPlots("N_{#lower[-0.2]{VTX} #lower[-0.25]{#scale[1.15]{#mu#mu}}}", 0, 50);
-        RP_nVTX->SetPlots("N_{#lower[-0.2]{PV} #lower[-0.25]{#scale[1.15]{#mu#mu}}} pritaikius pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", 0, 50, "Eksp./MC");
+        RP_nVTX->SetPlots("N_{#lower[-0.2]{VTX} #lower[-0.25]{#scale[1.15]{#mu#mu}}}", 0, 50);
+//        RP_nVTX->SetPlots("N_{#lower[-0.2]{PV} #lower[-0.25]{#scale[1.15]{#mu#mu}}} pritaikius pataisa_{#kern[-0.95]{#lower[-0.4]{#scale[0.8]{c}}}}", 0, 50, "Eksp./MC");
 
         TLegend *legend = new TLegend(0.6, 0.75, 0.95, 0.95);
         legend->SetNColumns(2);
-//        legend->AddEntry(h_data_nVTX, "Data", "lp");
-        legend->AddEntry(h_data_nVTX, "Matavimas", "lp");
+        legend->AddEntry(h_data_nVTX, "Data", "lp");
+//        legend->AddEntry(h_data_nVTX, "Matavimas", "lp");
         legend->AddEntry(h_DY_nVTX_before_PUCorr, "DY#rightarrow#mu#mu", "f");
         legend->AddEntry(h_bkg_nVTX_before_PUCorr[8], "DY#rightarrow #tau#tau", "f");
         legend->AddEntry(h_bkg_nVTX_before_PUCorr[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
@@ -3427,6 +3434,7 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         cout << "There are " << EvtPercentage << "% of events in 10-30 nVTX range" << endl;
 
     } // End of if(nVTX)
+    */
 
     f_DY->Close();
     f_bkg->Close();
@@ -3747,17 +3755,17 @@ void EMu_HistDrawer (TString whichGraphs , TString type)
         RP_SS_mass_before_TopPtCorr->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}] before top p_{#lower[-0.2]{T}} reweighting", 15, 3000);
         RP_mass_fine->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} [GeV/c^{2}]", 60, 120);
         RP_SS_mass_fine->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}]", 60, 120);
-//        RP_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
-        RP_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (prie#check{s}ingu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}) [GeV/c^{2}]", 15, 3000, "Eksp./MC");
-//        RP_SS_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}]", 15, 3000);
-        RP_SS_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (vienodu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}) [GeV/c^{2}]", 15, 3000, "Eksp./MC");
+        RP_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
+//        RP_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (prie#check{s}ingu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}) [GeV/c^{2}]", 15, 3000, "Eksp./MC");
+        RP_SS_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}]", 15, 3000);
+//        RP_SS_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (vienodu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}) [GeV/c^{2}]", 15, 3000, "Eksp./MC");
         RP_mass2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
         RP_SS_mass2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}]", 15, 3000);
 
         TLegend *legend = new TLegend(0.8, 0.45, 0.95, 0.95);
 
-//        legend->AddEntry(h_SS_data_mass, "Data", "lp");
-        legend->AddEntry(h_SS_data_mass, "Matavimas", "lp");
+        legend->AddEntry(h_SS_data_mass, "Data", "lp");
+//        legend->AddEntry(h_SS_data_mass, "Matavimas", "lp");
         legend->AddEntry(h_bkg_mass[6+isWJ], "DY#rightarrow #tau#tau", "f");
         legend->AddEntry(h_SS_bkg_mass[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         legend->AddEntry(h_SS_bkg_mass[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
@@ -5282,8 +5290,8 @@ void Est_HistDrawer()
 
     myRatioPlot_t *RP_mass_ee = new myRatioPlot_t("RP_mass_ee", s_mass_ee, h_data_mass_ee);
     myRatioPlot_t *RP_mass_ee2 = new myRatioPlot_t("RP_mass_ee2", s_mass_ee2, h_data_mass_ee2);
-//    RP_mass_ee->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+DD)   ");
-    RP_mass_ee->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000, "Eksp./(MC+i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}v.)      ");
+    RP_mass_ee->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+DD)   ");
+//    RP_mass_ee->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000, "Eksp./(MC+i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}v.)      ");
     RP_mass_ee2->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+DD)   ");
 //    RP_mass_ee2->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000, "Eksp./(MC+i_{#kern[-0.8]{#lower[-0.3]{#scale[0.7]{c}}}}v.)     ");
     RP_mass_ee->SetSystematics(NULL, estSystematics_ee, systematics_ee);
@@ -5291,32 +5299,32 @@ void Est_HistDrawer()
 
     TLegend *legend_ee = new TLegend(0.8, 0.45, 0.95, 0.95);
 
-//    legend_ee->AddEntry(h_data_mass_ee, "Data", "lp");
-    legend_ee->AddEntry(h_data_mass_ee, "Matavimas", "lp");
+    legend_ee->AddEntry(h_data_mass_ee, "Data", "lp");
+//    legend_ee->AddEntry(h_data_mass_ee, "Matavimas", "lp");
     legend_ee->AddEntry(h_DY_mass_ee, "DY#rightarrow #font[12]{ee} (MC)", "f");
     // Legend MC BKG (EN)
-//    legend_ee->AddEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (D-D)", "f");
-//    legend_ee->AddEntry(h_bkg_mass_ee[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (D-D)", "f");
-//    legend_ee->AddEntry(h_bkg_mass_ee[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (D-D)", "f");
-//    legend_ee->AddEntry(h_bkg_mass_ee[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (D-D)", "f");
-////    legend_ee->AddEntry(h_bkg_mass_ee[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (D-D)", "f");
-////    legend_ee->AddEntry(h_bkg_mass_ee[3], "#font[12]{#scale[1.1]{WZ}} (D-D)", "f");
-//    legend_ee->AddEntry(h_bkg_mass_ee[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
-//    legend_ee->AddEntry(h_bkg_mass_ee[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
-//    legend_ee->AddEntry(h_bkg_mass_ee[2], "#font[12]{#scale[1.1]{WW}} (D-D)", "f");
-//    legend_ee->AddEntry(h_bkg_mass_ee[1], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
-////    legend_ee->AddEntry(h_bkg_mass_ee[0], "#font[12]{#scale[1.1]{QCD}} (MC)", "f");
-
-    // Legend MC BKG (LT)
-    legend_ee->AddEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
-    legend_ee->AddEntry(h_bkg_mass_ee[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
-    legend_ee->AddEntry(h_bkg_mass_ee[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (i_{#kern[-0.75]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
-    legend_ee->AddEntry(h_bkg_mass_ee[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
+    legend_ee->AddEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (D-D)", "f");
+    legend_ee->AddEntry(h_bkg_mass_ee[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (D-D)", "f");
+    legend_ee->AddEntry(h_bkg_mass_ee[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (D-D)", "f");
+    legend_ee->AddEntry(h_bkg_mass_ee[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (D-D)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (D-D)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[3], "#font[12]{#scale[1.1]{WZ}} (D-D)", "f");
     legend_ee->AddEntry(h_bkg_mass_ee[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
     legend_ee->AddEntry(h_bkg_mass_ee[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
-    legend_ee->AddEntry(h_bkg_mass_ee[2], "#font[12]{#scale[1.1]{WW}} (i_{#kern[-0.75]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
+    legend_ee->AddEntry(h_bkg_mass_ee[2], "#font[12]{#scale[1.1]{WW}} (D-D)", "f");
     legend_ee->AddEntry(h_bkg_mass_ee[1], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
 //    legend_ee->AddEntry(h_bkg_mass_ee[0], "#font[12]{#scale[1.1]{QCD}} (MC)", "f");
+
+    // Legend MC BKG (LT)
+//    legend_ee->AddEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (i_{#kern[-0.75]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[2], "#font[12]{#scale[1.1]{WW}} (i_{#kern[-0.75]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[1], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
+////    legend_ee->AddEntry(h_bkg_mass_ee[0], "#font[12]{#scale[1.1]{QCD}} (MC)", "f");
 
     RP_mass_ee->ImportLegend(legend_ee);
     RP_mass_ee2->ImportLegend(legend_ee);
@@ -5488,8 +5496,8 @@ void Est_HistDrawer()
     myRatioPlot_t *RP_mass_mumu = new myRatioPlot_t("RP_mass_mumu", s_mass_mumu, h_data_mass_mumu);
     myRatioPlot_t *RP_mass_mumu2 = new myRatioPlot_t("RP_mass_mumu2", s_mass_mumu2, h_data_mass_mumu2);
 
-//    RP_mass_mumu->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+DD)   ");
-    RP_mass_mumu->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Eksp./(MC+i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}v.)     ");
+    RP_mass_mumu->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+DD)   ");
+//    RP_mass_mumu->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Eksp./(MC+i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}v.)     ");
     RP_mass_mumu2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+DD)    ");
 //    RP_mass_mumu2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Eksp./(MC+i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}v.)");
     RP_mass_mumu->SetSystematics(NULL, estSystematics_mumu, systematics_mumu);
@@ -5498,32 +5506,32 @@ void Est_HistDrawer()
     TLegend *legend_mumu = new TLegend(0.8, 0.45, 0.95, 0.95);
 
     // Legend (EN)
-//    legend_mumu->AddEntry(h_data_mass_mumu, "Data", "lp");
-//    legend_mumu->AddEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
-//    legend_mumu->AddEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (D-D)", "f");
-//    legend_mumu->AddEntry(h_bkg_mass_mumu[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (D-D)", "f");
-//    legend_mumu->AddEntry(h_bkg_mass_mumu[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (D-D)", "f");
-//    legend_mumu->AddEntry(h_bkg_mass_mumu[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (D-D)", "f");
-////    legend_mumu->AddEntry(h_bkg_mass_mumu[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (D-D)", "f");
-////    legend_mumu->AddEntry(h_bkg_mass_mumu[3], "#font[12]{#scale[1.1]{WZ}} (D-D)", "f");
-//    legend_mumu->AddEntry(h_bkg_mass_mumu[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
-//    legend_mumu->AddEntry(h_bkg_mass_mumu[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
-//    legend_mumu->AddEntry(h_bkg_mass_mumu[2], "#font[12]{#scale[1.1]{WW}} (D-D)", "f");
-//    legend_mumu->AddEntry(h_bkg_mass_mumu[1], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
-////    legend_mumu->AddEntry(h_bkg_mass_mumu[0], "#font[12]{#scale[1.1]{QCD}} (MC)", "f");
-
-    // Legend (LT)
-    legend_mumu->AddEntry(h_data_mass_mumu, "Matavimas", "lp");
+    legend_mumu->AddEntry(h_data_mass_mumu, "Data", "lp");
     legend_mumu->AddEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
-    legend_mumu->AddEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
-    legend_mumu->AddEntry(h_bkg_mass_mumu[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
-    legend_mumu->AddEntry(h_bkg_mass_mumu[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (i_{#kern[-0.75]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
-    legend_mumu->AddEntry(h_bkg_mass_mumu[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (D-D)", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (D-D)", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (D-D)", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (D-D)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (D-D)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[3], "#font[12]{#scale[1.1]{WZ}} (D-D)", "f");
     legend_mumu->AddEntry(h_bkg_mass_mumu[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
     legend_mumu->AddEntry(h_bkg_mass_mumu[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
-    legend_mumu->AddEntry(h_bkg_mass_mumu[2], "#font[12]{#scale[1.1]{WW}} (i_{#kern[-0.75]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[2], "#font[12]{#scale[1.1]{WW}} (D-D)", "f");
     legend_mumu->AddEntry(h_bkg_mass_mumu[1], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
 //    legend_mumu->AddEntry(h_bkg_mass_mumu[0], "#font[12]{#scale[1.1]{QCD}} (MC)", "f");
+
+    // Legend (LT)
+//    legend_mumu->AddEntry(h_data_mass_mumu, "Matavimas", "lp");
+//    legend_mumu->AddEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (i_{#kern[-0.75]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[2], "#font[12]{#scale[1.1]{WW}} (i_{#kern[-0.75]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[1], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
+////    legend_mumu->AddEntry(h_bkg_mass_mumu[0], "#font[12]{#scale[1.1]{QCD}} (MC)", "f");
 
     RP_mass_mumu->ImportLegend(legend_mumu);
     RP_mass_mumu2->ImportLegend(legend_mumu);
@@ -5575,6 +5583,154 @@ void Est_HistDrawer()
     f_data_mumu->Close();
 
 } // End of Est_HistDrawer()
+
+
+/// ################################################################################## ///
+/// -------------------------------- Muon Channel ------------------------------------ ///
+/// ################################################################################## ///
+void Test_RocCorr()
+{
+    LocalFileMgr Mgr;
+
+    Mgr.SetProc(_MuMu_DY_Full);
+    TString name_DY = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root";
+    TFile* f_DY = new TFile(name_DY, "READ");
+    if (f_DY->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root" << " opened successfully" << endl;
+    Mgr.SetProc(_MuMu_Bkg_Full);
+    TString name_bkg = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root";
+    TFile* f_bkg = new TFile(name_bkg, "READ");
+    if (f_bkg->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root" << " opened successfully" << endl;
+    Mgr.SetProc(_MuMu_SingleMuon_Full);
+    TString name_data = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+".root";
+    TFile* f_data = new TFile(name_data, "READ");
+    if (f_data->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+".root" << " opened successfully" << endl;
+
+    THStack *s_mass_before_RoccoR = new THStack("s_mass_before_RoccoR", "");
+    THStack *s_mass_before_EffCorr = new THStack("s_mass_before_EffCorr", "");
+
+//----------------------------------- MC bkg -------------------------------------------------------
+    TH1D *h_bkg_mass_before_RoccoR[9], *h_bkg_mass_before_EffCorr[9];
+    Int_t iter = 0;
+
+    for (SelProc_t pr = _MuMu_QCDMuEnriched_Full; pr > _EndOf_MuMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
+    {
+        if (pr == _MuMu_QCDMuEnriched_Full)
+        {
+            iter++;
+            continue;
+        }
+        f_bkg->GetObject("h_mass_before_RocCorr_"+Mgr.Procname[pr], h_bkg_mass_before_RoccoR[iter]);
+        f_bkg->GetObject("h_mass_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_before_EffCorr[iter]);
+
+        removeNegativeBins(h_bkg_mass_before_RoccoR[iter]);
+        removeNegativeBins(h_bkg_mass_before_EffCorr[iter]);
+
+        h_bkg_mass_before_RoccoR[iter]->SetFillColor(kRed);
+        h_bkg_mass_before_RoccoR[iter]->SetLineColor(kRed);
+        h_bkg_mass_before_RoccoR[iter]->SetDirectory(0);
+        s_mass_before_RoccoR->Add(h_bkg_mass_before_RoccoR[iter]);
+
+        h_bkg_mass_before_EffCorr[iter]->SetMarkerStyle(kFullDotLarge);
+        h_bkg_mass_before_EffCorr[iter]->SetMarkerColor(kBlack);
+        h_bkg_mass_before_EffCorr[iter]->SetLineColor(kBlack);
+        h_bkg_mass_before_EffCorr[iter]->SetDirectory(0);
+        s_mass_before_EffCorr->Add(h_bkg_mass_before_EffCorr[iter]);
+
+        iter++;
+
+        if (pr == _MuMu_WJets_Full)
+            pr = _EndOf_MuMu_VVnST_Normal; // next - WW
+        if (pr == _MuMu_tW)
+            pr = _MuMu_VVnST; // next - ttbar
+        if (pr == _MuMu_DYTauTau_Full) // last
+            break;
+
+    } // End of for(bkg)
+
+//---------------------------------- MC signal -----------------------------------------------------
+
+    TH1D *h_DY_mass_before_RoccoR, *h_DY_mass_before_EffCorr;
+
+    f_DY->GetObject("h_mass_before_RocCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_before_RoccoR);
+    f_DY->GetObject("h_mass_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_before_EffCorr);
+
+    removeNegativeBins(h_DY_mass_before_RoccoR);
+    removeNegativeBins(h_DY_mass_before_EffCorr);
+
+    h_DY_mass_before_RoccoR->SetFillColor(kRed);
+    h_DY_mass_before_RoccoR->SetLineColor(kRed);
+    h_DY_mass_before_RoccoR->SetDirectory(0);
+    s_mass_before_RoccoR->Add(h_DY_mass_before_RoccoR);
+
+    h_DY_mass_before_EffCorr->SetMarkerStyle(kFullDotLarge);
+    h_DY_mass_before_EffCorr->SetMarkerColor(kBlack);
+    h_DY_mass_before_EffCorr->SetLineColor(kBlack);
+    h_DY_mass_before_EffCorr->SetDirectory(0);
+    s_mass_before_EffCorr->Add(h_DY_mass_before_EffCorr);
+
+//--------------------------------------- DATA -----------------------------------------------------
+
+    TH1D *h_data_mass_before_RoccoR, *h_data_mass;
+
+    f_data->GetObject("h_mass_before_RocCorr_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass_before_RoccoR);
+    f_data->GetObject("h_mass_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass);
+
+    h_data_mass_before_RoccoR->SetFillColor(kRed);
+    h_data_mass_before_RoccoR->SetLineColor(kRed);
+    h_data_mass_before_RoccoR->SetDirectory(0);
+
+    h_data_mass->SetMarkerStyle(kFullDotLarge);
+    h_data_mass->SetMarkerColor(kBlack);
+    h_data_mass->SetLineColor(kBlack);
+    h_data_mass->SetDirectory(0);
+
+//--------------------------------- Ratio Plot --------------------------------------
+
+    myRatioPlot_t *RP_mass_test_MC, *RP_mass_test_Data, *RP_mass_test_uncorrMC_corrData, *RP_mass_test_corrMC_uncorrData;
+    RP_mass_test_MC = new myRatioPlot_t("RP_mass_test_MC",
+                                        ((TH1D*)(s_mass_before_RoccoR->GetStack()->Last())),
+                                        ((TH1D*)(s_mass_before_EffCorr->GetStack()->Last()))
+                                       );
+    RP_mass_test_Data = new myRatioPlot_t("RP_mass_test_Data", h_data_mass_before_RoccoR, h_data_mass);
+    RP_mass_test_uncorrMC_corrData = new myRatioPlot_t("RP_mass_test_uncorrMC_corrData",
+                                                       ((TH1D*)(s_mass_before_RoccoR->GetStack()->Last())),
+                                                       h_data_mass);
+    RP_mass_test_corrMC_uncorrData = new myRatioPlot_t("RP_mass_test_corrMC_uncorrData",
+                                                       ((TH1D*)(s_mass_before_EffCorr->GetStack()->Last())),
+                                                       h_data_mass_before_RoccoR);
+
+    RP_mass_test_MC->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] MC", 15, 3000, "Corr/Uncorr");
+    RP_mass_test_Data->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] Data", 15, 3000, "Corr/Uncorr");
+    RP_mass_test_uncorrMC_corrData->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] MC=uncorr, Data=Corr", 15, 3000, "Corr/Uncorr");
+    RP_mass_test_corrMC_uncorrData->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] MC=Corr, Data=uncorr", 15, 3000, "Corr/Uncorr");
+
+    TLegend *legend = new TLegend(0.8, 0.45, 0.95, 0.95);
+    legend->AddEntry(h_data_mass, "After RoccoR", "lp");
+    legend->AddEntry(h_DY_mass_before_RoccoR, "Before RoccoR", "f");
+
+    TLegend *legend_UC = new TLegend(0.8, 0.45, 0.95, 0.95);
+    legend_UC->AddEntry(h_data_mass, "Corrected Data", "lp");
+    legend_UC->AddEntry(h_DY_mass_before_RoccoR, "Uncorrected MC", "f");
+
+    TLegend *legend_CU = new TLegend(0.8, 0.45, 0.95, 0.95);
+    legend_CU->AddEntry(h_data_mass_before_RoccoR, "UnCorrected Data", "lp");
+    legend_CU->AddEntry(h_DY_mass_before_EffCorr, "Corrected MC", "f");
+
+    RP_mass_test_MC->ImportLegend(legend);
+    RP_mass_test_Data->ImportLegend(legend);
+    RP_mass_test_uncorrMC_corrData->ImportLegend(legend_UC);
+    RP_mass_test_corrMC_uncorrData->ImportLegend(legend_CU);
+
+    RP_mass_test_MC->Draw(0.5, 1e7, 1);
+    RP_mass_test_Data->Draw(0.5, 1e7, 1);
+    RP_mass_test_uncorrMC_corrData->Draw(0.5, 1e7, 1);
+    RP_mass_test_corrMC_uncorrData->Draw(0.5, 1e7, 1);
+
+    f_DY->Close();
+    f_bkg->Close();
+    f_data->Close();
+
+} // End of Test_RocCorr()
 
 
 /// ------------------------------- COMP CHI^2 ---------------------------------- ///

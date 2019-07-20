@@ -291,17 +291,17 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
                 // -- PVz weights -- //
                 Double_t PVzWeight = 1;
-                if(Mgr.isMC == kTRUE) PVzWeight = analyzer->PVzWeightValue(EE->PVz);
+                if(Mgr.isMC == kTRUE && !Mgr.Tag[i_tup].Contains("QCD")) PVzWeight = analyzer->PVzWeightValue(EE->PVz);
 
                 // -- L1 prefiring weights -- //
                 Double_t L1weight = 1;
-                if (Mgr.isMC == kTRUE) L1weight = EE->_prefiringweight;
+                if (Mgr.isMC == kTRUE && !Mgr.Tag[i_tup].Contains("QCD")) L1weight = EE->_prefiringweight;
 //                if (Mgr.isMC == kTRUE) L1weight = EE->_prefiringweightup;
 //                if (Mgr.isMC == kTRUE) L1weight = EE->_prefiringweightdown;
 
                 // -- Top Pt weights -- //
                 Double_t TopPtWeight = 1;
-                if (Mgr.isMC == kTRUE) TopPtWeight = EE->_topPtWeight;
+                if (Mgr.isMC == kTRUE && !Mgr.Tag[i_tup].Contains("QCD")) TopPtWeight = EE->_topPtWeight;
 
                 // -- Normalization -- //
                 Double_t TotWeight = GenWeight;
@@ -429,6 +429,9 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         h_mass_fine->Write();
         h_mass->Write();
         h_mass2->Write();
+        Double_t err = 0;
+        Double_t integ = h_mass->IntegralAndError(1, h_mass->GetSize()-2, err);
+        cout << "Number of events in mass histogram: " << integ << " +- " << err << endl;
 
         h_pT_before_PUCorr->Write();
         h_pT_before_EffCorr->Write();
@@ -704,7 +707,7 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
             cout << "\t[Sum of weights: " << Mgr.Wsum[i_tup] << "]" << endl;
             cout << "\t[Selected Events: " << NEvents << "]" << endl;
 
-            if (DEBUG == kTRUE) NEvents = 10;
+            if (DEBUG == kTRUE) NEvents = 100;
 
             myProgressBar_t bar(NEvents);
 
@@ -791,8 +794,22 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 //                if(Mgr.isMC == kTRUE) TotWeight = (Lumi_GtoH * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup]) * GenWeight;
                 if(Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup]) * GenWeight;
 
-                if(MuMu->isSelPassed == 1 || MuMu->isSelPassed == 3) // Before RC
+                if (DEBUG == kTRUE && MuMu->isSelPassed == 1)
                 {
+                    cout << MuMu->Muon_pT_uncorr->at(0) << "\t" << MuMu->Muon_pT->at(0) << endl;
+                    cout << MuMu->Muon_pT_uncorr->at(1) << "\t" << MuMu->Muon_pT->at(1) << endl;
+                    TLorentzVector mu1, mu2, mu1u, mu2u;
+                    mu1u.SetPtEtaPhiM(MuMu->Muon_pT_uncorr->at(0), MuMu->Muon_eta_uncorr->at(0), MuMu->Muon_phi_uncorr->at(0), M_Mu);
+                    mu2u.SetPtEtaPhiM(MuMu->Muon_pT_uncorr->at(1), MuMu->Muon_eta_uncorr->at(1), MuMu->Muon_phi_uncorr->at(1), M_Mu);
+                    mu1.SetPtEtaPhiM(MuMu->Muon_pT->at(0), MuMu->Muon_eta->at(0), MuMu->Muon_phi->at(0), M_Mu);
+                    mu2.SetPtEtaPhiM(MuMu->Muon_pT->at(1), MuMu->Muon_eta->at(1), MuMu->Muon_phi->at(1), M_Mu);
+                    cout << (mu1u+mu2u).M() << "\t" << (mu1+mu2).M() << "\n" << endl << endl;
+                }
+
+                if (MuMu->isSelPassed == 1 || MuMu->isSelPassed == 3) // Before RC
+                {
+//                    if (MuMu->Muon_pT_uncorr->at(0) < 50 || MuMu->Muon_pT_uncorr->at(1) < 50) continue;
+
                     if (fabs(MuMu->Muon_eta_uncorr->at(0)) > 2.4 || fabs(MuMu->Muon_eta_uncorr->at(1)) > 2.4)
                     {
                         cout << "Muon etas (uncorr):  [0] " << MuMu->Muon_eta_uncorr->at(0) << "    [1] " << MuMu->Muon_eta_uncorr->at(1) << endl;
@@ -815,6 +832,8 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
                     Double_t reco_Pt = (mu1 + mu2).Pt();
                     Double_t reco_rapi = (mu1 + mu2).Rapidity();
                     Double_t reco_mass = (mu1 + mu2).M();
+
+//                    if (reco_Pt < 50) continue;
 
                     h_mass_before_PUCorr->Fill(reco_mass, TotWeight);
                     h_mass_before_RocCorr->Fill(reco_mass, TotWeight * PUWeight);
@@ -843,6 +862,8 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
                 if (MuMu->isSelPassed == 1 || MuMu->isSelPassed == 2) // After RocCorr
                 {
+//                    if (MuMu->Muon_pT->at(0) < 50 || MuMu->Muon_pT->at(1) < 50) continue;
+
                     if (fabs(MuMu->Muon_eta->at(0)) > 2.4 || fabs(MuMu->Muon_eta->at(1)) > 2.4)
                     {
                         cout << "Muon etas:  [0] " << MuMu->Muon_eta->at(0) << "    [1] " << MuMu->Muon_eta->at(1) << endl;
@@ -875,6 +896,8 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
                     Double_t reco_Pt = (mu1 + mu2).Pt();
                     Double_t reco_rapi = (mu1 + mu2).Rapidity();
                     Double_t reco_mass = (mu1 + mu2).M();
+
+//                    if (reco_Pt < 50) continue;
 
                     h_mass_before_EffCorr->Fill(reco_mass, TotWeight * PUWeight);
                     h_mass_before_PVzCorr->Fill(reco_mass, TotWeight * PUWeight * effweight);

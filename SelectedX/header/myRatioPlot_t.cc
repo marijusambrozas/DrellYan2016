@@ -21,7 +21,7 @@ void myRatioPlot_t::SetPlots(TString xAxisName, Double_t xmin, Double_t xmax, TS
     TH1D* h1_deno_invm=((TH1D*)(s_stackedProcesses->GetStack()->Last()));
     h1_dataovermc->Divide(h1_deno_invm);
 
-    // Change statistics if needed
+    // Change statistical errors if needed
     if (statunc)
     {
         for (int i=1; i<(h1_dataovermc->GetSize()-1); i++)
@@ -31,8 +31,8 @@ void myRatioPlot_t::SetPlots(TString xAxisName, Double_t xmin, Double_t xmax, TS
     }
 
     //Setting hist options
-    h1_data->SetMarkerStyle(kFullDotLarge);
-    h1_data->SetMarkerColor(kBlack);
+//    h1_data->SetMarkerStyle(kFullDotLarge);
+//    h1_data->SetMarkerColor(kBlack);
 
     h1_dataovermc->SetLineColorAlpha(kBlack, 0);
     h1_dataovermc->SetLineWidth(1);
@@ -40,6 +40,7 @@ void myRatioPlot_t::SetPlots(TString xAxisName, Double_t xmin, Double_t xmax, TS
 //    h1_dataovermc->SetFillStyle(3244);
     h1_dataovermc->SetMarkerStyle(kFullDotLarge);
     h1_dataovermc->SetMarkerColor(kBlack);
+    h1_dataovermc->SetMarkerSize(1);
     h1_dataovermc->SetTitle(" ");
     h1_dataovermc->GetXaxis()->SetTitle(xAxisName);
     if (!DataMCname.Length())
@@ -66,7 +67,7 @@ void myRatioPlot_t::SetPlots(TString xAxisName, Double_t xmin, Double_t xmax, TS
 
     h1_dataovermc->GetXaxis()->SetRangeUser(xmin, xmax);
     h1_dataovermc->GetXaxis()->SetLabelSize(0.125/*12*/);
-    h1_dataovermc->GetXaxis()->SetTitleSize(0.17/*14*//*13*/);
+    h1_dataovermc->GetXaxis()->SetTitleSize(0.14/*17*//*13*/);
     h1_dataovermc->GetXaxis()->SetTitleOffset(0.9);
     h1_dataovermc->GetYaxis()->SetLabelSize(0.11/*10*/);
     h1_dataovermc->GetYaxis()->SetTitleSize(0.114/*11*/);
@@ -96,8 +97,8 @@ void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX)
         pad1->Draw();
         pad1->cd();
         s_stackedProcesses->Draw("HIST");
-//        s_stackedProcesses->GetYaxis()->SetTitle("Number of events");
-        s_stackedProcesses->GetYaxis()->SetTitle("I_{#kern[-0.9]{#lower[0.1]{#scale[0.7]{c}}}}vykiu_{#kern[-0.8]{#lower[-0.34]{#scale[0.7]{c}}}} skai#check{c}ius");
+        s_stackedProcesses->GetYaxis()->SetTitle("Number of events");
+//        s_stackedProcesses->GetYaxis()->SetTitle("I_{#kern[-0.9]{#lower[0.1]{#scale[0.7]{c}}}}vykiu_{#kern[-0.8]{#lower[-0.34]{#scale[0.7]{c}}}} skai#check{c}ius");
         s_stackedProcesses->GetYaxis()->SetTitleOffset(1/*1.1*/);
         s_stackedProcesses->GetYaxis()->SetTitleSize(0.07/*04*/);
         s_stackedProcesses->GetXaxis()->SetNoExponent(1);
