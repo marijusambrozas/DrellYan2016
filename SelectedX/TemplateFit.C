@@ -37,10 +37,10 @@
 
 using namespace RooFit;
 
-void E_Tfit ();
-void Mu_Tfit ();
-Double_t CompChiSquared (TH1D *h_data, THStack *s_MC);
-Double_t CompAvgDataMCDifference (TH1D *h_data, THStack *s_MC);
+void E_Tfit(Int_t type);
+void Mu_Tfit(Int_t type);
+Double_t CompChiSquared(TH1D *h_data, THStack *s_MC);
+Double_t CompAvgDataMCDifference(TH1D *h_data, THStack *s_MC);
 void removeNegativeBins(TH1D *h);
 
 // -- Drell-Yan mass bins -- //
@@ -59,22 +59,27 @@ const Double_t L_B2F = 19721.0;
 const Double_t L_G2H = 16146.0;
 const Double_t L_B2H = 35867.0;
 
-void TemplateFit (TString WhichX = "")
+void TemplateFit (TString WhichX = "", Int_t type = 2)
 {
     TString whichX = WhichX;
     whichX.ToUpper();
     Int_t Xselected = 0;
+    if (type < 1 || type > 2)
+    {
+        cout << "Wrong type!" << endl;
+        return;
+    }
     if (whichX.Contains("E"))
     {
         Xselected++;
-        cout << "\n*******      E_Tfit()      *******" << endl;
-        E_Tfit();
+        cout << "\n*******      E_Tfit(" << type << ")      *******" << endl;
+        E_Tfit(type);
     }
     if (whichX.Contains("MU"))
     {
         Xselected++;
-        cout << "\n*******     Mu_Tfit()     *******" << endl;
-        Mu_Tfit();
+        cout << "\n*******     Mu_Tfit(" << type << ")     *******" << endl;
+        Mu_Tfit(type);
     }
     if (Xselected == 0) cout << "Wrong arument!" << endl;
 
@@ -84,7 +89,7 @@ void TemplateFit (TString WhichX = "")
 /// ############################################################################# ///
 /// ----------------------------- Electron Channel ------------------------------ ///
 /// ############################################################################# ///
-void E_Tfit()
+void E_Tfit(Int_t type)
 {
    return; // NOT READY YET
 } // End of E_Tfit()
@@ -93,7 +98,7 @@ void E_Tfit()
 /// ################################################################################## ///
 /// -------------------------------- Muon Channel ------------------------------------ ///
 /// ################################################################################## ///
-void Mu_Tfit()
+void Mu_Tfit(Int_t type)
 {
     FileMgr fm;
 
@@ -109,7 +114,10 @@ void Mu_Tfit()
     Process_t pr1 = _WW;
     while (!stop)
     {
-        TFile *file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr1]+".root", "READ");
+        TFile *file;
+        if (type == 1) file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr1]+".root", "READ");
+        else if (type == 2) file = new TFile("/media/sf_DATA/FR/FR_Hist_Mu_"+fm.Procname[pr1]+".root", "READ");
+        else return;
         file->GetObject("h_PFiso_barrel_deno", h_barrel_MC_deno[pr1]);
         file->GetObject("h_PFiso_endcap_deno", h_endcap_MC_deno[pr1]);
         file->GetObject("h_PFiso_barrel_nume", h_barrel_MC_nume[pr1]);
@@ -127,27 +135,79 @@ void Mu_Tfit()
 
         file->Close();
 
-//        if (pr1 == _VVnST) {pr1 = _ttbar; continue;}
         if (pr1 == _WW) {pr1 = _WZ; continue;}
         if (pr1 == _WZ) {pr1 = _ZZ; continue;}
         if (pr1 == _ZZ) {pr1 = _tbarW; continue;}
         if (pr1 == _tbarW) {pr1 = _tW; continue;}
         if (pr1 == _tW) {pr1 = _ttbar; continue;}
-//        if (pr1 == _ttbar) {pr1 = _DY_50to100; continue;}
-        if (pr1 == _ttbar) {pr1 = _DY_10to50; continue;}
-        if (pr1 == _DY_10to50) {pr1 = _DY_50to100; continue;} // this is actually 50toInf (just a misleading filename)
-        if (pr1 == _DY_50to100) {pr1 = _WJets; continue;}
-        if (pr1 == _WJets) {stop = 1;}
+        if (pr1 == _ttbar) {pr1 = _ttbar_700to1000; continue;}
+        if (pr1 == _ttbar_700to1000) {pr1 = _ttbar_1000toInf; continue;}
+        if (pr1 == _ttbar_1000toInf) {pr1 = _WJets; continue;}
+        if (pr1 == _WJets) {pr1 = _WJets_ext2v5; continue;}
+        if (pr1 == _WJets_ext2v5) {stop = 1;}
     }
-    h_barrel_MC_deno[_DY_50to100]->Add(h_barrel_MC_deno[_DY_10to50]);
-    h_endcap_MC_deno[_DY_50to100]->Add(h_endcap_MC_deno[_DY_10to50]);
-    h_barrel_MC_nume[_DY_50to100]->Add(h_barrel_MC_nume[_DY_10to50]);
-    h_endcap_MC_nume[_DY_50to100]->Add(h_endcap_MC_nume[_DY_10to50]);
+    h_barrel_MC_deno[_ttbar]->Add(h_barrel_MC_deno[_ttbar_700to1000]);
+    h_endcap_MC_deno[_ttbar]->Add(h_endcap_MC_deno[_ttbar_700to1000]);
+    h_barrel_MC_nume[_ttbar]->Add(h_barrel_MC_nume[_ttbar_700to1000]);
+    h_endcap_MC_nume[_ttbar]->Add(h_endcap_MC_nume[_ttbar_700to1000]);
+    h_barrel_MC_deno[_ttbar]->Add(h_barrel_MC_deno[_ttbar_1000toInf]);
+    h_endcap_MC_deno[_ttbar]->Add(h_endcap_MC_deno[_ttbar_1000toInf]);
+    h_barrel_MC_nume[_ttbar]->Add(h_barrel_MC_nume[_ttbar_1000toInf]);
+    h_endcap_MC_nume[_ttbar]->Add(h_endcap_MC_nume[_ttbar_1000toInf]);
+    h_barrel_MC_deno[_WJets]->Add(h_barrel_MC_deno[_WJets_ext2v5]);
+    h_endcap_MC_deno[_WJets]->Add(h_endcap_MC_deno[_WJets_ext2v5]);
+    h_barrel_MC_nume[_WJets]->Add(h_barrel_MC_nume[_WJets_ext2v5]);
+    h_endcap_MC_nume[_WJets]->Add(h_endcap_MC_nume[_WJets_ext2v5]);
+
+    // DY
+    for (Process_t pr = _DY_10to50; pr <= _DY_2000to3000; pr=next(pr))
+    {
+        TFile *file;
+        if (type == 1) file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
+        else if (type == 2) file = new TFile("/media/sf_DATA/FR/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
+        else return;
+        file->GetObject("h_PFiso_barrel_deno", h_barrel_MC_deno[pr]);
+        file->GetObject("h_PFiso_endcap_deno", h_endcap_MC_deno[pr]);
+        file->GetObject("h_PFiso_barrel_nume", h_barrel_MC_nume[pr]);
+        file->GetObject("h_PFiso_endcap_nume", h_endcap_MC_nume[pr]);
+        removeNegativeBins(h_barrel_MC_deno[pr]);
+        removeNegativeBins(h_endcap_MC_deno[pr]);
+        removeNegativeBins(h_barrel_MC_nume[pr]);
+        removeNegativeBins(h_endcap_MC_nume[pr]);
+
+        h_barrel_MC_deno[pr]->SetDirectory(0);
+        h_endcap_MC_deno[pr]->SetDirectory(0);
+        h_barrel_MC_nume[pr]->SetDirectory(0);
+        h_endcap_MC_nume[pr]->SetDirectory(0);
+
+        if (pr == _DY_10to50)
+        {
+            h_barrel_MC_deno[_DY_Full] = ((TH1D*)(h_barrel_MC_deno[pr]->Clone("h_barrel_MC_deno_DY")));
+            h_endcap_MC_deno[_DY_Full] = ((TH1D*)(h_endcap_MC_deno[pr]->Clone("h_endcap_MC_deno_DY")));
+            h_barrel_MC_nume[_DY_Full] = ((TH1D*)(h_barrel_MC_nume[pr]->Clone("h_barrel_MC_nume_DY")));
+            h_endcap_MC_nume[_DY_Full] = ((TH1D*)(h_endcap_MC_nume[pr]->Clone("h_endcap_MC_nume_DY")));
+            h_barrel_MC_deno[_DY_Full]->SetDirectory(0);
+            h_endcap_MC_deno[_DY_Full]->SetDirectory(0);
+            h_barrel_MC_nume[_DY_Full]->SetDirectory(0);
+            h_endcap_MC_nume[_DY_Full]->SetDirectory(0);
+        }
+        else
+        {
+            h_barrel_MC_deno[_DY_Full]->Add(h_barrel_MC_deno[pr]);
+            h_endcap_MC_deno[_DY_Full]->Add(h_endcap_MC_deno[pr]);
+            h_barrel_MC_nume[_DY_Full]->Add(h_barrel_MC_nume[pr]);
+            h_endcap_MC_nume[_DY_Full]->Add(h_endcap_MC_nume[pr]);
+        }
+        file->Close();
+    }
 
     // QCD
     for (Process_t pr = _QCDMuEnriched_15to20; pr <= _QCDMuEnriched_1000toInf; pr=next(pr))
     {
-        TFile *file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
+        TFile *file;
+        if (type == 1) file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
+        else if (type == 2) file = new TFile("/media/sf_DATA/FR/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
+        else return;
         file->GetObject("h_PFiso_barrel_deno", h_barrel_MC_deno[pr]);
         file->GetObject("h_PFiso_endcap_deno", h_endcap_MC_deno[pr]);
         file->GetObject("h_PFiso_barrel_nume", h_barrel_MC_nume[pr]);
@@ -187,7 +247,10 @@ void Mu_Tfit()
 
     for (Process_t pr=_SingleMuon_B; pr<=_SingleMuon_H; pr=next(pr))
     {
-        TFile *file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
+        TFile *file;
+        if (type == 1) file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
+        else if (type == 2) file = new TFile("/media/sf_DATA/FR/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
+        else return;
         TH1D *h_temp[4];
         if (pr == _SingleMuon_B)
         {
@@ -230,7 +293,7 @@ void Mu_Tfit()
 
     RooDataHist *rh_barrel_nume_QCD = new RooDataHist("rh_barrel_nume_QCD", "RooHist_barrel_nume_QCD", iso_nume, h_barrel_MC_nume[_QCDMuEnriched_Full]);
     RooDataHist *rh_barrel_nume_WJets = new RooDataHist("rh_barrel_nume_WJets", "RooHist_barrel_nume_WJets", iso_nume, h_barrel_MC_nume[_WJets]);
-    RooDataHist *rh_barrel_nume_DY = new RooDataHist("rh_barrel_nume_DY", "RooHist_barrel_nume_DY", iso_nume, h_barrel_MC_nume[_DY_50to100]);
+    RooDataHist *rh_barrel_nume_DY = new RooDataHist("rh_barrel_nume_DY", "RooHist_barrel_nume_DY", iso_nume, h_barrel_MC_nume[_DY_Full]);
     RooDataHist *rh_barrel_nume_ttbar = new RooDataHist("rh_barrel_nume_ttbar", "RooHist_barrel_nume_ttbar", iso_nume, h_barrel_MC_nume[_ttbar]);
     RooDataHist *rh_barrel_nume_tW = new RooDataHist("rh_barrel_nume_tW", "RooHist_barrel_nume_tW", iso_nume, h_barrel_MC_nume[_tW]);
     RooDataHist *rh_barrel_nume_tbarW = new RooDataHist("rh_barrel_nume_tbarW", "RooHist_barrel_nume_tbarW", iso_nume, h_barrel_MC_nume[_tbarW]);
@@ -241,7 +304,7 @@ void Mu_Tfit()
 
     RooDataHist *rh_endcap_nume_QCD = new RooDataHist("rh_endcap_nume_QCD", "RooHist_endcap_nume_QCD", iso_nume, h_endcap_MC_nume[_QCDMuEnriched_Full]);
     RooDataHist *rh_endcap_nume_WJets = new RooDataHist("rh_endcap_nume_WJets", "RooHist_endcap_nume_WJets", iso_nume, h_endcap_MC_nume[_WJets]);
-    RooDataHist *rh_endcap_nume_DY = new RooDataHist("rh_endcap_nume_DY", "RooHist_endcap_nume_DY", iso_nume, h_endcap_MC_nume[_DY_50to100]);
+    RooDataHist *rh_endcap_nume_DY = new RooDataHist("rh_endcap_nume_DY", "RooHist_endcap_nume_DY", iso_nume, h_endcap_MC_nume[_DY_Full]);
     RooDataHist *rh_endcap_nume_ttbar = new RooDataHist("rh_endcap_nume_ttbar", "RooHist_endcap_nume_ttbar", iso_nume, h_endcap_MC_nume[_ttbar]);
     RooDataHist *rh_endcap_nume_tW = new RooDataHist("rh_endcap_nume_tW", "RooHist_endcap_nume_tW", iso_nume, h_endcap_MC_nume[_tW]);
     RooDataHist *rh_endcap_nume_tbarW = new RooDataHist("rh_endcap_nume_tbarW", "RooHist_endcap_nume_tbarW", iso_nume, h_endcap_MC_nume[_tbarW]);
@@ -252,7 +315,7 @@ void Mu_Tfit()
 
     RooDataHist *rh_barrel_deno_QCD = new RooDataHist("rh_barrel_deno_QCD", "RooHist_barrel_deno_QCD", iso_deno, h_barrel_MC_deno[_QCDMuEnriched_Full]);
     RooDataHist *rh_barrel_deno_WJets = new RooDataHist("rh_barrel_deno_WJets", "RooHist_barrel_deno_WJets", iso_deno, h_barrel_MC_deno[_WJets]);
-    RooDataHist *rh_barrel_deno_DY = new RooDataHist("rh_barrel_deno_DY", "RooHist_barrel_deno_DY", iso_deno, h_barrel_MC_deno[_DY_50to100]);
+    RooDataHist *rh_barrel_deno_DY = new RooDataHist("rh_barrel_deno_DY", "RooHist_barrel_deno_DY", iso_deno, h_barrel_MC_deno[_DY_Full]);
     RooDataHist *rh_barrel_deno_ttbar = new RooDataHist("rh_barrel_deno_ttbar", "RooHist_barrel_deno_ttbar", iso_deno, h_barrel_MC_deno[_ttbar]);
     RooDataHist *rh_barrel_deno_tW = new RooDataHist("rh_barrel_deno_tW", "RooHist_barrel_deno_tW", iso_deno, h_barrel_MC_deno[_tW]);
     RooDataHist *rh_barrel_deno_tbarW = new RooDataHist("rh_barrel_deno_tbarW", "RooHist_barrel_deno_tbarW", iso_deno, h_barrel_MC_deno[_tbarW]);
@@ -263,7 +326,7 @@ void Mu_Tfit()
 
     RooDataHist *rh_endcap_deno_QCD = new RooDataHist("rh_endcap_deno_QCD", "RooHist_endcap_deno_QCD", iso_deno, h_endcap_MC_deno[_QCDMuEnriched_Full]);
     RooDataHist *rh_endcap_deno_WJets = new RooDataHist("rh_endcap_deno_WJets", "RooHist_endcap_deno_WJets", iso_deno, h_endcap_MC_deno[_WJets]);
-    RooDataHist *rh_endcap_deno_DY = new RooDataHist("rh_endcap_deno_DY", "RooHist_endcap_deno_DY", iso_deno, h_endcap_MC_deno[_DY_50to100]);
+    RooDataHist *rh_endcap_deno_DY = new RooDataHist("rh_endcap_deno_DY", "RooHist_endcap_deno_DY", iso_deno, h_endcap_MC_deno[_DY_Full]);
     RooDataHist *rh_endcap_deno_ttbar = new RooDataHist("rh_endcap_deno_ttbar", "RooHist_endcap_deno_ttbar", iso_deno, h_endcap_MC_deno[_ttbar]);
     RooDataHist *rh_endcap_deno_tW = new RooDataHist("rh_endcap_deno_tW", "RooHist_endcap_deno_tW", iso_deno, h_endcap_MC_deno[_tW]);
     RooDataHist *rh_endcap_deno_tbarW = new RooDataHist("rh_endcap_deno_tbarW", "RooHist_endcap_deno_tbarW", iso_deno, h_endcap_MC_deno[_tbarW]);
@@ -463,45 +526,85 @@ void Mu_Tfit()
     Double_t Nnorm_endcap_deno_QCD = N_endcap_deno_QCD * h_endcap_data_deno->Integral() / N_endcap_deno_total;
 
     // Fit constraints
-    RooRealVar n_barrel_nume_ttbar("n_barrel_nume_ttbar", "n_barrel_nume_ttbar", Nnorm_barrel_nume_ttbar*0.92, Nnorm_barrel_nume_ttbar*0.95*0.92, Nnorm_barrel_nume_ttbar*1.05*0.92);
-    RooRealVar n_endcap_nume_ttbar("n_endcap_nume_ttbar", "n_endcap_nume_ttbar", Nnorm_endcap_nume_ttbar*0.92, Nnorm_endcap_nume_ttbar*0.95*0.92, Nnorm_endcap_nume_ttbar*1.05*0.92);
-    RooRealVar n_barrel_deno_ttbar("n_barrel_deno_ttbar", "n_barrel_deno_ttbar", Nnorm_barrel_deno_ttbar*0.92, Nnorm_barrel_deno_ttbar*0.95*0.92, Nnorm_barrel_deno_ttbar*1.05*0.92);
-    RooRealVar n_endcap_deno_ttbar("n_endcap_deno_ttbar", "n_endcap_deno_ttbar", Nnorm_endcap_deno_ttbar*0.92, Nnorm_endcap_deno_ttbar*0.95*0.92, Nnorm_endcap_deno_ttbar*1.05*0.92);
+//    RooRealVar n_barrel_nume_ttbar("n_barrel_nume_ttbar", "n_barrel_nume_ttbar", Nnorm_barrel_nume_ttbar, Nnorm_barrel_nume_ttbar*0.95, Nnorm_barrel_nume_ttbar*1.05);
+//    RooRealVar n_endcap_nume_ttbar("n_endcap_nume_ttbar", "n_endcap_nume_ttbar", Nnorm_endcap_nume_ttbar, Nnorm_endcap_nume_ttbar*0.95, Nnorm_endcap_nume_ttbar*1.05);
+//    RooRealVar n_barrel_deno_ttbar("n_barrel_deno_ttbar", "n_barrel_deno_ttbar", Nnorm_barrel_deno_ttbar, Nnorm_barrel_deno_ttbar*0.95, Nnorm_barrel_deno_ttbar*1.05);
+//    RooRealVar n_endcap_deno_ttbar("n_endcap_deno_ttbar", "n_endcap_deno_ttbar", Nnorm_endcap_deno_ttbar, Nnorm_endcap_deno_ttbar*0.95, Nnorm_endcap_deno_ttbar*1.05);
 
-    RooRealVar n_barrel_nume_WJets("n_barrel_nume_WJets", "n_barrel_nume_WJets", Nnorm_barrel_nume_WJets, Nnorm_barrel_nume_WJets*0.95, Nnorm_barrel_nume_WJets*1.05);
-    RooRealVar n_endcap_nume_WJets("n_endcap_nume_WJets", "n_endcap_nume_WJets", Nnorm_endcap_nume_WJets, Nnorm_endcap_nume_WJets*0.95, Nnorm_endcap_nume_WJets*1.05);
-    RooRealVar n_barrel_deno_WJets("n_barrel_deno_WJets", "n_barrel_deno_WJets", Nnorm_barrel_deno_WJets, Nnorm_barrel_deno_WJets*0.95, Nnorm_barrel_deno_WJets*1.05);
-    RooRealVar n_endcap_deno_WJets("n_endcap_deno_WJets", "n_endcap_deno_WJets", Nnorm_endcap_deno_WJets, Nnorm_endcap_deno_WJets*0.95, Nnorm_endcap_deno_WJets*1.05);
+//    RooRealVar n_barrel_nume_WJets("n_barrel_nume_WJets", "n_barrel_nume_WJets", Nnorm_barrel_nume_WJets, Nnorm_barrel_nume_WJets*0.95, Nnorm_barrel_nume_WJets*1.05);
+//    RooRealVar n_endcap_nume_WJets("n_endcap_nume_WJets", "n_endcap_nume_WJets", Nnorm_endcap_nume_WJets, Nnorm_endcap_nume_WJets*0.95, Nnorm_endcap_nume_WJets*1.05);
+//    RooRealVar n_barrel_deno_WJets("n_barrel_deno_WJets", "n_barrel_deno_WJets", Nnorm_barrel_deno_WJets, Nnorm_barrel_deno_WJets*0.95, Nnorm_barrel_deno_WJets*1.05);
+//    RooRealVar n_endcap_deno_WJets("n_endcap_deno_WJets", "n_endcap_deno_WJets", Nnorm_endcap_deno_WJets, Nnorm_endcap_deno_WJets*0.95, Nnorm_endcap_deno_WJets*1.05);
 
-    RooRealVar n_barrel_nume_DY("n_barrel_nume_DY", "n_barrel_nume_DY", Nnorm_barrel_nume_DY, Nnorm_barrel_nume_DY*0.95, Nnorm_barrel_nume_DY*1.05);
-    RooRealVar n_endcap_nume_DY("n_endcap_nume_DY", "n_endcap_nume_DY", Nnorm_endcap_nume_DY, Nnorm_endcap_nume_DY*0.95, Nnorm_endcap_nume_DY*1.05);
-    RooRealVar n_barrel_deno_DY("n_barrel_deno_DY", "n_barrel_deno_DY", Nnorm_barrel_deno_DY, Nnorm_barrel_deno_DY*0.95, Nnorm_barrel_deno_DY*1.05);
-    RooRealVar n_endcap_deno_DY("n_endcap_deno_DY", "n_endcap_deno_DY", Nnorm_endcap_deno_DY, Nnorm_endcap_deno_DY*0.95, Nnorm_endcap_deno_DY*1.05);
+//    RooRealVar n_barrel_nume_DY("n_barrel_nume_DY", "n_barrel_nume_DY", Nnorm_barrel_nume_DY, Nnorm_barrel_nume_DY*0.95, Nnorm_barrel_nume_DY*1.05);
+//    RooRealVar n_endcap_nume_DY("n_endcap_nume_DY", "n_endcap_nume_DY", Nnorm_endcap_nume_DY, Nnorm_endcap_nume_DY*0.95, Nnorm_endcap_nume_DY*1.05);
+//    RooRealVar n_barrel_deno_DY("n_barrel_deno_DY", "n_barrel_deno_DY", Nnorm_barrel_deno_DY, Nnorm_barrel_deno_DY*0.95, Nnorm_barrel_deno_DY*1.05);
+//    RooRealVar n_endcap_deno_DY("n_endcap_deno_DY", "n_endcap_deno_DY", Nnorm_endcap_deno_DY, Nnorm_endcap_deno_DY*0.95, Nnorm_endcap_deno_DY*1.05);
 
-    RooRealVar n_barrel_nume_tW("n_barrel_nume_tW", "n_barrel_nume_tW", Nnorm_barrel_nume_tW, Nnorm_barrel_nume_tW*0.95, Nnorm_barrel_nume_tW*1.05);
-    RooRealVar n_endcap_nume_tW("n_endcap_nume_tW", "n_endcap_nume_tW", Nnorm_endcap_nume_tW, Nnorm_endcap_nume_tW*0.95, Nnorm_endcap_nume_tW*1.05);
-    RooRealVar n_barrel_deno_tW("n_barrel_deno_tW", "n_barrel_deno_tW", Nnorm_barrel_deno_tW, Nnorm_barrel_deno_tW*0.95, Nnorm_barrel_deno_tW*1.05);
-    RooRealVar n_endcap_deno_tW("n_endcap_deno_tW", "n_endcap_deno_tW", Nnorm_endcap_deno_tW, Nnorm_endcap_deno_tW*0.95, Nnorm_endcap_deno_tW*1.05);
+//    RooRealVar n_barrel_nume_tW("n_barrel_nume_tW", "n_barrel_nume_tW", Nnorm_barrel_nume_tW, Nnorm_barrel_nume_tW*0.95, Nnorm_barrel_nume_tW*1.05);
+//    RooRealVar n_endcap_nume_tW("n_endcap_nume_tW", "n_endcap_nume_tW", Nnorm_endcap_nume_tW, Nnorm_endcap_nume_tW*0.95, Nnorm_endcap_nume_tW*1.05);
+//    RooRealVar n_barrel_deno_tW("n_barrel_deno_tW", "n_barrel_deno_tW", Nnorm_barrel_deno_tW, Nnorm_barrel_deno_tW*0.95, Nnorm_barrel_deno_tW*1.05);
+//    RooRealVar n_endcap_deno_tW("n_endcap_deno_tW", "n_endcap_deno_tW", Nnorm_endcap_deno_tW, Nnorm_endcap_deno_tW*0.95, Nnorm_endcap_deno_tW*1.05);
 
-    RooRealVar n_barrel_nume_tbarW("n_barrel_nume_tbarW", "n_barrel_nume_tbarW", Nnorm_barrel_nume_tbarW, Nnorm_barrel_nume_tbarW*0.95, Nnorm_barrel_nume_tbarW*1.05);
-    RooRealVar n_endcap_nume_tbarW("n_endcap_nume_tbarW", "n_endcap_nume_tbarW", Nnorm_endcap_nume_tbarW, Nnorm_endcap_nume_tbarW*0.95, Nnorm_endcap_nume_tbarW*1.05);
-    RooRealVar n_barrel_deno_tbarW("n_barrel_deno_tbarW", "n_barrel_deno_tbarW", Nnorm_barrel_deno_tbarW, Nnorm_barrel_deno_tbarW*0.95, Nnorm_barrel_deno_tbarW*1.05);
-    RooRealVar n_endcap_deno_tbarW("n_endcap_deno_tbarW", "n_endcap_deno_tbarW", Nnorm_endcap_deno_tbarW, Nnorm_endcap_deno_tbarW*0.95, Nnorm_endcap_deno_tbarW*1.05);
+//    RooRealVar n_barrel_nume_tbarW("n_barrel_nume_tbarW", "n_barrel_nume_tbarW", Nnorm_barrel_nume_tbarW, Nnorm_barrel_nume_tbarW*0.95, Nnorm_barrel_nume_tbarW*1.05);
+//    RooRealVar n_endcap_nume_tbarW("n_endcap_nume_tbarW", "n_endcap_nume_tbarW", Nnorm_endcap_nume_tbarW, Nnorm_endcap_nume_tbarW*0.95, Nnorm_endcap_nume_tbarW*1.05);
+//    RooRealVar n_barrel_deno_tbarW("n_barrel_deno_tbarW", "n_barrel_deno_tbarW", Nnorm_barrel_deno_tbarW, Nnorm_barrel_deno_tbarW*0.95, Nnorm_barrel_deno_tbarW*1.05);
+//    RooRealVar n_endcap_deno_tbarW("n_endcap_deno_tbarW", "n_endcap_deno_tbarW", Nnorm_endcap_deno_tbarW, Nnorm_endcap_deno_tbarW*0.95, Nnorm_endcap_deno_tbarW*1.05);
 
-    RooRealVar n_barrel_nume_WW("n_barrel_nume_WW", "n_barrel_nume_WW", Nnorm_barrel_nume_WW, Nnorm_barrel_nume_WW*0.95, Nnorm_barrel_nume_WW*1.05);
-    RooRealVar n_endcap_nume_WW("n_endcap_nume_WW", "n_endcap_nume_WW", Nnorm_endcap_nume_WW, Nnorm_endcap_nume_WW*0.95, Nnorm_endcap_nume_WW*1.05);
-    RooRealVar n_barrel_deno_WW("n_barrel_deno_WW", "n_barrel_deno_WW", Nnorm_barrel_deno_WW, Nnorm_barrel_deno_WW*0.95, Nnorm_barrel_deno_WW*1.05);
-    RooRealVar n_endcap_deno_WW("n_endcap_deno_WW", "n_endcap_deno_WW", Nnorm_endcap_deno_WW, Nnorm_endcap_deno_WW*0.95, Nnorm_endcap_deno_WW*1.05);
+//    RooRealVar n_barrel_nume_WW("n_barrel_nume_WW", "n_barrel_nume_WW", Nnorm_barrel_nume_WW, Nnorm_barrel_nume_WW*0.95, Nnorm_barrel_nume_WW*1.05);
+//    RooRealVar n_endcap_nume_WW("n_endcap_nume_WW", "n_endcap_nume_WW", Nnorm_endcap_nume_WW, Nnorm_endcap_nume_WW*0.95, Nnorm_endcap_nume_WW*1.05);
+//    RooRealVar n_barrel_deno_WW("n_barrel_deno_WW", "n_barrel_deno_WW", Nnorm_barrel_deno_WW, Nnorm_barrel_deno_WW*0.95, Nnorm_barrel_deno_WW*1.05);
+//    RooRealVar n_endcap_deno_WW("n_endcap_deno_WW", "n_endcap_deno_WW", Nnorm_endcap_deno_WW, Nnorm_endcap_deno_WW*0.95, Nnorm_endcap_deno_WW*1.05);
 
-    RooRealVar n_barrel_nume_WZ("n_barrel_nume_WZ", "n_barrel_nume_WZ", Nnorm_barrel_nume_WZ, Nnorm_barrel_nume_WZ*0.95, Nnorm_barrel_nume_WZ*1.05);
-    RooRealVar n_endcap_nume_WZ("n_endcap_nume_WZ", "n_endcap_nume_WZ", Nnorm_endcap_nume_WZ, Nnorm_endcap_nume_WZ*0.95, Nnorm_endcap_nume_WZ*1.05);
-    RooRealVar n_barrel_deno_WZ("n_barrel_deno_WZ", "n_barrel_deno_WZ", Nnorm_barrel_deno_WZ, Nnorm_barrel_deno_WZ*0.95, Nnorm_barrel_deno_WZ*1.05);
-    RooRealVar n_endcap_deno_WZ("n_endcap_deno_WZ", "n_endcap_deno_WZ", Nnorm_endcap_deno_WZ, Nnorm_endcap_deno_WZ*0.95, Nnorm_endcap_deno_WZ*1.05);
+//    RooRealVar n_barrel_nume_WZ("n_barrel_nume_WZ", "n_barrel_nume_WZ", Nnorm_barrel_nume_WZ, Nnorm_barrel_nume_WZ*0.95, Nnorm_barrel_nume_WZ*1.05);
+//    RooRealVar n_endcap_nume_WZ("n_endcap_nume_WZ", "n_endcap_nume_WZ", Nnorm_endcap_nume_WZ, Nnorm_endcap_nume_WZ*0.95, Nnorm_endcap_nume_WZ*1.05);
+//    RooRealVar n_barrel_deno_WZ("n_barrel_deno_WZ", "n_barrel_deno_WZ", Nnorm_barrel_deno_WZ, Nnorm_barrel_deno_WZ*0.95, Nnorm_barrel_deno_WZ*1.05);
+//    RooRealVar n_endcap_deno_WZ("n_endcap_deno_WZ", "n_endcap_deno_WZ", Nnorm_endcap_deno_WZ, Nnorm_endcap_deno_WZ*0.95, Nnorm_endcap_deno_WZ*1.05);
 
-    RooRealVar n_barrel_nume_ZZ("n_barrel_nume_ZZ", "n_barrel_nume_ZZ", Nnorm_barrel_nume_ZZ, Nnorm_barrel_nume_ZZ*0.95, Nnorm_barrel_nume_ZZ*1.05);
-    RooRealVar n_endcap_nume_ZZ("n_endcap_nume_ZZ", "n_endcap_nume_ZZ", Nnorm_endcap_nume_ZZ, Nnorm_endcap_nume_ZZ*0.95, Nnorm_endcap_nume_ZZ*1.05);
-    RooRealVar n_barrel_deno_ZZ("n_barrel_deno_ZZ", "n_barrel_deno_ZZ", Nnorm_barrel_deno_ZZ, Nnorm_barrel_deno_ZZ*0.95, Nnorm_barrel_deno_ZZ*1.05);
-    RooRealVar n_endcap_deno_ZZ("n_endcap_deno_ZZ", "n_endcap_deno_ZZ", Nnorm_endcap_deno_ZZ, Nnorm_endcap_deno_ZZ*0.95, Nnorm_endcap_deno_ZZ*1.05);
+//    RooRealVar n_barrel_nume_ZZ("n_barrel_nume_ZZ", "n_barrel_nume_ZZ", Nnorm_barrel_nume_ZZ, Nnorm_barrel_nume_ZZ*0.95, Nnorm_barrel_nume_ZZ*1.05);
+//    RooRealVar n_endcap_nume_ZZ("n_endcap_nume_ZZ", "n_endcap_nume_ZZ", Nnorm_endcap_nume_ZZ, Nnorm_endcap_nume_ZZ*0.95, Nnorm_endcap_nume_ZZ*1.05);
+//    RooRealVar n_barrel_deno_ZZ("n_barrel_deno_ZZ", "n_barrel_deno_ZZ", Nnorm_barrel_deno_ZZ, Nnorm_barrel_deno_ZZ*0.95, Nnorm_barrel_deno_ZZ*1.05);
+//    RooRealVar n_endcap_deno_ZZ("n_endcap_deno_ZZ", "n_endcap_deno_ZZ", Nnorm_endcap_deno_ZZ, Nnorm_endcap_deno_ZZ*0.95, Nnorm_endcap_deno_ZZ*1.05);
+
+    RooRealVar n_barrel_nume_ttbar("n_barrel_nume_ttbar", "n_barrel_nume_ttbar", Nnorm_barrel_nume_ttbar, Nnorm_barrel_nume_ttbar*0.9, Nnorm_barrel_nume_ttbar*1.1);
+    RooRealVar n_endcap_nume_ttbar("n_endcap_nume_ttbar", "n_endcap_nume_ttbar", Nnorm_endcap_nume_ttbar, Nnorm_endcap_nume_ttbar*0.9, Nnorm_endcap_nume_ttbar*1.1);
+    RooRealVar n_barrel_deno_ttbar("n_barrel_deno_ttbar", "n_barrel_deno_ttbar", Nnorm_barrel_deno_ttbar, Nnorm_barrel_deno_ttbar*0.9, Nnorm_barrel_deno_ttbar*1.1);
+    RooRealVar n_endcap_deno_ttbar("n_endcap_deno_ttbar", "n_endcap_deno_ttbar", Nnorm_endcap_deno_ttbar, Nnorm_endcap_deno_ttbar*0.9, Nnorm_endcap_deno_ttbar*1.1);
+
+    RooRealVar n_barrel_nume_WJets("n_barrel_nume_WJets", "n_barrel_nume_WJets", Nnorm_barrel_nume_WJets, Nnorm_barrel_nume_WJets*0.9, Nnorm_barrel_nume_WJets*1.1);
+    RooRealVar n_endcap_nume_WJets("n_endcap_nume_WJets", "n_endcap_nume_WJets", Nnorm_endcap_nume_WJets, Nnorm_endcap_nume_WJets*0.9, Nnorm_endcap_nume_WJets*1.1);
+    RooRealVar n_barrel_deno_WJets("n_barrel_deno_WJets", "n_barrel_deno_WJets", Nnorm_barrel_deno_WJets, Nnorm_barrel_deno_WJets*0.9, Nnorm_barrel_deno_WJets*1.1);
+    RooRealVar n_endcap_deno_WJets("n_endcap_deno_WJets", "n_endcap_deno_WJets", Nnorm_endcap_deno_WJets, Nnorm_endcap_deno_WJets*0.9, Nnorm_endcap_deno_WJets*1.1);
+
+    RooRealVar n_barrel_nume_DY("n_barrel_nume_DY", "n_barrel_nume_DY", Nnorm_barrel_nume_DY, Nnorm_barrel_nume_DY*0.9, Nnorm_barrel_nume_DY*1.1);
+    RooRealVar n_endcap_nume_DY("n_endcap_nume_DY", "n_endcap_nume_DY", Nnorm_endcap_nume_DY, Nnorm_endcap_nume_DY*0.9, Nnorm_endcap_nume_DY*1.1);
+    RooRealVar n_barrel_deno_DY("n_barrel_deno_DY", "n_barrel_deno_DY", Nnorm_barrel_deno_DY, Nnorm_barrel_deno_DY*0.9, Nnorm_barrel_deno_DY*1.1);
+    RooRealVar n_endcap_deno_DY("n_endcap_deno_DY", "n_endcap_deno_DY", Nnorm_endcap_deno_DY, Nnorm_endcap_deno_DY*0.9, Nnorm_endcap_deno_DY*1.1);
+
+    RooRealVar n_barrel_nume_tW("n_barrel_nume_tW", "n_barrel_nume_tW", Nnorm_barrel_nume_tW, Nnorm_barrel_nume_tW*0.9, Nnorm_barrel_nume_tW*1.1);
+    RooRealVar n_endcap_nume_tW("n_endcap_nume_tW", "n_endcap_nume_tW", Nnorm_endcap_nume_tW, Nnorm_endcap_nume_tW*0.9, Nnorm_endcap_nume_tW*1.1);
+    RooRealVar n_barrel_deno_tW("n_barrel_deno_tW", "n_barrel_deno_tW", Nnorm_barrel_deno_tW, Nnorm_barrel_deno_tW*0.9, Nnorm_barrel_deno_tW*1.1);
+    RooRealVar n_endcap_deno_tW("n_endcap_deno_tW", "n_endcap_deno_tW", Nnorm_endcap_deno_tW, Nnorm_endcap_deno_tW*0.9, Nnorm_endcap_deno_tW*1.1);
+
+    RooRealVar n_barrel_nume_tbarW("n_barrel_nume_tbarW", "n_barrel_nume_tbarW", Nnorm_barrel_nume_tbarW, Nnorm_barrel_nume_tbarW*0.9, Nnorm_barrel_nume_tbarW*1.1);
+    RooRealVar n_endcap_nume_tbarW("n_endcap_nume_tbarW", "n_endcap_nume_tbarW", Nnorm_endcap_nume_tbarW, Nnorm_endcap_nume_tbarW*0.9, Nnorm_endcap_nume_tbarW*1.1);
+    RooRealVar n_barrel_deno_tbarW("n_barrel_deno_tbarW", "n_barrel_deno_tbarW", Nnorm_barrel_deno_tbarW, Nnorm_barrel_deno_tbarW*0.9, Nnorm_barrel_deno_tbarW*1.1);
+    RooRealVar n_endcap_deno_tbarW("n_endcap_deno_tbarW", "n_endcap_deno_tbarW", Nnorm_endcap_deno_tbarW, Nnorm_endcap_deno_tbarW*0.9, Nnorm_endcap_deno_tbarW*1.1);
+
+    RooRealVar n_barrel_nume_WW("n_barrel_nume_WW", "n_barrel_nume_WW", Nnorm_barrel_nume_WW, Nnorm_barrel_nume_WW*0.9, Nnorm_barrel_nume_WW*1.1);
+    RooRealVar n_endcap_nume_WW("n_endcap_nume_WW", "n_endcap_nume_WW", Nnorm_endcap_nume_WW, Nnorm_endcap_nume_WW*0.9, Nnorm_endcap_nume_WW*1.1);
+    RooRealVar n_barrel_deno_WW("n_barrel_deno_WW", "n_barrel_deno_WW", Nnorm_barrel_deno_WW, Nnorm_barrel_deno_WW*0.9, Nnorm_barrel_deno_WW*1.1);
+    RooRealVar n_endcap_deno_WW("n_endcap_deno_WW", "n_endcap_deno_WW", Nnorm_endcap_deno_WW, Nnorm_endcap_deno_WW*0.9, Nnorm_endcap_deno_WW*1.1);
+
+    RooRealVar n_barrel_nume_WZ("n_barrel_nume_WZ", "n_barrel_nume_WZ", Nnorm_barrel_nume_WZ, Nnorm_barrel_nume_WZ*0.9, Nnorm_barrel_nume_WZ*1.1);
+    RooRealVar n_endcap_nume_WZ("n_endcap_nume_WZ", "n_endcap_nume_WZ", Nnorm_endcap_nume_WZ, Nnorm_endcap_nume_WZ*0.9, Nnorm_endcap_nume_WZ*1.1);
+    RooRealVar n_barrel_deno_WZ("n_barrel_deno_WZ", "n_barrel_deno_WZ", Nnorm_barrel_deno_WZ, Nnorm_barrel_deno_WZ*0.9, Nnorm_barrel_deno_WZ*1.1);
+    RooRealVar n_endcap_deno_WZ("n_endcap_deno_WZ", "n_endcap_deno_WZ", Nnorm_endcap_deno_WZ, Nnorm_endcap_deno_WZ*0.9, Nnorm_endcap_deno_WZ*1.1);
+
+    RooRealVar n_barrel_nume_ZZ("n_barrel_nume_ZZ", "n_barrel_nume_ZZ", Nnorm_barrel_nume_ZZ, Nnorm_barrel_nume_ZZ*0.9, Nnorm_barrel_nume_ZZ*1.1);
+    RooRealVar n_endcap_nume_ZZ("n_endcap_nume_ZZ", "n_endcap_nume_ZZ", Nnorm_endcap_nume_ZZ, Nnorm_endcap_nume_ZZ*0.9, Nnorm_endcap_nume_ZZ*1.1);
+    RooRealVar n_barrel_deno_ZZ("n_barrel_deno_ZZ", "n_barrel_deno_ZZ", Nnorm_barrel_deno_ZZ, Nnorm_barrel_deno_ZZ*0.9, Nnorm_barrel_deno_ZZ*1.1);
+    RooRealVar n_endcap_deno_ZZ("n_endcap_deno_ZZ", "n_endcap_deno_ZZ", Nnorm_endcap_deno_ZZ, Nnorm_endcap_deno_ZZ*0.9, Nnorm_endcap_deno_ZZ*1.1);
 
     RooRealVar n_barrel_nume_QCD("n_barrel_nume_QCD", "n_barrel_nume_QCD", Nnorm_barrel_nume_QCD, Nnorm_barrel_nume_QCD*0.5, Nnorm_barrel_nume_QCD*1.5);
     RooRealVar n_endcap_nume_QCD("n_endcap_nume_QCD", "n_endcap_nume_QCD", Nnorm_endcap_nume_QCD, Nnorm_endcap_nume_QCD*0.5, Nnorm_endcap_nume_QCD*1.5);
@@ -548,9 +651,9 @@ void Mu_Tfit()
     c1_barrel_nume->Draw();
     c1_barrel_nume->cd();
     c1_barrel_nume->SetTopMargin(0.01);
-    c1_barrel_nume->SetBottomMargin(0.25);
+    c1_barrel_nume->SetBottomMargin(0.35);
     c1_barrel_nume->SetRightMargin(0.03);
-    c1_barrel_nume->SetLeftMargin(0.09);
+    c1_barrel_nume->SetLeftMargin(0.13);
     c1_barrel_nume->SetFillStyle(1);
     c1_barrel_nume->SetLogy();
 
@@ -606,17 +709,18 @@ void Mu_Tfit()
     legend->Draw();
 
     frame_barrel_nume->GetYaxis()->SetTitle("Number of entries");
+    frame_barrel_nume->GetYaxis()->SetTitleOffset(1.5);
     frame_barrel_nume->GetXaxis()->SetLabelSize(0);
 
     // Bottom pad
     //Top Pad
-    TPad *c2_barrel_nume = new TPad("padc2_barrel_nume","padc2_barrel_nume",0.01,0.01,0.99,0.25);
+    TPad *c2_barrel_nume = new TPad("padc2_barrel_nume","padc2_barrel_nume",0.01,0.01,0.99,0.35);
     c2_barrel_nume->Draw();
     c2_barrel_nume->cd();
-    c2_barrel_nume->SetTopMargin(0.1);
-    c2_barrel_nume->SetBottomMargin(0.30);
+    c2_barrel_nume->SetTopMargin(0.05);
+    c2_barrel_nume->SetBottomMargin(0.33);
     c2_barrel_nume->SetRightMargin(0.02);
-    c2_barrel_nume->SetLeftMargin(0.08);
+    c2_barrel_nume->SetLeftMargin(0.12);
     c2_barrel_nume->SetFillStyle(0);
     c2_barrel_nume->SetGrid();
 
@@ -637,17 +741,19 @@ void Mu_Tfit()
     h_barrel_nume_ratio->SetTitle("");
     h_barrel_nume_ratio->GetXaxis()->SetMoreLogLabels(1);
     h_barrel_nume_ratio->GetXaxis()->SetNoExponent(1);
-    h_barrel_nume_ratio->GetXaxis()->SetTitle("PFiso/p_{T}");
+    h_barrel_nume_ratio->GetXaxis()->SetTitle("I_{#lower[-0.2]{PF}}^{rel.} (#mu_{#lower[-0.4]{barrel}}^{nume})");
     h_barrel_nume_ratio->GetXaxis()->SetTitleSize(0.17);
     h_barrel_nume_ratio->GetXaxis()->SetLabelSize(0.125);
+    h_barrel_nume_ratio->GetXaxis()->SetTitleOffset(0.8);
     h_barrel_nume_ratio->GetYaxis()->SetTitle("Data/MC");
     h_barrel_nume_ratio->GetYaxis()->SetTitleSize(0.114);
-    h_barrel_nume_ratio->GetYaxis()->SetTitleOffset(0.5);
+    h_barrel_nume_ratio->GetYaxis()->SetTitleOffset(0.48);
     h_barrel_nume_ratio->GetYaxis()->SetLabelSize(0.11);
     h_barrel_nume_ratio->GetYaxis()->SetTickLength(0.01);
     h_barrel_nume_ratio->GetYaxis()->SetDecimals(1);
-    h_barrel_nume_ratio->SetMaximum(1.3);
-    h_barrel_nume_ratio->SetMinimum(0.7);
+    h_barrel_nume_ratio->SetMaximum(1.25);
+    h_barrel_nume_ratio->SetMinimum(0.75);
+    h_barrel_nume_ratio->GetYaxis()->SetNdivisions(5);
     h_barrel_nume_ratio->SetLineWidth(1);
     h_barrel_nume_ratio->SetLineColor(kBlack);
     h_barrel_nume_ratio->SetMarkerStyle(kFullDotLarge);
@@ -678,9 +784,9 @@ void Mu_Tfit()
     c1_endcap_nume->Draw();
     c1_endcap_nume->cd();
     c1_endcap_nume->SetTopMargin(0.01);
-    c1_endcap_nume->SetBottomMargin(0.25);
+    c1_endcap_nume->SetBottomMargin(0.35);
     c1_endcap_nume->SetRightMargin(0.03);
-    c1_endcap_nume->SetLeftMargin(0.09);
+    c1_endcap_nume->SetLeftMargin(0.13);
     c1_endcap_nume->SetFillStyle(1);
     c1_endcap_nume->SetLogy();
 
@@ -721,17 +827,18 @@ void Mu_Tfit()
     legend->Draw();
 
     frame_endcap_nume->GetYaxis()->SetTitle("Number of entries");
+    frame_endcap_nume->GetYaxis()->SetTitleOffset(1.5);
     frame_endcap_nume->GetXaxis()->SetLabelSize(0);
 
     // Bottom pad
     //Top Pad
-    TPad *c2_endcap_nume = new TPad("padc2_endcap_nume","padc2_endcap_nume",0.01,0.01,0.99,0.25);
+    TPad *c2_endcap_nume = new TPad("padc2_endcap_nume","padc2_endcap_nume",0.01,0.01,0.99,0.35);
     c2_endcap_nume->Draw();
     c2_endcap_nume->cd();
-    c2_endcap_nume->SetTopMargin(0.1);
-    c2_endcap_nume->SetBottomMargin(0.30);
+    c2_endcap_nume->SetTopMargin(0.05);
+    c2_endcap_nume->SetBottomMargin(0.33);
     c2_endcap_nume->SetRightMargin(0.02);
-    c2_endcap_nume->SetLeftMargin(0.08);
+    c2_endcap_nume->SetLeftMargin(0.12);
     c2_endcap_nume->SetFillStyle(0);
     c2_endcap_nume->SetGrid();
 
@@ -752,17 +859,19 @@ void Mu_Tfit()
     h_endcap_nume_ratio->SetTitle("");
     h_endcap_nume_ratio->GetXaxis()->SetMoreLogLabels(1);
     h_endcap_nume_ratio->GetXaxis()->SetNoExponent(1);
-    h_endcap_nume_ratio->GetXaxis()->SetTitle("PFiso/p_{T}");
+    h_endcap_nume_ratio->GetXaxis()->SetTitle("I_{#lower[-0.2]{PF}}^{rel.} (#mu_{#lower[-0.4]{endcap}}^{nume})");
     h_endcap_nume_ratio->GetXaxis()->SetTitleSize(0.17);
     h_endcap_nume_ratio->GetXaxis()->SetLabelSize(0.125);
+    h_endcap_nume_ratio->GetXaxis()->SetTitleOffset(0.8);
     h_endcap_nume_ratio->GetYaxis()->SetTitle("Data/MC");
     h_endcap_nume_ratio->GetYaxis()->SetTitleSize(0.114);
-    h_endcap_nume_ratio->GetYaxis()->SetTitleOffset(0.5);
+    h_endcap_nume_ratio->GetYaxis()->SetTitleOffset(0.48);
     h_endcap_nume_ratio->GetYaxis()->SetLabelSize(0.11);
     h_endcap_nume_ratio->GetYaxis()->SetTickLength(0.01);
     h_endcap_nume_ratio->GetYaxis()->SetDecimals(1);
-    h_endcap_nume_ratio->SetMaximum(1.3);
-    h_endcap_nume_ratio->SetMinimum(0.7);
+    h_endcap_nume_ratio->SetMaximum(1.25);
+    h_endcap_nume_ratio->SetMinimum(0.75);
+    h_endcap_nume_ratio->GetYaxis()->SetNdivisions(5);
     h_endcap_nume_ratio->SetLineWidth(1);
     h_endcap_nume_ratio->SetLineColor(kBlack);
     h_endcap_nume_ratio->SetMarkerStyle(kFullDotLarge);
@@ -788,9 +897,9 @@ void Mu_Tfit()
     c1_barrel_deno->Draw();
     c1_barrel_deno->cd();
     c1_barrel_deno->SetTopMargin(0.01);
-    c1_barrel_deno->SetBottomMargin(0.25);
+    c1_barrel_deno->SetBottomMargin(0.35);
     c1_barrel_deno->SetRightMargin(0.03);
-    c1_barrel_deno->SetLeftMargin(0.09);
+    c1_barrel_deno->SetLeftMargin(0.13);
     c1_barrel_deno->SetFillStyle(1);
     c1_barrel_deno->SetLogy();
 
@@ -831,17 +940,18 @@ void Mu_Tfit()
     legend->Draw();
 
     frame_barrel_deno->GetYaxis()->SetTitle("Number of entries");
+    frame_barrel_deno->GetYaxis()->SetTitleOffset(1.5);
     frame_barrel_deno->GetXaxis()->SetLabelSize(0);
 
     // Bottom pad
     //Top Pad
-    TPad *c2_barrel_deno = new TPad("padc2_barrel_deno","padc2_barrel_deno",0.01,0.01,0.99,0.25);
+    TPad *c2_barrel_deno = new TPad("padc2_barrel_deno","padc2_barrel_deno",0.01,0.01,0.99,0.35);
     c2_barrel_deno->Draw();
     c2_barrel_deno->cd();
-    c2_barrel_deno->SetTopMargin(0.1);
-    c2_barrel_deno->SetBottomMargin(0.30);
+    c2_barrel_deno->SetTopMargin(0.05);
+    c2_barrel_deno->SetBottomMargin(0.33);
     c2_barrel_deno->SetRightMargin(0.02);
-    c2_barrel_deno->SetLeftMargin(0.08);
+    c2_barrel_deno->SetLeftMargin(0.12);
     c2_barrel_deno->SetFillStyle(0);
     c2_barrel_deno->SetGrid();
 
@@ -862,17 +972,19 @@ void Mu_Tfit()
     h_barrel_deno_ratio->SetTitle("");
     h_barrel_deno_ratio->GetXaxis()->SetMoreLogLabels(1);
     h_barrel_deno_ratio->GetXaxis()->SetNoExponent(1);
-    h_barrel_deno_ratio->GetXaxis()->SetTitle("PFiso/p_{T}");
+    h_barrel_deno_ratio->GetXaxis()->SetTitle("I_{#lower[-0.2]{PF}}^{rel.} (#mu_{#lower[-0.4]{barrel}}^{deno})");
     h_barrel_deno_ratio->GetXaxis()->SetTitleSize(0.17);
     h_barrel_deno_ratio->GetXaxis()->SetLabelSize(0.125);
+    h_barrel_deno_ratio->GetXaxis()->SetTitleOffset(0.8);
     h_barrel_deno_ratio->GetYaxis()->SetTitle("Data/MC");
     h_barrel_deno_ratio->GetYaxis()->SetTitleSize(0.114);
-    h_barrel_deno_ratio->GetYaxis()->SetTitleOffset(0.5);
+    h_barrel_deno_ratio->GetYaxis()->SetTitleOffset(0.48);
     h_barrel_deno_ratio->GetYaxis()->SetLabelSize(0.11);
     h_barrel_deno_ratio->GetYaxis()->SetTickLength(0.01);
     h_barrel_deno_ratio->GetYaxis()->SetDecimals(1);
-    h_barrel_deno_ratio->SetMaximum(1.3);
-    h_barrel_deno_ratio->SetMinimum(0.7);
+    h_barrel_deno_ratio->SetMaximum(1.25);
+    h_barrel_deno_ratio->SetMinimum(0.75);
+    h_barrel_deno_ratio->GetYaxis()->SetNdivisions(5);
     h_barrel_deno_ratio->SetLineWidth(1);
     h_barrel_deno_ratio->SetLineColor(kBlack);
     h_barrel_deno_ratio->SetMarkerStyle(kFullDotLarge);
@@ -882,7 +994,12 @@ void Mu_Tfit()
     h_barrel_deno_ratio->Draw("E1P");
 
     // Red line at Data/MC=1
-    h_line->Draw("LSAME");
+    TH1D *h_line_deno = ((TH1D*)(h_barrel_deno_ratio->Clone("h_line_deno")));
+    h_line_deno->Reset("ICES");
+    for (Int_t i=1; i<=h_line_deno->GetNbinsX(); i++)
+        h_line_deno->SetBinContent(i, 1);
+    h_line_deno->SetLineColor(kRed);
+    h_line_deno->Draw("LSAME");
 
     //Chi^2
     RooAbsReal *chi2_barrel_deno = model_barrel_deno.createChi2(*rh_barrel_deno_data);
@@ -898,9 +1015,9 @@ void Mu_Tfit()
     c1_endcap_deno->Draw();
     c1_endcap_deno->cd();
     c1_endcap_deno->SetTopMargin(0.01);
-    c1_endcap_deno->SetBottomMargin(0.25);
+    c1_endcap_deno->SetBottomMargin(0.35);
     c1_endcap_deno->SetRightMargin(0.03);
-    c1_endcap_deno->SetLeftMargin(0.09);
+    c1_endcap_deno->SetLeftMargin(0.13);
     c1_endcap_deno->SetFillStyle(1);
     c1_endcap_deno->SetLogy();
 
@@ -941,17 +1058,18 @@ void Mu_Tfit()
     legend->Draw();
 
     frame_endcap_deno->GetYaxis()->SetTitle("Number of entries");
+    frame_endcap_deno->GetYaxis()->SetTitleOffset(1.5);
     frame_endcap_deno->GetXaxis()->SetLabelSize(0);
 
     // Bottom pad
     //Top Pad
-    TPad *c2_endcap_deno = new TPad("padc2_endcap_deno","padc2_endcap_deno",0.01,0.01,0.99,0.25);
+    TPad *c2_endcap_deno = new TPad("padc2_endcap_deno","padc2_endcap_deno",0.01,0.01,0.99,0.35);
     c2_endcap_deno->Draw();
     c2_endcap_deno->cd();
-    c2_endcap_deno->SetTopMargin(0.1);
-    c2_endcap_deno->SetBottomMargin(0.30);
+    c2_endcap_deno->SetTopMargin(0.05);
+    c2_endcap_deno->SetBottomMargin(0.33);
     c2_endcap_deno->SetRightMargin(0.02);
-    c2_endcap_deno->SetLeftMargin(0.08);
+    c2_endcap_deno->SetLeftMargin(0.12);
     c2_endcap_deno->SetFillStyle(0);
     c2_endcap_deno->SetGrid();
 
@@ -972,17 +1090,19 @@ void Mu_Tfit()
     h_endcap_deno_ratio->SetTitle("");
     h_endcap_deno_ratio->GetXaxis()->SetMoreLogLabels(1);
     h_endcap_deno_ratio->GetXaxis()->SetNoExponent(1);
-    h_endcap_deno_ratio->GetXaxis()->SetTitle("PFiso/p_{T}");
+    h_endcap_deno_ratio->GetXaxis()->SetTitle("I_{#lower[-0.2]{PF}}^{rel.} (#mu_{#lower[-0.4]{barrel}}^{deno})");
     h_endcap_deno_ratio->GetXaxis()->SetTitleSize(0.17);
     h_endcap_deno_ratio->GetXaxis()->SetLabelSize(0.125);
+    h_endcap_deno_ratio->GetXaxis()->SetTitleOffset(0.8);
     h_endcap_deno_ratio->GetYaxis()->SetTitle("Data/MC");
     h_endcap_deno_ratio->GetYaxis()->SetTitleSize(0.114);
-    h_endcap_deno_ratio->GetYaxis()->SetTitleOffset(0.5);
+    h_endcap_deno_ratio->GetYaxis()->SetTitleOffset(0.48);
     h_endcap_deno_ratio->GetYaxis()->SetLabelSize(0.11);
     h_endcap_deno_ratio->GetYaxis()->SetTickLength(0.01);
     h_endcap_deno_ratio->GetYaxis()->SetDecimals(1);
-    h_endcap_deno_ratio->SetMaximum(1.3);
-    h_endcap_deno_ratio->SetMinimum(0.7);
+    h_endcap_deno_ratio->SetMaximum(1.25);
+    h_endcap_deno_ratio->SetMinimum(0.75);
+    h_endcap_deno_ratio->GetYaxis()->SetNdivisions(5);
     h_endcap_deno_ratio->SetLineWidth(1);
     h_endcap_deno_ratio->SetLineColor(kBlack);
     h_endcap_deno_ratio->SetMarkerStyle(kFullDotLarge);
@@ -992,7 +1112,7 @@ void Mu_Tfit()
     h_endcap_deno_ratio->Draw("E1P");
 
     // Red line at Data/MC=1
-    h_line->Draw("LSAME");
+    h_line_deno->Draw("LSAME");
 
     //Chi^2
     RooAbsReal *chi2_endcap_deno = model_endcap_deno.createChi2(*rh_endcap_deno_data);

@@ -220,13 +220,13 @@ void ee_Est()
             }
             myRatioPlot_t* RP_EMu_wQCD_invm = new myRatioPlot_t("EMu_wQCD_mass", s_EMu_wQCD_invm, h_EMu_data_invm);
             myRatioPlot_t* RP_EMu_wQCD_invm2 = new myRatioPlot_t("EMu_wQCD_mass2", s_EMu_wQCD_invm2, h_EMu_data_invm2);
-//            RP_EMu_wQCD_invm->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
+            RP_EMu_wQCD_invm->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
             RP_EMu_wQCD_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
-            RP_EMu_wQCD_invm->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (prie#check{s}ingu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}} [GeV/c^{2}]", 15, 3000, "Eksp./MC");
+//            RP_EMu_wQCD_invm->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (prie#check{s}ingu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}) [GeV/c^{2}]", 15, 3000, "Eksp./MC");
 //            RP_EMu_wQCD_invm2->SetPlots("e#mu (priesingu kruviu) invariantine mase [GeV/c^{2}]", 15, 3000);
             TLegend *legend_EMu = new TLegend(0.77, 0.5, 0.95, 0.95);
-//            legend_EMu->AddEntry(h_EMu_data_invm, "Data", "lp");
-            legend_EMu->AddEntry(h_EMu_data_invm, "Matavimas", "lp");
+            legend_EMu->AddEntry(h_EMu_data_invm, "Data", "lp");
+//            legend_EMu->AddEntry(h_EMu_data_invm, "Matavimas", "lp");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_DYTauTau_Full], "DY#rightarrow#tau#tau (MC)","f");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_ttbar_Full], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (MC)", "f");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_tW], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (MC)", "f");
@@ -235,8 +235,8 @@ void ee_Est()
             legend_EMu->AddEntry(h_EMu_invm[_EMu_WZ], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_WW], "#font[12]{#scale[1.1]{WW}} (MC)", "f");
             if (isWJ) legend_EMu->AddEntry(h_EMu_invm[_EMu_WJets_Full], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
-//            legend_EMu->AddEntry(h_EMu_QCD_invm, "#font[12]{#scale[1.1]{QCD}} (est)", "f");
-            legend_EMu->AddEntry(h_EMu_QCD_invm, "#font[12]{#scale[1.1]{QCD}} (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
+            legend_EMu->AddEntry(h_EMu_QCD_invm, "#font[12]{#scale[1.1]{QCD}} (est)", "f");
+//            legend_EMu->AddEntry(h_EMu_QCD_invm, "#font[12]{#scale[1.1]{QCD}} (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
 
             RP_EMu_wQCD_invm->ImportLegend(legend_EMu);
             RP_EMu_wQCD_invm2->ImportLegend(legend_EMu);
@@ -250,7 +250,7 @@ void ee_Est()
             removeNegativeBins(h_EMu_QCD_invm);
             removeNegativeBins(h_EMu_QCD_invm2);
 
-            Double_t dataerror_emu, MCerror_emu, dataintegral_emu=2.25081e+07, MCintegral_emu;
+            Double_t dataerror_emu, MCerror_emu, dataintegral_emu=2.25081e+07, MCintegral_emu, QCDerror, QCDintegral;
             Double_t dataerrorZ_emu, MCerrorZ_emu, dataintegralZ_emu=2.25081e+07, MCintegralZ_emu;
             Double_t dataerror_noZ_emu=0, MCerror_noZ_emu=0, dataintegral_noZ_emu=2.25081e+07, MCintegral_noZ_emu, temp_noZ_emu;
 
@@ -259,6 +259,8 @@ void ee_Est()
 
             dataintegralZ_emu = h_EMu_data_invm->IntegralAndError(10, 22, dataerrorZ_emu);
             MCintegralZ_emu = ((TH1D*)(s_EMu_invm->GetStack()->Last()))->IntegralAndError(10, 22, MCerrorZ_emu);
+
+            QCDintegral = h_EMu_QCD_invm->IntegralAndError(1, h_EMu_QCD_invm->GetSize()-2, QCDerror);
 
             dataintegral_noZ_emu = h_EMu_data_invm->IntegralAndError(1, 9, temp_noZ_emu);
             dataerror_noZ_emu += temp_noZ_emu * temp_noZ_emu;
@@ -282,6 +284,7 @@ void ee_Est()
             std::cout << "EMu MC events around Z: " << MCintegralZ_emu << "+-" << MCerrorZ_emu << endl;
             std::cout << "EMu data events outside Z: " << dataintegral_noZ_emu << "+-" << dataerror_noZ_emu << endl;
             std::cout << "EMu MC events outside Z: " << MCintegral_noZ_emu << "+-" << MCerror_noZ_emu << endl;
+            std::cout << "EMu QCD events: " << QCDintegral << "+-" << QCDerror << endl;
 
 //************************************ E E **********************************************************
 
@@ -330,12 +333,20 @@ void ee_Est()
             h_ee_Est_invm->Divide(((TH1D*)(s_EMu_invm->GetStack()->Last())));
             removeNegativeBins(h_ee_Est_invm);
             h_ee_Est_invm->SetDirectory(0);
+            h_ee_Est_invm->SetLineColor(kBlack);
+            h_ee_Est_invm->SetMarkerStyle(kFullTriangleUp);
+            h_ee_Est_invm->SetMarkerSize(1.5);
+            h_ee_Est_invm->SetMarkerColor(kBlack);
 
             TH1D* h_ee_Est_invm2 = ((TH1D*)(h_EMu_data_invm2->Clone("h_ee_mass_Est2")));
             h_ee_Est_invm2->Multiply(((TH1D*)(s_ee_invm2->GetStack()->Last())));
             h_ee_Est_invm2->Divide(((TH1D*)(s_EMu_invm2->GetStack()->Last())));
             removeNegativeBins(h_ee_Est_invm2);
             h_ee_Est_invm2->SetDirectory(0);
+            h_ee_Est_invm2->SetLineColor(kBlack);
+            h_ee_Est_invm2->SetMarkerStyle(kFullTriangleUp);
+            h_ee_Est_invm2->SetMarkerSize(1.5);
+            h_ee_Est_invm2->SetMarkerColor(kBlack);
 
 
 /// ############################# Statistical uncertainties (by hand) ##################################### ///
@@ -642,16 +653,14 @@ void ee_Est()
             myRatioPlot_t *RP_invm = new myRatioPlot_t("DataDriven_InvariantMass", s_ee_invm, h_ee_Est_invm);
             myRatioPlot_t *RP_invm2 = new myRatioPlot_t("DataDriven_InvariantMass2", s_ee_invm2, h_ee_Est_invm2);
             RP_invm->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000,
-                              "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC", UNC_ee_EstOverMC);
+                              /*"I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC"*/"Est./MC", UNC_ee_EstOverMC);
             RP_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000, "Est./MC", UNC_ee_EstOverMC2);
-//            RP_invm->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
-//            RP_invm2->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000, "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC");
             RP_invm->SetSystematics(estSystematics, NULL, systematics);
             RP_invm2->SetSystematics(estSystematics2, NULL, systematics2);
 
             TLegend *legend = new TLegend(0.77, 0.5, 0.95, 0.95);
-//            legend->AddEntry(h_ee_Est_invm, "Estimation", "lp");
-            legend->AddEntry(h_ee_Est_invm, "I_{#kern[-0.7]{#lower[0.03]{#scale[0.68]{c}}}}vertis", "lp");
+            legend->AddEntry(h_ee_Est_invm, "Estimation", "lp");
+//            legend->AddEntry(h_ee_Est_invm, "I_{#kern[-0.7]{#lower[0.03]{#scale[0.68]{c}}}}vertis", "lp");
             legend->AddEntry(h_ee_invm[_EE_DYTauTau_Full], "DY#rightarrow#tau#tau","f");
             legend->AddEntry(h_ee_invm[_EE_ttbar_Full], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
             legend->AddEntry(h_ee_invm[_EE_tW], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
@@ -717,9 +726,7 @@ void ee_Est()
                 RP_ee_invm_pr[pr] = new myRatioPlot_t("h_mass_DataDriven_"+Mgr.Procname[pr], h_ee_invm[pr], h_ee_Est_pr_invm[pr]);
                 RP_ee_invm_pr2[pr] = new myRatioPlot_t("h_mass_DataDriven2_"+Mgr.Procname[pr], h_ee_invm2[pr], h_ee_Est_pr_invm2[pr]);
                 RP_ee_invm_pr[pr]->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000, "Est./MC", UNC_ee_EstOverMC);
-//                RP_ee_invm_pr[pr]->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
                 RP_ee_invm_pr2[pr]->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000, "Est./MC", UNC_ee_EstOverMC2);
-//                RP_ee_invm_pr2[pr]->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
                 RP_ee_invm_pr[pr]->SetSystematics(NULL, NULL, systematics);
                 RP_ee_invm_pr2[pr]->SetSystematics(NULL, NULL, systematics2);
 
@@ -771,9 +778,7 @@ void ee_Est()
             myRatioPlot_t* RP_tW = new myRatioPlot_t("tWest", s_tW_invm, h1_eeTW_invm_Est);
             myRatioPlot_t* RP_tW2 = new myRatioPlot_t("tWest2", s_tW_invm2, h1_eeTW_invm_Est2);
             RP_tW->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000, "Est./MC", UNC_ee_EstOverMC);
-//            RP_tW->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
             RP_tW2->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{ee}}}} [GeV/c^{2}]", 15, 3000, "Est./MC", UNC_ee_EstOverMC2);
-//            RP_tW2->SetPlots("Elektronu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
             RP_tW->SetSystematics(NULL, NULL, systematics);
             RP_tW2->SetSystematics(NULL, NULL, systematics2);
 
@@ -966,14 +971,14 @@ void MuMu_Est()
             }
             myRatioPlot_t* RP_EMu_wQCD_invm = new myRatioPlot_t("EMu_wQCD_mass", s_EMu_wQCD_invm, h_EMu_data_invm);
             myRatioPlot_t* RP_EMu_wQCD_invm2 = new myRatioPlot_t("EMu_wQCD_mass2", s_EMu_wQCD_invm2, h_EMu_data_invm2);
-//            RP_EMu_wQCD_invm->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
-            RP_EMu_wQCD_invm->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (prie#check{s}ingu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}} [GeV/c^{2}]", 15, 3000, "Eksp./MC");
+            RP_EMu_wQCD_invm->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
+//            RP_EMu_wQCD_invm->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (prie#check{s}ingu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}) [GeV/c^{2}]", 15, 3000, "Eksp./MC");
             RP_EMu_wQCD_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
-//            RP_EMu_wQCD_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (prie#check{s}ingu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}} [GeV/c^{2}]", 15, 3000, "Eksp./MC");
+//            RP_EMu_wQCD_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (prie#check{s}ingu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}) [GeV/c^{2}]", 15, 3000, "Eksp./MC");
 
             TLegend *legend_EMu = new TLegend(0.77, 0.5, 0.95, 0.95);
-//            legend_EMu->AddEntry(h_EMu_data_invm, "Data", "lp");
-            legend_EMu->AddEntry(h_EMu_data_invm, "Matavimas", "lp");
+            legend_EMu->AddEntry(h_EMu_data_invm, "Data", "lp");
+//            legend_EMu->AddEntry(h_EMu_data_invm, "Matavimas", "lp");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_DYTauTau_Full], "DY#rightarrow#tau#tau (MC)","f");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_ttbar_Full], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (MC)", "f");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_tW], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (MC)", "f");
@@ -982,8 +987,8 @@ void MuMu_Est()
             legend_EMu->AddEntry(h_EMu_invm[_EMu_WZ], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_WW], "#font[12]{#scale[1.1]{WW}} (MC)", "f");
             if (isWJ) legend_EMu->AddEntry(h_EMu_invm[_EMu_WJets_Full], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
-//            legend_EMu->AddEntry(h_EMu_QCD_invm, "#font[12]{#scale[1.1]{QCD}} (est)", "f");
-            legend_EMu->AddEntry(h_EMu_QCD_invm, "#font[12]{#scale[1.1]{QCD}} (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
+            legend_EMu->AddEntry(h_EMu_QCD_invm, "#font[12]{#scale[1.1]{QCD}} (est)", "f");
+//            legend_EMu->AddEntry(h_EMu_QCD_invm, "#font[12]{#scale[1.1]{QCD}} (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
 
             RP_EMu_wQCD_invm->ImportLegend(legend_EMu);
             RP_EMu_wQCD_invm2->ImportLegend(legend_EMu);
@@ -1075,11 +1080,19 @@ void MuMu_Est()
             h_MuMu_Est_invm->Multiply(((TH1D*)(s_MuMu_invm->GetStack()->Last())));
             h_MuMu_Est_invm->Divide(((TH1D*)(s_EMu_invm->GetStack()->Last())));
             h_MuMu_Est_invm->SetDirectory(0);
+            h_MuMu_Est_invm->SetLineColor(kBlack);
+            h_MuMu_Est_invm->SetMarkerStyle(kFullTriangleUp);
+            h_MuMu_Est_invm->SetMarkerSize(1.5);
+            h_MuMu_Est_invm->SetMarkerColor(kBlack);
             removeNegativeBins(h_MuMu_Est_invm);
             TH1D* h_MuMu_Est_invm2 = ((TH1D*)(h_EMu_data_invm2->Clone("h_MuMu_mass_Est2")));
             h_MuMu_Est_invm2->Multiply(((TH1D*)(s_MuMu_invm2->GetStack()->Last())));
             h_MuMu_Est_invm2->Divide(((TH1D*)(s_EMu_invm2->GetStack()->Last())));
             h_MuMu_Est_invm2->SetDirectory(0);
+            h_MuMu_Est_invm2->SetLineColor(kBlack);
+            h_MuMu_Est_invm2->SetMarkerStyle(kFullTriangleUp);
+            h_MuMu_Est_invm2->SetMarkerSize(1.5);
+            h_MuMu_Est_invm2->SetMarkerColor(kBlack);
             removeNegativeBins(h_MuMu_Est_invm2);
 
 /// ################################# Uncertainties (by hand) ######################################### ///
@@ -1380,16 +1393,16 @@ void MuMu_Est()
 
             myRatioPlot_t *RP_invm = new myRatioPlot_t("DataDriven_InvariantMass", s_MuMu_invm, h_MuMu_Est_invm);
             myRatioPlot_t *RP_invm2 = new myRatioPlot_t("DataDriven_InvariantMass2", s_MuMu_invm2, h_MuMu_Est_invm2);
-//            RP_invm->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, UNC_MuMuEstoverMC);
-            RP_invm->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC", UNC_MuMu_EstOverMC);
+            RP_invm->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Est./MC", UNC_MuMu_EstOverMC);
+//            RP_invm->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC", UNC_MuMu_EstOverMC);
             RP_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Est./MC", UNC_MuMu_EstOverMC2);
 //            RP_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "I_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}vert./MC", UNC_MuMu_EstOverMC2);
             RP_invm->SetSystematics(estSystematics, NULL, systematics);
             RP_invm2->SetSystematics(estSystematics2, NULL, systematics2);
 
             TLegend *legend = new TLegend(0.77, 0.5, 0.95, 0.95);
-//            legend->AddEntry(h_MuMu_Est_invm, "Estimation", "lp");
-            legend->AddEntry(h_MuMu_Est_invm, "I_{#kern[-0.7]{#lower[0.03]{#scale[0.68]{c}}}}vertis", "lp");
+            legend->AddEntry(h_MuMu_Est_invm, "Estimation", "lp");
+//            legend->AddEntry(h_MuMu_Est_invm, "I_{#kern[-0.7]{#lower[0.03]{#scale[0.68]{c}}}}vertis", "lp");
             legend->AddEntry(h_MuMu_invm[_MuMu_DYTauTau_Full], "DY#rightarrow#tau#tau","f");
             legend->AddEntry(h_MuMu_invm[_MuMu_ttbar_Full], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
             legend->AddEntry(h_MuMu_invm[_MuMu_tW], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
@@ -1448,9 +1461,7 @@ void MuMu_Est()
                 RP_MuMu_invm_pr[pr] = new myRatioPlot_t("h_mass_DataDriven_"+Mgr.Procname[pr], h_MuMu_invm[pr], h_MuMu_Est_pr_invm[pr]);
                 RP_MuMu_invm_pr2[pr] = new myRatioPlot_t("h_mass_DataDriven2_"+Mgr.Procname[pr], h_MuMu_invm2[pr], h_MuMu_Est_pr_invm2[pr]);
                 RP_MuMu_invm_pr[pr]->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Est./MC", UNC_MuMu_EstOverMC);
-//                RP_MuMu_invm_pr[pr]->SetPlots("Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000, UNC_MuMu_EstOverMC);
                 RP_MuMu_invm_pr2[pr]->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Est./MC", UNC_MuMu_EstOverMC2);
-//                RP_MuMu_invm_pr2[pr]->SetPlots("Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000, UNC_MuMu_EstOverMC2);
                 RP_MuMu_invm_pr[pr]->SetSystematics(NULL, NULL, systematics);
                 RP_MuMu_invm_pr2[pr]->SetSystematics(NULL, NULL, systematics2);
 
@@ -1503,9 +1514,7 @@ void MuMu_Est()
             myRatioPlot_t* RP_tW = new myRatioPlot_t("tWest", s_tW_invm, h1_MuMuTW_invm_Est);
             myRatioPlot_t* RP_tW2 = new myRatioPlot_t("tWest2", s_tW_invm2, h1_MuMuTW_invm_Est2);
             RP_tW->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Est./MC");
-//            RP_tW->SetPlots("Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
             RP_tW2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Est./MC");
-//            RP_tW2->SetPlots("Miuonu poros invariantin#dot{e} mas#dot{e} [GeV/c^{2}]", 15, 3000);
             RP_tW->SetSystematics(NULL, NULL, systematics);
             RP_tW2->SetSystematics(NULL, NULL, systematics2);
 
