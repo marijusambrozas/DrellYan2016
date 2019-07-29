@@ -420,6 +420,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
 
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
+        std::vector<double> *phi = new std::vector<double>;
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<double> *TRKiso = new std::vector<double>;
@@ -453,6 +454,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         // -- Creating SelectedMuMu variables to assign branches -- //
         MuonTree->Branch("p_T", &p_T);
         MuonTree->Branch("eta", &eta);
+        MuonTree->Branch("phi", &phi);
         MuonTree->Branch("charge", &charge);
         MuonTree->Branch("relPFiso", &relPFiso);
         MuonTree->Branch("TRKiso", &TRKiso);
@@ -552,7 +554,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         // -- Rochester correction -- //
                         Double_t rndm[2], SF=0; r1->RndmArray(2, rndm);
                         Int_t s, m;
-                        if(Mgr.Tag[i_tup] == "DATA")
+                        if(Mgr.isMC == kFALSE)
                             SF = rc.kScaleDT(mu.charge, mu.Pt, mu.eta, mu.phi, s=0, m=0);
                         else
                         {
@@ -581,6 +583,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         timesPassed++;
                         p_T->clear();
                         eta->clear();
+                        phi->clear();
                         charge->clear();
                         relPFiso->clear();
                         TRKiso->clear();
@@ -605,6 +608,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         {
                             p_T->push_back(SelectedMuonCollection_deno[i].Pt);
                             eta->push_back(SelectedMuonCollection_deno[i].eta);
+                            phi->push_back(SelectedMuonCollection_deno[i].phi);
                             charge->push_back(SelectedMuonCollection_deno[i].charge);
                             relPFiso->push_back(SelectedMuonCollection_deno[i].RelPFIso_dBeta);
                             TRKiso->push_back(SelectedMuonCollection_deno[i].trkiso);
