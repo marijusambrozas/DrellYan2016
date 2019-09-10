@@ -149,17 +149,21 @@ void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX)
             h1_fullunc->SetDirectory(0);
             h1_dataovermc->Draw("same E0");
         }
-        if(logX) l_one = new TLine(x1, 1, x2+5, 1);
-        else l_one = new TLine (x1, 1, x2, 1);
-        l_one->SetLineColor(kRed);
-        l_one->SetLineWidth(2);
-        l_one->Draw("same");
-        l_one->Draw("sameaxis");
-//        if (systSet)
-//        {
-//            h1_fullunc->Draw("sameaxis");
-//            h1_dataovermc->Draw("samehist P");
-//        }
+        h1_one = ((TH1D*)(h1_dataovermc->Clone("h1_one")));
+        for (Int_t i=0; i<h1_dataovermc->GetSize(); i++)
+        {
+            h1_one->SetBinContent(i, 1);
+            h1_one->SetBinError(i, 0);
+        }
+        h1_one->SetLineColor(kRed);
+        h1_one->SetLineWidth(2);
+        h1_one->Draw("samehist][");
+        h1_one->Draw("sameaxis");
+        if (systSet)
+        {
+            h1_fullunc->Draw("sameaxis");
+            h1_dataovermc->Draw("samehist P");
+        }
         h1_dataovermc->Draw("same E0");
         if(logX) pad2->SetLogx();
         pad2->SetTickx(1);

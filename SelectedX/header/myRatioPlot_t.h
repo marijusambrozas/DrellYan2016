@@ -17,12 +17,11 @@
 
 class myRatioPlot_t {
 public :
-   TH1D *h1_data, *h1_dataovermc, *h1_fullunc;
+   TH1D *h1_data, *h1_dataovermc, *h1_fullunc, *h1_one;
    THStack *s_stackedProcesses;
    TLegend *legend;
    TCanvas *canvas;
    TPad *pad1, *pad2;
-   TLine *l_one;
    TText *text;
    TString CanvasName;
    Double_t x1, x2;
@@ -50,9 +49,9 @@ public :
 #ifdef myRatioPlot_t_cxx
 
 myRatioPlot_t::myRatioPlot_t(TString cName, const THStack *stack, const TH1D *hist) :
-    h1_data(0), h1_dataovermc(0), h1_fullunc(0),
+    h1_data(0), h1_dataovermc(0), h1_fullunc(0), h1_one(0),
     s_stackedProcesses(0), legend(0),
-    canvas(0), pad1(0), pad2(0), l_one(0),
+    canvas(0), pad1(0), pad2(0),
       x1(0.), x2(0.), legendSet(0), legendEntries(0), PlotsSet(0), systSet(0),
       autoCleanUp(1)
 {
@@ -64,9 +63,9 @@ myRatioPlot_t::myRatioPlot_t(TString cName, const THStack *stack, const TH1D *hi
 }
 
 myRatioPlot_t::myRatioPlot_t(TString cName, const TH1D *stack, const TH1D *hist) :
-    h1_data(0), h1_dataovermc(0), h1_fullunc(0),
+    h1_data(0), h1_dataovermc(0), h1_fullunc(0), h1_one(0),
     s_stackedProcesses(0), legend(0),
-    canvas(0), pad1(0), pad2(0), l_one(0),
+    canvas(0), pad1(0), pad2(0),
       x1(0.), x2(0.), legendSet(0), legendEntries(0), PlotsSet(0), systSet(0),
       autoCleanUp(1)
 {
@@ -87,12 +86,12 @@ myRatioPlot_t::~myRatioPlot_t()
      delete h1_data;
      delete h1_dataovermc;
      delete h1_fullunc;
+     delete h1_one;
      delete s_stackedProcesses;
      delete legend;
      delete canvas;
      delete pad1;
      delete pad2;
-     delete l_one;
    }
 }
 
