@@ -787,6 +787,52 @@ void Test_HistDrawer(Int_t type)
 
 //----------------------------------- MC bkg -------------------------------------------------------
 
+    // QCD
+    for (Process_t pr = _QCDMuEnriched_15to20; pr <= _QCDMuEnriched_1000toInf; pr=next(pr))
+    {
+        TFile *file;
+        if (type == 1) file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr]+"_TEST.root", "READ");
+        else if (type == 2) file = new TFile("/media/sf_DATA/FR/FR_Hist_Mu_"+fm.Procname[pr]+"_TEST.root", "READ");
+        else return;
+        file->GetObject("h_mass", h_mass_MC[pr]);
+        file->GetObject("h_nVTX", h_nVTX_MC[pr]);
+        removeNegativeBins(h_mass_MC[pr]);
+        removeNegativeBins(h_nVTX_MC[pr]);
+
+        // Converting to event density (dividing by bin width)
+        for (Int_t i = 1; i<=binnum; i++)
+        {
+            h_mass_MC[pr]->SetBinContent(i, h_mass_MC[pr]->GetBinContent(i)/(massbins[i]-massbins[i-1]));
+            h_mass_MC[pr]->SetBinError(i, h_mass_MC[pr]->GetBinError(i)/(massbins[i]-massbins[i-1]));
+        }
+
+        if (pr == _QCDMuEnriched_15to20)
+        {
+            h_mass_MC[_QCDMuEnriched_Full] = ((TH1D*)(h_mass_MC[pr]->Clone("h_mass_QCD")));
+            h_nVTX_MC[_QCDMuEnriched_Full] = ((TH1D*)(h_nVTX_MC[pr]->Clone("h_nVTX_QCD")));
+            h_mass_MC[_QCDMuEnriched_Full]->SetDirectory(0);
+            h_nVTX_MC[_QCDMuEnriched_Full]->SetDirectory(0);
+        }
+        else
+        {
+            h_mass_MC[_QCDMuEnriched_Full]->Add(h_mass_MC[pr]);
+            h_nVTX_MC[_QCDMuEnriched_Full]->Add(h_nVTX_MC[pr]);
+        }
+
+        Color_t color = kRed + 3;
+        h_mass_MC[pr]->SetFillColor(color);
+        h_nVTX_MC[pr]->SetFillColor(color);
+        h_mass_MC[pr]->SetLineColor(color);
+        h_nVTX_MC[pr]->SetLineColor(color);
+        h_mass_MC[pr]->SetDirectory(0);
+        h_nVTX_MC[pr]->SetDirectory(0);
+
+        s_mass->Add(h_mass_MC[pr]);
+        s_nVTX->Add(h_nVTX_MC[pr]);
+
+        file->Close();
+    }
+
     // Other MC
     Int_t stop = 0;
     Process_t pr1 = _WW;
@@ -876,52 +922,6 @@ void Test_HistDrawer(Int_t type)
         }
 
         Color_t color = kOrange - 5;
-        h_mass_MC[pr]->SetFillColor(color);
-        h_nVTX_MC[pr]->SetFillColor(color);
-        h_mass_MC[pr]->SetLineColor(color);
-        h_nVTX_MC[pr]->SetLineColor(color);
-        h_mass_MC[pr]->SetDirectory(0);
-        h_nVTX_MC[pr]->SetDirectory(0);
-
-        s_mass->Add(h_mass_MC[pr]);
-        s_nVTX->Add(h_nVTX_MC[pr]);
-
-        file->Close();
-    }
-
-    // QCD
-    for (Process_t pr = _QCDMuEnriched_15to20; pr <= _QCDMuEnriched_1000toInf; pr=next(pr))
-    {
-        TFile *file;
-        if (type == 1) file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr]+"_TEST.root", "READ");
-        else if (type == 2) file = new TFile("/media/sf_DATA/FR/FR_Hist_Mu_"+fm.Procname[pr]+"_TEST.root", "READ");
-        else return;
-        file->GetObject("h_mass", h_mass_MC[pr]);
-        file->GetObject("h_nVTX", h_nVTX_MC[pr]);
-        removeNegativeBins(h_mass_MC[pr]);
-        removeNegativeBins(h_nVTX_MC[pr]);
-
-        // Converting to event density (dividing by bin width)
-        for (Int_t i = 1; i<=binnum; i++)
-        {
-            h_mass_MC[pr]->SetBinContent(i, h_mass_MC[pr]->GetBinContent(i)/(massbins[i]-massbins[i-1]));
-            h_mass_MC[pr]->SetBinError(i, h_mass_MC[pr]->GetBinError(i)/(massbins[i]-massbins[i-1]));
-        }
-
-        if (pr == _QCDMuEnriched_15to20)
-        {
-            h_mass_MC[_QCDMuEnriched_Full] = ((TH1D*)(h_mass_MC[pr]->Clone("h_masso_QCD")));
-            h_nVTX_MC[_QCDMuEnriched_Full] = ((TH1D*)(h_nVTX_MC[pr]->Clone("h_nVTX_QCD")));
-            h_mass_MC[_QCDMuEnriched_Full]->SetDirectory(0);
-            h_nVTX_MC[_QCDMuEnriched_Full]->SetDirectory(0);
-        }
-        else
-        {
-            h_mass_MC[_QCDMuEnriched_Full]->Add(h_mass_MC[pr]);
-            h_nVTX_MC[_QCDMuEnriched_Full]->Add(h_nVTX_MC[pr]);
-        }
-
-        Color_t color = kRed + 3;
         h_mass_MC[pr]->SetFillColor(color);
         h_nVTX_MC[pr]->SetFillColor(color);
         h_mass_MC[pr]->SetLineColor(color);
