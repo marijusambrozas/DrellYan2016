@@ -613,6 +613,32 @@ Bool_t DYAnalyzer::SeparateDYLLSample_isHardProcess(TString Tag, NtupleHandle *n
 				GenFlag = kTRUE;
 		}
 	}
+        else if(Tag.Contains("DY"))
+        {
+                vector<GenLepton> GenLeptonCollection;
+                Int_t NGenLeptons = ntuple->gnpair;
+                for(Int_t i_gen=0; i_gen<NGenLeptons; i_gen++)
+                {
+                        GenLepton genlep;
+                        genlep.FillFromNtuple(ntuple, i_gen);
+                        if(genlep.isElectron() && genlep.isHardProcess)
+                                GenLeptonCollection.push_back(genlep);
+                }
+
+                if(GenLeptonCollection.size() == 2) // -- Select the events containing 2 electrons from hard-process -- //
+                {
+                        if(Tag == "DY_M50to100") // -- Select only evetns withtin 50 < M < 100 -- //
+                        {
+                                TLorentzVector v1 = GenLeptonCollection[0].Momentum;
+                                TLorentzVector v2 = GenLeptonCollection[1].Momentum;
+                                Double_t reco_M = (v1 + v2).M();
+                                if(reco_M < 100)
+                                        GenFlag = kTRUE;
+                        }
+                        else
+                                GenFlag = kTRUE;
+                }
+        }
 	// -- other cases(e.g. ttbar, WJets, Diboson...): pass
 	else
 		GenFlag = kTRUE; 
