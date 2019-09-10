@@ -2201,9 +2201,9 @@ void LocalFileMgr::SetProc (SelProc_t pr, Bool_t ClearOld)
         Location = "SelectedEE/Data/SelectedEE_DoubleEG_B_0000.root";
         TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("SelectedEE_DoubleEG_B_0001"); Wsum.push_back(33031246); nEvents.push_back(662642);
-        Location = "SelectedEE/Data/SelectedEE_DoubleEG_B_0001.root";
-        TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+//        Tag.push_back("SelectedEE_DoubleEG_B_0001"); Wsum.push_back(33031246); nEvents.push_back(662642);
+//        Location = "SelectedEE/Data/SelectedEE_DoubleEG_B_0001.root";
+//        TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _EE_DoubleEG_C)
     {
@@ -2255,9 +2255,9 @@ void LocalFileMgr::SetProc (SelProc_t pr, Bool_t ClearOld)
         Location = "SelectedEE/Data/SelectedEE_DoubleEG_G_0000.root";
         TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("SelectedEE_DoubleEG_G_0001"); Wsum.push_back(4669958); nEvents.push_back(176543);
-        Location = "SelectedEE/Data/SelectedEE_DoubleEG_G_0001.root";
-        TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+//        Tag.push_back("SelectedEE_DoubleEG_G_0001"); Wsum.push_back(4669958); nEvents.push_back(176543);
+//        Location = "SelectedEE/Data/SelectedEE_DoubleEG_G_0001.root";
+//        TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _EE_DoubleEG_H)
     {
@@ -2269,9 +2269,9 @@ void LocalFileMgr::SetProc (SelProc_t pr, Bool_t ClearOld)
         Location = "SelectedEE/Data/SelectedEE_DoubleEG_Hver2_0000.root";
         TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("SelectedEE_DoubleEG_Hver2_0001"); Wsum.push_back(11645108); nEvents.push_back(432957);
-        Location = "SelectedEE/Data/SelectedEE_DoubleEG_Hver2_0001.root";
-        TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+//        Tag.push_back("SelectedEE_DoubleEG_Hver2_0001"); Wsum.push_back(11645108); nEvents.push_back(432957);
+//        Location = "SelectedEE/Data/SelectedEE_DoubleEG_Hver2_0001.root";
+//        TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("SelectedEE_DoubleEG_Hver3"); Wsum.push_back(2021309); nEvents.push_back(78568);
         Location = "SelectedEE/Data/SelectedEE_DoubleEG_Hver3.root";
@@ -2287,9 +2287,9 @@ void LocalFileMgr::SetProc (SelProc_t pr, Bool_t ClearOld)
         Location = "SelectedEE/Data/SelectedEE_DoubleEG_B_0000.root";
         TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("SelectedEE_DoubleEG_B_0001"); Wsum.push_back(33031246); nEvents.push_back(662642);
-        Location = "SelectedEE/Data/SelectedEE_DoubleEG_B_0001.root";
-        TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+//        Tag.push_back("SelectedEE_DoubleEG_B_0001"); Wsum.push_back(33031246); nEvents.push_back(662642);
+//        Location = "SelectedEE/Data/SelectedEE_DoubleEG_B_0001.root";
+//        TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("SelectedEE_DoubleEG_C"); Wsum.push_back(45521797); nEvents.push_back(912737);
         Location = "SelectedEE/Data/SelectedEE_DoubleEG_C.root";
@@ -2311,17 +2311,17 @@ void LocalFileMgr::SetProc (SelProc_t pr, Bool_t ClearOld)
         Location = "SelectedEE/Data/SelectedEE_DoubleEG_G_0000.root";
         TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("SelectedEE_DoubleEG_G_0001"); Wsum.push_back(4669958); nEvents.push_back(176543);
-        Location = "SelectedEE/Data/SelectedEE_DoubleEG_G_0001.root";
-        TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+//        Tag.push_back("SelectedEE_DoubleEG_G_0001"); Wsum.push_back(4669958); nEvents.push_back(176543);
+//        Location = "SelectedEE/Data/SelectedEE_DoubleEG_G_0001.root";
+//        TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("SelectedEE_DoubleEG_Hver2_0000"); Wsum.push_back(68821231); nEvents.push_back(2624157);
         Location = "SelectedEE/Data/SelectedEE_DoubleEG_Hver2_0000.root";
         TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("SelectedEE_DoubleEG_Hver2_0001"); Wsum.push_back(11645108); nEvents.push_back(432957);
-        Location = "SelectedEE/Data/SelectedEE_DoubleEG_Hver2_0001.root";
-        TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+//        Tag.push_back("SelectedEE_DoubleEG_Hver2_0001"); Wsum.push_back(11645108); nEvents.push_back(432957);
+//        Location = "SelectedEE/Data/SelectedEE_DoubleEG_Hver2_0001.root";
+//        TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("SelectedEE_DoubleEG_Hver3"); Wsum.push_back(2021309); nEvents.push_back(78568);
         Location = "SelectedEE/Data/SelectedEE_DoubleEG_Hver3.root";
