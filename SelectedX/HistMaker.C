@@ -177,9 +177,8 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         analyzer->SetupEfficiencyScaleFactor_electron();
 
         // -- For PVz reweighting -- //
-//        analyzer->SetupPVzWeights(Mgr.isMC, "ee", "./etc/PVzWeights.root");
-        analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
-
+        analyzer->SetupPVzWeights(Mgr.isMC, "ee", "./etc/PVzWeights.root");
+//        analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
 
         // -- Creating Histograms -- //
         TH1D *h_mass_before_PUCorr = new TH1D("h_mass_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", binnum, massbins);
@@ -696,6 +695,10 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
+            // For counting how many events make it into the histograms (DEBUGGING)
+            Int_t Npass_raw = 0;
+            Double_t Npass_weighed = 0;
+
             TChain *chain = new TChain(Mgr.TreeName[i_tup]);
             chain->Add(Mgr.FullLocation[i_tup]);
 
@@ -714,6 +717,7 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
             for(Int_t i=0; i<NEvents; i++)
             {              
                 MuMu->GetEvent(i);
+                bar.Draw(i);
 
 //                if (MuMu->Muon_eta->size() != 2 && (MuMu->isSelPassed == 1 || MuMu->isSelPassed == 2))
 //                {
@@ -808,7 +812,7 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
                 if (MuMu->isSelPassed == 1 || MuMu->isSelPassed == 3) // Before RC
                 {
-//                    if (MuMu->Muon_pT_uncorr->at(0) < 50 || MuMu->Muon_pT_uncorr->at(1) < 50) continue;
+                    if (MuMu->Muon_pT_uncorr->at(0) < 52 || MuMu->Muon_pT_uncorr->at(1) < 52) continue;
 
                     if (fabs(MuMu->Muon_eta_uncorr->at(0)) > 2.4 || fabs(MuMu->Muon_eta_uncorr->at(1)) > 2.4)
                     {
@@ -862,7 +866,7 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
                 if (MuMu->isSelPassed == 1 || MuMu->isSelPassed == 2) // After RocCorr
                 {
-//                    if (MuMu->Muon_pT->at(0) < 50 || MuMu->Muon_pT->at(1) < 50) continue;
+                    if (MuMu->Muon_pT->at(0) < 52 || MuMu->Muon_pT->at(1) < 52) continue;
 
                     if (fabs(MuMu->Muon_eta->at(0)) > 2.4 || fabs(MuMu->Muon_eta->at(1)) > 2.4)
                     {
@@ -885,10 +889,10 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
                     // -- Efficiency scale factor -- //
                     if(Mgr.isMC == kTRUE)
                     {
-//                        weight1 = analyzer->EfficiencySF_EventWeight_HLT_BtoF(MuMu);
-//                        weight2 = analyzer->EfficiencySF_EventWeight_HLT_GtoH(MuMu);
-                        weight1 = analyzer->EfficiencySF_EventWeight_HLT_BtoF_new(MuMu);
-                        weight2 = analyzer->EfficiencySF_EventWeight_HLT_GtoH_new(MuMu);
+                        weight1 = analyzer->EfficiencySF_EventWeight_HLT_BtoF(MuMu);
+                        weight2 = analyzer->EfficiencySF_EventWeight_HLT_GtoH(MuMu);
+//                        weight1 = analyzer->EfficiencySF_EventWeight_HLT_BtoF_new(MuMu);
+//                        weight2 = analyzer->EfficiencySF_EventWeight_HLT_GtoH_new(MuMu);
                         effweight = (Lumi_BtoF * weight1 + Lumi_GtoH * weight2) / Lumi;
 //                        effweight = weight2;
                     }
@@ -957,13 +961,21 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
                     h_phi_lead->Fill(mu1.Phi(), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     h_phi_sublead->Fill(mu2.Phi(), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
-                }// End of After RocCorr
+                    Npass_raw++;
+                    Npass_weighed += TotWeight * PUWeight;
 
-                bar.Draw(i);
+                }// End of After RocCorr
 
             }// End of event iteration
 
-            if(Mgr.isMC == kTRUE) printf("\tNormalization factor: %.8f\n", Lumi*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup]);
+            cout << "\t *** " << Npass_raw << " raw events have passed the selection" << endl;
+            if(Mgr.isMC == kTRUE)
+            {
+                cout << "\t *** " << Npass_weighed << " normalised events have passed the selection" << endl;
+                cout << "\t *** Cross section: " << Mgr.Xsec[i_tup] << endl;
+                cout << "\t *** Sum of weights: " << Mgr.Wsum[i_tup] << endl;
+                printf("\t *** Normalization factor: %.8f\n\n", Lumi*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup]);
+            }
 
             Double_t LoopRunTime = looptime.CpuTime();
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;

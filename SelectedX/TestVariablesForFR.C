@@ -27,6 +27,7 @@
 
 void E_HistDrawer(Int_t type);
 void Mu_HistDrawer(Int_t type);
+void Test_HistDrawer(Int_t type);
 Double_t CompChiSquared(TH1D *h_data, THStack *s_MC);
 Double_t CompAvgDataMCDifference(TH1D *h_data, THStack *s_MC);
 void removeNegativeBins(TH1D *h);
@@ -68,6 +69,12 @@ void TestVariablesForFR (TString WhichX = "", Int_t type = 2)
         Xselected++;
         cout << "\n*******     MuMu_HistDrawer(" << type << ")     *******" << endl;
         Mu_HistDrawer(type);
+    }
+    if (whichX.Contains("TEST"))
+    {
+        Xselected++;
+        cout << "\n*******     Test_HistDrawer(" << type << ")     *******" << endl;
+        Test_HistDrawer(type);
     }
     if (Xselected == 0) cout << "Wrong arument!" << endl;
 
@@ -258,18 +265,18 @@ void Mu_HistDrawer(Int_t type)
         file->GetObject("h_pT_endcap_deno", h_pT_endcap_MC[pr]);
         file->GetObject("h_eta_deno", h_eta_MC[pr]);
         file->GetObject("h_nVTX", h_nVTX_MC[pr]);
-        removeNegativeBins(h_PFiso_barrel_MC_deno[pr]);
-        removeNegativeBins(h_PFiso_endcap_MC_deno[pr]);
-        removeNegativeBins(h_TRKiso_barrel_MC_deno[pr]);
-        removeNegativeBins(h_TRKiso_endcap_MC_deno[pr]);
-        removeNegativeBins(h_PFiso_barrel_MC_nume[pr]);
-        removeNegativeBins(h_PFiso_endcap_MC_nume[pr]);
-        removeNegativeBins(h_TRKiso_barrel_MC_nume[pr]);
-        removeNegativeBins(h_TRKiso_endcap_MC_nume[pr]);
-        removeNegativeBins(h_pT_barrel_MC[pr]);
-        removeNegativeBins(h_pT_endcap_MC[pr]);
-        removeNegativeBins(h_eta_MC[pr]);
-        removeNegativeBins(h_nVTX_MC[pr]);
+//        removeNegativeBins(h_PFiso_barrel_MC_deno[pr]);
+//        removeNegativeBins(h_PFiso_endcap_MC_deno[pr]);
+//        removeNegativeBins(h_TRKiso_barrel_MC_deno[pr]);
+//        removeNegativeBins(h_TRKiso_endcap_MC_deno[pr]);
+//        removeNegativeBins(h_PFiso_barrel_MC_nume[pr]);
+//        removeNegativeBins(h_PFiso_endcap_MC_nume[pr]);
+//        removeNegativeBins(h_TRKiso_barrel_MC_nume[pr]);
+//        removeNegativeBins(h_TRKiso_endcap_MC_nume[pr]);
+//        removeNegativeBins(h_pT_barrel_MC[pr]);
+//        removeNegativeBins(h_pT_endcap_MC[pr]);
+//        removeNegativeBins(h_eta_MC[pr]);
+//        removeNegativeBins(h_nVTX_MC[pr]);
 
         if (pr == _DY_10to50)
         {
@@ -764,6 +771,266 @@ void Mu_HistDrawer(Int_t type)
     cout << "Endcap deno   " << h_PFiso_endcap_MC_deno[_WJets]->Integral() << endl;
 
 } // End of Mu_HistDrawer
+
+
+/// ################################################################################## ///
+/// ------------------------------------- TEST --------------------------------------- ///
+/// ################################################################################## ///
+void Test_HistDrawer(Int_t type)
+{
+    FileMgr fm;
+    THStack *s_mass = new THStack("s_mass", "");
+    THStack *s_nVTX = new THStack("s_nVTX", "");
+
+    TH1D *h_mass_MC[_EndOf_Data_Special], *h_nVTX_MC[_EndOf_Data_Special],
+         *h_mass_data, *h_nVTX_data;
+
+//----------------------------------- MC bkg -------------------------------------------------------
+
+    // Other MC
+    Int_t stop = 0;
+    Process_t pr1 = _WW;
+    while (!stop)
+    {
+        TFile *file;
+        if (type == 1) file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr1]+"_TEST.root", "READ");
+        else if (type == 2) file = new TFile("/media/sf_DATA/FR/FR_Hist_Mu_"+fm.Procname[pr1]+"_TEST.root", "READ");
+        else return;
+        file->GetObject("h_mass", h_mass_MC[pr1]);
+        file->GetObject("h_nVTX", h_nVTX_MC[pr1]);
+
+        removeNegativeBins(h_mass_MC[pr1]);
+        removeNegativeBins(h_nVTX_MC[pr1]);
+
+        // Converting to event density (dividing by bin width)
+        for (Int_t i = 1; i<=binnum; i++)
+        {
+            h_mass_MC[pr1]->SetBinContent(i, h_mass_MC[pr1]->GetBinContent(i)/(massbins[i]-massbins[i-1]));
+            h_mass_MC[pr1]->SetBinError(i, h_mass_MC[pr1]->GetBinError(i)/(massbins[i]-massbins[i-1]));
+        }
+
+        Color_t color = kBlack;
+        if (pr1 == _WJets || pr1 == _WJets_ext2v5) color = kRed - 2;
+        if (pr1 == _VVnST) color = kMagenta - 5;
+        if (pr1 == _WW) color = kMagenta - 5;
+        if (pr1 == _WZ) color = kMagenta - 2;
+        if (pr1 == _ZZ) color = kMagenta - 6;
+        if (pr1 == _tbarW) color = kGreen - 2;
+        if (pr1 == _tW) color = kGreen + 2;
+        if (pr1 == _ttbar || pr1 == _ttbar_700to1000 || pr1 == _ttbar_1000toInf) color = kCyan + 2;
+
+        h_mass_MC[pr1]->SetFillColor(color);
+        h_nVTX_MC[pr1]->SetFillColor(color);
+        h_mass_MC[pr1]->SetLineColor(color);
+        h_nVTX_MC[pr1]->SetLineColor(color);
+        h_mass_MC[pr1]->SetDirectory(0);
+        h_nVTX_MC[pr1]->SetDirectory(0);
+
+        s_mass->Add(h_mass_MC[pr1]);
+        s_nVTX->Add(h_nVTX_MC[pr1]);
+
+        file->Close();
+
+        if (pr1 == _WW) {pr1 = _WZ; continue;}
+        if (pr1 == _WZ) {pr1 = _ZZ; continue;}
+        if (pr1 == _ZZ) {pr1 = _tbarW; continue;}
+        if (pr1 == _tbarW) {pr1 = _tW; continue;}
+        if (pr1 == _tW) {pr1 = _ttbar; continue;}
+        if (pr1 == _ttbar) {pr1 = _ttbar_700to1000; continue;}
+        if (pr1 == _ttbar_700to1000) {pr1 = _ttbar_1000toInf; continue;}
+        if (pr1 == _ttbar_1000toInf) {pr1 = _WJets; continue;}
+        if (pr1 == _WJets) {pr1 = _WJets_ext2v5; continue;}
+        if (pr1 == _WJets_ext2v5) {stop = 1;}
+    }
+
+    // Drell-Yan
+    for (Process_t pr = _DY_10to50; pr <= _DY_2000to3000; pr=next(pr))
+    {
+        TFile *file;
+        if (type == 1) file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr]+"_TEST.root", "READ");
+        else if (type == 2) file = new TFile("/media/sf_DATA/FR/FR_Hist_Mu_"+fm.Procname[pr]+"_TEST.root", "READ");
+        else return;
+        file->GetObject("h_mass", h_mass_MC[pr]);
+        file->GetObject("h_nVTX", h_nVTX_MC[pr]);
+        removeNegativeBins(h_mass_MC[pr]);
+        removeNegativeBins(h_nVTX_MC[pr]);
+
+        // Converting to event density (dividing by bin width)
+        for (Int_t i = 1; i<=binnum; i++)
+        {
+            h_mass_MC[pr]->SetBinContent(i, h_mass_MC[pr]->GetBinContent(i)/(massbins[i]-massbins[i-1]));
+            h_mass_MC[pr]->SetBinError(i, h_mass_MC[pr]->GetBinError(i)/(massbins[i]-massbins[i-1]));
+        }
+
+        if (pr == _DY_10to50)
+        {
+            h_mass_MC[_DY_Full] = ((TH1D*)(h_mass_MC[pr]->Clone("h_mass_DY")));
+            h_nVTX_MC[_DY_Full] = ((TH1D*)(h_nVTX_MC[pr]->Clone("h_nVTX_DY")));
+            h_mass_MC[_DY_Full]->SetDirectory(0);
+            h_nVTX_MC[_DY_Full]->SetDirectory(0);
+        }
+        else
+        {
+            h_mass_MC[_DY_Full]->Add(h_mass_MC[pr]);
+            h_nVTX_MC[_DY_Full]->Add(h_nVTX_MC[pr]);
+        }
+
+        Color_t color = kOrange - 5;
+        h_mass_MC[pr]->SetFillColor(color);
+        h_nVTX_MC[pr]->SetFillColor(color);
+        h_mass_MC[pr]->SetLineColor(color);
+        h_nVTX_MC[pr]->SetLineColor(color);
+        h_mass_MC[pr]->SetDirectory(0);
+        h_nVTX_MC[pr]->SetDirectory(0);
+
+        s_mass->Add(h_mass_MC[pr]);
+        s_nVTX->Add(h_nVTX_MC[pr]);
+
+        file->Close();
+    }
+
+    // QCD
+    for (Process_t pr = _QCDMuEnriched_15to20; pr <= _QCDMuEnriched_1000toInf; pr=next(pr))
+    {
+        TFile *file;
+        if (type == 1) file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr]+"_TEST.root", "READ");
+        else if (type == 2) file = new TFile("/media/sf_DATA/FR/FR_Hist_Mu_"+fm.Procname[pr]+"_TEST.root", "READ");
+        else return;
+        file->GetObject("h_mass", h_mass_MC[pr]);
+        file->GetObject("h_nVTX", h_nVTX_MC[pr]);
+        removeNegativeBins(h_mass_MC[pr]);
+        removeNegativeBins(h_nVTX_MC[pr]);
+
+        // Converting to event density (dividing by bin width)
+        for (Int_t i = 1; i<=binnum; i++)
+        {
+            h_mass_MC[pr]->SetBinContent(i, h_mass_MC[pr]->GetBinContent(i)/(massbins[i]-massbins[i-1]));
+            h_mass_MC[pr]->SetBinError(i, h_mass_MC[pr]->GetBinError(i)/(massbins[i]-massbins[i-1]));
+        }
+
+        if (pr == _QCDMuEnriched_15to20)
+        {
+            h_mass_MC[_QCDMuEnriched_Full] = ((TH1D*)(h_mass_MC[pr]->Clone("h_masso_QCD")));
+            h_nVTX_MC[_QCDMuEnriched_Full] = ((TH1D*)(h_nVTX_MC[pr]->Clone("h_nVTX_QCD")));
+            h_mass_MC[_QCDMuEnriched_Full]->SetDirectory(0);
+            h_nVTX_MC[_QCDMuEnriched_Full]->SetDirectory(0);
+        }
+        else
+        {
+            h_mass_MC[_QCDMuEnriched_Full]->Add(h_mass_MC[pr]);
+            h_nVTX_MC[_QCDMuEnriched_Full]->Add(h_nVTX_MC[pr]);
+        }
+
+        Color_t color = kRed + 3;
+        h_mass_MC[pr]->SetFillColor(color);
+        h_nVTX_MC[pr]->SetFillColor(color);
+        h_mass_MC[pr]->SetLineColor(color);
+        h_nVTX_MC[pr]->SetLineColor(color);
+        h_mass_MC[pr]->SetDirectory(0);
+        h_nVTX_MC[pr]->SetDirectory(0);
+
+        s_mass->Add(h_mass_MC[pr]);
+        s_nVTX->Add(h_nVTX_MC[pr]);
+
+        file->Close();
+    }
+
+    h_mass_MC[_QCDMuEnriched_Full]->SetFillColor(kGray);
+    h_nVTX_MC[_QCDMuEnriched_Full]->SetFillColor(kGray);
+    h_mass_MC[_QCDMuEnriched_Full]->SetFillStyle(3002);
+    h_nVTX_MC[_QCDMuEnriched_Full]->SetFillStyle(3002);
+    h_mass_MC[_QCDMuEnriched_Full]->SetLineColor(kRed);
+    h_nVTX_MC[_QCDMuEnriched_Full]->SetLineColor(kRed);
+
+//--------------------------------------- DATA -----------------------------------------------------
+
+    for (Process_t pr=_SingleMuon_B; pr<=_SingleMuon_H; pr=next(pr))
+    {
+        TFile *file;
+        if (type == 1) file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr]+"_TEST.root", "READ");
+        else if (type == 2) file = new TFile("/media/sf_DATA/FR/FR_Hist_Mu_"+fm.Procname[pr]+"_TEST.root", "READ");
+        else return;
+        TH1D *h_temp[2];
+        if (pr == _SingleMuon_B)
+        {
+            file->GetObject("h_mass", h_mass_data);
+            file->GetObject("h_nVTX", h_nVTX_data);
+            removeNegativeBins(h_mass_data);
+            removeNegativeBins(h_nVTX_data);
+            // Converting to event density (dividing by bin width)
+            for (Int_t i = 1; i<=binnum; i++)
+            {
+                h_mass_data->SetBinContent(i, h_mass_data->GetBinContent(i)/(massbins[i]-massbins[i-1]));
+                h_mass_data->SetBinError(i, h_mass_data->GetBinError(i)/(massbins[i]-massbins[i-1]));
+            }
+        }
+        else
+        {
+            file->GetObject("h_mass", h_temp[0]);
+            file->GetObject("h_nVTX", h_temp[1]);
+            removeNegativeBins(h_temp[0]);
+            removeNegativeBins(h_temp[1]);
+            // Converting to event density (dividing by bin width)
+            for (Int_t i = 1; i<=binnum; i++)
+            {
+                h_temp[0]->SetBinContent(i, h_temp[0]->GetBinContent(i)/(massbins[i]-massbins[i-1]));
+                h_temp[0]->SetBinError(i, h_temp[0]->GetBinError(i)/(massbins[i]-massbins[i-1]));
+            }
+            h_mass_data->Add(h_temp[0]);
+            h_nVTX_data->Add(h_temp[1]);
+        }
+    }
+
+    h_mass_data->SetMarkerStyle(kFullDotLarge);
+    h_nVTX_data->SetMarkerStyle(kFullDotLarge);
+    h_mass_data->SetMarkerColor(kBlack);
+    h_nVTX_data->SetMarkerColor(kBlack);
+    h_mass_data->SetLineColor(kBlack);
+    h_nVTX_data->SetLineColor(kBlack);
+    h_mass_data->SetDirectory(0);
+    h_nVTX_data->SetDirectory(0);
+
+//--------------------------------- Ratio Plots --------------------------------------
+
+    myRatioPlot_t *RP_mass = new myRatioPlot_t("RP_mass", s_mass, h_mass_data);
+    myRatioPlot_t *RP_nVTX = new myRatioPlot_t("RP_nVTX", s_nVTX, h_nVTX_data);
+
+    RP_mass->SetPlots("m_{#mu#mu} [GeV/c^{2}]", -3, 3);
+    RP_nVTX->SetPlots("N_{#lower[-0.25]{VTX}} (#mu)", 0, 50);
+
+
+    TLegend *legend = new TLegend(0.5, 0.65, 0.95, 0.95);
+
+    legend->AddEntry(h_mass_data, "Data", "lp");
+//    legend->AddEntry(h_mass_data, "Matavimas", "lp");
+    legend->AddEntry(h_mass_MC[_DY_50to100], "DY", "f");
+    legend->AddEntry(h_mass_MC[_ttbar], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+    legend->AddEntry(h_mass_MC[_tW], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+    legend->AddEntry(h_mass_MC[_tbarW], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+    legend->AddEntry(h_mass_MC[_ZZ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+    legend->AddEntry(h_mass_MC[_WZ], "#font[12]{#scale[1.1]{WZ}}", "f");
+    legend->AddEntry(h_mass_MC[_WW], "#font[12]{#scale[1.1]{WW}}", "f");
+//    legend->AddEntry(h_mass_MC[_VVnST], "Diboson+#font[12]{#scale[1.1]{tW}}+#font[12]{#scale[1.1]{#bar{t}W}}", "f");
+    legend->AddEntry(h_mass_MC[_WJets], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+    legend->AddEntry(h_mass_MC[_QCDMuEnriched_15to20], "#font[12]{#scale[1.1]{QCD}}", "f");
+    legend->SetNColumns(2);
+
+    RP_mass->ImportLegend(legend);
+    RP_nVTX->ImportLegend(legend);
+
+    RP_mass->Draw(1, 1e6, 1);
+    RP_mass->s_stackedProcesses->GetYaxis()->SetTitle("N_{#lower[-0.25]{EVT}}/GeV");
+    RP_mass->pad1->cd();
+    RP_mass->s_stackedProcesses->Draw("sameaxis");
+    RP_mass->legend->Draw();
+    RP_mass->pad1->Update();
+    RP_mass->canvas->Update();
+    RP_nVTX->Draw(1, 1e8, 0);
+
+    cout << "MC mass integral: " << ((TH1D*)(s_mass->GetStack()->Last()))->Integral() << endl;
+    cout << "Data mass integral: " << h_mass_data->Integral() << endl;
+
+} // End of Test_HistDrawer
 
 
 /// ------------------------------- COMP CHI^2 ---------------------------------- ///

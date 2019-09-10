@@ -29,6 +29,7 @@ void EE_HistDrawer (TString whichGraphs, TString type);
 void MuMu_HistDrawer (TString whichGraphs, TString type);
 void EMu_HistDrawer (TString whichGraphs, TString type);
 void Est_HistDrawer ();
+void TEST_HistDrawer (TString whichGraphs , TString type);
 void Test_RocCorr ();
 Double_t CompChiSquared (TH1D *h_data, THStack *s_MC);
 Double_t CompAvgDataMCDifference (TH1D *h_data, THStack *s_MC);
@@ -84,6 +85,12 @@ void HistDrawer (TString WhichX = "", TString WhichGraphs = "ALL", TString type 
         Xselected++;
         cout << "\n*****   Test_RocCorr ()  *****" << endl;
         Test_RocCorr();
+    }
+    if (whichX.Contains("DENSITY"))
+    {
+        Xselected++;
+        cout << "\n*****   TEST_HistDrawer ()  *****" << endl;
+        TEST_HistDrawer(whichGraphs,type);
     }
     if (Xselected == 0) cout << "Wrong arument!" << endl;
 
@@ -5789,3 +5796,181 @@ void removeNegativeBins(TH1D *h)
         }
     }
 }
+
+
+void TEST_HistDrawer (TString whichGraphs , TString type)
+{
+    if (!whichGraphs.Length())
+    {
+        cout << "Error: no whichGraphs specified!" << endl;
+        return;
+    }
+
+    Int_t count_drawn = 0;
+    LocalFileMgr Mgr;
+
+    Mgr.SetProc(_MuMu_DY_Full);
+    TString name_DY = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root";
+    TFile* f_DY = new TFile(name_DY, "READ");
+    if (f_DY->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_DY_Full]+".root" << " opened successfully" << endl;
+    Mgr.SetProc(_MuMu_Bkg_Full);
+    TString name_bkg = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root";
+    TFile* f_bkg = new TFile(name_bkg, "READ");
+    if (f_bkg->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_Bkg_Full]+".root" << " opened successfully" << endl;
+    Mgr.SetProc(_MuMu_SingleMuon_Full);
+    TString name_data = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+".root";
+    TFile* f_data = new TFile(name_data, "READ");
+    if (f_data->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+".root" << " opened successfully" << endl;
+
+        THStack *s_mass_before_EffCorr = new THStack("s_mass_before_EffCorr", "");
+        THStack *s_mass = new THStack("s_mass", "");
+
+//----------------------------------- MC bkg -------------------------------------------------------
+        TH1D *h_bkg_mass_before_EffCorr[9], *h_bkg_mass[9];
+        Int_t iter = 0;
+
+        for (SelProc_t pr = _MuMu_QCDMuEnriched_Full; pr > _EndOf_MuMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
+        {
+            if (pr == _MuMu_QCDMuEnriched_Full)
+            {
+                iter++;
+                continue;
+            }
+            f_bkg->GetObject("h_mass_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_before_EffCorr[iter]);
+            f_bkg->GetObject("h_mass_"+Mgr.Procname[pr], h_bkg_mass[iter]);
+            removeNegativeBins(h_bkg_mass_before_EffCorr[iter]);
+            removeNegativeBins(h_bkg_mass[iter]);
+
+            // Converting to event density (dividing by bin width)
+            for (Int_t i=1; i<=binnum; i++)
+            {
+                h_bkg_mass_before_EffCorr[iter]->SetBinContent(i, h_bkg_mass_before_EffCorr[iter]->GetBinContent(i)/(massbins[i]-massbins[i-1]));
+                h_bkg_mass_before_EffCorr[iter]->SetBinError(i, h_bkg_mass_before_EffCorr[iter]->GetBinError(i)/(massbins[i]-massbins[i-1]));
+                h_bkg_mass[iter]->SetBinContent(i, h_bkg_mass[iter]->GetBinContent(i)/(massbins[i]-massbins[i-1]));
+                h_bkg_mass[iter]->SetBinError(i, h_bkg_mass[iter]->GetBinError(i)/(massbins[i]-massbins[i-1]));
+            }
+
+            Color_t color = kBlack;
+            if (pr == _MuMu_QCDMuEnriched_Full) color = kRed + 3;
+            if (pr == _MuMu_WJets_Full) color = kRed - 2;
+            if (pr == _MuMu_WW) color = kMagenta - 5;
+            if (pr == _MuMu_WZ) color = kMagenta - 2;
+            if (pr == _MuMu_ZZ) color = kMagenta - 6;
+            if (pr == _MuMu_tbarW) color = kGreen - 2;
+            if (pr == _MuMu_tW) color = kGreen + 2;
+            if (pr == _MuMu_ttbar_Full) color = kCyan + 2;
+            if (pr == _MuMu_DYTauTau_Full) color = kOrange - 5;
+
+            h_bkg_mass_before_EffCorr[iter]->SetFillColor(color);
+            h_bkg_mass_before_EffCorr[iter]->SetLineColor(color);
+            h_bkg_mass_before_EffCorr[iter]->SetDirectory(0);
+            s_mass_before_EffCorr->Add(h_bkg_mass_before_EffCorr[iter]);
+
+            h_bkg_mass[iter]->SetFillColor(color);
+            h_bkg_mass[iter]->SetLineColor(color);
+            h_bkg_mass[iter]->SetDirectory(0);
+            s_mass->Add(h_bkg_mass[iter]);
+
+            iter++;
+
+            if (pr == _MuMu_WJets_Full)
+                pr = _EndOf_MuMu_VVnST_Normal; // next - WW
+            if (pr == _MuMu_tW)
+                pr = _MuMu_VVnST; // next - ttbar
+            if (pr == _MuMu_DYTauTau_Full) // last
+                break;
+
+        } // End of for(bkg)
+
+//---------------------------------- MC signal -----------------------------------------------------
+
+        TH1D *h_DY_mass_before_EffCorr, *h_DY_mass;
+
+        f_DY->GetObject("h_mass_before_EffCorr_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass_before_EffCorr);
+        f_DY->GetObject("h_mass_"+Mgr.Procname[_MuMu_DY_Full], h_DY_mass);
+        removeNegativeBins(h_DY_mass_before_EffCorr);
+        removeNegativeBins(h_DY_mass);
+
+        // Converting to event density (dividing by bin width)
+        for (Int_t i=1; i<=binnum; i++)
+        {
+            h_DY_mass_before_EffCorr->SetBinContent(i, h_DY_mass_before_EffCorr->GetBinContent(i)/(massbins[i]-massbins[i-1]));
+            h_DY_mass_before_EffCorr->SetBinError(i, h_DY_mass_before_EffCorr->GetBinError(i)/(massbins[i]-massbins[i-1]));
+            h_DY_mass->SetBinContent(i, h_DY_mass->GetBinContent(i)/(massbins[i]-massbins[i-1]));
+            h_DY_mass->SetBinError(i, h_DY_mass->GetBinError(i)/(massbins[i]-massbins[i-1]));
+        }
+
+        h_DY_mass_before_EffCorr->SetFillColor(kOrange);
+        h_DY_mass_before_EffCorr->SetLineColor(kOrange);
+        h_DY_mass_before_EffCorr->SetDirectory(0);
+        s_mass_before_EffCorr->Add(h_DY_mass_before_EffCorr);
+
+        h_DY_mass->SetFillColor(kOrange);
+        h_DY_mass->SetLineColor(kOrange);
+        h_DY_mass->SetDirectory(0);
+        s_mass->Add(h_DY_mass);
+
+//--------------------------------------- DATA -----------------------------------------------------
+
+        TH1D *h_data_mass;
+
+        f_data->GetObject("h_mass_"+Mgr.Procname[_MuMu_SingleMuon_Full], h_data_mass);
+
+        // Converting to event density (dividing by bin width)
+        for (Int_t i=1; i<=binnum; i++)
+        {
+            h_data_mass->SetBinContent(i, h_data_mass->GetBinContent(i)/(massbins[i]-massbins[i-1]));
+            h_data_mass->SetBinError(i, h_data_mass->GetBinError(i)/(massbins[i]-massbins[i-1]));
+        }
+
+
+        h_data_mass->SetMarkerStyle(kFullDotLarge);
+        h_data_mass->SetMarkerColor(kBlack);
+        h_data_mass->SetLineColor(kBlack);
+        h_data_mass->SetDirectory(0);
+
+//--------------------------------- Ratio Plot --------------------------------------
+
+        myRatioPlot_t *RP_mass_before_EffCorr, *RP_mass;
+        RP_mass_before_EffCorr = new myRatioPlot_t("RP_mass_before_EffCorr", s_mass_before_EffCorr, h_data_mass);
+        RP_mass = new myRatioPlot_t("RP_mass", s_mass, h_data_mass);
+
+        RP_mass_before_EffCorr->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}] before Efficiency SF", 15, 3000);
+        RP_mass->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
+
+        TLegend *legend = new TLegend(0.5, 0.65, 0.95, 0.95);
+
+        legend->AddEntry(h_data_mass, "Data", "lp");
+//        legend->AddEntry(h_data_mass, "Matavimas", "lp");
+        legend->AddEntry(h_DY_mass, "DY#rightarrow#mu#mu", "f");
+        legend->AddEntry(h_bkg_mass[8], "DY#rightarrow #tau#tau", "f");
+        legend->AddEntry(h_bkg_mass[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+        legend->AddEntry(h_bkg_mass[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+        legend->AddEntry(h_bkg_mass[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+        legend->AddEntry(h_bkg_mass[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+        legend->AddEntry(h_bkg_mass[3], "#font[12]{#scale[1.1]{WZ}}", "f");
+        legend->AddEntry(h_bkg_mass[2], "#font[12]{#scale[1.1]{WW}}", "f");
+        legend->AddEntry(h_bkg_mass[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+//        legend->AddEntry(h_bkg_mass[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        legend->SetNColumns(2);
+
+        RP_mass_before_EffCorr->ImportLegend(legend);
+        RP_mass->ImportLegend(legend);
+
+        RP_mass_before_EffCorr->Draw(0.5, 1e6, 1);
+        RP_mass_before_EffCorr->s_stackedProcesses->GetYaxis()->SetTitle("N_{#lower[-0.25]{EVT}}/GeV");
+        RP_mass_before_EffCorr->pad1->cd();
+        RP_mass_before_EffCorr->s_stackedProcesses->Draw("sameaxis");
+        RP_mass_before_EffCorr->legend->Draw();
+        RP_mass_before_EffCorr->pad1->Update();
+        RP_mass_before_EffCorr->canvas->Update();
+
+        RP_mass->Draw(0.5, 1e6, 1);
+        RP_mass->s_stackedProcesses->GetYaxis()->SetTitle("N_{#lower[-0.25]{EVT}}/GeV");
+        RP_mass->pad1->cd();
+        RP_mass->s_stackedProcesses->Draw("sameaxis");
+        RP_mass->legend->Draw();
+        RP_mass->pad1->Update();
+        RP_mass->canvas->Update();
+
+} // End of TEST_HistDrawer()
