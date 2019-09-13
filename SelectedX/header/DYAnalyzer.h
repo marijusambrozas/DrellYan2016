@@ -627,7 +627,7 @@ Bool_t DYAnalyzer::SeparateDYLLSample_isHardProcess(TString Tag, NtupleHandle *n
 
                 if(GenLeptonCollection.size() == 2) // -- Select the events containing 2 electrons from hard-process -- //
                 {
-                        if(Tag == "DY_M50to100") // -- Select only evetns withtin 50 < M < 100 -- //
+                        if(Tag == "DY_M50to100") // -- Select only events withtin 50 < M < 100 -- //
                         {
                                 TLorentzVector v1 = GenLeptonCollection[0].Momentum;
                                 TLorentzVector v2 = GenLeptonCollection[1].Momentum;
@@ -3076,7 +3076,7 @@ void DYAnalyzer::SetupPVzWeights(Bool_t isMC, TString whichX, TString fileName)
     TFile *f = new TFile(fileName, "READ");
     TString WhichX = whichX;
     WhichX.ToLower();
-    if (WhichX!="ee" && WhichX!="mumu" && WhichX!="emu")
+    if (WhichX!="ee" && WhichX!="mumu" && WhichX!="emu" && WhichX!="combined")
     {
         cout << "ERROR! Wrong name for the final state!" << endl;
 //        return;
