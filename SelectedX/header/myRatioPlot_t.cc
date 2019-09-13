@@ -156,13 +156,17 @@ void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX)
             h1_one->SetBinError(i, 0);
         }
         h1_one->SetLineColor(kRed);
+        h1_one->SetFillStyle(0);
         h1_one->SetLineWidth(2);
+        h1_one->SetDirectory(0);
         h1_one->Draw("samehist][");
         h1_one->Draw("sameaxis");
         if (systSet)
         {
             h1_fullunc->Draw("sameaxis");
             h1_dataovermc->Draw("samehist P");
+            h1_one->Draw("samehist][");
+            h1_one->Draw("sameaxis");
         }
         h1_dataovermc->Draw("same E0");
         if(logX) pad2->SetLogx();
