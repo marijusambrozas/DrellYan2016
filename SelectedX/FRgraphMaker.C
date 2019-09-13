@@ -571,39 +571,39 @@ void Mu_FRgraphMaker (Bool_t DEBUG)
         TH1D* h_TRKiso_endcap_deno = new TH1D("h_TRKiso_endcap_deno", "h_TRKiso_endcap_deno", 100, 0, 5); h_TRKiso_endcap_deno->Sumw2();
         TH1D* h_nVTX = new TH1D("h_nVTX", "h_nVTX", 50, 0, 50); h_nVTX->Sumw2();
 
-        TH1D* h_PFiso_barrel_nume_50to100  = new TH1D("h_PFiso_barrel_nume_50to100",  "h_PFiso_barrel_nume_50to100",  30, 0, 0.15); h_PFiso_barrel_nume_50to100->Sumw2();
-        TH1D* h_PFiso_endcap_nume_50to100  = new TH1D("h_PFiso_endcap_nume_50to100",  "h_PFiso_endcap_nume_50to100",  30, 0, 0.15); h_PFiso_endcap_nume_50to100->Sumw2();
-        TH1D* h_PFiso_barrel_deno_50to100  = new TH1D("h_PFiso_barrel_deno_50to100",  "h_PFiso_barrel_deno_50to100",  100, 0, 5);   h_PFiso_barrel_deno_50to100->Sumw2();
-        TH1D* h_PFiso_endcap_deno_50to100  = new TH1D("h_PFiso_endcap_deno_50to100",  "h_PFiso_endcap_deno_50to100",  100, 0, 5);   h_PFiso_endcap_deno_50to100->Sumw2();
+        TH1D* h_PFiso_barrel_nume_50to70  = new TH1D("h_PFiso_barrel_nume_50to70",  "h_PFiso_barrel_nume_50to70",  30, 0, 0.15); h_PFiso_barrel_nume_50to70->Sumw2();
+        TH1D* h_PFiso_endcap_nume_50to70  = new TH1D("h_PFiso_endcap_nume_50to70",  "h_PFiso_endcap_nume_50to70",  30, 0, 0.15); h_PFiso_endcap_nume_50to70->Sumw2();
+        TH1D* h_PFiso_barrel_deno_50to70  = new TH1D("h_PFiso_barrel_deno_50to70",  "h_PFiso_barrel_deno_50to70",  100, 0, 5);   h_PFiso_barrel_deno_50to70->Sumw2();
+        TH1D* h_PFiso_endcap_deno_50to70  = new TH1D("h_PFiso_endcap_deno_50to70",  "h_PFiso_endcap_deno_50to70",  100, 0, 5);   h_PFiso_endcap_deno_50to70->Sumw2();
+        TH1D* h_PFiso_barrel_nume_70to100 = new TH1D("h_PFiso_barrel_nume_70to100", "h_PFiso_barrel_nume_70to100", 30, 0, 0.15); h_PFiso_barrel_nume_70to100->Sumw2();
+        TH1D* h_PFiso_endcap_nume_70to100 = new TH1D("h_PFiso_endcap_nume_70to100", "h_PFiso_endcap_nume_70to100", 30, 0, 0.15); h_PFiso_endcap_nume_70to100->Sumw2();
+        TH1D* h_PFiso_barrel_deno_70to100 = new TH1D("h_PFiso_barrel_deno_70to100", "h_PFiso_barrel_deno_70to100", 100, 0, 5);   h_PFiso_barrel_deno_70to100->Sumw2();
+        TH1D* h_PFiso_endcap_deno_70to100 = new TH1D("h_PFiso_endcap_deno_70to100", "h_PFiso_endcap_deno_70to100", 100, 0, 5);   h_PFiso_endcap_deno_70to100->Sumw2();
         TH1D* h_PFiso_barrel_nume_100to200 = new TH1D("h_PFiso_barrel_nume_100to200", "h_PFiso_barrel_nume_100to200", 30, 0, 0.15); h_PFiso_barrel_nume_100to200->Sumw2();
         TH1D* h_PFiso_endcap_nume_100to200 = new TH1D("h_PFiso_endcap_nume_100to200", "h_PFiso_endcap_nume_100to200", 30, 0, 0.15); h_PFiso_endcap_nume_100to200->Sumw2();
         TH1D* h_PFiso_barrel_deno_100to200 = new TH1D("h_PFiso_barrel_deno_100to200", "h_PFiso_barrel_deno_100to200", 100, 0, 5);   h_PFiso_barrel_deno_100to200->Sumw2();
         TH1D* h_PFiso_endcap_deno_100to200 = new TH1D("h_PFiso_endcap_deno_100to200", "h_PFiso_endcap_deno_100to200", 100, 0, 5);   h_PFiso_endcap_deno_100to200->Sumw2();
-        TH1D* h_PFiso_barrel_nume_200to300 = new TH1D("h_PFiso_barrel_nume_200to300", "h_PFiso_barrel_nume_200to300", 30, 0, 0.15); h_PFiso_barrel_nume_200to300->Sumw2();
-        TH1D* h_PFiso_endcap_nume_200to300 = new TH1D("h_PFiso_endcap_nume_200to300", "h_PFiso_endcap_nume_200to300", 30, 0, 0.15); h_PFiso_endcap_nume_200to300->Sumw2();
-        TH1D* h_PFiso_barrel_deno_200to300 = new TH1D("h_PFiso_barrel_deno_200to300", "h_PFiso_barrel_deno_200to300", 100, 0, 5);   h_PFiso_barrel_deno_200to300->Sumw2();
-        TH1D* h_PFiso_endcap_deno_200to300 = new TH1D("h_PFiso_endcap_deno_200to300", "h_PFiso_endcap_deno_200to300", 100, 0, 5);   h_PFiso_endcap_deno_200to300->Sumw2();
-        TH1D* h_PFiso_barrel_nume_300to500 = new TH1D("h_PFiso_barrel_nume_300to500", "h_PFiso_barrel_nume_300to500", 30, 0, 0.15); h_PFiso_barrel_nume_300to500->Sumw2();
-        TH1D* h_PFiso_endcap_nume_300to500 = new TH1D("h_PFiso_endcap_nume_300to500", "h_PFiso_endcap_nume_300to500", 30, 0, 0.15); h_PFiso_endcap_nume_300to500->Sumw2();
-        TH1D* h_PFiso_barrel_deno_300to500 = new TH1D("h_PFiso_barrel_deno_300to500", "h_PFiso_barrel_deno_300to500", 100, 0, 5);   h_PFiso_barrel_deno_300to500->Sumw2();
-        TH1D* h_PFiso_endcap_deno_300to500 = new TH1D("h_PFiso_endcap_deno_300to500", "h_PFiso_endcap_deno_300to500", 100, 0, 5);   h_PFiso_endcap_deno_300to500->Sumw2();
+        TH1D* h_PFiso_barrel_nume_200to500 = new TH1D("h_PFiso_barrel_nume_200to500", "h_PFiso_barrel_nume_200to500", 30, 0, 0.15); h_PFiso_barrel_nume_200to500->Sumw2();
+        TH1D* h_PFiso_endcap_nume_200to500 = new TH1D("h_PFiso_endcap_nume_200to500", "h_PFiso_endcap_nume_200to500", 30, 0, 0.15); h_PFiso_endcap_nume_200to500->Sumw2();
+        TH1D* h_PFiso_barrel_deno_200to500 = new TH1D("h_PFiso_barrel_deno_200to500", "h_PFiso_barrel_deno_200to500", 100, 0, 5);   h_PFiso_barrel_deno_200to500->Sumw2();
+        TH1D* h_PFiso_endcap_deno_200to500 = new TH1D("h_PFiso_endcap_deno_200to500", "h_PFiso_endcap_deno_200to500", 100, 0, 5);   h_PFiso_endcap_deno_200to500->Sumw2();
 
-        TH1D* h_pT_barrel_nume_50to100  = new TH1D("h_pT_barrel_nume_50to100 ", "h_pT_barrel_nume_50to100 ", ptbinnum, ptbin);               h_pT_barrel_nume_50to100 ->Sumw2();
-        TH1D* h_pT_endcap_nume_50to100  = new TH1D("h_pT_endcap_nume_50to100 ", "h_pT_endcap_nume_50to100 ", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_nume_50to100 ->Sumw2();
-        TH1D* h_pT_barrel_deno_50to100  = new TH1D("h_pT_barrel_deno_50to100 ", "h_pT_barrel_deno_50to100 ", ptbinnum, ptbin);               h_pT_barrel_deno_50to100 ->Sumw2();
-        TH1D* h_pT_endcap_deno_50to100  = new TH1D("h_pT_endcap_deno_50to100 ", "h_pT_endcap_deno_50to100 ", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_deno_50to100 ->Sumw2();
+        TH1D* h_pT_barrel_nume_50to70  = new TH1D("h_pT_barrel_nume_50to70 ", "h_pT_barrel_nume_50to70 ", ptbinnum, ptbin);               h_pT_barrel_nume_50to70 ->Sumw2();
+        TH1D* h_pT_endcap_nume_50to70  = new TH1D("h_pT_endcap_nume_50to70 ", "h_pT_endcap_nume_50to70 ", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_nume_50to70 ->Sumw2();
+        TH1D* h_pT_barrel_deno_50to70  = new TH1D("h_pT_barrel_deno_50to70 ", "h_pT_barrel_deno_50to70 ", ptbinnum, ptbin);               h_pT_barrel_deno_50to70 ->Sumw2();
+        TH1D* h_pT_endcap_deno_50to70  = new TH1D("h_pT_endcap_deno_50to70 ", "h_pT_endcap_deno_50to70 ", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_deno_50to70 ->Sumw2();
+        TH1D* h_pT_barrel_nume_70to100 = new TH1D("h_pT_barrel_nume_70to100", "h_pT_barrel_nume_70to100", ptbinnum, ptbin);               h_pT_barrel_nume_70to100->Sumw2();
+        TH1D* h_pT_endcap_nume_70to100 = new TH1D("h_pT_endcap_nume_70to100", "h_pT_endcap_nume_70to100", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_nume_70to100->Sumw2();
+        TH1D* h_pT_barrel_deno_70to100 = new TH1D("h_pT_barrel_deno_70to100", "h_pT_barrel_deno_70to100", ptbinnum, ptbin);               h_pT_barrel_deno_70to100->Sumw2();
+        TH1D* h_pT_endcap_deno_70to100 = new TH1D("h_pT_endcap_deno_70to100", "h_pT_endcap_deno_70to100", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_deno_70to100->Sumw2();
         TH1D* h_pT_barrel_nume_100to200 = new TH1D("h_pT_barrel_nume_100to200", "h_pT_barrel_nume_100to200", ptbinnum, ptbin);               h_pT_barrel_nume_100to200->Sumw2();
         TH1D* h_pT_endcap_nume_100to200 = new TH1D("h_pT_endcap_nume_100to200", "h_pT_endcap_nume_100to200", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_nume_100to200->Sumw2();
         TH1D* h_pT_barrel_deno_100to200 = new TH1D("h_pT_barrel_deno_100to200", "h_pT_barrel_deno_100to200", ptbinnum, ptbin);               h_pT_barrel_deno_100to200->Sumw2();
         TH1D* h_pT_endcap_deno_100to200 = new TH1D("h_pT_endcap_deno_100to200", "h_pT_endcap_deno_100to200", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_deno_100to200->Sumw2();
-        TH1D* h_pT_barrel_nume_200to300 = new TH1D("h_pT_barrel_nume_200to300", "h_pT_barrel_nume_200to300", ptbinnum, ptbin);               h_pT_barrel_nume_200to300->Sumw2();
-        TH1D* h_pT_endcap_nume_200to300 = new TH1D("h_pT_endcap_nume_200to300", "h_pT_endcap_nume_200to300", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_nume_200to300->Sumw2();
-        TH1D* h_pT_barrel_deno_200to300 = new TH1D("h_pT_barrel_deno_200to300", "h_pT_barrel_deno_200to300", ptbinnum, ptbin);               h_pT_barrel_deno_200to300->Sumw2();
-        TH1D* h_pT_endcap_deno_200to300 = new TH1D("h_pT_endcap_deno_200to300", "h_pT_endcap_deno_200to300", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_deno_200to300->Sumw2();
-        TH1D* h_pT_barrel_nume_300to500 = new TH1D("h_pT_barrel_nume_300to500", "h_pT_barrel_nume_300to500", ptbinnum, ptbin);               h_pT_barrel_nume_300to500->Sumw2();
-        TH1D* h_pT_endcap_nume_300to500 = new TH1D("h_pT_endcap_nume_300to500", "h_pT_endcap_nume_300to500", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_nume_300to500->Sumw2();
-        TH1D* h_pT_barrel_deno_300to500 = new TH1D("h_pT_barrel_deno_300to500", "h_pT_barrel_deno_300to500", ptbinnum, ptbin);               h_pT_barrel_deno_300to500->Sumw2();
-        TH1D* h_pT_endcap_deno_300to500 = new TH1D("h_pT_endcap_deno_300to500", "h_pT_endcap_deno_300to500", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_deno_300to500->Sumw2();
+        TH1D* h_pT_barrel_nume_200to500 = new TH1D("h_pT_barrel_nume_200to500", "h_pT_barrel_nume_200to500", ptbinnum, ptbin);               h_pT_barrel_nume_200to500->Sumw2();
+        TH1D* h_pT_endcap_nume_200to500 = new TH1D("h_pT_endcap_nume_200to500", "h_pT_endcap_nume_200to500", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_nume_200to500->Sumw2();
+        TH1D* h_pT_barrel_deno_200to500 = new TH1D("h_pT_barrel_deno_200to500", "h_pT_barrel_deno_200to500", ptbinnum, ptbin);               h_pT_barrel_deno_200to500->Sumw2();
+        TH1D* h_pT_endcap_deno_200to500 = new TH1D("h_pT_endcap_deno_200to500", "h_pT_endcap_deno_200to500", ptbinnum_endcap, ptbin_endcap); h_pT_endcap_deno_200to500->Sumw2();
 
 
         std::vector<double> *p_T = new std::vector<double>;
@@ -703,25 +703,25 @@ void Mu_FRgraphMaker (Bool_t DEBUG)
                         h_PFiso_barrel_nume->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         h_TRKiso_barrel_nume->Fill(TRKiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
-                        if (p_T->at(i_mu) < 100)
+                        if (p_T->at(i_mu) < 70)
                         {
-                            h_pT_barrel_nume_50to100->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                            h_PFiso_barrel_nume_50to100->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_pT_barrel_nume_50to70->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_barrel_nume_50to70->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        }
+                        else if (p_T->at(i_mu) < 100)
+                        {
+                            h_pT_barrel_nume_70to100->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_barrel_nume_70to100->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                         else if (p_T->at(i_mu) < 200)
                         {
                             h_pT_barrel_nume_100to200->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                             h_PFiso_barrel_nume_100to200->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
-                        else if (p_T->at(i_mu) < 300)
-                        {
-                            h_pT_barrel_nume_200to300->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                            h_PFiso_barrel_nume_200to300->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                        }
                         else if (p_T->at(i_mu) < 500)
                         {
-                            h_pT_barrel_nume_300to500->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                            h_PFiso_barrel_nume_300to500->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_pT_barrel_nume_200to500->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_barrel_nume_200to500->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                     }
                     else // Endcap
@@ -730,25 +730,25 @@ void Mu_FRgraphMaker (Bool_t DEBUG)
                         h_PFiso_endcap_nume->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         h_TRKiso_endcap_nume->Fill(TRKiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
-                        if (p_T->at(i_mu) < 100)
+                        if (p_T->at(i_mu) < 70)
                         {
-                            h_pT_endcap_nume_50to100->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                            h_PFiso_endcap_nume_50to100->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_pT_endcap_nume_50to70->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_endcap_nume_50to70->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        }
+                        else if (p_T->at(i_mu) < 100)
+                        {
+                            h_pT_endcap_nume_70to100->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_endcap_nume_70to100->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                         else if (p_T->at(i_mu) < 200)
                         {
                             h_pT_endcap_nume_100to200->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                             h_PFiso_endcap_nume_100to200->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
-                        else if (p_T->at(i_mu) < 300)
-                        {
-                            h_pT_endcap_nume_200to300->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                            h_PFiso_endcap_nume_200to300->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                        }
                         else if (p_T->at(i_mu) < 500)
                         {
-                            h_pT_endcap_nume_300to500->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                            h_PFiso_endcap_nume_300to500->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_pT_endcap_nume_200to500->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_endcap_nume_200to500->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                     }
                 }
@@ -760,25 +760,25 @@ void Mu_FRgraphMaker (Bool_t DEBUG)
                     h_PFiso_barrel_deno->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     h_TRKiso_barrel_deno->Fill(TRKiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
-                    if (p_T->at(i_mu) < 100)
+                    if (p_T->at(i_mu) < 70)
                     {
-                        h_pT_barrel_deno_50to100->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                        h_PFiso_barrel_deno_50to100->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_pT_barrel_deno_50to70->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_barrel_deno_50to70->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    }
+                    else if (p_T->at(i_mu) < 100)
+                    {
+                        h_pT_barrel_deno_70to100->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_barrel_deno_70to100->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                     else if (p_T->at(i_mu) < 200)
                     {
                         h_pT_barrel_deno_100to200->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         h_PFiso_barrel_deno_100to200->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
-                    else if (p_T->at(i_mu) < 300)
-                    {
-                        h_pT_barrel_deno_200to300->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                        h_PFiso_barrel_deno_200to300->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                    }
                     else if (p_T->at(i_mu) < 500)
                     {
-                        h_pT_barrel_deno_300to500->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                        h_PFiso_barrel_deno_300to500->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_pT_barrel_deno_200to500->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_barrel_deno_200to500->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                 }
                 else // Endcap
@@ -787,25 +787,25 @@ void Mu_FRgraphMaker (Bool_t DEBUG)
                     h_PFiso_endcap_deno->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     h_TRKiso_endcap_deno->Fill(TRKiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
-                    if (p_T->at(i_mu) < 100)
+                    if (p_T->at(i_mu) < 70)
                     {
-                        h_pT_endcap_deno_50to100->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                        h_PFiso_endcap_deno_50to100->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_pT_endcap_deno_50to70->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_endcap_deno_50to70->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    }
+                    else if (p_T->at(i_mu) < 100)
+                    {
+                        h_pT_endcap_deno_70to100->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_endcap_deno_70to100->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                     else if (p_T->at(i_mu) < 200)
                     {
                         h_pT_endcap_deno_100to200->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         h_PFiso_endcap_deno_100to200->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
-                    else if (p_T->at(i_mu) < 300)
-                    {
-                        h_pT_endcap_deno_200to300->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                        h_PFiso_endcap_deno_200to300->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                    }
                     else if (p_T->at(i_mu) < 500)
                     {
-                        h_pT_endcap_deno_300to500->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                        h_PFiso_endcap_deno_300to500->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_pT_endcap_deno_200to500->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_endcap_deno_200to500->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                 }
             }// End of i_mu iteration
@@ -835,39 +835,39 @@ void Mu_FRgraphMaker (Bool_t DEBUG)
         h_TRKiso_endcap_deno->Write();
         h_nVTX->Write();
 
-        h_pT_barrel_nume_50to100->Write();
-        h_pT_endcap_nume_50to100->Write();
-        h_pT_barrel_deno_50to100->Write();
-        h_pT_endcap_deno_50to100->Write();
+        h_pT_barrel_nume_50to70->Write();
+        h_pT_endcap_nume_50to70->Write();
+        h_pT_barrel_deno_50to70->Write();
+        h_pT_endcap_deno_50to70->Write();
+        h_pT_barrel_nume_70to100->Write();
+        h_pT_endcap_nume_70to100->Write();
+        h_pT_barrel_deno_70to100->Write();
+        h_pT_endcap_deno_70to100->Write();
         h_pT_barrel_nume_100to200->Write();
         h_pT_endcap_nume_100to200->Write();
         h_pT_barrel_deno_100to200->Write();
         h_pT_endcap_deno_100to200->Write();
-        h_pT_barrel_nume_200to300->Write();
-        h_pT_endcap_nume_200to300->Write();
-        h_pT_barrel_deno_200to300->Write();
-        h_pT_endcap_deno_200to300->Write();
-        h_pT_barrel_nume_300to500->Write();
-        h_pT_endcap_nume_300to500->Write();
-        h_pT_barrel_deno_300to500->Write();
-        h_pT_endcap_deno_300to500->Write();
+        h_pT_barrel_nume_200to500->Write();
+        h_pT_endcap_nume_200to500->Write();
+        h_pT_barrel_deno_200to500->Write();
+        h_pT_endcap_deno_200to500->Write();
 
-        h_PFiso_barrel_nume_50to100->Write();
-        h_PFiso_endcap_nume_50to100->Write();
-        h_PFiso_barrel_deno_50to100->Write();
-        h_PFiso_endcap_deno_50to100->Write();
+        h_PFiso_barrel_nume_50to70->Write();
+        h_PFiso_endcap_nume_50to70->Write();
+        h_PFiso_barrel_deno_50to70->Write();
+        h_PFiso_endcap_deno_50to70->Write();
+        h_PFiso_barrel_nume_70to100->Write();
+        h_PFiso_endcap_nume_70to100->Write();
+        h_PFiso_barrel_deno_70to100->Write();
+        h_PFiso_endcap_deno_70to100->Write();
         h_PFiso_barrel_nume_100to200->Write();
         h_PFiso_endcap_nume_100to200->Write();
         h_PFiso_barrel_deno_100to200->Write();
         h_PFiso_endcap_deno_100to200->Write();
-        h_PFiso_barrel_nume_200to300->Write();
-        h_PFiso_endcap_nume_200to300->Write();
-        h_PFiso_barrel_deno_200to300->Write();
-        h_PFiso_endcap_deno_200to300->Write();
-        h_PFiso_barrel_nume_300to500->Write();
-        h_PFiso_endcap_nume_300to500->Write();
-        h_PFiso_barrel_deno_300to500->Write();
-        h_PFiso_endcap_deno_300to500->Write();
+        h_PFiso_barrel_nume_200to500->Write();
+        h_PFiso_endcap_nume_200to500->Write();
+        h_PFiso_barrel_deno_200to500->Write();
+        h_PFiso_endcap_deno_200to500->Write();
 
         cout << " Finished.\n" << endl;
 

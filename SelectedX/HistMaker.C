@@ -177,7 +177,8 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         analyzer->SetupEfficiencyScaleFactor_electron();
 
         // -- For PVz reweighting -- //
-        analyzer->SetupPVzWeights(Mgr.isMC, "ee", "./etc/PVzWeights.root");
+        analyzer->SetupPVzWeights(Mgr.isMC, "combined", "./etc/PVzWeights.root");
+//        analyzer->SetupPVzWeights(Mgr.isMC, "ee", "./etc/PVzWeights.root");
 //        analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
 
         // -- Creating Histograms -- //
@@ -602,7 +603,8 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         analyzer->SetupEfficiencyScaleFactor_GtoH_new();
 
         // -- For PVz reweighting -- //
-        analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
+//        analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
+        analyzer->SetupPVzWeights(Mgr.isMC, "combined", "./etc/PVzWeights.root");
 
         // -- Creating Histograms -- //
         TH1D *h_mass_before_PUCorr = new TH1D("h_mass_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", binnum, massbins);
@@ -1175,7 +1177,8 @@ void EMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         analyzer->SetupEfficiencyScaleFactor_electron();
 
         // -- For PVz reweighting -- //
-        analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
+//        analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
+        analyzer->SetupPVzWeights(Mgr.isMC, "combined", "./etc/PVzWeights.root");
 
         // -- Creating Histograms -- //
         TH1D *h_emu_mass_before_PUCorr = new TH1D("h_emu_mass_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", binnum, massbins);
