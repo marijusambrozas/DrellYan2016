@@ -621,7 +621,7 @@ Bool_t DYAnalyzer::SeparateDYLLSample_isHardProcess(TString Tag, NtupleHandle *n
                 {
                         GenLepton genlep;
                         genlep.FillFromNtuple(ntuple, i_gen);
-                        if(genlep.isElectron() && genlep.isHardProcess)
+                        if(genlep.isHardProcess)
                                 GenLeptonCollection.push_back(genlep);
                 }
 

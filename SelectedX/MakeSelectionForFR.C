@@ -517,15 +517,15 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                 if(Mgr.isMC == kTRUE) PUWeight = analyzer->PileUpWeightValue_80X(nPU);
 
                 // -- Separate DYLL samples -- //
-                Bool_t GenFlag = kTRUE;//kFALSE;
+                Bool_t GenFlag = kFALSE;
                 GenFlag = analyzer->SeparateDYLLSample_isHardProcess(Mgr.Tag[i_tup], ntuple);
 
                 // -- Get GenTopCollection -- //
-                Bool_t GenFlag_top = kTRUE;//kFALSE;
+                Bool_t GenFlag_top = kFALSE;
                 vector<GenOthers> GenTopCollection;
                 GenFlag_top = analyzer->Separate_ttbarSample(Mgr.Tag[i_tup], ntuple, &GenTopCollection);
 
-                if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += ntuple->GENEvt_weight;
+                if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += evt_weight;
 
                 Bool_t TriggerFlag = kFALSE;
                 TriggerFlag = ntuple->isTriggered(analyzer->HLT);
