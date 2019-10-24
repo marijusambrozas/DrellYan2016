@@ -913,7 +913,7 @@ void MakeSelectionForQCDest_Mu (TString type, TString HLTname, Bool_t Debug)
                         prefiring_weight_down = ntuple->_prefiringweightdown;
 
                         // -- Vector filling -- //
-                        for (UInt_t i=0; i<SelectedMuonCollection_deno.size(); i++)
+                        for (UInt_t i=0; i<SelectedMuonCollection.size(); i++)
                         {
                             p_T->push_back(SelectedMuonCollection[i].Pt);
                             eta->push_back(SelectedMuonCollection[i].eta);
