@@ -19,6 +19,8 @@
 #define Lumi_GtoH 16146 // -- from Run2016G to Run2016H, JSON. unit: /pb, Updated at 2018.05.17 -- //
 #define nMassBin 43
 #define nMassBin2 86
+#define nPtBinEndcap 8//9
+#define nPtBinBarrel 16//17
 
 class DYAnalyzer
 {
@@ -101,6 +103,12 @@ public:
 
         // -- PVz weights -- //
         Double_t PVzWeight[80];
+
+        // -- Fake rates -- //
+        const double ptbin_barrel[nPtBinBarrel+1] = {/*47,*/52,60,70,80,90,100,120,140,160,180,200,250,300,350,400,450,500};
+        const double ptbin_endcap[nPtBinEndcap+1] = {/*47,*/52,60,70,80,90,100,150,200,500};
+        Double_t FR_barrel[nPtBinBarrel];
+        Double_t FR_endcap[nPtBinEndcap];
 
 	// -- Constructor -- //
 	DYAnalyzer(TString HLTname);
@@ -198,7 +206,13 @@ public:
 	Bool_t EventSelection_Zdiff_13TeV_HighPt10(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection);
 	Bool_t EventSelection_Zdiff_13TeV_HighPt11(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection);
 
+        // -- FAKE RATE -- //
         Bool_t EventSelection_FR(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection_nume, vector< Muon >* SelectedMuonCollection_deno); // -- output: muons passing numerator and denominator selection -- //
+        Bool_t EventSelection_FRdijetEst(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection_fail); // -- output: two muons passing regular selection but failing isolation requirements-- //
+        Bool_t EventSelection_FRsingleJetEst(vector< Muon > MuonCollection, NtupleHandle *ntuple, Muon *SelectedMuon_pass, Muon *SelectedMuon_fail); // -- output: one muon passing full regular selection and another one passing the same selection but failing isolation requirements-- //
+        void SetupFRvalues(TString filename, TString type="template");
+        Double_t FakeRate(Double_t p_T, Double_t eta);
+
 
 	Bool_t isPassAccCondition_Muon(Muon Mu1, Muon Mu2);
 	Bool_t isPassAccCondition_GenLepton(GenLepton genlep1, GenLepton genlep2);
@@ -5705,7 +5719,8 @@ Bool_t DYAnalyzer::EventSelection_Zdiff_13TeV_HighPt11(vector< Muon > MuonCollec
         } // -- End of else if(nQMuons > 2) -- //
 
 	return isPassEventSelection;
-}
+} // End of EventSelection_Zdiff_13TeV_HighPt11
+
 
 Bool_t DYAnalyzer::EventSelection_FR(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection_nume,
                                      vector< Muon >* SelectedMuonCollection_deno)
@@ -5722,10 +5737,122 @@ Bool_t DYAnalyzer::EventSelection_FR(vector< Muon > MuonCollection, NtupleHandle
         }
     }
     return isPassEventSelection;
-}
+} // End of EventSelection_FR()
+
+
+
+Bool_t DYAnalyzer::EventSelection_FRdijetEst(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection_fail)
+{
+    Bool_t isPassEventSelection = kFALSE;
+    vector< Muon > TempMuonCollection;
+    for (Int_t j=0; j<(int)MuonCollection.size(); j++)
+    {
+        if (MuonCollection[j].Pt > 52 && fabs(MuonCollection[j].eta) < 2.4 && MuonCollection[j].isTightMuon() && MuonCollection[j].RelPFIso_dBeta > 0.15)
+            TempMuonCollection.push_back(MuonCollection[j]);
+    }
+    if (TempMuonCollection.size() == 2)
+    {
+        isPassEventSelection = kTRUE;
+        for (Int_t i=0; i<2; i++)
+            SelectedMuonCollection_fail->push_back(TempMuonCollection[i]);
+    }
+    return isPassEventSelection;
+} // End of EventSelection_FRdijetEst()
+
+
+
+Bool_t DYAnalyzer::EventSelection_FRsingleJetEst(vector< Muon > MuonCollection, NtupleHandle *ntuple, Muon *SelectedMuon_pass, Muon *SelectedMuon_fail)
+{
+    Bool_t isPassEventSelection = kFALSE;
+    vector< Muon > TempMuonCollection_pass;
+    vector< Muon > TempMuonCollection_fail;
+    for (Int_t j=0; j<(int)MuonCollection.size(); j++)
+    {
+        if (MuonCollection[j].Pt > 52 && fabs(MuonCollection[j].eta) < 2.4 && MuonCollection[j].isTightMuon())
+        {
+            if (MuonCollection[j].RelPFIso_dBeta < 0.15)
+                TempMuonCollection_pass.push_back(MuonCollection[j]);
+            else
+                TempMuonCollection_fail.push_back(MuonCollection[j]);
+        }
+    }
+    if (TempMuonCollection_pass.size() == 1 && TempMuonCollection_fail.size() == 1)
+    {
+        isPassEventSelection = kTRUE;
+        *SelectedMuon_pass = TempMuonCollection_pass[0];
+        *SelectedMuon_fail = TempMuonCollection_fail[0];
+    }
+    return isPassEventSelection;
+} // End of EventSelection_FRsingleJetEst()
+
+
+void DYAnalyzer::SetupFRvalues(TString filename, TString type) // type can also be "ratio"
+{
+    // -- Setting up -- //
+    std::cout << "Setting up fake rate values from " << filename << endl;
+    std::cout << "Fake rate obtained using " << type << " method." << endl;
+    TFile *f = new TFile(filename, "READ");
+    TH1D *h_FR_barrel, *h_FR_endcap;
+    f->GetObject("h_FR"+type+"_barrel", h_FR_barrel);
+    f->GetObject("h_FR"+type+"_endcap", h_FR_endcap);
+
+    // -- Getting values from histograms -- //
+    for (Int_t i_bin=1; i_bin<=nPtBinBarrel; i_bin++)
+    {
+        FR_barrel[i_bin-1] = h_FR_barrel->GetBinContent(i_bin);
+        if (i_bin <= nPtBinEndcap)
+            FR_endcap[i_bin-1] = h_FR_endcap->GetBinContent(i_bin);
+    }
+
+    // -- Checking if everything has been done correctly -- //
+    Int_t nProblem = 0;
+    for (Int_t i=0; i<nPtBinBarrel; i++)
+    {
+        if (FR_barrel[i] >= 1 || FR_barrel[i] <= 0) {nProblem++; std::cout << i << "  " << FR_barrel[i] << endl;}
+        if (i < nPtBinEndcap) { if (FR_endcap[i] >= 1 || FR_endcap[i] <= 0) {nProblem++; std::cout << i << "  " << FR_endcap[i] << endl;} }
+    }
+    if (nProblem)
+        std::cout << "**************************************************\n" <<
+                     "Problems were detected: fake rate values exceeding 'regular' probability boundaries have been found.\n" <<
+                     "Please check the code.\n**************************************************" << endl;
+    else std::cout << "Fake rates have been set up successfully." << endl;
+    return;
+} // End of SetupFRvalues()
+
+
+
+Double_t DYAnalyzer::FakeRate(Double_t p_T, Double_t eta)
+{
+    Int_t i_bin = 0;
+    Int_t stop = 0;
+    if (eta < 1.2) // barrel
+    {
+        while (!stop)
+        {
+            if (p_T < ptbin_barrel[i_bin + 1] || i_bin >= nPtBinBarrel-1) // Points exceeding boundaries are assigned last available FR value
+                stop = 1;
+            else
+                i_bin++;
+        }
+        return FR_barrel[i_bin];
+    }
+    else // endcap
+    {
+        while (!stop)
+        {
+            if (p_T < ptbin_endcap[i_bin + 1] || i_bin >= nPtBinEndcap-1) // Points exceeding boundaries are assigned last available FR value
+                stop = 1;
+            else
+                i_bin++;
+        }
+        return FR_endcap[i_bin];
+    }
+} // End of FakeRate()
+
+
 
 Bool_t DYAnalyzer::EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple,
-						vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection)
+                                             vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection)
 {
     Bool_t isPassEventSelection = kFALSE;
 

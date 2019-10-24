@@ -814,7 +814,7 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
                 if (MuMu->isSelPassed == 1 || MuMu->isSelPassed == 3) // Before RC
                 {
-                    if (MuMu->Muon_pT_uncorr->at(0) < 52 || MuMu->Muon_pT_uncorr->at(1) < 52) continue;
+//                    if (MuMu->Muon_pT_uncorr->at(0) < 52 || MuMu->Muon_pT_uncorr->at(1) < 52) continue;
 
                     if (fabs(MuMu->Muon_eta_uncorr->at(0)) > 2.4 || fabs(MuMu->Muon_eta_uncorr->at(1)) > 2.4)
                     {
@@ -868,7 +868,7 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
                 if (MuMu->isSelPassed == 1 || MuMu->isSelPassed == 2) // After RocCorr
                 {
-                    if (MuMu->Muon_pT->at(0) < 52 || MuMu->Muon_pT->at(1) < 52) continue;
+//                    if (MuMu->Muon_pT->at(0) < 52 || MuMu->Muon_pT->at(1) < 52) continue;
 
                     if (fabs(MuMu->Muon_eta->at(0)) > 2.4 || fabs(MuMu->Muon_eta->at(1)) > 2.4)
                     {

@@ -512,7 +512,7 @@ void Mu_FRgraphMaker (Bool_t DEBUG)
     FileMgr Mgr;
 
     TFile *f;
-    TString Dir = "/media/sf_DATA/FR/";
+    TString Dir = "/media/sf_DATA/FR/Muon/";
     TString debug = "";
     if (DEBUG == kTRUE) debug = "_DEBUG";
 

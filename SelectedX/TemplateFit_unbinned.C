@@ -115,8 +115,8 @@ void Mu_Tfit(Int_t type)
     while (!stop)
     {
         TFile *file;
-        if (type == 1) file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr1]+".root", "READ");
-        else if (type == 2) file = new TFile("/media/sf_DATA/FR/FR_Hist_Mu_"+fm.Procname[pr1]+".root", "READ");
+        if (type == 1) file = new TFile("/media/sf_DATA/FR/Muon/SelectedForFR_Mu_"+fm.Procname[pr1]+".root", "READ");
+        else if (type == 2) file = new TFile("/media/sf_DATA/FR/Muon/FR_Hist_Mu_"+fm.Procname[pr1]+".root", "READ");
         else return;
         file->GetObject("h_PFiso_barrel_deno", h_barrel_MC_deno[pr1]);
         file->GetObject("h_PFiso_endcap_deno", h_endcap_MC_deno[pr1]);
@@ -163,8 +163,8 @@ void Mu_Tfit(Int_t type)
     for (Process_t pr = _DY_10to50; pr <= _DY_2000to3000; pr=next(pr))
     {
         TFile *file;
-        if (type == 1) file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
-        else if (type == 2) file = new TFile("/media/sf_DATA/FR/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
+        if (type == 1) file = new TFile("/media/sf_DATA/FR/Muon/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
+        else if (type == 2) file = new TFile("/media/sf_DATA/FR/Muon/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
         else return;
         file->GetObject("h_PFiso_barrel_deno", h_barrel_MC_deno[pr]);
         file->GetObject("h_PFiso_endcap_deno", h_endcap_MC_deno[pr]);
@@ -205,8 +205,8 @@ void Mu_Tfit(Int_t type)
     for (Process_t pr = _QCDMuEnriched_15to20; pr <= _QCDMuEnriched_1000toInf; pr=next(pr))
     {
         TFile *file;
-        if (type == 1) file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
-        else if (type == 2) file = new TFile("/media/sf_DATA/FR/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
+        if (type == 1) file = new TFile("/media/sf_DATA/FR/Muon/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
+        else if (type == 2) file = new TFile("/media/sf_DATA/FR/Muon/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
         else return;
         file->GetObject("h_PFiso_barrel_deno", h_barrel_MC_deno[pr]);
         file->GetObject("h_PFiso_endcap_deno", h_endcap_MC_deno[pr]);
@@ -248,8 +248,8 @@ void Mu_Tfit(Int_t type)
     for (Process_t pr=_SingleMuon_B; pr<=_SingleMuon_H; pr=next(pr))
     {
         TFile *file;
-        if (type == 1) file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
-        else if (type == 2) file = new TFile("/media/sf_DATA/FR/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
+        if (type == 1) file = new TFile("/media/sf_DATA/FR/Muon/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
+        else if (type == 2) file = new TFile("/media/sf_DATA/FR/Muon/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
         else return;
         TH1D *h_temp[4];
         if (pr == _SingleMuon_B)
@@ -1121,8 +1121,8 @@ void Mu_Tfit(Int_t type)
 
 
 //    // Writing
-//    TFile *file_FR = new TFile("/media/sf_DATA/FR/FakeRate_muon.root", "RECREATE");
-//    if (file_FR->IsOpen()) cout << "File '/media/sf_DATA/FR/FakeRate_muon.root' has been created. Writing histograms.." << endl;
+//    TFile *file_FR = new TFile("/media/sf_DATA/FR/Muon/FakeRate_muon.root", "RECREATE");
+//    if (file_FR->IsOpen()) cout << "File '/media/sf_DATA/FR/Muon/FakeRate_muon.root' has been created. Writing histograms.." << endl;
 //    file_FR->cd();
 //    h_FRratio_barrel->Write();
 //    h_FRratio_endcap->Write();
@@ -1130,7 +1130,7 @@ void Mu_Tfit(Int_t type)
 //    h_FRtemplate_endcap->Write();
 //    cout << "Finished. Closing the file.." << endl;
 //    file_FR->Close();
-//    if (!file_FR->IsOpen()) cout << "File '/media/sf_DATA/FR/FakeRate_muon.root' has been closed successfully." << endl;
+//    if (!file_FR->IsOpen()) cout << "File '/media/sf_DATA/FR/Muon/FakeRate_muon.root' has been closed successfully." << endl;
 //    else cout << "File did not close!" << endl;
 
 //    // Drawing
