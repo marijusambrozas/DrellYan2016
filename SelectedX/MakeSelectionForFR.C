@@ -915,12 +915,12 @@ void MakeSelectionForQCDest_Mu (TString type, TString HLTname, Bool_t Debug)
                         // -- Vector filling -- //
                         for (UInt_t i=0; i<SelectedMuonCollection_deno.size(); i++)
                         {
-                            p_T->push_back(SelectedMuonCollection_deno[i].Pt);
-                            eta->push_back(SelectedMuonCollection_deno[i].eta);
-                            phi->push_back(SelectedMuonCollection_deno[i].phi);
-                            charge->push_back(SelectedMuonCollection_deno[i].charge);
-                            relPFiso->push_back(SelectedMuonCollection_deno[i].RelPFIso_dBeta);
-                            TRKiso->push_back(SelectedMuonCollection_deno[i].trkiso);
+                            p_T->push_back(SelectedMuonCollection[i].Pt);
+                            eta->push_back(SelectedMuonCollection[i].eta);
+                            phi->push_back(SelectedMuonCollection[i].phi);
+                            charge->push_back(SelectedMuonCollection[i].charge);
+                            relPFiso->push_back(SelectedMuonCollection[i].RelPFIso_dBeta);
+                            TRKiso->push_back(SelectedMuonCollection[i].trkiso);
                         }
                         MuonTree->Fill();
                     } // End of isPassEvtSelection
