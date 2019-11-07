@@ -5726,9 +5726,17 @@ Bool_t DYAnalyzer::EventSelection_FR(vector< Muon > MuonCollection, NtupleHandle
                                      vector< Muon >* SelectedMuonCollection_deno)
 {
     Bool_t isPassEventSelection = kFALSE;
+    Bool_t skip = kTRUE;
     for(Int_t j=0; j<(int)MuonCollection.size(); j++)
-    {
+    { // Asking for only one tight muon to surpass trigger threshold
         if(MuonCollection[j].Pt > 52 && fabs(MuonCollection[j].eta) < 2.4 && MuonCollection[j].isTightMuon())
+            skip = kFALSE;
+    }
+    if (skip == kTRUE)
+        return isPassEventSelection;
+    for(Int_t j=0; j<(int)MuonCollection.size(); j++)
+    { // All other muons still have to pass these criteria
+        if (fabs(MuonCollection[j].eta) < 2.4 && (MuonCollection[j].isTightMuon()))
         {
             isPassEventSelection = kTRUE;
             SelectedMuonCollection_deno->push_back(MuonCollection[j]);
@@ -5825,7 +5833,7 @@ Double_t DYAnalyzer::FakeRate(Double_t p_T, Double_t eta)
 {
     Int_t i_bin = 0;
     Int_t stop = 0;
-    if (eta < 1.2) // barrel
+    if (fabs(eta) < 1.2) // barrel
     {
         while (!stop)
         {
