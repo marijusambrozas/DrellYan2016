@@ -432,12 +432,25 @@ void Mu_EstFR(Int_t type)
 //--------------------------------- FR by template --------------------------------------  
 
     // Barrel
-    h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(1.0393e+06/h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Integral());
-    h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(1.5567e+07/h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
-    h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(2.7123e+05/h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
-    h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(4.4126e+06/h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
-    h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Scale(6.0141e+04/h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
-    h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Scale(9.3704e+05/h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
+//    h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(1.0393e+06/h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Integral()); // OLD All muons' pT>52GeV
+//    h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(1.5567e+07/h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
+//    h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(2.7123e+05/h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
+//    h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(4.4126e+06/h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
+//    h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Scale(6.0141e+04/h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
+//    h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Scale(9.3704e+05/h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
+    h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(8.2803e+05/h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Integral()); // All muons' pT>52GeV
+    h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(1.3530e+07/h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
+    h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(2.1451e+05/h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
+    h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(3.7908e+06/h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
+    h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Scale(4.5879e+04/h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
+    h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Scale(7.9078e+05/h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
+//    h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(1.1587e+06/h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Integral()); // Only one muon's pT>52GeV
+//    h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(1.7258e+07/h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
+//    h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(2.9382e+05/h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
+//    h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(4.4139e+06/h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
+//    h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Scale(5.9937e+04/h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
+//    h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Scale(9.3962e+05/h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
+
 
     TH1D *h_FRtemplate_barrel_deno = ((TH1D*)(h_pT_barrel_template_deno_50to70[_QCDMuEnriched_Full]->Clone("h_FRtemplate_barrel_deno")));
     h_FRtemplate_barrel_deno->Add(h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]);
@@ -451,12 +464,24 @@ void Mu_EstFR(Int_t type)
     h_FRtemplate_barrel->SetDirectory(0);
 
     // Endcap
-    h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(1.1732e+06/h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(7.7612e+06/h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(2.9061e+05/h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(1.9792e+06/h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Scale(6.0998e+04/h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Scale(3.4973e+05/h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
+//    h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(1.1732e+06/h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Integral()); // OLD All muons' pT>52GeV
+//    h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(7.7612e+06/h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
+//    h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(2.9061e+05/h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
+//    h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(1.9792e+06/h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
+//    h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Scale(6.0998e+04/h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
+//    h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Scale(3.4973e+05/h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(9.5464e+05/h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Integral()); // All muons' pT>52GeV
+    h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(6.7609e+06/h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(2.3836e+05/h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(1.7141e+06/h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Scale(4.8543e+04/h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Scale(2.9986e+05/h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
+//    h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(1.4732e+06/h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Integral()); // Only one muon's pT>52GeV
+//    h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(9.3080e+06/h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
+//    h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(2.9061e+05/h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
+//    h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(1.9804e+06/h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
+//    h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Scale(6.0817e+04/h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
+//    h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Scale(3.5033e+05/h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
 
     TH1D *h_FRtemplate_endcap_deno = ((TH1D*)(h_pT_endcap_template_deno_50to70[_QCDMuEnriched_Full]->Clone("h_FRtemplate_endcap_deno")));
     h_FRtemplate_endcap_deno->Add(h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]);
@@ -469,6 +494,59 @@ void Mu_EstFR(Int_t type)
     h_FRtemplate_endcap->Divide(h_FRtemplate_endcap_deno);
     h_FRtemplate_endcap->SetDirectory(0);
 
+
+//--------------------------------- Mixed FR --------------------------------------
+    // Numerator -- from ratio method, denominator -- from template fitting
+
+    // ----- Numerator ----- //
+    // Barrel
+    TH1D * h_FRmixed_barrel = ((TH1D*)(h_pT_barrel_data_nume->Clone("h_FRmixed_barrel"))); // so far it is just a numerator of numerator
+    h_FRmixed_barrel->SetDirectory(0);
+    h_FRmixed_barrel->Multiply(h_pT_barrel_MC_nume[_QCDMuEnriched_Full]);
+
+    TH1D * h_pT_barrel_mixed_nume_2 = ((TH1D*)(h_pT_barrel_MC_nume[_DY_Full]->Clone("h_pT_barrel_deno"))); // denominator of numerator
+    h_pT_barrel_mixed_nume_2->SetDirectory(0);
+    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_ttbar]);
+    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_tW]);
+    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_tbarW]);
+    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_WW]);
+    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_WZ]);
+    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_ZZ]);
+    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_WJets]);
+    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_QCDMuEnriched_Full]);
+
+    h_FRmixed_barrel->Divide(h_pT_barrel_mixed_nume_2);
+
+    // Endcap
+    // Barrel
+    TH1D * h_FRmixed_endcap = ((TH1D*)(h_pT_endcap_data_nume->Clone("h_FRmixed_endcap"))); // so far it is just a numerator of numerator
+    h_FRmixed_endcap->SetDirectory(0);
+    h_FRmixed_endcap->Multiply(h_pT_endcap_MC_nume[_QCDMuEnriched_Full]);
+
+    TH1D * h_pT_endcap_mixed_nume_2 = ((TH1D*)(h_pT_endcap_MC_nume[_DY_Full]->Clone("h_pT_endcap_deno"))); // denominator of numerator
+    h_pT_endcap_mixed_nume_2->SetDirectory(0);
+    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_ttbar]);
+    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_tW]);
+    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_tbarW]);
+    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_WW]);
+    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_WZ]);
+    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_ZZ]);
+    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_WJets]);
+    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_QCDMuEnriched_Full]);
+
+    h_FRmixed_endcap->Divide(h_pT_endcap_mixed_nume_2);
+
+    // ----- Denominator ----- //
+    TH1D* h_pT_barrel_mixed_deno = ((TH1D*)(h_FRtemplate_barrel_deno->Clone("h_pT_barrel_mixed_deno")));
+    TH1D* h_pT_endcap_mixed_deno = ((TH1D*)(h_FRtemplate_endcap_deno->Clone("h_pT_endcap_mixed_deno")));
+    h_pT_barrel_mixed_deno->SetDirectory(0);
+    h_pT_endcap_mixed_deno->SetDirectory(0);
+
+    // ----- Fake Rate ----- //
+    h_FRmixed_barrel->Divide(h_pT_barrel_mixed_deno);
+    h_FRmixed_endcap->Divide(h_pT_endcap_mixed_deno);
+
+
     // Writing
     TFile *file_FR = new TFile("/media/sf_DATA/FR/Muon/FakeRate_muon.root", "RECREATE");
     if (file_FR->IsOpen()) cout << "File '/media/sf_DATA/FR/Muon/FakeRate_muon.root' has been created. Writing histograms.." << endl;
@@ -477,6 +555,8 @@ void Mu_EstFR(Int_t type)
     h_FRratio_endcap->Write();
     h_FRtemplate_barrel->Write();
     h_FRtemplate_endcap->Write();
+    h_FRmixed_barrel->Write();
+    h_FRmixed_endcap->Write();
     cout << "Finished. Closing the file.." << endl;
     file_FR->Close();
     if (!file_FR->IsOpen()) cout << "File '/media/sf_DATA/FR/Muon/FakeRate_muon.root' has been closed successfully." << endl;
@@ -491,9 +571,9 @@ void Mu_EstFR(Int_t type)
     c_FR_barrel->SetTopMargin(0.05);
     c_FR_barrel->SetBottomMargin(0.12);
     c_FR_barrel->SetLeftMargin(0.13);
-    h_FRratio_barrel->SetMarkerStyle(kFullDotLarge);
-    h_FRratio_barrel->SetMarkerColor(kBlack);
-    h_FRratio_barrel->SetLineColor(kBlack);
+    h_FRratio_barrel->SetMarkerStyle(kFullSquare);
+    h_FRratio_barrel->SetMarkerColor(kRed);
+    h_FRratio_barrel->SetLineColor(kRed);
     h_FRratio_barrel->SetStats(kFALSE);
     h_FRratio_barrel->SetTitle("");
     h_FRratio_barrel->GetXaxis()->SetTitle("p_{T} (#mu)");
@@ -509,15 +589,21 @@ void Mu_EstFR(Int_t type)
     h_FRratio_barrel->GetXaxis()->SetRangeUser(52, 500);
     h_FRratio_barrel->GetYaxis()->SetRangeUser(0, 0.5);
     h_FRratio_barrel->Draw();
-    h_FRtemplate_barrel->SetMarkerStyle(kFullSquare);
-    h_FRtemplate_barrel->SetMarkerColor(kRed);
-    h_FRtemplate_barrel->SetLineColor(kRed);
+    h_FRtemplate_barrel->SetMarkerStyle(kFullDotLarge);
+    h_FRtemplate_barrel->SetMarkerColor(kBlack);
+    h_FRtemplate_barrel->SetLineColor(kBlack);
     h_FRtemplate_barrel->SetStats(kFALSE);
     h_FRtemplate_barrel->Draw("same");
+    h_FRmixed_barrel->SetMarkerStyle(22);
+    h_FRmixed_barrel->SetMarkerColor(kBlue);
+    h_FRmixed_barrel->SetLineColor(kBlue);
+    h_FRmixed_barrel->SetStats(kFALSE);
+    h_FRmixed_barrel->Draw("same");
 
     TLegend *legend = new TLegend(0.6, 0.8, 0.95, 0.95);
     legend->AddEntry(h_FRtemplate_barrel, "Template fitting", "LP");
     legend->AddEntry(h_FRratio_barrel, "Ratio method", "LP");
+    legend->AddEntry(h_FRmixed_barrel, "Mixed method", "LP");
     legend->Draw();
     legend->Draw();
     TText *textb = new TText (.4, .7, "Barrel");
@@ -536,9 +622,9 @@ void Mu_EstFR(Int_t type)
     c_FR_endcap->SetTopMargin(0.05);
     c_FR_endcap->SetBottomMargin(0.12);
     c_FR_endcap->SetLeftMargin(0.13);
-    h_FRratio_endcap->SetMarkerStyle(kFullDotLarge);
-    h_FRratio_endcap->SetMarkerColor(kBlack);
-    h_FRratio_endcap->SetLineColor(kBlack);
+    h_FRratio_endcap->SetMarkerStyle(kFullSquare);
+    h_FRratio_endcap->SetMarkerColor(kRed);
+    h_FRratio_endcap->SetLineColor(kRed);
     h_FRratio_endcap->SetStats(kFALSE);
     h_FRratio_endcap->SetTitle("");
     h_FRratio_endcap->GetXaxis()->SetTitle("p_{T} (#mu)");
@@ -554,11 +640,16 @@ void Mu_EstFR(Int_t type)
     h_FRratio_endcap->GetXaxis()->SetRangeUser(52, 500);
     h_FRratio_endcap->GetYaxis()->SetRangeUser(0, 0.5);
     h_FRratio_endcap->Draw();
-    h_FRtemplate_endcap->SetMarkerStyle(kFullSquare);
-    h_FRtemplate_endcap->SetMarkerColor(kRed);
-    h_FRtemplate_endcap->SetLineColor(kRed);
+    h_FRtemplate_endcap->SetMarkerStyle(kFullDotLarge);
+    h_FRtemplate_endcap->SetMarkerColor(kBlack);
+    h_FRtemplate_endcap->SetLineColor(kBlack);
     h_FRtemplate_endcap->SetStats(kFALSE);
     h_FRtemplate_endcap->Draw("same");
+    h_FRmixed_endcap->SetMarkerStyle(22);
+    h_FRmixed_endcap->SetMarkerColor(kBlue);
+    h_FRmixed_endcap->SetLineColor(kBlue);
+    h_FRmixed_endcap->SetStats(kFALSE);
+    h_FRmixed_endcap->Draw("same");
     legend->Draw();
     TText *texte = new TText (.4, .7, "Endcap");
     texte->SetTextAlign(11);

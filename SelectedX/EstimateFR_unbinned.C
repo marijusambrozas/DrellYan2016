@@ -107,8 +107,8 @@ void Mu_EstFR(Int_t type)
     while (!stop)
     {
         TFile *file;
-        if (type == 1) file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr1]+".root", "READ");
-        else if (type == 2) file = new TFile("/media/sf_DATA/FR/FR_Hist_Mu_"+fm.Procname[pr1]+".root", "READ");
+        if (type == 1) file = new TFile("/media/sf_DATA/FR/Muon/SelectedForFR_Mu_"+fm.Procname[pr1]+".root", "READ");
+        else if (type == 2) file = new TFile("/media/sf_DATA/FR/Muon/FR_Hist_Mu_"+fm.Procname[pr1]+".root", "READ");
         else return;
         file->GetObject("h_pT_barrel_deno", h_pT_barrel_MC_deno[pr1]);
         file->GetObject("h_pT_endcap_deno", h_pT_endcap_MC_deno[pr1]);
@@ -155,8 +155,8 @@ void Mu_EstFR(Int_t type)
     for (Process_t pr = _DY_10to50; pr <= _DY_2000to3000; pr=next(pr))
     {
         TFile *file;
-        if (type == 1) file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
-        else if (type == 2) file = new TFile("/media/sf_DATA/FR/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
+        if (type == 1) file = new TFile("/media/sf_DATA/FR/Muon/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
+        else if (type == 2) file = new TFile("/media/sf_DATA/FR/Muon/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
         else return;
         file->GetObject("h_pT_barrel_deno", h_pT_barrel_MC_deno[pr]);
         file->GetObject("h_pT_endcap_deno", h_pT_endcap_MC_deno[pr]);
@@ -197,8 +197,8 @@ void Mu_EstFR(Int_t type)
     for (Process_t pr = _QCDMuEnriched_15to20; pr <= _QCDMuEnriched_1000toInf; pr=next(pr))
     {
         TFile *file;
-        if (type == 1) file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
-        else if (type == 2) file = new TFile("/media/sf_DATA/FR/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
+        if (type == 1) file = new TFile("/media/sf_DATA/FR/Muon/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
+        else if (type == 2) file = new TFile("/media/sf_DATA/FR/Muon/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
         else return;
         file->GetObject("h_pT_barrel_deno", h_pT_barrel_MC_deno[pr]);
         file->GetObject("h_pT_endcap_deno", h_pT_endcap_MC_deno[pr]);
@@ -240,8 +240,8 @@ void Mu_EstFR(Int_t type)
     for (Process_t pr=_SingleMuon_B; pr<=_SingleMuon_H; pr=next(pr))
     {
         TFile *file;
-        if (type == 1) file = new TFile("/media/sf_DATA/FR/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
-        else if (type == 2) file = new TFile("/media/sf_DATA/FR/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
+        if (type == 1) file = new TFile("/media/sf_DATA/FR/Muon/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
+        else if (type == 2) file = new TFile("/media/sf_DATA/FR/Muon/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
         else return;
         TH1D *h_temp[4];
         if (pr == _SingleMuon_B)
@@ -344,34 +344,88 @@ void Mu_EstFR(Int_t type)
 //--------------------------------- FR by template --------------------------------------
 
     h_pT_barrel_template_nume = ((TH1D*)(h_pT_barrel_MC_nume[_QCDMuEnriched_Full]->Clone("h_pT_barrel_template_nume")));
-    h_pT_barrel_template_nume->Scale(1.3769e+06/h_pT_barrel_template_nume->Integral());
+    h_pT_barrel_template_nume->Scale(1.0917e+06/h_pT_barrel_template_nume->Integral());
     h_pT_barrel_template_deno = ((TH1D*)(h_pT_barrel_MC_deno[_QCDMuEnriched_Full]->Clone("h_pT_barrel_template_deno")));
-    h_pT_barrel_template_deno->Scale(2.0946e+07/h_pT_barrel_template_deno->Integral());
+    h_pT_barrel_template_deno->Scale(1.8118e+07/h_pT_barrel_template_deno->Integral());
 
     h_FRtemplate_barrel = ((TH1D*)(h_pT_barrel_template_nume->Clone("h_FRtemplate_barrel")));
     h_FRtemplate_barrel->Divide(h_pT_barrel_template_deno);
     h_FRtemplate_barrel->SetDirectory(0);
 
     h_pT_endcap_template_nume = ((TH1D*)(h_pT_endcap_MC_nume[_QCDMuEnriched_Full]->Clone("h_pT_endcap_template_nume")));
-    h_pT_endcap_template_nume->Scale(1.5227e+06/h_pT_endcap_template_nume->Integral());
+    h_pT_endcap_template_nume->Scale(1.2406e+06/h_pT_endcap_template_nume->Integral());
     h_pT_endcap_template_deno = ((TH1D*)(h_pT_endcap_MC_deno[_QCDMuEnriched_Full]->Clone("h_pT_endcap_template_deno")));
-    h_pT_endcap_template_deno->Scale(1.0206e+07/h_pT_endcap_template_deno->Integral());
+    h_pT_endcap_template_deno->Scale(8.8509e+06/h_pT_endcap_template_deno->Integral());
 
     h_FRtemplate_endcap = ((TH1D*)(h_pT_endcap_template_nume->Clone("h_FRtemplate_endcap")));
     h_FRtemplate_endcap->Divide(h_pT_endcap_template_deno);
     h_FRtemplate_endcap->SetDirectory(0);
 
+//--------------------------------- Mixed FR --------------------------------------
+    // Numerator -- from ratio method, denominator -- from template fitting
+
+    // ----- Numerator ----- //
+    // Barrel
+    TH1D * h_FRmixed_barrel = ((TH1D*)(h_pT_barrel_data_nume->Clone("h_FRmixed_barrel"))); // so far it is just a numerator of numerator
+    h_FRmixed_barrel->SetDirectory(0);
+    h_FRmixed_barrel->Multiply(h_pT_barrel_MC_nume[_QCDMuEnriched_Full]);
+
+    TH1D * h_pT_barrel_mixed_nume_2 = ((TH1D*)(h_pT_barrel_MC_nume[_DY_Full]->Clone("h_pT_barrel_deno"))); // denominator of numerator
+    h_pT_barrel_mixed_nume_2->SetDirectory(0);
+    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_ttbar]);
+    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_tW]);
+    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_tbarW]);
+    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_WW]);
+    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_WZ]);
+    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_ZZ]);
+    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_WJets]);
+    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_QCDMuEnriched_Full]);
+
+    h_FRmixed_barrel->Divide(h_pT_barrel_mixed_nume_2);
+
+    // Endcap
+    // Barrel
+    TH1D * h_FRmixed_endcap = ((TH1D*)(h_pT_endcap_data_nume->Clone("h_FRmixed_endcap"))); // so far it is just a numerator of numerator
+    h_FRmixed_endcap->SetDirectory(0);
+    h_FRmixed_endcap->Multiply(h_pT_endcap_MC_nume[_QCDMuEnriched_Full]);
+
+    TH1D * h_pT_endcap_mixed_nume_2 = ((TH1D*)(h_pT_endcap_MC_nume[_DY_Full]->Clone("h_pT_endcap_deno"))); // denominator of numerator
+    h_pT_endcap_mixed_nume_2->SetDirectory(0);
+    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_ttbar]);
+    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_tW]);
+    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_tbarW]);
+    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_WW]);
+    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_WZ]);
+    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_ZZ]);
+    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_WJets]);
+    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_QCDMuEnriched_Full]);
+
+    h_FRmixed_endcap->Divide(h_pT_endcap_mixed_nume_2);
+
+    // ----- Denominator ----- //
+    TH1D* h_pT_barrel_mixed_deno = ((TH1D*)(h_pT_barrel_template_deno->Clone("h_pT_barrel_mixed_deno")));
+    TH1D* h_pT_endcap_mixed_deno = ((TH1D*)(h_pT_endcap_template_deno->Clone("h_pT_endcap_mixed_deno")));
+    h_pT_barrel_mixed_deno->SetDirectory(0);
+    h_pT_endcap_mixed_deno->SetDirectory(0);
+
+    // ----- Fake Rate ----- //
+    h_FRmixed_barrel->Divide(h_pT_barrel_mixed_deno);
+    h_FRmixed_endcap->Divide(h_pT_endcap_mixed_deno);
+
+
     // Writing
-    TFile *file_FR = new TFile("/media/sf_DATA/FR/FakeRate_muon.root", "RECREATE");
-    if (file_FR->IsOpen()) cout << "File '/media/sf_DATA/FR/FakeRate_muon.root' has been created. Writing histograms.." << endl;
+    TFile *file_FR = new TFile("/media/sf_DATA/FR/Muon/FakeRate_muon.root", "RECREATE");
+    if (file_FR->IsOpen()) cout << "File '/media/sf_DATA/FR/Muon/FakeRate_muon.root' has been created. Writing histograms.." << endl;
     file_FR->cd();
     h_FRratio_barrel->Write();
     h_FRratio_endcap->Write();
     h_FRtemplate_barrel->Write();
     h_FRtemplate_endcap->Write();
+    h_FRmixed_barrel->Write();
+    h_FRmixed_endcap->Write();
     cout << "Finished. Closing the file.." << endl;
     file_FR->Close();
-    if (!file_FR->IsOpen()) cout << "File '/media/sf_DATA/FR/FakeRate_muon.root' has been closed successfully." << endl;
+    if (!file_FR->IsOpen()) cout << "File '/media/sf_DATA/FR/Muon/FakeRate_muon.root' has been closed successfully." << endl;
     else cout << "File did not close!" << endl;
 
     // Drawing
@@ -383,9 +437,9 @@ void Mu_EstFR(Int_t type)
     c_FR_barrel->SetTopMargin(0.05);
     c_FR_barrel->SetBottomMargin(0.12);
     c_FR_barrel->SetLeftMargin(0.13);
-    h_FRratio_barrel->SetMarkerStyle(kFullDotLarge);
-    h_FRratio_barrel->SetMarkerColor(kBlack);
-    h_FRratio_barrel->SetLineColor(kBlack);
+    h_FRratio_barrel->SetMarkerStyle(kFullSquare);
+    h_FRratio_barrel->SetMarkerColor(kRed);
+    h_FRratio_barrel->SetLineColor(kRed);
     h_FRratio_barrel->SetStats(kFALSE);
     h_FRratio_barrel->SetTitle("");
     h_FRratio_barrel->GetXaxis()->SetTitle("p_{T} (#mu)");
@@ -398,18 +452,24 @@ void Mu_EstFR(Int_t type)
     h_FRratio_barrel->GetYaxis()->SetLabelSize(0.04);
     h_FRratio_barrel->GetXaxis()->SetNoExponent(1);
     h_FRratio_barrel->GetXaxis()->SetMoreLogLabels(1);
-    h_FRratio_barrel->GetXaxis()->SetRangeUser(50, 500);
+    h_FRratio_barrel->GetXaxis()->SetRangeUser(52, 500);
     h_FRratio_barrel->GetYaxis()->SetRangeUser(0, 0.5);
     h_FRratio_barrel->Draw();
-    h_FRtemplate_barrel->SetMarkerStyle(kFullSquare);
-    h_FRtemplate_barrel->SetMarkerColor(kRed);
-    h_FRtemplate_barrel->SetLineColor(kRed);
+    h_FRtemplate_barrel->SetMarkerStyle(kFullDotLarge);
+    h_FRtemplate_barrel->SetMarkerColor(kBlack);
+    h_FRtemplate_barrel->SetLineColor(kBlack);
     h_FRtemplate_barrel->SetStats(kFALSE);
     h_FRtemplate_barrel->Draw("same");
+    h_FRmixed_barrel->SetMarkerStyle(22);
+    h_FRmixed_barrel->SetMarkerColor(kBlue);
+    h_FRmixed_barrel->SetLineColor(kBlue);
+    h_FRmixed_barrel->SetStats(kFALSE);
+    h_FRmixed_barrel->Draw("same");
 
     TLegend *legend = new TLegend(0.6, 0.8, 0.95, 0.95);
     legend->AddEntry(h_FRtemplate_barrel, "Template fitting", "LP");
     legend->AddEntry(h_FRratio_barrel, "Ratio method", "LP");
+    legend->AddEntry(h_FRmixed_barrel, "Mixed method", "LP");
     legend->Draw();
     legend->Draw();
     TText *textb = new TText (.4, .7, "Barrel");
@@ -428,9 +488,9 @@ void Mu_EstFR(Int_t type)
     c_FR_endcap->SetTopMargin(0.05);
     c_FR_endcap->SetBottomMargin(0.12);
     c_FR_endcap->SetLeftMargin(0.13);
-    h_FRratio_endcap->SetMarkerStyle(kFullDotLarge);
-    h_FRratio_endcap->SetMarkerColor(kBlack);
-    h_FRratio_endcap->SetLineColor(kBlack);
+    h_FRratio_endcap->SetMarkerStyle(kFullSquare);
+    h_FRratio_endcap->SetMarkerColor(kRed);
+    h_FRratio_endcap->SetLineColor(kRed);
     h_FRratio_endcap->SetStats(kFALSE);
     h_FRratio_endcap->SetTitle("");
     h_FRratio_endcap->GetXaxis()->SetTitle("p_{T} (#mu)");
@@ -443,14 +503,19 @@ void Mu_EstFR(Int_t type)
     h_FRratio_endcap->GetYaxis()->SetLabelSize(0.04);
     h_FRratio_endcap->GetXaxis()->SetNoExponent(1);
     h_FRratio_endcap->GetXaxis()->SetMoreLogLabels(1);
-    h_FRratio_endcap->GetXaxis()->SetRangeUser(50, 500);
+    h_FRratio_endcap->GetXaxis()->SetRangeUser(52, 500);
     h_FRratio_endcap->GetYaxis()->SetRangeUser(0, 0.5);
     h_FRratio_endcap->Draw();
-    h_FRtemplate_endcap->SetMarkerStyle(kFullSquare);
-    h_FRtemplate_endcap->SetMarkerColor(kRed);
-    h_FRtemplate_endcap->SetLineColor(kRed);
+    h_FRtemplate_endcap->SetMarkerStyle(kFullDotLarge);
+    h_FRtemplate_endcap->SetMarkerColor(kBlack);
+    h_FRtemplate_endcap->SetLineColor(kBlack);
     h_FRtemplate_endcap->SetStats(kFALSE);
     h_FRtemplate_endcap->Draw("same");
+    h_FRmixed_endcap->SetMarkerStyle(22);
+    h_FRmixed_endcap->SetMarkerColor(kBlue);
+    h_FRmixed_endcap->SetLineColor(kBlue);
+    h_FRmixed_endcap->SetStats(kFALSE);
+    h_FRmixed_endcap->Draw("same");
     legend->Draw();
     TText *texte = new TText (.4, .7, "Endcap");
     texte->SetTextAlign(11);

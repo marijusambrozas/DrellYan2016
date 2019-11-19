@@ -687,11 +687,12 @@ void Mu_Tfit(Int_t type)
                              LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
 
     rh_barrel_nume_data->plotOn(frame_barrel_nume, DataError(RooAbsData::SumW2));
+    frame_barrel_nume->GetYaxis()->SetRangeUser(1, 2e8);
     frame_barrel_nume->Draw();
     fit_barrel_nume->Print();
 
     // Legend
-    TLegend *legend = new TLegend(0.65, 0.7, 0.95, 0.97);
+    TLegend *legend = new TLegend(0.65, 0.8, 0.95, 0.97);
     legend->SetFillColor(kWhite);
     legend->SetLineColor(kWhite);
     legend->AddEntry(frame_barrel_nume->nameOf(0), "Data", "LP");
@@ -820,6 +821,7 @@ void Mu_Tfit(Int_t type)
                              LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
 
     rh_endcap_nume_data->plotOn(frame_endcap_nume, DataError(RooAbsData::SumW2));
+    frame_endcap_nume->GetYaxis()->SetRangeUser(1, 2e8);
     frame_endcap_nume->Draw();
     fit_endcap_nume->Print();
 
@@ -933,6 +935,7 @@ void Mu_Tfit(Int_t type)
                              LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
 
     rh_barrel_deno_data->plotOn(frame_barrel_deno, DataError(RooAbsData::SumW2));
+    frame_barrel_deno->GetYaxis()->SetRangeUser(1, 2e8);
     frame_barrel_deno->Draw();
     fit_barrel_deno->Print();
 
@@ -1051,6 +1054,7 @@ void Mu_Tfit(Int_t type)
                              LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
 
     rh_endcap_deno_data->plotOn(frame_endcap_deno, DataError(RooAbsData::SumW2));
+    frame_endcap_deno->GetYaxis()->SetRangeUser(1, 2e8);
     frame_endcap_deno->Draw();
     fit_endcap_deno->Print();
 
@@ -1090,7 +1094,7 @@ void Mu_Tfit(Int_t type)
     h_endcap_deno_ratio->SetTitle("");
     h_endcap_deno_ratio->GetXaxis()->SetMoreLogLabels(1);
     h_endcap_deno_ratio->GetXaxis()->SetNoExponent(1);
-    h_endcap_deno_ratio->GetXaxis()->SetTitle("I_{#lower[-0.2]{PF}}^{rel.} (#mu_{#lower[-0.4]{barrel}}^{deno})");
+    h_endcap_deno_ratio->GetXaxis()->SetTitle("I_{#lower[-0.2]{PF}}^{rel.} (#mu_{#lower[-0.4]{endcap}}^{deno})");
     h_endcap_deno_ratio->GetXaxis()->SetTitleSize(0.17);
     h_endcap_deno_ratio->GetXaxis()->SetLabelSize(0.125);
     h_endcap_deno_ratio->GetXaxis()->SetTitleOffset(0.8);

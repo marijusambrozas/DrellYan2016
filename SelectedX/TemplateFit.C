@@ -1311,11 +1311,12 @@ void Mu_Tfit(Int_t type)
                                     LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
 
     rh_barrel_nume_data_50to70->plotOn(frame_barrel_nume_50to70, DataError(RooAbsData::SumW2));
+    frame_barrel_nume_50to70->GetYaxis()->SetRangeUser(1e0, 2e8);
     frame_barrel_nume_50to70->Draw();
     fit_barrel_nume_50to70->Print();
 
     // Legend
-    TLegend *legend = new TLegend(0.65, 0.7, 0.95, 0.97);
+    TLegend *legend = new TLegend(0.65, 0.8, 0.95, 0.97);
     legend->SetFillColor(kWhite);
     legend->SetLineColor(kWhite);
     legend->AddEntry(frame_barrel_nume_50to70->nameOf(0), "Data", "LP");
@@ -1445,6 +1446,7 @@ void Mu_Tfit(Int_t type)
                                     LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
 
     rh_endcap_nume_data_50to70->plotOn(frame_endcap_nume_50to70, DataError(RooAbsData::SumW2));
+    frame_endcap_nume_50to70->GetYaxis()->SetRangeUser(1e0, 2e8);
     frame_endcap_nume_50to70->Draw();
     fit_endcap_nume_50to70->Print();
 
@@ -1559,6 +1561,7 @@ void Mu_Tfit(Int_t type)
                                     LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
 
     rh_barrel_deno_data_50to70->plotOn(frame_barrel_deno_50to70, DataError(RooAbsData::SumW2));
+    frame_barrel_deno_50to70->GetYaxis()->SetRangeUser(1e0, 2e8);
     frame_barrel_deno_50to70->Draw();
     fit_barrel_deno_50to70->Print();
 
@@ -1678,6 +1681,7 @@ void Mu_Tfit(Int_t type)
                                     LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
 
     rh_endcap_deno_data_50to70->plotOn(frame_endcap_deno_50to70, DataError(RooAbsData::SumW2));
+    frame_endcap_deno_50to70->GetYaxis()->SetRangeUser(1e0, 2e7);
     frame_endcap_deno_50to70->Draw();
     fit_endcap_deno_50to70->Print();
 
@@ -1793,6 +1797,7 @@ void Mu_Tfit(Int_t type)
                                      LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
 
     rh_barrel_nume_data_70to100->plotOn(frame_barrel_nume_70to100, DataError(RooAbsData::SumW2));
+    frame_barrel_nume_70to100->GetYaxis()->SetRangeUser(1e0, 2e8);
     frame_barrel_nume_70to100->Draw();
     fit_barrel_nume_70to100->Print();
 
@@ -1904,6 +1909,7 @@ void Mu_Tfit(Int_t type)
                                      LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
 
     rh_endcap_nume_data_70to100->plotOn(frame_endcap_nume_70to100, DataError(RooAbsData::SumW2));
+    frame_endcap_nume_70to100->GetYaxis()->SetRangeUser(1e0, 2e8);
     frame_endcap_nume_70to100->Draw();
     fit_endcap_nume_70to100->Print();
 
@@ -2018,6 +2024,7 @@ void Mu_Tfit(Int_t type)
                                      LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
 
     rh_barrel_deno_data_70to100->plotOn(frame_barrel_deno_70to100, DataError(RooAbsData::SumW2));
+    frame_barrel_deno_70to100->GetYaxis()->SetRangeUser(1e0, 2e7);
     frame_barrel_deno_70to100->Draw();
     fit_barrel_deno_70to100->Print();
 
@@ -2130,6 +2137,7 @@ void Mu_Tfit(Int_t type)
                                      LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
 
     rh_endcap_deno_data_70to100->plotOn(frame_endcap_deno_70to100, DataError(RooAbsData::SumW2));
+    frame_endcap_deno_70to100->GetYaxis()->SetRangeUser(1e0, 2e7);
     frame_endcap_deno_70to100->Draw();
     fit_endcap_deno_70to100->Print();
 
@@ -2245,6 +2253,7 @@ void Mu_Tfit(Int_t type)
                                       LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
 
     rh_barrel_nume_data_100to500->plotOn(frame_barrel_nume_100to500, DataError(RooAbsData::SumW2));
+    frame_barrel_nume_100to500->GetYaxis()->SetRangeUser(1e0, 5e7);
     frame_barrel_nume_100to500->Draw();
     fit_barrel_nume_100to500->Print();
 
@@ -2356,6 +2365,7 @@ void Mu_Tfit(Int_t type)
                                       LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
 
     rh_endcap_nume_data_100to500->plotOn(frame_endcap_nume_100to500, DataError(RooAbsData::SumW2));
+    frame_endcap_nume_100to500->GetYaxis()->SetRangeUser(1e0, 5e7);
     frame_endcap_nume_100to500->Draw();
     fit_endcap_nume_100to500->Print();
 
@@ -2470,6 +2480,7 @@ void Mu_Tfit(Int_t type)
                                       LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
 
     rh_barrel_deno_data_100to500->plotOn(frame_barrel_deno_100to500, DataError(RooAbsData::SumW2));
+    frame_barrel_deno_100to500->GetYaxis()->SetRangeUser(1e0, 2e7);
     frame_barrel_deno_100to500->Draw();
     fit_barrel_deno_100to500->Print();
 
@@ -2582,6 +2593,7 @@ void Mu_Tfit(Int_t type)
                                       LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
 
     rh_endcap_deno_data_100to500->plotOn(frame_endcap_deno_100to500, DataError(RooAbsData::SumW2));
+    frame_endcap_deno_100to500->GetYaxis()->SetRangeUser(1e0, 2e7);
     frame_endcap_deno_100to500->Draw();
     fit_endcap_deno_100to500->Print();
 

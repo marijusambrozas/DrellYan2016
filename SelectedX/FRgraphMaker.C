@@ -670,6 +670,11 @@ void Mu_FRgraphMaker (Bool_t DEBUG)
                 cout << "eta[1] = " << eta->at(0) << endl;
             }
 
+            // Skipping if not all muons have pT>52GeV
+            Int_t skip = 0;
+            for (UInt_t i_mu=0; i_mu<p_T->size(); i_mu++) {if (p_T->at(i_mu)<52) skip = 1;}
+            if (skip) continue;
+
             // -- Pileup-Reweighting -- //
             Double_t PUWeight = 1;
             if(Mgr.isMC == kTRUE) PUWeight = analyzer->PileUpWeightValue_80X(nPU);
@@ -680,15 +685,15 @@ void Mu_FRgraphMaker (Bool_t DEBUG)
 
             // -- PVz weights -- //
             Double_t PVzWeight = 1;
-            if (Mgr.isMC == kTRUE && !Mgr.Tag[0].Contains("QCD")) PVzWeight = analyzer->PVzWeightValue(PVz);
+//            if (Mgr.isMC == kTRUE && !Mgr.Tag[0].Contains("QCD")) PVzWeight = analyzer->PVzWeightValue(PVz);
 
             // -- L1 prefiring weights -- //
             Double_t L1weight = 1;
-            if (Mgr.isMC == kTRUE && !Mgr.Tag[0].Contains("QCD")) L1weight = prefiring_weight;
+//            if (Mgr.isMC == kTRUE && !Mgr.Tag[0].Contains("QCD")) L1weight = prefiring_weight;
 
             // -- Top pT weights -- //
             Double_t TopPtWeight = 1;
-            if (Mgr.isMC == kTRUE && Mgr.Tag[0].Contains("ttbar")) TopPtWeight = top_weight;
+//            if (Mgr.isMC == kTRUE && Mgr.Tag[0].Contains("ttbar")) TopPtWeight = top_weight;
 
             // -- Normalization -- //
             Double_t TotWeight = gen_weight;
@@ -911,7 +916,7 @@ void Mu_QCDgraphMaker (Bool_t DEBUG)
     analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
 
     // -- For QCD estimation from Fake Rate -- //
-    analyzer->SetupFRvalues(Dir+"FakeRate_muon.root");
+    analyzer->SetupFRvalues(Dir+"FakeRate_muon.root"/*, "mixed"*/);
 
     for (Process_t pr=_DY_10to50; pr<_EndOf_SinglMuon_Normal; pr=next(pr))
     {
@@ -999,6 +1004,10 @@ void Mu_QCDgraphMaker (Bool_t DEBUG)
             if (p_T->size() != 2) continue;
             if (charge->at(0) == charge->at(1)) continue;
             if (relPFiso->at(0) < 0.15 || relPFiso->at(1) < 0.15) continue;
+//            if (p_T->at(0)<17 || p_T->at(1) < 17) continue;
+//            if (p_T->at(0)<52 || p_T->at(1) < 52) continue;
+
+
             nPass++;
 
             if (DEBUG == kTRUE)
@@ -1213,6 +1222,8 @@ void Mu_WJETgraphMaker (Bool_t DEBUG)
             if (p_T->size() != 2) continue;
             if (charge->at(0) == charge->at(1)) continue;
             if (relPFiso->at(0) < 0.15 && relPFiso->at(1) < 0.15) continue;
+            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
+
             nPass++;
 
             if (DEBUG == kTRUE)

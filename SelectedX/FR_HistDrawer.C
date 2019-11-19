@@ -1089,19 +1089,6 @@ void Fit_HistDrawer()
          *h_endcap_data_deno_100to500,
          *h_endcap_data_nume_100to500;
 
-    THStack *s_barrel_deno_50to70,
-            *s_barrel_nume_50to70,
-            *s_endcap_deno_50to70,
-            *s_endcap_nume_50to70,
-            *s_barrel_deno_70to100,
-            *s_barrel_nume_70to100,
-            *s_endcap_deno_70to100,
-            *s_endcap_nume_70to100,
-            *s_barrel_deno_100to500,
-            *s_barrel_nume_100to500,
-            *s_endcap_deno_100to500,
-            *s_endcap_nume_100to500;
-
 // ############################# SETUP ################################# //
 //----------------------------- MC bkg ------------------------------------
 
@@ -1112,18 +1099,18 @@ void Fit_HistDrawer()
     {
         TFile *file;
         file = new TFile("/media/sf_DATA/FR/Muon/FR_Hist_Mu_"+fm.Procname[pr1]+".root", "READ");
-        file->GetObject("h_PFiso_barrel_deno_50to70",   h_barrel_MC_deno_50to70 [pr1]);
-        file->GetObject("h_PFiso_endcap_deno_50to70",   h_endcap_MC_deno_50to70 [pr1]);
-        file->GetObject("h_PFiso_barrel_nume_50to70",   h_barrel_MC_nume_50to70 [pr1]);
-        file->GetObject("h_PFiso_endcap_nume_50to70",   h_endcap_MC_nume_50to70 [pr1]);
-        file->GetObject("h_PFiso_barrel_deno_70to100",  h_barrel_MC_deno_70to100[pr1]);
-        file->GetObject("h_PFiso_endcap_deno_70to100",  h_endcap_MC_deno_70to100[pr1]);
-        file->GetObject("h_PFiso_barrel_nume_70to100",  h_barrel_MC_nume_70to100[pr1]);
-        file->GetObject("h_PFiso_endcap_nume_70to100",  h_endcap_MC_nume_70to100[pr1]);
-        file->GetObject("h_PFiso_barrel_deno_100to500", h_barrel_MC_deno_100to500[pr1]);
-        file->GetObject("h_PFiso_endcap_deno_100to500", h_endcap_MC_deno_100to500[pr1]);
-        file->GetObject("h_PFiso_barrel_nume_100to500", h_barrel_MC_nume_100to500[pr1]);
-        file->GetObject("h_PFiso_endcap_nume_100to500", h_endcap_MC_nume_100to500[pr1]);
+        file->GetObject("h_pT_barrel_deno_50to70",   h_barrel_MC_deno_50to70 [pr1]);
+        file->GetObject("h_pT_endcap_deno_50to70",   h_endcap_MC_deno_50to70 [pr1]);
+        file->GetObject("h_pT_barrel_nume_50to70",   h_barrel_MC_nume_50to70 [pr1]);
+        file->GetObject("h_pT_endcap_nume_50to70",   h_endcap_MC_nume_50to70 [pr1]);
+        file->GetObject("h_pT_barrel_deno_70to100",  h_barrel_MC_deno_70to100[pr1]);
+        file->GetObject("h_pT_endcap_deno_70to100",  h_endcap_MC_deno_70to100[pr1]);
+        file->GetObject("h_pT_barrel_nume_70to100",  h_barrel_MC_nume_70to100[pr1]);
+        file->GetObject("h_pT_endcap_nume_70to100",  h_endcap_MC_nume_70to100[pr1]);
+        file->GetObject("h_pT_barrel_deno_100to500", h_barrel_MC_deno_100to500[pr1]);
+        file->GetObject("h_pT_endcap_deno_100to500", h_endcap_MC_deno_100to500[pr1]);
+        file->GetObject("h_pT_barrel_nume_100to500", h_barrel_MC_nume_100to500[pr1]);
+        file->GetObject("h_pT_endcap_nume_100to500", h_endcap_MC_nume_100to500[pr1]);
 
         removeNegativeBins(h_barrel_MC_deno_50to70  [pr1]);
         removeNegativeBins(h_endcap_MC_deno_50to70  [pr1]);
@@ -1297,18 +1284,18 @@ void Fit_HistDrawer()
     {
         TFile *file;
         file = new TFile("/media/sf_DATA/FR/Muon/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
-        file->GetObject("h_PFiso_barrel_deno_50to70",   h_barrel_MC_deno_50to70  [pr]);
-        file->GetObject("h_PFiso_endcap_deno_50to70",   h_endcap_MC_deno_50to70  [pr]);
-        file->GetObject("h_PFiso_barrel_nume_50to70",   h_barrel_MC_nume_50to70  [pr]);
-        file->GetObject("h_PFiso_endcap_nume_50to70",   h_endcap_MC_nume_50to70  [pr]);
-        file->GetObject("h_PFiso_barrel_deno_70to100",  h_barrel_MC_deno_70to100 [pr]);
-        file->GetObject("h_PFiso_endcap_deno_70to100",  h_endcap_MC_deno_70to100 [pr]);
-        file->GetObject("h_PFiso_barrel_nume_70to100",  h_barrel_MC_nume_70to100 [pr]);
-        file->GetObject("h_PFiso_endcap_nume_70to100",  h_endcap_MC_nume_70to100 [pr]);
-        file->GetObject("h_PFiso_barrel_deno_100to500", h_barrel_MC_deno_100to500[pr]);
-        file->GetObject("h_PFiso_endcap_deno_100to500", h_endcap_MC_deno_100to500[pr]);
-        file->GetObject("h_PFiso_barrel_nume_100to500", h_barrel_MC_nume_100to500[pr]);
-        file->GetObject("h_PFiso_endcap_nume_100to500", h_endcap_MC_nume_100to500[pr]);
+        file->GetObject("h_pT_barrel_deno_50to70",   h_barrel_MC_deno_50to70  [pr]);
+        file->GetObject("h_pT_endcap_deno_50to70",   h_endcap_MC_deno_50to70  [pr]);
+        file->GetObject("h_pT_barrel_nume_50to70",   h_barrel_MC_nume_50to70  [pr]);
+        file->GetObject("h_pT_endcap_nume_50to70",   h_endcap_MC_nume_50to70  [pr]);
+        file->GetObject("h_pT_barrel_deno_70to100",  h_barrel_MC_deno_70to100 [pr]);
+        file->GetObject("h_pT_endcap_deno_70to100",  h_endcap_MC_deno_70to100 [pr]);
+        file->GetObject("h_pT_barrel_nume_70to100",  h_barrel_MC_nume_70to100 [pr]);
+        file->GetObject("h_pT_endcap_nume_70to100",  h_endcap_MC_nume_70to100 [pr]);
+        file->GetObject("h_pT_barrel_deno_100to500", h_barrel_MC_deno_100to500[pr]);
+        file->GetObject("h_pT_endcap_deno_100to500", h_endcap_MC_deno_100to500[pr]);
+        file->GetObject("h_pT_barrel_nume_100to500", h_barrel_MC_nume_100to500[pr]);
+        file->GetObject("h_pT_endcap_nume_100to500", h_endcap_MC_nume_100to500[pr]);
 
         removeNegativeBins(h_barrel_MC_deno_50to70  [pr]);
         removeNegativeBins(h_endcap_MC_deno_50to70  [pr]);
@@ -1413,18 +1400,18 @@ void Fit_HistDrawer()
     {
         TFile *file;
         file = new TFile("/media/sf_DATA/FR/Muon/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
-        file->GetObject("h_PFiso_barrel_deno_50to70",   h_barrel_MC_deno_50to70 [pr]);
-        file->GetObject("h_PFiso_endcap_deno_50to70",   h_endcap_MC_deno_50to70 [pr]);
-        file->GetObject("h_PFiso_barrel_nume_50to70",   h_barrel_MC_nume_50to70 [pr]);
-        file->GetObject("h_PFiso_endcap_nume_50to70",   h_endcap_MC_nume_50to70 [pr]);
-        file->GetObject("h_PFiso_barrel_deno_70to100",  h_barrel_MC_deno_70to100[pr]);
-        file->GetObject("h_PFiso_endcap_deno_70to100",  h_endcap_MC_deno_70to100[pr]);
-        file->GetObject("h_PFiso_barrel_nume_70to100",  h_barrel_MC_nume_70to100[pr]);
-        file->GetObject("h_PFiso_endcap_nume_70to100",  h_endcap_MC_nume_70to100[pr]);
-        file->GetObject("h_PFiso_barrel_deno_100to500", h_barrel_MC_deno_100to500[pr]);
-        file->GetObject("h_PFiso_endcap_deno_100to500", h_endcap_MC_deno_100to500[pr]);
-        file->GetObject("h_PFiso_barrel_nume_100to500", h_barrel_MC_nume_100to500[pr]);
-        file->GetObject("h_PFiso_endcap_nume_100to500", h_endcap_MC_nume_100to500[pr]);
+        file->GetObject("h_pT_barrel_deno_50to70",   h_barrel_MC_deno_50to70 [pr]);
+        file->GetObject("h_pT_endcap_deno_50to70",   h_endcap_MC_deno_50to70 [pr]);
+        file->GetObject("h_pT_barrel_nume_50to70",   h_barrel_MC_nume_50to70 [pr]);
+        file->GetObject("h_pT_endcap_nume_50to70",   h_endcap_MC_nume_50to70 [pr]);
+        file->GetObject("h_pT_barrel_deno_70to100",  h_barrel_MC_deno_70to100[pr]);
+        file->GetObject("h_pT_endcap_deno_70to100",  h_endcap_MC_deno_70to100[pr]);
+        file->GetObject("h_pT_barrel_nume_70to100",  h_barrel_MC_nume_70to100[pr]);
+        file->GetObject("h_pT_endcap_nume_70to100",  h_endcap_MC_nume_70to100[pr]);
+        file->GetObject("h_pT_barrel_deno_100to500", h_barrel_MC_deno_100to500[pr]);
+        file->GetObject("h_pT_endcap_deno_100to500", h_endcap_MC_deno_100to500[pr]);
+        file->GetObject("h_pT_barrel_nume_100to500", h_barrel_MC_nume_100to500[pr]);
+        file->GetObject("h_pT_endcap_nume_100to500", h_endcap_MC_nume_100to500[pr]);
 
         removeNegativeBins(h_barrel_MC_deno_50to70  [pr]);
         removeNegativeBins(h_endcap_MC_deno_50to70  [pr]);
@@ -1533,18 +1520,18 @@ void Fit_HistDrawer()
         TH1D *h_temp[12];
         if (pr == _SingleMuon_B)
         {
-            file->GetObject("h_PFiso_barrel_deno_50to70",   h_barrel_data_deno_50to70 );
-            file->GetObject("h_PFiso_endcap_deno_50to70",   h_endcap_data_deno_50to70 );
-            file->GetObject("h_PFiso_barrel_nume_50to70",   h_barrel_data_nume_50to70 );
-            file->GetObject("h_PFiso_endcap_nume_50to70",   h_endcap_data_nume_50to70 );
-            file->GetObject("h_PFiso_barrel_deno_70to100",  h_barrel_data_deno_70to100);
-            file->GetObject("h_PFiso_endcap_deno_70to100",  h_endcap_data_deno_70to100);
-            file->GetObject("h_PFiso_barrel_nume_70to100",  h_barrel_data_nume_70to100);
-            file->GetObject("h_PFiso_endcap_nume_70to100",  h_endcap_data_nume_70to100);
-            file->GetObject("h_PFiso_barrel_deno_100to500", h_barrel_data_deno_100to500);
-            file->GetObject("h_PFiso_endcap_deno_100to500", h_endcap_data_deno_100to500);
-            file->GetObject("h_PFiso_barrel_nume_100to500", h_barrel_data_nume_100to500);
-            file->GetObject("h_PFiso_endcap_nume_100to500", h_endcap_data_nume_100to500);
+            file->GetObject("h_pT_barrel_deno_50to70",   h_barrel_data_deno_50to70 );
+            file->GetObject("h_pT_endcap_deno_50to70",   h_endcap_data_deno_50to70 );
+            file->GetObject("h_pT_barrel_nume_50to70",   h_barrel_data_nume_50to70 );
+            file->GetObject("h_pT_endcap_nume_50to70",   h_endcap_data_nume_50to70 );
+            file->GetObject("h_pT_barrel_deno_70to100",  h_barrel_data_deno_70to100);
+            file->GetObject("h_pT_endcap_deno_70to100",  h_endcap_data_deno_70to100);
+            file->GetObject("h_pT_barrel_nume_70to100",  h_barrel_data_nume_70to100);
+            file->GetObject("h_pT_endcap_nume_70to100",  h_endcap_data_nume_70to100);
+            file->GetObject("h_pT_barrel_deno_100to500", h_barrel_data_deno_100to500);
+            file->GetObject("h_pT_endcap_deno_100to500", h_endcap_data_deno_100to500);
+            file->GetObject("h_pT_barrel_nume_100to500", h_barrel_data_nume_100to500);
+            file->GetObject("h_pT_endcap_nume_100to500", h_endcap_data_nume_100to500);
 
             removeNegativeBins(h_barrel_data_deno_50to70);
             removeNegativeBins(h_endcap_data_deno_50to70);
@@ -1561,18 +1548,18 @@ void Fit_HistDrawer()
         }
         else
         {
-            file->GetObject("h_PFiso_barrel_deno_50to70",   h_temp[0]);
-            file->GetObject("h_PFiso_endcap_deno_50to70",   h_temp[1]);
-            file->GetObject("h_PFiso_barrel_nume_50to70",   h_temp[2]);
-            file->GetObject("h_PFiso_endcap_nume_50to70",   h_temp[3]);
-            file->GetObject("h_PFiso_barrel_deno_70to100",  h_temp[4]);
-            file->GetObject("h_PFiso_endcap_deno_70to100",  h_temp[5]);
-            file->GetObject("h_PFiso_barrel_nume_70to100",  h_temp[6]);
-            file->GetObject("h_PFiso_endcap_nume_70to100",  h_temp[7]);
-            file->GetObject("h_PFiso_barrel_deno_100to500", h_temp[8]);
-            file->GetObject("h_PFiso_endcap_deno_100to500", h_temp[9]);
-            file->GetObject("h_PFiso_barrel_nume_100to500", h_temp[10]);
-            file->GetObject("h_PFiso_endcap_nume_100to500", h_temp[11]);
+            file->GetObject("h_pT_barrel_deno_50to70",   h_temp[0]);
+            file->GetObject("h_pT_endcap_deno_50to70",   h_temp[1]);
+            file->GetObject("h_pT_barrel_nume_50to70",   h_temp[2]);
+            file->GetObject("h_pT_endcap_nume_50to70",   h_temp[3]);
+            file->GetObject("h_pT_barrel_deno_70to100",  h_temp[4]);
+            file->GetObject("h_pT_endcap_deno_70to100",  h_temp[5]);
+            file->GetObject("h_pT_barrel_nume_70to100",  h_temp[6]);
+            file->GetObject("h_pT_endcap_nume_70to100",  h_temp[7]);
+            file->GetObject("h_pT_barrel_deno_100to500", h_temp[8]);
+            file->GetObject("h_pT_endcap_deno_100to500", h_temp[9]);
+            file->GetObject("h_pT_barrel_nume_100to500", h_temp[10]);
+            file->GetObject("h_pT_endcap_nume_100to500", h_temp[11]);
 
             removeNegativeBins(h_temp[0]);
             removeNegativeBins(h_temp[1]);
@@ -1656,35 +1643,70 @@ void Fit_HistDrawer()
 
 //-------------------------------------- SCALING -----------------------------------------------------
 
-    h_barrel_MC_deno_50to70[_DY_Full]           ->Scale(2.0067e+06 / h_barrel_MC_deno_50to70[_DY_Full]           ->Integral());
-//    h_barrel_MC_deno_50to70[_DY_Full]           ->Scale(3.0767e+06 / h_barrel_MC_deno_50to70[_DY_Full]           ->Integral());
-    h_barrel_MC_deno_50to70[_WW]                ->Scale(4.5226e+04 / h_barrel_MC_deno_50to70[_WW]                ->Integral());
-    h_barrel_MC_deno_50to70[_WZ]                ->Scale(1.6319e+04 / h_barrel_MC_deno_50to70[_WZ]                ->Integral());
-    h_barrel_MC_deno_50to70[_ZZ]                ->Scale(5.0282e+03 / h_barrel_MC_deno_50to70[_ZZ]                ->Integral());
-    h_barrel_MC_deno_50to70[_tW]                ->Scale(2.4659e+04 / h_barrel_MC_deno_50to70[_tW]                ->Integral());
-    h_barrel_MC_deno_50to70[_tbarW]             ->Scale(2.4717e+04 / h_barrel_MC_deno_50to70[_tbarW]             ->Integral());
-    h_barrel_MC_deno_50to70[_ttbar]             ->Scale(10.9162e+05 / h_barrel_MC_deno_50to70[_ttbar]             ->Integral());
-//    h_barrel_MC_deno_50to70[_ttbar]             ->Scale(5.9162e+05 / h_barrel_MC_deno_50to70[_ttbar]             ->Integral());
-    h_barrel_MC_deno_50to70[_WJets]             ->Scale(11.1813e+06 / h_barrel_MC_deno_50to70[_WJets]             ->Integral());
-//    h_barrel_MC_deno_50to70[_WJets]             ->Scale(9.1813e+06 / h_barrel_MC_deno_50to70[_WJets]             ->Integral());
-    h_barrel_MC_deno_50to70[_QCDMuEnriched_Full]->Scale(1.5578e+07 / h_barrel_MC_deno_50to70[_QCDMuEnriched_Full]->Integral());
-//    h_barrel_MC_deno_50to70[_QCDMuEnriched_Full]->Scale(1.5578e+07 / h_barrel_MC_deno_50to70[_QCDMuEnriched_Full]->Integral());
+    h_barrel_MC_deno_50to70[_DY_Full]             ->Scale(6.0283e+05 / h_barrel_MC_deno_50to70[_DY_Full]            ->Integral());
+    h_barrel_MC_deno_50to70[_WW]                  ->Scale(2.9979e+04 / h_barrel_MC_deno_50to70[_WW]                 ->Integral());
+    h_barrel_MC_deno_50to70[_WZ]                  ->Scale(7.5397e+03 / h_barrel_MC_deno_50to70[_WZ]                 ->Integral());
+    h_barrel_MC_deno_50to70[_ZZ]                  ->Scale(1.4975e+03 / h_barrel_MC_deno_50to70[_ZZ]                 ->Integral());
+    h_barrel_MC_deno_50to70[_tW]                  ->Scale(1.3394e+04 / h_barrel_MC_deno_50to70[_tW]                 ->Integral());
+    h_barrel_MC_deno_50to70[_tbarW]               ->Scale(1.3531e+04 / h_barrel_MC_deno_50to70[_tbarW]              ->Integral());
+    h_barrel_MC_deno_50to70[_ttbar]               ->Scale(2.7678e+05 / h_barrel_MC_deno_50to70[_ttbar]              ->Integral());
+    h_barrel_MC_deno_50to70[_WJets]               ->Scale(9.2318e+06 / h_barrel_MC_deno_50to70[_WJets]              ->Integral());
+    h_barrel_MC_deno_50to70[_QCDMuEnriched_Full]  ->Scale(1.3530e+07 / h_barrel_MC_deno_50to70[_QCDMuEnriched_Full] ->Integral());
+    h_barrel_MC_deno_70to100[_DY_Full]            ->Scale(2.8544e+05 / h_barrel_MC_deno_50to70[_DY_Full]            ->Integral());
+    h_barrel_MC_deno_70to100[_WW]                 ->Scale(4.5226e+04 / h_barrel_MC_deno_50to70[_WW]                 ->Integral());
+    h_barrel_MC_deno_70to100[_WZ]                 ->Scale(5.0573e+03 / h_barrel_MC_deno_50to70[_WZ]                 ->Integral());
+    h_barrel_MC_deno_70to100[_ZZ]                 ->Scale(7.2227e+02 / h_barrel_MC_deno_50to70[_ZZ]                 ->Integral());
+    h_barrel_MC_deno_70to100[_tW]                 ->Scale(1.2115e+04 / h_barrel_MC_deno_50to70[_tW]                 ->Integral());
+    h_barrel_MC_deno_70to100[_tbarW]              ->Scale(1.2028e+04 / h_barrel_MC_deno_50to70[_tbarW]              ->Integral());
+    h_barrel_MC_deno_70to100[_ttbar]              ->Scale(2.3233e+05 / h_barrel_MC_deno_50to70[_ttbar]              ->Integral());
+    h_barrel_MC_deno_70to100[_WJets]              ->Scale(3.4985e+06 / h_barrel_MC_deno_50to70[_WJets]              ->Integral());
+    h_barrel_MC_deno_70to100[_QCDMuEnriched_Full] ->Scale(3.7908e+06 / h_barrel_MC_deno_50to70[_QCDMuEnriched_Full] ->Integral());
+    h_barrel_MC_deno_100to500[_DY_Full]           ->Scale(1.0562e+05 / h_barrel_MC_deno_50to70[_DY_Full]            ->Integral());
+    h_barrel_MC_deno_100to500[_WW]                ->Scale(1.4394e+04 / h_barrel_MC_deno_50to70[_WW]                 ->Integral());
+    h_barrel_MC_deno_100to500[_WZ]                ->Scale(5.1568e+03 / h_barrel_MC_deno_50to70[_WZ]                 ->Integral());
+    h_barrel_MC_deno_100to500[_ZZ]                ->Scale(8.3444e+02 / h_barrel_MC_deno_50to70[_ZZ]                 ->Integral());
+    h_barrel_MC_deno_100to500[_tW]                ->Scale(1.2316e+04 / h_barrel_MC_deno_50to70[_tW]                 ->Integral());
+    h_barrel_MC_deno_100to500[_tbarW]             ->Scale(1.2003e+04 / h_barrel_MC_deno_50to70[_tbarW]              ->Integral());
+    h_barrel_MC_deno_100to500[_ttbar]             ->Scale(2.7302e+05 / h_barrel_MC_deno_50to70[_ttbar]              ->Integral());
+    h_barrel_MC_deno_100to500[_WJets]             ->Scale(1.3415e+06 / h_barrel_MC_deno_50to70[_WJets]              ->Integral());
+    h_barrel_MC_deno_100to500[_QCDMuEnriched_Full]->Scale(7.9078e+05 / h_barrel_MC_deno_50to70[_QCDMuEnriched_Full] ->Integral());
 
-    s_barrel_deno_50to70 = new THStack("s_barrel_deno_50to70", "");
-    s_barrel_deno_50to70->Add(h_barrel_MC_deno_50to70[_DY_Full]           );
-    s_barrel_deno_50to70->Add(h_barrel_MC_deno_50to70[_WW]                );
-    s_barrel_deno_50to70->Add(h_barrel_MC_deno_50to70[_WZ]                );
-    s_barrel_deno_50to70->Add(h_barrel_MC_deno_50to70[_ZZ]                );
-    s_barrel_deno_50to70->Add(h_barrel_MC_deno_50to70[_tW]                );
-    s_barrel_deno_50to70->Add(h_barrel_MC_deno_50to70[_tbarW]             );
-    s_barrel_deno_50to70->Add(h_barrel_MC_deno_50to70[_ttbar]             );
-    s_barrel_deno_50to70->Add(h_barrel_MC_deno_50to70[_WJets]             );
-    s_barrel_deno_50to70->Add(h_barrel_MC_deno_50to70[_QCDMuEnriched_Full]);
+    THStack * s_barrel_deno = new THStack("s_barrel_deno", "");
+    s_barrel_deno->Add(h_barrel_MC_deno_50to70[_WW]                );
+    s_barrel_deno->Add(h_barrel_MC_deno_50to70[_WZ]                );
+    s_barrel_deno->Add(h_barrel_MC_deno_50to70[_ZZ]                );
+    s_barrel_deno->Add(h_barrel_MC_deno_50to70[_tW]                );
+    s_barrel_deno->Add(h_barrel_MC_deno_50to70[_tbarW]             );
+    s_barrel_deno->Add(h_barrel_MC_deno_50to70[_ttbar]             );
+    s_barrel_deno->Add(h_barrel_MC_deno_50to70[_DY_Full]           );
+    s_barrel_deno->Add(h_barrel_MC_deno_50to70[_WJets]             );
+    s_barrel_deno->Add(h_barrel_MC_deno_50to70[_QCDMuEnriched_Full]);
+    s_barrel_deno->Add(h_barrel_MC_deno_70to100[_WW]                );
+    s_barrel_deno->Add(h_barrel_MC_deno_70to100[_WZ]                );
+    s_barrel_deno->Add(h_barrel_MC_deno_70to100[_ZZ]                );
+    s_barrel_deno->Add(h_barrel_MC_deno_70to100[_tW]                );
+    s_barrel_deno->Add(h_barrel_MC_deno_70to100[_tbarW]             );
+    s_barrel_deno->Add(h_barrel_MC_deno_70to100[_ttbar]             );
+    s_barrel_deno->Add(h_barrel_MC_deno_70to100[_DY_Full]           );
+    s_barrel_deno->Add(h_barrel_MC_deno_70to100[_WJets]             );
+    s_barrel_deno->Add(h_barrel_MC_deno_70to100[_QCDMuEnriched_Full]);
+    s_barrel_deno->Add(h_barrel_MC_deno_100to500[_WW]                );
+    s_barrel_deno->Add(h_barrel_MC_deno_100to500[_WZ]                );
+    s_barrel_deno->Add(h_barrel_MC_deno_100to500[_ZZ]                );
+    s_barrel_deno->Add(h_barrel_MC_deno_100to500[_tW]                );
+    s_barrel_deno->Add(h_barrel_MC_deno_100to500[_tbarW]             );
+    s_barrel_deno->Add(h_barrel_MC_deno_100to500[_ttbar]             );
+    s_barrel_deno->Add(h_barrel_MC_deno_100to500[_DY_Full]           );
+    s_barrel_deno->Add(h_barrel_MC_deno_100to500[_WJets]             );
+    s_barrel_deno->Add(h_barrel_MC_deno_100to500[_QCDMuEnriched_Full]);
+
+    h_barrel_data_deno_50to70->Add(h_barrel_data_deno_70to100);
+    h_barrel_data_deno_50to70->Add(h_barrel_data_deno_100to500);
 
 
 // ------------------------------------- DRAWING -----------------------------------------------------
-    myRatioPlot_t *RP_barrel_deno_50to70 = new myRatioPlot_t("RP_barrel_deno_50to70", s_barrel_deno_50to70, h_barrel_data_deno_50to70);
-    RP_barrel_deno_50to70->SetPlots("I_{PF}^{rel.}", 0, 5);
+    myRatioPlot_t *RP_barrel_deno = new myRatioPlot_t("RP_barrel_deno_50to70", s_barrel_deno, h_barrel_data_deno_70to100);
+    RP_barrel_deno->SetPlots("p_{T} (#mu_{barrel}^{deno})", 0, 5);
 
     TLegend *legend = new TLegend(0.5, 0.65, 0.95, 0.95);
 
@@ -1700,8 +1722,8 @@ void Fit_HistDrawer()
     legend->AddEntry(h_barrel_MC_deno_50to70[_QCDMuEnriched_Full], "#font[12]{#scale[1.1]{QCD}}", "f");
     legend->SetNColumns(2);
 
-    RP_barrel_deno_50to70->ImportLegend(legend);
-    RP_barrel_deno_50to70->Draw(1, 1e7, 0);
+    RP_barrel_deno->ImportLegend(legend);
+    RP_barrel_deno->Draw(1, 1e7, 0);
 
 } // End of Fit_HistDrawer()
 
@@ -1834,8 +1856,8 @@ void Mu_QCDest_HistDrawer(Int_t remNegBins)
     RP_mass_wQCD->ImportLegend(legend_wQCD);
     RP_mass_woQCD->ImportLegend(legend_woQCD);
 
-    RP_mass_wQCD->Draw(1e-3, 100, 1);
-    RP_mass_woQCD->Draw(1e-3, 100, 1);
+    RP_mass_wQCD->Draw(1e-3, 1e3, 1);
+    RP_mass_woQCD->Draw(1e-3, 1e3, 1);
 
     TLegend * l_QCD_est = new TLegend(0.7, 0.88, 0.95, 0.95);
     l_QCD_est->AddEntry(h_QCD_est, "#font[12]{#scale[1.1]{QCD}} (est.)", "f");
@@ -1886,7 +1908,7 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins)
     THStack * s_mass_woWJET = new THStack("s_mass_woWJET", "");
     Color_t color = kBlack;
 
-    for (Process_t pr=_DY_10to50; pr<_EndOf_SinglMuon_Normal; pr=next(pr))
+    for (Process_t pr=_SingleMuon_H; pr>=_DY_10to50; pr=previous(pr))
     {
         Mgr.SetProc(pr);
 
@@ -1918,52 +1940,59 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins)
             h_mass[pr]->SetLineColor(kBlack);
         }
 
-        if (pr < _SingleMuon_B) s_mass_wWJET->Add(h_mass[pr]);
-        if (pr < _WJets || pr > _EndOf_WJets_Normal) s_mass_woWJET->Add(h_mass[pr]);
+        if (pr < _SingleMuon_B)
+        {
+            s_mass_wWJET->Add(h_mass[pr]);
+            if (pr < _WJets || pr > _EndOf_WJets_Normal) s_mass_woWJET->Add(h_mass[pr]);
+        }
 
         // Adding up for convenience
-        if (pr == _DY_10to50)
-        {
-            h_mass[_DY_Full] = ((TH1D*)(h_mass[pr]->Clone("h_mass_DY_Full")));
-            h_mass[_DY_Full]->SetDirectory(0);
-        }
-        else if (pr < _EndOf_DY_Normal) h_mass[_DY_Full]->Add(h_mass[pr]);
-        else if (pr == _ttbar)
-        {
-            h_mass[_ttbar_Full] = ((TH1D*)(h_mass[pr]->Clone("h_mass_ttbar_Full")));
-            h_mass[_ttbar_Full]->SetDirectory(0);
-        }
-        else if (pr < _EndOf_ttbar_Normal) h_mass[_ttbar_Full]->Add(h_mass[pr]);
-        else if (pr == _tW)
-        {
-            h_mass[_VVnST] = ((TH1D*)(h_mass[pr]->Clone("h_mass_VVnST")));
-            h_mass[_VVnST]->SetDirectory(0);
-        }
-        else if (pr < _EndOf_VVnST_Normal) h_mass[_VVnST]->Add(h_mass[pr]);
-        else if (pr == _WJets)
-        {
-            h_mass[_WJets_Full] = ((TH1D*)(h_mass[pr]->Clone("h_mass_WJets_Full")));
-            h_mass[_WJets_Full]->SetDirectory(0);
-        }
-        else if (pr < _EndOf_WJets_Normal) h_mass[_WJets_Full]->Add(h_mass[pr]);
-        else if (pr == _QCDMuEnriched_15to20)
-        {
-            h_mass[_QCDMuEnriched_Full] = ((TH1D*)(h_mass[pr]->Clone("h_mass_QCDMuEnriched_Full")));
-            h_mass[_QCDMuEnriched_Full]->SetDirectory(0);
-        }
-        else if (pr < _EndOf_QCDMuEnriched_Normal) h_mass[_QCDMuEnriched_Full]->Add(h_mass[pr]);
-        else if (pr == _SingleMuon_B)
+        if (pr == _SingleMuon_H)
         {
             h_mass[_SingleMuon_Full] = ((TH1D*)(h_mass[pr]->Clone("h_mass_SingleMuon_Full")));
             h_mass[_SingleMuon_Full]->SetDirectory(0);
         }
-        else if (pr < _EndOf_SinglMuon_Normal) h_mass[_SingleMuon_Full]->Add(h_mass[pr]);
+        else if (pr >= _SingleMuon_B) h_mass[_SingleMuon_Full]->Add(h_mass[pr]);
+        else if (pr == _QCDMuEnriched_1000toInf)
+        {
+            h_mass[_QCDMuEnriched_Full] = ((TH1D*)(h_mass[pr]->Clone("h_mass_QCDMuEnriched_Full")));
+            h_mass[_QCDMuEnriched_Full]->SetDirectory(0);
+        }
+        else if (pr >= _QCDMuEnriched_15to20) h_mass[_QCDMuEnriched_Full]->Add(h_mass[pr]);
+        else if (pr == _WJets_ext2v5)
+        {
+            h_mass[_WJets_Full] = ((TH1D*)(h_mass[pr]->Clone("h_mass_WJets_Full")));
+            h_mass[_WJets_Full]->SetDirectory(0);
+        }
+        else if (pr >= _WJets) h_mass[_WJets_Full]->Add(h_mass[pr]);
+        else if (pr == _WW)
+        {
+            h_mass[_VVnST] = ((TH1D*)(h_mass[pr]->Clone("h_mass_VVnST")));
+            h_mass[_VVnST]->SetDirectory(0);
+        }
+        else if (pr >= _tW) h_mass[_VVnST]->Add(h_mass[pr]);
+        else if (pr == _ttbar_1000toInf)
+        {
+            h_mass[_ttbar_Full] = ((TH1D*)(h_mass[pr]->Clone("h_mass_ttbar_Full")));
+            h_mass[_ttbar_Full]->SetDirectory(0);
+        }
+        else if (pr >= _ttbar) h_mass[_ttbar_Full]->Add(h_mass[pr]);
+        else if (pr == _DY_2000to3000)
+        {
+            h_mass[_DY_Full] = ((TH1D*)(h_mass[pr]->Clone("h_mass_DY_Full")));
+            h_mass[_DY_Full]->SetDirectory(0);
+        }
+        else if (pr >= _DY_10to50) h_mass[_DY_Full]->Add(h_mass[pr]);
 
-
-        if (pr == _DY_2000to3000) pr = _EndOf_DYTauTau_Normal; // next -- ttbar
-        if (pr == _QCDMuEnriched_1000toInf) pr = _EndOf_DoubleEG_Normal; // next -- SingleMuon_B
+        if (pr == _SingleMuon_B) pr = _EndOf_QCDMuEnriched_Normal; // next -- QCD_Mu_1000toInf
+        if (pr == _ttbar) pr = _EndOf_DY_Normal; // next -- DY_2000to3000
 
     } // End of pr iteration
+
+    // For drawing MC W+Jets on top
+    h_mass[_WJets_Full]->SetFillColor(kGray);
+    h_mass[_WJets_Full]->SetFillStyle(3002);
+    h_mass[_WJets_Full]->SetLineColor(kRed);
 
     // W+Jets estimation
     h_WJET_est = ((TH1D*)(h_mass[_SingleMuon_Full]->Clone("h_WJET_est")));
@@ -1999,8 +2028,9 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins)
     RP_mass_wWJET->ImportLegend(legend_wWJET);
     RP_mass_woWJET->ImportLegend(legend_woWJET);
 
-    RP_mass_wWJET->Draw(1e-2, 1000, 1);
-    RP_mass_woWJET->Draw(1e-2, 1000, 1);
+    RP_mass_wWJET->Draw(1e-2, 1e5, 1);
+//    RP_mass_wWJET->DrawOnTop(h_mass[_WJets_Full]);
+    RP_mass_woWJET->Draw(1e-2, 1e5, 1);
 
     TLegend * l_WJET_est = new TLegend(0.7, 0.88, 0.95, 0.95);
     l_WJET_est->AddEntry(h_WJET_est, "#font[12]{#scale[1.1]{W}}+Jets (est.)", "f");

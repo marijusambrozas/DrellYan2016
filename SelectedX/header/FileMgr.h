@@ -64,6 +64,23 @@ enum Process_t
 };
 
 inline
+Process_t previous (Process_t pr)    // Processes that begin with "EndOf" will be skipped by this
+{
+  if (pr == _None)
+      return pr;
+  else if (pr == _DYTauTau_10to50 || pr == _DoubleEG_B || pr == _DY_Full)
+      return Process_t(int(pr)-3);
+  else if (pr == _DYMuMu_10to50 || pr == _DYEE_10to50 || pr == _EndOf_MCsignal_Normal || pr == _ttbar || pr == _tW ||
+           pr == _WJets || pr == _QCDMuEnriched_15to20 || pr == _QCDEMEnriched_20to30 || pr == _EndOf_MCbkg_Normal || pr == _SingleMuon_B ||
+           pr == _SingleElectron_B || pr == _EndOf_Data_Normal || pr == _DYTauTau_Full || pr == _DoubleEG_Full || pr == _Test_MuMu ||
+           pr == _A_DY_50to100 || pr == _A_WJets || pr == _A_DY_Full)
+      return Process_t(int(pr)-2);
+  else
+      return Process_t(int(pr)-1);
+}
+
+
+inline
 Process_t next (Process_t pr)    // Processes that begin with "EndOf" will be skipped by this
 {
   if (pr == _EndOf_Alternatives)
@@ -71,9 +88,9 @@ Process_t next (Process_t pr)    // Processes that begin with "EndOf" will be sk
   else if (pr == _DYEE_2000to3000 || pr == _QCDEMEnriched_300toInf || pr == _SingleElectron_H)
       return Process_t(int(pr)+3);
   else if (pr == _DY_2000to3000 || pr == _DYMuMu_2000to3000 || pr == _EndOf_DYEE_Normal || pr == _DYTauTau_50toInf || pr == _ttbar_1000toInf ||
-            pr == _WW || pr == _WJets_ext2v5 || pr == _QCDMuEnriched_1000toInf || pr == _EndOf_QCDEMEnriched_Normal || pr == _DoubleEG_H ||
-            pr == _SingleMuon_H || pr == _EndOf_SingleElectron_Normal || pr == _DYEE_Full || pr == _bkg_Full || pr == _SingleElectron_Full ||
-            pr == _Test_EMu || pr == _A_DY_650toInf || pr == _A_WW)
+           pr == _WW || pr == _WJets_ext2v5 || pr == _QCDMuEnriched_1000toInf || pr == _EndOf_QCDEMEnriched_Normal || pr == _DoubleEG_H ||
+           pr == _SingleMuon_H || pr == _EndOf_SingleElectron_Normal || pr == _DYEE_Full || pr == _bkg_Full || pr == _SingleElectron_Full ||
+           pr == _Test_EMu || pr == _A_DY_650toInf || pr == _A_WW)
       return Process_t(int(pr)+2);
   else
       return Process_t(int(pr)+1);
