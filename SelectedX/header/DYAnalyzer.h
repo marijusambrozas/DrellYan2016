@@ -207,9 +207,9 @@ public:
 	Bool_t EventSelection_Zdiff_13TeV_HighPt11(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection);
 
         // -- FAKE RATE -- //
-        Bool_t EventSelection_FR(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection_nume, vector< Muon >* SelectedMuonCollection_deno); // -- output: muons passing numerator and denominator selection -- //
-        Bool_t EventSelection_FRdijetEst(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection_fail); // -- output: two muons passing regular selection but failing isolation requirements-- //
-        Bool_t EventSelection_FRsingleJetEst(vector< Muon > MuonCollection, NtupleHandle *ntuple, Muon *SelectedMuon_pass, Muon *SelectedMuon_fail); // -- output: one muon passing full regular selection and another one passing the same selection but failing isolation requirements-- //
+        Bool_t EventSelection_FR(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection_nume, vector<Muon> *SelectedMuonCollection_deno); // -- output: muons passing numerator and denominator selection -- //
+        Bool_t EventSelection_FRdijetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection_fail); // -- output: two muons passing regular selection but failing isolation requirements-- //
+        Bool_t EventSelection_FRsingleJetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple,  vector<Muon> *SelectedMuonCollection); // -- output: one muon passing full regular selection and another one passing the same selection but failing isolation requirements-- //
         void SetupFRvalues(TString filename, TString type="template");
         Double_t FakeRate(Double_t p_T, Double_t eta);
 
@@ -349,7 +349,7 @@ void DYAnalyzer::AssignAccThreshold(TString HLTname, TString *HLT, Double_t *Lea
         else if(HLTname == "Mu50")
 	{
 		*HLT = "HLT_Mu50_v*";
-		*LeadPtCut = 53;
+                *LeadPtCut = 52;
 		*SubPtCut = 10;
 		*LeadEtaCut = 2.4;
 		*SubEtaCut = 2.4;
@@ -5729,14 +5729,14 @@ Bool_t DYAnalyzer::EventSelection_FR(vector< Muon > MuonCollection, NtupleHandle
     Bool_t skip = kTRUE;
     for(Int_t j=0; j<(int)MuonCollection.size(); j++)
     { // Asking for only one tight muon to surpass trigger threshold
-        if(MuonCollection[j].Pt > 52 && fabs(MuonCollection[j].eta) < 2.4 && MuonCollection[j].isTightMuon())
+        if(MuonCollection[j].Pt > LeadPtCut && fabs(MuonCollection[j].eta) < SubEtaCut && MuonCollection[j].isTightMuon())
             skip = kFALSE;
     }
     if (skip == kTRUE)
         return isPassEventSelection;
     for(Int_t j=0; j<(int)MuonCollection.size(); j++)
     { // All other muons still have to pass these criteria
-        if (fabs(MuonCollection[j].eta) < 2.4 && (MuonCollection[j].isTightMuon()))
+        if (fabs(MuonCollection[j].eta) < SubEtaCut && (MuonCollection[j].isTightMuon()))
         {
             isPassEventSelection = kTRUE;
             SelectedMuonCollection_deno->push_back(MuonCollection[j]);
@@ -5755,40 +5755,61 @@ Bool_t DYAnalyzer::EventSelection_FRdijetEst(vector< Muon > MuonCollection, Ntup
     vector< Muon > TempMuonCollection;
     for (Int_t j=0; j<(int)MuonCollection.size(); j++)
     {
-        if (MuonCollection[j].Pt > 52 && fabs(MuonCollection[j].eta) < 2.4 && MuonCollection[j].isTightMuon() && MuonCollection[j].RelPFIso_dBeta > 0.15)
+        if (fabs(MuonCollection[j].eta) < SubEtaCut && MuonCollection[j].isTightMuon() && MuonCollection[j].RelPFIso_dBeta >= 0.15)
             TempMuonCollection.push_back(MuonCollection[j]);
     }
     if (TempMuonCollection.size() == 2)
     {
-        isPassEventSelection = kTRUE;
-        for (Int_t i=0; i<2; i++)
-            SelectedMuonCollection_fail->push_back(TempMuonCollection[i]);
+        if ((TempMuonCollection[0].Pt > LeadPtCut && TempMuonCollection[1] > SubPtCut) || (TempMuonCollection[0].Pt > SubPtCut && TempMuonCollection[1] > LeadPtCut))
+        {
+            isPassEventSelection = kTRUE;
+            for (Int_t i=0; i<2; i++)
+                SelectedMuonCollection_fail->push_back(TempMuonCollection[i]);
+        }
     }
     return isPassEventSelection;
 } // End of EventSelection_FRdijetEst()
 
 
 
-Bool_t DYAnalyzer::EventSelection_FRsingleJetEst(vector< Muon > MuonCollection, NtupleHandle *ntuple, Muon *SelectedMuon_pass, Muon *SelectedMuon_fail)
+Bool_t DYAnalyzer::EventSelection_FRsingleJetEst(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection)
 {
     Bool_t isPassEventSelection = kFALSE;
-    vector< Muon > TempMuonCollection_pass;
-    vector< Muon > TempMuonCollection_fail;
+    SelectedMuonCollection->Clear();
+    Muon TempMuon_lead, TempMuon_sublead;
+    Double_t pT_lead=-999, pT_sublead=-999;
+    Int_t nTightMuons = 0;
     for (Int_t j=0; j<(int)MuonCollection.size(); j++)
     {
-        if (MuonCollection[j].Pt > 52 && fabs(MuonCollection[j].eta) < 2.4 && MuonCollection[j].isTightMuon())
+        if (fabs(MuonCollection[j].eta) < SubEtaCut && MuonCollection[j].isTightMuon())
         {
-            if (MuonCollection[j].RelPFIso_dBeta < 0.15)
-                TempMuonCollection_pass.push_back(MuonCollection[j]);
-            else
-                TempMuonCollection_fail.push_back(MuonCollection[j]);
+            nTightMuons++;
+            if (MuonCollection[j].Pt > pT_lead)
+            {
+                TempMuon_lead = MuonCollection[j];
+                pT_lead = MuonCollection[j].Pt;
+            }
+            else if (MuonCollection[j] > pT_sublead)
+            {
+                TempMuon_sublead = MuonCollection[j];
+                pT_sublead = MuonCollection[j].Pt;
+            }
         }
     }
-    if (TempMuonCollection_pass.size() == 1 && TempMuonCollection_fail.size() == 1)
+    if (nTightMuons == 2 && pT_lead > LeadPtCut && pT_sublead > SubPtCut)
     {
-        isPassEventSelection = kTRUE;
-        *SelectedMuon_pass = TempMuonCollection_pass[0];
-        *SelectedMuon_fail = TempMuonCollection_fail[0];
+        if (TempMuon_lead.RelPFIso_dBeta < 0.15 && TempMuon_sublead.RelPFIso_dBeta >= 0.15)
+        {
+            isPassEventSelection = kTRUE;
+            SelectedMuonCollection->push_back(TempMuon_lead);
+            SelectedMuonCollection->push_back(TempMuon_sublead);
+        }
+        else if (TempMuon_sublead.RelPFIso_dBeta < 0.15 && TempMuon_lead.RelPFIso_dBeta >= 0.15)
+        {
+            isPassEventSelection = kTRUE;
+            SelectedMuonCollection->push_back(TempMuon_sublead);
+            SelectedMuonCollection->push_back(TempMuon_lead);
+        }
     }
     return isPassEventSelection;
 } // End of EventSelection_FRsingleJetEst()
