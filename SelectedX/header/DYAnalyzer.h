@@ -5760,7 +5760,7 @@ Bool_t DYAnalyzer::EventSelection_FRdijetEst(vector< Muon > MuonCollection, Ntup
     }
     if (TempMuonCollection.size() == 2)
     {
-        if ((TempMuonCollection[0].Pt > LeadPtCut && TempMuonCollection[1] > SubPtCut) || (TempMuonCollection[0].Pt > SubPtCut && TempMuonCollection[1] > LeadPtCut))
+        if ((TempMuonCollection[0].Pt > LeadPtCut && TempMuonCollection[1].Pt > SubPtCut) || (TempMuonCollection[0].Pt > SubPtCut && TempMuonCollection[1].Pt > LeadPtCut))
         {
             isPassEventSelection = kTRUE;
             for (Int_t i=0; i<2; i++)
@@ -5789,7 +5789,7 @@ Bool_t DYAnalyzer::EventSelection_FRsingleJetEst(vector< Muon > MuonCollection, 
                 TempMuon_lead = MuonCollection[j];
                 pT_lead = MuonCollection[j].Pt;
             }
-            else if (MuonCollection[j] > pT_sublead)
+            else if (MuonCollection[j].Pt > pT_sublead)
             {
                 TempMuon_sublead = MuonCollection[j];
                 pT_sublead = MuonCollection[j].Pt;
