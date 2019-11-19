@@ -5775,7 +5775,7 @@ Bool_t DYAnalyzer::EventSelection_FRdijetEst(vector< Muon > MuonCollection, Ntup
 Bool_t DYAnalyzer::EventSelection_FRsingleJetEst(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection)
 {
     Bool_t isPassEventSelection = kFALSE;
-    SelectedMuonCollection->Clear();
+    SelectedMuonCollection->clear();
     Muon TempMuon_lead, TempMuon_sublead;
     Double_t pT_lead=-999, pT_sublead=-999;
     Int_t nTightMuons = 0;
