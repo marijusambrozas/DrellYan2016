@@ -4367,7 +4367,6 @@ void FileMgr::SetupChain(Int_t i_tuple, TChain *chain)
         cout << "No process set!" << endl;
         return;
     }
-//    chain = new TChain(TreeName[i_tuple]);
     for (Int_t i_tup=0; i_tup<nNtuples.size(); i_tup++)
     {
         if (i_tup != i_tuple && i_tuple != -1) continue;
@@ -4375,9 +4374,7 @@ void FileMgr::SetupChain(Int_t i_tuple, TChain *chain)
         {
             stringstream ss;
             ss << i;
-//            cout << FullLocation[i_tup]+NtupleName[i_tup]+ss.str()+".root" << endl;
             chain->Add(FullLocation[i_tup]+NtupleName[i_tup]+ss.str()+".root");
         }
     }
-//    cout << chain->GetEntries() << endl;
 } // end of SetupChain()
