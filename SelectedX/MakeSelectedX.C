@@ -203,7 +203,7 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
             EE.MakeBranches(ElectronTree);
 
             TChain *chain = new TChain(Mgr.TreeName[i_tup]);
-            chain->Add(Mgr.FullLocation[i_tup]);
+            Mgr.SetupChain(i_tup, chain);
 
             NtupleHandle *ntuple = new NtupleHandle(chain);
             if (Mgr.isMC == kTRUE)
@@ -465,7 +465,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t Debug)
             MuMu.MakeBranches(MuonTree);
 
             TChain *chain = new TChain(Mgr.TreeName[i_tup]);
-            chain->Add(Mgr.FullLocation[i_tup]);
+            Mgr.SetupChain(i_tup, chain);
 
             NtupleHandle *ntuple = new NtupleHandle(chain);
             if (Mgr.isMC == kTRUE)
@@ -795,7 +795,7 @@ void MakeSelectedEMu (TString type, TString HLTname, Bool_t Debug)
             EMu.MakeBranches(EMuTree);
 
             TChain *chain = new TChain(Mgr.TreeName[i_tup]);
-            chain->Add(Mgr.FullLocation[i_tup]);
+            Mgr.SetupChain(i_tup, chain);
 
             NtupleHandle *ntuple = new NtupleHandle(chain);
             if (Mgr.isMC == kTRUE)
