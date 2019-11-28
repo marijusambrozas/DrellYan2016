@@ -197,8 +197,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             SelectedEE_t EE; EE.CreateNew();
             EE.MakeBranches(ElectronTree);
 
-            TChain *chain = new TChain(Mgr.TreeName[i_tup]);
-            chain->Add(Mgr.FullLocation[i_tup]);
+            TChain *chain;
+            Mgr.SetupChain(i_tup, chain);
 
             NtupleHandle *ntuple = new NtupleHandle(chain);
             if (Mgr.isMC == kTRUE)
@@ -491,8 +491,8 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
 
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
-            TChain *chain = new TChain(Mgr.TreeName[i_tup]);
-            chain->Add(Mgr.FullLocation[i_tup]);
+            TChain *chain;
+            Mgr.SetupChain(i_tup, chain);
 
             NtupleHandle *ntuple = new NtupleHandle(chain);
             if (Mgr.isMC == kTRUE)
@@ -803,8 +803,8 @@ void MakeSelectionForQCDest_Mu (TString type, TString HLTname, Bool_t Debug)
 
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
-            TChain *chain = new TChain(Mgr.TreeName[i_tup]);
-            chain->Add(Mgr.FullLocation[i_tup]);
+            TChain *chain;
+            Mgr.SetupChain(i_tup, chain);
 
             NtupleHandle *ntuple = new NtupleHandle(chain);
             if (Mgr.isMC == kTRUE)
@@ -1107,8 +1107,8 @@ void MakeSelectionForWJETSest_Mu (TString type, TString HLTname, Bool_t Debug)
 
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
-            TChain *chain = new TChain(Mgr.TreeName[i_tup]);
-            chain->Add(Mgr.FullLocation[i_tup]);
+            TChain *chain;
+            Mgr.SetupChain(i_tup, chain);
 
             NtupleHandle *ntuple = new NtupleHandle(chain);
             if (Mgr.isMC == kTRUE)
