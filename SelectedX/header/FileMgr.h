@@ -4375,6 +4375,7 @@ void FileMgr::SetupChain(Int_t i_tuple, TChain *chain)
         {
             stringstream ss;
             ss << i;
+            cout << FullLocation[i_tup]+NtupleName[i_tup]+ss.str()+".root" << endl;
             chain->Add(FullLocation[i_tup]+NtupleName[i_tup]+ss.str()+".root");
         }
     }
