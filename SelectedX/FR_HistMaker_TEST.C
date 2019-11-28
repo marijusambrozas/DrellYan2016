@@ -30,8 +30,8 @@
 #include "./header/myProgressBar_t.h"
 #include "./header/FileMgr.h"
 
-void E_FRgraphMaker (Bool_t DEBUG);
-void Mu_FRgraphMaker (Bool_t DEBUG);
+void E_FR_HistMaker (Bool_t DEBUG);
+void Mu_FR_HistMaker (Bool_t DEBUG);
 
 // -- Drell-Yan mass bins -- //
 const Int_t binnum = 43;
@@ -47,7 +47,7 @@ const Double_t massbins2[87] = {15, 17.5, 20, 22.5, 25, 27.5, 30, 32.5, 35, 37.5
                                 915, 1000, 1250, 1500, 2250, 3000};
 
 
-void FRgraphMaker_TEST (TString WhichX = "")
+void FR_HistMaker_TEST (TString WhichX = "")
 {
     TString whichX = WhichX;
     whichX.ToUpper();
@@ -63,23 +63,23 @@ void FRgraphMaker_TEST (TString WhichX = "")
 //        Xselected++;
 //        if (HLTname == "DEFAULT") HLT = "Ele23Ele12";
 //        else HLT = HLTname;
-//        cout << "\n*******      E_FRgraphMaker      *******" << endl;
-//        E_FRgraphMaker(DEBUG);
+//        cout << "\n*******      E_FR_HistMaker      *******" << endl;
+//        E_FR_HistMaker(DEBUG);
 //    }
     if (whichX.Contains("MU"))
     {
         Xselected++;
-        cout << "\n*****  Mu_FRgraphMaker  *****" << endl;
-        Mu_FRgraphMaker(DEBUG);
+        cout << "\n*****  Mu_FR_HistMaker  *****" << endl;
+        Mu_FR_HistMaker(DEBUG);
     }
 
-    if (Xselected == 0) cout << "Wrong arument! \nType in: >> .x FRgraphMaker_TEST.C+(\"whichX\")" << endl;
+    if (Xselected == 0) cout << "Wrong arument! \nType in: >> .x FR_HistMaker_TEST.C+(\"whichX\")" << endl;
 
 } // End of HistMaker()
 
 
 /// ----------------------------- Electron Channel ------------------------------ ///
-void E_FRgraphMaker (Bool_t DEBUG)
+void E_FR_HistMaker (Bool_t DEBUG)
 {
     return;
 //    if (!type.Length())
@@ -498,11 +498,11 @@ void E_FRgraphMaker (Bool_t DEBUG)
 //    TTimeStamp ts_end;
 //    cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
 
-} // End of E_FRgraphMaker()
+} // End of E_FR_HistMaker()
 
 
 /// -------------------------------- Muon Channel ------------------------------------ ///
-void Mu_FRgraphMaker (Bool_t DEBUG)
+void Mu_FR_HistMaker (Bool_t DEBUG)
 {
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;

@@ -30,11 +30,11 @@
 #include "./header/myProgressBar_t.h"
 #include "./header/FileMgr.h"
 
-void E_FRgraphMaker (Bool_t DEBUG);
-void Mu_FRgraphMaker (Bool_t DEBUG);
+void E_FR_HistMaker (Bool_t DEBUG);
+void Mu_FR_HistMaker (Bool_t DEBUG);
 
-void Mu_QCDgraphMaker (Bool_t DEBUG);
-void Mu_WJETgraphMaker (Bool_t DEBUG);
+void Mu_QCD_HistMaker (Bool_t DEBUG);
+void Mu_WJET_HistMaker (Bool_t DEBUG);
 
 // -- Drell-Yan mass bins -- //
 const Int_t binnum = 43;
@@ -50,7 +50,7 @@ const Double_t massbins2[87] = {15, 17.5, 20, 22.5, 25, 27.5, 30, 32.5, 35, 37.5
                                 915, 1000, 1250, 1500, 2250, 3000};
 
 
-void FRgraphMaker (TString WhichX = "")
+void FR_HistMaker (TString WhichX = "")
 {
     TString whichX = WhichX;
     whichX.ToUpper();
@@ -66,26 +66,26 @@ void FRgraphMaker (TString WhichX = "")
 //        Xselected++;
 //        if (HLTname == "DEFAULT") HLT = "Ele23Ele12";
 //        else HLT = HLTname;
-//        cout << "\n*******      E_FRgraphMaker      *******" << endl;
-//        E_FRgraphMaker(DEBUG);
+//        cout << "\n*******      E_FR_HistMaker      *******" << endl;
+//        E_FR_HistMaker(DEBUG);
 //    }
     if (whichX.Contains("MU"))
     {
         Xselected++;
         if (whichX.Contains("QCD"))
         {
-            cout << "\n*****  Mu_QCDgraphMaker  *****" << endl;
-            Mu_QCDgraphMaker(DEBUG);
+            cout << "\n*****  Mu_QCD_HistMaker  *****" << endl;
+            Mu_QCD_HistMaker(DEBUG);
         }
         else if (whichX.Contains("W") && whichX.Contains("JET"))
         {
-            cout << "\n*****  Mu_WJETgraphMaker  *****" << endl;
-            Mu_WJETgraphMaker(DEBUG);
+            cout << "\n*****  Mu_WJET_HistMaker  *****" << endl;
+            Mu_WJET_HistMaker(DEBUG);
         }
         else
         {
-            cout << "\n*****  Mu_FRgraphMaker  *****" << endl;
-            Mu_FRgraphMaker(DEBUG);
+            cout << "\n*****  Mu_FR_HistMaker  *****" << endl;
+            Mu_FR_HistMaker(DEBUG);
         }
     }
 
@@ -95,7 +95,7 @@ void FRgraphMaker (TString WhichX = "")
 
 
 /// ----------------------------- Electron Channel ------------------------------ ///
-void E_FRgraphMaker (Bool_t DEBUG)
+void E_FR_HistMaker (Bool_t DEBUG)
 {
     return;
 //    if (!type.Length())
@@ -514,11 +514,11 @@ void E_FRgraphMaker (Bool_t DEBUG)
 //    TTimeStamp ts_end;
 //    cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
 
-} // End of E_FRgraphMaker()
+} // End of E_FR_HistMaker()
 
 
 /// -------------------------------- Muon Channel ------------------------------------ ///
-void Mu_FRgraphMaker (Bool_t DEBUG)
+void Mu_FR_HistMaker (Bool_t DEBUG)
 {
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
@@ -883,11 +883,11 @@ void Mu_FRgraphMaker (Bool_t DEBUG)
     TTimeStamp ts_end;
     cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
 
-} // End of Mu_FRgraphMaker()
+} // End of Mu_FR_HistMaker()
 
 
 /// -------------------------------- Muon Channel ------------------------------------ ///
-void Mu_QCDgraphMaker (Bool_t DEBUG)
+void Mu_QCD_HistMaker (Bool_t DEBUG)
 {
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
@@ -1004,8 +1004,10 @@ void Mu_QCDgraphMaker (Bool_t DEBUG)
             if (p_T->size() != 2) continue;
             if (charge->at(0) == charge->at(1)) continue;
             if (relPFiso->at(0) < 0.15 || relPFiso->at(1) < 0.15) continue;
-//            if (p_T->at(0)<17 || p_T->at(1) < 17) continue;
-//            if (p_T->at(0)<52 || p_T->at(1) < 52) continue;
+            if (p_T->at(0) < 10 || p_T->at(1) < 10) continue;
+//            if (p_T->at(0) < 70 && p_T->at(1) < 70) continue;
+            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
+//            if (p_T->at(0) < 52 || p_T->at(1) < 52) continue;
 
 
             nPass++;
@@ -1102,10 +1104,10 @@ void Mu_QCDgraphMaker (Bool_t DEBUG)
     TTimeStamp ts_end;
     cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
 
-} // End of Mu_QCDgraphMaker()
+} // End of Mu_QCD_HistMaker()
 
 
-void Mu_WJETgraphMaker (Bool_t DEBUG)
+void Mu_WJET_HistMaker (Bool_t DEBUG)
 {
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
@@ -1222,7 +1224,9 @@ void Mu_WJETgraphMaker (Bool_t DEBUG)
             if (p_T->size() != 2) continue;
             if (charge->at(0) == charge->at(1)) continue;
             if (relPFiso->at(0) < 0.15 && relPFiso->at(1) < 0.15) continue;
-            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
+//            if (p_T->at(0) < 10 || p_T->at(1) < 10) continue;
+//            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
+            if (p_T->at(0) < 52 || p_T->at(1) < 52) continue;
 
             nPass++;
 
@@ -1332,4 +1336,4 @@ void Mu_WJETgraphMaker (Bool_t DEBUG)
     TTimeStamp ts_end;
     cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
 
-} // End of Mu_WJETgraphMaker()
+} // End of Mu_WJET_HistMaker()

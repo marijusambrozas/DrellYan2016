@@ -1989,11 +1989,6 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins)
 
     } // End of pr iteration
 
-    // For drawing MC W+Jets on top
-    h_mass[_WJets_Full]->SetFillColor(kGray);
-    h_mass[_WJets_Full]->SetFillStyle(3002);
-    h_mass[_WJets_Full]->SetLineColor(kRed);
-
     // W+Jets estimation
     h_WJET_est = ((TH1D*)(h_mass[_SingleMuon_Full]->Clone("h_WJET_est")));
     h_WJET_est->SetTitle("");
@@ -2038,7 +2033,7 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins)
     c_WJET_est->SetTopMargin(0.05);
     c_WJET_est->SetRightMargin(0.05);
     c_WJET_est->SetBottomMargin(0.15);
-    c_WJET_est->SetLeftMargin(0.15);
+    c_WJET_est->SetLeftMargin(0.17);
     h_WJET_est->Draw("hist");
     h_WJET_est->GetXaxis()->SetTitle("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}]");
     h_WJET_est->GetXaxis()->SetTitleSize(0.062);
@@ -2048,16 +2043,50 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins)
     h_WJET_est->GetXaxis()->SetNoExponent();
     h_WJET_est->GetYaxis()->SetTitle("Number of events");
     h_WJET_est->GetYaxis()->SetTitleSize(0.05);
-    h_WJET_est->GetYaxis()->SetTitleOffset(1.2);
+    h_WJET_est->GetYaxis()->SetTitleOffset(1.6);
     h_WJET_est->GetYaxis()->SetLabelSize(0.043);
     h_WJET_est->GetYaxis()->SetMoreLogLabels();
     h_WJET_est->GetYaxis()->SetNoExponent();
+    h_WJET_est->GetYaxis()->SetRangeUser(0, 2e3);
     l_WJET_est->Draw();
     c_WJET_est->SetLogx();
-    c_WJET_est->SetLogy();
     c_WJET_est->SetGridx();
     c_WJET_est->SetGridy();
     c_WJET_est->Update();
+
+    TH1D * h_WJET_fit = ((TH1D*)(h_mass[_WJets_Full]->Clone("h_WJET_fit")));
+    h_WJET_fit->SetTitle("");
+    h_WJET_fit->Scale(1.2256e+02 / h_WJET_fit->Integral()); // pT cuts: 52, 52
+//    h_WJET_fit->Scale(8.2256e+03 / h_WJET_fit->Integral()); // pT cuts: 52, 10
+//    h_WJET_fit->Scale(2.4489e+03 / h_WJET_fit->Integral()); // pT cuts: 52, 17
+//    h_WJET_fit->Scale(4.3978e+04 / h_WJET_fit->Integral()); // pT cuts: 52, 0
+    h_WJET_fit->SetDirectory(0);
+    h_WJET_fit->SetFillColor(kRed - 2);
+    h_WJET_fit->SetLineColor(kRed - 2);
+    TCanvas * c_WJET_fit = new TCanvas("c_WJET_fit", "c_WJET_fit", 750, 850);
+    c_WJET_fit->SetTopMargin(0.05);
+    c_WJET_fit->SetRightMargin(0.05);
+    c_WJET_fit->SetBottomMargin(0.15);
+    c_WJET_fit->SetLeftMargin(0.17);
+    h_WJET_fit->Draw("hist");
+    h_WJET_fit->GetXaxis()->SetTitle("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}]");
+    h_WJET_fit->GetXaxis()->SetTitleSize(0.062);
+    h_WJET_fit->GetXaxis()->SetTitleOffset(0.9);
+    h_WJET_fit->GetXaxis()->SetLabelSize(0.048);
+    h_WJET_fit->GetXaxis()->SetMoreLogLabels();
+    h_WJET_fit->GetXaxis()->SetNoExponent();
+    h_WJET_fit->GetYaxis()->SetTitle("Number of events");
+    h_WJET_fit->GetYaxis()->SetTitleSize(0.05);
+    h_WJET_fit->GetYaxis()->SetTitleOffset(1.6);
+    h_WJET_fit->GetYaxis()->SetLabelSize(0.043);
+    h_WJET_fit->GetYaxis()->SetMoreLogLabels();
+    h_WJET_fit->GetYaxis()->SetNoExponent();
+    h_WJET_fit->GetYaxis()->SetRangeUser(0, 800);
+    l_WJET_est->Draw();
+    c_WJET_fit->SetLogx();
+    c_WJET_fit->SetGridx();
+    c_WJET_fit->SetGridy();
+    c_WJET_fit->Update();
 
     f->Close();
     if (!f->IsOpen()) cout << "File " << Dir+"WJETest_Mu.root" << " has been closed successfully.\n" << endl;
