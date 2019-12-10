@@ -5387,15 +5387,38 @@ void Est_HistDrawer()
     TString name_bkg_est_mumu = Mgr.HistLocation+"EstBkg_MuMu.root";
     TFile* f_bkg_est_mumu = new TFile(name_bkg_est_mumu, "READ");
     if (f_bkg_est_mumu->IsOpen()) std::cout << "File " << "EstBkg_MuMu.root" << " opened successfully" << endl;
+    TString name_WJets_est_mumu = Mgr.HistLocation+"EstWJets_MuMu.root";
+    TFile* f_WJets_est_mumu = new TFile(name_WJets_est_mumu, "READ");
+    if (f_WJets_est_mumu->IsOpen()) std::cout << "File " << "EstWJets_MuMu.root" << " opened successfully" << endl;
+    TString name_QCD_est_mumu = Mgr.HistLocation+"EstQCD_MuMu.root";
+    TFile* f_QCD_est_mumu = new TFile(name_QCD_est_mumu, "READ");
+    if (f_QCD_est_mumu->IsOpen()) std::cout << "File " << "EstQCD_MuMu.root" << " opened successfully" << endl;
     Mgr.SetProc(_MuMu_SingleMuon_Full);
     TString name_data_mumu = Mgr.HistLocation+"Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+".root";
     TFile* f_data_mumu = new TFile(name_data_mumu, "READ");
     if (f_data_mumu->IsOpen()) std::cout << "File " << "Hist_"+Mgr.Procname[_MuMu_SingleMuon_Full]+".root" << " opened successfully" << endl;
 
     THStack *s_mass_mumu = new THStack("s_mass_mumu", "");
+    THStack *s_mass_mumu_wFR = new THStack("s_mass_mumu_wFR", "");
     THStack *s_mass_mumu2 = new THStack("s_mass_mumu2", "");
 
-//----------------------------------- MC bkg -------------------------------------------------------
+    //--------------------------------- FakeMu bkg -----------------------------------------------------
+    TH1D *h_fakes_mass_mumu[2];
+    f_QCD_est_mumu->GetObject("h_QCD_est", h_fakes_mass_mumu[0]);
+    removeNegativeBins(h_fakes_mass_mumu[0]);
+    h_fakes_mass_mumu[0]->SetFillColor(kRed + 3);
+    h_fakes_mass_mumu[0]->SetLineColor(kRed + 3);
+    h_fakes_mass_mumu[0]->SetDirectory(0);
+    s_mass_mumu_wFR->Add(h_fakes_mass_mumu[0]);
+
+    f_WJets_est_mumu->GetObject("h_WJET_fit", h_fakes_mass_mumu[1]);
+    removeNegativeBins(h_fakes_mass_mumu[1]);
+    h_fakes_mass_mumu[1]->SetFillColor(kRed - 2);
+    h_fakes_mass_mumu[1]->SetLineColor(kRed - 2);
+    h_fakes_mass_mumu[1]->SetDirectory(0);
+    s_mass_mumu_wFR->Add(h_fakes_mass_mumu[1]);
+
+    //----------------------------------- MC bkg -------------------------------------------------------
     TH1D *h_bkg_mass_mumu[9], *h_bkg_mass_mumu2[9];
     iter = 0;
 
@@ -5440,6 +5463,9 @@ void Est_HistDrawer()
         h_bkg_mass_mumu2[iter]->SetLineColor(color);
         h_bkg_mass_mumu2[iter]->SetDirectory(0);
         s_mass_mumu2->Add(h_bkg_mass_mumu2[iter]);
+        
+        if ((pr < _EndOf_MuMu_VVnST_Normal || pr > _EndOf_MuMu_MCbkg_Normal) && pr != _MuMu_QCDMuEnriched_Full && pr != _MuMu_WJets_Full)
+            s_mass_mumu_wFR->Add(h_bkg_mass_mumu[iter]);
 
         iter++;
 
@@ -5467,6 +5493,8 @@ void Est_HistDrawer()
     h_DY_mass_mumu2->SetLineColor(kOrange);
     h_DY_mass_mumu2->SetDirectory(0);
     s_mass_mumu2->Add(h_DY_mass_mumu2);
+
+    s_mass_mumu_wFR->Add(h_DY_mass_mumu);
 
 //--------------------------------------- DATA -----------------------------------------------------
 
@@ -5502,6 +5530,7 @@ void Est_HistDrawer()
 
     myRatioPlot_t *RP_mass_mumu = new myRatioPlot_t("RP_mass_mumu", s_mass_mumu, h_data_mass_mumu);
     myRatioPlot_t *RP_mass_mumu2 = new myRatioPlot_t("RP_mass_mumu2", s_mass_mumu2, h_data_mass_mumu2);
+    myRatioPlot_t *RP_mass_mumu_wFR = new myRatioPlot_t("RP_mass_mumu_wFR", s_mass_mumu_wFR, h_data_mass_mumu);
 
     RP_mass_mumu->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+DD)   ");
 //    RP_mass_mumu->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Eksp./(MC+i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}v.)     ");
@@ -5510,7 +5539,10 @@ void Est_HistDrawer()
     RP_mass_mumu->SetSystematics(NULL, estSystematics_mumu, systematics_mumu);
     RP_mass_mumu2->SetSystematics(NULL, estSystematics_mumu2, systematics_mumu2);
 
+    RP_mass_mumu_wFR->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Data/Est.");
+
     TLegend *legend_mumu = new TLegend(0.8, 0.45, 0.95, 0.95);
+    TLegend *legend_mumu_wFR = new TLegend(0.8, 0.45, 0.95, 0.95);
 
     // Legend (EN)
     legend_mumu->AddEntry(h_data_mass_mumu, "Data", "lp");
@@ -5527,6 +5559,20 @@ void Est_HistDrawer()
     legend_mumu->AddEntry(h_bkg_mass_mumu[1], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
 //    legend_mumu->AddEntry(h_bkg_mass_mumu[0], "#font[12]{#scale[1.1]{QCD}} (MC)", "f");
 
+    legend_mumu_wFR->AddEntry(h_data_mass_mumu, "Data", "lp");
+    legend_mumu_wFR->AddEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
+    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (D-D)", "f");
+    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (D-D)", "f");
+    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (D-D)", "f");
+    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (D-D)", "f");
+//    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (D-D)", "f");
+//    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[3], "#font[12]{#scale[1.1]{WZ}} (D-D)", "f");
+    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
+    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
+    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[2], "#font[12]{#scale[1.1]{WW}} (D-D)", "f");
+    legend_mumu_wFR->AddEntry(h_fakes_mass_mumu[1], "#font[12]{#scale[1.1]{W}}+Jets (D-D)", "f");
+    legend_mumu_wFR->AddEntry(h_fakes_mass_mumu[0], "#font[12]{#scale[1.1]{QCD}} (D-D)", "f");
+
     // Legend (LT)
 //    legend_mumu->AddEntry(h_data_mass_mumu, "Matavimas", "lp");
 //    legend_mumu->AddEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
@@ -5541,9 +5587,11 @@ void Est_HistDrawer()
 ////    legend_mumu->AddEntry(h_bkg_mass_mumu[0], "#font[12]{#scale[1.1]{QCD}} (MC)", "f");
 
     RP_mass_mumu->ImportLegend(legend_mumu);
-    RP_mass_mumu2->ImportLegend(legend_mumu);
     RP_mass_mumu->Draw(0.5, 1e7, 1);
+    RP_mass_mumu2->ImportLegend(legend_mumu);
     RP_mass_mumu2->Draw(0.5, 1e7, 1);
+    RP_mass_mumu_wFR->ImportLegend(legend_mumu_wFR);
+    RP_mass_mumu_wFR->Draw(0.5, 1e7, 1);
 
     Double_t dataerror_mumu, MCerror_mumu, dataintegral_mumu=2.25081e+07, MCintegral_mumu;
     Double_t dataerrorZ_mumu, MCerrorZ_mumu, DYerrorZ_mumu, dataintegralZ_mumu, MCintegralZ_mumu, DYintegralZ_mumu;
