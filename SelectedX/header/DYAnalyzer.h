@@ -210,6 +210,7 @@ public:
         Bool_t EventSelection_FR(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection_nume, vector<Muon> *SelectedMuonCollection_deno); // -- output: muons passing numerator and denominator selection -- //
         Bool_t EventSelection_FRdijetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection_fail); // -- output: two muons passing regular selection but failing isolation requirements-- //
         Bool_t EventSelection_FRsingleJetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple,  vector<Muon> *SelectedMuonCollection); // -- output: one muon passing full regular selection and another one passing the same selection but failing isolation requirements-- //
+        Bool_t EventSelection_FakeMuons_Triggerless(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection); // -- output: two muons passing regular selection but failing isolation requirements (at least one) -- //
         void SetupFRvalues(TString filename, TString type="template");
         Double_t FakeRate(Double_t p_T, Double_t eta);
 
@@ -5769,6 +5770,117 @@ Bool_t DYAnalyzer::EventSelection_FRdijetEst(vector< Muon > MuonCollection, Ntup
     }
     return isPassEventSelection;
 } // End of EventSelection_FRdijetEst()
+
+
+
+Bool_t DYAnalyzer::EventSelection_FakeMuons_Triggerless(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection)
+{
+    Bool_t isPassEventSelection = kFALSE;
+
+    //Collect qualified muons among muons
+    vector< Muon > QMuonCollection;
+    for(Int_t j=0; j<(int)MuonCollection.size(); j++)
+    {
+        if(MuonCollection[j].passTightID)
+            QMuonCollection.push_back(MuonCollection[j]);
+    }
+
+    Int_t nQMuons = (Int_t)QMuonCollection.size();
+    if (nQMuons >= 2)
+    {
+        if(nQMuons == 2)
+        {
+            Muon recolep1 = QMuonCollection[0];
+            Muon recolep2 = QMuonCollection[1];
+
+            // -- Check the Accpetance -- //
+            Bool_t isPassAcc = kFALSE;
+            isPassAcc = isPassAccCondition_Muon(recolep1, recolep2);
+
+            Double_t reco_M = (recolep1.Momentum + recolep2.Momentum).M();
+
+            Double_t VtxProb = -999;
+            Double_t VtxNormChi2 = 999;
+            DimuonVertexProbNormChi2(ntuple, recolep1.Inner_pT, recolep2.Inner_pT, &VtxProb, &VtxNormChi2);
+
+            TLorentzVector inner_v1 = recolep1.Momentum_Inner;
+            TLorentzVector inner_v2 = recolep2.Momentum_Inner;
+
+            // -- 3D open angle -- //
+            Double_t Angle = recolep1.Momentum.Angle(recolep2.Momentum.Vect());
+
+            Bool_t isOS = kFALSE;
+            if(recolep1.charge != recolep2.charge) isOS = kTRUE;
+
+            if(reco_M > 10 && isPassAcc == kTRUE && VtxNormChi2 < 20 && Angle < TMath::Pi() - 0.005) // can have same sign
+            {
+                isPassEventSelection = kTRUE;
+                SelectedMuonCollection->push_back(recolep1);
+                SelectedMuonCollection->push_back(recolep2);
+            }
+        }
+        else // nQMuons > 2
+        {
+            Double_t VtxProb_BestPair = -1;
+            Double_t VtxNormChi2_BestPair = 999;
+            Muon mu1_BestPair;
+            Muon mu2_BestPair;
+
+            for(Int_t i_mu=0; i_mu<nQMuons; i_mu++)
+            {
+                Muon Mu = QMuonCollection[i_mu];
+                for(Int_t j_mu=0; j_mu<nQMuons; j_mu++)
+                {
+                    Muon Mu_jth = QMuonCollection[j_mu];
+                    if(j_mu != i_mu) // do not calculate vertex variables(prob, chi2). with itself
+                    {
+                        // Check that this pair is within acceptance
+                        Bool_t isPassAcc = kFALSE;
+                        isPassAcc = isPassAccCondition_Muon(Mu, Mu_jth);
+
+                        if(isPassAcc == kTRUE) // Find best pair from pairs within acceptance
+                        {
+                            Double_t VtxProb_temp = -999;
+                            Double_t VtxNormChi2_temp = 999;
+                            DimuonVertexProbNormChi2(ntuple, Mu.Inner_pT, Mu_jth.Inner_pT, &VtxProb_temp, &VtxNormChi2_temp);
+
+                            // Find best pair with smallest Chi2/dnof(VTX)
+                            if(VtxNormChi2_temp < VtxNormChi2_BestPair)
+                            {
+                                VtxNormChi2_BestPair = VtxNormChi2_temp;
+                                mu1_BestPair = Mu;
+                                mu2_BestPair = Mu_jth;
+                            }
+                        }
+                    }
+                } // End of for(j_mu)
+            } // End of for(i_mu)
+
+            if(VtxNormChi2_BestPair < 999) // At least one pair within acceptance
+            {
+                TLorentzVector reco_v1 = mu1_BestPair.Momentum;
+                TLorentzVector reco_v2 = mu2_BestPair.Momentum;
+                Double_t reco_M = (reco_v1 + reco_v2).M();
+
+                // 3D open angle
+                Double_t Angle = reco_v1.Angle(reco_v2.Vect());
+
+                Bool_t isOS = kFALSE;
+                if(mu1_BestPair.charge != mu2_BestPair.charge) isOS = kTRUE;
+
+                if(reco_M > 10 && VtxNormChi2_BestPair < 20 && Angle < TMath::Pi() - 0.005) // can have same sign
+                {
+                    isPassEventSelection = kTRUE;
+                    SelectedMuonCollection->push_back(mu1_BestPair);
+                    SelectedMuonCollection->push_back(mu2_BestPair);
+                }
+            }
+        } // End of if(nQMuons > 2)
+    } // End of if(nQMuons >= 2)
+    if (isPassEventSelection == kTRUE && (SelectedMuonCollection->at(0).RelPFIso_dBeta >= 0.15 || SelectedMuonCollection->at(1).RelPFIso_dBeta >= 0.15)) // At least one failing
+        return isPassEventSelection;
+    return kFALSE;
+} // End of EventSelection_FakeMuons_Triggerless()
 
 
 
