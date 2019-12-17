@@ -92,7 +92,8 @@ void Mu_EstFR(Int_t type)
     FileMgr fm;
 
     TH1D *h_pT_barrel_deno, *h_pT_barrel_nume, *h_pT_endcap_deno, *h_pT_endcap_nume,
-         *h_FRratio_barrel, *h_FRratio_endcap, *h_FRtemplate_barrel, *h_FRtemplate_endcap;
+         *h_FRratio_barrel, *h_FRratio_endcap, *h_FRtemplate_barrel, *h_FRtemplate_endcap,
+         *h_FRdalmin_barrel, *h_FRdalmin_endcap;
 
     TH1D *h_pT_barrel_MC_deno[_EndOf_Data_Special], *h_pT_barrel_MC_nume[_EndOf_Data_Special],
          *h_pT_endcap_MC_deno[_EndOf_Data_Special], *h_pT_endcap_MC_nume[_EndOf_Data_Special],
@@ -546,6 +547,38 @@ void Mu_EstFR(Int_t type)
     h_FRmixed_barrel->Divide(h_pT_barrel_mixed_deno);
     h_FRmixed_endcap->Divide(h_pT_endcap_mixed_deno);
 
+//--------------------------------- Dalmin's FR --------------------------------------
+    h_FRdalmin_barrel = ((TH1D*)(h_FRmixed_barrel->Clone("h_FRdalmin_barrel")));
+    h_FRdalmin_barrel->SetDirectory(0);
+    h_FRdalmin_endcap = ((TH1D*)(h_FRmixed_endcap->Clone("h_FRdalmin_endcap")));
+    h_FRdalmin_endcap->SetDirectory(0);
+
+    h_FRdalmin_barrel->SetBinContent(1, 0.073598);
+    h_FRdalmin_barrel->SetBinContent(2, 0.0748619);
+    h_FRdalmin_barrel->SetBinContent(3, 0.0735089);
+    h_FRdalmin_barrel->SetBinContent(4, 0.0835437);
+    h_FRdalmin_barrel->SetBinContent(5, 0.0837622);
+    h_FRdalmin_barrel->SetBinContent(6, 0.0810606);
+    h_FRdalmin_barrel->SetBinContent(7, 0.0819881);
+    h_FRdalmin_barrel->SetBinContent(8, 0.0986144);
+    h_FRdalmin_barrel->SetBinContent(9, 0.0899716);
+    h_FRdalmin_barrel->SetBinContent(10, 0.114714);
+    h_FRdalmin_barrel->SetBinContent(11, 0.114298);
+    h_FRdalmin_barrel->SetBinContent(12, 0.138463);
+    h_FRdalmin_barrel->SetBinContent(13, 0.170341);
+    h_FRdalmin_barrel->SetBinContent(14, 0.188865);
+    h_FRdalmin_barrel->SetBinContent(15, 0.244211);
+    h_FRdalmin_barrel->SetBinContent(16, 0.263503);
+
+    h_FRdalmin_endcap->SetBinContent(1, 0.180487);
+    h_FRdalmin_endcap->SetBinContent(2, 0.187814);
+    h_FRdalmin_endcap->SetBinContent(3, 0.205887);
+    h_FRdalmin_endcap->SetBinContent(4, 0.193403);
+    h_FRdalmin_endcap->SetBinContent(5, 0.209049);
+    h_FRdalmin_endcap->SetBinContent(6, 0.220315);
+    h_FRdalmin_endcap->SetBinContent(7, 0.307998);
+    h_FRdalmin_endcap->SetBinContent(8, 0.395422);
+
 
     // Writing
     TFile *file_FR = new TFile("/media/sf_DATA/FR/Muon/FakeRate_muon.root", "RECREATE");
@@ -557,6 +590,8 @@ void Mu_EstFR(Int_t type)
     h_FRtemplate_endcap->Write();
     h_FRmixed_barrel->Write();
     h_FRmixed_endcap->Write();
+    h_FRdalmin_barrel->Write();
+    h_FRdalmin_endcap->Write();
     cout << "Finished. Closing the file.." << endl;
     file_FR->Close();
     if (!file_FR->IsOpen()) cout << "File '/media/sf_DATA/FR/Muon/FakeRate_muon.root' has been closed successfully." << endl;

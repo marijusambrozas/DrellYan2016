@@ -1741,6 +1741,8 @@ void Mu_QCDest_HistDrawer(Int_t remNegBins)
     TH1D * h_QCD_est;
     THStack * s_mass_wQCD = new THStack("s_mass_wQCD", "");
     THStack * s_mass_woQCD = new THStack("s_mass_woQCD", "");
+    TH1D * h_data_pT_lead;
+    TH1D * h_data_pT_sublead;
     Color_t color = kBlack;
 
     for (Process_t pr=_DY_10to50; pr<_EndOf_SinglMuon_Normal; pr=next(pr))
@@ -1813,8 +1815,20 @@ void Mu_QCDest_HistDrawer(Int_t remNegBins)
         {
             h_mass[_SingleMuon_Full] = ((TH1D*)(h_mass[pr]->Clone("h_mass_SingleMuon_Full")));
             h_mass[_SingleMuon_Full]->SetDirectory(0);
+            f->GetObject("h_pT_lead_"+Mgr.Procname[pr], h_data_pT_lead);
+            f->GetObject("h_pT_sublead_"+Mgr.Procname[pr], h_data_pT_sublead);
+            h_data_pT_lead->SetDirectory(0);
+            h_data_pT_sublead->SetDirectory(0);
         }
-        else if (pr < _EndOf_SinglMuon_Normal) h_mass[_SingleMuon_Full]->Add(h_mass[pr]);
+        else if (pr < _EndOf_SinglMuon_Normal)
+        {
+            h_mass[_SingleMuon_Full]->Add(h_mass[pr]);
+            TH1D * temp[2];
+            f->GetObject("h_pT_lead_"+Mgr.Procname[pr], temp[0]);
+            f->GetObject("h_pT_sublead_"+Mgr.Procname[pr], temp[1]);
+            h_data_pT_lead->Add(temp[0]);
+            h_data_pT_sublead->Add(temp[1]);
+        }
 
 
         if (pr == _DY_2000to3000) pr = _EndOf_DYTauTau_Normal; // next -- ttbar
@@ -1861,11 +1875,12 @@ void Mu_QCDest_HistDrawer(Int_t remNegBins)
 
     TLegend * l_QCD_est = new TLegend(0.7, 0.88, 0.95, 0.95);
     l_QCD_est->AddEntry(h_QCD_est, "#font[12]{#scale[1.1]{QCD}} (est.)", "f");
-    TCanvas * c_QCD_est = new TCanvas("c_QCD_est", "c_QCD_est", 750, 850);
+    TCanvas * c_QCD_est = new TCanvas("c_QCD_est", "QCD est", 750, 850);
     c_QCD_est->SetTopMargin(0.05);
     c_QCD_est->SetRightMargin(0.05);
     c_QCD_est->SetBottomMargin(0.15);
     c_QCD_est->SetLeftMargin(0.15);
+//    h_QCD_est->Scale(1.46);
     h_QCD_est->Draw("hist");
     h_QCD_est->GetXaxis()->SetTitle("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}]");
     h_QCD_est->GetXaxis()->SetTitleSize(0.062);
@@ -1875,20 +1890,76 @@ void Mu_QCDest_HistDrawer(Int_t remNegBins)
     h_QCD_est->GetXaxis()->SetNoExponent();
     h_QCD_est->GetYaxis()->SetTitle("Number of events");
     h_QCD_est->GetYaxis()->SetTitleSize(0.05);
-    h_QCD_est->GetYaxis()->SetTitleOffset(1.2);
+    h_QCD_est->GetYaxis()->SetTitleOffset(1.4);
     h_QCD_est->GetYaxis()->SetLabelSize(0.043);
     h_QCD_est->GetYaxis()->SetMoreLogLabels();
     h_QCD_est->GetYaxis()->SetNoExponent();
+//    h_QCD_est->GetYaxis()->SetRangeUser(0, 300);
     l_QCD_est->Draw();
     c_QCD_est->SetLogx();
-    c_QCD_est->SetLogy();
     c_QCD_est->SetGridx();
     c_QCD_est->SetGridy();
     c_QCD_est->Update();
+/*
+    TCanvas * c_pT_lead = new TCanvas("c_pT_lead", "pT lead", 750, 850);
+//    TF1 * fit_lead = new TF1("fit_lead", "expo(0)", 1, 200);
+    c_pT_lead->SetTopMargin(0.05);
+    c_pT_lead->SetRightMargin(0.05);
+    c_pT_lead->SetBottomMargin(0.15);
+    c_pT_lead->SetLeftMargin(0.15);
+//    h_data_pT_lead->Fit("fit_lead");
+    h_data_pT_lead->Draw();
+    h_data_pT_lead->GetXaxis()->SetTitle("p_{T} (#mu_{lead}) [GeV/c]");
+    h_data_pT_lead->SetTitle("");
+    h_data_pT_lead->GetXaxis()->SetTitleSize(0.062);
+    h_data_pT_lead->GetXaxis()->SetTitleOffset(0.9);
+    h_data_pT_lead->GetXaxis()->SetLabelSize(0.048);
+    h_data_pT_lead->GetXaxis()->SetMoreLogLabels();
+    h_data_pT_lead->GetXaxis()->SetNoExponent();
+    h_data_pT_lead->GetYaxis()->SetTitle("Number of events");
+    h_data_pT_lead->GetYaxis()->SetTitleSize(0.05);
+    h_data_pT_lead->GetYaxis()->SetTitleOffset(1.2);
+    h_data_pT_lead->GetYaxis()->SetLabelSize(0.043);
+    c_pT_lead->SetLogy();
+    c_pT_lead->SetGridx();
+    c_pT_lead->SetGridy();
+    c_pT_lead->Update();
 
+    TCanvas * c_pT_sublead = new TCanvas("c_pT_sublead", "pT sublead", 750, 850);
+//    TF1 * fit_sublead = new TF1("fit_sublead", "expo(0)", 1, 200);
+    c_pT_sublead->SetTopMargin(0.05);
+    c_pT_sublead->SetRightMargin(0.05);
+    c_pT_sublead->SetBottomMargin(0.15);
+    c_pT_sublead->SetLeftMargin(0.15);
+//    h_data_pT_sublead->Fit("fit_sublead");
+    h_data_pT_sublead->Draw("hist");
+    h_data_pT_sublead->GetXaxis()->SetTitle("p_{T} (#mu_{sublead}) [GeV/c]");
+    h_data_pT_sublead->SetTitle("");
+    h_data_pT_sublead->GetXaxis()->SetTitleSize(0.062);
+    h_data_pT_sublead->GetXaxis()->SetTitleOffset(0.9);
+    h_data_pT_sublead->GetXaxis()->SetLabelSize(0.048);
+    h_data_pT_sublead->GetXaxis()->SetMoreLogLabels();
+    h_data_pT_sublead->GetXaxis()->SetNoExponent();
+    h_data_pT_sublead->GetYaxis()->SetTitle("Number of events");
+    h_data_pT_sublead->GetYaxis()->SetTitleSize(0.05);
+    h_data_pT_sublead->GetYaxis()->SetTitleOffset(1.2);
+    h_data_pT_sublead->GetYaxis()->SetLabelSize(0.043);
+    c_pT_sublead->SetLogy();
+    c_pT_sublead->SetGridx();
+    c_pT_sublead->SetGridy();
+    c_pT_sublead->Update();
+*/
     f->Close();
     if (!f->IsOpen()) cout << "File " << Dir+"QCDest_Mu.root" << " has been closed successfully.\n" << endl;
     else cout << "FILE " << Dir+"QCDest_Mu.root" << " COULD NOT BE CLOSED!\n" << endl;
+
+    TFile * f_out = new TFile("/media/sf_DATA/SelectedMuMu/Histos/EstQCD_MuMu.root", "RECREATE");
+    if (f_out->IsOpen()) cout << "Writing output file..." << endl;
+    else cout << "Error while writing output!" << endl;
+    h_QCD_est->Write();
+    f_out->Close();
+    if (!f_out->IsOpen()) cout << "File /media/sf_DATA/SelectedMuMu/Histos/EstQCD_MuMu.root has been closed successfully.\n" << endl;
+    else cout << "FILE /media/sf_DATA/SelectedMuMu/Histos/EstQCD_MuMu.root COULD NOT BE CLOSED!\n" << endl;
 
 } // End of Mu_QCDest_HistDrawer()
 
@@ -2047,7 +2118,7 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins)
     h_WJET_est->GetYaxis()->SetLabelSize(0.043);
     h_WJET_est->GetYaxis()->SetMoreLogLabels();
     h_WJET_est->GetYaxis()->SetNoExponent();
-    h_WJET_est->GetYaxis()->SetRangeUser(0, 2e3);
+//    h_WJET_est->GetYaxis()->SetRangeUser(0.01, 1e3);
     l_WJET_est->Draw();
     c_WJET_est->SetLogx();
     c_WJET_est->SetGridx();
@@ -2056,7 +2127,10 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins)
 
     TH1D * h_WJET_fit = ((TH1D*)(h_mass[_WJets_Full]->Clone("h_WJET_fit")));
     h_WJET_fit->SetTitle("");
-    h_WJET_fit->Scale(1.2256e+02 / h_WJET_fit->Integral()); // pT cuts: 52, 52
+//    h_WJET_fit->Scale(6.6354e+03 / h_WJET_fit->Integral()); // pT cuts: 28, 17
+    h_WJET_fit->Scale(6.8312e+03 / h_WJET_fit->Integral()); // pT cuts: 28, 17; Mixed FR method with SF
+//    h_WJET_fit->Scale(7.0791e+03 / h_WJET_fit->Integral()); // pT cuts: 28, 17; Mixed FR method
+//    h_WJET_fit->Scale(1.2256e+02 / h_WJET_fit->Integral()); // pT cuts: 52, 52
 //    h_WJET_fit->Scale(8.2256e+03 / h_WJET_fit->Integral()); // pT cuts: 52, 10
 //    h_WJET_fit->Scale(2.4489e+03 / h_WJET_fit->Integral()); // pT cuts: 52, 17
 //    h_WJET_fit->Scale(4.3978e+04 / h_WJET_fit->Integral()); // pT cuts: 52, 0
@@ -2081,7 +2155,7 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins)
     h_WJET_fit->GetYaxis()->SetLabelSize(0.043);
     h_WJET_fit->GetYaxis()->SetMoreLogLabels();
     h_WJET_fit->GetYaxis()->SetNoExponent();
-    h_WJET_fit->GetYaxis()->SetRangeUser(0, 800);
+//    h_WJET_fit->GetYaxis()->SetRangeUser(0.01, 500);
     l_WJET_est->Draw();
     c_WJET_fit->SetLogx();
     c_WJET_fit->SetGridx();
@@ -2089,8 +2163,17 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins)
     c_WJET_fit->Update();
 
     f->Close();
-    if (!f->IsOpen()) cout << "File " << Dir+"WJETest_Mu.root" << " has been closed successfully.\n" << endl;
+    if (!f->IsOpen()) cout << "File " << Dir+"WJETest_Mu.root" << " has been closed successfully." << endl;
     else cout << "FILE " << Dir+"WJETest_Mu.root" << " COULD NOT BE CLOSED!\n" << endl;
+
+    TFile * f_out = new TFile("/media/sf_DATA/SelectedMuMu/Histos/EstWJets_MuMu.root", "RECREATE");
+    if (f_out->IsOpen()) cout << "Writing output file..." << endl;
+    else cout << "Error while writing output!" << endl;
+    h_WJET_est->Write();
+    h_WJET_fit->Write();
+    f_out->Close();
+    if (!f_out->IsOpen()) cout << "File /media/sf_DATA/SelectedMuMu/Histos/EstWJets_MuMu.root has been closed successfully.\n" << endl;
+    else cout << "FILE /media/sf_DATA/SelectedMuMu/Histos/EstWJets_MuMu.root COULD NOT BE CLOSED!\n" << endl;
 
 } // End of Mu_WJETest_HistDrawer()
 

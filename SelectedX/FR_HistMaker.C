@@ -33,8 +33,8 @@
 void E_FR_HistMaker (Bool_t DEBUG);
 void Mu_FR_HistMaker (Bool_t DEBUG);
 
-void Mu_QCD_HistMaker (Bool_t DEBUG);
-void Mu_WJET_HistMaker (Bool_t DEBUG);
+void Mu_QCD_HistMaker (Bool_t DEBUG, Int_t type);
+void Mu_WJET_HistMaker (Bool_t DEBUG, Int_t type);
 
 // -- Drell-Yan mass bins -- //
 const Int_t binnum = 43;
@@ -50,7 +50,7 @@ const Double_t massbins2[87] = {15, 17.5, 20, 22.5, 25, 27.5, 30, 32.5, 35, 37.5
                                 915, 1000, 1250, 1500, 2250, 3000};
 
 
-void FR_HistMaker (TString WhichX = "")
+void FR_HistMaker (TString WhichX = "", Int_t type=1)
 {
     TString whichX = WhichX;
     whichX.ToUpper();
@@ -74,13 +74,13 @@ void FR_HistMaker (TString WhichX = "")
         Xselected++;
         if (whichX.Contains("QCD"))
         {
-            cout << "\n*****  Mu_QCD_HistMaker  *****" << endl;
-            Mu_QCD_HistMaker(DEBUG);
+            cout << "\n*****  Mu_QCD_HistMaker(" << type << ")  *****" << endl;
+            Mu_QCD_HistMaker(DEBUG, type);
         }
         else if (whichX.Contains("W") && whichX.Contains("JET"))
         {
-            cout << "\n*****  Mu_WJET_HistMaker  *****" << endl;
-            Mu_WJET_HistMaker(DEBUG);
+            cout << "\n*****  Mu_WJET_HistMaker(" << type << ")  *****" << endl;
+            Mu_WJET_HistMaker(DEBUG, type);
         }
         else
         {
@@ -887,7 +887,9 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
 
 
 /// -------------------------------- Muon Channel ------------------------------------ ///
-void Mu_QCD_HistMaker (Bool_t DEBUG)
+void Mu_QCD_HistMaker (Bool_t DEBUG, Int_t type=1)
+// type=0 uses files with Mu50 trigger
+// type=1 -- no trigger
 {
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
@@ -907,16 +909,13 @@ void Mu_QCD_HistMaker (Bool_t DEBUG)
     DYAnalyzer *analyzer = new DYAnalyzer("Mu50");
 
     // -- For efficiency SF -- //
-//        analyzer->SetupEfficiencyScaleFactor_BtoF();
-//        analyzer->SetupEfficiencyScaleFactor_GtoH();
-//        analyzer->SetupEfficiencyScaleFactor_BtoF_new();
-//        analyzer->SetupEfficiencyScaleFactor_GtoH_new();
-
-    // -- For PVz reweighting -- //
-    analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
+        analyzer->SetupEfficiencyScaleFactor_BtoF();
+        analyzer->SetupEfficiencyScaleFactor_GtoH();
 
     // -- For QCD estimation from Fake Rate -- //
-    analyzer->SetupFRvalues(Dir+"FakeRate_muon.root"/*, "mixed"*/);
+    analyzer->SetupFRvalues(Dir+"FakeRate_muon.root", "dalmin");
+
+    TH1D* h_FRweight = new TH1D("h_FRweight", "FR weights", 100, 0, 0.4);
 
     for (Process_t pr=_DY_10to50; pr<_EndOf_SinglMuon_Normal; pr=next(pr))
     {
@@ -937,9 +936,15 @@ void Mu_QCD_HistMaker (Bool_t DEBUG)
         // -- For PU re-weighting -- //
         analyzer->SetupPileUpReWeighting_80X(Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root");
 
+        // -- For PVz reweighting -- //
+        analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
+
         // -- Creating Histograms -- //
         TH1D* h_mass = new TH1D("h_mass_"+Mgr.Procname[pr], "h_mass"+Mgr.Procname[pr], binnum, massbins); h_mass->Sumw2();
         TH1D* h_nVTX = new TH1D("h_nVTX_"+Mgr.Procname[pr], "h_nVTX"+Mgr.Procname[pr], 50, 0, 50); h_nVTX->Sumw2();
+        TH1D* h_pT_lead = new TH1D("h_pT_lead_"+Mgr.Procname[pr], "h_pT_lead"+Mgr.Procname[pr], 100, 0, 1000); h_pT_lead->Sumw2();
+        TH1D* h_pT_sublead = new TH1D("h_pT_sublead_"+Mgr.Procname[pr], "h_pT_sublead"+Mgr.Procname[pr], 100, 0, 1000); h_pT_sublead->Sumw2();
+        TH2D* h2_pT = new TH2D("h2_pT_"+Mgr.Procname[pr], "h2_pT_"+Mgr.Procname[pr], 49, 10, 500, 49, 10, 500);
 
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
@@ -956,8 +961,21 @@ void Mu_QCD_HistMaker (Bool_t DEBUG)
 
         TChain *chain = new TChain("FRTree");
 
-        chain->Add(Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
-        if (DEBUG == kTRUE) cout << Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+        if (type == 0) // Mu50 files
+        {
+            chain->Add(Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+            if (DEBUG == kTRUE) cout << Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+        }
+        else if (type == 1) // Triggerless files
+        {
+            chain->Add(Dir+"SelectedForBKGest_Mu_Triggerless"+Mgr.Procname[Mgr.CurrentProc]+".root");
+            if (DEBUG == kTRUE) cout << Dir+"SelectedForBKGest_Mu_Triggerless"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+        }
+        else
+        {
+            cout << "Wrong type! Select 0 (Mu50) or 1 (Triggerless)" << endl;
+            return;
+        }
         chain->SetBranchStatus("p_T", 1);
         chain->SetBranchStatus("eta", 1);
         chain->SetBranchStatus("phi", 1);
@@ -1004,9 +1022,10 @@ void Mu_QCD_HistMaker (Bool_t DEBUG)
             if (p_T->size() != 2) continue;
             if (charge->at(0) == charge->at(1)) continue;
             if (relPFiso->at(0) < 0.15 || relPFiso->at(1) < 0.15) continue;
-            if (p_T->at(0) < 10 || p_T->at(1) < 10) continue;
+//            if (p_T->at(0) < 10 || p_T->at(1) < 10) continue;
 //            if (p_T->at(0) < 70 && p_T->at(1) < 70) continue;
             if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
+            if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
 //            if (p_T->at(0) < 52 || p_T->at(1) < 52) continue;
 
 
@@ -1014,7 +1033,7 @@ void Mu_QCD_HistMaker (Bool_t DEBUG)
 
             if (DEBUG == kTRUE)
             {
-                if (nPass >= 100) break;
+                if (nPass >= 5) break;
                 cout << "Evt " << i << endl;
                 cout << "nMuons = " << p_T->size() << endl;
                 cout << "p_T[0] = " << p_T->at(0);
@@ -1023,6 +1042,7 @@ void Mu_QCD_HistMaker (Bool_t DEBUG)
                 cout << "p_T[1] = " << p_T->at(1);
                 cout << "\teta[1] = " << eta->at(1);
                 cout << "\tphi[1] = " << phi->at(1) << endl;
+                cout << "\nPVz = " << PVz << endl;
             }
 
             TLorentzVector mu1, mu2;
@@ -1037,18 +1057,27 @@ void Mu_QCD_HistMaker (Bool_t DEBUG)
 
             // -- efficiency weights -- //
             Double_t weight1 = 0, weight2 = 0, effweight = 1;
+            if (Mgr.isMC == kTRUE)
+            {
+                weight1 = analyzer->EfficiencySF_EventWeight_HLT_BtoF(mu1, mu2);
+                weight2 = analyzer->EfficiencySF_EventWeight_HLT_GtoH(mu1, mu2);
+                effweight = (Lumi_BtoF * weight1 + Lumi_GtoH * weight2) / Lumi;
+            }
 
             // -- PVz weights -- //
             Double_t PVzWeight = 1;
-            if (Mgr.isMC == kTRUE && !Mgr.Tag[0].Contains("QCD")) PVzWeight = analyzer->PVzWeightValue(PVz);
+//            if (Mgr.isMC == kTRUE && !Mgr.Tag[0].Contains("QCD")) PVzWeight = analyzer->PVzWeightValue(PVz);
 
             // -- L1 prefiring weights -- //
             Double_t L1weight = 1;
-            if (Mgr.isMC == kTRUE && !Mgr.Tag[0].Contains("QCD")) L1weight = prefiring_weight;
+//            if (Mgr.isMC == kTRUE && !Mgr.Tag[0].Contains("QCD")) L1weight = prefiring_weight;
 
             // -- Top pT weights -- //
             Double_t TopPtWeight = 1;
-            if (Mgr.isMC == kTRUE && Mgr.Tag[0].Contains("ttbar")) TopPtWeight = top_weight;
+//            if (Mgr.isMC == kTRUE && Mgr.Tag[0].Contains("ttbar")) TopPtWeight = top_weight;
+
+            if (DEBUG == kTRUE) cout << "Eff weight: " << effweight << "\tPVz weight: " << PVzWeight << "\nL1 weight:" << L1weight <<
+                                        "\tTop pT weight: " << TopPtWeight << endl;
 
             // -- FR WEIGHTS -- //
             Double_t FRweight = 1;
@@ -1058,6 +1087,7 @@ void Mu_QCD_HistMaker (Bool_t DEBUG)
             FRweight = FR1 / (1 - FR1) * FR2 / (1 - FR2);
             if (DEBUG == kTRUE) cout << "FR1 = " << FR1 << "   FR2 = " << FR2 << "   FRweight = " << FRweight << endl;
             avgFRweight += FRweight;
+            h_FRweight->Fill(FRweight);
 
             // -- Normalization -- //
             Double_t TotWeight = 1;
@@ -1067,6 +1097,18 @@ void Mu_QCD_HistMaker (Bool_t DEBUG)
 
             h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             h_mass->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            if (mu1.Pt() > mu2.Pt())
+            {
+                h2_pT->Fill(mu1.Pt(), mu2.Pt(), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+                h_pT_lead->Fill(mu1.Pt(), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+                h_pT_sublead->Fill(mu2.Pt(), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            }
+            else
+            {
+                h2_pT->Fill(mu2.Pt(), mu1.Pt(), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+                h_pT_lead->Fill(mu2.Pt(), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+                h_pT_sublead->Fill(mu1.Pt(), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            }
 
         }// End of event iteration
 
@@ -1084,6 +1126,9 @@ void Mu_QCD_HistMaker (Bool_t DEBUG)
 
         h_mass->Write();
         h_nVTX->Write();
+        h_pT_lead->Write();
+        h_pT_sublead->Write();
+        h2_pT->Write();
 
         cout << " Finished.\n" << endl;
 
@@ -1093,6 +1138,8 @@ void Mu_QCD_HistMaker (Bool_t DEBUG)
 
         cout << "===========================================================\n" << endl;
     } // End of pr iteration
+
+    h_FRweight->Draw();
 
     f->Close();
     if (!f->IsOpen()) cout << "File " << Dir+"QCDest_Mu"+debug+".root" << " has been closed successfully.\n" << endl;
@@ -1107,7 +1154,10 @@ void Mu_QCD_HistMaker (Bool_t DEBUG)
 } // End of Mu_QCD_HistMaker()
 
 
-void Mu_WJET_HistMaker (Bool_t DEBUG)
+void Mu_WJET_HistMaker (Bool_t DEBUG, Int_t type=2)
+// type=0 uses files with Mu50 trigger
+// type=1 -- IsoMu24_OR_IsoTkMu24
+// type=2 -- no trigger
 {
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
@@ -1132,11 +1182,12 @@ void Mu_WJET_HistMaker (Bool_t DEBUG)
 //        analyzer->SetupEfficiencyScaleFactor_BtoF_new();
 //        analyzer->SetupEfficiencyScaleFactor_GtoH_new();
 
-    // -- For PVz reweighting -- //
-    analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
+    // -- For efficiency SF -- //
+    analyzer->SetupEfficiencyScaleFactor_BtoF();
+    analyzer->SetupEfficiencyScaleFactor_GtoH();
 
     // -- For W+Jets estimation from Fake Rate -- //
-    analyzer->SetupFRvalues(Dir+"FakeRate_muon.root");
+    analyzer->SetupFRvalues(Dir+"FakeRate_muon.root", "dalmin");
 
     for (Process_t pr=_DY_10to50; pr<_EndOf_SinglMuon_Normal; pr=next(pr))
     {
@@ -1157,6 +1208,9 @@ void Mu_WJET_HistMaker (Bool_t DEBUG)
         // -- For PU re-weighting -- //
         analyzer->SetupPileUpReWeighting_80X(Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root");
 
+        // -- For PVz reweighting -- //
+        analyzer->SetupPVzWeights(Mgr.isMC, "combined", "./etc/PVzWeights.root");
+
         // -- Creating Histograms -- //
         TH1D* h_mass = new TH1D("h_mass_"+Mgr.Procname[pr], "h_mass"+Mgr.Procname[pr], binnum, massbins); h_mass->Sumw2();
         TH1D* h_nVTX = new TH1D("h_nVTX_"+Mgr.Procname[pr], "h_nVTX"+Mgr.Procname[pr], 50, 0, 50); h_nVTX->Sumw2();
@@ -1176,8 +1230,26 @@ void Mu_WJET_HistMaker (Bool_t DEBUG)
 
         TChain *chain = new TChain("FRTree");
 
-        chain->Add(Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
-        if (DEBUG == kTRUE) cout << Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+        if (type == 0) // Mu50 files
+        {
+            chain->Add(Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+            if (DEBUG == kTRUE) cout << Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+        }
+        else if (type == 1) // IsoMu24 files
+        {
+            chain->Add(Dir+"SelectedForWJETest_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+            if (DEBUG == kTRUE) cout << Dir+"SelectedForWJETest_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+        }
+        else if (type == 2) // Triggerless files
+        {
+            chain->Add(Dir+"SelectedForBKGest_Mu_Triggerless"+Mgr.Procname[Mgr.CurrentProc]+".root");
+            if (DEBUG == kTRUE) cout << Dir+"SelectedForBKGest_Mu_Triggerless"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+        }
+        else
+        {
+            cout << "Wrong type! Select 0 (Mu50), 1 (IsoMu24) or 2 (Triggerless)" << endl;
+            return;
+        }
         chain->SetBranchStatus("p_T", 1);
         chain->SetBranchStatus("eta", 1);
         chain->SetBranchStatus("phi", 1);
@@ -1222,17 +1294,18 @@ void Mu_WJET_HistMaker (Bool_t DEBUG)
 
             // W+Jets selection
             if (p_T->size() != 2) continue;
-            if (charge->at(0) == charge->at(1)) continue;
+            if (charge->at(0) != charge->at(1)) continue;
             if (relPFiso->at(0) < 0.15 && relPFiso->at(1) < 0.15) continue;
 //            if (p_T->at(0) < 10 || p_T->at(1) < 10) continue;
-//            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
-            if (p_T->at(0) < 52 || p_T->at(1) < 52) continue;
+            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
+            if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
+//            if (p_T->at(0) < 52 || p_T->at(1) < 52) continue;
 
             nPass++;
 
             if (DEBUG == kTRUE)
             {
-                if (nPass >= 100) break;
+                if (nPass >= 5) break;
                 cout << "Evt " << i << endl;
                 cout << "nMuons = " << p_T->size() << endl;
                 cout << "p_T[0] = " << p_T->at(0);
@@ -1241,6 +1314,7 @@ void Mu_WJET_HistMaker (Bool_t DEBUG)
                 cout << "p_T[1] = " << p_T->at(1);
                 cout << "\teta[1] = " << eta->at(1);
                 cout << "\tphi[1] = " << phi->at(1) << endl;
+                cout << "\nPVz = " << PVz << endl;
             }
 
             TLorentzVector mu1, mu2;
@@ -1256,6 +1330,12 @@ void Mu_WJET_HistMaker (Bool_t DEBUG)
 
             // -- efficiency weights -- //
             Double_t weight1 = 0, weight2 = 0, effweight = 1;
+            if (Mgr.isMC == kTRUE)
+            {
+                weight1 = analyzer->EfficiencySF_EventWeight_HLT_BtoF(mu1, mu2);
+                weight2 = analyzer->EfficiencySF_EventWeight_HLT_GtoH(mu1, mu2);
+                effweight = (Lumi_BtoF * weight1 + Lumi_GtoH * weight2) / Lumi;
+            }
 
             // -- PVz weights -- //
             Double_t PVzWeight = 1;
@@ -1268,6 +1348,9 @@ void Mu_WJET_HistMaker (Bool_t DEBUG)
             // -- Top pT weights -- //
             Double_t TopPtWeight = 1;
             if (Mgr.isMC == kTRUE && Mgr.Tag[0].Contains("ttbar")) TopPtWeight = top_weight;
+
+            if (DEBUG == kTRUE) cout << "Eff weight: " << effweight << "\tPVz weight: " << PVzWeight << "\nL1 weight:" << L1weight <<
+                                        "\tTop pT weight: " << TopPtWeight << endl;
 
             // -- FR WEIGHTS -- //
             Double_t FRweight = 1;

@@ -1339,23 +1339,23 @@ void MakeSelectionForBKGest_Mu_Triggerless (TString type, TString HLTname, Bool_
 //                out_dir = "Data/SelectedForBKGest_Mu_Triggerless_"+Mgr.Tag[i_tup];
 
             out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
-            out_dir = "SelectedForBKGest_Mu_Triggerless"+Mgr.Procname[Mgr.CurrentProc];
+            out_dir = "SelectedForBKGest_Mu_Triggerless_"+Mgr.Procname[Mgr.CurrentProc];
         }
         else if (Mgr.Type == "SIGNAL")
         {
 //                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/";
-//                out_dir = "MC_signal/SelectedForBKGest_Mu_Triggerless"+Mgr.Tag[i_tup];
+//                out_dir = "MC_signal/SelectedForBKGest_Mu_Triggerless_"+Mgr.Tag[i_tup];
 
             out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
-            out_dir = "SelectedForBKGest_Mu_Triggerless"+Mgr.Procname[Mgr.CurrentProc];
+            out_dir = "SelectedForBKGest_Mu_Triggerless_"+Mgr.Procname[Mgr.CurrentProc];
         }
         else if (Mgr.Type == "BKG")
         {
 //                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/";
-//                out_dir = "MC_bkg/SelectedForBKGest_Mu_Triggerless"+Mgr.Tag[i_tup];
+//                out_dir = "MC_bkg/SelectedForBKGest_Mu_Triggerless_"+Mgr.Tag[i_tup];
 
             out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
-            out_dir = "SelectedForBKGest_Mu_Triggerless"+Mgr.Procname[Mgr.CurrentProc];
+            out_dir = "SelectedForBKGest_Mu_Triggerless_"+Mgr.Procname[Mgr.CurrentProc];
         }
         else if (Mgr.Type == "TEST")
         {
