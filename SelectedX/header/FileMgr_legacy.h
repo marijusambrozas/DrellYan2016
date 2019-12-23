@@ -106,6 +106,7 @@ public:
         void NextProc ();
         void SetProc ( Process_t pr = _None, Bool_t ClearOld = kTRUE );
         void ClearProc ();
+        void SetupChain(Int_t i_tuple, TChain *chain);
 
 private:
         Bool_t namesSet = kFALSE;
@@ -3814,3 +3815,17 @@ void FileMgr::CheckProcesses()
     else cout << "Problems were detected." << endl;
 
 }// end of CheckProcesses()
+
+void FileMgr::SetupChain(Int_t i_tuple, TChain *chain)
+{
+    if (!CurrentProc)
+    {
+        cout << "No process set!" << endl;
+        return;
+    }
+    for (Int_t i_tup=0; i_tup<((int)(nNtuples.size())); i_tup++)
+    {
+        if (i_tup != i_tuple && i_tuple != -1) continue;
+        chain->Add(FullLocation[i_tup]);
+    }
+} // end of SetupChain()
