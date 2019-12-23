@@ -3823,7 +3823,7 @@ void FileMgr::SetupChain(Int_t i_tuple, TChain *chain)
         cout << "No process set!" << endl;
         return;
     }
-    for (Int_t i_tup=0; i_tup<((int)(nNtuples.size())); i_tup++)
+    for (Int_t i_tup=0; i_tup<((int)(TreeName.size())); i_tup++)
     {
         if (i_tup != i_tuple && i_tuple != -1) continue;
         chain->Add(FullLocation[i_tup]);
