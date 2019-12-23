@@ -6038,7 +6038,7 @@ Bool_t DYAnalyzer::EventSelection_FakeMuons_Triggerless(vector< Muon > MuonColle
     vector< Muon > QMuonCollection;
     for(Int_t j=0; j<(int)MuonCollection.size(); j++)
     {
-        if(MuonCollection[j].passTightID)
+        if(MuonCollection[j].isTightMuon())//passTightID)
             QMuonCollection.push_back(MuonCollection[j]);
     }
 
