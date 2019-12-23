@@ -909,11 +909,14 @@ void Mu_QCD_HistMaker (Bool_t DEBUG, Int_t type=1)
     DYAnalyzer *analyzer = new DYAnalyzer("Mu50");
 
     // -- For efficiency SF -- //
-        analyzer->SetupEfficiencyScaleFactor_BtoF();
-        analyzer->SetupEfficiencyScaleFactor_GtoH();
+    analyzer->SetupEfficiencyScaleFactor_BtoF();
+    analyzer->SetupEfficiencyScaleFactor_GtoH();
 
     // -- For QCD estimation from Fake Rate -- //
     analyzer->SetupFRvalues(Dir+"FakeRate_muon.root", "dalmin");
+
+    TH1D *h_mass_test[_EndOf_SinglMuon_Normal];
+    TH1D *h_mass_test_SS[_EndOf_SinglMuon_Normal];
 
     TH1D* h_FRweight = new TH1D("h_FRweight", "FR weights", 100, 0, 0.4);
 
@@ -940,11 +943,18 @@ void Mu_QCD_HistMaker (Bool_t DEBUG, Int_t type=1)
         analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
 
         // -- Creating Histograms -- //
-        TH1D* h_mass = new TH1D("h_mass_"+Mgr.Procname[pr], "h_mass"+Mgr.Procname[pr], binnum, massbins); h_mass->Sumw2();
-        TH1D* h_nVTX = new TH1D("h_nVTX_"+Mgr.Procname[pr], "h_nVTX"+Mgr.Procname[pr], 50, 0, 50); h_nVTX->Sumw2();
-        TH1D* h_pT_lead = new TH1D("h_pT_lead_"+Mgr.Procname[pr], "h_pT_lead"+Mgr.Procname[pr], 100, 0, 1000); h_pT_lead->Sumw2();
-        TH1D* h_pT_sublead = new TH1D("h_pT_sublead_"+Mgr.Procname[pr], "h_pT_sublead"+Mgr.Procname[pr], 100, 0, 1000); h_pT_sublead->Sumw2();
+        TH1D* h_mass = new TH1D("h_mass_"+Mgr.Procname[pr], "h_mass_"+Mgr.Procname[pr], binnum, massbins); h_mass->Sumw2();
+        TH1D* h_mass_SS = new TH1D("h_mass_SS_"+Mgr.Procname[pr], "h_mass_SS_"+Mgr.Procname[pr], binnum, massbins); h_mass_SS->Sumw2();
+        TH1D* h_mass_forFit = new TH1D("h_mass_forFit_"+Mgr.Procname[pr], "h_mass_forFit_"+Mgr.Procname[pr], 37, 15, 200); h_mass_forFit->Sumw2();
+        TH1D* h_mass_SS_forFit = new TH1D("h_mass_SS_forFit_"+Mgr.Procname[pr], "h_mass_SS_forFit_"+Mgr.Procname[pr], 37, 15, 200); h_mass_SS_forFit->Sumw2();
+        TH1D* h_nVTX = new TH1D("h_nVTX_"+Mgr.Procname[pr], "h_nVTX_"+Mgr.Procname[pr], 50, 0, 50); h_nVTX->Sumw2();
+        TH1D* h_pT_lead = new TH1D("h_pT_lead_"+Mgr.Procname[pr], "h_pT_lead_"+Mgr.Procname[pr], 100, 0, 1000); h_pT_lead->Sumw2();
+        TH1D* h_pT_sublead = new TH1D("h_pT_sublead_"+Mgr.Procname[pr], "h_pT_sublead_"+Mgr.Procname[pr], 100, 0, 1000); h_pT_sublead->Sumw2();
         TH2D* h2_pT = new TH2D("h2_pT_"+Mgr.Procname[pr], "h2_pT_"+Mgr.Procname[pr], 49, 10, 500, 49, 10, 500);
+        h_mass_test[pr] = new TH1D("h_test_"+Mgr.Procname[pr], "", binnum, massbins); h_mass_test[pr]->Sumw2();
+        h_mass_test[pr]->SetDirectory(0);
+        h_mass_test_SS[pr] = new TH1D("h_test_SS_"+Mgr.Procname[pr], "", binnum, massbins); h_mass_test_SS[pr]->Sumw2();
+        h_mass_test_SS[pr]->SetDirectory(0);
 
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
@@ -1010,17 +1020,23 @@ void Mu_QCD_HistMaker (Bool_t DEBUG, Int_t type=1)
         cout << "\t[Sum of weights: " << Mgr.Wsum[0] << "]" << endl;
         cout << "\t[Number of events: " << NEvents << "]" << endl;
 
+        UInt_t nPassMu=0, nFailMu=0;
 
         myProgressBar_t bar(NEvents);
 
         for(Int_t i=0; i<NEvents; i++)
         {
+            for (UInt_t m=0; m<relPFiso->size(); m++)
+            {
+                if (relPFiso->at(m) < 0.15) nPassMu++;
+                else nFailMu++;
+            }
             chain->GetEntry(i);
             if (!DEBUG) bar.Draw(i);
 
             // QCD selection
             if (p_T->size() != 2) continue;
-            if (charge->at(0) == charge->at(1)) continue;
+//            if (charge->at(0) == charge->at(1)) continue;
             if (relPFiso->at(0) < 0.15 || relPFiso->at(1) < 0.15) continue;
 //            if (p_T->at(0) < 10 || p_T->at(1) < 10) continue;
 //            if (p_T->at(0) < 70 && p_T->at(1) < 70) continue;
@@ -1066,15 +1082,15 @@ void Mu_QCD_HistMaker (Bool_t DEBUG, Int_t type=1)
 
             // -- PVz weights -- //
             Double_t PVzWeight = 1;
-//            if (Mgr.isMC == kTRUE && !Mgr.Tag[0].Contains("QCD")) PVzWeight = analyzer->PVzWeightValue(PVz);
+            if (Mgr.isMC == kTRUE && !Mgr.Tag[0].Contains("QCD")) PVzWeight = analyzer->PVzWeightValue(PVz);
 
             // -- L1 prefiring weights -- //
             Double_t L1weight = 1;
-//            if (Mgr.isMC == kTRUE && !Mgr.Tag[0].Contains("QCD")) L1weight = prefiring_weight;
+            if (Mgr.isMC == kTRUE && !Mgr.Tag[0].Contains("QCD")) L1weight = prefiring_weight;
 
             // -- Top pT weights -- //
             Double_t TopPtWeight = 1;
-//            if (Mgr.isMC == kTRUE && Mgr.Tag[0].Contains("ttbar")) TopPtWeight = top_weight;
+            if (Mgr.isMC == kTRUE && Mgr.Tag[0].Contains("ttbar")) TopPtWeight = top_weight;
 
             if (DEBUG == kTRUE) cout << "Eff weight: " << effweight << "\tPVz weight: " << PVzWeight << "\nL1 weight:" << L1weight <<
                                         "\tTop pT weight: " << TopPtWeight << endl;
@@ -1096,7 +1112,18 @@ void Mu_QCD_HistMaker (Bool_t DEBUG, Int_t type=1)
             if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl << endl;
 
             h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
-            h_mass->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            if (charge->at(0) != charge->at(1))
+            {
+                h_mass->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+                h_mass_forFit->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+                h_mass_test[pr]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+            }
+            else
+            {
+                h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+                h_mass_SS_forFit->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+                h_mass_test_SS[pr]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+            }
             if (mu1.Pt() > mu2.Pt())
             {
                 h2_pT->Fill(mu1.Pt(), mu2.Pt(), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
@@ -1120,11 +1147,16 @@ void Mu_QCD_HistMaker (Bool_t DEBUG, Int_t type=1)
             cout << "\t *** Sum of weights: " << Mgr.Wsum[0] << endl;
             printf("\t *** Normalization factor: %.8f\n\n", Lumi*Mgr.Xsec[0]/Mgr.Wsum[0]);
         }
+        cout << "\t # passed muons: " << nPassMu << endl;
+        cout << "\t # failed muons: " << nFailMu << endl;
 
         f->cd();
         cout << "\tWriting into file...";
 
         h_mass->Write();
+        h_mass_forFit->Write();
+        h_mass_SS->Write();
+        h_mass_SS_forFit->Write();
         h_nVTX->Write();
         h_pT_lead->Write();
         h_pT_sublead->Write();
@@ -1139,7 +1171,87 @@ void Mu_QCD_HistMaker (Bool_t DEBUG, Int_t type=1)
         cout << "===========================================================\n" << endl;
     } // End of pr iteration
 
+    TCanvas *c_data = new TCanvas("data","data", 800, 800);
+    h_mass_test[_SingleMuon_B]->Add(h_mass_test[_SingleMuon_C]);
+    h_mass_test[_SingleMuon_B]->Add(h_mass_test[_SingleMuon_D]);
+    h_mass_test[_SingleMuon_B]->Add(h_mass_test[_SingleMuon_E]);
+    h_mass_test[_SingleMuon_B]->Add(h_mass_test[_SingleMuon_F]);
+    h_mass_test[_SingleMuon_B]->Add(h_mass_test[_SingleMuon_G]);
+    h_mass_test[_SingleMuon_B]->Add(h_mass_test[_SingleMuon_H]);
+    h_mass_test[_SingleMuon_B]->Draw("hist");
+    c_data->SetLogx();
+    c_data->Update();
+
+    TCanvas *c_data_SS = new TCanvas("data_SS","data SS", 800, 800);
+    h_mass_test_SS[_SingleMuon_B]->Add(h_mass_test_SS[_SingleMuon_C]);
+    h_mass_test_SS[_SingleMuon_B]->Add(h_mass_test_SS[_SingleMuon_D]);
+    h_mass_test_SS[_SingleMuon_B]->Add(h_mass_test_SS[_SingleMuon_E]);
+    h_mass_test_SS[_SingleMuon_B]->Add(h_mass_test_SS[_SingleMuon_F]);
+    h_mass_test_SS[_SingleMuon_B]->Add(h_mass_test_SS[_SingleMuon_G]);
+    h_mass_test_SS[_SingleMuon_B]->Add(h_mass_test_SS[_SingleMuon_H]);
+    h_mass_test_SS[_SingleMuon_B]->Draw("hist");
+    c_data_SS->SetLogx();
+    c_data_SS->Update();
+
+    TCanvas *c_DY = new TCanvas("dy","dy", 800, 800);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_50to100]);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_100to200]);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_200to400]);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_400to500]);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_500to700]);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_700to800]);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_800to1000]);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_1000to1500]);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_1500to2000]);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_2000to3000]);
+    h_mass_test[_DY_10to50]->Draw("hist");
+    c_DY->SetLogx();
+    c_DY->Update();
+
+    TCanvas *c_DY_SS = new TCanvas("dy_SS","dy SS", 800, 800);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_50to100]);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_100to200]);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_200to400]);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_400to500]);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_500to700]);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_700to800]);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_800to1000]);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_1000to1500]);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_1500to2000]);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_2000to3000]);
+    h_mass_test_SS[_DY_10to50]->Draw("hist");
+    c_DY_SS->SetLogx();
+    c_DY_SS->Update();
+
+    TCanvas *c_tt = new TCanvas("ttbar","ttbar", 800, 800);
+    h_mass_test[_ttbar]->Add(h_mass_test[_ttbar_700to1000]);
+    h_mass_test[_ttbar]->Add(h_mass_test[_ttbar_1000toInf]);
+    h_mass_test[_ttbar]->Draw("hist");
+    c_tt->SetLogx();
+    c_tt->Update();
+
+    TCanvas *c_tt_SS = new TCanvas("ttbar_SS","ttbar SS", 800, 800);
+    h_mass_test_SS[_ttbar]->Add(h_mass_test_SS[_ttbar_700to1000]);
+    h_mass_test_SS[_ttbar]->Add(h_mass_test_SS[_ttbar_1000toInf]);
+    h_mass_test_SS[_ttbar]->Draw("hist");
+    c_tt_SS->SetLogx();
+    c_tt_SS->Update();
+
+    TCanvas *c_wjets = new TCanvas("wjets","wjets", 800, 800);
+    h_mass_test[_WJets]->Add(h_mass_test[_WJets_ext2v5]);
+    h_mass_test[_WJets]->Draw("hist");
+    c_wjets->SetLogx();
+    c_wjets->Update();
+
+    TCanvas *c_wjets_SS = new TCanvas("wjets_SS","wjets SS", 800, 800);
+    h_mass_test_SS[_WJets]->Add(h_mass_test_SS[_WJets_ext2v5]);
+    h_mass_test_SS[_WJets]->Draw("hist");
+    c_wjets_SS->SetLogx();
+    c_wjets_SS->Update();
+
+    TCanvas *c_FRweight = new TCanvas("FRweight","FR weights", 800, 800);
     h_FRweight->Draw();
+    c_FRweight->Update();
 
     f->Close();
     if (!f->IsOpen()) cout << "File " << Dir+"QCDest_Mu"+debug+".root" << " has been closed successfully.\n" << endl;
@@ -1177,17 +1289,14 @@ void Mu_WJET_HistMaker (Bool_t DEBUG, Int_t type=2)
     DYAnalyzer *analyzer = new DYAnalyzer("Mu50");
 
     // -- For efficiency SF -- //
-//        analyzer->SetupEfficiencyScaleFactor_BtoF();
-//        analyzer->SetupEfficiencyScaleFactor_GtoH();
-//        analyzer->SetupEfficiencyScaleFactor_BtoF_new();
-//        analyzer->SetupEfficiencyScaleFactor_GtoH_new();
-
-    // -- For efficiency SF -- //
     analyzer->SetupEfficiencyScaleFactor_BtoF();
     analyzer->SetupEfficiencyScaleFactor_GtoH();
 
     // -- For W+Jets estimation from Fake Rate -- //
     analyzer->SetupFRvalues(Dir+"FakeRate_muon.root", "dalmin");
+
+    TH1D *h_mass_test[_EndOf_SinglMuon_Normal];
+    TH1D *h_mass_test_SS[_EndOf_SinglMuon_Normal];
 
     for (Process_t pr=_DY_10to50; pr<_EndOf_SinglMuon_Normal; pr=next(pr))
     {
@@ -1209,11 +1318,18 @@ void Mu_WJET_HistMaker (Bool_t DEBUG, Int_t type=2)
         analyzer->SetupPileUpReWeighting_80X(Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root");
 
         // -- For PVz reweighting -- //
-        analyzer->SetupPVzWeights(Mgr.isMC, "combined", "./etc/PVzWeights.root");
+        analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
 
         // -- Creating Histograms -- //
         TH1D* h_mass = new TH1D("h_mass_"+Mgr.Procname[pr], "h_mass"+Mgr.Procname[pr], binnum, massbins); h_mass->Sumw2();
+        TH1D* h_mass_SS = new TH1D("h_mass_SS_"+Mgr.Procname[pr], "h_mass_SS_"+Mgr.Procname[pr], binnum, massbins); h_mass_SS->Sumw2();
+        TH1D* h_mass_forFit = new TH1D("h_mass_forFit_"+Mgr.Procname[pr], "h_mass_forFit_"+Mgr.Procname[pr], 37,15,200); h_mass_forFit->Sumw2();
+        TH1D* h_mass_SS_forFit = new TH1D("h_mass_SS_forFit_"+Mgr.Procname[pr], "h_mass_SS_forFit_"+Mgr.Procname[pr], 37,15,200); h_mass_SS_forFit->Sumw2();
         TH1D* h_nVTX = new TH1D("h_nVTX_"+Mgr.Procname[pr], "h_nVTX"+Mgr.Procname[pr], 50, 0, 50); h_nVTX->Sumw2();
+        h_mass_test[pr] = new TH1D("h_test_"+Mgr.Procname[pr], "", binnum, massbins); h_mass_test[pr]->Sumw2();
+        h_mass_test[pr]->SetDirectory(0);
+        h_mass_test_SS[pr] = new TH1D("h_test_SS_"+Mgr.Procname[pr], "", binnum, massbins); h_mass_test_SS[pr]->Sumw2();
+        h_mass_test_SS[pr]->SetDirectory(0);
 
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
@@ -1294,8 +1410,9 @@ void Mu_WJET_HistMaker (Bool_t DEBUG, Int_t type=2)
 
             // W+Jets selection
             if (p_T->size() != 2) continue;
-            if (charge->at(0) != charge->at(1)) continue;
+//            if (charge->at(0) == charge->at(1)) continue;
             if (relPFiso->at(0) < 0.15 && relPFiso->at(1) < 0.15) continue;
+            if (relPFiso->at(0) > 0.15 && relPFiso->at(1) > 0.15) continue;
 //            if (p_T->at(0) < 10 || p_T->at(1) < 10) continue;
             if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
             if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
@@ -1354,13 +1471,10 @@ void Mu_WJET_HistMaker (Bool_t DEBUG, Int_t type=2)
 
             // -- FR WEIGHTS -- //
             Double_t FRweight = 1;
-            if (relPFiso->at(0) >= 0.15 && relPFiso->at(1) >= 0.15) // Both failing -- subract two times (remove intersection)
+            if (relPFiso->at(0) >= 0.15 && relPFiso->at(1) >= 0.15) // Both failing -- skip
             {
-                Double_t FR1, FR2;
-                FR1 = analyzer->FakeRate(p_T->at(0), eta->at(0));
-                FR2 = analyzer->FakeRate(p_T->at(1), eta->at(1));
-                FRweight = -2 * FR1 / (1 - FR1) * FR2 / (1 - FR2);
-                if (DEBUG == kTRUE) cout << "FR1 = " << FR1 << "   FR2 = " << FR2 << "   FRweight = " << FRweight << endl;
+                cout << "Both failed" << endl; // Comment this when not needed
+                continue;
             }
             else // Only one failing
             {
@@ -1380,8 +1494,21 @@ void Mu_WJET_HistMaker (Bool_t DEBUG, Int_t type=2)
 //            if(Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * evt_weight;
             if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl << endl;
 
+            // -- Histogram filling -- //
             h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
-            h_mass->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            if (charge->at(0) != charge->at(1))
+            {
+                h_mass->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+                h_mass_forFit->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+                h_mass_test[pr]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+            }
+            else
+            {
+                h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+                h_mass_SS_forFit->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+                h_mass_test_SS[pr]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+            }
+
 
         }// End of event iteration
 
@@ -1398,6 +1525,9 @@ void Mu_WJET_HistMaker (Bool_t DEBUG, Int_t type=2)
         cout << "\tWriting into file...";
 
         h_mass->Write();
+        h_mass_forFit->Write();
+        h_mass_SS->Write();
+        h_mass_SS_forFit->Write();
         h_nVTX->Write();
 
         cout << " Finished.\n" << endl;
@@ -1408,6 +1538,85 @@ void Mu_WJET_HistMaker (Bool_t DEBUG, Int_t type=2)
 
         cout << "===========================================================\n" << endl;
     } // End of pr iteration
+
+    TCanvas *c_data = new TCanvas("data","data", 800, 800);
+    h_mass_test[_SingleMuon_B]->Add(h_mass_test[_SingleMuon_C]);
+    h_mass_test[_SingleMuon_B]->Add(h_mass_test[_SingleMuon_D]);
+    h_mass_test[_SingleMuon_B]->Add(h_mass_test[_SingleMuon_E]);
+    h_mass_test[_SingleMuon_B]->Add(h_mass_test[_SingleMuon_F]);
+    h_mass_test[_SingleMuon_B]->Add(h_mass_test[_SingleMuon_G]);
+    h_mass_test[_SingleMuon_B]->Add(h_mass_test[_SingleMuon_H]);
+    h_mass_test[_SingleMuon_B]->Draw("hist");
+    c_data->SetLogx();
+    c_data->Update();
+
+    TCanvas *c_data_SS = new TCanvas("data_SS","data SS", 800, 800);
+    h_mass_test_SS[_SingleMuon_B]->Add(h_mass_test_SS[_SingleMuon_C]);
+    h_mass_test_SS[_SingleMuon_B]->Add(h_mass_test_SS[_SingleMuon_D]);
+    h_mass_test_SS[_SingleMuon_B]->Add(h_mass_test_SS[_SingleMuon_E]);
+    h_mass_test_SS[_SingleMuon_B]->Add(h_mass_test_SS[_SingleMuon_F]);
+    h_mass_test_SS[_SingleMuon_B]->Add(h_mass_test_SS[_SingleMuon_G]);
+    h_mass_test_SS[_SingleMuon_B]->Add(h_mass_test_SS[_SingleMuon_H]);
+    h_mass_test_SS[_SingleMuon_B]->Draw("hist");
+    c_data_SS->SetLogx();
+    c_data_SS->Update();
+
+    TCanvas *c_DY = new TCanvas("dy","dy", 800, 800);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_50to100]);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_100to200]);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_200to400]);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_400to500]);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_500to700]);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_700to800]);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_800to1000]);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_1000to1500]);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_1500to2000]);
+    h_mass_test[_DY_10to50]->Add(h_mass_test[_DY_2000to3000]);
+    h_mass_test[_DY_10to50]->Draw("hist");
+    c_DY->SetLogx();
+    c_DY->Update();
+
+    TCanvas *c_DY_SS = new TCanvas("dy_SS","dy SS", 800, 800);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_50to100]);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_100to200]);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_200to400]);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_400to500]);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_500to700]);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_700to800]);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_800to1000]);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_1000to1500]);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_1500to2000]);
+    h_mass_test_SS[_DY_10to50]->Add(h_mass_test_SS[_DY_2000to3000]);
+    h_mass_test_SS[_DY_10to50]->Draw("hist");
+    c_DY_SS->SetLogx();
+    c_DY_SS->Update();
+
+    TCanvas *c_tt = new TCanvas("ttbar","ttbar", 800, 800);
+    h_mass_test[_ttbar]->Add(h_mass_test[_ttbar_700to1000]);
+    h_mass_test[_ttbar]->Add(h_mass_test[_ttbar_1000toInf]);
+    h_mass_test[_ttbar]->Draw("hist");
+    c_tt->SetLogx();
+    c_tt->Update();
+
+    TCanvas *c_tt_SS = new TCanvas("ttbar_SS","ttbar SS", 800, 800);
+    h_mass_test_SS[_ttbar]->Add(h_mass_test_SS[_ttbar_700to1000]);
+    h_mass_test_SS[_ttbar]->Add(h_mass_test_SS[_ttbar_1000toInf]);
+    h_mass_test_SS[_ttbar]->Draw("hist");
+    c_tt_SS->SetLogx();
+    c_tt_SS->Update();
+
+    TCanvas *c_wjets = new TCanvas("wjets","wjets", 800, 800);
+    h_mass_test[_WJets]->Add(h_mass_test[_WJets_ext2v5]);
+    h_mass_test[_WJets]->Draw("hist");
+    c_wjets->SetLogx();
+    c_wjets->Update();
+
+    TCanvas *c_wjets_SS = new TCanvas("wjets_SS","wjets SS", 800, 800);
+    h_mass_test_SS[_WJets]->Add(h_mass_test_SS[_WJets_ext2v5]);
+    h_mass_test_SS[_WJets]->Draw("hist");
+    c_wjets_SS->SetLogx();
+    c_wjets_SS->Update();
+
 
     f->Close();
     if (!f->IsOpen()) cout << "File " << Dir+"WJETest_Mu"+debug+".root" << " has been closed successfully.\n" << endl;

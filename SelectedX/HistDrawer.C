@@ -5416,7 +5416,12 @@ void Est_HistDrawer()
     h_fakes_mass_mumu[1]->SetFillColor(kRed - 2);
     h_fakes_mass_mumu[1]->SetLineColor(kRed - 2);
     h_fakes_mass_mumu[1]->SetDirectory(0);
+    h_fakes_mass_mumu[1]->GetYaxis()->SetRangeUser(0.01,1e7);
     s_mass_mumu_wFR->Add(h_fakes_mass_mumu[1]);
+    TCanvas *CC = new TCanvas("CC","CC",500,500);
+    s_mass_mumu_wFR->Draw("hist");
+    s_mass_mumu_wFR->GetYaxis()->SetRangeUser(0.01,1e7);
+    CC->Update();
 
     //----------------------------------- MC bkg -------------------------------------------------------
     TH1D *h_bkg_mass_mumu[9], *h_bkg_mass_mumu2[9];
