@@ -22,7 +22,8 @@
 #include "./header/DYAnalyzer.h"
 #include "./header/SelectedX.h"
 #include "./header/myProgressBar_t.cc"
-#include "./header/FileMgr.h"
+//#include "./header/FileMgr.h"
+#include "./header/FileMgr_legacy.h"
 #include "./etc/RoccoR/RoccoR.cc"
 
 void MakeSelectionForFR_E (TString type, TString HLTname, Bool_t Debug);
