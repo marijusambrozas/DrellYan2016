@@ -1463,9 +1463,10 @@ void MakeSelectionForBKGest_Mu_Triggerless (TString type, TString HLTname, Bool_
 //                GenFlag = analyzer->SeparateDYLLSample_isHardProcess(Mgr.Tag[i_tup], ntuple);
 
                 // -- Get GenTopCollection -- //
-                Bool_t GenFlag_top = kTRUE;//kFALSE;
-//                vector<GenOthers> GenTopCollection;
-//                GenFlag_top = analyzer->Separate_ttbarSample(Mgr.Tag[i_tup], ntuple, &GenTopCollection);
+                Bool_t GenFlag_top = kFALSE;
+                vector<GenOthers> GenTopCollection;
+                GenFlag_top = analyzer->Separate_ttbarSample(Mgr.Tag[i_tup], ntuple, &GenTopCollection);
+                GenFlag_top = kTRUE;
 
                 if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += gen_weight;
 
