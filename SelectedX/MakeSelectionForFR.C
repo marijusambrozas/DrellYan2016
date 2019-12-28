@@ -1519,12 +1519,12 @@ void MakeSelectionForBKGest_Mu_Triggerless (TString type, TString HLTname, Bool_
                         TRKiso->clear();
 
                         // -- Top pT reweighting -- //
-                        if (Mgr.Tag[i_tup].Contains("ttbar"))
+                        /*if (Mgr.Tag[i_tup].Contains("ttbar"))
                         {
                             Double_t SF0 = exp(0.0615 - (0.0005 * GenTopCollection[0].Pt));
                             Double_t SF1 = exp(0.0615 - (0.0005 * GenTopCollection[1].Pt));
                             top_weight = sqrt(SF0 * SF1);
-                        }
+                        }*/
 
                         // -- Information for various other reweightings -- //
                         nPU = ntuple->nPileUp;
