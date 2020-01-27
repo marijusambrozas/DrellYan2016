@@ -537,7 +537,7 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
     TFile *f;
     TString OutputDir;
-    Bool_t isBkgFull = kFALSE;  // To tell if this is the _EE_Bkg_Full process (it is handled differently)
+    Bool_t isBkgFull = kFALSE;  // To tell if this is the _MuMu_Bkg_Full process (it is handled differently)
     TString debug = "";
     if (DEBUG == kTRUE) debug = "_DEBUG";
 
@@ -603,8 +603,8 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         analyzer->SetupEfficiencyScaleFactor_GtoH_new();
 
         // -- For PVz reweighting -- //
-//        analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
-        analyzer->SetupPVzWeights(Mgr.isMC, "combined", "./etc/PVzWeights.root");
+        analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
+//        analyzer->SetupPVzWeights(Mgr.isMC, "combined", "./etc/PVzWeights.root");
 
         // -- Creating Histograms -- //
         TH1D *h_mass_before_PUCorr = new TH1D("h_mass_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", binnum, massbins);
@@ -783,17 +783,17 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
 
                 // -- PVz weights -- //
                 Double_t PVzWeight = 1;
-                if (Mgr.isMC == kTRUE) PVzWeight = analyzer->PVzWeightValue(MuMu->PVz);
+                if (Mgr.isMC == kTRUE && Mgr.CurrentProc != _MuMu_QCDMuEnriched_Full) PVzWeight = analyzer->PVzWeightValue(MuMu->PVz);
 
                 // -- L1 prefiring weights -- //
                 Double_t L1weight = 1;
-                if (Mgr.isMC == kTRUE) L1weight = MuMu->_prefiringweight;
+                if (Mgr.isMC == kTRUE && Mgr.CurrentProc != _MuMu_QCDMuEnriched_Full) L1weight = MuMu->_prefiringweight;
 //                if (Mgr.isMC == kTRUE) L1weight = MuMu->_prefiringweightup;
 //                if (Mgr.isMC == kTRUE) L1weight = MuMu->_prefiringweightdown;
 
                 // -- Top pT weights -- //
                 Double_t TopPtWeight = 1;
-                if (Mgr.isMC == kTRUE) TopPtWeight = MuMu->_topPtWeight;
+                if (Mgr.isMC == kTRUE && Mgr.CurrentProc != _MuMu_QCDMuEnriched_Full) TopPtWeight = MuMu->_topPtWeight;
 
                 // -- Normalization -- //
                 Double_t TotWeight = GenWeight;
@@ -812,7 +812,7 @@ void MuMu_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
                     cout << (mu1u+mu2u).M() << "\t" << (mu1+mu2).M() << "\n" << endl << endl;
                 }
 
-                if (MuMu->isSelPassed == 1 || MuMu->isSelPassed == 3) // Before RC
+                if ((MuMu->isSelPassed == 1 || MuMu->isSelPassed == 3) && Mgr.CurrentProc != _MuMu_QCDMuEnriched_Full) // Before RC
                 {
 //                    if (MuMu->Muon_pT_uncorr->at(0) < 52 || MuMu->Muon_pT_uncorr->at(1) < 52) continue;
 

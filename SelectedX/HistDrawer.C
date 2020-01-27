@@ -28,7 +28,7 @@
 void EE_HistDrawer (TString whichGraphs, TString type);
 void MuMu_HistDrawer (TString whichGraphs, TString type);
 void EMu_HistDrawer (TString whichGraphs, TString type);
-void Est_HistDrawer ();
+void Est_HistDrawer (Int_t FR_systErr);
 void TEST_HistDrawer (TString whichGraphs , TString type);
 void Test_RocCorr ();
 Double_t CompChiSquared (TH1D *h_data, THStack *s_MC);
@@ -49,7 +49,7 @@ const Double_t massbins2[87] = {15, 17.5, 20, 22.5, 25, 27.5, 30, 32.5, 35, 37.5
                                 915, 1000, 1250, 1500, 2250, 3000};
 
 
-void HistDrawer (TString WhichX = "", TString WhichGraphs = "ALL", TString type = "")
+void HistDrawer (TString WhichX = "", TString WhichGraphs = "ALL", TString type = "", Int_t FR_systErr = 1)
 {
     TString whichX = WhichX;
     whichX.ToUpper();
@@ -77,8 +77,8 @@ void HistDrawer (TString WhichX = "", TString WhichGraphs = "ALL", TString type 
     if (whichX.Contains("EST") && !whichX.Contains("TEST"))
     {
         Xselected++;
-        cout << "\n*****   Est_HistDrawer ()  *****" << endl;
-        Est_HistDrawer();
+        cout << "\n*****   Est_HistDrawer (" << FR_systErr << ")  *****" << endl;
+        Est_HistDrawer(FR_systErr);
     }
     if (whichX.Contains("TEST"))
     {
@@ -1716,11 +1716,11 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
 
         for (SelProc_t pr = _MuMu_QCDMuEnriched_Full; pr > _EndOf_MuMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
         {
-            if (pr == _MuMu_QCDMuEnriched_Full)
-            {
-                iter++;
-                continue;
-            }
+//            if (pr == _MuMu_QCDMuEnriched_Full)
+//            {
+//                iter++;
+//                continue;
+//            }
             f_bkg->GetObject("h_mass_before_PUCorr_"+Mgr.Procname[pr], h_bkg_mass_before_PUCorr[iter]);
             f_bkg->GetObject("h_mass_before_RocCorr_"+Mgr.Procname[pr], h_bkg_mass_before_RoccoR[iter]);
             f_bkg->GetObject("h_mass_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_before_EffCorr[iter]);
@@ -1947,7 +1947,7 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         legend->AddEntry(h_bkg_mass[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         legend->AddEntry(h_bkg_mass[2], "#font[12]{#scale[1.1]{WW}}", "f");
         legend->AddEntry(h_bkg_mass[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
-//        legend->AddEntry(h_bkg_mass[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        legend->AddEntry(h_bkg_mass[0], "#font[12]{#scale[1.1]{QCD}}", "f");
 
         RP_mass_before_PUCorr->ImportLegend(legend);
         RP_mass_before_RoccoR->ImportLegend(legend);
@@ -3441,7 +3441,7 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         cout << "There are " << EvtPercentage << "% of events in 10-30 nVTX range" << endl;
 
     } // End of if(nVTX)
-    */
+*/
 
     f_DY->Close();
     f_bkg->Close();
@@ -5161,7 +5161,7 @@ void EMu_HistDrawer (TString whichGraphs , TString type)
 /// ############################################################################### ///
 /// ----------------------------- BKG ESTIMATIONS --------------------------------- ///
 /// ############################################################################### ///
-void Est_HistDrawer()
+void Est_HistDrawer(Int_t FR_systErr)
 {
     LocalFileMgr Mgr;
 
@@ -5411,7 +5411,7 @@ void Est_HistDrawer()
     h_fakes_mass_mumu[0]->SetDirectory(0);
     s_mass_mumu_wFR->Add(h_fakes_mass_mumu[0]);
 
-    f_WJets_est_mumu->GetObject("h_WJET_fit", h_fakes_mass_mumu[1]);
+    f_WJets_est_mumu->GetObject("h_WJET_fit_SS", h_fakes_mass_mumu[1]);
     removeNegativeBins(h_fakes_mass_mumu[1]);
     h_fakes_mass_mumu[1]->SetFillColor(kRed - 2);
     h_fakes_mass_mumu[1]->SetLineColor(kRed - 2);
@@ -5429,11 +5429,11 @@ void Est_HistDrawer()
 
     for (SelProc_t pr = _MuMu_QCDMuEnriched_Full; pr > _EndOf_MuMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
     {
-        if (pr == _MuMu_QCDMuEnriched_Full)
-        {
-            iter++;
-            continue;
-        }
+//        if (pr == _MuMu_QCDMuEnriched_Full)
+//        {
+//            iter++;
+//            continue;
+//        }
 
 //        if (pr == _MuMu_WJets || pr == _MuMu_QCDMuEnriched_Full)
         if (pr == _MuMu_WJets_Full || pr == _MuMu_QCDMuEnriched_Full || pr == _MuMu_WZ || pr == _MuMu_ZZ)
@@ -5541,10 +5541,23 @@ void Est_HistDrawer()
 //    RP_mass_mumu->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Eksp./(MC+i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}v.)     ");
     RP_mass_mumu2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+DD)    ");
 //    RP_mass_mumu2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Eksp./(MC+i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}v.)");
+    RP_mass_mumu_wFR->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Data/Est.");
     RP_mass_mumu->SetSystematics(NULL, estSystematics_mumu, systematics_mumu);
     RP_mass_mumu2->SetSystematics(NULL, estSystematics_mumu2, systematics_mumu2);
-
-    RP_mass_mumu_wFR->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Data/Est.");
+    if (FR_systErr > 0)
+    {
+        TH1D *h_QCD_systErr, *h_WJets_systErr;
+        f_QCD_est_mumu->GetObject("h_QCD_fullsysterr", h_QCD_systErr);
+        f_WJets_est_mumu->GetObject("h_WJET_fullsysterr", h_WJets_systErr);
+        for (Int_t j=0; j<43; j++)
+        {
+            estSystematics_mumu[j] = sqrt(h_QCD_systErr->GetBinContent(j+1)*h_QCD_systErr->GetBinContent(j+1)+
+                                          h_WJets_systErr->GetBinContent(j+1)*h_WJets_systErr->GetBinContent(j+1)+
+                                          estSystematics_mumu[j]*estSystematics_mumu[j]);
+            systematics_mumu[j] = estSystematics_mumu[j] / ((TH1D*)(s_mass_mumu->GetStack()->Last()))->GetBinContent(j+1);
+        }
+        RP_mass_mumu_wFR->SetSystematics(NULL, estSystematics_mumu, systematics_mumu);
+    }
 
     TLegend *legend_mumu = new TLegend(0.8, 0.45, 0.95, 0.95);
     TLegend *legend_mumu_wFR = new TLegend(0.8, 0.45, 0.95, 0.95);
@@ -5562,7 +5575,7 @@ void Est_HistDrawer()
     legend_mumu->AddEntry(h_bkg_mass_mumu[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
     legend_mumu->AddEntry(h_bkg_mass_mumu[2], "#font[12]{#scale[1.1]{WW}} (D-D)", "f");
     legend_mumu->AddEntry(h_bkg_mass_mumu[1], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
-//    legend_mumu->AddEntry(h_bkg_mass_mumu[0], "#font[12]{#scale[1.1]{QCD}} (MC)", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[0], "#font[12]{#scale[1.1]{QCD}} (MC)", "f");
 
     legend_mumu_wFR->AddEntry(h_data_mass_mumu, "Data", "lp");
     legend_mumu_wFR->AddEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
@@ -5598,12 +5611,14 @@ void Est_HistDrawer()
     RP_mass_mumu_wFR->ImportLegend(legend_mumu_wFR);
     RP_mass_mumu_wFR->Draw(0.5, 1e7, 1);
 
-    Double_t dataerror_mumu, MCerror_mumu, dataintegral_mumu=2.25081e+07, MCintegral_mumu;
+    Double_t dataerror_mumu, MCerror_mumu, MCerror_mumu_wFR, dataintegral_mumu=2.25081e+07, MCintegral_mumu, MCintegral_mumu_wFR;
     Double_t dataerrorZ_mumu, MCerrorZ_mumu, DYerrorZ_mumu, dataintegralZ_mumu, MCintegralZ_mumu, DYintegralZ_mumu;
     Double_t dataerror_noZ_mumu=0, MCerror_noZ_mumu=0, dataintegral_noZ_mumu=0, MCintegral_noZ_mumu, temp_noZ_mumu;
+    Double_t qcderror_mumu=0, wjetserror_mumu=0, qcdintegral_mumu=0, wjetsintegral_mumu=0;
 
     dataintegral_mumu = h_data_mass_mumu->IntegralAndError(1, h_data_mass_mumu->GetSize()-2, dataerror_mumu);
     MCintegral_mumu = ((TH1D*)(s_mass_mumu->GetStack()->Last()))->IntegralAndError(1, h_data_mass_mumu->GetSize()-2, MCerror_mumu);
+    MCintegral_mumu_wFR = ((TH1D*)(s_mass_mumu_wFR->GetStack()->Last()))->IntegralAndError(1, h_data_mass_mumu->GetSize()-2, MCerror_mumu_wFR);
 
     dataintegralZ_mumu = h_data_mass_mumu->IntegralAndError(10, 22, dataerrorZ_mumu);
     MCintegralZ_mumu = ((TH1D*)(s_mass_mumu->GetStack()->Last()))->IntegralAndError(10, 22, MCerrorZ_mumu);
@@ -5620,18 +5635,29 @@ void Est_HistDrawer()
     MCerror_noZ_mumu += temp_noZ_mumu * temp_noZ_mumu;
     MCerror_noZ_mumu = sqrt(MCerror_noZ_mumu);
 
+    qcdintegral_mumu = h_bkg_mass_mumu[0]->IntegralAndError(1, h_bkg_mass_mumu[0]->GetSize()-2, qcderror_mumu);
+    wjetsintegral_mumu = h_bkg_mass_mumu[1]->IntegralAndError(1, h_bkg_mass_mumu[1]->GetSize()-2, wjetserror_mumu);
+
     std::cout << "MuMu Data events: " << dataintegral_mumu << "+-" << dataerror_mumu << endl;
-    std::cout << "MuMu MC+DD events: " << MCintegral_mumu << "+-" << MCerror_mumu << endl;
-    std::cout << "MuMu MC/Obs: " << MCintegral_mumu/dataintegral_mumu << "+-" <<
+    std::cout << "MuMu MC+DD events (only EMu): " << MCintegral_mumu << "+-" << MCerror_mumu << endl;
+    std::cout << "MuMu MC/Obs (only EMu): " << MCintegral_mumu/dataintegral_mumu << "+-" <<
                  sqrt((dataerror_mumu / dataintegral_mumu) * (dataerror_mumu / dataintegral_mumu) +
                        (MCerror_mumu / MCintegral_mumu) * (MCerror_mumu / MCintegral_mumu)) << endl;
-    std::cout << "MuMu Avg. Data and Est relative difference: " << CompAvgDataMCDifference(h_data_mass_mumu, s_mass_mumu) << endl;
-    std::cout << "MuMu Chi^2: " << CompChiSquared(h_data_mass_mumu, s_mass_mumu) << endl << endl;
+    std::cout << "MuMu Avg. Data and Est relative difference (only EMu): " << CompAvgDataMCDifference(h_data_mass_mumu, s_mass_mumu) << endl;
+    std::cout << "MuMu Chi^2 (only EMu): " << CompChiSquared(h_data_mass_mumu, s_mass_mumu) << endl << endl;
 
-    std::cout << "MuMu Data events around Z: " << dataintegralZ_mumu << "+-" << dataerrorZ_mumu << endl;
-    std::cout << "MuMu MC events around Z: " << MCintegralZ_mumu << "+-" << MCerrorZ_mumu << endl;
-    std::cout << "MuMu Data events outside Z: " << dataintegral_noZ_mumu << "+-" << dataerror_noZ_mumu << endl;
-    std::cout << "MuMu MC events outside Z: " << MCintegral_noZ_mumu << "+-" << MCerror_noZ_mumu << endl << endl;
+    std::cout << "MuMu Data events around Z (only EMu): " << dataintegralZ_mumu << "+-" << dataerrorZ_mumu << endl;
+    std::cout << "MuMu MC events around Z (only EMu): " << MCintegralZ_mumu << "+-" << MCerrorZ_mumu << endl;
+    std::cout << "MuMu Data events outside Z (only EMu): " << dataintegral_noZ_mumu << "+-" << dataerror_noZ_mumu << endl;
+    std::cout << "MuMu MC events outside Z (only EMu): " << MCintegral_noZ_mumu << "+-" << MCerror_noZ_mumu << endl << endl;
+
+    std::cout << "MuMu MC+DD events (EMu+FR): " << MCintegral_mumu_wFR << "+-" << MCerror_mumu_wFR << endl;
+    std::cout << "MuMu MC/Obs (EMu+FR): " << MCintegral_mumu_wFR/dataintegral_mumu << "+-" <<
+                 sqrt((dataerror_mumu / dataintegral_mumu) * (dataerror_mumu / dataintegral_mumu) +
+                       (MCerror_mumu_wFR / MCintegral_mumu_wFR) * (MCerror_mumu_wFR / MCintegral_mumu_wFR)) << endl;
+
+    std::cout << "MuMu QCD events (MC): " << qcdintegral_mumu << "+-" << qcderror_mumu << endl;
+    std::cout << "MuMu W+Jets events (MC): " << wjetsintegral_mumu << "+-" << wjetserror_mumu << endl;
 
     f_DY_ee->Close();
     f_DY_mumu->Close();
