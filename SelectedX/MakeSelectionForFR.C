@@ -410,8 +410,8 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         if (Mgr.CurrentProc == _WJets)
         {
             Mgr.FullLocation.clear();
-            Mgr.FullLocation.push_back("root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/WJetsToLNu/");
-            Mgr.FullLocation.push_back("root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/WJetsToLNu_ext/");
+            Mgr.FullLocation.push_back("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WJetsToLNu/180326_143021/0000/");
+            Mgr.FullLocation.push_back("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WJetsToLNu_ext/180326_143105/0000/");
         }
 
         Int_t Ntup = Mgr.FullLocation.size();
