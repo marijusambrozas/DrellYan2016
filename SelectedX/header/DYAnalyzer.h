@@ -5998,7 +5998,7 @@ Bool_t DYAnalyzer::EventSelection_FR(vector< Muon > MuonCollection, NtupleHandle
         {
             isPassEventSelection = kTRUE;
             SelectedMuonCollection_deno->push_back(MuonCollection[j]);
-            if (MuonCollection[j].RelPFIso_dBeta < 0.15)
+            if (MuonCollection[j].RelPFIso_dBeta <= 0.15)
                 SelectedMuonCollection_nume->push_back(MuonCollection[j]);
         }
     }
@@ -6191,8 +6191,8 @@ void DYAnalyzer::SetupFRvalues(TString filename, TString type) // type can also 
     std::cout << "Fake rate obtained using " << type << " method." << endl;
     TFile *f = new TFile(filename, "READ");
     TH1D *h_FR_barrel, *h_FR_endcap;
-    f->GetObject("h_FR"+type+"_barrel", h_FR_barrel);
-    f->GetObject("h_FR"+type+"_endcap", h_FR_endcap);
+    f->GetObject("h_FR"+type+"_barrel", h_FR_barrel);  // +"up"  +"down"
+    f->GetObject("h_FR"+type+"_endcap", h_FR_endcap);  // +"up"  +"down"
 
     // -- Getting values from histograms -- //
     for (Int_t i_bin=1; i_bin<=nPtBinBarrel; i_bin++)

@@ -284,7 +284,7 @@ void Mu_EstFR(Int_t type)
     h_pT_barrel_nume = ((TH1D*)(h_pT_barrel_MC_deno[_DY_Full]->Clone("h_pT_barrel_nume")));
     h_pT_barrel_nume->Add(h_pT_barrel_MC_deno[_ttbar]);
     h_pT_barrel_nume->Add(h_pT_barrel_MC_deno[_tW]);
-    h_pT_barrel_nume->Add(h_pT_barrel_MC_deno[_tbarW]);
+//    h_pT_barrel_nume->Add(h_pT_barrel_MC_deno[_tbarW]);
     h_pT_barrel_nume->Add(h_pT_barrel_MC_deno[_WW]);
     h_pT_barrel_nume->Add(h_pT_barrel_MC_deno[_WZ]);
     h_pT_barrel_nume->Add(h_pT_barrel_MC_deno[_ZZ]);
@@ -296,7 +296,7 @@ void Mu_EstFR(Int_t type)
     h_pT_endcap_nume = ((TH1D*)(h_pT_endcap_MC_deno[_DY_Full]->Clone("h_pT_endcap_nume")));
     h_pT_endcap_nume->Add(h_pT_endcap_MC_deno[_ttbar]);
     h_pT_endcap_nume->Add(h_pT_endcap_MC_deno[_tW]);
-    h_pT_endcap_nume->Add(h_pT_endcap_MC_deno[_tbarW]);
+//    h_pT_endcap_nume->Add(h_pT_endcap_MC_deno[_tbarW]);
     h_pT_endcap_nume->Add(h_pT_endcap_MC_deno[_WW]);
     h_pT_endcap_nume->Add(h_pT_endcap_MC_deno[_WZ]);
     h_pT_endcap_nume->Add(h_pT_endcap_MC_deno[_ZZ]);
@@ -310,7 +310,7 @@ void Mu_EstFR(Int_t type)
     h_pT_barrel_deno = ((TH1D*)(h_pT_barrel_MC_nume[_DY_Full]->Clone("h_pT_barrel_deno")));
     h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_ttbar]);
     h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_tW]);
-    h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_tbarW]);
+//    h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_tbarW]);
     h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_WW]);
     h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_WZ]);
     h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_ZZ]);
@@ -322,7 +322,7 @@ void Mu_EstFR(Int_t type)
     h_pT_endcap_deno = ((TH1D*)(h_pT_endcap_MC_nume[_DY_Full]->Clone("h_pT_endcap_deno")));
     h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_ttbar]);
     h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_tW]);
-    h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_tbarW]);
+//    h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_tbarW]);
     h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_WW]);
     h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_WZ]);
     h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_ZZ]);
@@ -344,18 +344,22 @@ void Mu_EstFR(Int_t type)
 //--------------------------------- FR by template --------------------------------------
 
     h_pT_barrel_template_nume = ((TH1D*)(h_pT_barrel_MC_nume[_QCDMuEnriched_Full]->Clone("h_pT_barrel_template_nume")));
-    h_pT_barrel_template_nume->Scale(1.0917e+06/h_pT_barrel_template_nume->Integral());
+    h_pT_barrel_template_nume->Scale(1.3854e+06/h_pT_barrel_template_nume->Integral());
     h_pT_barrel_template_deno = ((TH1D*)(h_pT_barrel_MC_deno[_QCDMuEnriched_Full]->Clone("h_pT_barrel_template_deno")));
-    h_pT_barrel_template_deno->Scale(1.8118e+07/h_pT_barrel_template_deno->Integral());
+    h_pT_barrel_template_deno->Scale(2.0879e+07/h_pT_barrel_template_deno->Integral()); // To compare with Dalmin
+//    h_pT_barrel_template_deno->Scale(2.0850e+07/h_pT_barrel_template_deno->Integral()); // Dalmin's exact fit result
+//    h_pT_barrel_template_deno->Scale(1.8118e+07/h_pT_barrel_template_deno->Integral());
 
     h_FRtemplate_barrel = ((TH1D*)(h_pT_barrel_template_nume->Clone("h_FRtemplate_barrel")));
     h_FRtemplate_barrel->Divide(h_pT_barrel_template_deno);
     h_FRtemplate_barrel->SetDirectory(0);
 
     h_pT_endcap_template_nume = ((TH1D*)(h_pT_endcap_MC_nume[_QCDMuEnriched_Full]->Clone("h_pT_endcap_template_nume")));
-    h_pT_endcap_template_nume->Scale(1.2406e+06/h_pT_endcap_template_nume->Integral());
+    h_pT_endcap_template_nume->Scale(1.5258e+06/h_pT_endcap_template_nume->Integral());
     h_pT_endcap_template_deno = ((TH1D*)(h_pT_endcap_MC_deno[_QCDMuEnriched_Full]->Clone("h_pT_endcap_template_deno")));
-    h_pT_endcap_template_deno->Scale(8.8509e+06/h_pT_endcap_template_deno->Integral());
+    h_pT_endcap_template_deno->Scale(1.0134e+07/h_pT_endcap_template_deno->Integral()); // To compare with Dalmin
+//    h_pT_endcap_template_deno->Scale(1.0130e+07/h_pT_endcap_template_deno->Integral()); // Dalmin's exact fit result
+//    h_pT_endcap_template_deno->Scale(8.8509e+06/h_pT_endcap_template_deno->Integral());
 
     h_FRtemplate_endcap = ((TH1D*)(h_pT_endcap_template_nume->Clone("h_FRtemplate_endcap")));
     h_FRtemplate_endcap->Divide(h_pT_endcap_template_deno);
@@ -374,7 +378,7 @@ void Mu_EstFR(Int_t type)
     h_pT_barrel_mixed_nume_2->SetDirectory(0);
     h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_ttbar]);
     h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_tW]);
-    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_tbarW]);
+//    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_tbarW]);
     h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_WW]);
     h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_WZ]);
     h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_ZZ]);
@@ -384,7 +388,6 @@ void Mu_EstFR(Int_t type)
     h_FRmixed_barrel->Divide(h_pT_barrel_mixed_nume_2);
 
     // Endcap
-    // Barrel
     TH1D * h_FRmixed_endcap = ((TH1D*)(h_pT_endcap_data_nume->Clone("h_FRmixed_endcap"))); // so far it is just a numerator of numerator
     h_FRmixed_endcap->SetDirectory(0);
     h_FRmixed_endcap->Multiply(h_pT_endcap_MC_nume[_QCDMuEnriched_Full]);
@@ -393,7 +396,7 @@ void Mu_EstFR(Int_t type)
     h_pT_endcap_mixed_nume_2->SetDirectory(0);
     h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_ttbar]);
     h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_tW]);
-    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_tbarW]);
+//    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_tbarW]);
     h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_WW]);
     h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_WZ]);
     h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_ZZ]);
@@ -412,6 +415,67 @@ void Mu_EstFR(Int_t type)
     h_FRmixed_barrel->Divide(h_pT_barrel_mixed_deno);
     h_FRmixed_endcap->Divide(h_pT_endcap_mixed_deno);
 
+//--------------------------------- Dalmin's FR --------------------------------------
+    TH1D *h_FRdalminTemplate_barrel = ((TH1D*)(h_FRmixed_barrel->Clone("h_FRdalminTemplate_barrel")));
+    h_FRdalminTemplate_barrel->SetDirectory(0);
+    TH1D *h_FRdalminTemplate_endcap = ((TH1D*)(h_FRmixed_endcap->Clone("h_FRdalminTemplate_endcap")));
+    h_FRdalminTemplate_endcap->SetDirectory(0);
+    TH1D *h_FRdalminRatio_barrel = ((TH1D*)(h_FRmixed_barrel->Clone("h_FRdalminRatio_barrel")));
+    h_FRdalminRatio_barrel->SetDirectory(0);
+    TH1D *h_FRdalminRatio_endcap = ((TH1D*)(h_FRmixed_endcap->Clone("h_FRdalminRatio_endcap")));
+    h_FRdalminRatio_endcap->SetDirectory(0);
+
+    h_FRdalminTemplate_barrel->SetBinContent(1, 0.073598);
+    h_FRdalminTemplate_barrel->SetBinContent(2, 0.0748619);
+    h_FRdalminTemplate_barrel->SetBinContent(3, 0.0735089);
+    h_FRdalminTemplate_barrel->SetBinContent(4, 0.0835437);
+    h_FRdalminTemplate_barrel->SetBinContent(5, 0.0837622);
+    h_FRdalminTemplate_barrel->SetBinContent(6, 0.0810606);
+    h_FRdalminTemplate_barrel->SetBinContent(7, 0.0819881);
+    h_FRdalminTemplate_barrel->SetBinContent(8, 0.0986144);
+    h_FRdalminTemplate_barrel->SetBinContent(9, 0.0899716);
+    h_FRdalminTemplate_barrel->SetBinContent(10, 0.114714);
+    h_FRdalminTemplate_barrel->SetBinContent(11, 0.114298);
+    h_FRdalminTemplate_barrel->SetBinContent(12, 0.138463);
+    h_FRdalminTemplate_barrel->SetBinContent(13, 0.170341);
+    h_FRdalminTemplate_barrel->SetBinContent(14, 0.188865);
+    h_FRdalminTemplate_barrel->SetBinContent(15, 0.244211);
+    h_FRdalminTemplate_barrel->SetBinContent(16, 0.263503);
+
+    h_FRdalminTemplate_endcap->SetBinContent(1, 0.180487);
+    h_FRdalminTemplate_endcap->SetBinContent(2, 0.187814);
+    h_FRdalminTemplate_endcap->SetBinContent(3, 0.205887);
+    h_FRdalminTemplate_endcap->SetBinContent(4, 0.193403);
+    h_FRdalminTemplate_endcap->SetBinContent(5, 0.209049);
+    h_FRdalminTemplate_endcap->SetBinContent(6, 0.220315);
+    h_FRdalminTemplate_endcap->SetBinContent(7, 0.307998);
+    h_FRdalminTemplate_endcap->SetBinContent(8, 0.395422);
+
+    h_FRdalminRatio_barrel->SetBinContent(1, 0.0649563);
+    h_FRdalminRatio_barrel->SetBinContent(2, 0.0648437);
+    h_FRdalminRatio_barrel->SetBinContent(3, 0.061752);
+    h_FRdalminRatio_barrel->SetBinContent(4, 0.0687284);
+    h_FRdalminRatio_barrel->SetBinContent(5, 0.0676425);
+    h_FRdalminRatio_barrel->SetBinContent(6, 0.0646986);
+    h_FRdalminRatio_barrel->SetBinContent(7, 0.0643073);
+    h_FRdalminRatio_barrel->SetBinContent(8, 0.0763119);
+    h_FRdalminRatio_barrel->SetBinContent(9, 0.0689178);
+    h_FRdalminRatio_barrel->SetBinContent(10, 0.0872131);
+    h_FRdalminRatio_barrel->SetBinContent(11, 0.0849665);
+    h_FRdalminRatio_barrel->SetBinContent(12, 0.103783);
+    h_FRdalminRatio_barrel->SetBinContent(13, 0.128793);
+    h_FRdalminRatio_barrel->SetBinContent(14, 0.148508);
+    h_FRdalminRatio_barrel->SetBinContent(15, 0.187512);
+    h_FRdalminRatio_barrel->SetBinContent(16, 0.201801);
+
+    h_FRdalminRatio_endcap->SetBinContent(1, 0.148281);
+    h_FRdalminRatio_endcap->SetBinContent(2, 0.150428);
+    h_FRdalminRatio_endcap->SetBinContent(3, 0.162051);
+    h_FRdalminRatio_endcap->SetBinContent(4, 0.147379);
+    h_FRdalminRatio_endcap->SetBinContent(5, 0.156856);
+    h_FRdalminRatio_endcap->SetBinContent(6, 0.161871);
+    h_FRdalminRatio_endcap->SetBinContent(7, 0.212606);
+    h_FRdalminRatio_endcap->SetBinContent(8, 0.264714);
 
     // Writing
     TFile *file_FR = new TFile("/media/sf_DATA/FR/Muon/FakeRate_muon.root", "RECREATE");
@@ -423,6 +487,10 @@ void Mu_EstFR(Int_t type)
     h_FRtemplate_endcap->Write();
     h_FRmixed_barrel->Write();
     h_FRmixed_endcap->Write();
+    h_FRdalminTemplate_barrel->Write();
+    h_FRdalminTemplate_endcap->Write();
+    h_FRdalminRatio_barrel->Write();
+    h_FRdalminRatio_endcap->Write();
     cout << "Finished. Closing the file.." << endl;
     file_FR->Close();
     if (!file_FR->IsOpen()) cout << "File '/media/sf_DATA/FR/Muon/FakeRate_muon.root' has been closed successfully." << endl;
@@ -465,11 +533,26 @@ void Mu_EstFR(Int_t type)
     h_FRmixed_barrel->SetLineColor(kBlue);
     h_FRmixed_barrel->SetStats(kFALSE);
     h_FRmixed_barrel->Draw("same");
+    h_FRdalminTemplate_barrel->SetMarkerStyle(23);
+    h_FRdalminTemplate_barrel->SetMarkerColor(kTeal+4);
+    h_FRdalminTemplate_barrel->SetLineColor(kTeal+4);
+    h_FRdalminTemplate_barrel->SetStats(kFALSE);
+    h_FRdalminTemplate_barrel->Draw("same");
+    h_FRdalminRatio_barrel->SetMarkerStyle(33);
+    h_FRdalminRatio_barrel->SetMarkerColor(kOrange+8);
+    h_FRdalminRatio_barrel->SetLineColor(kOrange+8);
+    h_FRdalminRatio_barrel->SetStats(kFALSE);
+    h_FRdalminRatio_barrel->Draw("same");
 
     TLegend *legend = new TLegend(0.6, 0.8, 0.95, 0.95);
-    legend->AddEntry(h_FRtemplate_barrel, "Template fitting", "LP");
+//    legend->AddEntry(h_FRtemplate_barrel, "Template fitting", "LP");
+//    legend->AddEntry(h_FRratio_barrel, "Ratio method", "LP");
+//    legend->AddEntry(h_FRmixed_barrel, "Mixed method", "LP");
     legend->AddEntry(h_FRratio_barrel, "Ratio method", "LP");
-    legend->AddEntry(h_FRmixed_barrel, "Mixed method", "LP");
+    legend->AddEntry(h_FRtemplate_barrel, "Template fitting", "LP");
+    legend->AddEntry(h_FRmixed_barrel, "Nume - ratio, Deno - template", "LP");
+    legend->AddEntry(h_FRdalminTemplate_barrel, "Dalmin's template", "LP");
+    legend->AddEntry(h_FRdalminRatio_barrel, "Dalmin's ratio", "LP");
     legend->Draw();
     legend->Draw();
     TText *textb = new TText (.4, .7, "Barrel");
@@ -516,6 +599,17 @@ void Mu_EstFR(Int_t type)
     h_FRmixed_endcap->SetLineColor(kBlue);
     h_FRmixed_endcap->SetStats(kFALSE);
     h_FRmixed_endcap->Draw("same");
+    h_FRdalminTemplate_endcap->SetMarkerStyle(23);
+    h_FRdalminTemplate_endcap->SetMarkerColor(kTeal+4);
+    h_FRdalminTemplate_endcap->SetLineColor(kTeal+4);
+    h_FRdalminTemplate_endcap->SetStats(kFALSE);
+    h_FRdalminTemplate_endcap->Draw("same");
+    h_FRdalminRatio_endcap->SetMarkerStyle(33);
+    h_FRdalminRatio_endcap->SetMarkerColor(kOrange+8);
+    h_FRdalminRatio_endcap->SetLineColor(kOrange+8);
+    h_FRdalminRatio_endcap->SetStats(kFALSE);
+    h_FRdalminRatio_endcap->Draw("same");
+
     legend->Draw();
     TText *texte = new TText (.4, .7, "Endcap");
     texte->SetTextAlign(11);

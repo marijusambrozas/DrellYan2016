@@ -81,7 +81,7 @@ void EstimateFR (TString WhichX = "", Int_t type = 2)
 void E_EstFR(Int_t type)
 {
    return; // NOT READY YET
-} // End of EE_HistDrawer()
+} // End of E_EstFR()
 
 
 /// ################################################################################## ///
@@ -453,9 +453,12 @@ void Mu_EstFR(Int_t type)
 //    h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Scale(9.3962e+05/h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
 
 
+//    Double_t nevt=0, err=0;
     TH1D *h_FRtemplate_barrel_deno = ((TH1D*)(h_pT_barrel_template_deno_50to70[_QCDMuEnriched_Full]->Clone("h_FRtemplate_barrel_deno")));
     h_FRtemplate_barrel_deno->Add(h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]);
     h_FRtemplate_barrel_deno->Add(h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]);
+//    nevt = h_FRtemplate_barrel_deno->IntegralAndError(1, h_FRtemplate_barrel_deno->GetSize()-2, err);
+//    cout << "Deno barrel events: " << nevt << "+-" << err << endl;
 
     h_FRtemplate_barrel = ((TH1D*)(h_pT_barrel_template_nume_50to70[_QCDMuEnriched_Full]->Clone("h_FRtemplate_barrel")));
     h_FRtemplate_barrel->Add(h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]);
@@ -463,6 +466,15 @@ void Mu_EstFR(Int_t type)
 
     h_FRtemplate_barrel->Divide(h_FRtemplate_barrel_deno);
     h_FRtemplate_barrel->SetDirectory(0);
+
+    // For systematic errors
+    TH1D *h_FRtemplate_barrel_up   = ((TH1D*)(h_FRtemplate_barrel->Clone("h_FRtemplate_barrel_up")));
+    TH1D *h_FRtemplate_barrel_down = ((TH1D*)(h_FRtemplate_barrel->Clone("h_FRtemplate_barrel_down")));
+    for (Int_t i=1; i<h_FRtemplate_barrel->GetSize()-1; i++)
+    {
+        h_FRtemplate_barrel_up  ->SetBinContent(i, h_FRtemplate_barrel->GetBinContent(i)+h_FRtemplate_barrel->GetBinError(i));
+        h_FRtemplate_barrel_down->SetBinContent(i, h_FRtemplate_barrel->GetBinContent(i)-h_FRtemplate_barrel->GetBinError(i));
+    }
 
     // Endcap
 //    h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(1.1732e+06/h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Integral()); // OLD All muons' pT>52GeV
@@ -494,6 +506,15 @@ void Mu_EstFR(Int_t type)
 
     h_FRtemplate_endcap->Divide(h_FRtemplate_endcap_deno);
     h_FRtemplate_endcap->SetDirectory(0);
+
+    // For systematic errors
+    TH1D *h_FRtemplate_endcap_up   = ((TH1D*)(h_FRtemplate_endcap->Clone("h_FRtemplate_endcap_up")));
+    TH1D *h_FRtemplate_endcap_down = ((TH1D*)(h_FRtemplate_endcap->Clone("h_FRtemplate_endcap_down")));
+    for (Int_t i=1; i<h_FRtemplate_endcap->GetSize()-1; i++)
+    {
+        h_FRtemplate_endcap_up  ->SetBinContent(i, h_FRtemplate_endcap->GetBinContent(i)+h_FRtemplate_endcap->GetBinError(i));
+        h_FRtemplate_endcap_down->SetBinContent(i, h_FRtemplate_endcap->GetBinContent(i)-h_FRtemplate_endcap->GetBinError(i));
+    }
 
 
 //--------------------------------- Mixed FR --------------------------------------
@@ -588,6 +609,10 @@ void Mu_EstFR(Int_t type)
     h_FRratio_endcap->Write();
     h_FRtemplate_barrel->Write();
     h_FRtemplate_endcap->Write();
+    h_FRtemplate_barrel_up->Write();
+    h_FRtemplate_endcap_up->Write();
+    h_FRtemplate_barrel_down->Write();
+    h_FRtemplate_endcap_down->Write();
     h_FRmixed_barrel->Write();
     h_FRmixed_endcap->Write();
     h_FRdalmin_barrel->Write();
@@ -611,7 +636,7 @@ void Mu_EstFR(Int_t type)
     h_FRratio_barrel->SetLineColor(kRed);
     h_FRratio_barrel->SetStats(kFALSE);
     h_FRratio_barrel->SetTitle("");
-    h_FRratio_barrel->GetXaxis()->SetTitle("p_{T} (#mu)");
+    h_FRratio_barrel->GetXaxis()->SetTitle("p_{T} (#mu) [GeV/c]");
     h_FRratio_barrel->GetXaxis()->SetTitleOffset(1);
     h_FRratio_barrel->GetXaxis()->SetTitleSize(0.05);
     h_FRratio_barrel->GetXaxis()->SetLabelSize(0.04);
@@ -662,7 +687,7 @@ void Mu_EstFR(Int_t type)
     h_FRratio_endcap->SetLineColor(kRed);
     h_FRratio_endcap->SetStats(kFALSE);
     h_FRratio_endcap->SetTitle("");
-    h_FRratio_endcap->GetXaxis()->SetTitle("p_{T} (#mu)");
+    h_FRratio_endcap->GetXaxis()->SetTitle("p_{T} (#mu) [GeV/c]");
     h_FRratio_endcap->GetXaxis()->SetTitleOffset(1);
     h_FRratio_endcap->GetXaxis()->SetTitleSize(0.05);
     h_FRratio_endcap->GetXaxis()->SetLabelSize(0.04);
