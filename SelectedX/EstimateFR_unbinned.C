@@ -284,7 +284,7 @@ void Mu_EstFR(Int_t type)
     h_pT_barrel_nume = ((TH1D*)(h_pT_barrel_MC_deno[_DY_Full]->Clone("h_pT_barrel_nume")));
     h_pT_barrel_nume->Add(h_pT_barrel_MC_deno[_ttbar]);
     h_pT_barrel_nume->Add(h_pT_barrel_MC_deno[_tW]);
-//    h_pT_barrel_nume->Add(h_pT_barrel_MC_deno[_tbarW]);
+    h_pT_barrel_nume->Add(h_pT_barrel_MC_deno[_tbarW]);
     h_pT_barrel_nume->Add(h_pT_barrel_MC_deno[_WW]);
     h_pT_barrel_nume->Add(h_pT_barrel_MC_deno[_WZ]);
     h_pT_barrel_nume->Add(h_pT_barrel_MC_deno[_ZZ]);
@@ -296,7 +296,7 @@ void Mu_EstFR(Int_t type)
     h_pT_endcap_nume = ((TH1D*)(h_pT_endcap_MC_deno[_DY_Full]->Clone("h_pT_endcap_nume")));
     h_pT_endcap_nume->Add(h_pT_endcap_MC_deno[_ttbar]);
     h_pT_endcap_nume->Add(h_pT_endcap_MC_deno[_tW]);
-//    h_pT_endcap_nume->Add(h_pT_endcap_MC_deno[_tbarW]);
+    h_pT_endcap_nume->Add(h_pT_endcap_MC_deno[_tbarW]);
     h_pT_endcap_nume->Add(h_pT_endcap_MC_deno[_WW]);
     h_pT_endcap_nume->Add(h_pT_endcap_MC_deno[_WZ]);
     h_pT_endcap_nume->Add(h_pT_endcap_MC_deno[_ZZ]);
@@ -310,7 +310,7 @@ void Mu_EstFR(Int_t type)
     h_pT_barrel_deno = ((TH1D*)(h_pT_barrel_MC_nume[_DY_Full]->Clone("h_pT_barrel_deno")));
     h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_ttbar]);
     h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_tW]);
-//    h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_tbarW]);
+    h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_tbarW]);
     h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_WW]);
     h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_WZ]);
     h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_ZZ]);
@@ -322,7 +322,7 @@ void Mu_EstFR(Int_t type)
     h_pT_endcap_deno = ((TH1D*)(h_pT_endcap_MC_nume[_DY_Full]->Clone("h_pT_endcap_deno")));
     h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_ttbar]);
     h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_tW]);
-//    h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_tbarW]);
+    h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_tbarW]);
     h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_WW]);
     h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_WZ]);
     h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_ZZ]);
@@ -346,7 +346,8 @@ void Mu_EstFR(Int_t type)
     h_pT_barrel_template_nume = ((TH1D*)(h_pT_barrel_MC_nume[_QCDMuEnriched_Full]->Clone("h_pT_barrel_template_nume")));
     h_pT_barrel_template_nume->Scale(1.3854e+06/h_pT_barrel_template_nume->Integral());
     h_pT_barrel_template_deno = ((TH1D*)(h_pT_barrel_MC_deno[_QCDMuEnriched_Full]->Clone("h_pT_barrel_template_deno")));
-    h_pT_barrel_template_deno->Scale(2.0879e+07/h_pT_barrel_template_deno->Integral()); // To compare with Dalmin
+    h_pT_barrel_template_deno->Scale(2.0915e+07/h_pT_barrel_template_deno->Integral()); // To compare with Dalmin
+//    h_pT_barrel_template_deno->Scale(2.0879e+07/h_pT_barrel_template_deno->Integral()); // To compare with Dalmin
 //    h_pT_barrel_template_deno->Scale(2.0850e+07/h_pT_barrel_template_deno->Integral()); // Dalmin's exact fit result
 //    h_pT_barrel_template_deno->Scale(1.8118e+07/h_pT_barrel_template_deno->Integral());
 
@@ -378,7 +379,7 @@ void Mu_EstFR(Int_t type)
     h_pT_barrel_mixed_nume_2->SetDirectory(0);
     h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_ttbar]);
     h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_tW]);
-//    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_tbarW]);
+    h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_tbarW]);
     h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_WW]);
     h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_WZ]);
     h_pT_barrel_mixed_nume_2->Add(h_pT_barrel_MC_nume[_ZZ]);
@@ -396,7 +397,7 @@ void Mu_EstFR(Int_t type)
     h_pT_endcap_mixed_nume_2->SetDirectory(0);
     h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_ttbar]);
     h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_tW]);
-//    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_tbarW]);
+    h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_tbarW]);
     h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_WW]);
     h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_WZ]);
     h_pT_endcap_mixed_nume_2->Add(h_pT_endcap_MC_nume[_ZZ]);

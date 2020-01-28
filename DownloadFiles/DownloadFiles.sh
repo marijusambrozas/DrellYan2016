@@ -2,8 +2,10 @@
 
 eos=/usr/bin/xrdcp
 
-server="cms-xrdr.sdfarm.kr:1094"
-path="/xrd/store/user/dpai/"
+#server="cms-xrdr.sdfarm.kr:1094"
+server="tier3"
+#path="/xrd/store/user/dpai/"
+path="DrellYan2016/"
 
 if [ ${#2} -eq 0 ] ; then
     echo "./DownloadFiles.sh destPath filenames_file(s)"
@@ -31,7 +33,8 @@ for f in `cat $@` ; do
 #    echo "Start download?"
 #    read isOk
 #    if [[ "$isOk" == "y" || "$isOk" == "yes" ]] ; then
-         ${eos} root://$server//$f ${destPath}$d
+#         ${eos} root://$server//$f ${destPath}$d
+	 scp server:${path}$f
 #    elif [[ "$isOk" == "n" || "$isOk" == "no" ]] ; then
 #	echo "Uh.. Ok."
 #    else

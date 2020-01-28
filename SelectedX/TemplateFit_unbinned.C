@@ -472,13 +472,13 @@ void Mu_Tfit(Int_t type)
     Double_t N_endcap_deno_ZZ = h_endcap_MC_deno[_ZZ]->Integral();
 
     Double_t N_barrel_nume_total = N_barrel_nume_ttbar + N_barrel_nume_WJets + N_barrel_nume_DY + N_barrel_nume_QCD +
-                                   N_barrel_nume_tW    /*+ N_barrel_nume_tbarW */+ N_barrel_nume_WW + N_barrel_nume_WZ  + N_barrel_nume_ZZ;
+                                   N_barrel_nume_tW    + N_barrel_nume_tbarW + N_barrel_nume_WW + N_barrel_nume_WZ  + N_barrel_nume_ZZ;
     Double_t N_endcap_nume_total = N_endcap_nume_ttbar + N_endcap_nume_WJets + N_endcap_nume_DY + N_endcap_nume_QCD +
-                                   N_endcap_nume_tW    /*+ N_endcap_nume_tbarW */+ N_endcap_nume_WW + N_endcap_nume_WZ  + N_endcap_nume_ZZ;
+                                   N_endcap_nume_tW    + N_endcap_nume_tbarW + N_endcap_nume_WW + N_endcap_nume_WZ  + N_endcap_nume_ZZ;
     Double_t N_barrel_deno_total = N_barrel_deno_ttbar + N_barrel_deno_WJets + N_barrel_deno_DY + N_barrel_deno_QCD +
-                                   N_barrel_deno_tW    /*+ N_barrel_deno_tbarW */+ N_barrel_deno_WW + N_barrel_deno_WZ  + N_barrel_deno_ZZ;
+                                   N_barrel_deno_tW    + N_barrel_deno_tbarW + N_barrel_deno_WW + N_barrel_deno_WZ  + N_barrel_deno_ZZ;
     Double_t N_endcap_deno_total = N_endcap_deno_ttbar + N_endcap_deno_WJets + N_endcap_deno_DY + N_endcap_deno_QCD +
-                                   N_endcap_deno_tW    /*+ N_endcap_deno_tbarW */+ N_endcap_deno_WW + N_endcap_deno_WZ  + N_endcap_deno_ZZ;
+                                   N_endcap_deno_tW    + N_endcap_deno_tbarW + N_endcap_deno_WW + N_endcap_deno_WZ  + N_endcap_deno_ZZ;
 
     Double_t Nnorm_barrel_nume_ttbar = N_barrel_nume_ttbar * h_barrel_data_nume->Integral() / N_barrel_nume_total;
     Double_t Nnorm_endcap_nume_ttbar = N_endcap_nume_ttbar * h_endcap_data_nume->Integral() / N_endcap_nume_total;
@@ -613,28 +613,28 @@ void Mu_Tfit(Int_t type)
 
     // Models
     RooAddPdf model_barrel_nume("model_barrel_nume", "model_barrel_nume", RooArgList(*pdf_barrel_nume_QCD,   *pdf_barrel_nume_WJets, *pdf_barrel_nume_DY,
-                                                                                     *pdf_barrel_nume_ttbar, *pdf_barrel_nume_tW,    /**pdf_barrel_nume_tbarW,*/
+                                                                                     *pdf_barrel_nume_ttbar, *pdf_barrel_nume_tW,    *pdf_barrel_nume_tbarW,
                                                                                      *pdf_barrel_nume_WW,    *pdf_barrel_nume_WZ,    *pdf_barrel_nume_ZZ),
                                 RooArgList(n_barrel_nume_QCD,   n_barrel_nume_WJets, n_barrel_nume_DY, n_barrel_nume_ttbar, n_barrel_nume_tW,
-                                           /*n_barrel_nume_tbarW,*/ n_barrel_nume_WW,    n_barrel_nume_WZ, n_barrel_nume_ZZ));
+                                           n_barrel_nume_tbarW, n_barrel_nume_WW,    n_barrel_nume_WZ, n_barrel_nume_ZZ));
 
     RooAddPdf model_endcap_nume("model_endcap_nume", "model_endcap_nume", RooArgList(*pdf_endcap_nume_QCD,   *pdf_endcap_nume_WJets, *pdf_endcap_nume_DY,
-                                                                                     *pdf_endcap_nume_ttbar, *pdf_endcap_nume_tW,    /**pdf_endcap_nume_tbarW,*/
+                                                                                     *pdf_endcap_nume_ttbar, *pdf_endcap_nume_tW,    *pdf_endcap_nume_tbarW,
                                                                                      *pdf_endcap_nume_WW,    *pdf_endcap_nume_WZ,    *pdf_endcap_nume_ZZ),
                                 RooArgList(n_endcap_nume_QCD,   n_endcap_nume_WJets, n_endcap_nume_DY, n_endcap_nume_ttbar, n_endcap_nume_tW,
-                                           /*n_endcap_nume_tbarW,*/ n_endcap_nume_WW,    n_endcap_nume_WZ, n_endcap_nume_ZZ));
+                                           n_endcap_nume_tbarW, n_endcap_nume_WW,    n_endcap_nume_WZ, n_endcap_nume_ZZ));
 
     RooAddPdf model_barrel_deno("model_barrel_deno", "model_barrel_deno", RooArgList(*pdf_barrel_deno_QCD,   *pdf_barrel_deno_WJets, *pdf_barrel_deno_DY,
-                                                                                     *pdf_barrel_deno_ttbar, *pdf_barrel_deno_tW,    /**pdf_barrel_deno_tbarW,*/
+                                                                                     *pdf_barrel_deno_ttbar, *pdf_barrel_deno_tW,    *pdf_barrel_deno_tbarW,
                                                                                      *pdf_barrel_deno_WW,    *pdf_barrel_deno_WZ,    *pdf_barrel_deno_ZZ),
                                 RooArgList(n_barrel_deno_QCD,   n_barrel_deno_WJets, n_barrel_deno_DY, n_barrel_deno_ttbar, n_barrel_deno_tW,
-                                           /*n_barrel_deno_tbarW,*/ n_barrel_deno_WW,    n_barrel_deno_WZ, n_barrel_deno_ZZ));
+                                           n_barrel_deno_tbarW, n_barrel_deno_WW,    n_barrel_deno_WZ, n_barrel_deno_ZZ));
 
     RooAddPdf model_endcap_deno("model_endcap_deno", "model_endcap_deno", RooArgList(*pdf_endcap_deno_QCD,   *pdf_endcap_deno_WJets, *pdf_endcap_deno_DY,
-                                                                                     *pdf_endcap_deno_ttbar, *pdf_endcap_deno_tW,    /**pdf_endcap_deno_tbarW,*/
+                                                                                     *pdf_endcap_deno_ttbar, *pdf_endcap_deno_tW,    *pdf_endcap_deno_tbarW,
                                                                                      *pdf_endcap_deno_WW,    *pdf_endcap_deno_WZ,    *pdf_endcap_deno_ZZ),
                                 RooArgList(n_endcap_deno_QCD,   n_endcap_deno_WJets, n_endcap_deno_DY, n_endcap_deno_ttbar, n_endcap_deno_tW,
-                                           /*n_endcap_deno_tbarW,*/ n_endcap_deno_WW,    n_endcap_deno_WZ, n_endcap_deno_ZZ));
+                                           n_endcap_deno_tbarW, n_endcap_deno_WW,    n_endcap_deno_WZ, n_endcap_deno_ZZ));
 
     // Fitting
     RooFitResult* fit_barrel_nume = model_barrel_nume.fitTo(*rh_barrel_nume_data, Save());
@@ -661,21 +661,21 @@ void Mu_Tfit(Int_t type)
     RooPlot *frame_barrel_nume = iso_nume.frame(Title(" "));
     rh_barrel_nume_data->plotOn(frame_barrel_nume, DataError(RooAbsData::SumW2));
     model_barrel_nume.plotOn(frame_barrel_nume, Components("pdf_barrel_nume_ZZ,pdf_barrel_nume_WZ,pdf_barrel_nume_WW,pdf_barrel_nume_tW,"
-                                                           /*"pdf_barrel_nume_tbarW,"*/"pdf_barrel_nume_ttbar,pdf_barrel_nume_DY,"
+                                                           "pdf_barrel_nume_tbarW,pdf_barrel_nume_ttbar,pdf_barrel_nume_DY,"
                                                            "pdf_barrel_nume_WJets,pdf_barrel_nume_QCD"),
                              LineColor(0), FillColor(kRed+3), DrawOption("F"));
     model_barrel_nume.plotOn(frame_barrel_nume, Components("pdf_barrel_nume_ZZ,pdf_barrel_nume_WZ,pdf_barrel_nume_WW,pdf_barrel_nume_tW,"
-                                                           /*"pdf_barrel_nume_tbarW,"*/"pdf_barrel_nume_ttbar,pdf_barrel_nume_DY,"
+                                                           "pdf_barrel_nume_tbarW,pdf_barrel_nume_ttbar,pdf_barrel_nume_DY,"
                                                            "pdf_barrel_nume_WJets"),
                              LineColor(0), FillColor(kRed-2), DrawOption("F"));
     model_barrel_nume.plotOn(frame_barrel_nume, Components("pdf_barrel_nume_ZZ,pdf_barrel_nume_WZ,pdf_barrel_nume_WW,pdf_barrel_nume_tW,"
-                                                           /*"pdf_barrel_nume_tbarW,"*/"pdf_barrel_nume_ttbar,pdf_barrel_nume_DY"),
+                                                           "pdf_barrel_nume_tbarW,pdf_barrel_nume_ttbar,pdf_barrel_nume_DY"),
                              LineColor(0), FillColor(kOrange), DrawOption("F"));
     model_barrel_nume.plotOn(frame_barrel_nume, Components("pdf_barrel_nume_ZZ,pdf_barrel_nume_WZ,pdf_barrel_nume_WW,pdf_barrel_nume_tW,"
-                                                           /*"pdf_barrel_nume_tbarW,"*/"pdf_barrel_nume_ttbar"),
+                                                           "pdf_barrel_nume_tbarW,pdf_barrel_nume_ttbar"),
                              LineColor(0), FillColor(kCyan+2), DrawOption("F"));
     model_barrel_nume.plotOn(frame_barrel_nume, Components("pdf_barrel_nume_ZZ,pdf_barrel_nume_WZ,pdf_barrel_nume_WW,pdf_barrel_nume_tW,"
-                                                           /*"pdf_barrel_nume_tbarW"*/),
+                                                           "pdf_barrel_nume_tbarW"),
                              LineColor(0), FillColor(kGreen-2), DrawOption("F"));
     model_barrel_nume.plotOn(frame_barrel_nume, Components("pdf_barrel_nume_ZZ,pdf_barrel_nume_WZ,pdf_barrel_nume_WW,pdf_barrel_nume_tW"),
                              LineColor(0), FillColor(kGreen+2), DrawOption("F"));
@@ -700,7 +700,7 @@ void Mu_Tfit(Int_t type)
     legend->AddEntry(frame_barrel_nume->nameOf(2), "#font[12]{#scale[1.1]{W}}+Jets", "F");
     legend->AddEntry(frame_barrel_nume->nameOf(3), "DY", "F");
     legend->AddEntry(frame_barrel_nume->nameOf(4), "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "F");
-//    legend->AddEntry(frame_barrel_nume->nameOf(5), "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "F");
+    legend->AddEntry(frame_barrel_nume->nameOf(5), "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "F");
     legend->AddEntry(frame_barrel_nume->nameOf(6), "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "F");
     legend->AddEntry(frame_barrel_nume->nameOf(7), "#font[12]{#scale[1.1]{WW}}", "F");
     legend->AddEntry(frame_barrel_nume->nameOf(8), "#font[12]{#scale[1.1]{WZ}}", "F");
@@ -795,21 +795,21 @@ void Mu_Tfit(Int_t type)
     RooPlot *frame_endcap_nume = iso_nume.frame(Title(" "));
     rh_endcap_nume_data->plotOn(frame_endcap_nume, DataError(RooAbsData::SumW2));
     model_endcap_nume.plotOn(frame_endcap_nume, Components("pdf_endcap_nume_ZZ,pdf_endcap_nume_WZ,pdf_endcap_nume_WW,pdf_endcap_nume_tW,"
-                                                           /*"pdf_endcap_nume_tbarW,"*/"pdf_endcap_nume_ttbar,pdf_endcap_nume_DY,"
+                                                           "pdf_endcap_nume_tbarW,pdf_endcap_nume_ttbar,pdf_endcap_nume_DY,"
                                                            "pdf_endcap_nume_WJets,pdf_endcap_nume_QCD"),
                              LineColor(0), FillColor(kRed+3), DrawOption("F"));
     model_endcap_nume.plotOn(frame_endcap_nume, Components("pdf_endcap_nume_ZZ,pdf_endcap_nume_WZ,pdf_endcap_nume_WW,pdf_endcap_nume_tW,"
-                                                           /*"pdf_endcap_nume_tbarW,"*/"pdf_endcap_nume_ttbar,pdf_endcap_nume_DY,"
+                                                           "pdf_endcap_nume_tbarW,pdf_endcap_nume_ttbar,pdf_endcap_nume_DY,"
                                                            "pdf_endcap_nume_WJets"),
                              LineColor(0), FillColor(kRed-2), DrawOption("F"));
     model_endcap_nume.plotOn(frame_endcap_nume, Components("pdf_endcap_nume_ZZ,pdf_endcap_nume_WZ,pdf_endcap_nume_WW,pdf_endcap_nume_tW,"
-                                                           /*"pdf_endcap_nume_tbarW,"*/"pdf_endcap_nume_ttbar,pdf_endcap_nume_DY"),
+                                                           "pdf_endcap_nume_tbarW,pdf_endcap_nume_ttbar,pdf_endcap_nume_DY"),
                              LineColor(0), FillColor(kOrange), DrawOption("F"));
     model_endcap_nume.plotOn(frame_endcap_nume, Components("pdf_endcap_nume_ZZ,pdf_endcap_nume_WZ,pdf_endcap_nume_WW,pdf_endcap_nume_tW,"
-                                                           /*"pdf_endcap_nume_tbarW,"*/"pdf_endcap_nume_ttbar"),
+                                                           "pdf_endcap_nume_tbarW,pdf_endcap_nume_ttbar"),
                              LineColor(0), FillColor(kCyan+2), DrawOption("F"));
     model_endcap_nume.plotOn(frame_endcap_nume, Components("pdf_endcap_nume_ZZ,pdf_endcap_nume_WZ,pdf_endcap_nume_WW,pdf_endcap_nume_tW,"
-                                                           /*"pdf_endcap_nume_tbarW"*/),
+                                                           "pdf_endcap_nume_tbarW"),
                              LineColor(0), FillColor(kGreen-2), DrawOption("F"));
     model_endcap_nume.plotOn(frame_endcap_nume, Components("pdf_endcap_nume_ZZ,pdf_endcap_nume_WZ,pdf_endcap_nume_WW,pdf_endcap_nume_tW"),
                              LineColor(0), FillColor(kGreen+2), DrawOption("F"));
@@ -909,21 +909,21 @@ void Mu_Tfit(Int_t type)
     RooPlot *frame_barrel_deno = iso_deno.frame(Title(" "));
     rh_barrel_deno_data->plotOn(frame_barrel_deno, DataError(RooAbsData::SumW2));
     model_barrel_deno.plotOn(frame_barrel_deno, Components("pdf_barrel_deno_ZZ,pdf_barrel_deno_WZ,pdf_barrel_deno_WW,pdf_barrel_deno_tW,"
-                                                           /*"pdf_barrel_deno_tbarW,"*/"pdf_barrel_deno_ttbar,pdf_barrel_deno_DY,"
+                                                           "pdf_barrel_deno_tbarW,pdf_barrel_deno_ttbar,pdf_barrel_deno_DY,"
                                                            "pdf_barrel_deno_WJets,pdf_barrel_deno_QCD"),
                              LineColor(0), FillColor(kRed+3), DrawOption("F"));
     model_barrel_deno.plotOn(frame_barrel_deno, Components("pdf_barrel_deno_ZZ,pdf_barrel_deno_WZ,pdf_barrel_deno_WW,pdf_barrel_deno_tW,"
-                                                           /*"pdf_barrel_deno_tbarW,"*/"pdf_barrel_deno_ttbar,pdf_barrel_deno_DY,"
+                                                           "pdf_barrel_deno_tbarW,pdf_barrel_deno_ttbar,pdf_barrel_deno_DY,"
                                                            "pdf_barrel_deno_WJets"),
                              LineColor(0), FillColor(kRed-2), DrawOption("F"));
     model_barrel_deno.plotOn(frame_barrel_deno, Components("pdf_barrel_deno_ZZ,pdf_barrel_deno_WZ,pdf_barrel_deno_WW,pdf_barrel_deno_tW,"
-                                                           /*"pdf_barrel_deno_tbarW,"*/"pdf_barrel_deno_ttbar,pdf_barrel_deno_DY"),
+                                                           "pdf_barrel_deno_tbarW,pdf_barrel_deno_ttbar,pdf_barrel_deno_DY"),
                              LineColor(0), FillColor(kOrange), DrawOption("F"));
     model_barrel_deno.plotOn(frame_barrel_deno, Components("pdf_barrel_deno_ZZ,pdf_barrel_deno_WZ,pdf_barrel_deno_WW,pdf_barrel_deno_tW,"
-                                                           /*"pdf_barrel_deno_tbarW,"*/"pdf_barrel_deno_ttbar"),
+                                                           "pdf_barrel_deno_tbarW,pdf_barrel_deno_ttbar"),
                              LineColor(0), FillColor(kCyan+2), DrawOption("F"));
     model_barrel_deno.plotOn(frame_barrel_deno, Components("pdf_barrel_deno_ZZ,pdf_barrel_deno_WZ,pdf_barrel_deno_WW,pdf_barrel_deno_tW,"
-                                                           /*"pdf_barrel_deno_tbarW"*/),
+                                                           "pdf_barrel_deno_tbarW"),
                              LineColor(0), FillColor(kGreen-2), DrawOption("F"));
     model_barrel_deno.plotOn(frame_barrel_deno, Components("pdf_barrel_deno_ZZ,pdf_barrel_deno_WZ,pdf_barrel_deno_WW,pdf_barrel_deno_tW"),
                              LineColor(0), FillColor(kGreen+2), DrawOption("F"));
@@ -1030,21 +1030,21 @@ void Mu_Tfit(Int_t type)
     RooPlot *frame_endcap_deno = iso_deno.frame(Title(" "));
     rh_endcap_deno_data->plotOn(frame_endcap_deno, DataError(RooAbsData::SumW2));
     model_endcap_deno.plotOn(frame_endcap_deno, Components("pdf_endcap_deno_ZZ,pdf_endcap_deno_WZ,pdf_endcap_deno_WW,pdf_endcap_deno_tW,"
-                                                           /*"pdf_endcap_deno_tbarW,"*/"pdf_endcap_deno_ttbar,pdf_endcap_deno_DY,"
+                                                           "pdf_endcap_deno_tbarW,pdf_endcap_deno_ttbar,pdf_endcap_deno_DY,"
                                                            "pdf_endcap_deno_WJets,pdf_endcap_deno_QCD"),
                              LineColor(0), FillColor(kRed+3), DrawOption("F"));
     model_endcap_deno.plotOn(frame_endcap_deno, Components("pdf_endcap_deno_ZZ,pdf_endcap_deno_WZ,pdf_endcap_deno_WW,pdf_endcap_deno_tW,"
-                                                           /*"pdf_endcap_deno_tbarW,"*/"pdf_endcap_deno_ttbar,pdf_endcap_deno_DY,"
+                                                           "pdf_endcap_deno_tbarW,pdf_endcap_deno_ttbar,pdf_endcap_deno_DY,"
                                                            "pdf_endcap_deno_WJets"),
                              LineColor(0), FillColor(kRed-2), DrawOption("F"));
     model_endcap_deno.plotOn(frame_endcap_deno, Components("pdf_endcap_deno_ZZ,pdf_endcap_deno_WZ,pdf_endcap_deno_WW,pdf_endcap_deno_tW,"
-                                                           /*"pdf_endcap_deno_tbarW,"*/"pdf_endcap_deno_ttbar,pdf_endcap_deno_DY"),
+                                                           "pdf_endcap_deno_tbarW,pdf_endcap_deno_ttbar,pdf_endcap_deno_DY"),
                              LineColor(0), FillColor(kOrange), DrawOption("F"));
     model_endcap_deno.plotOn(frame_endcap_deno, Components("pdf_endcap_deno_ZZ,pdf_endcap_deno_WZ,pdf_endcap_deno_WW,pdf_endcap_deno_tW,"
-                                                           /*"pdf_endcap_deno_tbarW,"*/"pdf_endcap_deno_ttbar"),
+                                                           "pdf_endcap_deno_tbarW,pdf_endcap_deno_ttbar"),
                              LineColor(0), FillColor(kCyan+2), DrawOption("F"));
     model_endcap_deno.plotOn(frame_endcap_deno, Components("pdf_endcap_deno_ZZ,pdf_endcap_deno_WZ,pdf_endcap_deno_WW,pdf_endcap_deno_tW,"
-                                                           /*"pdf_endcap_deno_tbarW"*/),
+                                                           "pdf_endcap_deno_tbarW"),
                              LineColor(0), FillColor(kGreen-2), DrawOption("F"));
     model_endcap_deno.plotOn(frame_endcap_deno, Components("pdf_endcap_deno_ZZ,pdf_endcap_deno_WZ,pdf_endcap_deno_WW,pdf_endcap_deno_tW"),
                              LineColor(0), FillColor(kGreen+2), DrawOption("F"));

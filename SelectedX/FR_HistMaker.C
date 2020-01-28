@@ -705,7 +705,10 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
 
             // -- Normalization -- //
             Double_t TotWeight = gen_weight;
-            if(Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
+//            if (Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
+//            if (pr == _DY_50to100) TotWeight = (Lumi * 3 * 1952.68432327 / 81780984.0) * gen_weight;
+//            if (pr == _ttbar) TotWeight = (Lumi * 831.76 / 154948878.0) * gen_weight;
+//            if (pr == _WJets) TotWeight = (Lumi * 61526.7 / 86731698.0) * gen_weight;
             if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl;
 
             if (Mgr.isMC == kTRUE && p_T->size() > 1) n2MC += TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight;
@@ -828,6 +831,79 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
 
         f->cd();
         cout << "\tWriting into file...";
+
+        if (Mgr.isMC == kTRUE && pr != _DY_50to100 && pr != _ttbar && pr != _WJets)
+        {
+            h_pT_barrel_nume    ->Scale(Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]);
+            h_pT_endcap_nume    ->Scale(Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]);
+            h_pT_barrel_deno    ->Scale(Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]);
+            h_pT_endcap_deno    ->Scale(Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]);
+            h_eta_nume          ->Scale(Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]);
+            h_eta_deno          ->Scale(Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]);
+            h_PFiso_barrel_nume ->Scale(Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]);
+            h_PFiso_endcap_nume ->Scale(Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]);
+            h_PFiso_barrel_deno ->Scale(Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]);
+            h_PFiso_endcap_deno ->Scale(Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]);
+            h_TRKiso_barrel_nume->Scale(Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]);
+            h_TRKiso_endcap_nume->Scale(Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]);
+            h_TRKiso_barrel_deno->Scale(Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]);
+            h_TRKiso_endcap_deno->Scale(Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]);
+            h_nVTX              ->Scale(Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]);
+        }
+        if (pr == _DY_50to100)
+        {
+            h_pT_barrel_nume    ->Scale(Lumi * 3 * 1952.68432327 / 81780984.0);
+            h_pT_endcap_nume    ->Scale(Lumi * 3 * 1952.68432327 / 81780984.0);
+            h_pT_barrel_deno    ->Scale(Lumi * 3 * 1952.68432327 / 81780984.0);
+            h_pT_endcap_deno    ->Scale(Lumi * 3 * 1952.68432327 / 81780984.0);
+            h_eta_nume          ->Scale(Lumi * 3 * 1952.68432327 / 81780984.0);
+            h_eta_deno          ->Scale(Lumi * 3 * 1952.68432327 / 81780984.0);
+            h_PFiso_barrel_nume ->Scale(Lumi * 3 * 1952.68432327 / 81780984.0);
+            h_PFiso_endcap_nume ->Scale(Lumi * 3 * 1952.68432327 / 81780984.0);
+            h_PFiso_barrel_deno ->Scale(Lumi * 3 * 1952.68432327 / 81780984.0);
+            h_PFiso_endcap_deno ->Scale(Lumi * 3 * 1952.68432327 / 81780984.0);
+            h_TRKiso_barrel_nume->Scale(Lumi * 3 * 1952.68432327 / 81780984.0);
+            h_TRKiso_endcap_nume->Scale(Lumi * 3 * 1952.68432327 / 81780984.0);
+            h_TRKiso_barrel_deno->Scale(Lumi * 3 * 1952.68432327 / 81780984.0);
+            h_TRKiso_endcap_deno->Scale(Lumi * 3 * 1952.68432327 / 81780984.0);
+            h_nVTX              ->Scale(Lumi * 3 * 1952.68432327 / 81780984.0);
+        }
+        if (pr == _ttbar)
+        {
+            h_pT_barrel_nume    ->Scale(Lumi * 831.76 / 154948878.0);
+            h_pT_endcap_nume    ->Scale(Lumi * 831.76 / 154948878.0);
+            h_pT_barrel_deno    ->Scale(Lumi * 831.76 / 154948878.0);
+            h_pT_endcap_deno    ->Scale(Lumi * 831.76 / 154948878.0);
+            h_eta_nume          ->Scale(Lumi * 831.76 / 154948878.0);
+            h_eta_deno          ->Scale(Lumi * 831.76 / 154948878.0);
+            h_PFiso_barrel_nume ->Scale(Lumi * 831.76 / 154948878.0);
+            h_PFiso_endcap_nume ->Scale(Lumi * 831.76 / 154948878.0);
+            h_PFiso_barrel_deno ->Scale(Lumi * 831.76 / 154948878.0);
+            h_PFiso_endcap_deno ->Scale(Lumi * 831.76 / 154948878.0);
+            h_TRKiso_barrel_nume->Scale(Lumi * 831.76 / 154948878.0);
+            h_TRKiso_endcap_nume->Scale(Lumi * 831.76 / 154948878.0);
+            h_TRKiso_barrel_deno->Scale(Lumi * 831.76 / 154948878.0);
+            h_TRKiso_endcap_deno->Scale(Lumi * 831.76 / 154948878.0);
+            h_nVTX              ->Scale(Lumi * 831.76 / 154948878.0);
+        }
+        if (pr == _WJets)
+        {
+            h_pT_barrel_nume    ->Scale(Lumi * 61526.7 / 86731698.0);
+            h_pT_endcap_nume    ->Scale(Lumi * 61526.7 / 86731698.0);
+            h_pT_barrel_deno    ->Scale(Lumi * 61526.7 / 86731698.0);
+            h_pT_endcap_deno    ->Scale(Lumi * 61526.7 / 86731698.0);
+            h_eta_nume          ->Scale(Lumi * 61526.7 / 86731698.0);
+            h_eta_deno          ->Scale(Lumi * 61526.7 / 86731698.0);
+            h_PFiso_barrel_nume ->Scale(Lumi * 61526.7 / 86731698.0);
+            h_PFiso_endcap_nume ->Scale(Lumi * 61526.7 / 86731698.0);
+            h_PFiso_barrel_deno ->Scale(Lumi * 61526.7 / 86731698.0);
+            h_PFiso_endcap_deno ->Scale(Lumi * 61526.7 / 86731698.0);
+            h_TRKiso_barrel_nume->Scale(Lumi * 61526.7 / 86731698.0);
+            h_TRKiso_endcap_nume->Scale(Lumi * 61526.7 / 86731698.0);
+            h_TRKiso_barrel_deno->Scale(Lumi * 61526.7 / 86731698.0);
+            h_TRKiso_endcap_deno->Scale(Lumi * 61526.7 / 86731698.0);
+            h_nVTX              ->Scale(Lumi * 61526.7 / 86731698.0);
+        }
 
         h_pT_barrel_nume->Write();
         h_pT_endcap_nume->Write();
