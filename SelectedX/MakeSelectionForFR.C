@@ -406,14 +406,6 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
         cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
 
-        // For test only, remove later
-        if (Mgr.CurrentProc == _WJets)
-        {
-            Mgr.FullLocation.clear();
-            Mgr.FullLocation.push_back("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WJetsToLNu/180326_143021/0000/");
-            Mgr.FullLocation.push_back("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WJetsToLNu_ext/180326_143105/0000/");
-        }
-
         Int_t Ntup = Mgr.FullLocation.size();
 
         //Creating a file
@@ -509,8 +501,8 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
             TChain *chain = new TChain(Mgr.TreeName[i_tup]);
-            chain->Add(Mgr.FullLocation[i_tup]+"*.root");
-//            Mgr.SetupChain(i_tup, chain);
+//            chain->Add(Mgr.FullLocation[i_tup]+"*.root");
+            Mgr.SetupChain(i_tup, chain);
 
             NtupleHandle *ntuple = new NtupleHandle(chain);
             if (Mgr.isMC == kTRUE)
@@ -546,15 +538,13 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                 SumWeightRaw += ntuple->GENEvt_weight;
 
                 // -- Separate DYLL samples -- //
-                Bool_t GenFlag = kTRUE; // For test only, change later
-//                Bool_t GenFlag = kFALSE;
-//                GenFlag = analyzer->SeparateDYLLSample_isHardProcess(Mgr.Tag[i_tup], ntuple);
+                Bool_t GenFlag = kFALSE;
+                GenFlag = analyzer->SeparateDYLLSample_isHardProcess(Mgr.Tag[i_tup], ntuple);
 
                 // -- Get GenTopCollection -- //
-                Bool_t GenFlag_top = kTRUE; // For test only, change later
-//                Bool_t GenFlag_top = kFALSE;
-//                vector<GenOthers> GenTopCollection;
-//                GenFlag_top = analyzer->Separate_ttbarSample(Mgr.Tag[i_tup], ntuple, &GenTopCollection);
+                Bool_t GenFlag_top = kFALSE;
+                vector<GenOthers> GenTopCollection;
+                GenFlag_top = analyzer->Separate_ttbarSample(Mgr.Tag[i_tup], ntuple, &GenTopCollection);
 
                 if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += gen_weight;
 
@@ -579,10 +569,9 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         else
                         {
                             Double_t genPt = analyzer->GenMuonPt("fromHardProcessFinalState", ntuple, mu);
-                            // For test only, uncomment later
-//                            if (genPt > 0)
-//                                SF = rc.kScaleFromGenMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, genPt, rndm[0], s=0, m=0);
-//                            else
+                            if (genPt > 0)
+                                SF = rc.kScaleFromGenMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, genPt, rndm[0], s=0, m=0);
+                            else
                                 SF = rc.kScaleAndSmearMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
                         }
                         mu.Pt = SF*mu.Pt;
@@ -609,13 +598,12 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
 
                         // -- Top pT reweighting -- //
                         top_weight = 1;
-                        // For test only, uncomment later
-//                        if (Mgr.Tag[i_tup].Contains("ttbar"))
-//                        {
-//                            Double_t SF0 = exp(0.0615 - (0.0005 * GenTopCollection[0].Pt));
-//                            Double_t SF1 = exp(0.0615 - (0.0005 * GenTopCollection[1].Pt));
-//                            top_weight = sqrt(SF0 * SF1);
-//                        }
+                        if (Mgr.Tag[i_tup].Contains("ttbar"))
+                        {
+                            Double_t SF0 = exp(0.0615 - (0.0005 * GenTopCollection[0].Pt));
+                            Double_t SF1 = exp(0.0615 - (0.0005 * GenTopCollection[1].Pt));
+                            top_weight = sqrt(SF0 * SF1);
+                        }
 
                         // -- Information for various other reweightings -- //
                         nPU = ntuple->nPileUp;
