@@ -120,25 +120,31 @@ void E_HistDrawer(Int_t type)
 void Mu_HistDrawer(Int_t type)
 {
     FileMgr fm;
-    THStack *s_PFiso_barrel_deno = new THStack("s_PFiso_barrel_deno", "");
-    THStack *s_PFiso_endcap_deno = new THStack("s_PFiso_endcap_deno", "");
     THStack *s_PFiso_barrel_nume = new THStack("s_PFiso_barrel_nume", "");
     THStack *s_PFiso_endcap_nume = new THStack("s_PFiso_endcap_nume", "");
+    THStack *s_PFiso_barrel_deno = new THStack("s_PFiso_barrel_deno", "");
+    THStack *s_PFiso_endcap_deno = new THStack("s_PFiso_endcap_deno", "");
+    THStack *s_PFiso_barrel_ctrl = new THStack("s_PFiso_barrel_ctrl", "");
+    THStack *s_PFiso_endcap_ctrl = new THStack("s_PFiso_endcap_ctrl", "");
     THStack *s_pT_barrel_nume = new THStack("s_pT_barrel_nume", "");
     THStack *s_pT_endcap_nume = new THStack("s_pT_endcap_nume", "");
     THStack *s_pT_barrel_deno = new THStack("s_pT_barrel_deno", "");
     THStack *s_pT_endcap_deno = new THStack("s_pT_endcap_deno", "");
+    THStack *s_pT_barrel_ctrl = new THStack("s_pT_barrel_ctrl", "");
+    THStack *s_pT_endcap_ctrl = new THStack("s_pT_endcap_ctrl", "");
     THStack *s_eta = new THStack("s_eta", "");
     THStack *s_nVTX = new THStack("s_nVTX", "");
 
-    TH1D *h_PFiso_barrel_MC_deno[_EndOf_Data_Special], *h_PFiso_endcap_MC_deno[_EndOf_Data_Special],
-         *h_PFiso_barrel_MC_nume[_EndOf_Data_Special], *h_PFiso_endcap_MC_nume[_EndOf_Data_Special],
+    TH1D *h_PFiso_barrel_MC_nume[_EndOf_Data_Special], *h_PFiso_endcap_MC_nume[_EndOf_Data_Special],
+         *h_PFiso_barrel_MC_deno[_EndOf_Data_Special], *h_PFiso_endcap_MC_deno[_EndOf_Data_Special],
+         *h_PFiso_barrel_MC_ctrl[_EndOf_Data_Special], *h_PFiso_endcap_MC_ctrl[_EndOf_Data_Special],
          *h_pT_barrel_MC_nume[_EndOf_Data_Special], *h_pT_endcap_MC_nume[_EndOf_Data_Special],
          *h_pT_barrel_MC_deno[_EndOf_Data_Special], *h_pT_endcap_MC_deno[_EndOf_Data_Special],
+         *h_pT_barrel_MC_ctrl[_EndOf_Data_Special], *h_pT_endcap_MC_ctrl[_EndOf_Data_Special],
          *h_eta_MC[_EndOf_Data_Special], *h_nVTX_MC[_EndOf_Data_Special],
-         *h_PFiso_barrel_data_deno, *h_PFiso_endcap_data_deno,
-         *h_PFiso_barrel_data_nume, *h_PFiso_endcap_data_nume, *h_pT_barrel_data_nume, *h_pT_endcap_data_nume,
-         *h_pT_barrel_data_deno, *h_pT_endcap_data_deno, *h_eta_data, *h_nVTX_data;
+         *h_PFiso_barrel_data_nume, *h_PFiso_endcap_data_nume, *h_PFiso_barrel_data_deno, *h_PFiso_endcap_data_deno,
+         *h_PFiso_barrel_data_ctrl, *h_PFiso_endcap_data_ctrl, *h_pT_barrel_data_nume, *h_pT_endcap_data_nume,
+         *h_pT_barrel_data_deno, *h_pT_endcap_data_deno, *h_pT_barrel_data_ctrl, *h_pT_endcap_data_ctrl, *h_eta_data, *h_nVTX_data;
 
 //----------------------------------- MC bkg -------------------------------------------------------
 
@@ -151,25 +157,33 @@ void Mu_HistDrawer(Int_t type)
         if (type == 1) file = new TFile("/media/sf_DATA/FR/Muon/SelectedForFR_Mu_"+fm.Procname[pr1]+".root", "READ");
         else if (type == 2) file = new TFile("/media/sf_DATA/FR/Muon/FR_Hist_Mu_"+fm.Procname[pr1]+".root", "READ");
         else return;
-        file->GetObject("h_PFiso_barrel_deno", h_PFiso_barrel_MC_deno[pr1]);
-        file->GetObject("h_PFiso_endcap_deno", h_PFiso_endcap_MC_deno[pr1]);
         file->GetObject("h_PFiso_barrel_nume", h_PFiso_barrel_MC_nume[pr1]);
         file->GetObject("h_PFiso_endcap_nume", h_PFiso_endcap_MC_nume[pr1]);
+        file->GetObject("h_PFiso_barrel_deno", h_PFiso_barrel_MC_deno[pr1]);
+        file->GetObject("h_PFiso_endcap_deno", h_PFiso_endcap_MC_deno[pr1]);
+        file->GetObject("h_PFiso_barrel_ctrl", h_PFiso_barrel_MC_ctrl[pr1]);
+        file->GetObject("h_PFiso_endcap_ctrl", h_PFiso_endcap_MC_ctrl[pr1]);
         file->GetObject("h_pT_barrel_nume", h_pT_barrel_MC_nume[pr1]);
         file->GetObject("h_pT_endcap_nume", h_pT_endcap_MC_nume[pr1]);
         file->GetObject("h_pT_barrel_deno", h_pT_barrel_MC_deno[pr1]);
         file->GetObject("h_pT_endcap_deno", h_pT_endcap_MC_deno[pr1]);
+        file->GetObject("h_pT_barrel_ctrl", h_pT_barrel_MC_ctrl[pr1]);
+        file->GetObject("h_pT_endcap_ctrl", h_pT_endcap_MC_ctrl[pr1]);
         file->GetObject("h_eta_deno", h_eta_MC[pr1]);
         file->GetObject("h_nVTX", h_nVTX_MC[pr1]);
 
-        removeNegativeBins(h_PFiso_barrel_MC_deno[pr1]);
-        removeNegativeBins(h_PFiso_endcap_MC_deno[pr1]);
         removeNegativeBins(h_PFiso_barrel_MC_nume[pr1]);
         removeNegativeBins(h_PFiso_endcap_MC_nume[pr1]);
+        removeNegativeBins(h_PFiso_barrel_MC_deno[pr1]);
+        removeNegativeBins(h_PFiso_endcap_MC_deno[pr1]);
+        removeNegativeBins(h_PFiso_barrel_MC_ctrl[pr1]);
+        removeNegativeBins(h_PFiso_endcap_MC_ctrl[pr1]);
         removeNegativeBins(h_pT_barrel_MC_nume[pr1]);
         removeNegativeBins(h_pT_endcap_MC_nume[pr1]);
         removeNegativeBins(h_pT_barrel_MC_deno[pr1]);
         removeNegativeBins(h_pT_endcap_MC_deno[pr1]);
+        removeNegativeBins(h_pT_barrel_MC_ctrl[pr1]);
+        removeNegativeBins(h_pT_endcap_MC_ctrl[pr1]);
         removeNegativeBins(h_eta_MC[pr1]);
         removeNegativeBins(h_nVTX_MC[pr1]);
 
@@ -183,45 +197,61 @@ void Mu_HistDrawer(Int_t type)
         if (pr1 == _tW) color = kGreen + 2;
         if (pr1 == _ttbar || pr1 == _ttbar_700to1000 || pr1 == _ttbar_1000toInf) color = kCyan + 2;
 
-        h_PFiso_barrel_MC_deno[pr1]->SetFillColor(color);
-        h_PFiso_endcap_MC_deno[pr1]->SetFillColor(color);
         h_PFiso_barrel_MC_nume[pr1]->SetFillColor(color);
         h_PFiso_endcap_MC_nume[pr1]->SetFillColor(color);
+        h_PFiso_barrel_MC_deno[pr1]->SetFillColor(color);
+        h_PFiso_endcap_MC_deno[pr1]->SetFillColor(color);
+        h_PFiso_barrel_MC_ctrl[pr1]->SetFillColor(color);
+        h_PFiso_endcap_MC_ctrl[pr1]->SetFillColor(color);
         h_pT_barrel_MC_nume[pr1]->SetFillColor(color);
         h_pT_endcap_MC_nume[pr1]->SetFillColor(color);
         h_pT_barrel_MC_deno[pr1]->SetFillColor(color);
         h_pT_endcap_MC_deno[pr1]->SetFillColor(color);
+        h_pT_barrel_MC_ctrl[pr1]->SetFillColor(color);
+        h_pT_endcap_MC_ctrl[pr1]->SetFillColor(color);
         h_eta_MC[pr1]->SetFillColor(color);
         h_nVTX_MC[pr1]->SetFillColor(color);
-        h_PFiso_barrel_MC_deno[pr1]->SetLineColor(color);
-        h_PFiso_endcap_MC_deno[pr1]->SetLineColor(color);
         h_PFiso_barrel_MC_nume[pr1]->SetLineColor(color);
         h_PFiso_endcap_MC_nume[pr1]->SetLineColor(color);
+        h_PFiso_barrel_MC_deno[pr1]->SetLineColor(color);
+        h_PFiso_endcap_MC_deno[pr1]->SetLineColor(color);
+        h_PFiso_barrel_MC_ctrl[pr1]->SetLineColor(color);
+        h_PFiso_endcap_MC_ctrl[pr1]->SetLineColor(color);
         h_pT_barrel_MC_nume[pr1]->SetLineColor(color);
         h_pT_endcap_MC_nume[pr1]->SetLineColor(color);
         h_pT_barrel_MC_deno[pr1]->SetLineColor(color);
         h_pT_endcap_MC_deno[pr1]->SetLineColor(color);
+        h_pT_barrel_MC_ctrl[pr1]->SetLineColor(color);
+        h_pT_endcap_MC_ctrl[pr1]->SetLineColor(color);
         h_eta_MC[pr1]->SetLineColor(color);
         h_nVTX_MC[pr1]->SetLineColor(color);
-        h_PFiso_barrel_MC_deno[pr1]->SetDirectory(0);
-        h_PFiso_endcap_MC_deno[pr1]->SetDirectory(0);
         h_PFiso_barrel_MC_nume[pr1]->SetDirectory(0);
         h_PFiso_endcap_MC_nume[pr1]->SetDirectory(0);
+        h_PFiso_barrel_MC_deno[pr1]->SetDirectory(0);
+        h_PFiso_endcap_MC_deno[pr1]->SetDirectory(0);
+        h_PFiso_barrel_MC_ctrl[pr1]->SetDirectory(0);
+        h_PFiso_endcap_MC_ctrl[pr1]->SetDirectory(0);
         h_pT_barrel_MC_nume[pr1]->SetDirectory(0);
         h_pT_endcap_MC_nume[pr1]->SetDirectory(0);
         h_pT_barrel_MC_deno[pr1]->SetDirectory(0);
         h_pT_endcap_MC_deno[pr1]->SetDirectory(0);
+        h_pT_barrel_MC_ctrl[pr1]->SetDirectory(0);
+        h_pT_endcap_MC_ctrl[pr1]->SetDirectory(0);
         h_eta_MC[pr1]->SetDirectory(0);
         h_nVTX_MC[pr1]->SetDirectory(0);
 
-        s_PFiso_barrel_deno->Add(h_PFiso_barrel_MC_deno[pr1]);
-        s_PFiso_endcap_deno->Add(h_PFiso_endcap_MC_deno[pr1]);
         s_PFiso_barrel_nume->Add(h_PFiso_barrel_MC_nume[pr1]);
         s_PFiso_endcap_nume->Add(h_PFiso_endcap_MC_nume[pr1]);
+        s_PFiso_barrel_deno->Add(h_PFiso_barrel_MC_deno[pr1]);
+        s_PFiso_endcap_deno->Add(h_PFiso_endcap_MC_deno[pr1]);
+        s_PFiso_barrel_ctrl->Add(h_PFiso_barrel_MC_ctrl[pr1]);
+        s_PFiso_endcap_ctrl->Add(h_PFiso_endcap_MC_ctrl[pr1]);
         s_pT_barrel_nume->Add(h_pT_barrel_MC_nume[pr1]);
         s_pT_endcap_nume->Add(h_pT_endcap_MC_nume[pr1]);
         s_pT_barrel_deno->Add(h_pT_barrel_MC_deno[pr1]);
         s_pT_endcap_deno->Add(h_pT_endcap_MC_deno[pr1]);
+        s_pT_barrel_ctrl->Add(h_pT_barrel_MC_ctrl[pr1]);
+        s_pT_endcap_ctrl->Add(h_pT_endcap_MC_ctrl[pr1]);
         s_eta->Add(h_eta_MC[pr1]);
         s_nVTX->Add(h_nVTX_MC[pr1]);
 
@@ -246,104 +276,140 @@ void Mu_HistDrawer(Int_t type)
         if (type == 1) file = new TFile("/media/sf_DATA/FR/Muon/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
         else if (type == 2) file = new TFile("/media/sf_DATA/FR/Muon/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
         else return;
-        file->GetObject("h_PFiso_barrel_deno", h_PFiso_barrel_MC_deno[pr]);
-        file->GetObject("h_PFiso_endcap_deno", h_PFiso_endcap_MC_deno[pr]);
         file->GetObject("h_PFiso_barrel_nume", h_PFiso_barrel_MC_nume[pr]);
         file->GetObject("h_PFiso_endcap_nume", h_PFiso_endcap_MC_nume[pr]);
+        file->GetObject("h_PFiso_barrel_deno", h_PFiso_barrel_MC_deno[pr]);
+        file->GetObject("h_PFiso_endcap_deno", h_PFiso_endcap_MC_deno[pr]);
+        file->GetObject("h_PFiso_barrel_ctrl", h_PFiso_barrel_MC_ctrl[pr]);
+        file->GetObject("h_PFiso_endcap_ctrl", h_PFiso_endcap_MC_ctrl[pr]);
         file->GetObject("h_pT_barrel_nume", h_pT_barrel_MC_nume[pr]);
         file->GetObject("h_pT_endcap_nume", h_pT_endcap_MC_nume[pr]);
         file->GetObject("h_pT_barrel_deno", h_pT_barrel_MC_deno[pr]);
         file->GetObject("h_pT_endcap_deno", h_pT_endcap_MC_deno[pr]);
+        file->GetObject("h_pT_barrel_ctrl", h_pT_barrel_MC_ctrl[pr]);
+        file->GetObject("h_pT_endcap_ctrl", h_pT_endcap_MC_ctrl[pr]);
         file->GetObject("h_eta_deno", h_eta_MC[pr]);
         file->GetObject("h_nVTX", h_nVTX_MC[pr]);
-//        removeNegativeBins(h_PFiso_barrel_MC_deno[pr]);
-//        removeNegativeBins(h_PFiso_endcap_MC_deno[pr]);
-//        removeNegativeBins(h_PFiso_barrel_MC_nume[pr]);
-//        removeNegativeBins(h_PFiso_endcap_MC_nume[pr]);
-//        removeNegativeBins(h_pT_barrel_MC_nume[pr]);
-//        removeNegativeBins(h_pT_endcap_MC_nume[pr]);
-//        removeNegativeBins(h_pT_barrel_MC_deno[pr]);
-//        removeNegativeBins(h_pT_endcap_MC_deno[pr]);
-//        removeNegativeBins(h_eta_MC[pr]);
-//        removeNegativeBins(h_nVTX_MC[pr]);
+        removeNegativeBins(h_PFiso_barrel_MC_nume[pr]);
+        removeNegativeBins(h_PFiso_endcap_MC_nume[pr]);
+        removeNegativeBins(h_PFiso_barrel_MC_deno[pr]);
+        removeNegativeBins(h_PFiso_endcap_MC_deno[pr]);
+        removeNegativeBins(h_PFiso_barrel_MC_ctrl[pr]);
+        removeNegativeBins(h_PFiso_endcap_MC_ctrl[pr]);
+        removeNegativeBins(h_pT_barrel_MC_nume[pr]);
+        removeNegativeBins(h_pT_endcap_MC_nume[pr]);
+        removeNegativeBins(h_pT_barrel_MC_deno[pr]);
+        removeNegativeBins(h_pT_endcap_MC_deno[pr]);
+        removeNegativeBins(h_pT_barrel_MC_ctrl[pr]);
+        removeNegativeBins(h_pT_endcap_MC_ctrl[pr]);
+        removeNegativeBins(h_eta_MC[pr]);
+        removeNegativeBins(h_nVTX_MC[pr]);
 
         if (pr == _DY_10to50)
         {
-            h_PFiso_barrel_MC_deno[_DY_Full] = ((TH1D*)(h_PFiso_barrel_MC_deno[pr]->Clone("h_PFiso_barrel_deno_DY")));
-            h_PFiso_endcap_MC_deno[_DY_Full] = ((TH1D*)(h_PFiso_endcap_MC_deno[pr]->Clone("h_PFiso_endcap_deno_DY")));
             h_PFiso_barrel_MC_nume[_DY_Full] = ((TH1D*)(h_PFiso_barrel_MC_nume[pr]->Clone("h_PFiso_barrel_nume_DY")));
             h_PFiso_endcap_MC_nume[_DY_Full] = ((TH1D*)(h_PFiso_endcap_MC_nume[pr]->Clone("h_PFiso_endcap_nume_DY")));
+            h_PFiso_barrel_MC_deno[_DY_Full] = ((TH1D*)(h_PFiso_barrel_MC_deno[pr]->Clone("h_PFiso_barrel_deno_DY")));
+            h_PFiso_endcap_MC_deno[_DY_Full] = ((TH1D*)(h_PFiso_endcap_MC_deno[pr]->Clone("h_PFiso_endcap_deno_DY")));
+            h_PFiso_barrel_MC_ctrl[_DY_Full] = ((TH1D*)(h_PFiso_barrel_MC_ctrl[pr]->Clone("h_PFiso_barrel_ctrl_DY")));
+            h_PFiso_endcap_MC_ctrl[_DY_Full] = ((TH1D*)(h_PFiso_endcap_MC_ctrl[pr]->Clone("h_PFiso_endcap_ctrl_DY")));
             h_pT_barrel_MC_nume[_DY_Full] = ((TH1D*)(h_pT_barrel_MC_nume[pr]->Clone("h_pT_barrel_nume_DY")));
             h_pT_endcap_MC_nume[_DY_Full] = ((TH1D*)(h_pT_endcap_MC_nume[pr]->Clone("h_pT_endcap_nume_DY")));
             h_pT_barrel_MC_deno[_DY_Full] = ((TH1D*)(h_pT_barrel_MC_deno[pr]->Clone("h_pT_barrel_deno_DY")));
             h_pT_endcap_MC_deno[_DY_Full] = ((TH1D*)(h_pT_endcap_MC_deno[pr]->Clone("h_pT_endcap_deno_DY")));
+            h_pT_barrel_MC_ctrl[_DY_Full] = ((TH1D*)(h_pT_barrel_MC_ctrl[pr]->Clone("h_pT_barrel_ctrl_DY")));
+            h_pT_endcap_MC_ctrl[_DY_Full] = ((TH1D*)(h_pT_endcap_MC_ctrl[pr]->Clone("h_pT_endcap_ctrl_DY")));
             h_eta_MC[_DY_Full] = ((TH1D*)(h_eta_MC[pr]->Clone("h_eta_deno_DY")));
             h_nVTX_MC[_DY_Full] = ((TH1D*)(h_nVTX_MC[pr]->Clone("h_nVTX_DY")));
-            h_PFiso_barrel_MC_deno[_DY_Full]->SetDirectory(0);
-            h_PFiso_endcap_MC_deno[_DY_Full]->SetDirectory(0);
             h_PFiso_barrel_MC_nume[_DY_Full]->SetDirectory(0);
             h_PFiso_endcap_MC_nume[_DY_Full]->SetDirectory(0);
+            h_PFiso_barrel_MC_deno[_DY_Full]->SetDirectory(0);
+            h_PFiso_endcap_MC_deno[_DY_Full]->SetDirectory(0);
+            h_PFiso_barrel_MC_ctrl[_DY_Full]->SetDirectory(0);
+            h_PFiso_endcap_MC_ctrl[_DY_Full]->SetDirectory(0);
             h_pT_barrel_MC_nume[_DY_Full]->SetDirectory(0);
             h_pT_endcap_MC_nume[_DY_Full]->SetDirectory(0);
             h_pT_barrel_MC_deno[_DY_Full]->SetDirectory(0);
             h_pT_endcap_MC_deno[_DY_Full]->SetDirectory(0);
+            h_pT_barrel_MC_ctrl[_DY_Full]->SetDirectory(0);
+            h_pT_endcap_MC_ctrl[_DY_Full]->SetDirectory(0);
             h_eta_MC[_DY_Full]->SetDirectory(0);
             h_nVTX_MC[_DY_Full]->SetDirectory(0);
         }
         else
         {
-            h_PFiso_barrel_MC_deno[_DY_Full]->Add(h_PFiso_barrel_MC_deno[pr]);
-            h_PFiso_endcap_MC_deno[_DY_Full]->Add(h_PFiso_endcap_MC_deno[pr]);
             h_PFiso_barrel_MC_nume[_DY_Full]->Add(h_PFiso_barrel_MC_nume[pr]);
             h_PFiso_endcap_MC_nume[_DY_Full]->Add(h_PFiso_endcap_MC_nume[pr]);
+            h_PFiso_barrel_MC_deno[_DY_Full]->Add(h_PFiso_barrel_MC_deno[pr]);
+            h_PFiso_endcap_MC_deno[_DY_Full]->Add(h_PFiso_endcap_MC_deno[pr]);
+            h_PFiso_barrel_MC_ctrl[_DY_Full]->Add(h_PFiso_barrel_MC_ctrl[pr]);
+            h_PFiso_endcap_MC_ctrl[_DY_Full]->Add(h_PFiso_endcap_MC_ctrl[pr]);
             h_pT_barrel_MC_nume[_DY_Full]->Add(h_pT_barrel_MC_nume[pr]);
             h_pT_endcap_MC_nume[_DY_Full]->Add(h_pT_endcap_MC_nume[pr]);
             h_pT_barrel_MC_deno[_DY_Full]->Add(h_pT_barrel_MC_deno[pr]);
             h_pT_endcap_MC_deno[_DY_Full]->Add(h_pT_endcap_MC_deno[pr]);
+            h_pT_barrel_MC_ctrl[_DY_Full]->Add(h_pT_barrel_MC_ctrl[pr]);
+            h_pT_endcap_MC_ctrl[_DY_Full]->Add(h_pT_endcap_MC_ctrl[pr]);
             h_eta_MC[_DY_Full]->Add(h_eta_MC[pr]);
             h_nVTX_MC[_DY_Full]->Add(h_nVTX_MC[pr]);
         }
 
         Color_t color = kOrange - 5;
-        h_PFiso_barrel_MC_deno[pr]->SetFillColor(color);
-        h_PFiso_endcap_MC_deno[pr]->SetFillColor(color);
         h_PFiso_barrel_MC_nume[pr]->SetFillColor(color);
         h_PFiso_endcap_MC_nume[pr]->SetFillColor(color);
+        h_PFiso_barrel_MC_deno[pr]->SetFillColor(color);
+        h_PFiso_endcap_MC_deno[pr]->SetFillColor(color);
+        h_PFiso_barrel_MC_ctrl[pr]->SetFillColor(color);
+        h_PFiso_endcap_MC_ctrl[pr]->SetFillColor(color);
         h_pT_barrel_MC_nume[pr]->SetFillColor(color);
         h_pT_endcap_MC_nume[pr]->SetFillColor(color);
         h_pT_barrel_MC_deno[pr]->SetFillColor(color);
         h_pT_endcap_MC_deno[pr]->SetFillColor(color);
+        h_pT_barrel_MC_ctrl[pr]->SetFillColor(color);
+        h_pT_endcap_MC_ctrl[pr]->SetFillColor(color);
         h_eta_MC[pr]->SetFillColor(color);
         h_nVTX_MC[pr]->SetFillColor(color);
-        h_PFiso_barrel_MC_deno[pr]->SetLineColor(color);
-        h_PFiso_endcap_MC_deno[pr]->SetLineColor(color);
         h_PFiso_barrel_MC_nume[pr]->SetLineColor(color);
         h_PFiso_endcap_MC_nume[pr]->SetLineColor(color);
+        h_PFiso_barrel_MC_deno[pr]->SetLineColor(color);
+        h_PFiso_endcap_MC_deno[pr]->SetLineColor(color);
+        h_PFiso_barrel_MC_ctrl[pr]->SetLineColor(color);
+        h_PFiso_endcap_MC_ctrl[pr]->SetLineColor(color);
         h_pT_barrel_MC_nume[pr]->SetLineColor(color);
         h_pT_endcap_MC_nume[pr]->SetLineColor(color);
         h_pT_barrel_MC_deno[pr]->SetLineColor(color);
         h_pT_endcap_MC_deno[pr]->SetLineColor(color);
+        h_pT_barrel_MC_ctrl[pr]->SetLineColor(color);
+        h_pT_endcap_MC_ctrl[pr]->SetLineColor(color);
         h_eta_MC[pr]->SetLineColor(color);
         h_nVTX_MC[pr]->SetLineColor(color);
-        h_PFiso_barrel_MC_deno[pr]->SetDirectory(0);
-        h_PFiso_endcap_MC_deno[pr]->SetDirectory(0);
         h_PFiso_barrel_MC_nume[pr]->SetDirectory(0);
         h_PFiso_endcap_MC_nume[pr]->SetDirectory(0);
+        h_PFiso_barrel_MC_deno[pr]->SetDirectory(0);
+        h_PFiso_endcap_MC_deno[pr]->SetDirectory(0);
+        h_PFiso_barrel_MC_ctrl[pr]->SetDirectory(0);
+        h_PFiso_endcap_MC_ctrl[pr]->SetDirectory(0);
         h_pT_barrel_MC_nume[pr]->SetDirectory(0);
         h_pT_endcap_MC_nume[pr]->SetDirectory(0);
         h_pT_barrel_MC_deno[pr]->SetDirectory(0);
         h_pT_endcap_MC_deno[pr]->SetDirectory(0);
+        h_pT_barrel_MC_ctrl[pr]->SetDirectory(0);
+        h_pT_endcap_MC_ctrl[pr]->SetDirectory(0);
         h_eta_MC[pr]->SetDirectory(0);
         h_nVTX_MC[pr]->SetDirectory(0);
 
-        s_PFiso_barrel_deno->Add(h_PFiso_barrel_MC_deno[pr]);
-        s_PFiso_endcap_deno->Add(h_PFiso_endcap_MC_deno[pr]);
         s_PFiso_barrel_nume->Add(h_PFiso_barrel_MC_nume[pr]);
         s_PFiso_endcap_nume->Add(h_PFiso_endcap_MC_nume[pr]);
+        s_PFiso_barrel_deno->Add(h_PFiso_barrel_MC_deno[pr]);
+        s_PFiso_endcap_deno->Add(h_PFiso_endcap_MC_deno[pr]);
+        s_PFiso_barrel_ctrl->Add(h_PFiso_barrel_MC_ctrl[pr]);
+        s_PFiso_endcap_ctrl->Add(h_PFiso_endcap_MC_ctrl[pr]);
         s_pT_barrel_nume->Add(h_pT_barrel_MC_nume[pr]);
         s_pT_endcap_nume->Add(h_pT_endcap_MC_nume[pr]);
         s_pT_barrel_deno->Add(h_pT_barrel_MC_deno[pr]);
         s_pT_endcap_deno->Add(h_pT_endcap_MC_deno[pr]);
+        s_pT_barrel_ctrl->Add(h_pT_barrel_MC_ctrl[pr]);
+        s_pT_endcap_ctrl->Add(h_pT_endcap_MC_ctrl[pr]);
         s_eta->Add(h_eta_MC[pr]);
         s_nVTX->Add(h_nVTX_MC[pr]);
 
@@ -357,138 +423,186 @@ void Mu_HistDrawer(Int_t type)
         if (type == 1) file = new TFile("/media/sf_DATA/FR/Muon/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
         else if (type == 2) file = new TFile("/media/sf_DATA/FR/Muon/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
         else return;
-        file->GetObject("h_PFiso_barrel_deno", h_PFiso_barrel_MC_deno[pr]);
-        file->GetObject("h_PFiso_endcap_deno", h_PFiso_endcap_MC_deno[pr]);
         file->GetObject("h_PFiso_barrel_nume", h_PFiso_barrel_MC_nume[pr]);
         file->GetObject("h_PFiso_endcap_nume", h_PFiso_endcap_MC_nume[pr]);
+        file->GetObject("h_PFiso_barrel_deno", h_PFiso_barrel_MC_deno[pr]);
+        file->GetObject("h_PFiso_endcap_deno", h_PFiso_endcap_MC_deno[pr]);
+        file->GetObject("h_PFiso_barrel_ctrl", h_PFiso_barrel_MC_ctrl[pr]);
+        file->GetObject("h_PFiso_endcap_ctrl", h_PFiso_endcap_MC_ctrl[pr]);
         file->GetObject("h_pT_barrel_nume", h_pT_barrel_MC_nume[pr]);
         file->GetObject("h_pT_endcap_nume", h_pT_endcap_MC_nume[pr]);
         file->GetObject("h_pT_barrel_deno", h_pT_barrel_MC_deno[pr]);
         file->GetObject("h_pT_endcap_deno", h_pT_endcap_MC_deno[pr]);
+        file->GetObject("h_pT_barrel_ctrl", h_pT_barrel_MC_ctrl[pr]);
+        file->GetObject("h_pT_endcap_ctrl", h_pT_endcap_MC_ctrl[pr]);
         file->GetObject("h_eta_deno", h_eta_MC[pr]);
         file->GetObject("h_nVTX", h_nVTX_MC[pr]);
-        removeNegativeBins(h_PFiso_barrel_MC_deno[pr]);
-        removeNegativeBins(h_PFiso_endcap_MC_deno[pr]);
         removeNegativeBins(h_PFiso_barrel_MC_nume[pr]);
         removeNegativeBins(h_PFiso_endcap_MC_nume[pr]);
+        removeNegativeBins(h_PFiso_barrel_MC_deno[pr]);
+        removeNegativeBins(h_PFiso_endcap_MC_deno[pr]);
+        removeNegativeBins(h_PFiso_barrel_MC_ctrl[pr]);
+        removeNegativeBins(h_PFiso_endcap_MC_ctrl[pr]);
         removeNegativeBins(h_pT_barrel_MC_nume[pr]);
         removeNegativeBins(h_pT_endcap_MC_nume[pr]);
         removeNegativeBins(h_pT_barrel_MC_deno[pr]);
         removeNegativeBins(h_pT_endcap_MC_deno[pr]);
+        removeNegativeBins(h_pT_barrel_MC_ctrl[pr]);
+        removeNegativeBins(h_pT_endcap_MC_ctrl[pr]);
         removeNegativeBins(h_eta_MC[pr]);
         removeNegativeBins(h_nVTX_MC[pr]);
 
         if (pr == _QCDMuEnriched_15to20)
         {
-            h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full] = ((TH1D*)(h_PFiso_barrel_MC_deno[pr]->Clone("h_PFiso_barrel_deno_QCD")));
-            h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full] = ((TH1D*)(h_PFiso_endcap_MC_deno[pr]->Clone("h_PFiso_endcap_deno_QCD")));
             h_PFiso_barrel_MC_nume[_QCDMuEnriched_Full] = ((TH1D*)(h_PFiso_barrel_MC_nume[pr]->Clone("h_PFiso_barrel_nume_QCD")));
             h_PFiso_endcap_MC_nume[_QCDMuEnriched_Full] = ((TH1D*)(h_PFiso_endcap_MC_nume[pr]->Clone("h_PFiso_endcap_nume_QCD")));
+            h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full] = ((TH1D*)(h_PFiso_barrel_MC_deno[pr]->Clone("h_PFiso_barrel_deno_QCD")));
+            h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full] = ((TH1D*)(h_PFiso_endcap_MC_deno[pr]->Clone("h_PFiso_endcap_deno_QCD")));
+            h_PFiso_barrel_MC_ctrl[_QCDMuEnriched_Full] = ((TH1D*)(h_PFiso_barrel_MC_ctrl[pr]->Clone("h_PFiso_barrel_ctrl_QCD")));
+            h_PFiso_endcap_MC_ctrl[_QCDMuEnriched_Full] = ((TH1D*)(h_PFiso_endcap_MC_ctrl[pr]->Clone("h_PFiso_endcap_ctrl_QCD")));
             h_pT_barrel_MC_nume[_QCDMuEnriched_Full] = ((TH1D*)(h_pT_barrel_MC_nume[pr]->Clone("h_pT_barrel_nume_QCD")));
             h_pT_endcap_MC_nume[_QCDMuEnriched_Full] = ((TH1D*)(h_pT_endcap_MC_nume[pr]->Clone("h_pT_endcap_nume_QCD")));
             h_pT_barrel_MC_deno[_QCDMuEnriched_Full] = ((TH1D*)(h_pT_barrel_MC_deno[pr]->Clone("h_pT_barrel_deno_QCD")));
             h_pT_endcap_MC_deno[_QCDMuEnriched_Full] = ((TH1D*)(h_pT_endcap_MC_deno[pr]->Clone("h_pT_endcap_deno_QCD")));
+            h_pT_barrel_MC_ctrl[_QCDMuEnriched_Full] = ((TH1D*)(h_pT_barrel_MC_ctrl[pr]->Clone("h_pT_barrel_ctrl_QCD")));
+            h_pT_endcap_MC_ctrl[_QCDMuEnriched_Full] = ((TH1D*)(h_pT_endcap_MC_ctrl[pr]->Clone("h_pT_endcap_ctrl_QCD")));
             h_eta_MC[_QCDMuEnriched_Full] = ((TH1D*)(h_eta_MC[pr]->Clone("h_eta_deno_QCD")));
             h_nVTX_MC[_QCDMuEnriched_Full] = ((TH1D*)(h_nVTX_MC[pr]->Clone("h_nVTX_QCD")));
-            h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full]->SetDirectory(0);
-            h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full]->SetDirectory(0);
             h_PFiso_barrel_MC_nume[_QCDMuEnriched_Full]->SetDirectory(0);
             h_PFiso_endcap_MC_nume[_QCDMuEnriched_Full]->SetDirectory(0);
+            h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full]->SetDirectory(0);
+            h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full]->SetDirectory(0);
+            h_PFiso_barrel_MC_ctrl[_QCDMuEnriched_Full]->SetDirectory(0);
+            h_PFiso_endcap_MC_ctrl[_QCDMuEnriched_Full]->SetDirectory(0);
             h_pT_barrel_MC_nume[_QCDMuEnriched_Full]->SetDirectory(0);
             h_pT_endcap_MC_nume[_QCDMuEnriched_Full]->SetDirectory(0);
             h_pT_barrel_MC_deno[_QCDMuEnriched_Full]->SetDirectory(0);
             h_pT_endcap_MC_deno[_QCDMuEnriched_Full]->SetDirectory(0);
+            h_pT_barrel_MC_ctrl[_QCDMuEnriched_Full]->SetDirectory(0);
+            h_pT_endcap_MC_ctrl[_QCDMuEnriched_Full]->SetDirectory(0);
             h_eta_MC[_QCDMuEnriched_Full]->SetDirectory(0);
             h_nVTX_MC[_QCDMuEnriched_Full]->SetDirectory(0);
         }
         else
         {
-            h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full]->Add(h_PFiso_barrel_MC_deno[pr]);
-            h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full]->Add(h_PFiso_endcap_MC_deno[pr]);
             h_PFiso_barrel_MC_nume[_QCDMuEnriched_Full]->Add(h_PFiso_barrel_MC_nume[pr]);
             h_PFiso_endcap_MC_nume[_QCDMuEnriched_Full]->Add(h_PFiso_endcap_MC_nume[pr]);
+            h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full]->Add(h_PFiso_barrel_MC_deno[pr]);
+            h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full]->Add(h_PFiso_endcap_MC_deno[pr]);
+            h_PFiso_barrel_MC_ctrl[_QCDMuEnriched_Full]->Add(h_PFiso_barrel_MC_ctrl[pr]);
+            h_PFiso_endcap_MC_ctrl[_QCDMuEnriched_Full]->Add(h_PFiso_endcap_MC_ctrl[pr]);
             h_pT_barrel_MC_nume[_QCDMuEnriched_Full]->Add(h_pT_barrel_MC_nume[pr]);
             h_pT_endcap_MC_nume[_QCDMuEnriched_Full]->Add(h_pT_endcap_MC_nume[pr]);
             h_pT_barrel_MC_deno[_QCDMuEnriched_Full]->Add(h_pT_barrel_MC_deno[pr]);
             h_pT_endcap_MC_deno[_QCDMuEnriched_Full]->Add(h_pT_endcap_MC_deno[pr]);
+            h_pT_barrel_MC_ctrl[_QCDMuEnriched_Full]->Add(h_pT_barrel_MC_ctrl[pr]);
+            h_pT_endcap_MC_ctrl[_QCDMuEnriched_Full]->Add(h_pT_endcap_MC_ctrl[pr]);
             h_eta_MC[_QCDMuEnriched_Full]->Add(h_eta_MC[pr]);
             h_nVTX_MC[_QCDMuEnriched_Full]->Add(h_nVTX_MC[pr]);
         }
 
         Color_t color = kRed + 3;
-        h_PFiso_barrel_MC_deno[pr]->SetFillColor(color);
-        h_PFiso_endcap_MC_deno[pr]->SetFillColor(color);
         h_PFiso_barrel_MC_nume[pr]->SetFillColor(color);
         h_PFiso_endcap_MC_nume[pr]->SetFillColor(color);
+        h_PFiso_barrel_MC_deno[pr]->SetFillColor(color);
+        h_PFiso_endcap_MC_deno[pr]->SetFillColor(color);
+        h_PFiso_barrel_MC_ctrl[pr]->SetFillColor(color);
+        h_PFiso_endcap_MC_ctrl[pr]->SetFillColor(color);
         h_pT_barrel_MC_nume[pr]->SetFillColor(color);
         h_pT_endcap_MC_nume[pr]->SetFillColor(color);
         h_pT_barrel_MC_deno[pr]->SetFillColor(color);
         h_pT_endcap_MC_deno[pr]->SetFillColor(color);
+        h_pT_barrel_MC_ctrl[pr]->SetFillColor(color);
+        h_pT_endcap_MC_ctrl[pr]->SetFillColor(color);
         h_eta_MC[pr]->SetFillColor(color);
         h_nVTX_MC[pr]->SetFillColor(color);
-        h_PFiso_barrel_MC_deno[pr]->SetLineColor(color);
-        h_PFiso_endcap_MC_deno[pr]->SetLineColor(color);
         h_PFiso_barrel_MC_nume[pr]->SetLineColor(color);
         h_PFiso_endcap_MC_nume[pr]->SetLineColor(color);
+        h_PFiso_barrel_MC_deno[pr]->SetLineColor(color);
+        h_PFiso_endcap_MC_deno[pr]->SetLineColor(color);
+        h_PFiso_barrel_MC_ctrl[pr]->SetLineColor(color);
+        h_PFiso_endcap_MC_ctrl[pr]->SetLineColor(color);
         h_pT_barrel_MC_nume[pr]->SetLineColor(color);
         h_pT_endcap_MC_nume[pr]->SetLineColor(color);
         h_pT_barrel_MC_deno[pr]->SetLineColor(color);
         h_pT_endcap_MC_deno[pr]->SetLineColor(color);
+        h_pT_barrel_MC_ctrl[pr]->SetLineColor(color);
+        h_pT_endcap_MC_ctrl[pr]->SetLineColor(color);
         h_eta_MC[pr]->SetLineColor(color);
         h_nVTX_MC[pr]->SetLineColor(color);
-        h_PFiso_barrel_MC_deno[pr]->SetDirectory(0);
-        h_PFiso_endcap_MC_deno[pr]->SetDirectory(0);
         h_PFiso_barrel_MC_nume[pr]->SetDirectory(0);
         h_PFiso_endcap_MC_nume[pr]->SetDirectory(0);
+        h_PFiso_barrel_MC_deno[pr]->SetDirectory(0);
+        h_PFiso_endcap_MC_deno[pr]->SetDirectory(0);
+        h_PFiso_barrel_MC_ctrl[pr]->SetDirectory(0);
+        h_PFiso_endcap_MC_ctrl[pr]->SetDirectory(0);
         h_pT_barrel_MC_nume[pr]->SetDirectory(0);
         h_pT_endcap_MC_nume[pr]->SetDirectory(0);
         h_pT_barrel_MC_deno[pr]->SetDirectory(0);
         h_pT_endcap_MC_deno[pr]->SetDirectory(0);
+        h_pT_barrel_MC_ctrl[pr]->SetDirectory(0);
+        h_pT_endcap_MC_ctrl[pr]->SetDirectory(0);
         h_eta_MC[pr]->SetDirectory(0);
         h_nVTX_MC[pr]->SetDirectory(0);
 
-        s_PFiso_barrel_deno->Add(h_PFiso_barrel_MC_deno[pr]);
-        s_PFiso_endcap_deno->Add(h_PFiso_endcap_MC_deno[pr]);
         s_PFiso_barrel_nume->Add(h_PFiso_barrel_MC_nume[pr]);
         s_PFiso_endcap_nume->Add(h_PFiso_endcap_MC_nume[pr]);
+        s_PFiso_barrel_deno->Add(h_PFiso_barrel_MC_deno[pr]);
+        s_PFiso_endcap_deno->Add(h_PFiso_endcap_MC_deno[pr]);
+        s_PFiso_barrel_ctrl->Add(h_PFiso_barrel_MC_ctrl[pr]);
+        s_PFiso_endcap_ctrl->Add(h_PFiso_endcap_MC_ctrl[pr]);
         s_pT_barrel_nume->Add(h_pT_barrel_MC_nume[pr]);
         s_pT_endcap_nume->Add(h_pT_endcap_MC_nume[pr]);
         s_pT_barrel_deno->Add(h_pT_barrel_MC_deno[pr]);
         s_pT_endcap_deno->Add(h_pT_endcap_MC_deno[pr]);
+        s_pT_barrel_ctrl->Add(h_pT_barrel_MC_ctrl[pr]);
+        s_pT_endcap_ctrl->Add(h_pT_endcap_MC_ctrl[pr]);
         s_eta->Add(h_eta_MC[pr]);
         s_nVTX->Add(h_nVTX_MC[pr]);
 
         file->Close();
     }
 
-     h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full]->SetFillColor(kGray);
-     h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full]->SetFillColor(kGray);
      h_PFiso_barrel_MC_nume[_QCDMuEnriched_Full]->SetFillColor(kGray);
      h_PFiso_endcap_MC_nume[_QCDMuEnriched_Full]->SetFillColor(kGray);
+     h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full]->SetFillColor(kGray);
+     h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full]->SetFillColor(kGray);
+     h_PFiso_barrel_MC_ctrl[_QCDMuEnriched_Full]->SetFillColor(kGray);
+     h_PFiso_endcap_MC_ctrl[_QCDMuEnriched_Full]->SetFillColor(kGray);
         h_pT_barrel_MC_nume[_QCDMuEnriched_Full]->SetFillColor(kGray);
         h_pT_endcap_MC_nume[_QCDMuEnriched_Full]->SetFillColor(kGray);
         h_pT_barrel_MC_deno[_QCDMuEnriched_Full]->SetFillColor(kGray);
         h_pT_endcap_MC_deno[_QCDMuEnriched_Full]->SetFillColor(kGray);
+        h_pT_barrel_MC_ctrl[_QCDMuEnriched_Full]->SetFillColor(kGray);
+        h_pT_endcap_MC_ctrl[_QCDMuEnriched_Full]->SetFillColor(kGray);
                    h_eta_MC[_QCDMuEnriched_Full]->SetFillColor(kGray);
                   h_nVTX_MC[_QCDMuEnriched_Full]->SetFillColor(kGray);
-     h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full]->SetFillStyle(3002);
-     h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full]->SetFillStyle(3002);
      h_PFiso_barrel_MC_nume[_QCDMuEnriched_Full]->SetFillStyle(3002);
      h_PFiso_endcap_MC_nume[_QCDMuEnriched_Full]->SetFillStyle(3002);
+     h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full]->SetFillStyle(3002);
+     h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full]->SetFillStyle(3002);
+     h_PFiso_barrel_MC_ctrl[_QCDMuEnriched_Full]->SetFillStyle(3002);
+     h_PFiso_endcap_MC_ctrl[_QCDMuEnriched_Full]->SetFillStyle(3002);
         h_pT_barrel_MC_nume[_QCDMuEnriched_Full]->SetFillStyle(3002);
         h_pT_endcap_MC_nume[_QCDMuEnriched_Full]->SetFillStyle(3002);
         h_pT_barrel_MC_deno[_QCDMuEnriched_Full]->SetFillStyle(3002);
         h_pT_endcap_MC_deno[_QCDMuEnriched_Full]->SetFillStyle(3002);
+        h_pT_barrel_MC_ctrl[_QCDMuEnriched_Full]->SetFillStyle(3002);
+        h_pT_endcap_MC_ctrl[_QCDMuEnriched_Full]->SetFillStyle(3002);
                    h_eta_MC[_QCDMuEnriched_Full]->SetFillStyle(3002);
                   h_nVTX_MC[_QCDMuEnriched_Full]->SetFillStyle(3002);
-     h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full]->SetLineColor(kRed);
-     h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full]->SetLineColor(kRed);
      h_PFiso_barrel_MC_nume[_QCDMuEnriched_Full]->SetLineColor(kRed);
      h_PFiso_endcap_MC_nume[_QCDMuEnriched_Full]->SetLineColor(kRed);
+     h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full]->SetLineColor(kRed);
+     h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full]->SetLineColor(kRed);
+     h_PFiso_barrel_MC_ctrl[_QCDMuEnriched_Full]->SetLineColor(kRed);
+     h_PFiso_endcap_MC_ctrl[_QCDMuEnriched_Full]->SetLineColor(kRed);
         h_pT_barrel_MC_nume[_QCDMuEnriched_Full]->SetLineColor(kRed);
         h_pT_endcap_MC_nume[_QCDMuEnriched_Full]->SetLineColor(kRed);
         h_pT_barrel_MC_deno[_QCDMuEnriched_Full]->SetLineColor(kRed);
         h_pT_endcap_MC_deno[_QCDMuEnriched_Full]->SetLineColor(kRed);
+        h_pT_barrel_MC_ctrl[_QCDMuEnriched_Full]->SetLineColor(kRed);
+        h_pT_endcap_MC_ctrl[_QCDMuEnriched_Full]->SetLineColor(kRed);
                    h_eta_MC[_QCDMuEnriched_Full]->SetLineColor(kRed);
                   h_nVTX_MC[_QCDMuEnriched_Full]->SetLineColor(kRed);
 
@@ -500,42 +614,54 @@ void Mu_HistDrawer(Int_t type)
         if (type == 1) file = new TFile("/media/sf_DATA/FR/Muon/SelectedForFR_Mu_"+fm.Procname[pr]+".root", "READ");
         else if (type == 2) file = new TFile("/media/sf_DATA/FR/Muon/FR_Hist_Mu_"+fm.Procname[pr]+".root", "READ");
         else return;
-        TH1D *h_temp[10];
+        TH1D *h_temp[14];
         if (pr == _SingleMuon_B)
         {
-            file->GetObject("h_PFiso_barrel_deno", h_PFiso_barrel_data_deno);
-            file->GetObject("h_PFiso_endcap_deno", h_PFiso_endcap_data_deno);
             file->GetObject("h_PFiso_barrel_nume", h_PFiso_barrel_data_nume);
             file->GetObject("h_PFiso_endcap_nume", h_PFiso_endcap_data_nume);
+            file->GetObject("h_PFiso_barrel_deno", h_PFiso_barrel_data_deno);
+            file->GetObject("h_PFiso_endcap_deno", h_PFiso_endcap_data_deno);
+            file->GetObject("h_PFiso_barrel_ctrl", h_PFiso_barrel_data_ctrl);
+            file->GetObject("h_PFiso_endcap_ctrl", h_PFiso_endcap_data_ctrl);
             file->GetObject("h_pT_barrel_nume", h_pT_barrel_data_nume);
             file->GetObject("h_pT_endcap_nume", h_pT_endcap_data_nume);
             file->GetObject("h_pT_barrel_deno", h_pT_barrel_data_deno);
             file->GetObject("h_pT_endcap_deno", h_pT_endcap_data_deno);
+            file->GetObject("h_pT_barrel_ctrl", h_pT_barrel_data_ctrl);
+            file->GetObject("h_pT_endcap_ctrl", h_pT_endcap_data_ctrl);
             file->GetObject("h_eta_deno", h_eta_data);
             file->GetObject("h_nVTX", h_nVTX_data);
-            removeNegativeBins(h_PFiso_barrel_data_deno);
-            removeNegativeBins(h_PFiso_endcap_data_deno);
             removeNegativeBins(h_PFiso_barrel_data_nume);
             removeNegativeBins(h_PFiso_endcap_data_nume);
+            removeNegativeBins(h_PFiso_barrel_data_deno);
+            removeNegativeBins(h_PFiso_endcap_data_deno);
+            removeNegativeBins(h_PFiso_barrel_data_ctrl);
+            removeNegativeBins(h_PFiso_endcap_data_ctrl);
             removeNegativeBins(h_pT_barrel_data_nume);
             removeNegativeBins(h_pT_endcap_data_nume);
             removeNegativeBins(h_pT_barrel_data_deno);
             removeNegativeBins(h_pT_endcap_data_deno);
+            removeNegativeBins(h_pT_barrel_data_ctrl);
+            removeNegativeBins(h_pT_endcap_data_ctrl);
             removeNegativeBins(h_eta_data);
             removeNegativeBins(h_nVTX_data);
         }
         else
         {
-            file->GetObject("h_PFiso_barrel_deno", h_temp[0]);
-            file->GetObject("h_PFiso_endcap_deno", h_temp[1]);
-            file->GetObject("h_PFiso_barrel_nume", h_temp[2]);
-            file->GetObject("h_PFiso_endcap_nume", h_temp[3]);
-            file->GetObject("h_pT_barrel_nume", h_temp[4]);
-            file->GetObject("h_pT_endcap_nume", h_temp[5]);
-            file->GetObject("h_pT_barrel_deno", h_temp[6]);
-            file->GetObject("h_pT_endcap_deno", h_temp[7]);
-            file->GetObject("h_eta_deno", h_temp[8]);
-            file->GetObject("h_nVTX", h_temp[9]);
+            file->GetObject("h_PFiso_barrel_nume", h_temp[0]);
+            file->GetObject("h_PFiso_endcap_nume", h_temp[1]);
+            file->GetObject("h_PFiso_barrel_deno", h_temp[2]);
+            file->GetObject("h_PFiso_endcap_deno", h_temp[3]);
+            file->GetObject("h_PFiso_barrel_ctrl", h_temp[4]);
+            file->GetObject("h_PFiso_endcap_ctrl", h_temp[5]);
+            file->GetObject("h_pT_barrel_nume", h_temp[6]);
+            file->GetObject("h_pT_endcap_nume", h_temp[7]);
+            file->GetObject("h_pT_barrel_deno", h_temp[8]);
+            file->GetObject("h_pT_endcap_deno", h_temp[9]);
+            file->GetObject("h_pT_barrel_ctrl", h_temp[10]);
+            file->GetObject("h_pT_endcap_ctrl", h_temp[11]);
+            file->GetObject("h_eta_deno", h_temp[12]);
+            file->GetObject("h_nVTX", h_temp[13]);
             removeNegativeBins(h_temp[0]);
             removeNegativeBins(h_temp[1]);
             removeNegativeBins(h_temp[2]);
@@ -546,81 +672,113 @@ void Mu_HistDrawer(Int_t type)
             removeNegativeBins(h_temp[7]);
             removeNegativeBins(h_temp[8]);
             removeNegativeBins(h_temp[9]);
-            h_PFiso_barrel_data_deno->Add(h_temp[0]);
-            h_PFiso_endcap_data_deno->Add(h_temp[1]);
-            h_PFiso_barrel_data_nume->Add(h_temp[2]);
-            h_PFiso_endcap_data_nume->Add(h_temp[3]);
-            h_pT_barrel_data_nume->Add(h_temp[4]);
-            h_pT_endcap_data_nume->Add(h_temp[5]);
-            h_pT_barrel_data_deno->Add(h_temp[6]);
-            h_pT_endcap_data_deno->Add(h_temp[7]);
-            h_eta_data->Add(h_temp[8]);
-            h_nVTX_data->Add(h_temp[9]);
+            removeNegativeBins(h_temp[10]);
+            removeNegativeBins(h_temp[11]);
+            removeNegativeBins(h_temp[12]);
+            removeNegativeBins(h_temp[13]);
+            h_PFiso_barrel_data_nume->Add(h_temp[0]);
+            h_PFiso_endcap_data_nume->Add(h_temp[1]);
+            h_PFiso_barrel_data_deno->Add(h_temp[2]);
+            h_PFiso_endcap_data_deno->Add(h_temp[3]);
+            h_PFiso_barrel_data_ctrl->Add(h_temp[4]);
+            h_PFiso_endcap_data_ctrl->Add(h_temp[5]);
+            h_pT_barrel_data_nume->Add(h_temp[6]);
+            h_pT_endcap_data_nume->Add(h_temp[7]);
+            h_pT_barrel_data_deno->Add(h_temp[8]);
+            h_pT_endcap_data_deno->Add(h_temp[9]);
+            h_pT_barrel_data_ctrl->Add(h_temp[10]);
+            h_pT_endcap_data_ctrl->Add(h_temp[11]);
+            h_eta_data->Add(h_temp[12]);
+            h_nVTX_data->Add(h_temp[13]);
         }
     }
 
-    h_PFiso_barrel_data_deno->SetMarkerStyle(kFullDotLarge);
-    h_PFiso_endcap_data_deno->SetMarkerStyle(kFullDotLarge);
     h_PFiso_barrel_data_nume->SetMarkerStyle(kFullDotLarge);
     h_PFiso_endcap_data_nume->SetMarkerStyle(kFullDotLarge);
+    h_PFiso_barrel_data_deno->SetMarkerStyle(kFullDotLarge);
+    h_PFiso_endcap_data_deno->SetMarkerStyle(kFullDotLarge);
+    h_PFiso_barrel_data_ctrl->SetMarkerStyle(kFullDotLarge);
+    h_PFiso_endcap_data_ctrl->SetMarkerStyle(kFullDotLarge);
     h_pT_barrel_data_nume->SetMarkerStyle(kFullDotLarge);
     h_pT_endcap_data_nume->SetMarkerStyle(kFullDotLarge);
     h_pT_barrel_data_deno->SetMarkerStyle(kFullDotLarge);
     h_pT_endcap_data_deno->SetMarkerStyle(kFullDotLarge);
+    h_pT_barrel_data_ctrl->SetMarkerStyle(kFullDotLarge);
+    h_pT_endcap_data_ctrl->SetMarkerStyle(kFullDotLarge);
     h_eta_data->SetMarkerStyle(kFullDotLarge);
     h_nVTX_data->SetMarkerStyle(kFullDotLarge);
-    h_PFiso_barrel_data_deno->SetMarkerColor(kBlack);
-    h_PFiso_endcap_data_deno->SetMarkerColor(kBlack);
     h_PFiso_barrel_data_nume->SetMarkerColor(kBlack);
     h_PFiso_endcap_data_nume->SetMarkerColor(kBlack);
+    h_PFiso_barrel_data_deno->SetMarkerColor(kBlack);
+    h_PFiso_endcap_data_deno->SetMarkerColor(kBlack);
+    h_PFiso_barrel_data_ctrl->SetMarkerColor(kBlack);
+    h_PFiso_endcap_data_ctrl->SetMarkerColor(kBlack);
     h_pT_barrel_data_nume->SetMarkerColor(kBlack);
     h_pT_endcap_data_nume->SetMarkerColor(kBlack);
     h_pT_barrel_data_deno->SetMarkerColor(kBlack);
     h_pT_endcap_data_deno->SetMarkerColor(kBlack);
+    h_pT_barrel_data_ctrl->SetMarkerColor(kBlack);
+    h_pT_endcap_data_ctrl->SetMarkerColor(kBlack);
     h_eta_data->SetMarkerColor(kBlack);
     h_nVTX_data->SetMarkerColor(kBlack);
-    h_PFiso_barrel_data_deno->SetLineColor(kBlack);
-    h_PFiso_endcap_data_deno->SetLineColor(kBlack);
     h_PFiso_barrel_data_nume->SetLineColor(kBlack);
     h_PFiso_endcap_data_nume->SetLineColor(kBlack);
+    h_PFiso_barrel_data_deno->SetLineColor(kBlack);
+    h_PFiso_endcap_data_deno->SetLineColor(kBlack);
+    h_PFiso_barrel_data_ctrl->SetLineColor(kBlack);
+    h_PFiso_endcap_data_ctrl->SetLineColor(kBlack);
     h_pT_barrel_data_nume->SetLineColor(kBlack);
     h_pT_endcap_data_nume->SetLineColor(kBlack);
     h_pT_barrel_data_deno->SetLineColor(kBlack);
     h_pT_endcap_data_deno->SetLineColor(kBlack);
+    h_pT_barrel_data_ctrl->SetLineColor(kBlack);
+    h_pT_endcap_data_ctrl->SetLineColor(kBlack);
     h_eta_data->SetLineColor(kBlack);
     h_nVTX_data->SetLineColor(kBlack);
-    h_PFiso_barrel_data_deno->SetDirectory(0);
-    h_PFiso_endcap_data_deno->SetDirectory(0);
     h_PFiso_barrel_data_nume->SetDirectory(0);
     h_PFiso_endcap_data_nume->SetDirectory(0);
+    h_PFiso_barrel_data_deno->SetDirectory(0);
+    h_PFiso_endcap_data_deno->SetDirectory(0);
+    h_PFiso_barrel_data_ctrl->SetDirectory(0);
+    h_PFiso_endcap_data_ctrl->SetDirectory(0);
     h_pT_barrel_data_nume->SetDirectory(0);
     h_pT_endcap_data_nume->SetDirectory(0);
     h_pT_barrel_data_deno->SetDirectory(0);
     h_pT_endcap_data_deno->SetDirectory(0);
+    h_pT_barrel_data_ctrl->SetDirectory(0);
+    h_pT_endcap_data_ctrl->SetDirectory(0);
     h_eta_data->SetDirectory(0);
     h_nVTX_data->SetDirectory(0);
 
 //--------------------------------- Ratio Plots --------------------------------------
 
-    myRatioPlot_t *RP_PFiso_barrel_deno = new myRatioPlot_t("RP_PFiso_barrel_deno", s_PFiso_barrel_deno, h_PFiso_barrel_data_deno);
-    myRatioPlot_t *RP_PFiso_endcap_deno = new myRatioPlot_t("RP_PFiso_endcap_deno", s_PFiso_endcap_deno, h_PFiso_endcap_data_deno);
     myRatioPlot_t *RP_PFiso_barrel_nume = new myRatioPlot_t("RP_PFiso_barrel_nume", s_PFiso_barrel_nume, h_PFiso_barrel_data_nume);
     myRatioPlot_t *RP_PFiso_endcap_nume = new myRatioPlot_t("RP_PFiso_endcap_nume", s_PFiso_endcap_nume, h_PFiso_endcap_data_nume);
+    myRatioPlot_t *RP_PFiso_barrel_deno = new myRatioPlot_t("RP_PFiso_barrel_deno", s_PFiso_barrel_deno, h_PFiso_barrel_data_deno);
+    myRatioPlot_t *RP_PFiso_endcap_deno = new myRatioPlot_t("RP_PFiso_endcap_deno", s_PFiso_endcap_deno, h_PFiso_endcap_data_deno);
+    myRatioPlot_t *RP_PFiso_barrel_ctrl = new myRatioPlot_t("RP_PFiso_barrel_ctrl", s_PFiso_barrel_ctrl, h_PFiso_barrel_data_ctrl);
+    myRatioPlot_t *RP_PFiso_endcap_ctrl = new myRatioPlot_t("RP_PFiso_endcap_ctrl", s_PFiso_endcap_ctrl, h_PFiso_endcap_data_ctrl);
     myRatioPlot_t *RP_pT_barrel_nume = new myRatioPlot_t("RP_pT_barrel_nume", s_pT_barrel_nume, h_pT_barrel_data_nume);
     myRatioPlot_t *RP_pT_endcap_nume = new myRatioPlot_t("RP_pT_endcap_nume", s_pT_endcap_nume, h_pT_endcap_data_nume);
     myRatioPlot_t *RP_pT_barrel_deno = new myRatioPlot_t("RP_pT_barrel_deno", s_pT_barrel_deno, h_pT_barrel_data_deno);
     myRatioPlot_t *RP_pT_endcap_deno = new myRatioPlot_t("RP_pT_endcap_deno", s_pT_endcap_deno, h_pT_endcap_data_deno);
+    myRatioPlot_t *RP_pT_barrel_ctrl = new myRatioPlot_t("RP_pT_barrel_ctrl", s_pT_barrel_ctrl, h_pT_barrel_data_ctrl);
+    myRatioPlot_t *RP_pT_endcap_ctrl = new myRatioPlot_t("RP_pT_endcap_ctrl", s_pT_endcap_ctrl, h_pT_endcap_data_ctrl);
     myRatioPlot_t *RP_eta = new myRatioPlot_t("RP_eta", s_eta, h_eta_data);
     myRatioPlot_t *RP_nVTX = new myRatioPlot_t("RP_nVTX", s_nVTX, h_nVTX_data);
 
-    RP_PFiso_barrel_deno->SetPlots("I_{PF}^{rel.} (#mu_{#lower[-0.4]{barrel}}^{deno})", 0, 5);
-    RP_PFiso_endcap_deno->SetPlots("I_{PF}^{rel.} (#mu_{#lower[-0.4]{endcap}}^{deno})", 0, 5);
     RP_PFiso_barrel_nume->SetPlots("I_{PF}^{rel.} (#mu_{#lower[-0.4]{barrel}}^{nume})", 0, 0.15);
     RP_PFiso_endcap_nume->SetPlots("I_{PF}^{rel.} (#mu_{#lower[-0.4]{endcap}}^{nume})", 0, 0.15);
+    RP_PFiso_barrel_deno->SetPlots("I_{PF}^{rel.} (#mu_{#lower[-0.4]{barrel}}^{deno})", 0, 5);
+    RP_PFiso_endcap_deno->SetPlots("I_{PF}^{rel.} (#mu_{#lower[-0.4]{endcap}}^{deno})", 0, 5);
+    RP_PFiso_barrel_ctrl->SetPlots("I_{PF}^{rel.} (#mu_{#lower[-0.4]{barrel}}^{control})", 0.15, 5);
+    RP_PFiso_endcap_ctrl->SetPlots("I_{PF}^{rel.} (#mu_{#lower[-0.4]{endcap}}^{control})", 0.15, 5);
     RP_pT_barrel_nume->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{barrel}}^{nume}) [GeV/c]", 50, 500);
     RP_pT_endcap_nume->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{endcap}}^{nume}) [GeV/c]", 50, 500);
     RP_pT_barrel_deno->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{barrel}}^{deno}) [GeV/c]", 50, 500);
     RP_pT_endcap_deno->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{endcap}}^{deno}) [GeV/c]", 50, 500);
+    RP_pT_barrel_ctrl->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{barrel}}^{control}) [GeV/c]", 50, 500);
+    RP_pT_endcap_ctrl->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{endcap}}^{control}) [GeV/c]", 50, 500);
     RP_eta->SetPlots("#eta (#mu)", -3, 3);
     RP_nVTX->SetPlots("N_{#lower[-0.25]{VTX}} (#mu)", 0, 50);
 
@@ -641,40 +799,56 @@ void Mu_HistDrawer(Int_t type)
     legend->AddEntry(h_eta_MC[_QCDMuEnriched_15to20], "#font[12]{#scale[1.1]{QCD}}", "f");
     legend->SetNColumns(2);
 
-    RP_PFiso_barrel_deno->ImportLegend(legend);
-    RP_PFiso_endcap_deno->ImportLegend(legend);
     RP_PFiso_barrel_nume->ImportLegend(legend);
     RP_PFiso_endcap_nume->ImportLegend(legend);
+    RP_PFiso_barrel_deno->ImportLegend(legend);
+    RP_PFiso_endcap_deno->ImportLegend(legend);
+    RP_PFiso_barrel_ctrl->ImportLegend(legend);
+    RP_PFiso_endcap_ctrl->ImportLegend(legend);
     RP_pT_barrel_nume->ImportLegend(legend);
     RP_pT_endcap_nume->ImportLegend(legend);
     RP_pT_barrel_deno->ImportLegend(legend);
     RP_pT_endcap_deno->ImportLegend(legend);
+    RP_pT_barrel_ctrl->ImportLegend(legend);
+    RP_pT_endcap_ctrl->ImportLegend(legend);
     RP_eta->ImportLegend(legend);
     RP_nVTX->ImportLegend(legend);
 
-    RP_PFiso_barrel_deno->Draw(1, 1e8, 0);
-    RP_PFiso_barrel_deno->DrawOnTop(h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full]);
-
-    RP_PFiso_endcap_deno->Draw(1, 1e8, 0);
-    RP_PFiso_endcap_deno->DrawOnTop(h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full]);
-
     RP_PFiso_barrel_nume->Draw(1, 1e8, 0);
-    RP_PFiso_barrel_nume->DrawOnTop(h_PFiso_barrel_MC_nume[_QCDMuEnriched_Full]);
+//    RP_PFiso_barrel_nume->DrawOnTop(h_PFiso_barrel_MC_nume[_QCDMuEnriched_Full]);
 
     RP_PFiso_endcap_nume->Draw(1, 1e8, 0);
-    RP_PFiso_endcap_nume->DrawOnTop(h_PFiso_endcap_MC_nume[_QCDMuEnriched_Full]);
+//    RP_PFiso_endcap_nume->DrawOnTop(h_PFiso_endcap_MC_nume[_QCDMuEnriched_Full]);
+
+    RP_PFiso_barrel_deno->Draw(1, 1e8, 0);
+//    RP_PFiso_barrel_deno->DrawOnTop(h_PFiso_barrel_MC_deno[_QCDMuEnriched_Full]);
+
+    RP_PFiso_endcap_deno->Draw(1, 1e8, 0);
+//    RP_PFiso_endcap_deno->DrawOnTop(h_PFiso_endcap_MC_deno[_QCDMuEnriched_Full]);
+
+    RP_PFiso_barrel_ctrl->Draw(1, 1e8, 0);
+//    RP_PFiso_barrel_ctrl->DrawOnTop(h_PFiso_barrel_MC_ctrl[_QCDMuEnriched_Full]);
+
+    RP_PFiso_endcap_ctrl->Draw(1, 1e8, 0);
+//    RP_PFiso_endcap_ctrl->DrawOnTop(h_PFiso_endcap_MC_ctrl[_QCDMuEnriched_Full]);
 
     RP_pT_barrel_nume->Draw(1, 1e8, 0);
-    RP_pT_barrel_nume->DrawOnTop(h_pT_barrel_MC_nume[_QCDMuEnriched_Full]);
+//    RP_pT_barrel_nume->DrawOnTop(h_pT_barrel_MC_nume[_QCDMuEnriched_Full]);
 
     RP_pT_endcap_nume->Draw(1, 1e8, 0);
-    RP_pT_endcap_nume->DrawOnTop(h_pT_endcap_MC_nume[_QCDMuEnriched_Full]);
+//    RP_pT_endcap_nume->DrawOnTop(h_pT_endcap_MC_nume[_QCDMuEnriched_Full]);
 
     RP_pT_barrel_deno->Draw(1, 1e8, 0);
 //    RP_pT_barrel_deno->DrawOnTop(h_pT_barrel_MC_deno[_QCDMuEnriched_Full]);
 
     RP_pT_endcap_deno->Draw(1, 1e8, 0);
 //    RP_pT_endcap_deno->DrawOnTop(h_pT_endcap_MC_deno[_QCDMuEnriched_Full]);
+
+    RP_pT_barrel_ctrl->Draw(1, 1e8, 0);
+//    RP_pT_barrel_ctrl->DrawOnTop(h_pT_barrel_MC_ctrl[_QCDMuEnriched_Full]);
+
+    RP_pT_endcap_ctrl->Draw(1, 1e8, 0);
+//    RP_pT_endcap_ctrl->DrawOnTop(h_pT_endcap_MC_ctrl[_QCDMuEnriched_Full]);
 
     RP_eta->Draw(1, 1e8, 0);
     RP_nVTX->Draw(1, 1e8, 0);
@@ -2241,7 +2415,8 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_QCD_est_SS->SetDirectory(0);
     h_QCD_est->Scale(2);
     cout << "Default Opposite sign QCD integral: " << h_QCD_est->Integral(1, 30) << endl;
-    h_QCD_est->Scale(7.0967e+03 / h_QCD_est->Integral(1, 30));
+//    h_QCD_est->Scale(7.0967e+03 / h_QCD_est->Integral(1, 30));
+    h_QCD_est->Scale(8.8024e+03 / h_QCD_est->Integral(1, 30));
     h_QCD_est_SS->Scale(2);
     s_mass_wWJET->Add(h_QCD_est);
     s_mass_woWJET->Add(h_QCD_est);
@@ -2547,12 +2722,11 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_WJET_fit_SS->SetTitle("");
 //    h_WJET_fit_SS->Scale(5.3412e+03 / h_WJET_fit_SS->Integral()); // from full histogram fitting
     cout << "Same sign W+Jets integral: " << h_WJET_fit_SS->Integral(1,30) << endl;
-//    h_WJET_fit_SS->Scale(4.2705e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins
-    h_WJET_fit_SS->Scale(3.5733e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (my FR 2)
+//    h_WJET_fit_SS->Scale(3.5733e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (my FR 2)
+    h_WJET_fit_SS->Scale(2.4400e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (my FR 2)
 //    h_WJET_fit_SS->Scale(3.5543e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (FOR SYSTEMATIC ERRORS)
 //    h_WJET_fit_SS->Scale(3.4181e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (FOR SYSTEMATIC ERRORS (up))
 //    h_WJET_fit_SS->Scale(3.7006e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (FOR SYSTEMATIC ERRORS (down))
-//    h_WJET_fit_SS->Scale(3.9222e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins on old data
     Double_t int_wjet_est, err_wjet_est;
     int_wjet_est = h_WJET_fit_SS->IntegralAndError(1, h_WJET_fit_SS->GetSize()-2, err_wjet_est);
     cout << "WJets est events (FROM SS): " << int_wjet_est << "+-" << err_wjet_est << endl;

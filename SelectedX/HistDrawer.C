@@ -49,7 +49,7 @@ const Double_t massbins2[87] = {15, 17.5, 20, 22.5, 25, 27.5, 30, 32.5, 35, 37.5
                                 915, 1000, 1250, 1500, 2250, 3000};
 
 
-void HistDrawer (TString WhichX = "", TString WhichGraphs = "ALL", TString type = "", Int_t FR_systErr = 1)
+void HistDrawer (TString WhichX = "", Int_t FR_systErr = 1, TString WhichGraphs = "ALL", TString type = "")
 {
     TString whichX = WhichX;
     whichX.ToUpper();
