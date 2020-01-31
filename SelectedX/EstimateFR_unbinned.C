@@ -346,7 +346,7 @@ void Mu_EstFR(Int_t type)
     h_pT_barrel_template_nume = ((TH1D*)(h_pT_barrel_MC_nume[_QCDMuEnriched_Full]->Clone("h_pT_barrel_template_nume")));
     h_pT_barrel_template_nume->Scale(1.3854e+06/h_pT_barrel_template_nume->Integral());
     h_pT_barrel_template_deno = ((TH1D*)(h_pT_barrel_MC_deno[_QCDMuEnriched_Full]->Clone("h_pT_barrel_template_deno")));
-    h_pT_barrel_template_deno->Scale(2.0915e+07/h_pT_barrel_template_deno->Integral()); // To compare with Dalmin
+    h_pT_barrel_template_deno->Scale(2.0916e+07/h_pT_barrel_template_deno->Integral()); // To compare with Dalmin
 //    h_pT_barrel_template_deno->Scale(2.0879e+07/h_pT_barrel_template_deno->Integral()); // To compare with Dalmin
 //    h_pT_barrel_template_deno->Scale(2.0850e+07/h_pT_barrel_template_deno->Integral()); // Dalmin's exact fit result
 //    h_pT_barrel_template_deno->Scale(1.8118e+07/h_pT_barrel_template_deno->Integral());
@@ -358,7 +358,7 @@ void Mu_EstFR(Int_t type)
     h_pT_endcap_template_nume = ((TH1D*)(h_pT_endcap_MC_nume[_QCDMuEnriched_Full]->Clone("h_pT_endcap_template_nume")));
     h_pT_endcap_template_nume->Scale(1.5258e+06/h_pT_endcap_template_nume->Integral());
     h_pT_endcap_template_deno = ((TH1D*)(h_pT_endcap_MC_deno[_QCDMuEnriched_Full]->Clone("h_pT_endcap_template_deno")));
-    h_pT_endcap_template_deno->Scale(1.0134e+07/h_pT_endcap_template_deno->Integral()); // To compare with Dalmin
+    h_pT_endcap_template_deno->Scale(1.0138e+07/h_pT_endcap_template_deno->Integral()); // To compare with Dalmin
 //    h_pT_endcap_template_deno->Scale(1.0130e+07/h_pT_endcap_template_deno->Integral()); // Dalmin's exact fit result
 //    h_pT_endcap_template_deno->Scale(8.8509e+06/h_pT_endcap_template_deno->Integral());
 
@@ -524,14 +524,14 @@ void Mu_EstFR(Int_t type)
     h_FRratio_barrel->GetXaxis()->SetRangeUser(52, 500);
     h_FRratio_barrel->GetYaxis()->SetRangeUser(0, 0.5);
     h_FRratio_barrel->Draw();
-    h_FRtemplate_barrel->SetMarkerStyle(kFullDotLarge);
-    h_FRtemplate_barrel->SetMarkerColor(kBlack);
-    h_FRtemplate_barrel->SetLineColor(kBlack);
+    h_FRtemplate_barrel->SetMarkerStyle(22);
+    h_FRtemplate_barrel->SetMarkerColor(kBlue);
+    h_FRtemplate_barrel->SetLineColor(kBlue);
     h_FRtemplate_barrel->SetStats(kFALSE);
-    h_FRtemplate_barrel->Draw("same");
-    h_FRmixed_barrel->SetMarkerStyle(22);
-    h_FRmixed_barrel->SetMarkerColor(kBlue);
-    h_FRmixed_barrel->SetLineColor(kBlue);
+//    h_FRtemplate_barrel->Draw("same");
+    h_FRmixed_barrel->SetMarkerStyle(kFullDotLarge);
+    h_FRmixed_barrel->SetMarkerColor(kBlack);
+    h_FRmixed_barrel->SetLineColor(kBlack);
     h_FRmixed_barrel->SetStats(kFALSE);
     h_FRmixed_barrel->Draw("same");
     h_FRdalminTemplate_barrel->SetMarkerStyle(23);
@@ -549,9 +549,9 @@ void Mu_EstFR(Int_t type)
 //    legend->AddEntry(h_FRtemplate_barrel, "Template fitting", "LP");
 //    legend->AddEntry(h_FRratio_barrel, "Ratio method", "LP");
 //    legend->AddEntry(h_FRmixed_barrel, "Mixed method", "LP");
+    legend->AddEntry(h_FRmixed_barrel, "Template fitting", "LP");
     legend->AddEntry(h_FRratio_barrel, "Ratio method", "LP");
-    legend->AddEntry(h_FRtemplate_barrel, "Template fitting", "LP");
-    legend->AddEntry(h_FRmixed_barrel, "Nume - ratio, Deno - template", "LP");
+//    legend->AddEntry(h_FRtemplate_barrel, "Nume+Deno template fitting", "LP");
     legend->AddEntry(h_FRdalminTemplate_barrel, "Dalmin's template", "LP");
     legend->AddEntry(h_FRdalminRatio_barrel, "Dalmin's ratio", "LP");
     legend->Draw();
@@ -590,14 +590,14 @@ void Mu_EstFR(Int_t type)
     h_FRratio_endcap->GetXaxis()->SetRangeUser(52, 500);
     h_FRratio_endcap->GetYaxis()->SetRangeUser(0, 0.5);
     h_FRratio_endcap->Draw();
-    h_FRtemplate_endcap->SetMarkerStyle(kFullDotLarge);
-    h_FRtemplate_endcap->SetMarkerColor(kBlack);
-    h_FRtemplate_endcap->SetLineColor(kBlack);
+    h_FRtemplate_endcap->SetMarkerStyle(22);
+    h_FRtemplate_endcap->SetMarkerColor(kBlue);
+    h_FRtemplate_endcap->SetLineColor(kBlue);
     h_FRtemplate_endcap->SetStats(kFALSE);
-    h_FRtemplate_endcap->Draw("same");
-    h_FRmixed_endcap->SetMarkerStyle(22);
-    h_FRmixed_endcap->SetMarkerColor(kBlue);
-    h_FRmixed_endcap->SetLineColor(kBlue);
+//    h_FRtemplate_endcap->Draw("same");
+    h_FRmixed_endcap ->SetMarkerStyle(kFullDotLarge);
+    h_FRmixed_endcap ->SetMarkerColor(kBlack);
+    h_FRmixed_endcap ->SetLineColor(kBlack);
     h_FRmixed_endcap->SetStats(kFALSE);
     h_FRmixed_endcap->Draw("same");
     h_FRdalminTemplate_endcap->SetMarkerStyle(23);
