@@ -2722,8 +2722,9 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_WJET_fit_SS->SetTitle("");
 //    h_WJET_fit_SS->Scale(5.3412e+03 / h_WJET_fit_SS->Integral()); // from full histogram fitting
     cout << "Same sign W+Jets integral: " << h_WJET_fit_SS->Integral(1,30) << endl;
-//    h_WJET_fit_SS->Scale(3.5733e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (my FR 2)
-    h_WJET_fit_SS->Scale(2.4400e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (my FR 2)
+    h_WJET_fit_SS->Scale(3.2999e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (my FR 2)
+//    h_WJET_fit_SS->Scale(2.4400e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (my FR 2)
+//    h_WJET_fit_SS->Scale(3.3925e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (my FR 2)
 //    h_WJET_fit_SS->Scale(3.5543e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (FOR SYSTEMATIC ERRORS)
 //    h_WJET_fit_SS->Scale(3.4181e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (FOR SYSTEMATIC ERRORS (up))
 //    h_WJET_fit_SS->Scale(3.7006e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (FOR SYSTEMATIC ERRORS (down))

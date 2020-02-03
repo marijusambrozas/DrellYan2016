@@ -995,7 +995,7 @@ void Mu_QCD_HistMaker (Bool_t DEBUG, Int_t type=1)
     analyzer->SetupEfficiencyScaleFactor_GtoH();
 
     // -- For QCD estimation from Fake Rate -- //
-    analyzer->SetupFRvalues(Dir+"FakeRate_muon.root", "sigCtrl_template");
+    analyzer->SetupFRvalues(Dir+"FakeRate_muon.root", "dalmin");
 
     TH1D *h_mass_test[_EndOf_SinglMuon_Normal];
     TH1D *h_mass_test_SS[_EndOf_SinglMuon_Normal];
@@ -1386,7 +1386,7 @@ void Mu_WJET_HistMaker (Bool_t DEBUG, Int_t type=2)
     analyzer->SetupEfficiencyScaleFactor_GtoH();
 
     // -- For W+Jets estimation from Fake Rate -- //
-    analyzer->SetupFRvalues(Dir+"FakeRate_muon.root", "sigCtrl_template");
+    analyzer->SetupFRvalues(Dir+"FakeRate_muon.root", "dalmin");
 
     TH1D *h_mass_test[_EndOf_SinglMuon_Normal];
     TH1D *h_mass_test_SS[_EndOf_SinglMuon_Normal];
