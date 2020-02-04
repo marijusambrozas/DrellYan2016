@@ -888,21 +888,21 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
         }
         if (pr == _WJets)
         {
-            h_pT_barrel_nume    ->Scale(Lumi * 61526.7 / 86731698.0);
-            h_pT_endcap_nume    ->Scale(Lumi * 61526.7 / 86731698.0);
-            h_pT_barrel_deno    ->Scale(Lumi * 61526.7 / 86731698.0);
-            h_pT_endcap_deno    ->Scale(Lumi * 61526.7 / 86731698.0);
-            h_eta_nume          ->Scale(Lumi * 61526.7 / 86731698.0);
-            h_eta_deno          ->Scale(Lumi * 61526.7 / 86731698.0);
-            h_PFiso_barrel_nume ->Scale(Lumi * 61526.7 / 86731698.0);
-            h_PFiso_endcap_nume ->Scale(Lumi * 61526.7 / 86731698.0);
-            h_PFiso_barrel_deno ->Scale(Lumi * 61526.7 / 86731698.0);
-            h_PFiso_endcap_deno ->Scale(Lumi * 61526.7 / 86731698.0);
-            h_TRKiso_barrel_nume->Scale(Lumi * 61526.7 / 86731698.0);
-            h_TRKiso_endcap_nume->Scale(Lumi * 61526.7 / 86731698.0);
-            h_TRKiso_barrel_deno->Scale(Lumi * 61526.7 / 86731698.0);
-            h_TRKiso_endcap_deno->Scale(Lumi * 61526.7 / 86731698.0);
-            h_nVTX              ->Scale(Lumi * 61526.7 / 86731698.0);
+            h_pT_barrel_nume    ->Scale(Lumi * 61526.7 / 120618339.0); //86731698.0); // Dalmin has different WSum
+            h_pT_endcap_nume    ->Scale(Lumi * 61526.7 / 120618339.0); //86731698.0); // Because he uses less skims
+            h_pT_barrel_deno    ->Scale(Lumi * 61526.7 / 120618339.0); //86731698.0);
+            h_pT_endcap_deno    ->Scale(Lumi * 61526.7 / 120618339.0); //86731698.0);
+            h_eta_nume          ->Scale(Lumi * 61526.7 / 120618339.0); //86731698.0);
+            h_eta_deno          ->Scale(Lumi * 61526.7 / 120618339.0); //86731698.0);
+            h_PFiso_barrel_nume ->Scale(Lumi * 61526.7 / 120618339.0); //86731698.0);
+            h_PFiso_endcap_nume ->Scale(Lumi * 61526.7 / 120618339.0); //86731698.0);
+            h_PFiso_barrel_deno ->Scale(Lumi * 61526.7 / 120618339.0); //86731698.0);
+            h_PFiso_endcap_deno ->Scale(Lumi * 61526.7 / 120618339.0); //86731698.0);
+            h_TRKiso_barrel_nume->Scale(Lumi * 61526.7 / 120618339.0); //86731698.0);
+            h_TRKiso_endcap_nume->Scale(Lumi * 61526.7 / 120618339.0); //86731698.0);
+            h_TRKiso_barrel_deno->Scale(Lumi * 61526.7 / 120618339.0); //86731698.0);
+            h_TRKiso_endcap_deno->Scale(Lumi * 61526.7 / 120618339.0); //86731698.0);
+            h_nVTX              ->Scale(Lumi * 61526.7 / 120618339.0); //86731698.0);
         }
 
         h_pT_barrel_nume->Write();

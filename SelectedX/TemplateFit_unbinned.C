@@ -123,10 +123,10 @@ void Mu_Tfit(Int_t type)
         file->GetObject("h_PFiso_barrel_nume", h_barrel_MC_nume[pr1]);
         file->GetObject("h_PFiso_endcap_nume", h_endcap_MC_nume[pr1]);
 
-        removeNegativeBins(h_barrel_MC_deno[pr1]);
-        removeNegativeBins(h_endcap_MC_deno[pr1]);
-        removeNegativeBins(h_barrel_MC_nume[pr1]);
-        removeNegativeBins(h_endcap_MC_nume[pr1]);
+//        removeNegativeBins(h_barrel_MC_deno[pr1]);
+//        removeNegativeBins(h_endcap_MC_deno[pr1]);
+//        removeNegativeBins(h_barrel_MC_nume[pr1]);
+//        removeNegativeBins(h_endcap_MC_nume[pr1]);
 
         h_barrel_MC_deno[pr1]->SetDirectory(0);
         h_endcap_MC_deno[pr1]->SetDirectory(0);
@@ -170,10 +170,11 @@ void Mu_Tfit(Int_t type)
         file->GetObject("h_PFiso_endcap_deno", h_endcap_MC_deno[pr]);
         file->GetObject("h_PFiso_barrel_nume", h_barrel_MC_nume[pr]);
         file->GetObject("h_PFiso_endcap_nume", h_endcap_MC_nume[pr]);
-        removeNegativeBins(h_barrel_MC_deno[pr]);
-        removeNegativeBins(h_endcap_MC_deno[pr]);
-        removeNegativeBins(h_barrel_MC_nume[pr]);
-        removeNegativeBins(h_endcap_MC_nume[pr]);
+
+//        removeNegativeBins(h_barrel_MC_deno[pr]);
+//        removeNegativeBins(h_endcap_MC_deno[pr]);
+//        removeNegativeBins(h_barrel_MC_nume[pr]);
+//        removeNegativeBins(h_endcap_MC_nume[pr]);
 
         h_barrel_MC_deno[pr]->SetDirectory(0);
         h_endcap_MC_deno[pr]->SetDirectory(0);
@@ -212,10 +213,10 @@ void Mu_Tfit(Int_t type)
         file->GetObject("h_PFiso_endcap_deno", h_endcap_MC_deno[pr]);
         file->GetObject("h_PFiso_barrel_nume", h_barrel_MC_nume[pr]);
         file->GetObject("h_PFiso_endcap_nume", h_endcap_MC_nume[pr]);
-        removeNegativeBins(h_barrel_MC_deno[pr]);
-        removeNegativeBins(h_endcap_MC_deno[pr]);
-        removeNegativeBins(h_barrel_MC_nume[pr]);
-        removeNegativeBins(h_endcap_MC_nume[pr]);
+//        removeNegativeBins(h_barrel_MC_deno[pr]);
+//        removeNegativeBins(h_endcap_MC_deno[pr]);
+//        removeNegativeBins(h_barrel_MC_nume[pr]);
+//        removeNegativeBins(h_endcap_MC_nume[pr]);
 
         h_barrel_MC_deno[pr]->SetDirectory(0);
         h_endcap_MC_deno[pr]->SetDirectory(0);
@@ -258,10 +259,10 @@ void Mu_Tfit(Int_t type)
             file->GetObject("h_PFiso_endcap_deno", h_endcap_data_deno);
             file->GetObject("h_PFiso_barrel_nume", h_barrel_data_nume);
             file->GetObject("h_PFiso_endcap_nume", h_endcap_data_nume);
-            removeNegativeBins(h_barrel_data_deno);
-            removeNegativeBins(h_endcap_data_deno);
-            removeNegativeBins(h_barrel_data_nume);
-            removeNegativeBins(h_endcap_data_nume);
+//            removeNegativeBins(h_barrel_data_deno);
+//            removeNegativeBins(h_endcap_data_deno);
+//            removeNegativeBins(h_barrel_data_nume);
+//            removeNegativeBins(h_endcap_data_nume);
         }
         else
         {
@@ -269,10 +270,10 @@ void Mu_Tfit(Int_t type)
             file->GetObject("h_PFiso_endcap_deno", h_temp[1]);
             file->GetObject("h_PFiso_barrel_nume", h_temp[2]);
             file->GetObject("h_PFiso_endcap_nume", h_temp[3]);
-            removeNegativeBins(h_temp[0]);
-            removeNegativeBins(h_temp[1]);
-            removeNegativeBins(h_temp[2]);
-            removeNegativeBins(h_temp[3]);
+//            removeNegativeBins(h_temp[0]);
+//            removeNegativeBins(h_temp[1]);
+//            removeNegativeBins(h_temp[2]);
+//            removeNegativeBins(h_temp[3]);
             h_barrel_data_deno->Add(h_temp[0]);
             h_endcap_data_deno->Add(h_temp[1]);
             h_barrel_data_nume->Add(h_temp[2]);
@@ -472,13 +473,13 @@ void Mu_Tfit(Int_t type)
     Double_t N_endcap_deno_ZZ = h_endcap_MC_deno[_ZZ]->Integral();
 
     Double_t N_barrel_nume_total = N_barrel_nume_ttbar + N_barrel_nume_WJets + N_barrel_nume_DY + N_barrel_nume_QCD +
-                                   N_barrel_nume_tW    + N_barrel_nume_tbarW + N_barrel_nume_WW + N_barrel_nume_WZ  + N_barrel_nume_ZZ;
+                                   N_barrel_nume_tW    /*+ N_barrel_nume_tbarW*/ + N_barrel_nume_WW + N_barrel_nume_WZ  + N_barrel_nume_ZZ;
     Double_t N_endcap_nume_total = N_endcap_nume_ttbar + N_endcap_nume_WJets + N_endcap_nume_DY + N_endcap_nume_QCD +
-                                   N_endcap_nume_tW    + N_endcap_nume_tbarW + N_endcap_nume_WW + N_endcap_nume_WZ  + N_endcap_nume_ZZ;
+                                   N_endcap_nume_tW    /*+ N_endcap_nume_tbarW*/ + N_endcap_nume_WW + N_endcap_nume_WZ  + N_endcap_nume_ZZ;
     Double_t N_barrel_deno_total = N_barrel_deno_ttbar + N_barrel_deno_WJets + N_barrel_deno_DY + N_barrel_deno_QCD +
-                                   N_barrel_deno_tW    + N_barrel_deno_tbarW + N_barrel_deno_WW + N_barrel_deno_WZ  + N_barrel_deno_ZZ;
+                                   N_barrel_deno_tW    /*+ N_barrel_deno_tbarW*/ + N_barrel_deno_WW + N_barrel_deno_WZ  + N_barrel_deno_ZZ;
     Double_t N_endcap_deno_total = N_endcap_deno_ttbar + N_endcap_deno_WJets + N_endcap_deno_DY + N_endcap_deno_QCD +
-                                   N_endcap_deno_tW    + N_endcap_deno_tbarW + N_endcap_deno_WW + N_endcap_deno_WZ  + N_endcap_deno_ZZ;
+                                   N_endcap_deno_tW    /*+ N_endcap_deno_tbarW*/ + N_endcap_deno_WW + N_endcap_deno_WZ  + N_endcap_deno_ZZ;
 
     Double_t Nnorm_barrel_nume_ttbar = N_barrel_nume_ttbar * h_barrel_data_nume->Integral() / N_barrel_nume_total;
     Double_t Nnorm_endcap_nume_ttbar = N_endcap_nume_ttbar * h_endcap_data_nume->Integral() / N_endcap_nume_total;
@@ -613,28 +614,28 @@ void Mu_Tfit(Int_t type)
 
     // Models
     RooAddPdf model_barrel_nume("model_barrel_nume", "model_barrel_nume", RooArgList(*pdf_barrel_nume_QCD,   *pdf_barrel_nume_WJets, *pdf_barrel_nume_DY,
-                                                                                     *pdf_barrel_nume_ttbar, *pdf_barrel_nume_tW,    *pdf_barrel_nume_tbarW,
+                                                                                     *pdf_barrel_nume_ttbar, *pdf_barrel_nume_tW,    /**pdf_barrel_nume_tbarW,*/
                                                                                      *pdf_barrel_nume_WW,    *pdf_barrel_nume_WZ,    *pdf_barrel_nume_ZZ),
                                 RooArgList(n_barrel_nume_QCD,   n_barrel_nume_WJets, n_barrel_nume_DY, n_barrel_nume_ttbar, n_barrel_nume_tW,
-                                           n_barrel_nume_tbarW, n_barrel_nume_WW,    n_barrel_nume_WZ, n_barrel_nume_ZZ));
+                                           /*n_barrel_nume_tbarW,*/ n_barrel_nume_WW,    n_barrel_nume_WZ, n_barrel_nume_ZZ));
 
     RooAddPdf model_endcap_nume("model_endcap_nume", "model_endcap_nume", RooArgList(*pdf_endcap_nume_QCD,   *pdf_endcap_nume_WJets, *pdf_endcap_nume_DY,
-                                                                                     *pdf_endcap_nume_ttbar, *pdf_endcap_nume_tW,    *pdf_endcap_nume_tbarW,
+                                                                                     *pdf_endcap_nume_ttbar, *pdf_endcap_nume_tW,    /**pdf_endcap_nume_tbarW,*/
                                                                                      *pdf_endcap_nume_WW,    *pdf_endcap_nume_WZ,    *pdf_endcap_nume_ZZ),
                                 RooArgList(n_endcap_nume_QCD,   n_endcap_nume_WJets, n_endcap_nume_DY, n_endcap_nume_ttbar, n_endcap_nume_tW,
-                                           n_endcap_nume_tbarW, n_endcap_nume_WW,    n_endcap_nume_WZ, n_endcap_nume_ZZ));
+                                           /*n_endcap_nume_tbarW,*/ n_endcap_nume_WW,    n_endcap_nume_WZ, n_endcap_nume_ZZ));
 
     RooAddPdf model_barrel_deno("model_barrel_deno", "model_barrel_deno", RooArgList(*pdf_barrel_deno_QCD,   *pdf_barrel_deno_WJets, *pdf_barrel_deno_DY,
-                                                                                     *pdf_barrel_deno_ttbar, *pdf_barrel_deno_tW,    *pdf_barrel_deno_tbarW,
+                                                                                     *pdf_barrel_deno_ttbar, *pdf_barrel_deno_tW,    /**pdf_barrel_deno_tbarW,*/
                                                                                      *pdf_barrel_deno_WW,    *pdf_barrel_deno_WZ,    *pdf_barrel_deno_ZZ),
                                 RooArgList(n_barrel_deno_QCD,   n_barrel_deno_WJets, n_barrel_deno_DY, n_barrel_deno_ttbar, n_barrel_deno_tW,
-                                           n_barrel_deno_tbarW, n_barrel_deno_WW,    n_barrel_deno_WZ, n_barrel_deno_ZZ));
+                                           /*n_barrel_deno_tbarW,*/ n_barrel_deno_WW,    n_barrel_deno_WZ, n_barrel_deno_ZZ));
 
     RooAddPdf model_endcap_deno("model_endcap_deno", "model_endcap_deno", RooArgList(*pdf_endcap_deno_QCD,   *pdf_endcap_deno_WJets, *pdf_endcap_deno_DY,
-                                                                                     *pdf_endcap_deno_ttbar, *pdf_endcap_deno_tW,    *pdf_endcap_deno_tbarW,
+                                                                                     *pdf_endcap_deno_ttbar, *pdf_endcap_deno_tW,    /**pdf_endcap_deno_tbarW,*/
                                                                                      *pdf_endcap_deno_WW,    *pdf_endcap_deno_WZ,    *pdf_endcap_deno_ZZ),
                                 RooArgList(n_endcap_deno_QCD,   n_endcap_deno_WJets, n_endcap_deno_DY, n_endcap_deno_ttbar, n_endcap_deno_tW,
-                                           n_endcap_deno_tbarW, n_endcap_deno_WW,    n_endcap_deno_WZ, n_endcap_deno_ZZ));
+                                           /*n_endcap_deno_tbarW,*/ n_endcap_deno_WW,    n_endcap_deno_WZ, n_endcap_deno_ZZ));
 
     // Fitting
     RooFitResult* fit_barrel_nume = model_barrel_nume.fitTo(*rh_barrel_nume_data, Save());
@@ -661,21 +662,21 @@ void Mu_Tfit(Int_t type)
     RooPlot *frame_barrel_nume = iso_nume.frame(Title(" "));
     rh_barrel_nume_data->plotOn(frame_barrel_nume, DataError(RooAbsData::SumW2));
     model_barrel_nume.plotOn(frame_barrel_nume, Components("pdf_barrel_nume_ZZ,pdf_barrel_nume_WZ,pdf_barrel_nume_WW,pdf_barrel_nume_tW,"
-                                                           "pdf_barrel_nume_tbarW,pdf_barrel_nume_ttbar,pdf_barrel_nume_DY,"
+                                                           /*"pdf_barrel_nume_tbarW,*/"pdf_barrel_nume_ttbar,pdf_barrel_nume_DY,"
                                                            "pdf_barrel_nume_WJets,pdf_barrel_nume_QCD"),
                              LineColor(0), FillColor(kRed+3), DrawOption("F"));
     model_barrel_nume.plotOn(frame_barrel_nume, Components("pdf_barrel_nume_ZZ,pdf_barrel_nume_WZ,pdf_barrel_nume_WW,pdf_barrel_nume_tW,"
-                                                           "pdf_barrel_nume_tbarW,pdf_barrel_nume_ttbar,pdf_barrel_nume_DY,"
+                                                           /*"pdf_barrel_nume_tbarW,*/"pdf_barrel_nume_ttbar,pdf_barrel_nume_DY,"
                                                            "pdf_barrel_nume_WJets"),
                              LineColor(0), FillColor(kRed-2), DrawOption("F"));
     model_barrel_nume.plotOn(frame_barrel_nume, Components("pdf_barrel_nume_ZZ,pdf_barrel_nume_WZ,pdf_barrel_nume_WW,pdf_barrel_nume_tW,"
-                                                           "pdf_barrel_nume_tbarW,pdf_barrel_nume_ttbar,pdf_barrel_nume_DY"),
+                                                           /*"pdf_barrel_nume_tbarW,*/"pdf_barrel_nume_ttbar,pdf_barrel_nume_DY"),
                              LineColor(0), FillColor(kOrange), DrawOption("F"));
     model_barrel_nume.plotOn(frame_barrel_nume, Components("pdf_barrel_nume_ZZ,pdf_barrel_nume_WZ,pdf_barrel_nume_WW,pdf_barrel_nume_tW,"
-                                                           "pdf_barrel_nume_tbarW,pdf_barrel_nume_ttbar"),
+                                                           /*"pdf_barrel_nume_tbarW,*/"pdf_barrel_nume_ttbar"),
                              LineColor(0), FillColor(kCyan+2), DrawOption("F"));
     model_barrel_nume.plotOn(frame_barrel_nume, Components("pdf_barrel_nume_ZZ,pdf_barrel_nume_WZ,pdf_barrel_nume_WW,pdf_barrel_nume_tW,"
-                                                           "pdf_barrel_nume_tbarW"),
+                                                           /*"pdf_barrel_nume_tbarW"*/),
                              LineColor(0), FillColor(kGreen-2), DrawOption("F"));
     model_barrel_nume.plotOn(frame_barrel_nume, Components("pdf_barrel_nume_ZZ,pdf_barrel_nume_WZ,pdf_barrel_nume_WW,pdf_barrel_nume_tW"),
                              LineColor(0), FillColor(kGreen+2), DrawOption("F"));
@@ -795,21 +796,21 @@ void Mu_Tfit(Int_t type)
     RooPlot *frame_endcap_nume = iso_nume.frame(Title(" "));
     rh_endcap_nume_data->plotOn(frame_endcap_nume, DataError(RooAbsData::SumW2));
     model_endcap_nume.plotOn(frame_endcap_nume, Components("pdf_endcap_nume_ZZ,pdf_endcap_nume_WZ,pdf_endcap_nume_WW,pdf_endcap_nume_tW,"
-                                                           "pdf_endcap_nume_tbarW,pdf_endcap_nume_ttbar,pdf_endcap_nume_DY,"
+                                                           /*"pdf_endcap_nume_tbarW,*/"pdf_endcap_nume_ttbar,pdf_endcap_nume_DY,"
                                                            "pdf_endcap_nume_WJets,pdf_endcap_nume_QCD"),
                              LineColor(0), FillColor(kRed+3), DrawOption("F"));
     model_endcap_nume.plotOn(frame_endcap_nume, Components("pdf_endcap_nume_ZZ,pdf_endcap_nume_WZ,pdf_endcap_nume_WW,pdf_endcap_nume_tW,"
-                                                           "pdf_endcap_nume_tbarW,pdf_endcap_nume_ttbar,pdf_endcap_nume_DY,"
+                                                           /*"pdf_endcap_nume_tbarW,*/"pdf_endcap_nume_ttbar,pdf_endcap_nume_DY,"
                                                            "pdf_endcap_nume_WJets"),
                              LineColor(0), FillColor(kRed-2), DrawOption("F"));
     model_endcap_nume.plotOn(frame_endcap_nume, Components("pdf_endcap_nume_ZZ,pdf_endcap_nume_WZ,pdf_endcap_nume_WW,pdf_endcap_nume_tW,"
-                                                           "pdf_endcap_nume_tbarW,pdf_endcap_nume_ttbar,pdf_endcap_nume_DY"),
+                                                           /*"pdf_endcap_nume_tbarW,*/"pdf_endcap_nume_ttbar,pdf_endcap_nume_DY"),
                              LineColor(0), FillColor(kOrange), DrawOption("F"));
     model_endcap_nume.plotOn(frame_endcap_nume, Components("pdf_endcap_nume_ZZ,pdf_endcap_nume_WZ,pdf_endcap_nume_WW,pdf_endcap_nume_tW,"
-                                                           "pdf_endcap_nume_tbarW,pdf_endcap_nume_ttbar"),
+                                                           /*"pdf_endcap_nume_tbarW,*/"pdf_endcap_nume_ttbar"),
                              LineColor(0), FillColor(kCyan+2), DrawOption("F"));
     model_endcap_nume.plotOn(frame_endcap_nume, Components("pdf_endcap_nume_ZZ,pdf_endcap_nume_WZ,pdf_endcap_nume_WW,pdf_endcap_nume_tW,"
-                                                           "pdf_endcap_nume_tbarW"),
+                                                           /*"pdf_endcap_nume_tbarW"*/),
                              LineColor(0), FillColor(kGreen-2), DrawOption("F"));
     model_endcap_nume.plotOn(frame_endcap_nume, Components("pdf_endcap_nume_ZZ,pdf_endcap_nume_WZ,pdf_endcap_nume_WW,pdf_endcap_nume_tW"),
                              LineColor(0), FillColor(kGreen+2), DrawOption("F"));
@@ -909,21 +910,21 @@ void Mu_Tfit(Int_t type)
     RooPlot *frame_barrel_deno = iso_deno.frame(Title(" "));
     rh_barrel_deno_data->plotOn(frame_barrel_deno, DataError(RooAbsData::SumW2));
     model_barrel_deno.plotOn(frame_barrel_deno, Components("pdf_barrel_deno_ZZ,pdf_barrel_deno_WZ,pdf_barrel_deno_WW,pdf_barrel_deno_tW,"
-                                                           "pdf_barrel_deno_tbarW,pdf_barrel_deno_ttbar,pdf_barrel_deno_DY,"
+                                                           /*"pdf_barrel_deno_tbarW,*/"pdf_barrel_deno_ttbar,pdf_barrel_deno_DY,"
                                                            "pdf_barrel_deno_WJets,pdf_barrel_deno_QCD"),
                              LineColor(0), FillColor(kRed+3), DrawOption("F"));
     model_barrel_deno.plotOn(frame_barrel_deno, Components("pdf_barrel_deno_ZZ,pdf_barrel_deno_WZ,pdf_barrel_deno_WW,pdf_barrel_deno_tW,"
-                                                           "pdf_barrel_deno_tbarW,pdf_barrel_deno_ttbar,pdf_barrel_deno_DY,"
+                                                           /*"pdf_barrel_deno_tbarW,*/"pdf_barrel_deno_ttbar,pdf_barrel_deno_DY,"
                                                            "pdf_barrel_deno_WJets"),
                              LineColor(0), FillColor(kRed-2), DrawOption("F"));
     model_barrel_deno.plotOn(frame_barrel_deno, Components("pdf_barrel_deno_ZZ,pdf_barrel_deno_WZ,pdf_barrel_deno_WW,pdf_barrel_deno_tW,"
-                                                           "pdf_barrel_deno_tbarW,pdf_barrel_deno_ttbar,pdf_barrel_deno_DY"),
+                                                           /*"pdf_barrel_deno_tbarW,*/"pdf_barrel_deno_ttbar,pdf_barrel_deno_DY"),
                              LineColor(0), FillColor(kOrange), DrawOption("F"));
     model_barrel_deno.plotOn(frame_barrel_deno, Components("pdf_barrel_deno_ZZ,pdf_barrel_deno_WZ,pdf_barrel_deno_WW,pdf_barrel_deno_tW,"
-                                                           "pdf_barrel_deno_tbarW,pdf_barrel_deno_ttbar"),
+                                                           /*"pdf_barrel_deno_tbarW,*/"pdf_barrel_deno_ttbar"),
                              LineColor(0), FillColor(kCyan+2), DrawOption("F"));
     model_barrel_deno.plotOn(frame_barrel_deno, Components("pdf_barrel_deno_ZZ,pdf_barrel_deno_WZ,pdf_barrel_deno_WW,pdf_barrel_deno_tW,"
-                                                           "pdf_barrel_deno_tbarW"),
+                                                           /*"pdf_barrel_deno_tbarW"*/),
                              LineColor(0), FillColor(kGreen-2), DrawOption("F"));
     model_barrel_deno.plotOn(frame_barrel_deno, Components("pdf_barrel_deno_ZZ,pdf_barrel_deno_WZ,pdf_barrel_deno_WW,pdf_barrel_deno_tW"),
                              LineColor(0), FillColor(kGreen+2), DrawOption("F"));
@@ -1030,21 +1031,21 @@ void Mu_Tfit(Int_t type)
     RooPlot *frame_endcap_deno = iso_deno.frame(Title(" "));
     rh_endcap_deno_data->plotOn(frame_endcap_deno, DataError(RooAbsData::SumW2));
     model_endcap_deno.plotOn(frame_endcap_deno, Components("pdf_endcap_deno_ZZ,pdf_endcap_deno_WZ,pdf_endcap_deno_WW,pdf_endcap_deno_tW,"
-                                                           "pdf_endcap_deno_tbarW,pdf_endcap_deno_ttbar,pdf_endcap_deno_DY,"
+                                                           /*"pdf_endcap_deno_tbarW,*/"pdf_endcap_deno_ttbar,pdf_endcap_deno_DY,"
                                                            "pdf_endcap_deno_WJets,pdf_endcap_deno_QCD"),
                              LineColor(0), FillColor(kRed+3), DrawOption("F"));
     model_endcap_deno.plotOn(frame_endcap_deno, Components("pdf_endcap_deno_ZZ,pdf_endcap_deno_WZ,pdf_endcap_deno_WW,pdf_endcap_deno_tW,"
-                                                           "pdf_endcap_deno_tbarW,pdf_endcap_deno_ttbar,pdf_endcap_deno_DY,"
+                                                           /*"pdf_endcap_deno_tbarW,*/"pdf_endcap_deno_ttbar,pdf_endcap_deno_DY,"
                                                            "pdf_endcap_deno_WJets"),
                              LineColor(0), FillColor(kRed-2), DrawOption("F"));
     model_endcap_deno.plotOn(frame_endcap_deno, Components("pdf_endcap_deno_ZZ,pdf_endcap_deno_WZ,pdf_endcap_deno_WW,pdf_endcap_deno_tW,"
-                                                           "pdf_endcap_deno_tbarW,pdf_endcap_deno_ttbar,pdf_endcap_deno_DY"),
+                                                           /*"pdf_endcap_deno_tbarW,*/"pdf_endcap_deno_ttbar,pdf_endcap_deno_DY"),
                              LineColor(0), FillColor(kOrange), DrawOption("F"));
     model_endcap_deno.plotOn(frame_endcap_deno, Components("pdf_endcap_deno_ZZ,pdf_endcap_deno_WZ,pdf_endcap_deno_WW,pdf_endcap_deno_tW,"
-                                                           "pdf_endcap_deno_tbarW,pdf_endcap_deno_ttbar"),
+                                                           /*"pdf_endcap_deno_tbarW,*/"pdf_endcap_deno_ttbar"),
                              LineColor(0), FillColor(kCyan+2), DrawOption("F"));
     model_endcap_deno.plotOn(frame_endcap_deno, Components("pdf_endcap_deno_ZZ,pdf_endcap_deno_WZ,pdf_endcap_deno_WW,pdf_endcap_deno_tW,"
-                                                           "pdf_endcap_deno_tbarW"),
+                                                           /*"pdf_endcap_deno_tbarW"*/),
                              LineColor(0), FillColor(kGreen-2), DrawOption("F"));
     model_endcap_deno.plotOn(frame_endcap_deno, Components("pdf_endcap_deno_ZZ,pdf_endcap_deno_WZ,pdf_endcap_deno_WW,pdf_endcap_deno_tW"),
                              LineColor(0), FillColor(kGreen+2), DrawOption("F"));
@@ -1127,6 +1128,26 @@ void Mu_Tfit(Int_t type)
     cout << "chi2: " << chi2_endcap_deno->getVal() << endl;
     cout << "Normalized chi2: " << chi2_endcap_deno->getVal() / ((Double_t)h_endcap_data_deno->GetNbinsX()) << endl;
 
+    cout << "Data integral: BARREL "     << N_barrel_deno_data  << "   ENDCAP " << N_endcap_deno_data << endl;
+    cout << "Total MC integral: BARREL " << N_barrel_deno_total << "   ENDCAP " << N_endcap_deno_total << endl;
+    cout << "MC QCD integral: BARREL "   << N_barrel_deno_QCD   << "   ENDCAP " << N_endcap_deno_QCD << endl;
+    cout << "MC WJets integral: BARREL " << N_barrel_deno_WJets << "   ENDCAP " << N_endcap_deno_WJets << endl;
+    cout << "MC DY integral: BARREL "    << N_barrel_deno_DY    << "   ENDCAP " << N_endcap_deno_DY << endl;
+    cout << "MC ttbar integral: BARREL " << N_barrel_deno_ttbar << "   ENDCAP " << N_endcap_deno_ttbar << endl;
+    cout << "MC tW integral: BARREL "    << N_barrel_deno_tW    << "   ENDCAP " << N_endcap_deno_tW << endl;
+    cout << "MC tbarW integral: BARREL " << N_barrel_deno_tbarW << "   ENDCAP " << N_endcap_deno_tbarW << endl;
+    cout << "MC WW integral: BARREL "    << N_barrel_deno_WW    << "   ENDCAP " << N_endcap_deno_WW << endl;
+    cout << "MC WZ integral: BARREL "    << N_barrel_deno_WZ    << "   ENDCAP " << N_endcap_deno_WZ << endl;
+    cout << "MC ZZ integral: BARREL "    << N_barrel_deno_ZZ    << "   ENDCAP " << N_endcap_deno_ZZ << endl;
+    cout << "Normalized MC QCD integral: BARREL "   << Nnorm_barrel_deno_QCD   << "   ENDCAP " << Nnorm_endcap_deno_QCD << endl;
+    cout << "Normalized MC WJets integral: BARREL " << Nnorm_barrel_deno_WJets << "   ENDCAP " << Nnorm_endcap_deno_WJets << endl;
+    cout << "Normalized MC DY integral: BARREL "    << Nnorm_barrel_deno_DY    << "   ENDCAP " << Nnorm_endcap_deno_DY << endl;
+    cout << "Normalized MC ttbar integral: BARREL " << Nnorm_barrel_deno_ttbar << "   ENDCAP " << Nnorm_endcap_deno_ttbar << endl;
+    cout << "Normalized MC tW integral: BARREL "    << Nnorm_barrel_deno_tW    << "   ENDCAP " << Nnorm_endcap_deno_tW << endl;
+    cout << "Normalized MC tbarW integral: BARREL " << Nnorm_barrel_deno_tbarW << "   ENDCAP " << Nnorm_endcap_deno_tbarW << endl;
+    cout << "Normalized MC WW integral: BARREL "    << Nnorm_barrel_deno_WW    << "   ENDCAP " << Nnorm_endcap_deno_WW << endl;
+    cout << "Normalized MC WZ integral: BARREL "    << Nnorm_barrel_deno_WZ    << "   ENDCAP " << Nnorm_endcap_deno_WZ << endl;
+    cout << "Normalized MC ZZ integral: BARREL "    << Nnorm_barrel_deno_ZZ    << "   ENDCAP " << Nnorm_endcap_deno_ZZ << endl;
 
 //    // Writing
 //    TFile *file_FR = new TFile("/media/sf_DATA/FR/Muon/FakeRate_muon.root", "RECREATE");
