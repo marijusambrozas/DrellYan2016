@@ -459,6 +459,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<double> *TRKiso = new std::vector<double>;
+        Double_t MET_pT, MET_phi, MET_sumEt;
         Int_t nPU;
         Int_t nVTX;
         Double_t PVz;
@@ -478,6 +479,9 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("charge", &charge);
         MuonTree->Branch("relPFiso", &relPFiso);
         MuonTree->Branch("TRKiso", &TRKiso);
+        MuonTree->Branch("MET_pT", &MET_pT);
+        MuonTree->Branch("MET_phi", &MET_phi);
+        MuonTree->Branch("MET_sumEt", &MET_sumEt);
         MuonTree->Branch("nPU", &nPU);
         MuonTree->Branch("nVTX", &nVTX);
         MuonTree->Branch("PVz", &PVz);
@@ -511,6 +515,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                 ntuple->TurnOnBranches_GenOthers(); // for quarks
             }
             ntuple->TurnOnBranches_Muon();
+            ntuple->TurnOnBranches_MET();
 
             Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
 
@@ -604,6 +609,11 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             Double_t SF1 = exp(0.0615 - (0.0005 * GenTopCollection[1].Pt));
                             top_weight = sqrt(SF0 * SF1);
                         }
+
+                        // -- MET information -- //
+                        MET_pT = ntuple->pfMET_pT;
+                        MET_phi = ntuple->pfMET_phi;
+                        MET_sumEt = ntuple->pfMET_SumEt;
 
                         // -- Information for various other reweightings -- //
                         nPU = ntuple->nPileUp;
