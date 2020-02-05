@@ -53,7 +53,7 @@ const Double_t L_B2F = 19721.0;
 const Double_t L_G2H = 16146.0;
 const Double_t L_B2H = 35867.0;
 
-void FR_HistDrawer (TString WhichX = "", Int_t type = 2, Int_t systErr = 1)
+void FR_HistDrawer (TString WhichX = "", Int_t type = 2, Int_t systErr = 0)
 {
     TString whichX = WhichX;
     whichX.ToUpper();
@@ -773,12 +773,12 @@ void Mu_HistDrawer(Int_t type)
     RP_PFiso_endcap_deno->SetPlots("I_{PF}^{rel.} (#mu_{#lower[-0.4]{endcap}}^{deno})", 0, 5);
     RP_PFiso_barrel_ctrl->SetPlots("I_{PF}^{rel.} (#mu_{#lower[-0.4]{barrel}}^{control})", 0.15, 5);
     RP_PFiso_endcap_ctrl->SetPlots("I_{PF}^{rel.} (#mu_{#lower[-0.4]{endcap}}^{control})", 0.15, 5);
-    RP_pT_barrel_nume->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{barrel}}^{nume}) [GeV/c]", 50, 500);
-    RP_pT_endcap_nume->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{endcap}}^{nume}) [GeV/c]", 50, 500);
-    RP_pT_barrel_deno->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{barrel}}^{deno}) [GeV/c]", 50, 500);
-    RP_pT_endcap_deno->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{endcap}}^{deno}) [GeV/c]", 50, 500);
-    RP_pT_barrel_ctrl->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{barrel}}^{control}) [GeV/c]", 50, 500);
-    RP_pT_endcap_ctrl->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{endcap}}^{control}) [GeV/c]", 50, 500);
+    RP_pT_barrel_nume->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{barrel}}^{nume}) [GeV/c]", 52, 1000);
+    RP_pT_endcap_nume->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{endcap}}^{nume}) [GeV/c]", 52, 1000);
+    RP_pT_barrel_deno->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{barrel}}^{deno}) [GeV/c]", 52, 1000);
+    RP_pT_endcap_deno->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{endcap}}^{deno}) [GeV/c]", 52, 1000);
+    RP_pT_barrel_ctrl->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{barrel}}^{control}) [GeV/c]", 52, 1000);
+    RP_pT_endcap_ctrl->SetPlots("p_{#lower[-0.25]{T}} (#mu_{#lower[-0.4]{endcap}}^{control}) [GeV/c]", 52, 1000);
     RP_eta->SetPlots("#eta (#mu)", -3, 3);
     RP_nVTX->SetPlots("N_{#lower[-0.25]{VTX}} (#mu)", 0, 50);
 
@@ -2415,8 +2415,7 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_QCD_est_SS->SetDirectory(0);
     h_QCD_est->Scale(2);
     cout << "Default Opposite sign QCD integral: " << h_QCD_est->Integral(1, 30) << endl;
-//    h_QCD_est->Scale(7.0967e+03 / h_QCD_est->Integral(1, 30));
-    h_QCD_est->Scale(8.8024e+03 / h_QCD_est->Integral(1, 30));
+    h_QCD_est->Scale(6.6329e+03 / h_QCD_est->Integral(1, 30));
     h_QCD_est_SS->Scale(2);
     s_mass_wWJET->Add(h_QCD_est);
     s_mass_woWJET->Add(h_QCD_est);
@@ -2722,7 +2721,7 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_WJET_fit_SS->SetTitle("");
 //    h_WJET_fit_SS->Scale(5.3412e+03 / h_WJET_fit_SS->Integral()); // from full histogram fitting
     cout << "Same sign W+Jets integral: " << h_WJET_fit_SS->Integral(1,30) << endl;
-    h_WJET_fit_SS->Scale(3.2999e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (my FR 2)
+    h_WJET_fit_SS->Scale(3.3833e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (my FR 2)
 //    h_WJET_fit_SS->Scale(2.4400e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (my FR 2)
 //    h_WJET_fit_SS->Scale(3.3925e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (my FR 2)
 //    h_WJET_fit_SS->Scale(3.5543e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (FOR SYSTEMATIC ERRORS)

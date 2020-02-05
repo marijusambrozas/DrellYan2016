@@ -19,8 +19,8 @@
 #define Lumi_GtoH 16146 // -- from Run2016G to Run2016H, JSON. unit: /pb, Updated at 2018.05.17 -- //
 #define nMassBin 43
 #define nMassBin2 86
-#define nPtBinEndcap 8//9
-#define nPtBinBarrel 16//17
+#define nPtBinEndcap 9//8
+#define nPtBinBarrel 18//16
 
 class DYAnalyzer
 {
@@ -105,8 +105,8 @@ public:
         Double_t PVzWeight[80];
 
         // -- Fake rates -- //
-        const double ptbin_barrel[nPtBinBarrel+1] = {/*47,*/52,60,70,80,90,100,120,140,160,180,200,250,300,350,400,450,500};
-        const double ptbin_endcap[nPtBinEndcap+1] = {/*47,*/52,60,70,80,90,100,150,200,500};
+        const double ptbin_barrel[nPtBinBarrel+1] = {52,60,70,80,90,100,120,140,160,180,200,250,300,350,400,450,500,700,1000};
+        const double ptbin_endcap[nPtBinEndcap+1] = {52,60,70,80,90,100,150,200,500,1000};
         Double_t FR_barrel[nPtBinBarrel];
         Double_t FR_endcap[nPtBinEndcap];
 
@@ -213,7 +213,7 @@ public:
         Bool_t EventSelection_FRdijetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection_fail); // -- output: two muons passing regular selection but failing isolation requirements-- //
         Bool_t EventSelection_FRsingleJetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple,  vector<Muon> *SelectedMuonCollection); // -- output: one muon passing full regular selection and another one passing the same selection but failing isolation requirements-- //
         Bool_t EventSelection_FakeMuons_Triggerless(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection); // -- output: two muons passing regular selection but failing isolation requirements (at least one) -- //
-        void SetupFRvalues(TString filename, TString type="template");
+        void SetupFRvalues(TString filename, TString type="sigCtrl_template");
         Double_t FakeRate(Double_t p_T, Double_t eta);
 
 
@@ -6184,7 +6184,7 @@ Bool_t DYAnalyzer::EventSelection_FRsingleJetEst(vector< Muon > MuonCollection, 
 } // End of EventSelection_FRsingleJetEst()
 
 
-void DYAnalyzer::SetupFRvalues(TString filename, TString type) // type can also be "ratio"
+void DYAnalyzer::SetupFRvalues(TString filename, TString type) // type can be "ratio", "template", "mixed", "sigCtrl_template" or "dalmin"
 {
     // -- Setting up -- //
     std::cout << "Setting up fake rate values from " << filename << endl;

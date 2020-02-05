@@ -4147,10 +4147,20 @@ void Mu_WJETSest_Tfit(Int_t type)
     // Making data-driven QCD templates
     TH1D *h_QCD_est = ((TH1D*)(h_data_mass_dijet->Clone("h_QCD_est")));
     TH1D *h_QCD_est_SS = ((TH1D*)(h_data_mass_SS_dijet->Clone("h_QCD_est_SS")));
-    h_QCD_est->Add(h_MC_mass_dijet[_DY_Full], -1);
     h_QCD_est->Add(h_MC_mass_dijet[_ttbar], -1);
-    h_QCD_est_SS->Add(h_MC_mass_SS_dijet[_DY_Full], -1);
+    h_QCD_est->Add(h_MC_mass_dijet[_DY_Full], -1);
+    h_QCD_est->Add(h_MC_mass_dijet[_tW], -1);
+    h_QCD_est->Add(h_MC_mass_dijet[_tbarW], -1);
+    h_QCD_est->Add(h_MC_mass_dijet[_WW], -1);
+    h_QCD_est->Add(h_MC_mass_dijet[_WZ], -1);
+    h_QCD_est->Add(h_MC_mass_dijet[_ZZ], -1);
     h_QCD_est_SS->Add(h_MC_mass_SS_dijet[_ttbar], -1);
+    h_QCD_est_SS->Add(h_MC_mass_SS_dijet[_DY_Full], -1);
+    h_QCD_est_SS->Add(h_MC_mass_SS_dijet[_tW], -1);
+    h_QCD_est_SS->Add(h_MC_mass_SS_dijet[_tbarW], -1);
+    h_QCD_est_SS->Add(h_MC_mass_SS_dijet[_WW], -1);
+    h_QCD_est_SS->Add(h_MC_mass_SS_dijet[_WZ], -1);
+    h_QCD_est_SS->Add(h_MC_mass_SS_dijet[_ZZ], -1);
     removeNegativeBins(h_QCD_est);
     removeNegativeBins(h_QCD_est_SS);
 
@@ -4220,8 +4230,8 @@ void Mu_WJETSest_Tfit(Int_t type)
     cout << "Expected # of opposite sign W+Jets events: ~" << N_mass_WJets << endl;
 
     Double_t N_mass_total = N_mass_ttbar + N_mass_WJets + N_mass_DY +
-                            N_mass_QCD/*   + N_mass_tW    + N_mass_tbarW +
-                            N_mass_WW    + N_mass_WZ    + N_mass_ZZ*/;
+                            N_mass_QCD   + N_mass_tW    + N_mass_tbarW +
+                            N_mass_WW    + N_mass_WZ    + N_mass_ZZ;
 
     Double_t Nnorm_mass_ttbar = N_mass_ttbar * h_data_mass->Integral() / N_mass_total;
     Double_t Nnorm_mass_WJets = N_mass_WJets * h_data_mass->Integral() / N_mass_total;
@@ -4276,12 +4286,13 @@ void Mu_WJETSest_Tfit(Int_t type)
 
     // Main stack histogram
     RooPlot *frame = mass.frame(Title(" "));
+    frame->GetYaxis()->SetRangeUser(1e-1, 2e5);
     rh_mass_data->plotOn(frame, DataError(RooAbsData::SumW2));
 
     model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
                                         "pdf_mass_tW,pdf_mass_tbarW,pdf_mass_ttbar,pdf_mass_DY"),
                       LineColor(0), FillColor(kOrange), DrawOption("F"));
-    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJetspdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
                                         "pdf_mass_tW,pdf_mass_tbarW,pdf_mass_ttbar"),
                       LineColor(0), FillColor(kCyan+2), DrawOption("F"));
     model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
@@ -4312,7 +4323,7 @@ void Mu_WJETSest_Tfit(Int_t type)
 */
 
     rh_mass_data->plotOn(frame, DataError(RooAbsData::SumW2));
-    frame->GetYaxis()->SetRangeUser(1e0, 2e6);
+    frame->GetYaxis()->SetRangeUser(1e-1, 2e5);
     frame->Draw();
     fit_mass->Print();
 
