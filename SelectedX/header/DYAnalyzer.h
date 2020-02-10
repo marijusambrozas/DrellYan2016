@@ -7525,6 +7525,16 @@ void DYAnalyzer::GenMatching(TString MuonType, NtupleHandle* ntuple, vector<Muon
                                 GenLeptonCollection.push_back(genlep);
 		}
 	}
+        else if (MuonType == "decayedHadron")
+        {
+            for(Int_t i_gen=0; i_gen<NGenLeptons; i_gen++)
+            {
+                    GenLepton genlep;
+                    genlep.FillFromNtuple(ntuple, i_gen);
+                    if(genlep.isMuon() && genlep.isDecayedLeptonHadron)
+                            GenLeptonCollection.push_back(genlep);
+            }
+        }
 	else
 	{
                 std::cout << "Incorrect MuonType!" << endl;

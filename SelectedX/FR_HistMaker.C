@@ -559,8 +559,6 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
         // -- For efficiency SF -- //
         analyzer->SetupEfficiencyScaleFactor_BtoF();
         analyzer->SetupEfficiencyScaleFactor_GtoH();
-//        analyzer->SetupEfficiencyScaleFactor_BtoF_new();
-//        analyzer->SetupEfficiencyScaleFactor_GtoH_new();
 
         // -- For PVz reweighting -- //
         analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
@@ -587,6 +585,13 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
         TH1D* h_TRKiso_endcap_deno = new TH1D("h_TRKiso_endcap_deno", "h_TRKiso_endcap_deno", 100, 0, 5); h_TRKiso_endcap_deno->Sumw2();
         TH1D* h_TRKiso_barrel_ctrl = new TH1D("h_TRKiso_barrel_ctrl", "h_TRKiso_barrel_ctrl", 50, 0.15, 5); h_TRKiso_barrel_deno->Sumw2();
         TH1D* h_TRKiso_endcap_ctrl = new TH1D("h_TRKiso_endcap_ctrl", "h_TRKiso_endcap_ctrl", 50, 0.15, 5); h_TRKiso_endcap_deno->Sumw2();
+        TH1D* h_MET = new TH1D("h_MET", "h_MET", 100, 0, 1000); h_MET->Sumw2();
+        TH1D* h_MT_barrel_nume = new TH1D("h_MT_barrel_nume", "h_MT_barrel_nume", 500, 0, 1000); h_MT_barrel_nume->Sumw2();
+        TH1D* h_MT_endcap_nume = new TH1D("h_MT_endcap_nume", "h_MT_endcap_nume", 500, 0, 1000); h_MT_endcap_nume->Sumw2();
+        TH1D* h_MT_barrel_deno = new TH1D("h_MT_barrel_deno", "h_MT_barrel_deno", 500, 0, 1000); h_MT_barrel_deno->Sumw2();
+        TH1D* h_MT_endcap_deno = new TH1D("h_MT_endcap_deno", "h_MT_endcap_deno", 500, 0, 1000); h_MT_endcap_deno->Sumw2();
+        TH1D* h_MT_barrel_ctrl = new TH1D("h_MT_barrel_ctrl", "h_MT_barrel_ctrl", 500, 0, 1000); h_MT_barrel_ctrl->Sumw2();
+        TH1D* h_MT_endcap_ctrl = new TH1D("h_MT_endcap_ctrl", "h_MT_endcap_ctrl", 500, 0, 1000); h_MT_endcap_ctrl->Sumw2();
         TH1D* h_nVTX = new TH1D("h_nVTX", "h_nVTX", 50, 0, 50); h_nVTX->Sumw2();
 
         TH1D* h_PFiso_barrel_nume_50to70   = new TH1D("h_PFiso_barrel_nume_50to70",   "h_PFiso_barrel_nume_50to70",   15, 0, 0.15); h_PFiso_barrel_nume_50to70  ->Sumw2();
@@ -629,9 +634,11 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
 
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
+        std::vector<double> *phi = new std::vector<double>;
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<double> *TRKiso = new std::vector<double>;
+        Double_t MET_pT, MET_phi, MET_sumEt;
         Int_t nPU;
         Int_t nVTX;
         Double_t PVz;
@@ -645,8 +652,12 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
         if (DEBUG == kTRUE) cout << Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
         chain->SetBranchStatus("p_T", 1);
         chain->SetBranchStatus("eta", 1);
+        chain->SetBranchStatus("phi", 1);
         chain->SetBranchStatus("relPFiso", 1);
         chain->SetBranchStatus("TRKiso", 1);
+        chain->SetBranchStatus("MET_pT", 1);
+        chain->SetBranchStatus("MET_phi", 1);
+        chain->SetBranchStatus("MET_sumEt", 1);
         chain->SetBranchStatus("nPU", 1);
         chain->SetBranchStatus("nVTX", 1);
         chain->SetBranchStatus("PVz", 1);
@@ -658,9 +669,13 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchStatus("prefiring_weight_down", 1);
         chain->SetBranchAddress("p_T", &p_T);
         chain->SetBranchAddress("eta", &eta);
+        chain->SetBranchAddress("phi", &phi);
         chain->SetBranchAddress("charge", &charge);
         chain->SetBranchAddress("relPFiso", &relPFiso);
         chain->SetBranchAddress("TRKiso", &TRKiso);
+        chain->SetBranchAddress("MET_pT", &MET_pT);
+        chain->SetBranchAddress("MET_phi", &MET_phi);
+        chain->SetBranchAddress("MET_sumEt", &MET_sumEt);
         chain->SetBranchAddress("nPU", &nPU);
         chain->SetBranchAddress("nVTX", &nVTX);
         chain->SetBranchAddress("PVz", &PVz);
@@ -687,6 +702,7 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
                 cout << "nMuons = " << p_T->size() << endl;
                 cout << "p_T[1] = " << p_T->at(0) << endl;
                 cout << "eta[1] = " << eta->at(0) << endl;
+                cout << "phi[1] = " << phi->at(0) << endl;
             }
 
             // -- Pileup-Reweighting -- //
@@ -717,11 +733,38 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
             if (Mgr.isMC == kTRUE && p_T->size() > 1) n2MC += TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight;
             if (Mgr.isMC == kFALSE && p_T->size() > 1) n2Data++;
 
-            h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+            // For finding the leading muon
+            TLorentzVector mu_lead;
+            mu_lead.SetPtEtaPhiM(0, 0, 0, M_Mu);
+            Double_t iso_lead = -9999;
+
+            Double_t iso_count = 0;
             for (UInt_t i_mu=0; i_mu<p_T->size(); i_mu++)
             {
-                if (p_T->at(i_mu)<=52) continue;
+                if (p_T->at(i_mu) <= 52) continue;
+                if (relPFiso->at(i_mu) < 0.15) iso_count++;
+
+                // Selecting leading muon (could also try finding a muon with the best isolation)
+                if (p_T->at(i_mu) > mu_lead.Pt())
+                {
+                    mu_lead.SetPtEtaPhiM(p_T->at(i_mu), eta->at(i_mu), phi->at(i_mu), M_Mu);
+                    iso_lead = relPFiso->at(i_mu);
+                }
+            }
+            if (iso_count > 1) continue;
+            Double_t dTheta = mu_lead.Phi() - MET_phi;
+            Double_t MT = sqrt(2 * mu_lead.Pt() * MET_pT * (1 - cos(dTheta)));
+//            if (MT >= 60) continue;
+//            if (MET_pT >= 50) continue;
+
+            h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+            h_MET->Fill(MET_pT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+
+            for (UInt_t i_mu=0; i_mu<p_T->size(); i_mu++)
+            {
+                if (p_T->at(i_mu) <= 52) continue;
                 if (DEBUG == kTRUE) cout << "i_mu = " << i_mu << endl;
+
                 // -- Efficiency scale factor -- //
 //                if(Mgr.isMC == kTRUE)
 //                {
@@ -874,6 +917,19 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
                 }
             }// End of i_mu iteration
 
+            if (fabs(mu_lead.Eta()) < 1.2)
+            {
+                h_MT_barrel_deno->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                if (iso_lead < 0.15) h_MT_barrel_nume->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                else h_MT_barrel_ctrl->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+            }
+            else
+            {
+                h_MT_endcap_deno->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                if (iso_lead < 0.15) h_MT_endcap_nume->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                else h_MT_endcap_ctrl->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+            }
+
             bar.Draw(i);
 
         }// End of event iteration
@@ -904,6 +960,13 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
         h_TRKiso_endcap_deno->Write();
         h_TRKiso_barrel_ctrl->Write();
         h_TRKiso_endcap_ctrl->Write();
+        h_MET->Write();
+        h_MT_barrel_nume->Write();
+        h_MT_endcap_nume->Write();
+        h_MT_barrel_deno->Write();
+        h_MT_endcap_deno->Write();
+        h_MT_barrel_ctrl->Write();
+        h_MT_endcap_ctrl->Write();
         h_nVTX->Write();
 
         h_pT_barrel_nume_50to70->Write();
@@ -1120,8 +1183,9 @@ void Mu_QCD_HistMaker (Bool_t DEBUG, Int_t type=1)
             if (p_T->size() != 2) continue;
 //            if (charge->at(0) == charge->at(1)) continue;
             if (relPFiso->at(0) < 0.15 || relPFiso->at(1) < 0.15) continue;
-            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
-            if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
+//            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
+//            if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
+            if (p_T->at(0) < 2 || p_T->at(1) < 2) continue;
 
 
             nPass++;

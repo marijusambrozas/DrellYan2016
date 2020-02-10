@@ -512,24 +512,18 @@ void Mu_EstFR(Int_t type)
 //--------------------------------- FR by template --------------------------------------  
 
     // Barrel
-//    h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(1.0393e+06/h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Integral()); // OLD All muons' pT>52GeV
-//    h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(1.5567e+07/h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
-//    h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(2.7123e+05/h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
-//    h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(4.4126e+06/h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
-//    h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Scale(6.0141e+04/h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
-//    h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Scale(9.3704e+05/h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
-    h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(1.0467e+06/h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Integral()); // All muons' pT>52GeV
+//    h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(6.2803e+05/h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Integral()); // MT<50GeV
+//    h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(1.0305e+07/h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
+//    h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(1.4985e+05/h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
+//    h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(2.5972e+06/h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
+//    h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Scale(3.2044e+04/h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
+//    h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Scale(4.8280e+05/h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
+    h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(1.0467e+06/h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Integral());
     h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(1.5551e+07/h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
     h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(2.7505e+05/h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
     h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(4.4041e+06/h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
     h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Scale(5.9729e+04/h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
     h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Scale(9.3823e+05/h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
-//    h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(1.1587e+06/h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Integral()); // Only one muon's pT>52GeV
-//    h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(1.7258e+07/h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
-//    h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(2.9382e+05/h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
-//    h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(4.4139e+06/h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
-//    h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Scale(5.9937e+04/h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
-//    h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Scale(9.3962e+05/h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
 
 
 //    Double_t nevt=0, err=0;
@@ -556,24 +550,18 @@ void Mu_EstFR(Int_t type)
     }
 
     // Endcap
-//    h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(1.1732e+06/h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Integral()); // OLD All muons' pT>52GeV
-//    h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(7.7612e+06/h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
-//    h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(2.9061e+05/h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
-//    h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(1.9792e+06/h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
-//    h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Scale(6.0998e+04/h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
-//    h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Scale(3.4973e+05/h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(1.1835e+06/h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Integral()); // All muons' pT>52GeV
+//    h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(7.4694e+05/h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Integral()); // MT<60GeV
+//    h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(5.3707e+06/h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
+//    h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(1.7066e+05/h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
+//    h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(1.2119e+06/h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
+//    h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Scale(2.7435e+04/h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
+//    h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Scale(1.8082e+05/h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(1.1835e+06/h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Integral());
     h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(7.7520e+06/h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
     h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(2.9318e+05/h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
     h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(1.9852e+06/h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
     h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Scale(6.0587e+04/h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
     h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Scale(3.4908e+05/h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
-//    h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(1.4732e+06/h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Integral()); // Only one muon's pT>52GeV
-//    h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(9.3080e+06/h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
-//    h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(2.9061e+05/h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
-//    h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(1.9804e+06/h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
-//    h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Scale(6.0817e+04/h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
-//    h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Scale(3.5033e+05/h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
 
     TH1D *h_FRtemplate_endcap_deno = ((TH1D*)(h_pT_endcap_template_deno_50to70[_QCDMuEnriched_Full]->Clone("h_FRtemplate_endcap_deno")));
     h_FRtemplate_endcap_deno->Add(h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]);
@@ -663,6 +651,12 @@ void Mu_EstFR(Int_t type)
     h_FRsigCtrl_template_endcap->Add(h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]);
 
     // ---- Denominator ---- //
+//    h_pT_barrel_template_ctrl_50to70  [_QCDMuEnriched_Full]->Scale(9.7365e+06/h_pT_barrel_template_ctrl_50to70  [_QCDMuEnriched_Full]->Integral()); // MT<60GeV
+//    h_pT_barrel_template_ctrl_70to100 [_QCDMuEnriched_Full]->Scale(2.4558e+06/h_pT_barrel_template_ctrl_70to100 [_QCDMuEnriched_Full]->Integral());
+//    h_pT_barrel_template_ctrl_100to500[_QCDMuEnriched_Full]->Scale(4.5699e+05/h_pT_barrel_template_ctrl_100to500[_QCDMuEnriched_Full]->Integral());
+//    h_pT_endcap_template_ctrl_50to70  [_QCDMuEnriched_Full]->Scale(4.6759e+06/h_pT_endcap_template_ctrl_50to70  [_QCDMuEnriched_Full]->Integral());
+//    h_pT_endcap_template_ctrl_70to100 [_QCDMuEnriched_Full]->Scale(1.0595e+06/h_pT_endcap_template_ctrl_70to100 [_QCDMuEnriched_Full]->Integral());
+//    h_pT_endcap_template_ctrl_100to500[_QCDMuEnriched_Full]->Scale(1.5648e+05/h_pT_endcap_template_ctrl_100to500[_QCDMuEnriched_Full]->Integral());
     h_pT_barrel_template_ctrl_50to70  [_QCDMuEnriched_Full]->Scale(1.4763e+07/h_pT_barrel_template_ctrl_50to70  [_QCDMuEnriched_Full]->Integral());
     h_pT_barrel_template_ctrl_70to100 [_QCDMuEnriched_Full]->Scale(4.1953e+06/h_pT_barrel_template_ctrl_70to100 [_QCDMuEnriched_Full]->Integral());
     h_pT_barrel_template_ctrl_100to500[_QCDMuEnriched_Full]->Scale(8.8544e+05/h_pT_barrel_template_ctrl_100to500[_QCDMuEnriched_Full]->Integral());
