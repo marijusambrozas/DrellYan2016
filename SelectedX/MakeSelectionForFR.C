@@ -582,7 +582,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             else
                                 SF = rc.kScaleAndSmearMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
                             if (mu.Pt != mu.Pt || SF != SF || SF*mu.Pt != SF*mu.Pt)
-                                cout << /*"\nGenPt: " << genPt <<*/ "  Pt: " << mu.Pt << "  Corr Pt: " << SF*mu.Pt << "  multiplier: " << SF
+                                cout << "\nGenPt: " << genPt << "  Pt: " << mu.Pt << "  Corr Pt: " << SF*mu.Pt << "  multiplier: " << SF
                                      << "\nEta: " << mu.eta << "   Phi: " << mu.phi << "  Charge: " << mu.charge << "\ntrLayers: " << mu.trackerLayers
                                      << "  PFiso: " << mu.relPFiso << endl;
                         }
