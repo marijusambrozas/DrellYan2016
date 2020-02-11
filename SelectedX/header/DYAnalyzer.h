@@ -354,7 +354,7 @@ void DYAnalyzer::AssignAccThreshold(TString HLTname, TString *HLT, Double_t *Lea
 	{
 		*HLT = "HLT_Mu50_v*";
                 *LeadPtCut = 52;
-		*SubPtCut = 10;
+                *SubPtCut = 0;
 		*LeadEtaCut = 2.4;
 		*SubEtaCut = 2.4;
 	}
@@ -7645,6 +7645,16 @@ Double_t DYAnalyzer::GenMuonPt(TString muonType, NtupleHandle* ntuple, Muon reco
                         GenLepton genlep;
                         genlep.FillFromNtuple(ntuple, i_gen);
                         if(genlep.isMuon() && genlep.fromHardProcessFinalState)
+                                GenLeptonCollection.push_back(genlep);
+                }
+        }
+        if(MuonType == "finalstate_or_hadrondecay")
+        {
+                for(Int_t i_gen=0; i_gen<NGenLeptons; i_gen++)
+                {
+                        GenLepton genlep;
+                        genlep.FillFromNtuple(ntuple, i_gen);
+                        if(genlep.isMuon() && (genlep.fromHardProcessFinalState || genlep.isDecayedLeptonHadron || genlep.fromHardProcessDecayed))
                                 GenLeptonCollection.push_back(genlep);
                 }
         }
