@@ -51,14 +51,6 @@ void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "D
         Debug = kTRUE;
         cout << "DEBUG MODE ON. Running on 100 events only" << endl;
     }
-//    if (whichX.Contains("E"))
-//    {
-//        Xselected++;
-//        if (HLTname == "DEFAULT") HLT = "Ele23Ele12";
-//        else HLT = HLTname;
-//        cout << "\n*******      MakeSelectionForFR_E (" << type << ", " << HLT << ")      *******" << endl;
-//        MakeSelectionForFR_E(type, HLT, Debug);
-//    }
     if (whichX.Contains("MU"))
     {
         Xselected++;
@@ -93,6 +85,14 @@ void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "D
             cout << "\n*****  MakeSelectionForFR_Mu (" << type << ", " << HLT << ")  *****" << endl;
             MakeSelectionForFR_Mu(type, HLT, Debug);
         }
+    }
+    else if (whichX.Contains("E"))
+    {
+        Xselected++;
+        if (HLTname == "DEFAULT") HLT = "Photon_OR";
+        else HLT = HLTname;
+        cout << "\n*******      MakeSelectionForFR_E (" << type << ", " << HLT << ")      *******" << endl;
+        MakeSelectionForFR_E(type, HLT, Debug);
     }
 
     if (Xselected == 0) {
@@ -137,74 +137,93 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
     for (Int_t i_proc=0; i_proc<Nproc; i_proc++)
     {
         Mgr.SetProc(Processes[i_proc], kTRUE);
+        cout << "===========================================================" << endl;
         cout << "Type: " << Mgr.Type << endl;
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
         cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
 
-        Int_t Ntup = Mgr.FullLocation.size();
+        Int_t Ntup = Mgr.FullLocation.size();           
+
+        //Creating a file
+        TString out_base;
+        TString out_dir;
+        TFile* ElectronFile;
+        if (Mgr.Type == "DATA")
+        {
+            out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
+            out_dir = "SelectedForFR_E_"+Mgr.Procname[Mgr.CurrentProc];
+        }
+        else if (Mgr.Type == "SIGNAL")
+        {
+            out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
+            out_dir = "SelectedForFR_E_"+Mgr.Procname[Mgr.CurrentProc];
+        }
+        else if (Mgr.Type == "BKG")
+        {
+            out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
+            out_dir = "SelectedForFR_E_"+Mgr.Procname[Mgr.CurrentProc];
+        }
+        else if (Mgr.Type == "TEST")
+        {
+            out_base = "/media/sf_DATA/test/";
+            out_dir = "SelectedForFR_E_"+Mgr.Procname[Mgr.CurrentProc];
+        }
+        else
+        {
+            cout << "Problems with TYPE." << endl;
+            return;
+        }
+
+        if (Debug == kTRUE)
+            ElectronFile = TFile::Open(out_base+out_dir+"_DEBUG.root", "RECREATE");
+        else
+            ElectronFile = TFile::Open(out_base+out_dir+".root", "RECREATE");
+        ElectronFile->cd();
+
+        std::vector<double> *p_T = new std::vector<double>;
+        std::vector<double> *eta = new std::vector<double>;
+        std::vector<double> *phi = new std::vector<double>;
+        std::vector<int> *charge = new std::vector<int>;
+        std::vector<double> *relPFiso = new std::vector<double>;
+        std::vector<double> *TRKiso = new std::vector<double>;
+        Double_t MET_pT, MET_phi, MET_sumEt;
+        Int_t nPU;
+        Int_t nVTX;
+        Double_t PVz;
+        Double_t gen_weight, top_weight;
+        Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
+
+        const int ptbinnum_endcap = 14;
+        double ptbin_endcap[ptbinnum_endcap+1] = {17,28,30,35,40,50,60,70,80,90,100,150,200,500,1000};
+        const int ptbinnum = 21;
+        double ptbin[ptbinnum+1] = {17,28,35,40,50,60,70,80,90,100,120,140,160,180,200,250,300,350,400,450,500,700,1000};
+
+        TTree* ElectronTree = new TTree("FRTree", "FRTree");
+        // -- Creating electron variables to assign branches -- //
+        ElectronTree->Branch("p_T", &p_T);
+        ElectronTree->Branch("eta", &eta);
+        ElectronTree->Branch("phi", &phi);
+        ElectronTree->Branch("charge", &charge);
+        ElectronTree->Branch("relPFiso", &relPFiso);
+        ElectronTree->Branch("MET_pT", &MET_pT);
+        ElectronTree->Branch("MET_phi", &MET_phi);
+        ElectronTree->Branch("MET_sumEt", &MET_sumEt);
+        ElectronTree->Branch("nPU", &nPU);
+        ElectronTree->Branch("nVTX", &nVTX);
+        ElectronTree->Branch("PVz", &PVz);
+        ElectronTree->Branch("gen_weight", &gen_weight);
+        ElectronTree->Branch("top_weight", &top_weight);
+        ElectronTree->Branch("prefiring_weight", &prefiring_weight);
+        ElectronTree->Branch("prefiring_weight_up", &prefiring_weight_up);
+        ElectronTree->Branch("prefiring_weight_down", &prefiring_weight_down);
 
         // Loop for all samples in a process
         for (Int_t i_tup = 0; i_tup<Ntup; i_tup++)
-        {           
-//            if (Mgr.CurrentProc == _WJets) i_tup = 2;
-
+        {
             TStopwatch looptime;
             looptime.Start();
 
-            if (Mgr.Tag[i_tup] == "QCDEMEnriched_Pt120to170") continue; // One of the skims crashes here
-
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
-
-            //Creating a file
-            TString out_base;
-            TString out_dir;
-            TFile* ElectronFile;
-            if (Mgr.Type == "DATA")
-            {
-//                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/";
-//                out_dir = "Data/SelectedEE_"+Mgr.Tag[i_tup];
-
-                out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
-                out_dir = "SelectedEE_"+Mgr.Tag[i_tup];
-            }
-            else if (Mgr.Type == "SIGNAL")
-            {
-//                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/";
-//                out_dir = "MC_signal/SelectedEE_"+Mgr.Tag[i_tup];
-
-                out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
-                out_dir = "SelectedEE_"+Mgr.Tag[i_tup];
-            }
-            else if (Mgr.Type == "BKG")
-            {
-//                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedEE/";
-//                out_dir = "MC_bkg/SelectedEE_"+Mgr.Tag[i_tup];
-
-                out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
-                out_dir = "SelectedEE_"+Mgr.Tag[i_tup];
-            }
-            else if (Mgr.Type == "TEST")
-            {
-                out_base = "/media/sf_DATA/test/";
-                out_dir = "SelectedEE_"+Mgr.Tag[i_tup];
-            }
-            else
-            {
-                cout << "Problems with TYPE." << endl;
-                return;
-            }
-
-            if (Debug == kTRUE)
-                ElectronFile = TFile::Open(out_base+out_dir+"_DEBUG.root", "RECREATE");
-            else
-                ElectronFile = TFile::Open(out_base+out_dir+".root", "RECREATE");
-            ElectronFile->cd();
-
-
-            TTree* ElectronTree = new TTree("DYTree", "DYTree");
-            // -- Creating LongSelectedEE variables to assign branches -- //
-            SelectedEE_t EE; EE.CreateNew();
-            EE.MakeBranches(ElectronTree);
 
             TChain *chain = new TChain(Mgr.TreeName[i_tup]);
             Mgr.SetupChain(i_tup, chain);
@@ -216,6 +235,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                 ntuple->TurnOnBranches_GenOthers(); // for quarks
             }
             ntuple->TurnOnBranches_Electron();
+            ntuple->TurnOnBranches_MET();
 
             Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
 
@@ -223,10 +243,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             if (Debug == kTRUE) NEvents = 1000; // using few events for debugging
 
             cout << "\t[Total Events: " << NEvents << "]" << endl;
-            Int_t timesPassed = 0;           
-            Int_t isClear = 0; // vectors that are writen into files should be cleared afer each event
-
             myProgressBar_t bar(NEvents);
+            Int_t timesPassed = 0;
 
             // Loop for all events in the chain
             for (Int_t i=0; i<NEvents; i++)
@@ -234,35 +252,26 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                 ntuple->GetEvent(i);
 
                 // -- Positive/Negative Gen-weights -- //
-                ntuple->GENEvt_weight < 0 ? EE.GENEvt_weight = -1 : EE.GENEvt_weight = 1;
-                SumWeight += EE.GENEvt_weight;
+                ntuple->GENEvt_weight < 0 ? gen_weight = -1 : gen_weight = 1;
+                SumWeight += gen_weight;
                 SumWeightRaw += ntuple->GENEvt_weight;
 
                 // -- Separate DYLL samples -- //
                 Bool_t GenFlag = kFALSE;
                 GenFlag = analyzer->SeparateDYLLSample_isHardProcess(Mgr.Tag[i_tup], ntuple);
 
-                // -- Separate ttbar samples -- //
+                // -- Get GenTopCollection -- //
                 Bool_t GenFlag_top = kFALSE;
                 vector<GenOthers> GenTopCollection;
                 GenFlag_top = analyzer->Separate_ttbarSample(Mgr.Tag[i_tup], ntuple, &GenTopCollection);
 
-                if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += EE.GENEvt_weight;
+                if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += gen_weight;
 
                 Bool_t TriggerFlag = kFALSE;
                 TriggerFlag = ntuple->isTriggered(analyzer->HLT);
 
                 if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
                 {
-                    if (Mgr.Tag[i_tup].Contains("ttbar"))
-                    {
-                        // -- Top pT reweighting -- //
-                        Double_t SF0 = exp(0.0615 - (0.0005 * GenTopCollection[0].Pt));
-                        Double_t SF1 = exp(0.0615 - (0.0005 * GenTopCollection[1].Pt));
-                        EE._topPtWeight = sqrt(SF0 * SF1);
-                    }
-                    else EE._topPtWeight = 1;
-
                     // -- Reco level selection -- //
                     vector< Electron > ElectronCollection;
                     Int_t NLeptons = ntuple->Nelectrons;
@@ -276,48 +285,50 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                     // -- Event Selection -- //
                     vector< Electron > SelectedElectronCollection;
                     Bool_t isPassEventSelection = kFALSE;
-                    EE.isSelPassed = 0;
-                    isPassEventSelection = analyzer->EventSelection_ElectronChannel(ElectronCollection, ntuple, &SelectedElectronCollection);
+                    isPassEventSelection = analyzer->EventSelection_FR(ElectronCollection, ntuple, &SelectedElectronCollection);
 
                     if (isPassEventSelection == kTRUE)
-                    {                       
+                    {
                         timesPassed++;
-                        Electron ele1 = SelectedElectronCollection[0];
-                        Electron ele2 = SelectedElectronCollection[1];
+                        p_T->clear();
+                        eta->clear();
+                        phi->clear();
+                        charge->clear();
+                        relPFiso->clear();
+                        TRKiso->clear();
 
-                        EE.isSelPassed = 1;
-                        EE.nVertices = ntuple->nVertices;
-                        EE.nPileUp = ntuple->nPileUp;
-                        EE._prefiringweight = ntuple->_prefiringweight;
-                        EE._prefiringweightup = ntuple->_prefiringweightup;
-                        EE._prefiringweightdown = ntuple->_prefiringweightdown;
-                        EE.PVz = ntuple->PVz;
-                        EE.Electron_InvM = (ele1.Momentum + ele2.Momentum).M();
-
-                        EE.Electron_pT->push_back(ele1.Pt);
-                        EE.Electron_pT->push_back(ele2.Pt);
-                        EE.Electron_eta->push_back(ele1.eta);
-                        EE.Electron_eta->push_back(ele2.eta);
-                        EE.Electron_phi->push_back(ele1.phi);
-                        EE.Electron_phi->push_back(ele2.phi);
-                        EE.Electron_Energy->push_back(ele1.Energy);
-                        EE.Electron_Energy->push_back(ele2.Energy);
-                        EE.Electron_charge->push_back(ele1.charge);
-                        EE.Electron_charge->push_back(ele2.charge);
-                        EE.Electron_etaSC->push_back(ele1.etaSC);
-                        EE.Electron_etaSC->push_back(ele2.etaSC);
-                        EE.Electron_phiSC->push_back(ele1.phiSC);
-                        EE.Electron_phiSC->push_back(ele2.phiSC);
-                        EE.Electron_Energy_uncorr->push_back(ele1.Energy_uncorr);
-                        EE.Electron_Energy_uncorr->push_back(ele2.Energy_uncorr);
-
-                        ElectronTree->Fill();
-                        isClear = EE.ClearVectors();
-                        if (!isClear)
+                        // -- Top pT reweighting -- //
+                        top_weight = 1;
+                        if (Mgr.Tag[i_tup].Contains("ttbar"))
                         {
-                            cout << "======== ERROR: The vectors were not cleared ========" << endl;
-                            break;
+                            Double_t SF0 = exp(0.0615 - (0.0005 * GenTopCollection[0].Pt));
+                            Double_t SF1 = exp(0.0615 - (0.0005 * GenTopCollection[1].Pt));
+                            EE._topPtWeight = sqrt(SF0 * SF1);
                         }
+
+                        // -- MET information -- //
+                        MET_pT = ntuple->pfMET_pT;
+                        MET_phi = ntuple->pfMET_phi;
+                        MET_sumEt = ntuple->pfMET_SumEt;
+
+                        // -- Information for various other reweightings -- //
+                        nPU = ntuple->nPileUp;
+                        nVTX = ntuple->nVertices;
+                        PVz = ntuple->PVz;
+                        prefiring_weight = ntuple->_prefiringweight;
+                        prefiring_weight_up = ntuple->_prefiringweightup;
+                        prefiring_weight_down = ntuple->_prefiringweightdown;
+
+                        // -- Vector filling -- //
+                        for (UInt_t i=0; i<SelectedElectronCollection.size(); i++)
+                        {
+                            p_T->push_back(SelectedElectronCollection[i].Pt);
+                            eta->push_back(SelectedElectronCollection[i].eta);
+                            phi->push_back(SelectedElectronCollection[i].phi);
+                            charge->push_back(SelectedElectronCollection[i].charge);
+                            relPFiso->push_back(SelectedElectronCollection[i].RelPFIso_dBeta);
+                        }
+                        ElectronTree->Fill();
 
                     } // End of event selection
 
@@ -339,26 +350,29 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             Double_t LoopRunTime = looptime.CpuTime();
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
 
-            // Writing
-            cout << "Writing into file...";
-            Int_t write;
-            write = ElectronTree->Write();
-            if (write)
-            {
-                cout << " Finished." << endl << "Closing a file..." << endl;
-                TString addition = "";
-                if (Debug == kTRUE) addition = "_DEBUG";
-                ElectronFile->Close();
-                if (!ElectronFile->IsOpen()) cout << "File SelectedEE_" << Mgr.Tag[i_tup]+addition << ".root has been closed successfully.\n" << endl;
-                else cout << "FILE SelectedEE_" << Mgr.Tag[i_tup]+addition << ".root COULD NOT BE CLOSED!\n" << endl;
-            }
-            else
-            {
-                cout << " Writing was NOT successful!\n" << endl;
-                ElectronFile->Close();
-            }
-
         } // End of i_tup iteration
+
+        // Writing
+        cout << "Writing into file...";
+        ElectronFile->cd();
+        Int_t write;
+        write = ElectronTree->Write();
+
+        TString addition = "";
+        if (Debug == kTRUE) addition = "_DEBUG";
+        if (write)
+        {
+            cout << " Tree writing finished." << endl << "Closing a file..." << endl;
+            ElectronFile->Close();
+            if (!ElectronFile->IsOpen()) cout << "File SelectedForFR_E_" << Mgr.Procname[Mgr.CurrentProc]+addition << ".root has been closed successfully.\n" << endl;
+            else cout << "FILE SelectedForFR_E_" << Mgr.Procname[Mgr.CurrentProc]+addition << ".root COULD NOT BE CLOSED!\n" << endl;
+        }
+        else
+        {
+            cout << " Writing was NOT successful!\n" << endl;
+            ElectronFile->Close();
+        }
+        cout << "===========================================================\n" << endl;
 
     } // End of i_proc iteration
 
@@ -414,25 +428,16 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         TFile* MuonFile;
         if (Mgr.Type == "DATA")
         {
-//                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/";
-//                out_dir = "Data/SelectedMuMu_"+Mgr.Tag[i_tup];
-
             out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
             out_dir = "SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc];
         }
         else if (Mgr.Type == "SIGNAL")
         {
-//                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/";
-//                out_dir = "MC_signal/SelectedMuMu_"+Mgr.Tag[i_tup];
-
             out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
             out_dir = "SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc];
         }
         else if (Mgr.Type == "BKG")
         {
-//                out_base = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/SelectedX_v1/SelectedMuMu/";
-//                out_dir = "MC_bkg/SelectedMuMu_"+Mgr.Tag[i_tup];
-
             out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
             out_dir = "SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc];
         }
@@ -472,7 +477,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         double ptbin[ptbinnum+1] = {47,52,60,70,80,90,100,120,140,160,180,200,250,300,350,400,450,500};
 
         TTree* MuonTree = new TTree("FRTree", "FRTree");
-        // -- Creating SelectedMuMu variables to assign branches -- //
+        // -- Creating muon variables to assign branches -- //
         MuonTree->Branch("p_T", &p_T);
         MuonTree->Branch("eta", &eta);
         MuonTree->Branch("phi", &phi);
@@ -497,8 +502,6 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         // Loop for all samples in a process
         for (Int_t i_tup = 0; i_tup<Ntup; i_tup++)
         {
-//            if (Mgr.CurrentProc == _WJets) i_tup = 2;
-
             TStopwatch looptime;
             looptime.Start();
 
@@ -579,6 +582,8 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             else
                                 SF = rc.kScaleAndSmearMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
                         }
+                        if (mu.Pt != mu.Pt || SF != SF || SF*mu.Pt != SF*mu.Pt)
+                            cout << "\nGenPt: " << genPt << "  Pt: " << mu.Pt << "  Corr Pt: " << SF*mu.Pt << endl;
                         mu.Pt = SF*mu.Pt;
                         mu.Momentum.SetPtEtaPhiM(mu.Pt, mu.eta, mu.phi, M_Mu);
 

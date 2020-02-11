@@ -415,6 +415,14 @@ void DYAnalyzer::AssignAccThreshold(TString HLTname, TString *HLT, Double_t *Lea
 		*LeadEtaCut = 2.4; // -- Later it should exclude ECAL gap
 		*SubEtaCut = 2.4; // -- Later it should exclude ECAL gap
 	}
+        else if (HLTname == "Photon_OR")
+        {
+            *HLT = "HLT_Photon*";
+            *LeadPtCut = 28;
+            *SubPtCut = 17;
+            *LeadEtaCut = 2.4; // -- Later it should exclude ECAL gap
+            *SubEtaCut = 2.4; // -- Later it should exclude ECAL gap
+        }
 	else
 	{ 
                 std::cout << "Wrong HLT name!: " << HLTname << endl;
@@ -1916,22 +1924,22 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF(Muon mu1, Muon mu2)
 
     if(ptbin1_Reco == 9999 || etabin1_Reco == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d)\n", ptbin1_Reco, etabin1_Reco);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Reco, etabin1_Reco, Pt1, eta1);
         return -999;
     }
     if(ptbin1_ID == 9999 || etabin1_ID == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d)\n", ptbin1_ID, etabin1_ID);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_ID, etabin1_ID, Pt1, eta1);
         return -999;
     }
     if(ptbin1_Iso == 9999 || etabin1_Iso == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d)\n", ptbin1_Iso, etabin1_Iso);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Iso, etabin1_Iso, Pt1, eta1);
         return -999;
     }
     if(ptbin1_Trig == 9999 || etabin1_Trig == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d)\n", ptbin1_Trig, etabin1_Trig);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Trig, etabin1_Trig, Pt1, eta1);
         return -999;
     }
 
@@ -1956,22 +1964,22 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF(Muon mu1, Muon mu2)
 
     if(ptbin2_Reco == 9999 || etabin2_Reco == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d)\n", ptbin2_Reco, etabin2_Reco);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Reco, etabin2_Reco, Pt2, eta2);
         return -999;
     }
     if(ptbin2_ID == 9999 || etabin2_ID == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d)\n", ptbin2_ID, etabin2_ID);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_ID, etabin2_ID, Pt2, eta2);
         return -999;
     }
     if(ptbin2_Iso == 9999 || etabin2_Iso == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d)\n", ptbin2_Iso, etabin2_Iso);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Iso, etabin2_Iso, Pt2, eta2);
         return -999;
     }
     if(ptbin2_Trig == 9999 || etabin2_Trig == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d)\n", ptbin2_Trig, etabin2_Trig);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Trig, etabin2_Trig, Pt2, eta2);
         return -999;
     }
 
@@ -2043,22 +2051,22 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF(TLorentzVector mu1, TLore
 
     if(ptbin1_Reco == 9999 || etabin1_Reco == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d)\n", ptbin1_Reco, etabin1_Reco);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Reco, etabin1_Reco, Pt1, eta1);
         return -999;
     }
     if(ptbin1_ID == 9999 || etabin1_ID == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d)\n", ptbin1_ID, etabin1_ID);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_ID, etabin1_ID, Pt1, eta1);
         return -999;
     }
     if(ptbin1_Iso == 9999 || etabin1_Iso == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d)\n", ptbin1_Iso, etabin1_Iso);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Iso, etabin1_Iso, Pt1, eta1);
         return -999;
     }
     if(ptbin1_Trig == 9999 || etabin1_Trig == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d)\n", ptbin1_Trig, etabin1_Trig);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Trig, etabin1_Trig, Pt1, eta1);
         return -999;
     }
 
@@ -2083,22 +2091,22 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF(TLorentzVector mu1, TLore
 
     if(ptbin2_Reco == 9999 || etabin2_Reco == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d)\n", ptbin2_Reco, etabin2_Reco);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Reco, etabin2_Reco, Pt2, eta2);
         return -999;
     }
     if(ptbin2_ID == 9999 || etabin2_ID == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d)\n", ptbin2_ID, etabin2_ID);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_ID, etabin2_ID, Pt2, eta2);
         return -999;
     }
     if(ptbin2_Iso == 9999 || etabin2_Iso == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d)\n", ptbin2_Iso, etabin2_Iso);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Iso, etabin2_Iso, Pt2, eta2);
         return -999;
     }
     if(ptbin2_Trig == 9999 || etabin2_Trig == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d)\n", ptbin2_Trig, etabin2_Trig);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Trig, etabin2_Trig, Pt2, eta2);
         return -999;
     }
 
@@ -2183,17 +2191,17 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF_new(SelectedMuMu_t *MuMu)
 
     if(ptbin1_ID == 9999 || etabin1_ID == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d)\n", ptbin1_ID, etabin1_ID);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_ID, etabin1_ID, Pt1, eta1);
         return -999;
     }
     if(ptbin1_Iso == 9999 || etabin1_Iso == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d)\n", ptbin1_Iso, etabin1_Iso);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Iso, etabin1_Iso, Pt1, eta1);
         return -999;
     }
     if(ptbin1_Trig == 9999 || etabin1_Trig == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d)\n", ptbin1_Trig, etabin1_Trig);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Trig, etabin1_Trig, Pt1, eta1);
         return -999;
     }
 
@@ -2212,17 +2220,17 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF_new(SelectedMuMu_t *MuMu)
 
     if(ptbin2_ID == 9999 || etabin2_ID == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d)\n", ptbin2_ID, etabin2_ID);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_ID, etabin2_ID, Pt2, eta2);
         return -999;
     }
     if(ptbin2_Iso == 9999 || etabin2_Iso == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d)\n", ptbin2_Iso, etabin2_Iso);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Iso, etabin2_Iso, Pt2, eta2);
         return -999;
     }
     if(ptbin2_Trig == 9999 || etabin2_Trig == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d)\n", ptbin2_Trig, etabin2_Trig);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Trig, etabin2_Trig, Pt2, eta2);
         return -999;
     }
 
@@ -2298,23 +2306,23 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF(SelectedMuMu_t *MuMu)
 
     if(ptbin1_Reco == 9999 || etabin1_Reco == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d)\n", ptbin1_Reco, etabin1_Reco);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Reco, etabin1_Reco, Pt1, eta1);
         cout << "pT1: " << Pt1 << "    eta1: " << eta1 << endl;
         return -999;
     }
     if(ptbin1_ID == 9999 || etabin1_ID == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d)\n", ptbin1_ID, etabin1_ID);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_ID, etabin1_ID, Pt1, eta1);
         return -999;
     }
     if(ptbin1_Iso == 9999 || etabin1_Iso == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d)\n", ptbin1_Iso, etabin1_Iso);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Iso, etabin1_Iso, Pt1, eta1);
         return -999;
     }
     if(ptbin1_Trig == 9999 || etabin1_Trig == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d)\n", ptbin1_Trig, etabin1_Trig);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Trig, etabin1_Trig, Pt1, eta1);
         return -999;
     }
 
@@ -2341,23 +2349,23 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_BtoF(SelectedMuMu_t *MuMu)
 
     if(ptbin2_Reco == 9999 || etabin2_Reco == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d)\n", ptbin2_Reco, etabin2_Reco);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Reco, etabin2_Reco, Pt2, eta2);
         return -999;
         cout << "pT2: " << Pt2 << "    eta2: " << eta2 << endl;
     }
     if(ptbin2_ID == 9999 || etabin2_ID == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d)\n", ptbin2_ID, etabin2_ID);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_ID, etabin2_ID, Pt2, eta2);
         return -999;
     }
     if(ptbin2_Iso == 9999 || etabin2_Iso == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d)\n", ptbin2_Iso, etabin2_Iso);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Iso, etabin2_Iso, Pt2, eta2);
         return -999;
     }
     if(ptbin2_Trig == 9999 || etabin2_Trig == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d)\n", ptbin2_Trig, etabin2_Trig);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Trig, etabin2_Trig, Pt2, eta2);
         return -999;
     }
 
@@ -2429,22 +2437,22 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH(Muon mu1, Muon mu2)
 
     if(ptbin1_Reco == 9999 || etabin1_Reco == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d)\n", ptbin1_Reco, etabin1_Reco);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Reco, etabin1_Reco, Pt1, eta1);
         return -999;
     }
     if(ptbin1_ID == 9999 || etabin1_ID == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d)\n", ptbin1_ID, etabin1_ID);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_ID, etabin1_ID, Pt1, eta1);
         return -999;
     }
     if(ptbin1_Iso == 9999 || etabin1_Iso == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d)\n", ptbin1_Iso, etabin1_Iso);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Iso, etabin1_Iso, Pt1, eta1);
         return -999;
     }
     if(ptbin1_Trig == 9999 || etabin1_Trig == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d)\n", ptbin1_Trig, etabin1_Trig);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Trig, etabin1_Trig, Pt1, eta1);
         return -999;
     }
 
@@ -2469,22 +2477,22 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH(Muon mu1, Muon mu2)
 
     if(ptbin2_Reco == 9999 || etabin2_Reco == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d)\n", ptbin2_Reco, etabin2_Reco);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Reco, etabin2_Reco, Pt2, eta2);
         return -999;
     }
     if(ptbin2_ID == 9999 || etabin2_ID == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d)\n", ptbin2_ID, etabin2_ID);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_ID, etabin2_ID, Pt2, eta2);
         return -999;
     }
     if(ptbin2_Iso == 9999 || etabin2_Iso == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d)\n", ptbin2_Iso, etabin2_Iso);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Iso, etabin2_Iso, Pt2, eta2);
         return -999;
     }
     if(ptbin2_Trig == 9999 || etabin2_Trig == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d)\n", ptbin2_Trig, etabin2_Trig);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d, (pt, eta) = (%f, %f))\n", ptbin2_Trig, etabin2_Trig, Pt2, eta2);
         return -999;
     }
     Double_t Eff_muon2_data = Eff_Reco_data_GtoH[etabin2_Reco][ptbin2_Reco] * Eff_ID_data_GtoH[etabin2_ID][ptbin2_ID] * Eff_Iso_data_GtoH[etabin2_Iso][ptbin2_Iso];
@@ -2556,22 +2564,22 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH(TLorentzVector mu1, TLore
 
     if(ptbin1_Reco == 9999 || etabin1_Reco == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d)\n", ptbin1_Reco, etabin1_Reco);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Reco, etabin1_Reco, Pt1, eta1);
         return -999;
     }
     if(ptbin1_ID == 9999 || etabin1_ID == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d)\n", ptbin1_ID, etabin1_ID);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_ID, etabin1_ID, Pt1, eta1);
         return -999;
     }
     if(ptbin1_Iso == 9999 || etabin1_Iso == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d)\n", ptbin1_Iso, etabin1_Iso);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Iso, etabin1_Iso, Pt1, eta1);
         return -999;
     }
     if(ptbin1_Trig == 9999 || etabin1_Trig == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d)\n", ptbin1_Trig, etabin1_Trig);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Trig, etabin1_Trig, Pt1, eta1);
         return -999;
     }
 
@@ -2596,22 +2604,22 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH(TLorentzVector mu1, TLore
 
     if(ptbin2_Reco == 9999 || etabin2_Reco == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d)\n", ptbin2_Reco, etabin2_Reco);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Reco, etabin2_Reco, Pt2, eta2);
         return -999;
     }
     if(ptbin2_ID == 9999 || etabin2_ID == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d)\n", ptbin2_ID, etabin2_ID);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_ID, etabin2_ID, Pt2, eta2);
         return -999;
     }
     if(ptbin2_Iso == 9999 || etabin2_Iso == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d)\n", ptbin2_Iso, etabin2_Iso);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Iso, etabin2_Iso, Pt2, eta2);
         return -999;
     }
     if(ptbin2_Trig == 9999 || etabin2_Trig == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d)\n", ptbin2_Trig, etabin2_Trig);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Trig, etabin2_Trig, Pt2, eta2);
         return -999;
     }
     Double_t Eff_muon2_data = Eff_Reco_data_GtoH[etabin2_Reco][ptbin2_Reco] * Eff_ID_data_GtoH[etabin2_ID][ptbin2_ID] * Eff_Iso_data_GtoH[etabin2_Iso][ptbin2_Iso];
@@ -2696,17 +2704,17 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH_new(SelectedMuMu_t *MuMu)
 
     if(ptbin1_ID == 9999 || etabin1_ID == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d)\n", ptbin1_ID, etabin1_ID);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_ID, etabin1_ID, Pt1, eta1);
         return -999;
     }
     if(ptbin1_Iso == 9999 || etabin1_Iso == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d)\n", ptbin1_Iso, etabin1_Iso);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Iso, etabin1_Iso, Pt1, eta1);
         return -999;
     }
     if(ptbin1_Trig == 9999 || etabin1_Trig == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d)\n", ptbin1_Trig, etabin1_Trig);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Trig, etabin1_Trig, Pt1, eta1);
         return -999;
     }
 
@@ -2725,17 +2733,17 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH_new(SelectedMuMu_t *MuMu)
 
     if(ptbin2_ID == 9999 || etabin2_ID == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d)\n", ptbin2_ID, etabin2_ID);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_ID, etabin2_ID, Pt2, eta2);
         return -999;
     }
     if(ptbin2_Iso == 9999 || etabin2_Iso == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d)\n", ptbin2_Iso, etabin2_Iso);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Iso, etabin2_Iso, Pt2, eta2);
         return -999;
     }
     if(ptbin2_Trig == 9999 || etabin2_Trig == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d)\n", ptbin2_Trig, etabin2_Trig);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Trig, etabin2_Trig, Pt2, eta2);
         return -999;
     }
 
@@ -2811,23 +2819,23 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH(SelectedMuMu_t *MuMu)
 
     if(ptbin1_Reco == 9999 || etabin1_Reco == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d)\n", ptbin1_Reco, etabin1_Reco);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Reco, etabin1_Reco) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Reco, etabin1_Reco, Pt1, eta1);
         cout << "pT1: " << Pt1 << "    eta1: " << eta1 << endl;
         return -999;
     }
     if(ptbin1_ID == 9999 || etabin1_ID == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d)\n", ptbin1_ID, etabin1_ID);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_ID, etabin1_ID) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_ID, etabin1_ID, Pt1, eta1);
         return -999;
     }
     if(ptbin1_Iso == 9999 || etabin1_Iso == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d)\n", ptbin1_Iso, etabin1_Iso);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Iso, etabin1_Iso) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Iso, etabin1_Iso, Pt1, eta1);
         return -999;
     }
     if(ptbin1_Trig == 9999 || etabin1_Trig == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d)\n", ptbin1_Trig, etabin1_Trig);
+        printf("ERROR! Wrong assigned bin number ... (ptbin1_Trig, etabin1_Trig) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin1_Trig, etabin1_Trig, Pt1, eta1);
         return -999;
     }
 
@@ -2854,23 +2862,23 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_HLT_GtoH(SelectedMuMu_t *MuMu)
 
     if(ptbin2_Reco == 9999 || etabin2_Reco == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d)\n", ptbin2_Reco, etabin2_Reco);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Reco, etabin2_Reco) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Reco, etabin2_Reco, Pt2, eta2);
         cout << "pT2: " << Pt2 << "    eta2: " << eta2 << endl;
         return -999;
     }
     if(ptbin2_ID == 9999 || etabin2_ID == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d)\n", ptbin2_ID, etabin2_ID);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_ID, etabin2_ID) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_ID, etabin2_ID, Pt2, eta2);
         return -999;
     }
     if(ptbin2_Iso == 9999 || etabin2_Iso == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d)\n", ptbin2_Iso, etabin2_Iso);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Iso, etabin2_Iso) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Iso, etabin2_Iso, Pt2, eta2);
         return -999;
     }
     if(ptbin2_Trig == 9999 || etabin2_Trig == 9999)
     {
-        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d)\n", ptbin2_Trig, etabin2_Trig);
+        printf("ERROR! Wrong assigned bin number ... (ptbin2_Trig, etabin2_Trig) = (%d, %d), (pt, eta) = (%f, %f)\n", ptbin2_Trig, etabin2_Trig, Pt2, eta2);
         return -999;
     }
     Double_t Eff_muon2_data = Eff_Reco_data_GtoH[etabin2_Reco][ptbin2_Reco] * Eff_ID_data_GtoH[etabin2_ID][ptbin2_ID] * Eff_Iso_data_GtoH[etabin2_Iso][ptbin2_Iso];
@@ -8009,10 +8017,10 @@ Int_t DYAnalyzer::Find_muon_PtBin_Reco(Double_t Pt)
         Int_t ptbin = 9999;
 
         // -- if Pt is larger than the largest Pt bin edge, SF is same with the value for the last bin -- //
-        if(Pt > PtBinEdges[nPtBins])
+        if(Pt >= PtBinEdges[nPtBins])
                 ptbin = nPtBins-1;
         // -- if Pt is smaller than the smallest Pt bin edge, SF is same with the value for the first bin -- // updated at 14 Apr. 2017 by Dalmin Pai
-        else if(Pt < PtBinEdges[0])
+        else if(Pt <= PtBinEdges[0])
                 ptbin = 0;
         else
         {
