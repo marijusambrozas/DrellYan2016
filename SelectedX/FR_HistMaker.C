@@ -1572,10 +1572,13 @@ void Mu_WJET_HistMaker (Bool_t DEBUG, Int_t type=2)
 //            if (charge->at(0) == charge->at(1)) continue;
             if (relPFiso->at(0) < 0.15 && relPFiso->at(1) < 0.15) continue;
             if (relPFiso->at(0) > 0.15 && relPFiso->at(1) > 0.15) continue;
-            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
-            if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
+//            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
+//            if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
+            if (p_T->at(0) < 2 || p_T->at(1) < 2) continue;
 
             nPass++;
+
+            if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << charge->at(1) << " " << relPFiso->at(1) << endl;
 
             if (DEBUG == kTRUE)
             {
@@ -1608,6 +1611,9 @@ void Mu_WJET_HistMaker (Bool_t DEBUG, Int_t type=2)
             {
                 weight1 = analyzer->EfficiencySF_EventWeight_HLT_BtoF(mu1, mu2);
                 weight2 = analyzer->EfficiencySF_EventWeight_HLT_GtoH(mu1, mu2);
+                if (weight1<0 || weight2<0)
+                    cout << "weights: " << weight1 << " " << weight2 << "   Pt: " << p_T->at(0) << " " << mu1.Pt() << " " << p_T->at(1)
+                         << " " << mu2.Pt() << "   Eta: " << eta->at(0) << " " << mu1.Eta() << " " << eta->at(1) << " " << mu2.Eta() << endl;
                 effweight = (Lumi_BtoF * weight1 + Lumi_GtoH * weight2) / Lumi;
             }
 
