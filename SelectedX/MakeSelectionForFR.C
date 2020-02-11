@@ -576,15 +576,15 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             SF = rc.kScaleDT(mu.charge, mu.Pt, mu.eta, mu.phi, s=0, m=0);
                         else
                         {
-                            Double_t genPt = analyzer->GenMuonPt("fromHardProcessFinalState", ntuple, mu);
-                            if (genPt > 0)
-                                SF = rc.kScaleFromGenMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, genPt, rndm[0], s=0, m=0);
-                            else
+//                            Double_t genPt = analyzer->GenMuonPt("fromHardProcessFinalState", ntuple, mu);
+//                            if (genPt > 0)
+//                                SF = rc.kScaleFromGenMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, genPt, rndm[0], s=0, m=0);
+//                            else
                                 SF = rc.kScaleAndSmearMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
                             if (mu.Pt != mu.Pt || SF != SF || SF*mu.Pt != SF*mu.Pt)
                                 cout << "\nGenPt: " << genPt << "  Pt: " << mu.Pt << "  Corr Pt: " << SF*mu.Pt << "  multiplier: " << SF
-                                     << "Eta: " << mu.eta << "   Phi: " << mu.phi << "  Charge: " << mu.charge << "\ntrLayers: " << mu.trackerLayers
-                                     << "PFiso: " << mu.relPFiso << endl;
+                                     << "\nEta: " << mu.eta << "   Phi: " << mu.phi << "  Charge: " << mu.charge << "\ntrLayers: " << mu.trackerLayers
+                                     << "  PFiso: " << mu.relPFiso << endl;
                         }
                         mu.Pt = SF*mu.Pt;
                         mu.Momentum.SetPtEtaPhiM(mu.Pt, mu.eta, mu.phi, M_Mu);
