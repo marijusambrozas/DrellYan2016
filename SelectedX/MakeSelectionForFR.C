@@ -195,7 +195,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
         const int ptbinnum_endcap = 14;
         double ptbin_endcap[ptbinnum_endcap+1] = {17,28,30,35,40,50,60,70,80,90,100,150,200,500,1000};
-        const int ptbinnum = 21;
+        const int ptbinnum = 22;
         double ptbin[ptbinnum+1] = {17,28,35,40,50,60,70,80,90,100,120,140,160,180,200,250,300,350,400,450,500,700,1000};
 
         TTree* ElectronTree = new TTree("FRTree", "FRTree");
@@ -303,7 +303,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         {
                             Double_t SF0 = exp(0.0615 - (0.0005 * GenTopCollection[0].Pt));
                             Double_t SF1 = exp(0.0615 - (0.0005 * GenTopCollection[1].Pt));
-                            EE._topPtWeight = sqrt(SF0 * SF1);
+                            top_weight = sqrt(SF0 * SF1);
                         }
 
                         // -- MET information -- //
@@ -581,9 +581,9 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                                 SF = rc.kScaleFromGenMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, genPt, rndm[0], s=0, m=0);
                             else
                                 SF = rc.kScaleAndSmearMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
+                            if (mu.Pt != mu.Pt || SF != SF || SF*mu.Pt != SF*mu.Pt)
+                                cout << "\nGenPt: " << genPt << "  Pt: " << mu.Pt << "  Corr Pt: " << SF*mu.Pt << endl;
                         }
-                        if (mu.Pt != mu.Pt || SF != SF || SF*mu.Pt != SF*mu.Pt)
-                            cout << "\nGenPt: " << genPt << "  Pt: " << mu.Pt << "  Corr Pt: " << SF*mu.Pt << endl;
                         mu.Pt = SF*mu.Pt;
                         mu.Momentum.SetPtEtaPhiM(mu.Pt, mu.eta, mu.phi, M_Mu);
 
