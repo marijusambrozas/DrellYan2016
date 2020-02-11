@@ -213,6 +213,7 @@ public:
         Bool_t EventSelection_FRdijetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection_fail); // -- output: two muons passing regular selection but failing isolation requirements-- //
         Bool_t EventSelection_FRsingleJetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple,  vector<Muon> *SelectedMuonCollection); // -- output: one muon passing full regular selection and another one passing the same selection but failing isolation requirements-- //
         Bool_t EventSelection_FakeMuons_Triggerless(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection); // -- output: two muons passing regular selection but failing isolation requirements (at least one) -- //
+        Bool_t EventSelection_FR(vector<Electron> ElectronCollection, NtupleHandle *ntuple, vector<Electron> *SelectedElectronCollection); // Electron selection
         void SetupFRvalues(TString filename, TString type="sigCtrl_template");
         Double_t FakeRate(Double_t p_T, Double_t eta);
 
@@ -5988,8 +5989,8 @@ Bool_t DYAnalyzer::EventSelection_Zdiff_13TeV_HighPt11(vector< Muon > MuonCollec
 } // End of EventSelection_Zdiff_13TeV_HighPt11
 
 
-Bool_t DYAnalyzer::EventSelection_FR(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection_nume,
-                                     vector< Muon >* SelectedMuonCollection_deno)
+Bool_t DYAnalyzer::EventSelection_FR(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon>* SelectedMuonCollection_nume,
+                                     vector<Muon>* SelectedMuonCollection_deno)
 {
     Bool_t isPassEventSelection = kFALSE;
     Bool_t skip = kTRUE;
@@ -6015,7 +6016,7 @@ Bool_t DYAnalyzer::EventSelection_FR(vector< Muon > MuonCollection, NtupleHandle
 
 
 
-Bool_t DYAnalyzer::EventSelection_FRdijetEst(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection_fail)
+Bool_t DYAnalyzer::EventSelection_FRdijetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon>* SelectedMuonCollection_fail)
 {
     Bool_t isPassEventSelection = kFALSE;
     vector< Muon > TempMuonCollection;
@@ -6038,7 +6039,7 @@ Bool_t DYAnalyzer::EventSelection_FRdijetEst(vector< Muon > MuonCollection, Ntup
 
 
 
-Bool_t DYAnalyzer::EventSelection_FakeMuons_Triggerless(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection)
+Bool_t DYAnalyzer::EventSelection_FakeMuons_Triggerless(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon>* SelectedMuonCollection)
 {
     Bool_t isPassEventSelection = kFALSE;
 
@@ -6149,7 +6150,7 @@ Bool_t DYAnalyzer::EventSelection_FakeMuons_Triggerless(vector< Muon > MuonColle
 
 
 
-Bool_t DYAnalyzer::EventSelection_FRsingleJetEst(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection)
+Bool_t DYAnalyzer::EventSelection_FRsingleJetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection)
 {
     Bool_t isPassEventSelection = kFALSE;
     SelectedMuonCollection->clear();
@@ -6190,6 +6191,10 @@ Bool_t DYAnalyzer::EventSelection_FRsingleJetEst(vector< Muon > MuonCollection, 
     }
     return isPassEventSelection;
 } // End of EventSelection_FRsingleJetEst()
+
+
+Bool_t DYAnalyzer::EventSelection_FR(vector<Electron> ElectronCollection, NtupleHandle *ntuple, vector<Electron> *SelectedElectronCollection) // Electron selection
+{return kTRUE;}
 
 
 void DYAnalyzer::SetupFRvalues(TString filename, TString type) // type can be "ratio", "template", "mixed", "sigCtrl_template" or "dalmin"
