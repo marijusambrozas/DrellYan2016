@@ -7648,7 +7648,7 @@ Double_t DYAnalyzer::GenMuonPt(TString muonType, NtupleHandle* ntuple, Muon reco
                                 GenLeptonCollection.push_back(genlep);
                 }
         }
-        if(MuonType == "finalstate_or_hadrondecay")
+        else if(MuonType == "finalstate_or_hadrondecay")
         {
                 for(Int_t i_gen=0; i_gen<NGenLeptons; i_gen++)
                 {
@@ -7700,6 +7700,7 @@ Double_t DYAnalyzer::GenMuonPt(TString muonType, NtupleHandle* ntuple, Muon reco
                 }
 
         }
+        if(fabs(GenMuonPt-reco_Pt)/reco_Pt > 0.3) GenMuonPt = 0; // To avoid very bad mismatches
 
         return GenMuonPt;
 }
