@@ -762,6 +762,11 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
 
             for (UInt_t i_mu=0; i_mu<p_T->size(); i_mu++)
             {
+                if (p_T->at(i_mu) != p_T->at(i_mu))
+                {
+                    cout << p_T->at(i_mu) << " " << eta->at(i_mu) << " " << phi->at(i_mu) << " " << charge->at(i_mu) << " " << relPFiso->at(i_mu) << endl;
+                    continue;
+                }
                 if (p_T->at(i_mu) <= 52) continue;
                 if (DEBUG == kTRUE) cout << "i_mu = " << i_mu << endl;
 
@@ -1183,10 +1188,12 @@ void Mu_QCD_HistMaker (Bool_t DEBUG, Int_t type=1)
             if (p_T->size() != 2) continue;
 //            if (charge->at(0) == charge->at(1)) continue;
             if (relPFiso->at(0) < 0.15 || relPFiso->at(1) < 0.15) continue;
-//            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
-//            if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
-            if (p_T->at(0) < 2 || p_T->at(1) < 2) continue;
+            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
+            if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
+//            if (p_T->at(0) < 2 || p_T->at(1) < 2) continue;
 
+            if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << charge->at(0) << " " << relPFiso->at(0) << endl;
+            if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << charge->at(1) << " " << relPFiso->at(1) << endl;
 
             nPass++;
 
@@ -1572,12 +1579,13 @@ void Mu_WJET_HistMaker (Bool_t DEBUG, Int_t type=2)
 //            if (charge->at(0) == charge->at(1)) continue;
             if (relPFiso->at(0) < 0.15 && relPFiso->at(1) < 0.15) continue;
             if (relPFiso->at(0) > 0.15 && relPFiso->at(1) > 0.15) continue;
-//            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
-//            if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
-            if (p_T->at(0) < 2 || p_T->at(1) < 2) continue;
+            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
+            if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
+//            if (p_T->at(0) < 2 || p_T->at(1) < 2) continue;
 
             nPass++;
 
+            if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << charge->at(0) << " " << relPFiso->at(0) << endl;
             if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << charge->at(1) << " " << relPFiso->at(1) << endl;
 
             if (DEBUG == kTRUE)
