@@ -936,8 +936,8 @@ void Mu_Tfit(Int_t type)
                              LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
 
     rh_barrel_deno_data->plotOn(frame_barrel_deno, DataError(RooAbsData::SumW2));
-//    frame_barrel_deno->GetXaxis()->SetRangeUser(0, 0.5);
-    frame_barrel_deno->GetYaxis()->SetRangeUser(1, 2e8);
+    frame_barrel_deno->GetXaxis()->SetRangeUser(0, 0.5);
+    frame_barrel_deno->GetYaxis()->SetRangeUser(10, 1e9);
     frame_barrel_deno->Draw();
     fit_barrel_deno->Print();
 
@@ -981,7 +981,7 @@ void Mu_Tfit(Int_t type)
     h_barrel_deno_ratio->GetXaxis()->SetTitleSize(0.17);
     h_barrel_deno_ratio->GetXaxis()->SetLabelSize(0.125);
     h_barrel_deno_ratio->GetXaxis()->SetTitleOffset(0.8);
-//    h_barrel_deno_ratio->GetXaxis()->SetRangeUser(0, 0.5);
+    h_barrel_deno_ratio->GetXaxis()->SetRangeUser(0, 0.5);
     h_barrel_deno_ratio->GetYaxis()->SetTitle("Data/MC");
     h_barrel_deno_ratio->GetYaxis()->SetTitleSize(0.114);
     h_barrel_deno_ratio->GetYaxis()->SetTitleOffset(0.48);
@@ -1057,8 +1057,8 @@ void Mu_Tfit(Int_t type)
                              LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
 
     rh_endcap_deno_data->plotOn(frame_endcap_deno, DataError(RooAbsData::SumW2));
-//    frame_endcap_deno->GetXaxis()->SetRangeUser(0, 0.5);
-    frame_endcap_deno->GetYaxis()->SetRangeUser(1, 2e8);
+    frame_endcap_deno->GetXaxis()->SetRangeUser(0, 0.5);
+    frame_endcap_deno->GetYaxis()->SetRangeUser(10, 1e9);
     frame_endcap_deno->Draw();
     fit_endcap_deno->Print();
 
@@ -1102,7 +1102,7 @@ void Mu_Tfit(Int_t type)
     h_endcap_deno_ratio->GetXaxis()->SetTitleSize(0.17);
     h_endcap_deno_ratio->GetXaxis()->SetLabelSize(0.125);
     h_endcap_deno_ratio->GetXaxis()->SetTitleOffset(0.8);
-//    h_endcap_deno_ratio->GetXaxis()->SetRangeUser(0, 0.5);
+    h_endcap_deno_ratio->GetXaxis()->SetRangeUser(0, 0.5);
     h_endcap_deno_ratio->GetYaxis()->SetTitle("Data/MC");
     h_endcap_deno_ratio->GetYaxis()->SetTitleSize(0.114);
     h_endcap_deno_ratio->GetYaxis()->SetTitleOffset(0.48);

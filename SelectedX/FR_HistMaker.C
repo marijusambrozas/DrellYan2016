@@ -683,12 +683,12 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
 //            for (UInt_t i_mu=0; i_mu<p_T->size(); i_mu++) {if (p_T->at(i_mu)<52) skip = 1;}
 //            if (skip) continue;
 
-            Int_t nIso = 0;
-            for (UInt_t i_mu=0; i_mu<p_T->size(); i_mu++)
-            {
-                if (relPFiso->at(i_mu) < 0.15) nIso++;
-            }
-            if (nIso > 1) continue;
+//            Int_t nIso = 0;
+//            for (UInt_t i_mu=0; i_mu<p_T->size(); i_mu++)
+//            {
+//                if (relPFiso->at(i_mu) < 0.15) nIso++;
+//            }
+//            if (nIso > 1) continue;
 
             // -- Pileup-Reweighting -- //
             Double_t PUWeight = 1;
