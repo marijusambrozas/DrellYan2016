@@ -193,12 +193,6 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
 
-//        So far using the same binning as muon FR
-//        const int ptbinnum_endcap = 14;
-//        double ptbin_endcap[ptbinnum_endcap+1] = {17,28,30,35,40,50,60,70,80,90,100,150,200,500,1000};
-//        const int ptbinnum = 22;
-//        double ptbin[ptbinnum+1] = {17,28,35,40,50,60,70,80,90,100,120,140,160,180,200,250,300,350,400,450,500,700,1000};
-
         TTree* ElectronTree = new TTree("FRTree", "FRTree");
         // -- Creating electron variables to assign branches -- //
         ElectronTree->Branch("p_T", &p_T);
@@ -251,6 +245,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             for (Int_t i=0; i<NEvents; i++)
             {
                 ntuple->GetEvent(i);
+
+//                if (ntuple->pfMET_pT >= 20) continue;
 
                 // -- Positive/Negative Gen-weights -- //
                 ntuple->GENEvt_weight < 0 ? gen_weight = -1 : gen_weight = 1;

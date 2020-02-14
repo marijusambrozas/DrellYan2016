@@ -109,6 +109,7 @@ public:
         const double ptbin_endcap[nPtBinEndcap+1] = {52,60,70,80,90,100,150,200,500,1000};
         Double_t FR_barrel[nPtBinBarrel];
         Double_t FR_endcap[nPtBinEndcap];
+        const double prescales[8] = {0.0016/36.47, 0.0066/36.47, 0.0132/36.47, 0.0264/36.47, 0.13/36.47, 0.26/36.47, 0.54/36.47, 1};
 
 	// -- Constructor -- //
 	DYAnalyzer(TString HLTname);
@@ -216,6 +217,8 @@ public:
         Bool_t EventSelection_FR(vector<Electron> ElectronCollection, NtupleHandle *ntuple, vector<Electron> *SelectedElectronCollection); // Electron selection
         void SetupFRvalues(TString filename, TString type="sigCtrl_template");
         Double_t FakeRate(Double_t p_T, Double_t eta);
+        Double_t PrescaleFactor(vector<Muon> MuonCollection, NtupleHandle *ntuple);
+        Double_t getPrescale(Double_t Et);
 
 
 	Bool_t isPassAccCondition_Muon(Muon Mu1, Muon Mu2);
@@ -6194,7 +6197,38 @@ Bool_t DYAnalyzer::EventSelection_FRsingleJetEst(vector<Muon> MuonCollection, Nt
 
 
 Bool_t DYAnalyzer::EventSelection_FR(vector<Electron> ElectronCollection, NtupleHandle *ntuple, vector<Electron> *SelectedElectronCollection) // Electron selection
-{return kTRUE;}
+{
+    Bool_t isPassEventSelection = kFALSE;
+    SelectedElectronCollection->clear();
+
+    Bool_t skip = kTRUE;
+    for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
+    { // Asking for only one electron to surpass trigger threshold
+        if(ElectronCollection[j].Pt > LeadPtCut && fabs(ElectronCollection[j].etaSC) < SubEtaCut && ElectronCollection[j].mHits == 0 &&
+           !(fabs(ElectronCollection[j].etaSC) > 1.4442 && fabs(ElectronCollection[j].etaSC) < 1.566))
+            skip = kFALSE;
+    }
+    if (skip == kTRUE)
+        return isPassEventSelection;
+
+    Double_t med_count = 0;
+    for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
+    { // All other muons still have to pass these criteria
+        if (fabs(ElectronCollection[j].etaSC) < SubEtaCut && (ElectronCollection[j].mHits == 0) &&
+           !(fabs(ElectronCollection[j].etaSC) > 1.4442 && fabs(ElectronCollection[j].etaSC) < 1.566))
+        {
+            isPassEventSelection = kTRUE;
+            SelectedElectronCollection->push_back(ElectronCollection[j]);
+            if (ele.passMediumID) med_count++;
+        }
+    }
+//    if (med_count > 1)
+//    {
+//        isPassEventSelection = kFALSE;
+//        SelectedElectronCollection->clear();
+//    }
+    return isPassEventSelection;
+}
 
 
 void DYAnalyzer::SetupFRvalues(TString filename, TString type) // type can be "ratio", "template", "mixed", "sigCtrl_template" or "dalmin"
@@ -6259,6 +6293,22 @@ Double_t DYAnalyzer::FakeRate(Double_t p_T, Double_t eta)
         return FR_endcap[i_bin];
     }
 } // End of FakeRate()
+
+
+Double_t DYAnalyzer::PrescaleFactor(vector<Muon> MuonCollection, NtupleHandle *ntuple)
+{
+    Double_t Weight = -9999;
+    for(Int_t i_mu=0; i_mu<(Int_t)MuonCollection.size(); i_mu++)
+    {
+        Muon mu = MuonCollection[i_mu];
+        if(mu.isTrigMatched(ntuple, "HLT_Photon*"))
+        {
+            Weight = getPrescale(mu.Et);
+            break;
+        }
+    }
+    return Weight;
+}
 
 
 
