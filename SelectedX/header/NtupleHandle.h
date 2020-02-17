@@ -960,10 +960,10 @@ public:
         {
             for( Int_t k = 0; k < HLT_ntrig; k++ )
             {
-                if( (HLT_trigName->at((unsigned int)k)) == "HLT_Photon22*"  || (HLT_trigName->at((unsigned int)k)) == "HLT_Photon30*" ||
-                    (HLT_trigName->at((unsigned int)k)) == "HLT_Photon36*"  || (HLT_trigName->at((unsigned int)k)) == "HLT_Photon50*" ||
-                    (HLT_trigName->at((unsigned int)k)) == "HLT_Photon75*"  || (HLT_trigName->at((unsigned int)k)) == "HLT_Photon90*" ||
-                    (HLT_trigName->at((unsigned int)k)) == "HLT_Photon120*" || (HLT_trigName->at((unsigned int)k)) == "HLT_Photon175*")
+                if( (HLT_trigName->at((unsigned int)k)) == "HLT_Photon22_v*"  || (HLT_trigName->at((unsigned int)k)) == "HLT_Photon30_v*" ||
+                    (HLT_trigName->at((unsigned int)k)) == "HLT_Photon36_v*"  || (HLT_trigName->at((unsigned int)k)) == "HLT_Photon50_v*" ||
+                    (HLT_trigName->at((unsigned int)k)) == "HLT_Photon75_v*"  || (HLT_trigName->at((unsigned int)k)) == "HLT_Photon90_v*" ||
+                    (HLT_trigName->at((unsigned int)k)) == "HLT_Photon120_v*" || (HLT_trigName->at((unsigned int)k)) == "HLT_Photon175_v*")
                 {
                     if( HLT_trigFired[k] == 1 )
                     {

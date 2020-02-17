@@ -217,7 +217,7 @@ public:
         Bool_t EventSelection_FR(vector<Electron> ElectronCollection, NtupleHandle *ntuple, vector<Electron> *SelectedElectronCollection); // Electron selection
         void SetupFRvalues(TString filename, TString type="sigCtrl_template");
         Double_t FakeRate(Double_t p_T, Double_t eta);
-        Double_t PrescaleFactor(vector<Muon> MuonCollection, NtupleHandle *ntuple);
+        Double_t PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple);
         Double_t getPrescale(Double_t Et);
 
 
@@ -6295,19 +6295,38 @@ Double_t DYAnalyzer::FakeRate(Double_t p_T, Double_t eta)
 } // End of FakeRate()
 
 
-Double_t DYAnalyzer::PrescaleFactor(vector<Muon> MuonCollection, NtupleHandle *ntuple)
+Double_t DYAnalyzer::PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple)
 {
     Double_t Weight = -9999;
     for(Int_t i_mu=0; i_mu<(Int_t)MuonCollection.size(); i_mu++)
     {
         Muon mu = MuonCollection[i_mu];
-        if(mu.isTrigMatched(ntuple, "HLT_Photon*"))
+        if(mu.isTrigMatched(ntuple, "HLT_Photon22_v*") || mu.isTrigMatched(ntuple, "HLT_Photon30_v*") || mu.isTrigMatched(ntuple, "HLT_Photon36_v*") ||
+           mu.isTrigMatched(ntuple, "HLT_Photon50_v*") || mu.isTrigMatched(ntuple, "HLT_Photon75_v*") || mu.isTrigMatched(ntuple, "HLT_Photon90_v*") ||
+           mu.isTrigMatched(ntuple, "HLT_Photon120_v*") || mu.isTrigMatched(ntuple, "HLT_Photon175_v*"))
         {
             Weight = getPrescale(mu.Et);
             break;
         }
     }
     return Weight;
+}
+
+
+Double_t DYAnalyzer::getPrescale(Double_t Et)
+{
+    Double_t prescale = 0;
+
+    if (Et < 30) prescale = prescales[0];
+    else if (Et < 36) prescale = prescales[1];
+    else if (Et < 50) prescale = prescales[2];
+    else if (Et < 75) prescale = prescales[3];
+    else if (Et < 90) prescale = prescales[4];
+    else if (Et < 120) prescale = prescales[5];
+    else if (Et < 175) prescale = prescales[6];
+    else prescale = prescales[7];
+
+    return prescale;
 }
 
 

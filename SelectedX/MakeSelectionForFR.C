@@ -185,13 +185,13 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         std::vector<double> *phi = new std::vector<double>;
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
-        std::vector<double> *TRKiso = new std::vector<double>;
         Double_t MET_pT, MET_phi, MET_sumEt;
         Int_t nPU;
         Int_t nVTX;
         Double_t PVz;
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
+        Double_t prescale_factor;
 
         TTree* ElectronTree = new TTree("FRTree", "FRTree");
         // -- Creating electron variables to assign branches -- //
@@ -211,6 +211,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         ElectronTree->Branch("prefiring_weight", &prefiring_weight);
         ElectronTree->Branch("prefiring_weight_up", &prefiring_weight_up);
         ElectronTree->Branch("prefiring_weight_down", &prefiring_weight_down);
+        ElectronTree->Branch("prescale_factor", &prescale_factor);
 
         // Loop for all samples in a process
         for (Int_t i_tup = 0; i_tup<Ntup; i_tup++)
@@ -292,7 +293,6 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         phi->clear();
                         charge->clear();
                         relPFiso->clear();
-                        TRKiso->clear();
 
                         // -- Top pT reweighting -- //
                         top_weight = 1;
@@ -315,6 +315,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         prefiring_weight = ntuple->_prefiringweight;
                         prefiring_weight_up = ntuple->_prefiringweightup;
                         prefiring_weight_down = ntuple->_prefiringweightdown;
+                        prescale_factor = analyzer->PrescaleFactor(SelectedElectronCollection, ntuple);
+                        if (prescale_factor <= 0) continue; // If no trigger match between selected electrons
 
                         // -- Vector filling -- //
                         for (UInt_t i=0; i<SelectedElectronCollection.size(); i++)
