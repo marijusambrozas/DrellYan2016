@@ -10,6 +10,7 @@
 #include <TGraphErrors.h>
 #include <TH2.h>
 #include <TGraphAsymmErrors.h>
+#include <TSystem.h>
 #include <iostream>
 
 #define Lumi 35867 // -- from Run2016B to Run2016H, JSON. unit: /pb, Updated at 2017.07.30 -- //
@@ -6223,7 +6224,7 @@ Bool_t DYAnalyzer::EventSelection_FR(vector<Electron> ElectronCollection, Ntuple
         {
             isPassEventSelection = kTRUE;
             SelectedElectronCollection->push_back(ElectronCollection[j]);
-            if (ele.passMediumID) med_count++;
+            if (ElectronCollection[j].passMediumID) med_count++;
         }
     }
 //    if (med_count > 1)
@@ -6302,14 +6303,14 @@ Double_t DYAnalyzer::FakeRate(Double_t p_T, Double_t eta)
 Double_t DYAnalyzer::PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple)
 {
     Double_t Weight = -9999;
-    for(Int_t i_mu=0; i_mu<(Int_t)MuonCollection.size(); i_mu++)
+    for(Int_t i_ele=0; i_ele<(Int_t)ElectronCollection.size(); i_ele++)
     {
-        Muon mu = MuonCollection[i_mu];
-        if(mu.isTrigMatched(ntuple, "HLT_Photon22_v*") || mu.isTrigMatched(ntuple, "HLT_Photon30_v*") || mu.isTrigMatched(ntuple, "HLT_Photon36_v*") ||
-           mu.isTrigMatched(ntuple, "HLT_Photon50_v*") || mu.isTrigMatched(ntuple, "HLT_Photon75_v*") || mu.isTrigMatched(ntuple, "HLT_Photon90_v*") ||
-           mu.isTrigMatched(ntuple, "HLT_Photon120_v*") || mu.isTrigMatched(ntuple, "HLT_Photon175_v*"))
+        Electron ele = ElectronCollection[i_ele];
+        if(ele.isTrigMatched(ntuple, "HLT_Photon22_v*") || ele.isTrigMatched(ntuple, "HLT_Photon30_v*") || ele.isTrigMatched(ntuple, "HLT_Photon36_v*") ||
+           ele.isTrigMatched(ntuple, "HLT_Photon50_v*") || ele.isTrigMatched(ntuple, "HLT_Photon75_v*") || ele.isTrigMatched(ntuple, "HLT_Photon90_v*") ||
+           ele.isTrigMatched(ntuple, "HLT_Photon120_v*") || ele.isTrigMatched(ntuple, "HLT_Photon175_v*"))
         {
-            Weight = getPrescale(mu.Et);
+            Weight = getPrescale(ele.Et);
             break;
         }
     }
