@@ -1,7 +1,1 @@
-DoubleEG_B
-DoubleEG_C
-DoubleEG_D
-DoubleEG_E
-DoubleEG_F
-DoubleEG_G
-DoubleEG_H
+ZZ
