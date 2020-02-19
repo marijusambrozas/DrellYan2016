@@ -10,19 +10,18 @@ WhichX=$1
 Trigger=$3
 #echo $Trigger
 
-#source /cvmfs/cms.cern.ch/cmsset_default.sh
-#source /cms/ldap_home/mambroza/DrellYan2016/SelectedX/Execute/cmsset_default.sh&
-#wait %1
-#scram p CMSSW CMSSW_8_0_6&
-#wait %1
-#cd CMSSW_8_4_0/src
-#eval `scram runtime -sh`&
-#wait %1
-/cms/ldap_home/mambroza/DrellYan2016/SelectedX/Execute/setup.sh
+#yum whatprovides libnss_sss.so.2
+yum update
+
+export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
+export SCRAM_ARCH=slc6_amd64_gcc530
+source $VO_CMS_SW_DIR/cmsset_default.sh
+cd $VO_CMS_SW_DIR/$SCRAM_ARCH/cms/cmssw/CMSSW_8_0_32/src
+eval `scramv1 runtime -sh`
 
 cd /cms/ldap_home/mambroza/DrellYan2016/SelectedX/
-#ls
 #voms-proxy-init --voms cms
+#grid-proxy-init
 
 Process=$2
 root -l -q -b MakeSelectedX.C'("'$WhichX'", "'$Process'", "'$Trigger'")'&

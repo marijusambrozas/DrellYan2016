@@ -25,6 +25,7 @@
 #include "./header/FileMgr.h"
 #include "./etc/RoccoR/RoccoR.cc"
 
+
 void MakeSelectedEE (TString type, TString HLTname, Bool_t Debug);
 void MakeSelectedMuMu (TString type, TString HLTname, Bool_t Debug);
 void MakeSelectedEMu (TString type, TString HLTname, Bool_t Debug);
@@ -492,7 +493,7 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t Debug)
             RoccoR rc(RCaddress);
 
             // Loop for all events in the chain
-            for (Int_t i=0; i<NEvents; i++)
+            for (Int_t i=0; i<100/*NEvents*/; i++)
             {
                 ntuple->GetEvent(i);
 
@@ -550,7 +551,9 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t Debug)
                             else
                                 SF = rc.kScaleAndSmearMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
                         }
+                        cout << "Pt " << mu.Pt << "  SF " << SF;
                         mu.Pt = SF*mu.Pt;
+                        cout << "   new Pt " << mu.Pt << endl;
                         mu.Momentum.SetPtEtaPhiM(mu.Pt, mu.eta, mu.phi, M_Mu);
 
                         MuonCollection.push_back(mu);

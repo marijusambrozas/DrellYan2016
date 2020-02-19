@@ -11,6 +11,7 @@ ZZ
 tW
 tbarW
 WJets
+WJets_ext2v5
 DoubleEG_B
 DoubleEG_C
 DoubleEG_D
