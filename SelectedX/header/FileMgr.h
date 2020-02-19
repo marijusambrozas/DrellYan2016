@@ -1,8 +1,5 @@
 // Header for file management
 // Created by Marijus Ambrozas 2018.08.14
-// 2018.08.16: Changed FindProc to return vector of processes (so you can type a larger invM interval and get more processes), changed searching mechanisms.
-// 2018.08.17: Added TString Type  ("DATA", "SIGNAL", or "BKG") and vector<TString> TreeName.
-// 2018.08.20: Added Test processes (for testing in local PC). Moved CheckProcesses and PrepareProcNames to private functions. CheckProcesses now checks if ClearProc works.
 
 #pragma once
 
@@ -42,16 +39,18 @@ enum Process_t
     _DoubleEG_B, _DoubleEG_C, _DoubleEG_D, _DoubleEG_E, _DoubleEG_F, _DoubleEG_G, _DoubleEG_H,
     _EndOf_DoubleEG_Normal,
     _SingleMuon_B, _SingleMuon_C, _SingleMuon_D, _SingleMuon_E, _SingleMuon_F, _SingleMuon_G, _SingleMuon_H,
-    _EndOf_SinglMuon_Normal,
+    _EndOf_SingleMuon_Normal,
     _SingleElectron_B, _SingleElectron_C, _SingleElectron_D, _SingleElectron_E, _SingleElectron_F, _SingleElectron_G, _SingleElectron_H,
     _EndOf_SingleElectron_Normal,
+    _SinglePhoton_B, _SinglePhoton_C, _SinglePhoton_D, _SinglePhoton_E, _SinglePhoton_F, _SinglePhoton_G, _SinglePhoton_H,
+    _EndOf_SinglePhoton_Normal,
     _EndOf_Data_Normal,
     // "Special" processes - similar processes are combined
     _DY_Full, _DYMuMu_Full, _DYEE_Full,
     _EndOf_MCsignal_Special,
     _DYTauTau_Full, _ttbar_Full, _VVnST, _WJets_Full, _QCDMuEnriched_Full, _QCDEMEnriched_Full, _bkg_Full,
     _EndOf_MCbkg_Special, // there is no WJets in bkgSpecial
-    _DoubleEG_Full, _SingleMuon_Full, _SingleElectron_Full,
+    _DoubleEG_Full, _SingleMuon_Full, _SingleElectron_Full, _SinglePhoton_Full,
     _EndOf_Data_Special,
     // Processes for testing at local pc
     _Test_MuMu, _Test_EE, _Test_EMu,
@@ -72,8 +71,8 @@ Process_t previous (Process_t pr)    // Processes that begin with "EndOf" will b
       return Process_t(int(pr)-3);
   else if (pr == _DYMuMu_10to50 || pr == _DYEE_10to50 || pr == _EndOf_MCsignal_Normal || pr == _ttbar || pr == _tW ||
            pr == _WJets || pr == _QCDMuEnriched_15to20 || pr == _QCDEMEnriched_20to30 || pr == _EndOf_MCbkg_Normal || pr == _SingleMuon_B ||
-           pr == _SingleElectron_B || pr == _EndOf_Data_Normal || pr == _DYTauTau_Full || pr == _DoubleEG_Full || pr == _Test_MuMu ||
-           pr == _A_DY_50to100 || pr == _A_WJets || pr == _A_DY_Full)
+           pr == _SingleElectron_B || pr == _SinglePhoton_B || pr == _EndOf_Data_Normal || pr == _DYTauTau_Full || pr == _DoubleEG_Full ||
+           pr == _Test_MuMu || pr == _A_DY_50to100 || pr == _A_WJets || pr == _A_DY_Full)
       return Process_t(int(pr)-2);
   else
       return Process_t(int(pr)-1);
@@ -85,12 +84,12 @@ Process_t next (Process_t pr)    // Processes that begin with "EndOf" will be sk
 {
   if (pr == _EndOf_Alternatives)
       return pr;
-  else if (pr == _DYEE_2000to3000 || pr == _QCDEMEnriched_300toInf || pr == _SingleElectron_H)
+  else if (pr == _DYEE_2000to3000 || pr == _QCDEMEnriched_300toInf || pr == _SinglePhoton_H)
       return Process_t(int(pr)+3);
   else if (pr == _DY_2000to3000 || pr == _DYMuMu_2000to3000 || pr == _EndOf_DYEE_Normal || pr == _DYTauTau_50toInf || pr == _ttbar_1000toInf ||
            pr == _WW || pr == _WJets_ext2v5 || pr == _QCDMuEnriched_1000toInf || pr == _EndOf_QCDEMEnriched_Normal || pr == _DoubleEG_H ||
-           pr == _SingleMuon_H || pr == _EndOf_SingleElectron_Normal || pr == _DYEE_Full || pr == _bkg_Full || pr == _SingleElectron_Full ||
-           pr == _Test_EMu || pr == _A_DY_650toInf || pr == _A_WW)
+           pr == _SingleMuon_H || pr == _SingleElectron_H || pr == _EndOf_SinglePhoton_Normal || pr == _DYEE_Full || pr == _bkg_Full ||
+           pr == _SinglePhoton_Full || pr == _Test_EMu || pr == _A_DY_650toInf || pr == _A_WW)
       return Process_t(int(pr)+2);
   else
       return Process_t(int(pr)+1);
@@ -2485,6 +2484,135 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(31);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
+    else if (pr == _SinglePhoton_B)
+    {
+        isMC = kFALSE;
+        Type = "DATA";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
+
+        Tag.push_back("SinglePhoton_B"); nEvents.push_back(-1);
+        Location = "SinglePhoton_Run2016B/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(9999);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+    }
+    else if (pr == _SinglePhoton_C)
+    {
+        isMC = kFALSE;
+        Type = "DATA";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
+
+        Tag.push_back("SinglePhoton_C"); nEvents.push_back(-1);
+        Location = "SinglePhoton_Run2016C/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(9999);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+    }
+    else if (pr == _SinglePhoton_D)
+    {
+        isMC = kFALSE;
+        Type = "DATA";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
+
+        Tag.push_back("SinglePhoton_D"); nEvents.push_back(-1);
+        Location = "SinglePhoton_Run2016D/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(9999);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+    }
+    else if (pr == _SinglePhoton_E)
+    {
+        isMC = kFALSE;
+        Type = "DATA";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
+
+        Tag.push_back("SinglePhoton_E"); nEvents.push_back(-1);
+        Location = "SinglePhoton_Run2016E/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(9999);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+    }
+    else if (pr == _SinglePhoton_F)
+    {
+        isMC = kFALSE;
+        Type = "DATA";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
+
+        Tag.push_back("SinglePhoton_F"); nEvents.push_back(-1);
+        Location = "SinglePhoton_Run2016F/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(9999);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+    }
+    else if (pr == _SinglePhoton_G)
+    {
+        isMC = kFALSE;
+        Type = "DATA";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
+
+        Tag.push_back("SinglePhoton_G"); nEvents.push_back(-1);
+        Location = "SinglePhoton_Run2016G/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(9999);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+    }
+    else if (pr == _SinglePhoton_H)
+    {
+        isMC = kFALSE;
+        Type = "DATA";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
+
+        Tag.push_back("SinglePhoton_Hver2"); nEvents.push_back(-1);
+        Location = "SinglePhoton_Run2016Hver2/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(9999);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("SinglePhoton_Hver3"); nEvents.push_back(-1);
+        Location = "SinglePhoton_Run2016Hver3/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(9999);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+    }
+
+    else if (pr == _SinglePhoton_Full)
+    {
+        isMC = kFALSE;
+        Type = "DATA";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
+
+        Tag.push_back("SinglePhoton_B"); nEvents.push_back(-1);
+        Location = "SinglePhoton_Run2016B/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(9999);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("SinglePhoton_C"); nEvents.push_back(-1);
+        Location = "SinglePhoton_Run2016C/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(9999);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("SinglePhoton_D"); nEvents.push_back(-1);
+        Location = "SinglePhoton_Run2016D/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(9999);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("SinglePhoton_E"); nEvents.push_back(-1);
+        Location = "SinglePhoton_Run2016E/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(9999);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("SinglePhoton_F"); nEvents.push_back(-1);
+        Location = "SinglePhoton_Run2016F/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(9999);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("SinglePhoton_G"); nEvents.push_back(-1);
+        Location = "SinglePhoton_Run2016G/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(9999);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("SinglePhoton_Hver2"); nEvents.push_back(-1);
+        Location = "SinglePhoton_Run2016Hver2/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(9999);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("SinglePhoton_Hver3"); nEvents.push_back(-1);
+        Location = "SinglePhoton_Run2016Hver3/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(9999);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+    }
     else if (pr == _Test_MuMu)
     {
         isMC = kTRUE;
@@ -2736,6 +2864,7 @@ vector<Process_t> FileMgr::FindProc (TString search, Bool_t notify, Bool_t insta
     srch.ReplaceAll(" TO", "TO"); srch.ReplaceAll("_TO", "TO");
     srch.ReplaceAll("TO ", "TO"); srch.ReplaceAll("TO_", "TO");
     srch.ReplaceAll("DRELLYAN", "DY");
+    srch.ReplaceAll("DRELL-YAN", "DY");
     srch.ReplaceAll("ZW", "WZ");
     srch.ReplaceAll("SINGLETOP", "TW");
     srch.ReplaceAll("SINGLEANTITOP", "TBARW") ;
@@ -3260,7 +3389,7 @@ vector<Process_t> FileMgr::FindProc (TString search, Bool_t notify, Bool_t insta
         if (notify == kTRUE) cout << Procname[_tW] << "." << endl;
     }
 
-    else if (srch.Contains("TBARW") || srch.Contains("SINGLEANTITOP"))
+    else if (srch.Contains("TBARW"))
     {
         Result.push_back(_tbarW);
         if (notify == kTRUE) cout << Procname[_tbarW] << "." << endl;
@@ -3851,6 +3980,111 @@ vector<Process_t> FileMgr::FindProc (TString search, Bool_t notify, Bool_t insta
             }
         }// end of if(SingleElectron)
 
+        if (srch.Contains("PHOT") || srch.Contains("GAMMA"))
+        {
+            // Checking if search contains intervals
+            if (srch.Contains("BTO"))
+                first = _SinglePhoton_B;
+            else if (srch.Contains("CTO"))
+                first = _SinglePhoton_C;
+            else if (srch.Contains("DTO"))
+                first = _SinglePhoton_D;
+            else if (srch.Contains("ETO"))
+                first = _SinglePhoton_E;
+            else if (srch.Contains("FTO"))
+                first = _SinglePhoton_F;
+            else if (srch.Contains("GTO"))
+                first = _SinglePhoton_G;
+            else if (srch.Contains("HTO"))
+                first = _SinglePhoton_H;
+
+            if (srch.Contains("TOB"))
+                last = _SinglePhoton_B;
+            else if (srch.Contains("TOC"))
+                last = _SinglePhoton_C;
+            else if (srch.Contains("TOD"))
+                last = _SinglePhoton_D;
+            else if (srch.Contains("TOE"))
+                last = _SinglePhoton_E;
+            else if (srch.Contains("TOF"))
+                last = _SinglePhoton_F;
+            else if (srch.Contains("TOG"))
+                last = _SinglePhoton_G;
+            else if (srch.Contains("TOH"))
+                last = _SinglePhoton_H;
+
+            // Swapping first with last if necessary
+            if (int(first)>int(last) && last!=_None)
+            {
+                Process_t NewLast = first;
+                first = last;
+                last = NewLast;
+            }
+            if (first == _SinglePhoton_B && last == _SinglePhoton_H)
+            {
+                Result.push_back(_SinglePhoton_Full);
+                if (notify == kTRUE) cout << Procname[_SinglePhoton_Full] << "." << endl;
+            }
+            else if (first != _None && last != _None)
+            {
+                for (Process_t pr=first; pr<=last; pr=next(pr))
+                {
+                    Result.push_back(pr);
+                    if (notify == kTRUE)
+                    {
+                        if (pr != last) cout << Procname[pr] << ", ";
+                        else cout << Procname[pr] << "." << endl;
+                    }
+                }
+            }
+            // Goes on if there are no intervals
+            else if (srch.Contains("FULL"))
+            {
+                Result.push_back(_SinglePhoton_Full);
+                if (notify == kTRUE) cout << Procname[_SinglePhoton_Full] << "." << endl;
+            }
+            else if (srch.Contains("_B")  || srch.Contains("RUNB"))
+            {
+                Result.push_back(_SinglePhoton_B);
+                if (notify == kTRUE) cout << Procname[_SinglePhoton_B] << "." << endl;
+            }
+            else if (srch.Contains("_C") || srch.Contains("RUNC"))
+            {
+                Result.push_back(_SinglePhoton_C);
+                if (notify == kTRUE) cout << Procname[_SinglePhoton_C] << "." << endl;
+            }
+            else if (srch.Contains("_D") || srch.Contains("RUND"))
+            {
+                Result.push_back(_SinglePhoton_D);
+                if (notify == kTRUE) cout << Procname[_SinglePhoton_D] << "." << endl;
+            }
+            else if (srch.Contains("_E") || srch.Contains("RUNE"))
+            {
+                Result.push_back(_SinglePhoton_E);
+                if (notify == kTRUE) cout << Procname[_SinglePhoton_E] << "." << endl;
+            }
+            else if (srch.Contains("_F") || srch.Contains("RUNF"))
+            {
+                Result.push_back(_SinglePhoton_F);
+                if (notify == kTRUE) cout << Procname[_SinglePhoton_F] << "." << endl;
+            }
+            else if (srch.Contains("_G")|| srch.Contains("RUNG"))
+            {
+                Result.push_back(_SinglePhoton_G);
+                if (notify == kTRUE) cout << Procname[_SinglePhoton_G] << "." << endl;
+            }
+            else if (srch.Contains("_H")|| srch.Contains("RUNH"))
+            {
+                Result.push_back(_SinglePhoton_H);
+                if (notify == kTRUE) cout << Procname[_SinglePhoton_H] << "." << endl;
+            }
+            else
+            {
+                Result.push_back(_SinglePhoton_Full);
+                if (notify == kTRUE) cout << Procname[_SinglePhoton_Full] << "." << endl;
+            }
+        }// end of if(SinglePhoton)
+
     }// end of if(Single)
 
     else if (srch.Contains("SIGNAL"))
@@ -3998,7 +4232,7 @@ void FileMgr::PrepareProcNames ()
     Procname[_SingleMuon_F] = "SingleMuon_F";
     Procname[_SingleMuon_G] = "SingleMuon_G";
     Procname[_SingleMuon_H] = "SingleMuon_H";
-    Procname[_EndOf_SinglMuon_Normal] = "EndOf_SinglMuon_Normal";
+    Procname[_EndOf_SingleMuon_Normal] = "EndOf_SinglMuon_Normal";
     Procname[_SingleElectron_B] = "SingleElectron_B";
     Procname[_SingleElectron_C] = "SingleElectron_C";
     Procname[_SingleElectron_D] = "SingleElectron_D";
@@ -4006,6 +4240,13 @@ void FileMgr::PrepareProcNames ()
     Procname[_SingleElectron_F] = "SingleElectron_F";
     Procname[_SingleElectron_G] = "SingleElectron_G";
     Procname[_SingleElectron_H] = "SingleElectron_H";
+    Procname[_SinglePhoton_B] = "SinglePhoton_B";
+    Procname[_SinglePhoton_C] = "SinglePhoton_C";
+    Procname[_SinglePhoton_D] = "SinglePhoton_D";
+    Procname[_SinglePhoton_E] = "SinglePhoton_E";
+    Procname[_SinglePhoton_F] = "SinglePhoton_F";
+    Procname[_SinglePhoton_G] = "SinglePhoton_G";
+    Procname[_SinglePhoton_H] = "SinglePhoton_H";
     Procname[_EndOf_SingleElectron_Normal] = "EndOf_SingleElectron_Normal";
     Procname[_EndOf_Data_Normal] = "EndOf_Data_Normal";
     Procname[_DY_Full] = "DY_Full";
@@ -4023,6 +4264,7 @@ void FileMgr::PrepareProcNames ()
     Procname[_DoubleEG_Full] = "DoubleEG_Full";
     Procname[_SingleMuon_Full] = "SingleMuon_Full";
     Procname[_SingleElectron_Full] = "SingleElectron_Full";
+    Procname[_SinglePhoton_Full] = "SinglePhoton_Full";
     Procname[_EndOf_Data_Special] = "EndOf_Data_Special";
     Procname[_Test_MuMu] = "Test_MuMu";
     Procname[_Test_EE] = "Test_EE";
