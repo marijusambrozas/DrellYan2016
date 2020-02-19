@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ ${#1} -eq 0 ] || [ ${#2} -eq 0 ] ; then
-    echo "./SelectAllX.sh <WhichX> <Process> <Trigger>"
+    echo "./SelectFR.sh <WhichX> <Process> <Trigger>"
     exit
 fi
 
@@ -21,12 +21,12 @@ cd /cms/ldap_home/mambroza/DrellYan2016/SelectedX/
 #grid-proxy-init
 
 Process=$2
-root -l -q -b MakeSelectedX.C'("'$WhichX'", "'$Process'", "'$Trigger'")'&
+root -l -q -b MakeSelectionForFR.C'("'$WhichX'", "'$Process'", "'$Trigger'")'&
 wait %1
-if [[ $Process == *'QCDEM_120to170'* ]] ; then
-    root -l -q -b MakeSelectedX.C'("QCDfail", "", "'$Trigger'")'&
-    wait %1
-    root -l -q -b MakeSelectedX.C'("QCDmerge", "", "")'
-fi
+#if [[ $Process == *'QCDEM_120to170'* ]] ; then
+#    root -l -q -b MakeSelectedX.C'("QCDfail", "", "'$Trigger'")'&
+#    wait %1
+#    root -l -q -b MakeSelectedX.C'("QCDmerge", "", "")'
+#fi
 
 exit
