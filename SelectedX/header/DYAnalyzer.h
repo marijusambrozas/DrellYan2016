@@ -1,9 +1,7 @@
 // -- Class for common functions used in DY differential cross section measurement analysis @ 13 TeV -- //
 // -- Author: KyoengPil Lee, 05 Dec. 2015 -- //
 // -- Author: Dalmin Pai, 11 Sep. 2017 -- //
-// -- Synchronize acceptance cuts in dilepton channels : 19 Jan. 2018 -- //
-// -- Change sub-leading pT cut (17->28) and isolation (trkiso->RelPFIso_dBeta) in muon channel : 24 Jan. 2018 -- //
-// -- Add N-1 selection of trkiso : 26 Jan. 2018 -- //
+// -- Author: Marijus Ambrozas, 3 Jul. 2018 //
 #pragma once
 
 #include "Object.h"
@@ -174,9 +172,7 @@ public:
         Int_t Find_electron_EtaBin_ID(Double_t eta);
         Int_t Find_electron_EtaBin_Trig(Double_t eta);
 	
-	////////////////////////////
-	// -- Event Selections -- //
-	////////////////////////////
+        // -- Event selection for muon channel -- //
 	Bool_t EventSelection(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection); // -- output: 2 muons passing event selection conditions -- //
         Bool_t EventSelection(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection, vector< Int_t >* Index); // -- output: 2 muons passing event selection conditions and their indices -- //  //*Derived by Marijus Ambrozas 2018.07*//
         Bool_t EventSelection_Mu50(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection); // -- output: 2 muons passing event selection conditions -- //
@@ -196,6 +192,13 @@ public:
 	Bool_t EventSelection_Wjet(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection); // -- output: 2 muons passing event selection conditions -- //
 	Bool_t EventSelection_CheckMoreThanOneDimuonCand(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection, Bool_t& isMoreThanOneCand); // -- output: 2 muons passing event selection conditions -- //
 
+        Bool_t isPassAccCondition_Muon(Muon Mu1, Muon Mu2);
+        Bool_t isPassAccCondition_GenLepton(GenLepton genlep1, GenLepton genlep2);
+        void CompareMuon(Muon *Mu1, Muon *Mu2, Muon *leadMu, Muon *subMu);
+        void CompareGenLepton(GenLepton *genlep1, GenLepton *genlep2, GenLepton *leadgenlep, GenLepton *subgenlep);
+        void DimuonVertexProbNormChi2(NtupleHandle *ntuple, Double_t Pt1, Double_t Pt2, Double_t *VtxProb, Double_t *VtxNormChi2);
+        void DimuonVertexProbNormChi2(LongSelectedMuMu_t *ntuple, Double_t Pt1, Double_t Pt2, Double_t *VtxProb, Double_t *VtxNormChi2);
+
 	// -- for N-1 cuts of muon channel -- //
 	Bool_t EventSelection_Zdiff_13TeV_HighPt1(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection);
 	Bool_t EventSelection_Zdiff_13TeV_HighPt2(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection);
@@ -209,7 +212,46 @@ public:
 	Bool_t EventSelection_Zdiff_13TeV_HighPt10(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection);
 	Bool_t EventSelection_Zdiff_13TeV_HighPt11(vector< Muon > MuonCollection, NtupleHandle *ntuple, vector< Muon >* SelectedMuonCollection);
 
-        // -- FAKE RATE -- //
+        // -- Event selection for electron channel -- //
+        Bool_t EventSelection_Electron(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection); // -- output: 2 electrons passing event selection conditions -- //
+        Bool_t EventSelection_ElectronChannel_NminusPFIso(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection); // -- output: 2 electrons passing event selection conditions -- //
+        Bool_t EventSelection_ElectronChannel(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection); // -- output: 2 electrons passing event selection conditions -- //
+
+        Bool_t EventSelection_ElectronChannel(vector< Electron > ElectronCollection, NtupleHandle *ntuple,          // -- output: 2 electrons passing event selection conditions
+                                              vector< Electron >* SelectedElectronCollection, vector< Int_t >* Sel_Index);  // and their indices inside the ntuple vectors -- //*Derived by Marijus Ambrozas 2018.08.02*//
+        Bool_t EventSelection_ElectronChannel(vector< Electron > ElectronCollection, LongSelectedEE_t *ntuple,          // -- output: 2 electrons passing event selection conditions
+                                              vector< Electron >* SelectedElectronCollection, vector< Int_t >* Sel_Index);  // and their indices inside the ntuple vectors -- //*Derived by Marijus Ambrozas 2018.08.06*//
+
+        // -- for N-1 cuts of electron channel -- //
+        Bool_t EventSelection_ElectronChannel1(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection);
+        Bool_t EventSelection_ElectronChannel2(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection);
+        Bool_t EventSelection_ElectronChannel3(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection);
+        Bool_t EventSelection_ElectronChannel4(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection);
+        Bool_t EventSelection_ElectronChannel5(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection);
+        Bool_t EventSelection_ElectronChannel6(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection);
+        Bool_t EventSelection_ElectronChannel7(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection);
+        Bool_t EventSelection_ElectronChannel8(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection);
+        Bool_t isPassAccCondition_Electron(Electron Elec1, Electron Elec2);
+        Bool_t isPassAccCondition_GenLepton_ECALGAP(GenLepton genlep1, GenLepton genlep2);
+        void CompareElectron(Electron *Elec1, Electron *Elec2, Electron *leadElec, Electron *subElec);
+
+        // -- Event selection for emu method -- //
+        Bool_t EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple,
+                                              vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection); // -- output: 1 muon and 1 electron passing event selection conditions -- //
+        Bool_t EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple, // Derived by Marijus Ambrozas 2018.08.07
+                                              vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection,
+                                              Int_t &Sel_Index_Mu, Int_t &Sel_Index_Ele); // -- output: 1 muon and 1 electron passing event selection conditions and their indices -- //
+        Bool_t EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, LongSelectedEMu_t *ntuple, // Derived by Marijus Ambrozas 2018.08.07
+                                              vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection,
+                                              Int_t &Sel_Index_Mu, Int_t &Sel_Index_Ele); // -- output: 1 muon and 1 electron passing event selection conditions and their indices -- //
+        void emuVertexProbNormChi2(NtupleHandle *ntuple, Double_t Pt1, Double_t Pt2, Double_t *VtxProb, Double_t *VtxNormChi2);
+        void emuVertexProbNormChi2(LongSelectedEMu_t *ntuple, Double_t Pt1, Double_t Pt2, Double_t *VtxProb, Double_t *VtxNormChi2);
+        Double_t EfficiencySF_EventWeight_emu_BtoF(Muon mu1, Electron ele2);
+        Double_t EfficiencySF_EventWeight_emu_BtoF(SelectedEMu_t *EMu);
+        Double_t EfficiencySF_EventWeight_emu_GtoH(Muon mu1, Electron ele2);
+        Double_t EfficiencySF_EventWeight_emu_GtoH(SelectedEMu_t *EMu);
+
+        // -- Event selection for Fake Rate -- //
         Bool_t EventSelection_FR(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection_nume, vector<Muon> *SelectedMuonCollection_deno); // -- output: muons passing numerator and denominator selection -- //
         Bool_t EventSelection_FRdijetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection_fail); // -- output: two muons passing regular selection but failing isolation requirements-- //
         Bool_t EventSelection_FRsingleJetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple,  vector<Muon> *SelectedMuonCollection); // -- output: one muon passing full regular selection and another one passing the same selection but failing isolation requirements-- //
@@ -219,37 +261,6 @@ public:
         Double_t FakeRate(Double_t p_T, Double_t eta);
         Double_t PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple);
         Double_t getPrescale(Double_t Et);
-
-
-	Bool_t isPassAccCondition_Muon(Muon Mu1, Muon Mu2);
-	Bool_t isPassAccCondition_GenLepton(GenLepton genlep1, GenLepton genlep2);
-	void CompareMuon(Muon *Mu1, Muon *Mu2, Muon *leadMu, Muon *subMu);
-	void CompareGenLepton(GenLepton *genlep1, GenLepton *genlep2, GenLepton *leadgenlep, GenLepton *subgenlep);
-	void DimuonVertexProbNormChi2(NtupleHandle *ntuple, Double_t Pt1, Double_t Pt2, Double_t *VtxProb, Double_t *VtxNormChi2);
-        void DimuonVertexProbNormChi2(LongSelectedMuMu_t *ntuple, Double_t Pt1, Double_t Pt2, Double_t *VtxProb, Double_t *VtxNormChi2);
-
-	// -- for electron channel -- //
-	Bool_t EventSelection_Electron(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection); // -- output: 2 electrons passing event selection conditions -- //
-	Bool_t EventSelection_ElectronChannel_NminusPFIso(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection); // -- output: 2 electrons passing event selection conditions -- //
-	Bool_t EventSelection_ElectronChannel(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection); // -- output: 2 electrons passing event selection conditions -- //
-
-        Bool_t EventSelection_ElectronChannel(vector< Electron > ElectronCollection, NtupleHandle *ntuple,          // -- output: 2 electrons passing event selection conditions
-                                              vector< Electron >* SelectedElectronCollection, vector< Int_t >* Sel_Index);  // and their indices inside the ntuple vectors -- //*Derived by Marijus Ambrozas 2018.08.02*//
-        Bool_t EventSelection_ElectronChannel(vector< Electron > ElectronCollection, LongSelectedEE_t *ntuple,          // -- output: 2 electrons passing event selection conditions
-                                              vector< Electron >* SelectedElectronCollection, vector< Int_t >* Sel_Index);  // and their indices inside the ntuple vectors -- //*Derived by Marijus Ambrozas 2018.08.06*//
-
-	// -- for N-1 cuts of electron channel -- //
-	Bool_t EventSelection_ElectronChannel1(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection);
-	Bool_t EventSelection_ElectronChannel2(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection);
-	Bool_t EventSelection_ElectronChannel3(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection);
-	Bool_t EventSelection_ElectronChannel4(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection);
-	Bool_t EventSelection_ElectronChannel5(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection);
-	Bool_t EventSelection_ElectronChannel6(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection);
-	Bool_t EventSelection_ElectronChannel7(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection);
-	Bool_t EventSelection_ElectronChannel8(vector< Electron > ElectronCollection, NtupleHandle *ntuple, vector< Electron >* SelectedElectronCollection);
-	Bool_t isPassAccCondition_Electron(Electron Elec1, Electron Elec2);
-	Bool_t isPassAccCondition_GenLepton_ECALGAP(GenLepton genlep1, GenLepton genlep2);
-	void CompareElectron(Electron *Elec1, Electron *Elec2, Electron *leadElec, Electron *subElec);
 
 	// -- pre-FSR functions -- //
 	void PostToPreFSR_byDressedLepton(NtupleHandle *ntuple, GenLepton *genlep_postFSR, Double_t dRCut, GenLepton *genlep_preFSR, vector< GenOthers >* GenPhotonCollection);
@@ -264,21 +275,14 @@ public:
         void PrintOutDoubleMuInfo(Muon mu1, Muon mu2);
         Double_t GenMuonPt(TString MuonType, NtupleHandle* ntuple, Muon reco_mu);
 
-	// -- emu method -- //
-        Bool_t EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple,
-                                              vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection); // -- output: 1 muon and 1 electron passing event selection conditions -- //
-        Bool_t EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple, // Derived by Marijus Ambrozas 2018.08.07
-                                              vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection,
-                                              Int_t &Sel_Index_Mu, Int_t &Sel_Index_Ele); // -- output: 1 muon and 1 electron passing event selection conditions and their indices -- //
-        Bool_t EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, LongSelectedEMu_t *ntuple, // Derived by Marijus Ambrozas 2018.08.07
-                                              vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection,
-                                              Int_t &Sel_Index_Mu, Int_t &Sel_Index_Ele); // -- output: 1 muon and 1 electron passing event selection conditions and their indices -- //
-        void emuVertexProbNormChi2(NtupleHandle *ntuple, Double_t Pt1, Double_t Pt2, Double_t *VtxProb, Double_t *VtxNormChi2);
-        void emuVertexProbNormChi2(LongSelectedEMu_t *ntuple, Double_t Pt1, Double_t Pt2, Double_t *VtxProb, Double_t *VtxNormChi2);
-	Double_t EfficiencySF_EventWeight_emu_BtoF(Muon mu1, Electron ele2);
-        Double_t EfficiencySF_EventWeight_emu_BtoF(SelectedEMu_t *EMu);
-	Double_t EfficiencySF_EventWeight_emu_GtoH(Muon mu1, Electron ele2);
-        Double_t EfficiencySF_EventWeight_emu_GtoH(SelectedEMu_t *EMu);
+        // Functions below copied from Andrius Juodagalvis (github.com/andjuo/DYee2015/)
+        TCanvas *findCanvas(TString canvName);
+        int findCanvases(TString canvNames, std::vector<TCanvas*> &cV);
+        void closeCanvases(int itimes=3);
+        void SaveCanvas(TCanvas* canv, TString canvName, TString destDir, int correctName=0);
+        void SaveCanvases(std::vector<TCanvas*> &cV, TString destDir, TFile *fout=NULL);
+        // if listOfCanvNames="ALL", saves all canvases
+        int  SaveCanvases(TString listOfCanvNames, TString destDir, TFile *fout=NULL);
 };
 
 DYAnalyzer::DYAnalyzer(TString HLTname)
@@ -8542,6 +8546,7 @@ void DYAnalyzer::emuVertexProbNormChi2(NtupleHandle *ntuple, Double_t ele_Pt, Do
         return;
 }
 
+
 void DYAnalyzer::emuVertexProbNormChi2(LongSelectedEMu_t *ntuple, Double_t ele_Pt, Double_t mu_Pt, Double_t *VtxProb, Double_t *VtxNormChi2)
 {
         vector<double> *PtCollection1 = ntuple->vtxTrkEMu1Pt; //electron
@@ -8566,4 +8571,163 @@ void DYAnalyzer::emuVertexProbNormChi2(LongSelectedEMu_t *ntuple, Double_t ele_P
         }
 
         return;
+}
+
+
+TCanvas *DYAnalyzer::findCanvas(TString canvName) // Copied from Andrius Juodagalvis
+{
+    TSeqCollection *seq=gROOT->GetListOfCanvases();
+    TCanvas *cOut=NULL;
+    for (int i=0; i<=seq->LastIndex(); i++)
+    {
+        TCanvas *c= (TCanvas*) seq->At(i);
+        //std::cout << "i=" << i << " " << c->GetName() << "\n";
+        if (c->GetName() == canvName)
+        {
+            cOut=c;
+            break;
+        }
+    }
+    return cOut;
+}
+
+
+int DYAnalyzer::findCanvases(TString canvNames, std::vector<TCanvas*> &cV) // Copied from Andrius Juodagalvis
+{
+    unsigned int iniSize=cV.size();
+    TSeqCollection *seq=gROOT->GetListOfCanvases();
+    for (int i=0; i<=seq->LastIndex(); i++)
+    {
+        TCanvas *c= (TCanvas*) seq->At(i);
+        //std::cout << "i=" << i << " " << c->GetName() << "\n";
+        int keep=0;
+        if (canvNames.Length()==0) keep=1;
+        else
+        {
+            std::stringstream ss(canvNames.Data());
+            TString cName;
+            while (!ss.eof())
+            {
+                ss >> cName;
+                if (cName.Length() && (c->GetName() == cName)) { keep=1; break; }
+            }
+        }
+        if (keep) cV.push_back(c);
+    }
+    return int(cV.size()-iniSize);
+}
+
+
+void DYAnalyzer::closeCanvases(int itimes) // Copied from Andrius Juodagalvis
+{
+    for (int i=0; i<itimes; i++)
+    {
+        TSeqCollection *seq=gROOT->GetListOfCanvases();
+        for (int i=0; i<=seq->LastIndex(); i++)
+        {
+            TCanvas *c= (TCanvas*) seq->At(i);
+            delete c;
+        }
+        gSystem->ProcessEvents();
+    }
+}
+
+
+void DYAnalyzer::SaveCanvas(TCanvas* canv, TString canvName, TString destDir, int correctName) // Copied from Andrius Juodagalvis
+{
+    if (correctName==1)
+    {
+        canvName.ReplaceAll(" ","_");
+        canvName.ReplaceAll(":","_");
+        canvName.ReplaceAll(";","_");
+    }
+
+    gSystem->mkdir(destDir,kTRUE);
+    gSystem->mkdir(destDir+TString("/png"),kTRUE);
+    gSystem->mkdir(destDir+TString("/pdf"),kTRUE);
+    gSystem->mkdir(destDir+TString("/root"),kTRUE);
+
+    TString saveName=destDir+TString("/png/");
+    saveName+=canvName;
+    saveName+=".png";
+    canv->SaveAs(saveName);
+    saveName.ReplaceAll("png","pdf");
+    canv->SaveAs(saveName);
+    saveName.ReplaceAll("pdf","root");
+    canv->SaveAs(saveName);
+    return;
+}
+
+
+void DYAnalyzer::SaveCanvases(std::vector<TCanvas*> &cV, TString destDir, TFile *fout) // Copied from Andrius Juodagalvis
+{
+    if (cV.size()==0) {
+        std::cout << "SaveCanvases: vector is empty\n";
+        return;
+    }
+
+    if (destDir.Length())
+    {
+        gSystem->mkdir(destDir,kTRUE);
+        gSystem->mkdir(destDir+TString("/png"),kTRUE);
+        gSystem->mkdir(destDir+TString("/pdf"),kTRUE);
+        gSystem->mkdir(destDir+TString("/root"),kTRUE);
+
+        for (unsigned int i=0; i<cV.size(); i++)
+        {
+            TCanvas *canv= cV[i];
+            TString saveName=destDir+TString("/png/");
+            saveName+=canv->GetName();
+            saveName+=".png";
+            canv->SaveAs(saveName);
+            saveName.ReplaceAll("png","pdf");
+            canv->SaveAs(saveName);
+            saveName.ReplaceAll("pdf","root");
+            canv->SaveAs(saveName);
+        }
+    }
+
+    if (fout)
+    {
+        for (unsigned int i=0; i<cV.size(); i++)
+        {
+            cV[i]->Write();
+        }
+    }
+    return;
+}
+
+
+int DYAnalyzer::SaveCanvases(TString listOfCanvNames, TString destDir, TFile *fout) // Copied from Andrius Juodagalvis
+{
+    if (listOfCanvNames.Length()==0) return 0;
+
+    if (listOfCanvNames=="ALL")
+    {
+        TSeqCollection *seq=gROOT->GetListOfCanvases();
+        std::vector<TCanvas*> cV;
+        for (int i=0; i<=seq->LastIndex(); i++)
+        {
+            TCanvas *c= (TCanvas*) seq->At(i);
+            cV.push_back(c);
+        }
+        SaveCanvases(cV,destDir,fout);
+        return 1;
+    }
+
+    std::stringstream ss(listOfCanvNames.Data());
+    TString cName;
+    std::vector<TCanvas*> cV;
+    while (!ss.eof())
+    {
+        ss >> cName;
+        if (cName.Length())
+        {
+            TCanvas *c= findCanvas(cName);
+            if (!c) { std::cout << "\tCanvas " << cName << " was not found\n"; }
+            else cV.push_back(c);
+        }
+    }
+    if (cV.size()) SaveCanvases(cV,destDir,fout);
+    return int(cV.size());
 }

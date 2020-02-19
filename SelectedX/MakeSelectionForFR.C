@@ -470,11 +470,6 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
 
-        const int ptbinnum_endcap = 9;
-        double ptbin_endcap[ptbinnum_endcap+1] = {47,52,60,70,80,90,100,150,200,500};
-        const int ptbinnum = 17;
-        double ptbin[ptbinnum+1] = {47,52,60,70,80,90,100,120,140,160,180,200,250,300,350,400,450,500};
-
         TTree* MuonTree = new TTree("FRTree", "FRTree");
         // -- Creating muon variables to assign branches -- //
         MuonTree->Branch("p_T", &p_T);
@@ -795,11 +790,6 @@ void MakeSelectionForQCDest_Mu (TString type, TString HLTname, Bool_t Debug)
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
 
-        const int ptbinnum_endcap = 9;
-        double ptbin_endcap[ptbinnum_endcap+1] = {47,52,60,70,80,90,100,150,200,500};
-        const int ptbinnum = 17;
-        double ptbin[ptbinnum+1] = {47,52,60,70,80,90,100,120,140,160,180,200,250,300,350,400,450,500};
-
         TTree* MuonTree = new TTree("FRTree", "FRTree");
         // -- Creating SelectedMuMu variables to assign branches -- //
         MuonTree->Branch("p_T", &p_T);
@@ -823,8 +813,6 @@ void MakeSelectionForQCDest_Mu (TString type, TString HLTname, Bool_t Debug)
         // Loop for all samples in a process
         for (Int_t i_tup = 0; i_tup<Ntup; i_tup++)
         {
-//            if (Mgr.CurrentProc == _WJets) i_tup = 2;
-
             TStopwatch looptime;
             looptime.Start();
 
@@ -897,11 +885,15 @@ void MakeSelectionForQCDest_Mu (TString type, TString HLTname, Bool_t Debug)
                             SF = rc.kScaleDT(mu.charge, mu.Pt, mu.eta, mu.phi, s=0, m=0);
                         else
                         {
-                            Double_t genPt = analyzer->GenMuonPt("fromHardProcessFinalState", ntuple, mu);
+                            Double_t genPt = analyzer->GenMuonPt("finalState_OR_hadronDecay", ntuple, mu);
                             if (genPt > 0)
                                 SF = rc.kScaleFromGenMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, genPt, rndm[0], s=0, m=0);
                             else
                                 SF = rc.kScaleAndSmearMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
+                            if (mu.Pt != mu.Pt || SF != SF || SF*mu.Pt != SF*mu.Pt)
+                                cout << "\nGenPt: " << genPt << "  Pt: " << mu.Pt << "  Corr Pt: " << SF*mu.Pt << "  multiplier: " << SF
+                                     << "\nEta: " << mu.eta << "   Phi: " << mu.phi << "  Charge: " << mu.charge << "\ntrLayers: " << mu.trackerLayers
+                                     << "  PFiso: " << mu.relPFiso << endl;
                         }
                         mu.Pt = SF*mu.Pt;
                         mu.Momentum.SetPtEtaPhiM(mu.Pt, mu.eta, mu.phi, M_Mu);
@@ -926,6 +918,7 @@ void MakeSelectionForQCDest_Mu (TString type, TString HLTname, Bool_t Debug)
                         TRKiso->clear();
 
                         // -- Top pT reweighting -- //
+                        top_weight = 1;
                         if (Mgr.Tag[i_tup].Contains("ttbar"))
                         {
                             Double_t SF0 = exp(0.0615 - (0.0005 * GenTopCollection[0].Pt));
@@ -1101,11 +1094,6 @@ void MakeSelectionForWJETSest_Mu (TString type, TString HLTname, Bool_t Debug)
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
 
-        const int ptbinnum_endcap = 9;
-        double ptbin_endcap[ptbinnum_endcap+1] = {47,52,60,70,80,90,100,150,200,500};
-        const int ptbinnum = 17;
-        double ptbin[ptbinnum+1] = {47,52,60,70,80,90,100,120,140,160,180,200,250,300,350,400,450,500};
-
         TTree* MuonTree = new TTree("FRTree", "FRTree");
         // -- Creating SelectedMuMu variables to assign branches -- //
         MuonTree->Branch("p_T", &p_T);
@@ -1201,11 +1189,15 @@ void MakeSelectionForWJETSest_Mu (TString type, TString HLTname, Bool_t Debug)
                             SF = rc.kScaleDT(mu.charge, mu.Pt, mu.eta, mu.phi, s=0, m=0);
                         else
                         {
-                            Double_t genPt = analyzer->GenMuonPt("fromHardProcessFinalState", ntuple, mu);
+                            Double_t genPt = analyzer->GenMuonPt("finalState_OR_hadronDecay", ntuple, mu);
                             if (genPt > 0)
                                 SF = rc.kScaleFromGenMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, genPt, rndm[0], s=0, m=0);
                             else
                                 SF = rc.kScaleAndSmearMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
+                            if (mu.Pt != mu.Pt || SF != SF || SF*mu.Pt != SF*mu.Pt)
+                                cout << "\nGenPt: " << genPt << "  Pt: " << mu.Pt << "  Corr Pt: " << SF*mu.Pt << "  multiplier: " << SF
+                                     << "\nEta: " << mu.eta << "   Phi: " << mu.phi << "  Charge: " << mu.charge << "\ntrLayers: " << mu.trackerLayers
+                                     << "  PFiso: " << mu.relPFiso << endl;
                         }
                         mu.Pt = SF*mu.Pt;
                         mu.Momentum.SetPtEtaPhiM(mu.Pt, mu.eta, mu.phi, M_Mu);
@@ -1230,6 +1222,7 @@ void MakeSelectionForWJETSest_Mu (TString type, TString HLTname, Bool_t Debug)
                         TRKiso->clear();
 
                         // -- Top pT reweighting -- //
+                        top_weight = 1;
                         if (Mgr.Tag[i_tup].Contains("ttbar"))
                         {
                             Double_t SF0 = exp(0.0615 - (0.0005 * GenTopCollection[0].Pt));
@@ -1405,11 +1398,6 @@ void MakeSelectionForBKGest_Mu_Triggerless (TString type, TString HLTname, Bool_
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
 
-        const int ptbinnum_endcap = 9;
-        double ptbin_endcap[ptbinnum_endcap+1] = {47,52,60,70,80,90,100,150,200,500};
-        const int ptbinnum = 17;
-        double ptbin[ptbinnum+1] = {47,52,60,70,80,90,100,120,140,160,180,200,250,300,350,400,450,500};
-
         TTree* MuonTree = new TTree("FRTree", "FRTree");
         // -- Creating SelectedMuMu variables to assign branches -- //
         MuonTree->Branch("p_T", &p_T);
@@ -1433,8 +1421,6 @@ void MakeSelectionForBKGest_Mu_Triggerless (TString type, TString HLTname, Bool_
         // Loop for all samples in a process
         for (Int_t i_tup = 0; i_tup<Ntup; i_tup++)
         {
-//            if (Mgr.CurrentProc == _WJets) i_tup = 2;
-
             TStopwatch looptime;
             looptime.Start();
 
@@ -1477,14 +1463,13 @@ void MakeSelectionForBKGest_Mu_Triggerless (TString type, TString HLTname, Bool_
                 SumWeightRaw += ntuple->GENEvt_weight;
 
                 // -- Separate DYLL samples -- //
-                Bool_t GenFlag = kTRUE;//kFALSE;
-//                GenFlag = analyzer->SeparateDYLLSample_isHardProcess(Mgr.Tag[i_tup], ntuple);
+                Bool_t GenFlag = kFALSE;
+                GenFlag = analyzer->SeparateDYLLSample_isHardProcess(Mgr.Tag[i_tup], ntuple);
 
                 // -- Get GenTopCollection -- //
-                Bool_t GenFlag_top = kTRUE;//kFALSE;
+                Bool_t GenFlag_top = kFALSE;
                 vector<GenOthers> GenTopCollection;
-                /*GenFlag_top = */analyzer->Separate_ttbarSample(Mgr.Tag[i_tup], ntuple, &GenTopCollection);
-//                GenFlag_top = kTRUE;
+                GenFlag_top = analyzer->Separate_ttbarSample(Mgr.Tag[i_tup], ntuple, &GenTopCollection);
 
                 if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += gen_weight;
 
@@ -1508,11 +1493,15 @@ void MakeSelectionForBKGest_Mu_Triggerless (TString type, TString HLTname, Bool_
                             SF = rc.kScaleDT(mu.charge, mu.Pt, mu.eta, mu.phi, s=0, m=0);
                         else
                         {
-                            Double_t genPt = analyzer->GenMuonPt("fromHardProcessFinalState", ntuple, mu);
+                            Double_t genPt = analyzer->GenMuonPt("finalState_OR_hadronDecay", ntuple, mu);
                             if (genPt > 0)
                                 SF = rc.kScaleFromGenMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, genPt, rndm[0], s=0, m=0);
                             else
                                 SF = rc.kScaleAndSmearMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
+                            if (mu.Pt != mu.Pt || SF != SF || SF*mu.Pt != SF*mu.Pt)
+                                cout << "\nGenPt: " << genPt << "  Pt: " << mu.Pt << "  Corr Pt: " << SF*mu.Pt << "  multiplier: " << SF
+                                     << "\nEta: " << mu.eta << "   Phi: " << mu.phi << "  Charge: " << mu.charge << "\ntrLayers: " << mu.trackerLayers
+                                     << "  PFiso: " << mu.relPFiso << endl;
                         }
                         mu.Pt = SF*mu.Pt;
                         mu.Momentum.SetPtEtaPhiM(mu.Pt, mu.eta, mu.phi, M_Mu);
@@ -1537,12 +1526,13 @@ void MakeSelectionForBKGest_Mu_Triggerless (TString type, TString HLTname, Bool_
                         TRKiso->clear();
 
                         // -- Top pT reweighting -- //
-                        /*if (Mgr.Tag[i_tup].Contains("ttbar"))
+                        top_weight = 1;
+                        if (Mgr.Tag[i_tup].Contains("ttbar"))
                         {
                             Double_t SF0 = exp(0.0615 - (0.0005 * GenTopCollection[0].Pt));
                             Double_t SF1 = exp(0.0615 - (0.0005 * GenTopCollection[1].Pt));
                             top_weight = sqrt(SF0 * SF1);
-                        }*/
+                        }
 
                         // -- Information for various other reweightings -- //
                         nPU = ntuple->nPileUp;
