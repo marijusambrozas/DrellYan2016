@@ -64,3 +64,5 @@ Local/
 *.nav
 *.snm
 
+# rootlogon (different in different places)
+rootlogon.C
