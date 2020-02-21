@@ -22,7 +22,6 @@
 #include "./header/DYAnalyzer.h"
 #include "./header/SelectedX.h"
 #include "./header/myProgressBar_t.cc"
-//#include "./header/FileMgr.h"
 #include "./header/FileMgr.h"
 #include "./etc/RoccoR/RoccoR.cc"
 
@@ -185,6 +184,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         std::vector<double> *phi = new std::vector<double>;
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
+        std::vector<int> *passMediumID = new std::vector<int>;
         Double_t MET_pT, MET_phi, MET_sumEt;
         Int_t nPU;
         Int_t nVTX;
@@ -200,6 +200,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         ElectronTree->Branch("phi", &phi);
         ElectronTree->Branch("charge", &charge);
         ElectronTree->Branch("relPFiso", &relPFiso);
+        ElectronTree->Branch("passMediumID", &passMediumID);
         ElectronTree->Branch("MET_pT", &MET_pT);
         ElectronTree->Branch("MET_phi", &MET_phi);
         ElectronTree->Branch("MET_sumEt", &MET_sumEt);
@@ -293,6 +294,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         phi->clear();
                         charge->clear();
                         relPFiso->clear();
+                        passMediumID->clear();
 
                         // -- Top pT reweighting -- //
                         top_weight = 1;
@@ -322,10 +324,11 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         for (UInt_t i=0; i<SelectedElectronCollection.size(); i++)
                         {
                             p_T->push_back(SelectedElectronCollection[i].Pt);
-                            eta->push_back(SelectedElectronCollection[i].eta);
+                            eta->push_back(SelectedElectronCollection[i].etaSC);
                             phi->push_back(SelectedElectronCollection[i].phi);
                             charge->push_back(SelectedElectronCollection[i].charge);
                             relPFiso->push_back(SelectedElectronCollection[i].RelPFIso_dBeta);
+                            passMediumID->push_back(SelectedElectronCollection[i].passMediumID);
                         }
                         ElectronTree->Fill();
 
