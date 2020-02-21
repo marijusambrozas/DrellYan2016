@@ -1,0 +1,15 @@
+executable = SelectSignal.sh
+universe = vanilla
+accounting_group = group_cms
+
+arguments = MuMu QCDMu_50to80 DEFAULT
+output = output/mumu_out_QCDMu_50to80.txt
+error = output/mumu_err_QCDMu_50to80.txt
+log = output/mumu_log_QCDMu_50to80.txt
+getenv = True
+use_x509userproxy = True
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+queue
