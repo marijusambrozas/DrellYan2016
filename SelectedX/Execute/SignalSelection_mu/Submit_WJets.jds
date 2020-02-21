@@ -1,0 +1,15 @@
+executable = SelectSignal.sh
+universe = vanilla
+accounting_group = group_cms
+
+arguments = MuMu WJets DEFAULT
+output = output/mumu_out_WJets.txt
+error = output/mumu_err_WJets.txt
+log = output/mumu_log_WJets.txt
+getenv = True
+use_x509userproxy = True
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+queue

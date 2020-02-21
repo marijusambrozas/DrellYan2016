@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ ${#1} -eq 0 ] || [ ${#2} -eq 0 ] ; then
+if [ ${#1} -eq 0 ] || [ ${#2} -eq 0 || ${#3} -eq 0 ] ; then
     echo "./SelectAllX.sh <WhichX> <Process> <Trigger>"
     exit
 fi
@@ -19,10 +19,6 @@ eval `scramv1 runtime -sh`
 cd /cms/ldap_home/mambroza/DrellYan2016/SelectedX/
 
 Process=$2
-if [[ $Process != *'DY_10to50'* ]] ; then
-    sleep 1m
-fi
-
 root -l -q -b MakeSelectedX.C'("'$WhichX'", "'$Process'", "'$Trigger'")'&
 wait %1
 if [[ $Process == *'QCDEM_120to170'* ]] ; then
