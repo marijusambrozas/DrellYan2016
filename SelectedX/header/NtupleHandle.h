@@ -925,7 +925,7 @@ public:
         chain->GetEntry(i);
     }
 
-    Bool_t isTriggered(TString HLT)
+    Bool_t isTriggered(TString HLT, TString *trigger = NULL)
     {
         Bool_t isTrigger = false;
         if( HLT == "HLT_IsoMu20_v* || HLT_IsoTkMu20_v*" )
@@ -937,6 +937,7 @@ public:
                     if( HLT_trigFired[k] == 1 )
                     {
                         isTrigger = true;
+                        if (trigger) *trigger = HLT_trigName->at((unsigned int)k);
                         break;
                     }
                 }
@@ -951,6 +952,7 @@ public:
                     if( HLT_trigFired[k] == 1 )
                     {
                         isTrigger = true;
+                        if (trigger) *trigger = HLT_trigName->at((unsigned int)k);
                         break;
                     }
                 }
@@ -968,6 +970,7 @@ public:
                     if( HLT_trigFired[k] == 1 )
                     {
                         isTrigger = true;
+                        if (trigger) *trigger = HLT_trigName->at((unsigned int)k);
                         break;
                     }
                 }
@@ -982,6 +985,7 @@ public:
                     if( HLT_trigFired[k] == 1 )
                     {
                         isTrigger = true;
+                        if (trigger) *trigger = HLT_trigName->at((unsigned int)k);
                         break;
                     }
                 }

@@ -237,7 +237,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
 
             Int_t NEvents = chain->GetEntries();
-            if (Debug == kTRUE) NEvents = 1000; // using few events for debugging
+            if (Debug == kTRUE) NEvents = 100; // using few events for debugging
 
             cout << "\t[Total Events: " << NEvents << "]" << endl;
             myProgressBar_t bar(NEvents);
@@ -247,6 +247,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             for (Int_t i=0; i<NEvents; i++)
             {
                 ntuple->GetEvent(i);
+                if (Debug == kTRUE) cout << "\nEvent " << i << endl;
 
 //                if (ntuple->pfMET_pT >= 20) continue;
 
@@ -267,7 +268,10 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                 if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += gen_weight;
 
                 Bool_t TriggerFlag = kFALSE;
-                TriggerFlag = ntuple->isTriggered(analyzer->HLT);
+                TString triggername;
+                TriggerFlag = ntuple->isTriggered(analyzer->HLT, &triggername);
+                if (Debug == kTRUE)
+                    cout << triggername << endl;
 
                 if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
                 {
@@ -318,17 +322,27 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         prefiring_weight_up = ntuple->_prefiringweightup;
                         prefiring_weight_down = ntuple->_prefiringweightdown;
                         prescale_factor = analyzer->PrescaleFactor(SelectedElectronCollection, ntuple);
+                        if (Debug == kTRUE) cout << prescale_factor << endl;
                         if (prescale_factor <= 0) continue; // If no trigger match between selected electrons
 
                         // -- Vector filling -- //
-                        for (UInt_t i=0; i<SelectedElectronCollection.size(); i++)
+                        for (UInt_t i_ele=0; i_ele<SelectedElectronCollection.size(); i_ele++)
                         {
-                            p_T->push_back(SelectedElectronCollection[i].Pt);
-                            eta->push_back(SelectedElectronCollection[i].etaSC);
-                            phi->push_back(SelectedElectronCollection[i].phi);
-                            charge->push_back(SelectedElectronCollection[i].charge);
-                            relPFiso->push_back(SelectedElectronCollection[i].RelPFIso_dBeta);
-                            passMediumID->push_back(SelectedElectronCollection[i].passMediumID);
+                            p_T->push_back(SelectedElectronCollection[i_ele].Pt);
+                            eta->push_back(SelectedElectronCollection[i_ele].etaSC);
+                            phi->push_back(SelectedElectronCollection[i_ele].phi);
+                            charge->push_back(SelectedElectronCollection[i_ele].charge);
+                            relPFiso->push_back(SelectedElectronCollection[i_ele].RelPFIso_dBeta);
+                            passMediumID->push_back(SelectedElectronCollection[i_ele].passMediumID);
+
+                            if (Debug == kTRUE)
+                            {
+                                cout << "Passing electron " << i_ele << ": p_T = " << SelectedElectronCollection[i_ele].Pt;
+                                cout << "   eta = " << SelectedElectronCollection[i_ele].etaSC;
+                                cout << "   charge = " << SelectedElectronCollection[i_ele].charge;
+                                if (SelectedElectronCollection[i_ele].passMediumID == 1) cout << "   MediumID";
+                                cout << endl;
+                            }
                         }
                         ElectronTree->Fill();
 

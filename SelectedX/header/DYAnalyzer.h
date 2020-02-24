@@ -6219,7 +6219,7 @@ Bool_t DYAnalyzer::EventSelection_FR(vector<Electron> ElectronCollection, Ntuple
     Double_t med_count = 0;
     for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
     { // All other muons still have to pass these criteria
-        if (fabs(ElectronCollection[j].etaSC) < SubEtaCut && (ElectronCollection[j].mHits == 0) &&
+        if (ElectronCollection[j].Pt > SubPtCut && fabs(ElectronCollection[j].etaSC) < SubEtaCut && (ElectronCollection[j].mHits == 0) &&
            !(fabs(ElectronCollection[j].etaSC) > 1.4442 && fabs(ElectronCollection[j].etaSC) < 1.566))
         {
             isPassEventSelection = kTRUE;
@@ -6310,7 +6310,7 @@ Double_t DYAnalyzer::PrescaleFactor(vector<Electron> ElectronCollection, NtupleH
            ele.isTrigMatched(ntuple, "HLT_Photon50_v*") || ele.isTrigMatched(ntuple, "HLT_Photon75_v*") || ele.isTrigMatched(ntuple, "HLT_Photon90_v*") ||
            ele.isTrigMatched(ntuple, "HLT_Photon120_v*") || ele.isTrigMatched(ntuple, "HLT_Photon175_v*"))
         {
-            Weight = getPrescale(ele.Et);
+            Weight = getPrescale(ele.Pt);
             break;
         }
     }
