@@ -1009,7 +1009,6 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "BKG";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/"; // NOT FOUND IN v2.7
 
         Tag.push_back("ttbar_M1000toInf"); Xsec.push_back(20.578); nEvents.push_back(24561630);
         Wsum.push_back(24561630.0);

@@ -6311,7 +6311,7 @@ Double_t DYAnalyzer::PrescaleFactor(vector<Electron> ElectronCollection, NtupleH
            ele.isTrigMatched(ntuple, "HLT_Photon120_v*") || ele.isTrigMatched(ntuple, "HLT_Photon175_v*"))
         {
             Weight = getPrescale(ele.Pt);
-            *trigMatched = i_ele;
+            *trig_matched = i_ele;
             break;
         }
     }
