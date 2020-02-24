@@ -260,7 +260,7 @@ public:
         Bool_t EventSelection_FR(vector<Electron> ElectronCollection, NtupleHandle *ntuple, vector<Electron> *SelectedElectronCollection); // Electron selection
         void SetupFRvalues(TString filename, TString type="sigCtrl_template");
         Double_t FakeRate(Double_t p_T, Double_t eta);
-        Double_t PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple);
+        Double_t PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple, Int_t *trig_matched);
         Double_t getPrescale(Double_t Et);
 
 	// -- pre-FSR functions -- //
@@ -6300,7 +6300,7 @@ Double_t DYAnalyzer::FakeRate(Double_t p_T, Double_t eta)
 } // End of FakeRate()
 
 
-Double_t DYAnalyzer::PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple)
+Double_t DYAnalyzer::PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple, Int_t *trig_matched)
 {
     Double_t Weight = -9999;
     for(Int_t i_ele=0; i_ele<(Int_t)ElectronCollection.size(); i_ele++)
@@ -6311,6 +6311,7 @@ Double_t DYAnalyzer::PrescaleFactor(vector<Electron> ElectronCollection, NtupleH
            ele.isTrigMatched(ntuple, "HLT_Photon120_v*") || ele.isTrigMatched(ntuple, "HLT_Photon175_v*"))
         {
             Weight = getPrescale(ele.Pt);
+            *trigMatched = i_ele;
             break;
         }
     }
