@@ -6303,6 +6303,7 @@ Double_t DYAnalyzer::FakeRate(Double_t p_T, Double_t eta)
 Double_t DYAnalyzer::PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple, Int_t *trig_matched)
 {
     Double_t Weight = -9999;
+    *trig_matched = -1;
     for(Int_t i_ele=0; i_ele<(Int_t)ElectronCollection.size(); i_ele++)
     {
         Electron ele = ElectronCollection[i_ele];
@@ -6310,10 +6311,18 @@ Double_t DYAnalyzer::PrescaleFactor(vector<Electron> ElectronCollection, NtupleH
            ele.isTrigMatched(ntuple, "HLT_Photon50_v*") || ele.isTrigMatched(ntuple, "HLT_Photon75_v*") || ele.isTrigMatched(ntuple, "HLT_Photon90_v*") ||
            ele.isTrigMatched(ntuple, "HLT_Photon120_v*") || ele.isTrigMatched(ntuple, "HLT_Photon175_v*"))
         {
-            Weight = getPrescale(ele.Pt);
+//            Weight = getPrescale(ele.Pt);
             *trig_matched = i_ele;
-            break;
+            cout << "Ele " << i_ele << ":  22: " << ele.isTrigMatched(ntuple, "HLT_Photon22_v*") << "  30: " << ele.isTrigMatched(ntuple, "HLT_Photon30_v*");
+            cout << "  36: " << ele.isTrigMatched(ntuple, "HLT_Photon36_v*") << "  50: " << ele.isTrigMatched(ntuple, "HLT_Photon50_v*");
+            cout << "  75: " << ele.isTrigMatched(ntuple, "HLT_Photon75_v*") << "  90: " << ele.isTrigMatched(ntuple, "HLT_Photon90_v*");
+            cout << "  120: " << ele.isTrigMatched(ntuple, "HLT_Photon120_v*") << "  175: " << ele.isTrigMatched(ntuple, "HLT_Photon175_v*") << endl;
+//            break;
         }
+    }
+    if (*trig_matched > -1)
+    {
+        Weight = getPrescale(ElectronCollection[*trig_matched].Pt);
     }
     return Weight;
 }

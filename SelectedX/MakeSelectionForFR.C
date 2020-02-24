@@ -954,14 +954,14 @@ void MakeSelectionForQCDest_Mu (TString type, TString HLTname, Bool_t Debug)
                         prefiring_weight_down = ntuple->_prefiringweightdown;
 
                         // -- Vector filling -- //
-                        for (UInt_t i=0; i<SelectedMuonCollection.size(); i++)
+                        for (UInt_t i_mu=0; i_mu<SelectedMuonCollection.size(); i_mu++)
                         {
-                            p_T->push_back(SelectedMuonCollection[i].Pt);
-                            eta->push_back(SelectedMuonCollection[i].eta);
-                            phi->push_back(SelectedMuonCollection[i].phi);
-                            charge->push_back(SelectedMuonCollection[i].charge);
-                            relPFiso->push_back(SelectedMuonCollection[i].RelPFIso_dBeta);
-                            TRKiso->push_back(SelectedMuonCollection[i].trkiso);
+                            p_T->push_back(SelectedMuonCollection[i_mu].Pt);
+                            eta->push_back(SelectedMuonCollection[i_mu].eta);
+                            phi->push_back(SelectedMuonCollection[i_mu].phi);
+                            charge->push_back(SelectedMuonCollection[i_mu].charge);
+                            relPFiso->push_back(SelectedMuonCollection[i_mu].RelPFIso_dBeta);
+                            TRKiso->push_back(SelectedMuonCollection[i_mu].trkiso);
                         }
                         MuonTree->Fill();
                     } // End of isPassEvtSelection
