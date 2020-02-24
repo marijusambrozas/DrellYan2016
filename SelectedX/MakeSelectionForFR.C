@@ -350,7 +350,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
                 } // End of if(isTriggered)
 
-                bar.Draw(i);
+                if (!Debug) bar.Draw(i);
             } // End of event iteration
 
             cout << "\t" << timesPassed << " events have passed the event selection." << endl;
