@@ -239,7 +239,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
 
             Int_t NEvents = chain->GetEntries();
-            if (Debug == kTRUE) NEvents = 100; // using few events for debugging
+            if (Debug == kTRUE) NEvents = 1000; // using few events for debugging
 
             cout << "\t[Total Events: " << NEvents << "]" << endl;
             myProgressBar_t bar(NEvents);
@@ -249,7 +249,6 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             for (Int_t i=0; i<NEvents; i++)
             {
                 ntuple->GetEvent(i);
-                if (Debug == kTRUE) cout << "\nEvent " << i << endl;
 
 //                if (ntuple->pfMET_pT >= 20) continue;
 
@@ -272,11 +271,9 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                 Bool_t TriggerFlag = kFALSE;
                 TString triggername;
                 TriggerFlag = ntuple->isTriggered(analyzer->HLT, &triggername);
-                if (Debug == kTRUE)
-                    cout << triggername << endl;
 
                 if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
-                {
+                {                    
                     // -- Reco level selection -- //
                     vector< Electron > ElectronCollection;
                     Int_t NLeptons = ntuple->Nelectrons;
@@ -294,6 +291,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
                     if (isPassEventSelection == kTRUE)
                     {
+                        if (Debug == kTRUE) cout << "\nEvent " << i << endl << triggername << endl;
                         timesPassed++;
                         p_T->clear();
                         eta->clear();
