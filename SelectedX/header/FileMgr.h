@@ -4637,6 +4637,10 @@ void FileMgr::SetupChain(Int_t i_tuple, TChain *chain)
         if (i_tup != i_tuple && i_tuple != -1) continue;
         for (Int_t i=1; i<=nNtuples[i_tup]; i++)
         {
+            if ((CurrentProc == _DY_50to100 || CurrentProc == _DYEE_50to100 || CurrentProc == _DYMuMu_50to100 || CurrentProc == _DYTauTau_50toInf ||
+                ((CurrentProc == _DY_Full || CurrentProc == _DYEE_Full || CurrentProc == _DYMuMu_Full || CurrentProc == _DYTauTau_Full) && i_tuple == 3)) &&
+                i == 6) continue; // Skipping ntuple_skim_sig_6.root because it has some errors
+
             stringstream ss;
             ss << i;
             chain->Add(FullLocation[i_tup]+NtupleName[i_tup]+ss.str()+".root");
