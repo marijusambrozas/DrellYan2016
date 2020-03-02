@@ -4639,7 +4639,7 @@ void FileMgr::SetupChain(Int_t i_tuple, TChain *chain)
         {
             if ((CurrentProc == _DY_50to100 || CurrentProc == _DYEE_50to100 || CurrentProc == _DYMuMu_50to100 || CurrentProc == _DYTauTau_50toInf ||
                 ((CurrentProc == _DY_Full || CurrentProc == _DYEE_Full || CurrentProc == _DYMuMu_Full || CurrentProc == _DYTauTau_Full) && i_tuple == 3)) &&
-                (i == 6 || i == 270 || i == 663 || i == 968 || i < 260 || i > 280)) continue; // Skipping several ntuple_skim_sig_X.root because they have some errors
+                (i == 6 || i == 270 || i == 278 || i == 663 || i == 968 || i < 260 || i > 280)) continue; // Skipping several ntuple_skim_sig_X.root because they have some errors
 
             stringstream ss;
             ss << i;
