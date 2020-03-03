@@ -16,6 +16,7 @@
 #include <iostream>
 #include <sstream>
 #include <TVectorT.h>
+#include <TROOT.h>
 
 // -- Customized Analyzer for Drel-Yan Analysis -- //
 #include "./header/DYAnalyzer.h"
@@ -1100,27 +1101,27 @@ void E_HistDrawer(Int_t type)
     myRatioPlot_t *RP_eta = new myRatioPlot_t("RP_eta", s_eta, h_eta_data);
     myRatioPlot_t *RP_nVTX = new myRatioPlot_t("RP_nVTX", s_nVTX, h_nVTX_data);
 
-    RP_PFiso_barrel_nume->SetPlots("I_{PF}^{rel.} (#e_{#lower[-0.4]{barrel}}^{nume})", 0, 0.15);
-    RP_PFiso_endcap_nume->SetPlots("I_{PF}^{rel.} (#e_{#lower[-0.4]{endcap}}^{nume})", 0, 0.15);
-    RP_PFiso_barrel_deno->SetPlots("I_{PF}^{rel.} (#e_{#lower[-0.4]{barrel}}^{deno})", 0, 5);
-    RP_PFiso_endcap_deno->SetPlots("I_{PF}^{rel.} (#e_{#lower[-0.4]{endcap}}^{deno})", 0, 5);
-    RP_PFiso_barrel_ctrl->SetPlots("I_{PF}^{rel.} (#e_{#lower[-0.4]{barrel}}^{control})", 0.15, 5);
-    RP_PFiso_endcap_ctrl->SetPlots("I_{PF}^{rel.} (#e_{#lower[-0.4]{endcap}}^{control})", 0.15, 5);
-    RP_pT_barrel_nume->SetPlots("p_{#lower[-0.25]{T}} (#e_{#lower[-0.4]{barrel}}^{nume}) [GeV/c]", 52, 1000);
-    RP_pT_endcap_nume->SetPlots("p_{#lower[-0.25]{T}} (#e_{#lower[-0.4]{endcap}}^{nume}) [GeV/c]", 52, 1000);
-    RP_pT_barrel_deno->SetPlots("p_{#lower[-0.25]{T}} (#e_{#lower[-0.4]{barrel}}^{deno}) [GeV/c]", 52, 1000);
-    RP_pT_endcap_deno->SetPlots("p_{#lower[-0.25]{T}} (#e_{#lower[-0.4]{endcap}}^{deno}) [GeV/c]", 52, 1000);
-    RP_pT_barrel_ctrl->SetPlots("p_{#lower[-0.25]{T}} (#e_{#lower[-0.4]{barrel}}^{control}) [GeV/c]", 52, 1000);
-    RP_pT_endcap_ctrl->SetPlots("p_{#lower[-0.25]{T}} (#e_{#lower[-0.4]{endcap}}^{control}) [GeV/c]", 52, 1000);
+    RP_PFiso_barrel_nume->SetPlots("I_{PF}^{rel.} (e_{#lower[-0.4]{barrel}}^{nume})", 0, 5);
+    RP_PFiso_endcap_nume->SetPlots("I_{PF}^{rel.} (e_{#lower[-0.4]{endcap}}^{nume})", 0, 5);
+    RP_PFiso_barrel_deno->SetPlots("I_{PF}^{rel.} (e_{#lower[-0.4]{barrel}}^{deno})", 0, 5);
+    RP_PFiso_endcap_deno->SetPlots("I_{PF}^{rel.} (e_{#lower[-0.4]{endcap}}^{deno})", 0, 5);
+    RP_PFiso_barrel_ctrl->SetPlots("I_{PF}^{rel.} (e_{#lower[-0.4]{barrel}}^{control})", 0, 5);
+    RP_PFiso_endcap_ctrl->SetPlots("I_{PF}^{rel.} (e_{#lower[-0.4]{endcap}}^{control})", 0, 5);
+    RP_pT_barrel_nume->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{barrel}}^{nume}) [GeV/c]", 52, 1000);
+    RP_pT_endcap_nume->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{endcap}}^{nume}) [GeV/c]", 52, 1000);
+    RP_pT_barrel_deno->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{barrel}}^{deno}) [GeV/c]", 52, 1000);
+    RP_pT_endcap_deno->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{endcap}}^{deno}) [GeV/c]", 52, 1000);
+    RP_pT_barrel_ctrl->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{barrel}}^{control}) [GeV/c]", 52, 1000);
+    RP_pT_endcap_ctrl->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{endcap}}^{control}) [GeV/c]", 52, 1000);
     RP_MET->SetPlots("E_{#lower[-0.25]{T}}^{miss} [GeV]", 0, 500);
-    RP_MT_barrel_nume->SetPlots("m_{#lower[-0.25]{T}} (#e_{#lower[-0.4]{barrel}}^{nume}, E_{#lower[-0.25]{T}}^{miss}) [GeV/c^{2}]", 0, 500);
-    RP_MT_endcap_nume->SetPlots("m_{#lower[-0.25]{T}} (#e_{#lower[-0.4]{endcap}}^{nume}, E_{#lower[-0.25]{T}}^{miss}) [GeV/c^{2}]", 0, 500);
-    RP_MT_barrel_deno->SetPlots("m_{#lower[-0.25]{T}} (#e_{#lower[-0.4]{barrel}}^{deno}, E_{#lower[-0.25]{T}}^{miss}) [GeV/c^{2}]", 0, 500);
-    RP_MT_endcap_deno->SetPlots("m_{#lower[-0.25]{T}} (#e_{#lower[-0.4]{endcap}}^{deno}, E_{#lower[-0.25]{T}}^{miss}) [GeV/c^{2}]", 0, 500);
-    RP_MT_barrel_ctrl->SetPlots("m_{#lower[-0.25]{T}} (#e_{#lower[-0.4]{barrel}}^{control}, E_{#lower[-0.25]{T}}^{miss}) [GeV/c^{2}]", 0, 500);
-    RP_MT_endcap_ctrl->SetPlots("m_{#lower[-0.25]{T}} (#e_{#lower[-0.4]{endcap}}^{control}, E_{#lower[-0.25]{T}}^{miss}) [GeV/c^{2}]", 0, 500);
-    RP_eta->SetPlots("#eta (#mu)", -3, 3);
-    RP_nVTX->SetPlots("N_{#lower[-0.25]{VTX}} (#mu)", 0, 50);
+    RP_MT_barrel_nume->SetPlots("m_{#lower[-0.25]{T}} (e_{#lower[-0.4]{barrel}}^{nume}, E_{#lower[-0.25]{T}}^{miss}) [GeV/c^{2}]", 0, 500);
+    RP_MT_endcap_nume->SetPlots("m_{#lower[-0.25]{T}} (e_{#lower[-0.4]{endcap}}^{nume}, E_{#lower[-0.25]{T}}^{miss}) [GeV/c^{2}]", 0, 500);
+    RP_MT_barrel_deno->SetPlots("m_{#lower[-0.25]{T}} (e_{#lower[-0.4]{barrel}}^{deno}, E_{#lower[-0.25]{T}}^{miss}) [GeV/c^{2}]", 0, 500);
+    RP_MT_endcap_deno->SetPlots("m_{#lower[-0.25]{T}} (e_{#lower[-0.4]{endcap}}^{deno}, E_{#lower[-0.25]{T}}^{miss}) [GeV/c^{2}]", 0, 500);
+    RP_MT_barrel_ctrl->SetPlots("m_{#lower[-0.25]{T}} (e_{#lower[-0.4]{barrel}}^{control}, E_{#lower[-0.25]{T}}^{miss}) [GeV/c^{2}]", 0, 500);
+    RP_MT_endcap_ctrl->SetPlots("m_{#lower[-0.25]{T}} (e_{#lower[-0.4]{endcap}}^{control}, E_{#lower[-0.25]{T}}^{miss}) [GeV/c^{2}]", 0, 500);
+    RP_eta->SetPlots("#eta (e)", -3, 3);
+    RP_nVTX->SetPlots("N_{#lower[-0.25]{VTX}}", 0, 50);
 
 
     TLegend *legend = new TLegend(0.5, 0.65, 0.95, 0.95);
@@ -1136,7 +1137,7 @@ void E_HistDrawer(Int_t type)
     legend->AddEntry(h_eta_MC[_WW], "#font[12]{#scale[1.1]{WW}}", "f");
 //    legend->AddEntry(h_eta_MC[_VVnST], "Diboson+#font[12]{#scale[1.1]{tW}}+#font[12]{#scale[1.1]{#bar{t}W}}", "f");
     legend->AddEntry(h_eta_MC[_WJets], "#font[12]{#scale[1.1]{W}}+Jets", "f");
-    legend->AddEntry(h_eta_MC[_QCDMuEnriched_15to20], "#font[12]{#scale[1.1]{QCD}}", "f");
+    legend->AddEntry(h_eta_MC[_QCDEMEnriched_20to30], "#font[12]{#scale[1.1]{QCD}}", "f");
     legend->SetNColumns(2);
 
     RP_PFiso_barrel_nume->ImportLegend(legend);
@@ -1161,65 +1162,65 @@ void E_HistDrawer(Int_t type)
     RP_eta->ImportLegend(legend);
     RP_nVTX->ImportLegend(legend);
 
-    RP_PFiso_barrel_nume->Draw(1, 1e8, 0);
+    RP_PFiso_barrel_nume->Draw(1, 1e12, 0);
 //    RP_PFiso_barrel_nume->DrawOnTop(h_PFiso_barrel_MC_nume[_QCDEMEnriched_Full]);
 
-    RP_PFiso_endcap_nume->Draw(1, 1e8, 0);
+    RP_PFiso_endcap_nume->Draw(1, 1e12, 0);
 //    RP_PFiso_endcap_nume->DrawOnTop(h_PFiso_endcap_MC_nume[_QCDEMEnriched_Full]);
 
-    RP_PFiso_barrel_deno->Draw(1, 1e8, 0);
+    RP_PFiso_barrel_deno->Draw(1, 1e12, 0);
 //    RP_PFiso_barrel_deno->DrawOnTop(h_PFiso_barrel_MC_deno[_QCDEMEnriched_Full]);
 
-    RP_PFiso_endcap_deno->Draw(1, 1e8, 0);
+    RP_PFiso_endcap_deno->Draw(1, 1e12, 0);
 //    RP_PFiso_endcap_deno->DrawOnTop(h_PFiso_endcap_MC_deno[_QCDEMEnriched_Full]);
 
-    RP_PFiso_barrel_ctrl->Draw(1, 1e8, 0);
+    RP_PFiso_barrel_ctrl->Draw(1, 1e12, 0);
 //    RP_PFiso_barrel_ctrl->DrawOnTop(h_PFiso_barrel_MC_ctrl[_QCDEMEnriched_Full]);
 
-    RP_PFiso_endcap_ctrl->Draw(1, 1e8, 0);
+    RP_PFiso_endcap_ctrl->Draw(1, 1e12, 0);
 //    RP_PFiso_endcap_ctrl->DrawOnTop(h_PFiso_endcap_MC_ctrl[_QCDEMEnriched_Full]);
 
-    RP_pT_barrel_nume->Draw(1, 1e8, 0);
+    RP_pT_barrel_nume->Draw(1, 1e12, 0);
 //    RP_pT_barrel_nume->DrawOnTop(h_pT_barrel_MC_nume[_QCDEMEnriched_Full]);
 
-    RP_pT_endcap_nume->Draw(1, 1e8, 0);
+    RP_pT_endcap_nume->Draw(1, 1e12, 0);
 //    RP_pT_endcap_nume->DrawOnTop(h_pT_endcap_MC_nume[_QCDEMEnriched_Full]);
 
-    RP_pT_barrel_deno->Draw(1, 1e8, 0);
+    RP_pT_barrel_deno->Draw(1, 1e12, 0);
 //    RP_pT_barrel_deno->DrawOnTop(h_pT_barrel_MC_deno[_QCDEMEnriched_Full]);
 
-    RP_pT_endcap_deno->Draw(1, 1e8, 0);
+    RP_pT_endcap_deno->Draw(1, 1e12, 0);
 //    RP_pT_endcap_deno->DrawOnTop(h_pT_endcap_MC_deno[_QCDEMEnriched_Full]);
 
-    RP_pT_barrel_ctrl->Draw(1, 1e8, 0);
+    RP_pT_barrel_ctrl->Draw(1, 1e12, 0);
 //    RP_pT_barrel_ctrl->DrawOnTop(h_pT_barrel_MC_ctrl[_QCDEMEnriched_Full]);
 
-    RP_pT_endcap_ctrl->Draw(1, 1e8, 0);
+    RP_pT_endcap_ctrl->Draw(1, 1e12, 0);
 //    RP_pT_endcap_ctrl->DrawOnTop(h_pT_endcap_MC_ctrl[_QCDEMEnriched_Full]);
 
-    RP_MET->Draw(1, 1e8, 0);
+    RP_MET->Draw(1, 1e12, 0);
 //    RP_MET->DrawOnTop(h_MET_MC[_QCDEMEnriched_Full]);
 
-    RP_MT_barrel_nume->Draw(1, 1e8, 0);
+    RP_MT_barrel_nume->Draw(1, 1e12, 0);
 //    RP_MT_barrel_nume->DrawOnTop(h_MT_barrel_MC_nume[_QCDEMEnriched_Full]);
 
-    RP_MT_endcap_nume->Draw(1, 1e8, 0);
+    RP_MT_endcap_nume->Draw(1, 1e12, 0);
 //    RP_MT_endcap_nume->DrawOnTop(h_MT_endcap_MC_nume[_QCDEMEnriched_Full]);
 
-    RP_MT_barrel_deno->Draw(1, 1e8, 0);
+    RP_MT_barrel_deno->Draw(1, 1e12, 0);
 //    RP_MT_barrel_deno->DrawOnTop(h_MT_barrel_MC_deno[_QCDEMEnriched_Full]);
 
-    RP_MT_endcap_deno->Draw(1, 1e8, 0);
+    RP_MT_endcap_deno->Draw(1, 1e12, 0);
 //    RP_MT_endcap_deno->DrawOnTop(h_MT_endcap_MC_deno[_QCDEMEnriched_Full]);
 
-    RP_MT_barrel_ctrl->Draw(1, 1e8, 0);
+    RP_MT_barrel_ctrl->Draw(1, 1e12, 0);
 //    RP_MT_barrel_ctrl->DrawOnTop(h_MT_barrel_MC_ctrl[_QCDEMEnriched_Full]);
 
-    RP_MT_endcap_ctrl->Draw(1, 1e8, 0);
+    RP_MT_endcap_ctrl->Draw(1, 1e12, 0);
 //    RP_MT_endcap_ctrl->DrawOnTop(h_MT_endcap_MC_ctrl[_QCDEMEnriched_Full]);
 
-    RP_eta->Draw(1, 1e8, 0);
-    RP_nVTX->Draw(1, 1e8, 0);
+    RP_eta->Draw(1, 1e12, 0);
+    RP_nVTX->Draw(1, 1e12, 0);
 
     cout << "MC PFiso integral: " << ((TH1D*)(s_PFiso_barrel_deno->GetStack()->Last()))->Integral() +
                                      ((TH1D*)(s_PFiso_endcap_deno->GetStack()->Last()))->Integral() << endl;
@@ -3793,7 +3794,7 @@ void Mu_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     Color_t color = kBlack;
 
     // Loop over all processes (adding all histograms)
-    for (Process_t pr=_DY_10to50; pr<_EndOf_SinglMuon_Normal; pr=next(pr))
+    for (Process_t pr=_DY_10to50; pr<_EndOf_SingleMuon_Normal; pr=next(pr))
     {
         Mgr.SetProc(pr);
 
@@ -3920,7 +3921,7 @@ void Mu_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_data_pT_lead->SetDirectory(0);
             h_data_pT_sublead->SetDirectory(0);
         }
-        else if (pr < _EndOf_SinglMuon_Normal)
+        else if (pr < _EndOf_SingleMuon_Normal)
         {
             h_mass[_SingleMuon_Full]->Add(h_mass[pr]);
             h_mass_SS[_SingleMuon_Full]->Add(h_mass_SS[pr]);

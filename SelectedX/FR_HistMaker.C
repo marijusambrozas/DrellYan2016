@@ -61,14 +61,6 @@ void FR_HistMaker (TString WhichX = "", Int_t type=1)
         DEBUG = kTRUE;
         cout << "**** DEBUG MODE: Running with 100 events only. ****" << endl;
     }
-//    if (whichX.Contains("E"))
-//    {
-//        Xselected++;
-//        if (HLTname == "DEFAULT") HLT = "Ele23Ele12";
-//        else HLT = HLTname;
-//        cout << "\n*******      E_FR_HistMaker      *******" << endl;
-//        E_FR_HistMaker(DEBUG);
-//    }
     if (whichX.Contains("MU"))
     {
         Xselected++;
@@ -88,8 +80,14 @@ void FR_HistMaker (TString WhichX = "", Int_t type=1)
             Mu_FR_HistMaker(DEBUG);
         }
     }
+    else if (whichX.Contains("E"))
+    {
+        Xselected++;
+        cout << "\n*****    E_FR_HistMaker    *****" << endl;
+        E_FR_HistMaker(DEBUG);
+    }
 
-    if (Xselected == 0) cout << "Wrong arument! \nType in: >> .x HistMaker.C+(\"whichX\", \"whichProcess\", SwitchROCCORR)" << endl;
+    if (Xselected == 0) cout << "Wrong arument! \nType in: >> .x FR_HistMaker.C+(\"whichX\", type)" << endl;
 
 } // End of HistMaker()
 
@@ -97,7 +95,6 @@ void FR_HistMaker (TString WhichX = "", Int_t type=1)
 /// ----------------------------- Electron Channel ------------------------------ ///
 void E_FR_HistMaker (Bool_t DEBUG)
 {
-    return;
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
     TStopwatch totaltime;
@@ -141,12 +138,12 @@ void E_FR_HistMaker (Bool_t DEBUG)
         analyzer->SetupPVzWeights(Mgr.isMC, "ee", "./etc/PVzWeights.root");
 
         // -- Creating Histograms -- //
-        TH1D* h_pT_barrel_nume = new TH1D("h_pT_barrel_nume", "h_pT_barrel_nume", nPtBinBarrel, analyzer->ptbin_barrel); h_pT_barrel_nume->Sumw2();
-        TH1D* h_pT_endcap_nume = new TH1D("h_pT_endcap_nume", "h_pT_endcap_nume", nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap_nume->Sumw2();
-        TH1D* h_pT_barrel_deno = new TH1D("h_pT_barrel_deno", "h_pT_barrel_deno", nPtBinBarrel, analyzer->ptbin_barrel); h_pT_barrel_deno->Sumw2();
-        TH1D* h_pT_endcap_deno = new TH1D("h_pT_endcap_deno", "h_pT_endcap_deno", nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap_deno->Sumw2();
-        TH1D* h_pT_barrel_ctrl = new TH1D("h_pT_barrel_ctrl", "h_pT_barrel_ctrl", nPtBinBarrel, analyzer->ptbin_barrel); h_pT_barrel_ctrl->Sumw2();
-        TH1D* h_pT_endcap_ctrl = new TH1D("h_pT_endcap_ctrl", "h_pT_endcap_ctrl", nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap_ctrl->Sumw2();
+        TH1D* h_pT_barrel_nume = new TH1D("h_pT_barrel_nume", "h_pT_barrel_nume", /*nPtBinBarrel, analyzer->ptbin_barrel*/ 200, 0, 1000); h_pT_barrel_nume->Sumw2();
+        TH1D* h_pT_endcap_nume = new TH1D("h_pT_endcap_nume", "h_pT_endcap_nume", /*nPtBinEndcap, analyzer->ptbin_endcap*/ 200, 0, 1000); h_pT_endcap_nume->Sumw2();
+        TH1D* h_pT_barrel_deno = new TH1D("h_pT_barrel_deno", "h_pT_barrel_deno", /*nPtBinBarrel, analyzer->ptbin_barrel*/ 200, 0, 1000); h_pT_barrel_deno->Sumw2();
+        TH1D* h_pT_endcap_deno = new TH1D("h_pT_endcap_deno", "h_pT_endcap_deno", /*nPtBinEndcap, analyzer->ptbin_endcap*/ 200, 0, 1000); h_pT_endcap_deno->Sumw2();
+        TH1D* h_pT_barrel_ctrl = new TH1D("h_pT_barrel_ctrl", "h_pT_barrel_ctrl", /*nPtBinBarrel, analyzer->ptbin_barrel*/ 200, 0, 1000); h_pT_barrel_ctrl->Sumw2();
+        TH1D* h_pT_endcap_ctrl = new TH1D("h_pT_endcap_ctrl", "h_pT_endcap_ctrl", /*nPtBinEndcap, analyzer->ptbin_endcap*/ 200, 0, 1000); h_pT_endcap_ctrl->Sumw2();
         TH1D* h_eta_nume = new TH1D("h_eta_nume", "h_eta_nume", 48, -2.4, 2.4); h_eta_nume->Sumw2();
         TH1D* h_eta_deno = new TH1D("h_eta_deno", "h_eta_deno", 48, -2.4, 2.4); h_eta_deno->Sumw2();
         TH1D* h_eta_ctrl = new TH1D("h_eta_ctrl", "h_eta_ctrl", 48, -2.4, 2.4); h_eta_ctrl->Sumw2();
@@ -216,6 +213,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
         Double_t prescale_factor;
+        Int_t trig_matched;
 
         TChain *chain = new TChain("FRTree");
 
@@ -238,6 +236,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchStatus("prefiring_weight_up", 1);
         chain->SetBranchStatus("prefiring_weight_down", 1);
         chain->SetBranchStatus("prescale_factor", 1);
+        chain->SetBranchStatus("trig_matched", 1);
         chain->SetBranchAddress("p_T", &p_T);
         chain->SetBranchAddress("eta", &eta);
         chain->SetBranchAddress("phi", &phi);
@@ -256,6 +255,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchAddress("prefiring_weight_up", &prefiring_weight_up);
         chain->SetBranchAddress("prefiring_weight_down", &prefiring_weight_down);
         chain->SetBranchAddress("prescale_factor", &prescale_factor);
+        chain->SetBranchAddress("trig_matched", &trig_matched);
 
         Int_t NEvents = chain->GetEntries();
         cout << "\t[Sum of weights: " << Mgr.Wsum[0] << "]" << endl;
@@ -297,14 +297,14 @@ void E_FR_HistMaker (Bool_t DEBUG)
             if (Mgr.isMC == kTRUE) TopPtWeight = top_weight;
 
             // -- Normalization -- //
-            Double_t TotWeight = gen_weight;
+            Double_t TotWeight = gen_weight / prescale_factor;
             if (Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
             if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl;
 
             if (Mgr.isMC == kTRUE && p_T->size() > 1) n2MC += TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight;
             if (Mgr.isMC == kFALSE && p_T->size() > 1) n2Data++;
 
-            // For finding the leading muon
+            // For finding the leading electron
             TLorentzVector ele_lead;
             ele_lead.SetPtEtaPhiM(0, 0, 0, M_Elec);
             Double_t iso_lead = -9999;
@@ -316,9 +316,9 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 if (passMediumID->at(i_ele)) med_count++;
 
                 // Selecting leading electron (could also try finding a muon with the best isolation)
-                if (p_T->at(i_ele) > mu_lead.Pt())
+                if (p_T->at(i_ele) > ele_lead.Pt())
                 {
-                    mu_lead.SetPtEtaPhiM(p_T->at(i_ele), eta->at(i_ele), phi->at(i_ele), M_Elec);
+                    ele_lead.SetPtEtaPhiM(p_T->at(i_ele), eta->at(i_ele), phi->at(i_ele), M_Elec);
                     iso_lead = relPFiso->at(i_ele);
                 }
             }
@@ -339,6 +339,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                     continue;
                 }
                 if (p_T->at(i_ele) <= 17) continue;
+                if (i_ele != (UInt_t)trig_matched) continue;
                 if (DEBUG == kTRUE) cout << "i_ele = " << i_ele << endl;
 
                 // -- Efficiency scale factor -- //
@@ -491,7 +492,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 if (iso_lead < 0.15) h_MT_barrel_nume->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                 else h_MT_barrel_ctrl->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
             }
-            else if (fabs(eta->at(i_ele)) > 1.566) // Endcap
+            else if (fabs(ele_lead.Eta()) > 1.566) // Endcap
             {
                 h_MT_endcap_deno->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                 if (iso_lead < 0.15) h_MT_endcap_nume->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
@@ -611,7 +612,7 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
 
     UInt_t n2MC=0, n2Data=0;
 
-    for (Process_t pr=_DY_10to50; pr<_EndOf_SinglMuon_Normal; pr=next(pr))
+    for (Process_t pr=_DY_10to50; pr<_EndOf_SingleMuon_Normal; pr=next(pr))
     {
         Mgr.SetProc(pr);
 
@@ -1142,12 +1143,12 @@ void Mu_QCD_HistMaker (Bool_t DEBUG, Int_t type=1)
     // -- For QCD estimation from Fake Rate -- //
     analyzer->SetupFRvalues(Dir+"FakeRate_muon.root", "sigCtrl_template");
 
-    TH1D *h_mass_test[_EndOf_SinglMuon_Normal];
-    TH1D *h_mass_test_SS[_EndOf_SinglMuon_Normal];
+    TH1D *h_mass_test[_EndOf_SingleMuon_Normal];
+    TH1D *h_mass_test_SS[_EndOf_SingleMuon_Normal];
 
     TH1D* h_FRweight = new TH1D("h_FRweight", "FR weights", 100, 0, 0.4);
 
-    for (Process_t pr=_DY_10to50; pr<_EndOf_SinglMuon_Normal; pr=next(pr))
+    for (Process_t pr=_DY_10to50; pr<_EndOf_SingleMuon_Normal; pr=next(pr))
     {
         Mgr.SetProc(pr);
 
@@ -1536,10 +1537,10 @@ void Mu_WJET_HistMaker (Bool_t DEBUG, Int_t type=2)
     // -- For W+Jets estimation from Fake Rate -- //
     analyzer->SetupFRvalues(Dir+"FakeRate_muon.root", "sigCtrl_template");
 
-    TH1D *h_mass_test[_EndOf_SinglMuon_Normal];
-    TH1D *h_mass_test_SS[_EndOf_SinglMuon_Normal];
+    TH1D *h_mass_test[_EndOf_SingleMuon_Normal];
+    TH1D *h_mass_test_SS[_EndOf_SingleMuon_Normal];
 
-    for (Process_t pr=_DY_10to50; pr<_EndOf_SinglMuon_Normal; pr=next(pr))
+    for (Process_t pr=_DY_10to50; pr<_EndOf_SingleMuon_Normal; pr=next(pr))
     {
         Mgr.SetProc(pr);
 
