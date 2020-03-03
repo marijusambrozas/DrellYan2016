@@ -220,7 +220,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         Type = "SIGNAL";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
-        Tag.push_back("DY_M50to100"); Xsec.push_back(1873.52*3); Wsum.push_back(81780984); nEvents.push_back(122055296); // Wsum is inclusive here (50toInf)
+        Tag.push_back("DY_M50to100"); Xsec.push_back(1873.52*3); Wsum.push_back(78026576/*81780984*/); nEvents.push_back(121265767/*122055296*/); // Wsum is inclusive here (50toInf)
 //        Location = "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000/";
         Location = "DYLL_M50toInf/";
         NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(1451);
@@ -363,7 +363,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(467);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation + Location);
 
-        Tag.push_back("DY_M50to100"); Xsec.push_back(1873.52*3); Wsum.push_back(81780984.0); nEvents.push_back(122055296);
+        Tag.push_back("DY_M50to100"); Xsec.push_back(1873.52*3); Wsum.push_back(78026576/*81780984*/); nEvents.push_back(121265767/*122055296*/);
 //        Location = "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000/";
         Location = "DYLL_50toInf/";
         NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(1451);
@@ -4639,7 +4639,7 @@ void FileMgr::SetupChain(Int_t i_tuple, TChain *chain)
         {
             if ((CurrentProc == _DY_50to100 || CurrentProc == _DYEE_50to100 || CurrentProc == _DYMuMu_50to100 || CurrentProc == _DYTauTau_50toInf ||
                 ((CurrentProc == _DY_Full || CurrentProc == _DYEE_Full || CurrentProc == _DYMuMu_Full || CurrentProc == _DYTauTau_Full) && i_tuple == 3)) &&
-                (i == 6 || i == 270 || i == 278 || i == 307 || i == 308 || i == 318 || i == 663 || i == 968/* || i < 600 || i > 800*/)) continue; // Skipping several ntuple_skim_sig_X.root because they have some errors
+                (i == 6 || i == 270 || i == 278 || i == 307 || i == 308 || i == 318 || i == 663 || i == 968)) continue; // Skipping several ntuple_skim_sig_X.root because they have some errors
 
             stringstream ss;
             ss << i;
