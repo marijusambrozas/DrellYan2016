@@ -194,7 +194,7 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
         TH1D *h_pT_before_EffCorr = new TH1D("h_pT_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
         TH1D *h_pT_before_PVzCorr = new TH1D("h_pT_before_PVzCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
         TH1D *h_pT_before_L1Corr = new TH1D("h_pT_before_L1Corr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
-        TH1D *h_pT_before_TopPtCorr = new TH1D("h_pT_before_TopPtCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
+        TH1D *h_pT_before_TopPtCorr = new TH1D("h_pT_before_TopPtCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 500, 0, 1000);
         TH1D *h_pT = new TH1D("h_pT_"+Mgr.Procname[Mgr.CurrentProc], "", 100, 0, 1000);
         TH1D *h_rapi_before_PUCorr = new TH1D("h_rapi_before_PUCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5);
         TH1D *h_rapi_before_EffCorr = new TH1D("h_rapi_before_EffCorr_"+Mgr.Procname[Mgr.CurrentProc], "", 100, -5, 5);
@@ -333,7 +333,7 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
                     h_pT_before_PVzCorr->Fill(reco_Pt, TotWeight * PUWeight * effweight);
                     h_pT_before_L1Corr->Fill(reco_Pt, TotWeight * PUWeight * effweight * PVzWeight);
                     h_pT_before_TopPtCorr->Fill(reco_Pt, TotWeight * PUWeight * effweight * PVzWeight * L1weight);
-                    h_pT->Fill(reco_Pt, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_pT->Fill(ele1.Pt(), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     h_rapi_before_PUCorr->Fill(reco_rapi, TotWeight);
                     h_rapi_before_EffCorr->Fill(reco_rapi, TotWeight * PUWeight);
                     h_rapi_before_PVzCorr->Fill(reco_rapi, TotWeight * PUWeight * effweight);
@@ -410,6 +410,7 @@ void EE_HistMaker (TString type, TString HLTname , Bool_t DEBUG)
                 bar.Draw(i);
 
             } // End of event iteration
+            h_pT->Draw();
 
             if(Mgr.isMC == kTRUE) printf("\tNormalization factor: %.8f\n", Lumi*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup]);
 
