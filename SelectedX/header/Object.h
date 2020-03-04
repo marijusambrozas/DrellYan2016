@@ -936,10 +936,14 @@ public:
 
                             Double_t dR = sqrt((Lepton_eta - Trig_eta)*(Lepton_eta - Trig_eta) + (Lepton_phi - Trig_phi)*(Lepton_phi - Trig_phi));
                             Double_t dpT = fabs(Lepton_pT - Trig_pT) / Trig_pT;
-                            if(dR < 0.3 && fabs(Lepton_eta) < 2.5 && dpT<0.1)
+                            if(dR < 0.3 && fabs(Lepton_eta) < 2.5)
                             {
-                                isTrigMatch = true;
-                                break;
+                                cout << "HLTname: " << hlt_trigName->at((unsigned int)k) <<"    pT: " << Lepton_pT << "   HLT pT: " << Trig_pT << endl;
+                                if (dpT<0.1)
+                                {
+                                    isTrigMatch = true;
+                                    break;
+                                }
                             }
 			}
 		}
