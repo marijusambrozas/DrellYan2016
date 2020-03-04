@@ -200,6 +200,8 @@ void E_FR_HistMaker (Bool_t DEBUG)
         TH1D* h_pT_barrel_ctrl_100to500 = new TH1D("h_pT_barrel_ctrl_100to500", "h_pT_barrel_ctrl_200to500", nPtBinBarrel, analyzer->ptbin_barrel); h_pT_barrel_ctrl_100to500->Sumw2();
         TH1D* h_pT_endcap_ctrl_100to500 = new TH1D("h_pT_endcap_ctrl_100to500", "h_pT_endcap_ctrl_200to500", nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap_ctrl_100to500->Sumw2();
 
+        TH1D* h_mass_test = new TH1D("h_mass_test", "h_mass_test", binnum, massbins); h_mass_test->Sumw2();
+
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
         std::vector<double> *phi = new std::vector<double>;
@@ -308,6 +310,14 @@ void E_FR_HistMaker (Bool_t DEBUG)
             TLorentzVector ele_lead;
             ele_lead.SetPtEtaPhiM(0, 0, 0, M_Elec);
             Double_t iso_lead = -9999;
+
+            if (p_T->size() == 2 && passMediumID->at(0) && passMediumID->at(1))
+            {
+                TLorentzVector ele1, ele2;
+                ele1.SetPtEtaPhiM(p_T->at(0), eta->at(0), phi->at(0), M_Elec);
+                ele2.SetPtEtaPhiM(p_T->at(1), eta->at(1), phi->at(1), M_Elec);
+                h_mass_test->Fill((ele1+ele2).M(), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+            }
 
             Double_t med_count = 0;
             for (UInt_t i_ele=0; i_ele<p_T->size(); i_ele++)
@@ -569,6 +579,8 @@ void E_FR_HistMaker (Bool_t DEBUG)
         h_PFiso_endcap_deno_100to500->Write();
         h_PFiso_barrel_ctrl_100to500->Write();
         h_PFiso_endcap_ctrl_100to500->Write();
+
+        h_mass_test->Write();
 
         cout << " Finished.\n" << endl;
 

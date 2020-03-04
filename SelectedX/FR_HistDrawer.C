@@ -133,6 +133,7 @@ void E_HistDrawer(Int_t type)
     THStack *s_MT_endcap_ctrl = new THStack("s_MT_endcap_ctrl", "");
     THStack *s_eta = new THStack("s_eta", "");
     THStack *s_nVTX = new THStack("s_nVTX", "");
+    THStack *s_mass_test = new THStack("s_mass_test", "");
 
     TH1D *h_PFiso_barrel_MC_nume[_EndOf_Data_Special], *h_PFiso_endcap_MC_nume[_EndOf_Data_Special],
          *h_PFiso_barrel_MC_deno[_EndOf_Data_Special], *h_PFiso_endcap_MC_deno[_EndOf_Data_Special],
@@ -144,12 +145,12 @@ void E_HistDrawer(Int_t type)
          *h_MT_barrel_MC_nume[_EndOf_Data_Special], *h_MT_endcap_MC_nume[_EndOf_Data_Special],
          *h_MT_barrel_MC_deno[_EndOf_Data_Special], *h_MT_endcap_MC_deno[_EndOf_Data_Special],
          *h_MT_barrel_MC_ctrl[_EndOf_Data_Special], *h_MT_endcap_MC_ctrl[_EndOf_Data_Special],
-         *h_eta_MC[_EndOf_Data_Special], *h_nVTX_MC[_EndOf_Data_Special],
+         *h_eta_MC[_EndOf_Data_Special], *h_nVTX_MC[_EndOf_Data_Special], *h_mass_test_MC[_EndOf_Data_Special],
          *h_PFiso_barrel_data_nume, *h_PFiso_endcap_data_nume, *h_PFiso_barrel_data_deno, *h_PFiso_endcap_data_deno,
          *h_PFiso_barrel_data_ctrl, *h_PFiso_endcap_data_ctrl, *h_pT_barrel_data_nume, *h_pT_endcap_data_nume,
          *h_pT_barrel_data_deno, *h_pT_endcap_data_deno, *h_pT_barrel_data_ctrl, *h_pT_endcap_data_ctrl,
-         *h_MET_data, *h_MT_barrel_data_nume, *h_MT_endcap_data_nume,
-         *h_MT_barrel_data_deno, *h_MT_endcap_data_deno, *h_MT_barrel_data_ctrl, *h_MT_endcap_data_ctrl;
+         *h_MET_data, *h_MT_barrel_data_nume, *h_MT_endcap_data_nume, *h_MT_barrel_data_deno, *h_MT_endcap_data_deno,
+         *h_MT_barrel_data_ctrl, *h_MT_endcap_data_ctrl, *h_mass_test_data;
 
 //----------------------------------- MC bkg -------------------------------------------------------
 
@@ -183,6 +184,7 @@ void E_HistDrawer(Int_t type)
         file->GetObject("h_MT_endcap_ctrl", h_MT_endcap_MC_ctrl[pr1]);
         file->GetObject("h_eta_deno", h_eta_MC[pr1]);
         file->GetObject("h_nVTX", h_nVTX_MC[pr1]);
+        file->GetObject("h_mass_test", h_mass_test_MC[pr1]);
 
         removeNegativeBins(h_PFiso_barrel_MC_nume[pr1]);
         removeNegativeBins(h_PFiso_endcap_MC_nume[pr1]);
@@ -205,6 +207,7 @@ void E_HistDrawer(Int_t type)
         removeNegativeBins(h_MT_endcap_MC_ctrl[pr1]);
         removeNegativeBins(h_eta_MC[pr1]);
         removeNegativeBins(h_nVTX_MC[pr1]);
+        removeNegativeBins(h_mass_test_MC[pr1]);
 
         Color_t color = kBlack;
         if (pr1 == _WJets || pr1 == _WJets_ext2v5) color = kRed - 2;
@@ -237,6 +240,7 @@ void E_HistDrawer(Int_t type)
         h_MT_endcap_MC_ctrl[pr1]->SetFillColor(color);
         h_eta_MC[pr1]->SetFillColor(color);
         h_nVTX_MC[pr1]->SetFillColor(color);
+        h_mass_test_MC[pr1]->SetFillColor(color);
         h_PFiso_barrel_MC_nume[pr1]->SetLineColor(color);
         h_PFiso_endcap_MC_nume[pr1]->SetLineColor(color);
         h_PFiso_barrel_MC_deno[pr1]->SetLineColor(color);
@@ -258,6 +262,7 @@ void E_HistDrawer(Int_t type)
         h_MT_endcap_MC_ctrl[pr1]->SetLineColor(color);
         h_eta_MC[pr1]->SetLineColor(color);
         h_nVTX_MC[pr1]->SetLineColor(color);
+        h_mass_test_MC[pr1]->SetLineColor(color);
         h_PFiso_barrel_MC_nume[pr1]->SetDirectory(0);
         h_PFiso_endcap_MC_nume[pr1]->SetDirectory(0);
         h_PFiso_barrel_MC_deno[pr1]->SetDirectory(0);
@@ -279,6 +284,7 @@ void E_HistDrawer(Int_t type)
         h_MT_endcap_MC_ctrl[pr1]->SetDirectory(0);
         h_eta_MC[pr1]->SetDirectory(0);
         h_nVTX_MC[pr1]->SetDirectory(0);
+        h_mass_test_MC[pr1]->SetDirectory(0);
 
         if (pr1 == _WJets)
         {
@@ -303,6 +309,7 @@ void E_HistDrawer(Int_t type)
             h_MT_endcap_MC_ctrl[_WJets_Full] = ((TH1D*)(h_MT_endcap_MC_ctrl[pr1]->Clone("h_MT_endcap_ctrl_WJets")));
             h_eta_MC[_WJets_Full] = ((TH1D*)(h_eta_MC[pr1]->Clone("h_eta_deno_WJets")));
             h_nVTX_MC[_WJets_Full] = ((TH1D*)(h_nVTX_MC[pr1]->Clone("h_nVTX_WJets")));
+            h_mass_test_MC[_WJets_Full] = ((TH1D*)(h_mass_test_MC[pr1]->Clone("h_mass_test_WJets")));
             h_PFiso_barrel_MC_nume[_WJets_Full]->SetDirectory(0);
             h_PFiso_endcap_MC_nume[_WJets_Full]->SetDirectory(0);
             h_PFiso_barrel_MC_deno[_WJets_Full]->SetDirectory(0);
@@ -324,6 +331,7 @@ void E_HistDrawer(Int_t type)
             h_MT_endcap_MC_ctrl[_WJets_Full]->SetDirectory(0);
             h_eta_MC[_WJets_Full]->SetDirectory(0);
             h_nVTX_MC[_WJets_Full]->SetDirectory(0);
+            h_mass_test_MC[_WJets_Full]->SetDirectory(0);
         }
         else if (pr1 == _WJets_ext2v5)
         {
@@ -348,6 +356,7 @@ void E_HistDrawer(Int_t type)
             h_MT_endcap_MC_ctrl[_WJets_Full]->Add(h_MT_endcap_MC_ctrl[pr1]);
             h_eta_MC[_WJets_Full]->Add(h_eta_MC[pr1]);
             h_nVTX_MC[_WJets_Full]->Add(h_nVTX_MC[pr1]);
+            h_mass_test_MC[_WJets_Full]->Add(h_mass_test_MC[pr1]);
         }
 
         s_PFiso_barrel_nume->Add(h_PFiso_barrel_MC_nume[pr1]);
@@ -371,6 +380,7 @@ void E_HistDrawer(Int_t type)
         s_MT_endcap_ctrl->Add(h_MT_endcap_MC_ctrl[pr1]);
         s_eta->Add(h_eta_MC[pr1]);
         s_nVTX->Add(h_nVTX_MC[pr1]);
+        s_mass_test->Add(h_mass_test_MC[pr1]);
 
         file->Close();
 
@@ -414,6 +424,7 @@ void E_HistDrawer(Int_t type)
         file->GetObject("h_MT_endcap_ctrl", h_MT_endcap_MC_ctrl[pr]);
         file->GetObject("h_eta_deno", h_eta_MC[pr]);
         file->GetObject("h_nVTX", h_nVTX_MC[pr]);
+        file->GetObject("h_mass_test", h_mass_test_MC[pr]);
         removeNegativeBins(h_PFiso_barrel_MC_nume[pr]);
         removeNegativeBins(h_PFiso_endcap_MC_nume[pr]);
         removeNegativeBins(h_PFiso_barrel_MC_deno[pr]);
@@ -435,6 +446,7 @@ void E_HistDrawer(Int_t type)
         removeNegativeBins(h_MT_endcap_MC_ctrl[pr]);
         removeNegativeBins(h_eta_MC[pr]);
         removeNegativeBins(h_nVTX_MC[pr]);
+        removeNegativeBins(h_mass_test_MC[pr]);
 
         if (pr == _DY_10to50)
         {
@@ -459,6 +471,7 @@ void E_HistDrawer(Int_t type)
             h_MT_endcap_MC_ctrl[_DY_Full] = ((TH1D*)(h_MT_endcap_MC_ctrl[pr]->Clone("h_MT_endcap_ctrl_DY")));
             h_eta_MC[_DY_Full] = ((TH1D*)(h_eta_MC[pr]->Clone("h_eta_deno_DY")));
             h_nVTX_MC[_DY_Full] = ((TH1D*)(h_nVTX_MC[pr]->Clone("h_nVTX_DY")));
+            h_mass_test_MC[_DY_Full] = ((TH1D*)(h_mass_test_MC[pr]->Clone("h_mass_test_DY")));
             h_PFiso_barrel_MC_nume[_DY_Full]->SetDirectory(0);
             h_PFiso_endcap_MC_nume[_DY_Full]->SetDirectory(0);
             h_PFiso_barrel_MC_deno[_DY_Full]->SetDirectory(0);
@@ -480,6 +493,7 @@ void E_HistDrawer(Int_t type)
             h_MT_endcap_MC_ctrl[_DY_Full]->SetDirectory(0);
             h_eta_MC[_DY_Full]->SetDirectory(0);
             h_nVTX_MC[_DY_Full]->SetDirectory(0);
+            h_mass_test_MC[_DY_Full]->SetDirectory(0);
         }
         else
         {
@@ -504,6 +518,7 @@ void E_HistDrawer(Int_t type)
             h_MT_endcap_MC_ctrl[_DY_Full]->Add(h_MT_endcap_MC_ctrl[pr]);
             h_eta_MC[_DY_Full]->Add(h_eta_MC[pr]);
             h_nVTX_MC[_DY_Full]->Add(h_nVTX_MC[pr]);
+            h_mass_test_MC[_DY_Full]->Add(h_mass_test_MC[pr]);
         }
 
         Color_t color = kOrange - 5;
@@ -528,6 +543,7 @@ void E_HistDrawer(Int_t type)
         h_MT_endcap_MC_ctrl[pr]->SetFillColor(color);
         h_eta_MC[pr]->SetFillColor(color);
         h_nVTX_MC[pr]->SetFillColor(color);
+        h_mass_test_MC[pr]->SetFillColor(color);
         h_PFiso_barrel_MC_nume[pr]->SetLineColor(color);
         h_PFiso_endcap_MC_nume[pr]->SetLineColor(color);
         h_PFiso_barrel_MC_deno[pr]->SetLineColor(color);
@@ -549,6 +565,7 @@ void E_HistDrawer(Int_t type)
         h_MT_endcap_MC_ctrl[pr]->SetLineColor(color);
         h_eta_MC[pr]->SetLineColor(color);
         h_nVTX_MC[pr]->SetLineColor(color);
+        h_mass_test_MC[pr]->SetLineColor(color);
         h_PFiso_barrel_MC_nume[pr]->SetDirectory(0);
         h_PFiso_endcap_MC_nume[pr]->SetDirectory(0);
         h_PFiso_barrel_MC_deno[pr]->SetDirectory(0);
@@ -570,6 +587,7 @@ void E_HistDrawer(Int_t type)
         h_MT_endcap_MC_ctrl[pr]->SetDirectory(0);
         h_eta_MC[pr]->SetDirectory(0);
         h_nVTX_MC[pr]->SetDirectory(0);
+        h_mass_test_MC[pr]->SetDirectory(0);
 
         s_PFiso_barrel_nume->Add(h_PFiso_barrel_MC_nume[pr]);
         s_PFiso_endcap_nume->Add(h_PFiso_endcap_MC_nume[pr]);
@@ -592,6 +610,7 @@ void E_HistDrawer(Int_t type)
         s_MT_endcap_ctrl->Add(h_MT_endcap_MC_ctrl[pr]);
         s_eta->Add(h_eta_MC[pr]);
         s_nVTX->Add(h_nVTX_MC[pr]);
+        s_mass_test->Add(h_mass_test_MC[pr]);
 
         file->Close();
     }
@@ -624,6 +643,7 @@ void E_HistDrawer(Int_t type)
         file->GetObject("h_MT_endcap_ctrl", h_MT_endcap_MC_ctrl[pr]);
         file->GetObject("h_eta_deno", h_eta_MC[pr]);
         file->GetObject("h_nVTX", h_nVTX_MC[pr]);
+        file->GetObject("h_mass_test", h_mass_test_MC[pr]);
         removeNegativeBins(h_PFiso_barrel_MC_nume[pr]);
         removeNegativeBins(h_PFiso_endcap_MC_nume[pr]);
         removeNegativeBins(h_PFiso_barrel_MC_deno[pr]);
@@ -645,6 +665,7 @@ void E_HistDrawer(Int_t type)
         removeNegativeBins(h_MT_endcap_MC_ctrl[pr]);
         removeNegativeBins(h_eta_MC[pr]);
         removeNegativeBins(h_nVTX_MC[pr]);
+        removeNegativeBins(h_mass_test_MC[pr]);
 
         if (pr == _QCDEMEnriched_20to30)
         {
@@ -669,6 +690,8 @@ void E_HistDrawer(Int_t type)
             h_MT_endcap_MC_ctrl[_QCDEMEnriched_Full] = ((TH1D*)(h_MT_endcap_MC_ctrl[pr]->Clone("h_MT_endcap_ctrl_QCD")));
             h_eta_MC[_QCDEMEnriched_Full] = ((TH1D*)(h_eta_MC[pr]->Clone("h_eta_deno_QCD")));
             h_nVTX_MC[_QCDEMEnriched_Full] = ((TH1D*)(h_nVTX_MC[pr]->Clone("h_nVTX_QCD")));
+            h_mass_test_MC[_QCDEMEnriched_Full] = ((TH1D*)(h_mass_test_MC[pr]->Clone("h_mass_test_QCD")));
+
             h_PFiso_barrel_MC_nume[_QCDEMEnriched_Full]->SetDirectory(0);
             h_PFiso_endcap_MC_nume[_QCDEMEnriched_Full]->SetDirectory(0);
             h_PFiso_barrel_MC_deno[_QCDEMEnriched_Full]->SetDirectory(0);
@@ -690,6 +713,7 @@ void E_HistDrawer(Int_t type)
             h_MT_endcap_MC_ctrl[_QCDEMEnriched_Full]->SetDirectory(0);
             h_eta_MC[_QCDEMEnriched_Full]->SetDirectory(0);
             h_nVTX_MC[_QCDEMEnriched_Full]->SetDirectory(0);
+            h_mass_test_MC[_QCDEMEnriched_Full]->SetDirectory(0);
         }
         else
         {
@@ -714,6 +738,7 @@ void E_HistDrawer(Int_t type)
             h_MT_endcap_MC_ctrl[_QCDEMEnriched_Full]->Add(h_MT_endcap_MC_ctrl[pr]);
             h_eta_MC[_QCDEMEnriched_Full]->Add(h_eta_MC[pr]);
             h_nVTX_MC[_QCDEMEnriched_Full]->Add(h_nVTX_MC[pr]);
+            h_mass_test_MC[_QCDEMEnriched_Full]->Add(h_mass_test_MC[pr]);
         }
 
         Color_t color = kRed + 3;
@@ -738,6 +763,7 @@ void E_HistDrawer(Int_t type)
         h_MT_endcap_MC_ctrl[pr]->SetFillColor(color);
         h_eta_MC[pr]->SetFillColor(color);
         h_nVTX_MC[pr]->SetFillColor(color);
+        h_mass_test_MC[pr]->SetFillColor(color);
         h_PFiso_barrel_MC_nume[pr]->SetLineColor(color);
         h_PFiso_endcap_MC_nume[pr]->SetLineColor(color);
         h_PFiso_barrel_MC_deno[pr]->SetLineColor(color);
@@ -759,6 +785,7 @@ void E_HistDrawer(Int_t type)
         h_MT_endcap_MC_ctrl[pr]->SetLineColor(color);
         h_eta_MC[pr]->SetLineColor(color);
         h_nVTX_MC[pr]->SetLineColor(color);
+        h_mass_test_MC[pr]->SetLineColor(color);
         h_PFiso_barrel_MC_nume[pr]->SetDirectory(0);
         h_PFiso_endcap_MC_nume[pr]->SetDirectory(0);
         h_PFiso_barrel_MC_deno[pr]->SetDirectory(0);
@@ -780,6 +807,7 @@ void E_HistDrawer(Int_t type)
         h_MT_endcap_MC_ctrl[pr]->SetDirectory(0);
         h_eta_MC[pr]->SetDirectory(0);
         h_nVTX_MC[pr]->SetDirectory(0);
+        h_mass_test_MC[pr]->SetDirectory(0);
 
         s_PFiso_barrel_nume->Add(h_PFiso_barrel_MC_nume[pr]);
         s_PFiso_endcap_nume->Add(h_PFiso_endcap_MC_nume[pr]);
@@ -802,6 +830,7 @@ void E_HistDrawer(Int_t type)
         s_MT_endcap_ctrl->Add(h_MT_endcap_MC_ctrl[pr]);
         s_eta->Add(h_eta_MC[pr]);
         s_nVTX->Add(h_nVTX_MC[pr]);
+        s_mass_test->Add(h_mass_test_MC[pr]);
 
         file->Close();
     }
@@ -827,6 +856,7 @@ void E_HistDrawer(Int_t type)
         h_MT_endcap_MC_ctrl[_QCDEMEnriched_Full]->SetFillColor(kGray);
                    h_eta_MC[_QCDEMEnriched_Full]->SetFillColor(kGray);
                   h_nVTX_MC[_QCDEMEnriched_Full]->SetFillColor(kGray);
+             h_mass_test_MC[_QCDEMEnriched_Full]->SetFillColor(kGray);
      h_PFiso_barrel_MC_nume[_QCDEMEnriched_Full]->SetFillStyle(3002);
      h_PFiso_endcap_MC_nume[_QCDEMEnriched_Full]->SetFillStyle(3002);
      h_PFiso_barrel_MC_deno[_QCDEMEnriched_Full]->SetFillStyle(3002);
@@ -848,6 +878,7 @@ void E_HistDrawer(Int_t type)
         h_MT_endcap_MC_ctrl[_QCDEMEnriched_Full]->SetFillStyle(3002);
                    h_eta_MC[_QCDEMEnriched_Full]->SetFillStyle(3002);
                   h_nVTX_MC[_QCDEMEnriched_Full]->SetFillStyle(3002);
+             h_mass_test_MC[_QCDEMEnriched_Full]->SetFillStyle(3002);
      h_PFiso_barrel_MC_nume[_QCDEMEnriched_Full]->SetLineColor(kRed);
      h_PFiso_endcap_MC_nume[_QCDEMEnriched_Full]->SetLineColor(kRed);
      h_PFiso_barrel_MC_deno[_QCDEMEnriched_Full]->SetLineColor(kRed);
@@ -869,6 +900,7 @@ void E_HistDrawer(Int_t type)
         h_MT_endcap_MC_ctrl[_QCDEMEnriched_Full]->SetLineColor(kRed);
                    h_eta_MC[_QCDEMEnriched_Full]->SetLineColor(kRed);
                   h_nVTX_MC[_QCDEMEnriched_Full]->SetLineColor(kRed);
+             h_mass_test_MC[_QCDEMEnriched_Full]->SetLineColor(kRed);
 
 //--------------------------------------- DATA -----------------------------------------------------
 
@@ -878,7 +910,7 @@ void E_HistDrawer(Int_t type)
         if (type == 1) file = new TFile("/media/sf_DATA/FR/Electron/SelectedForFR_E_"+fm.Procname[pr]+".root", "READ");
         else if (type == 2) file = new TFile("/media/sf_DATA/FR/Electron/FR_Hist_E_"+fm.Procname[pr]+".root", "READ");
         else return;
-        TH1D *h_temp[21];
+        TH1D *h_temp[22];
         if (pr == _SinglePhoton_B)
         {
             file->GetObject("h_PFiso_barrel_nume", h_PFiso_barrel_data_nume);
@@ -902,6 +934,7 @@ void E_HistDrawer(Int_t type)
             file->GetObject("h_MT_endcap_ctrl", h_MT_endcap_data_ctrl);
             file->GetObject("h_eta_deno", h_eta_data);
             file->GetObject("h_nVTX", h_nVTX_data);
+            file->GetObject("h_mass_test", h_mass_test_data);
             removeNegativeBins(h_PFiso_barrel_data_nume);
             removeNegativeBins(h_PFiso_endcap_data_nume);
             removeNegativeBins(h_PFiso_barrel_data_deno);
@@ -923,6 +956,7 @@ void E_HistDrawer(Int_t type)
             removeNegativeBins(h_MT_endcap_data_ctrl);
             removeNegativeBins(h_eta_data);
             removeNegativeBins(h_nVTX_data);
+            removeNegativeBins(h_mass_test_data);
         }
         else
         {
@@ -947,6 +981,7 @@ void E_HistDrawer(Int_t type)
             file->GetObject("h_MT_endcap_ctrl", h_temp[18]);
             file->GetObject("h_eta_deno", h_temp[19]);
             file->GetObject("h_nVTX", h_temp[20]);
+            file->GetObject("h_mass_test", h_temp[21]);
             removeNegativeBins(h_temp[0]);
             removeNegativeBins(h_temp[1]);
             removeNegativeBins(h_temp[2]);
@@ -968,6 +1003,7 @@ void E_HistDrawer(Int_t type)
             removeNegativeBins(h_temp[18]);
             removeNegativeBins(h_temp[19]);
             removeNegativeBins(h_temp[20]);
+            removeNegativeBins(h_temp[21]);
             h_PFiso_barrel_data_nume->Add(h_temp[0]);
             h_PFiso_endcap_data_nume->Add(h_temp[1]);
             h_PFiso_barrel_data_deno->Add(h_temp[2]);
@@ -989,6 +1025,7 @@ void E_HistDrawer(Int_t type)
             h_MT_endcap_data_ctrl->Add(h_temp[18]);
             h_eta_data->Add(h_temp[19]);
             h_nVTX_data->Add(h_temp[20]);
+            h_mass_test_data->Add(h_temp[21]);
         }
     }
 
@@ -1013,6 +1050,7 @@ void E_HistDrawer(Int_t type)
     h_MT_endcap_data_ctrl->SetMarkerStyle(kFullDotLarge);
     h_eta_data->SetMarkerStyle(kFullDotLarge);
     h_nVTX_data->SetMarkerStyle(kFullDotLarge);
+    h_mass_test_data->SetMarkerStyle(kFullDotLarge);
     h_PFiso_barrel_data_nume->SetMarkerColor(kBlack);
     h_PFiso_endcap_data_nume->SetMarkerColor(kBlack);
     h_PFiso_barrel_data_deno->SetMarkerColor(kBlack);
@@ -1034,6 +1072,7 @@ void E_HistDrawer(Int_t type)
     h_MT_endcap_data_ctrl->SetMarkerColor(kBlack);
     h_eta_data->SetMarkerColor(kBlack);
     h_nVTX_data->SetMarkerColor(kBlack);
+    h_mass_test_data->SetMarkerColor(kBlack);
     h_PFiso_barrel_data_nume->SetLineColor(kBlack);
     h_PFiso_endcap_data_nume->SetLineColor(kBlack);
     h_PFiso_barrel_data_deno->SetLineColor(kBlack);
@@ -1055,6 +1094,7 @@ void E_HistDrawer(Int_t type)
     h_MT_endcap_data_ctrl->SetLineColor(kBlack);
     h_eta_data->SetLineColor(kBlack);
     h_nVTX_data->SetLineColor(kBlack);
+    h_mass_test_data->SetLineColor(kBlack);
     h_PFiso_barrel_data_nume->SetDirectory(0);
     h_PFiso_endcap_data_nume->SetDirectory(0);
     h_PFiso_barrel_data_deno->SetDirectory(0);
@@ -1076,6 +1116,7 @@ void E_HistDrawer(Int_t type)
     h_MT_endcap_data_ctrl->SetDirectory(0);
     h_eta_data->SetDirectory(0);
     h_nVTX_data->SetDirectory(0);
+    h_mass_test_data->SetDirectory(0);
 
 //--------------------------------- Ratio Plots --------------------------------------
 
@@ -1100,6 +1141,7 @@ void E_HistDrawer(Int_t type)
     myRatioPlot_t *RP_MT_endcap_ctrl = new myRatioPlot_t("RP_MT_endcap_ctrl", s_MT_endcap_ctrl, h_MT_endcap_data_ctrl);
     myRatioPlot_t *RP_eta = new myRatioPlot_t("RP_eta", s_eta, h_eta_data);
     myRatioPlot_t *RP_nVTX = new myRatioPlot_t("RP_nVTX", s_nVTX, h_nVTX_data);
+    myRatioPlot_t *RP_mass_test = new myRatioPlot_t("RP_mass_test", s_mass_test, h_mass_test_data);
 
     RP_PFiso_barrel_nume->SetPlots("I_{PF}^{rel.} (e_{#lower[-0.4]{barrel}}^{nume})", 0, 5);
     RP_PFiso_endcap_nume->SetPlots("I_{PF}^{rel.} (e_{#lower[-0.4]{endcap}}^{nume})", 0, 5);
@@ -1122,6 +1164,7 @@ void E_HistDrawer(Int_t type)
     RP_MT_endcap_ctrl->SetPlots("m_{#lower[-0.25]{T}} (e_{#lower[-0.4]{endcap}}^{control}, E_{#lower[-0.25]{T}}^{miss}) [GeV/c^{2}]", 0, 500);
     RP_eta->SetPlots("#eta (e)", -3, 3);
     RP_nVTX->SetPlots("N_{#lower[-0.25]{VTX}}", 0, 50);
+    RP_mass_test->SetPlots("m_{#lower[-0.25]{ee}} [GeV/c^{2}]", 15, 3000);
 
 
     TLegend *legend = new TLegend(0.5, 0.65, 0.95, 0.95);
@@ -1161,6 +1204,7 @@ void E_HistDrawer(Int_t type)
     RP_MT_endcap_ctrl->ImportLegend(legend);
     RP_eta->ImportLegend(legend);
     RP_nVTX->ImportLegend(legend);
+    RP_mass_test->ImportLegend(legend);
 
     RP_PFiso_barrel_nume->Draw(1, 1e12, 0);
 //    RP_PFiso_barrel_nume->DrawOnTop(h_PFiso_barrel_MC_nume[_QCDEMEnriched_Full]);
@@ -1221,6 +1265,7 @@ void E_HistDrawer(Int_t type)
 
     RP_eta->Draw(1, 1e12, 0);
     RP_nVTX->Draw(1, 1e12, 0);
+    RP_mass_test->Draw(1, 1e12, 1);
 
     cout << "MC PFiso integral: " << ((TH1D*)(s_PFiso_barrel_deno->GetStack()->Last()))->Integral() +
                                      ((TH1D*)(s_PFiso_endcap_deno->GetStack()->Last()))->Integral() << endl;
