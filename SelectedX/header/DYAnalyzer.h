@@ -6328,42 +6328,42 @@ Double_t DYAnalyzer::PrescaleFactor(vector<Electron> ElectronCollection, NtupleH
     for(Int_t i_ele=0; i_ele<(Int_t)ElectronCollection.size(); i_ele++)
     {
         Electron ele = ElectronCollection[i_ele];
-        if (ele.isTrigMatched(ntuple, "HLT_Photon22_v*") && ele.Pt > 22) // added pT cuts to avoid mismatches (175GeV trigger matched to 30GeV electron, etc.)
+        if (ele.isTrigMatched(ntuple, "HLT_Photon22_v*") /*&& ele.Pt > 22*/) // added pT cuts to avoid mismatches (175GeV trigger matched to 30GeV electron, etc.)
         {
             *trig_matched = i_ele;
             Factor = prescales[0];
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon30_v*") && ele.Pt > 30)
+        if (ele.isTrigMatched(ntuple, "HLT_Photon30_v*") /*&& ele.Pt > 30*/)
         {
             *trig_matched = i_ele;
             Factor = prescales[1];
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon36_v*") && ele.Pt > 36)
+        if (ele.isTrigMatched(ntuple, "HLT_Photon36_v*") /*&& ele.Pt > 36*/)
         {
             *trig_matched = i_ele;
             Factor = prescales[2];
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon50_v*") && ele.Pt > 50)
+        if (ele.isTrigMatched(ntuple, "HLT_Photon50_v*") /*&& ele.Pt > 50*/)
         {
             *trig_matched = i_ele;
             Factor = prescales[3];
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon75_v*") && ele.Pt > 75)
+        if (ele.isTrigMatched(ntuple, "HLT_Photon75_v*") /*&& ele.Pt > 75*/)
         {
             *trig_matched = i_ele;
             Factor = prescales[4];
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon90_v*") && ele.Pt > 90)
+        if (ele.isTrigMatched(ntuple, "HLT_Photon90_v*") /*&& ele.Pt > 90*/)
         {
             *trig_matched = i_ele;
             Factor = prescales[5];
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon120_v*") && ele.Pt > 120)
+        if (ele.isTrigMatched(ntuple, "HLT_Photon120_v*") /*&& ele.Pt > 120*/)
         {
             *trig_matched = i_ele;
             Factor = prescales[6];
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon175_v*") && ele.Pt > 175)
+        if (ele.isTrigMatched(ntuple, "HLT_Photon175_v*") /*&& ele.Pt > 175*/)
         {
             *trig_matched = i_ele;
             Factor = prescales[7];
