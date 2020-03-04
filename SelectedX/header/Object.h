@@ -917,7 +917,7 @@ public:
 		return isPass;
 	}
 
-	Bool_t isTrigMatched(NtupleHandle *nh, TString HLT)
+        Bool_t isTrigMatched(NtupleHandle *nh, TString HLT, Double_t *HLT_pT=NULL)
 	{
 		vector<string> *hlt_trigName = nh->HLT_trigName;
 		Int_t hlt_ntrig = nh->HLT_ntrig;
@@ -938,10 +938,11 @@ public:
                             Double_t dpT = fabs(Lepton_pT - Trig_pT) / Trig_pT;
                             if(dR < 0.3 && fabs(Lepton_eta) < 2.5)
                             {
-                                cout << "HLTname: " << hlt_trigName->at((unsigned int)k) <<"    pT: " << Lepton_pT << "   HLT pT: " << Trig_pT << endl;
+//                                cout << "HLTname: " << hlt_trigName->at((unsigned int)k) <<"    pT: " << Lepton_pT << "   HLT pT: " << Trig_pT << endl;
                                 if (dpT < 0.2)
                                 {
                                     isTrigMatch = true;
+                                    if (HLT_pT) *HLT_pT = Trig_pT;
                                     break;
                                 }
                             }
