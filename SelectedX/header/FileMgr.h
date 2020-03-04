@@ -2180,7 +2180,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kFALSE;
         Type = "DATA";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/";
 
         Tag.push_back("SingleMuon_B_0000"); nEvents.push_back(108561074);
 //        Location = "SingleMuon/crab_SingleMuon_RunB/180326_143105/0000/";
@@ -2198,7 +2198,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kFALSE;
         Type = "DATA";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/";
 
         Tag.push_back("SingleMuon_C"); nEvents.push_back(64715287);
 //        Location = "SingleMuon/crab_SingleMuon_RunC/180326_143152/0000/";
@@ -2211,7 +2211,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kFALSE;
         Type = "DATA";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/";
 
         Tag.push_back("SingleMuon_D"); nEvents.push_back(96652779);
 //        Location = "SingleMuon/crab_SingleMuon_RunD/180326_143257/0000/";
@@ -2224,7 +2224,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kFALSE;
         Type = "DATA";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/";
 
         Tag.push_back("SingleMuon_E"); nEvents.push_back(87358348);
 //        Location = "SingleMuon/crab_SingleMuon_RunE/180326_143338/0000/";
@@ -2237,7 +2237,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kFALSE;
         Type = "DATA";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/";
 
         Tag.push_back("SingleMuon_F"); nEvents.push_back(64986568);
 //        Location = "SingleMuon/crab_SingleMuon_RunF/180326_143419/0000/";
@@ -2250,7 +2250,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kFALSE;
         Type = "DATA";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/";
 
         Tag.push_back("SingleMuon_G_0000"); nEvents.push_back(138710659);
 //        Location = "SingleMuon/crab_SingleMuon_RunG/180326_144335/0000/";
@@ -2268,7 +2268,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kFALSE;
         Type = "DATA";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/";
 
         Tag.push_back("SingleMuon_Hver2_0000"); nEvents.push_back(141936183);
 //        Location = "SingleMuon/crab_SingleMuon_RunHver2/180326_144412/0000/";
@@ -2292,7 +2292,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kFALSE;
         Type = "DATA";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/";
 
         Tag.push_back("SingleMuon_B_0000"); nEvents.push_back(108561074);
 //        Location = "SingleMuon/crab_SingleMuon_RunB/180326_143105/0000/";
