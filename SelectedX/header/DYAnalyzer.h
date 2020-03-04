@@ -6420,7 +6420,6 @@ Double_t DYAnalyzer::PrescaleFactor(vector<Electron> ElectronCollection, NtupleH
             *trig_matched = i_ele;
             Factor = getPrescale(HLT_pT);
         }
-        cout << HLT_pT << "   " << Factor << endl;
     }
     return Factor;
 }
