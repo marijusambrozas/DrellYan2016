@@ -274,6 +274,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
                 if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
                 {                    
+                    if (Debug == kTRUE && triggername == "HLT_Photon175_v*") {NEvents++; continue;} // FOR TEST
                     // -- Reco level selection -- //
                     vector< Electron > ElectronCollection;
                     Int_t NLeptons = ntuple->Nelectrons;
@@ -291,7 +292,6 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
                     if (isPassEventSelection == kTRUE)
                     {
-                        if (Debug == kTRUE && triggername == "HLT_Photon175_v*") {NEvents++; continue;} // FOR TEST
                         if (Debug == kTRUE) cout << "\nEvent " << i << endl << triggername << endl;
                         timesPassed++;
                         p_T->clear();
