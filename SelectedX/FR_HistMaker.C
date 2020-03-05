@@ -117,7 +117,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
 
     UInt_t n2MC=0, n2Data=0;
 
-    for (Process_t pr=_DY_10to50; pr<_DY_50to100; pr=next(pr))
+    for (Process_t pr=_SinglePhoton_B; pr<=_SinglePhoton_H; pr=next(pr))
     {
         Mgr.SetProc(pr);
 
@@ -185,7 +185,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchStatus("prefiring_weight", 1);
         chain->SetBranchStatus("prefiring_weight_up", 1);
         chain->SetBranchStatus("prefiring_weight_down", 1);
-//        chain->SetBranchStatus("prescale_factor", 1);
+        chain->SetBranchStatus("prescale_factor", 1);
         chain->SetBranchStatus("trig_matched", 1);
         chain->SetBranchAddress("p_T", &p_T);
         chain->SetBranchAddress("eta", &eta);
@@ -204,7 +204,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchAddress("prefiring_weight", &prefiring_weight);
         chain->SetBranchAddress("prefiring_weight_up", &prefiring_weight_up);
         chain->SetBranchAddress("prefiring_weight_down", &prefiring_weight_down);
-//        chain->SetBranchAddress("prescale_factor", &prescale_factor);
+        chain->SetBranchAddress("prescale_factor", &prescale_factor);
         chain->SetBranchAddress("trig_matched", &trig_matched);
 
         Int_t NEvents = chain->GetEntries();
@@ -268,7 +268,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 }
                 if (p_T->at(i_ele) <= 28) continue;
                 if (DEBUG == kTRUE) cout << "i_ele = " << i_ele << endl;
-                prescale_factor = analyzer->getPrescale(p_T->at(i_ele));
+//                prescale_factor = analyzer->getPrescale(p_T->at(i_ele));
 
                 h_pT->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_factor);
                 h_pT_uncorr->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
