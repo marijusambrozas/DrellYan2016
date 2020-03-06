@@ -374,6 +374,15 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             Double_t LoopRunTime = looptime.CpuTime();
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
 
+            Int_t noreps, reps;
+            for (std::map<std::pair<int,int>,int>::iterator it=repeats.begin(); it!=repeats.end(); it++)
+            {
+                if (it->second == 1)noreps++;
+                else if (it->second == 0) cout << "0 repetitions.. What??" << endl;
+                else reps++;
+            }
+            cout << noreps << " events without repetitions\n" << reps << " events with repetitions" << endl;
+
         } // End of i_tup iteration
 
         // Writing
