@@ -300,7 +300,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
 
             // -- Normalization -- //
             Double_t TotWeight = gen_weight / prescale_factor;
-            if (Mgr.isMC == kTRUE) TotWeight = (2*Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
+            if (Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
             if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl;
 
             if (Mgr.isMC == kTRUE && p_T->size() > 1) n2MC += TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight;
@@ -316,7 +316,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 TLorentzVector ele1, ele2;
                 ele1.SetPtEtaPhiM(p_T->at(0), eta->at(0), phi->at(0), M_Elec);
                 ele2.SetPtEtaPhiM(p_T->at(1), eta->at(1), phi->at(1), M_Elec);
-                h_mass_test->Fill((ele1+ele2).M(), TotWeight/* * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight*/);
+                h_mass_test->Fill((ele1+ele2).M(), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
             }
 
             Double_t med_count = 0;

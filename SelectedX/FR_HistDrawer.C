@@ -1206,66 +1206,66 @@ void E_HistDrawer(Int_t type)
     RP_nVTX->ImportLegend(legend);
     RP_mass_test->ImportLegend(legend);
 
-    RP_PFiso_barrel_nume->Draw(1, 1e12, 0);
+    RP_PFiso_barrel_nume->Draw(1, 1e10, 0);
 //    RP_PFiso_barrel_nume->DrawOnTop(h_PFiso_barrel_MC_nume[_QCDEMEnriched_Full]);
 
-    RP_PFiso_endcap_nume->Draw(1, 1e12, 0);
+    RP_PFiso_endcap_nume->Draw(1, 1e10, 0);
 //    RP_PFiso_endcap_nume->DrawOnTop(h_PFiso_endcap_MC_nume[_QCDEMEnriched_Full]);
 
-    RP_PFiso_barrel_deno->Draw(1, 1e12, 0);
+    RP_PFiso_barrel_deno->Draw(1, 1e10, 0);
 //    RP_PFiso_barrel_deno->DrawOnTop(h_PFiso_barrel_MC_deno[_QCDEMEnriched_Full]);
 
-    RP_PFiso_endcap_deno->Draw(1, 1e12, 0);
+    RP_PFiso_endcap_deno->Draw(1, 1e10, 0);
 //    RP_PFiso_endcap_deno->DrawOnTop(h_PFiso_endcap_MC_deno[_QCDEMEnriched_Full]);
 
-    RP_PFiso_barrel_ctrl->Draw(1, 1e12, 0);
+    RP_PFiso_barrel_ctrl->Draw(1, 1e10, 0);
 //    RP_PFiso_barrel_ctrl->DrawOnTop(h_PFiso_barrel_MC_ctrl[_QCDEMEnriched_Full]);
 
-    RP_PFiso_endcap_ctrl->Draw(1, 1e12, 0);
+    RP_PFiso_endcap_ctrl->Draw(1, 1e10, 0);
 //    RP_PFiso_endcap_ctrl->DrawOnTop(h_PFiso_endcap_MC_ctrl[_QCDEMEnriched_Full]);
 
-    RP_pT_barrel_nume->Draw(1, 1e12, 0);
+    RP_pT_barrel_nume->Draw(1, 1e10, 0);
 //    RP_pT_barrel_nume->DrawOnTop(h_pT_barrel_MC_nume[_QCDEMEnriched_Full]);
 
-    RP_pT_endcap_nume->Draw(1, 1e12, 0);
+    RP_pT_endcap_nume->Draw(1, 1e10, 0);
 //    RP_pT_endcap_nume->DrawOnTop(h_pT_endcap_MC_nume[_QCDEMEnriched_Full]);
 
-    RP_pT_barrel_deno->Draw(1, 1e12, 0);
+    RP_pT_barrel_deno->Draw(1, 1e10, 0);
 //    RP_pT_barrel_deno->DrawOnTop(h_pT_barrel_MC_deno[_QCDEMEnriched_Full]);
 
-    RP_pT_endcap_deno->Draw(1, 1e12, 0);
+    RP_pT_endcap_deno->Draw(1, 1e10, 0);
 //    RP_pT_endcap_deno->DrawOnTop(h_pT_endcap_MC_deno[_QCDEMEnriched_Full]);
 
-    RP_pT_barrel_ctrl->Draw(1, 1e12, 0);
+    RP_pT_barrel_ctrl->Draw(1, 1e10, 0);
 //    RP_pT_barrel_ctrl->DrawOnTop(h_pT_barrel_MC_ctrl[_QCDEMEnriched_Full]);
 
-    RP_pT_endcap_ctrl->Draw(1, 1e12, 0);
+    RP_pT_endcap_ctrl->Draw(1, 1e10, 0);
 //    RP_pT_endcap_ctrl->DrawOnTop(h_pT_endcap_MC_ctrl[_QCDEMEnriched_Full]);
 
-    RP_MET->Draw(1, 1e12, 0);
+    RP_MET->Draw(1, 1e10, 0);
 //    RP_MET->DrawOnTop(h_MET_MC[_QCDEMEnriched_Full]);
 
-    RP_MT_barrel_nume->Draw(1, 1e12, 0);
+    RP_MT_barrel_nume->Draw(1, 1e10, 0);
 //    RP_MT_barrel_nume->DrawOnTop(h_MT_barrel_MC_nume[_QCDEMEnriched_Full]);
 
-    RP_MT_endcap_nume->Draw(1, 1e12, 0);
+    RP_MT_endcap_nume->Draw(1, 1e10, 0);
 //    RP_MT_endcap_nume->DrawOnTop(h_MT_endcap_MC_nume[_QCDEMEnriched_Full]);
 
-    RP_MT_barrel_deno->Draw(1, 1e12, 0);
+    RP_MT_barrel_deno->Draw(1, 1e10, 0);
 //    RP_MT_barrel_deno->DrawOnTop(h_MT_barrel_MC_deno[_QCDEMEnriched_Full]);
 
-    RP_MT_endcap_deno->Draw(1, 1e12, 0);
+    RP_MT_endcap_deno->Draw(1, 1e10, 0);
 //    RP_MT_endcap_deno->DrawOnTop(h_MT_endcap_MC_deno[_QCDEMEnriched_Full]);
 
-    RP_MT_barrel_ctrl->Draw(1, 1e12, 0);
+    RP_MT_barrel_ctrl->Draw(1, 1e10, 0);
 //    RP_MT_barrel_ctrl->DrawOnTop(h_MT_barrel_MC_ctrl[_QCDEMEnriched_Full]);
 
-    RP_MT_endcap_ctrl->Draw(1, 1e12, 0);
+    RP_MT_endcap_ctrl->Draw(1, 1e10, 0);
 //    RP_MT_endcap_ctrl->DrawOnTop(h_MT_endcap_MC_ctrl[_QCDEMEnriched_Full]);
 
     RP_eta->Draw(1, 1e12, 0);
-    RP_nVTX->Draw(1, 1e12, 0);
-    RP_mass_test->Draw(1, 1e12, 1);
+    RP_nVTX->Draw(1, 1e10, 0);
+    RP_mass_test->Draw(1, 1e9, 1);
 
     cout << "MC PFiso integral: " << ((TH1D*)(s_PFiso_barrel_deno->GetStack()->Last()))->Integral() +
                                      ((TH1D*)(s_PFiso_endcap_deno->GetStack()->Last()))->Integral() << endl;
