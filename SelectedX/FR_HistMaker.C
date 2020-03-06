@@ -227,8 +227,8 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 cout << "phi[1] = " << phi->at(0) << endl;
             }
 
-            if (p_T->size() != 2) continue;
-            if (!passMediumID->at(0) || !passMediumID->at(1)) continue;
+//            if (p_T->size() != 2) continue;
+//            if (!passMediumID->at(0) || !passMediumID->at(1)) continue;
 
             // -- Pileup-Reweighting -- //
             Double_t PUWeight = 1;
