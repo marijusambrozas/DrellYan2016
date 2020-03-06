@@ -245,6 +245,9 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             myProgressBar_t bar(NEvents);
             Int_t timesPassed = 0;
 
+            Int_t trig_fired[8] = {0, 0, 0, 0, 0, 0, 0, 0}; // How many triggers have fired in a single event?
+            Int_t trig_2fired[3] = {0, 0, 0}; // Photon_50 OR Photon_75
+
             // Loop for all events in the chain
             for (Int_t i=0; i<NEvents; i++)
             {
@@ -269,8 +272,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                 if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += gen_weight;
 
                 Bool_t TriggerFlag = kFALSE;
-                TString triggername;
-                TriggerFlag = ntuple->isTriggered(analyzer->HLT, &triggername);
+                std::vector<TString> *triggername;
+                TriggerFlag = ntuple->isTriggered(analyzer->HLT, triggername);
 
                 if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
                 {                    
@@ -291,7 +294,20 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
                     if (isPassEventSelection == kTRUE)
                     {
-                        if (Debug == kTRUE) cout << "\nEvent " << i << endl << triggername << endl;
+                        if (Debug == kTRUE)
+                        {
+                            cout << "\nEvent " << i << endl;
+                            for (UInt_t z=0; z<triggername->size(); z++) cout << triggername->at(z) << "  ";
+                            cout << endl;
+                        }
+                        trig_fired[triggername->size()] += 1;
+                        Int_t trig2 = 0;
+                        for (UInt_t z=0; z<triggername->size(); z++)
+                        {
+                            if (triggername->at(z) == "HLT_Photon50_v*" || triggername->at(z) == "HLT_Photon75_v*") trig2++;
+                        }
+                        trig_2fired[trig2] += 1;
+
                         timesPassed++;
                         p_T->clear();
                         eta->clear();
@@ -365,6 +381,21 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
             Double_t LoopRunTime = looptime.CpuTime();
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
+
+            cout << "Fired photon trigger numbers (triggers/event):" << endl;
+            cout << "----------------------------------------------" << endl;
+            cout << "0\t1\t2\t3\t4\t5\t6\t7" << endl;
+            cout << "----------------------------------------------" << endl;
+            for (Int_t z=0; z<8; z++)
+            {
+                cout << trig_fired[z] << "\t";
+            }
+            cout << "----------------------------------------------\n" << endl;
+
+            cout << "How many events with Photon50 and Photon75 triggers?" << endl;
+            cout << "HLT_Photon50\tHLT_Photon75\tBoth" << endl;
+            cout << trig_2fired[0] << "\t" << trig_2fired[1] << "\t" << trig_2fired[2] << endl << endl;
+
 
         } // End of i_tup iteration
 
