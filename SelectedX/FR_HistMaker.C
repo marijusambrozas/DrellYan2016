@@ -311,11 +311,19 @@ void E_FR_HistMaker (Bool_t DEBUG)
             ele_lead.SetPtEtaPhiM(0, 0, 0, M_Elec);
             Double_t iso_lead = -9999;
 
-            if (p_T->size() == 2 && passMediumID->at(0) && passMediumID->at(1))
+            if (p_T->size() == 2 && passMediumID->at(0) && passMediumID->at(1) && charge->at(0) != charge->at(1))
             {
+//                if (p_T->at(0) > p_T->at(1) && p_T->at(0) < 175) continue;
+//                if (p_T->at(0) < p_T->at(1) && p_T->at(1) < 175) continue;
                 TLorentzVector ele1, ele2;
                 ele1.SetPtEtaPhiM(p_T->at(0), eta->at(0), phi->at(0), M_Elec);
                 ele2.SetPtEtaPhiM(p_T->at(1), eta->at(1), phi->at(1), M_Elec);
+                Electron e1, e2;
+                e1.Pt  = p_T->at(0);
+                e1.etaSC = eta->at(0);
+                e2.Pt  = p_T->at(1);
+                e2.etaSC = eta->at(1);
+//                effweight = analyzer->EfficiencySF_EventWeight_electron(e1, e2);
                 h_mass_test->Fill((ele1+ele2).M(), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
             }
 
@@ -333,6 +341,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 }
             }
             if (med_count > 1) continue;
+//            if (ele_lead.Pt() < 175) continue;
             Double_t dTheta = ele_lead.Phi() - MET_phi;
             Double_t MT = sqrt(2 * ele_lead.Pt() * MET_pT * (1 - cos(dTheta)));
 //            if (MT >= 60) continue;

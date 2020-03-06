@@ -141,7 +141,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
         cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
 
-        Int_t Ntup = Mgr.FullLocation.size();           
+        Int_t Ntup = Mgr.FullLocation.size();
 
         //Creating a file
         TString out_base;
@@ -227,6 +227,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             TChain *chain = new TChain(Mgr.TreeName[i_tup]);
             Mgr.SetupChain(i_tup, chain);
 
+            std::map<std::pair<int,int>, int> repeats; // to search for repeating events
+
             NtupleHandle *ntuple = new NtupleHandle(chain);
             if (Mgr.isMC == kTRUE)
             {
@@ -249,6 +251,10 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             for (Int_t i=0; i<NEvents; i++)
             {
                 ntuple->GetEvent(i);
+                repeats[std::make_pair(ntuple->runNum, ntuple->evtNum)]++;
+                if (repeats[std::make_pair(ntuple->runNum, ntuple->evtNum)] > 0)
+                    cout << "Evt " << ntuple->runNum << "; " << ntuple->evtNum << " repeated " <<
+                            repeats[std::make_pair(ntuple->runNum, ntuple->evtNum)] << " times." << endl;
 
 //                if (ntuple->pfMET_pT >= 20) continue;
 
