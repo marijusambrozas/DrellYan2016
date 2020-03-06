@@ -295,7 +295,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                     if (isPassEventSelection == kTRUE)
                     {
                         repeats[std::make_pair(ntuple->runNum, ntuple->evtNum)]++;
-                        if (repeats[std::make_pair(ntuple->runNum, ntuple->evtNum)] > 0)
+                        if (repeats[std::make_pair(ntuple->runNum, ntuple->evtNum)] > 1)
                             cout << "Evt " << ntuple->runNum << "; " << ntuple->evtNum << " repeated " <<
                                     repeats[std::make_pair(ntuple->runNum, ntuple->evtNum)] << " times." << endl;
 
