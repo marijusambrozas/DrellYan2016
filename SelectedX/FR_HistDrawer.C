@@ -904,7 +904,7 @@ void E_HistDrawer(Int_t type)
 
 
     h_pT_uncorr->SetLineColor(kBlack);
-    h_pT->SetLineColor(kRed);
+//    h_pT->SetLineColor(kRed);
     h_eta->SetLineColor(kBlack);
     h_pT_uncorr->SetDirectory(0);
     h_pT->SetDirectory(0);
@@ -948,13 +948,16 @@ void E_HistDrawer(Int_t type)
     c_eta->SetLogy();
     c_eta->Update();
     TCanvas *c_pT = new TCanvas("c_pT", "pT", 800, 800);
-    h_pT_uncorr->SetLineWidth(3);
-    h_pT->SetLineWidth(3);
+//    h_pT_uncorr->SetLineWidth(3);
+//    h_pT->SetLineWidth(3);
     h_pT_uncorr->SetStats(0);
     h_pT->SetStats(0);
     h_pT->SetTitle("");
     h_pT->Draw("hist");
-    h_pT_uncorr->Draw("samehist");
+    TF1 *fit = new TF1("fitt", "1e15*(x)^(-4)", 22, 500);
+//    h_pT->Fit(fit, "R");
+    fit->Draw("LSAME");
+//    h_pT_uncorr->Draw("samehist");
     c_pT->SetLogy();
     c_pT->Update();
 
