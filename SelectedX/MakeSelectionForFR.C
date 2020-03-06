@@ -251,10 +251,6 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             for (Int_t i=0; i<NEvents; i++)
             {
                 ntuple->GetEvent(i);
-                repeats[std::make_pair(ntuple->runNum, ntuple->evtNum)]++;
-                if (repeats[std::make_pair(ntuple->runNum, ntuple->evtNum)] > 0)
-                    cout << "Evt " << ntuple->runNum << "; " << ntuple->evtNum << " repeated " <<
-                            repeats[std::make_pair(ntuple->runNum, ntuple->evtNum)] << " times." << endl;
 
 //                if (ntuple->pfMET_pT >= 20) continue;
 
@@ -298,6 +294,11 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
                     if (isPassEventSelection == kTRUE)
                     {
+                        repeats[std::make_pair(ntuple->runNum, ntuple->evtNum)]++;
+                        if (repeats[std::make_pair(ntuple->runNum, ntuple->evtNum)] > 0)
+                            cout << "Evt " << ntuple->runNum << "; " << ntuple->evtNum << " repeated " <<
+                                    repeats[std::make_pair(ntuple->runNum, ntuple->evtNum)] << " times." << endl;
+
                         if (Debug == kTRUE) cout << "\nEvent " << i << endl << triggername << endl;
                         timesPassed++;
                         p_T->clear();
