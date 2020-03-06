@@ -937,7 +937,7 @@ public:
                     if( HLT_trigFired[k] == 1 )
                     {
                         isTrigger = true;
-                        if (trigger) *trigger = HLT_trigName->at((unsigned int)k);
+                        if (trigger) trigger->push_back(HLT_trigName->at((unsigned int)k));
                         break;
                     }
                 }
@@ -952,7 +952,7 @@ public:
                     if( HLT_trigFired[k] == 1 )
                     {
                         isTrigger = true;
-                        if (trigger) *trigger = HLT_trigName->at((unsigned int)k);
+                        if (trigger) trigger->push_back(HLT_trigName->at((unsigned int)k));
                         break;
                     }
                 }
@@ -984,7 +984,7 @@ public:
                     if( HLT_trigFired[k] == 1 )
                     {
                         isTrigger = true;
-                        if (trigger) *trigger = HLT_trigName->at((unsigned int)k);
+                        if (trigger) trigger->push_back(HLT_trigName->at((unsigned int)k));
                         break;
                     }
                 }
