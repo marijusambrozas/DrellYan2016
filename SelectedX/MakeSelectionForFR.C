@@ -272,7 +272,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                 if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += gen_weight;
 
                 Bool_t TriggerFlag = kFALSE;
-                std::vector<TString> *triggername;
+                std::vector<TString> *triggername = new std::vector<TString>;
                 TriggerFlag = ntuple->isTriggered(analyzer->HLT, triggername);
 
                 if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
