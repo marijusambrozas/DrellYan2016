@@ -185,14 +185,16 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<int> *passMediumID = new std::vector<int>;
-        Double_t MET_pT, MET_phi, MET_sumEt;
+        std::vector<int> *trig_fired = new std::vector<int>;
+        std::vector<int> *trig_matched = new std::vector<int>;
+        std::vector<double> *trig_pT = new std::vector<double>;
+        Double_t MET_pT, MET_phi;
         Int_t nPU;
         Int_t nVTX;
         Double_t PVz;
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
         Double_t prescale_factor;
-        Int_t trig_matched;
 
         TTree* ElectronTree = new TTree("FRTree", "FRTree");
         // -- Creating electron variables to assign branches -- //
@@ -202,9 +204,11 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         ElectronTree->Branch("charge", &charge);
         ElectronTree->Branch("relPFiso", &relPFiso);
         ElectronTree->Branch("passMediumID", &passMediumID);
+        ElectronTree->Branch("trig_fired", &trig_fired);
+        ElectronTree->Branch("trig_matched", &trig_matched);
+        ElectronTree->Branch("trig_pT", &trig_pT);
         ElectronTree->Branch("MET_pT", &MET_pT);
         ElectronTree->Branch("MET_phi", &MET_phi);
-        ElectronTree->Branch("MET_sumEt", &MET_sumEt);
         ElectronTree->Branch("nPU", &nPU);
         ElectronTree->Branch("nVTX", &nVTX);
         ElectronTree->Branch("PVz", &PVz);
@@ -214,7 +218,6 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         ElectronTree->Branch("prefiring_weight_up", &prefiring_weight_up);
         ElectronTree->Branch("prefiring_weight_down", &prefiring_weight_down);
         ElectronTree->Branch("prescale_factor", &prescale_factor);
-        ElectronTree->Branch("trig_matched", &trig_matched);
 
         // Loop for all samples in a process
         for (Int_t i_tup = 0; i_tup<Ntup; i_tup++)
@@ -307,6 +310,9 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         charge->clear();
                         relPFiso->clear();
                         passMediumID->clear();
+                        trig_fired->clear();
+                        trig_matched->clear();
+                        trig_pT->clear();
 
                         // -- Top pT reweighting -- //
                         top_weight = 1;
@@ -320,7 +326,6 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         // -- MET information -- //
                         MET_pT = ntuple->pfMET_pT;
                         MET_phi = ntuple->pfMET_phi;
-                        MET_sumEt = ntuple->pfMET_SumEt;
 
                         // -- Information for various other reweightings -- //
                         nPU = ntuple->nPileUp;
@@ -329,7 +334,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         prefiring_weight = ntuple->_prefiringweight;
                         prefiring_weight_up = ntuple->_prefiringweightup;
                         prefiring_weight_down = ntuple->_prefiringweightdown;
-                        prescale_factor = analyzer->PrescaleFactor(SelectedElectronCollection, ntuple, &trig_matched);
+                        prescale_factor = analyzer->PrescaleFactor(SelectedElectronCollection, ntuple, trig_fired, trig_matched, trig_pT);
                         if (Debug == kTRUE) cout << "Trigger match: " << trig_matched << "   Prescale: " << prescale_factor << endl;
                         if (prescale_factor <= 0) continue; // If no trigger match between selected electrons
 
@@ -350,6 +355,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                                 cout << "   charge = " << SelectedElectronCollection[i_ele].charge;
                                 if (SelectedElectronCollection[i_ele].passMediumID == 1) cout << "   MediumID";
                                 cout << endl;
+                                if (i_ele < trig_fired->size())
+                                    cout << "Trigger Photon" << trig_fired->at(i_ele) << " HLT pT: " << trig_pT << endl;
                             }
                         }
                         ElectronTree->Fill();

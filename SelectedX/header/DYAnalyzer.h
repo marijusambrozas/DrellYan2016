@@ -260,7 +260,7 @@ public:
         Bool_t EventSelection_FR(vector<Electron> ElectronCollection, NtupleHandle *ntuple, vector<Electron> *SelectedElectronCollection); // Electron selection
         void SetupFRvalues(TString filename, TString type="sigCtrl_template");
         Double_t FakeRate(Double_t p_T, Double_t eta);
-        Double_t PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple, Int_t *trig_matched);
+        Double_t PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t getPrescale(Double_t Et);
 
 	// -- pre-FSR functions -- //
@@ -6372,7 +6372,8 @@ Double_t DYAnalyzer::PrescaleFactor(vector<Electron> ElectronCollection, NtupleH
 }
 */
 
-Double_t DYAnalyzer::PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple, Int_t *trig_matched)
+Double_t DYAnalyzer::PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired,
+                                    std::vector<int> *trig_matched, std::vector<double> *trig_pT)
 {
     Double_t Factor = -9999;
     Double_t HLT_pT = -9999;
@@ -6382,42 +6383,58 @@ Double_t DYAnalyzer::PrescaleFactor(vector<Electron> ElectronCollection, NtupleH
         Electron ele = ElectronCollection[i_ele];
         if (ele.isTrigMatched(ntuple, "HLT_Photon22_v*", &HLT_pT))
         {
-            *trig_matched = i_ele;
+            trig_fired->push_back(22);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
             Factor = getPrescale(HLT_pT);
         }
         if (ele.isTrigMatched(ntuple, "HLT_Photon30_v*", &HLT_pT))
         {
-            *trig_matched = i_ele;
+            trig_fired->push_back(30);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
             Factor = getPrescale(HLT_pT);
         }
         if (ele.isTrigMatched(ntuple, "HLT_Photon36_v*", &HLT_pT))
         {
-            *trig_matched = i_ele;
+            trig_fired->push_back(36);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
             Factor = getPrescale(HLT_pT);
         }
         if (ele.isTrigMatched(ntuple, "HLT_Photon50_v*", &HLT_pT))
         {
-            *trig_matched = i_ele;
+            trig_fired->push_back(50);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
             Factor = getPrescale(HLT_pT);
         }
         if (ele.isTrigMatched(ntuple, "HLT_Photon75_v*", &HLT_pT))
         {
-            *trig_matched = i_ele;
+            trig_fired->push_back(75);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
             Factor = getPrescale(HLT_pT);
         }
         if (ele.isTrigMatched(ntuple, "HLT_Photon90_v*", &HLT_pT))
         {
-            *trig_matched = i_ele;
+            trig_fired->push_back(90);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
             Factor = getPrescale(HLT_pT);
         }
         if (ele.isTrigMatched(ntuple, "HLT_Photon120_v*", &HLT_pT))
         {
-            *trig_matched = i_ele;
+            trig_fired->push_back(120);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
             Factor = getPrescale(HLT_pT);
         }
         if (ele.isTrigMatched(ntuple, "HLT_Photon175_v*", &HLT_pT))
         {
-            *trig_matched = i_ele;
+            trig_fired->push_back(175);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
             Factor = getPrescale(HLT_pT);
         }
     }
