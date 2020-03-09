@@ -390,11 +390,11 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             {
                 cout << trig_fired[z] << "\t";
             }
-            cout << "----------------------------------------------\n" << endl;
+            cout << "\n----------------------------------------------\n" << endl;
 
             cout << "How many events with Photon50 and Photon75 triggers?" << endl;
             cout << "HLT_Photon50\tHLT_Photon75\tBoth" << endl;
-            cout << trig_2fired[0] << "\t" << trig_2fired[1] << "\t" << trig_2fired[2] << endl << endl;
+            cout << trig_2fired[0] << "\t\t" << trig_2fired[1] << "\t\t" << trig_2fired[2] << endl << endl;
 
 
         } // End of i_tup iteration

@@ -21,7 +21,7 @@
 
 void Trigger_simulation()
 {
-    TF1 *f_rand = new TF1("f_rand", "31949*x^(-4)", 22, 200);
+    TF1 *f_rand = new TF1("f_rand", "31949*x^(-4)", 28, 3000);
     TH1D *h_pT = new TH1D("h_pT", "Simulated p_T", 178, 22, 200);
     TH1D *h_trig = new TH1D("h_trig", "Fired triggers in single event", 8, 0-0.5, 8-0.5);
     TH1D *h_2trig = new TH1D("h_2trig", "What fired: Photon_50, Photon_75 or both?", 3, 0-0.5, 3-0.5);
@@ -48,6 +48,7 @@ void Trigger_simulation()
                 }
                 counters[i_tr] += 1;
             }
+            else break;
         }
         h_trig->Fill(nTrig);
         if (triggers[3] == 1 && triggers[4] == 1) h_2trig->Fill(2); // Photon_50 AND Photon_75
