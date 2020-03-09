@@ -245,7 +245,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             myProgressBar_t bar(NEvents);
             Int_t timesPassed = 0;
 
-            Int_t trig_fired[8] = {0, 0, 0, 0, 0, 0, 0, 0}; // How many triggers have fired in a single event?
+            Int_t trig_fired[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0}; // How many triggers have fired in a single event?
             Int_t trig_2fired[3] = {0, 0, 0}; // Photon_50 OR Photon_75
 
             // Loop for all events in the chain
@@ -301,12 +301,12 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                             cout << endl;
                         }
                         trig_fired[triggername->size()] += 1;
-                        Int_t trig2 = 0;
+                        Int_t trig2 = -1;
                         for (UInt_t z=0; z<triggername->size(); z++)
                         {
                             if (triggername->at(z) == "HLT_Photon50_v*" || triggername->at(z) == "HLT_Photon75_v*") trig2++;
                         }
-                        trig_2fired[trig2] += 1;
+                        if (trig2 >= 0) trig_2fired[trig2] += 1;
 
                         timesPassed++;
                         p_T->clear();
@@ -383,14 +383,14 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
 
             cout << "Fired photon trigger numbers (triggers/event):" << endl;
-            cout << "----------------------------------------------" << endl;
-            cout << "0\t1\t2\t3\t4\t5\t6\t7" << endl;
-            cout << "----------------------------------------------" << endl;
-            for (Int_t z=0; z<8; z++)
+            cout << "---------------------------------------------------------" << endl;
+            cout << "0\t1\t2\t3\t4\t5\t6\t7\t8" << endl;
+            cout << "---------------------------------------------------------" << endl;
+            for (Int_t z=0; z<9; z++)
             {
                 cout << trig_fired[z] << "\t";
             }
-            cout << "\n----------------------------------------------\n" << endl;
+            cout << "\n---------------------------------------------------------\n" << endl;
 
             cout << "How many events with Photon50 and Photon75 triggers?" << endl;
             cout << "HLT_Photon50\tHLT_Photon75\tBoth" << endl;
