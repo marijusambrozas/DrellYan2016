@@ -314,7 +314,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                             if (triggername->at(z) == "HLT_Photon50_v*") trig2++;
                             if (triggername->at(z) == "HLT_Photon75_v*") trig2 += 2;
                         }
-                        if (trig2 >= 0) trig_2fired[trig2] += 1;
+                        if (trig2 >= 0 && trig2 <=2) trig_2fired[trig2] += 1;
 
                         timesPassed++;
                         p_T->clear();
