@@ -398,14 +398,14 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
 
             cout << "Firing counts for each trigger:" << endl;
-            cout << "----------------------------------------------------------" << endl;
+            cout << "-----------------------------------------------------------" << endl;
             cout << "22\t30\t36\t50\t75\t90\t120\t175" << endl;
-            cout << "----------------------------------------------------------" << endl;
+            cout << "-----------------------------------------------------------" << endl;
             for (Int_t z=0; z<8; z++)
             {
                 cout << trig_count[z] << "\t";
             }
-            cout << "\n----------------------------------------------------------\n" << endl;
+            cout << "\n-----------------------------------------------------------\n" << endl;
 
             cout << "Fired photon trigger numbers (triggers/event):" << endl;
             cout << "-----------------------------------------------------------------" << endl;
