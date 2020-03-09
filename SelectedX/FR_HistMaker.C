@@ -146,8 +146,8 @@ void E_FR_HistMaker (Bool_t DEBUG)
         analyzer->SetupPVzWeights(Mgr.isMC, "ee", "./etc/PVzWeights.root");
 
         // -- Creating Histograms -- //
-        TH1D* h_pT_uncorr = new TH1D("h_pT_uncorr", "h_pT_uncorr", 500, 0, 1000); h_pT_uncorr->Sumw2();
-        TH1D* h_pT = new TH1D("h_pT", "h_pT", 500, 0, 1000); h_pT->Sumw2();
+        TH1D* h_pT_uncorr = new TH1D("h_pT_uncorr", "h_pT_uncorr", 500, 0, 500); h_pT_uncorr->Sumw2();
+        TH1D* h_pT = new TH1D("h_pT", "h_pT", 500, 0, 500); h_pT->Sumw2();
         TH1D* h_eta = new TH1D("h_eta", "h_eta", 48, -2.4, 2.4); h_eta->Sumw2();
 
         std::vector<double> *p_T = new std::vector<double>;
@@ -289,11 +289,11 @@ void E_FR_HistMaker (Bool_t DEBUG)
         h_pT->Write();
         h_eta->Write();
 
-        TCanvas *c1 = new TCanvas("c1", "c", 800, 800);
-        h_pT->Draw("hist");
-        h_pT_uncorr->SetLineColor(kRed);
-        h_pT_uncorr->Draw("samehist");
-        c1->Update();
+//        TCanvas *c1 = new TCanvas("c1", "c", 800, 800);
+//        h_pT->Draw("hist");
+//        h_pT_uncorr->SetLineColor(kRed);
+//        h_pT_uncorr->Draw("samehist");
+//        c1->Update();
 
         cout << " Finished.\n" << endl;
 

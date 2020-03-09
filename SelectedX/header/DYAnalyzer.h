@@ -6367,13 +6367,13 @@ Double_t DYAnalyzer::getPrescale(Double_t Et)
 {
     Double_t prescale = 0;
 
-    if (Et < 30) prescale = prescales[0];
-    else if (Et < 36) prescale = prescales[1];
-    else if (Et < 50) prescale = prescales[2];
-    else if (Et < 75) prescale = prescales[3];
-    else if (Et < 90) prescale = prescales[4];
-    else if (Et < 120) prescale = prescales[5];
-    else if (Et < 175) prescale = prescales[6];
+    if (Et <= 30) prescale = prescales[0];
+    else if (Et <= 36) prescale = /*prescales[0] +*/ prescales[1];
+    else if (Et <= 50) prescale = /*prescales[0] + prescales[1] +*/ prescales[2];
+    else if (Et <= 75) prescale = /*prescales[0] + prescales[1] + prescales[2] +*/ prescales[3];
+    else if (Et <= 90) prescale = /*prescales[0] + prescales[1] + prescales[2] + prescales[3] +*/ prescales[4];
+    else if (Et <= 120) prescale = /*prescales[0] + prescales[1] + prescales[2] + prescales[3] + prescales[4] +*/ prescales[5];
+    else if (Et <= 175) prescale = /*prescales[0] + prescales[1] + prescales[2] + prescales[3] + prescales[4] + prescales[5] +*/ prescales[6];
     else prescale = prescales[7];
 
     return prescale;

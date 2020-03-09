@@ -939,8 +939,8 @@ void E_HistDrawer(Int_t type)
     h_pT->GetXaxis()->SetTitle("p_{#lower[-0.25]{T}} [GeV/c]");
     h_eta->GetXaxis()->SetTitle("#eta");
 
-    h_pT_uncorr->GetXaxis()->SetRangeUser(28, 1000);
-    h_pT->GetXaxis()->SetRangeUser(28, 1000);
+    h_pT_uncorr->GetXaxis()->SetRangeUser(28, 500);
+    h_pT->GetXaxis()->SetRangeUser(28, 500);
     h_eta->GetXaxis()->SetRangeUser(-3, 3);
 
     TCanvas *c_eta               = new TCanvas("c_eta",               "eta",               800, 800);
@@ -955,9 +955,8 @@ void E_HistDrawer(Int_t type)
     h_pT->SetTitle("");
     h_pT->Draw("hist");
     TF1 *fit = new TF1("fitt", "1e15*(x)^(-4)", 22, 500);
-//    h_pT->Fit(fit, "R");
-    fit->Draw("LSAME");
-//    h_pT_uncorr->Draw("samehist");
+//    fit->Draw("LSAME");
+    h_pT_uncorr->Draw("samehist");
     c_pT->SetLogy();
     c_pT->Update();
 
