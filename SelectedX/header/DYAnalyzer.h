@@ -6206,7 +6206,7 @@ Bool_t DYAnalyzer::EventSelection_FR(vector<Electron> ElectronCollection, Ntuple
     Bool_t isPassEventSelection = kFALSE;
     SelectedElectronCollection->clear();
 
-    Bool_t skip = kTRUE;
+    Int_t med_count = 0;
     for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
     { // Asking for only one electron to surpass trigger threshold
         if(ElectronCollection[j].Pt > LeadPtCut && ElectronCollection[j].Pt < 3000 && fabs(ElectronCollection[j].etaSC) < SubEtaCut &&
