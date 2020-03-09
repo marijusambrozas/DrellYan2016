@@ -277,12 +277,12 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
                 if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
                 {
-                    Int_t skip = 0;
-                    for (UInt_t z=0; z<triggername->size(); z++)
-                    {
-                        if (triggername->at(z) == "HLT_Photon175_v*") skip++;
-                    }
-                    if (skip) continue;
+//                    Int_t skip = 0;
+//                    for (UInt_t z=0; z<triggername->size(); z++)
+//                    {
+//                        if (triggername->at(z) == "HLT_Photon175_v*") skip++;
+//                    }
+//                    if (skip) continue;
 
                     // -- Reco level selection -- //
                     vector< Electron > ElectronCollection;
