@@ -6377,7 +6377,6 @@ Double_t DYAnalyzer::PrescaleFactor(vector<Electron> ElectronCollection, NtupleH
 {
     Double_t Factor = -9999;
     Double_t HLT_pT = -9999;
-    *trig_matched = -1;
     for(Int_t i_ele=0; i_ele<(Int_t)ElectronCollection.size(); i_ele++)
     {
         Electron ele = ElectronCollection[i_ele];

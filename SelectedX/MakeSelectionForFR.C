@@ -335,7 +335,6 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         prefiring_weight_up = ntuple->_prefiringweightup;
                         prefiring_weight_down = ntuple->_prefiringweightdown;
                         prescale_factor = analyzer->PrescaleFactor(SelectedElectronCollection, ntuple, trig_fired, trig_matched, trig_pT);
-                        if (Debug == kTRUE) cout << "Trigger match: " << trig_matched << "   Prescale: " << prescale_factor << endl;
                         if (prescale_factor <= 0) continue; // If no trigger match between selected electrons
 
                         // -- Vector filling -- //
