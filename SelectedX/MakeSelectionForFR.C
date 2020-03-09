@@ -355,7 +355,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                                 if (SelectedElectronCollection[i_ele].passMediumID == 1) cout << "   MediumID";
                                 cout << endl;
                                 if (i_ele < trig_fired->size())
-                                    cout << "Trigger Photon" << trig_fired->at(i_ele) << " HLT pT: " << trig_pT << endl;
+                                    cout << "Trigger Photon" << trig_fired->at(i_ele) << " HLT pT: " << trig_pT->at(i_ele) << endl;
                             }
                         }
                         ElectronTree->Fill();
