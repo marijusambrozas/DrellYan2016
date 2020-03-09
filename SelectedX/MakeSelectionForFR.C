@@ -304,7 +304,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         Int_t trig2 = -1;
                         for (UInt_t z=0; z<triggername->size(); z++)
                         {
-                            if (triggername->at(z) == "HLT_Photon50_v*" || triggername->at(z) == "HLT_Photon75_v*") trig2++;
+                            if (triggername->at(z) == "HLT_Photon50_v*") trig2++;
+                            if (triggername->at(z) == "HLT_Photon75_v*") trig2 =+ 2;
                         }
                         if (trig2 >= 0) trig_2fired[trig2] += 1;
 
