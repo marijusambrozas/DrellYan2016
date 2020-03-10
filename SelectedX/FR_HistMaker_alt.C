@@ -50,7 +50,7 @@ const Double_t massbins2[87] = {15, 17.5, 20, 22.5, 25, 27.5, 30, 32.5, 35, 37.5
                                 915, 1000, 1250, 1500, 2250, 3000};
 
 
-void FR_HistMaker (TString WhichX = "", Int_t type=1)
+void FR_HistMaker_alt (TString WhichX = "", Int_t type=1)
 {
     TString whichX = WhichX;
     whichX.ToUpper();
@@ -312,7 +312,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
             if (Mgr.isMC == kTRUE) TopPtWeight = top_weight;
 
             // -- Normalization -- //
-            Double_t TotWeight = gen_weight / prescale_factor;
+            Double_t TotWeight = gen_weight;
             if (Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
             ////////////////////////////
             if (pr == _WJets) TotWeight = (Lumi * Mgr.Xsec[0] / (16433848+161144203)) * gen_weight; // REMOVE LATER
@@ -327,6 +327,11 @@ void E_FR_HistMaker (Bool_t DEBUG)
             ele_lead.SetPtEtaPhiM(0, 0, 0, M_Elec);
             Double_t iso_lead = -9999;
 
+            if (p_T->size() != passMediumID->size() || p_T->size() != charge->size())
+            {
+                cout << "ERROR: vector sizes do not match!" << endl;
+                break;
+            }
             if (p_T->size() == 2 && passMediumID->at(0) && passMediumID->at(1) && charge->at(0) != charge->at(1))
             {
 //                if (p_T->at(0) > p_T->at(1) && p_T->at(0) < 175) continue;
@@ -344,6 +349,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
             }
 
             Double_t med_count = 0;
+            Int_t i_lead = -1;
             for (UInt_t i_ele=0; i_ele<p_T->size(); i_ele++)
             {
                 if (p_T->at(i_ele) <= 17) continue;
@@ -352,8 +358,18 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 // Selecting leading electron (could also try finding a muon with the best isolation)
                 if (p_T->at(i_ele) > ele_lead.Pt())
                 {
+                    Int_t matched = 0;
+                    for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
+                    {
+                        if (((UInt_t)(trig_matched->at(i_tr))) == i_ele)
+                        {
+                            matched = 1;
+                            i_lead = i_tr;
+                        }
+                    }
+                    if (matched == 0) continue;
                     ele_lead.SetPtEtaPhiM(p_T->at(i_ele), eta->at(i_ele), phi->at(i_ele), M_Elec);
-                    iso_lead = relPFiso->at(i_ele);
+                    iso_lead = relPFiso->at(i_ele);                                    
                 }
             }
             if (med_count > 1) continue;
@@ -383,164 +399,170 @@ void E_FR_HistMaker (Bool_t DEBUG)
                     continue;
                 }
                 if (p_T->at(i_ele) <= 17) continue;
-//                if (i_ele != (UInt_t)trig_matched) continue;
                 if (DEBUG == kTRUE) cout << "i_ele = " << i_ele << endl;
 
-                // -- Efficiency scale factor -- //
-//                if(Mgr.isMC == kTRUE)
-//                {
-//                    effweight = analyzer->EfficiencySF_EventWeight_electron(EE);
-//                }
+                Int_t matched = 0;
+                Double_t prescale_alt = 1;
+                for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
+                {
+                    if (((UInt_t)(trig_matched->at(i_tr))) == i_ele)
+                    {
+                        matched = 1;
+                        if (Mgr.isMC == kFALSE) prescale_alt += analyzer->getPrescale(trig_fired->at(i_tr)+1);
+                    }
+                }
+                if (matched == 0) continue;
 
                 if (passMediumID->at(i_ele)) // Signal/Numerator
                 {
-                    h_eta_nume->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_eta_nume->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     if (fabs(eta->at(i_ele)) < 1.4442) // Barrel
                     {
-                        h_pT_barrel_nume->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                        h_PFiso_barrel_nume->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_pT_barrel_nume->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_PFiso_barrel_nume->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
 
                         if (p_T->at(i_ele) < 70)
                         {
-                            h_pT_barrel_nume_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                            h_PFiso_barrel_nume_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_pT_barrel_nume_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_PFiso_barrel_nume_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                         else if (p_T->at(i_ele) < 100)
                         {
-                            h_pT_barrel_nume_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                            h_PFiso_barrel_nume_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_pT_barrel_nume_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_PFiso_barrel_nume_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                         else //if (p_T->at(i_ele) < 500)
                         {
-                            h_pT_barrel_nume_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                            h_PFiso_barrel_nume_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_pT_barrel_nume_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_PFiso_barrel_nume_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                     }
                     else if (fabs(eta->at(i_ele)) > 1.566) // Endcap
                     {
-                        h_pT_endcap_nume->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                        h_PFiso_endcap_nume->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_pT_endcap_nume->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_PFiso_endcap_nume->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
 
                         if (p_T->at(i_ele) < 70)
                         {
-                            h_pT_endcap_nume_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                            h_PFiso_endcap_nume_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_pT_endcap_nume_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_PFiso_endcap_nume_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                         else if (p_T->at(i_ele) < 100)
                         {
-                            h_pT_endcap_nume_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                            h_PFiso_endcap_nume_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_pT_endcap_nume_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_PFiso_endcap_nume_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                         else //if (p_T->at(i_ele) < 500)
                         {
-                            h_pT_endcap_nume_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                            h_PFiso_endcap_nume_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_pT_endcap_nume_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_PFiso_endcap_nume_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                     }
                 } // End of if(Signal/Numerator)
                 else // Control
                 {
-                    h_eta_ctrl->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_eta_ctrl->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     if (fabs(eta->at(i_ele)) < 1.4442) // Barrel
                     {
-                        h_pT_barrel_ctrl->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                        h_PFiso_barrel_ctrl->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_pT_barrel_ctrl->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_PFiso_barrel_ctrl->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
 
                         if (p_T->at(i_ele) < 70)
                         {
-                            h_pT_barrel_ctrl_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                            h_PFiso_barrel_ctrl_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_pT_barrel_ctrl_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_PFiso_barrel_ctrl_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                         else if (p_T->at(i_ele) < 100)
                         {
-                            h_pT_barrel_ctrl_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                            h_PFiso_barrel_ctrl_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_pT_barrel_ctrl_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_PFiso_barrel_ctrl_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                         else //if (p_T->at(i_ele) < 500)
                         {
-                            h_pT_barrel_ctrl_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                            h_PFiso_barrel_ctrl_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_pT_barrel_ctrl_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_PFiso_barrel_ctrl_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                     }
                     else if (fabs(eta->at(i_ele)) > 1.566) // Endcap
                     {
-                        h_pT_endcap_ctrl->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                        h_PFiso_endcap_ctrl->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_pT_endcap_ctrl->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_PFiso_endcap_ctrl->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
 
                         if (p_T->at(i_ele) < 70)
                         {
-                            h_pT_endcap_ctrl_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                            h_PFiso_endcap_ctrl_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_pT_endcap_ctrl_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_PFiso_endcap_ctrl_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                         else if (p_T->at(i_ele) < 100)
                         {
-                            h_pT_endcap_ctrl_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                            h_PFiso_endcap_ctrl_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_pT_endcap_ctrl_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_PFiso_endcap_ctrl_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                         else //if (p_T->at(i_mu) < 500)
                         {
-                            h_pT_endcap_ctrl_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                            h_PFiso_endcap_ctrl_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_pT_endcap_ctrl_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_PFiso_endcap_ctrl_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                     }
                 }// End of if(Control)
                 // Denominator
-                h_eta_deno->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                h_eta_deno->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                 if (fabs(eta->at(i_ele)) < 1.4442) // Barrel
                 {
-                    h_pT_barrel_deno->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                    h_PFiso_barrel_deno->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_pT_barrel_deno->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    h_PFiso_barrel_deno->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
 
                     if (p_T->at(i_ele) < 70)
                     {
-                        h_pT_barrel_deno_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                        h_PFiso_barrel_deno_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_pT_barrel_deno_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_PFiso_barrel_deno_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     }
                     else if (p_T->at(i_ele) < 100)
                     {
-                        h_pT_barrel_deno_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                        h_PFiso_barrel_deno_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_pT_barrel_deno_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_PFiso_barrel_deno_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     }
                     else //if (p_T->at(i_ele) < 500)
                     {
-                        h_pT_barrel_deno_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                        h_PFiso_barrel_deno_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_pT_barrel_deno_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_PFiso_barrel_deno_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     }
                 }
                 else if (fabs(eta->at(i_ele)) > 1.566) // Endcap
                 {
-                    h_pT_endcap_deno->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                    h_PFiso_endcap_deno->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_pT_endcap_deno->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    h_PFiso_endcap_deno->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
 
                     if (p_T->at(i_ele) < 70)
                     {
-                        h_pT_endcap_deno_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                        h_PFiso_endcap_deno_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_pT_endcap_deno_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_PFiso_endcap_deno_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     }
                     else if (p_T->at(i_ele) < 100)
                     {
-                        h_pT_endcap_deno_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                        h_PFiso_endcap_deno_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_pT_endcap_deno_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_PFiso_endcap_deno_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     }
                     else //if (p_T->at(i_ele) < 500)
                     {
-                        h_pT_endcap_deno_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                        h_PFiso_endcap_deno_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_pT_endcap_deno_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_PFiso_endcap_deno_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     }
                 }
             }// End of i_ele iteration
 
+            Double_t prescale_lead = analyzer->getPrescale_alt(trig_pT->at(i_lead));
             if (fabs(ele_lead.Eta()) < 1.4442) // Barrel
             {
-                h_MT_barrel_deno->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                if (iso_lead < 0.15) h_MT_barrel_nume->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                else h_MT_barrel_ctrl->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                h_MT_barrel_deno->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
+                if (iso_lead < 0.15) h_MT_barrel_nume->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
+                else h_MT_barrel_ctrl->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
             }
             else if (fabs(ele_lead.Eta()) > 1.566) // Endcap
             {
-                h_MT_endcap_deno->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                if (iso_lead < 0.15) h_MT_endcap_nume->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                else h_MT_endcap_ctrl->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                h_MT_endcap_deno->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
+                if (iso_lead < 0.15) h_MT_endcap_nume->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
+                else h_MT_endcap_ctrl->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
             }
 
             if (DEBUG == kFALSE) bar.Draw(i);

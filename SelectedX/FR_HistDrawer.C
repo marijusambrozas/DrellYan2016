@@ -392,8 +392,8 @@ void E_HistDrawer(Int_t type)
         if (pr1 == _ttbar) {pr1 = _ttbar_700to1000; continue;}
         if (pr1 == _ttbar_700to1000) {pr1 = _ttbar_1000toInf; continue;}
         if (pr1 == _ttbar_1000toInf) {pr1 = _WJets; continue;}
-        if (pr1 == _WJets) {pr1 = _WJets_ext2v5; continue;}
-        if (pr1 == _WJets_ext2v5) {stop = 1;}
+        if (pr1 == _WJets) /*{pr1 = _WJets_ext2v5; continue;}
+        if (pr1 == _WJets_ext2v5)*/ {stop = 1;}
     }
 
     // Drell-Yan
@@ -1267,21 +1267,27 @@ void E_HistDrawer(Int_t type)
     RP_nVTX->Draw(1, 1e10, 0);
     RP_mass_test->Draw(1, 1e9, 1);
 
-    cout << "MC PFiso integral: " << ((TH1D*)(s_PFiso_barrel_deno->GetStack()->Last()))->Integral() +
-                                     ((TH1D*)(s_PFiso_endcap_deno->GetStack()->Last()))->Integral() << endl;
-    cout << "Data PFiso integral: " << h_PFiso_barrel_data_deno->Integral() + h_PFiso_endcap_data_deno->Integral() << endl;
-    cout << "--------\nQCD PFiso integral:\nBarrel nume   " << h_PFiso_barrel_MC_nume[_QCDEMEnriched_Full]->Integral() << endl;
-    cout << "Barrel deno   " << h_PFiso_barrel_MC_deno[_QCDEMEnriched_Full]->Integral() << endl;
-    cout << "Endcap nume   " << h_PFiso_endcap_MC_nume[_QCDEMEnriched_Full]->Integral() << endl;
-    cout << "Endcap deno   " << h_PFiso_endcap_MC_deno[_QCDEMEnriched_Full]->Integral() << endl;
-    cout << "--------\nWJets PFiso integral:\nBarrel nume   " << h_PFiso_barrel_MC_nume[_WJets_Full]->Integral() << endl;
-    cout << "Barrel deno   " << h_PFiso_barrel_MC_deno[_WJets_Full]->Integral() << endl;
-    cout << "Endcap nume   " << h_PFiso_endcap_MC_nume[_WJets_Full]->Integral() << endl;
-    cout << "Endcap deno   " << h_PFiso_endcap_MC_deno[_WJets_Full]->Integral() << endl;
-    cout << "--------\nDY PFiso integral:\nBarrel nume   " << h_PFiso_barrel_MC_nume[_DY_Full]->Integral() << endl;
-    cout << "Barrel deno   " << h_PFiso_barrel_MC_deno[_DY_Full]->Integral() << endl;
-    cout << "Endcap nume   " << h_PFiso_endcap_MC_nume[_DY_Full]->Integral() << endl;
-    cout << "Endcap deno   " << h_PFiso_endcap_MC_deno[_DY_Full]->Integral() << endl;
+//    cout << "MC PFiso integral: " << ((TH1D*)(s_PFiso_barrel_deno->GetStack()->Last()))->Integral() +
+//                                     ((TH1D*)(s_PFiso_endcap_deno->GetStack()->Last()))->Integral() << endl;
+//    cout << "Data PFiso integral: " << h_PFiso_barrel_data_deno->Integral() + h_PFiso_endcap_data_deno->Integral() << endl;
+//    cout << "--------\nQCD PFiso integral:\nBarrel nume   " << h_PFiso_barrel_MC_nume[_QCDEMEnriched_Full]->Integral() << endl;
+//    cout << "Barrel deno   " << h_PFiso_barrel_MC_deno[_QCDEMEnriched_Full]->Integral() << endl;
+//    cout << "Endcap nume   " << h_PFiso_endcap_MC_nume[_QCDEMEnriched_Full]->Integral() << endl;
+//    cout << "Endcap deno   " << h_PFiso_endcap_MC_deno[_QCDEMEnriched_Full]->Integral() << endl;
+//    cout << "--------\nWJets PFiso integral:\nBarrel nume   " << h_PFiso_barrel_MC_nume[_WJets_Full]->Integral() << endl;
+//    cout << "Barrel deno   " << h_PFiso_barrel_MC_deno[_WJets_Full]->Integral() << endl;
+//    cout << "Endcap nume   " << h_PFiso_endcap_MC_nume[_WJets_Full]->Integral() << endl;
+//    cout << "Endcap deno   " << h_PFiso_endcap_MC_deno[_WJets_Full]->Integral() << endl;
+//    cout << "--------\nDY PFiso integral:\nBarrel nume   " << h_PFiso_barrel_MC_nume[_DY_Full]->Integral() << endl;
+//    cout << "Barrel deno   " << h_PFiso_barrel_MC_deno[_DY_Full]->Integral() << endl;
+//    cout << "Endcap nume   " << h_PFiso_endcap_MC_nume[_DY_Full]->Integral() << endl;
+//    cout << "Endcap deno   " << h_PFiso_endcap_MC_deno[_DY_Full]->Integral() << endl;
+
+    cout << "MC pT integral: " << ((TH1D*)(s_pT_barrel_deno->GetStack()->Last()))->Integral() +
+                                     ((TH1D*)(s_pT_endcap_deno->GetStack()->Last()))->Integral() << endl;
+    cout << "Data pT integral: " << h_pT_barrel_data_deno->Integral() + h_pT_endcap_data_deno->Integral() << endl;
+    cout << "MC eta integral: " << ((TH1D*)(s_eta->GetStack()->Last()))->Integral() << endl;
+    cout << "Data eta integral: " << h_eta_data->Integral() << endl;
 
     // ---- TEST OF MT CUTS ---- //
     Double_t QCD_full_nume, QCD_full_deno, QCD_full_ctrl, WJets_full_nume, WJets_full_deno, WJets_full_ctrl;
