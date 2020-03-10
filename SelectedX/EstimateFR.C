@@ -1,4 +1,5 @@
-﻿#include <TFile.h>
+﻿#include <TROOT.h>
+#include <TFile.h>
 #include <TH2.h>
 #include <TCanvas.h>
 #include <TStyle.h>
@@ -68,7 +69,370 @@ void EstimateFR (TString WhichX = "", Int_t type = 2)
 /// ############################################################################# ///
 void E_EstFR(Int_t type)
 {
-   return; // NOT READY YET
+    FileMgr fm;
+
+    TH1D *h_pT_barrel_nume, *h_pT_endcap_nume, *h_pT_barrel_deno, *h_pT_endcap_deno,
+         *h_FRratio_barrel, *h_FRratio_endcap, *h_FRtemplate_barrel, *h_FRtemplate_endcap;
+
+    TH1D *h_pT_barrel_MC_nume[_EndOf_Data_Special], *h_pT_endcap_MC_nume[_EndOf_Data_Special],
+         *h_pT_barrel_MC_ctrl[_EndOf_Data_Special], *h_pT_endcap_MC_ctrl[_EndOf_Data_Special],
+         *h_pT_barrel_data_nume,*h_pT_endcap_data_nume, *h_pT_barrel_data_ctrl, *h_pT_endcap_data_ctrl;
+
+//----------------------------------- MC bkg -------------------------------------------------------
+
+    // Other MC
+    Int_t stop = 0;
+    Process_t pr1 = _WW;
+    while (!stop)
+    {
+        TFile *file = new TFile("/media/sf_DATA/FR/Electron/FR_Hist_E_"+fm.Procname[pr1]+".root", "READ");
+
+        file->GetObject("h_pT_barrel_ctrl", h_pT_barrel_MC_ctrl[pr1]);
+        file->GetObject("h_pT_endcap_ctrl", h_pT_endcap_MC_ctrl[pr1]);
+        file->GetObject("h_pT_barrel_nume", h_pT_barrel_MC_nume[pr1]);
+        file->GetObject("h_pT_endcap_nume", h_pT_endcap_MC_nume[pr1]);
+
+        removeNegativeBins(h_pT_barrel_MC_ctrl[pr1]);
+        removeNegativeBins(h_pT_endcap_MC_ctrl[pr1]);
+        removeNegativeBins(h_pT_barrel_MC_nume[pr1]);
+        removeNegativeBins(h_pT_endcap_MC_nume[pr1]);
+
+        h_pT_barrel_MC_ctrl[pr1]->SetDirectory(0);
+        h_pT_endcap_MC_ctrl[pr1]->SetDirectory(0);
+        h_pT_barrel_MC_nume[pr1]->SetDirectory(0);
+        h_pT_endcap_MC_nume[pr1]->SetDirectory(0);
+
+        file->Close();
+
+        if (pr1 == _WW) {pr1 = _WZ; continue;}
+        if (pr1 == _WZ) {pr1 = _ZZ; continue;}
+        if (pr1 == _ZZ) {pr1 = _tbarW; continue;}
+        if (pr1 == _tbarW) {pr1 = _tW; continue;}
+        if (pr1 == _tW) {pr1 = _ttbar; continue;}
+        if (pr1 == _ttbar) {pr1 = _ttbar_700to1000; continue;}
+        if (pr1 == _ttbar_700to1000) {pr1 = _ttbar_1000toInf; continue;}
+        if (pr1 == _ttbar_1000toInf) {pr1 = _WJets; continue;}
+        if (pr1 == _WJets) {pr1 = _WJets_ext2v5; continue;}
+        if (pr1 == _WJets_ext2v5) {stop = 1;}
+    }
+
+    // DY
+    for (Process_t pr = _DY_10to50; pr <= _DY_2000to3000; pr=next(pr))
+    {
+        TFile *file = new TFile("/media/sf_DATA/FR/Electron/FR_Hist_E_"+fm.Procname[pr]+".root", "READ");
+
+        file->GetObject("h_pT_barrel_ctrl", h_pT_barrel_MC_ctrl[pr]);
+        file->GetObject("h_pT_endcap_ctrl", h_pT_endcap_MC_ctrl[pr]);
+        file->GetObject("h_pT_barrel_nume", h_pT_barrel_MC_nume[pr]);
+        file->GetObject("h_pT_endcap_nume", h_pT_endcap_MC_nume[pr]);
+
+        removeNegativeBins(h_pT_barrel_MC_ctrl[pr]);
+        removeNegativeBins(h_pT_endcap_MC_ctrl[pr]);
+        removeNegativeBins(h_pT_barrel_MC_nume[pr]);
+        removeNegativeBins(h_pT_endcap_MC_nume[pr]);
+
+        h_pT_barrel_MC_ctrl[pr]->SetDirectory(0);
+        h_pT_endcap_MC_ctrl[pr]->SetDirectory(0);
+        h_pT_barrel_MC_nume[pr]->SetDirectory(0);
+        h_pT_endcap_MC_nume[pr]->SetDirectory(0);
+
+        if (pr == _DY_10to50)
+        {
+            h_pT_barrel_MC_ctrl[_DY_Full] = ((TH1D*)(h_pT_barrel_MC_ctrl[pr]->Clone("h_pT_barrel_MC_ctrl_DY")));
+            h_pT_endcap_MC_ctrl[_DY_Full] = ((TH1D*)(h_pT_endcap_MC_ctrl[pr]->Clone("h_pT_endcap_MC_ctrl_DY")));
+            h_pT_barrel_MC_nume[_DY_Full] = ((TH1D*)(h_pT_barrel_MC_nume[pr]->Clone("h_pT_barrel_MC_nume_DY")));
+            h_pT_endcap_MC_nume[_DY_Full] = ((TH1D*)(h_pT_endcap_MC_nume[pr]->Clone("h_pT_endcap_MC_nume_DY")));
+            h_pT_barrel_MC_ctrl[_DY_Full]->SetDirectory(0);
+            h_pT_endcap_MC_ctrl[_DY_Full]->SetDirectory(0);
+            h_pT_barrel_MC_nume[_DY_Full]->SetDirectory(0);
+            h_pT_endcap_MC_nume[_DY_Full]->SetDirectory(0);
+        }
+        else
+        {
+            h_pT_barrel_MC_ctrl[_DY_Full]->Add(h_pT_barrel_MC_ctrl[pr]);
+            h_pT_endcap_MC_ctrl[_DY_Full]->Add(h_pT_endcap_MC_ctrl[pr]);
+            h_pT_barrel_MC_nume[_DY_Full]->Add(h_pT_barrel_MC_nume[pr]);
+            h_pT_endcap_MC_nume[_DY_Full]->Add(h_pT_endcap_MC_nume[pr]);
+        }
+        file->Close();
+    }
+
+    // QCD
+    for (Process_t pr = _QCDEMEnriched_20to30; pr <= _QCDEMEnriched_300toInf; pr=next(pr))
+    {
+        TFile *file = new TFile("/media/sf_DATA/FR/Electron/FR_Hist_E_"+fm.Procname[pr]+".root", "READ");
+
+        file->GetObject("h_pT_barrel_ctrl", h_pT_barrel_MC_ctrl[pr]);
+        file->GetObject("h_pT_endcap_ctrl", h_pT_endcap_MC_ctrl[pr]);
+        file->GetObject("h_pT_barrel_nume", h_pT_barrel_MC_nume[pr]);
+        file->GetObject("h_pT_endcap_nume", h_pT_endcap_MC_nume[pr]);
+
+        removeNegativeBins(h_pT_barrel_MC_ctrl[pr]);
+        removeNegativeBins(h_pT_endcap_MC_ctrl[pr]);
+        removeNegativeBins(h_pT_barrel_MC_nume[pr]);
+        removeNegativeBins(h_pT_endcap_MC_nume[pr]);
+
+        h_pT_barrel_MC_ctrl[pr]->SetDirectory(0);
+        h_pT_endcap_MC_ctrl[pr]->SetDirectory(0);
+        h_pT_barrel_MC_nume[pr]->SetDirectory(0);
+        h_pT_endcap_MC_nume[pr]->SetDirectory(0);
+
+        if (pr == _QCDEMEnriched_20to30)
+        {
+            h_pT_barrel_MC_ctrl[_QCDEMEnriched_Full] = ((TH1D*)(h_pT_barrel_MC_ctrl[pr]->Clone("h_pT_barrel_MC_ctrl_QCD")));
+            h_pT_endcap_MC_ctrl[_QCDEMEnriched_Full] = ((TH1D*)(h_pT_endcap_MC_ctrl[pr]->Clone("h_pT_endcap_MC_ctrl_QCD")));
+            h_pT_barrel_MC_nume[_QCDEMEnriched_Full] = ((TH1D*)(h_pT_barrel_MC_nume[pr]->Clone("h_pT_barrel_MC_nume_QCD")));
+            h_pT_endcap_MC_nume[_QCDEMEnriched_Full] = ((TH1D*)(h_pT_endcap_MC_nume[pr]->Clone("h_pT_endcap_MC_nume_QCD")));
+
+            h_pT_barrel_MC_ctrl[_QCDEMEnriched_Full]->SetDirectory(0);
+            h_pT_endcap_MC_ctrl[_QCDEMEnriched_Full]->SetDirectory(0);
+            h_pT_barrel_MC_nume[_QCDEMEnriched_Full]->SetDirectory(0);
+            h_pT_endcap_MC_nume[_QCDEMEnriched_Full]->SetDirectory(0);
+        }
+        else
+        {
+            h_pT_barrel_MC_ctrl[_QCDEMEnriched_Full]->Add(h_pT_barrel_MC_ctrl[pr]);
+            h_pT_endcap_MC_ctrl[_QCDEMEnriched_Full]->Add(h_pT_endcap_MC_ctrl[pr]);
+            h_pT_barrel_MC_nume[_QCDEMEnriched_Full]->Add(h_pT_barrel_MC_nume[pr]);
+            h_pT_endcap_MC_nume[_QCDEMEnriched_Full]->Add(h_pT_endcap_MC_nume[pr]);
+        }
+        file->Close();
+    }
+
+//--------------------------------------- DATA -----------------------------------------------------
+
+    for (Process_t pr=_SinglePhoton_B; pr<=_SinglePhoton_H; pr=next(pr))
+    {
+        TFile *file = new TFile("/media/sf_DATA/FR/Electron/FR_Hist_E_"+fm.Procname[pr]+".root", "READ");
+
+        TH1D *h_temp[4];
+        if (pr == _SinglePhoton_B)
+        {
+            file->GetObject("h_pT_barrel_ctrl", h_pT_barrel_data_ctrl);
+            file->GetObject("h_pT_endcap_ctrl", h_pT_endcap_data_ctrl);
+            file->GetObject("h_pT_barrel_nume", h_pT_barrel_data_nume);
+            file->GetObject("h_pT_endcap_nume", h_pT_endcap_data_nume);
+            removeNegativeBins(h_pT_barrel_data_ctrl);
+            removeNegativeBins(h_pT_endcap_data_ctrl);
+            removeNegativeBins(h_pT_barrel_data_nume);
+            removeNegativeBins(h_pT_endcap_data_nume);
+        }
+        else
+        {
+            file->GetObject("h_pT_barrel_ctrl", h_temp[0]);
+            file->GetObject("h_pT_endcap_ctrl", h_temp[1]);
+            file->GetObject("h_pT_barrel_nume", h_temp[2]);
+            file->GetObject("h_pT_endcap_nume", h_temp[3]);
+            removeNegativeBins(h_temp[0]);
+            removeNegativeBins(h_temp[1]);
+            removeNegativeBins(h_temp[2]);
+            removeNegativeBins(h_temp[3]);
+            h_pT_barrel_data_ctrl->Add(h_temp[0]);
+            h_pT_endcap_data_ctrl->Add(h_temp[1]);
+            h_pT_barrel_data_nume->Add(h_temp[2]);
+            h_pT_endcap_data_nume->Add(h_temp[3]);
+        }
+    }
+
+    h_pT_barrel_data_ctrl->SetDirectory(0);
+    h_pT_endcap_data_ctrl->SetDirectory(0);
+    h_pT_barrel_data_nume->SetDirectory(0);
+    h_pT_endcap_data_nume->SetDirectory(0);
+
+//--------------------------------- FR by ratio -------------------------------------- (deno = nume + ctrl)
+
+    //            DATA_nume * QCD_nume * sum(allMC_nume + allMC_ctrl)
+    // FR = ------------------------------------------------------------------
+    //      (DATA_nume + DATA_ctrl) * (QCD_nume + QCD_ctrl) * sum(allMC_nume)
+
+    // ####### Numerator ####### //
+    // Barrel
+    h_pT_barrel_nume = ((TH1D*)(h_pT_barrel_MC_nume[_DY_Full]->Clone("h_pT_barrel_nume")));
+    h_pT_barrel_nume->Add(h_pT_barrel_MC_nume[_ttbar]);
+    h_pT_barrel_nume->Add(h_pT_barrel_MC_nume[_tW]);
+    h_pT_barrel_nume->Add(h_pT_barrel_MC_nume[_tbarW]);
+    h_pT_barrel_nume->Add(h_pT_barrel_MC_nume[_WW]);
+    h_pT_barrel_nume->Add(h_pT_barrel_MC_nume[_WZ]);
+    h_pT_barrel_nume->Add(h_pT_barrel_MC_nume[_ZZ]);
+    h_pT_barrel_nume->Add(h_pT_barrel_MC_nume[_WJets]);
+    h_pT_barrel_nume->Add(h_pT_barrel_MC_nume[_QCDEMEnriched_Full]);
+    h_pT_barrel_nume->Add(h_pT_barrel_MC_ctrl[_DY_Full]);
+    h_pT_barrel_nume->Add(h_pT_barrel_MC_ctrl[_ttbar]);
+    h_pT_barrel_nume->Add(h_pT_barrel_MC_ctrl[_tW]);
+    h_pT_barrel_nume->Add(h_pT_barrel_MC_ctrl[_tbarW]);
+    h_pT_barrel_nume->Add(h_pT_barrel_MC_ctrl[_WW]);
+    h_pT_barrel_nume->Add(h_pT_barrel_MC_ctrl[_WZ]);
+    h_pT_barrel_nume->Add(h_pT_barrel_MC_ctrl[_ZZ]);
+    h_pT_barrel_nume->Add(h_pT_barrel_MC_ctrl[_WJets]);
+    h_pT_barrel_nume->Add(h_pT_barrel_MC_ctrl[_QCDEMEnriched_Full]);
+    h_pT_barrel_nume->Multiply(h_pT_barrel_MC_nume[_QCDEMEnriched_Full]);
+    h_pT_barrel_nume->Multiply(h_pT_barrel_data_nume);
+    // Endcap
+    h_pT_endcap_nume = ((TH1D*)(h_pT_endcap_MC_nume[_DY_Full]->Clone("h_pT_endcap_nume")));
+    h_pT_endcap_nume->Add(h_pT_endcap_MC_nume[_ttbar]);
+    h_pT_endcap_nume->Add(h_pT_endcap_MC_nume[_tW]);
+    h_pT_endcap_nume->Add(h_pT_endcap_MC_nume[_tbarW]);
+    h_pT_endcap_nume->Add(h_pT_endcap_MC_nume[_WW]);
+    h_pT_endcap_nume->Add(h_pT_endcap_MC_nume[_WZ]);
+    h_pT_endcap_nume->Add(h_pT_endcap_MC_nume[_ZZ]);
+    h_pT_endcap_nume->Add(h_pT_endcap_MC_nume[_WJets]);
+    h_pT_endcap_nume->Add(h_pT_endcap_MC_nume[_QCDEMEnriched_Full]);
+    h_pT_endcap_nume->Add(h_pT_endcap_MC_ctrl[_DY_Full]);
+    h_pT_endcap_nume->Add(h_pT_endcap_MC_ctrl[_ttbar]);
+    h_pT_endcap_nume->Add(h_pT_endcap_MC_ctrl[_tW]);
+    h_pT_endcap_nume->Add(h_pT_endcap_MC_ctrl[_tbarW]);
+    h_pT_endcap_nume->Add(h_pT_endcap_MC_ctrl[_WW]);
+    h_pT_endcap_nume->Add(h_pT_endcap_MC_ctrl[_WZ]);
+    h_pT_endcap_nume->Add(h_pT_endcap_MC_ctrl[_ZZ]);
+    h_pT_endcap_nume->Add(h_pT_endcap_MC_ctrl[_WJets]);
+    h_pT_endcap_nume->Add(h_pT_endcap_MC_ctrl[_QCDEMEnriched_Full]);
+    h_pT_endcap_nume->Multiply(h_pT_endcap_MC_nume[_QCDEMEnriched_Full]);
+    h_pT_endcap_nume->Multiply(h_pT_endcap_data_nume);
+
+    // ####### Denominator ####### //
+    // Barrel
+    h_pT_barrel_deno = ((TH1D*)(h_pT_barrel_MC_nume[_DY_Full]->Clone("h_pT_barrel_deno")));
+    h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_ttbar]);
+    h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_tW]);
+    h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_tbarW]);
+    h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_WW]);
+    h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_WZ]);
+    h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_ZZ]);
+    h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_WJets]);
+    h_pT_barrel_deno->Add(h_pT_barrel_MC_nume[_QCDEMEnriched_Full]);
+    TH1D *h_multiplier_barrel_deno[2];
+    h_multiplier_barrel_deno[0] = ((TH1D*)(h_pT_barrel_MC_ctrl[_QCDEMEnriched_Full]->Clone("h_multiplier_barrel_deno_0")));
+    h_multiplier_barrel_deno[1] = ((TH1D*)(h_pT_barrel_data_ctrl->Clone("h_multiplier_barrel_deno_1")));
+    h_multiplier_barrel_deno[0]->Add(h_pT_barrel_MC_nume[_QCDEMEnriched_Full]);
+    h_multiplier_barrel_deno[1]->Add(h_pT_barrel_data_nume);
+    h_pT_barrel_deno->Multiply(h_multiplier_barrel_deno[0]);
+    h_pT_barrel_deno->Multiply(h_multiplier_barrel_deno[1]);
+    // Endcap
+    h_pT_endcap_deno = ((TH1D*)(h_pT_endcap_MC_nume[_DY_Full]->Clone("h_pT_endcap_deno")));
+    h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_ttbar]);
+    h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_tW]);
+    h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_tbarW]);
+    h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_WW]);
+    h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_WZ]);
+    h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_ZZ]);
+    h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_WJets]);
+    h_pT_endcap_deno->Add(h_pT_endcap_MC_nume[_QCDEMEnriched_Full]);
+    TH1D *h_multiplier_endcap_deno[2];
+    h_multiplier_endcap_deno[0] = ((TH1D*)(h_pT_endcap_MC_ctrl[_QCDEMEnriched_Full]->Clone("h_multiplier_endcap_deno_0")));
+    h_multiplier_endcap_deno[1] = ((TH1D*)(h_pT_endcap_data_ctrl->Clone("h_multiplier_endcap_deno_1")));
+    h_multiplier_endcap_deno[0]->Add(h_pT_endcap_MC_nume[_QCDEMEnriched_Full]);
+    h_multiplier_endcap_deno[1]->Add(h_pT_endcap_data_nume);
+    h_pT_endcap_deno->Multiply(h_multiplier_endcap_deno[0]);
+    h_pT_endcap_deno->Multiply(h_multiplier_endcap_deno[1]);
+
+    // ######## FR ######## //
+    // Barrel
+    h_FRratio_barrel = ((TH1D*)(h_pT_barrel_nume->Clone("h_FRratio_barrel")));
+    h_FRratio_barrel->Divide(h_pT_barrel_deno);
+    h_FRratio_barrel->SetDirectory(0);
+    // Endcap
+    h_FRratio_endcap = ((TH1D*)(h_pT_endcap_nume->Clone("h_FRratio_endcap")));
+    h_FRratio_endcap->Divide(h_pT_endcap_deno);
+    h_FRratio_endcap->SetDirectory(0);
+
+    // Writing
+    TString filename = "/media/sf_DATA/FR/Electron/FakeRate_electron.root";
+    TFile *file_FR = new TFile(filename, "RECREATE");
+    if (file_FR->IsOpen()) cout << "File '" << filename << "' has been created. Writing histograms.." << endl;
+    file_FR->cd();
+    h_FRratio_barrel->Write();
+    h_FRratio_endcap->Write();
+//    h_FRtemplate_barrel->Write();
+//    h_FRtemplate_endcap->Write();
+    cout << "Finished. Closing the file.." << endl;
+    file_FR->Close();
+    if (!file_FR->IsOpen()) cout << "File '" << filename << "' has been closed successfully." << endl;
+    else cout << "File did not close!" << endl;
+
+    // Drawing
+    TCanvas *c_FR_barrel = new TCanvas("c_FR_barrel", "c_FR_barrel", 800, 800);
+    c_FR_barrel->cd();
+    c_FR_barrel->SetGrid(1);
+    c_FR_barrel->SetLogx(1);
+    c_FR_barrel->SetRightMargin(0.05);
+    c_FR_barrel->SetTopMargin(0.05);
+    c_FR_barrel->SetBottomMargin(0.12);
+    c_FR_barrel->SetLeftMargin(0.13);
+    h_FRratio_barrel->SetMarkerStyle(kFullSquare);
+    h_FRratio_barrel->SetMarkerColor(kRed);
+    h_FRratio_barrel->SetLineColor(kRed);
+    h_FRratio_barrel->SetStats(kFALSE);
+    h_FRratio_barrel->SetTitle("");
+    h_FRratio_barrel->GetXaxis()->SetTitle("p_{T} (#mu) [GeV/c]");
+    h_FRratio_barrel->GetXaxis()->SetTitleOffset(1);
+    h_FRratio_barrel->GetXaxis()->SetTitleSize(0.05);
+    h_FRratio_barrel->GetXaxis()->SetLabelSize(0.04);
+    h_FRratio_barrel->GetYaxis()->SetTitle("Fake rate");
+    h_FRratio_barrel->GetYaxis()->SetTitleSize(0.05);
+    h_FRratio_barrel->GetYaxis()->SetTitleOffset(1.25);
+    h_FRratio_barrel->GetYaxis()->SetLabelSize(0.04);
+    h_FRratio_barrel->GetXaxis()->SetNoExponent(1);
+    h_FRratio_barrel->GetXaxis()->SetMoreLogLabels(1);
+    h_FRratio_barrel->GetXaxis()->SetRangeUser(52, 1000);
+    h_FRratio_barrel->GetYaxis()->SetRangeUser(0, 0.55);
+    h_FRratio_barrel->Draw();
+//    h_FRtemplate_barrel->SetMarkerStyle(33);
+//    h_FRtemplate_barrel->SetMarkerColor(kGreen+2);
+//    h_FRtemplate_barrel->SetLineColor(kGreen+2);
+//    h_FRtemplate_barrel->SetStats(kFALSE);
+//    h_FRtemplate_barrel->Draw("same");
+
+    TLegend *legend = new TLegend(0.13, 0.77, 0.6, 0.95);
+    legend->AddEntry(h_FRratio_barrel, "Ratio", "LP");
+//    legend->AddEntry(h_FRtemplate_barrel, "Template (signal, non-signal)", "LP");
+    legend->Draw();
+    TText *textb = new TText (0.45, 0.6, "Barrel");
+    textb->SetTextAlign(11);
+    textb->SetTextSize(0.05);
+    textb->SetNDC(true);
+    textb->Draw();
+    c_FR_barrel->Update();
+
+    TCanvas *c_FR_endcap = new TCanvas("c_FR_endcap", "c_FR_endcap", 800, 800);
+    c_FR_endcap->cd();
+    c_FR_endcap->cd();
+    c_FR_endcap->SetGrid(1);
+    c_FR_endcap->SetLogx(1);
+    c_FR_endcap->SetRightMargin(0.05);
+    c_FR_endcap->SetTopMargin(0.05);
+    c_FR_endcap->SetBottomMargin(0.12);
+    c_FR_endcap->SetLeftMargin(0.13);
+    h_FRratio_endcap->SetMarkerStyle(kFullSquare);
+    h_FRratio_endcap->SetMarkerColor(kRed);
+    h_FRratio_endcap->SetLineColor(kRed);
+    h_FRratio_endcap->SetStats(kFALSE);
+    h_FRratio_endcap->SetTitle("");
+    h_FRratio_endcap->GetXaxis()->SetTitle("p_{T} (#mu) [GeV/c]");
+    h_FRratio_endcap->GetXaxis()->SetTitleOffset(1);
+    h_FRratio_endcap->GetXaxis()->SetTitleSize(0.05);
+    h_FRratio_endcap->GetXaxis()->SetLabelSize(0.04);
+    h_FRratio_endcap->GetYaxis()->SetTitle("Fake rate");
+    h_FRratio_endcap->GetYaxis()->SetTitleSize(0.05);
+    h_FRratio_endcap->GetYaxis()->SetTitleOffset(1.25);
+    h_FRratio_endcap->GetYaxis()->SetLabelSize(0.04);
+    h_FRratio_endcap->GetXaxis()->SetNoExponent(1);
+    h_FRratio_endcap->GetXaxis()->SetMoreLogLabels(1);
+    h_FRratio_endcap->GetXaxis()->SetRangeUser(52, 1000);
+    h_FRratio_endcap->GetYaxis()->SetRangeUser(0, 1);
+    h_FRratio_endcap->Draw();
+//    h_FRtemplate_endcap->SetMarkerStyle(33);
+//    h_FRtemplate_endcap->SetMarkerColor(kGreen+2);
+//    h_FRtemplate_endcap->SetLineColor(kGreen+2);
+//    h_FRtemplate_endcap->SetStats(kFALSE);
+//    h_FRtemplate_endcap->Draw("same");
+    legend->Draw();
+    TText *texte = new TText (0.45, 0.6, "Endcap");
+    texte->SetTextAlign(11);
+    texte->SetTextSize(0.05);
+    texte->SetNDC(true);
+    texte->Draw();
+    c_FR_endcap->Update();
+
 } // End of E_EstFR()
 
 
