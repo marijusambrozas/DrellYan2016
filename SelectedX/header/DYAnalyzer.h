@@ -262,6 +262,7 @@ public:
         Double_t FakeRate(Double_t p_T, Double_t eta);
         Double_t PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple, Int_t *trig_matched);
         Double_t getPrescale(Double_t Et);
+        Double_t getPrescale_alt(Double_t Et);
 
 	// -- pre-FSR functions -- //
 	void PostToPreFSR_byDressedLepton(NtupleHandle *ntuple, GenLepton *genlep_postFSR, Double_t dRCut, GenLepton *genlep_preFSR, vector< GenOthers >* GenPhotonCollection);
@@ -6379,6 +6380,22 @@ Double_t DYAnalyzer::getPrescale(Double_t Et)
     return prescale;
 }
 
+
+Double_t DYAnalyzer::getPrescale_alt(Double_t Et)
+{
+    Double_t prescale = 0;
+
+    if (Et <= 30) prescale = prescales[0];
+    else if (Et <= 36) prescale = prescales[0] + prescales[1];
+    else if (Et <= 50) prescale = prescales[0] + prescales[1] + prescales[2];
+    else if (Et <= 75) prescale = prescales[0] + prescales[1] + prescales[2] + prescales[3];
+    else if (Et <= 90) prescale = prescales[0] + prescales[1] + prescales[2] + prescales[3] + prescales[4];
+    else if (Et <= 120) prescale = prescales[0] + prescales[1] + prescales[2] + prescales[3] + prescales[4] + prescales[5];
+    else if (Et <= 175) prescale = prescales[0] + prescales[1] + prescales[2] + prescales[3] + prescales[4] + prescales[5] + prescales[6];
+    else prescale = prescales[7];
+
+    return prescale;
+}
 
 
 Bool_t DYAnalyzer::EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple,
