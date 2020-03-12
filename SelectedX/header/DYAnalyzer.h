@@ -262,6 +262,7 @@ public:
         Bool_t EventSelection_FRsingleJetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple,  vector<Muon> *SelectedMuonCollection); // -- output: one muon passing full regular selection and another one passing the same selection but failing isolation requirements-- //
         Bool_t EventSelection_FakeMuons_Triggerless(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection); // -- output: two muons passing regular selection but failing isolation requirements (at least one) -- //
         Bool_t EventSelection_FR(vector<Electron> ElectronCollection, NtupleHandle *ntuple, vector<Electron> *SelectedElectronCollection); // Electron selection
+        Bool_t EventSelection_FakeElectrons(vector<Electron> ElectronCollection, NtupleHandle *ntuple, vector<Electron> *SelectedElectronCollection);
         void SetupFRvalues(TString filename, TString type="sigCtrl_template");
         Double_t FakeRate(Double_t p_T, Double_t eta);
         Double_t PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
@@ -6160,6 +6161,44 @@ Bool_t DYAnalyzer::EventSelection_FakeMuons_Triggerless(vector<Muon> MuonCollect
         return isPassEventSelection;
     return kFALSE;
 } // End of EventSelection_FakeMuons_Triggerless()
+
+
+Bool_t DYAnalyzer::EventSelection_FakeElectrons(vector< Electron > ElectronCollection, NtupleHandle *ntuple, // -- input: All electrons in a event & NtupleHandle -- //
+                                                vector< Electron >* SelectedElectronCollection) // -- output: 2 electrons passing event selection conditions -- //
+{
+    Bool_t isPassEventSelection = kFALSE;
+
+    // -- Electron ID -- //
+    vector< Electron > QElectronCollection;
+    for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
+    {
+        Electron elec = ElectronCollection[j];
+        if(elec.mHits == 0 && elec.Pt > SubPtCut && fabs(elec.etaSC) < SubEtaCut && !(fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566))
+            QElectronCollection.push_back(ElectronCollection[j]);
+    }
+
+    Int_t nQElectrons = (Int_t)QElectronCollection.size();
+
+    if(nQElectrons == 2)
+    {
+        Electron recolep1 = QElectronCollection[0];
+        Electron recolep2 = QElectronCollection[1];
+
+        Bool_t isPassAcc = kFALSE;
+        isPassAcc = isPassAccCondition_Electron(recolep1, recolep2);
+
+        Double_t reco_M = (recolep1.Momentum + recolep2.Momentum).M();
+
+            if(reco_M > 10 && isPassAcc == kTRUE)
+        {
+            isPassEventSelection = kTRUE;
+            SelectedElectronCollection->push_back(recolep1);
+            SelectedElectronCollection->push_back(recolep2);
+        }
+    }
+    return isPassEventSelection;
+
+}
 
 
 
