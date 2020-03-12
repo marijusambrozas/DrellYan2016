@@ -332,21 +332,6 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 cout << "ERROR: vector sizes do not match!" << endl;
                 break;
             }
-            if (p_T->size() == 2 && passMediumID->at(0) && passMediumID->at(1) && charge->at(0) != charge->at(1))
-            {
-//                if (p_T->at(0) > p_T->at(1) && p_T->at(0) < 175) continue;
-//                if (p_T->at(0) < p_T->at(1) && p_T->at(1) < 175) continue;
-                TLorentzVector ele1, ele2;
-                ele1.SetPtEtaPhiM(p_T->at(0), eta->at(0), phi->at(0), M_Elec);
-                ele2.SetPtEtaPhiM(p_T->at(1), eta->at(1), phi->at(1), M_Elec);
-                Electron e1, e2;
-                e1.Pt  = p_T->at(0);
-                e1.etaSC = eta->at(0);
-                e2.Pt  = p_T->at(1);
-                e2.etaSC = eta->at(1);
-//                effweight = analyzer->EfficiencySF_EventWeight_electron(e1, e2);
-                h_mass_test->Fill((ele1+ele2).M(), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-            }
 
             Double_t med_count = 0;
             Int_t i_lead = -1;
@@ -369,18 +354,38 @@ void E_FR_HistMaker (Bool_t DEBUG)
                     }
                     if (matched == 0) continue;
                     ele_lead.SetPtEtaPhiM(p_T->at(i_ele), eta->at(i_ele), phi->at(i_ele), M_Elec);
-                    iso_lead = relPFiso->at(i_ele);                                    
+                    iso_lead = relPFiso->at(i_ele);
                 }
             }
-            if (med_count > 1) continue;
 //            if (ele_lead.Pt() < 175) continue;
             Double_t dTheta = ele_lead.Phi() - MET_phi;
             Double_t MT = sqrt(2 * ele_lead.Pt() * MET_pT * (1 - cos(dTheta)));
 //            if (MT >= 60) continue;
 //            if (MET_pT >= 50) continue;
 
-            h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-            h_MET->Fill(MET_pT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+            Double_t prescale_lead = analyzer->getPrescale(trig_pT->at(i_lead));
+            if (Mgr.isMC == kTRUE) prescale_lead = 1;
+
+            h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
+            h_MET->Fill(MET_pT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
+
+            if (p_T->size() == 2 && passMediumID->at(0) && passMediumID->at(1) && charge->at(0) != charge->at(1))
+            {
+//                if (p_T->at(0) > p_T->at(1) && p_T->at(0) < 175) continue;
+//                if (p_T->at(0) < p_T->at(1) && p_T->at(1) < 175) continue;
+                TLorentzVector ele1, ele2;
+                ele1.SetPtEtaPhiM(p_T->at(0), eta->at(0), phi->at(0), M_Elec);
+                ele2.SetPtEtaPhiM(p_T->at(1), eta->at(1), phi->at(1), M_Elec);
+                Electron e1, e2;
+                e1.Pt  = p_T->at(0);
+                e1.etaSC = eta->at(0);
+                e2.Pt  = p_T->at(1);
+                e2.etaSC = eta->at(1);
+//                effweight = analyzer->EfficiencySF_EventWeight_electron(e1, e2);
+                h_mass_test->Fill((ele1+ele2).M(), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
+            }
+
+            if (med_count > 1) continue;
 
             if (DEBUG == kTRUE)
             {
@@ -403,12 +408,13 @@ void E_FR_HistMaker (Bool_t DEBUG)
 
                 Int_t matched = 0;
                 Double_t prescale_alt = 1;
+
                 for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
                 {
                     if (((UInt_t)(trig_matched->at(i_tr))) == i_ele)
                     {
                         matched = 1;
-                        if (Mgr.isMC == kFALSE) prescale_alt += analyzer->getPrescale(trig_fired->at(i_tr)+1);
+                        if (Mgr.isMC == kFALSE) prescale_alt = analyzer->getPrescale(trig_pT->at(i_tr));
                     }
                 }
                 if (matched == 0) continue;
@@ -551,7 +557,6 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 }
             }// End of i_ele iteration
 
-            Double_t prescale_lead = analyzer->getPrescale_alt(trig_pT->at(i_lead));
             if (fabs(ele_lead.Eta()) < 1.4442) // Barrel
             {
                 h_MT_barrel_deno->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
