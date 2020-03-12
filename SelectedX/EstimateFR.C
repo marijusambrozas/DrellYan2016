@@ -373,8 +373,8 @@ void E_EstFR(Int_t type)
     h_FRratio_barrel->GetYaxis()->SetLabelSize(0.04);
     h_FRratio_barrel->GetXaxis()->SetNoExponent(1);
     h_FRratio_barrel->GetXaxis()->SetMoreLogLabels(1);
-    h_FRratio_barrel->GetXaxis()->SetRangeUser(52, 1000);
-    h_FRratio_barrel->GetYaxis()->SetRangeUser(0, 0.55);
+    h_FRratio_barrel->GetXaxis()->SetRangeUser(25, 1000);
+    h_FRratio_barrel->GetYaxis()->SetRangeUser(0, 0.25);
     h_FRratio_barrel->Draw();
 //    h_FRtemplate_barrel->SetMarkerStyle(33);
 //    h_FRtemplate_barrel->SetMarkerColor(kGreen+2);
@@ -417,8 +417,8 @@ void E_EstFR(Int_t type)
     h_FRratio_endcap->GetYaxis()->SetLabelSize(0.04);
     h_FRratio_endcap->GetXaxis()->SetNoExponent(1);
     h_FRratio_endcap->GetXaxis()->SetMoreLogLabels(1);
-    h_FRratio_endcap->GetXaxis()->SetRangeUser(52, 1000);
-    h_FRratio_endcap->GetYaxis()->SetRangeUser(0, 1);
+    h_FRratio_endcap->GetXaxis()->SetRangeUser(25, 1000);
+    h_FRratio_endcap->GetYaxis()->SetRangeUser(0, 0.25);
     h_FRratio_endcap->Draw();
 //    h_FRtemplate_endcap->SetMarkerStyle(33);
 //    h_FRtemplate_endcap->SetMarkerColor(kGreen+2);

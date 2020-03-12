@@ -392,8 +392,8 @@ void E_HistDrawer(Int_t type)
         if (pr1 == _ttbar) {pr1 = _ttbar_700to1000; continue;}
         if (pr1 == _ttbar_700to1000) {pr1 = _ttbar_1000toInf; continue;}
         if (pr1 == _ttbar_1000toInf) {pr1 = _WJets; continue;}
-        if (pr1 == _WJets) /*{pr1 = _WJets_ext2v5; continue;}
-        if (pr1 == _WJets_ext2v5)*/ {stop = 1;}
+        if (pr1 == _WJets) {pr1 = _WJets_ext2v5; continue;}
+        if (pr1 == _WJets_ext2v5) {stop = 1;}
     }
 
     // Drell-Yan
