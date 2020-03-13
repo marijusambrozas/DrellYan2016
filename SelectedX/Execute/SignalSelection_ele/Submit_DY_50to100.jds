@@ -1,0 +1,15 @@
+executable = SelectSignal.sh
+universe = vanilla
+accounting_group = group_cms
+
+arguments = EE DYEE_50to100 DEFAULT
+output = output/ee_out_DYEE_50to100.txt
+error = output/ee_err_DYEE_50to100.txt
+log = output/ee_log_DYEE_50to100.txt
+getenv = True
+use_x509userproxy = True
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+queue

@@ -1,0 +1,15 @@
+executable = SelectSignal.sh
+universe = vanilla
+accounting_group = group_cms
+
+arguments = EE ttbar_700to1000 DEFAULT
+output = output/ee_out_ttbar_700to1000.txt
+error = output/ee_err_ttbar_700to1000.txt
+log = output/ee_log_ttbar_700to1000.txt
+getenv = True
+use_x509userproxy = True
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+queue

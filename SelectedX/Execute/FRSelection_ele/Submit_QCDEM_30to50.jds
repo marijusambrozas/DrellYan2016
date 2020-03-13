@@ -1,0 +1,15 @@
+executable = SelectFR.sh
+universe = vanilla
+accounting_group = group_cms
+
+arguments = ele QCDEM_30to50 DEFAULT
+output = ../output/FR_Ele_out_QCDEM_30to50.txt
+error = ../output/FR_Ele_err_QCDEM_30to50.txt
+log = ../output/FR_Ele_log_QCDEM_30to50.txt
+getenv = True
+use_x509userproxy = True
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+queue

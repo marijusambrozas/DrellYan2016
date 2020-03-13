@@ -1,0 +1,15 @@
+executable = SelectFR.sh
+universe = vanilla
+accounting_group = group_cms
+
+arguments = mu SingleMuon_E DEFAULT
+output = ../output/FR_Mu_out_SingleMuon_E.txt
+error = ../output/FR_Mu_err_SingleMuon_E.txt
+log = ../output/FR_Mu_log_SingleMuon_E.txt
+getenv = True
+use_x509userproxy = True
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+queue
