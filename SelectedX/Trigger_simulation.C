@@ -16,6 +16,8 @@
 #include <fstream>
 #include <TH1.h>
 #include <TF1.h>
+#include <TCanvas.h>
+#include <TLegend.h>
 
 // -- Macro for simulating trigger prescale  -- //
 
@@ -46,25 +48,39 @@ void Trigger_simulation(Int_t type=1)
         Int_t nTrig = 0;
         for (Int_t i_tr=0; i_tr<8; i_tr++)
         {
-            if (p_T > thresholds[i_tr])
+            if (type == 1)
             {
-//                          if (counters[i_tr] >= 1/prescales[i_tr])
-                if (counters[i_tr]%((int)(1/prescales[i_tr])) == 0)
+                if (p_T > thresholds[i_tr])
                 {
-                    isTriggered = 1;
-                    nTrig ++;
-                    triggers[i_tr] = 1;
-                    h_trigcount->Fill(i_tr);
-//                    counters[i_tr]= 0;
+                    //                          if (counters[i_tr] >= 1/prescales[i_tr])
+                    if (counters[i_tr]%((int)(1/prescales[i_tr])) == 0)
+                    {
+                        isTriggered = 1;
+                        nTrig ++;
+                        triggers[i_tr] = 1;
+                        h_trigcount->Fill(i_tr);
+                        //                    counters[i_tr]= 0;
+                    }
+                    counters[i_tr] += 1;
                 }
-                if (type == 1) counters[i_tr] += 1;
+                else break;
             }
-            else break;
+            else
+            {
+                if ((p_T > thresholds[i_tr] && p_T < thresholds[i_tr+1]) || (p_T > thresholds[i_tr] && i_tr == 7))
+                {
+                    if (counters[i_tr]%((int)(1/prescales[i_tr])) == 0)
+                    {
+                        isTriggered = 1;
+                        nTrig ++;
+                        triggers[i_tr] = 1;
+                        h_trigcount->Fill(i_tr);
+                    }
+                    counters[i_tr] += 1;
+                }
+            }
         }
-        if (type != 1)
-        {
-            for (Int_t i_tr=0; i_tr<8; i_tr++) counters[i_tr] += 1;
-        }
+
         h_trig->Fill(nTrig);
         if (triggers[3] == 1 && triggers[4] == 1) h_2trig->Fill(2); // Photon_50 AND Photon_75
         else if (triggers[3] == 1) h_2trig->Fill(0); // only Photon_50
@@ -74,10 +90,16 @@ void Trigger_simulation(Int_t type=1)
             h_pT_pres->Fill(p_T);
             for (Int_t i_tr=0; i_tr<8; i_tr++)
             {
-                if (p_T > thresholds[i_tr])
-                    weight = weight + prescales[i_tr];
-//                if (triggers[i_tr] == 1)
-//                    weight = weight + prescales[i_tr];
+                if (type == 1)
+                {
+                    if (p_T > thresholds[i_tr])
+                        weight = weight + prescales[i_tr];
+                }
+                else
+                {
+                    if (p_T > thresholds[i_tr])
+                        weight = prescales[i_tr];
+                }
             }
             if (p_T > 175) weight = 1;
             h_pT_corr->Fill(p_T, 1/weight);
