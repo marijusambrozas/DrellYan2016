@@ -28,6 +28,7 @@ void CheckTriggerNames ()
 {
     FileMgr Mgr;
     vector<Process_t> Processes = Mgr.FindProc("SinglePhoton_C");
+    Int_t Nproc = Processes.size();
 
     vector<TString> TrigNames;
 
@@ -61,9 +62,9 @@ void CheckTriggerNames ()
                     Int_t write = 1;
                     for (Int_t j=0; j<TrigNames.size(); j++)
                     {
-                        if (HLT_trigName->at((unsigned int)k) == TrigNames[j]) write=0;
+                        if (ntuple->HLT_trigName->at((unsigned int)k) == TrigNames[j]) write=0;
                     }
-                    if (write == 1) TrigNames.push_back(HLT_trigName->at((unsigned int)k));
+                    if (write == 1) TrigNames.push_back(ntuple->HLT_trigName->at((unsigned int)k));
                 }
 
                 bar.Draw(i);
