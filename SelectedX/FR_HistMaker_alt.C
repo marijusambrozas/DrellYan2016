@@ -140,6 +140,8 @@ void E_FR_HistMaker (Bool_t DEBUG)
         // -- Creating Histograms -- //
         TH1D* h_pT_uncorr = new TH1D("h_pT_uncorr", "h_pT_uncorr", 500, 0, 500); h_pT_uncorr->Sumw2();
         TH1D* h_pT = new TH1D("h_pT", "h_pT", 500, 0, 500); h_pT->Sumw2();
+        TH1D* h_HLT_pT_uncorr = new TH1D("h_HLT_pT_uncorr", "h_HLT_pT_uncorr", 500, 0, 500); h_HLT_pT_uncorr->Sumw2();
+        TH1D* h_HLT_pT = new TH1D("h_HLT_pT", "h_HLT_pT", 500, 0, 500); h_HLT_pT->Sumw2();
         TH1D* h_eta = new TH1D("h_eta", "h_eta", 48, -2.4, 2.4); h_eta->Sumw2();
 
         std::vector<double> *p_T = new std::vector<double>;
@@ -291,7 +293,9 @@ void E_FR_HistMaker (Bool_t DEBUG)
                     if (((UInt_t)(trig_matched->at(i_tr))) == i_ele)
                     {
                         matched = 1;
-                        if (Mgr.isMC == kFALSE) prescale_alt = analyzer->getPrescale(trig_pT->at(i_tr));
+                        if (Mgr.isMC == kFALSE) prescale_alt = analyzer->getPrescale_alt(trig_pT->at(i_tr));
+                        h_HLT_pT->Fill(trig_pT->at(i_tr), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_HLT_pT_uncorr->Fill(trig_pT->at(i_tr), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                 }
                 if (matched == 0) continue;
@@ -313,6 +317,8 @@ void E_FR_HistMaker (Bool_t DEBUG)
 
         h_pT_uncorr->Write();
         h_pT->Write();
+        h_HLT_pT_uncorr->Write();
+        h_HLT_pT->Write();
         h_eta->Write();
         cout << " Finished.\n" << endl;
 

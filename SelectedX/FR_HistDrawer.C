@@ -154,7 +154,7 @@ void E_HistDrawer(Int_t type)
          *h_MT_barrel_MC_deno[_EndOf_Data_Special], *h_MT_endcap_MC_deno[_EndOf_Data_Special],
          *h_MT_barrel_MC_ctrl[_EndOf_Data_Special], *h_MT_endcap_MC_ctrl[_EndOf_Data_Special],
          *h_eta_MC[_EndOf_Data_Special], *h_nVTX_MC[_EndOf_Data_Special],*/
-         *h_pT, *h_pT_uncorr, *h_eta;
+         *h_pT, *h_pT_uncorr, *h_HLT_pT, *h_HLT_pT_uncorr, *h_eta;
 
 //----------------------------------- MC bkg -------------------------------------------------------
 /*
@@ -879,35 +879,42 @@ void E_HistDrawer(Int_t type)
 
     for (Process_t pr=_SinglePhoton_B; pr<_SinglePhoton_H; pr=next(pr))
     {
-        TFile *file;
-        if (type == 1) file = new TFile("/media/sf_DATA/FR/Electron/SelectedForFR_E_"+fm.Procname[pr]+".root", "READ");
-        else if (type == 2) file = new TFile("/media/sf_DATA/FR/Electron/FR_Hist_TEST_E_"+fm.Procname[pr]+".root", "READ");
-        else return;
-        TH1D *h_temp[3];
+        TFile *file = new TFile("/media/sf_DATA/FR/Electron/FR_Hist_TEST_E_"+fm.Procname[pr]+".root", "READ");
+
+        TH1D *h_temp[5];
         if (pr == _SinglePhoton_B)
         {
             file->GetObject("h_pT_uncorr", h_pT_uncorr);
             file->GetObject("h_pT", h_pT);
+            file->GetObject("h_HLT_pT_uncorr", h_HLT_pT_uncorr);
+            file->GetObject("h_HLT_pT", h_HLT_pT);
             file->GetObject("h_eta", h_eta);
         }
         else
         {
             file->GetObject("h_pT_uncorr", h_temp[0]);
             file->GetObject("h_pT", h_temp[1]);
-            file->GetObject("h_eta", h_temp[2]);
+            file->GetObject("h_HLT_pT_uncorr", h_temp[2]);
+            file->GetObject("h_HLT_pT", h_temp[3]);
+            file->GetObject("h_eta", h_temp[4]);
 
             h_pT_uncorr->Add(h_temp[0]);
             h_pT->Add(h_temp[1]);
-            h_eta->Add(h_temp[2]);
+            h_HLT_pT_uncorr->Add(h_temp[2]);
+            h_HLT_pT->Add(h_temp[3]);
+            h_eta->Add(h_temp[4]);
         }
     }
 
 
     h_pT_uncorr->SetLineColor(kBlack);
+    h_HLT_pT_uncorr->SetLineColor(kBlack);
 //    h_pT->SetLineColor(kRed);
     h_eta->SetLineColor(kBlack);
     h_pT_uncorr->SetDirectory(0);
     h_pT->SetDirectory(0);
+    h_HLT_pT_uncorr->SetDirectory(0);
+    h_HLT_pT->SetDirectory(0);
     h_eta->SetDirectory(0);
 
 //--------------------------------- Ratio Plots --------------------------------------
@@ -937,16 +944,21 @@ void E_HistDrawer(Int_t type)
 
     h_pT_uncorr->GetXaxis()->SetTitle("p_{#lower[-0.25]{T}} [GeV/c]");
     h_pT->GetXaxis()->SetTitle("p_{#lower[-0.25]{T}} [GeV/c]");
+    h_HLT_pT_uncorr->GetXaxis()->SetTitle("HLT p_{#lower[-0.25]{T}} [GeV/c]");
+    h_HLT_pT->GetXaxis()->SetTitle("HLT p_{#lower[-0.25]{T}} [GeV/c]");
     h_eta->GetXaxis()->SetTitle("#eta");
 
     h_pT_uncorr->GetXaxis()->SetRangeUser(28, 500);
     h_pT->GetXaxis()->SetRangeUser(28, 500);
+    h_HLT_pT_uncorr->GetXaxis()->SetRangeUser(25, 500);
+    h_HLT_pT->GetXaxis()->SetRangeUser(25, 500);
     h_eta->GetXaxis()->SetRangeUser(-3, 3);
 
     TCanvas *c_eta               = new TCanvas("c_eta",               "eta",               800, 800);
     h_eta->Draw();
     c_eta->SetLogy();
     c_eta->Update();
+
     TCanvas *c_pT = new TCanvas("c_pT", "pT", 800, 800);
 //    h_pT_uncorr->SetLineWidth(3);
 //    h_pT->SetLineWidth(3);
@@ -959,6 +971,17 @@ void E_HistDrawer(Int_t type)
     h_pT_uncorr->Draw("samehist");
     c_pT->SetLogy();
     c_pT->Update();
+
+    TCanvas *c_HLT_pT = new TCanvas("c_HLT_pT", "HLT pT", 800, 800);
+//    h_HLT_pT_uncorr->SetLineWidth(3);
+//    h_HLT_pT->SetLineWidth(3);
+    h_HLT_pT_uncorr->SetStats(0);
+    h_HLT_pT->SetStats(0);
+    h_HLT_pT->SetTitle("");
+    h_HLT_pT->Draw("hist");
+    h_HLT_pT_uncorr->Draw("samehist");
+    c_HLT_pT->SetLogy();
+    c_HLT_pT->Update();
 
 /*
     TLegend *legend = new TLegend(0.5, 0.65, 0.95, 0.95);
