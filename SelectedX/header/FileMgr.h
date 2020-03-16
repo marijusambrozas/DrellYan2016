@@ -1527,7 +1527,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+//        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
         Tag.push_back("QCDEMEnriched_Pt20to30"); Xsec.push_back(557600000*0.0096); Wsum.push_back(9218952.0); nEvents.push_back(9218952);
 //        Location = "QCD_Pt-20to30_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt20to30/180326_145104/0000/";
