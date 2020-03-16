@@ -3,9 +3,9 @@ universe = vanilla
 accounting_group = group_cms
 
 arguments = ele WW DEFAULT
-output = ../output/JetMu_out_WW.txt
-error = ../output/JetMu_err_WW.txt
-log = ../output/JetMu_log_WW.txt
+output = ../output/FR_Ele_out_WW.txt
+error = ../output/FR_Ele_err_WW.txt
+log = ../output/FR_Ele_log_WW.txt
 getenv = True
 use_x509userproxy = True
 

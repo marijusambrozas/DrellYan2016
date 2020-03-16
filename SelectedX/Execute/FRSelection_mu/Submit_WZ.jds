@@ -1,0 +1,15 @@
+executable = SelectFR.sh
+universe = vanilla
+accounting_group = group_cms
+
+arguments = mu WZ DEFAULT
+output = ../output/FR_Mu_out_WZ.txt
+error = ../output/FR_Mu_err_WZ.txt
+log = ../output/FR_Mu_log_WZ.txt
+getenv = True
+use_x509userproxy = True
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+queue

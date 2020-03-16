@@ -3,9 +3,9 @@ universe = vanilla
 accounting_group = group_cms
 
 arguments = ele DY_100toInf DEFAULT
-output = ../output/JetMu_out_DY_100toInf.txt
-error = ../output/JetMu_err_DY_100toInf.txt
-log = ../output/JetMu_log_DY_100toInf.txt
+output = ../output/FR_Ele_out_DY_100toInf.txt
+error = ../output/FR_Ele_err_DY_100toInf.txt
+log = ../output/FR_Ele_log_DY_100toInf.txt
 getenv = True
 use_x509userproxy = True
 

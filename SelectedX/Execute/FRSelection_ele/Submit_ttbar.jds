@@ -3,9 +3,9 @@ universe = vanilla
 accounting_group = group_cms
 
 arguments = ele ttbar DEFAULT
-output = ../output/JetMu_out_ttbar.txt
-error = ../output/JetMu_err_ttbar.txt
-log = ../output/JetMu_log_ttbar.txt
+output = ../output/FR_Ele_out_ttbar.txt
+error = ../output/FR_Ele_err_ttbar.txt
+log = ../output/FR_Ele_log_ttbar.txt
 getenv = True
 use_x509userproxy = True
 

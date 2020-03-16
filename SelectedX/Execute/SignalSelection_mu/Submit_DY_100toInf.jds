@@ -2,10 +2,10 @@ executable = SelectSignal.sh
 universe = vanilla
 accounting_group = group_cms
 
-arguments = MuMu DY_100toInf DEFAULT
-output = output/mumu_out_DY_100toInf.txt
-error = output/mumu_err_DY_100toInf.txt
-log = output/mumu_log_DY_100toInf.txt
+arguments = MuMu DYMuMu_100toInf DEFAULT
+output = output/mumu_out_DYMuMu_100toInf.txt
+error = output/mumu_err_DYMuMu_100toInf.txt
+log = output/mumu_log_DYMuMu_100toInf.txt
 getenv = True
 use_x509userproxy = True
 

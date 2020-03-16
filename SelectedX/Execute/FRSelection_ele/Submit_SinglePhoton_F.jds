@@ -1,0 +1,15 @@
+executable = SelectFR.sh
+universe = vanilla
+accounting_group = group_cms
+
+arguments = ele SinglePhoton_F DEFAULT
+output = ../output/FR_Ele_out_SinglePhoton_F.txt
+error = ../output/FR_Ele_err_SinglePhoton_F.txt
+log = ../output/FR_Ele_log_SinglePhoton_F.txt
+getenv = True
+use_x509userproxy = True
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+queue

@@ -1,0 +1,15 @@
+executable = SelectSignal.sh
+universe = vanilla
+accounting_group = group_cms
+
+arguments = EE tbarW DEFAULT
+output = output/ee_out_tbarW.txt
+error = output/ee_err_tbarW.txt
+log = output/ee_log_tbarW.txt
+getenv = True
+use_x509userproxy = True
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+queue

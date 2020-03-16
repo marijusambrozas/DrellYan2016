@@ -3,9 +3,9 @@ universe = vanilla
 accounting_group = group_cms
 
 arguments = ele WZ DEFAULT
-output = ../output/JetMu_out_WZ.txt
-error = ../output/JetMu_err_WZ.txt
-log = ../output/JetMu_log_WZ.txt
+output = ../output/FR_Ele_out_WZ.txt
+error = ../output/FR_Ele_err_WZ.txt
+log = ../output/FR_Ele_log_WZ.txt
 getenv = True
 use_x509userproxy = True
 

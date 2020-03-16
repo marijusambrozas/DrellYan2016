@@ -1,0 +1,15 @@
+executable = SelectSignal.sh
+universe = vanilla
+accounting_group = group_cms
+
+arguments = EE QCDEM_300to470 DEFAULT
+output = output/ee_out_QCDEM_300to470.txt
+error = output/ee_err_QCDEM_300to470.txt
+log = output/ee_log_QCDEM_300to470.txt
+getenv = True
+use_x509userproxy = True
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+queue
