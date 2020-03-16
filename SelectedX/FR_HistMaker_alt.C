@@ -247,9 +247,6 @@ void E_FR_HistMaker (Bool_t DEBUG)
             // -- Normalization -- //
             Double_t TotWeight = gen_weight;
             if (Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
-            ////////////////////////////
-            if (pr == _WJets) TotWeight = (Lumi * Mgr.Xsec[0] / (16433848+161144203)) * gen_weight; // REMOVE LATER
-            ////////////////////////////
             if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl;
 
             if (Mgr.isMC == kTRUE && p_T->size() > 1) n2MC += TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight;
@@ -283,7 +280,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                     cout << p_T->at(i_ele) << " " << eta->at(i_ele) << " " << phi->at(i_ele) << " " << charge->at(i_ele) << " " << relPFiso->at(i_ele) << endl;
                     continue;
                 }
-                if (p_T->at(i_ele) <= 28) continue;
+//                if (p_T->at(i_ele) <= 28) continue;
                 if (DEBUG == kTRUE) cout << "i_ele = " << i_ele << endl;
 
                 Int_t matched = 0;
@@ -294,6 +291,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                     {
                         matched = 1;
                         if (Mgr.isMC == kFALSE) prescale_alt = analyzer->getPrescale_alt(trig_pT->at(i_tr));
+//                        if (Mgr.isMC == kFALSE) prescale_alt += analyzer->getPrescale(trig_fired->at(i_tr)+1); //BAD
                         h_HLT_pT->Fill(trig_pT->at(i_tr), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         h_HLT_pT_uncorr->Fill(trig_pT->at(i_tr), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
