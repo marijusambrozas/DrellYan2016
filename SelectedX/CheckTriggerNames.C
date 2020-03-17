@@ -17,8 +17,6 @@
 #include <TCanvas.h>
 #include <TGraphAsymmErrors.h>
 
-
-// -- Macro for making new data files with only selection-passing events  -- //
 #include "./header/DYAnalyzer.h"
 #include "./header/SelectedX.h"
 #include "./header/myProgressBar_t.cc"
