@@ -145,12 +145,12 @@ void E_FR_HistMaker (Bool_t DEBUG)
         analyzer->SetupPVzWeights(Mgr.isMC, "ee", "./etc/PVzWeights.root");
 
         // -- Creating Histograms -- //
-        TH1D* h_pT_barrel_nume = new TH1D("h_pT_barrel_nume", "h_pT_barrel_nume", nPtBinBarrel_ele, analyzer->ptbin_barrel_ele /*200, 0, 1000*/); h_pT_barrel_nume->Sumw2();
-        TH1D* h_pT_endcap_nume = new TH1D("h_pT_endcap_nume", "h_pT_endcap_nume", nPtBinEndcap_ele, analyzer->ptbin_endcap_ele /*200, 0, 1000*/); h_pT_endcap_nume->Sumw2();
-        TH1D* h_pT_barrel_deno = new TH1D("h_pT_barrel_deno", "h_pT_barrel_deno", nPtBinBarrel_ele, analyzer->ptbin_barrel_ele /*200, 0, 1000*/); h_pT_barrel_deno->Sumw2();
-        TH1D* h_pT_endcap_deno = new TH1D("h_pT_endcap_deno", "h_pT_endcap_deno", nPtBinEndcap_ele, analyzer->ptbin_endcap_ele /*200, 0, 1000*/); h_pT_endcap_deno->Sumw2();
-        TH1D* h_pT_barrel_ctrl = new TH1D("h_pT_barrel_ctrl", "h_pT_barrel_ctrl", nPtBinBarrel_ele, analyzer->ptbin_barrel_ele /*200, 0, 1000*/); h_pT_barrel_ctrl->Sumw2();
-        TH1D* h_pT_endcap_ctrl = new TH1D("h_pT_endcap_ctrl", "h_pT_endcap_ctrl", nPtBinEndcap_ele, analyzer->ptbin_endcap_ele /*200, 0, 1000*/); h_pT_endcap_ctrl->Sumw2();
+        TH1D* h_pT_barrel_nume = new TH1D("h_pT_barrel_nume", "h_pT_barrel_nume", /*nPtBinBarrel_ele, analyzer->ptbin_barrel_ele*/ 250, 0, 500); h_pT_barrel_nume->Sumw2();
+        TH1D* h_pT_endcap_nume = new TH1D("h_pT_endcap_nume", "h_pT_endcap_nume", /*nPtBinEndcap_ele, analyzer->ptbin_endcap_ele*/ 250, 0, 500); h_pT_endcap_nume->Sumw2();
+        TH1D* h_pT_barrel_deno = new TH1D("h_pT_barrel_deno", "h_pT_barrel_deno", /*nPtBinBarrel_ele, analyzer->ptbin_barrel_ele*/ 250, 0, 500); h_pT_barrel_deno->Sumw2();
+        TH1D* h_pT_endcap_deno = new TH1D("h_pT_endcap_deno", "h_pT_endcap_deno", /*nPtBinEndcap_ele, analyzer->ptbin_endcap_ele*/ 250, 0, 500); h_pT_endcap_deno->Sumw2();
+        TH1D* h_pT_barrel_ctrl = new TH1D("h_pT_barrel_ctrl", "h_pT_barrel_ctrl", /*nPtBinBarrel_ele, analyzer->ptbin_barrel_ele*/ 250, 0, 500); h_pT_barrel_ctrl->Sumw2();
+        TH1D* h_pT_endcap_ctrl = new TH1D("h_pT_endcap_ctrl", "h_pT_endcap_ctrl", /*nPtBinEndcap_ele, analyzer->ptbin_endcap_ele*/ 250, 0, 500); h_pT_endcap_ctrl->Sumw2();
         TH1D* h_eta_nume = new TH1D("h_eta_nume", "h_eta_nume", 48, -2.4, 2.4); h_eta_nume->Sumw2();
         TH1D* h_eta_deno = new TH1D("h_eta_deno", "h_eta_deno", 48, -2.4, 2.4); h_eta_deno->Sumw2();
         TH1D* h_eta_ctrl = new TH1D("h_eta_ctrl", "h_eta_ctrl", 48, -2.4, 2.4); h_eta_ctrl->Sumw2();
@@ -363,7 +363,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
 //            if (MT >= 60) continue;
 //            if (MET_pT >= 50) continue;
 
-            Double_t prescale_lead = analyzer->getPrescale(trig_pT->at(i_lead));
+            Double_t prescale_lead = analyzer->getPrescale_alt(trig_pT->at(i_lead));
             if (Mgr.isMC == kTRUE) prescale_lead = 1;
 
             h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
