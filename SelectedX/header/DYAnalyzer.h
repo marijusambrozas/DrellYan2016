@@ -266,6 +266,7 @@ public:
         void SetupFRvalues(TString filename, TString type="sigCtrl_template");
         Double_t FakeRate(Double_t p_T, Double_t eta);
         Double_t PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
+        Double_t PrescaleFactor2(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t getPrescale(Double_t Et);
         Double_t getPrescale_alt(Double_t Et);
 
@@ -6253,7 +6254,7 @@ Bool_t DYAnalyzer::EventSelection_FR(vector<Electron> ElectronCollection, Ntuple
     Bool_t skip = kTRUE;
     for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
     { // Asking for only one electron to surpass trigger threshold
-        if(ElectronCollection[j].Pt > LeadPtCut && fabs(ElectronCollection[j].etaSC) < SubEtaCut && ElectronCollection[j].mHits == 0 &&
+        if(ElectronCollection[j].Pt > LeadPtCut && fabs(ElectronCollection[j].etaSC) < SubEtaCut && ElectronCollection[j].mHits <= 1 &&
            !(fabs(ElectronCollection[j].etaSC) > 1.4442 && fabs(ElectronCollection[j].etaSC) < 1.566))
             skip = kFALSE;
     }
@@ -6263,7 +6264,7 @@ Bool_t DYAnalyzer::EventSelection_FR(vector<Electron> ElectronCollection, Ntuple
     Double_t med_count = 0;
     for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
     { // All other muons still have to pass these criteria
-        if (ElectronCollection[j].Pt > SubPtCut && fabs(ElectronCollection[j].etaSC) < SubEtaCut && (ElectronCollection[j].mHits == 0) &&
+        if (ElectronCollection[j].Pt > SubPtCut && fabs(ElectronCollection[j].etaSC) < SubEtaCut && (ElectronCollection[j].mHits <= 1) &&
            !(fabs(ElectronCollection[j].etaSC) > 1.4442 && fabs(ElectronCollection[j].etaSC) < 1.566))
         {
             isPassEventSelection = kTRUE;
@@ -6482,7 +6483,26 @@ Double_t DYAnalyzer::PrescaleFactor(vector<Electron> ElectronCollection, NtupleH
         }
     }
     return Factor;
-}
+}// End of PrescaleFactor()
+
+Double_t DYAnalyzer::PrescaleFactor2(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired,
+                                     std::vector<int> *trig_matched, std::vector<double> *trig_pT)
+{
+    Double_t Factor = -9999;
+    Double_t HLT_pT = -9999;
+    for(Int_t i_ele=0; i_ele<(Int_t)ElectronCollection.size(); i_ele++)
+    {
+        Electron ele = ElectronCollection[i_ele];
+        if (ele.isTrigMatched(ntuple, "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*", &HLT_pT))
+        {
+            trig_fired->push_back(2312);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            Factor = 1;
+        }
+    }
+    return Factor;
+}// End of PrescaleFactor2()
 
 
 Double_t DYAnalyzer::getPrescale(Double_t Et)
