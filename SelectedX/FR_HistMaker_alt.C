@@ -273,6 +273,18 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 }
             }
 
+            Double_t prescale_alt = 0;
+//            Double_t tr_highest = -9999;
+//            Int_t i_highest = -1;
+//            for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
+//            {
+//                if (trig_fired->at(i_tr) > tr_highest)
+//                {
+//                    tr_highest = trig_fired->at(i_tr);
+//                    i_highest = i_tr;
+//                }
+//            }
+
             for (UInt_t i_ele=0; i_ele<p_T->size(); i_ele++)
             {
                 if (p_T->at(i_ele) != p_T->at(i_ele))
@@ -280,11 +292,12 @@ void E_FR_HistMaker (Bool_t DEBUG)
                     cout << p_T->at(i_ele) << " " << eta->at(i_ele) << " " << phi->at(i_ele) << " " << charge->at(i_ele) << " " << relPFiso->at(i_ele) << endl;
                     continue;
                 }
-//                if (p_T->at(i_ele) <= 28) continue;
+                if (p_T->at(i_ele) <= 28) continue;
                 if (DEBUG == kTRUE) cout << "i_ele = " << i_ele << endl;
 
                 Int_t matched = 0;
-                Double_t prescale_alt = 0;
+                prescale_alt = 0;
+
                 for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
                 {
                     if (((UInt_t)(trig_matched->at(i_tr))) == i_ele)
@@ -303,6 +316,13 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 h_eta->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
             }// End of i_ele iteration
+
+//            prescale_alt = analyzer->getPrescale(trig_pT->at(i_highest)+1);
+//            h_HLT_pT->Fill(trig_pT->at(i_highest), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//            h_HLT_pT_uncorr->Fill(trig_pT->at(i_highest), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+//            h_pT->Fill(p_T->at(trig_matched->at(i_highest)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//            h_pT_uncorr->Fill(p_T->at(trig_matched->at(i_highest)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+//            h_eta->Fill(eta->at(trig_matched->at(i_highest)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
             if (DEBUG == kFALSE) bar.Draw(i);
 
