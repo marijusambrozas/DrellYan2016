@@ -981,7 +981,7 @@ public:
         }
         else if ( HLT == "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v* && HLT_Photon*" )
         {
-            Int_t Photon=0, Ele=0
+            Int_t Photon=0, Ele=0;
             for( Int_t k = 0; k < HLT_ntrig; k++ )
             {
                 if( (HLT_trigName->at((unsigned int)k)) == "HLT_Photon22_v*"  || (HLT_trigName->at((unsigned int)k)) == "HLT_Photon30_v*" ||
