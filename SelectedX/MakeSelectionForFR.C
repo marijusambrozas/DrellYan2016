@@ -99,7 +99,7 @@ void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "D
         else
         {
             Xselected++;
-            if (HLTname == "DEFAULT") HLT = "Photon_OR";
+            if (HLTname == "DEFAULT") HLT = "Ele23Ele12_AND_Photon_OR";
             else HLT = HLTname;
             cout << "\n*******      MakeSelectionForFR_E (" << type << ", " << HLT << ")      *******" << endl;
             MakeSelectionForFR_E(type, HLT, Debug);
@@ -346,11 +346,15 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         prefiring_weight = ntuple->_prefiringweight;
                         prefiring_weight_up = ntuple->_prefiringweightup;
                         prefiring_weight_down = ntuple->_prefiringweightdown;
+
+                        if (analyzer->HLT == "HLT_Photon*")
+                            prescale_factor = analyzer->PrescaleFactor(SelectedElectronCollection, ntuple, trig_fired, trig_matched, trig_pT);
                         if (analyzer->HLT == "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*")
                             prescale_factor = analyzer->PrescaleFactor2(SelectedElectronCollection, ntuple, trig_fired, trig_matched, trig_pT);
-                        else
-                            prescale_factor = analyzer->PrescaleFactor(SelectedElectronCollection, ntuple, trig_fired, trig_matched, trig_pT);
-                        if (prescale_factor <= 0) continue; // If no trigger match between selected electrons
+                        if (analyzer->HLT == "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v* && HLT_Photon*")
+                            prescale_factor = analyzer->PrescaleFactor3(SelectedElectronCollection, ntuple, trig_fired, trig_matched, trig_pT);
+
+                        if (prescale_factor < 0) continue; // If no trigger match between selected electrons
 
                         // -- Vector filling -- //
                         for (UInt_t i_ele=0; i_ele<SelectedElectronCollection.size(); i_ele++)

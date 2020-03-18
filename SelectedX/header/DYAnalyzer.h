@@ -267,6 +267,7 @@ public:
         Double_t FakeRate(Double_t p_T, Double_t eta);
         Double_t PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t PrescaleFactor2(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
+        Double_t PrescaleFactor3(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t getPrescale(Double_t Et);
         Double_t getPrescale_alt(Double_t Et);
 
@@ -434,6 +435,14 @@ void DYAnalyzer::AssignAccThreshold(TString HLTname, TString *HLT, Double_t *Lea
         else if (HLTname == "Photon_OR")
         {
             *HLT = "HLT_Photon*";
+            *LeadPtCut = 28;
+            *SubPtCut = 17;
+            *LeadEtaCut = 2.4; // -- Later it should exclude ECAL gap
+            *SubEtaCut = 2.4; // -- Later it should exclude ECAL gap
+        }
+        else if (HLTname == "Ele23Ele12_AND_Photon_OR")
+        {
+            *HLT = "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v* && HLT_Photon*";
             *LeadPtCut = 28;
             *SubPtCut = 17;
             *LeadEtaCut = 2.4; // -- Later it should exclude ECAL gap
@@ -6503,6 +6512,82 @@ Double_t DYAnalyzer::PrescaleFactor2(vector<Electron> ElectronCollection, Ntuple
     }
     return Factor;
 }// End of PrescaleFactor2()
+
+
+Double_t DYAnalyzer::PrescaleFactor3(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired,
+                                    std::vector<int> *trig_matched, std::vector<double> *trig_pT)
+{
+    Double_t Factor = -9999;
+    Double_t HLT_pT = -9999;
+    for(Int_t i_ele=0; i_ele<(Int_t)ElectronCollection.size(); i_ele++)
+    {
+        Electron ele = ElectronCollection[i_ele];
+        if (ele.isTrigMatched(ntuple, "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*", &HLT_pT))
+        {
+            trig_fired->push_back(2312);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            Factor = 1;
+        }
+        if (ele.isTrigMatched(ntuple, "HLT_Photon22_v*", &HLT_pT))
+        {
+            trig_fired->push_back(22);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            Factor = getPrescale(HLT_pT);
+        }
+        if (ele.isTrigMatched(ntuple, "HLT_Photon30_v*", &HLT_pT))
+        {
+            trig_fired->push_back(30);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            Factor = getPrescale(HLT_pT);
+        }
+        if (ele.isTrigMatched(ntuple, "HLT_Photon36_v*", &HLT_pT))
+        {
+            trig_fired->push_back(36);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            Factor = getPrescale(HLT_pT);
+        }
+        if (ele.isTrigMatched(ntuple, "HLT_Photon50_v*", &HLT_pT))
+        {
+            trig_fired->push_back(50);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            Factor = getPrescale(HLT_pT);
+        }
+        if (ele.isTrigMatched(ntuple, "HLT_Photon75_v*", &HLT_pT))
+        {
+            trig_fired->push_back(75);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            Factor = getPrescale(HLT_pT);
+        }
+        if (ele.isTrigMatched(ntuple, "HLT_Photon90_v*", &HLT_pT))
+        {
+            trig_fired->push_back(90);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            Factor = getPrescale(HLT_pT);
+        }
+        if (ele.isTrigMatched(ntuple, "HLT_Photon120_v*", &HLT_pT))
+        {
+            trig_fired->push_back(120);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            Factor = getPrescale(HLT_pT);
+        }
+        if (ele.isTrigMatched(ntuple, "HLT_Photon175_v*", &HLT_pT))
+        {
+            trig_fired->push_back(175);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            Factor = getPrescale(HLT_pT);
+        }
+    }
+    return Factor;
+}// End of PrescaleFactor3()
 
 
 Double_t DYAnalyzer::getPrescale(Double_t Et)
