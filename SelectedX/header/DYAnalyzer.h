@@ -112,6 +112,8 @@ public:
         Double_t FR_endcap[nPtBinEndcap];
         const double ptbin_barrel_ele[nPtBinBarrel_ele+1] = {25,30,35,40,45,50,60,70,80,90,100,120,140,160,180,200,250,300,350,400,450,500,700,1000};
         const double ptbin_endcap_ele[nPtBinEndcap_ele+1] = {25,30,35,40,45,50,60,70,80,90,100,150,200,500,1000};
+        Double_t FR_barrel_ele[nPtBinBarrel_ele];
+        Double_t FR_endcap_ele[nPtBinEndcap_ele];
         const double prescales[8] = {0.0016/36.47, 0.0066/36.47, 0.0132/36.47, 0.0264/36.47, 0.13/36.47, 0.26/36.47, 0.54/36.47, 1};
 
 	// -- Constructor -- //
@@ -169,6 +171,7 @@ public:
         // ELECTRONS
         void SetupEfficiencyScaleFactor_electron();
         Double_t EfficiencySF_EventWeight_electron(Electron ele1, Electron ele2);
+        Double_t EfficiencySF_EventWeight_electron(TLorentzVector ele1, TLorentzVector ele2);
         Double_t EfficiencySF_EventWeight_electron(SelectedEE_t *EE);
         Int_t Find_electron_PtBin_Reco(Double_t Pt);
         Int_t Find_electron_PtBin_ID(Double_t Pt);
@@ -270,6 +273,8 @@ public:
         Double_t PrescaleFactor3(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t getPrescale(Double_t Et);
         Double_t getPrescale_alt(Double_t Et);
+        void SetupFRvalues_ele(TString filename, TString type="ratio");
+        Double_t FakeRate_ele(Double_t p_T, Double_t eta);
 
 	// -- pre-FSR functions -- //
 	void PostToPreFSR_byDressedLepton(NtupleHandle *ntuple, GenLepton *genlep_postFSR, Double_t dRCut, GenLepton *genlep_preFSR, vector< GenOthers >* GenPhotonCollection);
@@ -2978,6 +2983,76 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_electron(Electron ele1, Electron e
     Double_t Pt2 = ele2.Pt;
     //Double_t eta2 = ele2.eta;
     Double_t eta2 = ele2.etaSC;
+
+    Int_t ptbin2_Reco = Find_electron_PtBin_Reco(Pt2);
+    Int_t etabin2_Reco = Find_electron_EtaBin_Reco(eta2);
+
+    Int_t ptbin2_ID = Find_electron_PtBin_ID(Pt2);
+    Int_t etabin2_ID = Find_electron_EtaBin_ID(eta2);
+
+    Int_t ptbin2_Trig = Find_electron_PtBin_Trig(Pt2);
+    Int_t etabin2_Trig = Find_electron_EtaBin_Trig(eta2);
+
+    Double_t Eff_ele2_data = Eff_Reco_data[etabin2_Reco][ptbin2_Reco] * Eff_ID_data[etabin2_ID][ptbin2_ID];
+    Double_t Eff_ele2_MC = Eff_Reco_MC[etabin2_Reco][ptbin2_Reco] * Eff_ID_MC[etabin2_ID][ptbin2_ID];
+
+    // TRIGGERS
+    Double_t Eff_EventTrig_data = 0;
+    Double_t Eff_EventTrig_MC = 0;
+
+    Eff_EventTrig_data = Eff_HLT_Leg2_data[etabin1_Trig][ptbin1_Trig] * Eff_HLT_Leg2_data[etabin2_Trig][ptbin2_Trig];
+    Eff_EventTrig_MC = Eff_HLT_Leg2_MC[etabin1_Trig][ptbin1_Trig] * Eff_HLT_Leg2_MC[etabin2_Trig][ptbin2_Trig];
+
+    //cout << Eff_EventTrig_data << "\t" << Eff_EventTrig_MC << endl;
+
+    Double_t Eff_data_all = Eff_ele1_data * Eff_ele2_data * Eff_EventTrig_data;
+    Double_t Eff_MC_all = Eff_ele1_MC * Eff_ele2_MC * Eff_EventTrig_MC;
+
+    weight = Eff_data_all / Eff_MC_all;
+
+    if(weight > 2)
+    {
+        printf("(pt1, eta1, pt2, eta2): (%.3lf, %.3lf, %.3lf, %.3lf)\n", Pt1, eta1, Pt2, eta2);
+        printf("[SF] Weight = %.3lf\n", weight);
+    }
+
+    /*if((Pt1 < 25 && eta1 > 2.3) || (Pt2 < 25 && eta2 > 2.3))
+    {
+        printf("(pt1, eta1, pt2, eta2): (%.3lf, %.3lf, %.3lf, %.3lf)\n", Pt1, eta1, Pt2, eta2);
+        cout << Eff_EventTrig_data << "\t" << Eff_EventTrig_MC << endl;
+        cout << weight << endl;
+    }*/
+
+    return weight;
+
+}// End of EfficiencySF_EventWeight_electron(ele1, ele2)
+
+
+Double_t DYAnalyzer::EfficiencySF_EventWeight_electron(TLorentzVector ele1, TLorentzVector ele2)
+{
+    Double_t weight = -999;
+
+    // -- Electron1 -- //
+    Double_t Pt1 = ele1.Pt();
+    //Double_t eta1 = ele1.eta;
+    Double_t eta1 = ele1.Eta();
+
+    Int_t ptbin1_Reco = Find_electron_PtBin_Reco(Pt1);
+    Int_t etabin1_Reco = Find_electron_EtaBin_Reco(eta1);
+
+    Int_t ptbin1_ID = Find_electron_PtBin_ID(Pt1);
+    Int_t etabin1_ID = Find_electron_EtaBin_ID(eta1);
+
+    Int_t ptbin1_Trig = Find_electron_PtBin_Trig(Pt1);
+    Int_t etabin1_Trig = Find_electron_EtaBin_Trig(eta1);
+
+    Double_t Eff_ele1_data = Eff_Reco_data[etabin1_Reco][ptbin1_Reco] * Eff_ID_data[etabin1_ID][ptbin1_ID];
+    Double_t Eff_ele1_MC = Eff_Reco_MC[etabin1_Reco][ptbin1_Reco] * Eff_ID_MC[etabin1_ID][ptbin1_ID];
+
+    // -- Electron2 -- //
+    Double_t Pt2 = ele2.Pt();
+    //Double_t eta2 = ele2.eta;
+    Double_t eta2 = ele2.Eta();
 
     Int_t ptbin2_Reco = Find_electron_PtBin_Reco(Pt2);
     Int_t etabin2_Reco = Find_electron_EtaBin_Reco(eta2);
@@ -6324,6 +6399,40 @@ void DYAnalyzer::SetupFRvalues(TString filename, TString type) // type can be "r
 } // End of SetupFRvalues()
 
 
+void DYAnalyzer::SetupFRvalues_ele(TString filename, TString type) // type can be "ratio", "template"
+{
+    // -- Setting up -- //
+    std::cout << "Setting up fake rate values from " << filename << endl;
+    std::cout << "Fake rate obtained using " << type << " method." << endl;
+    TFile *f = new TFile(filename, "READ");
+    TH1D *h_FR_barrel, *h_FR_endcap;
+    f->GetObject("h_FR"+type+"_barrel", h_FR_barrel);  // +"up"  +"down"
+    f->GetObject("h_FR"+type+"_endcap", h_FR_endcap);  // +"up"  +"down"
+
+    // -- Getting values from histograms -- //
+    for (Int_t i_bin=1; i_bin<=nPtBinBarrel_ele; i_bin++)
+    {
+        FR_barrel_ele[i_bin-1] = h_FR_barrel->GetBinContent(i_bin);
+        if (i_bin <= nPtBinEndcap_ele)
+            FR_endcap_ele[i_bin-1] = h_FR_endcap->GetBinContent(i_bin);
+    }
+
+    // -- Checking if everything has been done correctly -- //
+    Int_t nProblem = 0;
+    for (Int_t i=0; i<nPtBinBarrel_ele; i++)
+    {
+        if (FR_barrel_ele[i] >= 1 || FR_barrel_ele[i] <= 0) {nProblem++; std::cout << i << "  " << FR_barrel_ele[i] << endl;}
+        if (i < nPtBinEndcap_ele) { if (FR_endcap_ele[i] >= 1 || FR_endcap_ele[i] <= 0) {nProblem++; std::cout << i << "  " << FR_endcap_ele[i] << endl;} }
+    }
+    if (nProblem)
+        std::cout << "**************************************************\n" <<
+                     "Problems were detected: fake rate values exceeding 'regular' probability boundaries have been found.\n" <<
+                     "Please check the code.\n**************************************************" << endl;
+    else std::cout << "Fake rates have been set up successfully." << endl;
+    return;
+} // End of SetupFRvalues_ele()
+
+
 
 Double_t DYAnalyzer::FakeRate(Double_t p_T, Double_t eta)
 {
@@ -6352,6 +6461,37 @@ Double_t DYAnalyzer::FakeRate(Double_t p_T, Double_t eta)
         return FR_endcap[i_bin];
     }
 } // End of FakeRate()
+
+
+Double_t DYAnalyzer::FakeRate_ele(Double_t p_T, Double_t eta)
+{
+    Int_t i_bin = 0;
+    Int_t stop = 0;
+    if (fabs(eta) < 1.4442) // barrel
+    {
+        while (!stop)
+        {
+            if (p_T < ptbin_barrel_ele[i_bin + 1] || i_bin >= nPtBinBarrel_ele-1) // Points exceeding boundaries are assigned last available FR value
+                stop = 1;
+            else
+                i_bin++;
+        }
+        return FR_barrel_ele[i_bin];
+    }
+    else if (fabs(eta) > 1.566) // endcap
+    {
+        while (!stop)
+        {
+            if (p_T < ptbin_endcap_ele[i_bin + 1] || i_bin >= nPtBinEndcap_ele-1) // Points exceeding boundaries are assigned last available FR value
+                stop = 1;
+            else
+                i_bin++;
+        }
+        return FR_endcap_ele[i_bin];
+    }
+    return 0;
+} // End of FakeRate_ele()
+
 
 /*
 Double_t DYAnalyzer::PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple, Int_t *trig_matched)
