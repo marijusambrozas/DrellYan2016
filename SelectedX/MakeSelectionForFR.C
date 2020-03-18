@@ -1436,6 +1436,7 @@ void MakeSelectionForBKGest_E (TString type, TString HLTname, Bool_t Debug)
 
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
+        std::vector<double> *etaSC = new std::vector<double>;
         std::vector<double> *phi = new std::vector<double>;
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
@@ -1451,6 +1452,7 @@ void MakeSelectionForBKGest_E (TString type, TString HLTname, Bool_t Debug)
         // -- Creating SelectedMuMu variables to assign branches -- //
         ElectronTree->Branch("p_T", &p_T);
         ElectronTree->Branch("eta", &eta);
+        ElectronTree->Branch("etaSC", &etaSC);
         ElectronTree->Branch("phi", &phi);
         ElectronTree->Branch("charge", &charge);
         ElectronTree->Branch("relPFiso", &relPFiso);
@@ -1544,6 +1546,7 @@ void MakeSelectionForBKGest_E (TString type, TString HLTname, Bool_t Debug)
                         timesPassed++;
                         p_T->clear();
                         eta->clear();
+                        etaSC->clear();
                         phi->clear();
                         charge->clear();
                         relPFiso->clear();
@@ -1575,6 +1578,7 @@ void MakeSelectionForBKGest_E (TString type, TString HLTname, Bool_t Debug)
                         {
                             p_T->push_back(SelectedElectronCollection[i].Pt);
                             eta->push_back(SelectedElectronCollection[i].eta);
+                            etaSC->push_back(SelectedElectronCollection[i].etaSC);
                             phi->push_back(SelectedElectronCollection[i].phi);
                             charge->push_back(SelectedElectronCollection[i].charge);
                             relPFiso->push_back(SelectedElectronCollection[i].RelPFIso_dBeta);
