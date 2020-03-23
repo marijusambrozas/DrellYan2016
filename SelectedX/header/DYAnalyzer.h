@@ -271,6 +271,7 @@ public:
         Double_t PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t PrescaleFactor2(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t PrescaleFactor3(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
+        Int_t FindTriggerAndPrescale(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t getPrescale(Double_t Et);
         Double_t getPrescale_alt(Double_t Et);
         void SetupFRvalues_ele(TString filename, TString type="ratio");
@@ -6347,7 +6348,7 @@ Bool_t DYAnalyzer::EventSelection_FR(vector<Electron> ElectronCollection, Ntuple
 
     Double_t med_count = 0;
     for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
-    { // All other muons still have to pass these criteria
+    { // All other electrons still have to pass these criteria
         if (ElectronCollection[j].Pt > SubPtCut && fabs(ElectronCollection[j].etaSC) < SubEtaCut && (ElectronCollection[j].mHits <= 1) &&
            !(fabs(ElectronCollection[j].etaSC) > 1.4442 && fabs(ElectronCollection[j].etaSC) < 1.566))
         {
@@ -6728,6 +6729,84 @@ Double_t DYAnalyzer::PrescaleFactor3(vector<Electron> ElectronCollection, Ntuple
     }
     return Factor;
 }// End of PrescaleFactor3()
+
+
+Int_t DYAnalyzer::FindTriggerAndPrescale(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired,
+                                            std::vector <int> trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT)
+{
+    Int_t triggered = 0;
+    Double_t Factor = -9999;
+    Double_t HLT_pT = -9999;
+    for(Int_t i_ele=0; i_ele<(Int_t)ElectronCollection.size(); i_ele++)
+    {
+        Electron ele = ElectronCollection[i_ele];
+        if (ele.isTrigMatched(ntuple, "HLT_Photon22_v*", &HLT_pT, &Factor))
+        {
+            triggered = 1;
+            trig_fired->push_back(22);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            trig_PS->push_back(Factor);
+        }
+        if (ele.isTrigMatched(ntuple, "HLT_Photon30_v*", &HLT_pT, &Factor))
+        {
+            triggered = 1;
+            trig_fired->push_back(30);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            trig_PS->push_back(Factor);
+        }
+        if (ele.isTrigMatched(ntuple, "HLT_Photon36_v*", &HLT_pT, &Factor))
+        {
+            triggered = 1;
+            trig_fired->push_back(36);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            trig_PS->push_back(Factor);
+        }
+        if (ele.isTrigMatched(ntuple, "HLT_Photon50_v*", &HLT_pT, &Factor))
+        {
+            triggered = 1;
+            trig_fired->push_back(50);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            trig_PS->push_back(Factor);
+        }
+        if (ele.isTrigMatched(ntuple, "HLT_Photon75_v*", &HLT_pT, &Factor))
+        {
+            triggered = 1;
+            trig_fired->push_back(75);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            trig_PS->push_back(Factor);
+        }
+        if (ele.isTrigMatched(ntuple, "HLT_Photon90_v*", &HLT_pT, &Factor))
+        {
+            triggered = 1;
+            trig_fired->push_back(90);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            trig_PS->push_back(Factor);
+        }
+        if (ele.isTrigMatched(ntuple, "HLT_Photon120_v*", &HLT_pT, &Factor))
+        {
+            triggered = 1;
+            trig_fired->push_back(120);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            trig_PS->push_back(Factor);
+        }
+        if (ele.isTrigMatched(ntuple, "HLT_Photon175_v*", &HLT_pT, &Factor))
+        {
+            triggered = 1;
+            trig_fired->push_back(175);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            trig_PS->push_back(Factor);
+        }
+    }
+    return triggered;
+}// End of FindTriggerAndPrescale()
 
 
 Double_t DYAnalyzer::getPrescale(Double_t Et)

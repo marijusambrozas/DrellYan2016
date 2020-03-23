@@ -24,6 +24,7 @@ public:
     Int_t HLT_ntrig;
     Int_t HLT_trigFired[MaxN];
     vector<string> *HLT_trigName;
+    Int_t HLT_trigPS[MaxN];
     Double_t HLT_trigPt[MaxN];
     Double_t HLT_trigEta[MaxN];
     Double_t HLT_trigPhi[MaxN];
@@ -346,6 +347,7 @@ public:
     	chain->SetBranchStatus("HLT_trigName", 1);
     	chain->SetBranchStatus("HLT_ntrig", 1);
     	chain->SetBranchStatus("HLT_trigFired", 1);
+        chain->SetBranchStatus("HLT_trigPS", 1);
         chain->SetBranchStatus("HLT_trigPt", 1);
         chain->SetBranchStatus("HLT_trigEta", 1);
     	chain->SetBranchStatus("HLT_trigPhi", 1);
@@ -353,6 +355,7 @@ public:
     	chain->SetBranchAddress("HLT_trigName", &HLT_trigName);
     	chain->SetBranchAddress("HLT_trigFired", HLT_trigFired);
     	chain->SetBranchAddress("HLT_ntrig", &HLT_ntrig);
+        chain->SetBranchAddress("HLT_trigPS", HLT_trigPS);
         chain->SetBranchAddress("HLT_trigPt", &HLT_trigPt);
         chain->SetBranchAddress("HLT_trigEta", &HLT_trigEta);
     	chain->SetBranchAddress("HLT_trigPhi", &HLT_trigPhi);

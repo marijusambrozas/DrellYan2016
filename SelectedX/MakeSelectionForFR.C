@@ -99,7 +99,7 @@ void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "D
         else
         {
             Xselected++;
-            if (HLTname == "DEFAULT") HLT = "Ele23Ele12_AND_Photon_OR";
+            if (HLTname == "DEFAULT") HLT = "Photon_OR";
             else HLT = HLTname;
             cout << "\n*******      MakeSelectionForFR_E (" << type << ", " << HLT << ")      *******" << endl;
             MakeSelectionForFR_E(type, HLT, Debug);
@@ -194,27 +194,47 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
         std::vector<double> *phi = new std::vector<double>;
-        std::vector<int> *charge = new std::vector<int>;
-        std::vector<double> *relPFiso = new std::vector<double>;
+        std::vector<double> *Full5x5_SigmaIEtaIEta = new std::vector<double>;
+        std::vector<double> *dEtaInSeed = new std::vector<double>;
+        std::vector<double> *dPhiIn = new std::vector<double>;
+        std::vector<double> *HoverE = new std::vector<double>;
+        std::vector<double> *InvEminusInvP = new std::vector<double>;
+        std::vector<double> *chIso03 = new std::vector<double>;
+        std::vector<double> *nhIso03 = new std::vector<double>;
+        std::vector<double> *phIso03 = new std::vector<double>;
+        std::vector<double> *ChIso03FromPU = new std::vector<double>;
+        std::vector<int> *mHits = new std::vector<double>;
+        std::vector<double> *relPFiso_dBeta = new std::vector<double>;
+        std::vector<double> *relPFiso_Rho = new std::vector<double>;
         std::vector<int> *passMediumID = new std::vector<int>;
         std::vector<int> *trig_fired = new std::vector<int>;
         std::vector<int> *trig_matched = new std::vector<int>;
         std::vector<double> *trig_pT = new std::vector<double>;
+        std::vector<int> *prescale_factor = new std::vector<int>;
         Double_t MET_pT, MET_phi;
         Int_t nPU;
         Int_t nVTX;
         Double_t PVz;
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
-        Double_t prescale_factor;
 
         TTree* ElectronTree = new TTree("FRTree", "FRTree");
         // -- Creating electron variables to assign branches -- //
         ElectronTree->Branch("p_T", &p_T);
         ElectronTree->Branch("eta", &eta);
         ElectronTree->Branch("phi", &phi);
-        ElectronTree->Branch("charge", &charge);
-        ElectronTree->Branch("relPFiso", &relPFiso);
+        ElectronTree->Branch("Full5x5_SigmaIEtaIEta", &Full5x5_SigmaIEtaIEta);
+        ElectronTree->Branch("dEtaInSeed", dEtaInSeed);
+        ElectronTree->Branch("dPhiIn", &dPhiIn);
+        ElectronTree->Branch("HoverE", &HoverE);
+        ElectronTree->Branch("InvEminusInvP", &InvEminusInvP);
+        ElectronTree->Branch("chIso03", &chIso03);
+        ElectronTree->Branch("nhIso03", &nhIso03);
+        ElectronTree->Branch("phIso03", &phIso03);
+        ElectronTree->Branch("ChIso03FromPU", &ChIso03FromPU);
+        ElectronTree->Branch("mHits", &mHits);
+        ElectronTree->Branch("relPFiso_dBeta", &relPFiso_dBeta);
+        ElectronTree->Branch("relPFiso_Rho", &relPFiso_Rho);
         ElectronTree->Branch("passMediumID", &passMediumID);
         ElectronTree->Branch("trig_fired", &trig_fired);
         ElectronTree->Branch("trig_matched", &trig_matched);
@@ -319,12 +339,23 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         p_T->clear();
                         eta->clear();
                         phi->clear();
-                        charge->clear();
-                        relPFiso->clear();
+                        Full5x5_SigmaIEtaIEta->clear();
+                        dEtaInSeed->clear();
+                        dPhiIn->clear();
+                        HoverE->clear();
+                        InvEminusInvP->clear();
+                        chIso03->clear();
+                        nhIso03->clear();
+                        phIso03->clear();
+                        ChIso03FromPU->clear();
+                        mHits->clear();
+                        relPFiso_dBeta->clear();
+                        relPFiso_Rho->clear();
                         passMediumID->clear();
                         trig_fired->clear();
                         trig_matched->clear();
                         trig_pT->clear();
+                        prescale_factor->clear();
 
                         // -- Top pT reweighting -- //
                         top_weight = 1;
@@ -347,14 +378,17 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         prefiring_weight_up = ntuple->_prefiringweightup;
                         prefiring_weight_down = ntuple->_prefiringweightdown;
 
-                        if (analyzer->HLT == "HLT_Photon*")
-                            prescale_factor = analyzer->PrescaleFactor(SelectedElectronCollection, ntuple, trig_fired, trig_matched, trig_pT);
-                        if (analyzer->HLT == "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*")
-                            prescale_factor = analyzer->PrescaleFactor2(SelectedElectronCollection, ntuple, trig_fired, trig_matched, trig_pT);
-                        if (analyzer->HLT == "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v* && HLT_Photon*")
-                            prescale_factor = analyzer->PrescaleFactor3(SelectedElectronCollection, ntuple, trig_fired, trig_matched, trig_pT);
+//                        if (analyzer->HLT == "HLT_Photon*")
+//                            prescale_factor = analyzer->PrescaleFactor(SelectedElectronCollection, ntuple, trig_fired, trig_matched, trig_pT);
+//                        if (analyzer->HLT == "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*")
+//                            prescale_factor = analyzer->PrescaleFactor2(SelectedElectronCollection, ntuple, trig_fired, trig_matched, trig_pT);
+//                        if (analyzer->HLT == "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v* && HLT_Photon*")
+//                            prescale_factor = analyzer->PrescaleFactor3(SelectedElectronCollection, ntuple, trig_fired, trig_matched, trig_pT);
 
-                        if (prescale_factor < 0) continue; // If no trigger match between selected electrons
+//                        if (prescale_factor < 0) continue; // If no trigger match between selected electrons
+
+                        Int_t triggered = 0;
+                        triggered = analyzer->FindTriggerAndPrescale(SelectedElectronCollection, ntuple, trig_fired, prescale_factor, trig_matched, trig_pT);
 
                         // -- Vector filling -- //
                         for (UInt_t i_ele=0; i_ele<SelectedElectronCollection.size(); i_ele++)
@@ -362,8 +396,18 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                             p_T->push_back(SelectedElectronCollection[i_ele].Pt);
                             eta->push_back(SelectedElectronCollection[i_ele].etaSC);
                             phi->push_back(SelectedElectronCollection[i_ele].phi);
-                            charge->push_back(SelectedElectronCollection[i_ele].charge);
-                            relPFiso->push_back(SelectedElectronCollection[i_ele].RelPFIso_dBeta);
+                            Full5x5_SigmaIEtaIEta->push_back(SelectedElectronCollection[i_ele].Full5x5_SigmaIEtaIEta);
+                            dEtaInSeed->push_back(SelectedElectronCollection[i_ele].dEtaInSeed);
+                            dPhiIn->push_back(SelectedElectronCollection[i_ele].dPhiIn);
+                            HoverE->push_back(SelectedElectronCollection[i_ele].HoverE);
+                            InvEminusInvP->push_back(SelectedElectronCollection[i_ele].InvEminusInvP);
+                            chIso03->push_back(SelectedElectronCollection[i_ele].chIso03);
+                            nhIso03->push_back(SelectedElectronCollection[i_ele].nhIso03);
+                            phIso03->push_back(SelectedElectronCollection[i_ele].phIso03);
+                            ChIso03FromPU->push_back(SelectedElectronCollection[i_ele].ChIso03FromPU);
+                            mHits->push_back(SelectedElectronCollection[i_ele].mHits);
+                            relPFiso_dBeta->push_back(SelectedElectronCollection[i_ele].RelPFIso_dBeta);
+                            relPFiso_Rho->push_back(SelectedElectronCollection[i_ele].RelPFIso_Rho);
                             passMediumID->push_back(SelectedElectronCollection[i_ele].passMediumID);
 
                             if (Debug == kTRUE)

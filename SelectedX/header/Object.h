@@ -917,7 +917,7 @@ public:
 		return isPass;
 	}
 
-        Bool_t isTrigMatched(NtupleHandle *nh, TString HLT, Double_t *HLT_pT=NULL)
+        Bool_t isTrigMatched(NtupleHandle *nh, TString HLT, Double_t *HLT_pT=NULL, Double_t *HLT_PS=NULL)
 	{
 		vector<string> *hlt_trigName = nh->HLT_trigName;
 		Int_t hlt_ntrig = nh->HLT_ntrig;
@@ -943,6 +943,7 @@ public:
                                 {
                                     isTrigMatch = true;
                                     if (HLT_pT) *HLT_pT = Trig_pT;
+                                    if (HLT_PS) *HLT_PS = nh->HLT_trigPS[k];
                                     break;
                                 }
                             }
