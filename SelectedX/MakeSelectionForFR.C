@@ -203,7 +203,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         std::vector<double> *nhIso03 = new std::vector<double>;
         std::vector<double> *phIso03 = new std::vector<double>;
         std::vector<double> *ChIso03FromPU = new std::vector<double>;
-        std::vector<int> *mHits = new std::vector<double>;
+        std::vector<int> *mHits = new std::vector<int>;
         std::vector<double> *relPFiso_dBeta = new std::vector<double>;
         std::vector<double> *relPFiso_Rho = new std::vector<double>;
         std::vector<int> *passMediumID = new std::vector<int>;
