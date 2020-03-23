@@ -6732,7 +6732,7 @@ Double_t DYAnalyzer::PrescaleFactor3(vector<Electron> ElectronCollection, Ntuple
 
 
 Int_t DYAnalyzer::FindTriggerAndPrescale(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired,
-                                            std::vector <int> trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT)
+                                            std::vector <int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT)
 {
     Int_t triggered = 0;
     Double_t Factor = -9999;
