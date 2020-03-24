@@ -147,7 +147,6 @@ void E_FR_HistMaker (Bool_t DEBUG)
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
         std::vector<double> *phi = new std::vector<double>;
-        std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<int> *passMediumID = new std::vector<int>;
         std::vector<int> *trig_fired = new std::vector<int>;
@@ -159,7 +158,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
         Double_t PVz;
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
-        Double_t prescale_factor;
+        std::vector<int> *prescale_factor = new std::vector<int>;
 
         TChain *chain = new TChain("FRTree");
 
@@ -187,7 +186,6 @@ void E_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchAddress("p_T", &p_T);
         chain->SetBranchAddress("eta", &eta);
         chain->SetBranchAddress("phi", &phi);
-        chain->SetBranchAddress("charge", &charge);
         chain->SetBranchAddress("relPFiso", &relPFiso);
         chain->SetBranchAddress("passMediumID", &passMediumID);
         chain->SetBranchAddress("trig_fired", &trig_fired);
@@ -257,7 +255,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
             ele_lead.SetPtEtaPhiM(0, 0, 0, M_Elec);
             Double_t iso_lead = -9999;
 
-            if (p_T->size() != passMediumID->size() || p_T->size() != charge->size())
+            if (p_T->size() != passMediumID->size())
             {
                 cout << "ERROR: vector sizes do not match!" << endl;
                 break;
@@ -269,7 +267,8 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 cout << "Triggers:" << endl;
                 for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
                 {
-                    cout << "Photon" << trig_fired->at(i_tr) << "  p_T: " << trig_pT->at(i_tr) << "  matched to " << trig_matched->at(i_tr) << endl;
+                    cout << "Photon" << trig_fired->at(i_tr) << "  p_T: " << trig_pT->at(i_tr) << "  matched to " << trig_matched->at(i_tr) <<
+                         "   prescale: " << prescale_factor->at(i_tr) << endl;
                 }
             }
 
@@ -289,7 +288,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
             {
                 if (p_T->at(i_ele) != p_T->at(i_ele))
                 {
-                    cout << p_T->at(i_ele) << " " << eta->at(i_ele) << " " << phi->at(i_ele) << " " << charge->at(i_ele) << " " << relPFiso->at(i_ele) << endl;
+                    cout << p_T->at(i_ele) << " " << eta->at(i_ele) << " " << phi->at(i_ele) << " " << relPFiso->at(i_ele) << endl;
                     continue;
                 }
                 if (p_T->at(i_ele) <= 28) continue;
