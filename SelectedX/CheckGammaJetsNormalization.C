@@ -40,7 +40,7 @@ void CheckGammaJetsNormalization (Bool_t Debug = kFALSE)
 
     TH1D *h_g_pT_isHardProcess = new TH1D("h_g_pT_isHardProcess", "Gamma pT", 500, 0, 5000);
     TH1D *h_g_pT_fromHardProcessFinalState = new TH1D("h_g_pT_fromHardProcessFinalState", "Gamma pT", 500, 0, 5000);
-    TH1D *h_g_pT_isPrompt = new TH1D("h_g_pT", "h_g_pT_isPrompt pT", 500, 0, 5000);
+    TH1D *h_g_pT_isPrompt = new TH1D("h_g_pT_isPrompt", "Gamma pT", 500, 0, 5000);
     TH1D *h_g_pT_isPromptFinalState = new TH1D("h_g_pT_isPromptFinalState", "Gamma pT", 500, 0, 5000);
     TH1D *h_g_pT = new TH1D("h_g_pT", "Gamma pT", 500, 0, 5000);
 
@@ -75,6 +75,8 @@ void CheckGammaJetsNormalization (Bool_t Debug = kFALSE)
             cout << "\t[Total Events: " << NEvents << "]" << endl;
             myProgressBar_t bar(NEvents);
 
+            Double_t wsum=0, wsum_raw=0;
+
             // Loop for all events in the chain
             for (Int_t i=0; i<NEvents; i++)
             {
@@ -83,17 +85,19 @@ void CheckGammaJetsNormalization (Bool_t Debug = kFALSE)
                 // -- Positive/Negative Gen-weights -- //
                 Double_t gen_weight = 0;
                 ntuple->GENEvt_weight < 0 ? gen_weight = -1 : gen_weight = 1;
+                wsum += gen_weight;
+                wsum_raw += ntuple->GENEvt_weight;
 
                 for (Int_t i_gen=0; i_gen<ntuple->nGenOthers; i_gen++)
                 {
                     if (fabs(ntuple->GenOthers_ID[i_gen]) == 22)
                     {
                         h_g_pT->Fill(ntuple->GenOthers_pT[i_gen], gen_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
-                        if (ntuple->GenLepton_isHardProcess[i_gen])
+                        if (ntuple->GenOthers_isHardProcess[i_gen])
                             h_g_pT_isHardProcess->Fill(ntuple->GenOthers_pT[i_gen], gen_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
-                        if (ntuple->GenLepton_fromHardProcessFinalState[i_gen])
+                        if (ntuple->GenOthers_fromHardProcessFinalState[i_gen])
                             h_g_pT_fromHardProcessFinalState->Fill(ntuple->GenOthers_pT[i_gen], gen_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
-                        if (ntuple->GenLepton_isPrompt[i_gen])
+                        if (ntuple->GenOthers_isPrompt[i_gen])
                             h_g_pT_isPrompt->Fill(ntuple->GenOthers_pT[i_gen], gen_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
                         if (ntuple->GenOthers_isPromptFinalState[i_gen])
                             h_g_pT_isPromptFinalState->Fill(ntuple->GenOthers_pT[i_gen], gen_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
@@ -105,6 +109,8 @@ void CheckGammaJetsNormalization (Bool_t Debug = kFALSE)
 
             Double_t LoopRunTime = looptime.CpuTime();
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
+
+            cout << "Sum of weights: " << wsum << endl << "Sum of unchanged weights: " << wsum_raw << endl;
 
         } // End of i_tup iteration
 
