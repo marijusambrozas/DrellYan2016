@@ -80,7 +80,7 @@ void CheckGammaJetsNormalization (Bool_t Debug = kFALSE)
                 Double_t gen_weight = 0;
                 ntuple->GENEvt_weight < 0 ? gen_weight = -1 : gen_weight = 1;
 
-                for (Int_t i_gen=0; i_gen<ntuple->nGenOthers; i++)
+                for (Int_t i_gen=0; i_gen<ntuple->nGenOthers; i_gen++)
                 {
                     if (ntuple->GenOthers_ID[i_gen] == 22 && ntuple->GenLepton_isHardProcess[i_gen])
                     {
