@@ -1719,7 +1719,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "BKG";
 
-        Tag.push_back("GammaJets_Pt100to200"); Xsec.push_back(1024.0); Wsum.push_back(485683.0); nEvents.push_back(496553);
+        Tag.push_back("GammaJets_Pt100to200"); Xsec.push_back(1024.0); Wsum.push_back(1.30426e+09 /*485683.0*/); nEvents.push_back(496553);
         Location = "GJets_Pt100to200_Sherpa/";
         NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(17);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
@@ -1729,7 +1729,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "BKG";
 
-        Tag.push_back("GammaJets_Pt200to500"); Xsec.push_back(68.66); Wsum.push_back(465906.0); nEvents.push_back(476054);
+        Tag.push_back("GammaJets_Pt200to500"); Xsec.push_back(68.66); Wsum.push_back(8.2977e+07/*465906.0*/); nEvents.push_back(476054);
         Location = "GJets_Pt200to500_Sherpa/";
         NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(19);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
@@ -1739,7 +1739,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "BKG";
 
-        Tag.push_back("GammaJets_Pt500to1000"); Xsec.push_back(1.014); Wsum.push_back(473831.0); nEvents.push_back(484865);
+        Tag.push_back("GammaJets_Pt500to1000"); Xsec.push_back(1.014); Wsum.push_back(1.42083e+06/*473831.0*/); nEvents.push_back(484865);
         Location = "GJets_Pt500to1000_Sherpa/";
         NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(38);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
@@ -1749,7 +1749,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "BKG";
 
-        Tag.push_back("GammaJets_Pt1000to2000"); Xsec.push_back(0.02092); Wsum.push_back(383501.0); nEvents.push_back(395409);
+        Tag.push_back("GammaJets_Pt1000to2000"); Xsec.push_back(0.02092); Wsum.push_back(24997.5/*383501.0*/); nEvents.push_back(395409);
         Location = "GJets_Pt1000to2000_Sherpa/";
         NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(56);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
@@ -1759,7 +1759,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "BKG";
 
-        Tag.push_back("GammaJets_Pt2000to5000"); Xsec.push_back(7.476e-05); Wsum.push_back(225925.0); nEvents.push_back(299739);
+        Tag.push_back("GammaJets_Pt2000to5000"); Xsec.push_back(7.476e-05); Wsum.push_back(89.7406/*225925.0*/); nEvents.push_back(299739);
         Location = "GJets_Pt2000to5000_Sherpa/";
         NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(30);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
