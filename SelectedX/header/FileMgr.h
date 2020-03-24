@@ -1709,7 +1709,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "BKG";
 
-        Tag.push_back("GammaJets_Pt20to100"); Xsec.push_back(137800.0); Wsum.push_back(479734.0); nEvents.push_back(498342);
+        Tag.push_back("GammaJets_Pt20to100"); Xsec.push_back(137800.0); Wsum.push_back(1.73524e+11/*479734.0*/); nEvents.push_back(498342);
         Location = "GJets_Pt20to100_Sherpa/";
         NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(60);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
