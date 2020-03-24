@@ -210,7 +210,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         std::vector<int> *trig_fired = new std::vector<int>;
         std::vector<int> *trig_matched = new std::vector<int>;
         std::vector<double> *trig_pT = new std::vector<double>;
-        std::vector<int> *prescale_factor = new std::vector<int>;
+        std::vector<double> *prescale_factor = new std::vector<double>;
         Double_t MET_pT, MET_phi;
         Int_t nPU;
         Int_t nVTX;
@@ -314,6 +314,14 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                 if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
                 {                    
                     if (Debug == kTRUE && triggername == "HLT_Photon175_v*") {NEvents++; continue;} // FOR TEST
+                    if (Debug == kTRUE)
+                    {
+                        for (Int_t i_tr=0; i_tr<ntuple->HLT_ntrig; i_tr++)
+                        {
+                            cout << ntuple->HLT_trigName->at(i_tr) << "   prescale=" << ntuple->HLT_trigPS << endl;
+                        }
+                        cout << endl;
+                    }
                     // -- Reco level selection -- //
                     vector< Electron > ElectronCollection;
                     Int_t NLeptons = ntuple->Nelectrons;
