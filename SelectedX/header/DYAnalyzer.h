@@ -6735,7 +6735,7 @@ Int_t DYAnalyzer::FindTriggerAndPrescale(vector<Electron> ElectronCollection, Nt
                                             std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT)
 {
     Int_t triggered = 0;
-    Double_t Factor = -9999;
+    Int_t Factor = -9999;
     Double_t HLT_pT = -9999;
     for(Int_t i_ele=0; i_ele<(Int_t)ElectronCollection.size(); i_ele++)
     {
