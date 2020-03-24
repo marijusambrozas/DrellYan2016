@@ -35,6 +35,7 @@ enum Process_t
     _EndOf_QCDMuEnriched_Normal,
     _QCDEMEnriched_20to30, _QCDEMEnriched_30to50, _QCDEMEnriched_50to80, _QCDEMEnriched_80to120, _QCDEMEnriched_120to170, _QCDEMEnriched_170to300,
     _QCDEMEnriched_300toInf, _EndOf_QCDEMEnriched_Normal,
+    _GJets_20to100, _GJets_100to200, _GJets_200to500, _GJets_500to1000, _GJets_1000to2000, _GJets_2000to5000, _EndOf_GJets_Normal,
     _EndOf_MCbkg_Normal,
     _DoubleEG_B, _DoubleEG_C, _DoubleEG_D, _DoubleEG_E, _DoubleEG_F, _DoubleEG_G, _DoubleEG_H,
     _EndOf_DoubleEG_Normal,
@@ -48,7 +49,7 @@ enum Process_t
     // "Special" processes - similar processes are combined
     _DY_Full, _DYMuMu_Full, _DYEE_Full,
     _EndOf_MCsignal_Special,
-    _DYTauTau_Full, _ttbar_Full, _VVnST, _WJets_Full, _QCDMuEnriched_Full, _QCDEMEnriched_Full, _bkg_Full,
+    _DYTauTau_Full, _ttbar_Full, _VVnST, _WJets_Full, _QCDMuEnriched_Full, _QCDEMEnriched_Full, _GJets_Full, _bkg_Full,
     _EndOf_MCbkg_Special, // there is no WJets in bkgSpecial
     _DoubleEG_Full, _SingleMuon_Full, _SingleElectron_Full, _SinglePhoton_Full,
     _EndOf_Data_Special,
@@ -70,9 +71,9 @@ Process_t previous (Process_t pr)    // Processes that begin with "EndOf" will b
   else if (pr == _DYTauTau_10to50 || pr == _DoubleEG_B || pr == _DY_Full)
       return Process_t(int(pr)-3);
   else if (pr == _DYMuMu_10to50 || pr == _DYEE_10to50 || pr == _EndOf_MCsignal_Normal || pr == _ttbar || pr == _tW ||
-           pr == _WJets || pr == _QCDMuEnriched_15to20 || pr == _QCDEMEnriched_20to30 || pr == _EndOf_MCbkg_Normal || pr == _SingleMuon_B ||
-           pr == _SingleElectron_B || pr == _SinglePhoton_B || pr == _EndOf_Data_Normal || pr == _DYTauTau_Full || pr == _DoubleEG_Full ||
-           pr == _Test_MuMu || pr == _A_DY_50to100 || pr == _A_WJets || pr == _A_DY_Full)
+           pr == _WJets || pr == _QCDMuEnriched_15to20 || pr == _QCDEMEnriched_20to30 || pr == _GJets_20to100 || pr == _EndOf_MCbkg_Normal ||
+           pr == _SingleMuon_B || pr == _SingleElectron_B || pr == _SinglePhoton_B || pr == _EndOf_Data_Normal || pr == _DYTauTau_Full ||
+           pr == _DoubleEG_Full || pr == _Test_MuMu || pr == _A_DY_50to100 || pr == _A_WJets || pr == _A_DY_Full)
       return Process_t(int(pr)-2);
   else
       return Process_t(int(pr)-1);
@@ -84,12 +85,12 @@ Process_t next (Process_t pr)    // Processes that begin with "EndOf" will be sk
 {
   if (pr == _EndOf_Alternatives)
       return pr;
-  else if (pr == _DYEE_2000to3000 || pr == _QCDEMEnriched_300toInf || pr == _SinglePhoton_H)
+  else if (pr == _DYEE_2000to3000 || pr == _GJets_2000to5000 || pr == _SinglePhoton_H)
       return Process_t(int(pr)+3);
   else if (pr == _DY_2000to3000 || pr == _DYMuMu_2000to3000 || pr == _EndOf_DYEE_Normal || pr == _DYTauTau_50toInf || pr == _ttbar_1000toInf ||
-           pr == _WW || pr == _WJets_ext2v5 || pr == _QCDMuEnriched_1000toInf || pr == _EndOf_QCDEMEnriched_Normal || pr == _DoubleEG_H ||
-           pr == _SingleMuon_H || pr == _SingleElectron_H || pr == _EndOf_SinglePhoton_Normal || pr == _DYEE_Full || pr == _bkg_Full ||
-           pr == _SinglePhoton_Full || pr == _Test_EMu || pr == _A_DY_650toInf || pr == _A_WW)
+           pr == _WW || pr == _WJets_ext2v5 || pr == _QCDMuEnriched_1000toInf || pr == _QCDEMEnriched_300toInf || pr == _EndOf_GJets_Normal ||
+           pr == _DoubleEG_H || pr == _SingleMuon_H || pr == _SingleElectron_H || pr == _EndOf_SinglePhoton_Normal || pr == _DYEE_Full ||
+           pr == _bkg_Full || pr == _SinglePhoton_Full || pr == _Test_EMu || pr == _A_DY_650toInf || pr == _A_WW)
       return Process_t(int(pr)+2);
   else
       return Process_t(int(pr)+1);
@@ -1523,7 +1524,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(166);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
-    else if (pr == _QCDEMEnriched_20to30) // Something wrong with this dataset in v2.7
+    else if (pr == _QCDEMEnriched_20to30)
     {
         isMC = kTRUE;
         Type = "BKG";
@@ -1701,6 +1702,101 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 //        Location = "QCD_Pt-300toInf_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt300toInf/180326_145836/0000/";
         Location = "QCDEMEnriched_Pt300toInf/";
         NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(93);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+    }
+    else if (pr == _GJets_20to100)
+    {
+        isMC = kTRUE;
+        Type = "BKG";
+
+        Tag.push_back("GammaJets_Pt20to100"); Xsec.push_back(137800.0); Wsum.push_back(479734.0); nEvents.push_back(498342);
+        Location = "GJets_Pt20to100_Sherpa/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(60);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+    }
+    else if (pr == _GJets_100to200)
+    {
+        isMC = kTRUE;
+        Type = "BKG";
+
+        Tag.push_back("GammaJets_Pt100to200"); Xsec.push_back(1024.0); Wsum.push_back(485683.0); nEvents.push_back(496553);
+        Location = "GJets_Pt100to200_Sherpa/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(17);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+    }
+    else if (pr == _GJets_200to500)
+    {
+        isMC = kTRUE;
+        Type = "BKG";
+
+        Tag.push_back("GammaJets_Pt200to500"); Xsec.push_back(68.66); Wsum.push_back(465906.0); nEvents.push_back(476054);
+        Location = "GJets_Pt200to500_Sherpa/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(19);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+    }
+    else if (pr == _GJets_500to1000)
+    {
+        isMC = kTRUE;
+        Type = "BKG";
+
+        Tag.push_back("GammaJets_Pt500to1000"); Xsec.push_back(1.014); Wsum.push_back(473831.0); nEvents.push_back(484865);
+        Location = "GJets_Pt500to1000_Sherpa/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(38);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+    }
+    else if (pr == _GJets_1000to2000)
+    {
+        isMC = kTRUE;
+        Type = "BKG";
+
+        Tag.push_back("GammaJets_Pt1000to2000"); Xsec.push_back(0.02092); Wsum.push_back(383501.0); nEvents.push_back(395409);
+        Location = "GJets_Pt1000to2000_Sherpa/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(56);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+    }
+    else if (pr == _GJets_2000to5000)
+    {
+        isMC = kTRUE;
+        Type = "BKG";
+
+        Tag.push_back("GammaJets_Pt2000to5000"); Xsec.push_back(7.476e-05); Wsum.push_back(225925.0); nEvents.push_back(299739);
+        Location = "GJets_Pt2000to5000_Sherpa/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(30);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+    }
+    else if (pr == _GJets_Full)
+    {
+        isMC = kTRUE;
+        Type = "BKG";
+
+        Tag.push_back("GammaJets_Pt20to100"); Xsec.push_back(137800.0); Wsum.push_back(479734.0); nEvents.push_back(498342);
+        Location = "GJets_Pt20to100_Sherpa/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(60);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("GammaJets_Pt100to200"); Xsec.push_back(1024.0); Wsum.push_back(485683.0); nEvents.push_back(496553);
+        Location = "GJets_Pt100to200_Sherpa/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(17);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("GammaJets_Pt200to500"); Xsec.push_back(68.66); Wsum.push_back(465906.0); nEvents.push_back(476054);
+        Location = "GJets_Pt200to500_Sherpa/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(19);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("GammaJets_Pt500to1000"); Xsec.push_back(1.014); Wsum.push_back(473831.0); nEvents.push_back(484865);
+        Location = "GJets_Pt500to1000_Sherpa/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(38);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("GammaJets_Pt1000to2000"); Xsec.push_back(0.02092); Wsum.push_back(383501.0); nEvents.push_back(395409);
+        Location = "GJets_Pt1000to2000_Sherpa/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(56);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("GammaJets_Pt2000to5000"); Xsec.push_back(7.476e-05); Wsum.push_back(225925.0); nEvents.push_back(299739);
+        Location = "GJets_Pt2000to5000_Sherpa/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(30);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _bkg_Full)
@@ -1990,6 +2086,36 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         Tag.push_back("QCDEMEnriched_Pt300toInf"); Xsec.push_back(9000*0.15); Wsum.push_back(7373633); nEvents.push_back(7373633);
         Location = "QCD_Pt-300toInf_EMEnriched_TuneCUETP8M1_13TeV_pythia8/crab_QCDEMEnriched_Pt300toInf/180326_145836/0000/";
         NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(93);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("GammaJets_Pt20to100"); Xsec.push_back(137800.0); Wsum.push_back(479734.0); nEvents.push_back(498342);
+        Location = "GJets_Pt20to100_Sherpa/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(60);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("GammaJets_Pt100to200"); Xsec.push_back(1024.0); Wsum.push_back(485683.0); nEvents.push_back(496553);
+        Location = "GJets_Pt100to200_Sherpa/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(17);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("GammaJets_Pt200to500"); Xsec.push_back(68.66); Wsum.push_back(465906.0); nEvents.push_back(476054);
+        Location = "GJets_Pt200to500_Sherpa/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(19);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("GammaJets_Pt500to1000"); Xsec.push_back(1.014); Wsum.push_back(473831.0); nEvents.push_back(484865);
+        Location = "GJets_Pt500to1000_Sherpa/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(38);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("GammaJets_Pt1000to2000"); Xsec.push_back(0.02092); Wsum.push_back(383501.0); nEvents.push_back(395409);
+        Location = "GJets_Pt1000to2000_Sherpa/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(56);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
+
+        Tag.push_back("GammaJets_Pt2000to5000"); Xsec.push_back(7.476e-05); Wsum.push_back(225925.0); nEvents.push_back(299739);
+        Location = "GJets_Pt2000to5000_Sherpa/";
+        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(30);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _DoubleEG_B)
@@ -3484,7 +3610,7 @@ vector<Process_t> FileMgr::FindProc (TString search, Bool_t notify, Bool_t insta
         if (notify == kTRUE) cout << Procname[_VVnST] << "." << endl;
     }
 
-    else if (srch.Contains("WJETS") || srch.Contains("W+JETS"))
+    else if (srch.Contains("W") && srch.Contains("JET"))
     {
         if (srch.Contains("ALTERNATIVE"))
         {
@@ -3680,6 +3806,75 @@ vector<Process_t> FileMgr::FindProc (TString search, Bool_t notify, Bool_t insta
         }// end of if(EMEnriched)
 
     }// end of if(QCD)
+
+    else if (srch.Contains("G") && srch.Contains("JET"))
+    {
+        // Checking for various intervals
+        if (srch.Contains("INFTO"))
+            first = _EndOf_GJets_Normal;
+        else if (srch.Contains("5000TO"))
+            first = _EndOf_GJets_Normal;
+        else if (srch.Contains("2000TO"))
+            first = _GJets_2000to5000;
+        else if (srch.Contains("1000TO"))
+            first = _GJets_1000to2000;
+        else if (srch.Contains("500TO"))
+            first = _GJets_500to1000;
+        else if (srch.Contains("200TO"))
+            first = _GJets_200to500;
+        else if (srch.Contains("100TO"))
+            first = _GJets_100to200;
+        else if (srch.Contains("20TO"))
+            first = _GJets_20to100;
+
+        if (srch.Contains("TOINF"))
+            last = _GJets_2000to5000;
+        else if (srch.Contains("TO5000"))
+            last = _GJets_2000to5000;
+        else if (srch.Contains("TO2000"))
+            last = _GJets_1000to2000;
+        else if (srch.Contains("TO1000"))
+            last = _GJets_500to1000;
+        else if (srch.Contains("TO500"))
+            last = _GJets_200to500;
+        else if (srch.Contains("TO200"))
+            last = _GJets_100to200;
+        else if (srch.Contains("TO100"))
+            last = _GJets_20to100;
+        else if (srch.Contains("TO20"))
+            last = _EndOf_QCDEMEnriched_Normal;
+
+        // Swapping first with last if necessary
+        if (int(first)>int(last) && last!=_None)
+        {
+            Process_t NewLast = Process_t(int(first)-1);
+            first = Process_t(int(last)+1);
+            last = NewLast;
+        }
+        if (first == _GJets_20to100 && last == _GJets_2000to5000)
+        {
+            Result.push_back(_GJets_Full);
+            if (notify == kTRUE) cout << Procname[_GJets_Full] << "." << endl;
+        }
+        else if (first != _None && last != _None)
+        {
+            for (Process_t pr=first; pr<=last; pr=next(pr))
+            {
+                Result.push_back(pr);
+                if (notify == kTRUE)
+                {
+                    if (pr != last) cout << Procname[pr] << ", ";
+                    else cout << Procname[pr] << "." << endl;
+                }
+            }
+        }
+        else
+        {
+            Result.push_back(_GJets_Full);
+            if (notify == kTRUE) cout << Procname[_GJets_Full] << "." << endl;
+        }
+
+    }// end of if(GammaJets)
 
     else if (srch.Contains("DOUBLE"))
     {
@@ -4239,6 +4434,13 @@ void FileMgr::PrepareProcNames ()
     Procname[_QCDEMEnriched_170to300] = "QCDEMEnriched_170to300";
     Procname[_QCDEMEnriched_300toInf] = "QCDEMEnriched_300toInf";
     Procname[_EndOf_QCDEMEnriched_Normal] = "EndOf_QCDEMEnriched_Normal";
+    Procname[_GJets_20to100] = "GJets_20to100";
+    Procname[_GJets_100to200] = "GJets_100to200";
+    Procname[_GJets_200to500] = "GJets_200to500";
+    Procname[_GJets_500to1000] = "GJets_500to1000";
+    Procname[_GJets_1000to2000] = "GJets_1000to2000";
+    Procname[_GJets_2000to5000] = "GJets_2000to5000";
+    Procname[_EndOf_GJets_Normal] = "EndOf_GJets_Normal";
     Procname[_EndOf_MCbkg_Normal] = "EndOf_MCbkg_Normal";
     Procname[_DoubleEG_B] = "DoubleEG_B";
     Procname[_DoubleEG_C] = "DoubleEG_C";
@@ -4282,6 +4484,7 @@ void FileMgr::PrepareProcNames ()
     Procname[_WJets_Full] = "WJets_Full";
     Procname[_QCDMuEnriched_Full] = "QCDMuEnriched_Full";
     Procname[_QCDEMEnriched_Full] = "QCDEMEnriched_Full";
+    Procname[_GJets_Full] = "GJets_Full";
     Procname[_bkg_Full] = "bkg_Full";
     Procname[_EndOf_MCbkg_Special] = "EndOf_MCbkg_Special";
     Procname[_DoubleEG_Full] = "DoubleEG_Full";
