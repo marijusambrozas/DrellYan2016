@@ -38,6 +38,10 @@ void CheckGammaJetsNormalization (Bool_t Debug = kFALSE)
     TFile* ElectronFile = TFile::Open("~/DrellYan2016/GammaJetsTest.root", "RECREATE");
     ElectronFile->cd();
 
+    TH1D *h_g_pT_isHardProcess = new TH1D("h_g_pT_isHardProcess", "Gamma pT", 500, 0, 5000);
+    TH1D *h_g_pT_fromHardProcessFinalState = new TH1D("h_g_pT_fromHardProcessFinalState", "Gamma pT", 500, 0, 5000);
+    TH1D *h_g_pT_isPrompt = new TH1D("h_g_pT", "h_g_pT_isPrompt pT", 500, 0, 5000);
+    TH1D *h_g_pT_isPromptFinalState = new TH1D("h_g_pT_isPromptFinalState", "Gamma pT", 500, 0, 5000);
     TH1D *h_g_pT = new TH1D("h_g_pT", "Gamma pT", 500, 0, 5000);
 
     // Loop for all processes
@@ -82,9 +86,17 @@ void CheckGammaJetsNormalization (Bool_t Debug = kFALSE)
 
                 for (Int_t i_gen=0; i_gen<ntuple->nGenOthers; i_gen++)
                 {
-                    if (ntuple->GenOthers_ID[i_gen] == 22 && ntuple->GenLepton_isHardProcess[i_gen])
+                    if (fabs(ntuple->GenOthers_ID[i_gen]) == 22)
                     {
                         h_g_pT->Fill(ntuple->GenOthers_pT[i_gen], gen_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
+                        if (ntuple->GenLepton_isHardProcess[i_gen])
+                            h_g_pT_isHardProcess->Fill(ntuple->GenOthers_pT[i_gen], gen_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
+                        if (ntuple->GenLepton_fromHardProcessFinalState[i_gen])
+                            h_g_pT_fromHardProcessFinalState->Fill(ntuple->GenOthers_pT[i_gen], gen_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
+                        if (ntuple->GenLepton_isPrompt[i_gen])
+                            h_g_pT_isPrompt->Fill(ntuple->GenOthers_pT[i_gen], gen_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
+                        if (ntuple->GenOthers_isPromptFinalState[i_gen])
+                            h_g_pT_isPromptFinalState->Fill(ntuple->GenOthers_pT[i_gen], gen_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
                     }
                 }
 
@@ -101,10 +113,14 @@ void CheckGammaJetsNormalization (Bool_t Debug = kFALSE)
     // Writing
     cout << "Writing into file...";
     ElectronFile->cd();
-    Int_t write;
-    write = h_g_pT->Write();
+    Int_t write1, write2, write3, write4, write5;
+    write1 = h_g_pT_isHardProcess->Write();
+    write2 = h_g_pT_fromHardProcessFinalState->Write();
+    write3 = h_g_pT_isPrompt->Write();
+    write4 = h_g_pT_isPromptFinalState->Write();
+    write5 = h_g_pT->Write();
 
-    if (write)
+    if (write1 && write2 && write3 && write4 && write5)
     {
         cout << " Histogram writing finished." << endl << "Closing a file..." << endl;
         ElectronFile->Close();
