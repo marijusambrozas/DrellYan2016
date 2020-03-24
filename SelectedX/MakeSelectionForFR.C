@@ -318,7 +318,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                     {
                         for (Int_t i_tr=0; i_tr<ntuple->HLT_ntrig; i_tr++)
                         {
-                            cout << ntuple->HLT_trigName->at(i_tr) << "   prescale=" << ntuple->HLT_trigPS << endl;
+                            cout << ntuple->HLT_trigName->at(i_tr) << "   prescale=" << ntuple->HLT_trigPS[i_tr] << endl;
                         }
                         cout << endl;
                     }
