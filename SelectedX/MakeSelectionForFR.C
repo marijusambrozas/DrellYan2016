@@ -316,9 +316,9 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                     if (Debug == kTRUE && triggername == "HLT_Photon175_v*") {NEvents++; continue;} // FOR TEST
                     if (Debug == kTRUE)
                     {
-                        for (Int_t i_tr=0; i_tr<ntuple->HLT_ntrig; i_tr++)
+                        for (Int_t i_tr=0; i_tr<ntuple->HLT_trigPS->size()/*HLT_ntrig*/; i_tr++)
                         {
-                            cout << ntuple->HLT_trigName->at(i_tr) << "   prescale=" << ntuple->HLT_trigPS[i_tr] << endl;
+                            cout << ntuple->HLT_trigName->at(i_tr) << "   prescale=" << ntuple->HLT_trigPS->at(i_tr) << endl;
                         }
                         cout << endl;
                     }
@@ -398,7 +398,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 //                        if (prescale_factor < 0) continue; // If no trigger match between selected electrons
 
                         Int_t triggered = 0;
-                        triggered = analyzer->FindTriggerAndPrescale(SelectedElectronCollection, ntuple, trig_fired, prescale_factor, trig_matched, trig_pT);
+//                        triggered = analyzer->FindTriggerAndPrescale(SelectedElectronCollection, ntuple, trig_fired, prescale_factor, trig_matched, trig_pT);
 
                         // -- Vector filling -- //
                         for (UInt_t i_ele=0; i_ele<SelectedElectronCollection.size(); i_ele++)
