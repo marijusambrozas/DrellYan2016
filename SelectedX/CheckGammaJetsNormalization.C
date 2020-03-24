@@ -96,27 +96,27 @@ void CheckGammaJetsNormalization (Bool_t Debug = kFALSE)
 
         } // End of i_tup iteration
 
-        // Writing
-        cout << "Writing into file...";
-        ElectronFile->cd();
-        Int_t write;
-        write = h_g_pT->Write();
-
-        if (write)
-        {
-            cout << " Histogram writing finished." << endl << "Closing a file..." << endl;
-            ElectronFile->Close();
-            if (!ElectronFile->IsOpen()) cout << "File GammaJetsTest.root has been closed successfully.\n" << endl;
-            else cout << "FILE GammaJetsTest.root COULD NOT BE CLOSED!\n" << endl;
-        }
-        else
-        {
-            cout << " Writing was NOT successful!\n" << endl;
-            ElectronFile->Close();
-        }
-        cout << "===========================================================\n" << endl;
-
     } // End of i_proc iteration
+
+    // Writing
+    cout << "Writing into file...";
+    ElectronFile->cd();
+    Int_t write;
+    write = h_g_pT->Write();
+
+    if (write)
+    {
+        cout << " Histogram writing finished." << endl << "Closing a file..." << endl;
+        ElectronFile->Close();
+        if (!ElectronFile->IsOpen()) cout << "File GammaJetsTest.root has been closed successfully.\n" << endl;
+        else cout << "FILE GammaJetsTest.root COULD NOT BE CLOSED!\n" << endl;
+    }
+    else
+    {
+        cout << " Writing was NOT successful!\n" << endl;
+        ElectronFile->Close();
+    }
+    cout << "===========================================================\n" << endl;
 
     Double_t TotalRunTime = totaltime.CpuTime();
     cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
