@@ -943,7 +943,7 @@ public:
                                 {
                                     isTrigMatch = true;
                                     if (HLT_pT) *HLT_pT = Trig_pT;
-                                    if (HLT_PS) *HLT_PS = nh->HLT_trigPS->at((unsigned int)k);
+                                    if (HLT_PS) *HLT_PS = nh->HLT_trigPS[k];
                                     break;
                                 }
                             }
