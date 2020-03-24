@@ -353,7 +353,7 @@ public:
     	chain->SetBranchStatus("HLT_trigPhi", 1);
 
     	chain->SetBranchAddress("HLT_trigName", &HLT_trigName);
-    	chain->SetBranchAddress("HLT_trigFired", HLT_trigFired);
+        chain->SetBranchAddress("HLT_trigFired", &HLT_trigFired);
     	chain->SetBranchAddress("HLT_ntrig", &HLT_ntrig);
         chain->SetBranchAddress("HLT_trigPS", &HLT_trigPS);
         chain->SetBranchAddress("HLT_trigPt", &HLT_trigPt);
