@@ -355,7 +355,7 @@ public:
     	chain->SetBranchAddress("HLT_trigName", &HLT_trigName);
     	chain->SetBranchAddress("HLT_trigFired", HLT_trigFired);
     	chain->SetBranchAddress("HLT_ntrig", &HLT_ntrig);
-        chain->SetBranchAddress("HLT_trigPS", HLT_trigPS);
+        chain->SetBranchAddress("HLT_trigPS", &HLT_trigPS);
         chain->SetBranchAddress("HLT_trigPt", &HLT_trigPt);
         chain->SetBranchAddress("HLT_trigEta", &HLT_trigEta);
     	chain->SetBranchAddress("HLT_trigPhi", &HLT_trigPhi);
