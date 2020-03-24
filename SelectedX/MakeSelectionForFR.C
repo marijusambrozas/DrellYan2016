@@ -210,7 +210,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         std::vector<int> *trig_fired = new std::vector<int>;
         std::vector<int> *trig_matched = new std::vector<int>;
         std::vector<double> *trig_pT = new std::vector<double>;
-        std::vector<double> *prescale_factor = new std::vector<double>;
+        std::vector<int> *prescale_factor = new std::vector<int>;
         Double_t MET_pT, MET_phi;
         Int_t nPU;
         Int_t nVTX;
