@@ -24,7 +24,7 @@ public:
     Int_t HLT_ntrig;
     Int_t HLT_trigFired[MaxN];
     vector<string> *HLT_trigName;
-    Double_t HLT_trigPS[MaxN];
+    Int_t HLT_trigPS[MaxN];
     Double_t HLT_trigPt[MaxN];
     Double_t HLT_trigEta[MaxN];
     Double_t HLT_trigPhi[MaxN];
