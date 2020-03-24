@@ -67,6 +67,7 @@ void CheckGammaJetsNormalization (Bool_t Debug = kFALSE)
             Mgr.SetupChain(i_tup, chain);
 
             NtupleHandle *ntuple = new NtupleHandle(chain);
+            ntuple->TurnOnBranches_GenLepton(); // for photons
             ntuple->TurnOnBranches_GenOthers(); // for photons
 
             Int_t NEvents = chain->GetEntries();
