@@ -109,6 +109,8 @@ public:
         Double_t FR_barrel[nPtBinBarrel];
         Double_t FR_endcap[nPtBinEndcap];
         const double prescales[8] = {0.0016/36.47, 0.0066/36.47, 0.0132/36.47, 0.0264/36.47, 0.13/36.47, 0.26/36.47, 0.54/36.47, 1};
+//        const double prescales[8] = {1./12., 1./30., 1./15., 1./2000., 1./400., 1./200., 1./100., 1.}; // This includes only HLT prescale, no L1 prescale
+
 
 	// -- Constructor -- //
 	DYAnalyzer(TString HLTname);

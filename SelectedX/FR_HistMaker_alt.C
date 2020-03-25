@@ -147,8 +147,6 @@ void E_FR_HistMaker (Bool_t DEBUG)
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
         std::vector<double> *phi = new std::vector<double>;
-        std::vector<int> *charge = new std::vector<int>;
-        std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<int> *passMediumID = new std::vector<int>;
         std::vector<int> *trig_fired = new std::vector<int>;
         std::vector<int> *trig_matched = new std::vector<int>;
@@ -159,7 +157,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
         Double_t PVz;
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
-        Double_t prescale_factor;
+//        Double_t prescale_factor;
 
         TChain *chain = new TChain("FRTree");
 
@@ -168,7 +166,6 @@ void E_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchStatus("p_T", 1);
         chain->SetBranchStatus("eta", 1);
         chain->SetBranchStatus("phi", 1);
-        chain->SetBranchStatus("relPFiso", 1);
         chain->SetBranchStatus("passMediumID", 1);
         chain->SetBranchStatus("trig_fired", 1);
         chain->SetBranchStatus("trig_matched", 1);
@@ -183,12 +180,10 @@ void E_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchStatus("prefiring_weight", 1);
         chain->SetBranchStatus("prefiring_weight_up", 1);
         chain->SetBranchStatus("prefiring_weight_down", 1);
-        chain->SetBranchStatus("prescale_factor", 1);
+//        chain->SetBranchStatus("prescale_factor", 1);
         chain->SetBranchAddress("p_T", &p_T);
         chain->SetBranchAddress("eta", &eta);
         chain->SetBranchAddress("phi", &phi);
-        chain->SetBranchAddress("charge", &charge);
-        chain->SetBranchAddress("relPFiso", &relPFiso);
         chain->SetBranchAddress("passMediumID", &passMediumID);
         chain->SetBranchAddress("trig_fired", &trig_fired);
         chain->SetBranchAddress("trig_matched", &trig_matched);
@@ -203,7 +198,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchAddress("prefiring_weight", &prefiring_weight);
         chain->SetBranchAddress("prefiring_weight_up", &prefiring_weight_up);
         chain->SetBranchAddress("prefiring_weight_down", &prefiring_weight_down);
-        chain->SetBranchAddress("prescale_factor", &prescale_factor);
+//        chain->SetBranchAddress("prescale_factor", &prescale_factor);
 
         Int_t NEvents = chain->GetEntries();
         cout << "\t[Sum of weights: " << Mgr.Wsum[0] << "]" << endl;
@@ -255,9 +250,8 @@ void E_FR_HistMaker (Bool_t DEBUG)
             // For finding the leading electron
             TLorentzVector ele_lead;
             ele_lead.SetPtEtaPhiM(0, 0, 0, M_Elec);
-            Double_t iso_lead = -9999;
 
-            if (p_T->size() != passMediumID->size() || p_T->size() != charge->size())
+            if (p_T->size() != passMediumID->size())
             {
                 cout << "ERROR: vector sizes do not match!" << endl;
                 break;
@@ -276,7 +270,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
             Double_t prescale_alt = 0;
 //            Double_t tr_highest = -9999;
 //            Int_t i_highest = -1;
-//            for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
+//            for (Int_t i_tr=0; i_tr<(int)(trig_fired->size()); i_tr++)
 //            {
 //                if (trig_fired->at(i_tr) > tr_highest)
 //                {
@@ -284,12 +278,18 @@ void E_FR_HistMaker (Bool_t DEBUG)
 //                    i_highest = i_tr;
 //                }
 //            }
+//            if (i_highest < 0) continue;
+//            if (i_highest > (int)(trig_fired->size()))
+//            {
+//                cout << "Highest pT trigger index is higher than a number of indices!  i_high=" << i_highest << "   size=" << trig_fired->size() << endl;
+//                break;
+//            }
 
             for (UInt_t i_ele=0; i_ele<p_T->size(); i_ele++)
             {
                 if (p_T->at(i_ele) != p_T->at(i_ele))
                 {
-                    cout << p_T->at(i_ele) << " " << eta->at(i_ele) << " " << phi->at(i_ele) << " " << charge->at(i_ele) << " " << relPFiso->at(i_ele) << endl;
+                    cout << p_T->at(i_ele) << " " << eta->at(i_ele) << " " << phi->at(i_ele) << endl;
                     continue;
                 }
                 if (p_T->at(i_ele) <= 28) continue;
@@ -303,8 +303,8 @@ void E_FR_HistMaker (Bool_t DEBUG)
                     if (((UInt_t)(trig_matched->at(i_tr))) == i_ele)
                     {
                         matched = 1;
-                        if (Mgr.isMC == kFALSE) prescale_alt = analyzer->getPrescale_alt(trig_pT->at(i_tr));
-//                        if (Mgr.isMC == kFALSE) prescale_alt += analyzer->getPrescale(trig_fired->at(i_tr)+1); //BAD
+                        prescale_alt = analyzer->getPrescale_alt(trig_pT->at(i_tr));
+//                        prescale_alt += analyzer->getPrescale(trig_fired->at(i_tr)+1); //BAD
                         h_HLT_pT->Fill(trig_pT->at(i_tr), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         h_HLT_pT_uncorr->Fill(trig_pT->at(i_tr), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
@@ -317,7 +317,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
 
             }// End of i_ele iteration
 
-//            prescale_alt = analyzer->getPrescale(trig_pT->at(i_highest)+1);
+//            prescale_alt = analyzer->getPrescale(trig_fired->at(i_highest)+1);
 //            h_HLT_pT->Fill(trig_pT->at(i_highest), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
 //            h_HLT_pT_uncorr->Fill(trig_pT->at(i_highest), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 //            h_pT->Fill(p_T->at(trig_matched->at(i_highest)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
