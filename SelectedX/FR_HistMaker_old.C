@@ -33,6 +33,8 @@
 void E_FR_HistMaker (Bool_t DEBUG);
 void Mu_FR_HistMaker (Bool_t DEBUG);
 
+void E_QCD_HistMaker (Bool_t DEBUG);
+void E_WJET_HistMaker (Bool_t DEBUG);
 void Mu_QCD_HistMaker (Bool_t DEBUG, Int_t type);
 void Mu_WJET_HistMaker (Bool_t DEBUG, Int_t type);
 
@@ -50,7 +52,7 @@ const Double_t massbins2[87] = {15, 17.5, 20, 22.5, 25, 27.5, 30, 32.5, 35, 37.5
                                 915, 1000, 1250, 1500, 2250, 3000};
 
 
-void FR_HistMaker_alt (TString WhichX = "", Int_t type=1)
+void FR_HistMaker_old (TString WhichX = "", Int_t type=1)
 {
     TString whichX = WhichX;
     whichX.ToUpper();
@@ -83,8 +85,21 @@ void FR_HistMaker_alt (TString WhichX = "", Int_t type=1)
     else if (whichX.Contains("E"))
     {
         Xselected++;
-        cout << "\n*****    E_FR_HistMaker    *****" << endl;
-        E_FR_HistMaker(DEBUG);
+        if (whichX.Contains("QCD"))
+        {
+            cout << "\n*****  E_QCD_HistMaker  *****" << endl;
+            E_QCD_HistMaker(DEBUG);
+        }
+        else if (whichX.Contains("W") && whichX.Contains("JET"))
+        {
+            cout << "\n*****  E_WJET_HistMaker  *****" << endl;
+            E_WJET_HistMaker(DEBUG);
+        }
+        else
+        {
+            cout << "\n*****    E_FR_HistMaker    *****" << endl;
+            E_FR_HistMaker(DEBUG);
+        }
     }
 
     if (Xselected == 0) cout << "Wrong arument! \nType in: >> .x FR_HistMaker.C+(\"whichX\", type)" << endl;
@@ -116,12 +131,12 @@ void E_FR_HistMaker (Bool_t DEBUG)
         // -- Output ROOTFile -- //
         f = new TFile(Dir+"FR_Hist_E_"+Mgr.Procname[Mgr.CurrentProc]+debug+".root", "RECREATE");
 
-        /*///////////////////////////////////////
+        ///////////////////////////////////////
         if (pr == _WJets_ext2v5) // REMOVE LATER
         {
             f->Close();
             continue;
-        }//////////////////////////////////////*/
+        }//////////////////////////////////////
 
         cout << "===========================================================" << endl;
         cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
@@ -145,12 +160,12 @@ void E_FR_HistMaker (Bool_t DEBUG)
         analyzer->SetupPVzWeights(Mgr.isMC, "ee", "./etc/PVzWeights.root");
 
         // -- Creating Histograms -- //
-        TH1D* h_pT_barrel_nume = new TH1D("h_pT_barrel_nume", "h_pT_barrel_nume", /*nPtBinBarrel_ele, analyzer->ptbin_barrel_ele*/ 250, 0, 500); h_pT_barrel_nume->Sumw2();
-        TH1D* h_pT_endcap_nume = new TH1D("h_pT_endcap_nume", "h_pT_endcap_nume", /*nPtBinEndcap_ele, analyzer->ptbin_endcap_ele*/ 250, 0, 500); h_pT_endcap_nume->Sumw2();
-        TH1D* h_pT_barrel_deno = new TH1D("h_pT_barrel_deno", "h_pT_barrel_deno", /*nPtBinBarrel_ele, analyzer->ptbin_barrel_ele*/ 250, 0, 500); h_pT_barrel_deno->Sumw2();
-        TH1D* h_pT_endcap_deno = new TH1D("h_pT_endcap_deno", "h_pT_endcap_deno", /*nPtBinEndcap_ele, analyzer->ptbin_endcap_ele*/ 250, 0, 500); h_pT_endcap_deno->Sumw2();
-        TH1D* h_pT_barrel_ctrl = new TH1D("h_pT_barrel_ctrl", "h_pT_barrel_ctrl", /*nPtBinBarrel_ele, analyzer->ptbin_barrel_ele*/ 250, 0, 500); h_pT_barrel_ctrl->Sumw2();
-        TH1D* h_pT_endcap_ctrl = new TH1D("h_pT_endcap_ctrl", "h_pT_endcap_ctrl", /*nPtBinEndcap_ele, analyzer->ptbin_endcap_ele*/ 250, 0, 500); h_pT_endcap_ctrl->Sumw2();
+        TH1D* h_pT_barrel_nume = new TH1D("h_pT_barrel_nume", "h_pT_barrel_nume", /*nPtBinBarrel_ele, analyzer->ptbin_barrel_ele*/ 200, 0, 1000); h_pT_barrel_nume->Sumw2();
+        TH1D* h_pT_endcap_nume = new TH1D("h_pT_endcap_nume", "h_pT_endcap_nume", /*nPtBinEndcap_ele, analyzer->ptbin_endcap_ele*/ 200, 0, 1000); h_pT_endcap_nume->Sumw2();
+        TH1D* h_pT_barrel_deno = new TH1D("h_pT_barrel_deno", "h_pT_barrel_deno", /*nPtBinBarrel_ele, analyzer->ptbin_barrel_ele*/ 200, 0, 1000); h_pT_barrel_deno->Sumw2();
+        TH1D* h_pT_endcap_deno = new TH1D("h_pT_endcap_deno", "h_pT_endcap_deno", /*nPtBinEndcap_ele, analyzer->ptbin_endcap_ele*/ 200, 0, 1000); h_pT_endcap_deno->Sumw2();
+        TH1D* h_pT_barrel_ctrl = new TH1D("h_pT_barrel_ctrl", "h_pT_barrel_ctrl", /*nPtBinBarrel_ele, analyzer->ptbin_barrel_ele*/ 200, 0, 1000); h_pT_barrel_ctrl->Sumw2();
+        TH1D* h_pT_endcap_ctrl = new TH1D("h_pT_endcap_ctrl", "h_pT_endcap_ctrl", /*nPtBinEndcap_ele, analyzer->ptbin_endcap_ele*/ 200, 0, 1000); h_pT_endcap_ctrl->Sumw2();
         TH1D* h_eta_nume = new TH1D("h_eta_nume", "h_eta_nume", 48, -2.4, 2.4); h_eta_nume->Sumw2();
         TH1D* h_eta_deno = new TH1D("h_eta_deno", "h_eta_deno", 48, -2.4, 2.4); h_eta_deno->Sumw2();
         TH1D* h_eta_ctrl = new TH1D("h_eta_ctrl", "h_eta_ctrl", 48, -2.4, 2.4); h_eta_ctrl->Sumw2();
@@ -312,11 +327,11 @@ void E_FR_HistMaker (Bool_t DEBUG)
             if (Mgr.isMC == kTRUE) TopPtWeight = top_weight;
 
             // -- Normalization -- //
-            Double_t TotWeight = gen_weight;
+            Double_t TotWeight = gen_weight / prescale_factor;
             if (Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
-            /*///////////////////////////
+            ///////////////////////////
             if (pr == _WJets) TotWeight = (Lumi * Mgr.Xsec[0] / (16433848+161144203)) * gen_weight; // REMOVE LATER
-            ///////////////////////////*/
+            ///////////////////////////
             if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl;
 
             if (Mgr.isMC == kTRUE && p_T->size() > 1) n2MC += TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight;
@@ -326,48 +341,6 @@ void E_FR_HistMaker (Bool_t DEBUG)
             TLorentzVector ele_lead;
             ele_lead.SetPtEtaPhiM(0, 0, 0, M_Elec);
             Double_t iso_lead = -9999;
-
-            if (p_T->size() != passMediumID->size() || p_T->size() != charge->size())
-            {
-                cout << "ERROR: vector sizes do not match!" << endl;
-                break;
-            }
-
-            Double_t med_count = 0;
-            Int_t i_lead = -1;
-            for (UInt_t i_ele=0; i_ele<p_T->size(); i_ele++)
-            {
-                if (p_T->at(i_ele) <= 17) continue;
-                if (passMediumID->at(i_ele)) med_count++;
-
-                // Selecting leading electron (could also try finding a muon with the best isolation)
-                if (p_T->at(i_ele) > ele_lead.Pt())
-                {
-                    Int_t matched = 0;
-                    for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
-                    {
-                        if (((UInt_t)(trig_matched->at(i_tr))) == i_ele)
-                        {
-                            matched = 1;
-                            i_lead = i_tr;
-                        }
-                    }
-                    if (matched == 0) continue;
-                    ele_lead.SetPtEtaPhiM(p_T->at(i_ele), eta->at(i_ele), phi->at(i_ele), M_Elec);
-                    iso_lead = relPFiso->at(i_ele);
-                }
-            }
-//            if (ele_lead.Pt() < 175) continue;
-            Double_t dTheta = ele_lead.Phi() - MET_phi;
-            Double_t MT = sqrt(2 * ele_lead.Pt() * MET_pT * (1 - cos(dTheta)));
-//            if (MT >= 60) continue;
-//            if (MET_pT >= 50) continue;
-
-            Double_t prescale_lead = analyzer->getPrescale_alt(trig_pT->at(i_lead));
-            if (Mgr.isMC == kTRUE) prescale_lead = 1;
-
-            h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
-            h_MET->Fill(MET_pT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
 
             if (p_T->size() == 2 && passMediumID->at(0) && passMediumID->at(1) && charge->at(0) != charge->at(1))
             {
@@ -382,10 +355,31 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 e2.Pt  = p_T->at(1);
                 e2.etaSC = eta->at(1);
 //                effweight = analyzer->EfficiencySF_EventWeight_electron(e1, e2);
-                h_mass_test->Fill((ele1+ele2).M(), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
+                h_mass_test->Fill((ele1+ele2).M(), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
             }
 
+            Double_t med_count = 0;
+            for (UInt_t i_ele=0; i_ele<p_T->size(); i_ele++)
+            {
+                if (p_T->at(i_ele) <= 17) continue;
+                if (passMediumID->at(i_ele)) med_count++;
+
+                // Selecting leading electron (could also try finding a muon with the best isolation)
+                if (p_T->at(i_ele) > ele_lead.Pt())
+                {
+                    ele_lead.SetPtEtaPhiM(p_T->at(i_ele), eta->at(i_ele), phi->at(i_ele), M_Elec);
+                    iso_lead = relPFiso->at(i_ele);
+                }
+            }
             if (med_count > 1) continue;
+//            if (ele_lead.Pt() < 175) continue;
+            Double_t dTheta = ele_lead.Phi() - MET_phi;
+            Double_t MT = sqrt(2 * ele_lead.Pt() * MET_pT * (1 - cos(dTheta)));
+//            if (MT >= 60) continue;
+//            if (MET_pT >= 50) continue;
+
+            h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+            h_MET->Fill(MET_pT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
             if (DEBUG == kTRUE)
             {
@@ -404,170 +398,164 @@ void E_FR_HistMaker (Bool_t DEBUG)
                     continue;
                 }
                 if (p_T->at(i_ele) <= 17) continue;
+//                if (i_ele != (UInt_t)trig_matched) continue;
                 if (DEBUG == kTRUE) cout << "i_ele = " << i_ele << endl;
 
-                Int_t matched = 0;
-                Double_t prescale_alt = 1;
-
-                for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
-                {
-                    if (((UInt_t)(trig_matched->at(i_tr))) == i_ele)
-                    {
-                        matched = 1;
-                        if (Mgr.isMC == kFALSE) prescale_alt = analyzer->getPrescale(trig_pT->at(i_tr));
-                    }
-                }
-                if (matched == 0) continue;
+                // -- Efficiency scale factor -- //
+//                if(Mgr.isMC == kTRUE)
+//                {
+//                    effweight = analyzer->EfficiencySF_EventWeight_electron(EE);
+//                }
 
                 if (passMediumID->at(i_ele)) // Signal/Numerator
                 {
-                    h_eta_nume->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    h_eta_nume->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     if (fabs(eta->at(i_ele)) < 1.4442) // Barrel
                     {
-                        h_pT_barrel_nume->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                        h_PFiso_barrel_nume->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_pT_barrel_nume->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_barrel_nume->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
                         if (p_T->at(i_ele) < 70)
                         {
-                            h_pT_barrel_nume_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_barrel_nume_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_pT_barrel_nume_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_barrel_nume_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                         else if (p_T->at(i_ele) < 100)
                         {
-                            h_pT_barrel_nume_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_barrel_nume_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_pT_barrel_nume_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_barrel_nume_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                         else //if (p_T->at(i_ele) < 500)
                         {
-                            h_pT_barrel_nume_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_barrel_nume_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_pT_barrel_nume_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_barrel_nume_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                     }
                     else if (fabs(eta->at(i_ele)) > 1.566) // Endcap
                     {
-                        h_pT_endcap_nume->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                        h_PFiso_endcap_nume->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_pT_endcap_nume->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_endcap_nume->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
                         if (p_T->at(i_ele) < 70)
                         {
-                            h_pT_endcap_nume_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_endcap_nume_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_pT_endcap_nume_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_endcap_nume_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                         else if (p_T->at(i_ele) < 100)
                         {
-                            h_pT_endcap_nume_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_endcap_nume_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_pT_endcap_nume_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_endcap_nume_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                         else //if (p_T->at(i_ele) < 500)
                         {
-                            h_pT_endcap_nume_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_endcap_nume_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_pT_endcap_nume_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_endcap_nume_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                     }
                 } // End of if(Signal/Numerator)
                 else // Control
                 {
-                    h_eta_ctrl->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    h_eta_ctrl->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     if (fabs(eta->at(i_ele)) < 1.4442) // Barrel
                     {
-                        h_pT_barrel_ctrl->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                        h_PFiso_barrel_ctrl->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_pT_barrel_ctrl->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_barrel_ctrl->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
                         if (p_T->at(i_ele) < 70)
                         {
-                            h_pT_barrel_ctrl_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_barrel_ctrl_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_pT_barrel_ctrl_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_barrel_ctrl_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                         else if (p_T->at(i_ele) < 100)
                         {
-                            h_pT_barrel_ctrl_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_barrel_ctrl_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_pT_barrel_ctrl_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_barrel_ctrl_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                         else //if (p_T->at(i_ele) < 500)
                         {
-                            h_pT_barrel_ctrl_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_barrel_ctrl_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_pT_barrel_ctrl_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_barrel_ctrl_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                     }
                     else if (fabs(eta->at(i_ele)) > 1.566) // Endcap
                     {
-                        h_pT_endcap_ctrl->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                        h_PFiso_endcap_ctrl->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_pT_endcap_ctrl->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_endcap_ctrl->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
                         if (p_T->at(i_ele) < 70)
                         {
-                            h_pT_endcap_ctrl_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_endcap_ctrl_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_pT_endcap_ctrl_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_endcap_ctrl_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                         else if (p_T->at(i_ele) < 100)
                         {
-                            h_pT_endcap_ctrl_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_endcap_ctrl_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_pT_endcap_ctrl_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_endcap_ctrl_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                         else //if (p_T->at(i_mu) < 500)
                         {
-                            h_pT_endcap_ctrl_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_endcap_ctrl_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                            h_pT_endcap_ctrl_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_endcap_ctrl_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                     }
                 }// End of if(Control)
                 // Denominator
-                h_eta_deno->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                h_eta_deno->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                 if (fabs(eta->at(i_ele)) < 1.4442) // Barrel
                 {
-                    h_pT_barrel_deno->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_PFiso_barrel_deno->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    h_pT_barrel_deno->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_PFiso_barrel_deno->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
                     if (p_T->at(i_ele) < 70)
                     {
-                        h_pT_barrel_deno_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                        h_PFiso_barrel_deno_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_pT_barrel_deno_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_barrel_deno_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                     else if (p_T->at(i_ele) < 100)
                     {
-                        h_pT_barrel_deno_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                        h_PFiso_barrel_deno_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_pT_barrel_deno_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_barrel_deno_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                     else //if (p_T->at(i_ele) < 500)
                     {
-                        h_pT_barrel_deno_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                        h_PFiso_barrel_deno_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_pT_barrel_deno_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_barrel_deno_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                 }
                 else if (fabs(eta->at(i_ele)) > 1.566) // Endcap
                 {
-                    h_pT_endcap_deno->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_PFiso_endcap_deno->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    h_pT_endcap_deno->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_PFiso_endcap_deno->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
                     if (p_T->at(i_ele) < 70)
                     {
-                        h_pT_endcap_deno_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                        h_PFiso_endcap_deno_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_pT_endcap_deno_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_endcap_deno_50to70->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                     else if (p_T->at(i_ele) < 100)
                     {
-                        h_pT_endcap_deno_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                        h_PFiso_endcap_deno_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_pT_endcap_deno_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_endcap_deno_70to100->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                     else //if (p_T->at(i_ele) < 500)
                     {
-                        h_pT_endcap_deno_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                        h_PFiso_endcap_deno_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_pT_endcap_deno_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_endcap_deno_100to500->Fill(relPFiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                 }
             }// End of i_ele iteration
 
             if (fabs(ele_lead.Eta()) < 1.4442) // Barrel
             {
-                h_MT_barrel_deno->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
-                if (iso_lead < 0.15) h_MT_barrel_nume->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
-                else h_MT_barrel_ctrl->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
+                h_MT_barrel_deno->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                if (iso_lead < 0.15) h_MT_barrel_nume->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                else h_MT_barrel_ctrl->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
             }
             else if (fabs(ele_lead.Eta()) > 1.566) // Endcap
             {
-                h_MT_endcap_deno->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
-                if (iso_lead < 0.15) h_MT_endcap_nume->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
-                else h_MT_endcap_ctrl->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_lead);
+                h_MT_endcap_deno->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                if (iso_lead < 0.15) h_MT_endcap_nume->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                else h_MT_endcap_ctrl->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
             }
 
             if (DEBUG == kFALSE) bar.Draw(i);
@@ -1185,6 +1173,500 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
     cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
 
 } // End of Mu_FR_HistMaker()
+
+
+/// -------------------------------- Electron Channel ------------------------------------ ///
+void E_QCD_HistMaker (Bool_t DEBUG)
+{
+    TTimeStamp ts_start;
+    cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
+    TStopwatch totaltime;
+    totaltime.Start();
+
+    FileMgr Mgr;
+
+    TFile *f;
+    TString Dir = "/media/sf_DATA/FR/Electron/";
+    TString debug = "";
+    if (DEBUG == kTRUE) debug = "_DEBUG";
+
+    // -- Output ROOTFile -- //
+    f = new TFile(Dir+"QCDest_E"+debug+".root", "RECREATE");
+
+    DYAnalyzer *analyzer = new DYAnalyzer("Ele23Ele12");
+
+    // -- For efficiency SF -- //
+    analyzer->SetupEfficiencyScaleFactor_electron();
+
+    // -- For QCD estimation from Fake Rate -- //
+    analyzer->SetupFRvalues_ele(Dir+"FakeRate_electron.root", "ratio");
+
+    TH1D* h_FRweight = new TH1D("h_FRweight", "FR weights", 100, 0, 0.01);
+
+    for (Process_t pr=_DY_10to50; pr<_EndOf_DoubleEG_Normal; pr=next(pr))
+    {
+        Mgr.SetProc(pr);
+
+        cout << "===========================================================" << endl;
+        cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
+        cout << "Xsec: " << Mgr.Xsec[0] << endl;
+        cout << "Wsum: " << Mgr.Wsum[0] << endl;
+        cout << "Type: " << Mgr.Type << endl;
+        cout << "Directory: " << Dir << endl;
+
+        TStopwatch totaltime;
+        totaltime.Start();
+        Int_t nPass = 0;
+        Double_t avgFRweight = 0;
+
+        // -- For PU re-weighting -- //
+        analyzer->SetupPileUpReWeighting_80X(Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root");
+
+        // -- For PVz reweighting -- //
+        analyzer->SetupPVzWeights(Mgr.isMC, "ee", "./etc/PVzWeights.root");
+
+        // -- Creating Histograms -- //
+        TH1D* h_mass = new TH1D("h_mass_"+Mgr.Procname[pr], "h_mass_"+Mgr.Procname[pr], binnum, massbins); h_mass->Sumw2();
+        TH1D* h_nVTX = new TH1D("h_nVTX_"+Mgr.Procname[pr], "h_nVTX_"+Mgr.Procname[pr], 50, 0, 50); h_nVTX->Sumw2();
+
+        std::vector<double> *p_T = new std::vector<double>;
+        std::vector<double> *eta = new std::vector<double>;
+        std::vector<double> *phi = new std::vector<double>;
+        std::vector<int> *charge = new std::vector<int>;
+        std::vector<double> *relPFiso = new std::vector<double>;
+        std::vector<int> *passMediumID = new std::vector<int>;
+        Double_t MET_pT, MET_phi;
+        Int_t nPU;
+        Int_t nVTX;
+        Double_t PVz;
+        Double_t gen_weight, top_weight;
+        Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
+
+        TChain *chain = new TChain("FRTree");
+        chain->Add(Dir+"SelectedForBKGest_E_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+        if (DEBUG == kTRUE) cout << Dir+"SelectedForBKGest_E_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+
+        chain->SetBranchStatus("p_T", 1);
+        chain->SetBranchStatus("eta", 1);
+        chain->SetBranchStatus("phi", 1);
+        chain->SetBranchStatus("charge", 1);
+        chain->SetBranchStatus("relPFiso", 1);
+        chain->SetBranchStatus("passMediumID", 1);
+        chain->SetBranchStatus("MET_pT", 1);
+        chain->SetBranchStatus("MET_phi", 1);
+        chain->SetBranchStatus("nPU", 1);
+        chain->SetBranchStatus("nVTX", 1);
+        chain->SetBranchStatus("PVz", 1);
+        chain->SetBranchStatus("gen_weight", 1);
+        chain->SetBranchStatus("top_weight", 1);
+        chain->SetBranchStatus("prefiring_weight", 1);
+        chain->SetBranchStatus("prefiring_weight_up", 1);
+        chain->SetBranchStatus("prefiring_weight_down", 1);
+        chain->SetBranchAddress("p_T", &p_T);
+        chain->SetBranchAddress("eta", &eta);
+        chain->SetBranchAddress("phi", &phi);
+        chain->SetBranchAddress("charge", &charge);
+        chain->SetBranchAddress("relPFiso", &relPFiso);
+        chain->SetBranchAddress("passMediumID", &passMediumID);
+        chain->SetBranchAddress("MET_pT", &MET_pT);
+        chain->SetBranchAddress("MET_phi", &MET_phi);
+        chain->SetBranchAddress("nPU", &nPU);
+        chain->SetBranchAddress("nVTX", &nVTX);
+        chain->SetBranchAddress("PVz", &PVz);
+        chain->SetBranchAddress("gen_weight", &gen_weight);
+        chain->SetBranchAddress("top_weight", &top_weight);
+        chain->SetBranchAddress("prefiring_weight", &prefiring_weight);
+        chain->SetBranchAddress("prefiring_weight_up", &prefiring_weight_up);
+        chain->SetBranchAddress("prefiring_weight_down", &prefiring_weight_down);
+
+        Int_t NEvents = chain->GetEntries();
+        cout << "\t[Sum of weights: " << Mgr.Wsum[0] << "]" << endl;
+        cout << "\t[Number of events: " << NEvents << "]" << endl;
+
+        UInt_t nPassEle=0, nFailEle=0;
+
+        myProgressBar_t bar(NEvents);
+
+        for(Int_t i=0; i<NEvents; i++)
+        {
+            chain->GetEntry(i);
+            for (UInt_t e=0; e<passMediumID->size(); e++)
+            {
+                if (passMediumID->at(e) == 1) nPassEle++;
+                else nFailEle++;
+            }
+            if (!DEBUG) bar.Draw(i);
+
+            // QCD selection
+            if (p_T->size() != 2) continue;
+            if (passMediumID->at(0) == 1 || passMediumID->at(1)  == 1) continue;
+            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
+            if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
+
+            if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << charge->at(0) << " " << relPFiso->at(0) << endl;
+            if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << charge->at(1) << " " << relPFiso->at(1) << endl;
+
+            if (fabs(eta->at(0)) > 1.4442 && fabs(eta->at(0)) < 1.566) continue;   // REMOVE LATER
+            if (fabs(eta->at(1)) > 1.4442 && fabs(eta->at(1)) < 1.566) continue;   // REMOVE LATER
+            if (fabs(eta->at(0)) > 2.4) continue;   // REMOVE LATER
+            if (fabs(eta->at(1)) > 2.4) continue;   // REMOVE LATER
+
+            nPass++;
+
+            if (DEBUG == kTRUE)
+            {
+                if (nPass >= 5) break;
+                cout << "Evt " << i << endl;
+                cout << "nElectrons = " << p_T->size() << endl;
+                cout << "p_T[0] = " << p_T->at(0);
+                cout << "\teta[0] = " << eta->at(0);
+                cout << "\tphi[0] = " << phi->at(0) << endl;
+                cout << "\tpassMediumID[0] = " << passMediumID->at(0) << endl;
+                cout << "p_T[1] = " << p_T->at(1);
+                cout << "\teta[1] = " << eta->at(1);
+                cout << "\tphi[1] = " << phi->at(1) << endl;
+                cout << "\tpassMediumID[1] = " << passMediumID->at(1) << endl;
+                cout << "\nPVz = " << PVz << endl;
+            }
+
+            TLorentzVector ele1, ele2;
+            ele1.SetPtEtaPhiM(p_T->at(0), eta->at(0), phi->at(0), M_Elec);
+            ele2.SetPtEtaPhiM(p_T->at(1), eta->at(1), phi->at(1), M_Elec);
+            Double_t mass = (ele1+ele2).M();
+
+            // -- Pileup-Reweighting -- //
+            Double_t PUWeight = 1;
+            if (Mgr.isMC == kTRUE) PUWeight = analyzer->PileUpWeightValue_80X(nPU);
+            if (DEBUG == kTRUE) cout << "PU weight " << PUWeight << endl;
+
+            // -- efficiency weights -- //
+            Double_t effweight = 1;
+            if (Mgr.isMC == kTRUE)
+            {
+                effweight = analyzer->EfficiencySF_EventWeight_electron(ele1, ele2);
+            }
+
+            // -- PVz weights -- //
+            Double_t PVzWeight = 1;
+            if (Mgr.isMC == kTRUE) PVzWeight = analyzer->PVzWeightValue(PVz);
+
+            // -- L1 prefiring weights -- //
+            Double_t L1weight = 1;
+            if (Mgr.isMC == kTRUE) L1weight = prefiring_weight;
+
+            // -- Top pT weights -- //
+            Double_t TopPtWeight = 1;
+            if (Mgr.isMC == kTRUE && Mgr.Tag[0].Contains("ttbar")) TopPtWeight = top_weight;
+
+            if (DEBUG == kTRUE) cout << "Eff weight: " << effweight << "\tPVz weight: " << PVzWeight << "\nL1 weight:" << L1weight <<
+                                        "\tTop pT weight: " << TopPtWeight << endl;
+
+            // -- FR WEIGHTS -- //
+            Double_t FRweight = 1;
+            Double_t FR1, FR2;
+            FR1 = analyzer->FakeRate_ele(p_T->at(0), eta->at(0));
+            FR2 = analyzer->FakeRate_ele(p_T->at(1), eta->at(1));
+            FRweight = FR1 / (1 - FR1) * FR2 / (1 - FR2);
+            if (DEBUG == kTRUE) cout << "FR1 = " << FR1 << "   FR2 = " << FR2 << "   FRweight = " << FRweight << endl;
+            avgFRweight += FRweight;
+            h_FRweight->Fill(FRweight);
+
+            // -- Normalization -- //
+            Double_t TotWeight = 1;
+            if (Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
+            if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl << endl;
+
+            h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            h_mass->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+
+        }// End of event iteration
+
+        cout << "\t " << nPass << " events have passed the selection." << endl;
+        cout << "\t Average FR weight: " << avgFRweight / NEvents << endl;
+        if(Mgr.isMC == kTRUE)
+        {
+            cout << "\t *** Cross section: " << Mgr.Xsec[0] << endl;
+            cout << "\t *** Sum of weights: " << Mgr.Wsum[0] << endl;
+            printf("\t *** Normalization factor: %.8f\n\n", Lumi*Mgr.Xsec[0]/Mgr.Wsum[0]);
+        }
+        cout << "\t # passed electrons: " << nPassEle << endl;
+        cout << "\t # failed electrons: " << nFailEle << endl;
+
+        f->cd();
+        cout << "\tWriting into file...";
+
+        h_mass->Write();
+        h_nVTX->Write();
+
+        cout << " Finished.\n" << endl;
+
+        if (DEBUG == kTRUE && pr == _DY_10to50) break;
+        if (pr == _DY_2000to3000) pr = _EndOf_DYTauTau_Normal; // next -- ttbar
+        if (pr == _WJets_ext2v5) pr = _EndOf_QCDMuEnriched_Normal; // next -- QCDEMEnriched_20to30
+
+        cout << "===========================================================\n" << endl;
+    } // End of pr iteration
+
+    TCanvas *c_FRweight = new TCanvas("FRweight","FR weights", 800, 800);
+    h_FRweight->Draw();
+    c_FRweight->Update();
+
+    f->Close();
+    if (!f->IsOpen()) cout << "File " << Dir+"QCDest_E"+debug+".root" << " has been closed successfully.\n" << endl;
+    else cout << "FILE " << Dir+"QCDest_E"+debug+".root" << " COULD NOT BE CLOSED!\n" << endl;
+
+    Double_t TotalRunTime = totaltime.CpuTime();
+    cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
+
+    TTimeStamp ts_end;
+    cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
+
+} // End of E_QCD_HistMaker()
+
+
+void E_WJET_HistMaker (Bool_t DEBUG)
+{
+    TTimeStamp ts_start;
+    cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
+    TStopwatch totaltime;
+    totaltime.Start();
+
+    FileMgr Mgr;
+
+    TFile *f;
+    TString Dir = "/media/sf_DATA/FR/Electron/";
+    TString debug = "";
+    if (DEBUG == kTRUE) debug = "_DEBUG";
+
+    // -- Output ROOTFile -- //
+    f = new TFile(Dir+"WJETest_E"+debug+".root", "RECREATE");
+
+    DYAnalyzer *analyzer = new DYAnalyzer("Ele23Ele12");
+
+    // -- For efficiency SF -- //
+    analyzer->SetupEfficiencyScaleFactor_electron();
+
+    // -- For W+Jets estimation from Fake Rate -- //
+    analyzer->SetupFRvalues_ele(Dir+"FakeRate_electron.root", "ratio");
+
+    TH1D* h_FRweight = new TH1D("h_FRweight", "FR weights", 100, 0, 0.5);
+
+    for (Process_t pr=_DY_10to50; pr<_EndOf_DoubleEG_Normal; pr=next(pr))
+    {
+        Mgr.SetProc(pr);
+
+        cout << "===========================================================" << endl;
+        cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
+        cout << "Xsec: " << Mgr.Xsec[0] << endl;
+        cout << "Wsum: " << Mgr.Wsum[0] << endl;
+        cout << "Type: " << Mgr.Type << endl;
+        cout << "Directory: " << Dir << endl;
+
+        TStopwatch totaltime;
+        totaltime.Start();
+        Int_t nPass = 0;
+        Double_t avgFRweight = 0;
+
+        // -- For PU re-weighting -- //
+        analyzer->SetupPileUpReWeighting_80X(Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root");
+
+        // -- For PVz reweighting -- //
+        analyzer->SetupPVzWeights(Mgr.isMC, "ee", "./etc/PVzWeights.root");
+
+        // -- Creating Histograms -- //
+        TH1D* h_mass = new TH1D("h_mass_"+Mgr.Procname[pr], "h_mass"+Mgr.Procname[pr], binnum, massbins); h_mass->Sumw2();
+        TH1D* h_nVTX = new TH1D("h_nVTX_"+Mgr.Procname[pr], "h_nVTX"+Mgr.Procname[pr], 50, 0, 50); h_nVTX->Sumw2();
+
+        std::vector<double> *p_T = new std::vector<double>;
+        std::vector<double> *eta = new std::vector<double>;
+        std::vector<double> *phi = new std::vector<double>;
+        std::vector<int> *charge = new std::vector<int>;
+        std::vector<double> *relPFiso = new std::vector<double>;
+        std::vector<int> *passMediumID = new std::vector<int>;
+        Double_t MET_pT, MET_phi;
+        Int_t nPU;
+        Int_t nVTX;
+        Double_t PVz;
+        Double_t gen_weight, top_weight;
+        Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
+
+        TChain *chain = new TChain("FRTree");
+
+        chain->Add(Dir+"SelectedForBKGest_E_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+        if (DEBUG == kTRUE) cout << Dir+"SelectedForBKGest_E_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+
+        chain->SetBranchStatus("p_T", 1);
+        chain->SetBranchStatus("eta", 1);
+        chain->SetBranchStatus("phi", 1);
+        chain->SetBranchStatus("charge", 1);
+        chain->SetBranchStatus("relPFiso", 1);
+        chain->SetBranchStatus("passMediumID", 1);
+        chain->SetBranchStatus("MET_pT", 1);
+        chain->SetBranchStatus("MET_phi", 1);
+        chain->SetBranchStatus("nPU", 1);
+        chain->SetBranchStatus("nVTX", 1);
+        chain->SetBranchStatus("PVz", 1);
+        chain->SetBranchStatus("gen_weight", 1);
+        chain->SetBranchStatus("top_weight", 1);
+        chain->SetBranchStatus("prefiring_weight", 1);
+        chain->SetBranchStatus("prefiring_weight_up", 1);
+        chain->SetBranchStatus("prefiring_weight_down", 1);
+        chain->SetBranchAddress("p_T", &p_T);
+        chain->SetBranchAddress("eta", &eta);
+        chain->SetBranchAddress("phi", &phi);
+        chain->SetBranchAddress("charge", &charge);
+        chain->SetBranchAddress("relPFiso", &relPFiso);
+        chain->SetBranchAddress("passMediumID", &passMediumID);
+        chain->SetBranchAddress("MET_pT", &MET_pT);
+        chain->SetBranchAddress("MET_phi", &MET_phi);
+        chain->SetBranchAddress("nPU", &nPU);
+        chain->SetBranchAddress("nVTX", &nVTX);
+        chain->SetBranchAddress("PVz", &PVz);
+        chain->SetBranchAddress("gen_weight", &gen_weight);
+        chain->SetBranchAddress("top_weight", &top_weight);
+        chain->SetBranchAddress("prefiring_weight", &prefiring_weight);
+        chain->SetBranchAddress("prefiring_weight_up", &prefiring_weight_up);
+        chain->SetBranchAddress("prefiring_weight_down", &prefiring_weight_down);
+
+        Int_t NEvents = chain->GetEntries();
+        cout << "\t[Sum of weights: " << Mgr.Wsum[0] << "]" << endl;
+        cout << "\t[Number of events: " << NEvents << "]" << endl;
+
+
+        myProgressBar_t bar(NEvents);
+
+        for(Int_t i=0; i<NEvents; i++)
+        {
+            chain->GetEntry(i);
+            if (!DEBUG) bar.Draw(i);
+
+            // W+Jets selection
+            if (p_T->size() != 2) continue;
+            if (passMediumID->at(0) == 1 && passMediumID->at(1) == 1) continue;
+            if (passMediumID->at(0) == 0 && passMediumID->at(1) == 0) continue;
+            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
+            if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
+
+            if (fabs(eta->at(0)) > 1.4442 && fabs(eta->at(0)) < 1.566) continue;   // REMOVE LATER
+            if (fabs(eta->at(1)) > 1.4442 && fabs(eta->at(1)) < 1.566) continue;   // REMOVE LATER
+            if (fabs(eta->at(0)) > 2.4) continue;   // REMOVE LATER
+            if (fabs(eta->at(1)) > 2.4) continue;   // REMOVE LATER
+
+            if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << charge->at(0) << " " << relPFiso->at(0) << endl;
+            if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << charge->at(1) << " " << relPFiso->at(1) << endl;
+
+            nPass++;
+
+            if (DEBUG == kTRUE)
+            {
+                if (nPass >= 5) break;
+                cout << "Evt " << i << endl;
+                cout << "nMuons = " << p_T->size() << endl;
+                cout << "p_T[0] = " << p_T->at(0);
+                cout << "\teta[0] = " << eta->at(0);
+                cout << "\tphi[0] = " << phi->at(0) << endl;
+                cout << "\tpassMediumID[0] = " << passMediumID->at(0) << endl;
+                cout << "p_T[1] = " << p_T->at(1);
+                cout << "\teta[1] = " << eta->at(1);
+                cout << "\tphi[1] = " << phi->at(1) << endl;
+                cout << "\tpassMediumID[1] = " << passMediumID->at(1) << endl;
+                cout << "\nPVz = " << PVz << endl;
+            }
+
+            TLorentzVector ele1, ele2;
+            ele1.SetPtEtaPhiM(p_T->at(0), eta->at(0), phi->at(0), M_Elec);
+            ele2.SetPtEtaPhiM(p_T->at(1), eta->at(1), phi->at(1), M_Elec);
+            Double_t mass = (ele1+ele2).M();
+
+            // -- Pileup-Reweighting -- //
+            Double_t PUWeight = 1;
+            if (Mgr.isMC == kTRUE) PUWeight = analyzer->PileUpWeightValue_80X(nPU);
+            if (DEBUG == kTRUE) cout << "PU weight " << PUWeight << endl;
+
+            // -- efficiency weights -- //
+            Double_t effweight = 1;
+            if (Mgr.isMC == kTRUE)
+            {
+                effweight = analyzer->EfficiencySF_EventWeight_electron(ele1, ele2);
+            }
+
+            // -- PVz weights -- //
+            Double_t PVzWeight = 1;
+            if (Mgr.isMC == kTRUE) PVzWeight = analyzer->PVzWeightValue(PVz);
+
+            // -- L1 prefiring weights -- //
+            Double_t L1weight = 1;
+            if (Mgr.isMC == kTRUE) L1weight = prefiring_weight;
+
+            // -- Top pT weights -- //
+            Double_t TopPtWeight = 1;
+            if (Mgr.isMC == kTRUE && Mgr.Tag[0].Contains("ttbar")) TopPtWeight = top_weight;
+
+            if (DEBUG == kTRUE) cout << "Eff weight: " << effweight << "\tPVz weight: " << PVzWeight << "\nL1 weight:" << L1weight <<
+                                        "\tTop pT weight: " << TopPtWeight << endl;
+
+            // -- FR WEIGHTS -- //
+            Double_t FRweight = 1;
+            Double_t FR;
+            if (passMediumID->at(0) == 0 && passMediumID->at(1) == 1) // First fails, second passes
+                FR = analyzer->FakeRate_ele(p_T->at(0), eta->at(0));
+            else // Second fails, first passes
+                FR = analyzer->FakeRate_ele(p_T->at(1), eta->at(1));
+            FRweight = FR / (1 - FR);
+            if (DEBUG == kTRUE) cout << "FR = " << FR << "   FRweight = " << FRweight << endl;
+            avgFRweight += FRweight;
+            h_FRweight->Fill(FRweight);
+
+            // -- Normalization -- //
+            Double_t TotWeight = 1;
+            if (Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
+            if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl << endl;
+
+            // -- Histogram filling -- //
+            h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            h_mass->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+
+        }// End of event iteration
+
+        cout << "\t " << nPass << " events have passed the selection." << endl;
+        cout << "\t Average FR weight: " << avgFRweight / NEvents << endl;
+        if(Mgr.isMC == kTRUE)
+        {
+            cout << "\t *** Cross section: " << Mgr.Xsec[0] << endl;
+            cout << "\t *** Sum of weights: " << Mgr.Wsum[0] << endl;
+            printf("\t *** Normalization factor: %.8f\n\n", Lumi*Mgr.Xsec[0]/Mgr.Wsum[0]);
+        }
+
+        f->cd();
+        cout << "\tWriting into file...";
+
+        h_mass->Write();
+        h_nVTX->Write();
+
+        cout << " Finished.\n" << endl;
+
+        if (DEBUG == kTRUE && pr == _DY_10to50) break;
+        if (pr == _DY_2000to3000) pr = _EndOf_DYTauTau_Normal; // next -- ttbar
+        if (pr == _WJets_ext2v5) pr = _EndOf_QCDMuEnriched_Normal; // next -- SingleMuon_B
+
+        cout << "===========================================================\n" << endl;
+    } // End of pr iteration
+
+    TCanvas *c_FRweight = new TCanvas("FRweight","FR weights", 800, 800);
+    h_FRweight->Draw();
+    c_FRweight->Update();
+
+    f->Close();
+    if (!f->IsOpen()) cout << "File " << Dir+"WJETest_E"+debug+".root" << " has been closed successfully.\n" << endl;
+    else cout << "FILE " << Dir+"WJETest_E"+debug+".root" << " COULD NOT BE CLOSED!\n" << endl;
+
+    Double_t TotalRunTime = totaltime.CpuTime();
+    cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
+
+    TTimeStamp ts_end;
+    cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
+
+} // End of E_WJET_HistMaker()
 
 
 /// -------------------------------- Muon Channel ------------------------------------ ///
