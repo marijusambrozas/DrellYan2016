@@ -145,12 +145,12 @@ void E_FR_HistMaker (Bool_t DEBUG)
         analyzer->SetupPVzWeights(Mgr.isMC, "ee", "./etc/PVzWeights.root");
 
         // -- Creating Histograms -- //
-        TH1D* h_pT_barrel_nume = new TH1D("h_pT_barrel_nume", "h_pT_barrel_nume", /*nPtBinBarrel_ele, analyzer->ptbin_barrel_ele*/ 250, 0, 500); h_pT_barrel_nume->Sumw2();
-        TH1D* h_pT_endcap_nume = new TH1D("h_pT_endcap_nume", "h_pT_endcap_nume", /*nPtBinEndcap_ele, analyzer->ptbin_endcap_ele*/ 250, 0, 500); h_pT_endcap_nume->Sumw2();
-        TH1D* h_pT_barrel_deno = new TH1D("h_pT_barrel_deno", "h_pT_barrel_deno", /*nPtBinBarrel_ele, analyzer->ptbin_barrel_ele*/ 250, 0, 500); h_pT_barrel_deno->Sumw2();
-        TH1D* h_pT_endcap_deno = new TH1D("h_pT_endcap_deno", "h_pT_endcap_deno", /*nPtBinEndcap_ele, analyzer->ptbin_endcap_ele*/ 250, 0, 500); h_pT_endcap_deno->Sumw2();
-        TH1D* h_pT_barrel_ctrl = new TH1D("h_pT_barrel_ctrl", "h_pT_barrel_ctrl", /*nPtBinBarrel_ele, analyzer->ptbin_barrel_ele*/ 250, 0, 500); h_pT_barrel_ctrl->Sumw2();
-        TH1D* h_pT_endcap_ctrl = new TH1D("h_pT_endcap_ctrl", "h_pT_endcap_ctrl", /*nPtBinEndcap_ele, analyzer->ptbin_endcap_ele*/ 250, 0, 500); h_pT_endcap_ctrl->Sumw2();
+        TH1D* h_pT_barrel_nume = new TH1D("h_pT_barrel_nume", "h_pT_barrel_nume", nPtBinBarrel_ele, analyzer->ptbin_barrel_ele /*250, 0, 500*/); h_pT_barrel_nume->Sumw2();
+        TH1D* h_pT_endcap_nume = new TH1D("h_pT_endcap_nume", "h_pT_endcap_nume", nPtBinEndcap_ele, analyzer->ptbin_endcap_ele /*250, 0, 500*/); h_pT_endcap_nume->Sumw2();
+        TH1D* h_pT_barrel_deno = new TH1D("h_pT_barrel_deno", "h_pT_barrel_deno", nPtBinBarrel_ele, analyzer->ptbin_barrel_ele /*250, 0, 500*/); h_pT_barrel_deno->Sumw2();
+        TH1D* h_pT_endcap_deno = new TH1D("h_pT_endcap_deno", "h_pT_endcap_deno", nPtBinEndcap_ele, analyzer->ptbin_endcap_ele /*250, 0, 500*/); h_pT_endcap_deno->Sumw2();
+        TH1D* h_pT_barrel_ctrl = new TH1D("h_pT_barrel_ctrl", "h_pT_barrel_ctrl", nPtBinBarrel_ele, analyzer->ptbin_barrel_ele /*250, 0, 500*/); h_pT_barrel_ctrl->Sumw2();
+        TH1D* h_pT_endcap_ctrl = new TH1D("h_pT_endcap_ctrl", "h_pT_endcap_ctrl", nPtBinEndcap_ele, analyzer->ptbin_endcap_ele /*250, 0, 500*/); h_pT_endcap_ctrl->Sumw2();
         TH1D* h_eta_nume = new TH1D("h_eta_nume", "h_eta_nume", 48, -2.4, 2.4); h_eta_nume->Sumw2();
         TH1D* h_eta_deno = new TH1D("h_eta_deno", "h_eta_deno", 48, -2.4, 2.4); h_eta_deno->Sumw2();
         TH1D* h_eta_ctrl = new TH1D("h_eta_ctrl", "h_eta_ctrl", 48, -2.4, 2.4); h_eta_ctrl->Sumw2();
@@ -395,7 +395,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
 
             // -- L1 prefiring weights -- //
             Double_t L1weight = 1;
-//            if (Mgr.isMC == kTRUE) L1weight = prefiring_weight;
+            if (Mgr.isMC == kTRUE) L1weight = prefiring_weight;
 
             // -- Top pT weights -- //
             Double_t TopPtWeight = 1;
@@ -521,17 +521,101 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 if (DEBUG == kTRUE) cout << "i_ele = " << i_ele << endl;
 
                 Int_t matched = 0;
-                Double_t prescale_alt = 1;
+                Int_t matched22=0, matched30=0, matched36=0, matched50=0, matched75=0, matched90=0, matched120=0, matched175=0;
+                Int_t i_22=-1, i_30=-1, i_36=-1, i_50=-1, i_75=-1, i_90=-1, i_120=-1, i_175=-1;
+                Double_t prescale_alt = 1.;
 
-                for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
+                if (Mgr.isMC == kFALSE)
                 {
-                    if (((UInt_t)(trig_matched->at(i_tr))) == i_ele)
+                    for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
                     {
-                        matched = 1;
-                        if (Mgr.isMC == kFALSE) prescale_alt = analyzer->getPrescale_alt(trig_pT->at(i_tr));
+//                        if (((UInt_t)(trig_matched->at(i_tr))) == i_ele)
+//                        {
+    //                        matched = 1;
+    //                        if (Mgr.isMC == kFALSE) prescale_alt = analyzer->getPrescale_alt(trig_pT->at(i_tr));
+//                        }
+                        if (trig_fired->at(i_tr) < 22) continue;
+                        if (((UInt_t)(trig_matched->at(i_tr))) == i_ele)
+                        {
+                            if (trig_fired->at(i_tr) == 22 && trig_pT->at(i_tr)<30)
+                            {
+                                i_22 = i_tr;
+                                matched22 = 1;
+                            }
+                            if (trig_fired->at(i_tr) == 30 && trig_pT->at(i_tr)<36)
+                            {
+                                i_30 = i_tr;
+                                matched30 = 1;
+                            }
+                            if (trig_fired->at(i_tr) == 36 && trig_pT->at(i_tr)<50)
+                            {
+                                i_36 = i_tr;
+                                matched36 = 1;
+                            }
+                            if (trig_fired->at(i_tr) == 50 && trig_pT->at(i_tr)<75)
+                            {
+                                i_50 = i_tr;
+                                matched50 = 1;
+                            }
+                            if (trig_fired->at(i_tr) == 75 && trig_pT->at(i_tr)<90)
+                            {
+                                i_75 = i_tr;
+                                matched75 = 1;
+                            }
+                            if (trig_fired->at(i_tr) == 90 && trig_pT->at(i_tr)<120)
+                            {
+                                i_90 = i_tr;
+                                matched90 = 1;
+                            }
+                            if (trig_fired->at(i_tr) == 120 && trig_pT->at(i_tr)<175)
+                            {
+                                i_120 = i_tr;
+                                matched120 = 1;
+                            }
+                            else if (trig_fired->at(i_tr) == 175)
+                            {
+                                i_175 = i_tr;
+                                matched175 = 1;
+                            }
+                        }
+
+    //                if (matched == 0) continue;
+                    }
+                    if (matched22==0 && matched30==0 && matched36==0 && matched50 == 0 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0) continue;
+                    else if (matched22 == 1 && matched30 == 0 && matched36 == 0 && matched50 == 0 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0)
+                    {
+                        prescale_alt = 813./18629321.;
+                    }
+                    else if (matched30 == 1 && matched36 == 0 && matched50 == 0 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0)
+                    {
+                        prescale_alt = 3211./18629321.;
+                    }
+                    else if (matched36 == 1 && matched50 == 0 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0)
+                    {
+                        prescale_alt = 6372./18629321.;
+                    }
+                    else if (matched50 == 1 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0)
+                    {
+                        prescale_alt = 12648./18629321.;
+                    }
+                    else if (matched75 == 1 && matched90 == 0 && matched120 == 0 && matched175 == 0)
+                    {
+                        prescale_alt = 63170./18629321.;
+                    }
+                    else if (matched90 == 1 && matched120 == 0 && matched175 == 0)
+                    {
+                        prescale_alt = 126981./18629321.;
+                    }
+                    else if (matched120 == 1 && matched175 == 0)
+                    {
+                        prescale_alt = 260278./18629321.;
+                    }
+                    else if (matched175 == 1)
+                    {
+                        prescale_alt = 1.;
                     }
                 }
-                if (matched == 0) continue;
+
 
                 if (passMediumID->at(i_ele)) // Signal/Numerator
                 {
