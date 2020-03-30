@@ -286,6 +286,27 @@ void E_FR_HistMaker (Bool_t DEBUG)
 //                break;
 //            }
 
+            Int_t fired22=0, fired30=0, fired36=0, fired50=0, fired75=0, fired90=0, fired120=0, fired175=0;
+            for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
+            {
+                if (trig_fired->at(i_tr) == 22) fired22++;
+                if (trig_fired->at(i_tr) == 30) fired30++;
+                if (trig_fired->at(i_tr) == 36) fired36++;
+                if (trig_fired->at(i_tr) == 50) fired50++;
+                if (trig_fired->at(i_tr) == 75) fired75++;
+                if (trig_fired->at(i_tr) == 90) fired90++;
+                if (trig_fired->at(i_tr) == 120) fired120++;
+                if (trig_fired->at(i_tr) == 175) fired175++;
+            }
+            if (fired175 && !fired22 && !fired30 && !fired36 && !fired50 && !fired75 && !fired90 && !fired120) n175++;
+            if (fired175 && fired120) n120175++;
+            if (fired175 && fired90) n90175++;
+            if (fired175 && fired75) n75175++;
+            if (fired175 && fired50) n50175++;
+            if (fired175 && fired36) n36175++;
+            if (fired175 && fired30) n30175++;
+            if (fired175 && fired22) n22175++;
+
             for (UInt_t i_ele=0; i_ele<p_T->size(); i_ele++)
             {
                 if (p_T->at(i_ele) != p_T->at(i_ele))
@@ -305,42 +326,42 @@ void E_FR_HistMaker (Bool_t DEBUG)
                     if (trig_fired->at(i_tr) < 22) continue;
                     if (((UInt_t)(trig_matched->at(i_tr))) == i_ele)
                     {
-                        if (trig_fired->at(i_tr) == 22 && trig_pT->at(i_tr)<30)
+                        if (trig_fired->at(i_tr) == 22 && trig_pT->at(i_tr) > 22 && trig_pT->at(i_tr) < 30)
                         {
                             i_22 = i_tr;
                             matched22 = 1;
                         }
-                        if (trig_fired->at(i_tr) == 30 && trig_pT->at(i_tr)<36)
+                        if (trig_fired->at(i_tr) == 30 && trig_pT->at(i_tr) > 30 && trig_pT->at(i_tr) < 36)
                         {
                             i_30 = i_tr;
                             matched30 = 1;
                         }
-                        if (trig_fired->at(i_tr) == 36 && trig_pT->at(i_tr)<50)
+                        if (trig_fired->at(i_tr) == 36 && trig_pT->at(i_tr) > 36 && trig_pT->at(i_tr) < 50)
                         {
                             i_36 = i_tr;
                             matched36 = 1;
                         }
-                        if (trig_fired->at(i_tr) == 50 && trig_pT->at(i_tr)<75)
+                        if (trig_fired->at(i_tr) == 50 && trig_pT->at(i_tr) > 50 && trig_pT->at(i_tr) < 75)
                         {
                             i_50 = i_tr;
                             matched50 = 1;
                         }
-                        if (trig_fired->at(i_tr) == 75 && trig_pT->at(i_tr)<90)
+                        if (trig_fired->at(i_tr) == 75 && trig_pT->at(i_tr) > 75 && trig_pT->at(i_tr) < 90)
                         {
                             i_75 = i_tr;
                             matched75 = 1;
                         }
-                        if (trig_fired->at(i_tr) == 90 && trig_pT->at(i_tr)<120)
+                        if (trig_fired->at(i_tr) == 90 && trig_pT->at(i_tr) > 90 && trig_pT->at(i_tr) < 120)
                         {
                             i_90 = i_tr;
                             matched90 = 1;
                         }
-                        if (trig_fired->at(i_tr) == 120 && trig_pT->at(i_tr)<175)
+                        if (trig_fired->at(i_tr) == 120 && trig_pT->at(i_tr) > 120 && trig_pT->at(i_tr) < 175)
                         {
                             i_120 = i_tr;
                             matched120 = 1;
                         }
-                        else if (trig_fired->at(i_tr) == 175)
+                        else if (trig_fired->at(i_tr) == 175 && trig_pT->at(i_tr) > 175)
                         {
                             i_175 = i_tr;
                             matched175 = 1;
@@ -351,10 +372,11 @@ void E_FR_HistMaker (Bool_t DEBUG)
 
                     }
                 }
+                if (matched22+matched30+matched36+matched50+matched75+matched90+matched120 > 1) continue;
                 if (matched22==0 && matched30==0 && matched36==0 && matched50 == 0 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0) continue;
                 else if (matched22 == 1 && matched30 == 0 && matched36 == 0 && matched50 == 0 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0)
                 {
-                    prescale_alt = 813./18629321.;
+                    prescale_alt = 813./18621470.;
                     h_HLT_pT->Fill(trig_pT->at(i_22), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     h_HLT_pT_uncorr->Fill(trig_pT->at(i_22), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     h_pT->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
@@ -363,7 +385,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 }
                 else if (matched30 == 1 && matched36 == 0 && matched50 == 0 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0)
                 {
-                    prescale_alt = 3211./18629321.;
+                    prescale_alt = 3211./18621470.;
                     h_HLT_pT->Fill(trig_pT->at(i_30), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     h_HLT_pT_uncorr->Fill(trig_pT->at(i_30), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     h_pT->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
@@ -372,7 +394,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 }
                 else if (matched36 == 1 && matched50 == 0 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0)
                 {
-                    prescale_alt = 6372./18629321.;
+                    prescale_alt = 6372./18621470.;
                     h_HLT_pT->Fill(trig_pT->at(i_36), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     h_HLT_pT_uncorr->Fill(trig_pT->at(i_36), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     h_pT->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
@@ -381,7 +403,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 }
                 else if (matched50 == 1 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0)
                 {
-                    prescale_alt = 12648./18629321.;
+                    prescale_alt = 12648./18621470.;
                     h_HLT_pT->Fill(trig_pT->at(i_50), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     h_HLT_pT_uncorr->Fill(trig_pT->at(i_50), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     h_pT->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
@@ -390,7 +412,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 }
                 else if (matched75 == 1 && matched90 == 0 && matched120 == 0 && matched175 == 0)
                 {
-                    prescale_alt = 63170./18629321.;
+                    prescale_alt = 63170./18621470.;
                     h_HLT_pT->Fill(trig_pT->at(i_75), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     h_HLT_pT_uncorr->Fill(trig_pT->at(i_75), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     h_pT->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
@@ -399,7 +421,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 }
                 else if (matched90 == 1 && matched120 == 0 && matched175 == 0)
                 {
-                    prescale_alt = 126981./18629321.;
+                    prescale_alt = 126981./18621470.;
                     h_HLT_pT->Fill(trig_pT->at(i_90), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     h_HLT_pT_uncorr->Fill(trig_pT->at(i_90), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     h_pT->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
@@ -408,7 +430,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 }
                 else if (matched120 == 1 && matched175 == 0)
                 {
-                    prescale_alt = 260278./18629321.;
+                    prescale_alt = 260278./18621470.;
                     h_HLT_pT->Fill(trig_pT->at(i_120), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     h_HLT_pT_uncorr->Fill(trig_pT->at(i_120), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     h_pT->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
@@ -426,27 +448,6 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 }
 
             }// End of i_ele iteration
-
-            Int_t fired22=0, fired30=0, fired36=0, fired50=0, fired75=0, fired90=0, fired120=0, fired175=0;
-            for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
-            {
-                if (trig_fired->at(i_tr) == 22) fired22++;
-                if (trig_fired->at(i_tr) == 30) fired30++;
-                if (trig_fired->at(i_tr) == 36) fired36++;
-                if (trig_fired->at(i_tr) == 50) fired50++;
-                if (trig_fired->at(i_tr) == 75) fired75++;
-                if (trig_fired->at(i_tr) == 90) fired90++;
-                if (trig_fired->at(i_tr) == 120) fired120++;
-                if (trig_fired->at(i_tr) == 175) fired175++;
-            }
-            if (fired175 && !fired120) n175++;
-            if (fired175 && fired120) n120175++;
-            if (fired175 && fired90) n90175++;
-            if (fired175 && fired75) n75175++;
-            if (fired175 && fired50) n50175++;
-            if (fired175 && fired36) n36175++;
-            if (fired175 && fired30) n30175++;
-            if (fired175 && fired22) n22175++;
 
 //            prescale_alt = analyzer->getPrescale(trig_fired->at(i_highest)+1);
 //            h_HLT_pT->Fill(trig_pT->at(i_highest), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
