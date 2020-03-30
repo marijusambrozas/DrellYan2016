@@ -204,6 +204,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         std::vector<double> *phIso03 = new std::vector<double>;
         std::vector<double> *ChIso03FromPU = new std::vector<double>;
         std::vector<int> *mHits = new std::vector<int>;
+        std::vector<int> *passConvVeto = new std::vector<int>;
         std::vector<double> *relPFiso_dBeta = new std::vector<double>;
         std::vector<double> *relPFiso_Rho = new std::vector<double>;
         std::vector<int> *passMediumID = new std::vector<int>;
@@ -212,6 +213,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         std::vector<double> *trig_pT = new std::vector<double>;
         std::vector<int> *prescale_factor = new std::vector<int>;
         Double_t MET_pT, MET_phi;
+        Int_t runNum;
         Int_t nPU;
         Int_t nVTX;
         Double_t PVz;
@@ -233,6 +235,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         ElectronTree->Branch("phIso03", &phIso03);
         ElectronTree->Branch("ChIso03FromPU", &ChIso03FromPU);
         ElectronTree->Branch("mHits", &mHits);
+        ElectronTree->Branch("passConvVeto", &passConvVeto);
         ElectronTree->Branch("relPFiso_dBeta", &relPFiso_dBeta);
         ElectronTree->Branch("relPFiso_Rho", &relPFiso_Rho);
         ElectronTree->Branch("passMediumID", &passMediumID);
@@ -241,6 +244,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         ElectronTree->Branch("trig_pT", &trig_pT);
         ElectronTree->Branch("MET_pT", &MET_pT);
         ElectronTree->Branch("MET_phi", &MET_phi);
+        ElectronTree->Branch("runNum", &runNum);
         ElectronTree->Branch("nPU", &nPU);
         ElectronTree->Branch("nVTX", &nVTX);
         ElectronTree->Branch("PVz", &PVz);
@@ -359,6 +363,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         phIso03->clear();
                         ChIso03FromPU->clear();
                         mHits->clear();
+                        passConvVeto->clear();
                         relPFiso_dBeta->clear();
                         relPFiso_Rho->clear();
                         passMediumID->clear();
@@ -381,6 +386,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         MET_phi = ntuple->pfMET_phi;
 
                         // -- Information for various other reweightings -- //
+                        runNum = ntuple->runNum;
                         nPU = ntuple->nPileUp;
                         nVTX = ntuple->nVertices;
                         PVz = ntuple->PVz;
@@ -416,6 +422,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                             phIso03->push_back(SelectedElectronCollection[i_ele].phIso03);
                             ChIso03FromPU->push_back(SelectedElectronCollection[i_ele].ChIso03FromPU);
                             mHits->push_back(SelectedElectronCollection[i_ele].mHits);
+                            passConvVeto->push_back(SelectedElectronCollection[i_ele].passConvVeto);
                             relPFiso_dBeta->push_back(SelectedElectronCollection[i_ele].RelPFIso_dBeta);
                             relPFiso_Rho->push_back(SelectedElectronCollection[i_ele].RelPFIso_Rho);
                             passMediumID->push_back(SelectedElectronCollection[i_ele].passMediumID);
