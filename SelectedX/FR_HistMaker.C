@@ -169,9 +169,9 @@ void E_FR_HistMaker (Bool_t DEBUG)
         TH1D* h_SigmaIEtaIEta_barrel_nume = new TH1D("h_SigmaIEtaIEta_barrel_nume", "h_SigmaIEtaIEta_barrel_nume", 10, 0, 0.01); h_SigmaIEtaIEta_barrel_nume->Sumw2();
         TH1D* h_SigmaIEtaIEta_endcap_nume = new TH1D("h_SigmaIEtaIEta_endcap_nume", "h_SigmaIEtaIEta_endcap_nume", 30, 0, 0.03); h_SigmaIEtaIEta_endcap_nume->Sumw2();
         TH1D* h_SigmaIEtaIEta_barrel_deno = new TH1D("h_SigmaIEtaIEta_barrel_deno", "h_SigmaIEtaIEta_barrel_deno", 50, 0, 0.05); h_SigmaIEtaIEta_barrel_deno->Sumw2();
-        TH1D* h_SigmaIEtaIEta_endcap_deno = new TH1D("h_SigmaIEtaIEta_endcap_deno", "h_SigmaIEtaIEta_endcap_deno", 50, 0, 0.1); h_SigmaIEtaIEta_endcap_deno->Sumw2();
+        TH1D* h_SigmaIEtaIEta_endcap_deno = new TH1D("h_SigmaIEtaIEta_endcap_deno", "h_SigmaIEtaIEta_endcap_deno", 50, 0, 0.1);  h_SigmaIEtaIEta_endcap_deno->Sumw2();
         TH1D* h_SigmaIEtaIEta_barrel_ctrl = new TH1D("h_SigmaIEtaIEta_barrel_ctrl", "h_SigmaIEtaIEta_barrel_ctrl", 50, 0, 0.05); h_SigmaIEtaIEta_barrel_ctrl->Sumw2();
-        TH1D* h_SigmaIEtaIEta_endcap_ctrl = new TH1D("h_SigmaIEtaIEta_endcap_ctrl", "h_SigmaIEtaIEta_endcap_ctrl", 50, 0, 0.1); h_SigmaIEtaIEta_endcap_ctrl->Sumw2();
+        TH1D* h_SigmaIEtaIEta_endcap_ctrl = new TH1D("h_SigmaIEtaIEta_endcap_ctrl", "h_SigmaIEtaIEta_endcap_ctrl", 50, 0, 0.1);  h_SigmaIEtaIEta_endcap_ctrl->Sumw2();
         TH1D* h_dEtaInSeed_barrel_nume = new TH1D("h_dEtaInSeed_barrel_nume", "h_dEtaInSeed_barrel_nume", 20, -0.1, 0.1); h_dEtaInSeed_barrel_nume->Sumw2();
         TH1D* h_dEtaInSeed_endcap_nume = new TH1D("h_dEtaInSeed_endcap_nume", "h_dEtaInSeed_endcap_nume", 20, -0.1, 0.1); h_dEtaInSeed_endcap_nume->Sumw2();
         TH1D* h_dEtaInSeed_barrel_deno = new TH1D("h_dEtaInSeed_barrel_deno", "h_dEtaInSeed_barrel_deno", 100, -1, 1); h_dEtaInSeed_barrel_deno->Sumw2();
@@ -180,16 +180,16 @@ void E_FR_HistMaker (Bool_t DEBUG)
         TH1D* h_dEtaInSeed_endcap_ctrl = new TH1D("h_dEtaInSeed_endcap_ctrl", "h_dEtaInSeed_endcap_ctrl", 100, -1, 1); h_dEtaInSeed_endcap_ctrl->Sumw2();
         TH1D* h_dPhiIn_barrel_nume = new TH1D("h_dPhiIn_barrel_nume", "h_dPhiIn_barrel_nume", 20, -0.1, 0.1); h_dPhiIn_barrel_nume->Sumw2();
         TH1D* h_dPhiIn_endcap_nume = new TH1D("h_dPhiIn_endcap_nume", "h_dPhiIn_endcap_nume", 20, -0.1, 0.1); h_dPhiIn_endcap_nume->Sumw2();
-        TH1D* h_dPhiIn_barrel_deno = new TH1D("h_dPhiIn_barrel_deno", "h_dPhiIn_barrel_deno", 100, -1, 1); h_dPhiIn_barrel_deno->Sumw2();
-        TH1D* h_dPhiIn_endcap_deno = new TH1D("h_dPhiIn_endcap_deno", "h_dPhiIn_endcap_deno", 100, -1, 1); h_dPhiIn_endcap_deno->Sumw2();
-        TH1D* h_dPhiIn_barrel_ctrl = new TH1D("h_dPhiIn_barrel_ctrl", "h_dPhiIn_barrel_ctrl", 100, -1, 1); h_dPhiIn_barrel_ctrl->Sumw2();
-        TH1D* h_dPhiIn_endcap_ctrl = new TH1D("h_dPhiIn_endcap_ctrl", "h_dPhiIn_endcap_ctrl", 100, -1, 1); h_dPhiIn_endcap_ctrl->Sumw2();
-        TH1D* h_HoverE_barrel_nume = new TH1D("h_HoverE_barrel_nume", "h_HoverE_barrel_nume", 50, 0, 0.5); h_HoverE_barrel_nume->Sumw2();
-        TH1D* h_HoverE_endcap_nume = new TH1D("h_HoverE_endcap_nume", "h_HoverE_endcap_nume", 50, 0, 0.5); h_HoverE_endcap_nume->Sumw2();
-        TH1D* h_HoverE_barrel_deno = new TH1D("h_HoverE_barrel_deno", "h_HoverE_barrel_deno", 100, 0, 10); h_HoverE_barrel_deno->Sumw2();
-        TH1D* h_HoverE_endcap_deno = new TH1D("h_HoverE_endcap_deno", "h_HoverE_endcap_deno", 100, 0, 10); h_HoverE_endcap_deno->Sumw2();
-        TH1D* h_HoverE_barrel_ctrl = new TH1D("h_HoverE_barrel_ctrl", "h_HoverE_barrel_ctrl", 100, 0, 10); h_HoverE_barrel_ctrl->Sumw2();
-        TH1D* h_HoverE_endcap_ctrl = new TH1D("h_HoverE_endcap_ctrl", "h_HoverE_endcap_ctrl", 100, 0, 10); h_HoverE_endcap_ctrl->Sumw2();
+        TH1D* h_dPhiIn_barrel_deno = new TH1D("h_dPhiIn_barrel_deno", "h_dPhiIn_barrel_deno", 20, -0.1, 0.1); h_dPhiIn_barrel_deno->Sumw2();
+        TH1D* h_dPhiIn_endcap_deno = new TH1D("h_dPhiIn_endcap_deno", "h_dPhiIn_endcap_deno", 100, -1, 1);    h_dPhiIn_endcap_deno->Sumw2();
+        TH1D* h_dPhiIn_barrel_ctrl = new TH1D("h_dPhiIn_barrel_ctrl", "h_dPhiIn_barrel_ctrl", 20, -0.1, 0.1); h_dPhiIn_barrel_ctrl->Sumw2();
+        TH1D* h_dPhiIn_endcap_ctrl = new TH1D("h_dPhiIn_endcap_ctrl", "h_dPhiIn_endcap_ctrl", 100, -1, 1);    h_dPhiIn_endcap_ctrl->Sumw2();
+        TH1D* h_HoverE_barrel_nume = new TH1D("h_HoverE_barrel_nume", "h_HoverE_barrel_nume", 20, 0, 0.1); h_HoverE_barrel_nume->Sumw2();
+        TH1D* h_HoverE_endcap_nume = new TH1D("h_HoverE_endcap_nume", "h_HoverE_endcap_nume", 30, 0, 0.15); h_HoverE_endcap_nume->Sumw2();
+        TH1D* h_HoverE_barrel_deno = new TH1D("h_HoverE_barrel_deno", "h_HoverE_barrel_deno", 20, 0, 0.1);  h_HoverE_barrel_deno->Sumw2();
+        TH1D* h_HoverE_endcap_deno = new TH1D("h_HoverE_endcap_deno", "h_HoverE_endcap_deno", 30, 0, 0.15); h_HoverE_endcap_deno->Sumw2();
+        TH1D* h_HoverE_barrel_ctrl = new TH1D("h_HoverE_barrel_ctrl", "h_HoverE_barrel_ctrl", 20, 0, 0.1);  h_HoverE_barrel_ctrl->Sumw2();
+        TH1D* h_HoverE_endcap_ctrl = new TH1D("h_HoverE_endcap_ctrl", "h_HoverE_endcap_ctrl", 30, 0, 0.15); h_HoverE_endcap_ctrl->Sumw2();
         TH1D* h_InvEminusInvP_barrel_nume = new TH1D("h_InvEminusInvP_barrel_nume", "h_InvEminusInvP_barrel_nume", 50, 0, 0.5); h_InvEminusInvP_barrel_nume->Sumw2();
         TH1D* h_InvEminusInvP_endcap_nume = new TH1D("h_InvEminusInvP_endcap_nume", "h_InvEminusInvP_endcap_nume", 50, 0, 0.5); h_InvEminusInvP_endcap_nume->Sumw2();
         TH1D* h_InvEminusInvP_barrel_deno = new TH1D("h_InvEminusInvP_barrel_deno", "h_InvEminusInvP_barrel_deno", 60, 0, 6); h_InvEminusInvP_barrel_deno->Sumw2();
@@ -229,24 +229,33 @@ void E_FR_HistMaker (Bool_t DEBUG)
         TH1D* h_MT_endcap_ctrl = new TH1D("h_MT_endcap_ctrl", "h_MT_endcap_ctrl", 500, 0, 1000); h_MT_endcap_ctrl->Sumw2();
         TH1D* h_nVTX = new TH1D("h_nVTX", "h_nVTX", 50, 0, 50); h_nVTX->Sumw2();
 
-        TH1D* h_PFiso_dBeta_barrel_nume_50to70   = new TH1D("h_PFiso_dBeta_barrel_nume_50to70",   "h_PFiso_dBeta_barrel_nume_50to70",   50, 0, 0.5);  h_PFiso_dBeta_barrel_nume_50to70  ->Sumw2();
-        TH1D* h_PFiso_dBeta_endcap_nume_50to70   = new TH1D("h_PFiso_dBeta_endcap_nume_50to70",   "h_PFiso_dBeta_endcap_nume_50to70",   50, 0, 0.5);  h_PFiso_dBeta_endcap_nume_50to70  ->Sumw2();
-        TH1D* h_PFiso_dBeta_barrel_deno_50to70   = new TH1D("h_PFiso_dBeta_barrel_deno_50to70",   "h_PFiso_dBeta_barrel_deno_50to70",   50, 0, 5);    h_PFiso_dBeta_barrel_deno_50to70  ->Sumw2();
-        TH1D* h_PFiso_dBeta_endcap_deno_50to70   = new TH1D("h_PFiso_dBeta_endcap_deno_50to70",   "h_PFiso_dBeta_endcap_deno_50to70",   50, 0, 5);    h_PFiso_dBeta_endcap_deno_50to70  ->Sumw2();
-        TH1D* h_PFiso_dBeta_barrel_ctrl_50to70   = new TH1D("h_PFiso_dBeta_barrel_ctrl_50to70",   "h_PFiso_dBeta_barrel_ctrl_50to70",   50, 0, 5);    h_PFiso_dBeta_barrel_ctrl_50to70  ->Sumw2();
-        TH1D* h_PFiso_dBeta_endcap_ctrl_50to70   = new TH1D("h_PFiso_dBeta_endcap_ctrl_50to70",   "h_PFiso_dBeta_endcap_ctrl_50to70",   50, 0, 5);    h_PFiso_dBeta_endcap_ctrl_50to70  ->Sumw2();
-        TH1D* h_PFiso_dBeta_barrel_nume_70to100  = new TH1D("h_PFiso_dBeta_barrel_nume_70to100",  "h_PFiso_dBeta_barrel_nume_70to100",  50, 0, 0.5);  h_PFiso_dBeta_barrel_nume_70to100 ->Sumw2();
-        TH1D* h_PFiso_dBeta_endcap_nume_70to100  = new TH1D("h_PFiso_dBeta_endcap_nume_70to100",  "h_PFiso_dBeta_endcap_nume_70to100",  50, 0, 0.5);  h_PFiso_dBeta_endcap_nume_70to100 ->Sumw2();
-        TH1D* h_PFiso_dBeta_barrel_deno_70to100  = new TH1D("h_PFiso_dBeta_barrel_deno_70to100",  "h_PFiso_dBeta_barrel_deno_70to100",  50, 0, 5);    h_PFiso_dBeta_barrel_deno_70to100 ->Sumw2();
-        TH1D* h_PFiso_dBeta_endcap_deno_70to100  = new TH1D("h_PFiso_dBeta_endcap_deno_70to100",  "h_PFiso_dBeta_endcap_deno_70to100",  50, 0, 5);    h_PFiso_dBeta_endcap_deno_70to100 ->Sumw2();
-        TH1D* h_PFiso_dBeta_barrel_ctrl_70to100  = new TH1D("h_PFiso_dBeta_barrel_ctrl_70to100",  "h_PFiso_dBeta_barrel_ctrl_70to100",  50, 0, 5);    h_PFiso_dBeta_barrel_ctrl_70to100 ->Sumw2();
-        TH1D* h_PFiso_dBeta_endcap_ctrl_70to100  = new TH1D("h_PFiso_dBeta_endcap_ctrl_70to100",  "h_PFiso_dBeta_endcap_ctrl_70to100",  50, 0, 5);    h_PFiso_dBeta_endcap_ctrl_70to100 ->Sumw2();
-        TH1D* h_PFiso_dBeta_barrel_nume_100to500 = new TH1D("h_PFiso_dBeta_barrel_nume_100to500", "h_PFiso_dBeta_barrel_nume_100to500", 50, 0, 0.5);  h_PFiso_dBeta_barrel_nume_100to500->Sumw2();
-        TH1D* h_PFiso_dBeta_endcap_nume_100to500 = new TH1D("h_PFiso_dBeta_endcap_nume_100to500", "h_PFiso_dBeta_endcap_nume_100to500", 50, 0, 0.5);  h_PFiso_dBeta_endcap_nume_100to500->Sumw2();
-        TH1D* h_PFiso_dBeta_barrel_deno_100to500 = new TH1D("h_PFiso_dBeta_barrel_deno_100to500", "h_PFiso_dBeta_barrel_deno_100to500", 50, 0, 5);    h_PFiso_dBeta_barrel_deno_100to500->Sumw2();
-        TH1D* h_PFiso_dBeta_endcap_deno_100to500 = new TH1D("h_PFiso_dBeta_endcap_deno_100to500", "h_PFiso_dBeta_endcap_deno_100to500", 50, 0, 5);    h_PFiso_dBeta_endcap_deno_100to500->Sumw2();
-        TH1D* h_PFiso_dBeta_barrel_ctrl_100to500 = new TH1D("h_PFiso_dBeta_barrel_ctrl_100to500", "h_PFiso_dBeta_barrel_ctrl_100to500", 50, 0, 5);    h_PFiso_dBeta_barrel_ctrl_100to500->Sumw2();
-        TH1D* h_PFiso_dBeta_endcap_ctrl_100to500 = new TH1D("h_PFiso_dBeta_endcap_ctrl_100to500", "h_PFiso_dBeta_endcap_ctrl_100to500", 50, 0, 5);    h_PFiso_dBeta_endcap_ctrl_100to500->Sumw2();
+        TH1D* h_PFiso_Rho_barrel_deno_30to50   = new TH1D("h_PFiso_Rho_barrel_deno_30to50",   "h_PFiso_Rho_barrel_deno_30to50",   50, 0, 5); h_PFiso_Rho_barrel_deno_30to50  ->Sumw2();
+        TH1D* h_PFiso_Rho_endcap_deno_30to50   = new TH1D("h_PFiso_Rho_endcap_deno_30to50",   "h_PFiso_Rho_endcap_deno_30to50",   50, 0, 5); h_PFiso_Rho_endcap_deno_30to50  ->Sumw2();
+        TH1D* h_PFiso_Rho_barrel_deno_50to70   = new TH1D("h_PFiso_Rho_barrel_deno_50to70",   "h_PFiso_Rho_barrel_deno_50to70",   50, 0, 5); h_PFiso_Rho_barrel_deno_50to70  ->Sumw2();
+        TH1D* h_PFiso_Rho_endcap_deno_50to70   = new TH1D("h_PFiso_Rho_endcap_deno_50to70",   "h_PFiso_Rho_endcap_deno_50to70",   50, 0, 5); h_PFiso_Rho_endcap_deno_50to70  ->Sumw2();
+        TH1D* h_PFiso_Rho_barrel_deno_70to100  = new TH1D("h_PFiso_Rho_barrel_deno_70to100",  "h_PFiso_Rho_barrel_deno_70to100",  50, 0, 5); h_PFiso_Rho_barrel_deno_70to100 ->Sumw2();
+        TH1D* h_PFiso_Rho_endcap_deno_70to100  = new TH1D("h_PFiso_Rho_endcap_deno_70to100",  "h_PFiso_Rho_endcap_deno_70to100",  50, 0, 5); h_PFiso_Rho_endcap_deno_70to100 ->Sumw2();
+        TH1D* h_PFiso_Rho_barrel_deno_100to200 = new TH1D("h_PFiso_Rho_barrel_deno_100to200", "h_PFiso_Rho_barrel_deno_100to200", 50, 0, 5); h_PFiso_Rho_barrel_deno_100to200->Sumw2();
+        TH1D* h_PFiso_Rho_endcap_deno_100to200 = new TH1D("h_PFiso_Rho_endcap_deno_100to200", "h_PFiso_Rho_endcap_deno_100to200", 50, 0, 5); h_PFiso_Rho_endcap_deno_100to200->Sumw2();
+        TH1D* h_PFiso_Rho_barrel_deno_200to500 = new TH1D("h_PFiso_Rho_barrel_deno_200to500", "h_PFiso_Rho_barrel_deno_200to500", 50, 0, 5); h_PFiso_Rho_barrel_deno_200to500->Sumw2();
+        TH1D* h_PFiso_Rho_endcap_deno_200to500 = new TH1D("h_PFiso_Rho_endcap_deno_200to500", "h_PFiso_Rho_endcap_deno_200to500", 50, 0, 5); h_PFiso_Rho_endcap_deno_200to500->Sumw2();
+        TH1D* h_PFiso_Rho_barrel_deno_30to50_JT   = new TH1D("h_PFiso_Rho_barrel_deno_30to50_JT",   "h_PFiso_Rho_barrel_deno_30to50_JT",   50, 0, 5); h_PFiso_Rho_barrel_deno_30to50_JT  ->Sumw2();
+        TH1D* h_PFiso_Rho_endcap_deno_30to50_JT   = new TH1D("h_PFiso_Rho_endcap_deno_30to50_JT",   "h_PFiso_Rho_endcap_deno_30to50_JT",   50, 0, 5); h_PFiso_Rho_endcap_deno_30to50_JT  ->Sumw2();
+        TH1D* h_PFiso_Rho_barrel_deno_50to70_JT   = new TH1D("h_PFiso_Rho_barrel_deno_50to70_JT",   "h_PFiso_Rho_barrel_deno_50to70_JT",   50, 0, 5); h_PFiso_Rho_barrel_deno_50to70_JT  ->Sumw2();
+        TH1D* h_PFiso_Rho_endcap_deno_50to70_JT   = new TH1D("h_PFiso_Rho_endcap_deno_50to70_JT",   "h_PFiso_Rho_endcap_deno_50to70_JT",   50, 0, 5); h_PFiso_Rho_endcap_deno_50to70_JT  ->Sumw2();
+        TH1D* h_PFiso_Rho_barrel_deno_70to100_JT  = new TH1D("h_PFiso_Rho_barrel_deno_70to100_JT",  "h_PFiso_Rho_barrel_deno_70to100_JT",  50, 0, 5); h_PFiso_Rho_barrel_deno_70to100_JT ->Sumw2();
+        TH1D* h_PFiso_Rho_endcap_deno_70to100_JT  = new TH1D("h_PFiso_Rho_endcap_deno_70to100_JT",  "h_PFiso_Rho_endcap_deno_70to100_JT",  50, 0, 5); h_PFiso_Rho_endcap_deno_70to100_JT ->Sumw2();
+        TH1D* h_PFiso_Rho_barrel_deno_100to200_JT = new TH1D("h_PFiso_Rho_barrel_deno_100to200_JT", "h_PFiso_Rho_barrel_deno_100to200_JT", 50, 0, 5); h_PFiso_Rho_barrel_deno_100to200_JT->Sumw2();
+        TH1D* h_PFiso_Rho_endcap_deno_100to200_JT = new TH1D("h_PFiso_Rho_endcap_deno_100to200_JT", "h_PFiso_Rho_endcap_deno_100to200_JT", 50, 0, 5); h_PFiso_Rho_endcap_deno_100to200_JT->Sumw2();
+        TH1D* h_PFiso_Rho_barrel_deno_200to500_JT = new TH1D("h_PFiso_Rho_barrel_deno_200to500_JT", "h_PFiso_Rho_barrel_deno_200to500_JT", 50, 0, 5); h_PFiso_Rho_barrel_deno_200to500_JT->Sumw2();
+        TH1D* h_PFiso_Rho_endcap_deno_200to500_JT = new TH1D("h_PFiso_Rho_endcap_deno_200to500_JT", "h_PFiso_Rho_endcap_deno_200to500_JT", 50, 0, 5); h_PFiso_Rho_endcap_deno_200to500_JT->Sumw2();
+
+        TH1D* h_PFiso_Rho_barrel_deno_PU10to20 = new TH1D("h_PFiso_Rho_barrel_deno_PU10to20", "h_PFiso_Rho_barrel_deno_PU10to20", 50, 0, 5); h_PFiso_Rho_barrel_deno_PU10to20->Sumw2();
+        TH1D* h_PFiso_Rho_endcap_deno_PU10to20 = new TH1D("h_PFiso_Rho_endcap_deno_PU10to20", "h_PFiso_Rho_endcap_deno_PU10to20", 50, 0, 5); h_PFiso_Rho_endcap_deno_PU10to20->Sumw2();
+        TH1D* h_PFiso_Rho_barrel_deno_PU20to30 = new TH1D("h_PFiso_Rho_barrel_deno_PU20to30", "h_PFiso_Rho_barrel_deno_PU20to30", 50, 0, 5); h_PFiso_Rho_barrel_deno_PU20to30->Sumw2();
+        TH1D* h_PFiso_Rho_endcap_deno_PU20to30 = new TH1D("h_PFiso_Rho_endcap_deno_PU20to30", "h_PFiso_Rho_endcap_deno_PU20to30", 50, 0, 5); h_PFiso_Rho_endcap_deno_PU20to30->Sumw2();
+        TH1D* h_PFiso_Rho_barrel_deno_PU30to50 = new TH1D("h_PFiso_Rho_barrel_deno_PU30to50", "h_PFiso_Rho_barrel_deno_PU30to50", 50, 0, 5); h_PFiso_Rho_barrel_deno_PU30to50->Sumw2();
+        TH1D* h_PFiso_Rho_endcap_deno_PU30to50 = new TH1D("h_PFiso_Rho_endcap_deno_PU30to50", "h_PFiso_Rho_endcap_deno_PU30to50", 50, 0, 5); h_PFiso_Rho_endcap_deno_PU30to50->Sumw2();
 
         TH1D* h_pT_barrel_nume_50to70   = new TH1D("h_pT_barrel_nume_50to70 ",  "h_pT_barrel_nume_50to70 ",  nPtBinBarrel_ele, analyzer->ptbin_barrel_ele); h_pT_barrel_nume_50to70  ->Sumw2();
         TH1D* h_pT_endcap_nume_50to70   = new TH1D("h_pT_endcap_nume_50to70 ",  "h_pT_endcap_nume_50to70 ",  nPtBinEndcap_ele, analyzer->ptbin_endcap_ele); h_pT_endcap_nume_50to70  ->Sumw2();
@@ -584,31 +593,31 @@ void E_FR_HistMaker (Bool_t DEBUG)
                     if (matched22==0 && matched30==0 && matched36==0 && matched50 == 0 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0) continue;
                     else if (matched22 == 1 && matched30 == 0 && matched36 == 0 && matched50 == 0 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0)
                     {
-                        prescale_alt = 813./18629321.;
+                        prescale_alt = 813./18621470.;
                     }
                     else if (matched30 == 1 && matched36 == 0 && matched50 == 0 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0)
                     {
-                        prescale_alt = 3211./18629321.;
+                        prescale_alt = 3211./18621470.;
                     }
                     else if (matched36 == 1 && matched50 == 0 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0)
                     {
-                        prescale_alt = 6372./18629321.;
+                        prescale_alt = 6372./18621470.;
                     }
                     else if (matched50 == 1 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0)
                     {
-                        prescale_alt = 12648./18629321.;
+                        prescale_alt = 12648./18621470.;
                     }
                     else if (matched75 == 1 && matched90 == 0 && matched120 == 0 && matched175 == 0)
                     {
-                        prescale_alt = 63170./18629321.;
+                        prescale_alt = 63170./18621470.;
                     }
                     else if (matched90 == 1 && matched120 == 0 && matched175 == 0)
                     {
-                        prescale_alt = 126981./18629321.;
+                        prescale_alt = 126981./18621470.;
                     }
                     else if (matched120 == 1 && matched175 == 0)
                     {
-                        prescale_alt = 260278./18629321.;
+                        prescale_alt = 260278./18621470.;
                     }
                     else if (matched175 == 1)
                     {
@@ -638,17 +647,17 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         if (p_T->at(i_ele) < 70)
                         {
                             h_pT_barrel_nume_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_dBeta_barrel_nume_50to70->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//                            h_PFiso_dBeta_barrel_nume_50to70->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                         else if (p_T->at(i_ele) < 100)
                         {
                             h_pT_barrel_nume_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_dBeta_barrel_nume_70to100->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//                            h_PFiso_dBeta_barrel_nume_70to100->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                         else //if (p_T->at(i_ele) < 500)
                         {
                             h_pT_barrel_nume_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_dBeta_barrel_nume_100to500->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//                            h_PFiso_dBeta_barrel_nume_100to500->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                     }
                     else if (fabs(eta->at(i_ele)) > 1.566) // Endcap
@@ -669,17 +678,17 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         if (p_T->at(i_ele) < 70)
                         {
                             h_pT_endcap_nume_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_dBeta_endcap_nume_50to70->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//                            h_PFiso_dBeta_endcap_nume_50to70->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                         else if (p_T->at(i_ele) < 100)
                         {
                             h_pT_endcap_nume_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_dBeta_endcap_nume_70to100->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//                            h_PFiso_dBeta_endcap_nume_70to100->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                         else //if (p_T->at(i_ele) < 500)
                         {
                             h_pT_endcap_nume_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_dBeta_endcap_nume_100to500->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//                            h_PFiso_dBeta_endcap_nume_100to500->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                     }
                 } // End of if(Signal/Numerator)
@@ -704,17 +713,17 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         if (p_T->at(i_ele) < 70)
                         {
                             h_pT_barrel_ctrl_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_dBeta_barrel_ctrl_50to70->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//                            h_PFiso_dBeta_barrel_ctrl_50to70->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                         else if (p_T->at(i_ele) < 100)
                         {
                             h_pT_barrel_ctrl_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_dBeta_barrel_ctrl_70to100->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//                            h_PFiso_dBeta_barrel_ctrl_70to100->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                         else //if (p_T->at(i_ele) < 500)
                         {
                             h_pT_barrel_ctrl_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_dBeta_barrel_ctrl_100to500->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//                            h_PFiso_dBeta_barrel_ctrl_100to500->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                     }
                     else if (fabs(eta->at(i_ele)) > 1.566) // Endcap
@@ -735,17 +744,17 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         if (p_T->at(i_ele) < 70)
                         {
                             h_pT_endcap_ctrl_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_dBeta_endcap_ctrl_50to70->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//                            h_PFiso_dBeta_endcap_ctrl_50to70->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                         else if (p_T->at(i_ele) < 100)
                         {
                             h_pT_endcap_ctrl_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_dBeta_endcap_ctrl_70to100->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//                            h_PFiso_dBeta_endcap_ctrl_70to100->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                         else //if (p_T->at(i_mu) < 500)
                         {
                             h_pT_endcap_ctrl_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                            h_PFiso_dBeta_endcap_ctrl_100to500->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//                            h_PFiso_dBeta_endcap_ctrl_100to500->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                     }
                 }// End of if(Control)
@@ -766,20 +775,80 @@ void E_FR_HistMaker (Bool_t DEBUG)
                     h_phiso_barrel_deno->Fill(phIso03->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     h_chisoPU_barrel_deno->Fill(ChIso03FromPU->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
 
+                    if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 && fabs(dEtaInSeed->at(i_ele)) < 0.00311 && fabs(dPhiIn->at(i_ele)) < 0.103 &&
+                        HoverE->at(i_ele) < 0.253 && InvEminusInvP->at(i_ele) < 0.134)
+                    {
+                        if (p_T->at(i_ele) > 30 && p_T->at(i_ele) < 50)
+                        {
+                            h_PFiso_Rho_barrel_deno_30to50->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                        else if (p_T->at(i_ele) > 50 && p_T->at(i_ele) < 70)
+                        {
+                           h_PFiso_Rho_barrel_deno_50to70->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                        else if (p_T->at(i_ele) > 70 && p_T->at(i_ele) < 100)
+                        {
+                            h_PFiso_Rho_barrel_deno_70to100->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                        else if (p_T->at(i_ele) > 100 && p_T->at(i_ele) < 200)
+                        {
+                            h_PFiso_Rho_barrel_deno_100to200->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                        else if (p_T->at(i_ele) > 200 && p_T->at(i_ele) < 500)
+                        {
+                            h_PFiso_Rho_barrel_deno_200to500->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+                    else if (HoverE->at(i_ele) < 0.253 && (Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.00998 || fabs(dEtaInSeed->at(i_ele)) >= 0.00311 ||
+                                                           fabs(dPhiIn->at(i_ele)) >= 0.103 || InvEminusInvP->at(i_ele) >= 0.134))
+                    {
+                        if (p_T->at(i_ele) > 30 && p_T->at(i_ele) < 50)
+                        {
+                            h_PFiso_Rho_barrel_deno_30to50_JT->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                        else if (p_T->at(i_ele) > 50 && p_T->at(i_ele) < 70)
+                        {
+                           h_PFiso_Rho_barrel_deno_50to70_JT->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                        else if (p_T->at(i_ele) > 70 && p_T->at(i_ele) < 100)
+                        {
+                            h_PFiso_Rho_barrel_deno_70to100_JT->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                        else if (p_T->at(i_ele) > 100 && p_T->at(i_ele) < 200)
+                        {
+                            h_PFiso_Rho_barrel_deno_100to200_JT->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                        else if (p_T->at(i_ele) > 200 && p_T->at(i_ele) < 500)
+                        {
+                            h_PFiso_Rho_barrel_deno_200to500_JT->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+                    if (nVTX > 10 && nVTX < 20)
+                    {
+                        h_PFiso_Rho_barrel_deno_PU10to20->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    }
+                    else if (nVTX > 20 && nVTX < 30)
+                    {
+                       h_PFiso_Rho_barrel_deno_PU20to30->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    }
+                    else if (nVTX > 30 && nVTX < 50)
+                    {
+                        h_PFiso_Rho_barrel_deno_PU30to50->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    }
                     if (p_T->at(i_ele) < 70)
                     {
                         h_pT_barrel_deno_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                        h_PFiso_dBeta_barrel_deno_50to70->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//                        h_PFiso_dBeta_barrel_deno_50to70->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     }
                     else if (p_T->at(i_ele) < 100)
                     {
                         h_pT_barrel_deno_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                        h_PFiso_dBeta_barrel_deno_70to100->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//                        h_PFiso_dBeta_barrel_deno_70to100->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     }
                     else //if (p_T->at(i_ele) < 500)
                     {
                         h_pT_barrel_deno_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                        h_PFiso_dBeta_barrel_deno_100to500->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//                        h_PFiso_dBeta_barrel_deno_100to500->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     }
                 }
                 else if (fabs(eta->at(i_ele)) > 1.566) // Endcap
@@ -797,20 +866,80 @@ void E_FR_HistMaker (Bool_t DEBUG)
                     h_phiso_endcap_deno->Fill(phIso03->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     h_chisoPU_endcap_deno->Fill(ChIso03FromPU->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
 
+                    if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dEtaInSeed->at(i_ele)) < 0.00609 && fabs(dPhiIn->at(i_ele)) < 0.045 &&
+                        HoverE->at(i_ele) < 0.0878 && InvEminusInvP->at(i_ele) < 0.13)
+                    {
+                        if (p_T->at(i_ele) > 30 && p_T->at(i_ele) < 50)
+                        {
+                            h_PFiso_Rho_endcap_deno_30to50->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                        else if (p_T->at(i_ele) > 50 && p_T->at(i_ele) < 70)
+                        {
+                           h_PFiso_Rho_endcap_deno_50to70->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                        else if (p_T->at(i_ele) > 70 && p_T->at(i_ele) < 100)
+                        {
+                            h_PFiso_Rho_endcap_deno_70to100->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                        else if (p_T->at(i_ele) > 100 && p_T->at(i_ele) < 200)
+                        {
+                            h_PFiso_Rho_endcap_deno_100to200->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                        else if (p_T->at(i_ele) > 200 && p_T->at(i_ele) < 500)
+                        {
+                            h_PFiso_Rho_endcap_deno_200to500->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+                    else if (HoverE->at(i_ele) < 0.0878 && (Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.0298 || fabs(dEtaInSeed->at(i_ele)) >= 0.00609 ||
+                                                            fabs(dPhiIn->at(i_ele)) >= 0.045 || InvEminusInvP->at(i_ele) >= 0.13))
+                    {
+                        if (p_T->at(i_ele) > 30 && p_T->at(i_ele) < 50)
+                        {
+                            h_PFiso_Rho_endcap_deno_30to50_JT->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                        else if (p_T->at(i_ele) > 50 && p_T->at(i_ele) < 70)
+                        {
+                           h_PFiso_Rho_endcap_deno_50to70_JT->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                        else if (p_T->at(i_ele) > 70 && p_T->at(i_ele) < 100)
+                        {
+                            h_PFiso_Rho_endcap_deno_70to100_JT->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                        else if (p_T->at(i_ele) > 100 && p_T->at(i_ele) < 200)
+                        {
+                            h_PFiso_Rho_endcap_deno_100to200_JT->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                        else if (p_T->at(i_ele) > 200 && p_T->at(i_ele) < 500)
+                        {
+                            h_PFiso_Rho_endcap_deno_200to500_JT->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+                    if (nVTX > 10 && nVTX < 20)
+                    {
+                        h_PFiso_Rho_endcap_deno_PU10to20->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    }
+                    else if (nVTX > 20 && nVTX < 30)
+                    {
+                       h_PFiso_Rho_endcap_deno_PU20to30->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    }
+                    else if (nVTX > 30 && nVTX < 50)
+                    {
+                        h_PFiso_Rho_endcap_deno_PU30to50->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    }
                     if (p_T->at(i_ele) < 70)
                     {
                         h_pT_endcap_deno_50to70->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                        h_PFiso_dBeta_endcap_deno_50to70->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//                        h_PFiso_dBeta_endcap_deno_50to70->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     }
                     else if (p_T->at(i_ele) < 100)
                     {
                         h_pT_endcap_deno_70to100->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                        h_PFiso_dBeta_endcap_deno_70to100->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//                        h_PFiso_dBeta_endcap_deno_70to100->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     }
                     else //if (p_T->at(i_ele) < 500)
                     {
                         h_pT_endcap_deno_100to500->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                        h_PFiso_dBeta_endcap_deno_100to500->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+//                        h_PFiso_dBeta_endcap_deno_100to500->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     }
                 }
             }// End of i_ele iteration
@@ -940,24 +1069,33 @@ void E_FR_HistMaker (Bool_t DEBUG)
         h_pT_barrel_ctrl_100to500->Write();
         h_pT_endcap_ctrl_100to500->Write();
 
-        h_PFiso_dBeta_barrel_nume_50to70->Write();
-        h_PFiso_dBeta_endcap_nume_50to70->Write();
-        h_PFiso_dBeta_barrel_deno_50to70->Write();
-        h_PFiso_dBeta_endcap_deno_50to70->Write();
-        h_PFiso_dBeta_barrel_ctrl_50to70->Write();
-        h_PFiso_dBeta_endcap_ctrl_50to70->Write();
-        h_PFiso_dBeta_barrel_nume_70to100->Write();
-        h_PFiso_dBeta_endcap_nume_70to100->Write();
-        h_PFiso_dBeta_barrel_deno_70to100->Write();
-        h_PFiso_dBeta_endcap_deno_70to100->Write();
-        h_PFiso_dBeta_barrel_ctrl_70to100->Write();
-        h_PFiso_dBeta_endcap_ctrl_70to100->Write();
-        h_PFiso_dBeta_barrel_nume_100to500->Write();
-        h_PFiso_dBeta_endcap_nume_100to500->Write();
-        h_PFiso_dBeta_barrel_deno_100to500->Write();
-        h_PFiso_dBeta_endcap_deno_100to500->Write();
-        h_PFiso_dBeta_barrel_ctrl_100to500->Write();
-        h_PFiso_dBeta_endcap_ctrl_100to500->Write();
+        h_PFiso_Rho_barrel_deno_30to50->Write();
+        h_PFiso_Rho_endcap_deno_30to50->Write();
+        h_PFiso_Rho_barrel_deno_50to70->Write();
+        h_PFiso_Rho_endcap_deno_50to70->Write();
+        h_PFiso_Rho_barrel_deno_70to100->Write();
+        h_PFiso_Rho_endcap_deno_70to100->Write();
+        h_PFiso_Rho_barrel_deno_100to200->Write();
+        h_PFiso_Rho_endcap_deno_100to200->Write();
+        h_PFiso_Rho_barrel_deno_200to500->Write();
+        h_PFiso_Rho_endcap_deno_200to500->Write();
+        h_PFiso_Rho_barrel_deno_30to50_JT->Write();
+        h_PFiso_Rho_endcap_deno_30to50_JT->Write();
+        h_PFiso_Rho_barrel_deno_50to70_JT->Write();
+        h_PFiso_Rho_endcap_deno_50to70_JT->Write();
+        h_PFiso_Rho_barrel_deno_70to100_JT->Write();
+        h_PFiso_Rho_endcap_deno_70to100_JT->Write();
+        h_PFiso_Rho_barrel_deno_100to200_JT->Write();
+        h_PFiso_Rho_endcap_deno_100to200_JT->Write();
+        h_PFiso_Rho_barrel_deno_200to500_JT->Write();
+        h_PFiso_Rho_endcap_deno_200to500_JT->Write();
+
+        h_PFiso_Rho_barrel_deno_PU10to20->Write();
+        h_PFiso_Rho_endcap_deno_PU10to20->Write();
+        h_PFiso_Rho_barrel_deno_PU20to30->Write();
+        h_PFiso_Rho_endcap_deno_PU20to30->Write();
+        h_PFiso_Rho_barrel_deno_PU30to50->Write();
+        h_PFiso_Rho_endcap_deno_PU30to50->Write();
 
         h_mass_test->Write();
 
