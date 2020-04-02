@@ -106,7 +106,818 @@ void TemplateFit (TString WhichX = "", Int_t type = 2)
 /// ############################################################################# ///
 void E_Tfit(Int_t type)
 {
-   return; // NOT READY YET
+    FileMgr fm;
+
+    TH1D *h_barrel_MC_template   [_EndOf_Data_Special][nPtBinBarrel_ele],
+         *h_barrel_MC_jetTemplate[_EndOf_Data_Special][nPtBinBarrel_ele],
+         *h_endcap_MC_template   [_EndOf_Data_Special][nPtBinEndcap_ele],
+         *h_endcap_MC_jetTemplate[_EndOf_Data_Special][nPtBinEndcap_ele],
+         *h_barrel_data_template   [nPtBinBarrel_ele],
+         *h_barrel_data_jetTemplate[nPtBinBarrel_ele],
+         *h_endcap_data_template   [nPtBinEndcap_ele],
+         *h_endcap_data_jetTemplate[nPtBinEndcap_ele];
+
+// ############################# SETUP ################################# //
+//----------------------------- MC bkg ------------------------------------
+
+    // Other MC
+    Int_t stop = 0;
+    Process_t pr1 = _WW;
+    while (!stop)
+    {
+        TFile *file = new TFile("/media/sf_DATA/FR/Electron/FR_Hist_E_"+fm.Procname[pr1]+".root", "READ");
+
+        for (Int_t ih=0; ih<nPtBinBarrel_ele; ih++)
+        {
+            file->GetObject("h_PFiso_Rho_barrel_template_"+TString::Itoa(ih, 10),   h_barrel_MC_template[pr1][ih]);
+            file->GetObject("h_PFiso_Rho_barrel_jetTemplate_"+TString::Itoa(ih, 10),   h_barrel_MC_jetTemplate[pr1][ih]);
+
+            removeNegativeBins(h_barrel_MC_template[pr1][ih]);
+            removeNegativeBins(h_barrel_MC_jetTemplate[pr1][ih]);
+
+            h_barrel_MC_template[pr1][ih]->SetBinContent(1, 0);
+            h_barrel_MC_template[pr1][ih]->SetBinContent(2, 0);
+            h_barrel_MC_template[pr1][ih]->SetBinContent(3, 0);
+            h_barrel_MC_jetTemplate[pr1][ih]->SetBinContent(1, 0);
+            h_barrel_MC_jetTemplate[pr1][ih]->SetBinContent(2, 0);
+            h_barrel_MC_jetTemplate[pr1][ih]->SetBinContent(3, 0);
+
+            h_barrel_MC_template[pr1][ih]->SetDirectory(0);
+            h_barrel_MC_jetTemplate[pr1][ih]->SetDirectory(0);
+
+            if (ih < nPtBinEndcap_ele)
+            {
+                file->GetObject("h_PFiso_Rho_endcap_template_"+TString::Itoa(ih, 10),   h_endcap_MC_template[pr1][ih]);
+                file->GetObject("h_PFiso_Rho_endcap_jetTemplate_"+TString::Itoa(ih, 10),   h_endcap_MC_jetTemplate[pr1][ih]);
+
+                removeNegativeBins(h_endcap_MC_template[pr1][ih]);
+                removeNegativeBins(h_endcap_MC_jetTemplate[pr1][ih]);
+
+                h_endcap_MC_template[pr1][ih]->SetBinContent(1, 0);
+                h_endcap_MC_template[pr1][ih]->SetBinContent(2, 0);
+                h_endcap_MC_template[pr1][ih]->SetBinContent(3, 0);
+                h_endcap_MC_jetTemplate[pr1][ih]->SetBinContent(1, 0);
+                h_endcap_MC_jetTemplate[pr1][ih]->SetBinContent(2, 0);
+                h_endcap_MC_jetTemplate[pr1][ih]->SetBinContent(3, 0);
+
+                h_endcap_MC_template[pr1][ih]->SetDirectory(0);
+                h_endcap_MC_jetTemplate[pr1][ih]->SetDirectory(0);
+            }
+        }
+
+        file->Close();
+
+        if (pr1 == _WW) {pr1 = _WZ; continue;}
+        if (pr1 == _WZ) {pr1 = _ZZ; continue;}
+        if (pr1 == _ZZ) {pr1 = _tbarW; continue;}
+        if (pr1 == _tbarW) {pr1 = _tW; continue;}
+        if (pr1 == _tW) {pr1 = _ttbar; continue;}
+        if (pr1 == _ttbar) {pr1 = _ttbar_700to1000; continue;}
+        if (pr1 == _ttbar_700to1000) {pr1 = _ttbar_1000toInf; continue;}
+        if (pr1 == _ttbar_1000toInf) {pr1 = _WJets; continue;}
+        if (pr1 == _WJets) {pr1 = _WJets_ext2v5; continue;}
+        if (pr1 == _WJets_ext2v5) {stop = 1;}
+    }
+
+    for (Int_t ih=0; ih<nPtBinBarrel_ele; ih++)
+    {
+        h_barrel_MC_template[_ttbar][ih]   ->Add(h_barrel_MC_template[_ttbar_700to1000][ih]);
+        h_barrel_MC_jetTemplate[_ttbar][ih]->Add(h_barrel_MC_jetTemplate[_ttbar_700to1000][ih]);
+        h_barrel_MC_template[_ttbar][ih]   ->Add(h_barrel_MC_template[_ttbar_1000toInf][ih]);
+        h_barrel_MC_jetTemplate[_ttbar][ih]->Add(h_barrel_MC_jetTemplate[_ttbar_1000toInf][ih]);
+        h_barrel_MC_template[_WJets][ih]   ->Add(h_barrel_MC_template[_WJets_ext2v5][ih]);
+        h_barrel_MC_jetTemplate[_WJets][ih]->Add(h_barrel_MC_jetTemplate[_WJets_ext2v5][ih]);
+
+        h_barrel_MC_template[_VVnST][ih] = ((TH1D*)(h_barrel_MC_template[_tW][ih]->Clone("h_barrel_VVnST_template")));
+        h_barrel_MC_template[_VVnST][ih]->Add(h_barrel_MC_template[_tbarW][ih]);
+        h_barrel_MC_template[_VVnST][ih]->Add(h_barrel_MC_template[_WW][ih]);
+        h_barrel_MC_template[_VVnST][ih]->Add(h_barrel_MC_template[_WZ][ih]);
+        h_barrel_MC_template[_VVnST][ih]->Add(h_barrel_MC_template[_ZZ][ih]);
+        h_barrel_MC_jetTemplate[_VVnST][ih] = ((TH1D*)(h_barrel_MC_jetTemplate[_tW][ih]->Clone("h_barrel_VVnST_jetTemplate")));
+        h_barrel_MC_jetTemplate[_VVnST][ih]->Add(h_barrel_MC_jetTemplate[_tbarW][ih]);
+        h_barrel_MC_jetTemplate[_VVnST][ih]->Add(h_barrel_MC_jetTemplate[_WW][ih]);
+        h_barrel_MC_jetTemplate[_VVnST][ih]->Add(h_barrel_MC_jetTemplate[_WZ][ih]);
+        h_barrel_MC_jetTemplate[_VVnST][ih]->Add(h_barrel_MC_jetTemplate[_ZZ][ih]);
+
+        if (ih < nPtBinEndcap_ele)
+        {
+            h_endcap_MC_template[_ttbar][ih]   ->Add(h_endcap_MC_template[_ttbar_700to1000][ih]);
+            h_endcap_MC_jetTemplate[_ttbar][ih]->Add(h_endcap_MC_jetTemplate[_ttbar_700to1000][ih]);
+            h_endcap_MC_template[_ttbar][ih]   ->Add(h_endcap_MC_template[_ttbar_1000toInf][ih]);
+            h_endcap_MC_jetTemplate[_ttbar][ih]->Add(h_endcap_MC_jetTemplate[_ttbar_1000toInf][ih]);
+            h_endcap_MC_template[_WJets][ih]   ->Add(h_endcap_MC_template[_WJets_ext2v5][ih]);
+            h_endcap_MC_jetTemplate[_WJets][ih]->Add(h_endcap_MC_jetTemplate[_WJets_ext2v5][ih]);
+
+            h_endcap_MC_template[_VVnST][ih] = ((TH1D*)(h_endcap_MC_template[_tW][ih]->Clone("h_endcap_VVnST_template")));
+            h_endcap_MC_template[_VVnST][ih]->Add(h_endcap_MC_template[_tbarW][ih]);
+            h_endcap_MC_template[_VVnST][ih]->Add(h_endcap_MC_template[_WW][ih]);
+            h_endcap_MC_template[_VVnST][ih]->Add(h_endcap_MC_template[_WZ][ih]);
+            h_endcap_MC_template[_VVnST][ih]->Add(h_endcap_MC_template[_ZZ][ih]);
+            h_endcap_MC_jetTemplate[_VVnST][ih] = ((TH1D*)(h_endcap_MC_jetTemplate[_tW][ih]->Clone("h_endcap_VVnST_jetTemplate")));
+            h_endcap_MC_jetTemplate[_VVnST][ih]->Add(h_endcap_MC_jetTemplate[_tbarW][ih]);
+            h_endcap_MC_jetTemplate[_VVnST][ih]->Add(h_endcap_MC_jetTemplate[_WW][ih]);
+            h_endcap_MC_jetTemplate[_VVnST][ih]->Add(h_endcap_MC_jetTemplate[_WZ][ih]);
+            h_endcap_MC_jetTemplate[_VVnST][ih]->Add(h_endcap_MC_jetTemplate[_ZZ][ih]);
+        }
+    }
+
+    // DY
+    for (Process_t pr = _DY_10to50; pr <= _DY_2000to3000; pr=next(pr))
+    {
+        TFile *file;
+        file = new TFile("/media/sf_DATA/FR/Electron/FR_Hist_E_"+fm.Procname[pr]+".root", "READ");
+
+        for (Int_t ih=0; ih<nPtBinBarrel_ele; ih++)
+        {
+            file->GetObject("h_PFiso_Rho_barrel_template_"+TString::Itoa(ih, 10), h_barrel_MC_template[pr][ih]);
+            file->GetObject("h_PFiso_Rho_barrel_jetTemplate_"+TString::Itoa(ih, 10), h_barrel_MC_jetTemplate[pr][ih]);
+
+            removeNegativeBins(h_barrel_MC_template[pr][ih]);
+            removeNegativeBins(h_barrel_MC_jetTemplate[pr][ih]);
+
+            h_barrel_MC_template[pr][ih]->SetBinContent(1, 0);
+            h_barrel_MC_template[pr][ih]->SetBinContent(2, 0);
+            h_barrel_MC_template[pr][ih]->SetBinContent(3, 0);
+            h_barrel_MC_jetTemplate[pr][ih]->SetBinContent(1, 0);
+            h_barrel_MC_jetTemplate[pr][ih]->SetBinContent(2, 0);
+            h_barrel_MC_jetTemplate[pr][ih]->SetBinContent(3, 0);
+
+            h_barrel_MC_template[pr][ih]->SetDirectory(0);
+            h_barrel_MC_jetTemplate[pr][ih]->SetDirectory(0);
+
+            if (ih < nPtBinEndcap_ele)
+            {
+                file->GetObject("h_PFiso_Rho_endcap_template_"+TString::Itoa(ih, 10), h_endcap_MC_template[pr][ih]);
+                file->GetObject("h_PFiso_Rho_endcap_jetTemplate_"+TString::Itoa(ih, 10), h_endcap_MC_jetTemplate[pr][ih]);
+
+                removeNegativeBins(h_endcap_MC_template[pr][ih]);
+                removeNegativeBins(h_endcap_MC_jetTemplate[pr][ih]);
+
+                h_endcap_MC_template[pr][ih]->SetBinContent(1, 0);
+                h_endcap_MC_template[pr][ih]->SetBinContent(2, 0);
+                h_endcap_MC_template[pr][ih]->SetBinContent(3, 0);
+                h_endcap_MC_jetTemplate[pr][ih]->SetBinContent(1, 0);
+                h_endcap_MC_jetTemplate[pr][ih]->SetBinContent(2, 0);
+                h_endcap_MC_jetTemplate[pr][ih]->SetBinContent(3, 0);
+
+                h_endcap_MC_template[pr][ih]->SetDirectory(0);
+                h_endcap_MC_jetTemplate[pr][ih]->SetDirectory(0);
+            }
+        }
+
+
+        if (pr == _DY_10to50)
+        {
+            for (Int_t ih=0; ih<nPtBinBarrel_ele; ih++)
+            {
+                h_barrel_MC_template[_DY_Full][ih] = ((TH1D*)(h_barrel_MC_template[pr][ih]->Clone("h_barrel_MC_template_DY_"+TString::Itoa(ih, 10))));
+                h_barrel_MC_jetTemplate[_DY_Full][ih] = ((TH1D*)(h_barrel_MC_jetTemplate[pr][ih]->Clone("h_barrel_MC_jetTemplate_DY_"+TString::Itoa(ih, 10))));
+                h_barrel_MC_template[_DY_Full][ih]   ->SetDirectory(0);
+                h_barrel_MC_jetTemplate[_DY_Full][ih]->SetDirectory(0);
+
+                if (ih < nPtBinEndcap_ele)
+                {
+                    h_endcap_MC_template[_DY_Full][ih] = ((TH1D*)(h_endcap_MC_template[pr][ih]->Clone("h_endcap_MC_template_DY_"+TString::Itoa(ih, 10))));
+                    h_endcap_MC_jetTemplate[_DY_Full][ih] = ((TH1D*)(h_endcap_MC_jetTemplate[pr][ih]->Clone("h_endcap_MC_jetTemplate_DY_"+TString::Itoa(ih, 10))));
+                    h_endcap_MC_template[_DY_Full][ih]   ->SetDirectory(0);
+                    h_endcap_MC_jetTemplate[_DY_Full][ih]->SetDirectory(0);
+                }
+            }
+        }
+        else
+        {
+            for (Int_t ih=0; ih<nPtBinBarrel_ele; ih++)
+            {
+                h_barrel_MC_template[_DY_Full][ih]    ->Add(h_barrel_MC_template[pr][ih]   );
+                h_barrel_MC_jetTemplate[_DY_Full][ih] ->Add(h_barrel_MC_jetTemplate[pr][ih]);
+
+                if (ih < nPtBinEndcap_ele)
+                {
+                    h_endcap_MC_template[_DY_Full][ih]    ->Add(h_endcap_MC_template[pr][ih]   );
+                    h_endcap_MC_jetTemplate[_DY_Full][ih] ->Add(h_endcap_MC_jetTemplate[pr][ih]);
+                }
+            }
+        }
+        file->Close();
+    }
+
+    // Gamma+Jets
+    for (Process_t pr = _GJets_20to100; pr <= _GJets_2000to5000; pr=next(pr))
+    {
+        TFile *file;
+        file = new TFile("/media/sf_DATA/FR/Electron/FR_Hist_E_"+fm.Procname[pr]+".root", "READ");
+
+        for (Int_t ih=0; ih<nPtBinBarrel_ele; ih++)
+        {
+            file->GetObject("h_PFiso_Rho_barrel_template_"+TString::Itoa(ih, 10), h_barrel_MC_template[pr][ih]);
+            file->GetObject("h_PFiso_Rho_barrel_jetTemplate_"+TString::Itoa(ih, 10), h_barrel_MC_jetTemplate[pr][ih]);
+
+            removeNegativeBins(h_barrel_MC_template[pr][ih]);
+            removeNegativeBins(h_barrel_MC_jetTemplate[pr][ih]);
+
+            h_barrel_MC_template[pr][ih]->SetBinContent(1, 0);
+            h_barrel_MC_template[pr][ih]->SetBinContent(2, 0);
+            h_barrel_MC_template[pr][ih]->SetBinContent(3, 0);
+            h_barrel_MC_jetTemplate[pr][ih]->SetBinContent(1, 0);
+            h_barrel_MC_jetTemplate[pr][ih]->SetBinContent(2, 0);
+            h_barrel_MC_jetTemplate[pr][ih]->SetBinContent(3, 0);
+
+            h_barrel_MC_template[pr][ih]->SetDirectory(0);
+            h_barrel_MC_jetTemplate[pr][ih]->SetDirectory(0);
+
+            if (ih < nPtBinEndcap_ele)
+            {
+                file->GetObject("h_PFiso_Rho_endcap_template_"+TString::Itoa(ih, 10), h_endcap_MC_template[pr][ih]);
+                file->GetObject("h_PFiso_Rho_endcap_jetTemplate_"+TString::Itoa(ih, 10), h_endcap_MC_jetTemplate[pr][ih]);
+
+                removeNegativeBins(h_endcap_MC_template[pr][ih]);
+                removeNegativeBins(h_endcap_MC_jetTemplate[pr][ih]);
+
+                h_endcap_MC_template[pr][ih]->SetBinContent(1, 0);
+                h_endcap_MC_template[pr][ih]->SetBinContent(2, 0);
+                h_endcap_MC_template[pr][ih]->SetBinContent(3, 0);
+                h_endcap_MC_jetTemplate[pr][ih]->SetBinContent(1, 0);
+                h_endcap_MC_jetTemplate[pr][ih]->SetBinContent(2, 0);
+                h_endcap_MC_jetTemplate[pr][ih]->SetBinContent(3, 0);
+
+                h_endcap_MC_template[pr][ih]->SetDirectory(0);
+                h_endcap_MC_jetTemplate[pr][ih]->SetDirectory(0);
+            }
+        }
+
+        if (pr == _GJets_20to100)
+        {
+            for (Int_t ih=0; ih<nPtBinBarrel_ele; ih++)
+            {
+                h_barrel_MC_template[_GJets_Full][ih] = ((TH1D*)(h_barrel_MC_template[pr][ih]->Clone("h_barrel_MC_template_GJets_"+TString::Itoa(ih, 10))));
+                h_barrel_MC_jetTemplate[_GJets_Full][ih] = ((TH1D*)(h_barrel_MC_jetTemplate[pr][ih]->Clone("h_barrel_MC_jetTemplate_GJets_"+TString::Itoa(ih, 10))));
+                h_barrel_MC_template[_GJets_Full][ih]   ->SetDirectory(0);
+                h_barrel_MC_jetTemplate[_GJets_Full][ih]->SetDirectory(0);
+
+                if (ih < nPtBinEndcap_ele)
+                {
+                    h_endcap_MC_template[_GJets_Full][ih] = ((TH1D*)(h_endcap_MC_template[pr][ih]->Clone("h_endcap_MC_template_GJets_"+TString::Itoa(ih, 10))));
+                    h_endcap_MC_jetTemplate[_GJets_Full][ih] = ((TH1D*)(h_endcap_MC_jetTemplate[pr][ih]->Clone("h_endcap_MC_jetTemplate_GJets_"+TString::Itoa(ih, 10))));
+                    h_endcap_MC_template[_GJets_Full][ih]   ->SetDirectory(0);
+                    h_endcap_MC_jetTemplate[_GJets_Full][ih]->SetDirectory(0);
+                }
+            }
+        }
+        else
+        {
+            for (Int_t ih=0; ih<nPtBinBarrel_ele; ih++)
+            {
+                h_barrel_MC_template[_GJets_Full][ih]    ->Add(h_barrel_MC_template[pr][ih]   );
+                h_barrel_MC_jetTemplate[_GJets_Full][ih] ->Add(h_barrel_MC_jetTemplate[pr][ih]);
+
+                if (ih < nPtBinEndcap_ele)
+                {
+                    h_endcap_MC_template[_GJets_Full][ih]    ->Add(h_endcap_MC_template[pr][ih]   );
+                    h_endcap_MC_jetTemplate[_GJets_Full][ih] ->Add(h_endcap_MC_jetTemplate[pr][ih]);
+                }
+            }
+        }
+        file->Close();
+    }
+
+    // QCD
+    for (Process_t pr = _QCDEMEnriched_20to30; pr <= _QCDEMEnriched_300toInf; pr=next(pr))
+    {
+        TFile *file;
+        file = new TFile("/media/sf_DATA/FR/Electron/FR_Hist_E_"+fm.Procname[pr]+".root", "READ");
+
+        for (Int_t ih=0; ih<nPtBinBarrel_ele; ih++)
+        {
+            file->GetObject("h_PFiso_Rho_barrel_template_"+TString::Itoa(ih, 10), h_barrel_MC_template[pr][ih]);
+            file->GetObject("h_PFiso_Rho_barrel_jetTemplate_"+TString::Itoa(ih, 10), h_barrel_MC_jetTemplate[pr][ih]);
+
+            removeNegativeBins(h_barrel_MC_template[pr][ih]);
+            removeNegativeBins(h_barrel_MC_jetTemplate[pr][ih]);
+
+            h_barrel_MC_template[pr][ih]->SetBinContent(1, 0);
+            h_barrel_MC_template[pr][ih]->SetBinContent(2, 0);
+            h_barrel_MC_template[pr][ih]->SetBinContent(3, 0);
+            h_barrel_MC_jetTemplate[pr][ih]->SetBinContent(1, 0);
+            h_barrel_MC_jetTemplate[pr][ih]->SetBinContent(2, 0);
+            h_barrel_MC_jetTemplate[pr][ih]->SetBinContent(3, 0);
+
+            h_barrel_MC_template[pr][ih]->SetDirectory(0);
+            h_barrel_MC_jetTemplate[pr][ih]->SetDirectory(0);
+
+            if (ih < nPtBinEndcap_ele)
+            {
+                file->GetObject("h_PFiso_Rho_endcap_template_"+TString::Itoa(ih, 10), h_endcap_MC_template[pr][ih]);
+                file->GetObject("h_PFiso_Rho_endcap_jetTemplate_"+TString::Itoa(ih, 10), h_endcap_MC_jetTemplate[pr][ih]);
+
+                removeNegativeBins(h_endcap_MC_template[pr][ih]);
+                removeNegativeBins(h_endcap_MC_jetTemplate[pr][ih]);
+
+                h_endcap_MC_template[pr][ih]->SetBinContent(1, 0);
+                h_endcap_MC_template[pr][ih]->SetBinContent(2, 0);
+                h_endcap_MC_template[pr][ih]->SetBinContent(3, 0);
+                h_endcap_MC_jetTemplate[pr][ih]->SetBinContent(1, 0);
+                h_endcap_MC_jetTemplate[pr][ih]->SetBinContent(2, 0);
+                h_endcap_MC_jetTemplate[pr][ih]->SetBinContent(3, 0);
+
+                h_endcap_MC_template[pr][ih]->SetDirectory(0);
+                h_endcap_MC_jetTemplate[pr][ih]->SetDirectory(0);
+            }
+        }
+
+        if (pr == _QCDEMEnriched_20to30)
+        {
+            for (Int_t ih=0; ih<nPtBinBarrel_ele; ih++)
+            {
+                h_barrel_MC_template[_QCDEMEnriched_Full][ih] = ((TH1D*)(h_barrel_MC_template[pr][ih]->Clone("h_barrel_MC_template_QCD_"+TString::Itoa(ih, 10))));
+                h_barrel_MC_jetTemplate[_QCDEMEnriched_Full][ih] = ((TH1D*)(h_barrel_MC_jetTemplate[pr][ih]->Clone("h_barrel_MC_jetTemplate_QCD_"+TString::Itoa(ih, 10))));
+                h_barrel_MC_template[_QCDEMEnriched_Full][ih]   ->SetDirectory(0);
+                h_barrel_MC_jetTemplate[_QCDEMEnriched_Full][ih]->SetDirectory(0);
+
+                if (ih < nPtBinEndcap_ele)
+                {
+                    h_endcap_MC_template[_QCDEMEnriched_Full][ih] = ((TH1D*)(h_endcap_MC_template[pr][ih]->Clone("h_endcap_MC_template_QCD_"+TString::Itoa(ih, 10))));
+                    h_endcap_MC_jetTemplate[_QCDEMEnriched_Full][ih] = ((TH1D*)(h_endcap_MC_jetTemplate[pr][ih]->Clone("h_endcap_MC_jetTemplate_QCD_"+TString::Itoa(ih, 10))));
+                    h_endcap_MC_template[_QCDEMEnriched_Full][ih]   ->SetDirectory(0);
+                    h_endcap_MC_jetTemplate[_QCDEMEnriched_Full][ih]->SetDirectory(0);
+                }
+            }
+        }
+        else
+        {
+            for (Int_t ih=0; ih<nPtBinBarrel_ele; ih++)
+            {
+                h_barrel_MC_template[_QCDEMEnriched_Full][ih]    ->Add(h_barrel_MC_template[pr][ih]   );
+                h_barrel_MC_jetTemplate[_QCDEMEnriched_Full][ih] ->Add(h_barrel_MC_jetTemplate[pr][ih]);
+
+                if (ih < nPtBinEndcap_ele)
+                {
+                    h_endcap_MC_template[_QCDEMEnriched_Full][ih]    ->Add(h_endcap_MC_template[pr][ih]   );
+                    h_endcap_MC_jetTemplate[_QCDEMEnriched_Full][ih] ->Add(h_endcap_MC_jetTemplate[pr][ih]);
+                }
+            }
+        }
+        file->Close();
+    }
+
+    //--------------------------------------- DATA -----------------------------------------------------
+
+    for (Process_t pr=_SinglePhoton_B; pr<=_SinglePhoton_H; pr=next(pr))
+    {
+        TFile *file;
+        file = new TFile("/media/sf_DATA/FR/Electron/FR_Hist_E_"+fm.Procname[pr]+".root", "READ");
+
+        if (pr == _SinglePhoton_B)
+        {
+            for (Int_t ih=0; ih<nPtBinBarrel_ele; ih++)
+            {
+                file->GetObject("h_PFiso_Rho_barrel_template_"+TString::Itoa(ih, 10), h_barrel_data_template[ih]);
+                file->GetObject("h_PFiso_Rho_barrel_jetTemplate_"+TString::Itoa(ih, 10), h_barrel_data_jetTemplate[ih]);
+
+                removeNegativeBins(h_barrel_data_template[ih]);
+                removeNegativeBins(h_barrel_data_jetTemplate[ih]);
+
+                h_barrel_data_template[ih]->SetBinContent(1, 0);
+                h_barrel_data_template[ih]->SetBinContent(2, 0);
+                h_barrel_data_template[ih]->SetBinContent(3, 0);
+                h_barrel_data_jetTemplate[ih]->SetBinContent(1, 0);
+                h_barrel_data_jetTemplate[ih]->SetBinContent(2, 0);
+                h_barrel_data_jetTemplate[ih]->SetBinContent(3, 0);
+
+                h_barrel_data_template[ih]->SetDirectory(0);
+                h_barrel_data_jetTemplate[ih]->SetDirectory(0);
+
+                if (ih < nPtBinEndcap_ele)
+                {
+                    file->GetObject("h_PFiso_Rho_endcap_template_"+TString::Itoa(ih, 10), h_endcap_data_template[ih]);
+                    file->GetObject("h_PFiso_Rho_endcap_jetTemplate_"+TString::Itoa(ih, 10), h_endcap_data_jetTemplate[ih]);
+
+                    removeNegativeBins(h_endcap_data_template[ih]);
+                    removeNegativeBins(h_endcap_data_jetTemplate[ih]);
+
+                    h_endcap_data_template[ih]->SetBinContent(1, 0);
+                    h_endcap_data_template[ih]->SetBinContent(2, 0);
+                    h_endcap_data_template[ih]->SetBinContent(3, 0);
+                    h_endcap_data_jetTemplate[ih]->SetBinContent(1, 0);
+                    h_endcap_data_jetTemplate[ih]->SetBinContent(2, 0);
+                    h_endcap_data_jetTemplate[ih]->SetBinContent(3, 0);
+
+                    h_endcap_data_template[ih]->SetDirectory(0);
+                    h_endcap_data_jetTemplate[ih]->SetDirectory(0);
+                }
+            }
+        }
+        else
+        {
+            for (Int_t ih=0; ih<nPtBinBarrel_ele; ih++)
+            {
+                TH1D* h_temp[4];
+                file->GetObject("h_PFiso_Rho_barrel_template_"+TString::Itoa(ih, 10), h_temp[0]);
+                file->GetObject("h_PFiso_Rho_barrel_jetTemplate_"+TString::Itoa(ih, 10), h_temp[1]);
+
+                removeNegativeBins(h_temp[0]);
+                removeNegativeBins(h_temp[1]);
+
+                h_temp[0]->SetBinContent(1, 0);
+                h_temp[0]->SetBinContent(2, 0);
+                h_temp[0]->SetBinContent(3, 0);
+                h_temp[1]->SetBinContent(1, 0);
+                h_temp[1]->SetBinContent(2, 0);
+                h_temp[1]->SetBinContent(3, 0);
+
+                h_barrel_data_template[ih]->Add(h_temp[0]);
+                h_barrel_data_jetTemplate[ih]->Add(h_temp[1]);
+
+                if (ih < nPtBinEndcap_ele)
+                {
+                    file->GetObject("h_PFiso_Rho_endcap_template_"+TString::Itoa(ih, 10), h_temp[2]);
+                    file->GetObject("h_PFiso_Rho_endcap_jetTemplate_"+TString::Itoa(ih, 10), h_temp[3]);
+
+                    removeNegativeBins(h_temp[2]);
+                    removeNegativeBins(h_temp[3]);
+
+                    h_temp[2]->SetBinContent(1, 0);
+                    h_temp[2]->SetBinContent(2, 0);
+                    h_temp[2]->SetBinContent(3, 0);
+                    h_temp[3]->SetBinContent(1, 0);
+                    h_temp[3]->SetBinContent(2, 0);
+                    h_temp[3]->SetBinContent(3, 0);
+
+                    h_endcap_data_template[ih]->Add(h_temp[2]);
+                    h_endcap_data_jetTemplate[ih]->Add(h_temp[3]);
+                }
+            }
+        }
+    }
+
+//    for (Int_t ih=0; ih<nPtBinBarrel_ele; ih++)
+//    {
+//        h_barrel_data_template[ih]->SetDirectory(0);
+//        h_barrel_data_jetTemplate[ih]->SetDirectory(0);
+
+//        if (nPtBinEndcap_ele)
+//        {
+//            h_endcap_data_template[ih]->SetDirectory(0);
+//            h_endcap_data_jetTemplate[ih]->SetDirectory(0);
+//        }
+//    }
+
+// ------------------------------- CREATE QCD TEMPLATE --------------------------------- //
+
+    TH1D *h_barrel_QCD_template[nPtBinBarrel_ele], *h_endcap_QCD_template[nPtBinBarrel_ele];
+    for (Int_t ih=0; ih<nPtBinBarrel_ele; ih++)
+    {
+        h_barrel_QCD_template[ih] = ((TH1D*)(h_barrel_data_jetTemplate[ih]->Clone("h_barrel_QCD_template_"+TString::Itoa(ih, 10))));
+        h_barrel_QCD_template[ih]->Add(h_barrel_MC_jetTemplate[_WJets][ih], -1);
+        h_barrel_QCD_template[ih]->Add(h_barrel_MC_jetTemplate[_ttbar][ih], -1);
+        h_barrel_QCD_template[ih]->Add(h_barrel_MC_jetTemplate[_DY_Full][ih], -1);
+        h_barrel_QCD_template[ih]->Add(h_barrel_MC_jetTemplate[_GJets_Full][ih], -1);
+        h_barrel_QCD_template[ih]->Add(h_barrel_MC_jetTemplate[_VVnST][ih], -1);
+        h_barrel_QCD_template[ih]->Scale(0.25);
+
+        if (ih < nPtBinEndcap_ele)
+        {
+            h_endcap_QCD_template[ih] = ((TH1D*)(h_endcap_data_jetTemplate[ih]->Clone("h_endcap_QCD_template_"+TString::Itoa(ih, 10))));
+            h_endcap_QCD_template[ih]->Add(h_endcap_MC_jetTemplate[_WJets][ih], -1);
+            h_endcap_QCD_template[ih]->Add(h_endcap_MC_jetTemplate[_ttbar][ih], -1);
+            h_endcap_QCD_template[ih]->Add(h_endcap_MC_jetTemplate[_DY_Full][ih], -1);
+            h_endcap_QCD_template[ih]->Add(h_endcap_MC_jetTemplate[_GJets_Full][ih], -1);
+            h_endcap_QCD_template[ih]->Add(h_endcap_MC_jetTemplate[_VVnST][ih], -1);
+            h_endcap_QCD_template[ih]->Scale(0.25);
+        }
+    }
+
+// ----------------------- MAIN FIT --------------------------------------- //
+    for (Int_t ih=0; ih<nPtBinBarrel_ele; ih++)
+    {
+    // ######################## MODEL BUILDING ##########################
+
+        // Making RooDataHist
+        RooRealVar PFiso_Rho("iso", "relPFiso_Rho", 0, 5);
+
+        RooDataHist *rh_barrel_QCD   = new RooDataHist("rh_barrel_QCD",   "RooHist_barrel_QCD",   PFiso_Rho, h_barrel_QCD_template[ih]);
+        RooDataHist *rh_barrel_WJets = new RooDataHist("rh_barrel_WJets", "RooHist_barrel_WJets", PFiso_Rho, h_barrel_MC_template[_WJets][ih]);
+        RooDataHist *rh_barrel_GJets = new RooDataHist("rh_barrel_GJets", "RooHist_barrel_GJets", PFiso_Rho, h_barrel_MC_template[_GJets_Full][ih]);
+        RooDataHist *rh_barrel_DY    = new RooDataHist("rh_barrel_DY",    "RooHist_barrel_DY",    PFiso_Rho, h_barrel_MC_template[_DY_Full][ih]);
+        RooDataHist *rh_barrel_ttbar = new RooDataHist("rh_barrel_ttbar", "RooHist_barrel_ttbar", PFiso_Rho, h_barrel_MC_template[_ttbar][ih]);
+        RooDataHist *rh_barrel_VVnST = new RooDataHist("rh_barrel_VVnST", "RooHist_barrel_VVnST", PFiso_Rho, h_barrel_MC_template[_VVnST][ih]);
+        RooDataHist *rh_barrel_data  = new RooDataHist("rh_barrel_data",  "RooHist_barrel_data",  PFiso_Rho, h_barrel_data_template[ih]);
+
+        // Making RooHistPdf
+        RooHistPdf *pdf_barrel_QCD   = new RooHistPdf("pdf_barrel_QCD",   "Barrel Data-driven QCD template", PFiso_Rho, *rh_barrel_QCD,   0);
+        RooHistPdf *pdf_barrel_WJets = new RooHistPdf("pdf_barrel_WJets", "Barrel MC W+Jets template",       PFiso_Rho, *rh_barrel_WJets, 0);
+        RooHistPdf *pdf_barrel_GJets = new RooHistPdf("pdf_barrel_GJets", "Barrel MC Gamma+Jets template",   PFiso_Rho, *rh_barrel_GJets, 0);
+        RooHistPdf *pdf_barrel_DY    = new RooHistPdf("pdf_barrel_DY",    "Barrel MC DY template",           PFiso_Rho, *rh_barrel_DY,    0);
+        RooHistPdf *pdf_barrel_ttbar = new RooHistPdf("pdf_barrel_ttbar", "Barrel MC ttbar template",        PFiso_Rho, *rh_barrel_ttbar, 0);
+        RooHistPdf *pdf_barrel_VVnST = new RooHistPdf("pdf_barrel_VVnST", "Barrel MC VVnST template",        PFiso_Rho, *rh_barrel_VVnST, 0);
+
+        // Constraints for integrals
+        Double_t N_barrel_ttbar = h_barrel_MC_template[_ttbar][ih]->Integral();
+        Double_t N_barrel_WJets = h_barrel_MC_template[_WJets][ih]->Integral();
+        Double_t N_barrel_GJets = h_barrel_MC_template[_GJets_Full][ih]->Integral();
+        Double_t N_barrel_DY    = h_barrel_MC_template[_DY_Full][ih]->Integral();
+        Double_t N_barrel_QCD   = h_barrel_QCD_template[ih]->Integral();
+        Double_t N_barrel_VVnST = h_barrel_MC_template[_VVnST][ih]->Integral();
+
+        Double_t N_barrel_total = N_barrel_ttbar + N_barrel_WJets + N_barrel_GJets + N_barrel_DY + N_barrel_QCD + N_barrel_VVnST;
+
+        Double_t Nnorm_barrel_ttbar = N_barrel_ttbar * h_barrel_data_template[ih]->Integral() / N_barrel_total; // Not to be trusted. QCD template normalization is very different.
+        Double_t Nnorm_barrel_WJets = N_barrel_WJets * h_barrel_data_template[ih]->Integral() / N_barrel_total; // Not to be trusted. QCD template normalization is very different.
+        Double_t Nnorm_barrel_GJets = N_barrel_GJets * h_barrel_data_template[ih]->Integral() / N_barrel_total; // Not to be trusted. QCD template normalization is very different.
+        Double_t Nnorm_barrel_DY    = N_barrel_DY    * h_barrel_data_template[ih]->Integral() / N_barrel_total; // Not to be trusted. QCD template normalization is very different.
+        Double_t Nnorm_barrel_VVnST = N_barrel_VVnST * h_barrel_data_template[ih]->Integral() / N_barrel_total; // Not to be trusted. QCD template normalization is very different.
+        Double_t Nnorm_barrel_QCD   = N_barrel_QCD   * h_barrel_data_template[ih]->Integral() / N_barrel_total; // Not to be trusted. QCD template normalization is very different.
+
+        // Fit constraints
+        RooRealVar n_barrel_ttbar("n_barrel_ttbar", "n_barrel_ttbar", Nnorm_barrel_ttbar, Nnorm_barrel_ttbar*0.95, Nnorm_barrel_ttbar*1.05);
+        RooRealVar n_barrel_WJets("n_barrel_WJets", "n_barrel_WJets", Nnorm_barrel_WJets, Nnorm_barrel_WJets*0.75, Nnorm_barrel_WJets*1.25);
+        RooRealVar n_barrel_GJets("n_barrel_GJets", "n_barrel_GJets", Nnorm_barrel_GJets, Nnorm_barrel_GJets*0.75, Nnorm_barrel_GJets*1.25);
+        RooRealVar n_barrel_DY   ("n_barrel_DY",    "n_barrel_DY",    Nnorm_barrel_DY,    Nnorm_barrel_DY   *0.95, Nnorm_barrel_DY   *1.05);
+        RooRealVar n_barrel_VVnST("n_barrel_VVnST", "n_barrel_VVnST", Nnorm_barrel_VVnST, Nnorm_barrel_VVnST*0.95, Nnorm_barrel_VVnST*1.05);
+        RooRealVar n_barrel_QCD  ("n_barrel_QCD",   "n_barrel_QCD",   Nnorm_barrel_QCD,   Nnorm_barrel_QCD  *0.25, Nnorm_barrel_QCD  *4.0);
+
+        // Models
+        RooAddPdf model_barrel("model_barrel", "model_barrel", RooArgList(*pdf_barrel_QCD, *pdf_barrel_WJets, *pdf_barrel_GJets,
+                                                                          *pdf_barrel_DY,  *pdf_barrel_ttbar, *pdf_barrel_VVnST),
+                               RooArgList(n_barrel_QCD,   n_barrel_WJets, n_barrel_GJets, n_barrel_DY, n_barrel_ttbar, n_barrel_VVnST));
+
+        // Fitting
+        RooFitResult* fit_barrel = model_barrel.fitTo(*rh_barrel_data, Save());
+
+        // DRAWING BARREL
+        TCanvas *c_fit_barrel = new TCanvas("c_fit_barrel", "Barrel "+TString::Itoa(ih, 10), 800, 800);
+        c_fit_barrel->cd();
+
+        //Top Pad
+        TPad *c1_barrel = new TPad("padc1_barrel","padc1_barrel",0.01,0.01,0.99,0.99);
+        c1_barrel->Draw();
+        c1_barrel->cd();
+        c1_barrel->SetTopMargin(0.01);
+        c1_barrel->SetBottomMargin(0.35);
+        c1_barrel->SetRightMargin(0.03);
+        c1_barrel->SetLeftMargin(0.13);
+        c1_barrel->SetFillStyle(1);
+        c1_barrel->SetLogy();
+
+        // Main stack histogram
+        RooPlot *frame_barrel = PFiso_Rho.frame(Title(" "));
+        rh_barrel_data->plotOn(frame_barrel, DataError(RooAbsData::SumW2));
+        model_barrel.plotOn(frame_barrel, Components("pdf_barrel_VVnST,pdf_barrel_ttbar,pdf_barrel_DY,"
+                                                     "pdf_barrel_GJets,pdf_barrel_WJets,pdf_barrel_QCD"),
+                            LineColor(0), FillColor(kRed+3), DrawOption("F"));
+        model_barrel.plotOn(frame_barrel, Components("pdf_barrel_VVnST,pdf_barrel_ttbar,pdf_barrel_DY,"
+                                                     "pdf_barrel_GJets,pdf_barrel_WJets"),
+                            LineColor(0), FillColor(kRed-2), DrawOption("F"));
+        model_barrel.plotOn(frame_barrel, Components("pdf_barrel_VVnST,pdf_barrel_ttbar,pdf_barrel_DY,"
+                                                     "pdf_barrel_GJets"),
+                            LineColor(0), FillColor(kYellow+3), DrawOption("F"));
+        model_barrel.plotOn(frame_barrel, Components("pdf_barrel_VVnST,pdf_barrel_ttbar,pdf_barrel_DY"),
+                            LineColor(0), FillColor(kOrange), DrawOption("F"));
+        model_barrel.plotOn(frame_barrel, Components("pdf_barrel_VVnST,pdf_barrel_ttbar"),
+                            LineColor(0), FillColor(kCyan+2), DrawOption("F"));
+        model_barrel.plotOn(frame_barrel, Components("pdf_barrel_VVnST"),
+                            LineColor(0), FillColor(kGreen-2), DrawOption("F"));
+
+        rh_barrel_data->plotOn(frame_barrel, DataError(RooAbsData::SumW2));
+        frame_barrel->GetYaxis()->SetRangeUser(1, 2e10);
+        frame_barrel->Draw();
+        fit_barrel->Print();
+
+        // Legend
+        TLegend *legend = new TLegend(0.65, 0.8, 0.95, 0.97);
+        legend->AddEntry(frame_barrel->nameOf(0),  "Data", "LP");
+        legend->AddEntry(frame_barrel->nameOf(1),  "#font[12]{#scale[1.1]{QCD}}", "F");
+        legend->AddEntry(frame_barrel->nameOf(2),  "#font[12]{#scale[1.1]{W}}+Jets", "F");
+        legend->AddEntry(frame_barrel->nameOf(3),  "#gamma+Jets", "F");
+        legend->AddEntry(frame_barrel->nameOf(4),  "DY", "F");
+        legend->AddEntry(frame_barrel->nameOf(5),  "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "F");
+        legend->AddEntry(frame_barrel->nameOf(6),  "#kern[0.1]{#font[12]{#scale[1.1]{Diboson+ST}}}", "F");
+        legend->SetNColumns(2);
+
+        legend->Draw();
+
+        frame_barrel->GetYaxis()->SetTitle("Number of entries");
+        frame_barrel->GetYaxis()->SetTitleOffset(1.5);
+        frame_barrel->GetXaxis()->SetLabelSize(0);
+
+        // Bottom pad
+        //Top Pad
+        TPad *c2_barrel = new TPad("padc2_barrel","padc2_barrel",0.01,0.01,0.99,0.35);
+        c2_barrel->Draw();
+        c2_barrel->cd();
+        c2_barrel->SetTopMargin(0.05);
+        c2_barrel->SetBottomMargin(0.33);
+        c2_barrel->SetRightMargin(0.02);
+        c2_barrel->SetLeftMargin(0.12);
+        c2_barrel->SetFillStyle(0);
+        c2_barrel->SetGrid();
+
+        // Ratio plot
+        TH1D *h_barrel_template_fit = ((TH1D*)(model_barrel.createHistogram("h_barrel_template_fit", PFiso_Rho)));
+        Double_t N_barrel_data = h_barrel_data_template[ih]->Integral();
+        Double_t N_barrel_MC   = h_barrel_template_fit->Integral();
+        h_barrel_template_fit->Scale(N_barrel_data/N_barrel_MC); // Why would I wanna do that???
+        cout << "----- BARREL" << ih << "-----" << endl;
+        cout << "Data integral: "   << N_barrel_data << endl;
+        cout << "MC integral: "     << h_barrel_template_fit->Integral() << endl;
+
+        TH1D *h_barrel_ratio = ((TH1D*)(h_barrel_data_template[ih]->Clone("h_barrel_ratio")));
+        h_barrel_data_template[ih]->Sumw2(); h_barrel_template_fit->Sumw2();
+        h_barrel_ratio->Divide(h_barrel_data_template[ih], h_barrel_template_fit);
+        h_barrel_ratio->SetTitle("");
+        h_barrel_ratio->GetXaxis()->SetMoreLogLabels(1);
+        h_barrel_ratio->GetXaxis()->SetNoExponent(1);
+        h_barrel_ratio->GetXaxis()->SetTitle("relPFiso_Rho");
+        h_barrel_ratio->GetXaxis()->SetTitleSize(0.17);
+        h_barrel_ratio->GetXaxis()->SetLabelSize(0.125);
+        h_barrel_ratio->GetXaxis()->SetTitleOffset(0.8);
+        h_barrel_ratio->GetYaxis()->SetTitle("Data/MC");
+        h_barrel_ratio->GetYaxis()->SetTitleSize(0.114);
+        h_barrel_ratio->GetYaxis()->SetTitleOffset(0.48);
+        h_barrel_ratio->GetYaxis()->SetLabelSize(0.11);
+        h_barrel_ratio->GetYaxis()->SetTickLength(0.01);
+        h_barrel_ratio->GetYaxis()->SetDecimals(1);
+        h_barrel_ratio->SetMaximum(1.3);
+        h_barrel_ratio->SetMinimum(0.7);
+        h_barrel_ratio->GetYaxis()->SetNdivisions(7);
+        h_barrel_ratio->SetLineWidth(1);
+        h_barrel_ratio->SetLineColor(kBlack);
+        h_barrel_ratio->SetMarkerStyle(kFullDotLarge);
+        h_barrel_ratio->SetMarkerColor(kBlack);
+        h_barrel_ratio->SetStats(kFALSE);
+
+        h_barrel_ratio->Draw("E1P");
+
+        // Red line at Data/MC=1
+        TH1D *h_line = ((TH1D*)(h_barrel_ratio->Clone("h_line")));
+        h_line->Reset("ICES");
+        for (Int_t i=1; i<=h_line->GetNbinsX(); i++)
+            h_line->SetBinContent(i, 1);
+        h_line->SetLineColor(kRed);
+        h_line->Draw("LSAME");
+
+        //Chi^2
+        RooAbsReal *chi2_barrel = model_barrel.createChi2(*rh_barrel_data);
+        cout << "chi2: " << chi2_barrel->getVal() << endl;
+        cout << "Normalized chi2: " << chi2_barrel->getVal() / ((Double_t)h_barrel_data_template[ih]->GetNbinsX()) << endl;
+
+        if (ih < nPtBinEndcap_ele)
+        {
+            RooDataHist *rh_endcap_QCD   = new RooDataHist("rh_endcap_QCD",   "RooHist_endcap_QCD",   PFiso_Rho, h_endcap_QCD_template[ih]);
+            RooDataHist *rh_endcap_WJets = new RooDataHist("rh_endcap_WJets", "RooHist_endcap_WJets", PFiso_Rho, h_endcap_MC_template[_WJets][ih]);
+            RooDataHist *rh_endcap_GJets = new RooDataHist("rh_endcap_GJets", "RooHist_endcap_GJets", PFiso_Rho, h_endcap_MC_template[_GJets_Full][ih]);
+            RooDataHist *rh_endcap_DY    = new RooDataHist("rh_endcap_DY",    "RooHist_endcap_DY",    PFiso_Rho, h_endcap_MC_template[_DY_Full][ih]);
+            RooDataHist *rh_endcap_ttbar = new RooDataHist("rh_endcap_ttbar", "RooHist_endcap_ttbar", PFiso_Rho, h_endcap_MC_template[_ttbar][ih]);
+            RooDataHist *rh_endcap_VVnST = new RooDataHist("rh_endcap_VVnST", "RooHist_endcap_VVnST", PFiso_Rho, h_endcap_MC_template[_VVnST][ih]);
+            RooDataHist *rh_endcap_data  = new RooDataHist("rh_endcap_data",  "RooHist_endcap_data",  PFiso_Rho, h_endcap_data_template[ih]);
+
+            RooHistPdf *pdf_endcap_QCD   = new RooHistPdf("pdf_endcap_QCD",   "Endcap Data-driven QCD template", PFiso_Rho, *rh_endcap_QCD,   0);
+            RooHistPdf *pdf_endcap_WJets = new RooHistPdf("pdf_endcap_WJets", "Endcap MC W+Jets template",       PFiso_Rho, *rh_endcap_WJets, 0);
+            RooHistPdf *pdf_endcap_GJets = new RooHistPdf("pdf_endcap_GJets", "Endcap MC Gamma+Jets template",   PFiso_Rho, *rh_endcap_GJets, 0);
+            RooHistPdf *pdf_endcap_DY    = new RooHistPdf("pdf_endcap_DY",    "Endcap MC DY template",           PFiso_Rho, *rh_endcap_DY,    0);
+            RooHistPdf *pdf_endcap_ttbar = new RooHistPdf("pdf_endcap_ttbar", "Endcap MC ttbar template",        PFiso_Rho, *rh_endcap_ttbar, 0);
+            RooHistPdf *pdf_endcap_VVnST = new RooHistPdf("pdf_endcap_VVnST", "Endcap MC VVnST template",        PFiso_Rho, *rh_endcap_VVnST, 0);
+
+            // Constraints for integrals
+            Double_t N_endcap_ttbar = h_endcap_MC_template[_ttbar][ih]->Integral();
+            Double_t N_endcap_WJets = h_endcap_MC_template[_WJets][ih]->Integral();
+            Double_t N_endcap_GJets = h_endcap_MC_template[_GJets_Full][ih]->Integral();
+            Double_t N_endcap_DY    = h_endcap_MC_template[_DY_Full][ih]->Integral();
+            Double_t N_endcap_QCD   = h_endcap_QCD_template[ih]->Integral();
+            Double_t N_endcap_VVnST = h_endcap_MC_template[_VVnST][ih]->Integral();
+
+            Double_t N_endcap_total = N_endcap_ttbar + N_endcap_WJets + N_endcap_GJets + N_endcap_DY + N_endcap_QCD + N_endcap_VVnST;
+
+            Double_t Nnorm_endcap_ttbar = N_endcap_ttbar * h_endcap_data_template[ih]->Integral() / N_endcap_total; // Not to be trusted. QCD template normalization is very different.
+            Double_t Nnorm_endcap_WJets = N_endcap_WJets * h_endcap_data_template[ih]->Integral() / N_endcap_total; // Not to be trusted. QCD template normalization is very different.
+            Double_t Nnorm_endcap_GJets = N_endcap_GJets * h_endcap_data_template[ih]->Integral() / N_endcap_total; // Not to be trusted. QCD template normalization is very different.
+            Double_t Nnorm_endcap_DY    = N_endcap_DY    * h_endcap_data_template[ih]->Integral() / N_endcap_total; // Not to be trusted. QCD template normalization is very different.
+            Double_t Nnorm_endcap_VVnST = N_endcap_VVnST * h_endcap_data_template[ih]->Integral() / N_endcap_total; // Not to be trusted. QCD template normalization is very different.
+            Double_t Nnorm_endcap_QCD   = N_endcap_QCD   * h_endcap_data_template[ih]->Integral() / N_endcap_total; // Not to be trusted. QCD template normalization is very different.
+
+            // Fit constraints
+            RooRealVar n_endcap_ttbar("n_endcap_ttbar", "n_endcap_ttbar", Nnorm_endcap_ttbar, Nnorm_endcap_ttbar*0.95, Nnorm_endcap_ttbar*1.05);
+            RooRealVar n_endcap_WJets("n_endcap_WJets", "n_endcap_WJets", Nnorm_endcap_WJets, Nnorm_endcap_WJets*0.75, Nnorm_endcap_WJets*1.25);
+            RooRealVar n_endcap_GJets("n_endcap_GJets", "n_endcap_GJets", Nnorm_endcap_GJets, Nnorm_endcap_GJets*0.75, Nnorm_endcap_GJets*1.25);
+            RooRealVar n_endcap_DY   ("n_endcap_DY",    "n_endcap_DY",    Nnorm_endcap_DY,    Nnorm_endcap_DY   *0.95, Nnorm_endcap_DY   *1.05);
+            RooRealVar n_endcap_VVnST("n_endcap_VVnST", "n_endcap_VVnST", Nnorm_endcap_VVnST, Nnorm_endcap_VVnST*0.95, Nnorm_endcap_VVnST*1.05);
+            RooRealVar n_endcap_QCD  ("n_endcap_QCD",   "n_endcap_QCD",   Nnorm_endcap_QCD,   Nnorm_endcap_QCD  *0.3 , Nnorm_endcap_QCD  *3.0);
+
+            // Models
+            RooAddPdf model_endcap("model_endcap", "model_endcap", RooArgList(*pdf_endcap_QCD, *pdf_endcap_WJets, *pdf_endcap_GJets,
+                                                                              *pdf_endcap_DY,  *pdf_endcap_ttbar, *pdf_endcap_VVnST),
+                                   RooArgList(n_endcap_QCD,   n_endcap_WJets, n_endcap_GJets, n_endcap_DY, n_endcap_ttbar, n_endcap_VVnST));
+
+            // Fitting
+            RooFitResult* fit_endcap = model_endcap.fitTo(*rh_endcap_data, Save());
+
+            // DRAWING BARREL
+            TCanvas *c_fit_endcap = new TCanvas("c_fit_endcap", "Endcap "+TString::Itoa(ih, 10), 800, 800);
+            c_fit_endcap->cd();
+
+            //Top Pad
+            TPad *c1_endcap = new TPad("padc1_endcap","padc1_endcap",0.01,0.01,0.99,0.99);
+            c1_endcap->Draw();
+            c1_endcap->cd();
+            c1_endcap->SetTopMargin(0.01);
+            c1_endcap->SetBottomMargin(0.35);
+            c1_endcap->SetRightMargin(0.03);
+            c1_endcap->SetLeftMargin(0.13);
+            c1_endcap->SetFillStyle(1);
+            c1_endcap->SetLogy();
+
+            // Main stack histogram
+            RooPlot *frame_endcap = PFiso_Rho.frame(Title(" "));
+            rh_endcap_data->plotOn(frame_endcap, DataError(RooAbsData::SumW2));
+            model_endcap.plotOn(frame_endcap, Components("pdf_endcap_VVnST,pdf_endcap_ttbar,pdf_endcap_DY,"
+                                                         "pdf_endcap_GJets,pdf_endcap_WJets,pdf_endcap_QCD"),
+                                LineColor(0), FillColor(kRed+3), DrawOption("F"));
+            model_endcap.plotOn(frame_endcap, Components("pdf_endcap_VVnST,pdf_endcap_ttbar,pdf_endcap_DY,"
+                                                         "pdf_endcap_GJets,pdf_endcap_WJets"),
+                                LineColor(0), FillColor(kRed-2), DrawOption("F"));
+            model_endcap.plotOn(frame_endcap, Components("pdf_endcap_VVnST,pdf_endcap_ttbar,pdf_endcap_DY,"
+                                                         "pdf_endcap_GJets"),
+                                LineColor(0), FillColor(kYellow+3), DrawOption("F"));
+            model_endcap.plotOn(frame_endcap, Components("pdf_endcap_VVnST,pdf_endcap_ttbar,pdf_endcap_DY"),
+                                LineColor(0), FillColor(kOrange), DrawOption("F"));
+            model_endcap.plotOn(frame_endcap, Components("pdf_endcap_VVnST,pdf_endcap_ttbar"),
+                                LineColor(0), FillColor(kCyan+2), DrawOption("F"));
+            model_endcap.plotOn(frame_endcap, Components("pdf_endcap_VVnST"),
+                                LineColor(0), FillColor(kGreen-2), DrawOption("F"));
+
+            rh_endcap_data->plotOn(frame_endcap, DataError(RooAbsData::SumW2));
+            frame_endcap->GetYaxis()->SetRangeUser(1, 2e10);
+            frame_endcap->Draw();
+            fit_endcap->Print();
+
+            legend->Draw();
+
+            frame_endcap->GetYaxis()->SetTitle("Number of entries");
+            frame_endcap->GetYaxis()->SetTitleOffset(1.5);
+            frame_endcap->GetXaxis()->SetLabelSize(0);
+
+            // Bottom pad
+            //Top Pad
+            TPad *c2_endcap = new TPad("padc2_endcap","padc2_endcap",0.01,0.01,0.99,0.35);
+            c2_endcap->Draw();
+            c2_endcap->cd();
+            c2_endcap->SetTopMargin(0.05);
+            c2_endcap->SetBottomMargin(0.33);
+            c2_endcap->SetRightMargin(0.02);
+            c2_endcap->SetLeftMargin(0.12);
+            c2_endcap->SetFillStyle(0);
+            c2_endcap->SetGrid();
+
+            // Ratio plot
+            TH1D *h_endcap_template_fit = ((TH1D*)(model_endcap.createHistogram("h_endcap_template_fit", PFiso_Rho)));
+            Double_t N_endcap_data = h_endcap_data_template[ih]->Integral();
+            Double_t N_endcap_MC   = h_endcap_template_fit->Integral();
+            h_endcap_template_fit->Scale(N_endcap_data/N_endcap_MC); // Why would I wanna do that???
+            cout << "----- ENDCAP" << ih << "-----" << endl;
+            cout << "Data integral: "   << N_endcap_data << endl;
+            cout << "MC integral: "     << h_endcap_template_fit->Integral() << endl;
+
+            TH1D *h_endcap_ratio = ((TH1D*)(h_endcap_data_template[ih]->Clone("h_endcap_ratio")));
+            h_endcap_data_template[ih]->Sumw2(); h_endcap_template_fit->Sumw2();
+            h_endcap_ratio->Divide(h_endcap_data_template[ih], h_endcap_template_fit);
+            h_endcap_ratio->SetTitle("");
+            h_endcap_ratio->GetXaxis()->SetMoreLogLabels(1);
+            h_endcap_ratio->GetXaxis()->SetNoExponent(1);
+            h_endcap_ratio->GetXaxis()->SetTitle("relPFiso_Rho");
+            h_endcap_ratio->GetXaxis()->SetTitleSize(0.17);
+            h_endcap_ratio->GetXaxis()->SetLabelSize(0.125);
+            h_endcap_ratio->GetXaxis()->SetTitleOffset(0.8);
+            h_endcap_ratio->GetYaxis()->SetTitle("Data/MC");
+            h_endcap_ratio->GetYaxis()->SetTitleSize(0.114);
+            h_endcap_ratio->GetYaxis()->SetTitleOffset(0.48);
+            h_endcap_ratio->GetYaxis()->SetLabelSize(0.11);
+            h_endcap_ratio->GetYaxis()->SetTickLength(0.01);
+            h_endcap_ratio->GetYaxis()->SetDecimals(1);
+            h_endcap_ratio->SetMaximum(1.3);
+            h_endcap_ratio->SetMinimum(0.7);
+            h_endcap_ratio->GetYaxis()->SetNdivisions(7);
+            h_endcap_ratio->SetLineWidth(1);
+            h_endcap_ratio->SetLineColor(kBlack);
+            h_endcap_ratio->SetMarkerStyle(kFullDotLarge);
+            h_endcap_ratio->SetMarkerColor(kBlack);
+            h_endcap_ratio->SetStats(kFALSE);
+
+            h_endcap_ratio->Draw("E1P");
+
+            // Red line at Data/MC=1
+            TH1D *h_line1 = ((TH1D*)(h_endcap_ratio->Clone("h_line1")));
+            h_line1->Reset("ICES");
+            for (Int_t i=1; i<=h_line1->GetNbinsX(); i++)
+                h_line1->SetBinContent(i, 1);
+            h_line1->SetLineColor(kRed);
+            h_line1->Draw("LSAME");
+
+            //Chi^2
+            RooAbsReal *chi2_endcap = model_endcap.createChi2(*rh_endcap_data);
+            cout << "chi2: " << chi2_endcap->getVal() << endl;
+            cout << "Normalized chi2: " << chi2_endcap->getVal() / ((Double_t)h_endcap_data_template[ih]->GetNbinsX()) << endl;
+        }
+    }
+
 } // End of E_Tfit()
 
 

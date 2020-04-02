@@ -20,8 +20,7 @@
 #define nMassBin2 86
 #define nPtBinEndcap 9//8
 #define nPtBinBarrel 18//16
-#define nPtBinEndcap_ele 14
-#define nPtBinBarrel_ele 23
+#define nPtBin_ele 14
 
 class DYAnalyzer
 {
@@ -110,10 +109,9 @@ public:
         const double ptbin_endcap[nPtBinEndcap+1] = {52,60,70,80,90,100,150,200,500,1000};
         Double_t FR_barrel[nPtBinBarrel];
         Double_t FR_endcap[nPtBinEndcap];
-        const double ptbin_barrel_ele[nPtBinBarrel_ele+1] = {25,30,35,40,45,50,60,70,80,90,100,120,140,160,180,200,250,300,350,400,450,500,700,1000};
-        const double ptbin_endcap_ele[nPtBinEndcap_ele+1] = {25,30,35,40,45,50,60,70,80,90,100,150,200,500,1000};
-        Double_t FR_barrel_ele[nPtBinBarrel_ele];
-        Double_t FR_endcap_ele[nPtBinEndcap_ele];
+        const double ptbin_ele[nPtBin_ele+1] = {25,30,35,40,50,60,70,80,100,130,160,200,300,500,1000};
+        Double_t FR_barrel_ele[nPtBin_ele];
+        Double_t FR_endcap_ele[nPtBin_ele];
         const double prescales[8] = {0.0016/36.47, 0.0066/36.47, 0.0132/36.47, 0.0264/36.47, 0.13/36.47, 0.26/36.47, 0.54/36.47, 1};
 
 	// -- Constructor -- //
@@ -6339,7 +6337,7 @@ Bool_t DYAnalyzer::EventSelection_FR(vector<Electron> ElectronCollection, Ntuple
     Bool_t skip = kTRUE;
     for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
     { // Asking for only one electron to surpass trigger threshold
-        if(ElectronCollection[j].Pt > LeadPtCut && fabs(ElectronCollection[j].etaSC) < SubEtaCut && ElectronCollection[j].mHits <= 2 && // CHANGE TO <=1 LATER!!!
+        if(ElectronCollection[j].Pt > LeadPtCut && fabs(ElectronCollection[j].etaSC) < SubEtaCut && ElectronCollection[j].mHits <= 1 &&
            !(fabs(ElectronCollection[j].etaSC) > 1.4442 && fabs(ElectronCollection[j].etaSC) < 1.566))
             skip = kFALSE;
     }
@@ -6349,7 +6347,7 @@ Bool_t DYAnalyzer::EventSelection_FR(vector<Electron> ElectronCollection, Ntuple
     Double_t med_count = 0;
     for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
     { // All other electrons still have to pass these criteria
-        if (ElectronCollection[j].Pt > SubPtCut && fabs(ElectronCollection[j].etaSC) < SubEtaCut && (ElectronCollection[j].mHits <= 2) &&
+        if (ElectronCollection[j].Pt > SubPtCut && fabs(ElectronCollection[j].etaSC) < SubEtaCut && (ElectronCollection[j].mHits <= 1) &&
            !(fabs(ElectronCollection[j].etaSC) > 1.4442 && fabs(ElectronCollection[j].etaSC) < 1.566))
         {
             isPassEventSelection = kTRUE;
@@ -6411,19 +6409,19 @@ void DYAnalyzer::SetupFRvalues_ele(TString filename, TString type) // type can b
     f->GetObject("h_FR"+type+"_endcap", h_FR_endcap);  // +"up"  +"down"
 
     // -- Getting values from histograms -- //
-    for (Int_t i_bin=1; i_bin<=nPtBinBarrel_ele; i_bin++)
+    for (Int_t i_bin=1; i_bin<=nPtBin_ele; i_bin++)
     {
         FR_barrel_ele[i_bin-1] = h_FR_barrel->GetBinContent(i_bin);
-        if (i_bin <= nPtBinEndcap_ele)
+        if (i_bin <= nPtBin_ele)
             FR_endcap_ele[i_bin-1] = h_FR_endcap->GetBinContent(i_bin);
     }
 
     // -- Checking if everything has been done correctly -- //
     Int_t nProblem = 0;
-    for (Int_t i=0; i<nPtBinBarrel_ele; i++)
+    for (Int_t i=0; i<nPtBin_ele; i++)
     {
         if (FR_barrel_ele[i] >= 1 || FR_barrel_ele[i] <= 0) {nProblem++; std::cout << i << "  " << FR_barrel_ele[i] << endl;}
-        if (i < nPtBinEndcap_ele) { if (FR_endcap_ele[i] >= 1 || FR_endcap_ele[i] <= 0) {nProblem++; std::cout << i << "  " << FR_endcap_ele[i] << endl;} }
+        if (i < nPtBin_ele) { if (FR_endcap_ele[i] >= 1 || FR_endcap_ele[i] <= 0) {nProblem++; std::cout << i << "  " << FR_endcap_ele[i] << endl;} }
     }
     if (nProblem)
         std::cout << "**************************************************\n" <<
@@ -6472,7 +6470,7 @@ Double_t DYAnalyzer::FakeRate_ele(Double_t p_T, Double_t eta)
     {
         while (!stop)
         {
-            if (p_T < ptbin_barrel_ele[i_bin + 1] || i_bin >= nPtBinBarrel_ele-1) // Points exceeding boundaries are assigned last available FR value
+            if (p_T < ptbin_ele[i_bin + 1] || i_bin >= nPtBin_ele-1) // Points exceeding boundaries are assigned last available FR value
                 stop = 1;
             else
                 i_bin++;
@@ -6483,7 +6481,7 @@ Double_t DYAnalyzer::FakeRate_ele(Double_t p_T, Double_t eta)
     {
         while (!stop)
         {
-            if (p_T < ptbin_endcap_ele[i_bin + 1] || i_bin >= nPtBinEndcap_ele-1) // Points exceeding boundaries are assigned last available FR value
+            if (p_T < ptbin_ele[i_bin + 1] || i_bin >= nPtBin_ele-1) // Points exceeding boundaries are assigned last available FR value
                 stop = 1;
             else
                 i_bin++;
