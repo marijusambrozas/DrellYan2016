@@ -20,7 +20,7 @@
 #define nMassBin2 86
 #define nPtBinEndcap 9//8
 #define nPtBinBarrel 18//16
-#define nPtBin_ele 14
+#define nPtBin_ele 10
 
 class DYAnalyzer
 {
@@ -109,7 +109,7 @@ public:
         const double ptbin_endcap[nPtBinEndcap+1] = {52,60,70,80,90,100,150,200,500,1000};
         Double_t FR_barrel[nPtBinBarrel];
         Double_t FR_endcap[nPtBinEndcap];
-        const double ptbin_ele[nPtBin_ele+1] = {25,30,35,40,50,60,70,80,100,130,160,200,300,500,1000};
+        const double ptbin_ele[nPtBin_ele+1] = {25,35,50,70,90,120,160,200,300,500,5000};
         Double_t FR_barrel_ele[nPtBin_ele];
         Double_t FR_endcap_ele[nPtBin_ele];
         const double prescales[8] = {0.0016/36.47, 0.0066/36.47, 0.0132/36.47, 0.0264/36.47, 0.13/36.47, 0.26/36.47, 0.54/36.47, 1};

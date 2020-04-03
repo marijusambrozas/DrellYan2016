@@ -214,6 +214,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         std::vector<int> *prescale_factor = new std::vector<int>;
         Double_t MET_pT, MET_phi;
         Int_t runNum;
+        Int_t lumiBlock;
         Int_t nPU;
         Int_t nVTX;
         Double_t PVz;
@@ -245,6 +246,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         ElectronTree->Branch("MET_pT", &MET_pT);
         ElectronTree->Branch("MET_phi", &MET_phi);
         ElectronTree->Branch("runNum", &runNum);
+        ElectronTree->Branch("lumiBlock", &lumiBlock);
         ElectronTree->Branch("nPU", &nPU);
         ElectronTree->Branch("nVTX", &nVTX);
         ElectronTree->Branch("PVz", &PVz);
@@ -387,6 +389,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
                         // -- Information for various other reweightings -- //
                         runNum = ntuple->runNum;
+                        lumiBlock = ntuple->lumiBlock;
                         nPU = ntuple->nPileUp;
                         nVTX = ntuple->nVertices;
                         PVz = ntuple->PVz;
