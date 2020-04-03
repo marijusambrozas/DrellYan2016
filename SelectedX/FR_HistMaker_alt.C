@@ -110,6 +110,8 @@ void E_FR_HistMaker (Bool_t DEBUG)
     UInt_t n2MC=0, n2Data=0;
     UInt_t n22175=0, n30175=0, n36175=0, n50175=0, n75175=0, n90175=0, n120175=0, n175=0;
 
+    std::map<int, int> prescalesForRuns;
+
     for (Process_t pr=_SinglePhoton_B; pr<=_SinglePhoton_H; pr=next(pr))
     {
         Mgr.SetProc(pr);
@@ -153,11 +155,13 @@ void E_FR_HistMaker (Bool_t DEBUG)
         std::vector<int> *trig_matched = new std::vector<int>;
         std::vector<double> *trig_pT = new std::vector<double>;
         Double_t MET_pT, MET_phi;
+        Int_t runNum;
         Int_t nPU;
         Int_t nVTX;
         Double_t PVz;
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
+        std::vector<int> *prescale_factor = new std::vector<int>;
 //        Double_t prescale_factor;
 
         TChain *chain = new TChain("FRTree");
@@ -173,6 +177,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchStatus("trig_pT", 1);
         chain->SetBranchStatus("MET_pT", 1);
         chain->SetBranchStatus("MET_phi", 1);
+        chain->SetBranchStatus("runNum", 1);
         chain->SetBranchStatus("nPU", 1);
         chain->SetBranchStatus("nVTX", 1);
         chain->SetBranchStatus("PVz", 1);
@@ -181,7 +186,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchStatus("prefiring_weight", 1);
         chain->SetBranchStatus("prefiring_weight_up", 1);
         chain->SetBranchStatus("prefiring_weight_down", 1);
-//        chain->SetBranchStatus("prescale_factor", 1);
+        chain->SetBranchStatus("prescale_factor", 1);
         chain->SetBranchAddress("p_T", &p_T);
         chain->SetBranchAddress("eta", &eta);
         chain->SetBranchAddress("phi", &phi);
@@ -191,6 +196,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchAddress("trig_pT", &trig_pT);
         chain->SetBranchAddress("MET_pT", &MET_pT);
         chain->SetBranchAddress("MET_phi", &MET_phi);
+        chain->SetBranchAddress("runNum", &runNum);
         chain->SetBranchAddress("nPU", &nPU);
         chain->SetBranchAddress("nVTX", &nVTX);
         chain->SetBranchAddress("PVz", &PVz);
@@ -199,7 +205,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchAddress("prefiring_weight", &prefiring_weight);
         chain->SetBranchAddress("prefiring_weight_up", &prefiring_weight_up);
         chain->SetBranchAddress("prefiring_weight_down", &prefiring_weight_down);
-//        chain->SetBranchAddress("prescale_factor", &prescale_factor);
+        chain->SetBranchAddress("prescale_factor", &prescale_factor);
 
         Int_t NEvents = chain->GetEntries();
         cout << "\t[Sum of weights: " << Mgr.Wsum[0] << "]" << endl;
@@ -289,9 +295,22 @@ void E_FR_HistMaker (Bool_t DEBUG)
             Int_t fired22=0, fired30=0, fired36=0, fired50=0, fired75=0, fired90=0, fired120=0, fired175=0;
             for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
             {
-                if (trig_fired->at(i_tr) == 22) fired22++;
-                if (trig_fired->at(i_tr) == 30) fired30++;
-                if (trig_fired->at(i_tr) == 36) fired36++;
+                if (trig_fired->at(i_tr) == 22)
+                {
+                    fired22++;
+
+                }
+                if (trig_fired->at(i_tr) == 30)
+                {
+                    fired30++;
+                }
+                if (trig_fired->at(i_tr) == 36)
+                {
+                    fired36++;
+                    if (prescalesForRuns[runNum] != 0 && prescalesForRuns[runNum] != prescale_factor->at(i_tr))
+                        cout << "Found different prescales for same run. Recorded: " << prescalesForRuns[runNum] << ", found: " << prescale_factor->at(i_tr) << endl;
+                    prescalesForRuns[runNum] = prescale_factor->at(i_tr);
+                }
                 if (trig_fired->at(i_tr) == 50) fired50++;
                 if (trig_fired->at(i_tr) == 75) fired75++;
                 if (trig_fired->at(i_tr) == 90) fired90++;
@@ -491,6 +510,11 @@ void E_FR_HistMaker (Bool_t DEBUG)
     cout << "HLT_Photon36+HLT_Photon175 trigger was activated " << n36175 << " times" << endl;
     cout << "HLT_Photon30+HLT_Photon175 trigger was activated " << n30175 << " times" << endl;
     cout << "HLT_Photon22+HLT_Photon175 trigger was activated " << n22175 << " times" << endl;
+
+    for (std::map<int,int>::iterator it=prescalesForRuns.begin(); it!=prescalesForRuns.end(); it++)
+    {
+        cout << "Run " << it->first << ": prescale = " << it->second << endl;
+    }
 
     Double_t TotalRunTime = totaltime.CpuTime();
     cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
