@@ -41,7 +41,8 @@ void FR_PrescaleTest (Bool_t DEBUG = kFALSE)
     PrescaleProvider pp("etc/prescale/triggerData2016");
 
     TFile *f;
-    TString Dir = "../";
+//    TString Dir = "../";
+    TString Dir = "/media/sf_DATA/FR/Electron/";
     TString debug = "";
     if (DEBUG == kTRUE) debug = "_DEBUG";
 
