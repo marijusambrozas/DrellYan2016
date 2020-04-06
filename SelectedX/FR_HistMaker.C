@@ -53,12 +53,14 @@ const Double_t massbins2[87] = {15, 17.5, 20, 22.5, 25, 27.5, 30, 32.5, 35, 37.5
 const Int_t binnum_ele_template = 5;
 const Double_t bins_ele_template_barrel[6] = {0, 0.0695, 0.2, 0.4, 0.8, 3};
 const Double_t bins_ele_template_endcap[6] = {0, 0.0821, 0.2, 0.4, 0.8, 3};
-const Double_t bins_ele_HE_barrel[6] = {0, 0.0253, 0.05, 0.08, 0.12, 0.3};
-const Double_t bins_ele_HE_endcap[6] = {0, 0.0878, 0.1, 0.13, 0.18, 0.3};
+const Double_t bins_ele_HE_barrel[6] = {0, 0.0253, 0.026, 0.03, 0.04, 0.2};
+const Double_t bins_ele_HE_endcap[6] = {0, 0.0878, 0.09, 0.092, 0.095, 0.5};
 const Double_t bins_ele_sigma_barrel[6] = {0, 0.00998, 0.02, 0.03, 0.05, 0.1};
 const Double_t bins_ele_sigma_endcap[6] = {0, 0.0298, 0.05, 0.07, 0.09, 0.2};
 const Double_t bins_ele_dEta_barrel[6] = {0, 0.00311, 0.01, 0.03, 0.05, 0.1};
 const Double_t bins_ele_dEta_endcap[6] = {0, 0.00609, 0.02, 0.05, 0.1, 0.5};
+const Double_t bins_ele_dPhi_barrel[6] = {0, 0.103, 0.11, 0.12, 0.15, 0.2};
+const Double_t bins_ele_dPhi_endcap[6] = {0, 0.045, 0.05, 0.07, 0.09, 0.2};
 const Double_t bins_ele_EP_barrel[6] = {0, 0.134, 0.3, 0.5, 0.8, 1.2};
 const Double_t bins_ele_EP_endcap[6] = {0, 0.13, 0.3, 0.5, 0.8, 1.2};
 
@@ -122,6 +124,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
     UInt_t n2MC=0, n2Data=0;
 
     for (Process_t pr=_DY_10to50; pr<_EndOf_SinglePhoton_Normal; pr=next(pr))
+//    for (Process_t pr=_QCDEMEnriched_20to30; pr<_EndOf_QCDEMEnriched_Normal; pr=next(pr))
     {
         Mgr.SetProc(pr);
 
@@ -241,13 +244,34 @@ void E_FR_HistMaker (Bool_t DEBUG)
         TH1D* h_MT_endcap_ctrl = new TH1D("h_MT_endcap_ctrl", "h_MT_endcap_ctrl", 500, 0, 1000); h_MT_endcap_ctrl->Sumw2();
         TH1D* h_nVTX = new TH1D("h_nVTX", "h_nVTX", 50, 0, 50); h_nVTX->Sumw2();
 
-        TH2D *h2_HEvsIso_barrel[nPtBin_ele],    *h2_HEvsIso_endcap[nPtBin_ele],
-             *h2_ISOvsSigma_barrel[nPtBin_ele], *h2_ISOvsSigma_endcap[nPtBin_ele],
-             *h2_HEvsSigma_barrel[nPtBin_ele],  *h2_HEvsSigma_endcap[nPtBin_ele],
-             *h2_ISOvsdEta_barrel[nPtBin_ele],  *h2_ISOvsdEta_endcap[nPtBin_ele],
-             *h2_HEvsdEta_barrel[nPtBin_ele],   *h2_HEvsdEta_endcap[nPtBin_ele],
-             *h2_ISOvsEP_barrel[nPtBin_ele],    *h2_ISOvsEP_endcap[nPtBin_ele],
-             *h2_HEvsEP_barrel[nPtBin_ele],     *h2_HEvsEP_endcap[nPtBin_ele];
+        TH1D* h_HoverE_barrel_template_int = new TH1D("h_HoverE_barrel_template_int", "h_HoverE_barrel_template_int", binnum_ele_template, bins_ele_HE_barrel); h_HoverE_barrel_template_int->Sumw2();
+        TH1D* h_HoverE_endcap_template_int = new TH1D("h_HoverE_endcap_template_int", "h_HoverE_endcap_template_int", binnum_ele_template, bins_ele_HE_endcap); h_HoverE_endcap_template_int->Sumw2();
+        TH1D* h_HoverE_barrel_jetTemplate_int = new TH1D("h_HoverE_barrel_jetTemplate_int", "h_HoverE_barrel_jetTemplate_int", binnum_ele_template, bins_ele_HE_barrel); h_HoverE_barrel_jetTemplate_int->Sumw2();
+        TH1D* h_HoverE_endcap_jetTemplate_int = new TH1D("h_HoverE_endcap_jetTemplate_int", "h_HoverE_endcap_jetTemplate_int", binnum_ele_template, bins_ele_HE_endcap); h_HoverE_endcap_jetTemplate_int->Sumw2();
+
+        TH2D *h2_HEvsIso_barrel[nPtBin_ele],     *h2_HEvsIso_endcap[nPtBin_ele],
+             *h2_ISOvsSigma_barrel[nPtBin_ele],  *h2_ISOvsSigma_endcap[nPtBin_ele],
+             *h2_HEvsSigma_barrel[nPtBin_ele],   *h2_HEvsSigma_endcap[nPtBin_ele],
+             *h2_ISOvsdEta_barrel[nPtBin_ele],   *h2_ISOvsdEta_endcap[nPtBin_ele],
+             *h2_HEvsdEta_barrel[nPtBin_ele],    *h2_HEvsdEta_endcap[nPtBin_ele],
+             *h2_ISOvsEP_barrel[nPtBin_ele],     *h2_ISOvsEP_endcap[nPtBin_ele],
+             *h2_HEvsEP_barrel[nPtBin_ele],      *h2_HEvsEP_endcap[nPtBin_ele],
+             *h2_ISOvsdPhi_barrel[nPtBin_ele],   *h2_ISOvsdPhi_endcap[nPtBin_ele],
+             *h2_HEvsdPhi_barrel[nPtBin_ele],    *h2_HEvsdPhi_endcap[nPtBin_ele],
+             *h2_SigmavsdEta_barrel[nPtBin_ele], *h2_SigmavsdEta_endcap[nPtBin_ele],
+             *h2_SigmavsdPhi_barrel[nPtBin_ele], *h2_SigmavsdPhi_endcap[nPtBin_ele],
+             *h2_SigmavsEP_barrel[nPtBin_ele],   *h2_SigmavsEP_endcap[nPtBin_ele],
+             *h2_dEtavsdPhi_barrel[nPtBin_ele],  *h2_dEtavsdPhi_endcap[nPtBin_ele],
+             *h2_dEtavsEP_barrel[nPtBin_ele],    *h2_dEtavsEP_endcap[nPtBin_ele],
+             *h2_dPhivsEP_barrel[nPtBin_ele],    *h2_dPhivsEP_endcap[nPtBin_ele];
+
+        TH2D* h2_HEvsPt_barrel = new TH2D("h2_HEvsPt_barrel", "h2_HEvsPt_barrel", binnum_ele_template, bins_ele_HE_barrel, nPtBin_ele, analyzer->ptbin_ele);
+        TH2D* h2_dEtavsPt_barrel = new TH2D("h2_dEtavsPt_barrel", "h2_dEtavsPt_barrel", binnum_ele_template, bins_ele_dEta_barrel, nPtBin_ele, analyzer->ptbin_ele);
+        TH2D* h2_SigmavsPt_barrel = new TH2D("h2_SigmavsPt_barrel", "h2_SigmavsPt_barrel", binnum_ele_template, bins_ele_sigma_barrel, nPtBin_ele, analyzer->ptbin_ele);
+
+        TH2D* h2_HEvsPt_endcap = new TH2D("h2_HEvsPt_endcap", "h2_HEvsPt_endcap", binnum_ele_template, bins_ele_HE_endcap, nPtBin_ele, analyzer->ptbin_ele);
+        TH2D* h2_dEtavsPt_endcap = new TH2D("h2_dEtavsPt_endcap", "h2_dEtavsPt_endcap", binnum_ele_template, bins_ele_dEta_endcap, nPtBin_ele, analyzer->ptbin_ele);
+        TH2D* h2_SigmavsPt_endcap = new TH2D("h2_SigmavsPt_endcap", "h2_SigmavsPt_endcap", binnum_ele_template, bins_ele_sigma_endcap, nPtBin_ele, analyzer->ptbin_ele);
 
         TH1D *h_PFiso_Rho_barrel_template[nPtBin_ele],       *h_PFiso_Rho_endcap_template[nPtBin_ele],
              *h_PFiso_Rho_barrel_jetTemplate[nPtBin_ele],    *h_PFiso_Rho_endcap_jetTemplate[nPtBin_ele],
@@ -310,7 +334,23 @@ void E_FR_HistMaker (Bool_t DEBUG)
             h2_ISOvsEP_barrel[ih] = new TH2D("h2_ISOvsEP_barrel_"+TString::Itoa(ih, 10), "h2_ISOvsEP_barrel_"+TString::Itoa(ih, 10),
                                                binnum_ele_template, bins_ele_template_barrel, binnum_ele_template, bins_ele_EP_barrel);
             h2_HEvsEP_barrel[ih] = new TH2D("h2_HEvsEP_barrel_"+TString::Itoa(ih, 10), "h2_HEvsEP_barrel_"+TString::Itoa(ih, 10),
-                                              binnum_ele_template, bins_ele_HE_barrel, binnum_ele_template, bins_ele_EP_barrel);
+                                              binnum_ele_template, bins_ele_HE_barrel, binnum_ele_template, bins_ele_EP_barrel);          
+            h2_ISOvsdPhi_barrel[ih] = new TH2D("h2_ISOvsdPhi_barrel_"+TString::Itoa(ih, 10), "h2_ISOvsdPhi_barrel_"+TString::Itoa(ih, 10),
+                                              binnum_ele_template, bins_ele_template_barrel, binnum_ele_template, bins_ele_dPhi_barrel);
+            h2_HEvsdPhi_barrel[ih] = new TH2D("h2_HEvsdPhi_barrel_"+TString::Itoa(ih, 10), "h2_HEvsdPhi_barrel_"+TString::Itoa(ih, 10),
+                                               binnum_ele_template, bins_ele_HE_barrel, binnum_ele_template, bins_ele_dPhi_barrel);
+            h2_SigmavsdEta_barrel[ih] = new TH2D("h2_SigmavsdEta_barrel_"+TString::Itoa(ih, 10), "h2_SigmavsdEta_barrel_"+TString::Itoa(ih, 10),
+                                              binnum_ele_template, bins_ele_sigma_barrel, binnum_ele_template, bins_ele_dEta_barrel);
+            h2_SigmavsdPhi_barrel[ih] = new TH2D("h2_SigmavsdPhi_barrel_"+TString::Itoa(ih, 10), "h2_SigmavsdPhi_barrel_"+TString::Itoa(ih, 10),
+                                              binnum_ele_template, bins_ele_sigma_barrel, binnum_ele_template, bins_ele_dPhi_barrel);
+            h2_SigmavsEP_barrel[ih] = new TH2D("h2_SigmavsEP_barrel_"+TString::Itoa(ih, 10), "h2_SigmavsEP_barrel_"+TString::Itoa(ih, 10),
+                                               binnum_ele_template, bins_ele_sigma_barrel, binnum_ele_template, bins_ele_EP_barrel);
+            h2_dEtavsdPhi_barrel[ih] = new TH2D("h2_dEtavsdPhi_barrel_"+TString::Itoa(ih, 10), "h2_dEtavsdPhi_barrel_"+TString::Itoa(ih, 10),
+                                              binnum_ele_template, bins_ele_dEta_barrel, binnum_ele_template, bins_ele_dPhi_barrel);
+            h2_dEtavsEP_barrel[ih] = new TH2D("h2_dEtavsEP_barrel_"+TString::Itoa(ih, 10), "h2_dEtavsEP_barrel_"+TString::Itoa(ih, 10),
+                                               binnum_ele_template, bins_ele_dEta_barrel, binnum_ele_template, bins_ele_EP_barrel);
+            h2_dPhivsEP_barrel[ih] = new TH2D("h2_dPhivsEP_barrel_"+TString::Itoa(ih, 10), "h2_dPhivsEP_barrel_"+TString::Itoa(ih, 10),
+                                             binnum_ele_template, bins_ele_dPhi_barrel, binnum_ele_template, bins_ele_EP_barrel);
 
             h2_HEvsIso_endcap[ih] = new TH2D("h2_HEvsIso_endcap_"+TString::Itoa(ih, 10), "h2_HEvsIso_endcap_"+TString::Itoa(ih, 10),
                                              binnum_ele_template, bins_ele_HE_endcap, binnum_ele_template, bins_ele_template_endcap);
@@ -326,6 +366,22 @@ void E_FR_HistMaker (Bool_t DEBUG)
                                                binnum_ele_template, bins_ele_template_endcap, binnum_ele_template, bins_ele_EP_endcap);
             h2_HEvsEP_endcap[ih] = new TH2D("h2_HEvsEP_endcap_"+TString::Itoa(ih, 10), "h2_HEvsEP_endcap_"+TString::Itoa(ih, 10),
                                               binnum_ele_template, bins_ele_HE_endcap, binnum_ele_template, bins_ele_EP_endcap);
+            h2_ISOvsdPhi_endcap[ih] = new TH2D("h2_ISOvsdPhi_endcap_"+TString::Itoa(ih, 10), "h2_ISOvsdPhi_endcap_"+TString::Itoa(ih, 10),
+                                              binnum_ele_template, bins_ele_template_endcap, binnum_ele_template, bins_ele_dPhi_endcap);
+            h2_HEvsdPhi_endcap[ih] = new TH2D("h2_HEvsdPhi_endcap_"+TString::Itoa(ih, 10), "h2_HEvsdPhi_endcap_"+TString::Itoa(ih, 10),
+                                               binnum_ele_template, bins_ele_HE_endcap, binnum_ele_template, bins_ele_dPhi_endcap);
+            h2_SigmavsdEta_endcap[ih] = new TH2D("h2_SigmavsdEta_endcap_"+TString::Itoa(ih, 10), "h2_SigmavsdEta_endcap_"+TString::Itoa(ih, 10),
+                                              binnum_ele_template, bins_ele_sigma_endcap, binnum_ele_template, bins_ele_dEta_endcap);
+            h2_SigmavsdPhi_endcap[ih] = new TH2D("h2_SigmavsdPhi_endcap_"+TString::Itoa(ih, 10), "h2_SigmavsdPhi_endcap_"+TString::Itoa(ih, 10),
+                                              binnum_ele_template, bins_ele_sigma_endcap, binnum_ele_template, bins_ele_dPhi_endcap);
+            h2_SigmavsEP_endcap[ih] = new TH2D("h2_SigmavsEP_endcap_"+TString::Itoa(ih, 10), "h2_SigmavsEP_endcap_"+TString::Itoa(ih, 10),
+                                               binnum_ele_template, bins_ele_sigma_endcap, binnum_ele_template, bins_ele_EP_endcap);
+            h2_dEtavsdPhi_endcap[ih] = new TH2D("h2_dEtavsdPhi_endcap_"+TString::Itoa(ih, 10), "h2_dEtavsdPhi_endcap_"+TString::Itoa(ih, 10),
+                                              binnum_ele_template, bins_ele_dEta_endcap, binnum_ele_template, bins_ele_dPhi_endcap);
+            h2_dEtavsEP_endcap[ih] = new TH2D("h2_dEtavsEP_endcap_"+TString::Itoa(ih, 10), "h2_dEtavsEP_endcap_"+TString::Itoa(ih, 10),
+                                               binnum_ele_template, bins_ele_dEta_endcap, binnum_ele_template, bins_ele_EP_endcap);
+            h2_dPhivsEP_endcap[ih] = new TH2D("h2_dPhivsEP_endcap_"+TString::Itoa(ih, 10), "h2_dPhivsEP_endcap_"+TString::Itoa(ih, 10),
+                                             binnum_ele_template, bins_ele_dPhi_endcap, binnum_ele_template, bins_ele_EP_endcap);
 
         }
 
@@ -353,12 +409,15 @@ void E_FR_HistMaker (Bool_t DEBUG)
         std::vector<int> *mHits = new std::vector<int>;
         std::vector<double> *relPFiso_dBeta = new std::vector<double>;
         std::vector<double> *relPFiso_Rho = new std::vector<double>;
+        std::vector<int> *passConvVeto = new std::vector<int>;
         std::vector<int> *passMediumID = new std::vector<int>;
         std::vector<int> *trig_fired = new std::vector<int>;
         std::vector<int> *trig_matched = new std::vector<int>;
         std::vector<double> *trig_pT = new std::vector<double>;
         std::vector<int> *prescale_factor = new std::vector<int>;
         Double_t MET_pT, MET_phi;
+        Int_t runNum;
+        Int_t lumiBlock;
         Int_t nPU;
         Int_t nVTX;
         Double_t PVz;
@@ -384,6 +443,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchStatus("mHits", 1);
         chain->SetBranchStatus("relPFiso_dBeta", 1);
         chain->SetBranchStatus("relPFiso_Rho", 1);
+        chain->SetBranchStatus("passConvVeto", 1);
         chain->SetBranchStatus("passMediumID", 1);
         chain->SetBranchStatus("trig_fired", 1);
         chain->SetBranchStatus("trig_matched", 1);
@@ -391,6 +451,8 @@ void E_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchStatus("prescale_factor", 1);
         chain->SetBranchStatus("MET_pT", 1);
         chain->SetBranchStatus("MET_phi", 1);
+        chain->SetBranchStatus("runNum", 1);
+        chain->SetBranchStatus("lumiBlock", 1);
         chain->SetBranchStatus("nPU", 1);
         chain->SetBranchStatus("nVTX", 1);
         chain->SetBranchStatus("PVz", 1);
@@ -415,6 +477,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchAddress("mHits", &mHits);
         chain->SetBranchAddress("relPFiso_dBeta", &relPFiso_dBeta);
         chain->SetBranchAddress("relPFiso_Rho", &relPFiso_Rho);
+        chain->SetBranchAddress("passConvVeto", &passConvVeto);
         chain->SetBranchAddress("passMediumID", &passMediumID);
         chain->SetBranchAddress("trig_fired", &trig_fired);
         chain->SetBranchAddress("trig_matched", &trig_matched);
@@ -422,6 +485,8 @@ void E_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchAddress("prescale_factor", &prescale_factor);
         chain->SetBranchAddress("MET_pT", &MET_pT);
         chain->SetBranchAddress("MET_phi", &MET_phi);
+        chain->SetBranchAddress("runNum", &runNum);
+        chain->SetBranchAddress("lumiBlock", &lumiBlock);
         chain->SetBranchAddress("nPU", &nPU);
         chain->SetBranchAddress("nVTX", &nVTX);
         chain->SetBranchAddress("PVz", &PVz);
@@ -723,7 +788,8 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 else // Control
                 {
                     h_eta_ctrl->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    if (fabs(eta->at(i_ele)) < 1.4442) // Barrel
+                    if (fabs(eta->at(i_ele)) < 1.4442 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.013 && HoverE->at(i_ele) < 0.13 &&
+                        fabs(dEtaInSeed->at(i_ele)) < 0.01 && fabs(dPhiIn->at(i_ele)) < 0.07) // Barrel
                     {
                         h_pT_barrel_ctrl->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         h_PFiso_dBeta_barrel_ctrl->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
@@ -738,7 +804,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         h_phiso_barrel_ctrl->Fill(phIso03->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         h_chisoPU_barrel_ctrl->Fill(ChIso03FromPU->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                     }
-                    else if (fabs(eta->at(i_ele)) > 1.566) // Endcap
+                    else if (fabs(eta->at(i_ele)) > 1.566 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.035 && HoverE->at(i_ele) < 0.13) // Endcap
                     {
                         h_pT_endcap_ctrl->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         h_PFiso_dBeta_endcap_ctrl->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
@@ -755,24 +821,28 @@ void E_FR_HistMaker (Bool_t DEBUG)
                     }
                 }// End of if(Control)
                 // Denominator
-                h_eta_deno->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                 if (fabs(eta->at(i_ele)) < 1.4442) // Barrel
                 {
-                    h_pT_barrel_deno->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_PFiso_dBeta_barrel_deno->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_PFiso_Rho_barrel_deno->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_SigmaIEtaIEta_barrel_deno->Fill(Full5x5_SigmaIEtaIEta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_dEtaInSeed_barrel_deno->Fill(dEtaInSeed->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_dPhiIn_barrel_deno->Fill(dPhiIn->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_HoverE_barrel_deno->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_InvEminusInvP_barrel_deno->Fill(InvEminusInvP->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_chiso_barrel_deno->Fill(chIso03->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_nhiso_barrel_deno->Fill(nhIso03->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_phiso_barrel_deno->Fill(phIso03->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_chisoPU_barrel_deno->Fill(ChIso03FromPU->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.013 && HoverE->at(i_ele) < 0.13 &&
+                        fabs(dEtaInSeed->at(i_ele)) < 0.01 && fabs(dPhiIn->at(i_ele)) < 0.07)
+                    {
+                        h_eta_deno->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_pT_barrel_deno->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_PFiso_dBeta_barrel_deno->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_PFiso_Rho_barrel_deno->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_SigmaIEtaIEta_barrel_deno->Fill(Full5x5_SigmaIEtaIEta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_dEtaInSeed_barrel_deno->Fill(dEtaInSeed->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_dPhiIn_barrel_deno->Fill(dPhiIn->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_HoverE_barrel_deno->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_InvEminusInvP_barrel_deno->Fill(InvEminusInvP->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_chiso_barrel_deno->Fill(chIso03->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_nhiso_barrel_deno->Fill(nhIso03->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_phiso_barrel_deno->Fill(phIso03->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_chisoPU_barrel_deno->Fill(ChIso03FromPU->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    }
 
                     if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 && fabs(dEtaInSeed->at(i_ele)) < 0.00311 && fabs(dPhiIn->at(i_ele)) < 0.103 &&
-                        HoverE->at(i_ele) < 0.253 && fabs(InvEminusInvP->at(i_ele)) < 0.134)
+                        HoverE->at(i_ele) < 0.253 && fabs(InvEminusInvP->at(i_ele)) < 0.134 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
@@ -780,8 +850,8 @@ void E_FR_HistMaker (Bool_t DEBUG)
                                 h_PFiso_Rho_barrel_template[ih]->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                     }
-                    else if (HoverE->at(i_ele) < 0.253 && fabs(InvEminusInvP->at(i_ele)) < 0.134 && Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.00998 &&
-                                                          fabs(dEtaInSeed->at(i_ele)) < 0.00311 && fabs(dPhiIn->at(i_ele)) < 0.103)
+                    else if (HoverE->at(i_ele) < 0.253 && (fabs(InvEminusInvP->at(i_ele)) < 0.134 || Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 ||
+                             fabs(dEtaInSeed->at(i_ele)) < 0.00311 || fabs(dPhiIn->at(i_ele)) < 0.103 || passConvVeto->at(i_ele) || mHits->at(i_ele) > 1))
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
@@ -790,7 +860,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         }
                     }
                     else if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 && fabs(dEtaInSeed->at(i_ele)) < 0.00311 && fabs(dPhiIn->at(i_ele)) < 0.103 &&
-                             HoverE->at(i_ele) >= 0.253 && fabs(InvEminusInvP->at(i_ele)) < 0.134)
+                             HoverE->at(i_ele) >= 0.253 && fabs(InvEminusInvP->at(i_ele)) < 0.134 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
@@ -800,17 +870,20 @@ void E_FR_HistMaker (Bool_t DEBUG)
                     }
 
                     if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 && fabs(dEtaInSeed->at(i_ele)) < 0.00311 && fabs(dPhiIn->at(i_ele)) < 0.103 &&
-                        relPFiso_Rho->at(i_ele) < 0.0695 && fabs(InvEminusInvP->at(i_ele)) < 0.134)
+                        relPFiso_Rho->at(i_ele) < 0.0695 && fabs(InvEminusInvP->at(i_ele)) < 0.134 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
+                        h_HoverE_barrel_template_int->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h2_HEvsPt_barrel->Fill(HoverE->at(i_ele), p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
                             if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
                                 h_HoverE_barrel_template[ih]->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                     }
-                    else if (relPFiso_Rho->at(i_ele) < 0.0695 && (Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.00998 || fabs(dEtaInSeed->at(i_ele)) >= 0.00311 ||
-                                                             fabs(dPhiIn->at(i_ele)) >= 0.103 || fabs(InvEminusInvP->at(i_ele)) >= 0.134))
+                    else if (relPFiso_Rho->at(i_ele) < 0.0695 && (fabs(InvEminusInvP->at(i_ele)) < 0.134 || Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 ||
+                                                                  fabs(dEtaInSeed->at(i_ele)) < 0.00311 || fabs(dPhiIn->at(i_ele)) < 0.103 || passConvVeto->at(i_ele) || mHits->at(i_ele) > 1))
                     {
+                        h_HoverE_barrel_jetTemplate_int->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
                             if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
@@ -818,8 +891,18 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         }
                     }
 
+                    if (HoverE->at(i_ele) < 0.253 && fabs(dEtaInSeed->at(i_ele)) < 0.00311 && fabs(dPhiIn->at(i_ele)) < 0.103 &&
+                        relPFiso_Rho->at(i_ele) < 0.0695 && fabs(InvEminusInvP->at(i_ele)) < 0.134 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        h2_SigmavsPt_barrel->Fill(Full5x5_SigmaIEtaIEta->at(i_ele), p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    }
+                    if (HoverE->at(i_ele) < 0.253 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 && fabs(dPhiIn->at(i_ele)) < 0.103 &&
+                        relPFiso_Rho->at(i_ele) < 0.0695 && fabs(InvEminusInvP->at(i_ele)) < 0.134 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        h2_dEtavsPt_barrel->Fill(dEtaInSeed->at(i_ele), p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    }
                     if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 && fabs(dEtaInSeed->at(i_ele)) < 0.00311 && fabs(dPhiIn->at(i_ele)) < 0.103 &&
-                        fabs(InvEminusInvP->at(i_ele)) < 0.134)
+                        fabs(InvEminusInvP->at(i_ele)) < 0.134 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
@@ -828,7 +911,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         }
                     }
                     if (HoverE->at(i_ele) < 0.253 && fabs(dEtaInSeed->at(i_ele)) < 0.00311 && fabs(dPhiIn->at(i_ele)) < 0.103 &&
-                        fabs(InvEminusInvP->at(i_ele)) < 0.134)
+                        fabs(InvEminusInvP->at(i_ele)) < 0.134 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
@@ -837,7 +920,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         }
                     }
                     if (relPFiso_Rho->at(i_ele) < 0.0695 && fabs(dEtaInSeed->at(i_ele)) < 0.00311 && fabs(dPhiIn->at(i_ele)) < 0.103 &&
-                        fabs(InvEminusInvP->at(i_ele)) < 0.134)
+                        fabs(InvEminusInvP->at(i_ele)) < 0.134 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
@@ -846,7 +929,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         }
                     }
                     if (HoverE->at(i_ele) < 0.253 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 && fabs(dPhiIn->at(i_ele)) < 0.103 &&
-                        fabs(InvEminusInvP->at(i_ele)) < 0.134)
+                        fabs(InvEminusInvP->at(i_ele)) < 0.134 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
@@ -855,7 +938,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         }
                     }
                     if (relPFiso_Rho->at(i_ele) < 0.0695 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 && fabs(dPhiIn->at(i_ele)) < 0.103 &&
-                        fabs(InvEminusInvP->at(i_ele)) < 0.134)
+                        fabs(InvEminusInvP->at(i_ele)) < 0.134 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
@@ -864,7 +947,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         }
                     }
                     if (HoverE->at(i_ele) < 0.253 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 && fabs(dPhiIn->at(i_ele)) < 0.103 &&
-                        fabs(dEtaInSeed->at(i_ele)) < 0.00311)
+                        fabs(dEtaInSeed->at(i_ele)) < 0.00311 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
@@ -873,12 +956,84 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         }
                     }
                     if (relPFiso_Rho->at(i_ele) < 0.0695 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 && fabs(dPhiIn->at(i_ele)) < 0.103 &&
-                        fabs(dEtaInSeed->at(i_ele)) < 0.00311)
+                        fabs(dEtaInSeed->at(i_ele)) < 0.00311 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
                             if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
                                 h2_HEvsEP_barrel[ih]->Fill(HoverE->at(i_ele), InvEminusInvP->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }           
+                    if (HoverE->at(i_ele) < 0.253 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 && fabs(dEtaInSeed->at(i_ele)) < 0.00311 &&
+                        fabs(InvEminusInvP->at(i_ele)) < 0.134 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h2_ISOvsdPhi_barrel[ih]->Fill(relPFiso_Rho->at(i_ele), fabs(dPhiIn->at(i_ele)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+                    if (relPFiso_Rho->at(i_ele) < 0.0695 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 && fabs(dEtaInSeed->at(i_ele)) < 0.00311 &&
+                        fabs(InvEminusInvP->at(i_ele)) < 0.134 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h2_HEvsdPhi_barrel[ih]->Fill(HoverE->at(i_ele), fabs(dPhiIn->at(i_ele)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+                    if (HoverE->at(i_ele) < 0.253 && relPFiso_Rho->at(i_ele) < 0.0695 && fabs(dPhiIn->at(i_ele)) < 0.103 &&
+                        fabs(InvEminusInvP->at(i_ele)) < 0.134 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h2_SigmavsdEta_barrel[ih]->Fill(Full5x5_SigmaIEtaIEta->at(i_ele), fabs(dEtaInSeed->at(i_ele)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+                    if (relPFiso_Rho->at(i_ele) < 0.0695 && HoverE->at(i_ele) < 0.253 && fabs(dEtaInSeed->at(i_ele)) < 0.00311 &&
+                        fabs(InvEminusInvP->at(i_ele)) < 0.134 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h2_SigmavsdPhi_barrel[ih]->Fill(HoverE->at(i_ele), fabs(dPhiIn->at(i_ele)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+                    if (HoverE->at(i_ele) < 0.253 && relPFiso_Rho->at(i_ele) < 0.0695 && fabs(dPhiIn->at(i_ele)) < 0.103 &&
+                        fabs(dEtaInSeed->at(i_ele)) < 0.00311 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h2_SigmavsEP_barrel[ih]->Fill(Full5x5_SigmaIEtaIEta->at(i_ele), fabs(dEtaInSeed->at(i_ele)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+                    if (relPFiso_Rho->at(i_ele) < 0.0695 && HoverE->at(i_ele) < 0.253 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 &&
+                        fabs(InvEminusInvP->at(i_ele)) < 0.134 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h2_dEtavsdPhi_barrel[ih]->Fill(fabs(dEtaInSeed->at(i_ele)), fabs(dPhiIn->at(i_ele)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+                    if (relPFiso_Rho->at(i_ele) < 0.0695 && HoverE->at(i_ele) < 0.253 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 &&
+                        fabs(dPhiIn->at(i_ele)) < 0.103 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h2_dEtavsEP_barrel[ih]->Fill(fabs(dEtaInSeed->at(i_ele)), fabs(InvEminusInvP->at(i_ele)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+                    if (relPFiso_Rho->at(i_ele) < 0.0695 && HoverE->at(i_ele) < 0.253 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 &&
+                        fabs(dEtaInSeed->at(i_ele)) < 0.00311 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h2_dPhivsEP_barrel[ih]->Fill(fabs(dPhiIn->at(i_ele)), fabs(InvEminusInvP->at(i_ele)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                     }
 
@@ -898,21 +1053,25 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 }
                 else if (fabs(eta->at(i_ele)) > 1.566) // Endcap
                 {
-                    h_pT_endcap_deno->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_PFiso_dBeta_endcap_deno->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_PFiso_Rho_endcap_deno->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_SigmaIEtaIEta_endcap_deno->Fill(Full5x5_SigmaIEtaIEta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_dEtaInSeed_endcap_deno->Fill(dEtaInSeed->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_dPhiIn_endcap_deno->Fill(dPhiIn->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_HoverE_endcap_deno->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_InvEminusInvP_endcap_deno->Fill(InvEminusInvP->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_chiso_endcap_deno->Fill(chIso03->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_nhiso_endcap_deno->Fill(nhIso03->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_phiso_endcap_deno->Fill(phIso03->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
-                    h_chisoPU_endcap_deno->Fill(ChIso03FromPU->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.035 && HoverE->at(i_ele) < 0.13)
+                    {
+                        h_eta_deno->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_pT_endcap_deno->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_PFiso_dBeta_endcap_deno->Fill(relPFiso_dBeta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_PFiso_Rho_endcap_deno->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_SigmaIEtaIEta_endcap_deno->Fill(Full5x5_SigmaIEtaIEta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_dEtaInSeed_endcap_deno->Fill(dEtaInSeed->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_dPhiIn_endcap_deno->Fill(dPhiIn->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_HoverE_endcap_deno->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_InvEminusInvP_endcap_deno->Fill(InvEminusInvP->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_chiso_endcap_deno->Fill(chIso03->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_nhiso_endcap_deno->Fill(nhIso03->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_phiso_endcap_deno->Fill(phIso03->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h_chisoPU_endcap_deno->Fill(ChIso03FromPU->at(i_ele)/p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    }
 
                     if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dEtaInSeed->at(i_ele)) < 0.00609 && fabs(dPhiIn->at(i_ele)) < 0.045 &&
-                        HoverE->at(i_ele) < 0.0878 && fabs(InvEminusInvP->at(i_ele)) < 0.13)
+                        HoverE->at(i_ele) < 0.0878 && fabs(InvEminusInvP->at(i_ele)) < 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
@@ -920,8 +1079,8 @@ void E_FR_HistMaker (Bool_t DEBUG)
                                 h_PFiso_Rho_endcap_template[ih]->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                     }
-                    else if (HoverE->at(i_ele) < 0.0878 && fabs(InvEminusInvP->at(i_ele)) < 0.13 && Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.0298 &&
-                                                           fabs(dEtaInSeed->at(i_ele)) < 0.00609 && fabs(dPhiIn->at(i_ele)) < 0.045)
+                    else if (HoverE->at(i_ele) < 0.0878 && fabs(InvEminusInvP->at(i_ele)) < 0.13 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 &&
+                             fabs(dEtaInSeed->at(i_ele)) < 0.00609 && fabs(dPhiIn->at(i_ele)) < 0.045 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
@@ -930,7 +1089,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         }
                     }
                     else if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dEtaInSeed->at(i_ele)) < 0.00609 && fabs(dPhiIn->at(i_ele)) < 0.045 &&
-                             HoverE->at(i_ele) < 0.0878 && fabs(InvEminusInvP->at(i_ele)) >= 0.13)
+                             HoverE->at(i_ele) < 0.0878 && fabs(InvEminusInvP->at(i_ele)) >= 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
@@ -938,18 +1097,22 @@ void E_FR_HistMaker (Bool_t DEBUG)
                                 h_PFiso_Rho_endcap_badJetTemplate[ih]->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                     }
+
                     if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dEtaInSeed->at(i_ele)) < 0.00609 && fabs(dPhiIn->at(i_ele)) < 0.045 &&
-                        relPFiso_Rho->at(i_ele) < 0.0821 && fabs(InvEminusInvP->at(i_ele)) < 0.13)
+                        relPFiso_Rho->at(i_ele) < 0.0821 && fabs(InvEminusInvP->at(i_ele)) < 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
+                        h_HoverE_endcap_template_int->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        h2_HEvsPt_endcap->Fill(HoverE->at(i_ele), p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
                             if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
                                 h_HoverE_endcap_template[ih]->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                     }
-                    else if (relPFiso_Rho->at(i_ele) < 0.0821 && (Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.0298 || fabs(dEtaInSeed->at(i_ele)) >= 0.00609 ||
-                                                                  fabs(dPhiIn->at(i_ele)) >= 0.045 || fabs(InvEminusInvP->at(i_ele)) >= 0.13))
+                    else if (relPFiso_Rho->at(i_ele) < 0.0821 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dEtaInSeed->at(i_ele)) >= 0.00609 &&
+                             fabs(dPhiIn->at(i_ele)) < 0.045 && fabs(InvEminusInvP->at(i_ele)) < 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
+                        h_HoverE_endcap_jetTemplate_int->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
                             if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
@@ -957,8 +1120,19 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         }
                     }
 
+                    if (HoverE->at(i_ele) < 0.0878 && fabs(dEtaInSeed->at(i_ele)) < 0.00609 && fabs(dPhiIn->at(i_ele)) < 0.045 &&
+                        relPFiso_Rho->at(i_ele) < 0.0821 && fabs(InvEminusInvP->at(i_ele)) < 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        h2_SigmavsPt_barrel->Fill(Full5x5_SigmaIEtaIEta->at(i_ele), p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    }
+                    if (HoverE->at(i_ele) < 0.0878 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dPhiIn->at(i_ele)) < 0.045 &&
+                        relPFiso_Rho->at(i_ele) < 0.0821 && fabs(InvEminusInvP->at(i_ele)) < 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        h2_dEtavsPt_barrel->Fill(dEtaInSeed->at(i_ele), p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                    }
+
                     if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dEtaInSeed->at(i_ele)) < 0.00609 && fabs(dPhiIn->at(i_ele)) < 0045103 &&
-                        fabs(InvEminusInvP->at(i_ele)) < 0.13)
+                        fabs(InvEminusInvP->at(i_ele)) < 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
@@ -967,7 +1141,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         }
                     }
                     if (HoverE->at(i_ele) < 0.0878 && fabs(dEtaInSeed->at(i_ele)) < 0.00609 && fabs(dPhiIn->at(i_ele)) < 0.045 &&
-                        fabs(InvEminusInvP->at(i_ele)) < 0.13)
+                        fabs(InvEminusInvP->at(i_ele)) < 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
@@ -976,7 +1150,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         }
                     }
                     if (relPFiso_Rho->at(i_ele) < 0.0821 && fabs(dEtaInSeed->at(i_ele)) < 0.00609 && fabs(dPhiIn->at(i_ele)) < 0.045 &&
-                        fabs(InvEminusInvP->at(i_ele)) < 0.13)
+                        fabs(InvEminusInvP->at(i_ele)) < 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
@@ -985,7 +1159,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         }
                     }
                     if (HoverE->at(i_ele) < 0.0878 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dPhiIn->at(i_ele)) < 0.045 &&
-                        fabs(InvEminusInvP->at(i_ele)) < 0.13)
+                        fabs(InvEminusInvP->at(i_ele)) < 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
@@ -994,7 +1168,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         }
                     }
                     if (relPFiso_Rho->at(i_ele) < 0.0821 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dPhiIn->at(i_ele)) < 0.045 &&
-                        fabs(InvEminusInvP->at(i_ele)) < 0.13)
+                        fabs(InvEminusInvP->at(i_ele)) < 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
@@ -1003,7 +1177,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         }
                     }
                     if (HoverE->at(i_ele) < 0.0878 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dPhiIn->at(i_ele)) < 0.045 &&
-                        fabs(dEtaInSeed->at(i_ele)) < 0.00609)
+                        fabs(dEtaInSeed->at(i_ele)) < 0.00609 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
@@ -1012,12 +1186,86 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         }
                     }
                     if (relPFiso_Rho->at(i_ele) < 0.0821 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dPhiIn->at(i_ele)) < 0.045 &&
-                        fabs(dEtaInSeed->at(i_ele)) < 0.00609)
+                        fabs(dEtaInSeed->at(i_ele)) < 0.00609 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
                     {
                         for (Int_t ih=0; ih<nPtBin_ele; ih++)
                         {
                             if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
                                 h2_HEvsEP_endcap[ih]->Fill(HoverE->at(i_ele), InvEminusInvP->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+
+                    if (HoverE->at(i_ele) < 0.0878 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dEtaInSeed->at(i_ele)) < 0.00609 &&
+                        fabs(InvEminusInvP->at(i_ele)) < 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h2_ISOvsdPhi_endcap[ih]->Fill(relPFiso_Rho->at(i_ele), fabs(dPhiIn->at(i_ele)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+                    if (relPFiso_Rho->at(i_ele) < 0.0821 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dEtaInSeed->at(i_ele)) < 0.00609 &&
+                        fabs(InvEminusInvP->at(i_ele)) < 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h2_HEvsdPhi_endcap[ih]->Fill(HoverE->at(i_ele), fabs(dPhiIn->at(i_ele)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+                    if (HoverE->at(i_ele) < 0.0878 && relPFiso_Rho->at(i_ele) < 0.0821 && fabs(dPhiIn->at(i_ele)) < 0.045 &&
+                        fabs(InvEminusInvP->at(i_ele)) < 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h2_SigmavsdEta_endcap[ih]->Fill(Full5x5_SigmaIEtaIEta->at(i_ele), fabs(dEtaInSeed->at(i_ele)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+                    if (relPFiso_Rho->at(i_ele) < 0.0821 && HoverE->at(i_ele) < 0.0878 && fabs(dEtaInSeed->at(i_ele)) < 0.00609 &&
+                        fabs(InvEminusInvP->at(i_ele)) < 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h2_SigmavsdPhi_endcap[ih]->Fill(HoverE->at(i_ele), fabs(dPhiIn->at(i_ele)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+
+                    if (HoverE->at(i_ele) < 0.0878 && relPFiso_Rho->at(i_ele) < 0.0821 && fabs(dPhiIn->at(i_ele)) < 0.045 &&
+                        fabs(dEtaInSeed->at(i_ele)) < 0.00609 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h2_SigmavsEP_endcap[ih]->Fill(Full5x5_SigmaIEtaIEta->at(i_ele), fabs(dEtaInSeed->at(i_ele)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+                    if (relPFiso_Rho->at(i_ele) < 0.0821 && HoverE->at(i_ele) < 0.0878 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 &&
+                        fabs(InvEminusInvP->at(i_ele)) < 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h2_dEtavsdPhi_endcap[ih]->Fill(fabs(dEtaInSeed->at(i_ele)), fabs(dPhiIn->at(i_ele)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+                    if (relPFiso_Rho->at(i_ele) < 0.0821 && HoverE->at(i_ele) < 0.0878 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 &&
+                        fabs(dPhiIn->at(i_ele)) < 0.045 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h2_dEtavsEP_endcap[ih]->Fill(fabs(dEtaInSeed->at(i_ele)), fabs(InvEminusInvP->at(i_ele)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
+                        }
+                    }
+                    if (relPFiso_Rho->at(i_ele) < 0.0821 && HoverE->at(i_ele) < 0.0878 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 &&
+                        fabs(dEtaInSeed->at(i_ele)) < 0.00609 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h2_dPhivsEP_endcap[ih]->Fill(fabs(dPhiIn->at(i_ele)), fabs(InvEminusInvP->at(i_ele)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight / prescale_alt);
                         }
                     }
 
@@ -1142,6 +1390,17 @@ void E_FR_HistMaker (Bool_t DEBUG)
         h_MT_endcap_ctrl->Write();
         h_nVTX->Write();
 
+        h_HoverE_barrel_template_int->Write();
+        h_HoverE_barrel_jetTemplate_int->Write();
+        h_HoverE_endcap_template_int->Write();
+        h_HoverE_endcap_jetTemplate_int->Write();
+        h2_HEvsPt_barrel->Write();
+        h2_SigmavsPt_barrel->Write();
+        h2_dEtavsPt_barrel->Write();
+        h2_HEvsPt_endcap->Write();
+        h2_SigmavsPt_endcap->Write();
+        h2_dEtavsPt_endcap->Write();
+
         for (Int_t ih=0; ih<nPtBin_ele; ih++)
         {
             h_PFiso_Rho_barrel_template[ih]->Write();
@@ -1163,6 +1422,14 @@ void E_FR_HistMaker (Bool_t DEBUG)
             h2_HEvsdEta_barrel[ih]->Write();
             h2_HEvsEP_barrel[ih]->Write();
             h2_ISOvsEP_barrel[ih]->Write();
+            h2_HEvsdPhi_barrel[ih]->Write();
+            h2_ISOvsdPhi_barrel[ih]->Write();
+            h2_SigmavsdEta_barrel[ih]->Write();
+            h2_SigmavsdPhi_barrel[ih]->Write();
+            h2_SigmavsEP_barrel[ih]->Write();
+            h2_dEtavsdPhi_barrel[ih]->Write();
+            h2_dEtavsEP_barrel[ih]->Write();
+            h2_dPhivsEP_barrel[ih]->Write();
 
             h2_HEvsIso_endcap[ih]->Write();
             h2_ISOvsSigma_endcap[ih]->Write();
@@ -1171,6 +1438,14 @@ void E_FR_HistMaker (Bool_t DEBUG)
             h2_HEvsdEta_endcap[ih]->Write();
             h2_HEvsEP_endcap[ih]->Write();
             h2_ISOvsEP_endcap[ih]->Write();
+            h2_HEvsdPhi_endcap[ih]->Write();
+            h2_ISOvsdPhi_endcap[ih]->Write();
+            h2_SigmavsdEta_endcap[ih]->Write();
+            h2_SigmavsdPhi_endcap[ih]->Write();
+            h2_SigmavsEP_endcap[ih]->Write();
+            h2_dEtavsdPhi_endcap[ih]->Write();
+            h2_dEtavsEP_endcap[ih]->Write();
+            h2_dPhivsEP_endcap[ih]->Write();
         }
 
         h_PFiso_Rho_barrel_template_PU10to20->Write();
