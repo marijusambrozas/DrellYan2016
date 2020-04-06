@@ -126,7 +126,7 @@ void FR_PrescaleTest (Bool_t DEBUG = kFALSE)
             {
                 if (p_T->at(i_ele) != p_T->at(i_ele))
                 {
-                    cout << p_T->at(i_ele) << " " << eta->at(i_ele) << " " << phi->at(i_ele) << endl;
+                    cout << p_T->at(i_ele) << endl;
                     continue;
                 }
                 if (p_T->at(i_ele) <= 28) continue;
