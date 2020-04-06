@@ -25,7 +25,6 @@
 #include <sstream>
 
 // -- Customized Analyzer for Drel-Yan Analysis -- //
-#include "./header/DYAnalyzer.h"
 #include "./header/SelectedX.h"
 #include "./header/myProgressBar_t.h"
 #include "./header/FileMgr.h"
@@ -62,8 +61,6 @@ void FR_PrescaleTest (Bool_t DEBUG = kFALSE)
 
         TStopwatch totaltime;
         totaltime.Start();
-
-        DYAnalyzer *analyzer = new DYAnalyzer("Photon_OR");
 
         // -- Creating Histograms -- //
         TH1D* h_pT_uncorr = new TH1D("h_pT_uncorr", "h_pT_uncorr", 500, 0, 500); h_pT_uncorr->Sumw2();
