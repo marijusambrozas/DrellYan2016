@@ -6337,7 +6337,7 @@ Bool_t DYAnalyzer::EventSelection_FR(vector<Electron> ElectronCollection, Ntuple
     Bool_t skip = kTRUE;
     for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
     { // Asking for only one electron to surpass trigger threshold
-        if(ElectronCollection[j].Pt > LeadPtCut && fabs(ElectronCollection[j].etaSC) < SubEtaCut && ElectronCollection[j].mHits <= 1 &&
+        if(ElectronCollection[j].Pt > LeadPtCut && fabs(ElectronCollection[j].etaSC) < SubEtaCut && ElectronCollection[j].mHits <= 3 &&
            !(fabs(ElectronCollection[j].etaSC) > 1.4442 && fabs(ElectronCollection[j].etaSC) < 1.566))
             skip = kFALSE;
     }
@@ -6347,7 +6347,7 @@ Bool_t DYAnalyzer::EventSelection_FR(vector<Electron> ElectronCollection, Ntuple
     Double_t med_count = 0;
     for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
     { // All other electrons still have to pass these criteria
-        if (ElectronCollection[j].Pt > SubPtCut && fabs(ElectronCollection[j].etaSC) < SubEtaCut && (ElectronCollection[j].mHits <= 1) &&
+        if (ElectronCollection[j].Pt > SubPtCut && fabs(ElectronCollection[j].etaSC) < SubEtaCut && (ElectronCollection[j].mHits <= 3) &&
            !(fabs(ElectronCollection[j].etaSC) > 1.4442 && fabs(ElectronCollection[j].etaSC) < 1.566))
         {
             isPassEventSelection = kTRUE;
