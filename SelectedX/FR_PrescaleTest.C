@@ -198,66 +198,66 @@ void FR_PrescaleTest (TString WhichX = "", Int_t type=1)
                 else if (matched22 == 1 && matched30 == 0 && matched36 == 0 && matched50 == 0 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0)
                 {
                     prescale_alt = pp.hltPrescale("HLT_Photon22_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG18", runNum, lumiBlock);
-                    h_HLT_pT->Fill(trig_pT->at(i_22), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
-                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_22), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                    h_pT->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
-                    h_pT_uncorr->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_HLT_pT->Fill(trig_pT->at(i_22), prescale_alt);
+                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_22));
+                    h_pT->Fill(p_T->at(i_ele), prescale_alt);
+                    h_pT_uncorr->Fill(p_T->at(i_ele));
                 }
                 else if (matched30 == 1 && matched36 == 0 && matched50 == 0 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0)
                 {
                     prescale_alt = pp.hltPrescale("HLT_Photon30_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG26", runNum, lumiBlock);
-                    h_HLT_pT->Fill(trig_pT->at(i_30), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
-                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_30), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                    h_pT->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
-                    h_pT_uncorr->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_HLT_pT->Fill(trig_pT->at(i_30), prescale_alt);
+                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_30));
+                    h_pT->Fill(p_T->at(i_ele), prescale_alt);
+                    h_pT_uncorr->Fill(p_T->at(i_ele));
                 }
                 else if (matched36 == 1 && matched50 == 0 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0)
                 {
                     prescale_alt = pp.hltPrescale("HLT_Photon36_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG26", runNum, lumiBlock);
-                    h_HLT_pT->Fill(trig_pT->at(i_36), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
-                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_36), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                    h_pT->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
-                    h_pT_uncorr->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_HLT_pT->Fill(trig_pT->at(i_36), prescale_alt);
+                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_36));
+                    h_pT->Fill(p_T->at(i_ele), prescale_alt);
+                    h_pT_uncorr->Fill(p_T->at(i_ele));
                 }
                 else if (matched50 == 1 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0)
                 {
                     prescale_alt = pp.hltPrescale("HLT_Photon50_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock);
-                    h_HLT_pT->Fill(trig_pT->at(i_50), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
-                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_50), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                    h_pT->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
-                    h_pT_uncorr->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_HLT_pT->Fill(trig_pT->at(i_50), prescale_alt);
+                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_50));
+                    h_pT->Fill(p_T->at(i_ele), prescale_alt);
+                    h_pT_uncorr->Fill(p_T->at(i_ele));
                 }
                 else if (matched75 == 1 && matched90 == 0 && matched120 == 0 && matched175 == 0)
                 {
                     prescale_alt = pp.hltPrescale("HLT_Photon75_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock);
-                    h_HLT_pT->Fill(trig_pT->at(i_75), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
-                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_75), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                    h_pT->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
-                    h_pT_uncorr->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_HLT_pT->Fill(trig_pT->at(i_75), prescale_alt);
+                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_75));
+                    h_pT->Fill(p_T->at(i_ele), prescale_alt);
+                    h_pT_uncorr->Fill(p_T->at(i_ele));
                 }
                 else if (matched90 == 1 && matched120 == 0 && matched175 == 0)
                 {
                     prescale_alt = pp.hltPrescale("HLT_Photon90_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock);
-                    h_HLT_pT->Fill(trig_pT->at(i_90), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
-                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_90), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                    h_pT->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
-                    h_pT_uncorr->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_HLT_pT->Fill(trig_pT->at(i_90), prescale_alt);
+                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_90));
+                    h_pT->Fill(p_T->at(i_ele), prescale_alt);
+                    h_pT_uncorr->Fill(p_T->at(i_ele));
                 }
                 else if (matched120 == 1 && matched175 == 0)
                 {
                     prescale_alt = pp.hltPrescale("HLT_Photon120_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock);
-                    h_HLT_pT->Fill(trig_pT->at(i_120), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
-                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_120), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                    h_pT->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
-                    h_pT_uncorr->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_HLT_pT->Fill(trig_pT->at(i_120), prescale_alt);
+                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_120));
+                    h_pT->Fill(p_T->at(i_ele), prescale_alt);
+                    h_pT_uncorr->Fill(p_T->at(i_ele));
                 }
                 else if (matched175 == 1)
                 {
                     prescale_alt = 1.;
-                    h_HLT_pT->Fill(trig_pT->at(i_175), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
-                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_175), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-                    h_pT->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
-                    h_pT_uncorr->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_HLT_pT->Fill(trig_pT->at(i_175), prescale_alt);
+                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_175));
+                    h_pT->Fill(p_T->at(i_ele), prescale_alt);
+                    h_pT_uncorr->Fill(p_T->at(i_ele));
                 }
                 else continue;
 
