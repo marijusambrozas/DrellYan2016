@@ -31,7 +31,7 @@
 #include "./header/FileMgr.h"
 #include "./header/PrescaleProvider.h"
 
-void FR_PrescaleTest (TString WhichX = "", Int_t type=1)
+void FR_PrescaleTest (Bool_t DEBUG = kFALSE)
 {
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
@@ -109,18 +109,9 @@ void FR_PrescaleTest (TString WhichX = "", Int_t type=1)
             chain->GetEntry(i);
             if (DEBUG == kTRUE){
                 cout << "\nEvt " << i << endl;
-                cout << "nMuons = " << p_T->size() << endl;
+                cout << "nEle = " << p_T->size() << endl;
                 cout << "p_T[1] = " << p_T->at(0) << endl;
-                cout << "eta[1] = " << eta->at(0) << endl;
-                cout << "phi[1] = " << phi->at(0) << endl;
             }
-
-            if (p_T->size() != passMediumID->size())
-            {
-                cout << "ERROR: vector sizes do not match!" << endl;
-                break;
-            }
-
 
             if (DEBUG == kTRUE)
             {
