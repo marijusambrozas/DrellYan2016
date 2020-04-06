@@ -41,7 +41,7 @@ public :
    void AddLegendEntry(TH1D *h, TString name, TString option);
    void ImportLegend(TLegend *newLegend, Int_t overwrite=0);
    void SetSystematics(Double_t *dataSystematics=NULL, Double_t *MCsystematics=NULL, Double_t *dataOverMCsystematics=NULL);
-   void DrawOnTop(TH1D* h1_onTop);
+   void DrawOnTop(TH1D* h1_onTop, TString option="");
 };
 
 #endif

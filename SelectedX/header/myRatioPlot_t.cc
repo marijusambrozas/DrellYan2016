@@ -291,10 +291,10 @@ void myRatioPlot_t::SetSystematics(Double_t *dataSystematics, Double_t *MCsystem
     systSet++;
 }
 
-void myRatioPlot_t::DrawOnTop(TH1D* h1_onTop)
+void myRatioPlot_t::DrawOnTop(TH1D* h1_onTop, TString option)
 {
     pad1->cd();
-    h1_onTop->Draw("samehist");
+    h1_onTop->Draw("same"+option);
     pad1->Update();
     canvas->cd();
     canvas->Update();
