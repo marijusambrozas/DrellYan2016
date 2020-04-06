@@ -255,8 +255,6 @@ void FR_PrescaleTest (Bool_t DEBUG = kFALSE)
 
         }// End of event iteration
 
-        if(Mgr.isMC == kTRUE) printf("\tNormalization factor: %.8f\n", Lumi*Mgr.Xsec[0]/Mgr.Wsum[0]);
-
         f->cd();
         cout << "\tWriting into file...";
 
