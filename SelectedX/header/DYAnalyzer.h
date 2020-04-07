@@ -171,6 +171,7 @@ public:
         Double_t EfficiencySF_EventWeight_electron(Electron ele1, Electron ele2);
         Double_t EfficiencySF_EventWeight_electron(TLorentzVector ele1, TLorentzVector ele2);
         Double_t EfficiencySF_EventWeight_electron(SelectedEE_t *EE);
+        Double_t EfficiencySF_EventWeight_electronFR(TLorentzVector ele1, TLorentzVector ele2, Int_t i_medium=-1);
         Int_t Find_electron_PtBin_Reco(Double_t Pt);
         Int_t Find_electron_PtBin_ID(Double_t Pt);
         Int_t Find_electron_PtBin_Trig(Double_t Pt);
@@ -3165,6 +3166,86 @@ Double_t DYAnalyzer::EfficiencySF_EventWeight_electron(SelectedEE_t *EE)
     return weight;
 
 }// End of EfficiencySF_EventWeight_electron(SelectedEE_t)
+
+
+Double_t DYAnalyzer::EfficiencySF_EventWeight_electronFR(TLorentzVector ele1, TLorentzVector ele2, Int_t i_medium)
+{
+    Double_t weight = -999;
+
+    // -- Electron1 -- //
+    Double_t Pt1 = ele1.Pt();
+    //Double_t eta1 = ele1.eta;
+    Double_t eta1 = ele1.Eta();
+
+    Int_t ptbin1_Reco = Find_electron_PtBin_Reco(Pt1);
+    Int_t etabin1_Reco = Find_electron_EtaBin_Reco(eta1);
+
+    Int_t ptbin1_ID = Find_electron_PtBin_ID(Pt1);
+    Int_t etabin1_ID = Find_electron_EtaBin_ID(eta1);
+
+    Int_t ptbin1_Trig = Find_electron_PtBin_Trig(Pt1);
+    Int_t etabin1_Trig = Find_electron_EtaBin_Trig(eta1);
+
+    Double_t Eff_ele1_data = Eff_Reco_data[etabin1_Reco][ptbin1_Reco];
+    Double_t Eff_ele1_MC = Eff_Reco_MC[etabin1_Reco][ptbin1_Reco];
+    if (i_medium == 1)
+    {
+        Eff_ele1_data *= Eff_ID_data[etabin1_ID][ptbin1_ID];
+        Eff_ele1_MC *=  Eff_ID_MC[etabin1_ID][ptbin1_ID];
+    }
+
+    // -- Electron2 -- //
+    Double_t Pt2 = ele2.Pt();
+    //Double_t eta2 = ele2.eta;
+    Double_t eta2 = ele2.Eta();
+
+    Int_t ptbin2_Reco = Find_electron_PtBin_Reco(Pt2);
+    Int_t etabin2_Reco = Find_electron_EtaBin_Reco(eta2);
+
+    Int_t ptbin2_ID = Find_electron_PtBin_ID(Pt2);
+    Int_t etabin2_ID = Find_electron_EtaBin_ID(eta2);
+
+    Int_t ptbin2_Trig = Find_electron_PtBin_Trig(Pt2);
+    Int_t etabin2_Trig = Find_electron_EtaBin_Trig(eta2);
+
+    Double_t Eff_ele2_data = Eff_Reco_data[etabin2_Reco][ptbin2_Reco];
+    Double_t Eff_ele2_MC = Eff_Reco_MC[etabin2_Reco][ptbin2_Reco];
+    if (i_medium == 2)
+    {
+        Eff_ele2_data *= Eff_ID_data[etabin2_ID][ptbin2_ID];
+        Eff_ele2_MC *= Eff_ID_MC[etabin2_ID][ptbin2_ID];
+    }
+
+    // TRIGGERS
+    Double_t Eff_EventTrig_data = 0;
+    Double_t Eff_EventTrig_MC = 0;
+
+    Eff_EventTrig_data = Eff_HLT_Leg2_data[etabin1_Trig][ptbin1_Trig] * Eff_HLT_Leg2_data[etabin2_Trig][ptbin2_Trig];
+    Eff_EventTrig_MC = Eff_HLT_Leg2_MC[etabin1_Trig][ptbin1_Trig] * Eff_HLT_Leg2_MC[etabin2_Trig][ptbin2_Trig];
+
+    //cout << Eff_EventTrig_data << "\t" << Eff_EventTrig_MC << endl;
+
+    Double_t Eff_data_all = Eff_ele1_data * Eff_ele2_data * Eff_EventTrig_data;
+    Double_t Eff_MC_all = Eff_ele1_MC * Eff_ele2_MC * Eff_EventTrig_MC;
+
+    weight = Eff_data_all / Eff_MC_all;
+
+    if(weight > 2)
+    {
+        printf("(pt1, eta1, pt2, eta2): (%.3lf, %.3lf, %.3lf, %.3lf)\n", Pt1, eta1, Pt2, eta2);
+        printf("[SF] Weight = %.3lf\n", weight);
+    }
+
+    /*if((Pt1 < 25 && eta1 > 2.3) || (Pt2 < 25 && eta2 > 2.3))
+    {
+        printf("(pt1, eta1, pt2, eta2): (%.3lf, %.3lf, %.3lf, %.3lf)\n", Pt1, eta1, Pt2, eta2);
+        cout << Eff_EventTrig_data << "\t" << Eff_EventTrig_MC << endl;
+        cout << weight << endl;
+    }*/
+
+    return weight;
+
+}// End of EfficiencySF_EventWeight_electronFR(ele1, ele2, i_medium)
 
 
 Double_t DYAnalyzer::EfficiencySF_EventWeight_emu_BtoF(Muon mu, Electron ele)
