@@ -284,10 +284,42 @@ void E_EstFR(Int_t type)
     h_pT_barrel_data_nume->SetDirectory(0);
     h_pT_endcap_data_nume->SetDirectory(0);
 
+
+//--------------------------------- FR from QCD MC -------------------------------------- (deno = nume + ctrl)
+
+    //             QCD_MC_nume
+    // FR = -------------------------
+    //      QCD_MC_nume + QCD_MC_ctrl
+
+    // ------ Numerator ------ //
+    TH1D *h_pT_barrel_nume_fMC = ((TH1D*)(h_pT_barrel_MC_nume[_QCDEMEnriched_Full]->Clone("h_pT_barrel_nume_fMC")));
+    TH1D *h_pT_endcap_nume_fMC = ((TH1D*)(h_pT_endcap_MC_nume[_QCDEMEnriched_Full]->Clone("h_pT_endcap_nume_fMC")));
+
+    // ------ Denominator ------ //
+    TH1D *h_pT_barrel_deno_fMC = ((TH1D*)(h_pT_barrel_MC_ctrl[_QCDEMEnriched_Full]->Clone("h_pT_barrel_deno_fMC")));
+    h_pT_barrel_deno_fMC->Add(h_pT_barrel_nume_fMC); // deno = sig+ctrl
+    TH1D *h_pT_endcap_deno_fMC = ((TH1D*)(h_pT_endcap_MC_ctrl[_QCDEMEnriched_Full]->Clone("h_pT_endcap_deno_fMC")));
+    h_pT_endcap_deno_fMC->Add(h_pT_endcap_nume_fMC); // deno = sig+ctrl
+
+    // ------ FR ------ //
+    // Barrel
+    TH1D *h_FRMC_barrel = ((TH1D*)(h_pT_barrel_nume_fMC->Clone("h_FRMC_barrel")));
+    h_FRMC_barrel->Divide(h_pT_barrel_deno_fMC);
+    h_FRMC_barrel->SetDirectory(0);
+    cout << "Numerator barrel (QCD MC): " << h_pT_barrel_nume_fMC->Integral() << endl;
+    cout << "Denominator barrel (QCD MC): " << h_pT_barrel_deno_fMC->Integral() << endl;
+    // Endcap
+    TH1D *h_FRMC_endcap = ((TH1D*)(h_pT_endcap_nume_fMC->Clone("h_FRMC_endcap")));
+    h_FRMC_endcap->Divide(h_pT_endcap_deno_fMC);
+    h_FRMC_endcap->SetDirectory(0);
+    cout << "Numerator endcap (QCD MC): " << h_pT_endcap_nume_fMC->Integral() << endl;
+    cout << "Denominator endcap (QCD MC): " << h_pT_endcap_deno_fMC->Integral() << endl;
+
+
 //--------------------------------- FR by ratio -------------------------------------- (deno = nume + ctrl)
 
     //            DATA_nume * QCD_nume * sum(allMC_nume + allMC_ctrl)
-    // FR = ------------------------------------------------------------------
+    // FR = -----------------------------------------------------------------
     //      (DATA_nume + DATA_ctrl) * (QCD_nume + QCD_ctrl) * sum(allMC_nume)
 
     // ####### Numerator ####### //
@@ -523,6 +555,8 @@ void E_EstFR(Int_t type)
     TFile *file_FR = new TFile(filename, "RECREATE");
     if (file_FR->IsOpen()) cout << "File '" << filename << "' has been created. Writing histograms.." << endl;
     file_FR->cd();
+    h_FRMC_barrel->Write();
+    h_FRMC_endcap->Write();
     h_FRratio_barrel->Write();
     h_FRratio_endcap->Write();
     h_FRsubtract_barrel->Write();
@@ -543,6 +577,10 @@ void E_EstFR(Int_t type)
     c_FR_barrel->SetTopMargin(0.05);
     c_FR_barrel->SetBottomMargin(0.12);
     c_FR_barrel->SetLeftMargin(0.13);
+    h_FRMC_barrel->SetMarkerStyle(23);
+    h_FRMC_barrel->SetMarkerColor(kYellow);
+    h_FRMC_barrel->SetLineColor(kYellow);
+    h_FRMC_barrel->SetStats(kFALSE);
     h_FRsubtract_barrel->SetMarkerStyle(kFullDotLarge);
     h_FRsubtract_barrel->SetMarkerColor(kBlack);
     h_FRsubtract_barrel->SetLineColor(kBlack);
@@ -569,10 +607,12 @@ void E_EstFR(Int_t type)
     h_FRratio_barrel->GetXaxis()->SetRangeUser(25, 1000);
     h_FRratio_barrel->GetYaxis()->SetRangeUser(0, 0.25);
     h_FRratio_barrel->Draw();
+    h_FRMC_barrel->Draw("same");
     h_FRsubtract_barrel->Draw("same");
     h_FRtemplate_barrel->Draw("same");
 
     TLegend *legend = new TLegend(0.13, 0.77, 0.6, 0.95);
+    legend->AddEntry(h_FRMC_barrel, "QCD MC", "LP");
     legend->AddEntry(h_FRratio_barrel, "Ratio", "LP");
     legend->AddEntry(h_FRsubtract_barrel, "Subtraction", "LP");
     legend->AddEntry(h_FRtemplate_barrel, "ABCD", "LP");
@@ -593,6 +633,10 @@ void E_EstFR(Int_t type)
     c_FR_endcap->SetTopMargin(0.05);
     c_FR_endcap->SetBottomMargin(0.12);
     c_FR_endcap->SetLeftMargin(0.13);
+    h_FRMC_endcap->SetMarkerStyle(23);
+    h_FRMC_endcap->SetMarkerColor(kYellow);
+    h_FRMC_endcap->SetLineColor(kYellow);
+    h_FRMC_endcap->SetStats(kFALSE);
     h_FRsubtract_endcap->SetMarkerStyle(kFullDotLarge);
     h_FRsubtract_endcap->SetMarkerColor(kBlack);
     h_FRsubtract_endcap->SetLineColor(kBlack);
@@ -619,6 +663,7 @@ void E_EstFR(Int_t type)
     h_FRratio_endcap->GetXaxis()->SetRangeUser(25, 1000);
     h_FRratio_endcap->GetYaxis()->SetRangeUser(0, 0.25);
     h_FRratio_endcap->Draw();
+    h_FRMC_endcap->Draw("same");
     h_FRsubtract_endcap->Draw("same");
     h_FRtemplate_endcap->Draw("same");
     legend->Draw();
