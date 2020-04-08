@@ -1688,8 +1688,8 @@ void MakeSelectionForBKGest_E (TString type, TString HLTname, Bool_t Debug)
                             ChIso03FromPU->push_back(SelectedElectronCollection[i_ele].ChIso03FromPU);
                             mHits->push_back(SelectedElectronCollection[i_ele].mHits);
                             passConvVeto->push_back(SelectedElectronCollection[i_ele].passConvVeto);
-                            relPFiso_dBeta->push_back(SelectedElectronCollection[i_ele].relPFiso_dBeta);
-                            relPFiso_Rho->push_back(SelectedElectronCollection[i_ele].relPFiso_Rho);
+                            relPFiso_dBeta->push_back(SelectedElectronCollection[i_ele].RelPFiso_dBeta);
+                            relPFiso_Rho->push_back(SelectedElectronCollection[i_ele].RelPFiso_Rho);
                             passMediumID->push_back(SelectedElectronCollection[i_ele].passMediumID);
                         }
                         ElectronTree->Fill();
