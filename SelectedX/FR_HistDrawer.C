@@ -8079,7 +8079,7 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     TFile *f = new TFile(Dir+"WJETest_E.root", "READ");
 
     TH1D *h_mass[_EndOf_Data_Special], *h_MET[_EndOf_Data_Special], *h_mass_temp[_EndOf_Data_Special];
-    TH1D *h_WJET_est, *h_WJET_est_temp;
+    TH1D *h_WJET_est, *h_WJET_est_temp, *h_WJET_est_fit;
     THStack * s_mass_wWJET = new THStack("s_mass_wWJET", "");
     THStack * s_mass_woWJET = new THStack("s_mass_woWJET", "");
     THStack * s_mass_wWJET_temp = new THStack("s_mass_wWJET_template", "");
@@ -8312,17 +8312,43 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_WJET_est_temp->SetFillColor(kRed - 2);
     h_WJET_est_temp->SetLineColor(kRed - 2);
 
+    // W+Jets estimation from template fit
+    Double_t int_wjet_fit=0, err_wjet_fit=0;
+    h_WJET_est_fit = ((TH1D*)(h_WJET_est_temp->Clone("h_WJET_est_fit")));
+    TH1D *h_DY_fit = ((TH1D*)(h_mass[_DY_Full]->Clone("h_DY_fit")));
+    TH1D *h_ttbar_fit = ((TH1D*)(h_mass[_ttbar_Full]->Clone("h_ttbar_fit")));
+    TH1D *h_VVnST_fit = ((TH1D*)(h_mass[_VVnST]->Clone("h_VVnST_fit")));
+    TH1D *h_GJets_fit = ((TH1D*)(h_mass[_GJets_Full]->Clone("h_GJets_fit")));
+    TH1D *h_QCD_fit = ((TH1D*)(h_QCD_est->Clone("h_QCD_fit")));
+    h_WJET_est_fit->Scale(5.6780e+03 / h_WJET_est_fit->Integral());
+    h_DY_fit->Scale(3.7017e+05 / h_DY_fit->Integral());
+    h_ttbar_fit->Scale(5.1808e+03 / h_ttbar_fit->Integral());
+    h_VVnST_fit->Scale(1.2742e+03 / h_VVnST_fit->Integral());
+    h_GJets_fit->Scale(2.2974e+00 / h_GJets_fit->Integral());
+    h_QCD_fit->Scale(1.6976e+04 / h_QCD_fit->Integral());
+    THStack *s_mass_fit = new THStack("s_mass_fit", "");
+    s_mass_fit->Add(h_QCD_fit);
+    s_mass_fit->Add(h_GJets_fit);
+    s_mass_fit->Add(h_VVnST_fit);
+    s_mass_fit->Add(h_WJET_est_fit);
+    s_mass_fit->Add(h_ttbar_fit);
+    s_mass_fit->Add(h_DY_fit);
+    int_wjet_fit = h_WJET_est_fit->IntegralAndError(1, h_WJET_est_fit->GetSize()-2, err_wjet_fit);
+    cout << "WJets est events (template fit): " << int_wjet_fit << "+-" << err_wjet_fit << endl;
+
+    myRatioPlot_t *RP_MET = new myRatioPlot_t("c_MET", s_MET, h_MET[_DoubleEG_Full]);
     myRatioPlot_t *RP_mass_wWJET = new myRatioPlot_t("c_mass_wWJET", s_mass_wWJET, h_mass[_DoubleEG_Full]);
     myRatioPlot_t *RP_mass_woWJET = new myRatioPlot_t("c_mass_woWJET", s_mass_woWJET, h_mass[_DoubleEG_Full]);
-    myRatioPlot_t *RP_MET = new myRatioPlot_t("c_MET", s_MET, h_MET[_DoubleEG_Full]);
     myRatioPlot_t *RP_mass_wWJET_temp = new myRatioPlot_t("c_mass_wWJET_template", s_mass_wWJET_temp, h_mass_temp[_DoubleEG_Full]);
     myRatioPlot_t *RP_mass_woWJET_temp = new myRatioPlot_t("c_mass_woWJET_template", s_mass_woWJET_temp, h_mass_temp[_DoubleEG_Full]);
+    myRatioPlot_t *RP_mass_fit = new myRatioPlot_t("c_mass_fit", s_mass_fit, h_mass[_DoubleEG_Full]);
 
+    RP_MET->SetPlots("p_{T}^{miss} [GeV/c]", 0, 1000);
     RP_mass_wWJET->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
     RP_mass_woWJET->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
-    RP_MET->SetPlots("p_{T}^{miss} [GeV/c]", 0, 1000);
     RP_mass_wWJET_temp->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
     RP_mass_woWJET_temp->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
+    RP_mass_fit->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
 
     TLegend * legend_wWJET = new TLegend(0.8, 0.52, 0.95, 0.95);
     legend_wWJET->AddEntry(h_mass[_DoubleEG_B], "Data", "pl");
@@ -8340,17 +8366,19 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     legend_woWJET->AddEntry(h_mass[_GJets_20to100], "#gamma+Jets", "f");
     legend_woWJET->AddEntry(h_mass[_QCDEMEnriched_20to30], "#font[12]{#scale[1.1]{QCD}}", "f");
 
+    RP_MET->ImportLegend(legend_wWJET);
     RP_mass_wWJET->ImportLegend(legend_wWJET);
     RP_mass_woWJET->ImportLegend(legend_woWJET);
     RP_mass_wWJET_temp->ImportLegend(legend_wWJET);
     RP_mass_woWJET_temp->ImportLegend(legend_woWJET);
-    RP_MET->ImportLegend(legend_wWJET);
+    RP_mass_fit->ImportLegend(legend_wWJET);
 
+    RP_MET->Draw(1e-2, 1e5, 0);
     RP_mass_wWJET->Draw(1e-2, 1e5, 1);
     RP_mass_woWJET->Draw(1e-2, 1e5, 1);
     RP_mass_wWJET_temp->Draw(1e-2, 1e4, 1);
     RP_mass_woWJET_temp->Draw(1e-2, 1e4, 1);
-    RP_MET->Draw(1e-2, 1e5, 0);
+    RP_mass_fit->Draw(1e-2, 1e5, 1);
 
     TLegend * l_WJET_est = new TLegend(0.7, 0.88, 0.95, 0.95);
     l_WJET_est->AddEntry(h_WJET_est, "#font[12]{#scale[1.1]{W}}+Jets (est.)", "f");
@@ -8406,12 +8434,38 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     c_WJET_est_temp->SetGridy();
     c_WJET_est_temp->Update();
 
+    // Draw WJets from template fit
+    TCanvas * c_WJET_fit = new TCanvas("c_WJET_fit", "W+Jets fit", 750, 850);
+    c_WJET_fit->SetTopMargin(0.05);
+    c_WJET_fit->SetRightMargin(0.05);
+    c_WJET_fit->SetBottomMargin(0.15);
+    c_WJET_fit->SetLeftMargin(0.17);
+    h_WJET_est_fit->Draw("hist");
+    h_WJET_est_fit->GetXaxis()->SetTitle("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}]");
+    h_WJET_est_fit->GetXaxis()->SetTitleSize(0.062);
+    h_WJET_est_fit->GetXaxis()->SetTitleOffset(0.9);
+    h_WJET_est_fit->GetXaxis()->SetLabelSize(0.048);
+    h_WJET_est_fit->GetXaxis()->SetMoreLogLabels();
+    h_WJET_est_fit->GetXaxis()->SetNoExponent();
+    h_WJET_est_fit->GetYaxis()->SetTitle("Number of events");
+    h_WJET_est_fit->GetYaxis()->SetTitleSize(0.05);
+    h_WJET_est_fit->GetYaxis()->SetTitleOffset(1.6);
+    h_WJET_est_fit->GetYaxis()->SetLabelSize(0.043);
+    h_WJET_est_fit->GetYaxis()->SetMoreLogLabels();
+    h_WJET_est_fit->GetYaxis()->SetNoExponent();
+    l_WJET_est->Draw();
+    c_WJET_fit->SetLogx();
+    c_WJET_fit->SetGridx();
+    c_WJET_fit->SetGridy();
+    c_WJET_fit->Update();
+
     // Starting writing
     TFile * f_out = new TFile("/media/sf_DATA/SelectedEE/Histos/EstWJets_EE.root", "RECREATE");
     if (f_out->IsOpen()) cout << "Writing output file..." << endl;
     else cout << "Error while writing output!" << endl;
     h_WJET_est->Write();
     h_WJET_est_temp->Write();
+    h_WJET_est_fit->Write();
 
     if (systErr > 0)
     {   // Errors
