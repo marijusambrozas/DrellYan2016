@@ -1502,8 +1502,19 @@ void MakeSelectionForBKGest_E (TString type, TString HLTname, Bool_t Debug)
         std::vector<double> *eta = new std::vector<double>;
         std::vector<double> *etaSC = new std::vector<double>;
         std::vector<double> *phi = new std::vector<double>;
-        std::vector<int> *charge = new std::vector<int>;
-        std::vector<double> *relPFiso = new std::vector<double>;
+        std::vector<double> *Full5x5_SigmaIEtaIEta = new std::vector<double>;
+        std::vector<double> *dEtaInSeed = new std::vector<double>;
+        std::vector<double> *dPhiIn = new std::vector<double>;
+        std::vector<double> *HoverE = new std::vector<double>;
+        std::vector<double> *InvEminusInvP = new std::vector<double>;
+        std::vector<double> *chIso03 = new std::vector<double>;
+        std::vector<double> *nhIso03 = new std::vector<double>;
+        std::vector<double> *phIso03 = new std::vector<double>;
+        std::vector<double> *ChIso03FromPU = new std::vector<double>;
+        std::vector<int> *mHits = new std::vector<int>;
+        std::vector<int> *passConvVeto = new std::vector<int>;
+        std::vector<double> *relPFiso_dBeta = new std::vector<double>;
+        std::vector<double> *relPFiso_Rho = new std::vector<double>;
         std::vector<int> *passMediumID = new std::vector<int>;
         Double_t MET_pT, MET_phi;
         Int_t nPU;
@@ -1518,8 +1529,19 @@ void MakeSelectionForBKGest_E (TString type, TString HLTname, Bool_t Debug)
         ElectronTree->Branch("eta", &eta);
         ElectronTree->Branch("etaSC", &etaSC);
         ElectronTree->Branch("phi", &phi);
-        ElectronTree->Branch("charge", &charge);
-        ElectronTree->Branch("relPFiso", &relPFiso);
+        ElectronTree->Branch("Full5x5_SigmaIEtaIEta", &Full5x5_SigmaIEtaIEta);
+        ElectronTree->Branch("dEtaInSeed", &dEtaInSeed);
+        ElectronTree->Branch("dPhiIn", &dPhiIn);
+        ElectronTree->Branch("HoverE", &HoverE);
+        ElectronTree->Branch("InvEminusInvP", &InvEminusInvP);
+        ElectronTree->Branch("chIso03", &chIso03);
+        ElectronTree->Branch("nhIso03", &nhIso03);
+        ElectronTree->Branch("phIso03", &phIso03);
+        ElectronTree->Branch("ChIso03FromPU", &ChIso03FromPU);
+        ElectronTree->Branch("mHits", &mHits);
+        ElectronTree->Branch("passConvVeto", &passConvVeto);
+        ElectronTree->Branch("relPFiso_dBeta", &relPFiso_dBeta);
+        ElectronTree->Branch("relPFiso_Rho", &relPFiso_Rho);
         ElectronTree->Branch("passMediumID", &passMediumID);
         ElectronTree->Branch("MET_pT", &MET_pT);
         ElectronTree->Branch("MET_phi", &MET_phi);
@@ -1612,8 +1634,19 @@ void MakeSelectionForBKGest_E (TString type, TString HLTname, Bool_t Debug)
                         eta->clear();
                         etaSC->clear();
                         phi->clear();
-                        charge->clear();
-                        relPFiso->clear();
+                        Full5x5_SigmaIEtaIEta->clear();
+                        dEtaInSeed->clear();
+                        dPhiIn->clear();
+                        HoverE->clear();
+                        InvEminusInvP->clear();
+                        chIso03->clear();
+                        nhIso03->clear();
+                        phIso03->clear();
+                        ChIso03FromPU->clear();
+                        mHits->clear();
+                        passConvVeto->clear();
+                        relPFiso_dBeta->clear();
+                        relPFiso_Rho->clear();
                         passMediumID->clear();
 
                         // -- Top pT reweighting -- //
@@ -1638,15 +1671,26 @@ void MakeSelectionForBKGest_E (TString type, TString HLTname, Bool_t Debug)
                         prefiring_weight_down = ntuple->_prefiringweightdown;
 
                         // -- Vector filling -- //
-                        for (UInt_t i=0; i<SelectedElectronCollection.size(); i++)
+                        for (UInt_t i_ele=0; i_ele<SelectedElectronCollection.size(); i_ele++)
                         {
-                            p_T->push_back(SelectedElectronCollection[i].Pt);
-                            eta->push_back(SelectedElectronCollection[i].eta);
-                            etaSC->push_back(SelectedElectronCollection[i].etaSC);
-                            phi->push_back(SelectedElectronCollection[i].phi);
-                            charge->push_back(SelectedElectronCollection[i].charge);
-                            relPFiso->push_back(SelectedElectronCollection[i].RelPFIso_dBeta);
-                            passMediumID->push_back(SelectedElectronCollection[i].passMediumID);
+                            p_T->push_back(SelectedElectronCollection[i_ele].Pt);
+                            eta->push_back(SelectedElectronCollection[i_ele].eta);
+                            etaSC->push_back(SelectedElectronCollection[i_ele].etaSC);
+                            phi->push_back(SelectedElectronCollection[i_ele].phi);
+                            Full5x5_SigmaIEtaIEta->push_back(SelectedElectronCollection[i_ele].Full5x5_SigmaIEtaIEta);
+                            dEtaInSeed->push_back(SelectedElectronCollection[i_ele].dEtaInSeed);
+                            dPhiIn->push_back(SelectedElectronCollection[i_ele].dPhiIn);
+                            HoverE->push_back(SelectedElectronCollection[i_ele].HoverE);
+                            InvEminusInvP->push_back(SelectedElectronCollection[i_ele].InvEminusInvP);
+                            chIso03->push_back(SelectedElectronCollection[i_ele].chIso03);
+                            nhIso03->push_back(SelectedElectronCollection[i_ele].nhIso03);
+                            phIso03->push_back(SelectedElectronCollection[i_ele].phIso03);
+                            ChIso03FromPU->push_back(SelectedElectronCollection[i_ele].ChIso03FromPU);
+                            mHits->push_back(SelectedElectronCollection[i_ele].mHits);
+                            passConvVeto->push_back(SelectedElectronCollection[i_ele].passConvVeto);
+                            relPFiso_dBeta->push_back(SelectedElectronCollection[i_ele].relPFiso_dBeta);
+                            relPFiso_Rho->push_back(SelectedElectronCollection[i_ele].relPFiso_Rho);
+                            passMediumID->push_back(SelectedElectronCollection[i_ele].passMediumID);
                         }
                         ElectronTree->Fill();
                     } // End of isPassEvtSelection
