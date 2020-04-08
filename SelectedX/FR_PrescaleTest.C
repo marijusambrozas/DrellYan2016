@@ -46,6 +46,17 @@ void FR_PrescaleTest (Bool_t DEBUG = kFALSE)
     TString debug = "";
     if (DEBUG == kTRUE) debug = "_DEBUG";
 
+//    cout << "Run " << 273158 << " LumiS " << 1 << " prescale " << pp.hltPrescale("HLT_Photon22_v", 273158, 1) << " " << pp.l1Prescale("L1_SingleEG18", 273158, 1) << endl;
+//    cout << "Run " << 273158 << " LumiS " << 2 << " prescale " << pp.hltPrescale("HLT_Photon22_v", 273158, 2) << " " << pp.l1Prescale("L1_SingleEG18", 273158, 2) << endl;
+//    cout << "Run " << 273158 << " LumiS " << 3 << " prescale " << pp.hltPrescale("HLT_Photon22_v", 273158, 3) << " " << pp.l1Prescale("L1_SingleEG18", 273158, 3) << endl;
+//    cout << "Run " << 273158 << " LumiS " << 18 << " prescale " << pp.hltPrescale("HLT_Photon22_v", 273158, 18) << " " << pp.l1Prescale("L1_SingleEG18", 273158, 18) << endl;
+//    cout << "Run " << 273158 << " LumiS " << 19 << " prescale " << pp.hltPrescale("HLT_Photon22_v", 273158, 19) << " " << pp.l1Prescale("L1_SingleEG18", 273158, 19) << endl;
+//    cout << "Run " << 273158 << " LumiS " << 32 << " prescale " << pp.hltPrescale("HLT_Photon22_v", 273158, 101) << " " << pp.l1Prescale("L1_SingleEG18", 273158, 101) << endl;
+//    cout << "Run " << 273402 << " LumiS " << 1 << " prescale " << pp.hltPrescale("HLT_Photon22_v", 273302, 1) << " " << pp.l1Prescale("L1_SingleEG18", 273302, 1) << endl;
+//    cout << "Run " << 273402 << " LumiS " << 191 << " prescale " << pp.hltPrescale("HLT_Photon22_v", 273302, 191) << " " << pp.l1Prescale("L1_SingleEG18", 273302, 191) << endl;
+//    cout << "Run " << 275000 << " LumiS " << 1 << " prescale " << pp.hltPrescale("HLT_Photon22_v", 275000, 1) << " " << pp.l1Prescale("L1_SingleEG18", 275000, 1) << endl;
+//    cout << "Run " << 275068 << " LumiS " << 2 << " prescale " << pp.hltPrescale("HLT_Photon22_v", 275068, 2) << " " << pp.l1Prescale("L1_SingleEG18", 275068, 2) << endl;
+
     for (Process_t pr=_SinglePhoton_B; pr<=_SinglePhoton_H; pr=next(pr))
     {
         Mgr.SetProc(pr);
@@ -87,12 +98,14 @@ void FR_PrescaleTest (Bool_t DEBUG = kFALSE)
         chain->SetBranchStatus("trig_pT", 1);
         chain->SetBranchStatus("runNum", 1);
         chain->SetBranchStatus("lumiBlock", 1);
+//        chain->SetBranchStatus("prescale_alt", 1);
         chain->SetBranchAddress("p_T", &p_T);
         chain->SetBranchAddress("trig_fired", &trig_fired);
         chain->SetBranchAddress("trig_matched", &trig_matched);
         chain->SetBranchAddress("trig_pT", &trig_pT);
         chain->SetBranchAddress("runNum", &runNum);
         chain->SetBranchAddress("lumiBlock", &lumiBlock);
+//        chain->SetBranchAddress("prescale_alt", &prescale_alt);
 
         Int_t NEvents = chain->GetEntries();
         cout << "\t[Sum of weights: " << Mgr.Wsum[0] << "]" << endl;
@@ -127,8 +140,64 @@ void FR_PrescaleTest (Bool_t DEBUG = kFALSE)
                     cout << p_T->at(i_ele) << endl;
                     continue;
                 }
-                if (p_T->at(i_ele) <= 28) continue;
+                if (p_T->at(i_ele) <= 25) continue;
                 if (DEBUG == kTRUE) cout << "i_ele = " << i_ele << endl;
+
+//                Int_t HLT_prescale = 0, L1_prescale = 0;
+//                for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
+//                {
+//                    if (trig_matched->at(i_tr) != i_ele) continue;
+
+//                    if (trig_pT->at(i_tr) < 22)
+//                    {
+//                        HLT_prescale = 0;
+//                    }
+//                    else if (trig_pT->at(i_tr) < 30)
+//                    {
+//                        L1_prescale = pp.l1Prescale("L1_SingleEG18", runNum, lumiBlock);
+//                        HLT_prescale = pp.hltPrescale("HLT_Photon22_v", runNum, lumiBlock);
+//                    }
+//                    else if (trig_pT->at(i_tr) < 36)
+//                    {
+//                        L1_prescale = pp.l1Prescale("L1_SingleEG26", runNum, lumiBlock);
+//                        HLT_prescale = pp.hltPrescale("HLT_Photon30_v", runNum, lumiBlock);
+//                    }
+//                    else if (trig_pT->at(i_tr) < 50)
+//                    {
+//                        L1_prescale = pp.l1Prescale("L1_SingleEG26", runNum, lumiBlock);
+//                        HLT_prescale = pp.hltPrescale("HLT_Photon36_v", runNum, lumiBlock);
+//                    }
+//                    else if (trig_pT->at(i_tr) < 75)
+//                    {
+//                        L1_prescale = (pp.l1Prescale("L1_SingleEG34", runNum, lumiBlock) + pp.l1Prescale("L1_SingleEG34", runNum, lumiBlock)) / 2;
+//                        HLT_prescale = pp.hltPrescale("HLT_Photon50_v", runNum, lumiBlock);
+//                    }
+//                    else if (trig_pT->at(i_tr) < 90)
+//                    {
+//                        L1_prescale = (pp.l1Prescale("L1_SingleEG34", runNum, lumiBlock) + pp.l1Prescale("L1_SingleEG34", runNum, lumiBlock)) / 2;
+//                        HLT_prescale = pp.hltPrescale("HLT_Photon75_v", runNum, lumiBlock);
+//                    }
+//                    else if (trig_pT->at(i_tr) < 120)
+//                    {
+//                        L1_prescale = (pp.l1Prescale("L1_SingleEG34", runNum, lumiBlock) + pp.l1Prescale("L1_SingleEG34", runNum, lumiBlock)) / 2;
+//                        HLT_prescale = pp.hltPrescale("HLT_Photon90_v", runNum, lumiBlock);
+//                    }
+//                    else if (trig_pT->at(i_tr) < 175)
+//                    {
+//                        L1_prescale = (pp.l1Prescale("L1_SingleEG34", runNum, lumiBlock) + pp.l1Prescale("L1_SingleEG34", runNum, lumiBlock)) / 2;
+//                        HLT_prescale = pp.hltPrescale("HLT_Photon120_v", runNum, lumiBlock);
+//                    }
+//                    else
+//                    {
+//                        L1_prescale = (pp.l1Prescale("L1_SingleEG34", runNum, lumiBlock) + pp.l1Prescale("L1_SingleEG34", runNum, lumiBlock)) / 2;
+//                        HLT_prescale = pp.hltPrescale("HLT_Photon175_v", runNum, lumiBlock);
+//                    }
+//                    h_HLT_pT->Fill(trig_pT->at(i_tr), L1_prescale*HLT_prescale);
+//                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_tr));
+//                    h_pT->Fill(p_T->at(i_ele), L1_prescale*HLT_prescale);
+//                    h_pT_uncorr->Fill(p_T->at(i_ele));
+//                    break; // If a match found, take the value and leave, otherwise we can introduce double counting
+//                }
 
                 Int_t matched22=0, matched30=0, matched36=0, matched50=0, matched75=0, matched90=0, matched120=0, matched175=0;
                 Int_t i_22=-1, i_30=-1, i_36=-1, i_50=-1, i_75=-1, i_90=-1, i_120=-1, i_175=-1;
@@ -210,7 +279,12 @@ void FR_PrescaleTest (Bool_t DEBUG = kFALSE)
                 }
                 else if (matched50 == 1 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0)
                 {
-                    prescale_alt = pp.hltPrescale("HLT_Photon50_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock);
+                    prescale_alt = 0;
+                    if (pp.l1Prescale("L1_SingleEG36", runNum, lumiBlock) != 0)
+                        prescale_alt = pp.hltPrescale("HLT_Photon50_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG36", runNum, lumiBlock);
+                    if (pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock) != 0)
+                        prescale_alt = pp.hltPrescale("HLT_Photon50_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock);
+//                    prescale_alt = pp.hltPrescale("HLT_Photon50_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock);
                     h_HLT_pT->Fill(trig_pT->at(i_50), prescale_alt);
                     h_HLT_pT_uncorr->Fill(trig_pT->at(i_50));
                     h_pT->Fill(p_T->at(i_ele), prescale_alt);
@@ -218,7 +292,12 @@ void FR_PrescaleTest (Bool_t DEBUG = kFALSE)
                 }
                 else if (matched75 == 1 && matched90 == 0 && matched120 == 0 && matched175 == 0)
                 {
-                    prescale_alt = pp.hltPrescale("HLT_Photon75_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock);
+                    prescale_alt = 0;
+                    if (pp.l1Prescale("L1_SingleEG36", runNum, lumiBlock) != 0)
+                        prescale_alt = pp.hltPrescale("HLT_Photon75_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG36", runNum, lumiBlock);
+                    if (pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock) != 0)
+                        prescale_alt = pp.hltPrescale("HLT_Photon75_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock);
+//                    prescale_alt = pp.hltPrescale("HLT_Photon75_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock);
                     h_HLT_pT->Fill(trig_pT->at(i_75), prescale_alt);
                     h_HLT_pT_uncorr->Fill(trig_pT->at(i_75));
                     h_pT->Fill(p_T->at(i_ele), prescale_alt);
@@ -226,7 +305,12 @@ void FR_PrescaleTest (Bool_t DEBUG = kFALSE)
                 }
                 else if (matched90 == 1 && matched120 == 0 && matched175 == 0)
                 {
-                    prescale_alt = pp.hltPrescale("HLT_Photon90_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock);
+                    prescale_alt = 0;
+                    if (pp.l1Prescale("L1_SingleEG36", runNum, lumiBlock) != 0)
+                        prescale_alt = pp.hltPrescale("HLT_Photon90_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG36", runNum, lumiBlock);
+                    if (pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock) != 0)
+                        prescale_alt = pp.hltPrescale("HLT_Photon90_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock);
+//                    prescale_alt = pp.hltPrescale("HLT_Photon90_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock);
                     h_HLT_pT->Fill(trig_pT->at(i_90), prescale_alt);
                     h_HLT_pT_uncorr->Fill(trig_pT->at(i_90));
                     h_pT->Fill(p_T->at(i_ele), prescale_alt);
@@ -234,7 +318,12 @@ void FR_PrescaleTest (Bool_t DEBUG = kFALSE)
                 }
                 else if (matched120 == 1 && matched175 == 0)
                 {
-                    prescale_alt = pp.hltPrescale("HLT_Photon120_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock);
+                    prescale_alt = 0;
+                    if (pp.l1Prescale("L1_SingleEG36", runNum, lumiBlock) != 0)
+                        prescale_alt = pp.hltPrescale("HLT_Photon120_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG36", runNum, lumiBlock);
+                    if (pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock) != 0)
+                        prescale_alt = pp.hltPrescale("HLT_Photon120_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock);
+//                    prescale_alt = pp.hltPrescale("HLT_Photon120_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock);
                     h_HLT_pT->Fill(trig_pT->at(i_120), prescale_alt);
                     h_HLT_pT_uncorr->Fill(trig_pT->at(i_120));
                     h_pT->Fill(p_T->at(i_ele), prescale_alt);
