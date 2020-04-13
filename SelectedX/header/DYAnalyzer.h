@@ -265,6 +265,7 @@ public:
         Bool_t EventSelection_FakeMuons_Triggerless(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection); // -- output: two muons passing regular selection but failing isolation requirements (at least one) -- //
         Bool_t EventSelection_FR(vector<Electron> ElectronCollection, NtupleHandle *ntuple, vector<Electron> *SelectedElectronCollection); // Electron selection
         Bool_t EventSelection_FakeElectrons(vector<Electron> ElectronCollection, NtupleHandle *ntuple, vector<Electron> *SelectedElectronCollection);
+        Bool_t EventSelection_FakeEMu(vector<Electron> ElectronCollection, vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Electron> *SelectedElectron, vector<Muon> *SelectedMuon);
         void SetupFRvalues(TString filename, TString type="sigCtrl_template");
         Double_t FakeRate(Double_t p_T, Double_t eta);
         Double_t PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
@@ -6443,6 +6444,84 @@ Bool_t DYAnalyzer::EventSelection_FR(vector<Electron> ElectronCollection, Ntuple
 //    }
     return isPassEventSelection;
 }
+
+
+Bool_t EventSelection_FakeEMu(vector<Electron> ElectronCollection, vector<Muon> MuonCollection, NtupleHandle *ntuple,
+                              vector<Electron> *SelectedElectron, vector<Muon> *SelectedMuon)
+{
+    Bool_t isPassEventSelection = kFALSE;
+
+    //Collect qualified muons among muons
+    vector< Muon > QMuonCollection;
+    for(Int_t j=0; j<(int)MuonCollection.size(); j++)
+    {
+        if(MuonCollection[j].isTightMuon() && MuonCollection[j].Pt > SubPtCut && fabs(MuonCollection[j].eta) < LeadEtaCut) // pT>17 && |eta|<2.4
+            QMuonCollection.push_back(MuonCollection[j]);
+    }
+
+    //Collect qualified electrons among electrons
+    vector< Electron > QElectronCollection;
+    for(Int_t j=0; j<(int)ElectronCollection.size(); j++)
+    {
+        Electron elec = ElectronCollection[j];
+        if(elec.mHits <= 1 && elec.Pt > SubPtCut && fabs(elec.etaSC) < LeadEtaCut &&
+           !(fabs(elec.etaSC) > 1.4442 && fabs(elec.etaSC) < 1.566)) // pT>17 && |eta|<2.4
+            QElectronCollection.push_back(ElectronCollection[j]);
+    }
+
+    Int_t nQMuons = (Int_t)QMuonCollection.size();
+    Int_t nQElectrons = (Int_t)QElectronCollection.size();
+
+    Double_t VtxNormChi2_BestPair = 999;
+    Muon mu_BestPair;
+    Electron el_BestPair;
+
+    // -- Select muon with highest pT -- //
+    for(Int_t i_mu=0; i_mu<nQMuons; i_mu++)
+    {
+        Muon Mu = QMuonCollection[i_mu];
+
+        // -- Start another loop for finding electron (for electron, we don't need to check about trigger) -- //
+        for(Int_t j_el=0; j_el<nQElectrons; j_el++)
+        {
+            Electron El = QElectronCollection[j_el];
+
+            Double_t VtxProb_temp = -999;
+            Double_t VtxNormChi2_temp = 999;
+            emuVertexProbNormChi2(ntuple, El.gsfpT, Mu.Inner_pT, &VtxProb_temp, &VtxNormChi2_temp);
+
+            // -- Find best pair by selecting smallest Chi2/dnof(VTX) value -- //
+            if(VtxNormChi2_temp < VtxNormChi2_BestPair)
+            {
+                VtxNormChi2_BestPair = VtxNormChi2_temp;
+                mu_BestPair = Mu;
+                el_BestPair = El;
+            }
+        } // end of for(j_el) (finding for electron)
+    } // end of for(i_mu) (finding for the first muon matched with HLT matching)
+
+    if(VtxNormChi2_BestPair < 999)
+    {
+        TLorentzVector reco_v1 = mu_BestPair.Momentum;
+        TLorentzVector reco_v2 = el_BestPair.Momentum;
+        Double_t reco_M = (reco_v1 + reco_v2).M();
+
+        Bool_t isPassAcc = kFALSE;
+        if(mu_BestPair.Pt > LeadPtCut || el_BestPair.Pt > LeadPtCut) isPassAcc = kTRUE;
+
+        // -- 3D open angle -- //
+        Double_t Angle = reco_v1.Angle(reco_v2.Vect());
+
+        if(reco_M > 15 && VtxNormChi2_BestPair < 20 && Angle < TMath::Pi() - 0.005 && isPassAcc == kTRUE)
+        {
+            isPassEventSelection = kTRUE;
+            *SelectedMuon = mu_BestPair;
+            *SelectedElectron = el_BestPair;
+        }
+    }
+
+    return isPassEventSelection;
+}// End of EventSelection_FakeEMu()
 
 
 void DYAnalyzer::SetupFRvalues(TString filename, TString type) // type can be "ratio", "template", "mixed", "sigCtrl_template" or "dalmin"
