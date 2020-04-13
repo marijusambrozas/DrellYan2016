@@ -4888,10 +4888,10 @@ void E_HistDrawer(Int_t type)
     RP_eta->SetPlots("#eta (e)", -3, 3);
     RP_nVTX->SetPlots("N_{#lower[-0.25]{VTX}}", 0, 50);
     RP_mass_test->SetPlots("m_{#lower[-0.25]{ee}} [GeV/c^{2}]", 15, 3000);
-    RP_HoverE_barrel_template_int->SetPlots("H/E (barrel)", 0, 1);
-    RP_HoverE_barrel_jetTemplate_int->SetPlots("H/E (barrel, jet selection)", 0, 1);
-    RP_HoverE_endcap_template_int->SetPlots("H/E (endcap)", 0, 1);
-    RP_HoverE_endcap_jetTemplate_int->SetPlots("H/E (endcap, jet selection)", 0, 1);
+    RP_HoverE_barrel_template_int->SetPlots("H/E (barrel)", 0, 0.2);
+    RP_HoverE_barrel_jetTemplate_int->SetPlots("H/E (barrel, jet selection)", 0, 0.2);
+    RP_HoverE_endcap_template_int->SetPlots("H/E (endcap)", 0, 0.5);
+    RP_HoverE_endcap_jetTemplate_int->SetPlots("H/E (endcap, jet selection)", 0, 0.5);
 
 
     TLegend *legend = new TLegend(0.5, 0.65, 0.95, 0.95);
@@ -8320,12 +8320,12 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     TH1D *h_VVnST_fit = ((TH1D*)(h_mass[_VVnST]->Clone("h_VVnST_fit")));
     TH1D *h_GJets_fit = ((TH1D*)(h_mass[_GJets_Full]->Clone("h_GJets_fit")));
     TH1D *h_QCD_fit = ((TH1D*)(h_QCD_est->Clone("h_QCD_fit")));
-    h_WJET_est_fit->Scale(5.6780e+03 / h_WJET_est_fit->Integral());
-    h_DY_fit->Scale(3.7017e+05 / h_DY_fit->Integral());
-    h_ttbar_fit->Scale(5.1808e+03 / h_ttbar_fit->Integral());
-    h_VVnST_fit->Scale(1.2742e+03 / h_VVnST_fit->Integral());
-    h_GJets_fit->Scale(2.2974e+00 / h_GJets_fit->Integral());
-    h_QCD_fit->Scale(1.6976e+04 / h_QCD_fit->Integral());
+    h_WJET_est_fit->Scale(5.6782e+03 / h_WJET_est_fit->Integral());
+    h_DY_fit->Scale(3.7026e+05 / h_DY_fit->Integral());
+    h_ttbar_fit->Scale(5.1997e+03 / h_ttbar_fit->Integral());
+    h_VVnST_fit->Scale(1.18204e+03 / h_VVnST_fit->Integral());
+    h_GJets_fit->Scale(2.2973e+00 / h_GJets_fit->Integral());
+    h_QCD_fit->Scale(1.6977e+04 / h_QCD_fit->Integral());
     THStack *s_mass_fit = new THStack("s_mass_fit", "");
     s_mass_fit->Add(h_QCD_fit);
     s_mass_fit->Add(h_GJets_fit);

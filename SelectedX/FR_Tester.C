@@ -108,8 +108,8 @@ void E_QCD_Tester (TString FRtype, Bool_t DEBUG)
     // -- For QCD estimation from Fake Rate -- //
     analyzer->SetupFRvalues_ele(Dir+"FakeRate_electron.root", FRtype);
 
-    TH1D *h_mass_2FR = new TH1D("h_mass_2FR", "h_mass_2FR", 10, 0, 1000);
-    TH1D *h_mass_1FR = new TH1D("h_mass_1FR", "h_mass_1FR", 10, 0, 1000);
+    TH1D *h_mass_2FR = new TH1D("h_mass_2FR", "", 10, 0, 1000);
+    TH1D *h_mass_1FR = new TH1D("h_mass_1FR", "", 10, 0, 1000);
 
     for (Process_t pr=_QCDEMEnriched_20to30; pr<_EndOf_QCDEMEnriched_Normal; pr=next(pr))
     {
@@ -243,6 +243,12 @@ void E_QCD_Tester (TString FRtype, Bool_t DEBUG)
     } // End of pr iteration
 
     TCanvas *c_comparison = new TCanvas("FR test","FR test (QCD)", 800, 800);
+    c_comparison->SetRightMargin(0.05);
+    c_comparison->SetTopMargin(0.05);
+    c_comparison->SetBottomMargin(0.12);
+    c_comparison->SetLeftMargin(0.13);
+    h_mass_1FR->SetDirectory(0);
+    h_mass_2FR->SetDirectory(0);
     h_mass_1FR->SetStats(0);
     h_mass_2FR->SetStats(0);
     h_mass_1FR->SetMarkerStyle(kFullDotLarge);
@@ -250,13 +256,23 @@ void E_QCD_Tester (TString FRtype, Bool_t DEBUG)
     h_mass_1FR->SetLineColor(kBlack);
     h_mass_2FR->SetLineColor(kRed);
     h_mass_2FR->SetMarkerColor(kRed);
-    h_mass_1FR->SetDirectory(0);
-    h_mass_2FR->SetDirectory(0);
-    TLegend *legend = new TLegend(0.5, 0.7, 0.9, 0.9);
-    legend->AddEntry(h_mass_1FR, "1 fail", "lp");
-    legend->AddEntry(h_mass_2FR, "2 fail, FR applied", "lp");
+    h_mass_1FR->GetXaxis()->SetTitle("m_{ee} [GeV/c^{2}]");
+    h_mass_1FR->GetXaxis()->SetNoExponent(1);
+    h_mass_1FR->GetXaxis()->SetMoreLogLabels(1);
+    h_mass_1FR->GetXaxis()->SetTitleOffset(1);
+    h_mass_1FR->GetXaxis()->SetTitleSize(0.05);
+    h_mass_1FR->GetXaxis()->SetLabelSize(0.04);
+    h_mass_1FR->GetYaxis()->SetTitle("Number of events");
+    h_mass_1FR->GetYaxis()->SetTitleSize(0.05);
+    h_mass_1FR->GetYaxis()->SetTitleOffset(1.25);
+    h_mass_1FR->GetYaxis()->SetLabelSize(0.04);
+    h_mass_1FR->GetYaxis()->SetRangeUser(10, 1e6);
+    TLegend *legend = new TLegend(0.4, 0.8, 0.95, 0.95);
+    legend->AddEntry(h_mass_1FR, "QCD MC (1 fail)", "lp");
+    legend->AddEntry(h_mass_2FR, "QCD MC (2 fail, FR applied once)", "lp");
     h_mass_1FR->Draw();
     h_mass_2FR->Draw("same");
+    legend->Draw();
     c_comparison->SetLogy();
     c_comparison->SetGridx();
     c_comparison->SetGridy();
@@ -273,8 +289,6 @@ void E_QCD_Tester (TString FRtype, Bool_t DEBUG)
 
 void E_WJET_Tester (TString FRtype, Bool_t DEBUG)
 {
-    return; // Not ready yet
-    /*
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
     TStopwatch totaltime;
@@ -287,20 +301,15 @@ void E_WJET_Tester (TString FRtype, Bool_t DEBUG)
     TString debug = "";
     if (DEBUG == kTRUE) debug = "_DEBUG";
 
-    // -- Output ROOTFile -- //
-    f = new TFile(Dir+"WJETest_E"+debug+".root", "RECREATE");
-
     DYAnalyzer *analyzer = new DYAnalyzer("Ele23Ele12");
 
-    // -- For efficiency SF -- //
-    analyzer->SetupEfficiencyScaleFactor_electron();
+    // -- For QCD estimation from Fake Rate -- //
+    analyzer->SetupFRvalues_ele(Dir+"FakeRate_electron.root", FRtype);
 
-    // -- For W+Jets estimation from Fake Rate -- //
-    analyzer->SetupFRvalues_ele(Dir+"FakeRate_electron.root", "subtract");
+    TH1D *h_mass, *h_mass_compare;
+    TH1D *h_mass_1FR = new TH1D("h_mass_1FR", "h_mass_1FR", binnum, massbins);
 
-    TH1D* h_FRweight = new TH1D("h_FRweight", "FR weights", 100, 0, 0.5);
-
-    for (Process_t pr=_DY_10to50; pr<_EndOf_DoubleEG_Normal; pr=next(pr))
+    for (Process_t pr=_WJets; pr<=_WJets_ext2v5; pr=next(pr))
     {
         Mgr.SetProc(pr);
 
@@ -313,8 +322,6 @@ void E_WJET_Tester (TString FRtype, Bool_t DEBUG)
 
         TStopwatch totaltime;
         totaltime.Start();
-        Int_t nPass = 0;
-        Double_t avgFRweight = 0;
 
         // -- For PU re-weighting -- //
         analyzer->SetupPileUpReWeighting_80X(Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root");
@@ -322,28 +329,17 @@ void E_WJET_Tester (TString FRtype, Bool_t DEBUG)
         // -- For PVz reweighting -- //
         analyzer->SetupPVzWeights(Mgr.isMC, "ee", "./etc/PVzWeights.root");
 
-        // -- Creating Histograms -- //
-        TH1D* h_mass = new TH1D("h_mass_"+Mgr.Procname[pr], "h_mass_"+Mgr.Procname[pr], binnum, massbins); h_mass->Sumw2();
-        TH1D* h_MET = new TH1D("h_MET_"+Mgr.Procname[pr], "h_MET"+Mgr.Procname[pr], 100, 0, 1000); h_mass->Sumw2();
-        TH1D* h_nVTX = new TH1D("h_nVTX_"+Mgr.Procname[pr], "h_nVTX"+Mgr.Procname[pr], 50, 0, 50); h_nVTX->Sumw2();
-        TH1D* h_mass_temp = new TH1D("h_mass_template_"+Mgr.Procname[pr], "h_mass_template_"+Mgr.Procname[pr], binnum, massbins); h_mass->Sumw2();
-
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
         std::vector<double> *phi = new std::vector<double>;
         std::vector<double> *etaSC = new std::vector<double>;
-        std::vector<int> *charge = new std::vector<int>;
-        std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<int> *passMediumID = new std::vector<int>;
-        Double_t MET_pT, MET_phi;
         Int_t nPU;
-        Int_t nVTX;
         Double_t PVz;
-        Double_t gen_weight, top_weight;
-        Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
+        Double_t gen_weight;
+        Double_t prefiring_weight;
 
         TChain *chain = new TChain("FRTree");
-
         chain->Add(Dir+"SelectedForBKGest_E_"+Mgr.Procname[Mgr.CurrentProc]+".root");
         if (DEBUG == kTRUE) cout << Dir+"SelectedForBKGest_E_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
 
@@ -351,36 +347,20 @@ void E_WJET_Tester (TString FRtype, Bool_t DEBUG)
         chain->SetBranchStatus("eta", 1);
         chain->SetBranchStatus("phi", 1);
         chain->SetBranchStatus("etaSC", 1);
-        chain->SetBranchStatus("charge", 1);
-        chain->SetBranchStatus("relPFiso", 1);
         chain->SetBranchStatus("passMediumID", 1);
-        chain->SetBranchStatus("MET_pT", 1);
-        chain->SetBranchStatus("MET_phi", 1);
         chain->SetBranchStatus("nPU", 1);
-        chain->SetBranchStatus("nVTX", 1);
         chain->SetBranchStatus("PVz", 1);
         chain->SetBranchStatus("gen_weight", 1);
-        chain->SetBranchStatus("top_weight", 1);
         chain->SetBranchStatus("prefiring_weight", 1);
-        chain->SetBranchStatus("prefiring_weight_up", 1);
-        chain->SetBranchStatus("prefiring_weight_down", 1);
         chain->SetBranchAddress("p_T", &p_T);
         chain->SetBranchAddress("eta", &eta);
-        chain->SetBranchAddress("phi", &phi);
         chain->SetBranchAddress("etaSC", &etaSC);
-        chain->SetBranchAddress("charge", &charge);
-        chain->SetBranchAddress("relPFiso", &relPFiso);
+        chain->SetBranchAddress("phi", &phi);
         chain->SetBranchAddress("passMediumID", &passMediumID);
-        chain->SetBranchAddress("MET_pT", &MET_pT);
-        chain->SetBranchAddress("MET_phi", &MET_phi);
         chain->SetBranchAddress("nPU", &nPU);
-        chain->SetBranchAddress("nVTX", &nVTX);
         chain->SetBranchAddress("PVz", &PVz);
         chain->SetBranchAddress("gen_weight", &gen_weight);
-        chain->SetBranchAddress("top_weight", &top_weight);
         chain->SetBranchAddress("prefiring_weight", &prefiring_weight);
-        chain->SetBranchAddress("prefiring_weight_up", &prefiring_weight_up);
-        chain->SetBranchAddress("prefiring_weight_down", &prefiring_weight_down);
 
         Int_t NEvents = chain->GetEntries();
         cout << "\t[Sum of weights: " << Mgr.Wsum[0] << "]" << endl;
@@ -394,23 +374,20 @@ void E_WJET_Tester (TString FRtype, Bool_t DEBUG)
             chain->GetEntry(i);
             if (!DEBUG) bar.Draw(i);
 
-            // W+Jets selection
+            // QCD selection
             if (p_T->size() != 2) continue;
-            if (passMediumID->at(0) == 1 && passMediumID->at(1) == 1) continue;
-            if (passMediumID->at(0) == 0 && passMediumID->at(1) == 0) continue;
+            if (passMediumID->at(0) == 1 && passMediumID->at(1)  == 1) continue;
+            if (passMediumID->at(0) == 0 && passMediumID->at(1)  == 0) continue;
             if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
             if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
 
-            if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << charge->at(0) << " " << relPFiso->at(0) << endl;
-            if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << charge->at(1) << " " << relPFiso->at(1) << endl;
-
-            nPass++;
+            if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << passMediumID->at(0) << endl;
+            if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << passMediumID->at(1) << endl;
 
             if (DEBUG == kTRUE)
             {
-                if (nPass >= 5) break;
                 cout << "Evt " << i << endl;
-                cout << "nMuons = " << p_T->size() << endl;
+                cout << "nElectrons = " << p_T->size() << endl;
                 cout << "p_T[0] = " << p_T->at(0);
                 cout << "\teta[0] = " << eta->at(0);
                 cout << "\tphi[0] = " << phi->at(0) << endl;
@@ -422,115 +399,100 @@ void E_WJET_Tester (TString FRtype, Bool_t DEBUG)
                 cout << "\nPVz = " << PVz << endl;
             }
 
-            TLorentzVector ele1, ele2, ele1_SF, ele2_SF;
+            TLorentzVector ele1, ele2;
             ele1.SetPtEtaPhiM(p_T->at(0), eta->at(0), phi->at(0), M_Elec);
             ele2.SetPtEtaPhiM(p_T->at(1), eta->at(1), phi->at(1), M_Elec);
-            ele1_SF.SetPtEtaPhiM(p_T->at(0), etaSC->at(0), phi->at(0), M_Elec);
-            ele2_SF.SetPtEtaPhiM(p_T->at(1), etaSC->at(1), phi->at(1), M_Elec);
             Double_t mass = (ele1+ele2).M();
 
             // -- Pileup-Reweighting -- //
-            Double_t PUWeight = 1;
-            if (Mgr.isMC == kTRUE) PUWeight = analyzer->PileUpWeightValue_80X(nPU);
+            Double_t PUWeight = analyzer->PileUpWeightValue_80X(nPU);
             if (DEBUG == kTRUE) cout << "PU weight " << PUWeight << endl;
 
-            // -- efficiency weights -- //
-            Double_t effweight = 1;
-
             // -- PVz weights -- //
-            Double_t PVzWeight = 1;
-            if (Mgr.isMC == kTRUE) PVzWeight = analyzer->PVzWeightValue(PVz);
+            Double_t PVzWeight = analyzer->PVzWeightValue(PVz);
 
             // -- L1 prefiring weights -- //
-            Double_t L1weight = 1;
-            if (Mgr.isMC == kTRUE) L1weight = prefiring_weight;
+            Double_t L1weight = prefiring_weight;
 
-            // -- Top pT weights -- //
-            Double_t TopPtWeight = 1;
-            if (Mgr.isMC == kTRUE && Mgr.Tag[0].Contains("ttbar")) TopPtWeight = top_weight;
-
-            if (DEBUG == kTRUE) cout << "Eff weight: " << effweight << "\tPVz weight: " << PVzWeight << "\nL1 weight:" << L1weight <<
-                                        "\tTop pT weight: " << TopPtWeight << endl;
-
-            // -- FR (and SF) WEIGHTS -- //
-            Double_t FRweight = 1;
-            Double_t FR;
-            if (passMediumID->at(0) == 0 && passMediumID->at(1) == 1) // First fails, second passes
-            {
-                FR = analyzer->FakeRate_ele(p_T->at(0), etaSC->at(0));
-                if (Mgr.isMC == kTRUE)
-                {
-                    effweight = analyzer->EfficiencySF_EventWeight_electronFR(ele1_SF, ele2_SF, 2);
-                }
-
-            }
-            else // Second fails, first passes
-            {
-                FR = analyzer->FakeRate_ele(p_T->at(1), etaSC->at(1));
-                if (Mgr.isMC == kTRUE)
-                {
-                    effweight = analyzer->EfficiencySF_EventWeight_electronFR(ele1_SF, ele2_SF, 1);
-                }
-            }
-            FRweight = FR / (1 - FR);
-            if (DEBUG == kTRUE) cout << "FR = " << FR << "   FRweight = " << FRweight << endl;
-            avgFRweight += FRweight;
-            h_FRweight->Fill(FRweight);
+            if (DEBUG == kTRUE) cout << "PU weight: " << PUWeight << "\tPVz weight: " << PVzWeight << "\nL1 weight:" << L1weight << endl;
 
             // -- Normalization -- //
-            Double_t TotWeight = 1;
-            if (Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
+            Double_t TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
             if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl << endl;
 
-            // -- Histogram filling -- //
-            h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
-            h_mass->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
-            h_MET->Fill(MET_pT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
-            if (MET_pT > 75)
-                h_mass_temp->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            // -- FR WEIGHTS -- //
+            Double_t FRweight=1, FR=-1;
+            if (passMediumID->at(0) == 1 && passMediumID->at(1) == 0) // First passing
+                FR = analyzer->FakeRate_ele(p_T->at(1), etaSC->at(1));
+            else if (passMediumID->at(0) == 0 && passMediumID->at(1) == 1) // First failing
+                FR = analyzer->FakeRate_ele(p_T->at(0), etaSC->at(0));
+            FRweight = FR / (1 - FR);
+            h_mass_1FR->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * FRweight);
 
         }// End of event iteration
 
-        cout << "\t " << nPass << " events have passed the selection." << endl;
-        cout << "\t Average FR weight: " << avgFRweight / NEvents << endl;
-        if(Mgr.isMC == kTRUE)
-        {
-            cout << "\t *** Cross section: " << Mgr.Xsec[0] << endl;
-            cout << "\t *** Sum of weights: " << Mgr.Wsum[0] << endl;
-            printf("\t *** Normalization factor: %.8f\n\n", Lumi*Mgr.Xsec[0]/Mgr.Wsum[0]);
-        }
-
-        f->cd();
-        cout << "\tWriting into file...";
-
-        h_mass->Write();
-        h_MET->Write();
-        h_nVTX->Write();
-        h_mass_temp->Write();
-
         cout << " Finished.\n" << endl;
-
-        if (DEBUG == kTRUE && pr == _DY_10to50) break;
-        if (pr == _DY_2000to3000) pr = _EndOf_DYTauTau_Normal; // next -- ttbar
-        if (pr == _WJets_ext2v5) pr = _EndOf_QCDMuEnriched_Normal; // next -- QCDEMEnriched
 
         cout << "===========================================================\n" << endl;
     } // End of pr iteration
 
-    TCanvas *c_FRweight = new TCanvas("FRweight","FR weights", 800, 800);
-    h_FRweight->Draw();
-    c_FRweight->Update();
+    TFile *f_orig = new TFile("/media/sf_DATA/SelectedEE/Histos/Hist_SelectedEE_Bkg_Full.root", "READ");
+    f_orig->GetObject("h_mass_SelectedEE_WJets_Full", h_mass);
+    h_mass->SetDirectory(0);
+    f_orig->Close();
+    TFile *f_est = new TFile("/media/sf_DATA/SelectedEE/Histos/EstWJets_EE.root", "READ");
+    f_est->GetObject("h_WJET_est_fit", h_mass_compare);
+    h_mass_compare->SetDirectory(0);
+    f_est->Close();
 
-    f->Close();
-    if (!f->IsOpen()) cout << "File " << Dir+"WJETest_E"+debug+".root" << " has been closed successfully.\n" << endl;
-    else cout << "FILE " << Dir+"WJETest_E"+debug+".root" << " COULD NOT BE CLOSED!\n" << endl;
+    TCanvas *c_comparison = new TCanvas("FR test","FR test (W+Jets)", 800, 800);
+    c_comparison->SetRightMargin(0.05);
+    c_comparison->SetTopMargin(0.05);
+    c_comparison->SetBottomMargin(0.12);
+    c_comparison->SetLeftMargin(0.13);
+    h_mass_1FR->SetDirectory(0);
+    h_mass->SetStats(0);
+    h_mass_1FR->SetStats(0);
+    h_mass_compare->SetStats(0);
+    h_mass->SetMarkerStyle(kFullDotLarge);
+    h_mass_1FR->SetMarkerStyle(kFullSquare);
+    h_mass_compare->SetMarkerStyle(33);
+    h_mass->SetLineColor(kBlack);
+    h_mass_1FR->SetLineColor(kRed);
+    h_mass_1FR->SetMarkerColor(kRed);
+    h_mass_compare->SetLineColor(kGreen+2);
+    h_mass_compare->SetMarkerColor(kGreen+2);
+    h_mass_compare->SetMarkerSize(1.5);
+    h_mass->GetXaxis()->SetTitle("m_{ee} [GeV/c^{2}]");
+    h_mass->GetXaxis()->SetNoExponent(1);
+    h_mass->GetXaxis()->SetMoreLogLabels(1);
+    h_mass->GetXaxis()->SetTitleOffset(1);
+    h_mass->GetXaxis()->SetTitleSize(0.05);
+    h_mass->GetXaxis()->SetLabelSize(0.04);
+    h_mass->GetYaxis()->SetTitle("Number of events");
+    h_mass->GetYaxis()->SetTitleSize(0.05);
+    h_mass->GetYaxis()->SetTitleOffset(1.25);
+    h_mass->GetYaxis()->SetLabelSize(0.04);
+    h_mass->GetYaxis()->SetRangeUser(1, 1e4);
+    TLegend *legend = new TLegend(0.5, 0.7, 0.95, 0.95);
+    legend->AddEntry(h_mass, "W+Jets MC (2 pass)", "lp");
+    legend->AddEntry(h_mass_1FR, "W+Jets MC (1 fail, FR applied)", "lp");
+    legend->AddEntry(h_mass_compare, "W+Jets est (data-driven template)", "lp");
+    h_mass->Draw();
+    h_mass_1FR->Draw("same");
+    h_mass_compare->Draw("same");
+    legend->Draw();
+    c_comparison->SetLogx();
+    c_comparison->SetLogy();
+    c_comparison->SetGridx();
+    c_comparison->SetGridy();
+    c_comparison->Update();
 
     Double_t TotalRunTime = totaltime.CpuTime();
     cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
 
     TTimeStamp ts_end;
     cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
-    */
 } // End of E_WJET_Tester()
 
 

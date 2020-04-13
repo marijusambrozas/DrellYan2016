@@ -233,37 +233,59 @@ void FR_TemplateTest (Int_t bin=-1, Int_t test=0)
     if (bin >= 0)
     {
         TCanvas *c_barrel = new TCanvas("c_barrel", "Barrel pT bin "+TString::Itoa(bin, 10), 800, 800);
+        h_barrel_data_template[bin]->GetXaxis()->SetTitle("H/E (barrel)");
+        h_barrel_data_template[bin]->GetYaxis()->SetTitle("Number of events");
+        h_barrel_data_template[bin]->SetStats(0);
         h_barrel_data_template[bin]->SetMarkerStyle(kFullDotLarge);
+        h_barrel_data_jetTemplate[bin]->SetStats(0);
         h_barrel_data_jetTemplate[bin]->SetMarkerStyle(kFullDotLarge);
         h_barrel_data_jetTemplate[bin]->SetLineColor(kRed);
         h_barrel_data_jetTemplate[bin]->SetMarkerColor(kRed);
+        h_barrel_QCD_template[bin]->GetXaxis()->SetTitle("H/E (barrel)");
+        h_barrel_QCD_template[bin]->GetYaxis()->SetTitle("Number of events");
+        h_barrel_QCD_template[bin]->SetStats(0);
         h_barrel_QCD_template[bin]->SetMarkerStyle(kFullDotLarge);
+        h_barrel_QCD_jetTemplate[bin]->SetStats(0);
         h_barrel_QCD_jetTemplate[bin]->SetMarkerStyle(kFullDotLarge);
         h_barrel_QCD_jetTemplate[bin]->SetLineColor(kRed);
         h_barrel_QCD_jetTemplate[bin]->SetMarkerColor(kRed);
+        TLegend *legend = new TLegend(0.5, 0.7, 0.9, 0.9);
 
         if (!test)
         {
             h_barrel_data_template[bin]->Draw();
             h_barrel_data_template[bin]->GetYaxis()->SetRangeUser(10, 1e9);
             h_barrel_data_jetTemplate[bin]->Draw("same");
+            legend->AddEntry(h_barrel_data_template[bin], "Data", "lp");
+            legend->AddEntry(h_barrel_data_jetTemplate[bin], "Scaled template (data)", "lp");
         }
         else
         {
             h_barrel_QCD_template[bin]->Draw();
             h_barrel_QCD_template[bin]->GetYaxis()->SetRangeUser(10, 1e9);
             h_barrel_QCD_jetTemplate[bin]->Draw("same");
+            legend->AddEntry(h_barrel_QCD_template[bin], "QCD MC", "lp");
+            legend->AddEntry(h_barrel_QCD_jetTemplate[bin], "Scaled template (QCD MC)", "lp");
         }
 
+        legend->Draw();
         c_barrel->SetLogy();
         c_barrel->Update();
 
         TCanvas *c_endcap = new TCanvas("c_endcap", "Endcap pT bin "+TString::Itoa(bin, 10), 800, 800);
+        h_endcap_data_template[bin]->GetXaxis()->SetTitle("H/E (endcap)");
+        h_endcap_data_template[bin]->GetYaxis()->SetTitle("Number of events");
+        h_endcap_data_template[bin]->SetStats(0);
         h_endcap_data_template[bin]->SetMarkerStyle(kFullDotLarge);
+        h_endcap_data_jetTemplate[bin]->SetStats(0);
         h_endcap_data_jetTemplate[bin]->SetMarkerStyle(kFullDotLarge);
         h_endcap_data_jetTemplate[bin]->SetLineColor(kRed);
         h_endcap_data_jetTemplate[bin]->SetMarkerColor(kRed);
+        h_endcap_QCD_template[bin]->GetXaxis()->SetTitle("H/E (endcap)");
+        h_endcap_QCD_template[bin]->GetYaxis()->SetTitle("Number of events");
+        h_endcap_QCD_template[bin]->SetStats(0);
         h_endcap_QCD_template[bin]->SetMarkerStyle(kFullDotLarge);
+        h_endcap_QCD_jetTemplate[bin]->SetStats(0);
         h_endcap_QCD_jetTemplate[bin]->SetMarkerStyle(kFullDotLarge);
         h_endcap_QCD_jetTemplate[bin]->SetLineColor(kRed);
         h_endcap_QCD_jetTemplate[bin]->SetMarkerColor(kRed);
@@ -281,6 +303,7 @@ void FR_TemplateTest (Int_t bin=-1, Int_t test=0)
             h_endcap_QCD_jetTemplate[bin]->Draw("same");
         }
 
+        legend->Draw();
         c_endcap->SetLogy();
         c_endcap->Update();
     }
@@ -301,14 +324,14 @@ void FR_TemplateTest (Int_t bin=-1, Int_t test=0)
         legend->AddEntry(h_pT_QCD_nume_barrel, "Normalized template (BC/D)", "lp");
 
         myRatioPlot_t *RP_barrel = new myRatioPlot_t("RP_barrel", h_pT_QCD_nume_barrel, h_pT_QCD_nume_barrel_original);
-        RP_barrel->SetPlots("p_{T} [GeV/c^{2}]", 25, 5000, "AD/BC");
+        RP_barrel->SetPlots("p_{T} (barrel) [GeV/c^{2}]", 25, 5000, "AD/BC");
         RP_barrel->ImportLegend(legend);
         RP_barrel->Draw(10, 1e9, 1);
         h_pT_QCD_nume_barrel->SetLineColor(kRed);
         RP_barrel->DrawOnTop(h_pT_QCD_nume_barrel);
 
         myRatioPlot_t *RP_endcap = new myRatioPlot_t("RP_endcap", h_pT_QCD_nume_endcap, h_pT_QCD_nume_endcap_original);
-        RP_endcap->SetPlots("p_{T} [GeV/c^{2}]", 25, 5000, "AD/BC");
+        RP_endcap->SetPlots("p_{T} (endcap) [GeV/c^{2}]", 25, 5000, "AD/BC");
         RP_endcap->ImportLegend(legend);
         RP_endcap->Draw(10, 1e9, 1);
         h_pT_QCD_nume_endcap->SetLineColor(kRed);

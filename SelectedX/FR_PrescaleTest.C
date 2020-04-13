@@ -84,6 +84,7 @@ void FR_PrescaleTest (Bool_t DEBUG = kFALSE)
         std::vector<int> *trig_fired = new std::vector<int>;
         std::vector<int> *trig_matched = new std::vector<int>;
         std::vector<double> *trig_pT = new std::vector<double>;
+        std::vector<int> *prescale = new std::vector<int>;
         Int_t runNum;
         Int_t lumiBlock;
         Int_t prescale_alt;
@@ -98,14 +99,14 @@ void FR_PrescaleTest (Bool_t DEBUG = kFALSE)
         chain->SetBranchStatus("trig_pT", 1);
         chain->SetBranchStatus("runNum", 1);
         chain->SetBranchStatus("lumiBlock", 1);
-//        chain->SetBranchStatus("prescale_alt", 1);
+        chain->SetBranchStatus("prescale_alt", 1);
         chain->SetBranchAddress("p_T", &p_T);
         chain->SetBranchAddress("trig_fired", &trig_fired);
         chain->SetBranchAddress("trig_matched", &trig_matched);
         chain->SetBranchAddress("trig_pT", &trig_pT);
         chain->SetBranchAddress("runNum", &runNum);
         chain->SetBranchAddress("lumiBlock", &lumiBlock);
-//        chain->SetBranchAddress("prescale_alt", &prescale_alt);
+        chain->SetBranchAddress("prescale_alt", &prescale);
 
         Int_t NEvents = chain->GetEntries();
         cout << "\t[Sum of weights: " << Mgr.Wsum[0] << "]" << endl;
@@ -251,11 +252,13 @@ void FR_PrescaleTest (Bool_t DEBUG = kFALSE)
 
                     }
                 }
+                cout << prescale->size();
                 if (matched22+matched30+matched36+matched50+matched75+matched90+matched120 > 1) continue;
                 if (matched22==0 && matched30==0 && matched36==0 && matched50 == 0 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0) continue;
                 else if (matched22 == 1 && matched30 == 0 && matched36 == 0 && matched50 == 0 && matched75 == 0 && matched90 == 0 && matched120 == 0 && matched175 == 0)
                 {
                     prescale_alt = pp.hltPrescale("HLT_Photon22_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG18", runNum, lumiBlock);
+                    if (prescale->at(i_22) != prescale_alt) cout << "Prescale: " << prescale->at(i_22) << "  " << prescale_alt << endl;
                     h_HLT_pT->Fill(trig_pT->at(i_22), prescale_alt);
                     h_HLT_pT_uncorr->Fill(trig_pT->at(i_22));
                     h_pT->Fill(p_T->at(i_ele), prescale_alt);

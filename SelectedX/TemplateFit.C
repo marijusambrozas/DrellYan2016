@@ -5057,7 +5057,7 @@ void E_WJETSest_Tfit()
     Double_t Nnorm_mass_ZZ    = N_mass_ZZ    * h_data_mass->Integral() / N_mass_total;
 
     // Fit constraints
-    RooRealVar n_mass_WJets("n_mass_WJets", "n_mass_WJets", Nnorm_mass_WJets, Nnorm_mass_WJets *0.5,  Nnorm_mass_WJets *1.5 );
+    RooRealVar n_mass_WJets("n_mass_WJets", "n_mass_WJets", Nnorm_mass_WJets, Nnorm_mass_WJets *0.5,  Nnorm_mass_WJets *3 );
     RooRealVar n_mass_QCD  ("n_mass_QCD",   "n_mass_QCD",   Nnorm_mass_QCD,   Nnorm_mass_QCD   *0.6,  Nnorm_mass_QCD   *1.4 );
     RooRealVar n_mass_GJets("n_mass_GJets", "n_mass_GJets", Nnorm_mass_GJets, Nnorm_mass_GJets *0.75, Nnorm_mass_GJets *1.25);
     RooRealVar n_mass_ttbar("n_mass_ttbar", "n_mass_ttbar", Nnorm_mass_ttbar, Nnorm_mass_ttbar *0.8,  Nnorm_mass_ttbar *1.2 );
