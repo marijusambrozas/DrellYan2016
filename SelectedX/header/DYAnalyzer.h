@@ -6446,8 +6446,8 @@ Bool_t DYAnalyzer::EventSelection_FR(vector<Electron> ElectronCollection, Ntuple
 }
 
 
-Bool_t EventSelection_FakeEMu(vector<Electron> ElectronCollection, vector<Muon> MuonCollection, NtupleHandle *ntuple,
-                              Electron *SelectedElectron, Muon *SelectedMuon)
+Bool_t DYAnalyzer::EventSelection_FakeEMu(vector<Electron> ElectronCollection, vector<Muon> MuonCollection, NtupleHandle *ntuple,
+                                          Electron *SelectedElectron, Muon *SelectedMuon)
 {
     Bool_t isPassEventSelection = kFALSE;
 
