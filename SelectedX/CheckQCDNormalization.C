@@ -25,7 +25,7 @@
 #include "./header/FileMgr.h"
 #include "./etc/RoccoR/RoccoR.cc"
 
-void CheckGammaJetsNormalization (Bool_t mu=kFALSE, Bool_t Debug = kFALSE)
+void CheckQCDNormalization (Bool_t mu=kFALSE, Bool_t Debug = kFALSE)
 {   
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;   
