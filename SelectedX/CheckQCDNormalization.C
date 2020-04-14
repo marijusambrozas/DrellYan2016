@@ -1,0 +1,160 @@
+#include <TChain.h>
+#include <TTree.h>
+#include <TFile.h>
+#include <TLorentzVector.h>
+#include <TStopwatch.h>
+#include <TTimeStamp.h>
+#include <TString.h>
+#include <TROOT.h>
+#include <TApplication.h>
+#include <vector>
+#include <TMath.h>
+#include <TFormula.h>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <TH1.h>
+#include <TCanvas.h>
+#include <TGraphAsymmErrors.h>
+
+
+// -- Macro for making new data files with only selection-passing events  -- //
+#include "./header/DYAnalyzer.h"
+#include "./header/SelectedX.h"
+#include "./header/myProgressBar_t.cc"
+#include "./header/FileMgr.h"
+#include "./etc/RoccoR/RoccoR.cc"
+
+void CheckGammaJetsNormalization (Bool_t mu=kFALSE, Bool_t Debug = kFALSE)
+{   
+    TTimeStamp ts_start;
+    cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;   
+
+    TStopwatch totaltime;
+    totaltime.Start();
+
+    FileMgr Mgr;
+
+    TString addition = "";
+    if (mu) addition = "Mu";
+
+    TFile* ElectronFile = TFile::Open("~/DrellYan2016/QCD"+addition+"Test.root", "RECREATE");
+    ElectronFile->cd();
+
+    TH1D *h_g_pT_isHardProcess = new TH1D("h_g_pT_isHardProcess", "Gamma pT", 500, 0, 5000);
+    TH1D *h_g_pT_fromHardProcessFinalState = new TH1D("h_g_pT_fromHardProcessFinalState", "Gamma pT", 500, 0, 5000);
+    TH1D *h_g_pT_isPrompt = new TH1D("h_g_pT_isPrompt", "Gamma pT", 500, 0, 5000);
+    TH1D *h_g_pT_isPromptFinalState = new TH1D("h_g_pT_isPromptFinalState", "Gamma pT", 500, 0, 5000);
+    TH1D *h_g_pT = new TH1D("h_g_pT", "Gamma pT", 500, 0, 5000);
+
+    Process_t first=_QCDEMEnriched_20to30, last=_QCDEMEnriched_300toInf;
+    if (mu)
+    {
+        first = _QCDMuEnriched_15to20;
+        last = _QCDMuEnriched_1000toInf;
+    }
+
+    // Loop for all processes
+    for (Process_t pr=first; pr<=last; pr=next(pr))
+    {
+        Mgr.SetProc(pr, kTRUE);
+        cout << "===========================================================" << endl;
+        cout << "Type: " << Mgr.Type << endl;
+        cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
+        cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
+
+        Int_t Ntup = Mgr.FullLocation.size();
+
+        // Loop for all samples in a process
+        for (Int_t i_tup = 0; i_tup<Ntup; i_tup++)
+        {
+            TStopwatch looptime;
+            looptime.Start();
+
+            cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
+
+            TChain *chain = new TChain(Mgr.TreeName[i_tup]);
+            Mgr.SetupChain(i_tup, chain);
+
+            NtupleHandle *ntuple = new NtupleHandle(chain);
+            ntuple->TurnOnBranches_GenLepton(); // for jets
+            ntuple->TurnOnBranches_GenOthers(); // for jets
+
+            Int_t NEvents = chain->GetEntries();
+            if (Debug == kTRUE) NEvents = 1000; // using few events for debugging
+
+            cout << "\t[Total Events: " << NEvents << "]" << endl;
+            myProgressBar_t bar(NEvents);
+
+            Double_t wsum=0, wsum_raw=0;
+
+            // Loop for all events in the chain
+            for (Int_t i=0; i<NEvents; i++)
+            {
+                ntuple->GetEvent(i);
+
+                // -- Positive/Negative Gen-weights -- //
+                Double_t gen_weight = 0;
+                ntuple->GENEvt_weight < 0 ? gen_weight = -1 : gen_weight = 1;
+                wsum += gen_weight;
+                wsum_raw += ntuple->GENEvt_weight;
+
+                for (Int_t i_gen=0; i_gen<ntuple->nGenOthers; i_gen++)
+                {
+                    if (fabs(ntuple->GenOthers_ID[i_gen]) == 5)
+                    {
+                        h_g_pT->Fill(ntuple->GenOthers_pT[i_gen], ntuple->GENEvt_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
+                        if (ntuple->GenOthers_isHardProcess[i_gen])
+                            h_g_pT_isHardProcess->Fill(ntuple->GenOthers_pT[i_gen], ntuple->GENEvt_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
+                        if (ntuple->GenOthers_fromHardProcessFinalState[i_gen])
+                            h_g_pT_fromHardProcessFinalState->Fill(ntuple->GenOthers_pT[i_gen], ntuple->GENEvt_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
+                        if (ntuple->GenOthers_isPrompt[i_gen])
+                            h_g_pT_isPrompt->Fill(ntuple->GenOthers_pT[i_gen], ntuple->GENEvt_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
+                        if (ntuple->GenOthers_isPromptFinalState[i_gen])
+                            h_g_pT_isPromptFinalState->Fill(ntuple->GenOthers_pT[i_gen], ntuple->GENEvt_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
+                    }
+                }
+
+                if (!Debug) bar.Draw(i);
+            } // End of event iteration
+
+            Double_t LoopRunTime = looptime.CpuTime();
+            cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
+
+            cout << "Sum of weights: " << wsum << endl << "Sum of unchanged weights: " << wsum_raw << endl;
+
+        } // End of i_tup iteration
+
+    } // End of i_proc iteration
+
+    // Writing
+    cout << "Writing into file...";
+    ElectronFile->cd();
+    Int_t write1, write2, write3, write4, write5;
+    write1 = h_g_pT_isHardProcess->Write();
+    write2 = h_g_pT_fromHardProcessFinalState->Write();
+    write3 = h_g_pT_isPrompt->Write();
+    write4 = h_g_pT_isPromptFinalState->Write();
+    write5 = h_g_pT->Write();
+
+    if (write1 && write2 && write3 && write4 && write5)
+    {
+        cout << " Histogram writing finished." << endl << "Closing a file..." << endl;
+        ElectronFile->Close();
+        if (!ElectronFile->IsOpen()) cout << "File QCDTest.root has been closed successfully.\n" << endl;
+        else cout << "FILE QCDTest.root COULD NOT BE CLOSED!\n" << endl;
+    }
+    else
+    {
+        cout << " Writing was NOT successful!\n" << endl;
+        ElectronFile->Close();
+    }
+    cout << "===========================================================\n" << endl;
+
+    Double_t TotalRunTime = totaltime.CpuTime();
+    cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
+
+    TTimeStamp ts_end;
+    cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
+
+} // End of CheckGammaJetsNormalization
