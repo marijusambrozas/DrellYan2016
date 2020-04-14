@@ -53,6 +53,9 @@ const Double_t massbins2[87] = {15, 17.5, 20, 22.5, 25, 27.5, 30, 32.5, 35, 37.5
                                 210, 220, 231.5, 243, 258, 273, 296.5, 320, 350, 380, 410, 440, 475, 510, 555, 600, 650, 700, 765, 830,
                                 915, 1000, 1250, 1500, 2250, 3000};
 
+const Double_t etabins[51] = {-2.4,-2.3,-2.2,-2.1,-2.0,-1.9,-1.8,-1.7,-1.6,-1.566,-1.4442,-1.4,-1.3,-1.2,-1.1,-1.0,-0.9,-0.8,-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,
+                              0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.4442,1.566,1.6,1.7,1.8,1.9,2.0,2.1,2.2,2.3,2.4};
+
 // -- RelPFiso bins for electron FR templates -- //
 const Int_t binnum_ele_template = 5;
 const Double_t bins_ele_template_barrel[6] = {0, 0.0695, 0.2, 0.4, 0.8, 3};
@@ -202,9 +205,9 @@ void E_FR_HistMaker (Bool_t DEBUG)
         TH1D* h_pT_endcap_deno = new TH1D("h_pT_endcap_deno", "h_pT_endcap_deno", nPtBin_ele, analyzer->ptbin_ele /*250, 0, 500*/); h_pT_endcap_deno->Sumw2();
         TH1D* h_pT_barrel_ctrl = new TH1D("h_pT_barrel_ctrl", "h_pT_barrel_ctrl", nPtBin_ele, analyzer->ptbin_ele /*250, 0, 500*/); h_pT_barrel_ctrl->Sumw2();
         TH1D* h_pT_endcap_ctrl = new TH1D("h_pT_endcap_ctrl", "h_pT_endcap_ctrl", nPtBin_ele, analyzer->ptbin_ele /*250, 0, 500*/); h_pT_endcap_ctrl->Sumw2();
-        TH1D* h_eta_nume = new TH1D("h_eta_nume", "h_eta_nume", 48, -2.4, 2.4); h_eta_nume->Sumw2();
-        TH1D* h_eta_deno = new TH1D("h_eta_deno", "h_eta_deno", 48, -2.4, 2.4); h_eta_deno->Sumw2();
-        TH1D* h_eta_ctrl = new TH1D("h_eta_ctrl", "h_eta_ctrl", 48, -2.4, 2.4); h_eta_ctrl->Sumw2();
+        TH1D* h_eta_nume = new TH1D("h_eta_nume", "h_eta_nume", 50, etabins); h_eta_nume->Sumw2();
+        TH1D* h_eta_deno = new TH1D("h_eta_deno", "h_eta_deno", 50, etabins); h_eta_deno->Sumw2();
+        TH1D* h_eta_ctrl = new TH1D("h_eta_ctrl", "h_eta_ctrl", 50, etabins); h_eta_ctrl->Sumw2();
         TH1D* h_PFiso_dBeta_barrel_nume = new TH1D("h_PFiso_dBeta_barrel_nume", "h_PFiso_dBeta_barrel_nume", 30, 0, 0.3); h_PFiso_dBeta_barrel_nume->Sumw2();
         TH1D* h_PFiso_dBeta_endcap_nume = new TH1D("h_PFiso_dBeta_endcap_nume", "h_PFiso_dBeta_endcap_nume", 30, 0, 0.3); h_PFiso_dBeta_endcap_nume->Sumw2();
         TH1D* h_PFiso_dBeta_barrel_deno = new TH1D("h_PFiso_dBeta_barrel_deno", "h_PFiso_dBeta_barrel_deno", 50, 0, 5); h_PFiso_dBeta_barrel_deno->Sumw2();
@@ -271,7 +274,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
         TH1D* h_chisoPU_endcap_deno = new TH1D("h_chisoPU_endcap_deno", "h_chisoPU_endcap_deno", 50, 0, 5); h_chisoPU_endcap_deno->Sumw2();
         TH1D* h_chisoPU_barrel_ctrl = new TH1D("h_chisoPU_barrel_ctrl", "h_chisoPU_barrel_ctrl", 50, 0, 5); h_chisoPU_barrel_ctrl->Sumw2();
         TH1D* h_chisoPU_endcap_ctrl = new TH1D("h_chisoPU_endcap_ctrl", "h_chisoPU_endcap_ctrl", 50, 0, 5); h_chisoPU_endcap_ctrl->Sumw2();
-        TH1D* h_MET = new TH1D("h_MET", "h_MET", 100, 0, 1000); h_MET->Sumw2();
+        TH1D* h_MET = new TH1D("h_MET", "h_MET", 100, 0, 100); h_MET->Sumw2();
         TH1D* h_MT_barrel_nume = new TH1D("h_MT_barrel_nume", "h_MT_barrel_nume", 500, 0, 1000); h_MT_barrel_nume->Sumw2();
         TH1D* h_MT_endcap_nume = new TH1D("h_MT_endcap_nume", "h_MT_endcap_nume", 500, 0, 1000); h_MT_endcap_nume->Sumw2();
         TH1D* h_MT_barrel_deno = new TH1D("h_MT_barrel_deno", "h_MT_barrel_deno", 500, 0, 1000); h_MT_barrel_deno->Sumw2();
@@ -2090,14 +2093,27 @@ void E_QCD_HistMaker (Bool_t DEBUG)
         // -- Creating Histograms -- //
         TH1D* h_mass = new TH1D("h_mass_"+Mgr.Procname[pr], "h_mass_"+Mgr.Procname[pr], binnum, massbins); h_mass->Sumw2();
         TH1D* h_nVTX = new TH1D("h_nVTX_"+Mgr.Procname[pr], "h_nVTX_"+Mgr.Procname[pr], 50, 0, 50); h_nVTX->Sumw2();
-        TH1D* h_mass_temp = new TH1D("h_mass_template_"+Mgr.Procname[pr], "h_mass_template_"+Mgr.Procname[pr], binnum, massbins); h_mass->Sumw2();
+        TH1D* h_mass_SS = new TH1D("h_mass_SS_"+Mgr.Procname[pr], "h_mass_SS_"+Mgr.Procname[pr], binnum, massbins); h_mass_SS->Sumw2();
+        TH1D* h_mass_temp = new TH1D("h_mass_template_"+Mgr.Procname[pr], "h_mass_template_"+Mgr.Procname[pr], binnum, massbins); h_mass_temp->Sumw2();
 
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
-        std::vector<double> *phi = new std::vector<double>;
         std::vector<double> *etaSC = new std::vector<double>;
+        std::vector<double> *phi = new std::vector<double>;
         std::vector<int> *charge = new std::vector<int>;
-        std::vector<double> *relPFiso = new std::vector<double>;
+        std::vector<double> *Full5x5_SigmaIEtaIEta = new std::vector<double>;
+        std::vector<double> *dEtaInSeed = new std::vector<double>;
+        std::vector<double> *dPhiIn = new std::vector<double>;
+        std::vector<double> *HoverE = new std::vector<double>;
+        std::vector<double> *InvEminusInvP = new std::vector<double>;
+        std::vector<double> *chIso03 = new std::vector<double>;
+        std::vector<double> *nhIso03 = new std::vector<double>;
+        std::vector<double> *phIso03 = new std::vector<double>;
+        std::vector<double> *ChIso03FromPU = new std::vector<double>;
+        std::vector<int> *mHits = new std::vector<int>;
+        std::vector<int> *passConvVeto = new std::vector<int>;
+        std::vector<double> *relPFiso_dBeta = new std::vector<double>;
+        std::vector<double> *relPFiso_Rho = new std::vector<double>;
         std::vector<int> *passMediumID = new std::vector<int>;
         Double_t MET_pT, MET_phi;
         Int_t nPU;
@@ -2115,7 +2131,19 @@ void E_QCD_HistMaker (Bool_t DEBUG)
         chain->SetBranchStatus("phi", 1);
         chain->SetBranchStatus("etaSC", 1);
         chain->SetBranchStatus("charge", 1);
-        chain->SetBranchStatus("relPFiso", 1);
+        chain->SetBranchStatus("Full5x5_SigmaIEtaIEta", 1);
+        chain->SetBranchStatus("dEtaInSeed", 1);
+        chain->SetBranchStatus("dPhiIn", 1);
+        chain->SetBranchStatus("HoverE", 1);
+        chain->SetBranchStatus("InvEminusInvP", 1);
+        chain->SetBranchStatus("chIso03", 1);
+        chain->SetBranchStatus("nhIso03", 1);
+        chain->SetBranchStatus("phIso03", 1);
+        chain->SetBranchStatus("ChIso03FromPU", 1);
+        chain->SetBranchStatus("mHits", 1);
+        chain->SetBranchStatus("passConvVeto", 1);
+        chain->SetBranchStatus("relPFiso_dBeta", 1);
+        chain->SetBranchStatus("relPFiso_Rho", 1);
         chain->SetBranchStatus("passMediumID", 1);
         chain->SetBranchStatus("MET_pT", 1);
         chain->SetBranchStatus("MET_phi", 1);
@@ -2127,12 +2155,25 @@ void E_QCD_HistMaker (Bool_t DEBUG)
         chain->SetBranchStatus("prefiring_weight", 1);
         chain->SetBranchStatus("prefiring_weight_up", 1);
         chain->SetBranchStatus("prefiring_weight_down", 1);
+
         chain->SetBranchAddress("p_T", &p_T);
         chain->SetBranchAddress("eta", &eta);
         chain->SetBranchAddress("etaSC", &etaSC);
         chain->SetBranchAddress("phi", &phi);
         chain->SetBranchAddress("charge", &charge);
-        chain->SetBranchAddress("relPFiso", &relPFiso);
+        chain->SetBranchAddress("Full5x5_SigmaIEtaIEta", &Full5x5_SigmaIEtaIEta);
+        chain->SetBranchAddress("dEtaInSeed", &dEtaInSeed);
+        chain->SetBranchAddress("dPhiIn", &dPhiIn);
+        chain->SetBranchAddress("HoverE", &HoverE);
+        chain->SetBranchAddress("InvEminusInvP", &InvEminusInvP);
+        chain->SetBranchAddress("chIso03", &chIso03);
+        chain->SetBranchAddress("nhIso03", &nhIso03);
+        chain->SetBranchAddress("phIso03", &phIso03);
+        chain->SetBranchAddress("ChIso03FromPU", &ChIso03FromPU);
+        chain->SetBranchAddress("mHits", &mHits);
+        chain->SetBranchAddress("passConvVeto", &passConvVeto);
+        chain->SetBranchAddress("relPFiso_dBeta", &relPFiso_dBeta);
+        chain->SetBranchAddress("relPFiso_Rho", &relPFiso_Rho);
         chain->SetBranchAddress("passMediumID", &passMediumID);
         chain->SetBranchAddress("MET_pT", &MET_pT);
         chain->SetBranchAddress("MET_phi", &MET_phi);
@@ -2165,12 +2206,20 @@ void E_QCD_HistMaker (Bool_t DEBUG)
 
             // QCD selection
             if (p_T->size() != 2) continue;
+            if ((etaSC->at(0) > 1.4442 && etaSC->at(0) < 1.566) || (etaSC->at(1) > 1.4442 && etaSC->at(1) < 1.566)) continue;
+            if (etaSC->at(0) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.013 || HoverE->at(0) >= 0.13 ||
+                                          fabs(dEtaInSeed->at(0)) >= 0.01 || fabs(dPhiIn->at(0)) >= 0.07 || mHits->at(0) > 1)) continue;
+            if (etaSC->at(1) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.013 || HoverE->at(1) >= 0.13 ||
+                                          fabs(dEtaInSeed->at(1)) >= 0.01 || fabs(dPhiIn->at(1)) >= 0.07 || mHits->at(1) > 1)) continue;
+            if (etaSC->at(0) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.035 || HoverE->at(0) >= 0.13 || mHits->at(0) > 1)) continue;
+            if (etaSC->at(1) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.035 || HoverE->at(1) >= 0.13 || mHits->at(1) > 1)) continue;
+
             if (passMediumID->at(0) == 1 || passMediumID->at(1)  == 1) continue;
             if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
             if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
 
-            if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << charge->at(0) << " " << relPFiso->at(0) << endl;
-            if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << charge->at(1) << " " << relPFiso->at(1) << endl;
+            if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << charge->at(0) << " " << relPFiso_Rho->at(0) << endl;
+            if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << charge->at(1) << " " << relPFiso_Rho->at(1) << endl;
 
             nPass++;
 
@@ -2243,6 +2292,8 @@ void E_QCD_HistMaker (Bool_t DEBUG)
             h_mass->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             if (MET_pT > 75)
                 h_mass_temp->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+//            if (charge->at(0) == charge->at(1))
+//                h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
 
         }// End of event iteration
 
@@ -2261,8 +2312,9 @@ void E_QCD_HistMaker (Bool_t DEBUG)
         cout << "\tWriting into file...";
 
         h_mass->Write();
-        h_nVTX->Write();
+        h_mass_SS->Write();
         h_mass_temp->Write();
+        h_nVTX->Write();
 
         cout << " Finished.\n" << endl;
 
@@ -2313,7 +2365,7 @@ void E_WJET_HistMaker (Bool_t DEBUG)
     analyzer->SetupEfficiencyScaleFactor_electron();
 
     // -- For W+Jets estimation from Fake Rate -- //
-    analyzer->SetupFRvalues_ele(Dir+"ctron.root", "subtract");
+    analyzer->SetupFRvalues_ele(Dir+"FakeRate_electron.root", "subtract");
 
     TH1D* h_FRweight = new TH1D("h_FRweight", "FR weights", 100, 0, 0.5);
 
@@ -2341,16 +2393,29 @@ void E_WJET_HistMaker (Bool_t DEBUG)
 
         // -- Creating Histograms -- //
         TH1D* h_mass = new TH1D("h_mass_"+Mgr.Procname[pr], "h_mass_"+Mgr.Procname[pr], binnum, massbins); h_mass->Sumw2();
-        TH1D* h_MET = new TH1D("h_MET_"+Mgr.Procname[pr], "h_MET"+Mgr.Procname[pr], 100, 0, 1000); h_mass->Sumw2();
+        TH1D* h_MET = new TH1D("h_MET_"+Mgr.Procname[pr], "h_MET"+Mgr.Procname[pr], 100, 0, 1000); h_MET->Sumw2();
         TH1D* h_nVTX = new TH1D("h_nVTX_"+Mgr.Procname[pr], "h_nVTX"+Mgr.Procname[pr], 50, 0, 50); h_nVTX->Sumw2();
-        TH1D* h_mass_temp = new TH1D("h_mass_template_"+Mgr.Procname[pr], "h_mass_template_"+Mgr.Procname[pr], binnum, massbins); h_mass->Sumw2();
+        TH1D* h_mass_SS = new TH1D("h_mass_SS_"+Mgr.Procname[pr], "h_mass_SS_"+Mgr.Procname[pr], binnum, massbins); h_mass_SS->Sumw2();
+        TH1D* h_mass_temp = new TH1D("h_mass_template_"+Mgr.Procname[pr], "h_mass_template_"+Mgr.Procname[pr], binnum, massbins); h_mass_temp->Sumw2();
 
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
-        std::vector<double> *phi = new std::vector<double>;
         std::vector<double> *etaSC = new std::vector<double>;
+        std::vector<double> *phi = new std::vector<double>;
         std::vector<int> *charge = new std::vector<int>;
-        std::vector<double> *relPFiso = new std::vector<double>;
+        std::vector<double> *Full5x5_SigmaIEtaIEta = new std::vector<double>;
+        std::vector<double> *dEtaInSeed = new std::vector<double>;
+        std::vector<double> *dPhiIn = new std::vector<double>;
+        std::vector<double> *HoverE = new std::vector<double>;
+        std::vector<double> *InvEminusInvP = new std::vector<double>;
+        std::vector<double> *chIso03 = new std::vector<double>;
+        std::vector<double> *nhIso03 = new std::vector<double>;
+        std::vector<double> *phIso03 = new std::vector<double>;
+        std::vector<double> *ChIso03FromPU = new std::vector<double>;
+        std::vector<int> *mHits = new std::vector<int>;
+        std::vector<int> *passConvVeto = new std::vector<int>;
+        std::vector<double> *relPFiso_dBeta = new std::vector<double>;
+        std::vector<double> *relPFiso_Rho = new std::vector<double>;
         std::vector<int> *passMediumID = new std::vector<int>;
         Double_t MET_pT, MET_phi;
         Int_t nPU;
@@ -2360,7 +2425,6 @@ void E_WJET_HistMaker (Bool_t DEBUG)
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
 
         TChain *chain = new TChain("FRTree");
-
         chain->Add(Dir+"SelectedForBKGest_E_"+Mgr.Procname[Mgr.CurrentProc]+".root");
         if (DEBUG == kTRUE) cout << Dir+"SelectedForBKGest_E_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
 
@@ -2369,7 +2433,19 @@ void E_WJET_HistMaker (Bool_t DEBUG)
         chain->SetBranchStatus("phi", 1);
         chain->SetBranchStatus("etaSC", 1);
         chain->SetBranchStatus("charge", 1);
-        chain->SetBranchStatus("relPFiso", 1);
+        chain->SetBranchStatus("Full5x5_SigmaIEtaIEta", 1);
+        chain->SetBranchStatus("dEtaInSeed", 1);
+        chain->SetBranchStatus("dPhiIn", 1);
+        chain->SetBranchStatus("HoverE", 1);
+        chain->SetBranchStatus("InvEminusInvP", 1);
+        chain->SetBranchStatus("chIso03", 1);
+        chain->SetBranchStatus("nhIso03", 1);
+        chain->SetBranchStatus("phIso03", 1);
+        chain->SetBranchStatus("ChIso03FromPU", 1);
+        chain->SetBranchStatus("mHits", 1);
+        chain->SetBranchStatus("passConvVeto", 1);
+        chain->SetBranchStatus("relPFiso_dBeta", 1);
+        chain->SetBranchStatus("relPFiso_Rho", 1);
         chain->SetBranchStatus("passMediumID", 1);
         chain->SetBranchStatus("MET_pT", 1);
         chain->SetBranchStatus("MET_phi", 1);
@@ -2381,12 +2457,25 @@ void E_WJET_HistMaker (Bool_t DEBUG)
         chain->SetBranchStatus("prefiring_weight", 1);
         chain->SetBranchStatus("prefiring_weight_up", 1);
         chain->SetBranchStatus("prefiring_weight_down", 1);
+
         chain->SetBranchAddress("p_T", &p_T);
         chain->SetBranchAddress("eta", &eta);
-        chain->SetBranchAddress("phi", &phi);
         chain->SetBranchAddress("etaSC", &etaSC);
+        chain->SetBranchAddress("phi", &phi);
         chain->SetBranchAddress("charge", &charge);
-        chain->SetBranchAddress("relPFiso", &relPFiso);
+        chain->SetBranchAddress("Full5x5_SigmaIEtaIEta", &Full5x5_SigmaIEtaIEta);
+        chain->SetBranchAddress("dEtaInSeed", &dEtaInSeed);
+        chain->SetBranchAddress("dPhiIn", &dPhiIn);
+        chain->SetBranchAddress("HoverE", &HoverE);
+        chain->SetBranchAddress("InvEminusInvP", &InvEminusInvP);
+        chain->SetBranchAddress("chIso03", &chIso03);
+        chain->SetBranchAddress("nhIso03", &nhIso03);
+        chain->SetBranchAddress("phIso03", &phIso03);
+        chain->SetBranchAddress("ChIso03FromPU", &ChIso03FromPU);
+        chain->SetBranchAddress("mHits", &mHits);
+        chain->SetBranchAddress("passConvVeto", &passConvVeto);
+        chain->SetBranchAddress("relPFiso_dBeta", &relPFiso_dBeta);
+        chain->SetBranchAddress("relPFiso_Rho", &relPFiso_Rho);
         chain->SetBranchAddress("passMediumID", &passMediumID);
         chain->SetBranchAddress("MET_pT", &MET_pT);
         chain->SetBranchAddress("MET_phi", &MET_phi);
@@ -2417,9 +2506,16 @@ void E_WJET_HistMaker (Bool_t DEBUG)
             if (passMediumID->at(0) == 0 && passMediumID->at(1) == 0) continue;
             if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
             if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
+            if ((etaSC->at(0) > 1.4442 && etaSC->at(0) < 1.566) || (etaSC->at(1) > 1.4442 && etaSC->at(1) < 1.566)) continue;
+            if (etaSC->at(0) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.013 || HoverE->at(0) >= 0.13 ||
+                                          fabs(dEtaInSeed->at(0)) >= 0.01 || fabs(dPhiIn->at(0)) >= 0.07 || mHits->at(0) > 1)) continue;
+            if (etaSC->at(1) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.013 || HoverE->at(1) >= 0.13 ||
+                                          fabs(dEtaInSeed->at(1)) >= 0.01 || fabs(dPhiIn->at(1)) >= 0.07 || mHits->at(1) > 1)) continue;
+            if (etaSC->at(0) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.035 || HoverE->at(0) >= 0.13 || mHits->at(0) > 1)) continue;
+            if (etaSC->at(1) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.035 || HoverE->at(1) >= 0.13 || mHits->at(1) > 1)) continue;
 
-            if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << charge->at(0) << " " << relPFiso->at(0) << endl;
-            if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << charge->at(1) << " " << relPFiso->at(1) << endl;
+            if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << charge->at(0) << " " << relPFiso_Rho->at(0) << endl;
+            if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << charge->at(1) << " " << relPFiso_Rho->at(1) << endl;
 
             nPass++;
 
@@ -2505,6 +2601,8 @@ void E_WJET_HistMaker (Bool_t DEBUG)
             h_MET->Fill(MET_pT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             if (MET_pT > 75)
                 h_mass_temp->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+//            if (charge->at(0) == charge->at(1))
+//                h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
 
         }// End of event iteration
 
@@ -2520,10 +2618,11 @@ void E_WJET_HistMaker (Bool_t DEBUG)
         f->cd();
         cout << "\tWriting into file...";
 
-        h_mass->Write();
+        h_mass->Write();        
+        h_mass_SS->Write();
+        h_mass_temp->Write();
         h_MET->Write();
         h_nVTX->Write();
-        h_mass_temp->Write();
 
         cout << " Finished.\n" << endl;
 
@@ -3388,7 +3487,7 @@ void EMu_QCD_HistMaker (Bool_t DEBUG)
         // -- Creating Histograms -- //
         TH1D* h_mass = new TH1D("h_mass_"+Mgr.Procname[pr], "h_mass_"+Mgr.Procname[pr], binnum, massbins); h_mass->Sumw2();
         TH1D* h_nVTX = new TH1D("h_nVTX_"+Mgr.Procname[pr], "h_nVTX_"+Mgr.Procname[pr], 50, 0, 50); h_nVTX->Sumw2();
-        TH1D* h_mass_temp = new TH1D("h_mass_template_"+Mgr.Procname[pr], "h_mass_template_"+Mgr.Procname[pr], binnum, massbins); h_mass->Sumw2();
+        TH1D* h_mass_SS = new TH1D("h_mass_SS_"+Mgr.Procname[pr], "h_mass_SS_"+Mgr.Procname[pr], binnum, massbins); h_mass_SS->Sumw2();
 
         std::vector<double> *e_p_T = new std::vector<double>;
         std::vector<double> *e_eta = new std::vector<double>;
@@ -3422,8 +3521,8 @@ void EMu_QCD_HistMaker (Bool_t DEBUG)
 
         TChain *chain = new TChain("FRTree");
 
-        chain->Add(Dir+"SelectedForBKGest_E_"+Mgr.Procname[Mgr.CurrentProc]+".root");
-        if (DEBUG == kTRUE) cout << Dir+"SelectedForBKGest_E_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+        chain->Add(Dir+"SelectedForBKGest_EMu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+        if (DEBUG == kTRUE) cout << Dir+"SelectedForBKGest_EMu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
 
         chain->SetBranchStatus("e_p_T", 1);
         chain->SetBranchStatus("e_eta", 1);
@@ -3507,7 +3606,7 @@ void EMu_QCD_HistMaker (Bool_t DEBUG)
             if (e_passMediumID->at(0)) nPassEle++;
             else nFailEle++;
             if (mu_relPFiso_dBeta->at(0) < 0.15) nPassMu++;
-            else nFailM++;
+            else nFailMu++;
 
             // QCD selection
             if (e_passMediumID->at(0) || mu_relPFiso_dBeta->at(0)  < 0.15) continue;
@@ -3583,10 +3682,10 @@ void EMu_QCD_HistMaker (Bool_t DEBUG)
             if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl << endl;
 
             h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
-            if (e_charge != mu_charge)
+            if (e_charge->at(0) != mu_charge->at(0))
                 h_mass->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             else
-                h_mass_temp->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+                h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
 
         }// End of event iteration
 
@@ -3608,7 +3707,7 @@ void EMu_QCD_HistMaker (Bool_t DEBUG)
 
         h_mass->Write();
         h_nVTX->Write();
-        h_mass_temp->Write();
+        h_mass_SS->Write();
 
         cout << " Finished.\n" << endl;
 
@@ -3690,7 +3789,8 @@ void EMu_WJET_HistMaker (Bool_t DEBUG)
         // -- Creating Histograms -- //
         TH1D* h_mass = new TH1D("h_mass_"+Mgr.Procname[pr], "h_mass_"+Mgr.Procname[pr], binnum, massbins); h_mass->Sumw2();
         TH1D* h_nVTX = new TH1D("h_nVTX_"+Mgr.Procname[pr], "h_nVTX"+Mgr.Procname[pr], 50, 0, 50); h_nVTX->Sumw2();
-        TH1D* h_mass_temp = new TH1D("h_mass_template_"+Mgr.Procname[pr], "h_mass_template_"+Mgr.Procname[pr], binnum, massbins); h_mass->Sumw2();
+        TH1D* h_mass_SS = new TH1D("h_mass_SS_"+Mgr.Procname[pr], "h_mass_SS_"+Mgr.Procname[pr], binnum, massbins); h_mass_SS->Sumw2();
+        TH1D* h_mass_temp = new TH1D("h_mass_template_"+Mgr.Procname[pr], "h_mass_template_"+Mgr.Procname[pr], binnum, massbins); h_mass_temp->Sumw2();
 
         std::vector<double> *e_p_T = new std::vector<double>;
         std::vector<double> *e_eta = new std::vector<double>;
@@ -3861,41 +3961,43 @@ void EMu_WJET_HistMaker (Bool_t DEBUG)
             if (DEBUG == kTRUE) cout << "Eff weight: " << effweight << "\tPVz weight: " << PVzWeight << "\nL1 weight:" << L1weight <<
                                         "\tTop pT weight: " << TopPtWeight << endl;
 
-            // -- FR (and SF) WEIGHTS -- //
-            Double_t FRweight = 1;
-            Double_t FR;
-            if (e_passMediumID->at(0) == 0 && mu_relPFiso_dBeta->at(0) < 0.15) // Electron fails, muon passes
-            {
-                FR = analyzer->FakeRate_ele(e_p_T->at(0), e_etaSC->at(0));
-//                if (Mgr.isMC == kTRUE)
-//                {
-//                    effweight = analyzer->EfficiencySF_EventWeight_electronFR(ele1_SF, ele2_SF, 2);
-//                }
-            }
-            else if (e_passMediumID->at(0) == 1 && mu_relPFiso_dBeta->at(0) >= 0.15) // Muon fails, electron passes
-            {
-                FR = analyzer->FakeRate(mu_p_T->at(0), mu_eta->at(0));
-//                if (Mgr.isMC == kTRUE)
-//                {
-//                    effweight = analyzer->EfficiencySF_EventWeight_electronFR(ele1_SF, ele2_SF, 1);
-//                }
-            }
-            FRweight = FR / (1 - FR);
-            if (DEBUG == kTRUE) cout << "FR = " << FR << "   FRweight = " << FRweight << endl;
-            avgFRweight += FRweight;
-            h_FRweight->Fill(FRweight);
-
             // -- Normalization -- //
             Double_t TotWeight = 1;
             if (Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
             if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl << endl;
 
+            // -- FR (and SF) WEIGHTS -- //
+            Double_t FRweight = 1;
+            Double_t FR = -1;
+            if (e_passMediumID->at(0) == 0 && mu_relPFiso_dBeta->at(0) < 0.15) // Electron fails, muon passes
+            {
+                FR = analyzer->FakeRate_ele(e_p_T->at(0), e_etaSC->at(0));
+                FRweight = FR / (1 - FR);
+//                if (Mgr.isMC == kTRUE)
+//                {
+//                    effweight = analyzer->EfficiencySF_EventWeight_electronFR(ele1_SF, ele2_SF, 2);
+//                }
+                h_mass_temp->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            }
+            else if (e_passMediumID->at(0) == 1 && mu_relPFiso_dBeta->at(0) >= 0.15) // Muon fails, electron passes
+            {
+                FR = analyzer->FakeRate(mu_p_T->at(0), mu_eta->at(0));
+                FRweight = FR / (1 - FR);
+//                if (Mgr.isMC == kTRUE)
+//                {
+//                    effweight = analyzer->EfficiencySF_EventWeight_electronFR(ele1_SF, ele2_SF, 1);
+//                }
+            }
+            if (DEBUG == kTRUE) cout << "FR = " << FR << "   FRweight = " << FRweight << endl;
+            avgFRweight += FRweight;
+            h_FRweight->Fill(FRweight);
+
             // -- Histogram filling -- //
             h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
-            if (e_charge != mu_charge)
+            if (e_charge->at(0) != mu_charge->at(0))
                 h_mass->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             else
-                h_mass_temp->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+                h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
 
         }// End of event iteration
 
@@ -3913,6 +4015,7 @@ void EMu_WJET_HistMaker (Bool_t DEBUG)
 
         h_mass->Write();
         h_nVTX->Write();
+        h_mass_SS->Write();
         h_mass_temp->Write();
 
         cout << " Finished.\n" << endl;

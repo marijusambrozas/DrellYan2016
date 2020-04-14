@@ -981,6 +981,8 @@ void MakeSelectionForBKGest_EE (TString type, TString HLTname, Bool_t Debug)
                 ntuple->GENEvt_weight < 0 ? gen_weight = -1 : gen_weight = 1;
                 SumWeight += gen_weight;
                 SumWeightRaw += ntuple->GENEvt_weight;
+                if (Processes[i_proc] >= _GJets_20to100 && Processes[i_proc] <= _GJets_2000to5000)
+                    gen_weight = ntuple->GENEvt_weight; // Resetting to +-1 affects normalization
 
                 // -- Separate DYLL samples -- //
                 Bool_t GenFlag = kFALSE;
@@ -1599,6 +1601,8 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
                 ntuple->GENEvt_weight < 0 ? gen_weight = -1 : gen_weight = 1;
                 SumWeight += gen_weight;
                 SumWeightRaw += ntuple->GENEvt_weight;
+                if (Processes[i_proc] >= _GJets_20to100 && Processes[i_proc] <= _GJets_2000to5000)
+                    gen_weight = ntuple->GENEvt_weight; // Resetting to +-1 affects normalization
 
                 // -- Separate DYLL samples -- //
                 Bool_t GenFlag = kFALSE;

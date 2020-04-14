@@ -639,7 +639,7 @@ void E_EstFR(Int_t type)
     h_FRsubtract_eta->SetDirectory(0);
 
 //--------------------------------- FR by template -------------------------------------- (deno = nume + ctrl)
-
+/*
     //                  QCD_nume(from ABCD)
     // FR = --------------------------------------------
     //      (QCD_nume + DATA_ctrl) - sum(nonQCD_MC_ctrl)
@@ -693,6 +693,7 @@ void E_EstFR(Int_t type)
     h_FRtemplate_endcap->SetDirectory(0);
     cout << "Numerator endcap (abcd): " << h_pT_endcap_nume_abcd->Integral() << endl;
     cout << "Denominator endcap (abcd): " << h_pT_endcap_deno_abcd->Integral() << endl;
+    */
 
 // ---------------------------- Writing------------------------------ //
     TString filename = "/media/sf_DATA/FR/Electron/FakeRate_electron.root";
@@ -705,8 +706,8 @@ void E_EstFR(Int_t type)
     h_FRratio_endcap->Write();
     h_FRsubtract_barrel->Write();
     h_FRsubtract_endcap->Write();
-    h_FRtemplate_barrel->Write();
-    h_FRtemplate_endcap->Write();
+//    h_FRtemplate_barrel->Write();
+//    h_FRtemplate_endcap->Write();
     cout << "Finished. Closing the file.." << endl;
     file_FR->Close();
     if (!file_FR->IsOpen()) cout << "File '" << filename << "' has been closed successfully." << endl;
@@ -734,11 +735,11 @@ void E_EstFR(Int_t type)
     h_FRratio_barrel->SetLineColor(kRed);
     h_FRratio_barrel->SetStats(kFALSE);
     h_FRratio_barrel->SetTitle("");
-    h_FRtemplate_barrel->SetMarkerStyle(33);
+    /*h_FRtemplate_barrel->SetMarkerStyle(33);
     h_FRtemplate_barrel->SetMarkerSize(1.5);
     h_FRtemplate_barrel->SetMarkerColor(kGreen+2);
     h_FRtemplate_barrel->SetLineColor(kGreen+2);
-    h_FRtemplate_barrel->SetStats(kFALSE);
+    h_FRtemplate_barrel->SetStats(kFALSE);*/
     h_FRratio_barrel->GetXaxis()->SetTitle("p_{T} (#mu) [GeV/c]");
     h_FRratio_barrel->GetXaxis()->SetTitleOffset(1);
     h_FRratio_barrel->GetXaxis()->SetTitleSize(0.05);
@@ -749,19 +750,19 @@ void E_EstFR(Int_t type)
     h_FRratio_barrel->GetYaxis()->SetLabelSize(0.04);
     h_FRratio_barrel->GetXaxis()->SetNoExponent(1);
     h_FRratio_barrel->GetXaxis()->SetMoreLogLabels(1);
-    h_FRratio_barrel->GetXaxis()->SetRangeUser(25, 1000);
+    h_FRratio_barrel->GetXaxis()->SetRangeUser(25, 3000);
     h_FRratio_barrel->GetYaxis()->SetRangeUser(0, 0.25);
     h_FRratio_barrel->Draw();
     h_FRMC_barrel->Draw("same");
     h_FRsubtract_barrel->Draw("same");
-    h_FRtemplate_barrel->Draw("same");
+//    h_FRtemplate_barrel->Draw("same");
 
     TLegend *legend = new TLegend(0.13, 0.77, 0.6, 0.95);
     legend->AddEntry(h_FRMC_barrel, "QCD MC", "LP");
     legend->AddEntry(h_FRratio_barrel, "Ratio", "LP");
     legend->AddEntry(h_FRsubtract_barrel, "Subtraction", "LP");
     TLegend *legend_noABCD = ((TLegend*)legend->Clone());
-    legend->AddEntry(h_FRtemplate_barrel, "ABCD", "LP");
+//    legend->AddEntry(h_FRtemplate_barrel, "ABCD", "LP");
     legend->Draw();
     TText *textb = new TText (0.45, 0.6, "Barrel");
     textb->SetTextAlign(11);
@@ -792,11 +793,11 @@ void E_EstFR(Int_t type)
     h_FRratio_endcap->SetLineColor(kRed);
     h_FRratio_endcap->SetStats(kFALSE);
     h_FRratio_endcap->SetTitle("");
-    h_FRtemplate_endcap->SetMarkerStyle(33);
+    /*h_FRtemplate_endcap->SetMarkerStyle(33);
     h_FRtemplate_endcap->SetMarkerSize(1.5);
     h_FRtemplate_endcap->SetMarkerColor(kGreen+2);
     h_FRtemplate_endcap->SetLineColor(kGreen+2);
-    h_FRtemplate_endcap->SetStats(kFALSE);
+    h_FRtemplate_endcap->SetStats(kFALSE);*/
     h_FRratio_endcap->GetXaxis()->SetTitle("p_{T} (#mu) [GeV/c]");
     h_FRratio_endcap->GetXaxis()->SetTitleOffset(1);
     h_FRratio_endcap->GetXaxis()->SetTitleSize(0.05);
@@ -807,12 +808,12 @@ void E_EstFR(Int_t type)
     h_FRratio_endcap->GetYaxis()->SetLabelSize(0.04);
     h_FRratio_endcap->GetXaxis()->SetNoExponent(1);
     h_FRratio_endcap->GetXaxis()->SetMoreLogLabels(1);
-    h_FRratio_endcap->GetXaxis()->SetRangeUser(25, 1000);
+    h_FRratio_endcap->GetXaxis()->SetRangeUser(25, 3000);
     h_FRratio_endcap->GetYaxis()->SetRangeUser(0, 0.3);
     h_FRratio_endcap->Draw();
     h_FRMC_endcap->Draw("same");
     h_FRsubtract_endcap->Draw("same");
-    h_FRtemplate_endcap->Draw("same");
+//    h_FRtemplate_endcap->Draw("same");
     legend->Draw();
     TText *texte = new TText (0.45, 0.6, "Endcap");
     texte->SetTextAlign(11);
