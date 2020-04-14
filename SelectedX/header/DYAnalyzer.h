@@ -274,7 +274,7 @@ public:
         Int_t FindTriggerAndPrescale(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t getPrescale(Double_t Et);
         Double_t getPrescale_alt(Double_t Et);
-        void SetupFRvalues_ele(TString filename, TString type="ratio");
+        void SetupFRvalues_ele(TString filename, TString type="subtract");
         Double_t FakeRate_ele(Double_t p_T, Double_t eta);
 
 	// -- pre-FSR functions -- //
