@@ -546,7 +546,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
         for(Int_t i=0; i<NEvents; i++)
         {
             chain->GetEntry(i);
-            if (MET_pT > 20) continue;
+            if (MET_pT >= 20) continue;
             if (DEBUG == kTRUE){
                 cout << "\nEvt " << i << endl;
                 cout << "nMuons = " << p_T->size() << endl;

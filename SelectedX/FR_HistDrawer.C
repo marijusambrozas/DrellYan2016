@@ -4839,12 +4839,12 @@ void E_HistDrawer(Int_t type)
     RP_PFiso_Rho_endcap_deno->SetPlots("relPFiso_Rho (e_{#lower[-0.4]{endcap}}^{deno})", 0, 5);
     RP_PFiso_Rho_barrel_ctrl->SetPlots("relPFiso_Rho (e_{#lower[-0.4]{barrel}}^{control})", 0, 5);
     RP_PFiso_Rho_endcap_ctrl->SetPlots("relPFiso_Rho (e_{#lower[-0.4]{endcap}}^{control})", 0, 5);
-    RP_pT_barrel_nume->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{barrel}}^{nume}) [GeV/c]", 25, 1000);
-    RP_pT_endcap_nume->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{endcap}}^{nume}) [GeV/c]", 25, 1000);
-    RP_pT_barrel_deno->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{barrel}}^{deno}) [GeV/c]", 25, 1000);
-    RP_pT_endcap_deno->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{endcap}}^{deno}) [GeV/c]", 25, 1000);
-    RP_pT_barrel_ctrl->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{barrel}}^{control}) [GeV/c]", 25, 1000);
-    RP_pT_endcap_ctrl->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{endcap}}^{control}) [GeV/c]", 25, 1000);
+    RP_pT_barrel_nume->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{barrel}}^{nume}) [GeV/c]", 25, 3000);
+    RP_pT_endcap_nume->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{endcap}}^{nume}) [GeV/c]", 25, 3000);
+    RP_pT_barrel_deno->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{barrel}}^{deno}) [GeV/c]", 25, 3000);
+    RP_pT_endcap_deno->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{endcap}}^{deno}) [GeV/c]", 25, 3000);
+    RP_pT_barrel_ctrl->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{barrel}}^{control}) [GeV/c]", 25, 3000);
+    RP_pT_endcap_ctrl->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{endcap}}^{control}) [GeV/c]", 25, 3000);
     RP_SigmaIEtaIEta_barrel_nume->SetPlots("#sigma_{i#etai#eta} (e_{#lower[-0.4]{barrel}}^{nume})",    0, 0.01);
     RP_SigmaIEtaIEta_endcap_nume->SetPlots("#sigma_{i#etai#eta} (e_{#lower[-0.4]{endcap}}^{nume})",    0, 0.03);
     RP_SigmaIEtaIEta_barrel_deno->SetPlots("#sigma_{i#etai#eta} (e_{#lower[-0.4]{barrel}}^{deno})",    0, 0.05);
