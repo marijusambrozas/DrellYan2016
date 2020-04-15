@@ -103,15 +103,16 @@ void CheckQCDNormalization (Bool_t mu=kFALSE, Bool_t Debug = kFALSE)
                 {
                     if (fabs(ntuple->GenOthers_ID[i_gen]) == 5)
                     {
-                        h_g_pT->Fill(ntuple->GenOthers_pT[i_gen], ntuple->GENEvt_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
+                        h_g_pT->Fill(ntuple->GenOthers_pT[i_gen], gen_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
                         if (ntuple->GenOthers_isHardProcess[i_gen])
-                            h_g_pT_isHardProcess->Fill(ntuple->GenOthers_pT[i_gen], ntuple->GENEvt_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
+                            h_g_pT_isHardProcess->Fill(ntuple->GenOthers_pT[i_gen], gen_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
                         if (ntuple->GenOthers_fromHardProcessFinalState[i_gen])
-                            h_g_pT_fromHardProcessFinalState->Fill(ntuple->GenOthers_pT[i_gen], ntuple->GENEvt_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
+                            h_g_pT_fromHardProcessFinalState->Fill(ntuple->GenOthers_pT[i_gen], gen_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
                         if (ntuple->GenOthers_isPrompt[i_gen])
-                            h_g_pT_isPrompt->Fill(ntuple->GenOthers_pT[i_gen], ntuple->GENEvt_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
+                            h_g_pT_isPrompt->Fill(ntuple->GenOthers_pT[i_gen], gen_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
                         if (ntuple->GenOthers_isPromptFinalState[i_gen])
-                            h_g_pT_isPromptFinalState->Fill(ntuple->GenOthers_pT[i_gen], ntuple->GENEvt_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
+                            h_g_pT_isPromptFinalState->Fill(ntuple->GenOthers_pT[i_gen], gen_weight*Mgr.Xsec[i_tup]*Lumi/Mgr.Wsum[i_tup]);
+                        break;
                     }
                 }
 
@@ -157,4 +158,4 @@ void CheckQCDNormalization (Bool_t mu=kFALSE, Bool_t Debug = kFALSE)
     TTimeStamp ts_end;
     cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
 
-} // End of CheckGammaJetsNormalization
+} // End of CheckQCDNormalization
