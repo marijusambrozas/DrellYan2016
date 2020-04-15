@@ -95,6 +95,8 @@ void FR_PrescaleTest_t3 (Bool_t DEBUG = kFALSE)
                     if (!(ntuple->HLT_trigFired[i_tr])) continue;
                     if (!(ntuple->HLT_trigName->at(i_tr)).Contains("Photon")) continue;
                     if (ntuple->HLT_trigPt[i_tr] <= 22) continue;
+                    Int_t matched22=0, matched30=0, matched36=0, matched50=0, matched75=0, matched90=0, matched120=0, matched175=0;
+                    Int_t i_22=-1, i_30=-1, i_36=-1, i_50=-1, i_75=-1, i_90=-1, i_120=-1, i_175=-1;
                     if (ntuple->HLT_trigName->at(i_tr) == "HLT_Photon22_v*" && ntuple->HLT_trigPt[i_tr] > 22 && ntuple->HLT_trigPt[i_tr] <= 30)
                     {
                         i_22 = i_tr;
