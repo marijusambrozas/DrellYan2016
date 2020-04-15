@@ -92,45 +92,45 @@ void FR_PrescaleTest_t3 (Bool_t DEBUG = kFALSE)
 
                 for (Int_t i_tr=0; i_tr<ntuple->HLT_ntrig; i_tr++)
                 {
-                    if (!(ntuple->HLT_trigFired->at(i_tr))) continue;
+                    if (!(ntuple->HLT_trigFired[i_tr])) continue;
                     if (!(ntuple->HLT_trigName->at(i_tr)).Contains("Photon")) continue;
-                    if (ntuple->HLT_trigPt->at(i_tr) <= 22) continue;
-                    if (ntuple->HLT_trigName->at(i_tr) == "HLT_Photon22_v*" && ntuple->HLT_trigPt->at(i_tr) > 22 && ntuple->HLT_trigPt->at(i_tr) <= 30)
+                    if (ntuple->HLT_trigPt[i_tr] <= 22) continue;
+                    if (ntuple->HLT_trigName->at(i_tr) == "HLT_Photon22_v*" && ntuple->HLT_trigPt[i_tr] > 22 && ntuple->HLT_trigPt[i_tr] <= 30)
                     {
                         i_22 = i_tr;
                         matched22 = 1;
                     }
-                    if (ntuple->HLT_trigName->at(i_tr) == "HLT_Photon30_v*" && ntuple->HLT_trigPt->at(i_tr) > 30 && ntuple->HLT_trigPt->at(i_tr) <= 36)
+                    if (ntuple->HLT_trigName->at(i_tr) == "HLT_Photon30_v*" && ntuple->HLT_trigPt[i_tr] > 30 && ntuple->HLT_trigPt[i_tr] <= 36)
                     {
                         i_30 = i_tr;
                         matched30 = 1;
                     }
-                    if (ntuple->HLT_trigName->at(i_tr) == "HLT_Photon36_v*" && ntuple->HLT_trigPt->at(i_tr) > 36 && ntuple->HLT_trigPt->at(i_tr) <= 50)
+                    if (ntuple->HLT_trigName->at(i_tr) == "HLT_Photon36_v*" && ntuple->HLT_trigPt[i_tr] > 36 && ntuple->HLT_trigPt[i_tr] <= 50)
                     {
                         i_36 = i_tr;
                         matched36 = 1;
                     }
-                    if (ntuple->HLT_trigName->at(i_tr) == "HLT_Photon50_v*" && ntuple->HLT_trigPt->at(i_tr) > 50 && ntuple->HLT_trigPt->at(i_tr) <= 75)
+                    if (ntuple->HLT_trigName->at(i_tr) == "HLT_Photon50_v*" && ntuple->HLT_trigPt[i_tr] > 50 && ntuple->HLT_trigPt[i_tr] <= 75)
                     {
                         i_50 = i_tr;
                         matched50 = 1;
                     }
-                    if (ntuple->HLT_trigName->at(i_tr) == "HLT_Photon75_v*" && ntuple->HLT_trigPt->at(i_tr) > 75 && ntuple->HLT_trigPt->at(i_tr) <= 90)
+                    if (ntuple->HLT_trigName->at(i_tr) == "HLT_Photon75_v*" && ntuple->HLT_trigPt[i_tr] > 75 && ntuple->HLT_trigPt[i_tr] <= 90)
                     {
                         i_75 = i_tr;
                         matched75 = 1;
                     }
-                    if (ntuple->HLT_trigName->at(i_tr) == "HLT_Photon90_v*" && ntuple->HLT_trigPt->at(i_tr) > 90 && ntuple->HLT_trigPt->at(i_tr) <= 120)
+                    if (ntuple->HLT_trigName->at(i_tr) == "HLT_Photon90_v*" && ntuple->HLT_trigPt[i_tr] > 90 && ntuple->HLT_trigPt[i_tr] <= 120)
                     {
                         i_90 = i_tr;
                         matched90 = 1;
                     }
-                    if (ntuple->HLT_trigName->at(i_tr) == "HLT_Photon120_v*" && ntuple->HLT_trigPt->at(i_tr) > 120 && ntuple->HLT_trigPt->at(i_tr) <= 175)
+                    if (ntuple->HLT_trigName->at(i_tr) == "HLT_Photon120_v*" && ntuple->HLT_trigPt[i_tr] > 120 && ntuple->HLT_trigPt[i_tr] <= 175)
                     {
                         i_120 = i_tr;
                         matched120 = 1;
                     }
-                    if (ntuple->HLT_trigName->at(i_tr) == "HLT_Photon175_v*" && ntuple->HLT_trigPt->at(i_tr) > 175)
+                    if (ntuple->HLT_trigName->at(i_tr) == "HLT_Photon175_v*" && ntuple->HLT_trigPt[i_tr] > 175)
                     {
                         i_175 = i_tr;
                         matched175 = 1;
@@ -142,20 +142,20 @@ void FR_PrescaleTest_t3 (Bool_t DEBUG = kFALSE)
                 if (matched22 == 1)
                 {
                     prescale_alt = pp.hltPrescale("HLT_Photon22_v", ntuple->runNum, ntuple->lumiBlock) * pp.l1Prescale("L1_SingleEG18", ntuple->runNum, ntuple->lumiBlock);
-                    h_HLT_pT->Fill(ntuple->HLT_trigPt->at(i_22), prescale_alt);
-                    h_HLT_pT_uncorr->Fill(ntuple->HLT_trigPt->at(i_22));
+                    h_HLT_pT->Fill(ntuple->HLT_trigPt[i_22], prescale_alt);
+                    h_HLT_pT_uncorr->Fill(ntuple->HLT_trigPt[i_22]);
                 }
                 else if (matched30 == 1)
                 {
                     prescale_alt = pp.hltPrescale("HLT_Photon30_v", ntuple->runNum, ntuple->lumiBlock) * pp.l1Prescale("L1_SingleEG26", ntuple->runNum, ntuple->lumiBlock);
-                    h_HLT_pT->Fill(ntuple->HLT_trigPt->at(i_30), prescale_alt);
-                    h_HLT_pT_uncorr->Fill(ntuple->HLT_trigPt->at(i_30));
+                    h_HLT_pT->Fill(ntuple->HLT_trigPt[i_30], prescale_alt);
+                    h_HLT_pT_uncorr->Fill(ntuple->HLT_trigPt[i_30]);
                 }
                 else if (matched36 == 1)
                 {
                     prescale_alt = pp.hltPrescale("HLT_Photon36_v", ntuple->runNum, ntuple->lumiBlock) * pp.l1Prescale("L1_SingleEG26", ntuple->runNum, ntuple->lumiBlock);
-                    h_HLT_pT->Fill(ntuple->HLT_trigPt->at(i_36), prescale_alt);
-                    h_HLT_pT_uncorr->Fill(ntuple->HLT_trigPt->at(i_36));
+                    h_HLT_pT->Fill(ntuple->HLT_trigPt[i_36], prescale_alt);
+                    h_HLT_pT_uncorr->Fill(ntuple->HLT_trigPt[i_36]);
                 }
                 else if (matched50 == 1)
                 {
@@ -164,8 +164,8 @@ void FR_PrescaleTest_t3 (Bool_t DEBUG = kFALSE)
                         prescale_alt = pp.hltPrescale("HLT_Photon50_v", ntuple->runNum, ntuple->lumiBlock) * pp.l1Prescale("L1_SingleEG36", ntuple->runNum, ntuple->lumiBlock);
                     if (pp.l1Prescale("L1_SingleEG40", ntuple->runNum, ntuple->lumiBlock) != 0)
                         prescale_alt = pp.hltPrescale("HLT_Photon50_v", ntuple->runNum, ntuple->lumiBlock) * pp.l1Prescale("L1_SingleEG40", ntuple->runNum, ntuple->lumiBlock);
-                    h_HLT_pT->Fill(ntuple->HLT_trigPt->at(i_50), prescale_alt);
-                    h_HLT_pT_uncorr->Fill(ntuple->HLT_trigPt->at(i_50));
+                    h_HLT_pT->Fill(ntuple->HLT_trigPt[i_50], prescale_alt);
+                    h_HLT_pT_uncorr->Fill(ntuple->HLT_trigPt[i_50]);
                 }
                 else if (matched75 == 1)
                 {
@@ -174,8 +174,8 @@ void FR_PrescaleTest_t3 (Bool_t DEBUG = kFALSE)
                         prescale_alt = pp.hltPrescale("HLT_Photon75_v", ntuple->runNum, ntuple->lumiBlock) * pp.l1Prescale("L1_SingleEG36", ntuple->runNum, ntuple->lumiBlock);
                     if (pp.l1Prescale("L1_SingleEG40", ntuple->runNum, ntuple->lumiBlock) != 0)
                         prescale_alt = pp.hltPrescale("HLT_Photon75_v", ntuple->runNum, ntuple->lumiBlock) * pp.l1Prescale("L1_SingleEG40", ntuple->runNum, ntuple->lumiBlock);
-                    h_HLT_pT->Fill(ntuple->HLT_trigPt->at(i_75), prescale_alt);
-                    h_HLT_pT_uncorr->Fill(ntuple->HLT_trigPt->at(i_75));
+                    h_HLT_pT->Fill(ntuple->HLT_trigPt[i_75], prescale_alt);
+                    h_HLT_pT_uncorr->Fill(ntuple->HLT_trigPt[i_75]);
                 }
                 else if (matched90 == 1)
                 {
@@ -184,8 +184,8 @@ void FR_PrescaleTest_t3 (Bool_t DEBUG = kFALSE)
                         prescale_alt = pp.hltPrescale("HLT_Photon90_v", ntuple->runNum, ntuple->lumiBlock) * pp.l1Prescale("L1_SingleEG36", ntuple->runNum, ntuple->lumiBlock);
                     if (pp.l1Prescale("L1_SingleEG40", ntuple->runNum, ntuple->lumiBlock) != 0)
                         prescale_alt = pp.hltPrescale("HLT_Photon90_v", ntuple->runNum, ntuple->lumiBlock) * pp.l1Prescale("L1_SingleEG40", ntuple->runNum, ntuple->lumiBlock);
-                    h_HLT_pT->Fill(ntuple->HLT_trigPt->at(i_90), prescale_alt);
-                    h_HLT_pT_uncorr->Fill(ntuple->HLT_trigPt->at(i_90));
+                    h_HLT_pT->Fill(ntuple->HLT_trigPt[i_90], prescale_alt);
+                    h_HLT_pT_uncorr->Fill(ntuple->HLT_trigPt[i_90]);
                 }
                 else if (matched120 == 1)
                 {
@@ -194,8 +194,8 @@ void FR_PrescaleTest_t3 (Bool_t DEBUG = kFALSE)
                         prescale_alt = pp.hltPrescale("HLT_Photon120_v", ntuple->runNum, ntuple->lumiBlock) * pp.l1Prescale("L1_SingleEG36", ntuple->runNum, ntuple->lumiBlock);
                     if (pp.l1Prescale("L1_SingleEG40", ntuple->runNum, ntuple->lumiBlock) != 0)
                         prescale_alt = pp.hltPrescale("HLT_Photon120_v", ntuple->runNum, ntuple->lumiBlock) * pp.l1Prescale("L1_SingleEG40", ntuple->runNum, ntuple->lumiBlock);
-                    h_HLT_pT->Fill(ntuple->HLT_trigPt->at(i_120), prescale_alt);
-                    h_HLT_pT_uncorr->Fill(ntuple->HLT_trigPt->at(i_120));
+                    h_HLT_pT->Fill(ntuple->HLT_trigPt[i_120], prescale_alt);
+                    h_HLT_pT_uncorr->Fill(ntuple->HLT_trigPt[i_120]);
                 }
                 else if (matched175 == 1)
                 {
@@ -212,8 +212,8 @@ void FR_PrescaleTest_t3 (Bool_t DEBUG = kFALSE)
                          prescale_alt = pp.hltPrescale("HLT_Photon175_v", ntuple->runNum, ntuple->lumiBlock) * pp.l1Prescale("L1_SingleEG38", ntuple->runNum, ntuple->lumiBlock);
                      if (pp.l1Prescale("L1_SingleEG40", ntuple->runNum, ntuple->lumiBlock) != 0)
                          prescale_alt = pp.hltPrescale("HLT_Photon175_v", ntuple->runNum, ntuple->lumiBlock) * pp.l1Prescale("L1_SingleEG40", ntuple->runNum, ntuple->lumiBlock);                    h_HLT_pT->Fill(trig_pT->at(i_175), prescale_alt);
-                    h_HLT_pT->Fill(ntuple->HLT_trigPt->at(i_175), prescale_alt);
-                    h_HLT_pT_uncorr->Fill(ntuple->HLT_trigPt->at(i_175));
+                    h_HLT_pT->Fill(ntuple->HLT_trigPt[i_175], prescale_alt);
+                    h_HLT_pT_uncorr->Fill(ntuple->HLT_trigPt[i_175]);
                 }
 
             if (DEBUG == kFALSE) bar.Draw(i);
