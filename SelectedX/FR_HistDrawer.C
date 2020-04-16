@@ -8110,6 +8110,7 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
             s_mass_wWJET_temp->Add(h_mass_temp[pr]);
             if (pr < _WJets)
             {
+                s_mass_woWJET->Add(h_mass[pr]);
                 s_mass_woWJET_temp->Add(h_mass_temp[pr]);
             }
         }
@@ -8269,12 +8270,12 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     TH1D *h_VVnST_fit = ((TH1D*)(h_mass[_VVnST]->Clone("h_VVnST_fit")));
     TH1D *h_GJets_fit = ((TH1D*)(h_mass[_GJets_Full]->Clone("h_GJets_fit")));
     TH1D *h_QCD_fit = ((TH1D*)(h_QCD_est->Clone("h_QCD_fit")));
-    h_WJET_est_fit->Scale(5.6782e+03 / h_WJET_est_fit->Integral());
-    h_DY_fit->Scale(3.7026e+05 / h_DY_fit->Integral());
-    h_ttbar_fit->Scale(5.1997e+03 / h_ttbar_fit->Integral());
-    h_VVnST_fit->Scale(1.18204e+03 / h_VVnST_fit->Integral());
-    h_GJets_fit->Scale(2.2973e+00 / h_GJets_fit->Integral());
-    h_QCD_fit->Scale(1.6977e+04 / h_QCD_fit->Integral());
+    h_WJET_est_fit->Scale(3.7239e+03 / h_WJET_est_fit->Integral());
+    h_DY_fit->Scale(2.2167e+05 / h_DY_fit->Integral());
+    h_ttbar_fit->Scale(4.1414e+03 / h_ttbar_fit->Integral());
+    h_VVnST_fit->Scale(9.986e+02 / h_VVnST_fit->Integral());
+    h_GJets_fit->Scale(1.3898e+00 / h_GJets_fit->Integral());
+    h_QCD_fit->Scale(7.6555e+03 / h_QCD_fit->Integral());
     THStack *s_mass_fit = new THStack("s_mass_fit", "");
     s_mass_fit->Add(h_QCD_fit);
     s_mass_fit->Add(h_GJets_fit);

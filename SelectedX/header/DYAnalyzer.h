@@ -20,7 +20,7 @@
 #define nMassBin2 86
 #define nPtBinEndcap 9//8
 #define nPtBinBarrel 18//16
-#define nPtBin_ele 23
+#define nPtBin_ele 22
 
 class DYAnalyzer
 {
