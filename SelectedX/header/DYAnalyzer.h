@@ -6258,7 +6258,7 @@ Bool_t DYAnalyzer::EventSelection_FakeMuons_Triggerless(vector<Muon> MuonCollect
             Bool_t isOS = kFALSE;
             if(recolep1.charge != recolep2.charge) isOS = kTRUE;
 
-            if(reco_M > 10 && isPassAcc == kTRUE && VtxNormChi2 < 20 && Angle < TMath::Pi() - 0.005) // can have same sign
+            if(reco_M > 15 && isPassAcc == kTRUE && VtxNormChi2 < 20 && Angle < TMath::Pi() - 0.005) // can have same sign
             {
                 isPassEventSelection = kTRUE;
                 SelectedMuonCollection->push_back(recolep1);
@@ -6481,7 +6481,7 @@ Bool_t DYAnalyzer::EventSelection_FakeEMu(vector<Electron> ElectronCollection, v
     {
         Muon Mu = QMuonCollection[i_mu];
 
-        // -- Start another loop for finding electron (for electron, we don't need to check about trigger) -- //
+        // -- Start another loop for finding electron -- //
         for(Int_t j_el=0; j_el<nQElectrons; j_el++)
         {
             Electron El = QElectronCollection[j_el];

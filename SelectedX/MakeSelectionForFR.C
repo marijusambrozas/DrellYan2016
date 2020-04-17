@@ -1488,33 +1488,17 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
             MuonFile = TFile::Open(out_base+out_dir+".root", "RECREATE");
         MuonFile->cd();
 
-        std::vector<double> *e_p_T = new std::vector<double>;
-        std::vector<double> *e_eta = new std::vector<double>;
-        std::vector<double> *e_etaSC = new std::vector<double>;
-        std::vector<double> *e_phi = new std::vector<double>;
-        std::vector<int> *e_charge = new std::vector<int>;
-        std::vector<double> *e_Full5x5_SigmaIEtaIEta = new std::vector<double>;
-        std::vector<double> *e_dEtaInSeed = new std::vector<double>;
-        std::vector<double> *e_dPhiIn = new std::vector<double>;
-        std::vector<double> *e_HoverE = new std::vector<double>;
-        std::vector<double> *e_InvEminusInvP = new std::vector<double>;
-        std::vector<double> *e_chIso03 = new std::vector<double>;
-        std::vector<double> *e_nhIso03 = new std::vector<double>;
-        std::vector<double> *e_phIso03 = new std::vector<double>;
-        std::vector<double> *e_ChIso03FromPU = new std::vector<double>;
-        std::vector<int> *e_mHits = new std::vector<int>;
-        std::vector<int> *e_passConvVeto = new std::vector<int>;
-        std::vector<double> *e_relPFiso_dBeta = new std::vector<double>;
-        std::vector<double> *e_relPFiso_Rho = new std::vector<double>;
-        std::vector<int> *e_passMediumID = new std::vector<int>;
-        std::vector<double> *mu_p_T = new std::vector<double>;
-        std::vector<double> *mu_eta = new std::vector<double>;
-        std::vector<double> *mu_phi = new std::vector<double>;
-        std::vector<int> *mu_charge = new std::vector<int>;
-        std::vector<double> *mu_relPFiso_dBeta = new std::vector<double>;
+        Double_t e_p_T, e_eta, e_etaSC, e_phi;
+        Int_t e_charge;
+        Double_t e_Full5x5_SigmaIEtaIEta, e_dEtaInSeed, e_dPhiIn, e_HoverE, e_InvEminusInvP;
+        Double_t e_relPFiso_dBeta, e_relPFiso_Rho;
+        Double_t e_chIso03, e_nhIso03, e_phIso03, e_ChIso03FromPU;
+        Int_t e_mHits, e_passConvVeto, e_passMediumID;
+        Double_t mu_p_T, mu_eta, mu_phi;
+        Int_t mu_charge;
+        Double_t mu_relPFiso_dBeta;
         Double_t MET_pT, MET_phi;
-        Int_t nPU;
-        Int_t nVTX;
+        Int_t nPU, nVTX;
         Double_t PVz;
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
@@ -1545,6 +1529,8 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("mu_phi", &mu_phi);
         MuonTree->Branch("mu_charge", &mu_charge);
         MuonTree->Branch("mu_relPFiso_dBeta", &mu_relPFiso_dBeta);
+        MuonTree->Branch("MET_pT", &MET_pT);
+        MuonTree->Branch("MET_phi", &MET_phi);
         MuonTree->Branch("nPU", &nPU);
         MuonTree->Branch("nVTX", &nVTX);
         MuonTree->Branch("PVz", &PVz);
@@ -1650,7 +1636,7 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
                         MuonCollection.push_back(mu);
                     } // End of i_mu iteration
 
-                    for (Int_t i_ele=0; i_ele<ntuple->nMuon; i_ele++)
+                    for (Int_t i_ele=0; i_ele<ntuple->Nelectrons; i_ele++)
                     {
                         Electron ele;
                         ele.FillFromNtuple(ntuple, i_ele);
@@ -1668,30 +1654,6 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
                         if (SelectedElectron.passMediumID && SelectedMuon.RelPFIso_dBeta < 0.15) continue;
 
                         timesPassed++;
-                        e_p_T->clear();
-                        e_eta->clear();
-                        e_etaSC->clear();
-                        e_phi->clear();
-                        e_charge->clear();
-                        e_Full5x5_SigmaIEtaIEta->clear();
-                        e_dEtaInSeed->clear();
-                        e_dPhiIn->clear();
-                        e_HoverE->clear();
-                        e_InvEminusInvP->clear();
-                        e_chIso03->clear();
-                        e_nhIso03->clear();
-                        e_phIso03->clear();
-                        e_ChIso03FromPU->clear();
-                        e_mHits->clear();
-                        e_passConvVeto->clear();
-                        e_relPFiso_dBeta->clear();
-                        e_relPFiso_Rho->clear();
-                        e_passMediumID->clear();
-                        mu_p_T->clear();
-                        mu_eta->clear();
-                        mu_phi->clear();
-                        mu_charge->clear();
-                        mu_relPFiso_dBeta->clear();
 
                         // -- Top pT reweighting -- //
                         top_weight = 1;
@@ -1702,38 +1664,41 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
                             top_weight = sqrt(SF0 * SF1);
                         }
 
-                        // -- Information for various other reweightings -- //
+                        // Information for reweightings
                         nPU = ntuple->nPileUp;
                         nVTX = ntuple->nVertices;
                         PVz = ntuple->PVz;
                         prefiring_weight = ntuple->_prefiringweight;
                         prefiring_weight_up = ntuple->_prefiringweightup;
                         prefiring_weight_down = ntuple->_prefiringweightdown;
-
-                        e_p_T->push_back(SelectedElectron.Pt);
-                        e_eta->push_back(SelectedElectron.eta);
-                        e_etaSC->push_back(SelectedElectron.etaSC);
-                        e_phi->push_back(SelectedElectron.phi);
-                        e_charge->push_back(SelectedElectron.charge);
-                        e_Full5x5_SigmaIEtaIEta->push_back(SelectedElectron.Full5x5_SigmaIEtaIEta);
-                        e_dEtaInSeed->push_back(SelectedElectron.dEtaInSeed);
-                        e_dPhiIn->push_back(SelectedElectron.dPhiIn);
-                        e_HoverE->push_back(SelectedElectron.HoverE);
-                        e_InvEminusInvP->push_back(SelectedElectron.InvEminusInvP);
-                        e_chIso03->push_back(SelectedElectron.chIso03);
-                        e_nhIso03->push_back(SelectedElectron.nhIso03);
-                        e_phIso03->push_back(SelectedElectron.phIso03);
-                        e_ChIso03FromPU->push_back(SelectedElectron.ChIso03FromPU);
-                        e_mHits->push_back(SelectedElectron.mHits);
-                        e_passConvVeto->push_back(SelectedElectron.passConvVeto);
-                        e_relPFiso_dBeta->push_back(SelectedElectron.RelPFIso_dBeta);
-                        e_relPFiso_Rho->push_back(SelectedElectron.RelPFIso_Rho);
-                        e_passMediumID->push_back(SelectedElectron.passMediumID);
-                        mu_p_T->push_back(SelectedMuon.Pt);
-                        mu_eta->push_back(SelectedMuon.eta);
-                        mu_phi->push_back(SelectedMuon.phi);
-                        mu_charge->push_back(SelectedMuon.charge);
-                        mu_relPFiso_dBeta->push_back(SelectedMuon.RelPFIso_dBeta);
+                        // MET information
+                        MET_pT = ntuple->pfMET_pT;
+                        MET_phi = ntuple->pfMET_phi;
+                        // EMu information
+                        e_p_T = SelectedElectron.Pt;
+                        e_eta = SelectedElectron.eta;
+                        e_etaSC = SelectedElectron.etaSC;
+                        e_phi = SelectedElectron.phi;
+                        e_charge = SelectedElectron.charge;
+                        e_Full5x5_SigmaIEtaIEta = SelectedElectron.Full5x5_SigmaIEtaIEta;
+                        e_dEtaInSeed = SelectedElectron.dEtaInSeed;
+                        e_dPhiIn = SelectedElectron.dPhiIn;
+                        e_HoverE = SelectedElectron.HoverE;
+                        e_InvEminusInvP = SelectedElectron.InvEminusInvP;
+                        e_chIso03 = SelectedElectron.chIso03;
+                        e_nhIso03 = SelectedElectron.nhIso03;
+                        e_phIso03 = SelectedElectron.phIso03;
+                        e_ChIso03FromPU = SelectedElectron.ChIso03FromPU;
+                        e_mHits = SelectedElectron.mHits;
+                        e_passConvVeto = SelectedElectron.passConvVeto;
+                        e_relPFiso_dBeta = SelectedElectron.RelPFIso_dBeta;
+                        e_relPFiso_Rho = SelectedElectron.RelPFIso_Rho;
+                        e_passMediumID = SelectedElectron.passMediumID;
+                        mu_p_T = SelectedMuon.Pt;
+                        mu_eta = SelectedMuon.eta;
+                        mu_phi = SelectedMuon.phi;
+                        mu_charge = SelectedMuon.charge;
+                        mu_relPFiso_dBeta = SelectedMuon.RelPFIso_dBeta;
 
                         MuonTree->Fill();
                     } // End of isPassEvtSelection
