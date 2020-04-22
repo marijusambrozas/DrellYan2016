@@ -221,7 +221,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         Type = "SIGNAL";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
-        Tag.push_back("DY_M50to100"); Xsec.push_back(1873.52*3); Wsum.push_back(78026576/*81780984*/); nEvents.push_back(121265767/*122055296*/); // Wsum is inclusive here (50toInf)
+        Tag.push_back("DY_M50to100"); Xsec.push_back(1873.52*3); Wsum.push_back(78026576/*81780984*/); nEvents.push_back(121265767/*122055296*/);
 //        Location = "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000/";
         Location = "DYLL_M50toInf/";
         NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(1451);

@@ -274,7 +274,7 @@ public:
         Int_t FindTriggerAndPrescale(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t getPrescale(Double_t Et);
         Double_t getPrescale_alt(Double_t Et);
-        void SetupFRvalues_ele(TString filename, TString type="subtract");
+        void SetupFRvalues_ele(TString filename, TString type="subtract", Int_t increaseLowPt=0);
         Double_t FakeRate_ele(Double_t p_T, Double_t eta);
 
 	// -- pre-FSR functions -- //
@@ -6558,7 +6558,7 @@ void DYAnalyzer::SetupFRvalues(TString filename, TString type) // type can be "r
 } // End of SetupFRvalues()
 
 
-void DYAnalyzer::SetupFRvalues_ele(TString filename, TString type) // type can be "ratio", "template"
+void DYAnalyzer::SetupFRvalues_ele(TString filename, TString type, Int_t increaseLowPt) // type can be "ratio", "template"
 {
     // -- Setting up -- //
     std::cout << "Setting up fake rate values from " << filename << endl;
@@ -6574,6 +6574,15 @@ void DYAnalyzer::SetupFRvalues_ele(TString filename, TString type) // type can b
         FR_barrel_ele[i_bin-1] = h_FR_barrel->GetBinContent(i_bin);
         if (i_bin <= nPtBin_ele)
             FR_endcap_ele[i_bin-1] = h_FR_endcap->GetBinContent(i_bin);
+    }
+    if (increaseLowPt == 1)
+    {
+        FR_barrel_ele[0] = h_FR_barrel->GetBinContent(1) + h_FR_barrel->GetBinError(1);
+        FR_barrel_ele[1] = h_FR_barrel->GetBinContent(2) + h_FR_barrel->GetBinError(2);
+        FR_barrel_ele[2] = h_FR_barrel->GetBinContent(3) + h_FR_barrel->GetBinError(3);
+        FR_endcap_ele[0] = h_FR_endcap->GetBinContent(1) + h_FR_endcap->GetBinError(1);
+        FR_endcap_ele[1] = h_FR_endcap->GetBinContent(2) + h_FR_endcap->GetBinError(2);
+        FR_endcap_ele[2] = h_FR_endcap->GetBinContent(3) + h_FR_endcap->GetBinError(3);
     }
 
     // -- Checking if everything has been done correctly -- //
