@@ -55,6 +55,7 @@ const Double_t massbins2[87] = {15, 17.5, 20, 22.5, 25, 27.5, 30, 32.5, 35, 37.5
 
 const Double_t etabins[51] = {-2.4,-2.3,-2.2,-2.1,-2.0,-1.9,-1.8,-1.7,-1.6,-1.566,-1.4442,-1.4,-1.3,-1.2,-1.1,-1.0,-0.9,-0.8,-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,
                               0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.4442,1.566,1.6,1.7,1.8,1.9,2.0,2.1,2.2,2.3,2.4};
+const Double_t etabins2[6] = {0, 0.7, 1.4442, 1.566, 2.0, 2.4};
 
 // -- RelPFiso bins for electron FR templates -- //
 const Int_t binnum_ele_template = 5;
@@ -87,12 +88,12 @@ void FR_HistMaker (TString WhichX = "", Int_t type=1)
         Xselected++;
         if (whichX.Contains("QCD"))
         {
-            cout << "\n*****  Mu_QCD_HistMaker()  *****" << endl;
+            cout << "\n*****  EMu_QCD_HistMaker()  *****" << endl;
             EMu_QCD_HistMaker(DEBUG);
         }
         else if (whichX.Contains("W") && whichX.Contains("JET"))
         {
-            cout << "\n*****  Mu_WJET_HistMaker()  *****" << endl;
+            cout << "\n*****  EMu_WJET_HistMaker()  *****" << endl;
             EMu_WJET_HistMaker(DEBUG);
         }
         else
@@ -2096,6 +2097,8 @@ void E_QCD_HistMaker (Bool_t DEBUG)
         TH1D* h_nVTX = new TH1D("h_nVTX_"+Mgr.Procname[pr], "h_nVTX_"+Mgr.Procname[pr], 50, 0, 50); h_nVTX->Sumw2();
         TH1D* h_mass_SS = new TH1D("h_mass_SS_"+Mgr.Procname[pr], "h_mass_SS_"+Mgr.Procname[pr], binnum, massbins); h_mass_SS->Sumw2();
         TH1D* h_mass_temp = new TH1D("h_mass_template_"+Mgr.Procname[pr], "h_mass_template_"+Mgr.Procname[pr], binnum, massbins); h_mass_temp->Sumw2();
+        TH1D* h_mass_test = new TH1D("h_mass_test_"+Mgr.Procname[pr], "h_mass_test_"+Mgr.Procname[pr], binnum, massbins); h_mass_test->Sumw2();
+        TH2D* h_zpeak = new TH2D("h_zpeak_"+Mgr.Procname[pr], "h_zpeak_"+Mgr.Procname[pr], nPtBin_ele, analyzer->ptbin_ele, 5, etabins2);
 
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
@@ -2207,14 +2210,13 @@ void E_QCD_HistMaker (Bool_t DEBUG)
 
             // QCD selection
             if (p_T->size() != 2) continue;
-            if ((etaSC->at(0) > 1.4442 && etaSC->at(0) < 1.566) || (etaSC->at(1) > 1.4442 && etaSC->at(1) < 1.566)) continue;
-            if (etaSC->at(0) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.013 || HoverE->at(0) >= 0.13 ||
-                                          fabs(dEtaInSeed->at(0)) >= 0.01 || fabs(dPhiIn->at(0)) >= 0.07 || mHits->at(0) > 1)) continue;
-            if (etaSC->at(1) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.013 || HoverE->at(1) >= 0.13 ||
-                                          fabs(dEtaInSeed->at(1)) >= 0.01 || fabs(dPhiIn->at(1)) >= 0.07 || mHits->at(1) > 1)) continue;
-            if (etaSC->at(0) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.035 || HoverE->at(0) >= 0.13 || mHits->at(0) > 1)) continue;
-            if (etaSC->at(1) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.035 || HoverE->at(1) >= 0.13 || mHits->at(1) > 1)) continue;
-
+            if ((fabs(etaSC->at(0)) > 1.4442 && fabs(etaSC->at(0)) < 1.566) || fabs((etaSC->at(1)) > 1.4442 && fabs(etaSC->at(1)) < 1.566)) continue;
+            if (fabs(etaSC->at(0)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.013 || HoverE->at(0) >= 0.13 ||
+                                                fabs(dEtaInSeed->at(0)) >= 0.01 || fabs(dPhiIn->at(0)) >= 0.07 || mHits->at(0) > 1)) continue;
+            if (fabs(etaSC->at(1)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.013 || HoverE->at(1) >= 0.13 ||
+                                                fabs(dEtaInSeed->at(1)) >= 0.01 || fabs(dPhiIn->at(1)) >= 0.07 || mHits->at(1) > 1)) continue;
+            if (fabs(etaSC->at(0)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.035 || HoverE->at(0) >= 0.13 || mHits->at(0) > 1)) continue;
+            if (fabs(etaSC->at(1)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.035 || HoverE->at(1) >= 0.13 || mHits->at(1) > 1)) continue;
             if (passMediumID->at(0) == 1 || passMediumID->at(1)  == 1) continue;
             if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
             if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
@@ -2284,6 +2286,52 @@ void E_QCD_HistMaker (Bool_t DEBUG)
             avgFRweight += FRweight;
             h_FRweight->Fill(FRweight);
 
+            Double_t nFails1=0, nFails2=0;
+            if (fabs(etaSC->at(0)) < 1.4442)
+            {
+                if (Full5x5_SigmaIEtaIEta->at(0) >= 0.00998) nFails1++;
+                if (fabs(dEtaInSeed->at(0)) >= 0.00311) nFails1++;
+                if (fabs(dPhiIn->at(0)) >= 0.103) nFails1++;
+                if (HoverE->at(0) >= 0.253) nFails1++;
+                if (relPFiso_Rho->at(0) >= 0.0695) nFails1++;
+                if (InvEminusInvP->at(0) >= 0.134) nFails1++;
+                if (mHits->at(0) > 1) nFails1++;
+                if (passConvVeto->at(0) == 0) nFails1++;
+            }
+            else if (fabs(etaSC->at(0)) > 1.566)
+            {
+                if (Full5x5_SigmaIEtaIEta->at(0) >= 0.0298) nFails1++;
+                if (fabs(dEtaInSeed->at(0)) >= 0.00609) nFails1++;
+                if (fabs(dPhiIn->at(0)) >= 0.045) nFails1++;
+                if (HoverE->at(0) >= 0.0878) nFails1++;
+                if (relPFiso_Rho->at(0) >= 0.0821) nFails1++;
+                if (InvEminusInvP->at(0) >= 0.13) nFails1++;
+                if (mHits->at(0) > 1) nFails1++;
+                if (passConvVeto->at(0) == 0) nFails1++;
+            }
+            if (fabs(etaSC->at(1)) < 1.4442)
+            {
+                if (Full5x5_SigmaIEtaIEta->at(1) >= 0.00998) nFails2++;
+                if (fabs(dEtaInSeed->at(1)) >= 0.00311) nFails2++;
+                if (fabs(dPhiIn->at(1)) >= 0.103) nFails2++;
+                if (HoverE->at(1) >= 0.253) nFails2++;
+                if (relPFiso_Rho->at(1) >= 0.0695) nFails2++;
+                if (InvEminusInvP->at(1) >= 0.134) nFails2++;
+                if (mHits->at(1) > 1) nFails2++;
+                if (passConvVeto->at(1) == 0) nFails2++;
+            }
+            else if (fabs(etaSC->at(1)) > 1.566)
+            {
+                if (Full5x5_SigmaIEtaIEta->at(1) >= 0.0298) nFails2++;
+                if (fabs(dEtaInSeed->at(1)) >= 0.00609) nFails2++;
+                if (fabs(dPhiIn->at(1)) >= 0.045) nFails2++;
+                if (HoverE->at(1) >= 0.0878) nFails2++;
+                if (relPFiso_Rho->at(1) >= 0.0821) nFails2++;
+                if (InvEminusInvP->at(1) >= 0.13) nFails2++;
+                if (mHits->at(1) > 1) nFails2++;
+                if (passConvVeto->at(1) == 0) nFails2++;
+            }
+
             // -- Normalization -- //
             Double_t TotWeight = 1;
             if (Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
@@ -2291,10 +2339,16 @@ void E_QCD_HistMaker (Bool_t DEBUG)
 
             h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             h_mass->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
-            if (MET_pT > 75)
+            h_mass_test->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+            if (charge->at(0) == charge->at(1) && MET_pT > 50)
                 h_mass_temp->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
-//            if (charge->at(0) == charge->at(1))
-//                h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            if (charge->at(0) == charge->at(1))
+                h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            if (mass < 60)
+            {
+                h_zpeak->Fill(p_T->at(0), fabs(eta->at(0)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+                h_zpeak->Fill(p_T->at(1), fabs(eta->at(1)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            }
 
         }// End of event iteration
 
@@ -2315,7 +2369,9 @@ void E_QCD_HistMaker (Bool_t DEBUG)
         h_mass->Write();
         h_mass_SS->Write();
         h_mass_temp->Write();
+        h_mass_test->Write();
         h_nVTX->Write();
+        h_zpeak->Write();
 
         cout << " Finished.\n" << endl;
 
@@ -2398,6 +2454,8 @@ void E_WJET_HistMaker (Bool_t DEBUG)
         TH1D* h_nVTX = new TH1D("h_nVTX_"+Mgr.Procname[pr], "h_nVTX"+Mgr.Procname[pr], 50, 0, 50); h_nVTX->Sumw2();
         TH1D* h_mass_SS = new TH1D("h_mass_SS_"+Mgr.Procname[pr], "h_mass_SS_"+Mgr.Procname[pr], binnum, massbins); h_mass_SS->Sumw2();
         TH1D* h_mass_temp = new TH1D("h_mass_template_"+Mgr.Procname[pr], "h_mass_template_"+Mgr.Procname[pr], binnum, massbins); h_mass_temp->Sumw2();
+        TH1D* h_mass_test = new TH1D("h_mass_test_"+Mgr.Procname[pr], "h_mass_test_"+Mgr.Procname[pr], binnum, massbins); h_mass_test->Sumw2();
+        TH2D* h_zpeak = new TH2D("h_zpeak_"+Mgr.Procname[pr], "h_zpeak_"+Mgr.Procname[pr], nPtBin_ele, analyzer->ptbin_ele, 5, etabins2);
 
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
@@ -2507,13 +2565,13 @@ void E_WJET_HistMaker (Bool_t DEBUG)
             if (passMediumID->at(0) == 0 && passMediumID->at(1) == 0) continue;
             if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
             if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
-            if ((etaSC->at(0) > 1.4442 && etaSC->at(0) < 1.566) || (etaSC->at(1) > 1.4442 && etaSC->at(1) < 1.566)) continue;
-            if (etaSC->at(0) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.013 || HoverE->at(0) >= 0.13 ||
-                                          fabs(dEtaInSeed->at(0)) >= 0.01 || fabs(dPhiIn->at(0)) >= 0.07 || mHits->at(0) > 1)) continue;
-            if (etaSC->at(1) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.013 || HoverE->at(1) >= 0.13 ||
-                                          fabs(dEtaInSeed->at(1)) >= 0.01 || fabs(dPhiIn->at(1)) >= 0.07 || mHits->at(1) > 1)) continue;
-            if (etaSC->at(0) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.035 || HoverE->at(0) >= 0.13 || mHits->at(0) > 1)) continue;
-            if (etaSC->at(1) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.035 || HoverE->at(1) >= 0.13 || mHits->at(1) > 1)) continue;
+            if ((fabs(etaSC->at(0)) > 1.4442 && fabs(etaSC->at(0)) < 1.566) || fabs((etaSC->at(1)) > 1.4442 && fabs(etaSC->at(1)) < 1.566)) continue;
+            if (fabs(etaSC->at(0)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.013 || HoverE->at(0) >= 0.13 ||
+                                                fabs(dEtaInSeed->at(0)) >= 0.01 || fabs(dPhiIn->at(0)) >= 0.07 || mHits->at(0) > 1)) continue;
+            if (fabs(etaSC->at(1)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.013 || HoverE->at(1) >= 0.13 ||
+                                                fabs(dEtaInSeed->at(1)) >= 0.01 || fabs(dPhiIn->at(1)) >= 0.07 || mHits->at(1) > 1)) continue;
+            if (fabs(etaSC->at(0)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.035 || HoverE->at(0) >= 0.13 || mHits->at(0) > 1)) continue;
+            if (fabs(etaSC->at(1)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.035 || HoverE->at(1) >= 0.13 || mHits->at(1) > 1)) continue;
 
             if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << charge->at(0) << " " << relPFiso_Rho->at(0) << endl;
             if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << charge->at(1) << " " << relPFiso_Rho->at(1) << endl;
@@ -2528,11 +2586,14 @@ void E_WJET_HistMaker (Bool_t DEBUG)
                 cout << "p_T[0] = " << p_T->at(0);
                 cout << "\teta[0] = " << eta->at(0);
                 cout << "\tphi[0] = " << phi->at(0) << endl;
+                cout << "\tcharge[0] = " << charge->at(0) << endl;
                 cout << "\tpassMediumID[0] = " << passMediumID->at(0) << endl;
                 cout << "p_T[1] = " << p_T->at(1);
                 cout << "\teta[1] = " << eta->at(1);
                 cout << "\tphi[1] = " << phi->at(1) << endl;
+                cout << "\tcharge[1] = " << charge->at(1) << endl;
                 cout << "\tpassMediumID[1] = " << passMediumID->at(1) << endl;
+                cout << "\nMET = " << MET_pT << endl;
                 cout << "\nPVz = " << PVz << endl;
             }
 
@@ -2567,6 +2628,7 @@ void E_WJET_HistMaker (Bool_t DEBUG)
                                         "\tTop pT weight: " << TopPtWeight << endl;
 
             // -- FR (and SF) WEIGHTS -- //
+            Int_t nFails = 0;
             Double_t FRweight = 1;
             Double_t FR;
             if (passMediumID->at(0) == 0 && passMediumID->at(1) == 1) // First fails, second passes
@@ -2576,7 +2638,28 @@ void E_WJET_HistMaker (Bool_t DEBUG)
                 {
                     effweight = analyzer->EfficiencySF_EventWeight_electronFR(ele1_SF, ele2_SF, 2);
                 }
-
+                if (fabs(etaSC->at(0)) < 1.4442)
+                {
+                    if (Full5x5_SigmaIEtaIEta->at(0) >= 0.00998) nFails++;
+                    if (fabs(dEtaInSeed->at(0)) >= 0.00311) nFails++;
+                    if (fabs(dPhiIn->at(0)) >= 0.103) nFails++;
+                    if (HoverE->at(0) >= 0.253) nFails++;
+                    if (relPFiso_Rho->at(0) >= 0.0695) nFails++;
+                    if (InvEminusInvP->at(0) >= 0.134) nFails++;
+                    if (mHits->at(0) > 1) nFails++;
+                    if (passConvVeto->at(0) == 0) nFails++;
+                }
+                else if (fabs(etaSC->at(0)) > 1.566)
+                {
+                    if (Full5x5_SigmaIEtaIEta->at(0) >= 0.0298) nFails++;
+                    if (fabs(dEtaInSeed->at(0)) >= 0.00609) nFails++;
+                    if (fabs(dPhiIn->at(0)) >= 0.045) nFails++;
+                    if (HoverE->at(0) >= 0.0878) nFails++;
+                    if (relPFiso_Rho->at(0) >= 0.0821) nFails++;
+                    if (InvEminusInvP->at(0) >= 0.13) nFails++;
+                    if (mHits->at(0) > 1) nFails++;
+                    if (passConvVeto->at(0) == 0) nFails++;
+                }
             }
             else // Second fails, first passes
             {
@@ -2584,6 +2667,29 @@ void E_WJET_HistMaker (Bool_t DEBUG)
                 if (Mgr.isMC == kTRUE)
                 {
                     effweight = analyzer->EfficiencySF_EventWeight_electronFR(ele1_SF, ele2_SF, 1);
+                }
+
+                if (fabs(etaSC->at(1)) < 1.4442)
+                {
+                    if (Full5x5_SigmaIEtaIEta->at(1) >= 0.00998) nFails++;
+                    if (fabs(dEtaInSeed->at(1)) >= 0.00311) nFails++;
+                    if (fabs(dPhiIn->at(1)) >= 0.103) nFails++;
+                    if (HoverE->at(1) >= 0.253) nFails++;
+                    if (relPFiso_Rho->at(1) >= 0.0695) nFails++;
+                    if (InvEminusInvP->at(1) >= 0.134) nFails++;
+                    if (mHits->at(1) > 1) nFails++;
+                    if (passConvVeto->at(1) == 0) nFails++;
+                }
+                else if (fabs(etaSC->at(1)) > 1.566)
+                {
+                    if (Full5x5_SigmaIEtaIEta->at(1) >= 0.0298) nFails++;
+                    if (fabs(dEtaInSeed->at(1)) >= 0.00609) nFails++;
+                    if (fabs(dPhiIn->at(1)) >= 0.045) nFails++;
+                    if (HoverE->at(1) >= 0.0878) nFails++;
+                    if (relPFiso_Rho->at(1) >= 0.0821) nFails++;
+                    if (InvEminusInvP->at(1) >= 0.13) nFails++;
+                    if (mHits->at(1) > 1) nFails++;
+                    if (passConvVeto->at(1) == 0) nFails++;
                 }
             }
             FRweight = FR / (1 - FR);
@@ -2599,11 +2705,22 @@ void E_WJET_HistMaker (Bool_t DEBUG)
             // -- Histogram filling -- //
             h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             h_mass->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            h_mass_test->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
             h_MET->Fill(MET_pT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
-            if (MET_pT > 75)
+            if (charge->at(0) == charge->at(1) && MET_pT > 50)
+            {
+//                cout << "SS+HighMET passed. Charges: " << charge->at(0) << " " << charge->at(1) << "  MET: " << MET_pT << endl;
                 h_mass_temp->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
-//            if (charge->at(0) == charge->at(1))
-//                h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            }
+            if (charge->at(0) == charge->at(1))
+                h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            if (mass < 60)
+            {
+                if (passMediumID->at(0) == 0 && passMediumID->at(1) == 1)
+                    h_zpeak->Fill(p_T->at(0), fabs(eta->at(0)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+                if (passMediumID->at(0) == 1 && passMediumID->at(1) == 0)
+                    h_zpeak->Fill(p_T->at(1), fabs(eta->at(1)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            }
 
         }// End of event iteration
 
@@ -2622,8 +2739,10 @@ void E_WJET_HistMaker (Bool_t DEBUG)
         h_mass->Write();        
         h_mass_SS->Write();
         h_mass_temp->Write();
+        h_mass_test->Write();
         h_MET->Write();
         h_nVTX->Write();
+        h_zpeak->Write();
 
         cout << " Finished.\n" << endl;
 
@@ -3489,36 +3608,21 @@ void EMu_QCD_HistMaker (Bool_t DEBUG)
         TH1D* h_mass = new TH1D("h_mass_"+Mgr.Procname[pr], "h_mass_"+Mgr.Procname[pr], binnum, massbins); h_mass->Sumw2();
         TH1D* h_nVTX = new TH1D("h_nVTX_"+Mgr.Procname[pr], "h_nVTX_"+Mgr.Procname[pr], 50, 0, 50); h_nVTX->Sumw2();
         TH1D* h_mass_SS = new TH1D("h_mass_SS_"+Mgr.Procname[pr], "h_mass_SS_"+Mgr.Procname[pr], binnum, massbins); h_mass_SS->Sumw2();
+        TH1D* h_mass_temp = new TH1D("h_mass_template_"+Mgr.Procname[pr], "h_mass_template_"+Mgr.Procname[pr], binnum, massbins); h_mass_temp->Sumw2();
+        TH1D* h_mass_test = new TH1D("h_mass_test_"+Mgr.Procname[pr], "h_mass_test_"+Mgr.Procname[pr], binnum, massbins); h_mass_test->Sumw2();
 
-        std::vector<double> *e_p_T = new std::vector<double>;
-        std::vector<double> *e_eta = new std::vector<double>;
-        std::vector<double> *e_etaSC = new std::vector<double>;
-        std::vector<double> *e_phi = new std::vector<double>;
-        std::vector<int> *e_charge = new std::vector<int>;
-        std::vector<double> *e_Full5x5_SigmaIEtaIEta = new std::vector<double>;
-        std::vector<double> *e_dEtaInSeed = new std::vector<double>;
-        std::vector<double> *e_dPhiIn = new std::vector<double>;
-        std::vector<double> *e_HoverE = new std::vector<double>;
-        std::vector<double> *e_InvEminusInvP = new std::vector<double>;
-        std::vector<double> *e_chIso03 = new std::vector<double>;
-        std::vector<double> *e_nhIso03 = new std::vector<double>;
-        std::vector<double> *e_phIso03 = new std::vector<double>;
-        std::vector<double> *e_ChIso03FromPU = new std::vector<double>;
-        std::vector<int> *e_mHits = new std::vector<int>;
-        std::vector<int> *e_passConvVeto = new std::vector<int>;
-        std::vector<double> *e_relPFiso_dBeta = new std::vector<double>;
-        std::vector<double> *e_relPFiso_Rho = new std::vector<double>;
-        std::vector<int> *e_passMediumID = new std::vector<int>;
-        std::vector<double> *mu_p_T = new std::vector<double>;
-        std::vector<double> *mu_eta = new std::vector<double>;
-        std::vector<double> *mu_phi = new std::vector<double>;
-        std::vector<int> *mu_charge = new std::vector<int>;
-        std::vector<double> *mu_relPFiso_dBeta = new std::vector<double>;
-        Int_t nPU;
-        Int_t nVTX;
-        Double_t PVz;
-        Double_t gen_weight, top_weight;
-        Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
+        Double_t e_p_T, e_eta, e_etaSC, e_phi;
+        Int_t e_charge;
+        Double_t e_Full5x5_SigmaIEtaIEta, e_dEtaInSeed, e_dPhiIn, e_HoverE, e_InvEminusInvP;
+        Double_t e_chIso03, e_nhIso03, e_phIso03, e_ChIso03FromPU;
+        Double_t e_relPFiso_dBeta, e_relPFiso_Rho;
+        Int_t e_mHits;
+        Int_t e_passConvVeto, e_passMediumID;
+        Double_t mu_p_T, mu_eta, mu_phi;
+        Int_t mu_charge;
+        Double_t mu_relPFiso_dBeta;
+        Int_t nPU, nVTX;
+        Double_t PVz, gen_weight, top_weight, prefiring_weight, prefiring_weight_up, prefiring_weight_down;
 
         TChain *chain = new TChain("FRTree");
 
@@ -3604,18 +3708,22 @@ void EMu_QCD_HistMaker (Bool_t DEBUG)
             chain->GetEntry(i);
             if (!DEBUG) bar.Draw(i);
 
-            if (e_passMediumID->at(0)) nPassEle++;
+            if (e_passMediumID) nPassEle++;
             else nFailEle++;
-            if (mu_relPFiso_dBeta->at(0) < 0.15) nPassMu++;
+            if (mu_relPFiso_dBeta < 0.15) nPassMu++;
             else nFailMu++;
 
             // QCD selection
-            if (e_passMediumID->at(0) || mu_relPFiso_dBeta->at(0)  < 0.15) continue;
-            if (e_p_T->at(0) < 17 || mu_p_T->at(0) < 17) continue;
-            if (e_p_T->at(0) < 28 && mu_p_T->at(0) < 28) continue;
+            if (e_passMediumID || mu_relPFiso_dBeta < 0.15) continue;
+            if (e_p_T < 17 || mu_p_T < 17) continue;
+            if (e_p_T < 28 && mu_p_T < 28) continue;
+            if (fabs(e_etaSC) > 1.4442 && fabs(e_etaSC) < 1.566) continue;
+            if (fabs(e_etaSC) < 1.4442 && (e_Full5x5_SigmaIEtaIEta >= 0.013 || e_HoverE >= 0.13 ||
+                                           fabs(e_dEtaInSeed) >= 0.01 || fabs(e_dPhiIn) >= 0.07 || e_mHits > 1)) continue;
+            if (fabs(e_etaSC) > 1.566 && (e_Full5x5_SigmaIEtaIEta >= 0.035 || e_HoverE >= 0.13 || e_mHits > 1)) continue;
 
-            if (e_p_T->at(0) != e_p_T->at(0)) cout << e_p_T->at(0) << " " << e_eta->at(0) << " " << e_phi->at(0) << " " << e_charge->at(0) << " " << e_relPFiso_Rho->at(0) << endl;
-            if (mu_p_T->at(0) != mu_p_T->at(0)) cout << mu_p_T->at(0) << " " << mu_eta->at(0) << " " << mu_phi->at(0) << " " << mu_charge->at(0) << " " << mu_relPFiso_dBeta->at(0) << endl;
+            if (e_p_T != e_p_T) cout << e_p_T << " " << e_eta << " " << e_phi << " " << e_charge << " " << e_relPFiso_Rho << endl;
+            if (mu_p_T != mu_p_T) cout << mu_p_T << " " << mu_eta << " " << mu_phi << " " << mu_charge << " " << mu_relPFiso_dBeta << endl;
 
             nPass++;
 
@@ -3623,21 +3731,21 @@ void EMu_QCD_HistMaker (Bool_t DEBUG)
             {
                 if (nPass >= 5) break;
                 cout << "Evt " << i << endl;
-                cout << "Electron p_T = " << e_p_T->at(0);
-                cout << "\teta = " << e_eta->at(0);
-                cout << "\tphi = " << e_phi->at(0) << endl;
-                cout << "\tpassMediumID = " << e_passMediumID->at(0) << endl;
-                cout << "Muon p_T = " << mu_p_T->at(0);
-                cout << "\teta = " << mu_eta->at(0);
-                cout << "\tphi = " << mu_phi->at(0) << endl;
-                cout << "\trelPFiso = " << mu_relPFiso_dBeta->at(0) << endl;
+                cout << "Electron p_T = " << e_p_T;
+                cout << "\teta = " << e_eta;
+                cout << "\tphi = " << e_phi << endl;
+                cout << "\tpassMediumID = " << e_passMediumID << endl;
+                cout << "Muon p_T = " << mu_p_T;
+                cout << "\teta = " << mu_eta;
+                cout << "\tphi = " << mu_phi << endl;
+                cout << "\trelPFiso = " << mu_relPFiso_dBeta << endl;
                 cout << "\nPVz = " << PVz << endl;
             }
 
             TLorentzVector ele, mu, ele_SF;
-            ele.SetPtEtaPhiM(e_p_T->at(0), e_eta->at(0), e_phi->at(0), M_Elec);
-            mu.SetPtEtaPhiM(mu_p_T->at(0), mu_eta->at(0), mu_phi->at(0), M_Mu);
-            ele_SF.SetPtEtaPhiM(e_p_T->at(0), e_etaSC->at(0), e_phi->at(0), M_Elec);
+            ele.SetPtEtaPhiM(e_p_T, e_eta, e_phi, M_Elec);
+            mu.SetPtEtaPhiM(mu_p_T, mu_eta, mu_phi, M_Mu);
+            ele_SF.SetPtEtaPhiM(e_p_T, e_etaSC, e_phi, M_Elec);
             Double_t mass = (ele+mu).M();
 
             // -- Pileup-Reweighting -- //
@@ -3670,8 +3778,8 @@ void EMu_QCD_HistMaker (Bool_t DEBUG)
             // -- FR WEIGHTS -- //
             Double_t FRweight = 1;
             Double_t FR1, FR2;
-            FR1 = analyzer->FakeRate_ele(e_p_T->at(0), e_etaSC->at(0));
-            FR2 = analyzer->FakeRate(mu_p_T->at(0), mu_eta->at(0));
+            FR1 = analyzer->FakeRate_ele(e_p_T, e_etaSC);
+            FR2 = analyzer->FakeRate(mu_p_T, mu_eta);
             FRweight = FR1 / (1 - FR1) * FR2 / (1 - FR2);
             if (DEBUG == kTRUE) cout << "FR1 = " << FR1 << "   FR2 = " << FR2 << "   FRweight = " << FRweight << endl;
             avgFRweight += FRweight;
@@ -3683,10 +3791,13 @@ void EMu_QCD_HistMaker (Bool_t DEBUG)
             if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl << endl;
 
             h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
-            if (e_charge->at(0) != mu_charge->at(0))
+            if (e_charge != mu_charge)
                 h_mass->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             else
                 h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            h_mass_temp->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            h_mass_test->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+
 
         }// End of event iteration
 
@@ -3709,6 +3820,8 @@ void EMu_QCD_HistMaker (Bool_t DEBUG)
         h_mass->Write();
         h_nVTX->Write();
         h_mass_SS->Write();
+        h_mass_temp->Write();
+        h_mass_test->Write();
 
         cout << " Finished.\n" << endl;
 
@@ -3765,8 +3878,12 @@ void EMu_WJET_HistMaker (Bool_t DEBUG)
 
     TH1D* h_FRweight = new TH1D("h_FRweight", "FR weights", 100, 0, 0.5);
 
+    Int_t n_efail=0, n_mufail=0;
+    Double_t nw_efail=0, nw_mufail=0;
+
     for (Process_t pr=_DY_10to50; pr<_EndOf_SingleMuon_Normal; pr=next(pr))
     {
+        if (DEBUG == kTRUE && pr != _WJets_ext2v5) continue;
         Mgr.SetProc(pr);
 
         cout << "===========================================================" << endl;
@@ -3792,36 +3909,22 @@ void EMu_WJET_HistMaker (Bool_t DEBUG)
         TH1D* h_nVTX = new TH1D("h_nVTX_"+Mgr.Procname[pr], "h_nVTX"+Mgr.Procname[pr], 50, 0, 50); h_nVTX->Sumw2();
         TH1D* h_mass_SS = new TH1D("h_mass_SS_"+Mgr.Procname[pr], "h_mass_SS_"+Mgr.Procname[pr], binnum, massbins); h_mass_SS->Sumw2();
         TH1D* h_mass_temp = new TH1D("h_mass_template_"+Mgr.Procname[pr], "h_mass_template_"+Mgr.Procname[pr], binnum, massbins); h_mass_temp->Sumw2();
+        TH1D* h_mass_test = new TH1D("h_mass_test_"+Mgr.Procname[pr], "h_mass_test_"+Mgr.Procname[pr], binnum, massbins); h_mass_test->Sumw2();
+        TH1D* h_mass_test_ef = new TH1D("h_mass_test_elefail_"+Mgr.Procname[pr], "h_mass_test_elefail_"+Mgr.Procname[pr], binnum, massbins); h_mass_test_ef->Sumw2();
+        TH1D* h_mass_test_mf = new TH1D("h_mass_test_mufail_"+Mgr.Procname[pr], "h_mass_test_mufail_"+Mgr.Procname[pr], binnum, massbins); h_mass_test_mf->Sumw2();
 
-        std::vector<double> *e_p_T = new std::vector<double>;
-        std::vector<double> *e_eta = new std::vector<double>;
-        std::vector<double> *e_etaSC = new std::vector<double>;
-        std::vector<double> *e_phi = new std::vector<double>;
-        std::vector<int> *e_charge = new std::vector<int>;
-        std::vector<double> *e_Full5x5_SigmaIEtaIEta = new std::vector<double>;
-        std::vector<double> *e_dEtaInSeed = new std::vector<double>;
-        std::vector<double> *e_dPhiIn = new std::vector<double>;
-        std::vector<double> *e_HoverE = new std::vector<double>;
-        std::vector<double> *e_InvEminusInvP = new std::vector<double>;
-        std::vector<double> *e_chIso03 = new std::vector<double>;
-        std::vector<double> *e_nhIso03 = new std::vector<double>;
-        std::vector<double> *e_phIso03 = new std::vector<double>;
-        std::vector<double> *e_ChIso03FromPU = new std::vector<double>;
-        std::vector<int> *e_mHits = new std::vector<int>;
-        std::vector<int> *e_passConvVeto = new std::vector<int>;
-        std::vector<double> *e_relPFiso_dBeta = new std::vector<double>;
-        std::vector<double> *e_relPFiso_Rho = new std::vector<double>;
-        std::vector<int> *e_passMediumID = new std::vector<int>;
-        std::vector<double> *mu_p_T = new std::vector<double>;
-        std::vector<double> *mu_eta = new std::vector<double>;
-        std::vector<double> *mu_phi = new std::vector<double>;
-        std::vector<int> *mu_charge = new std::vector<int>;
-        std::vector<double> *mu_relPFiso_dBeta = new std::vector<double>;
-        Int_t nPU;
-        Int_t nVTX;
-        Double_t PVz;
-        Double_t gen_weight, top_weight;
-        Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
+        Double_t e_p_T, e_eta, e_etaSC, e_phi;
+        Int_t e_charge;
+        Double_t e_Full5x5_SigmaIEtaIEta, e_dEtaInSeed, e_dPhiIn, e_HoverE, e_InvEminusInvP;
+        Double_t e_chIso03, e_nhIso03, e_phIso03, e_ChIso03FromPU;
+        Double_t e_relPFiso_dBeta, e_relPFiso_Rho;
+        Int_t e_mHits;
+        Int_t e_passConvVeto, e_passMediumID;
+        Double_t mu_p_T, mu_eta, mu_phi;
+        Int_t mu_charge;
+        Double_t mu_relPFiso_dBeta;
+        Int_t nPU, nVTX;
+        Double_t PVz, gen_weight, top_weight, prefiring_weight, prefiring_weight_up, prefiring_weight_down;
 
         TChain *chain = new TChain("FRTree");
 
@@ -3908,35 +4011,39 @@ void EMu_WJET_HistMaker (Bool_t DEBUG)
             if (!DEBUG) bar.Draw(i);
 
             // W+Jets selection
-            if (e_passMediumID->at(0) == 1 && mu_relPFiso_dBeta->at(0) < 0.15) continue;
-            if (e_passMediumID->at(0) == 0 && mu_relPFiso_dBeta->at(0) >= 0.15) continue;
-            if (e_p_T->at(0) < 17 || mu_p_T->at(0) < 17) continue;
-            if (e_p_T->at(0) < 28 && mu_p_T->at(0) < 28) continue;
+            if (e_passMediumID == 1 && mu_relPFiso_dBeta < 0.15) continue;
+            if (e_passMediumID == 0 && mu_relPFiso_dBeta >= 0.15) continue;
+            if (e_p_T < 17 || mu_p_T < 17) continue;
+            if (e_p_T < 28 && mu_p_T < 28) continue;
+            if (fabs(e_etaSC) > 1.4442 && fabs(e_etaSC) < 1.566) continue;
+            if (fabs(e_etaSC) < 1.4442 && (e_Full5x5_SigmaIEtaIEta >= 0.013 || e_HoverE >= 0.13 ||
+                                           fabs(e_dEtaInSeed) >= 0.01 || fabs(e_dPhiIn) >= 0.07 || e_mHits > 1)) continue;
+            if (fabs(e_etaSC) > 1.566 && (e_Full5x5_SigmaIEtaIEta >= 0.035 || e_HoverE >= 0.13 || e_mHits > 1)) continue;
 
-            if (e_p_T->at(0) != e_p_T->at(0)) cout << e_p_T->at(0) << " " << e_eta->at(0) << " " << e_phi->at(0) << " " << e_charge->at(0) << " " << e_relPFiso_Rho->at(0) << endl;
-            if (mu_p_T->at(0) != mu_p_T->at(0)) cout << mu_p_T->at(0) << " " << mu_eta->at(0) << " " << mu_phi->at(0) << " " << mu_charge->at(0) << " " << mu_relPFiso_dBeta->at(0) << endl;
+            if (e_p_T != e_p_T) cout << e_p_T << " " << e_eta << " " << e_phi << " " << e_charge << " " << e_relPFiso_Rho << endl;
+            if (mu_p_T != mu_p_T) cout << mu_p_T << " " << mu_eta << " " << mu_phi << " " << mu_charge << " " << mu_relPFiso_dBeta << endl;
 
             nPass++;
 
             if (DEBUG == kTRUE)
             {
-                if (nPass >= 5) break;
+                if (nPass >= 50) break;
                 cout << "Evt " << i << endl;
-                cout << "Electron p_T = " << e_p_T->at(0);
-                cout << "\teta = " << e_eta->at(0);
-                cout << "\tphi = " << e_phi->at(0) << endl;
-                cout << "\tpassMediumID = " << e_passMediumID->at(0) << endl;
-                cout << "Muon p_T = " << mu_p_T->at(0);
-                cout << "\teta = " << mu_eta->at(0);
-                cout << "\tphi = " << mu_phi->at(0) << endl;
-                cout << "\trelPFiso = " << mu_relPFiso_dBeta->at(0) << endl;
+                cout << "Electron p_T = " << e_p_T;
+                cout << "\teta = " << e_eta;
+                cout << "\tphi = " << e_phi << endl;
+                cout << "\tpassMediumID = " << e_passMediumID << endl;
+                cout << "Muon p_T = " << mu_p_T;
+                cout << "\teta = " << mu_eta;
+                cout << "\tphi = " << mu_phi << endl;
+                cout << "\trelPFiso = " << mu_relPFiso_dBeta << endl;
                 cout << "\nPVz = " << PVz << endl;
             }
 
             TLorentzVector ele, mu, ele_SF;
-            ele.SetPtEtaPhiM(e_p_T->at(0), e_eta->at(0), e_phi->at(0), M_Elec);
-            mu.SetPtEtaPhiM(mu_p_T->at(0), mu_eta->at(0), mu_phi->at(0), M_Mu);
-            ele_SF.SetPtEtaPhiM(e_p_T->at(0), e_etaSC->at(0), e_phi->at(0), M_Elec);
+            ele.SetPtEtaPhiM(e_p_T, e_eta, e_phi, M_Elec);
+            mu.SetPtEtaPhiM(mu_p_T, mu_eta, mu_phi, M_Mu);
+            ele_SF.SetPtEtaPhiM(e_p_T, e_etaSC, e_phi, M_Elec);
             Double_t mass = (ele+mu).M();
 
             // -- Pileup-Reweighting -- //
@@ -3970,24 +4077,37 @@ void EMu_WJET_HistMaker (Bool_t DEBUG)
             // -- FR (and SF) WEIGHTS -- //
             Double_t FRweight = 1;
             Double_t FR = -1;
-            if (e_passMediumID->at(0) == 0 && mu_relPFiso_dBeta->at(0) < 0.15) // Electron fails, muon passes
-            {
-                FR = analyzer->FakeRate_ele(e_p_T->at(0), e_etaSC->at(0));
+            if (e_passMediumID == 0 && mu_relPFiso_dBeta < 0.15) // Electron fails, muon passes
+            {                
+                FR = analyzer->FakeRate_ele(e_p_T, e_etaSC);
                 FRweight = FR / (1 - FR);
 //                if (Mgr.isMC == kTRUE)
 //                {
 //                    effweight = analyzer->EfficiencySF_EventWeight_electronFR(ele1_SF, ele2_SF, 2);
 //                }
                 h_mass_temp->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+                if (Mgr.isMC == kFALSE)
+                {
+                    n_efail++;
+                    nw_efail += FRweight;
+                }
+                h_mass_test_ef->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
             }
-            else if (e_passMediumID->at(0) == 1 && mu_relPFiso_dBeta->at(0) >= 0.15) // Muon fails, electron passes
-            {
-                FR = analyzer->FakeRate(mu_p_T->at(0), mu_eta->at(0));
+            else if (e_passMediumID == 1 && mu_relPFiso_dBeta >= 0.15) // Muon fails, electron passes
+            {                
+                FR = analyzer->FakeRate(mu_p_T, mu_eta);
                 FRweight = FR / (1 - FR);
 //                if (Mgr.isMC == kTRUE)
 //                {
 //                    effweight = analyzer->EfficiencySF_EventWeight_electronFR(ele1_SF, ele2_SF, 1);
 //                }
+//                h_mass_temp->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+                if (Mgr.isMC == kFALSE)
+                {
+                    n_mufail++;
+                    nw_mufail += FRweight;
+                }
+                h_mass_test_mf->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
             }
             if (DEBUG == kTRUE) cout << "FR = " << FR << "   FRweight = " << FRweight << endl;
             avgFRweight += FRweight;
@@ -3995,10 +4115,11 @@ void EMu_WJET_HistMaker (Bool_t DEBUG)
 
             // -- Histogram filling -- //
             h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
-            if (e_charge->at(0) != mu_charge->at(0))
+            if (e_charge != mu_charge)
                 h_mass->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             else
                 h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            h_mass_test->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
         }// End of event iteration
 
@@ -4018,6 +4139,9 @@ void EMu_WJET_HistMaker (Bool_t DEBUG)
         h_nVTX->Write();
         h_mass_SS->Write();
         h_mass_temp->Write();
+        h_mass_test->Write();
+        h_mass_test_ef->Write();
+        h_mass_test_mf->Write();
 
         cout << " Finished.\n" << endl;
 
@@ -4036,6 +4160,12 @@ void EMu_WJET_HistMaker (Bool_t DEBUG)
     f->Close();
     if (!f->IsOpen()) cout << "File " << Dir+"WJETest_EMu"+debug+".root" << " has been closed successfully.\n" << endl;
     else cout << "FILE " << Dir+"WJETest_EMu"+debug+".root" << " COULD NOT BE CLOSED!\n" << endl;
+
+    cout << "Events with failed electron: " << n_efail << endl;
+    cout << "Events with failed muon: " << n_mufail << endl;
+    cout << "FR weighted events with failed electron: " << nw_efail << endl;
+    cout << "FR weighted events with failed muon: " << nw_mufail << endl;
+
 
     Double_t TotalRunTime = totaltime.CpuTime();
     cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;

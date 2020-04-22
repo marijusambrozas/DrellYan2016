@@ -283,7 +283,7 @@ void FR_PrescaleTest (Bool_t DEBUG = kFALSE)
                      if (pp.l1Prescale("L1_SingleEG38", runNum, lumiBlock) != 0)
                          prescale_alt = pp.hltPrescale("HLT_Photon175_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG38", runNum, lumiBlock);
                      if (pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock) != 0)
-                         prescale_alt = pp.hltPrescale("HLT_Photon175_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock);                    h_HLT_pT->Fill(trig_pT->at(i_175), prescale_alt);
+                         prescale_alt = pp.hltPrescale("HLT_Photon175_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG40", runNum, lumiBlock);
                     h_HLT_pT->Fill(trig_pT->at(i_175), prescale_alt);
                     h_HLT_pT_uncorr->Fill(trig_pT->at(i_175));
                     h_pT->Fill(p_T->at(i_ele), prescale_alt);
