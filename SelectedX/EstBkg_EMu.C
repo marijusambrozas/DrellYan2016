@@ -26,32 +26,28 @@
 #include <sstream>
 #include <TVectorT.h>
 
-void ee_Est();
-void MuMu_Est();
+void ee_Est(Int_t UseFR);
+void MuMu_Est(Int_t UseFR);
 void removeNegativeBins(TH1D *h);
 
-void EstBkg_EMu(TString whichX = "EE")
+void EstBkg_EMu(TString whichX = "EE", Int_t UseFR = 1)
 {
     TString WhichX = whichX;
     WhichX.ToUpper();
 
     if (WhichX.Contains("EE"))
-        ee_Est();
+        ee_Est(UseFR);
     if (WhichX.Contains("MUMU"))
-        MuMu_Est();
+        MuMu_Est(UseFR);
 }
 
 
-void ee_Est()
+void ee_Est(Int_t UseFR)
 {
     LocalFileMgr Mgr;
 
     Mgr.SetProc(_EE_Bkg_Full);
     cout << "EE Hists location: " << Mgr.HistLocation << endl;
-
-    TFile* f_NeeEst = new TFile(Mgr.HistLocation+"EstBkg_EE.root", "RECREATE");
-    if (f_NeeEst->IsOpen()) std::cout << "File EstBkg_EE.root opened successfully\n";
-    else { std::cout << "File EstBkg_EE.root was not opened\n"; return; }
 
     TFile* f_Bkg_ee = new TFile(Mgr.HistLocation+"Hist_"+Mgr.Procname[_EE_Bkg_Full]+".root", "READ");
     if (f_Bkg_ee->IsOpen()) std::cout << "File Hist_"+Mgr.Procname[_EE_Bkg_Full]+".root opened successfully\n";
@@ -81,6 +77,41 @@ void ee_Est()
 
 //********************************* E MU ***********************************************************
 
+//--------------------------------- Get EMu QCD and WJets from FR -----------------------------------
+
+    TH1D *h_EMu_QCDFR_invm, *h_EMu_SS_QCDFR_invm;
+    TH1D *h_EMu_WJetsFR_invm, *h_EMu_SS_WJetsFR_invm;
+    if (UseFR)
+    {
+        TFile *f_QCD_emu = new TFile(Mgr.HistLocation+"EstQCD_EMu.root", "READ");
+        if (f_QCD_emu->IsOpen()) std::cout << "File EstQCD_EMu.root opened successfully\n";
+        else { std::cout << "File EstQCD_EMu.root was not opened\n"; return; }
+        f_QCD_emu->GetObject("h_QCD_est", h_EMu_QCDFR_invm);
+        f_QCD_emu->GetObject("h_QCD_est_SS", h_EMu_SS_QCDFR_invm);
+        h_EMu_QCDFR_invm->SetFillColor(kRed+3);
+        h_EMu_QCDFR_invm->SetLineColor(kRed+3);
+        h_EMu_QCDFR_invm->SetDirectory(0);
+        h_EMu_SS_QCDFR_invm->SetFillColor(kRed+3);
+        h_EMu_SS_QCDFR_invm->SetLineColor(kRed+3);
+        h_EMu_SS_QCDFR_invm->SetDirectory(0);
+        f_QCD_emu->Close();
+        if (!f_QCD_emu->IsOpen()) std::cout << "File EstQCD_EMu.root closed successfully\n";
+
+        TFile *f_WJets_emu = new TFile(Mgr.HistLocation+"EstWJets_EMu.root", "READ");
+        if (f_WJets_emu->IsOpen()) std::cout << "File EstWJets_EMu.root opened successfully\n";
+        else { std::cout << "File EstWJets_EMu.root was not opened\n"; return; }
+        f_WJets_emu->GetObject("h_WJET_est", h_EMu_WJetsFR_invm);
+        f_WJets_emu->GetObject("h_WJET_est_SS", h_EMu_SS_WJetsFR_invm);
+        h_EMu_WJetsFR_invm->SetFillColor(kRed-2);
+        h_EMu_WJetsFR_invm->SetLineColor(kRed-2);
+        h_EMu_WJetsFR_invm->SetDirectory(0);
+        h_EMu_SS_WJetsFR_invm->SetFillColor(kRed-2);
+        h_EMu_SS_WJetsFR_invm->SetLineColor(kRed-2);
+        h_EMu_SS_WJetsFR_invm->SetDirectory(0);
+        f_WJets_emu->Close();
+        if (!f_WJets_emu->IsOpen()) std::cout << "File EstWJets_EMu.root closed successfully\n";
+    }
+
 //---------------------------------- MC -----------------------------------------------------------
 
             TH1D* h_EMu_invm[_EndOf_EMu];
@@ -93,14 +124,16 @@ void ee_Est()
             THStack* s_EMu_SS_invm2 = new THStack("s_emu_SS_invm2", "");
             gStyle->SetOptStat(0);
 
-            Int_t isWJ = 0;
-            isWJ = 1; // UNCOMMENT THIS IF YOU WANT TO INCLUDE W+JETS
+            Int_t isWJ = 1; // Add MC WJets if ==1
+
+            if (UseFR)
+                isWJ = 0;
 
             for (SelProc_t pr=_EMu_WJets_Full; pr>_EndOf_EMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
             {
                 Mgr.SetProc(pr);
                 if (pr==_EndOf_EMu_VVnST_Normal) continue;
-                if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
+                if (isWJ == 0 && pr == _EMu_WJets_Full) {pr = _EndOf_EMu_VVnST_Normal; continue;}
                 f_Bkg_EMu->GetObject("h_emu_mass_"+Mgr.Procname[pr], h_EMu_invm[pr]);
                 f_Bkg_EMu->GetObject("h_emu_mass2_"+Mgr.Procname[pr], h_EMu_invm2[pr]);
                 removeNegativeBins(h_EMu_invm[pr]);
@@ -202,14 +235,24 @@ void ee_Est()
             h_EMu_QCD_invm2->SetLineColor(kRed+3);
             h_EMu_QCD_invm2->SetDirectory(0);
 
-            THStack* s_EMu_wQCD_invm = new THStack("s_emu_wQCD_invm", "");
-            THStack* s_EMu_wQCD_invm2 = new THStack("s_emu_wQCD_invm2", "");
-            s_EMu_wQCD_invm->Add(h_EMu_QCD_invm);
+
+// ------------------------------------ Draw stack histograms -------------------------------------
+
+            THStack *s_EMu_wQCD_invm = new THStack("s_emu_wQCD_invm", "");
+            THStack *s_EMu_wQCD_invm2 = new THStack("s_emu_wQCD_invm2", "");
+
+            if (UseFR)
+            {
+                s_EMu_wQCD_invm->Add(h_EMu_QCDFR_invm);
+                s_EMu_wQCD_invm->Add(h_EMu_WJetsFR_invm);
+            }
+            else
+                s_EMu_wQCD_invm->Add(h_EMu_QCD_invm);
             s_EMu_wQCD_invm2->Add(h_EMu_QCD_invm2);
             for (SelProc_t pr=_EMu_WJets_Full; pr>_EndOf_EMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
-            {               
+            {
                 if (pr == _EndOf_EMu_VVnST_Normal) continue;
-                if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
+                if (isWJ == 0 && pr == _EMu_WJets_Full) {pr = _EndOf_EMu_VVnST_Normal; continue;}
                 Mgr.SetProc(pr);
                 s_EMu_wQCD_invm->Add(h_EMu_invm[pr]);
                 s_EMu_wQCD_invm2->Add(h_EMu_invm2[pr]);
@@ -218,15 +261,13 @@ void ee_Est()
                 if (pr == _EMu_tW) pr = _EMu_VVnST; // next -- ttbar
                 if (pr == _EMu_DYTauTau_Full) break;
             }
+
             myRatioPlot_t* RP_EMu_wQCD_invm = new myRatioPlot_t("EMu_wQCD_mass", s_EMu_wQCD_invm, h_EMu_data_invm);
             myRatioPlot_t* RP_EMu_wQCD_invm2 = new myRatioPlot_t("EMu_wQCD_mass2", s_EMu_wQCD_invm2, h_EMu_data_invm2);
             RP_EMu_wQCD_invm->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
             RP_EMu_wQCD_invm2->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
-//            RP_EMu_wQCD_invm->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (prie#check{s}ingu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}) [GeV/c^{2}]", 15, 3000, "Eksp./MC");
-//            RP_EMu_wQCD_invm2->SetPlots("e#mu (priesingu kruviu) invariantine mase [GeV/c^{2}]", 15, 3000);
             TLegend *legend_EMu = new TLegend(0.77, 0.5, 0.95, 0.95);
             legend_EMu->AddEntry(h_EMu_data_invm, "Data", "lp");
-//            legend_EMu->AddEntry(h_EMu_data_invm, "Matavimas", "lp");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_DYTauTau_Full], "DY#rightarrow#tau#tau (MC)","f");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_ttbar_Full], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (MC)", "f");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_tW], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (MC)", "f");
@@ -234,23 +275,36 @@ void ee_Est()
             legend_EMu->AddEntry(h_EMu_invm[_EMu_ZZ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_WZ], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
             legend_EMu->AddEntry(h_EMu_invm[_EMu_WW], "#font[12]{#scale[1.1]{WW}} (MC)", "f");
-            if (isWJ) legend_EMu->AddEntry(h_EMu_invm[_EMu_WJets_Full], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
-            legend_EMu->AddEntry(h_EMu_QCD_invm, "#font[12]{#scale[1.1]{QCD}} (est)", "f");
-//            legend_EMu->AddEntry(h_EMu_QCD_invm, "#font[12]{#scale[1.1]{QCD}} (i_{#kern[-0.65]{#lower[-0.3]{#scale[0.7]{c}}}}vert.)", "f");
+            if (UseFR)
+            {
+                legend_EMu->AddEntry(h_EMu_WJetsFR_invm, "#font[12]{#scale[1.1]{W}}+Jets (est.)", "f");
+                legend_EMu->AddEntry(h_EMu_QCDFR_invm, "#font[12]{#scale[1.1]{QCD}} (est.)", "f");
+            }
+            else
+            {
+                if (isWJ) legend_EMu->AddEntry(h_EMu_invm[_EMu_WJets_Full], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
+                legend_EMu->AddEntry(h_EMu_QCD_invm, "#font[12]{#scale[1.1]{QCD}} (est.)", "f");
+            }
 
             RP_EMu_wQCD_invm->ImportLegend(legend_EMu);
             RP_EMu_wQCD_invm2->ImportLegend(legend_EMu);
             RP_EMu_wQCD_invm->Draw(4e-1, 7e4, 1);
             RP_EMu_wQCD_invm2->Draw(4e-1, 7e4, 1);
 
-            TH1D * h_EMu_data_invm_old = ((TH1D*)(h_EMu_data_invm->Clone("h_emu_data_invm_old")));
-            TH1D * h_EMu_data_invm_old2 = ((TH1D*)(h_EMu_data_invm2->Clone("h_emu_data_invm_old2")));
-            h_EMu_data_invm->Add(h_EMu_QCD_invm, -1);
+            TH1D *h_EMu_data_invm_old = ((TH1D*)(h_EMu_data_invm->Clone("h_emu_data_invm_old")));
+            TH1D *h_EMu_data_invm_old2 = ((TH1D*)(h_EMu_data_invm2->Clone("h_emu_data_invm_old2")));
+            if (UseFR)
+            {
+                h_EMu_data_invm->Add(h_EMu_QCDFR_invm, -1);
+                h_EMu_data_invm->Add(h_EMu_WJetsFR_invm, -1);
+            }
+            else
+                h_EMu_data_invm->Add(h_EMu_QCD_invm, -1);
             h_EMu_data_invm2->Add(h_EMu_QCD_invm2, -1);
             removeNegativeBins(h_EMu_QCD_invm);
             removeNegativeBins(h_EMu_QCD_invm2);
 
-            Double_t dataerror_emu, MCerror_emu, dataintegral_emu=2.25081e+07, MCintegral_emu, QCDerror, QCDintegral;
+            Double_t dataerror_emu, MCerror_emu, dataintegral_emu=2.25081e+07, MCintegral_emu, QCDerror, QCDintegral, QCDFRerror, QCDFRintegral;
             Double_t dataerrorZ_emu, MCerrorZ_emu, dataintegralZ_emu=2.25081e+07, MCintegralZ_emu;
             Double_t dataerror_noZ_emu=0, MCerror_noZ_emu=0, dataintegral_noZ_emu=2.25081e+07, MCintegral_noZ_emu, temp_noZ_emu;
 
@@ -261,6 +315,7 @@ void ee_Est()
             MCintegralZ_emu = ((TH1D*)(s_EMu_invm->GetStack()->Last()))->IntegralAndError(10, 22, MCerrorZ_emu);
 
             QCDintegral = h_EMu_QCD_invm->IntegralAndError(1, h_EMu_QCD_invm->GetSize()-2, QCDerror);
+            if (UseFR) QCDFRintegral = h_EMu_QCDFR_invm->IntegralAndError(1, h_EMu_QCDFR_invm->GetSize()-2, QCDFRerror);
 
             dataintegral_noZ_emu = h_EMu_data_invm->IntegralAndError(1, 9, temp_noZ_emu);
             dataerror_noZ_emu += temp_noZ_emu * temp_noZ_emu;
@@ -284,7 +339,8 @@ void ee_Est()
             std::cout << "EMu MC events around Z: " << MCintegralZ_emu << "+-" << MCerrorZ_emu << endl;
             std::cout << "EMu data events outside Z: " << dataintegral_noZ_emu << "+-" << dataerror_noZ_emu << endl;
             std::cout << "EMu MC events outside Z: " << MCintegral_noZ_emu << "+-" << MCerror_noZ_emu << endl;
-            std::cout << "EMu QCD events: " << QCDintegral << "+-" << QCDerror << endl;
+            std::cout << "EMu QCD events (from SS): " << QCDintegral << "+-" << QCDerror << endl;
+            if (UseFR) std::cout << "EMu QCD events (FR): " << QCDFRintegral << "+-" << QCDFRerror << endl;
 
 //************************************ E E **********************************************************
 
@@ -365,7 +421,7 @@ void ee_Est()
                     {
                         Mgr.SetProc(pr);
                         if (pr==_EndOf_EMu_VVnST_Normal) continue;
-                        if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
+                        if (isWJ == 0 && pr == _EMu_WJets_Full) {pr = _EndOf_EMu_VVnST_Normal; continue;}
 
                         tmp += h_EMu_invm[pr]->GetBinError(i) * h_EMu_invm[pr]->GetBinError(i);
 
@@ -410,7 +466,7 @@ void ee_Est()
                     {
                         Mgr.SetProc(pr);
                         if (pr==_EndOf_EMu_VVnST_Normal) continue;
-                        if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
+                        if (isWJ == 0 && pr == _EMu_WJets_Full) {pr = _EndOf_EMu_VVnST_Normal; continue;}
 
                         tmp += h_EMu_SS_invm[pr]->GetBinError(i) * h_EMu_SS_invm[pr]->GetBinError(i);
 
@@ -598,6 +654,9 @@ void ee_Est()
 
 // ###################################### Writing ###################################### //
 
+            TFile* f_NeeEst = new TFile(Mgr.HistLocation+"EstBkg_EE.root", "RECREATE");
+            if (f_NeeEst->IsOpen()) std::cout << "File EstBkg_EE.root opened successfully\n";
+            else { std::cout << "File EstBkg_EE.root was not opened\n"; return; }
             f_NeeEst->cd();
             h_ee_Est_invm->Write();
             h_ee_Est_invm2->Write();
@@ -810,7 +869,7 @@ void ee_Est()
 }// End of ee_Est
 
 
-void MuMu_Est()
+void MuMu_Est(Int_t UseFR)
 {
     LocalFileMgr Mgr;
 
@@ -844,6 +903,41 @@ void MuMu_Est()
 
 //********************************* E MU ***********************************************************
 
+//--------------------------------- Get EMu QCD and WJets from FR -----------------------------------
+
+    TH1D *h_EMu_QCDFR_invm, *h_EMu_SS_QCDFR_invm;
+    TH1D *h_EMu_WJetsFR_invm, *h_EMu_SS_WJetsFR_invm;
+    if (UseFR)
+    {
+        TFile *f_QCD_emu = new TFile(Mgr.HistLocation+"EstQCD_EMu.root", "READ");
+        if (f_QCD_emu->IsOpen()) std::cout << "File EstQCD_EMu.root opened successfully\n";
+        else { std::cout << "File EstQCD_EMu.root was not opened\n"; return; }
+        f_QCD_emu->GetObject("h_QCD_est", h_EMu_QCDFR_invm);
+        f_QCD_emu->GetObject("h_QCD_est_SS", h_EMu_SS_QCDFR_invm);
+        h_EMu_QCDFR_invm->SetFillColor(kRed+3);
+        h_EMu_QCDFR_invm->SetLineColor(kRed+3);
+        h_EMu_QCDFR_invm->SetDirectory(0);
+        h_EMu_SS_QCDFR_invm->SetFillColor(kRed+3);
+        h_EMu_SS_QCDFR_invm->SetLineColor(kRed+3);
+        h_EMu_SS_QCDFR_invm->SetDirectory(0);
+        f_QCD_emu->Close();
+        if (!f_QCD_emu->IsOpen()) std::cout << "File EstQCD_EMu.root closed successfully\n";
+
+        TFile *f_WJets_emu = new TFile(Mgr.HistLocation+"EstWJets_EMu.root", "READ");
+        if (f_WJets_emu->IsOpen()) std::cout << "File EstWJets_EMu.root opened successfully\n";
+        else { std::cout << "File EstWJets_EMu.root was not opened\n"; return; }
+        f_WJets_emu->GetObject("h_WJET_est", h_EMu_WJetsFR_invm);
+        f_WJets_emu->GetObject("h_WJET_est_SS", h_EMu_SS_WJetsFR_invm);
+        h_EMu_WJetsFR_invm->SetFillColor(kRed-2);
+        h_EMu_WJetsFR_invm->SetLineColor(kRed-2);
+        h_EMu_WJetsFR_invm->SetDirectory(0);
+        h_EMu_SS_WJetsFR_invm->SetFillColor(kRed-2);
+        h_EMu_SS_WJetsFR_invm->SetLineColor(kRed-2);
+        h_EMu_SS_WJetsFR_invm->SetDirectory(0);
+        f_WJets_emu->Close();
+        if (!f_WJets_emu->IsOpen()) std::cout << "File EstWJets_EMu.root closed successfully\n";
+    }
+
 //---------------------------------- MC -----------------------------------------------------------
 
             TH1D* h_EMu_invm[_EndOf_EMu];
@@ -856,14 +950,14 @@ void MuMu_Est()
             THStack* s_EMu_SS_invm2 = new THStack("s_emu_SS_invm2", "");
             gStyle->SetOptStat(0);
 
-            Int_t isWJ = 0;
-            isWJ = 1; // UNCOMMENT THIS IF YOU WANT TO INCLUDE W+JETS
+            Int_t isWJ = 1; // Include WJets MC if ==1
+            if (UseFR) isWJ = 0;
 
             for (SelProc_t pr=_EMu_WJets_Full; pr>_EndOf_EMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
             {
               Mgr.SetProc(pr);
               if (pr==_EndOf_EMu_VVnST_Normal) continue;
-              if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
+              if (isWJ == 0 && pr == _EMu_WJets_Full) {pr = _EndOf_EMu_VVnST_Normal; continue;}
               f_Bkg_EMu->GetObject("h_emu_mass_"+Mgr.Procname[pr], h_EMu_invm[pr]);
               f_Bkg_EMu->GetObject("h_emu_mass2_"+Mgr.Procname[pr], h_EMu_invm2[pr]);
               removeNegativeBins(h_EMu_invm[pr]);
@@ -961,7 +1055,7 @@ void MuMu_Est()
             for (SelProc_t pr=_EMu_WJets_Full; pr>_EndOf_EMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
             {
                 if (pr == _EndOf_EMu_VVnST_Normal) continue;
-                if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
+                if (isWJ == 0 && pr == _EMu_WJets_Full) {pr = _EndOf_EMu_VVnST_Normal; continue;}
                 Mgr.SetProc(pr);
                 s_EMu_wQCD_invm->Add(h_EMu_invm[pr]);
                 s_EMu_wQCD_invm2->Add(h_EMu_invm2[pr]);
@@ -1111,7 +1205,7 @@ void MuMu_Est()
                     {
                         Mgr.SetProc(pr);
                         if (pr==_EndOf_EMu_VVnST_Normal) continue;
-                        if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
+                        if (isWJ == 0 && pr == _EMu_WJets_Full) {pr = _EndOf_EMu_VVnST_Normal; continue;}
 
                         tmp += h_EMu_invm[pr]->GetBinError(i) * h_EMu_invm[pr]->GetBinError(i);
 
@@ -1156,7 +1250,7 @@ void MuMu_Est()
                     {
                         Mgr.SetProc(pr);
                         if (pr==_EndOf_EMu_VVnST_Normal) continue;
-                        if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
+                        if (isWJ == 0 && pr == _EMu_WJets_Full) {pr = _EndOf_EMu_VVnST_Normal; continue;}
 
                         tmp += h_EMu_SS_invm[pr]->GetBinError(i) * h_EMu_SS_invm[pr]->GetBinError(i);
 
@@ -1207,7 +1301,7 @@ void MuMu_Est()
                 {
                     Mgr.SetProc(pr);
                     if (pr==_EndOf_EMu_VVnST_Normal) continue;
-                    if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
+                    if (isWJ == 0 && pr == _EMu_WJets_Full) {pr = _EndOf_EMu_VVnST_Normal; continue;}
 
                     tmp += h_EMu_invm2[pr]->GetBinError(i) * h_EMu_invm2[pr]->GetBinError(i);
 
@@ -1252,7 +1346,7 @@ void MuMu_Est()
                 {
                     Mgr.SetProc(pr);
                     if (pr==_EndOf_EMu_VVnST_Normal) continue;
-                    if (isWJ == 0 && pr == _EMu_WJets_Full) continue;
+                    if (isWJ == 0 && pr == _EMu_WJets_Full) {pr = _EndOf_EMu_VVnST_Normal; continue;}
 
                     tmp += h_EMu_SS_invm2[pr]->GetBinError(i) * h_EMu_SS_invm2[pr]->GetBinError(i);
 
