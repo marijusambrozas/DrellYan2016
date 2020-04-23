@@ -3464,6 +3464,8 @@ void EMu_HistDrawer (TString whichGraphs , TString type)
 
     Int_t isWJ = 0;
     isWJ = 1; // UNCOMMENT THIS IF YOU WANT TO INCLUDE W+JETS INTO HISTOGRAMS
+    Int_t UseFR = 0;
+    UseFR = 1; // UNCOMMENT THIS IF YOU WANT TO WANT TO INCLUDE QCD AND WJETS ESTIMATIONS FROM FR
     Int_t count_drawn = 0;
     LocalFileMgr Mgr;
 
@@ -3764,16 +3766,13 @@ void EMu_HistDrawer (TString whichGraphs , TString type)
         RP_mass_fine->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} [GeV/c^{2}]", 60, 120);
         RP_SS_mass_fine->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}]", 60, 120);
         RP_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
-//        RP_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (prie#check{s}ingu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}) [GeV/c^{2}]", 15, 3000, "Eksp./MC");
         RP_SS_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}]", 15, 3000);
-//        RP_SS_mass->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (vienodu_{#kern[-0.7]{#lower[-0.4]{#scale[0.7]{c}}}} kr#bar{u}viu_{#kern[-0.7]{#lower[-0.01]{#scale[0.7]{c}}}}) [GeV/c^{2}]", 15, 3000, "Eksp./MC");
         RP_mass2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} [GeV/c^{2}]", 15, 3000);
         RP_SS_mass2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e}#mu}}} (same-sign) [GeV/c^{2}]", 15, 3000);
 
         TLegend *legend = new TLegend(0.8, 0.45, 0.95, 0.95);
 
         legend->AddEntry(h_SS_data_mass, "Data", "lp");
-//        legend->AddEntry(h_SS_data_mass, "Matavimas", "lp");
         legend->AddEntry(h_bkg_mass[6+isWJ], "DY#rightarrow #tau#tau", "f");
         legend->AddEntry(h_SS_bkg_mass[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
         legend->AddEntry(h_SS_bkg_mass[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
@@ -3823,6 +3822,75 @@ void EMu_HistDrawer (TString whichGraphs , TString type)
         RP_SS_mass->Draw(4e-1, 7e4, 1);
         RP_mass2->Draw(4e-1, 7e4, 1);
         RP_SS_mass2->Draw(4e-1, 7e4, 1);
+
+//------------------------------ Get FR estimates -----------------------------------
+
+        TH1D *h_QCDest_mass, *h_QCDest_SS_mass, *h_WJETest_mass, *h_WJETest_SS_mass;
+        TFile *f_QCDFR = new TFile(Mgr.HistLocation+"EstQCD_EMu.root", "READ");
+        f_QCDFR->GetObject("h_QCD_est", h_QCDest_mass);
+        f_QCDFR->GetObject("h_QCD_est_SS", h_QCDest_SS_mass);
+        h_QCDest_mass->SetDirectory(0);
+        h_QCDest_mass->SetFillColor(kRed+3);
+        h_QCDest_mass->SetLineColor(kRed+3);
+        h_QCDest_SS_mass->SetDirectory(0);
+        h_QCDest_SS_mass->SetFillColor(kRed+3);
+        h_QCDest_SS_mass->SetLineColor(kRed+3);
+        f_QCDFR->Close();
+
+        TFile *f_WJETFR = new TFile(Mgr.HistLocation+"EstWJets_EMu.root", "READ");
+        f_WJETFR->GetObject("h_WJET_est", h_WJETest_mass);
+        f_WJETFR->GetObject("h_WJET_est_SS", h_WJETest_SS_mass);
+        h_WJETest_mass->SetDirectory(0);
+        h_WJETest_mass->SetFillColor(kRed-2);
+        h_WJETest_mass->SetLineColor(kRed-2);
+        h_WJETest_SS_mass->SetDirectory(0);
+        h_WJETest_SS_mass->SetFillColor(kRed-2);
+        h_WJETest_SS_mass->SetLineColor(kRed-2);
+        f_WJETFR->Close();
+
+        THStack *s_mass_wFR = new THStack("s_mass_wFR", "");
+        s_mass_wFR->Add(h_QCDest_mass);
+        s_mass_wFR->Add(h_WJETest_mass);
+        s_mass_wFR->Add(h_bkg_mass[0+isWJ]);
+        s_mass_wFR->Add(h_bkg_mass[1+isWJ]);
+        s_mass_wFR->Add(h_bkg_mass[2+isWJ]);
+        s_mass_wFR->Add(h_bkg_mass[3+isWJ]);
+        s_mass_wFR->Add(h_bkg_mass[4+isWJ]);
+        s_mass_wFR->Add(h_bkg_mass[5+isWJ]);
+        s_mass_wFR->Add(h_bkg_mass[6+isWJ]);
+        THStack *s_mass_SS_wFR = new THStack("s_mass_SS_wFR", "");
+        s_mass_SS_wFR->Add(h_QCDest_SS_mass);
+        s_mass_SS_wFR->Add(h_WJETest_SS_mass);
+        s_mass_SS_wFR->Add(h_SS_bkg_mass[0+isWJ]);
+        s_mass_SS_wFR->Add(h_SS_bkg_mass[1+isWJ]);
+        s_mass_SS_wFR->Add(h_SS_bkg_mass[2+isWJ]);
+        s_mass_SS_wFR->Add(h_SS_bkg_mass[3+isWJ]);
+        s_mass_SS_wFR->Add(h_SS_bkg_mass[4+isWJ]);
+        s_mass_SS_wFR->Add(h_SS_bkg_mass[5+isWJ]);
+        s_mass_SS_wFR->Add(h_SS_bkg_mass[6+isWJ]);
+
+        TLegend *legend_wFR = new TLegend(0.8, 0.45, 0.95, 0.95);
+        legend_wFR->AddEntry(h_data_mass, "Data", "lp");
+        legend_wFR->AddEntry(h_bkg_mass[6+isWJ], "DY#rightarrow #tau#tau (MC)", "f");
+        legend_wFR->AddEntry(h_bkg_mass[5+isWJ], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (MC)", "f");
+        legend_wFR->AddEntry(h_bkg_mass[4+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (MC)", "f");
+        legend_wFR->AddEntry(h_bkg_mass[3+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (MC)", "f");
+        legend_wFR->AddEntry(h_bkg_mass[2+isWJ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
+        legend_wFR->AddEntry(h_bkg_mass[1+isWJ], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
+        legend_wFR->AddEntry(h_bkg_mass[0+isWJ], "#font[12]{#scale[1.1]{WW}} (MC)", "f");
+        legend_wFR->AddEntry(h_WJETest_mass, "#font[12]{#scale[1.1]{W}}+Jets (est.)", "f");
+        legend_wFR->AddEntry(h_QCDest_mass, "#font[12]{#scale[1.1]{QCD}} (est.)", "f");
+
+        myRatioPlot_t *RP_mass_wFR = new myRatioPlot_t("RP_mass_wFR", s_mass_wFR, h_data_mass);
+        myRatioPlot_t *RP_mass_SS_wFR = new myRatioPlot_t("RP_mass_SS_wFR", s_mass_SS_wFR, h_SS_data_mass);
+        RP_mass_wFR->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e#mu}}}} [GeV/c^{2}]", 15, 3000);
+        RP_mass_SS_wFR->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e#mu}}}} (same-sign) [GeV/c^{2}]", 15, 3000);
+        RP_mass_wFR->ImportLegend(legend_wFR);
+        RP_mass_SS_wFR->ImportLegend(legend_wFR);
+        RP_mass_wFR->Draw(4e-1, 7e4, 1);
+        RP_mass_SS_wFR->Draw(4e-1, 7e4, 1);
+
+// --------------------------- Printing some numbers --------------------------------
 
         Double_t dataerror, MCerror, MCerror_noSF, dataintegral=348650, MCintegral, MCintegral_noSF;
         Double_t dataerrorSS, MCerrorSS, MCerrorSS_noSF, dataintegralSS=348650, MCintegralSS, MCintegralSS_noSF;

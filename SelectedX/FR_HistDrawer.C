@@ -7907,6 +7907,15 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_QCD_est->Add(h_mass[_WJets_Full], -1);
 //    h_QCD_est->Add(h_mass[_GJets_Full], -1);
     removeNegativeBins(h_QCD_est);
+    // Setting errors
+    for (Int_t i_bin=1; i_bin<h_QCD_est->GetSize()-1; i_bin++)
+    {
+        h_QCD_est->SetBinError(i_bin, sqrt(h_QCD_est->GetBinContent(i_bin)));
+        if (h_QCD_est->GetBinContent(i_bin) == 0)
+        {
+            h_QCD_est->SetBinError(i_bin, 1);
+        }
+    }
     h_QCD_est->SetFillColor(kRed + 3);
     h_QCD_est->SetLineColor(kBlack);
     h_QCD_est->SetMarkerStyle(0);
@@ -7925,6 +7934,15 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_QCD_est_SS->Add(h_mass_SS[_WJets_Full], -1);
 //    h_QCD_est_SS->Add(h_mass_SS[_GJets_Full], -1);
     removeNegativeBins(h_QCD_est_SS);
+    // Setting errors
+    for (Int_t i_bin=1; i_bin<h_QCD_est_SS->GetSize()-1; i_bin++)
+    {
+        h_QCD_est_SS->SetBinError(i_bin, sqrt(h_QCD_est_SS->GetBinContent(i_bin)));
+        if (h_QCD_est_SS->GetBinContent(i_bin) == 0)
+        {
+            h_QCD_est_SS->SetBinError(i_bin, 1);
+        }
+    }
     h_QCD_est_SS->SetFillColor(kRed + 3);
     h_QCD_est_SS->SetLineColor(kBlack);
     h_QCD_est_SS->SetMarkerStyle(0);
@@ -7941,6 +7959,15 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_QCD_est_temp->Add(h_mass_temp[_WJets_Full], -1);
 //    h_QCD_est_temp->Add(h_mass_temp[_GJets_Full], -1);
     removeNegativeBins(h_QCD_est_temp);
+    // Setting errors
+    for (Int_t i_bin=1; i_bin<h_QCD_est_temp->GetSize()-1; i_bin++)
+    {
+        h_QCD_est_temp->SetBinError(i_bin, sqrt(h_QCD_est_temp->GetBinContent(i_bin)));
+        if (h_QCD_est_temp->GetBinContent(i_bin) == 0)
+        {
+            h_QCD_est_temp->SetBinError(i_bin, 1);
+        }
+    }
     h_QCD_est_temp->SetFillColor(kRed + 3);
     h_QCD_est_temp->SetLineColor(kBlack);
     h_QCD_est_temp->SetMarkerStyle(0);
@@ -7958,6 +7985,15 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_DY_fit->Scale(1.4835e+03 / h_DY_fit->Integral());
     h_ttbar_fit->Scale(4.6311e+01 / h_ttbar_fit->Integral());
     h_VVnST_fit->Scale(8.0363e+00 / h_VVnST_fit->Integral());
+    // Setting errors
+    for (Int_t i_bin=1; i_bin<h_QCD_est_fit->GetSize()-1; i_bin++)
+    {
+        h_QCD_est_fit->SetBinError(i_bin, sqrt(h_QCD_est_fit->GetBinContent(i_bin)));
+        if (h_QCD_est_fit->GetBinContent(i_bin) == 0)
+        {
+            h_QCD_est_fit->SetBinError(i_bin, 1);
+        }
+    }
     THStack *s_mass_fit = new THStack("s_mass_fit", "");
     s_mass_fit->Add(h_VVnST_fit);
     s_mass_fit->Add(h_WJets_fit);
@@ -8530,8 +8566,18 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
 //    h_WJET_est->Add(h_mass[_GJets_Full], -1);
     h_WJET_est->Add(h_QCD_est, -1);
     removeNegativeBins(h_WJET_est);
+    // Setting errors
+    for (Int_t i_bin=1; i_bin<h_WJET_est->GetSize()-1; i_bin++)
+    {
+        h_WJET_est->SetBinError(i_bin, sqrt(h_WJET_est->GetBinContent(i_bin)));
+        if (h_WJET_est->GetBinContent(i_bin) == 0)
+        {
+            h_WJET_est->SetBinError(i_bin, 1);
+        }
+    }
     h_WJET_est->SetFillColor(kRed - 2);
-    h_WJET_est->SetLineColor(kRed - 2);
+    h_WJET_est->SetLineColor(kBlack);
+    h_WJET_est->SetMarkerStyle(0);
     int_wjet = h_WJET_est->IntegralAndError(1, h_WJET_est->GetSize()-2, err_wjet);
     cout << "Data events: " << int_data << "+-" << err_data << endl;
     cout << "WJets est events (subraction): " << int_wjet << "+-" << err_wjet << endl;
@@ -8546,8 +8592,18 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
 //    h_WJET_est_SS->Add(h_mass_SS[_GJets_Full], -1);
     h_WJET_est_SS->Add(h_QCD_est_SS, -1);
     removeNegativeBins(h_WJET_est_SS);
+    // Setting errors
+    for (Int_t i_bin=1; i_bin<h_WJET_est_SS->GetSize()-1; i_bin++)
+    {
+        h_WJET_est_SS->SetBinError(i_bin, sqrt(h_WJET_est_SS->GetBinContent(i_bin)));
+        if (h_WJET_est_SS->GetBinContent(i_bin) == 0)
+        {
+            h_WJET_est_SS->SetBinError(i_bin, 1);
+        }
+    }
     h_WJET_est_SS->SetFillColor(kRed - 2);
-    h_WJET_est_SS->SetLineColor(kRed - 2);
+    h_WJET_est_SS->SetLineColor(kBlack);
+    h_WJET_est_SS->SetMarkerStyle(0);
 
     // High-MET template
     h_WJET_est_temp = ((TH1D*)(h_mass_temp[_DoubleEG_Full]->Clone("h_WJET_est_template")));
@@ -8559,8 +8615,18 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
 //    h_WJET_est_temp->Add(h_mass_temp[_GJets_Full], -1);
     h_WJET_est_temp->Add(h_QCD_est_temp, -1);
     removeNegativeBins(h_WJET_est_temp);
+    // Setting errors
+    for (Int_t i_bin=1; i_bin<h_WJET_est_temp->GetSize()-1; i_bin++)
+    {
+        h_WJET_est_temp->SetBinError(i_bin, sqrt(h_WJET_est_temp->GetBinContent(i_bin)));
+        if (h_WJET_est_temp->GetBinContent(i_bin) == 0)
+        {
+            h_WJET_est_temp->SetBinError(i_bin, 1);
+        }
+    }
     h_WJET_est_temp->SetFillColor(kRed - 2);
-    h_WJET_est_temp->SetLineColor(kRed - 2);
+    h_WJET_est_temp->SetLineColor(kBlack);
+    h_WJET_est_temp->SetMarkerStyle(0);
 
     // W+Jets estimation from template fit
     Double_t int_wjet_fit=0, err_wjet_fit=0;
@@ -8582,6 +8648,15 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
 //    h_QCD_fit->Scale(1.2280e+04 / h_QCD_fit->Integral());
     h_VVnST_fit->SetFillColor(kGreen+2);
     h_VVnST_fit->SetLineColor(kGreen+2);
+    // Setting errors
+    for (Int_t i_bin=1; i_bin<h_WJET_est_fit->GetSize()-1; i_bin++)
+    {
+        h_WJET_est_fit->SetBinError(i_bin, sqrt(h_WJET_est_fit->GetBinContent(i_bin)));
+        if (h_WJET_est_fit->GetBinContent(i_bin) == 0)
+        {
+            h_WJET_est_fit->SetBinError(i_bin, 1);
+        }
+    }
     THStack *s_mass_fit = new THStack("s_mass_fit", "");
     s_mass_fit->Add(h_QCD_fit);
     s_mass_fit->Add(h_VVnST_fit);
@@ -8706,7 +8781,7 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     c_WJET_est->SetRightMargin(0.05);
     c_WJET_est->SetBottomMargin(0.15);
     c_WJET_est->SetLeftMargin(0.17);
-    h_WJET_est->Draw("hist");
+    h_WJET_est->Draw("BAR");
     h_WJET_est->GetXaxis()->SetTitle("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}]");
     h_WJET_est->GetXaxis()->SetTitleSize(0.062);
     h_WJET_est->GetXaxis()->SetTitleOffset(0.9);
@@ -8732,7 +8807,7 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     c_WJET_est_SS->SetRightMargin(0.05);
     c_WJET_est_SS->SetBottomMargin(0.15);
     c_WJET_est_SS->SetLeftMargin(0.17);
-    h_WJET_est_SS->Draw("hist");
+    h_WJET_est_SS->Draw("BAR");
     h_WJET_est_SS->GetXaxis()->SetTitle("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} (same-sign) [GeV/c^{2}]");
     h_WJET_est_SS->GetXaxis()->SetTitleSize(0.062);
     h_WJET_est_SS->GetXaxis()->SetTitleOffset(0.9);
@@ -8757,7 +8832,7 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     c_WJET_est_temp->SetRightMargin(0.05);
     c_WJET_est_temp->SetBottomMargin(0.15);
     c_WJET_est_temp->SetLeftMargin(0.17);
-    h_WJET_est_temp->Draw("hist");
+    h_WJET_est_temp->Draw("BAR");
     h_WJET_est_temp->GetXaxis()->SetTitle("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}]");
     h_WJET_est_temp->GetXaxis()->SetTitleSize(0.062);
     h_WJET_est_temp->GetXaxis()->SetTitleOffset(0.9);
@@ -8782,7 +8857,7 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     c_WJET_fit->SetRightMargin(0.05);
     c_WJET_fit->SetBottomMargin(0.15);
     c_WJET_fit->SetLeftMargin(0.17);
-    h_WJET_est_fit->Draw("hist");
+    h_WJET_est_fit->Draw("BAR");
     h_WJET_est_fit->GetXaxis()->SetTitle("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}]");
     h_WJET_est_fit->GetXaxis()->SetTitleSize(0.062);
     h_WJET_est_fit->GetXaxis()->SetTitleOffset(0.9);
@@ -9920,6 +9995,15 @@ void EMu_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_QCD_est->Add(h_mass[_WJets_Full], -1);
 //    h_QCD_est->Add(h_mass[_GJets_Full], -1);
     removeNegativeBins(h_QCD_est);
+    // Setting errors
+    for (Int_t i_bin=1; i_bin<h_QCD_est->GetSize()-1; i_bin++)
+    {
+        h_QCD_est->SetBinError(i_bin, sqrt(h_QCD_est->GetBinContent(i_bin)));
+        if (h_QCD_est->GetBinContent(i_bin) == 0)
+        {
+            h_QCD_est->SetBinError(i_bin, 1);
+        }
+    }
     h_QCD_est->SetFillColor(kRed + 3);
     h_QCD_est->SetLineColor(kBlack);
     h_QCD_est->SetMarkerStyle(0);
@@ -9937,6 +10021,15 @@ void EMu_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_QCD_est_SS->Add(h_mass_SS[_WJets_Full], -1);
 //    h_QCD_est_SS->Add(h_mass_SS[_GJets_Full], -1);
     removeNegativeBins(h_QCD_est_SS);
+    // Setting errors
+    for (Int_t i_bin=1; i_bin<h_QCD_est_SS->GetSize()-1; i_bin++)
+    {
+        h_QCD_est_SS->SetBinError(i_bin, sqrt(h_QCD_est_SS->GetBinContent(i_bin)));
+        if (h_QCD_est_SS->GetBinContent(i_bin) == 0)
+        {
+            h_QCD_est_SS->SetBinError(i_bin, 1);
+        }
+    }
     h_QCD_est_SS->SetFillColor(kRed + 3);
     h_QCD_est_SS->SetLineColor(kBlack);
     h_QCD_est_SS->SetMarkerStyle(0);
@@ -9951,6 +10044,15 @@ void EMu_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_QCD_est_temp->Add(h_mass_temp[_WJets_Full], -1);
 //    h_QCD_est_temp->Add(h_mass_temp[_GJets_Full], -1);
     removeNegativeBins(h_QCD_est_temp);
+    // Setting errors
+    for (Int_t i_bin=1; i_bin<h_QCD_est_temp->GetSize()-1; i_bin++)
+    {
+        h_QCD_est_temp->SetBinError(i_bin, sqrt(h_QCD_est_temp->GetBinContent(i_bin)));
+        if (h_QCD_est_temp->GetBinContent(i_bin) == 0)
+        {
+            h_QCD_est_temp->SetBinError(i_bin, 1);
+        }
+    }
     h_QCD_est_temp->SetFillColor(kRed + 3);
     h_QCD_est_temp->SetLineColor(kBlack);
     h_QCD_est_temp->SetMarkerStyle(0);
@@ -10126,6 +10228,24 @@ void EMu_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     c_QCD_est_temp->SetGridy();
     c_QCD_est_temp->Update();
 
+    // Same-sign vs opposite-sign plots
+    TH1D *h_mass_QCD = ((TH1D*)(h_QCD_est->Clone("h_mass_QCD")));
+    TH1D *h_mass_SS_QCD = ((TH1D*)(h_QCD_est_SS->Clone("h_mass_SS_QCD")));
+    h_mass_QCD->SetMarkerStyle(kFullDotLarge);
+    h_mass_QCD->SetMarkerColor(kBlack);
+    h_mass_QCD->SetLineColor(kBlack);
+    h_mass_SS_QCD->SetMarkerStyle(kFullSquare);
+    h_mass_SS_QCD->SetMarkerColor(kRed);
+    h_mass_SS_QCD->SetLineColor(kRed);
+
+    myRatioPlot_t *RP_mass_QCD_SSvsOS = new myRatioPlot_t("c_mass_QCD_SSvsOS", h_mass_QCD, h_mass_SS_QCD);
+    RP_mass_QCD_SSvsOS->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e#mu}}}} [GeV/c^{2}]", 15, 3000, "OS/SS");
+    TLegend *l_SSvsOS = new TLegend(0.5, 0.8, 0.95, 0.95);
+    l_SSvsOS->AddEntry(h_mass_QCD, "Opposite-sign QCD estimation", "lp");
+    l_SSvsOS->AddEntry(h_mass_SS_QCD, "Same-sign QCD estimation", "lp");
+    RP_mass_QCD_SSvsOS->ImportLegend(l_SSvsOS);
+    RP_mass_QCD_SSvsOS->Draw(5, 1e3, 1, "E");
+
     f->Close();
     if (!f->IsOpen()) cout << "File " << Dir+"QCDest_EMu.root" << " has been closed successfully.\n" << endl;
     else cout << "FILE " << Dir+"QCDest_EMu.root" << " COULD NOT BE CLOSED!\n" << endl;
@@ -10166,7 +10286,7 @@ void EMu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_QCD_est->SetDirectory(0);
     h_QCD_est->SetFillColor(kRed+3);
     h_QCD_est->SetLineColor(kRed+3);
-    h_QCD_est->Scale(2);
+//    h_QCD_est->Scale(2);
     s_mass_wWJET->Add(h_QCD_est);
     s_mass_woWJET->Add(h_QCD_est);
 
@@ -10174,7 +10294,7 @@ void EMu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_QCD_est_SS->SetDirectory(0);
     h_QCD_est_SS->SetFillColor(kRed+3);
     h_QCD_est_SS->SetLineColor(kRed+3);
-    h_QCD_est_SS->Scale(2);
+//    h_QCD_est_SS->Scale(2);
     s_mass_wWJET_SS->Add(h_QCD_est_SS);
     s_mass_woWJET_SS->Add(h_QCD_est_SS);
 
@@ -10441,13 +10561,22 @@ void EMu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_WJET_est->SetDirectory(0);
     h_WJET_est->Add(h_mass[_DY_Full], -1);
     h_WJET_est->Add(h_mass[_ttbar_Full], -1);
-//    h_WJET_est->Add(h_mass[_WJets_Full], -1); // REMOVE AFTER TEST
     h_WJET_est->Add(h_mass[_VVnST], -1);
 //    h_WJET_est->Add(h_mass[_GJets_Full], -1);
     h_WJET_est->Add(h_QCD_est, -1);
     removeNegativeBins(h_WJET_est);
+    // Setting errors
+    for (Int_t i_bin=1; i_bin<h_WJET_est->GetSize()-1; i_bin++)
+    {
+        h_WJET_est->SetBinError(i_bin, sqrt(h_WJET_est->GetBinContent(i_bin)));
+        if (h_WJET_est->GetBinContent(i_bin) == 0)
+        {
+            h_WJET_est->SetBinError(i_bin, 1);
+        }
+    }
     h_WJET_est->SetFillColor(kRed - 2);
-    h_WJET_est->SetLineColor(kRed - 2);
+    h_WJET_est->SetLineColor(kBlack);
+    h_WJET_est->SetMarkerStyle(0);
     int_wjet = h_WJET_est->IntegralAndError(1, h_WJET_est->GetSize()-2, err_wjet);
     cout << "Data events: " << int_data << "+-" << err_data << endl;
     cout << "WJets est events (subraction): " << int_wjet << "+-" << err_wjet << endl;
@@ -10463,8 +10592,18 @@ void EMu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
 //    h_WJET_est_SS->Add(h_mass_SS[_GJets_Full], -1);
     h_WJET_est_SS->Add(h_QCD_est_SS, -1);
     removeNegativeBins(h_WJET_est_SS);
+    // Setting errors
+    for (Int_t i_bin=1; i_bin<h_WJET_est_SS->GetSize()-1; i_bin++)
+    {
+        h_WJET_est_SS->SetBinError(i_bin, sqrt(h_WJET_est_SS->GetBinContent(i_bin)));
+        if (h_WJET_est_SS->GetBinContent(i_bin) == 0)
+        {
+            h_WJET_est_SS->SetBinError(i_bin, 1);
+        }
+    }
     h_WJET_est_SS->SetFillColor(kRed - 2);
-    h_WJET_est_SS->SetLineColor(kRed - 2);
+    h_WJET_est_SS->SetLineColor(kBlack);
+    h_WJET_est_SS->SetMarkerStyle(0);
 
     // Template for fit
     h_WJET_est_temp = ((TH1D*)(h_mass_temp[_SingleMuon_Full]->Clone("h_WJET_est_template")));
@@ -10477,8 +10616,18 @@ void EMu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
 //    h_WJET_est_temp->Add(h_mass_temp[_GJets_Full], -1);
     h_WJET_est_temp->Add(h_QCD_est_temp, -1);
     removeNegativeBins(h_WJET_est_temp);
+    // Setting errors
+    for (Int_t i_bin=1; i_bin<h_WJET_est_temp->GetSize()-1; i_bin++)
+    {
+        h_WJET_est_temp->SetBinError(i_bin, sqrt(h_WJET_est_temp->GetBinContent(i_bin)));
+        if (h_WJET_est_temp->GetBinContent(i_bin) == 0)
+        {
+            h_WJET_est_temp->SetBinError(i_bin, 1);
+        }
+    }
     h_WJET_est_temp->SetFillColor(kRed - 2);
-    h_WJET_est_temp->SetLineColor(kRed - 2);
+    h_WJET_est_temp->SetLineColor(kBlack);
+    h_WJET_est_temp->SetMarkerStyle(0);
 
     myRatioPlot_t *RP_mass_wWJET = new myRatioPlot_t("c_mass_wWJET", s_mass_wWJET, h_mass[_SingleMuon_Full]);
     myRatioPlot_t *RP_mass_woWJET = new myRatioPlot_t("c_mass_woWJET", s_mass_woWJET, h_mass[_SingleMuon_Full]);
@@ -10545,7 +10694,7 @@ void EMu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     c_WJET_est->SetRightMargin(0.05);
     c_WJET_est->SetBottomMargin(0.15);
     c_WJET_est->SetLeftMargin(0.17);
-    h_WJET_est->Draw("hist");
+    h_WJET_est->Draw("BAR");
     h_WJET_est->GetXaxis()->SetTitle("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e#mu}}}} [GeV/c^{2}]");
     h_WJET_est->GetXaxis()->SetTitleSize(0.062);
     h_WJET_est->GetXaxis()->SetTitleOffset(0.9);
@@ -10571,7 +10720,7 @@ void EMu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     c_WJET_est_SS->SetRightMargin(0.05);
     c_WJET_est_SS->SetBottomMargin(0.15);
     c_WJET_est_SS->SetLeftMargin(0.17);
-    h_WJET_est_SS->Draw("hist");
+    h_WJET_est_SS->Draw("BAR");
     h_WJET_est_SS->GetXaxis()->SetTitle("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e#mu}}}} (same-sign) [GeV/c^{2}]");
     h_WJET_est_SS->GetXaxis()->SetTitleSize(0.062);
     h_WJET_est_SS->GetXaxis()->SetTitleOffset(0.9);
@@ -10596,7 +10745,7 @@ void EMu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     c_WJET_est_temp->SetRightMargin(0.05);
     c_WJET_est_temp->SetBottomMargin(0.15);
     c_WJET_est_temp->SetLeftMargin(0.17);
-    h_WJET_est_temp->Draw("hist");
+    h_WJET_est_temp->Draw("BAR");
     h_WJET_est_temp->GetXaxis()->SetTitle("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e#mu}}}} [GeV/c^{2}]");
     h_WJET_est_temp->GetXaxis()->SetTitleSize(0.062);
     h_WJET_est_temp->GetXaxis()->SetTitleOffset(0.9);
@@ -10670,6 +10819,24 @@ void EMu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
         h_draw_1->Draw("samehist");
         h_draw_2->Draw("samehist");
     }// End of if (systErr)
+
+    // Same-sign vs opposite-sign plots
+    TH1D *h_mass_WJET = ((TH1D*)(h_WJET_est->Clone("h_mass_WJets")));
+    TH1D *h_mass_SS_WJET = ((TH1D*)(h_WJET_est_SS->Clone("h_mass_SS_WJets")));
+    h_mass_WJET->SetMarkerStyle(kFullDotLarge);
+    h_mass_WJET->SetMarkerColor(kBlack);
+    h_mass_WJET->SetLineColor(kBlack);
+    h_mass_SS_WJET->SetMarkerStyle(kFullSquare);
+    h_mass_SS_WJET->SetMarkerColor(kRed);
+    h_mass_SS_WJET->SetLineColor(kRed);
+
+    myRatioPlot_t *RP_mass_WJET_SSvsOS = new myRatioPlot_t("RP_mass_WJET_SSvsOS", h_mass_WJET, h_mass_SS_WJET);
+    RP_mass_WJET_SSvsOS->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#font[12]{e#mu}}}} [GeV/c^{2}]", 15, 3000, "OS/SS");
+    TLegend *l_SSvsOS = new TLegend(0.5, 0.8, 0.95, 0.95);
+    l_SSvsOS->AddEntry(h_mass_WJET, "Opposite-sign W+Jets estimation", "lp");
+    l_SSvsOS->AddEntry(h_mass_SS_WJET, "Same-sign W+Jets estimation", "lp");
+    RP_mass_WJET_SSvsOS->ImportLegend(l_SSvsOS);
+    RP_mass_WJET_SSvsOS->Draw(5, 1e3, 1, "");
 
     f->Close();
     if (!f->IsOpen()) cout << "File " << Dir+"WJETest_EMu.root" << " has been closed successfully." << endl;
