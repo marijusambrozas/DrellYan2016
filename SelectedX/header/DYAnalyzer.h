@@ -6573,7 +6573,11 @@ void DYAnalyzer::SetupFRvalues_ele(TString filename, TString type, Int_t increas
     {
         FR_barrel_ele[i_bin-1] = h_FR_barrel->GetBinContent(i_bin);
         if (i_bin <= nPtBin_ele)
-            FR_endcap_ele[i_bin-1] = h_FR_endcap->GetBinContent(i_bin);
+        {
+            FR_endcap_ele[i_bin-1] = h_FR_endcap->GetBinContent(i_bin); // Original FR
+//            FR_endcap_ele[i_bin-1] = h_FR_endcap->GetBinContent(i_bin) + h_FR_endcap->GetBinError(i_bin); // FR increased by 1 sigma (for syst.unc.)
+//            FR_endcap_ele[i_bin-1] = h_FR_endcap->GetBinContent(i_bin) - h_FR_endcap->GetBinError(i_bin); // FR reduced by 1 sigma (for syst.unc.)
+        }
     }
     if (increaseLowPt == 1)
     {

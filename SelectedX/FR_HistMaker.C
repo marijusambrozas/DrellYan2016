@@ -2066,7 +2066,7 @@ void E_QCD_HistMaker (Bool_t DEBUG)
     analyzer->SetupEfficiencyScaleFactor_electron();
 
     // -- For QCD estimation from Fake Rate -- //
-    analyzer->SetupFRvalues_ele(Dir+"FakeRate_electron.root", "subtract");
+    analyzer->SetupFRvalues_ele(Dir+"FakeRate_electron.root", "subtract", 1);
 
     TH1D* h_FRweight = new TH1D("h_FRweight", "FR weights", 100, 0, 0.01);
 
@@ -2099,6 +2099,8 @@ void E_QCD_HistMaker (Bool_t DEBUG)
         TH1D* h_mass_temp = new TH1D("h_mass_template_"+Mgr.Procname[pr], "h_mass_template_"+Mgr.Procname[pr], binnum, massbins); h_mass_temp->Sumw2();
         TH1D* h_mass_test = new TH1D("h_mass_test_"+Mgr.Procname[pr], "h_mass_test_"+Mgr.Procname[pr], binnum, massbins); h_mass_test->Sumw2();
         TH2D* h_zpeak = new TH2D("h_zpeak_"+Mgr.Procname[pr], "h_zpeak_"+Mgr.Procname[pr], nPtBin_ele, analyzer->ptbin_ele, 5, etabins2);
+        TH1D* h_pT = new TH1D("h_pT_"+Mgr.Procname[pr], "h_pT_"+Mgr.Procname[pr], 100, 0, 1000); h_pT->Sumw2();
+        TH1D* h_rapi = new TH1D("h_rapi_"+Mgr.Procname[pr], "h_rapi_"+Mgr.Procname[pr], 80, -4, 4); h_pT->Sumw2();
 
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
@@ -2248,6 +2250,8 @@ void E_QCD_HistMaker (Bool_t DEBUG)
             ele1_SF.SetPtEtaPhiM(p_T->at(0), etaSC->at(0), phi->at(0), M_Elec);
             ele2_SF.SetPtEtaPhiM(p_T->at(1), etaSC->at(1), phi->at(1), M_Elec);
             Double_t mass = (ele1+ele2).M();
+            Double_t PT = (ele1+ele2).Pt();
+            Double_t rapi = (ele1+ele2).Rapidity();
 
             // -- Pileup-Reweighting -- //
             Double_t PUWeight = 1;
@@ -2340,6 +2344,8 @@ void E_QCD_HistMaker (Bool_t DEBUG)
             h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             h_mass->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             h_mass_test->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+            h_pT->Fill(PT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            h_rapi->Fill(rapi, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             if (charge->at(0) == charge->at(1) && MET_pT > 50)
                 h_mass_temp->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             if (charge->at(0) == charge->at(1))
@@ -2372,6 +2378,8 @@ void E_QCD_HistMaker (Bool_t DEBUG)
         h_mass_test->Write();
         h_nVTX->Write();
         h_zpeak->Write();
+        h_pT->Write();
+        h_rapi->Write();
 
         cout << " Finished.\n" << endl;
 
@@ -2422,7 +2430,7 @@ void E_WJET_HistMaker (Bool_t DEBUG)
     analyzer->SetupEfficiencyScaleFactor_electron();
 
     // -- For W+Jets estimation from Fake Rate -- //
-    analyzer->SetupFRvalues_ele(Dir+"FakeRate_electron.root", "subtract");
+    analyzer->SetupFRvalues_ele(Dir+"FakeRate_electron.root", "subtract", 1);
 
     TH1D* h_FRweight = new TH1D("h_FRweight", "FR weights", 100, 0, 0.5);
 
@@ -2456,6 +2464,8 @@ void E_WJET_HistMaker (Bool_t DEBUG)
         TH1D* h_mass_temp = new TH1D("h_mass_template_"+Mgr.Procname[pr], "h_mass_template_"+Mgr.Procname[pr], binnum, massbins); h_mass_temp->Sumw2();
         TH1D* h_mass_test = new TH1D("h_mass_test_"+Mgr.Procname[pr], "h_mass_test_"+Mgr.Procname[pr], binnum, massbins); h_mass_test->Sumw2();
         TH2D* h_zpeak = new TH2D("h_zpeak_"+Mgr.Procname[pr], "h_zpeak_"+Mgr.Procname[pr], nPtBin_ele, analyzer->ptbin_ele, 5, etabins2);
+        TH1D* h_pT = new TH1D("h_pT_"+Mgr.Procname[pr], "h_pT_"+Mgr.Procname[pr], 100, 0, 1000); h_pT->Sumw2();
+        TH1D* h_rapi = new TH1D("h_rapi_"+Mgr.Procname[pr], "h_rapi_"+Mgr.Procname[pr], 80, -4, 4); h_rapi->Sumw2();
 
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
@@ -2603,6 +2613,8 @@ void E_WJET_HistMaker (Bool_t DEBUG)
             ele1_SF.SetPtEtaPhiM(p_T->at(0), etaSC->at(0), phi->at(0), M_Elec);
             ele2_SF.SetPtEtaPhiM(p_T->at(1), etaSC->at(1), phi->at(1), M_Elec);
             Double_t mass = (ele1+ele2).M();
+            Double_t PT = (ele1+ele2).Pt();
+            Double_t rapi = (ele1+ele2).Rapidity();
 
             // -- Pileup-Reweighting -- //
             Double_t PUWeight = 1;
@@ -2707,6 +2719,8 @@ void E_WJET_HistMaker (Bool_t DEBUG)
             h_mass->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             h_mass_test->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
             h_MET->Fill(MET_pT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            h_pT->Fill(PT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            h_rapi->Fill(rapi, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             if (charge->at(0) == charge->at(1) && MET_pT > 50)
             {
 //                cout << "SS+HighMET passed. Charges: " << charge->at(0) << " " << charge->at(1) << "  MET: " << MET_pT << endl;
@@ -2714,7 +2728,7 @@ void E_WJET_HistMaker (Bool_t DEBUG)
             }
             if (charge->at(0) == charge->at(1))
                 h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
-            if (mass < 60)
+            if (mass > 75 && mass < 105)
             {
                 if (passMediumID->at(0) == 0 && passMediumID->at(1) == 1)
                     h_zpeak->Fill(p_T->at(0), fabs(eta->at(0)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
@@ -2743,6 +2757,8 @@ void E_WJET_HistMaker (Bool_t DEBUG)
         h_MET->Write();
         h_nVTX->Write();
         h_zpeak->Write();
+        h_pT->Write();
+        h_rapi->Write();
 
         cout << " Finished.\n" << endl;
 
