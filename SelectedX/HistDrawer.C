@@ -5442,14 +5442,12 @@ void Est_HistDrawer(Int_t FR_systErr)
     legend_ee_wFR->AddEntry(h_fakes_mass_ee[1], "#font[12]{#scale[1.1]{W}}+Jets (est.)", "f");
     legend_ee_wFR->AddEntry(h_fakes_mass_ee[0], "#font[12]{#scale[1.1]{QCD}} (est.)", "f");
 
-
     RP_mass_ee->ImportLegend(legend_ee);
     RP_mass_ee2->ImportLegend(legend_ee);
     RP_mass_ee_wFR->ImportLegend(legend_ee_wFR);
     RP_mass_ee->Draw(0.5, 1e7, 1);
     RP_mass_ee2->Draw(0.5, 1e7, 1);
     RP_mass_ee_wFR->Draw(0.5, 1e7, 1);
-
 
     Double_t dataerror_ee, MCerror_ee, MCerror_ee_wFR, dataintegral_ee=1.3107e+07, MCintegral_ee, MCintegral_ee_wFR;
     Double_t dataerrorZ_ee, MCerrorZ_ee, DYerrorZ_ee, dataintegralZ_ee, MCintegralZ_ee, DYintegralZ_ee;
