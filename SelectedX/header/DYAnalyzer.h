@@ -6531,15 +6531,21 @@ void DYAnalyzer::SetupFRvalues(TString filename, TString type) // type can be "r
     std::cout << "Fake rate obtained using " << type << " method." << endl;
     TFile *f = new TFile(filename, "READ");
     TH1D *h_FR_barrel, *h_FR_endcap;
-    f->GetObject("h_FR"+type+"_barrel", h_FR_barrel);  // +"up"  +"down"
-    f->GetObject("h_FR"+type+"_endcap", h_FR_endcap);  // +"up"  +"down"
+    f->GetObject("h_FR"+type+"_barrel", h_FR_barrel);
+    f->GetObject("h_FR"+type+"_endcap", h_FR_endcap);
 
     // -- Getting values from histograms -- //
     for (Int_t i_bin=1; i_bin<=nPtBinBarrel; i_bin++)
     {
         FR_barrel[i_bin-1] = h_FR_barrel->GetBinContent(i_bin);
+//        FR_barrel[i_bin-1] = h_FR_barrel->GetBinContent(i_bin) + h_FR_barrel->GetBinError(i_bin);
+//        FR_barrel[i_bin-1] = h_FR_barrel->GetBinContent(i_bin) - h_FR_barrel->GetBinError(i_bin);;
         if (i_bin <= nPtBinEndcap)
+        {
             FR_endcap[i_bin-1] = h_FR_endcap->GetBinContent(i_bin);
+//            FR_endcap[i_bin-1] = h_FR_endcap->GetBinContent(i_bin) + h_FR_endcap->GetBinError(i_bin);
+//            FR_endcap[i_bin-1] = h_FR_endcap->GetBinContent(i_bin) - h_FR_endcap->GetBinError(i_bin);
+        }
     }
 
     // -- Checking if everything has been done correctly -- //

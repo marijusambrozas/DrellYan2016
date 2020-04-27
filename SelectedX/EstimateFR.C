@@ -1743,12 +1743,12 @@ void Mu_EstFR(Int_t type)
     h_FRmixed_barrel->SetMarkerColor(kBlue);
     h_FRmixed_barrel->SetLineColor(kBlue);
     h_FRmixed_barrel->SetStats(kFALSE);
-    h_FRmixed_barrel->Draw("same");
+//    h_FRmixed_barrel->Draw("same");
     h_FRtemplate_barrel->SetMarkerStyle(33);
     h_FRtemplate_barrel->SetMarkerColor(kGreen+2);
     h_FRtemplate_barrel->SetLineColor(kGreen+2);
     h_FRtemplate_barrel->SetStats(kFALSE);
-    h_FRtemplate_barrel->Draw("same");
+//    h_FRtemplate_barrel->Draw("same");
     h_FRsigCtrl_template_barrel->SetMarkerStyle(kFullDotLarge);
     h_FRsigCtrl_template_barrel->SetMarkerColor(kBlack);
     h_FRsigCtrl_template_barrel->SetLineColor(kBlack);
@@ -1756,11 +1756,12 @@ void Mu_EstFR(Int_t type)
     h_FRsigCtrl_template_barrel->Draw("same");
 
     TLegend *legend = new TLegend(0.13, 0.77, 0.6, 0.95);
-    legend->AddEntry(h_FRratio_barrel, "Ratio", "LP");
-    legend->AddEntry(h_FRmixed_barrel, "Template (deno)", "LP");
-    legend->AddEntry(h_FRtemplate_barrel, "Template (nume, deno)", "LP");
-    legend->AddEntry(h_FRsigCtrl_template_barrel, "Template (signal, non-signal)", "LP");
-    legend->Draw();
+//    legend->AddEntry(h_FRratio_barrel, "Ratio", "LP");
+//    legend->AddEntry(h_FRmixed_barrel, "Template (deno)", "LP");
+//    legend->AddEntry(h_FRtemplate_barrel, "Template (nume, deno)", "LP");
+//    legend->AddEntry(h_FRsigCtrl_template_barrel, "Template (signal, non-signal)", "LP");
+    legend->AddEntry(h_FRratio_barrel, "MC ratio", "LP");
+    legend->AddEntry(h_FRsigCtrl_template_barrel, "Template fit", "LP");
     legend->Draw();
     TText *textb = new TText (0.45, 0.6, "Barrel");
     textb->SetTextAlign(11);
@@ -1800,12 +1801,12 @@ void Mu_EstFR(Int_t type)
     h_FRmixed_endcap->SetMarkerColor(kBlue);
     h_FRmixed_endcap->SetLineColor(kBlue);
     h_FRmixed_endcap->SetStats(kFALSE);
-    h_FRmixed_endcap->Draw("same");
+//    h_FRmixed_endcap->Draw("same");
     h_FRtemplate_endcap->SetMarkerStyle(33);
     h_FRtemplate_endcap->SetMarkerColor(kGreen+2);
     h_FRtemplate_endcap->SetLineColor(kGreen+2);
     h_FRtemplate_endcap->SetStats(kFALSE);
-    h_FRtemplate_endcap->Draw("same");
+//    h_FRtemplate_endcap->Draw("same");
     h_FRsigCtrl_template_endcap->SetMarkerStyle(kFullDotLarge);
     h_FRsigCtrl_template_endcap->SetMarkerColor(kBlack);
     h_FRsigCtrl_template_endcap->SetLineColor(kBlack);

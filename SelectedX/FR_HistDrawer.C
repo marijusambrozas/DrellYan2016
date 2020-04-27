@@ -87,25 +87,6 @@ void FR_HistDrawer (TString WhichX = "", Int_t systErr = 0, Int_t type = 2)
             return;
         }
     }
-    else if (whichX.Contains("E"))
-    {
-        Xselected++;
-        if (whichX.Contains("QCD"))
-        {
-            cout << "\n*******     E_QCDest_HistDrawer(" << type << ", " << systErr << ")    *******" << endl;
-            E_QCDest_HistDrawer(type, systErr);
-        }
-        else if (whichX.Contains("W") && whichX.Contains("JET"))
-        {
-            cout << "\n*******     E_WJETest_HistDrawer(" << type << ", " << systErr << ")    *******" << endl;
-            E_WJETest_HistDrawer(type, systErr);
-        }
-        else
-        {
-            cout << "\n*******      E_HistDrawer(" << type << ")      *******" << endl;
-            E_HistDrawer(type);
-        }
-    }
     else if (whichX.Contains("MU"))
     {
         Xselected++;
@@ -123,6 +104,25 @@ void FR_HistDrawer (TString WhichX = "", Int_t systErr = 0, Int_t type = 2)
         {
             cout << "\n*******     Mu_HistDrawer(" << type << ")     *******" << endl;
             Mu_HistDrawer(type);
+        }
+    }
+    else if (whichX.Contains("E"))
+    {
+        Xselected++;
+        if (whichX.Contains("QCD"))
+        {
+            cout << "\n*******     E_QCDest_HistDrawer(" << type << ", " << systErr << ")    *******" << endl;
+            E_QCDest_HistDrawer(type, systErr);
+        }
+        else if (whichX.Contains("W") && whichX.Contains("JET"))
+        {
+            cout << "\n*******     E_WJETest_HistDrawer(" << type << ", " << systErr << ")    *******" << endl;
+            E_WJETest_HistDrawer(type, systErr);
+        }
+        else
+        {
+            cout << "\n*******      E_HistDrawer(" << type << ")      *******" << endl;
+            E_HistDrawer(type);
         }
     }
     if (whichX.Contains("TEST"))
@@ -9359,8 +9359,8 @@ void Mu_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     if (systErr > 0)
     {   // Errors
         TFile *f_ratio = new TFile("/media/sf_DATA/SelectedMuMu/Histos/EstQCD_MuMu_RATIO.root", "READ");
-        TFile *f_up = new TFile("/media/sf_DATA/SelectedMuMu/Histos/EstQCD_MuMu_TEMPLATE_UP.root", "READ");
-        TFile *f_down = new TFile("/media/sf_DATA/SelectedMuMu/Histos/EstQCD_MuMu_TEMPLATE_DOWN.root", "READ");
+        TFile *f_up = new TFile("/media/sf_DATA/SelectedMuMu/Histos/EstQCD_MuMu_UP.root", "READ");
+        TFile *f_down = new TFile("/media/sf_DATA/SelectedMuMu/Histos/EstQCD_MuMu_DOWN.root", "READ");
         TH1D *h_ratio, *h_up, *h_down, *h_fullsysterr, *h_fullerr;
         f_ratio->GetObject("h_QCD_est", h_ratio);
         f_up->GetObject("h_QCD_est", h_up);
@@ -9686,7 +9686,7 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_WJET_est_SS->SetDirectory(0);
     h_WJET_est_SS->Add(h_mass_SS[_DY_Full], -1);
     h_WJET_est_SS->Add(h_mass_SS[_ttbar_Full], -1);
-    h_WJET_est_SS->Add(h_mass_SS[_VVnST], -1);
+//    h_WJET_est_SS->Add(h_mass_SS[_VVnST], -1);
     h_WJET_est_SS->Add(h_QCD_est_SS, -1);
     removeNegativeBins(h_WJET_est_SS);
     h_WJET_est_SS->SetFillColor(kRed - 2);
@@ -9793,7 +9793,7 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
 //    h_WJET_fit_MC->Scale(1.2256e+02 / h_WJET_fit_MC->Integral()); // pT cuts: 52, 52
 //    h_WJET_fit_MC->Scale(8.2256e+03 / h_WJET_fit_MC->Integral()); // pT cuts: 52, 10
 //    h_WJET_fit_MC->Scale(2.4489e+03 / h_WJET_fit_MC->Integral()); // pT cuts: 52, 17
-//    h_WJET_fit_MC->Scale(4.3978e+04 / h_WJET_fit_MC->Integral()); // pT cuts: 52, 0
+//    h_WJET_fit_MC->Scale(3.8159e+03 / h_WJET_fit_MC->Integral()); // pT cuts: 52, 0
     h_WJET_fit_MC->SetDirectory(0);
     h_WJET_fit_MC->SetFillColor(kRed - 2);
     h_WJET_fit_MC->SetLineColor(kRed - 2);
@@ -9825,15 +9825,11 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     // Draw WJets from template fitting (Same-sign data template BUT THE ESTIMATE IS FOR OPPOSITE SIGN!)
     TH1D * h_WJET_fit_SS = ((TH1D*)(h_WJET_est_SS->Clone("h_WJET_fit_SS")));
     h_WJET_fit_SS->SetTitle("");
-//    h_WJET_fit_SS->Scale(5.3412e+03 / h_WJET_fit_SS->Integral()); // from full histogram fitting
     cout << "Same sign W+Jets integral: " << h_WJET_fit_SS->Integral(1,30) << endl;
-//    h_WJET_fit_SS->Scale(2.2000e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (my FR 2)
-//    h_WJET_fit_SS->Scale(2.7086e+04 / h_WJET_fit_SS->Integral(1,30)); // Test with (52, 2) GeV pT cuts
-    h_WJET_fit_SS->Scale(2.5935e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (my FR 2)
-//    h_WJET_fit_SS->Scale(3.3925e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (my FR 2)
-//    h_WJET_fit_SS->Scale(3.5543e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (FOR SYSTEMATIC ERRORS)
-//    h_WJET_fit_SS->Scale(3.4181e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (FOR SYSTEMATIC ERRORS (up))
-//    h_WJET_fit_SS->Scale(3.7006e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (FOR SYSTEMATIC ERRORS (down))
+    h_WJET_fit_SS->Scale(3.1476e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (my FR 2)
+//    h_WJET_fit_SS->Scale(3.2959e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (FOR SYSTEMATIC ERRORS)
+//    h_WJET_fit_SS->Scale(3.1310e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (FOR SYSTEMATIC ERRORS (up))
+//    h_WJET_fit_SS->Scale(3.1729e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (FOR SYSTEMATIC ERRORS (down))
     Double_t int_wjet_est, err_wjet_est;
     int_wjet_est = h_WJET_fit_SS->IntegralAndError(1, h_WJET_fit_SS->GetSize()-2, err_wjet_est);
     cout << "WJets est events (FROM SS): " << int_wjet_est << "+-" << err_wjet_est << endl;
@@ -9871,8 +9867,8 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     if (systErr > 0)
     {   // Errors
         TFile *f_ratio = new TFile("/media/sf_DATA/SelectedMuMu/Histos/EstWJets_MuMu_RATIO.root", "READ");
-        TFile *f_up = new TFile("/media/sf_DATA/SelectedMuMu/Histos/EstWJets_MuMu_TEMPLATE_UP.root", "READ");
-        TFile *f_down = new TFile("/media/sf_DATA/SelectedMuMu/Histos/EstWJets_MuMu_TEMPLATE_DOWN.root", "READ");
+        TFile *f_up = new TFile("/media/sf_DATA/SelectedMuMu/Histos/EstWJets_MuMu_UP.root", "READ");
+        TFile *f_down = new TFile("/media/sf_DATA/SelectedMuMu/Histos/EstWJets_MuMu_DOWN.root", "READ");
         TH1D *h_ratio, *h_up, *h_down, *h_fullsysterr, *h_fullerr;
         f_ratio->GetObject("h_WJET_fit_SS", h_ratio);
         f_up->GetObject("h_WJET_fit_SS", h_up);
@@ -9885,13 +9881,18 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
             // Systematic errors
             h_ratio->SetBinContent(i, fabs(h_ratio->GetBinContent(i)-h_WJET_fit_SS->GetBinContent(i)));
             h_up->SetBinContent(i, fabs(h_up->GetBinContent(i)-h_down->GetBinContent(i))/2);
-            h_fullsysterr->SetBinContent(i, sqrt(h_ratio->GetBinContent(i)*h_ratio->GetBinContent(i)+h_up->GetBinContent(i)*h_up->GetBinContent(i)));
+            h_fullsysterr->SetBinContent(i, sqrt(h_ratio->GetBinContent(i)*h_ratio->GetBinContent(i)+h_up->GetBinContent(i)*h_up->GetBinContent(i)+
+                                                 0.10929*h_WJET_fit_SS->GetBinContent(i)+0.10929 * h_WJET_fit_SS->GetBinContent(i)));
             // Statistical errors
             if (h_WJET_fit_SS->GetBinContent(i) > 0) h_WJET_fit_SS->SetBinError(i, sqrt(h_WJET_fit_SS->GetBinContent(i)));
             else h_WJET_fit_SS->SetBinError(i, 1);
             // Combined error
             h_fullerr->SetBinContent(i, sqrt(h_WJET_fit_SS->GetBinError(i)*h_WJET_fit_SS->GetBinError(i)+
                                              h_fullsysterr->GetBinContent(i)*h_fullsysterr->GetBinContent(i)));
+            if (h_fullerr->GetBinContent(i) > h_WJET_fit_SS->GetBinContent(i))
+                h_fullerr->SetBinContent(i, h_WJET_fit_SS->GetBinContent(i));
+            if (h_WJET_fit_SS->GetBinContent(i) == 0)
+                h_fullerr->SetBinContent(i, 1);
         }
         cout << "Systematic error: " << h_fullsysterr->Integral() << endl;
         TH1D *h_draw_1 = ((TH1D*)(h_WJET_fit_SS->Clone("h_draw_1")));

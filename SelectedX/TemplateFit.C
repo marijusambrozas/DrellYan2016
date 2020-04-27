@@ -5719,11 +5719,11 @@ void Mu_WJETSest_Tfit(Int_t type)
     TH1D *h_WJets_est_SS = ((TH1D*)(h_data_mass_SS->Clone("h_WJets_est_SS")));
     h_WJets_est_SS->Add(h_MC_mass_SS[_ttbar], -1);
     h_WJets_est_SS->Add(h_MC_mass_SS[_DY_Full], -1);
-    h_WJets_est_SS->Add(h_MC_mass_SS[_tW], -1);
-    h_WJets_est_SS->Add(h_MC_mass_SS[_tbarW], -1);
-    h_WJets_est_SS->Add(h_MC_mass_SS[_WW], -1);
-    h_WJets_est_SS->Add(h_MC_mass_SS[_WZ], -1);
-    h_WJets_est_SS->Add(h_MC_mass_SS[_ZZ], -1);
+//    h_WJets_est_SS->Add(h_MC_mass_SS[_tW], -1);
+//    h_WJets_est_SS->Add(h_MC_mass_SS[_tbarW], -1);
+//    h_WJets_est_SS->Add(h_MC_mass_SS[_WW], -1);
+//    h_WJets_est_SS->Add(h_MC_mass_SS[_WZ], -1);
+//    h_WJets_est_SS->Add(h_MC_mass_SS[_ZZ], -1);
     h_WJets_est_SS->Add(h_QCD_est_SS, -2);
     removeNegativeBins(h_WJets_est_SS);
     THStack *s = new THStack("a","A");

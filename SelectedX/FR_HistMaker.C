@@ -35,8 +35,8 @@ void Mu_FR_HistMaker (Bool_t DEBUG);
 
 void E_QCD_HistMaker (Bool_t DEBUG);
 void E_WJET_HistMaker (Bool_t DEBUG);
-void Mu_QCD_HistMaker (Bool_t DEBUG, Int_t type);
-void Mu_WJET_HistMaker (Bool_t DEBUG, Int_t type);
+void Mu_QCD_HistMaker (Bool_t DEBUG);
+void Mu_WJET_HistMaker (Bool_t DEBUG);
 void EMu_QCD_HistMaker (Bool_t DEBUG);
 void EMu_WJET_HistMaker (Bool_t DEBUG);
 
@@ -107,13 +107,13 @@ void FR_HistMaker (TString WhichX = "", Int_t type=1)
         Xselected++;
         if (whichX.Contains("QCD"))
         {
-            cout << "\n*****  Mu_QCD_HistMaker(" << type << ")  *****" << endl;
-            Mu_QCD_HistMaker(DEBUG, type);
+            cout << "\n*****  Mu_QCD_HistMaker()  *****" << endl;
+            Mu_QCD_HistMaker(DEBUG);
         }
         else if (whichX.Contains("W") && whichX.Contains("JET"))
         {
-            cout << "\n*****  Mu_WJET_HistMaker(" << type << ")  *****" << endl;
-            Mu_WJET_HistMaker(DEBUG, type);
+            cout << "\n*****  Mu_WJET_HistMaker()  *****" << endl;
+            Mu_WJET_HistMaker(DEBUG);
         }
         else
         {
@@ -2070,6 +2070,13 @@ void E_QCD_HistMaker (Bool_t DEBUG)
 
     TH1D* h_FRweight = new TH1D("h_FRweight", "FR weights", 100, 0, 0.01);
 
+    // Sign-missasignment correction
+    TFile *f_ch = new TFile("~/DrellYan2016/SelectedX/etc/misid_majority.root");
+    TH1D *h_misid = ((TH1D*)(f_ch->Get("data")));
+    h_misid->SetDirectory(0);
+    f_ch->Close();
+    Double_t xAxis[13] = {0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.44, 1.57, 1.8, 2, 2.2, 2.5};
+
     for (Process_t pr=_DY_10to50; pr<_EndOf_DoubleEG_Normal; pr=next(pr))
     {
         Mgr.SetProc(pr);
@@ -2349,7 +2356,34 @@ void E_QCD_HistMaker (Bool_t DEBUG)
             if (charge->at(0) == charge->at(1) && MET_pT > 50)
                 h_mass_temp->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             if (charge->at(0) == charge->at(1))
-                h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            {
+//                Double_t f1=0, f2=0, weight=0;
+//                for (Int_t i_eta=0; i_eta<12; i_eta++)
+//                {
+//                    if (fabs(eta->at(0)) >= xAxis[i_eta] && fabs(eta->at(0)) < xAxis[i_eta+1])
+//                        f1 = 1 - h_misid->GetBinContent(i_eta+1);
+//                    if (fabs(eta->at(1)) >= xAxis[i_eta] && fabs(eta->at(1)) < xAxis[i_eta+1])
+//                        f2 = 1 - h_misid->GetBinContent(i_eta+1);
+//                }
+//                f1 = 0.01; f2 = 0.01;
+//                Double_t part1 = (f1 * (1-f2) + f2 * (1-f1)) * (f1 * (1-f2) + f2 * (1-f1)) / ((1-f1) * (1-f2) * (1-f1) * (1-f2));
+//                weight = 1 / ((1-f1) * (1-f2)) + part1;
+                h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight/* * weight*/);
+            }
+//            else
+//            {
+//                Double_t f1=0, f2=0, weight=0;
+//                for (Int_t i_eta=0; i_eta<12; i_eta++)
+//                {
+//                    if (fabs(eta->at(0)) >= xAxis[i_eta] && fabs(eta->at(0)) < xAxis[i_eta+1])
+//                        f1 = 1 - h_misid->GetBinContent(i_eta+1);
+//                    if (fabs(eta->at(1)) >= xAxis[i_eta] && fabs(eta->at(1)) < xAxis[i_eta+1])
+//                        f2 = 1 - h_misid->GetBinContent(i_eta+1);
+//                }
+//                f1 = 0.01; f2 = 0.01;
+//                weight = 0 - (f1 * (1-f2) + f2 * (1-f1)) / ((1-f1) * (1-f2) * (1-f1) * (1-f2));
+//                h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight * weight);
+//            }
             if (mass < 60)
             {
                 h_zpeak->Fill(p_T->at(0), fabs(eta->at(0)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
@@ -2433,6 +2467,13 @@ void E_WJET_HistMaker (Bool_t DEBUG)
     analyzer->SetupFRvalues_ele(Dir+"FakeRate_electron.root", "subtract", 1);
 
     TH1D* h_FRweight = new TH1D("h_FRweight", "FR weights", 100, 0, 0.5);
+
+    // Sign-missasignment correction
+    TFile *f_ch = new TFile("~/DrellYan2016/SelectedX/etc/misid_majority.root");
+    TH1D *h_misid = ((TH1D*)(f_ch->Get("data")));
+    h_misid->SetDirectory(0);
+    f_ch->Close();
+    Double_t xAxis[13] = {0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.44, 1.57, 1.8, 2, 2.2, 2.5};
 
     for (Process_t pr=_DY_10to50; pr<_EndOf_DoubleEG_Normal; pr=next(pr))
     {
@@ -2727,7 +2768,32 @@ void E_WJET_HistMaker (Bool_t DEBUG)
                 h_mass_temp->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             }
             if (charge->at(0) == charge->at(1))
-                h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+            {
+//                Double_t f1=0, f2=0, weight=0;
+//                for (Int_t i_eta=0; i_eta<12; i_eta++)
+//                {
+//                    if (fabs(eta->at(0)) >= xAxis[i_eta] && fabs(eta->at(0)) < xAxis[i_eta+1])
+//                        f1 = 1 - h_misid->GetBinContent(i_eta+1);
+//                    if (fabs(eta->at(1)) >= xAxis[i_eta] && fabs(eta->at(1)) < xAxis[i_eta+1])
+//                        f2 = 1 - h_misid->GetBinContent(i_eta+1);
+//                }
+//                Double_t part1 = (f1 * (1-f2) + f2 * (1-f1)) * (f1 * (1-f2) + f2 * (1-f1)) / ((1-f1) * (1-f2) * (1-f1) * (1-f2));
+//                weight = 1 / ((1-f1) * (1-f2)) + part1;
+                h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight/* * weight*/);
+            }
+//            else
+//            {
+//                Double_t f1=0, f2=0, weight=0;
+//                for (Int_t i_eta=0; i_eta<12; i_eta++)
+//                {
+//                    if (fabs(eta->at(0)) >= xAxis[i_eta] && fabs(eta->at(0)) < xAxis[i_eta+1])
+//                        f1 = 1 - h_misid->GetBinContent(i_eta+1);
+//                    if (fabs(eta->at(1)) >= xAxis[i_eta] && fabs(eta->at(1)) < xAxis[i_eta+1])
+//                        f2 = 1 - h_misid->GetBinContent(i_eta+1);
+//                }
+//                weight = 0 - (f1 * (1-f2) + f2 * (1-f1)) / ((1-f1) * (1-f2) * (1-f1) * (1-f2));
+//                h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight * weight);
+//            }
             if (mass > 75 && mass < 105)
             {
                 if (passMediumID->at(0) == 0 && passMediumID->at(1) == 1)
@@ -2787,9 +2853,7 @@ void E_WJET_HistMaker (Bool_t DEBUG)
 
 
 /// -------------------------------- Muon Channel ------------------------------------ ///
-void Mu_QCD_HistMaker (Bool_t DEBUG, Int_t type=1)
-// type=0 uses files with Mu50 trigger
-// type=1 -- no trigger
+void Mu_QCD_HistMaker (Bool_t DEBUG)
 {
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
@@ -2870,22 +2934,9 @@ void Mu_QCD_HistMaker (Bool_t DEBUG, Int_t type=1)
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
 
         TChain *chain = new TChain("FRTree");
+        chain->Add(Dir+"SelectedForBKGest_Mu_Triggerless_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+        if (DEBUG == kTRUE) cout << Dir+"SelectedForBKGest_Mu_Triggerless_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
 
-        if (type == 0) // Mu50 files
-        {
-            chain->Add(Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
-            if (DEBUG == kTRUE) cout << Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
-        }
-        else if (type == 1) // Triggerless files
-        {
-            chain->Add(Dir+"SelectedForBKGest_Mu_Triggerless"+Mgr.Procname[Mgr.CurrentProc]+".root");
-            if (DEBUG == kTRUE) cout << Dir+"SelectedForBKGest_Mu_Triggerless"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
-        }
-        else
-        {
-            cout << "Wrong type! Select 0 (Mu50) or 1 (Triggerless)" << endl;
-            return;
-        }
         chain->SetBranchStatus("p_T", 1);
         chain->SetBranchStatus("eta", 1);
         chain->SetBranchStatus("phi", 1);
@@ -3180,7 +3231,7 @@ void Mu_QCD_HistMaker (Bool_t DEBUG, Int_t type=1)
 } // End of Mu_QCD_HistMaker()
 
 
-void Mu_WJET_HistMaker (Bool_t DEBUG, Int_t type=2)
+void Mu_WJET_HistMaker (Bool_t DEBUG)
 // type=0 uses files with Mu50 trigger
 // type=1 -- IsoMu24_OR_IsoTkMu24
 // type=2 -- no trigger
@@ -3261,27 +3312,9 @@ void Mu_WJET_HistMaker (Bool_t DEBUG, Int_t type=2)
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
 
         TChain *chain = new TChain("FRTree");
+        chain->Add(Dir+"SelectedForBKGest_Mu_Triggerless_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+        if (DEBUG == kTRUE) cout << Dir+"SelectedForBKGest_Mu_Triggerless_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
 
-        if (type == 0) // Mu50 files
-        {
-            chain->Add(Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
-            if (DEBUG == kTRUE) cout << Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
-        }
-        else if (type == 1) // IsoMu24 files
-        {
-            chain->Add(Dir+"SelectedForWJETest_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
-            if (DEBUG == kTRUE) cout << Dir+"SelectedForWJETest_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
-        }
-        else if (type == 2) // Triggerless files
-        {
-            chain->Add(Dir+"SelectedForBKGest_Mu_Triggerless"+Mgr.Procname[Mgr.CurrentProc]+".root");
-            if (DEBUG == kTRUE) cout << Dir+"SelectedForBKGest_Mu_Triggerless"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
-        }
-        else
-        {
-            cout << "Wrong type! Select 0 (Mu50), 1 (IsoMu24) or 2 (Triggerless)" << endl;
-            return;
-        }
         chain->SetBranchStatus("p_T", 1);
         chain->SetBranchStatus("eta", 1);
         chain->SetBranchStatus("phi", 1);
