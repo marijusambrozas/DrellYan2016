@@ -325,6 +325,7 @@ void ee_Est(Int_t UseFR)
     Double_t dataerror_emu, MCerror_emu, dataintegral_emu=2.25081e+07, MCintegral_emu, QCDerror, QCDintegral, QCDFRerror, QCDFRintegral;
     Double_t dataerrorZ_emu, MCerrorZ_emu, dataintegralZ_emu=2.25081e+07, MCintegralZ_emu;
     Double_t dataerror_noZ_emu=0, MCerror_noZ_emu=0, dataintegral_noZ_emu=2.25081e+07, MCintegral_noZ_emu, temp_noZ_emu;
+    Double_t WJetsMCerror_emu, WJetsMCintegral_emu, WJetsFRerror_emu, WJetsFRintegral_emu;
 
     dataintegral_emu = h_EMu_data_invm->IntegralAndError(1, h_EMu_data_invm->GetSize()-2, dataerror_emu);
     MCintegral_emu = ((TH1D*)(s_EMu_invm->GetStack()->Last()))->IntegralAndError(1, h_EMu_data_invm->GetSize()-2, MCerror_emu);
@@ -334,6 +335,8 @@ void ee_Est(Int_t UseFR)
 
     QCDintegral = h_EMu_QCD_invm->IntegralAndError(1, h_EMu_QCD_invm->GetSize()-2, QCDerror);
     if (UseFR) QCDFRintegral = h_EMu_QCDFR_invm->IntegralAndError(1, h_EMu_QCDFR_invm->GetSize()-2, QCDFRerror);
+    WJetsMCintegral_emu = h_EMu_invm[_EMu_WJets_Full]->IntegralAndError(1, h_EMu_invm[_EMu_WJets_Full]->GetSize()-2, WJetsMCerror_emu);
+    if (UseFR) WJetsFRintegral_emu = h_EMu_WJetsFR_invm->IntegralAndError(1, h_EMu_WJetsFR_invm->GetSize()-2, WJetsFRerror_emu);
 
     dataintegral_noZ_emu = h_EMu_data_invm->IntegralAndError(1, 9, temp_noZ_emu);
     dataerror_noZ_emu += temp_noZ_emu * temp_noZ_emu;
@@ -359,6 +362,8 @@ void ee_Est(Int_t UseFR)
     std::cout << "EMu MC events outside Z: " << MCintegral_noZ_emu << "+-" << MCerror_noZ_emu << endl;
     std::cout << "EMu QCD events (from SS): " << QCDintegral << "+-" << QCDerror << endl;
     if (UseFR) std::cout << "EMu QCD events (FR): " << QCDFRintegral << "+-" << QCDFRerror << endl;
+    std::cout << "EMu WJets events (MC): " << WJetsMCintegral_emu << "+-" << WJetsMCerror_emu << endl;
+    if (UseFR) std::cout << "EMu WJets events (FR): " << WJetsFRintegral_emu << "+-" << WJetsFRerror_emu << endl;
 
 //************************************ E E **********************************************************
 
