@@ -5174,11 +5174,13 @@ void E_HistDrawer(Int_t type)
     cout << "Data integral (deno): " << h_pT_barrel_data_deno->Integral() + h_pT_endcap_data_deno->Integral() << endl;
     cout << "QCD integral (deno): " << h_pT_barrel_MC_deno[_QCDEMEnriched_Full]->Integral()+h_pT_endcap_MC_deno[_QCDEMEnriched_Full]->Integral() << endl;
     cout << "Gamma+Jets integral (deno): " << h_pT_barrel_MC_deno[_GJets_Full]->Integral()+h_pT_endcap_MC_deno[_GJets_Full]->Integral() << endl;
+    cout << "DY integral (deno): " << h_pT_barrel_MC_deno[_DY_Full]->Integral()+h_pT_endcap_MC_deno[_DY_Full]->Integral() << endl;
     cout << "MC integral(nume): " << ((TH1D*)(s_pT_barrel_nume->GetStack()->Last()))->Integral() +
             ((TH1D*)(s_pT_endcap_nume->GetStack()->Last()))->Integral() << endl;
     cout << "Data integral (nume): " << h_pT_barrel_data_nume->Integral() + h_pT_endcap_data_nume->Integral() << endl;
     cout << "QCD integral (nume): " << h_pT_barrel_MC_nume[_QCDEMEnriched_Full]->Integral()+h_pT_endcap_MC_nume[_QCDEMEnriched_Full]->Integral() << endl;
     cout << "Gamma+Jets integral (nume): " << h_pT_barrel_MC_nume[_GJets_Full]->Integral()+h_pT_endcap_MC_nume[_GJets_Full]->Integral() << endl;
+    cout << "DY integral (nume): " << h_pT_barrel_MC_nume[_DY_Full]->Integral()+h_pT_endcap_MC_nume[_DY_Full]->Integral() << endl;
 
     cout << "\nMC integral (deno barrel): " << ((TH1D*)(s_pT_barrel_deno->GetStack()->Last()))->Integral() << endl;
     cout << "Data integral (deno barrel): " << h_pT_barrel_data_deno->Integral() << endl;
@@ -8078,7 +8080,7 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     myRatioPlot_t *RP_mass_woQCD_test = new myRatioPlot_t("c_mass_woQCD_test", s_mass_woQCD_test, h_mass_test[_DoubleEG_Full]);
     myRatioPlot_t *RP_pT = new myRatioPlot_t("c_pT", s_pT, h_pT[_DoubleEG_Full]);
     myRatioPlot_t *RP_rapi = new myRatioPlot_t("c_rapi", s_rapi, h_rapi[_DoubleEG_Full]);
-    myRatioPlot_t *RP_mass_fit = new myRatioPlot_t("c_mass_woQCD_test", s_mass_fit, h_mass[_DoubleEG_Full]);
+    myRatioPlot_t *RP_mass_fit = new myRatioPlot_t("c_mass_fit", s_mass_fit, h_mass[_DoubleEG_Full]);
 
     RP_mass_wQCD->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000);
     RP_mass_woQCD->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000);
@@ -8300,7 +8302,8 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_fullerr->SetBinContent(i, sqrt(h_QCD_est_fit->GetBinError(i)*h_QCD_est_fit->GetBinError(i)+
                                              h_fullsysterr->GetBinContent(i)*h_fullsysterr->GetBinContent(i)));
         }
-        cout << "Systematic error: " << h_fullsysterr->Integral() << endl;
+        cout << "Estimated QCD events (from template fit): " << int_QCD_fit << "+-" << err_QCD_fit << "+-" <<
+                h_fullsysterr->Integral() << "   (+-" << h_fullerr << ")" << endl;
         TH1D *h_draw_1 = ((TH1D*)(h_QCD_est_fit->Clone("h_draw_1")));
         TH1D *h_draw_2 = ((TH1D*)(h_QCD_est_fit->Clone("h_draw_2")));
         h_draw_1->Add(h_fullerr, 1);
@@ -9056,7 +9059,8 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_fullerr->SetBinContent(i, sqrt(h_WJET_est_fit->GetBinError(i)*h_WJET_est_fit->GetBinError(i)+
                                              h_fullsysterr->GetBinContent(i)*h_fullsysterr->GetBinContent(i)));
         }
-        cout << "Systematic error: " << h_fullsysterr->Integral() << endl;
+        cout << "Estimated W+Jets events (from template fit): " << int_wjet_fit << "+-" << err_wjet_fit << "+-" <<
+                h_fullsysterr->Integral() << "   (+-" << h_fullerr->Integral() << ")" << endl;
         TH1D *h_draw_1 = ((TH1D*)(h_WJET_est_fit->Clone("h_draw_1")));
         TH1D *h_draw_2 = ((TH1D*)(h_WJET_est_fit->Clone("h_draw_2")));
         h_draw_1->Add(h_fullerr, 1);
@@ -9274,6 +9278,13 @@ void Mu_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_QCD_est->Add(h_mass[_VVnST], -1);
     h_QCD_est->Add(h_mass[_WJets_Full], -1);
     removeNegativeBins(h_QCD_est);
+    // Setting proper errors
+    for (Int_t i_bin=1; i_bin<h_QCD_est->GetSize()-1; i_bin++)
+    {
+        h_QCD_est->SetBinError(i_bin, sqrt(h_QCD_est->GetBinContent(i_bin)));
+        if (h_QCD_est->GetBinContent(i_bin) == 0)
+            h_QCD_est->SetBinError(i_bin, 1);
+    }
     h_QCD_est->SetFillColor(kRed + 3);
     h_QCD_est->SetLineColor(kBlack);
     h_QCD_est->SetMarkerStyle(0);
@@ -9381,7 +9392,8 @@ void Mu_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_fullerr->SetBinContent(i, sqrt(h_QCD_est->GetBinError(i)*h_QCD_est->GetBinError(i)+
                                              h_fullsysterr->GetBinContent(i)*h_fullsysterr->GetBinContent(i)));
         }
-        cout << "Systematic error: " << h_fullsysterr->Integral() << endl;
+        cout << "Estimated QCD events: " << int_qcd << "+-" << err_qcd << "+-" << h_fullsysterr->Integral() << "   (+-" <<
+                h_fullerr->Integral() << ")" << endl;
         TH1D *h_draw_1 = ((TH1D*)(h_QCD_est->Clone("h_draw_1")));
         TH1D *h_draw_2 = ((TH1D*)(h_QCD_est->Clone("h_draw_2")));
         h_draw_1->Add(h_fullerr, 1);
@@ -9793,7 +9805,7 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
 //    h_WJET_fit_MC->Scale(1.2256e+02 / h_WJET_fit_MC->Integral()); // pT cuts: 52, 52
 //    h_WJET_fit_MC->Scale(8.2256e+03 / h_WJET_fit_MC->Integral()); // pT cuts: 52, 10
 //    h_WJET_fit_MC->Scale(2.4489e+03 / h_WJET_fit_MC->Integral()); // pT cuts: 52, 17
-//    h_WJET_fit_MC->Scale(3.8159e+03 / h_WJET_fit_MC->Integral()); // pT cuts: 52, 0
+//    h_WJET_fit_MC->Scale(3.8159e+03 / h_WJET_fit_MC->Integral()); // pT cuts: 52, 0    
     h_WJET_fit_MC->SetDirectory(0);
     h_WJET_fit_MC->SetFillColor(kRed - 2);
     h_WJET_fit_MC->SetLineColor(kRed - 2);
@@ -9830,6 +9842,13 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
 //    h_WJET_fit_SS->Scale(3.2959e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (FOR SYSTEMATIC ERRORS)
 //    h_WJET_fit_SS->Scale(3.1310e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (FOR SYSTEMATIC ERRORS (up))
 //    h_WJET_fit_SS->Scale(3.1729e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (FOR SYSTEMATIC ERRORS (down))
+    // Setting proper errors
+    for (Int_t i_bin=1; i_bin < h_WJET_fit_SS->GetSize()-1; i_bin++)
+    {
+        h_WJET_fit_SS->SetBinError(i_bin, sqrt(h_WJET_fit_SS->GetBinContent(i_bin)));
+        if (h_WJET_fit_SS->GetBinContent(i_bin) == 0)
+            h_WJET_fit_SS->SetBinError(i_bin, 1);
+    }
     Double_t int_wjet_est, err_wjet_est;
     int_wjet_est = h_WJET_fit_SS->IntegralAndError(1, h_WJET_fit_SS->GetSize()-2, err_wjet_est);
     cout << "WJets est events (FROM SS): " << int_wjet_est << "+-" << err_wjet_est << endl;
@@ -9894,7 +9913,8 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
             if (h_WJET_fit_SS->GetBinContent(i) == 0)
                 h_fullerr->SetBinContent(i, 1);
         }
-        cout << "Systematic error: " << h_fullsysterr->Integral() << endl;
+        cout << "Estimated W+Jets events (from template fit): " << int_wjet_est << "+-" << err_wjet_est << "+-" <<
+                h_fullsysterr->Integral() << "   (+-" << h_fullerr->Integral() << ")" << endl;
         TH1D *h_draw_1 = ((TH1D*)(h_WJET_fit_SS->Clone("h_draw_1")));
         TH1D *h_draw_2 = ((TH1D*)(h_WJET_fit_SS->Clone("h_draw_2")));
         h_draw_1->Add(h_fullerr, 1);
