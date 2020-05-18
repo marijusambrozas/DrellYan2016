@@ -92,19 +92,23 @@
 \hyphenation{už-re-gis-truo-tų}
 \hyphenation{miu-o-nų}
 \hyphenation{in-te-gruo-tą-jį}
+\hyphenation{eks-pe-ri-men-ti-nių}
+\hyphenation{alice}
+\hyphenation{so-le-noi-di-nis}
+\hyphenation{pythia}
 
 \begin{document}
 %\linenumbers
 
 \begin{titlepage}
 \centering
-{\large Vilniaus universitetas \\ Fizikos fakultetas \\ Teorinės fizikos ir astronomijos institutas \par}
+{\large Vilniaus universiteto \\ Fizikos fakulteto \\ Teorinės fizikos ir astronomijos institutas \par}
 \vspace{3.5cm}
 {\Large Marijus Ambrozas \par}
 \vspace{0.3cm}
 {\Large Drell-Yan proceso triukšmo įvykių skaičiaus įvertinimas klaidingo atpažinimo metodu\par}
 \vspace{0.8cm}
-{\large Magistrantūros studijų mokslo tiriamasis darbas \par}
+{\large Magistrantūros studijų baigiamasis darbas \par}
 \vspace{0.8cm}
 {\large Teorinės fizikos ir astrofizikos \\ studijų programa \par}
 \vspace{3.5cm}
@@ -125,50 +129,61 @@ Instituto atstovas & prof.\ Egidijus Anisimovas\tabularnewline[0.5cm]
 \clearpage
 
 \section{Įvadas}% \addcontentsline{toc}{section}{Įvadas}
-Didelių energijų fizikoje protonas aprašomas naudojantis R.\ Feinmano pasiūlytu partonų modeliu \cite{FeynPartons},
-pagal kurį protono sandarą galima nusakyti naudojantis partonų pasiskirstymo funkcijomis \cite{BjorkPartons}.
-Norint geriau suprasti procesus, vykstančius protonų susidūrimų metu, svarbu partonų pasiskirstymus žinoti kuo tiksliau.
-Kvantinės chromodinamikos (angl.\ \textit{quantum chromodynamics} -- QCD) teorija nenumato partonų pasiskirstymo funkcijų parametrų.
-Jie gaunami funkcijas pritaikant prie eksperimentinių tyrimų rezultatų \cite{NNPDF, PDF_ABMP16, CTEQ2019}.
+Hadronų sandaros aprašymui didelių energijų fizikoje šiais laikais plačiai naudojamas R.\ Feinmano pasiūlytas
+partonų modelis \cite{FeynPartons}.
+Šiame modelyje visų hadronų sudėtis nusakoma partonų pasiskirstymo funkcijomis \cite{BjorkPartons}.
+Tikslus partonų pasiskirstymo funkcijų žinojimas yra svarbus stengiantis suprasti didelės energijos protonų susidūrimų
+metu vykstančius procesus.
+Šias funkcijas teoretikų grupės nuolat tikslina, priderindamos jas prie naujausių eksperimentinių tyrimų rezultatų
+\cite{PDF_MMHT2015, PDF_CJ15, NNPDF, PDF_ABMP16, PDF_MMHT2019, CTEQ2019}.
 
-Protonams susiduriant su didžiule energija kvarkas iš vieno protono ir antikvarkas iš kito gali anihiliuoti
-ir sukurti leptono-antileptono porą.
-Toks procesas vadinamas Drell-Yan procesu \cite{DYoriginal}.
-Didelio tikslumo naujausių Drell-Yan proceso diferencialinio reakcijos skerspjūvio eksperimentinių matavimų
-rezultatai \cite{DY_CMS2011, DY_CMS2013, DY_ATLAS2013, DY_ATLAS2014, DY_CMS2015, DY_ATLAS2016, DY_ATLAS2017, DY_CMS2019}
-pasitarnauja partonų pasiskirstymo funkcijų tikslinimui, teorinių modelių bei jų perturbatyvinių pataisų testavimui.
-Drell-Yan proceso tyrimo rezultatai yra svarbūs ir kituose eksperimentiniuose didelių energijų fizikos
-tyrimuose, kuriuose Drell-Yan procesas yra dominuojantis triukšmas \cite{Higgs2018, Zprime, SUSYtau}.
-Taigi, Drell-Yan procesas yra vienas iš  kertinių tyrimo objektų eksperimentinėje dalelių fizikoje.
+Vienas iš \ltq{švariausių} procesų, suteikiančių svarbios informacijos apie protono sudėtį, yra
+Drell-Yan procesas \cite{DYoriginal}.
+Tai -- didelės energijos protonų susidūrimo metu vykstantis procesas, kai kvarkas iš vieno protono ir antikvarkas
+iš kito anihiliuoja sukurdami leptono ir antileptono porą.
+Naujausi Drell-Yan proceso diferencialinio reakcijos skerspjūvio matavimai pasižymi dideliu tikslumu
+\cite{DY_CMS2013, DY_ATLAS2013, DY_ATLAS2014, DY_CMS2015, DY_ATLAS2016, DY_ATLAS2017, DY_CMS2019}.
+Šių matavimų rezultatai naudojami tikslinant partonų pasiskirstymo funkcijas bei testuojant perturbatyvų standartinio
+modelio aprašymą.
+Drell-Yan proceso tyrimas svarbus ir kitus didelių energijų fizikos procesus tiriantiems eksperimentatoriams,
+kurių matavimams šis procesas trukdo \cite{Higgs2018, Zprime, SUSYtau}.
+Taigi, Drell-Yan proceso tyrimai užima svarbią vietą eksperimentinėje didelių energijų fizikoje.
 
-CERN Didžiajame hadronų greitintuve (angl.\ \textit{Large Hadron Collider} -- LHC) kas $25$ ns vyksta $13$ TeV
-energijos protonų susidūrimai \cite{LHC_13TeV_25ns}.
-Kartais susidūrimų metu sukuriamos masyvios nestabilios dalelės (pvz., $Z$ bozonas, Higso bozonas ir pan.),
-kurių vidutinė gyvavimo trukmė yra labai trumpa.
-Aplink protonų susidūrimo vietas išdėstytais dalelių detektoriais įmanoma užregistruoti tik tokių
-dalelių skilimo produktus: fotonus, elektronus, įvairius hadronus bei miuonus.
-Įvykiai, kurių metu detektoriuje užfiksuojama leptono-antileptono pora vadinami Drell-Yan proceso įvykio kandidatais.
-Vis dėlto, niekada tiksliai nežinome ar įvykio kandidatas tikrai yra mus dominantis (Drell-Yan signalo) įvykis.
-Egzistuoja ir triukšmo įvykiai, kurių galutinis produktas atrodo labai panašiai į galutinį Drell-Yan proceso produktą.
-Į triukšmų indėlį reikia atsižvelgti statistiškai įvertinant, kokią dalį visų įvykių kandidatų jie galėjo sudaryti.
-Triukšmo įvykių skaičių galima būtų įvertinti naudojant vien tik modeliuotus duomenų rinkinius, tačiau jie turi
-netikslumų, į kuriuos visus atsižvelgti būtų labai sudėtinga.
-Siekiant tikslesnės detektoriaus išmatuotų pasiskirstymų interpretacijos yra naudojami matavimu grįsti metodai.
-Klaidingo atpažinimo metodas, kuris buvo naudojamas šiame darbe, yra taikomas norint įvertinti skaičių tokių triukšmo
-įvykių, kurių metu susidariusios hadronų čiurkšlės buvo klaidingai atpažintos kaip leptonai.
+CERN Didysis hadronų greitintuvas protonus sudaužia $40$ milijonų kartų per sekundę, susidūrimų energijai masių
+centro sistemoje siekiant $13$ TeV.
+Protonų susidūrimo metu gali būti sukuriamos labai trumpai gyvuojančios masyvios dalelės, tokios, kaip
+$Z$, $W$, Higso bozonai ir kt.
+Aplink protonų susidūrimo taškus pastatyti dalelių detektoriai registruoja tik tokių dalelių skilimo produktus:
+elektronus, miuonus, fotonus bei įvairių rūšių hadronus.
+Užregistruoti protonų susidūrimai, kurių metu buvo sukurti du izoliuoti (aplink save neturintys pašalinių dalelių
+trajektorijų) priešingo krūvio leptonai, vadinami Drell-Yan proceso įvykio kandidatais.
+Vienareikšmiškai pasakyti, kokio proceso metu susidarė detektoriaus užregistruotos dalelės, yra neįmanoma:
+visada egzistuoja keli skirtingi procesai, kuriems užregistruotas įvykio vaizdas gali atrodyti labai panašiai.
+Taip tarp Drell-Yan proceso įvykių kandidatų patenka ir su pašaliniais procesais susiję įvykiai.
+Jie vadinami triukšmo įvykiais.
+Iš įvykių rinkinio triukšmai pašalinami statistiškai: bandoma įvertinti, kokia jo dalis yra užteršta.
+Grubų triukšmo įvykių skaičiaus įvertį galima gauti naudojantis sumodeliuotais protonų susidūrimais.
+Vis dėlto, siekiant tikslesnės detektoriaus išmatuotų pasiskirstymų interpretacijos, naudojami matavimu grįsti
+triukšmo įvykių skaičiaus įvertinimo metodai.
+Šiame darbe buvo naudojamas klaidingo atpažinimo metodas, kuris taikomas įvertinant indėlį tokių triukšmų, kuriuose
+įvykiai su klaidingai atpažintomis hadronų čiurkšlėmis pateko tarp Drell-Yan proceso įvykių kandidatų.
 
-
-\textbf{Šio darbo tikslas} -- įvertinti Drell-Yan proceso triukšmo įvykių skaičių objekto klaidingo atpažinimo metodu.
-Tikslui pasiekti iškelti tokie \textbf{uždaviniai}:
-1) Įvertinti tikimybę, kad čiurkšlė bus klaidingai atpažinta kaip miuonas;
-2) Pritaikant klaidingo atpažinimo tikimybės įvertį nustatyti, kiek Drell-Yan proceso triukšmo įvykių yra susiję su
+\textbf{Šio darbo tikslas} -- įvertinti Drell-Yan proceso triukšmo įvykių skaičių klaidingo atpažinimo metodu.
+Tikslui pasiekti iškelti tokie uždaviniai:
+1) Įvertinti tikimybę, čiurkšlėms būti klaidingai atpažintoms kaip izoliuotiems miuonams ir elektronams;
+2) Pritaikyti klaidingo atpažinimo tikimybių įverčius nustatant, kiek Drell-Yan proceso įvykių kandidatų yra susiję su
 klaidingai atpažintomis čiurkšlėmis;
-3) Įvertinti gauto rezultato statistines ir sistemines paklaidas.
-Darbas buvo atliktas naudojant CERN CMS eksperimento 2016 metais užregistruotus protonų susidūrimų duomenis.
+3) Įvertinti gauto rezultato statistinius ir sisteminius neapibrėžtumus.
+Darbe buvo naudojami CERN CMS eksperimento 2016 metais užregistruoti protonų susidūrimų duomenys.
 
 
 \section{Drell-Yan proceso tyrimas CMS eksperimente}
-
+Šiame skyriuje supažindinama su didelių energijų fizikoje naudojamu protono sandaros aprašymu ir Drell-Yan procesu.
+Trumpai pristatomos pagrindinės šio proceso tyrimo kryptys ir paaiškinama jų svarba.
+Toliau supažindinama su didelių energijų fizikos tyrimuose (ir šiame darbe) naudojama eksperimentine įranga, trumpai paaiškinama,
+kaip gaunami fizikinei analizei naudojami duomenys.
+Taip pat šiame skyriuje aptariama su darbo tikslu susijusi eksperimentinių didelių energijų fizikos tyrimų problematika
+(triukšmais) bei pristatomas klaidingo atpažinimo metodas, kuris buvo taikomas atliekant darbą.
 
 \subsection{Partonų pasiskirstymo funkcijos}
 Standartiniame modelyje procesus nusakantys pamatuojami dydžiai (reakcijos skerspjūvis, skilimo dažnis) aprašomi sąveikos
@@ -182,8 +197,8 @@ sudarančias daleles: kvarkus ir gliuonus.
 Kai energijos pernaša reakcijos tarp kvarkų ir gliuonų metu yra labai maža (pavyzdžiui, vyksmams atomo branduolyje),
 stipriosios sąveikos konstanta $\alpha_s$ yra labai didelė.
 Dėl šios priežasties perturbatyvus aprašymas žemų energijų stipriesiems procesams yra netinkamas.
-Vis dėlto, stiprioji sąveika pasižymi asimptotine laisve -- reakcijos metu pernešamai energijai didėjant sąveikos konstanta
-gęsta, o pasiekus begalinę energiją dalelės turėtų nebesąveikauti išvis \cite{AFreedom}.
+Vis dėlto, stiprioji sąveika pasižymi asimptotine laisve (angl.\ \textit{asymptotic freedom}) -- reakcijos metu pernešamai
+energijai didėjant sąveikos konstanta gęsta, o pasiekus begalinę energiją dalelės turėtų nebesąveikauti išvis \cite{AFreedom}.
 Pavyzdžiui, sąveikos tarp susiduriančių protonų sudedamųjų dalių -- kvarkų -- energijai siekiant $Z$ bozono masę ($91.2$~GeV),
 stipriosios sąveikos konstanta jau turi vertę, siekiančią vos $0.118$ \cite{PDGreview}.
 Asimptotinė laisvė leidžia šiuolaikiniuose dalelių greitintuvuose vykstančių procesų teoriniams įverčiams naudoti
@@ -193,17 +208,17 @@ Norint teoriškai aprašyti hadronų susidūrimus svarbu žinoti, su kokiomis ti
 hadrono viduje esančios dalelės.
 Šiam tikslui yra naudojamas R.~Feinmano pasiūlytas artinys, vadinamas partonų modeliu \cite{FeynPartons}:
 kai energijos pernaša reakcijos metu yra tokia didelė, kad būtų galima taikyti perturbatyvų kvantinės chromodinamikos aprašymą,
-hadrono sudedamųjų dalių -- partonų -- impulso dedamosios, statmenos paties hadrono judėjimo krypčiai yra nykstamai mažos,
+hadrono sudedamųjų dalių -- partonų -- impulso dedamosios, statmenos hadrono judėjimo krypčiai, yra nykstamai mažos,
 lyginant su lygiagrečia hadrono judėjimui dedamąja.
 Tai reikštų, kad su hadronu susiduriančios dalelės atskaitos sistemoje jį galime įsivaizduoti kaip plokščią nejudančių
 taškų rinkinį.
 Toks artinys pilnai atitiktų realybę, jeigu hadrono impulsas būtų begalinis.
-Pritaikius partonų modelį hadroną galima aprašyti kaip tikimybės tankių rinkinį: kiekvienas tikimybės tankis nusakytų tikėtinumą
+Pritaikius partonų modelį hadroną galima aprašyti kaip tikimybės tankių rinkinį: kiekviena rinkinyje esanti funkcija nusakytų tikėtinumą
 aptikti konkretų partoną (kvarką arba gliuoną), nešantį tam tikrą procentinę hadrono impulso dalį $x$ \cite{BjorkPartons}.
 Šie tikimybės tankiai vadinami partonų pasiskirstymo funkcijomis (angl.\ \textit{parton distribution function} -- PDF).
-Partonų pasiskirstymo funkcija $f_{i}(x, Q^{2})$ aprašo tikimybę aptikti protono impulso
-dalį $x$ nešantį $i$ tipo partoną (pavyzdžiui, kylantįjį kvarką -- $u$, krentantįjį
-kvarką -- $d$ ir t.t.), kai \textit{kietojo} susidūrimo energija lygi $Q$.
+Partonų pasiskirstymo funkcija $f_{i}(x, Q^{2})$ aprašo tikimybę aptikti $i$ tipo partoną (pavyzdžiui, kylantįjį kvarką -- $u$,
+krentantįjį kvarką -- $d$ ir t.t.), nešantį tam tikrą protono impulso dalį tarp $x$ ir $x\!+\!\mathrm{d}x$, kai \textit{kietojo}
+susidūrimo energija lygi $Q$.
 Kietasis susidūrimas (angl.\ \textit{hard interaction}) -- procesas, kurio metu vyksta energijos pernaša, palyginama
 su pilnąja sistemos energija.
 Du partonų pasiskirstymo funkcijų pavyzdžiai, esant skirtingoms pernašos energijoms, yra pateikti
@@ -223,17 +238,18 @@ energijos pernaša reakcijos metu lygi $Q$.
 \begin{figure}[t]
 	\includegraphics[width=\linewidth]{CT18_PDF.png}
 	\caption{\label{fig:PDFs}
-		CTEQ-TEA kolektyvo pateikiamos protono partonų pasiskirstymo funkcijos esant skirtingoms susidūrimų energijoms \cite{CTEQ2019}.
-		Kairėje -- $Q=2 \; \mathrm{GeV}$, dešinėje -- $Q=100 \; \mathrm{GeV}$.
+		CTEQ-TEA kolektyvo pateikiamos protono partonų pasiskirstymo funkcijos, esant skirtingo dydžio energijoms pernašoms $Q$ \cite{CTEQ2019}.
+		Kairėje pusėje $Q=2 \; \mathrm{GeV}$, o dešinėje pusėje -- $Q=100 \; \mathrm{GeV}$.
 		Ant horizontalios ašies vaizduojama protono impulso dalis $x$, o ant vertikalios -- tikimybės tankio $f(x,\, Q^2)$
 		ir $x$ sandauga.}
 \end{figure}
 
-Kvantinės chromodinamikos teorija nenumato partonų pasiskirstymo funkcijų parametrų.
-Jie gaunami funkcijas pritaikant prie eksperimentinių tyrimų rezultatų \cite{NNPDF, PDF_ABMP16, CTEQ2019}.
+Naudojantis šiuolaikine teorija, partonų pasiskirstymo funkcijų neįmanoma apskaičiuoti iš pirminių principų.
+Jos gaunamos skirtingais metodais priderinant prie eksperimentinių tyrimų rezultatų
+\cite{PDF_MMHT2015, PDF_CJ15, NNPDF, PDF_ABMP16, PDF_MMHT2019, CTEQ2019}.
 Vieni svarbiausių rezultatų, naudojamų partonų pasiskirstymo funkcijų parametrų nustatymui atkeliauja iš elektrono-protono
-sklaidos eksperimentų (anksčiau tokius susidūrimus vykdydavo HERA dalelių greitintuvas Hamburge) bei iš
-Drell-Yan proceso, viršūninių kvarkų poros sukūrimo bei vienos čiurkšlės įvykių, kurie vyksta protonų priešpriešinių susidūrimų
+sklaidos eksperimentų (anksčiau tokius susidūrimus vykdydavo Hamburge esantis dalelių greitintuvas HERA) bei iš
+Drell-Yan proceso, viršūninių kvarkų poros sukūrimo bei vienos čiurkšlės įvykių, kurie vyksta protono-protono priešpriešinių susidūrimų
 metu, tyrimų \cite{CTEQ2019}.
 %Turint noro išplėsti dalį apie tyrimus
 
@@ -266,7 +282,7 @@ reiškia vienos kilpų ir vienos dalelės išspinduliavimo pataisas) elektrosilp
 ir trečios eilės kvantinės chromodinamikos perturbacijų tikslumo (angl.\ \textit{next-to-next-to-leading order} -- NNLO --
 reiškia dviejų kilpų ir dviejų dalelių išspinduliavimo pataisas).
 Tokios aukštos eilės elektrosilpnosios pataisos nenaudojamos, nes kiekvienos elektrosilpnosios viršūnės
-indėlis į reakcijos skerspjūvį yra $\approx10$ kartų mažiau reikšmingas (dėl atitinkamai mažesnės sąveikos konstantos), lyginant su
+indėlis į reakcijos skerspjūvį yra $\sim\!10$ kartų mažiau reikšmingas (dėl atitinkamai mažesnės sąveikos konstantos), lyginant su
 stipriosios sąveikos viršūne.
 Drell-Yan proceso pirmos eilės (angl.\ \textit{leading order} -- LO -- reiškia medžio lygmenį) Feinmano diagramos
 yra pavaizduotos \ref{fig:DYfeyn}~pav.
@@ -287,7 +303,7 @@ Didelių energijų fizikoje keturmatis impulsas dažnai išreiškiamas kaip mas�
 $\vec{p}$ -- trimatis impulso vektorius), skersinio impulso $\pT=\sqrt{p_x^2+p_y^2}$ (čia $p_x$, $p_y$ -- impulso dedamosios
 išilgai statmenų protonų susidūrimo krypčiai ašių), spartos $y=\frac{1}{2}\mathrm{ln}[\frac{E+p_z}{E-p_z}]$ (čia $p_z$ -- impulso dedamoji
 išilgai lygiagrečios protonų susidūrimo krypčiai ašies) ir
-azimutinio kampo $\phi$ rinkinys.
+sferinės koordinačių sistemos azimutinio kampo $\phi$ rinkinys.
 Taigi keturmačio impulso diferencialas $\mathrm{d}^4p$ gali būti pakeistas į $\mathrm{d}m\mathrm{d}\pT\mathrm{d}y\mathrm{d}\phi$.
 Be to, šie dydžiai apie procesą gali suteikti gerokai naudingesnės informacijos.
 
@@ -299,8 +315,8 @@ Todėl dažniausiai matuojami vienmačiai, dvimačiai arba trimačiai Drell-Yan 
 Nuo skirtingų parametrų priklausančių diferencialinių reakcijos skerspjūvių matavimo rezultatai teoretikams teikia
 skirtingą informaciją.
 
-Iš energijos ir impulso tvermės kiekvienoje Feinmano diagramos viršūnėje seka, kad idealiai priešpriešinio susidūrimo metu
-Drell-Yan proceso metu sukurtos leptonų poros invariantinė masė (lygi tarpinio bozono masei) medžio lygmenyje priklauso vien
+Iš kiekvienoje Feinmano diagramos viršūnėje galiojančios energijos ir impulso tvermės seka, kad, idealiai priešpriešinio
+protonų susidūrimo metu, Drell-Yan leptonų poros invariantinė masė medžio lygmenyje priklauso vien
 tik nuo susiduriančių protonų impulsų dalių, kurias neša sąveikaujantys partonai:
 \begin{align}
 \label{eq:DY4vec}
@@ -351,7 +367,7 @@ iš čia seka, kad
 iš priešingų pusių), $E_{(\gamma^*\!/\!Z)}$ ir $p_{z\,(\gamma^*\!/\!Z)}$ -- atitinkamai $Z$ bozono arba virtualaus fotono energija ir
 impulsas, $E_{l1}$, $p_{z\,l1}$, $E_{l2}$ ir $p_{z\,l2}$ -- susidariusių leptonų energijos ir impulso $z$ dedamosios, $p_{x}$ ir $p_{y}$ --
 leptonų impulsų $x$ ir $y$ dedamosios, kurios dėl impulso tvermės abiems leptonams yra vienodos, bet nukreiptos į priešingas puses.
-Čia visur naudojame vienetų sistemą, kurioje $c=1$.
+Čia ir toliau naudojame vienetų sistemą, kurioje $c=1$.
 Dėl iš \eqref{eq:DY4vec} ir \eqref{eq:DYinvm} išraiškų sekančios tiesioginės sąsajos tarp matuojamos invariantinės masės ir kvarkų
 nešamos protono impulso dalies, diferencialinio reakcijos skerspjūvio $\mathrm{d}\sigma/\mathrm{d}m_{ll}$
 matavimai leidžia įvertinti skirtingų partonų su tam tikra protono impulso dalimi egzistavimo tikėtinumus,
@@ -387,7 +403,7 @@ Taigi, Drell-Yan proceso kampinių pasiskirstymų matavimai turi nemažą svarb�
 Drell-Yan proceso tyrimas taip pat svarbus dėl to, kad jis trukdo tirti kitus standartinio modelio ar hipotetinius procesus, kuriuose
 pagaminami du leptonai.
 Pavyzdžiui, dviejų leptonų galutinės būsenos nagrinėjamos Higso bozono tyrime \cite{Higgs2018}, ne standartinio modelio dalelės --
-$Z'$ bozono -- paieškoje \cite{Zprime}, supersimetrijos paieškoje \cite{SUSYtau} ir pan.
+$Z'$ bozono -- paieškoje \cite{Zprime}, supersimetrijos paieškoje \cite{SUSYtau} ir t.t.
 Sėkmingam šių procesų tyrimui svarbu tiksliai įvertinti, kokia išmatuotų pasiskirstymų dalis yra susijusi su Drell-Yan procesu, o
 kokia -- su tiriamaisiais procesais.
 Didelio tikslumo Drell-Yan proceso tyrimai padeda sumažinti tokių įvertinimų neapibrėžtumus.
@@ -411,7 +427,7 @@ detektoriai, priklausantys skirtingų eksperimentų grupėms.
 Per vieną protonų pluoštelių prasikeitimą susiduria keliasdešimt protonų porų.
 Pluošteliai prakeičiami labai mažu ($\sim\!\!200$~µrad) kampu.
 Keturi didžiausi aplink greitintuvą išsidėstę eksperimentai yra CMS, ATLAS, LHCb ir ALICE.
-Šiame darbe naudojami 2016 metais CMS eksperimento užregistruoti protonų susidūrimų duomenys.
+Šiame darbe buvo naudojami CMS eksperimento 2016 metais užregistruoti protonų susidūrimų duomenys.
 
 Kompaktiškasis miuonų solenoidas (angl.\ \textit{Compact Muon Solenoid} -- CMS) \cite{CMSexperiment}
 yra plačios paskirties detektorius, galintis detektuoti didelį skaičių skirtingų dalelių.
@@ -423,29 +439,29 @@ skirtingų rūšių dalelėms aptikti.
 
 CMS detektoriaus sluoksnius galima pamatyti \ref{fig:CMSslice} paveiksle.
 Kiekvienas subdetektorius turi vieną cilindrinę ir dvi antgalių dalis.
-Subdetektorių sluoksniai yra išdėstyti atsižvelgiant į detektuojamų dalelių skvarbumą, kiekvienas sluosknis
-yra skirtingas ir turi specifinę paskirtį.
+Subdetektorių sluoksniai yra išdėstyti atsižvelgiant į detektuojamų dalelių skvarbumą.
+Kiekvienas sluosknis yra skirtingas ir turi specifinę paskirtį.
 
 Arčiausiai protonų susidūrimo vietos yra išdėstytas trekų detektorius (angl.\ \textit{silicon tracker}),
 pagamintas iš silicio pikselių ir juostelių.
-Į nuskurdintą puslaidininkio sluoksnį pataikiusios elektringos dalelės išlaisvina krūvininkus taip sugeneruodamos
+Į nuskurdintą puslaidininkio sluoksnį pataikiusios elektringos dalelės išlaisvina krūvininkus, taip sugeneruodamos
 elektrinį signalą.
 Trekų detektorius turi daug plonų puslaidininkio sluoksnių, tad išanalizavus užregistruotą signalą skirtinguose
 sluoksniuose galima nustatyti, kokia kryptimi nulėkė protonų susidūrimo metu sukurtos elektringosios dalelės.
 Puslaidininkio sluoksniai padaryti kaip įmanoma plonesni, kad pralėkdama dalelė juose prarastų kuo mažiau energijos
 ir nepakeistų savo trajektorijos.
 
-Pralėkusios trekų detektorių dalelės pirmiausia pataiko į elektromagnetinį kalorimetrą (angl.\ \textit{Electromagnetic Calorimeter} -- ECAL).
+Pralėkusios trekų detektorių, dalelės pirmiausia pataiko į elektromagnetinį kalorimetrą (angl.\ \textit{Electromagnetic Calorimeter} -- ECAL).
 Šio subdetektoriaus paskirtis -- detektuoti elektronus ir fotonus bei išmatuoti jų energiją.
 Elektromagnetinis kalorimetras pagamintas iš scintiliuojančios medžiagos -- švino volframato $\mathrm{PbWO}_{4}$.
-Į elektromagnetinį kalorimetrą pataikius reliatyvistiniu greičiu lekiančiam elektronui, medžiagos elektronai yra sužadinami
+Į elektromagnetinį kalorimetrą pataikius reliatyvistiniu greičiu lekiančiam elektronui, scintiliatoriaus medžiagos elektronai yra sužadinami
 ir relaksuoja skleisdami šviesą.
 Elektrono energija nustatoma išmatavus švytėjimo intensyvumą, kuris yra proporcingas elektrono prarastai energijai medžiagoje.
 Elektronas kalorimetre yra visiškai sustabdomas.
 Į tankią scintiliatoriaus medžiagą pataikę fotonai pavirsta į elektrono-pozitrono porą, kurios energija jau gali būti išmatuojama
 tokiu pačiu būdu.
-Ar signalas elektromagnetiniame kalorimetre yra susijęs su elektronu, ar su fotonu galima atskirti pagal tai, ar jis yra susietas su
-trekų detektoriuje užregistruotu treku.
+Ar signalas elektromagnetiniame kalorimetre yra susijęs su elektronu, ar su fotonu galima atskirti pagal tai, ar jis gali būti susietas su
+trekų detektoriuje užregistruotais signalais.
 
 Dalelės, kurios nėra sustabdomos elektromagnetiniame kalorimetre, pataiko į hadronų kalorimetrą (angl.\ \textit{hadron calorimeter} -- HCAL).
 Šis subdetektorius sustabdo hadronus ir matuoja jų energiją.
@@ -453,7 +469,7 @@ Hadronų kalorimetre naudojamas plastiko scintiliatorius.
 Kadangi hadronai yra gerokai sunkesni ir skvarbesni už elektronus, norint juos sustabdyti tarp scintiliatoriaus sluoksnių yra įterptos
 vario plokštės, o taip pat šis subdetektorius yra gerokai storesnis už elektromagnetinį kalorimetrą.
 
-Už hadronų kalorimetro yra iki superlaidumo temperatūros atšaldytas solenoidinis elektromagnetas.
+Už hadronų kalorimetro yra sumontuotas iki superlaidumo temperatūros atšaldytas solenoidinis elektromagnetas.
 Kai detektorius yra įjungtas, solenoidu teka maždaug $19.1$~kA stiprio elektros srovė, sukurianti iki $4$~T siekiantį magnetinį lauką.
 Jo paskirtis -- iškreivinti krūvį turinčių dalelių trajektorijas.
 Pagal tai, kuria kryptimi dalelės trajektorija užsisuka, galima nustatyti dalelės elektrinį krūvį,
@@ -461,7 +477,7 @@ o iš trajektorijos kreivumo spindulio galima įvertinti ir jos skersinį impuls
 Taip pat solenoidas veikia kaip papildoma kliūtis skvarbiausiems hadronams.
 Vis dėlto, norint užtikrinti, kad kuo mažiau hadronų pasiektų tolimesnius detektoriaus sluoksnius, už
 solenoido yra sumontuotas papildomas hadronų kalorimetro sluoksnis, vadinamas išoriniu hadronų kalorimetru
-(angl.\ \textit{HCAL outer}).
+(angl.\ HCAL \textit{outer}).
 
 Pačioje CMS detektoriaus išorėje keliais sluoksniais išdėstyti miuonų detektoriai.
 Miuonai yra apie $200$ kartų sunkesni už elektronus, bei nesąveikauja stipriąja sąveika, todėl yra gerokai skvarbesni
@@ -474,7 +490,7 @@ Nors miuonų detektoriai galėtų registruoti bet kokių elektringų dalelių pa
 kitos dalelės yra sustabdomos ankstesniuose detektoriaus sluoksniuose.
 Tuo tarpu miuonai nėra sustabdomi net ir miuonų detektorių sistemoje -- dujiniai detektoriai tik užfiksuoja jų
 trajektoriją.
-Šių dalelių impulsas yra nustatomas iš jų trajektorijos kreivumo.
+Šių dalelių impulsas yra nustatomas iš trajektorijos kreivumo.
 Kad impulsą būtų galima nustatyti kuo efektyviau, tarp miuonų detektorių yra sumontuotos geležinės magnetinio
 lauko apgrąžos plokštės, kurios sustiprina magnetinį lauką miuonų detektoriuose, tuo pačiu neleisdamos jam tęstis toli
 už detektoriaus ribų.
@@ -511,7 +527,7 @@ elektroną, fotoną, hadronus, signalo kalorimetruose trūkumas -- neutrinus).
 Galutinis pirmo lygio trigerio atrankos etapas -- papildomų kriterijų, kurie gali būti pasirinkti iš programuojamo
 kriterijų meniu, pritaikymas.
 Šie papildomi kriterijai gali būti keičiami ir greitintuvui veikiant, priklausomai nuo jo veikimo sąlygų
-(su greitintuvu dirbantys mokslininkai kartais eksperimentuoja keisdami protonų skaičių per vieną protonų prasikeitimą).
+(su greitintuvu dirbantys technikai kartais eksperimentuoja keisdami protonų skaičių per vieną pluoštelių prasikeitimą).
 Kriterijus visada stengiamasi parinkti taip, kad juos praeitų ne daugiau kaip $10^5$ įvykių per sekundę
 (tai yra CMS elektronikos pajėgumų viršutinė riba).
 Jie gali būti tokie, kaip reikalavimas fizikinio objekto kandidatui viršyti tam tikrą slenkstinę energiją, reikalavimas
@@ -520,7 +536,7 @@ Pirmo lygio trigeris turi apytiksliai $4$~µs vėlavimą, per kurį sistema nusp
 išsaugomas tolimesnei analizei. 
 
 Aukšto lygio trigeris -- tai programinės įrangos rinkinys, skirtas detaliau išanalizuoti pirmo lygio trigerį praėjusius
-įvykius ir dar labiau sumažinti jų skaičių prieš išrašant juos ilgalaikiam saugojimui.
+įvykius ir dar labiau sumažinti jų skaičių prieš įrašant ilgalaikiam saugojimui.
 Aukšto lygio trigerio programinė įranga yra sudiegta į įprastus superkompiuterius, pastatytus netoli CMS detektoriaus.
 Juose įvykio vaizdas atkuriamas pasinaudojant pilna detektoriaus užregistruota informacija, o atpažintiems fizikiniams
 objektams, siekiant išsaugoti tik potencialiai įdomius įvykius, pritaikomi griežtesni atrankos kriterijai.
@@ -535,7 +551,7 @@ Pavyzdžiui, dvejetui lygus tarpavimas sumažins išsaugomų potencialiai įdomi
 
 
 \subsection{Protonų susidūrimo įvykių atkūrimas}
-CMS detektoriaus užregistruoti signalai sujungiami į pilną protonų susidūrimo įvykio vaizdą naudojantis
+CMS detektoriaus užregistruoti signalai sujungiami į pilną protonų susidūrimo įvykio vaizdą, naudojantis
 dalelių srauto (angl.\ \textit{Particle Flow} -- PF) algoritmu \cite{ParticleFlow}.
 Šis algoritmas sujungia trekų detektoriuje užregistruotus signalus su pataikymais į kalorimetrus arba miuonų
 detektorius, taip nustatydamas susidariusių dalelių tipus, jų trajektorijas bei kitus parametrus
@@ -543,10 +559,10 @@ detektorius, taip nustatydamas susidariusių dalelių tipus, jų trajektorijas b
 Dalelių srautas gali atkurti ne tik dalelių trajektorijas, bet ir kitus fizikinius objektus, pavyzdžiui,
 hadronų čiurkšles (ši sąvoka plačiau paaiškinta \ref{sec:jets} skyriuje) ar skersinio impulso trūkumą.
 
-Dalelių srauto algoritmas įvykių atkuria iteratyviai.
+Dalelių srauto algoritmas įvykius atkuria iteratyviai.
 Pirmiausia nustatomos \ltq{akivaizdžiausios} trajektorijos (pavyzdžiui, tokios, kurios susideda iš pataikymų
 kiekviename trekų detektoriaus sluoksnyje, gerai sutampa su pataikymais į kalorimetrus ar miuonų detektorius,
-kalorimetro išmatuota energija gerai tinka su impulsu, nustatytu iš trajektorijos kreivumo ir pan.).
+kalorimetro išmatuota energija gerai sutinka su impulsu, nustatytu iš trajektorijos kreivumo ir pan.).
 Tada signalai, kurie buvo panaudoti nustatant geriausias trajektorijas, pašalinami ir atkūrimo procedūra
 kartojama su tuo, kas liko, tik šiek tiek sušvelninus trajektorijos nustatymo \ltq{gerumo} reikalavimus.
 Taip iteruojama iki kol panaudojama visa detektoriaus užregistruota informacija.
@@ -556,15 +572,15 @@ Atkurto Drell-Yan proceso įvykio kandidato pavyzdys atvaizduotas \ref{fig:Event
 Įvykio vaizdas sugeneruotas naudojantis CMS programinės įrangos pakete esančia programa FireWorks.
 
 Per kiekvieną protonų pluoštelių prasikeitimą įvyksta kelios dešimtys protonų susidūrimų, o taip pat, iki kol
-visos susidariusios dalelės išlekia iš detektoriaus arba yra sustabdomos, jau būna prasidėjęs kitas pluoštelių
+visos susidariusios dalelės išlekia iš detektoriaus arba yra sustabdomos, jau būna prasidėjęs ir kitas pluoštelių
 prasikeitimas (daugybiniai protonų susidūrimai angliškai vadinami \textit{pile-up} -- PU).
 Iš kelių dešimčių vienu metu įvykusių protonų susidūrimų dažniausiai įdomus būna tik vienas (o įvykiuose, kurių
 nepraleido trigeris, įdomaus nebuvo nei vieno).
 Dalelių srauto algoritmas sugeba atskirti didžiąją dalį dalelių trajektorijų, susijusių su pašaliniais
 protonų susidūrimais ir jas atmesti.
 Iš tiesų, dalelių srauto algoritmas yra toks pajėgus, kad net geba atpažinti daleles, kurios atsirado kitų dalelių skilimo metu
-ar susieti užregistruotus fotonus su juos dėl judėjimo su pagreičiu magnetiniame lauke išspinduliavusiais elektronais.
-Norint sėkmingai taikyti tokį algoritmą svarbu, kad aktyvių detektoriaus elementų sudalinimas būtų kuo smulkesnis,
+ar susieti užregistruotus fotonus su juos išspinduliavusiais elektronais (dėl judėjimo su pagreičiu magnetiniame lauke).
+Norint sėkmingai taikyti tokį algoritmą svarbu, kad aktyvių detektoriaus elementų sudalinimas būtų pakankamai smulkus,
 o pats detektorius būtų sandarus.
 CMS detektorius gerai atitinka abu iš šių kriterijų.
 
@@ -573,7 +589,7 @@ CMS detektorius gerai atitinka abu iš šių kriterijų.
 	\caption{\label{fig:Event}
 		Dalelių srauto algoritmu atkurto Drell-Yan proceso įvykio kandidato vaizdas.
 		Tamsiai žalios linijos vaizduoja mažos energijos dalelių (daugiausia pionų) trajektorijas,
-		o ryškios šviesiai žalios -- didelės energijos elektronų trajektorijas.
+		o ryškios šviesiai žalios linijos -- didelės energijos elektronų trajektorijas.
 		Šviesiai žali ir oranžiniai stulpeliai vaizduoja atitinkamai elektromagnetinio ir hadronų kalorimetro
 		segmentuose užregistruotus energijos kiekius.
 		Atkurtame įvykyje matomos elektronų poros invariantinė masė apytiksliai lygi $90$ GeV, t.y., labai artima $Z$ bozono masei.
@@ -639,18 +655,18 @@ ir skildami gali pagaminti leptonų.
 Pavyzdžiui, elektronas arba miuonas yra randamas apytiksliai $20\%$ gelminio kvarko sukurtų čiurkšlių
 (angl.\ \textit{b-jets}) ir apytiksliai $10\%$ žaviojo kvarko sukurtų čiurkšlių (angl.\ \textit{c-jets}) \cite{LeptonJets}.
 Čiurkšlėse susidariusios stipriąja sąveika nesąveikaujančios dalelės neretai pagelbėja nustatant,
-kokį kvarką atitinka matoma čiurkšlė \cite{LeptonJets}.
+kokį kvarką atitinka matoma čiurkšlė.
 Vis dėlto, jos kartais gali ir suklaidinti -- retais atvejais čiurkšlės yra supainiojamos su protonų susidūrimo metu
 pagamintu leptonu
 \cite{DY_CMS2011, DY_CMS2013, DY_ATLAS2013, DY_ATLAS2014, DY_CMS2015, DY_ATLAS2016, DY_ATLAS2017, DY_CMS2019, EleID, MuonID}.
 
 Bendru atveju čiurkšlėse susidarę leptonai nėra izoliuoti -- jie yra apsupti hadronų srauto.
 Vis dėlto, pasitaiko atvejų, kai leptonas yra pakankamai energingas, kad susumuotas aplink lėkusių hadronų ir fotonų
-skersinis impulsas yra gerokai mažesnis už leptono impulsą (tai gali sudaryti įspūdį, kad leptonas yra izoliuotas).
+skersinis impulsas yra gerokai mažesnis už leptono skersinį impulsą (tai gali sudaryti įspūdį, kad leptonas yra izoliuotas).
 Taip pat galimi atvejai, kai didesnę dalį čiurkšlės energijos nešasi vienas ar keli fotonai.
-Įvykio atkūrimo algoritmui klaidingai priskyrus trekų detektoriuje užfiksuotą trajektoriją su fotonų paliktu signalu
-elektromagnetiniame kalorimetre čiurkšlę galima neteisingai atpažinti kaip elektroną.
-Jeigu tokio \ltq{netikro} elektrono energija išmatuojama gerokai didesnė už jį supančių hadronų energiją, galima ji
+Įvykio atkūrimo algoritmui klaidingai susiejus trekų detektoriuje užfiksuotą trajektoriją su fotonų paliktu signalu
+elektromagnetiniame kalorimetre, čiurkšlę galima neteisingai atkurti kaip elektrono objektą.
+Jeigu išmatuota tokio \ltq{netikro} elektrono energija yra gerokai didesnė už jį supančių hadronų energiją, galima ji
 klaidingai palaikyti izoliuotu.
 Labai retais atvejais nutinka ir taip, kai energinga čiurkšlė pralekia hadronų kalorimetrą ir palieka signalą miuonų
 detektoriuje (toks procesas angliškai vadinamas \textit{hadronic punchthrough}).
@@ -668,15 +684,15 @@ Tiriant Drell-Yan procesą, į šių triukšmo procesų indėlį taip pat svarbu
 \subsection{Triukšmo įvykių skaičiaus įvertinimas}
 Turint detektoriaus išmatuotų duomenų rinkinį neįmanoma vienareikšmiškai pasakyti, kurie įvykiai yra susiję su triukšmo
 procesais.
-Galima tik ribotu tikslumu įvertinti, koks skaičius triukšmo įvykių rinkinyje galėjo būti.
+Įmanoma tik ribotu tikslumu įvertinti, koks skaičius triukšmo įvykių galėjo patekti į tiriamą rinkinį.
 Triukšmo įvykių skaičius įvertinamas pasinaudojant papildomais duomenų rinkiniais, kurie gali būti gauti iš tikro matavimo
 arba sumodeliuoti.
 
 Grubų triukšmo įvykių skaičiaus įvertį galima gauti pasinaudojus Monte Carlo (MC) metodu sumodeliuotais protonų susidūrimo įvykiais.
 Įvykių modeliavimas būna atliekamas keliais lygmenimis.
 Pirmiausia sumodeliuojamas pats protonų susidūrimas ir gaunama, kokios dalelės susidarė jo metu.
-Tada modeliuojami po susidūrimo vykstantys antriniai procesai, tokie, kaip hadronizacija, spinduliavimas, dalelių skilimai,
-pašaliniai protonų susidūrimai, vykstantys tuo pačiu metu.
+Tada modeliuojami po susidūrimo vykstantys antriniai procesai, tokie, kaip hadronizacija, spinduliavimas, dalelių skilimai bei
+tuo pačiu metu vykstantys pašaliniai protonų susidūrimai.
 Galiausiai modeliuojama, kaip įvykio produktai sąveikauja su medžiaga -- detektoriaus komponentais.
 Tokį virtualų eksperimentą kartojant daug kartų galima gauti vidutinį rezultatą, kuris yra palyginamas su realiu eksperimentu.
 
@@ -689,7 +705,7 @@ atskirų triukšmo procesų įvykių tikėtinumus, neidealus detektoriaus atsako
 Blogiausiai modeliavimas įvertina procesus, kurių tikėtinumas labai didelis, o įvykių atrankos praėjimo efektyvumas labai
 mažas -- norint gauti tolydų ir tikrovišką pasiskirstymą reikėtų tokių įvykių sumodeliuoti nepaprastai daug, o tam
 reikalingi neįmanomai dideli skaičiavimo ir duomenų saugojimo resursai.
-Būtent tokie yra su klaidingai atpažintomis čiurkšlėmis susiję W+Jets ir QCD procesai -- jų tikėtinumas didesnis už
+Būtent tokie yra su klaidingai atpažintomis čiurkšlėmis susiję $\WJets$ ir $\QCD$ procesai -- jų tikėtinumas didesnis už
 Drell-Yan proceso (atitinkamai $3$ ir net $500$ kartų), o tikimybė čiurkšlei būti klaidingai atpažintai kaip analizei
 atrinktam leptonui yra ganėtinai maža. 
 Dėl šių trūkumų naudoti vien modeliuotus duomenis yra vengiama ir, kur įmanoma, stengiamasi triukšmo įvykių skaičių
@@ -702,7 +718,7 @@ Signalo sritis pasirenkama taip, kad į ją patektų kuo daugiau signalo ir kuo 
 tyrimo sritis.
 Kontrolinė sritis pasirenkama taip, kad į ją patektų kuo daugiau triukšmo ir kuo mažiau signalo įvykių.
 Sritys gali būti apibrėžiamos įvairiais užregistruotus įvykius apibūdinančių parametrų apribojimais, pavyzdžiui,
-apribojant tam tikrų įvykyje užregistruotų dalelių ar čiurkšlių skaičių, tiriamų dalelių trajektorijų izoliuotumą, jų
+apribojant tam tikrų įvykyje užregistruotų dalelių ar kitų fizikinių objektų skaičių, tiriamų dalelių trajektorijų izoliuotumą, jų
 elektrinius krūvius ir pan.
 Signalo ir kontrolinė sritys turi būti nepersidengiančios.
 Matavimu grįsti metodai nustato sąsają tarp triukšmo įvykių pasiskirstymo signalo ir kontrolinėje srityje.
@@ -717,7 +733,7 @@ Jei triukšmo įvykyje susidaro dvi nestabilios dalelės, kurios gali skilti į 
 Toliau šiame darbe bus gilinamasi į klaidingo atpažinimo metodą.
 
 
-\subsection{Klaidingo atpažinimo metodas}
+\subsection{Klaidingo atpažinimo metodas}\label{sec:FR}
 Klaidingo atpažinimo metodas yra ganėtinai populiarus nustatant triukšmo įvykių skaičių, kuriuose viena ar kelios čiurkšlės
 buvo klaidingai atpažintos kaip izoliuoti leptonai.
 Nemažas skaičius CMS ir ATLAS eksperimentuose vykdomų leptono-antileptono galutinės būsenos tyrimų (daugiausia tai yra
@@ -745,7 +761,7 @@ Tam pasinaudojama įvykių rinkiniais, kuriuose vienas arba abu leptonai nepraė
 Dažniausiai klaidingo atpažinimo tikimybė pritaikoma kaip svoris daugiklis šiems įvykiams \cite{Z'_ATLAS2011, Z'_CMS2011, Z'_CMS2015}.
 Įvykio svoris susideda iš daugiklio $f/(1-f)$ kiekvienam objektui, kuris nepraėjo signalo atrankos (t.y., visas įvykio svoris
 susideda iš vieno arba dviejų tokių daugiklių) \cite{Z'_CMS2015}.
-Šie svoriai transformuoja įvykių su atrankos nepraeinančiais leptonais pasiskirstymą į pasiskirstymą, atitinkantį signalo
+Šie svoriai transformuoja įvykių su atrankos nepraeinančiais leptonais pasiskirstymą į atitinkantį signalo
 srityje esančius įvykius.
 
 Kai kurios ATLAS eksperimentinės tyrimo grupės klaidingo atpažinimo tikimybės pritaikymą aprašo kitaip \cite{DY_ATLAS2016, Z'_ATLAS2014}.
@@ -812,74 +828,99 @@ Vykdant Drell-Yan proceso įvykių atranką ieškoma dviejų numatytus kriteriju
 Taigi, klaidingai atpažinti gali būti nulis, vienas arba abu leptonai.
 Pilną atranką praėjusių įvykių skaičių galime išreikšti taip (tą galime išsivesti iš \eqref{eq:FRmatrix} išraiškos):
 \begin{equation}
-\label{eq:2pass}
-	N_{S1,S2} = N_{R1,R2} a_1 a_2 + N_{R,F} af + N_{F1,F2} f_1 f_2 \; ,
+\label{eq:2passSeparated}
+	N_{SS} = N_{RR} a_1 a_2 + N_{RF} a_1f_2 + N_{FR} f_1a_2 + N_{FF} f_1 f_2 \; ,
 \end{equation}
-čia $N_{S1,S2}$ -- įvykių su dviem atranką praėjusiais leptonais skaičius, $N_{R1,R2}$ -- įvykių su dviem tikrais
-leptonais skaičius, $N_{R,F}$ -- įvykių su vienu tikru leptonu ir viena klaidingai atpažinta čiurkšle skaičius
-(čia įskaičiuojami abu atvejai $a_1 f_2$ ir $a_2 f_1$), $N_{F1,F2}$ -- įvykių su dviem klaidingai
+čia $N_{SS}$ -- įvykių su dviem atranką praėjusiais leptonais skaičius, $N_{RR}$ -- įvykių su dviem tikrais
+leptonais skaičius, $N_{RF}$ ir $N_{FR}$ -- įvykių su vienu tikru leptonu ir viena klaidingai atpažinta čiurkšle skaičius,
+$N_{FF}$ -- įvykių su dviem klaidingai
 atpažintomis čiurkšlėmis skaičius.
 Čia nekreipiame dėmesio į fizikinio objekto atpažinimo efektyvumą.
+Paprastumo dėlei, apjunkime dėmenis $N_{RF}$ ir $N_{FR}$ po vienu skaičiumi $N_{RF+FR}$:
+\begin{equation}
+	N_{RF} a_1f_2 + N_{FR} f_1a_2 \equiv N_{RF\!+\!FR}\,af \, , 
+\end{equation}
+čia dešinėje pusėje numetėme indeksus nuo $a$ ir $f$, su sąlyga, kad žinome, kuri dalelė įvykyje tikras, o kuri -- netikras
+leptonas ir taikome daugiklius $a$ ir $f$ atitinkamai tikram ir netikram leptonui.
+Tai leidžia \eqref{eq:2passSeparated} išraišką sutrumpinti taip:
+\begin{equation}
+\label{eq:2pass}
+	N_{SS} = N_{RR} a_1 a_2 + N_{RF\!+\!FR}\, af + N_{FF} f_1 f_2 \; .
+\end{equation}
+Panašūs sutrumpinimai bus naudojami ir toliau.
 Klaidingo atpažinimo metodo tikslas -- nustatyti \eqref{eq:2pass} išraiškoje esančius antrąjį ir trečiąjį dėmenis.
 Tai padaroma suskaičiuojant įvykius, kuriuose klaidingai atpažinta čiurkšlė \textbf{nepraėjo} leptono atrankos kriterijų
-(tikimybė jų nepraeiti lygi $1-f$).
-Pavyzdžiui, įvykius su vienu atrankos nepraėjusiu leptonu galime išreikšti taip:
+(tikimybė jų nepraeiti lygi $1\!-\!f$).
+Pavyzdžiui, įvykius su vienu atrankos nepraėjusiu leptonu (nesvarbu, kuriuo) galime išreikšti taip:
 \begin{equation}
 	\label{eq:1fail}
 	\begin{gathered}
-		N_{S,C} = N_{R1,R2} \left( a_1(1-a_2) + (1-a_1)a_2 \right) + N_{R,F} \left( a(1-f) + (1-a)f \right) + \\
-				  	  + N_{F1,F2} \left( f_1(1-f_2) + (1-f_1)f_2 \right).
+		N_{SC\!+\!CS} = N_{RR} \left( a_1(1-a_2) + (1-a_1)a_2 \right) + N_{RF\!+\!FR} \left( a(1-f) + (1-a)f \right) + \\
+			   + N_{FF} \left( f_1(1-f_2) + (1-f_1)f_2 \right).
 	\end{gathered}
 \end{equation}
-Išsireiškiame $N_{R,F}$:
+Išsireiškiame $N_{RF\!+\!FR}$:
 \begin{equation}
 \label{eq:realfake}
-	N_{R,F} = \frac{ N_{S,C} - N_{R1,R2} (a_1(1-a_2)+(1-a_1)a_2) - N_{F1,F2} (f_1(1-f_2)+(1-f_1)f_2) }
+	N_{RF\!+\!FR} = \frac{ N_{SC\!+\!CS} - N_{RR} (a_1(1-a_2)+(1-a_1)a_2) - N_{FF} (f_1(1-f_2)+(1-f_1)f_2) }
 				   { (a(1-f)+(1-a)f) }.
 \end{equation}
 Jeigu $a$ yra ganėtinai didelis ($\approx \!1$), o $f$ -- ganėtinai mažas ($\approx \!0$), \eqref{eq:realfake} išraišką galima
 supaprastinti, vardiklyje esantį dėmenį $(1-a)f$ atmetant kaip mažą dydį.
-Dėmenį $N_{R1,R2} a_1(1-a_2)$ galime rasti iš modeliavimo, o $N_{F1,F2} (f_1(1-f_2)+(1-f_1)f_2)$ -- pasinaudodami
+Dėmenį $N_{RR} a_1(1-a_2)$ galime rasti iš modeliavimo, o $N_{FF} (f_1(1-f_2)+(1-f_1)f_2)$ -- pasinaudodami
 įvykiais, kuriuose dvi klaidingai atpažintos čiurkšlės nepraėjo leptono atrankos kriterijų.
 Iš tiesų:
 \begin{equation}
 \label{eq:FRWjets}
-	N_{S,C} - N_{R1,R2} a_1(1-a_2)- N_{F1,F2} (f_1(1-f_2)+(1-f_1)f_2) \approx N_{S,C}^{W+Jets} \; ,
+	N_{SC\!+\!CS} - N_{RR} a_1(1-a_2)- N_{FF} (f_1(1-f_2)+(1-f_1)f_2) \approx N_{SC\!+\!CS}^{\WJets} \; ,
 \end{equation}
 nes iš įvykių, kuriuose vienas fizikinis objektas nepraeina atrankos, atmetus visus įvykius, kuriuose dalyvauja du tikri elektronai
 arba dvi klaidingai atpažintos čiurkšlės, liekame su įvykiais, kuriuose buvo vienas tikras leptonas ir viena klaidingai atpažinta
 čiurkšlė, o dominuojantis tokio tipo procesas yra $\WJets$.
+Galime supaprastinti \eqref{eq:realfake} išraišką:
+\begin{equation}
+\label{eq:realfakeSimple}
+	N_{RF\!+\!FR} = \frac{ N_{SC\!+\!CS}^{\WJets} }
+				   		 { (a(1-f)+(1-a)f) }.
+\end{equation}
 Įvykius su dviem atrankos nepraėjusiais leptonais galime išreikšti taip:
 \begin{equation}
 \label{eq:2fail}
 	\begin{gathered}
-		N_{C1,C2} = N_{R1,R2} (1-a_1)(1-a_2) + N_{R,F} (1-a)(1-f) + 
-						+ N_{F1,F2} (1-f_1)(1-f_2).
+		N_{CC} = N_{RR} (1-a_1)(1-a_2) + N_{RF\!+\!FR} (1-a)(1-f) + 
+						+ N_{FF} (1-f_1)(1-f_2).
 	\end{gathered}
 \end{equation}
-Išsireiškiame $N_{F1,F2}$:
+Išsireiškiame $N_{FF}$:
 \begin{equation}
 \label{eq:2fake}
-	N_{F1,F2} = \frac{ N_{C1,C2} - N_{R1,R2} (1-a_1)(1-a_2) - N_{R,F} (1-a)(1-f) }
+	N_{FF} = \frac{ N_{CC} - N_{RR} (1-a_1)(1-a_2) - N_{RF\!+\!FR} (1-a)(1-f) }
 					 { (1-f_1)(1-f_2) },
 \end{equation}
-čia dėmenis $N_{R1,R2} (1-a_1)(1-a_2)$ ir $N_{R,F} (1-a)(1-f)$ galime rasti iš modeliavimo.
+čia dėmenis $N_{RR} (1-a_1)(1-a_2)$ ir $N_{RF\!+\!FR} (1-a)(1-f)$ galime rasti iš modeliavimo.
 Panašiai, kaip su $\WJets$ \eqref{eq:FRWjets} išraiškoje, čia galime užrašyti:
 \begin{equation}
 \label{eq:FRQCD}
-	N_{C1,C2} - N_{R1,R2} (1-a_1)(1-a_2) - N_{R,F} (1-a)(1-f) \approx N_{C1,C2}^{\QCD} \; ,
+	N_{CC} - N_{RR} (1-a_1)(1-a_2) - N_{RF\!+\!FR} (1-a)(1-f) \approx N_{CC}^{\QCD} \; ,
 \end{equation}
 nes dominuojantis procesas, kuriame dalyvauja dvi klaidingai atpažintos čiurkšlės yra $\QCD$.
+Taigi, \eqref{eq:2fake} išraišką galime sutrumpintai užrašyti taip:
+\begin{equation}
+\label{eq:2fakeSimple}
+	N_{FF} = \frac{ N_{CC}^{\QCD} }
+				  { (1-f_1)(1-f_2) },
+\end{equation}
 Įstatę išvestas išraiškas į \eqref{eq:2pass} gauname:
 \begin{equation}
 \label{eq:2passFR}
 	\begin{gathered}
-		N_{S1,S2} = N_{R1,R2} a_1 a_2 + \frac{N_{S,C}^{\WJets}}{(a(1-f)+(1-a)f)}af +
-				    \frac{N_{C1,C2}^{\QCD}}{(1-f_1)(1-f_2)}f_1f_2 \approx \\ \approx
-					N_{R1,R2} a_1 a_2 + N_{S,C}^{\WJets} \frac{f}{1-f} +
-					N_{C1,C2}^{\QCD} \frac{f_1 f_2}{(1-f_1)(1-f_2)}. 
+		N_{SS} = N_{RR} a_1 a_2 + \frac{N_{SC\!+\!CS}^{\WJets}}{(a(1-f)+(1-a)f)}af +
+				    \frac{N_{CC}^{\QCD}}{(1-f_1)(1-f_2)}f_1f_2 \approx \\ \approx
+					N_{RR} a_1 a_2 + N_{SC\!+\!CS}^{\WJets} \frac{f}{1-f} +
+					N_{CC}^{\QCD} \frac{f_1 f_2}{(1-f_1)(1-f_2)}, 
 	\end{gathered}
 \end{equation}
+čia $(1-a)f$ atmetėme kaip mažą dydį.
 Taigi, norint įvertinti su klaidingai atpažintomis čiurkšlėmis susijusių triukšmo įvykių skaičių signalo srityje,
 turime nustatyti, kiek buvo tokių triukšmo įvykių, kuriuose klaidingai atpažintos čiurkšlės nepraėjo atrankos
 kriterijų ir kiekvienam atrankos nepraėjusiam objektui pritaikyti daugiklį $f/(1-f)$.
@@ -887,740 +928,1040 @@ kriterijų ir kiekvienam atrankos nepraėjusiam objektui pritaikyti daugiklį $f
 
 \newpage
 \section{Drell-Yan proceso tyrimo metodika}
-Šiame skyriuje pristatomas CERN CMS detektorius bei pateikiama pagrindinė informacija apie tai, kaip buvo atliekamas
-tyrimas: pristatomi naudoti duomenų rinkiniai, supažindinama su darbui svarbiomis signalo ir triukšmo sąvokomis,
-apibūdinamas Drell-Yan proceso triukšmo įvykių skaičiaus įvertinimui naudotas fizikinio
-objekto klaidingo atpažinimo metodas, pristatomi taikyti paklaidų įvertinimo principai.
+Šiame skyriuje supažindinama su atlikto darbo metodika: trumpai pristatomi naudoti duomenų rinkiniai bei programinė įranga,
+supažindinama su vykdyta protonų susidūrimo įvykių atrankos procedūra bei atrinktiems įvykiams pritaikytomis pataisomis.
+Toliau paaiškinama, kaip buvo matuojamos klaidingo atpažinimo tikimybės bei kaip jos buvo panaudotos gaunant su klaidingai
+atpažintomis čiurkšlėmis susijusių triukšmo įvykių skaičiaus įverčius. Galiausiai supažindinama su rezultato neapibrėžtumų
+įvertinimo principais.
 
 
 \subsection{Duomenų rinkiniai ir analizės kodai}\label{sec:data}
-Šiame darbe buvo naudojami dalinai apdoroti CERN CMS detektoriaus 2016 metais užregistruoti $13$~TeV
-energijos protonų susidūrimų duomenys.
-Duomenų kiekis atitinka $35.9$~\invfb in-tegruotąjį šviesį, arba $~2 \cdot 10^{15}$ protonų susidūrimų.
-Tai yra apie $10$ kartų daugiau įvykių, nei užregistruota $2015$-aisiais metais \cite{DY2019}.
+Darbui atlikti buvo naudojami CERN CMS detektoriaus užregistruoti protonų susidūrimų duomenys.
+Duomenys buvo surinkti 2016 metais, esant $13$~TeV susidūrimų energijai.
+Jų kiekis atitinka $35.9$~\invfb integruotą šviesį ($\sim\!2 \cdot 10^{15}$ protonų susidūrimų).
+Tai yra $\sim\!10$ kartų daugiau įvykių, nei užregistruota $2015$-aisiais metais \cite{DY_CMS2019}.
+CMS detektoriaus užfiksuoti įvykiai yra suskirstomi į duomenų rinkinius grupuojant pagal tai,
+kiek ir kokio tipo objektų juose buvo aptikta.
+Skirtingi duomenų rinkiniai gali būti persidengiantys (turėti tų pačių įvykių).
+Šiame darbe buvo naudojami trys skirtingi duomenų rinkiniai:
+1) įvykių su bent vienu užfiksuotu miuonu rinkinys (\ttt{SingleMuon}),
+2) įvykių su bent dviem elektromagnetiniais objektais (elektronais arba fotonais) rinkinys (\ttt{DoubleEG}),
+3) įvykių su bent vienu fotonu rinkinys (\ttt{SinglePhoton}).
+Naudoti duomenų rinkiniai buvo dalinai apdoroti CMS Drell-Yan tyrimo mokslinės grupės.
 
-Detektoriaus duomenų interpretavimui buvo pasitelkiami modeliuoto Drell-Yan signalo bei pagrindinių triukšmo
-procesų duomenų rinkiniai (signalo ir triukšmo sąvokos aptariamos \ref{sec:sig_bkg}~skyriuje).
-Drell-Yan signalo bei $\WJets$ proceso įvykiai buvo sumodeliuoti antros eilės kvantinės chromodinamikos
-perturbacijų tikslumu  (angl.\ \textit{next-to-leading order} -- NLO) naudojant \textsc{MadGraph5\_aMC@NLO} įvykių
-modeliavimo programą \cite{MG_aMCatNLO}.
-Viršūninio kvarko ir antikvarko poros ($t\bar{t}\,$) ir vieno viršūninio kvarko kartu su $W$ bozonu ($tW$ arba
-$\tbarW$) įvykiai buvo sumodeliuoti naudojant \textsc{Powheg} \cite{powheg_ttbar, powheg_tW}.
-\textsc{Powheg} taip pat įvykius modeliuoja antros eilės QCD perturbacijų tikslumu.
-Dviejų bozonų ($WW$, $\WZ$, $\ZZ$) įvykiai buvo sumodeliuoti su \textsc{Pythia8} nulinės eilės perturbacijų tikslumu
-(angl.\ \textit{leading order} -- LO) \cite{pythia82}.
-Visų modeliuotų įvykių metu vykstantys antriniai procesai, tokie, kaip hadronizacija, spinduliavimas, dalelių skilimai,
-pašaliniai protonų susidūrimai ir pan., buvo sumodeliuoti naudojantis \textsc{Pythia8}.
-Detektoriaus atsakas į kiekvieną iš sumodeliuotų įvykių buvo modeliuojamas naudojantis \textsc{Geant4} programa
+Detektoriaus duomenų interpretavimui buvo pasitelkiami modeliuoti Drell-Yan proceso bei svarbiausių triukšmo
+procesų duomenų rinkiniai.
+Drell-Yan proceso bei $W$ bozono ir čiurkšlės ($\WJets$) įvykiai buvo sumodeliuoti su
+\textsc{MadGraph5\_aMC@NLO} \cite{MG_aMCatNLO}.
+Ši programa įvykius modeliuoja antros eilės (NLO) kvantinės chromodinamikos perturbacijų tikslumu.
+Viršūninio kvarko ir antikvarko poros ($t\bar{t}\,$) bei vieno viršūninio kvarko ir $W$ bozono ($tW$ arba
+$\tbarW$) procesai buvo sumodeliuoti naudojant \textsc{Powheg} įvykių modeliavimo programą \cite{powheg_ttbar, powheg_tW}.
+Vieno fotono ir vienos čiurkšlės ($\gJets$) įvykiai buvo sumodeliuoti su programa \textsc{Sherpa} \cite{Sherpa}.
+\textsc{Powheg} ir \textsc{Sherpa} įvykius taip pat modeliuoja antros eilės (NLO) perturbacijų tikslumu.
+Dviejų bozonų procesų ($WW$, $\WZ$, $\ZZ$) bei kelių čiurkšlių ($\QCD$) procso modeliavimas buvo atliktas su
+\textsc{Pythia8} \cite{pythia82}.
+\textsc{Pythia8} įvykius modeliuoja pirmos eilės (LO) tikslumu.
+Visi sumodeliuotuose įvykiuose vykstantys antriniai procesai (kvarkų ir gliuonų hadronizacija, papildomų dalelių
+spinduliavimas, nestabilių dalelių skilimai, pašaliniai tuo pačiu metu vykstantys protonų susidūrimai ir pan.)
+buvo sumodeliuoti su \textsc{Pythia8}.
+Visų sumodeliuotų dalelių sąveika su CMS detektoriaus medžiaga buvo sumodeliuota su \textsc{Geant4} programa
 \cite{geant4}.
-Eksperimentinių ir modeliuotų duomenų rinkiniai sudaryti vengiant pasikartojimų.
+Modeliuoti skirtingų procesų įvykių rinkiniai yra nepersidengiantys.
+Sumodeliuotų procesų reakcijos skerspjūviai pateikiami \ref{table:Xsec} lentelėje.
+Joje taip pat pateikiamas tikėtinas kiekvieno proceso įvykių skaičius, kai integruotas lygus $35.9$~\invfb.
 
-Eksperimente užregistruotų įvykių skaičius yra fiksuotas ir nulemtas skirtingų procesų reakcijų skerspjūvių bei
-integruotojo šviesio, kuris priklauso nuo protonų susidūrimų dažnio, protonų pluoštelio matmenų, protonų skaičiaus
-viename pluoštelyje, pluoštelių prasikeitimo kampo ir pan.
-Tuo tarpu modeliuotų įvykių skaičius gali būti įvairus priklausomai nuo turimų skaičiavimo resursų ir bendru atveju
-nesutampa su eksperimente užregistruotu įvykių skaičiumi.
-Kad būtų galima palyginti matavimą su modeliavimu, modeliuotų įvykių skaičius turi būti sunormuotas
-į išmatuotą integruotąjį šviesį.
-Žinant proceso reakcijos skerspjūvį $\sigma$ ir integruotąjį šviesį $\Lumi$, tikėtiniausią įvykių skaičių $N$
-gauname iš šių dydžių sandaugos:
-\begin{equation}
-	N = \sigma\Lumi \; .
-\end{equation}
-Turimą sumodeliuotų įvykių skaičių sunormuojame į $N$ kiekvienam modeliuotam įvykiui priskirdami normuojantį svorį
-$\omega_{i}^{\mathrm{Norm.}}$, kuris apskaičiuojamas taip:
-\begin{equation}
-	\omega_{i}^{\mathrm{Norm.}} = \omega_{i}^{\mathrm{Gen.}} \frac{ \sigma\Lumi }{ \sum_{i=j}^{N}\omega_{j}^{\mathrm{Gen.}} } \; ,
-	\label{eq:NLOweight}
-\end{equation}
-čia $\omega_{i}^{\mathrm{Gen.}}$ kiekvieno įvykio individualus svoris, priskirtas įvykių modeliavimo programos.
-Daugumai procesų $\omega_{i}^{\mathrm{Norm.}}<1$.
+\begin{table}[b!]
+	\begin{tabular}{|c|c|c|}
+		\hline
+		Procesas & Reakcijos skerspjūvis (pb) & Tikėtinas įvykių skaičius \\ 
+		\hline\hline
+		$\mathrm{DY} \!\!\rightarrow\! ll$ & $2.39\times 10^4$ & $8.58\times 10^8$ \\ %23908.693
+		\hline		
+		$\ZZ$ & $16.52$ & $5.93\times 10^5$ \\
+		\hline
+		$tW$ & $35.85$ & $1.29\times 10^6$ \\
+		\hline
+		$\tbarW$ & $35.85$ & $1.29\times 10^6$ \\
+		\hline
+		$\WZ$ & $47.13$ & $1.69\times 10^6$ \\
+		\hline
+		$WW$ & $118.70$ & $4.26\times 10^6$ \\
+		\hline	
+		$\ttbar$ & $831.76$ & $2.98\times 10^7$ \\
+		\hline	
+		$\WJets$ & $6.15\times 10^4$ & $2.21\times 10^9$ \\ %61526.70
+		\hline
+		$\gJets$ & $1.39 \times 10^5$ & $4.98\times 10^9$ \\
+		\hline
+		$\QCD$ ($\mu$) & $9.01\times 10^6$ & $3.23\times 10^{11}$ \\
+		\hline
+		$\QCD$ (EM) & $1.86\times 10^7$ & $6.67\times 10^{11}$ \\
+		\hline
+	\end{tabular}
+	\caption{\label{table:Xsec} Tyrime naudotų modeliuotų duomenų rinkinių reakcijų skerspjūviai ir tikėtini įvykių skaičiai, kai integruotas
+	šviesis lygus $35.9$~\invfb. Žymėjimai $\QCD$ ($\mu$) ir $\QCD$ (EM) reiškia įvykių rinkinius, \ltq{praturtintus}
+	atitinkamai miuonais arba elektromagnetiniais objektais (bent vienoje iš čiurkšlių susiformuoja miuonas arba fotonai/elektronai).}
+\end{table}
 
-Darbe naudoti CMS Drell-Yan tyrimo grupės dalinai atrinkti duomenys yra saugomi Pietų Korėjoje esančiame CMS Tier2
-duomenų centre ir užima apie $14$ TB.
-Duomenų analizei buvo rašomi C++ programiniai moduliai, kurie buvo leidžiami ROOT aplinkoje \cite{ROOTarticle}.
-Duomenų analizė vykdyta dviem etapais: pirmiausia buvo atliekama išmatuotų ir modeliuotų įvykių atranka nuotoliniu
-būdu prisijungus prie skaičiavimo centro.
-Svarbiausia su atrinktais įvykiais susijusi informacija buvo įrašoma į naujus duomenų failus, kurie užima tik
-apie $10$ GB.
-Naujai sukurti failai buvo parsisiunčiami į vietinį kompiuterį tolimesnei analizei.
-Programinio kodo versijos buvo tvarkomos naudojantis \textit{Github} versijų valdymo sistema.
-Visi parašyti analizės kodai yra patalpinti \textit{Github} saugykloje, esančioje adresu
+Darbe naudoti duomenys yra saugomi Pietų Korėjos Kyungpook nacionalinio universiteto Tier2 duomenų centre.
+Duomenų apimtis siekia apie $20$ TB.
+Duomenims analizuoti buvo rašomi programiniai moduliai C++ kalba.
+Parašyti programiniai moduliai buvo leidžiami CERN duomenų analizei skirtoje ROOT aplinkoje \cite{ROOTarticle}.
+Duomenų analizė buvo išskaidyta į du etapus.
+Pirmiausia Seulo nacionalinio universiteto CERN Tier3 skaičiavimo centre buvo atliekama darbui svarbių įvykių atranka.
+Atranka buvo vykdoma pagal kriterijus, aptariamus \ref{sec:selection} skyriuje, paleidus kodus nuotoliniu būdu.
+Atrinkti įvykiai buvo įrašomi į naujus duomenų failus ir toliau analizuojami atsisiuntus į vietinį kompiuterį.
+Atsisiųsti duomenų rinkiniai užima apie $66$ GB, didžiąją dalį jų apimties sudaro klaidingo atpažinimo tikimybės matavimui
+naudoti duomenys.
+Programinio kodo versijų sekimui ir tvarkymui buvo naudojama \textit{Github} versijų valdymo sistema.
+Visi parašyti C++ programiniai moduliai yra patalpinti viešoje \textit{Github} saugykloje, esančioje adresu
 \url{https://github.com/marijusambrozas/DrellYan2016/tree/master/SelectedX}.
 
 
-\subsection{Įvykių atranka}\label{sec:selection}
-Ne visi detektoriumi užregistruoti duomenys yra tinkami fizikinei analizei.
-Norint iš $2016$-aisiais metais CMS detektoriaus užregistruotų protonų priešpriešinių susidūrimų duomenų išskirti svarbią
-ir kokybišką informaciją buvo vykdoma įvykių atranka pagal kriterijus, kurie turėtų atmesti kiek įmanoma daugiau triukšmo
-įvykių ir tuo pačiu išsaugoti kuo daugiau signalo įvykių.
-Taip pat buvo apribojama tyrimo fazinė erdvė, paliekant tik tas sritis, kuriose detektoriaus veikimas yra efektyviausias.
-Visi taikyti atrankos kriterijai yra pateikti \ref{table:selection}~lentelėje.
+\subsection{Drell-Yan proceso įvykių atranka}\label{sec:selection}
+Ne visi CMS detektoriaus užfiksuoti protonų susidūrimo įvykiai yra tinkami Drell-Yan proceso fizikinei analizei.
+Norint iš $2016$ metais CMS užregistruotų duomenų išskirti dominančią informaciją, reikėjo įvykdyti įvykių atranką pagal
+numatytus specialius kriterijus.
+Atrankos kriterijai yra apibendrinti \ref{table:selection} lentelėje.
+Jie buvo parinkti taip, kad atranką praeitų kuo didesnis skaičius Drell-Yan signalo įvykių ir būtų atmetama kuo daugiau
+triukšmo įvykių, ypač tų, kurie susiję su klaidingai atpažintais fizikiniais objektais.
 
-\begin{table}[b!]
-	\begin{tabular}{|c|c|}
-		\hline
-		\textbf{Kriterijaus tipas} & \textbf{Reikalavimas} \\
-		\hline\hline
-		\multirow{3}{12em}{\centering Aukšto lygio trigeris} & \ttt{HLT\_IsoMu24} arba \ttt{HLT\_IsoTkMu24} \\ \cline{2-2}
-			& \multirow{2}{17em}{\centering Bent vienas miuonas turi būti aktyvavęs trigerį} \\
-		 & \\
-		\hline\hline
-		\multirow{2}{12em}{\centering Kinematiniai reikalavimai} & $p_{\mathrm{T \, 1}} > 28$~GeV, $p_{\mathrm{T \, 2}} > 17$~GeV \\ \cline{2-2}
-		 & $|\eta_1| < 2.4$, $|\eta_2| < 2.4$ \\
-		\hline\hline
-		\multirow{2}{12em}{\centering Dalelės identifikavimo reikalavimai} & \ttt{TightID} reikalavimai \\ \cline{2-2}
-		 & $I_{\mathrm{PF}}^{\mathrm{rel.}}<0.15$ \\
-		\hline\hline
-		\multirow{5}{12em}{\centering Reikalavimai geresniam signalo išskyrimui} &
-			\multirow{3}{17em}{\centering Pasirenkami 2 miuonai, kuriuos galima tiksliausiai suvesti į vieną pirminę viršūnę su $\chi^2<20$} \\
-		 & \\
-		 & \\ \cline{2-2}
-		 & Priešingi elektriniai krūviai \\ \cline{2-2}
-		 & Plokštuminis kampas $< \pi - 0.005$~rad \\
-		\hline
-	\end{tabular}
-	\caption{\label{table:selection}Apibendrinti įvykių atrankos kriterijai. Indeksai $1$ ir $2$ žymi atitinkamai greitesnįjį
-	ir lėtesnįjį miuoną.}
-\end{table}
+Elektronų kanalo įvykiams buvo naudojamas aukšto lygio dviejų elektronų trigeris, kuris aktyvuojamas aptikus vieną elektroną
+su skersiniu impulsu, didesniu nei $23$~GeV ir kitą -- su skersiniu impulsu, viršijančiu $12$~GeV.
+Siekiant, kad tyrimo sritis būtų kuo mažiau paveikta mažesnių už vienetą įvykių registravimo efektyvumų, ji buvo papildomai
+apribojama reikalaujant, kad vieno elektrono skersinis impulsas viršytų $28$~GeV, o kito -- $17$~GeV.
+Impulso apribojimai buvo taikomi konkrečiai dėl to, jog naudotas trigeris turėtų aktyvuotis aptikus elektronus
+su skersiniais impulsais, viršijančiais $(23, 12)$~GeV, tačiau jis maksimalų savo veikimo efektyvumą pasiekia prie šiek
+tiek aukštesnių skersinio impulso verčių.
+Taigi, kriterijus su slenksčiu $(28, 17)$~GeV užtikrina, kad būtų atrinkti įvykiai, kuriuose trigerio efektyvumas yra
+įsisotinęs.
+Taip pat buvo reikalaujama, kad elektromagnetinio kalorimetro elementų, į kuriuos elektronai pataikė, pseudospartos koordinatės
+($\eta\equiv -\mathrm{ln}\left[\tan\left(\theta/2\right)\right]$, kur $\theta$ -- kampas tarp dalelės trajektorijos ir $z$ ašies)
+absoliutinė vertė neviršytų $2.4$ bei nepatektų į sritį $1.4442<|\eta|<1.566$, kurioje yra perėjimas tarp kalorimetro
+cilindrinės ir antgalių dalies.
+Pseudospartos apribojimai skirti atmesti sritis, kuriose elektromagnetinio kalorimetro veikimo efektyvumas ne toks
+aukštas.
 
-Atrenkant įvykius buvo naudojamas aukšto lygio vieno miuono trigeris, kuris aktyvuojamas aptikus bent vieną
-miuoną su skersiniu impulsu, didesniu nei $24$~GeV.
+Norint užtikrinti, kad nagrinėjamame įvykių rinkinyje bus kuo mažiau klaidingai atpažintų čiurkšlių arba elektronų,
+atsiradusių fotonui pavirtus į elektrono-pozitrono porą, kiekvienam elektronui buvo taikomas CMS elektrono ir fotono
+fizikinių objektų mokslinės grupės (CMS \textit{EGamma Physics Object Group}) rekomenduojamas vidutiniškai griežtų
+elektrono atpažinimo kriterijų rinkinys \ltq{\ttt{MediumID}} (panašaus tipo reikalavimai, skirti analizuoti senesnių
+metų CMS detektoriaus duomenims, yra viešai prieinami išspausdintame straipsnyje \cite{EleID}, o naujesni kriterijai,
+kurie buvo taikomi šioje analizėje, yra prieinami tik CMS vidiniuose dokumentuose ir šiame darbe pridedami kaip priedas).
+Šiuos kriterijus turėtų atitikti apie $80\%$ tikrų elektronų ir apie $3\%$ klaidingai atpažintų objektų \cite{EleID}.
+Nors Drell-Yan proceso metu turėtų atsirasti priešingo krūvio elektronų pora, atrenkant įvykius elektronams priešingo
+krūvio reikalavimai nebuvo taikomi dėl ganėtinai didelės tikimybės, kad elektrono krūvis bus neteisingai atpažintas
+(ji siekia apie $1.5\%$ \cite{EleID}).
+Vietoje to, buvo reikalaujama, kad įvykyje būtų užfiksuoti lygiai du vidutiniškai griežtus kriterijus atitinkantys
+elektronai.
+
+Miuonų kanalo įvykiams buvo naudojamas aukšto lygio vieno miuono trigeris, kuris aktyvuojamas aptikus bent vieną izoliuotą
+miuoną, kurio skersinis impulsas viršija $24$~GeV.
 Miuonas turi būti atpažintas pasinaudojant trekų detektoriaus ir miuonų detektorių informacija.
-Kiekvienam miuonui iš trigerį aktyvavusių įvykių buvo taikomi \ttt{TightID} reikalavimai \cite{MuonID}, skirti sumažinti atranką
-praeinančių netikrų miuonų, bei miuonų, atsiradusių iš antrinių procesų, skaičių.
-\ttt{TightID} reikalavimus atitinka virš $95\%$ protonų susidūrimų metu sukurtų tikrų ir mažiau nei $0.3\%$ netikrų
-miuonų \cite{MuonID}.
-Taip pat kiekvienam miuonui buvo taikomas trajektorijos izoliuotumo reikalavimas: pašalinių dalelių, aptiktų
-$\Delta R < 0.3$ pločio kūgyje, nubrėžtame aplink miuono trajektoriją, skersinių impulsų suma negali
-viršyti $15\%$ miuono skersinio impulso vertės.
-Įvykiai, kuriuose nėra bent dviejų miuonų, atitinkančių išvardintus kriterijus buvo iškart atmetami.
-Likusiems įvykiams buvo taikomas reikalavimas, kad miuonų poros trajektorijas būtų galima pakankamai tiksliai
-suvesti į vieną pirminę
-viršūnę, taip pat buvo reikalaujama bei kad suporuoti miuonai būtų priešingų elektrinių krūvių.
-Įvykyje esant kelioms reikalavimus atitinkančioms poroms iš jų buvo išrenkama ta, kurią eina tiksliausiai suvesti į bendrą viršūnę.
-Tam, kad būtų išvengta kosminės spinduliuotės miuonų aptikimo, buvo taikomas papildomas kriterijus, reikalaujantis,
-kad plokštuminis kampas tarp dviejų miuonų trajektorijų būtų mažesnis, nei $\pi-0.005$~rad.
+Taip pat buvo reikalaujama, kad bent vienas iš įvykyje užfiksuotų miuonų savo trajektorijos koordinatėmis sutaptų su signalu,
+aktyvavusiu trigerį.
+Toliau miuonų skersinis impulsas buvo apribojamas taip pat, kaip ir elektronų, siekiant užtikrinti, kad ir miuonų įvykiai
+būtų atrinkti iš srities, kurioje trigerio efektyvumas yra įsisotinęs.
+CMS išorėje esančių miuonų detektorių veikimo efektyvumas mažai priklauso nuo pseudospartos, todėl miuonų pseudospartai
+buvo taikomas vienintelis apribojimas, kad jos absoliutinė vertė neviršytų $2.4$ (didesnių pseudospartos verčių
+miuonų detektoriai neuždengia).
+Norint atmesti miuonus, atsiradusius iš antrinių procesų bei netikrus miuonų signalus, atsiradusius iš miuonų detektorius
+pasiekusių čiurkšlių, buvo taikomi CMS miuono fizikinių objektų mokslinės grupės (CMS \textit{Muon Physics Object Group})
+rekomenduojamas labai griežtų miuono atpažinimo kriterijų rinkinys \ltq{\ttt{TightID}} \cite{MuonID}.
+Šiuos kriterijus atitinka apie $95\%$ tikrų izoliuotų miuonų ir vos $0.3\%$ netikrų arba neizoliuotų miuonų.
 
-Vienas iš svarbesnių šioje analizėje naudotų parametrų -- dalelių srauto algoritmo apskaičiuojamas santykinis
-dalelės trajektorijos izoliuotumas.
-Šis dydis apibrėžiamas kaip dalelių, patekusių į tam tikro pločio kūgį, nubrėžtą aplink tiriamosios
-dalelės trajektoriją, skersinių impulsų suma.
-Įprastai norima, kad ta suma būtų kuo mažesnė, arba, kitaip tariant, dalelės srautas kuo atskiresnis.
-Tada norint būti labiau užtikrintam, kad, pavyzdžiui miuono kandidatas tikrai yra miuonas, galima
-pritaikyti apribojimą, reikalaujanti, kad miuono kandidato trajektorijos atskirumas neviršytų tam tikro dydžio
-(pavyzdžiui, $15\%$ paties miuono skersinio impulso vertės).
-
+Siekiant dar labiau sumažinti atranką praeinančių netikrų miuonų skaičių, kiekvienam labai griežtus reikalavimus
+atitinkančiam miuonui papildomai buvo taikomas trajektorijos izoliuotumo reikalavimas: dalelių srauto algoritmo
+apskaičiuotas trajektorijos izoliuotumo parametras negali viršyti $0.15$.
+Izoliuotumo parametras $I^{\mathrm{rel.}}_{\mathrm{PF}}$ skaičiuojamas taip \cite{ParticleFlow}:
 \begin{equation}
 	\label{eq:isolation}
 	I^{\mathrm{rel.}}_{\mathrm{PF}} = \frac{1}{p_{\mathrm{T}}} 
-	\left[ \sum_{\Delta R<0.3} p_{\mathrm{T}}^{\mathrm{hadron^{\pm}}} +
-	\mathrm{max} \left( \sum_{\Delta R<0.3} p_{\mathrm{T}}^{\mathrm{hadron^0}} + 
-	\sum_{\Delta R<0.3} p_{\mathrm{T}}^{\gamma} -
-	\Delta \beta \sum_{\Delta R<0.3} p_{\mathrm{T}}^{\mathrm{PU}}
-	\, ,\;\; 0 \right) \right] \; \mathrm{,}
+	\left( \sum_{\Delta R<0.3} p_{\mathrm{T}}^{\mathrm{hadron^{\pm}}} +
+	\sum_{\Delta R<0.3} p_{\mathrm{T}}^{\mathrm{hadron^0}} + 
+	\sum_{\Delta R<0.3} p_{\mathrm{T}}^{\gamma} \right) \; \mathrm{,}
+\end{equation}
+čia $\pT$ -- nagrinėjamo miuono skersinis impulsas, $\Delta R = \sqrt{\Delta \phi^{2} + \Delta \eta^{2}}$ -- kūgio,
+brėžiamo aplink nagrinėjamo miuono trajektoriją, plotis, $p_{\mathrm{T}}^{\mathrm{hadron^{\pm}}}$ -- į nubrėžtą
+kūgį patenkančių elektringų hadronų skersiniai impulsai, $p_{\mathrm{T}}^{\mathrm{hadron^0}}$ -- elektriškai neutralių
+hadronų skersiniai impulsai,  $p_{\mathrm{T}}^{\gamma}$ -- fotonų skersiniai impulsai.
+Įvykiai, kuriuose nėra bent dviejų miuonų, atitinkančių labai griežtus atpažinimo kriterijus bei papildomus izoliuotumo
+reikalavimus, buvo iškart atmetami.
+Likusiuose įvykiuose buvo bandoma išrinkti du miuonus, kurių krūviai yra priešingi ir kuriuos eitų pakankamai tiksliai
+suvesti į vieną pirminę viršūnę: prie detektoriuje užfiksuotų pataikymų priderinus dvi iš vieno taško išeinančias kreives,
+priderinimo gerumą nusakantis dydis $\chi^2$ turėtų neviršyti $20$.
+Viename įvykyje pasitaikius kelioms tokius reikalavimus atitinkančioms miuonų poroms, iš jų buvo išsirenkama ta, kurios
+$\chi^2$ yra mažiausias.
+Labai retais atvejais reliatyvistiniai kosminiai miuonai gali pasiekti CMS detektorių ir imituoti miuono-antimiuono porą
+(jeigu pralekia pro detektoriaus centrą), tad siekiant tokio triukšmo išvengti buvo pritaikytas papildomas kriterijus,
+reikalaujantis, kad plokštuminis kampas tarp dviejų miuonų trajektorijų neviršytų $\pi-0.005$~rad.
+
+Pagrindinis šiame darbe matuojamas dydis buvo atranką praėjusių leptonų porų invariantinė masė.
+Kiekvienos leptonų poros invariantinė masė buvo supildoma į masių histogramą.
+Tyrinėta masių sritis nuo $15$ iki $3000$~GeV.
+Histogramos elektronų ir miuonų kanalams buvo brėžiamos atskirai.
+
+\begin{table}[b!]
+	\begin{tabular}{|c|c|c|}
+		\hline
+		\multirow{2}{9em}{\centering\textbf{Kriterijaus tipas}} & \multirow{2}{13em}{\centering\textbf{\textit{ee} atrankos reikalavimas}} &
+			\multirow{2}{12em}{\centering\textbf{\textit{µµ} atrankos reikalavimas}}\\
+		 & & \\
+		\hline\hline
+		\multirow{4}{9em}{\centering Aukšto lygio trigeris} & \multirow{4}{12em}{\centering\ttt{HLT\_Ele23Ele12}} &
+			\multirow{2}{13em}{\centering\ttt{HLT\_IsoMu24} arba \ttt{HLT\_IsoTkMu24}} \\
+		 & & \\ \cline{3-3}
+		 & & \multirow{2}{12em}{\centering Bent vienas miuonas turi būti aktyvavęs trigerį} \\
+		 & & \\
+		\hline\hline
+		\multirow{4}{9em}{\centering Kinematiniai reikalavimai} &
+			\multirow{2}{13em}{\centering $p_{\mathrm{T \, 1}} > 28$~GeV, $p_{\mathrm{T \, 2}} > 17$~GeV} &
+			\multirow{2}{12em}{\centering $p_{\mathrm{T \, 1}} > 28$~GeV, $p_{\mathrm{T \, 2}} > 17$~GeV} \\
+		 & & \\ \cline{2-3}
+		 & $|\eta_{\mathrm{SC}}| < 2.4$, & \multirow{2}{12em}{\centering $|\eta| < 2.4$} \\
+		 & išskyrus $1.4442<|\eta_{\mathrm{SC}}|<1.566$ & \\
+		\hline\hline
+		\multirow{2}{9em}{\centering Dalelės atpažinimo reikalavimai} & \multirow{2}{13em}{\centering \ltq{\ttt{MediumID}} reikalavimai} &
+			\ltq{\ttt{TightID}} reikalavimai \\ \cline{3-3}
+		 & & $I_{\mathrm{PF}}^{\mathrm{rel.}}<0.15$ \\
+		\hline\hline
+		\multirow{7}{9em}{\centering Reikalavimai geresniam signalo išskyrimui} &
+			\multirow{7}{13em}{\centering Atrankos reikalavimus turi atitikti lygiai 2 elektronai} &
+			\multirow{4}{12em}{\centering Pasirenkami 2 miuonai, kuriuos galima tiksliausiai suvesti į vieną pirminę viršūnę su $\chi^2<20$} \\
+		 & & \\
+		 & & \\
+		 & & \\ \cline{3-3}
+		 & & Priešingi elektriniai krūviai \\ \cline{3-3}
+		 & & \multirow{2}{12em}{\centering Plokštuminis kampas $\alpha < (\pi - 0.005)$~rad} \\
+		 & & \\
+		\hline
+	\end{tabular}
+	\caption{\label{table:selection}Apibendrinti įvykių atrankos kriterijai. Indeksai $1$ ir $2$ žymi atitinkamai greitesnįjį
+	ir lėtesnįjį leptoną. $\eta_{\mathrm{SC}}$ žymi elektromagnetinio kalorimetro segmento, į kurį pataikė elektronas, pseudospartą.}
+\end{table}
+
+
+\subsection{Modeliuotų įvykių skaičiaus normavimas}
+Modeliuoti protonų susidūrimai buvo naudojami interpretuojant CMS detektoriaus duomenis bei įvertinant triukšmo įvykių
+skaičių klaidingo atpažinimo metodu.
+Eksperimento metu užfiksuotų įvykių skaičius priklauso nuo integruoto šviesio ir vykstančių procesų reakcijų skerspjūvių:
+$N = \sigma\Lumi$.
+Integruotas šviesis priklauso nuo dalelių greitintuvą valdančių eksperimentatorių pasirinkimų, tokių, kaip duomenų rinkimo laikas,
+protonų susidūrimų dažnis, protonų pluoštelio matmenys ir tankis, pluoštelių prasikeitimo kampas ir pan.
+Modeliuotų įvykių skaičius nuo tokių parametrų nepriklauso.
+Teoriškai jų galima sumodeliuoti tiek, kiek tyrėjai pageidauja, tačiau dažniausiai šį skaičių apriboja turimi skaičiavimo
+resursai -- stengiamasi, kad sumodeliuoti duomenys neužimtų per daug vietos ir jų analizė neužtruktų labai ilgai.
+Bendru atveju modeliuotų įvykių skaičius nesutampa su eksperimente užregistruotu įvykių skaičiumi.
+
+Norint išmatuotus pasiskirstymus palyginti su modeliuotais, būtina sumodeliuotą įvykių skaičių sunormuoti į eksperimento
+metu pasiektą integruotą šviesį.
+Tai padaroma kiekvienam modeliuotam įvykiui priskiriant svorinį daugiklį $\omega_{i}^{\mathrm{Norm.}}$.
+T.y., pildant įvykių histogramą $i$-asis modeliuotas įvykis į ją yra įvedamas ne kaip vienas įvykis, o kaip
+$\omega_{i}^{\mathrm{Norm.}}$ įvykio.
+Svorinio daugiklio vertė gaunama pagal proporciją tarp tikėtino eksperimento metu užregistruotų įvykių skaičiaus $N$ ir
+sumodeliuoto įvykių skaičiaus $N_{\mathrm{MC}}$:
+\begin{equation}
+	\label{eq:LOweight}
+	\omega_{i}^{\mathrm{Norm.}} = \frac{ \sigma\Lumi }{ N_{\mathrm{MC}} } \; .
 \end{equation}
 
-čia $\Delta R = \sqrt{\Delta \phi^{2} + \Delta \eta^{2}}$ -- kūgio, brėžiamo aplink leptono kandidato
-trajektoriją, plotis, $p_{\mathrm{T}}^{\mathrm{hadron^{\pm}}}$ -- elektringų hadronų skersiniai impulsai,
-$p_{\mathrm{T}}^{\mathrm{hadron^0}}$ -- elektriškai neutralių hadronų skersiniai impulsai,
-$\Delta\beta=0.5$ -- iš modeliavimo įvertintas koeficientas, apytiksliai lygus protonų susidūrimo metu
-susidarančių elektriškai neutralių ir krūvį turinčių hadronų skaičiaus santykiui.
-
-Atranką praėjo iš viso apie $2.3\cdot10^7$ eksperimento metu užregistruotų įvykių.
-Pagrindinis matuojamas dydis buvo atranką praėjusių miuonų porų invariantinė masė.
-Iš jų verčių buvo brėžiama invariantinės masės histograma, apimanti masės sritį nuo $15$ iki $3000$~GeV.
+Programos, kurios modeliuoja įvykius aukštesniu negu pirmos eilės (LO) perturbacijų tikslumu, pačios gali jiems priskirti
+nelygius vienetui svorius -- svoriniai daugikliai atsiranda kaip perturbatyvios pataisos pirmos eilės tikslumu gautam
+pasiskirstymui.
+Todėl, norint sunormuoti aukštesnių eilių tikslumu sumodeliuotus įvykius, reikia atsižvelgti ne tik į jų skaičių, bet
+ir kiekvienam įvykiui modeliavimo programos priskirtus svorius.
+Taigi, aukštesnių eilių perturbacijų tikslumu sumodeliuotiems įvykiams svorinius daugiklius apskaičiuojame taip:
+\begin{equation}
+	\omega_{i}^{\mathrm{Norm.}} = \omega_{i}^{\mathrm{Gen.}} \frac{ \sigma\Lumi }{ \sum_{j=1}^{N}\omega_{j}^{\mathrm{Gen.}} } \; ,
+	\label{eq:NLOweight}
+\end{equation}
+čia $\omega_{i}^{\mathrm{Gen.}}$ kiekvieno įvykio individualus svoris, priskirtas įvykių modeliavimo programos.
+Ši išraiška nuo \eqref{eq:LOweight} skiriasi tuo, kad tikėtiną įvykių skaičių papildomai padauginame iš modeliavimo programos
+priskirto svorio, o daliname ne iš sumodeliuotų įvykių skaičiaus o iš įvykių svorių sumos (ji atitinka didesniu tikslumu
+įvertintą įvykių skaičių).
+Matome, kad visus modeliavimo programos priskiriamus svorius pakeitus į vienetą (pirmos eilės tikslumo atvejis), \eqref{eq:LOweight}
+ir \eqref{eq:NLOweight} išraiškos tampa vienodos.
+Daugumai procesų $\omega_{i}^{\mathrm{Norm.}}<1$.
+Šis dydis gali įgyti tiek teigiamas, tiek neigiamas vertes, priklausomai nuo modeliavimo programos.
 
 
 \subsection{Pataisos}\label{sec:corrections}
-Šiame skyriuje aprašomos pataisos buvo pritaikytos ankstesniame darbe \cite{MAk2}, tačiau jų rezultatai yra
-esminiai ir šiam darbui, nes jame naudojami tie patys duomenų rinkiniai.
-Todėl pagrindiniai pataisų pritaikymo žingsniai su jų pagrindimu yra pateikiami ir šiame darbe.
-Kai kurie grafikai buvo atnaujinti ištaisius kode buvusias klaidas.
+Modeliuojant protonų susidūrimus reikia atsižvelgti į labai didelį skaičių eksperimento parametrų, tokių, kaip protonų
+susidūrimo vieta detektoriuje, pašalinių protonų susidūrimų skaičius (kuris priklauso nuo įvairių protonų pluoštelio parametrų),
+skirtingų detektoriaus komponentų efektyvumai ir daug kitų.
+Natūralu, kad modeliuoti įvykiai visų realaus eksperimento sąlygų idealiai neatkartos.
+Siekiant atsižvelgti į reikšmingiausius neatitikimus, įvairios CMS mokslinės grupės išleidžia pataisas, kurias
+pritaikius galima pagerinti sutapimą tarp eksperimento ir modeliavimo.
 
-Įprastai per vieną protonų pluoštelių prasikeitimą (angl.\ \textit{bunch crossing}) vidutiniškai susiduria
-apie 23 protonų poros \cite{CMSLumi}.
-Tuo pačiu metu vykstantys pašaliniai protonų susidūrimai turi įtakos užregistruoto įvykio atkūrimo kokybei.
-Šį efektą bandoma simuliuoti modeliuotuose įvykiuose, tačiau dažniausiai tikimybinis protonų susidūrimų
-skaičiaus (per vieną prasikeitimą) pasiskirstymas matavime ir modeliavime nesutampa.
-Nesutapimą iš dalies nulemia atsitiktinės susidūrimų fliuktuacijos.
-Nemažą įtaką tam turi ir Didžiojo hadronų greitintuvo technikų tyrinėjimai keičiant protonų spindulio intensyvumą,
-pluoštelių skaičių, jų persiklojimo tūrį ir pan.
-Nesutapimą tarp išmatuoto ir modeliuoto protonų susidūrimų tankio bandoma sumažinti taikant protonų susidūrimo
-skaičiaus pataisas -- kiekvienam modeliuotam įvykiui priskiriamas papildomas svoris pagal tai, koks protonų
-susidūrimų skaičius jame buvo sumodeliuotas.
-Pataisa buvo taikoma darant prielaidą, kad protonų susidūrimo skerspjūvis greitintuve yra lygus $64$~mb
-($6.4 \cdot 10^{-30} \, \mathrm{m}^2)$.
-Išmatuoti ir modeliuoti atkurtų pirminių viršūnių skaičiaus pasiskirstymai atranką praėjusiuose įvykiuose
-prieš ir po pataisos pateikiami \ref{fig:PUba}~pav.
+Elektronų poros invariantinės masės matavimo kokybei didelę įtaką daro elektronų energijos matavimo tikslumas,
+o miuonų poros atveju -- jų skersinio impulso matavimo tikslumas.
+Siekiant pagerinti invariantinės masės matavimo kokybę, visiems detektoriaus užregistruotiems elektrono objektams
+buvo pritaikytos CMS elektrono ir fotono fizikinių objektų mokslinės grupės rekomenduojamos energijos matavimo
+skalės pataisos.
+Analogiškai miuonams buvo pritaikytos CMS Ročesterio mokslinės grupės pateikiamos miuonų impulso matavimo skalės
+pataisos \cite{RocCorr}.
+Šios pataisos buvo pritaikytos tiek CMS detektoriaus, tiek modeliuotiems įvykiams kaip pataisos daugikliai atitinkamai
+elektrono energijai arba miuono skersiniam impulsui.
+Šių daugiklių vertės išmatuotiems ir sumodeliuotiems įvykiams yra skirtingos.
+
+2016 metais kiekvieno protonų pluoštelių prasikeitimo CMS detektoriuje metu įvykdavo vidutiniškai 23 protonų
+susidūrimai \cite{CMSLumi}.
+Vienu metu vykstančių protonų susidūrimų skaičius nulemia vidutinį įvykio metu susidarančių dalelių skaičių.
+Užfiksuoto įvykio vaizdo atkūrimo kokybė gan smarkiai priklauso nuo dalelių trekų skaičiaus, tad lyginant
+eksperimentą su modeliavimu svarbu gerai atkartoti pašalinius protonų susidūrimus.
+Vis dėlto, dažnu atveju sumodeliuotas pašalinių protonų susidūrimų skaičiaus tikimybinis pasiskirstymas
+nesutampa su eksperimentiniu.
+Atsitiktinės susidūrimų fliuktuacijos šį nesutapimą nulemia tik iš dalies.
+Didesnę įtaką jam turi Didžiojo hadronų greitintuvo technikų tyrinėjimai keičiant protonų spindulio intensyvumą,
+pluoštelių formą, jų persiklojimo tūrį ir pan.
+
+Nesutapimą tarp išmatuoto ir modeliuoto protonų susidūrimų skaičiaus pasiskirstymo bandoma sumažinti taikant
+CMS šviesio fizikinių objektų grupės (CMS \textit{Luminosity Physics Object Group}) rekomenduojamas protonų
+susidūrimo skaičiaus pataisas.
+Kiekvienam modeliuotam įvykiui buvo priskiriamas papildomas svorinis daugiklis atsižvelgiant į jame buvusį protonų
+susidūrimų skaičių.
+Pataisa pritaikyta padarius prielaidą, kad protonų susidūrimo skerspjūvis greitintuve yra lygus $64$~mb.
+Išmatuoti ir sumodeliuoti įvykyje atkurtų pirminių viršūnių (atitinkančių protonų susidūrimus) skaičiaus pasiskirstymai
+prieš ir po pataisos elektronų poros įvykiuose palyginami \ref{fig:PUba}~pav.
+Pirminių viršūnių skaičiaus pasiskirstymai miuonų poros įvykiams atrodo analogiškai, todėl nepateikiami.
 Čia ir toliau paveikslų apatinėse dalyse pateikiami eksperimentinio ir modeliuoto rezultatų santykio grafikai.
-Pritaikius pataisą $10$-$30$ pirminių viršūnių skaičiaus srityje, į kurią patenka apie $91\%$ visų įvykių,
+Pritaikius pataisą, $10$-$30$ pirminių viršūnių skaičiaus srityje, kurioje yra $\sim\!91\%$ visų įvykių,
 eksperimentinis ir modeliuotas pasiskirstymai pradėjo sutapti labai gerai -- skirtumas neviršija $9\%$.
 
-Miuonų poros invariantinės masės matavimo kokybei ženklios įtakos turi miuonų skersinio impulso matavimo tikslumas.
-Dėl šios priežasties visiems užregistruotiems miuonams buvo pritaikytos Ročesterio mokslinės grupės pateikiamos
-miuonų impulso matavimo skalės pataisos \cite{RocCorr}.
+\begin{figure}[t!]
+	\includegraphics[width=0.48\textwidth]{Magistrinis/ee_nVTX_before.png}
+	\includegraphics[width=0.48\textwidth]{Magistrinis/ee_nVTX_after.png}
+	\vspace{-0.6cm}
+	\caption{\label{fig:PUba} Pirminių viršūnių skaičiaus pasiskirstymai atranką praėjusiuose elektronų poros įvykiuose
+		prieš (kairėje) ir po (dešinėje) pašalinių protonų susidūrimų skaičiaus pataisos pritaikymo.
+		Juodi taškai vaizduoja CMS detektoriumi išmatuotą, o spalvoti stulpeliai -- modeliuotus pasiskirstymus.}
+\end{figure}
 
-Dėl modeliavimo netobulumo dažnai nesutampa tam tikros realaus ir virtualaus eksperimento sąlygos.
-Kiekvienam miuonų poros įvykiui buvo priskiriami svoriniai daugikliai, priartinantys modeliuotus trigerio
-suveikimo bei miuono trajektorijos atkūrimo, atpažinimo ir izoliuotumo įvertinimo efektyvumus prie išmatuotųjų verčių.
-Kiekvieno suvidurkinto daugiklio vertė buvo nustatoma pagal leptono skersinio impulso ir pseudospartos vertes.
-Tipinė svorinio daugiklio vertė yra apie $0.9$.
-Invariantinės masės pasiskirstymai prieš ir po šių pataisų pritaikymo pateikiami atitinkamai \ref{fig:invMba}~pav.
-Pritaikius minėtas pataisas sutapimas tarp eksperimento ir modeliavimo pagerėjo vidutiniškai apie $10\%$.
+Labai dažnai modeliavimas neteisingai imituoja realios eksperimentinės įrangos veikimo efektyvumus.
+Kaip taisytini buvo išskiriami trigerių suveikimo efektyvumai, leptono trajektorijos atkūrimo ir dalelės teisingo
+atpažinimo efektyvumai.
+Miuonams papildomai buvo įskaitomas nesutapimas tarp tikro ir modeliuoto miuono izoliuotumo nustatymo efektyvumo.
+Nesutapimai buvo taisomi modeliuotiems įvykiams pritaikius svorinius daugiklius $\prod_k(\epsilon_k^{\mathrm{Data}}/\epsilon_k^{\mathrm{MC}})$, 
+kur raidės $\epsilon$ žymi efektyvumus, indeksai $k$ -- išskirtus eksperimento procesus (trigerio suveikimą ir t.t.),
+o indeksai \ltq{MC} ir \ltq{Data} pažymi atitinkamai modeliuotą ir išmatuotą efektyvumus.
+Efektyvumus išmatavo CMS Drell-Yan analizės mokslinė grupė.
+Svorinių daugiklių vertės buvo nustatomos pagal įvykyje užregistruotų leptonų skersinius impulsus ir pseudospartas.
+Tipinės svorinio daugiklio vertės siekė $\sim\!0.9$.
+Miuonų poros invariantinės masės pasiskirstymai prieš ir po efektyvumų pataisų pritaikymo yra palyginti \ref{fig:invMba_mumu}~pav.,
+o elektronų poros -- \ref{fig:invMba_ee} pav.
+Efektyvumų pataisos padėjo pagerinti sutapimą tarp eksperimento ir modeliavimo vidutiniškai $10\%$.
 
-Yra pastebėta, kad pirmos eilės perturbacijų tikslumu modeliuojant viršūninių kvarkų poros ($\ttbar\,$)
-įvykius, gaunami skersinių impulsų pasiskirstymai turi nesutapimų su nustatytaisiais eksperimentiškai \cite{ttbarPT}.
-Juos buvo bandoma ištaisyti modeliuotiems viršūninių kvarkų poros įvykiams priskiriant viršūninio kvarko tyrimo grupės
-siūlomus svorius, kurie skirti priartinti modeliuotą skersinių impulsų pasiskirstymą prie naujausių eksperimentinių rezultatų.
-Svorių vertės nustatomos pagal kvarkų skersinių impulsų $p_{t \; \mathrm{T}}$ vertes.
-Tipinės svorių vertės yra didesnės už $1$, kai abiejų kvarkų $p_{t \; \mathrm{T}}<120 \, \mathrm{GeV}$, ir mažesnės už $1$,
-kai $p_{t \; \mathrm{T}}>120 \, \mathrm{GeV}$.
-
-\begin{figure}[b!]
+\begin{figure}[t!]
 	\RawFloats
-	\includegraphics[width=0.48\textwidth]{Kursinis3/mumu_nVTX_before.png}
-	\includegraphics[width=0.48\textwidth]{Kursinis3/mumu_nVTX_after.png}
-	\vspace{-0.5cm}
-	\caption{\label{fig:PUba} Pirminių viršūnių skaičiaus pasiskirstymai atranką praėjusiuose įvykiuose prieš (kairėje)
-		ir po (dešinėje) protonų susidūrimų tankio pataisos pritaikymo.
-		Juodi taškai vaizduoja CMS detektoriumi išmatuotą, o spalvoti stulpeliai -- modeliuotus pasiskirstymus \cite{MAk2}.}
-	\includegraphics[width=0.48\textwidth]{Kursinis3/mumu_mass_before.png}
-	\includegraphics[width=0.48\textwidth]{Kursinis3/mumu_mass_afterSF.png}
-	\vspace{-0.5cm}
-	\caption{\label{fig:invMba} Miuonų porų invariantinės masės pasiskirstymai prieš ir po miuonų impulso matavimo skalės
-	bei efektyvumo pataisų pritaikymo.}
+	\includegraphics[width=0.48\textwidth]{Magistrinis/mumu_mass_before.png}
+	\includegraphics[width=0.48\textwidth]{Magistrinis/mumu_mass_after.png}
+	\vspace{-0.6cm}
+	\caption{\label{fig:invMba_mumu} Miuonų porų invariantinės masės pasiskirstymai prieš (kairėje) ir po (dešinėje)
+	miuonų impulso matavimo skalės bei efektyvumo pataisų pritaikymo.}
+	\includegraphics[width=0.48\textwidth]{Magistrinis/ee_mass_before.png}
+	\includegraphics[width=0.48\textwidth]{Magistrinis/ee_mass_after.png}
+	\vspace{-0.6cm}
+	\caption{\label{fig:invMba_ee} Elektronų porų invariantinės masės pasiskirstymai prieš (kairėje) ir po (dešinėje)
+	efektyvumo pataisų pritaikymo.}
 \end{figure}
 
-Matavimo ir modeliavimo rezultatų nesutapimą gali nulemti ne tik modeliavimo trūkumai, bet ir neidealios eksperimentinės sąlygos
-arba eksperimentatorių klaidos.
-Leptonų poros spartos pasiskirstymus paveikė dvi aplinkybės, į kurias buvo bandoma atsižvelgti pritaikant dar dvi pataisas.
-Viena pataisa buvo skirta ištaisyti protonų susidūrimo vietos $z$ koordinatės ($z$ ašis eina išilgai protonų
-spindulio lėkimo krypties detektoriaus centre) nesutapimą tarp matavimo ir modeliavimo.
-Tai padėjo sumažinti matavimo ir modeliavimo santykio pasiskirstymuose buvusius asimetriškumus tarp teigiamų ir neigiamų leptonų
-poros spartos verčių.
-Antroji pataisa buvo reikalinga todėl, kad eksperimento duomenų registravimo laikotarpiu buvo susidurta su problema,
-kai dėl laiko matavimo netikslumo trigerio suveikimas kartais buvo priskiriamas ne tam įvykiui, kuris iš tikrųjų jį aktyvavo, o
-ankstesniam.
-Dėl šio efekto dalis įdomių įvykių, kuriuose sukurtos dalelės turėjo dideles pseudospartos vertes ($|\eta|>2$) liko neįrašyti.
-Imituoti šiam pernelyg ankstyvo trigerio suveikimo efektui buvo pritaikyta pataisa, kuri priskirdavo įvykiams
-svorius pagal tai, kiek ir kokių įvykyje užregistruotų objektų patenka į didelių pseudospartų sritį.
-Ši pataisa turėjo įtakos ir leptonų poros spartos pasiskirstymui.
-Ji padėjo sumažinti modeliuotų įvykių skaičių prie didesnių spartos modulio verčių.
-Tipinės pataisos vertės vienam įvykiui siekė apie $0.98$ ir mažiau, jeigu jame buvo užfiksuota objektų, kurių $|\eta|>2$.
-Taip modeliuotas rezultatas buvo priartintas prie išmatuotojo.
-\ref{fig:rapiba}~pav.\ pavaizduoti leptonų poros spartos pasiskirstymai prieš ir po abiejų minėtų pataisų pritaikymo.
+Matavimo ir modeliavimo rezultatų sutapimą gali paveikti ne vien modeliavimo trūkumai, bet taip pat ir neidealios
+eksperimentinės sąlygos arba net eksperimentatorių klaidos.
+Leptonų poros spartos pasiskirstymus reikšmingai paveikė dvi aplinkybės, į kurias buvo bandoma atsižvelgti pritaikant
+papildomas pataisas.
+Viena pataisa buvo reikalinga atitaisyti nesutapimui tarp modeliuotos ir išmatuotos protonų susidūrimo taško $z$
+koordinatės ($z$ ašis eina per CMS detektoriaus centrą išilgai protonų spindulio lėkimo krypties).
+Ji buvo įgyvendinta kiekvienam modeliuotam įvykiui pritaikius svorinius daugiklius pagal jame išmatuotą protonų susidūrimo
+vietos $z$ koordinatę.
+Pataisa padėjo sumažinti eksperimento ir modeliavimo santykio pasiskirstymų asimetriškumą (neigiamų ir teigiamų spartos verčių
+pasiskirstymai pradėjo geriau sutapti tarpusavyje).
+Kita pataisa buvo skirta imituoti duomenų rinkimo laikotarpiu iškilusiai problemai, kai laiko matavimo netikslumai nulėmė
+\ltq{per ankstų} trigerio suveikimą -- kartais būdavo išsaugomas ne tas įvykis, kuris aktyvavo trigerį, o vienu ankstesnis.
+Šis efektas nulėmė dalies įdomių įvykių, kuriuose fizikiniai objektai turėjo dideles pseudospartos vertes ($|\eta|>2$), praradimą.
+Modeliuotuose įvykiuose ši problema buvo imituojama priskiriant svorinius daugiklius pagal įvykyje buvusių didelės pseudospartos
+fizikinių objektų skaičių.
+Tokia pataisa paveikė ir leptonų poros spartos pasiskirstymus -- sumažėjo modeliuotų įvykių su didele leptonų poros sparta skaičius.
+Įvykiams, turintiems didelės pseudospartos ($|\eta|>2$) fizikinių objektų, svorinio pataisos daugiklio vertės siekė apie $0.98$ ir mažiau.
+Elektronų poros spartos pasiskirstymai prieš ir po šių dviejų pataisų pritaikymo yra palyginti \ref{fig:rapiba}~pav.
+Analogiški pasiskirstymai miuonų poroms atrodo labai panašiai, todėl nepateikiami.
+Pataisa padėjo priartinti modeliuotą leptonų poros spartos pasiskirstymą prie išmatuoto.
 
 \begin{figure}[b!]
-	\includegraphics[width=0.48\textwidth]{Kursinis3/mumu_rapi_beforePVz.png}
-	\includegraphics[width=0.48\textwidth]{Kursinis3/mumu_rapi_after.png}
+	\includegraphics[width=0.48\textwidth]{Magistrinis/ee_rapi_before.png}
+	\includegraphics[width=0.48\textwidth]{Magistrinis/ee_rapi_after.png}
 	\vspace{-0.5cm}
-	\caption{\label{fig:rapiba} Miuonų porų spartos pasiskirstymai prieš ir po pirminės viršūnės $z$ koordinatės bei per ankstaus
-	trigerio suveikimo pataisų pritaikymo \cite{MAk2}.}
+	\caption{\label{fig:rapiba} Elektronų porų spartos pasiskirstymai prieš ir po pirminės viršūnės $z$ koordinatės bei per ankstaus
+	trigerio suveikimo pataisų pritaikymo.}
 \end{figure}
 
+Kai kuriuos nesutapimus gali nulemti ir neidealios teorinės žinios apie tam tikrus didelių energijų fizikos procesus.
+CMS kolektyvo viršūninio kvarko ir antikvarko porų ($\ttbar\,$) tyrėjai jau anksčiau buvo pastebėję, jog eksperimentiškai
+išmatuoti viršūninių kvarkų skersinio impulso pasiskirstymai turi reikšmingų nesutapimų su teoriniais pasiskirstymais,
+gautais modeliuojant antros eilės perturbacijų (NLO) tikslumu \cite{ttbarPT}.
+Šie neatitikimai buvo taisomi modeliuotiems $\ttbar\,$ įvykiams priskiriant viršūninio kvarko tyrimo grupės
+siūlomus svorinius daugiklius.
+Šie daugikliai turėtų priartinti modeliuotą viršūninių kvarkų skersinių impulsų pasiskirstymą prie naujausių eksperimentinių rezultatų.
+Jų vertės nustatomos iš kvarkų skersinių impulsų $(p_{t})_{\mathrm{T}}$ verčių.
+Tipinės svorinių daugiklių vertės buvo didesnės už vienetą, kai abiems kvarkams $(p_{t})_{\mathrm{T}}<120$~GeV, ir mažesnės už vienetą,
+kai abiems kvarkams $(p_{t})_{\mathrm{T}}>120$~GeV.
 
-\subsection{Klaidingo atpažinimo tikimybės matavimas}
-
-
-\subsection{Su čiurkšlėmis susijusių triukšmo įvykių skaičiaus įvertinimas}
-Fizikinio objekto klaidingo atpažinimo metodas buvo naudojamas įvertinti $\WJets$ ir $\QCD$ įvykių skaičiui.
-Tai yra tokie triukšmo įvykiai, kuriuose viena arba dvi čiurkšlės buvo atpažintos, kaip miuonai.
-Klaidingo atpažinimo metodas remiasi tikimybės, kad klaidingai atpažintas fizikinis objektas pateks į signalo sritį
-(angliškai ši tikimybė vadinama \textit{fake rate}), įvertinimu.
-
-Kontrolinė sritis buvo apibrėžta invertuojant miuono izoliuotumo kriterijų -- reikalaujama, kad miuono kandidato
-trajektorija būtų neizoliuota nuo kitų dalelių trajektorijų (tai neretai yra čiurkšlės arba miuono, susidariusio čiurkšlėje, požymis).
-Tada klaidingo atpažinimo tikimybe vadiname dydį, nusakantį, kokia dalis visų miuonais atpažintų čiurkšlių turi galimybę patekti
-į signalo sritį:
-\begin{equation} \label{eq:FR}
-	f_{\mathrm{signal} \,| \,\mathrm{Jet}} =
-	\frac{N^{\QCD}_{\mathrm{signal}}}{N^{\QCD}_{\mathrm{signal}}+N^{\QCD}_{\mathrm{control}}} \; ,
-\end{equation}
-čia $f_{\mathrm{signal} \,| \,\mathrm{Jet}}$ -- klaidingo atpažinimo tikimybė, $N^{\QCD}_{\mathrm{signal}}$ -- į signalo sritį
-patenkančių miuonais atpažintų čiurkšlių skaičius, $N^{\QCD}_{\mathrm{control}}$ -- į kontrolinę sritį patenkančių kaip miuonai
-atpažintų čiurkšlių skaičius.
-Indeksas $\QCD$ žymi faktą, kad klaidingo atpažinimo tikimybės įvertinimui turėtume naudoti tik $\QCD$ įvykius, t.y., tuos
-įvykius, kuriuose susidaro vien tik čiurkšlės, todėl bet koks tokiuose įvykiuose atpažintas miuonas yra kilęs iš čiurkšlės.
-Vis dėlto, į kontrolinę sritį gali patekti ne vien $\QCD$, bet ir tokie įvykiai, kuriuose yra tikrų, tik dėl įvairių
-priežasčių neizoliuotų miuonų.
-Pavyzdžiui, dėl mažo miuono impulso laboratorinėje atskaitos sistemoje jis gali neišsiskirti.
-
-Norint teisingai įvertinti klaidingo atpažinimo tikimybę, iš eksperimento metu užregistruotų duomenų reikėjo išskirti $\QCD$
-proceso įvykius.
-$\QCD$ įvykių išskyrimui buvo pasitelkti modeliuoti duomenų rinkiniai.
-Paprasčiausias variantas išskirti $\QCD$ įvykius būtų iš atranką praėjusių eksperimento metu užregistruotų įvykių skaičiaus
-atimti modeliuotą visų su $\QCD$ nesusijusių procesų įvykių skaičių:
+Visi svoriniai daugikliai iš skirtingų pataisų buvo tarpusavyje sudauginami, gaunant vidutinį pataisos daugiklį, skirtą vienam įvykiui.
+Galutinis kiekvieno modeliuoto įvykio svoris $\omega_i$ pildant histogramas buvo nustatomas sudauginant normuojantį įvykio daugiklį,
+gautą iš \eqref{eq:NLOweight} formulės, su vidutiniu pataisos daugikliu:
 \begin{equation}
-	\begin{gathered}
-		N^{\QCD}_{i} = N^{\mathrm{Data}}_{i} - \left( N^{\mathrm{DY}}_{i} +
-		N^{\WJets}_{i} + N^{\ttbar}_{i} + N^{tW+\tbarW}_{i} +
-		N^{WW+\WZ+\ZZ}_{i} \right)^{\mathrm{MC}}; \\
-		\hspace{280pt} i = \mathrm{signal}, \, \mathrm{control},
-	\end{gathered}
+\label{eq:weightCorr}
+	\omega_i = \omega_{i}^{\mathrm{Gen.}} \frac{ \sigma\Lumi }{ \sum_{j=1}^{N}\omega_{j}^{\mathrm{Gen.}} }
+			   \left[ \prod_{\mathrm{Corr.}} \omega_i^{\mathrm{Corr.}} \right] ,
 \end{equation}
-tačiau šis metodas nėra tinkamas, nes pašalinių įvykių skaičius yra pakankamai didelis, o taip pat įvykiai, kuriuose leptonai
-nėra izoliuoti, yra prasčiau sumodeliuoti ir ne taip gerai sutampa su matavimu.
-Tikslesniam $\QCD$ įvykių skaičiaus įvertinimui buvo naudojami du skirtingi metodai:
+čia $\sigma$ -- proceso reakcijos skerspjūvis, $\Lumi$ -- integruotas šviesis, $\omega_{i}^{\mathrm{Gen.}}$ -- modeliavimo
+programos įvykiui priskirtas svoris, $\omega_i^{\mathrm{Corr.}}$ -- tam tikros pataisos įvykiui priskirtas svoris.
+
+
+\subsection{Klaidingo atpažinimo tikimybės matavimas}\label{sec:FRmeasure}
+Klaidingo atpažinimo metodas buvo naudojamas įvertinti su viena ($\WJets$) ir dviem ($\QCD$) klaidingai kaip leptonai
+atpažintomis čiurkšlėmis susijusių triukšmo įvykių skaičių.
+Teorinis klaidingo atpažinimo metodo veikimo principas yra aprašytas \ref{sec:FR} skyriuje.
+Eksperimentiškai klaidingo atpažinimo tikimybė buvo matuojama skaičiuojant, kokia dalis atlaisvintus leptonų atrankos
+kriterijus praėjusių klaidingai atpažintų čiurkšlių gali praeiti ir Drell-Yan proceso atranką, kurios kriterijai nurodyti
+\ref{table:selection} lentelėje.
+Kitaip tariant, buvo apibrėžiamos signalo (praeinama griežta atranka) ir kontrolinė sritys (praeinama tik atlaisvinta
+atranka, o griežta nepraeinama), o klaidingo atpažinimo tikimybė buvo nustatoma pagal tokią formulę:
+\begin{equation}
+	\label{eq:FRexp}
+	f = \frac{N_{\mathrm{Signal}}^{\QCD}}{N_{\mathrm{Signal}}^{\QCD}+N_{\mathrm{Control}}^{\QCD}},
+\end{equation}
+čia indeksai \ltq{signal} ir \ltq{control} žymi signalo ir kontrolinę sritis, o indeksas \ltq{$\QCD$} pažymi, kad
+skaičiuojamas tik su $\QCD$ procesu susijusių įvykių skaičius.
+Taip daroma todėl, kad skaičiuojant klaidingo atpažinimo tikimybę mus domina tik klaidingai atpažinti leptonai,
+o $\QCD$ procese tikrų izoliuotų leptonų nėra.
+Konkretūs įvykių atrankos kriterijai, naudoti signalo ir kontrolinei sritims apibrėžti elektronų ir miuonų kanaluose,
+pateikti \ref{table:FR} lentelėje.
+
+Atlaisvinta miuonų atranka buvo atliekama naudojant aukšto lygio vieno neizoliuoto miuono trigerį, kuris aktyvuojamas,
+kai aptinkamas miuono objektas su skersiniu impulsu, didesniu, nei $50$~GeV.
+Iš trigerį aktyvavusių įvykių buvo atrenkami miuonai, kurie atitinka CMS miuonų fizikinių objektų mokslinės grupės nustatytus
+labai griežtus miuonų atpažinimo reikalavimus bei savo koordinatėmis sutampa su trigerį aktyvavusiu fizikiniu objektu.
+Atsižvelgiant į trigerio ir miuonų detektorių veikimo efektyvumus, buvo reikalaujama, kad miuonų skersinis impulsas viršytų
+$52$~GeV, o jų pseudospartos absoliutinė vertė būtų mažesnė už $2.4$.
+Signalo ir kontrolinė sritys buvo atskiriamos pagal pagrindinėje miuonų atrankoje (žr.\ \ref{table:selection} lentelę) taikytą
+trajektorijos izoliuotumo kriterijų: miuonai, tenkinantys izoliuotumo reikalavimą, patenka į signalo, o jo netenkinantys --
+į kontrolinę sritį.
+Taip pat, siekiant atmesti Drell-Yan signalą ir kitus su tikrų leptonų poromis susijusius įvykius (matuojant klaidingo
+atpažinimo tikimybę mus domina tik \ltq{netikri} leptonai), įvykiai su dviem ir daugiau miuonų, patenkančių į signalo sritį,
+buvo atmetami.
+
+Atlaisvinta elektronų atranka buvo atliekama naudojant aštuonių aukšto lygio vieno fotono trigerių su skirtingais skersinio impulso
+slenksčiais kombinaciją.
+Verta atkreipti dėmesį, kad elektronai taip pat gali aktyvuoti fotono trigerius, nes šie nesiremia CMS trekų detektoriaus informacija.
+Šie trigeriai aktyvuojami taip dažnai, kad jiems buvo taikomas tarpavimas: išsaugoma tik tam tikra dalis trigerį turinčių
+aktyvuoti įvykių.
+Kiekvienam iš naudotų trigerių buvo taikoma skirtinga tarpavimo vertė, o taip pat visos vertės buvo keičiamos realiu laiku duomenų
+rinkimo metu, priklausomai nuo eksperimento sąlygų.
+Kadangi modeliuotuose duomenyse trigerių tarpavimas nėra taikomas, norint tiesiogiai lyginti eksperimentą su modeliavimu,
+tarpavimą reikėjo atitaisyti.
+Tai buvo daroma kiekvienam CMS detektoriaus užregistruotam įvykiui pritaikant svorinį daugiklį, lygų nustatytai aktyvuoto
+trigerio tarpavimo vertei tuo metu, kai nagrinėjamas įvykis buvo užregistruotas.
+Atranką praėjusių elektrono objektų skersinių impulsų pasiskirstymai prieš ir po trigerių tarpavimo atitaisymo, palyginti
+\ref{fig:prescale} pav.
+
+\begin{figure}[t!]
+	\includegraphics[width=0.5\textwidth]{Magistrinis/prescale.png}
+	\vspace{-0.5cm}
+	\caption{\label{fig:prescale} Elektrono objektų skersinio impulso pasiskirstymai prieš ir po trigerių tarpavimo
+	atitaisymo (žr.\ legendą).}
+\end{figure}
+
+Trigerį aktyvavusiems elektrono objektams buvo taikomi papildomi atrankos reikalavimai, atitinkantys pagrindinėje įvykių
+atrankoje (žr.\ \ref{table:selection} lentelę) naudojamo dviejų elektronų trigerio taikomus reikalavimus fizikiniams objektams.
+Tai -- daugiausia reikalavimai elektrono objekto palikto signalo formai elektromagnetiniame kalorimetre bei reikalavimai
+trekų detektoriaus ir kalorimetro užregistruotos informacijos sutapimui.
+Atsižvelgiant į naudojamų trigerių ir CMS detektoriaus komponentų efektyvumus, buvo reikalaujama, kad elektronų skersinis
+impulsas viršytų $25$~GeV, o pseudosparta neviršytų $|\eta|<2.4$.
+Atlaisvintą atranką praėję elektronai į signalo ir kontrolinę sritis buvo skirstomi pagal tai, ar jie tenkina CMS elektrono
+ir fotono fizikinių objektų mokslinės grupės nustatytus vidutiniškai griežtus elektrono atpažinimo reikalavimus, ar ne.
+Analogiškai, kaip ir su miuonais, elektronų įvykiai taip pat buvo atmetami, jeigu juose yra daugiau negu vienas į signalo
+sritį patenkantis elektrono objektas.
+Vis dėlto, čia buvo papildomai stengiamasi atmesti ir su $\WJets$ procesu susijusius tikrus elektronus, todėl buvo taikomas
+reikalavimas, kad skersinio impulso trūkumas įvykyje neviršytų $25$~GeV ($W$ bozono skilimo metu susidaręs neutrinas tipiškai
+turi didelį skersinį impulsą).
+
+Klaidingo atpažinimo tikimybės matavimui pagal \eqref{eq:FRexp} formulę reikėjo išskirti signalo ir kontrolinėje srityje esančius
+su $\QCD$ procesu susijusius klaidingai atpažintus leptonus.
+$\QCD$ įvykių skaičius buvo įvertinamas kombinuojant matavimą ir modeliavimą skirtingais būdais.
+Miuonams buvo taikomi du metodai:
 \begin{enumerate}
-	\item Santykio metodas -- $\QCD$ įvykių skaičius įvertinamas iš matavimo paėmus procentinę $\QCD$ įvykių dalį, kuri buvo apskaičiuota
-	pasinaudojant modeliavimu:
-	\begin{equation}
-		\begin{gathered}
-			N^{\QCD}_{i} = N^{\mathrm{Data}}_{i} \cdot \left(\frac{N^{\QCD}_{i}}
-			{N^{\QCD}_{i} + N^{\mathrm{DY}}_{i} + N^{\WJets}_{i} +
-			N^{\ttbar}_{i} + N^{tW+\tbarW}_{i} + N^{WW+\WZ+ZZ}_{i}} \right)^{\mathrm{MC}}; \\
-			\hspace{300pt} i = \mathrm{signal}, \, \mathrm{control}.
-		\end{gathered}
-	\end{equation}
-	\item Šablonų pritaikymo (angl.\ \textit{template fitting}) metodas -- $\QCD$ įvykių skaičius įvertinamas prie tam tikro
-	išmatuoto pasiskirstymo pritaikius skirtingų procesų pasiskirstymų šablonus, darant prielaidą, kad įvykių tikimybinis
-	pasiskirstymas yra teisingas, o normavimo amplitudė netiksli.
-	Skirtingų procesų šablonai dažniausiai (ir šiame darbe) gaunami iš modeliavimo.
-	Pasiskirstymas, kurio šablonai pritaikomi prie matavimo, turi būti pasirenkamas toks, kuris leistų pakankamai gerai
-	atskirti $\QCD$ nuo kitų procesų (pasiskirstymų forma turėtų būti skirtinga).
-	Šiuo atveju buvo naudojami miuono trajektorijos izoliuotumo pasiskirstymo šablonai.
-	Turint detektoriaus išmatuotą pasiskirstymą ir skirtingų procesų šablonus, stengiamasi gauti geriausią sutapimą tarp matavimo ir
-	šablonų sumos varijuojant kiekvienam šablonui priskirtus svorinius daugiklius:
-	\begin{equation}
-		\begin{gathered}
-			N^{\mathrm{Data}}_{i}(I^{\mathrm{rel.}}_{\mathrm{PF}}) \approx
-			\lambda^{\mathrm{fit}}_{\,i}\, N^{\,\QCD}_{i}(I^{\mathrm{rel.}}_{\mathrm{PF}}) +
-			\epsilon^{\,\mathrm{fit}}_{\,i}\, N^{\,\mathrm{DY}}_{i}(I^{\mathrm{rel.}}_{\mathrm{PF}}) +
-			\zeta^{\,\mathrm{fit}}_{\,i}\, N^{\,\WJets}_{i}(I^{\mathrm{rel.}}_{\mathrm{PF}}) + \\[7pt] +
-			\theta^{\,\mathrm{fit}}_{i}\, N^{\,\ttbar}_{i}(I^{\mathrm{rel.}}_{\mathrm{PF}}) +
-			\kappa^{\,\mathrm{fit}}_{\,i}\, N^{\,tW}_{i}(I^{\mathrm{rel.}}_{\mathrm{PF}}) + 
-			\xi^{\,\mathrm{fit}}_{i}\, N^{\,\tbarW}_{i}(I^{\mathrm{rel.}}_{\mathrm{PF}}) +
-			\tau^{\,\mathrm{fit}}_{i}\, N^{\,WW}_{i}(I^{\mathrm{rel.}}_{\mathrm{PF}}) + \\[7pt] +
-			\chi^{\,\mathrm{fit}}_{\,i}\, N^{\,\WZ}_{i}(I^{\mathrm{rel.}}_{\mathrm{PF}}) +
-			\psi^{\,\mathrm{fit}}_{i}\, N^{\,\ZZ}_{i}(I^{\mathrm{rel.}}_{\mathrm{PF}});
-			\hspace{74pt} i = \mathrm{signal}, \, \mathrm{control}.
-		\end{gathered}
-	\end{equation}
-	Čia $\lambda^{\mathrm{fit}}_{\,i}$, $\epsilon^{\,\mathrm{fit}}_{\,i}$ ir t.t.\ -- varijuojami daugikliai,
-	kuriuos keičiant bandoma gauti geriausią šablonų sumos sutapimą su matavimu mažiausių kvadratų metodu.
-	Idealiu atveju šie daugikliai turėtų būti lygūs vienetui. 
-	Gavus daugiklių vertes klaidingo atpažinimo tikimybė įvertinama naudojant modeliuotą $\QCD$ įvykių skaičių, padaugintą
-	iš gautojo daugiklio vertės:
-	\begin{equation}
-		f_{\mathrm{signal} \,| \,\mathrm{Jet}} =
-		\frac{\lambda^{\mathrm{fit}}_{\,\mathrm{signal}}\, N^{\,\QCD \; \mathrm{MC}}_{\mathrm{signal}}}
-		{\lambda^{\mathrm{fit}}_{\,\mathrm{signal}}\, N^{\,\QCD \; \mathrm{MC}}_{\mathrm{signal}} +
-		\lambda^{\mathrm{fit}}_{\,\mathrm{control}}\, N^{\,\QCD \; \mathrm{MC}}_{\mathrm{control}}}\, .
-	\end{equation}
-	Svarbu atkreipti dėmesį, kad, nors šablonų pritaikymas daromas izoliuotumo pasiskirstymui, šis pasiskirstymas klaidingo
-	atpažinimo tikimybėje neatsispindi: įvertindami klaidingo atpažinimo tikimybę naudojame tik gautą svorinio daugiklio vertę.
-	Šablonų pritaikymo metodas yra laikomas tikslesniu nei santykio metodas, todėl jis buvo naudojamas kaip pagrindinis rezultatas.
+	\item Santykio metodas: $\QCD$ įvykių skaičius gaunamas padauginus išmatuotą įvykių skaičių iš sumodeliuoto $\QCD$ ir visų
+	galimų procesų santykio: $$N_i^{\QCD}=N_i^{\mathrm{Data}} \frac{N_i^{\QCD \, \mathrm{MC}}}{N_i^{\mathrm{All \, MC}}},$$
+	čia ir toliau $i$ gali būti \ltq{Signal} arba \ltq{Control}.
+	\item Šablonų priderinimo (angl.\ \textit{template fitting}) metodas: $\QCD$ įvykių skaičius gaunamas pasirinkus vieną
+	įvykius apibūdinantį parametrą ir mažiausių kvadratų metodu priderinus šio parametro pasiskirstymus skirtingiems procesams
+	(šablonus) prie eksperimento metu išmatuoto pasiskirstymo.
+	Šiuo atveju buvo naudojamas dalelių srauto algoritmo apskaičiuojamas trajektorijos izoliuotumo parametras.
+	Skirtingų procesų šablonus galima gauti įvairiais būdais, bet šiuo atveju šablonai buvo gauti pasinaudojant modeliavimu:
+	$$N_i^{\mathrm{Data}} \approx \alpha_i^{\QCD} N_i^{\QCD \, \mathrm{MC}} + \alpha_i^{\WJets} N_i^{\WJets \, \mathrm{MC}} +
+	\alpha_i^{\mathrm{DY}} N_i^{\mathrm{DY \, MC}} + \dots \;,$$
+	čia $\alpha$ su atitinkamais indeksais -- pataisos parametrai, kurių vertės nustatomos priderinimo metu.
+	Nustačius parametrų $\alpha$ vertes, į \eqref{eq:FRexp} išraišką statomas $\QCD$ įvykių skaičius įvertinamas kaip
+	$N_i^{\QCD} = \alpha_i^{\QCD} N_i^{\QCD \, \mathrm{MC}}$.
 \end{enumerate}
 
-\subsection{Matavimo paklaidų įvertinimas}\label{sec:uncertainties}
-Analizuojant protonų susidūrimus laikoma, kad įvykių skaičius yra pasiskirstęs pagal Puasono dėsnį.
-Puasono pasiskirstymu aprašomo įvykių skaičiaus standartinis nuokrypis yra lygus kvadratinei šakniai iš labiausiai
-tikėtino įvykių skaičiaus.
-Atliekant realų eksperimentą, labiausiai tikėtinas įvykių skaičius nėra tiksliai žinomas, todėl atranką praėjusių
-įvykių skaičiaus statistinio neapibrėžtumo verte laikoma kvadratinė šaknis iš užregistruoto įvykių skaičiaus.
+Elektronams kokybiškai sumodeliuotas $\QCD$ duomenų rinkinys nebuvo prieinamas, todėl jiems $\QCD$ įvykių skaičius buvo
+įvertinamas atimties metodu -- iš eksperimento metu išmatuoto įvykių skaičiaus atimant sumodeliuotą visų su $\QCD$ procesu
+nesusijusių įvykių skaičių:
+$$N_i^{\QCD} = N_i^{\mathrm{Data}} - N_i^{\mathrm{non}{\text -}\QCD \, \mathrm{MC}}.$$
+Klaidingo atpažinimo tikimybės matavimui skirtiems modeliuotiems įvykiams buvo pritaikytos visos \ref{sec:corrections}
+skyriuje aprašytos pataisos, išskyrus efektyvumų pataisas, nes šios buvo tinkamos  naudoti tik su tikrais izoliuotais leptonais.
+Klaidingo atpažinimo tikimybė buvo matuojama kaip funkcija nuo fizikinio objekto skersinio impulso ir pseudospartos,
+t.y., buvo sudalinta į tam tikro pločio skersinio impulso ir pseudospartos sritis.
+Klaidingo atpažinimo tikimybė nuo pseudospartos priklauso nežymiai: rimtesni kiekybiniai skirtumai pastebimi tik
+tarp tikimybių būti klaidingai atpažintiems objektams, pataikiusiems į detektoriaus cilindrinę ir antgalių dalis.
+Todėl pagal pseudospartą klaidingo atpažinimo tikimybės buvo dalinamos tik į dvi dalis, atitinkančias detektoriaus cilindrą
+ir antgalius.
 
-Kai modeliuoti įvykiai turi nelygius vienetui svorius, jų skaičiaus $N$ statistinis neapibrėžtumas $(\Delta N)_{\mathrm{Stat.\,}}$
-įvertinamas kaip kvadratinė šaknis iš modeliuotų įvykių svorių kvadratų sumos:
+\begin{table}[t]
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		\multicolumn{2}{|c|}{\textbf{Miuono objektai}} & \multicolumn{2}{c|}{\textbf{Elektrono objektai}} \\
+		\hline
+		\textbf{Signalo sritis} & \textbf{Kontrolinė sritis} & \textbf{Signalo sritis} & \textbf{Kontrolinė sritis} \\
+		\hline\hline
+		\multicolumn{2}{|c|}{\multirow{2}{15em}{\centering Aukšto lygio trigeris \ttt{HLT\_Mu50}}} &
+			\multicolumn{2}{c|}{\multirow{2}{20em}{\centering Aukšto lygio trigerių \ttt{HLT\_PhotonX} kombinacija
+				(\ttt{X} $=22, 30, 36, 50, 75, 90, 120, 175$)}} \\
+		\multicolumn{2}{|c|}{ } & \multicolumn{2}{c|}{ } \\
+		\hline
+		\multicolumn{2}{|c|}{$\pT>52$~GeV} & \multicolumn{2}{c|}{$\pT>25$~GeV} \\
+		\hline
+		\multicolumn{2}{|c|}{$|\eta|<2.4$} & \multicolumn{2}{c|}{$|\eta|<2.4$}\\
+		\hline
+		\multicolumn{2}{|c|}{\multirow{5}{15em}{\centering \ltq{\ttt{TightID}} reikalavimai}} &
+			\multicolumn{2}{c|}{\multirow{3}{20em}{\centering Pataikymams į EM kalorimetro cilindrą:\\ $\sigma_{i\eta i\eta}<0.013$,
+				$H/E<0.13$,\\ $|\Delta\eta_{in}^{seed}|<0.01$, $|\Delta\phi_{in}|<0.07$}} \\
+		\multicolumn{2}{|c|}{ } & \multicolumn{2}{c|}{ } \\
+		\multicolumn{2}{|c|}{ } & \multicolumn{2}{c|}{ } \\ \cline{3-4}
+		\multicolumn{2}{|c|}{ } & \multicolumn{2}{c|}{{\multirow{2}{20em}{\centering Pataikymams į EM kalorimetro antgalius:\\
+			$\sigma_{i\eta i\eta}<0.035$, $H/E<0.13$}}} \\
+		\multicolumn{2}{|c|}{ } & \multicolumn{2}{c|}{ } \\
+		\hline
+		\multirow{2}{7em}{\centering $I_{\mathrm{PF}}^{\mathrm{rel.}} < 0.15$} &
+			\multirow{2}{8em}{\centering $I_{\mathrm{PF}}^{\mathrm{rel.}} > 0.15$} &
+			\multirow{2}{8em}{\centering \ltq{\ttt{MediumID}} reikalavimai} &
+			\multirow{2}{12em}{\centering Netenkinami \ltq{\ttt{MediumID}} reikalavimai} \\
+		 & & & \\
+		\hline
+	\end{tabular}
+	\caption{\label{table:FR} Naudoti miuono ir elektrono objektų atrankos kriterijai signalo ir kontrolinei sritims.
+	Elektrono objektams naudoti atrankos kriterijams naudoti dydžiai $\sigma_{i\eta i\eta}$, $H/E$, $|\Delta\eta_{in}^{seed}|$ ir
+	$|\Delta\phi_{in}|$ yra paaiškinti CMS elektrono ir fotono fizikinių objektų mokslinės grupės paruoštame straipsnyje \cite{EleID}.}
+\end{table}
+
+
+\subsection{Su čiurkšlėmis susijusių triukšmo įvykių skaičiaus įvertinimas} \label{sec:bkgEst}
+Klaidingo atpažinimo tikimybę galima panaudoti įvertinant, kiek su klaidingai atpažintomis čiurkšlėmis susijusių
+triukšmo įvykių pateko į signalo sritį.
+Drell-Yan proceso atranką praeina įvykiai su dviem izoliuotais leptono objektais (žr.\ \ref{table:selection} lentelę),
+tad galimas dvejopas su klaidingai atpažintomis čiurkšlėmis susijęs triukšmas: klaidingai atpažinta kaip \ltq{geras}
+leptonas gali būti viena ($\WJets$) arba dvi ($\QCD$) čiurkšlės.
+Žinant klaidingo atpažinimo tikimybę, su tokiais triukšmais susijusių įvykių skaičių galima įvertinti pasinaudojant įvykių
+rinkiniais, kuriuose viena arba dvi klaidingai atpažintos čiurkšlės pateko ne į signalo, o į kontrolinę sritį
+(žr.\ \eqref{eq:2passFR} formulę).
+Šie duomenų rinkiniai buvo gaunami kombinuojant pagrindinės analizės ir klaidingo atpažinimo tikimybės matavimui skirtus
+įvykių atrankos kriterijus.
+Naudoti atrankos kriterijai apibendrinti \ref{table:jetSelection} lentelėje.
+
+Įvykių su dviem klaidingai atpažintomis čiurkšlėmis skaičius buvo įvertinamas pasinaudojant įvykiais, kuriuose abu užfiksuoti
+leptono objektai praėjo atlaisvintus atrankos kriterijus, bet pateko į kontrolinę sritį (t.y., abu miuonai nepraėjo trajektorijos
+izoliuotumo reikalavimo, arba abu elektronai nepraėjo vidutiniškai griežtų atpažinimo reikalavimų).
+Pagal \eqref{eq:2passFR} formulę, kiekvienam tokiam įvykiui buvo priskiriamas svorinis daugiklis $\frac{f_1 f_2}{(1-f_1)(1-f_2)}$.
+Kaip galima matyti iš \eqref{eq:2fake} formulės, įvykių rinkinys su dviem leptono objektais kontrolinėje srityje yra užterštas įvykiais,
+turinčiais tikrų leptonų, kurie dėl įvairių priežasčių nepraėjo signalo srities reikalavimų.
+Su tikrais leptonais susiję įvykiai buvo atmesti pasinaudojant modeliavimu.
+
+Įvykių su viena klaidingai atpažinta čiurkšle skaičius buvo įvertinamas pasinaudojant įvykiais, kuriuose abu leptono objektai
+praėjo atlaisvintus atrankos kriterijus, tačiau vienas iš jų pateko į kontrolinę, o kitas -- į signalo sritį.
+Pagal \eqref{eq:2passFR} formulę, kiekvienam tokiam įvykiui buvo priskiriamas svorinis daugiklis $f/(1-f)$.
+Panašiai, kaip ir dviejų į kontrolinę sritį patekusių leptono objektų atveju, šis duomenų rinkinys yra užterštas įvykiais,
+kuriuose susidarė du tikri leptonai, iš kurių vienas pateko į kontrolinę sritį, bei įvykiais su dviem klaidingai atpažintomis
+čiurkšlėmis, iš kurių viena pateko į signalo sritį (žr.\ \ref{eq:realfake} formulę).
+Dviejų tikrų leptonų įvykiai buvo atmesti pasinaudojant modeliavimu, o dviejų čiurkšlių įvykius -- pasinaudojant įverčiu, gautu
+iš įvykių rinkinio su dviem atrankos nepraeinančiais leptono objektais (tik šį įvertį reikėjo padauginti iš dviejų, kad būtų
+įvertinta galimybė bet kuriai iš dviejų klaidingai atpažintų čiurkšlių patekti į signalo sritį).
+
+Ne visais atvejais pašalinius (susijusius su tikrais leptonais) įvykius atmesti naudojantis modeliavimu pavyko be nesklandumų.
+Kadangi kokybiškai sumodeliuoti prastai izoliuotus leptonus yra sudėtinga, galima tikėtis didesnių modeliavimo netikslumų
+įvykių rinkiniuose, kuriuose figūruoja signalo atrankos reikalavimų nepraeinantys leptonai.
+Buvo pastebėta, jog modeliuotas Drell-Yan proceso įvertis nuvertina tikrąjį užregistruotų įvykių skaičių.
+Dėl šios priežasties po pašalinių įvykių atmetimo gautas su čiurkšlėmis susijusių įvykių skaičius buvo labai smarkiai
+pervertintas 80-100 GeV invariantinės masės srityje (šioje srityje yra su $Z$ bozonu susijęs Drell-Yan proceso diferencialinio
+reakcijos skerspjūvio maksimumas).
+Siekiant pervertinimo išvengti, analogiška klaidingo atpažinimo metodo procedūra buvo pakartota su įvykiais, kuriuose du
+leptono objektai turi vienodą elektrinį krūvį (tokios atrankos turėtų nepraeiti Drell-Yan proceso įvykiai, todėl šiuo atveju
+netikslus Drell-Yan įvykių skaičiaus įvertinimas nebetrukdo).
+Pasinaudojant sumodeliuotais įvykių rinkiniais buvo įsitikinta, kad su $\WJets$ bei $\QCD$ procesais susijusių įvykių, kuriuose
+atpažinti leptono objektai turi vienodus ir priešingus krūvius, pasiskirstymai paklaidų ribose skiriasi tik per konstantą.
+Tai leido iš atitinkamos konstantos padaugintus vienodo krūvio pasiskirstymus naudoti kaip pagrindinei analizei skirtus
+triukšmo įvykių skaičiaus įverčius.
+Konstantos buvo nustatinėjamos panaudojant invariantinės masės pasiskirstymo šablonų priderinimą.
+Ši procedūra buvo atlikta su vienos klaidingai kaip miuonas atpažintos čiurkšlės įvykiais bei įvykiais, kuriuose viena arba abi
+čiurkšlės buvo klaidingai atpažintos kaip elektronai.
+
+Analogiškai buvo galima įvertinti su klaidingai atpažintomis čiurkšlėmis susijusių triukšmo įvykių skaičių ne tik elektronų
+ir miuonų kanaluose, bet ir įvykių rinkinyje su priešingo krūvio elektrono-miuono pora.
+Toks duomenų rinkinys yra naudojamas taikant matavimu grįstą $\emu$ metodą, kuris skirtas įvertinti su tikrais leptonais susijusių
+Drell-Yan proceso triukšmo įvykių skaičių \cite{MAbak}.
+Šio metodo įvertį galima patikslinti iš naudojamo duomenų rinkinio atmetus su klaidingai atpažintomis čiurkšlėmis susijusius
+įvykius.
+Tai buvo padaryta pasinaudojant įvykių rinkiniais, kuriuose elektronas ir/arba miuonas praeina atlaisvintą atranką, bet patenka
+į kontrolinę sritį.
+Triukšmo įvykių skaičius buvo įvertintas atitinkamiems objektams naudojant išmatuotas elektrono arba miuono klaidingo atpažinimo
+tikimybes.
+
+\begin{table}[t]
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		\multicolumn{2}{|c|}{\textbf{\textit{µµ} įvykiai}} & \multicolumn{2}{c|}{\textbf{\textit{ee} įvykiai}} \\
+		\hline
+		\textbf{$\WJets$ atranka} & \textbf{$\QCD$ atranka} & \textbf{$\WJets$ atranka} & \textbf{$\QCD$ atranka} \\
+		\hline\hline
+		\multicolumn{2}{|c|}{Aukšto lygio trigeris: jokio} & \multicolumn{2}{c|}{Aukšto lygio trigeris: \ttt{HLT\_Ele23Ele12}} \\
+		\hline
+		\multicolumn{4}{|c|}{$(p_1)_\mathrm{T} > 28$~GeV, $(p_2)_\mathrm{T} > 17$~GeV} \\
+		\hline
+		\multicolumn{2}{|c|}{$|\eta| < 2.4$} &
+			\multicolumn{2}{c|}{$|\eta_{\mathrm{SC}}| < 2.4$, išskyrus $1.4442 < |\eta_{\mathrm{SC}}| < 1.566$} \\
+		\hline
+		\multicolumn{2}{|c|}{\ttt{TightID} reikalavimai} &
+			\multicolumn{2}{c|}{\multirow{3}{19em}{\centering Pataikymams į EM kalorimetro cilindrą:\\ $\sigma_{i\eta i\eta}<0.013$,
+				$H/E<0.13$,\\ $|\Delta\eta_{in}^{seed}|<0.01$, $|\Delta\phi_{in}|<0.07$}} \\ \cline{1-2}
+		\multicolumn{2}{|c|}{\multirow{3}{16em}{\centering Pasirenkami 2 miuonai, kuriuos galima tiksliausiai suvesti į vieną
+			pirminę viršūnę su $\chi^2<20$}} & \multicolumn{2}{c|}{ } \\
+		\multicolumn{2}{|c|}{ } & \multicolumn{2}{c|}{ } \\ \cline{3-4}
+		\multicolumn{2}{|c|}{ } & \multicolumn{2}{c|}{\multirow{2}{19em}{\centering Pataikymams į EM kalorimetro antgalius:\\
+			$\sigma_{i\eta i\eta}<0.035$, $H/E<0.13$}} \\ \cline{1-2}
+		\multicolumn{2}{|c|}{Priešingi elektriniai krūviai} & \multicolumn{2}{c|}{} \\
+		\hline
+		\multicolumn{2}{|c|}{\multirow{2}{16em}{\centering Plokštuminis kampas\\ $\alpha < \pi - 0.005$ rad}} & 
+			\multicolumn{2}{c|}{\multirow{2}{19em}{\centering Atrankos reikalavimus turi atitikti lygiai 2 elektronai}} \\
+		\multicolumn{2}{|c|}{ } & \multicolumn{2}{c|}{ } \\
+		\hline
+		\multirow{3}{9em}{\centering Vienam miuonui $I_{\mathrm{PF}}^{\mathrm{rel.}}<0.15$,
+			kitam -- $I_{\mathrm{PF}}^{\mathrm{rel.}}\geqslant 0.15$} &
+			\multirow{3}{7em}{\centering Abiems miuonams $I_{\mathrm{PF}}^{\mathrm{rel.}}\geqslant 0.15$} &
+			\multirow{3}{10em}{\centering Vienas elektronas tenkina \ltq{\ttt{MediumID}} reikalavimus, kitas -- ne} &
+			\multirow{3}{10em}{\centering Abu elektronai netenkina \ltq{\ttt{MediumID}} reikalavimų} \\
+		 & & & \\
+		 & & & \\
+		\hline
+	\end{tabular}
+	\caption{\label{table:jetSelection} Apibendrinti atrankos kriterijai įvykių rinkiniams, naudotiems vienos ($\WJets$) ir
+	dviejų ($\QCD$ klaidingai atpažintų čiurkšlių triukšmams įvertinti $ee$ ir $\mu\mu$ kanaluose.
+	$(p_1)_\mathrm{T}$ ir $(p_2)_\mathrm{T}$ žymi atitinkamai greitesniojo ir lėtesniojo leptono skersinį impulsą.
+	Elektrono objektams naudoti atrankos kriterijams naudoti dydžiai $\sigma_{i\eta i\eta}$, $H/E$, $|\Delta\eta_{in}^{seed}|$ ir
+	$|\Delta\phi_{in}|$ yra paaiškinti CMS elektrono ir fotono fizikinių objektų mokslinės grupės paruoštame straipsnyje \cite{EleID}.}
+\end{table}
+
+
+\subsection{Matavimo paklaidų įvertinimas}\label{sec:uncertainties}
+Eksperimentinėje didelių energijų fizikoje yra laikoma, jog įvykių skaičiaus pasiskirstymus aprašo Puasono dėsnis.
+Galima parodyti, kad taip pasiskirsčiusių atsitiktinių įvykių skaičiaus standartinis nuokrypis yra lygus kvadratinei
+šakniai iš tikėtiniausio įvykių skaičiaus.
+Realybėje tikėtiniausias įvykių skaičius nėra žinomas dydis, todėl tenka padaryti prielaidą, kad eksperimento metu išmatuotas
+įvykių skaičius yra artimas labiausiai tikėtinam.
+Tokiu atveju statistiniu užregistruotų įvykių skaičiaus neapibrėžtumu laikome kvadratinę šaknį iš jo paties.
+
+Dėl normavimo ir taikytų pataisų, modeliuoti įvykiai turėjo nelygius vienetui svorius $\omega_i$, apskaičiuojamus pagal
+\eqref{eq:weightCorr} formulę.
+Statistine įvykių su nevienetiniais svoriais skaičiaus neapibrėžtimi buvo laikoma kvadratinė šaknis iš visų įvykių svorių
+kvadratų sumos:
 \begin{equation}
-	(\Delta N)_{\mathrm{Stat.\,}} = \sqrt{\sum_{i=1}^{N}w_{i}^{2}} \; ,
+	(\Delta N)_{\mathrm{Stat.\,}} = \sqrt{\sum_{i=1}^{N}\omega_{i}^{2}} \; .
 	\label{eq:Sumw2Unc}
 \end{equation}
-čia $$w_{i}=w_{i}^{\mathrm{Norm.}} \cdot \prod_{p=1}^{N_{\mathrm{Pat.}}}w_{i}^{p} \; ,$$
-kur $w_{i}^{\mathrm{Norm.}}$ -- modeliuoto įvykio normuojantis svoris, gaunamas iš \eqref{eq:NLOweight} išraiškos,
-$w_{i}^{p}$ -- modeliuotam įvykiui pataisos $p$ priskirtas svorinis daugiklis, $N_{\mathrm{Pat.}}$ -- pritaikytų
-skirtingų pataisų skaičius.
-Modeliuotiems įvykiams taikytos pataisos yra aprašytos \ref{sec:corrections}~skyriuje.
-Jeigu modeliuotų įvykių turime daugiau, nei buvo užregistruota eksperimento metu, jiems bus priskiriami mažesni už
-vienetą svoriai ir sunormuoto įvykių skaičiaus statistinė paklaida bus mažesnė nei eksperimento metu užregistruotų
-įvykių.
+Matome, kad visų įvykių svorius pakeitus į vienetus grįžtame prie neapibrėžtumo, lygaus kvadratinei šakniai iš įvykių
+skaičiaus.
+
+Atkreiptinas dėmesys, kad, turint daugiau faktiškai sumodeliuotų įvykių (čia kalbame apie pačius įvykius, o ne jų svorius)
+nei buvo užregistruota eksperimento metu, jiems bus priskiriami mažesni už vienetą svoriai.
+Iš \eqref{eq:Sumw2Unc} formulės seka, kad tokiu atveju sunormuoto įvykių skaičiaus statistinė neapibrėžtis bus mažesnė nei
+detektoriaus užregistruotų įvykių skaičiaus.
 Tai yra vienas iš modeliavimo privalumų, kai modeliuojami mažo tikėtinumo įvykiai.
-Tuo tarpu, kai modeliuojami labai didelio tikėtinumo įvykiai, priklausomai nuo sumodeliuoto įvykių skaičiaus
-jiems gali būti priskiriami labai dideli svoriai.
-Tokiu atveju statistinis įvykių skaičiaus neapibrėžtumas bus gerokai didesnis nei detektoriaus užregistruotiems įvykiams.
-Tai yra vienas iš modeliavimo trūkumų ir viena iš pagrindinių priežasčių, kodėl naudojamas klaidingo atpažinimo metodas
-$\QCD$ ir $\WJets$ įvykių skaičiaus įvertinimui -- jų reakcijos skerspjūviai yra labai dideli ir norint juos kokybiškai
-sumodeliuoti reikia ypatingai didelių skaičiavimo resursų.
-Jeigu įvykiams priskiriami vienetiniai svoriai, iš \eqref{eq:Sumw2Unc} išraiškos gauname, kad įvykių
-skaičiaus paklaida lygi kvadratinei šakniai iš įvykių skaičiaus, taigi, ši formulė tinkama ir eksperimento
-metu užregistruotų įvykių skaičiaus statistinio neapibrėžtumo įvertinimui.
-Fizikinio objekto klaidingo atpažinimo metodu įvertinto triukšmo įvykių skaičiaus statistinis neapibrėžtumas taip
-pat buvo įvertintas paimant kvadratinę šaknį iš gauto rezultato, nes klaidingo atpažinimo tikimybė yra naudojama
-kaip svorinis daugiklis, kuris bendru atveju yra labai mažas, todėl neapibrėžtumas, įvertintas naudojantis
-\ref{eq:Sumw2Unc} formule būtų netikroviškai mažas.
+Tuo tarpu, jeigu modeliuojami labai didelio tikėtinumo įvykiai, priklausomai nuo sumodeliuoto įvykių skaičiaus
+jiems gali būti priskiriami smarkiai didesni už vienetą svoriai.
+Tokiu atveju statistinė neapibrėžtis gerokai viršys eksperimento metu užregistruotų įvykių neapibrėžtį.
+Tai yra viena iš pagrindinių priežasčių, kodėl $\QCD$ ir $\WJets$ triukšmo įvykių skaičiui įvertinimui reikia naudoti
+klaidingo atpažinimo (ar kitą) metodą -- šių procesų reakcijos skerspjūviai yra labai dideli (žr.\ \ref{table:Xsec} lentelę),
+o tai nulemia didelius statistinius neapibrėžtumus.
 
-Galimiems sisteminiams nukrypimams įvertinti CMS statistikos komitetas rekomenduoja turėti bent du skirtingais būdais
-atliktus matavimus, kurie, idealiu atveju, turėtų duoti sutampančius įverčius.
-Kadangi tikroji vertė, kurią bandoma išmatuoti, yra nežinoma, daroma prielaida, jog skirtingi įverčiai yra
-lygiaverčiai ir nepriklausomi, o tikroji vertė yra artimoje aplinkoje.
-Tokiu atveju skirtumo tarp dviejų skirtingų rezultatų absoliučioji vertė yra pakankamai saugus sisteminės matavimo
-paklaidos įvertis.
+Klaidingo atpažinimo metodu įvertinto triukšmo įvykių skaičiaus statistinis neapibrėžtumas buvo skaičiuojamas ne pagal
+\eqref{eq:Sumw2Unc} formulę, o ištraukiant kvadratinę šaknį iš gauto rezultato.
+Taip buvo padaryta todėl, kad klaidingo atpažinimo tikimybė buvo naudojama kaip svorinis daugiklis kiekvienam įvykiui.
+Bendru atveju šio daugiklio vertės buvo labai mažos, todėl neapibrėžtumas, įvertintas naudojantis \eqref{eq:Sumw2Unc}
+formule, būtų buvęs netikroviškai mažas.
 
-Šiame darbe buvo matuojamas Drell-Yan proceso triukšmo įvykių skaičius, o turimi du skirtingi įverčiai buvo gauti naudojant
-skirtingas klaidingo atpažinimo tikimybės įvertinimo metodikas: santykio ir šablonų pritaikymo metodą.
-Taigi, pagrindinė $\QCD$ ir $\WJets$ įvykių skaičiaus įverčio sisteminės paklaidos sudedamoji dalis buvo įvertinta pagal
-tokią formulę:
+Sisteminių neapibrėžtumų įvertinimui CMS statistikos komitetas rekomenduoja tą patį dydį įvertinti dviem skirtingais metodais,
+kurie idealiu atveju turėtų duoti vienodą rezultatą.
+Jeigu matavimai yra nepriklausomi ir lygiaverčiai, galima tikėtis, kad ieškoma tikroji vertė (kuri yra nežinoma) yra kažkur
+tarp dviejų gautųjų matavimo rezultatų arba artimoje aplinkoje.
+Taigi, vieno metodo įvertį pasirinkus centrine verte, jam galima priskirti sisteminę neapibrėžtį, lygią skirtumui tarp
+dviejų skirtingų matavimų.
+
+Viena iš sisteminės neapibrėžties dedamųjų kaip miuonai klaidingai atpažintų čiurkšlių įvertinimui buvo laikomas skirtumas
+tarp rezultatų, gautų naudojant dvi skirtingas klaidingo atpažinimo tikimybės įvertinimo metodikas: santykio ir šablonų
+priderinimo metodą (šablonų priderinimo metodu gautas įvertis buvo laikomas centrine verte):
 \begin{equation}
-	(\Delta N_{ll}^{\mathcal{P} \; \mathrm{įvert.}})_{\mathrm{Sist.\,}} =
-	\left| N_{ll}^{\mathcal{P} \; \mathrm{įvert.}}(\mathrm{šabl.}) -
-	N_{ll}^{\mathcal{P} \; \mathrm{įvert.}}(\mathrm{sant.}) \right| \;  ;
+\label{eq:systUncFRmumu}
+	(\Delta N_{\mu\mu}^{\mathcal{P} \; \mathrm{FR}})_{\mathrm{Sist.\,}} =
+	\left| N_{\mu\mu}^{\mathcal{P} \; \mathrm{FR}}(\mathrm{Fit}) -
+	N_{\mu\mu}^{\mathcal{P} \; \mathrm{FR}}(\mathrm{Ratio}) \right| \;  ;
 	\;\;\;\;\; \mathcal{P} = \QCD, \; \WJets \; ,
-	\label{eq:systUncFR}
 \end{equation}
-čia \ltq{įvert.}\ žymi matavimu grįstą įvertį, \ltq{fit.}\ žymi klaidingo atpažinimo tikimybei įvertinti naudotą šablonų
-pritaikymo metodą, o \ltq{sant.}\ -- santykio metodą.
+čia \ltq{FR}\ žymi klaidingo atpažinimo metodu įvertintą įvykių skaičių, \ltq{Fit} žymi klaidingo atpažinimo tikimybei
+įvertinti naudotą šablonų priderinimo metodą, o \ltq{Ratio}\ -- santykio metodą.
 
-Kadangi klaidingo atpažinimo tikimybei įvertinti buvo naudojamas baigtinis įvykių skaičius, ji turi savo statistinį neapibrėžtumą,
-kuris neatsispindi galutinio triukšmo įvykių skaičiaus įverčio statistiniame neapibrėžtume.
-Dėl šios priežasties klaidingo atpažinimo tikimybės statistinis neapibrėžtumas buvo įskaitomas laikant jį papildomu indėliu į
-sisteminę įverčio paklaidą.
-Skirtingos paklaidos dedamosios, laikant, kad jos yra tarpusavyje nepriklausomos, buvo sudedamos pagal Pitagoro teoremą.
+Tikimybė čiurkšlei būti klaidingai atpažintai kaip elektronui buvo matuojama tik vienu (atimties) metodu, todėl čia viena
+iš sisteminio neapibrėžtumo dedamųjų buvo laikomas skirtumas tarp triukšmo įvykių įverčio, gauto pašalinių įvykių atmetimui
+panaudojus modeliavimą (žr.\ \ref{sec:bkgEst} skyrių) ir įverčio, gauto panaudojus vienodo krūvio šabloną (vienodo krūvio
+šablono įvertis buvo laikomas centrine verte):
+\begin{equation}
+\label{eq:systUncFRee}
+	(\Delta N_{ee}^{\mathcal{P} \; \mathrm{FR}})_{\mathrm{Sist.\,}} =
+	\left| N_{ee}^{\mathcal{P} \; \mathrm{FR}}(\mathrm{Subtract}) -
+	N_{ee}^{\mathcal{P} \; \mathrm{FR}}(\mathrm{Template}) \right| \;  ;
+	\;\;\;\;\; \mathcal{P} = \QCD, \; \WJets \; ,
+\end{equation}
+čia \ltq{Subtract} žymi įvertį, gautą pašalinius įvykius atmetus naudojant modeliavimą, o \ltq{Template} -- įvertį, gautą
+panaudojus vienodo krūvio šabloną.
+
+Klaidingo atpažinimo tikimybei įvertinti buvo naudojamas baigtinis įvykių skaičius, todėl ji turi savo statistinį neapibrėžtumą.
+Šis neapibrėžtumas niekaip neatsispindi galutinio triukšmo įvykių skaičiaus įverčio statistiniame neapibrėžtume, todėl
+jis buvo įskaitomas laikant jį papildomu indėliu į sisteminę įverčio paklaidą.
+Tai pat į sisteminę paklaidą buvo įskaitoma šablonų priderinimo paklaida, grąžinta priderinimo algoritmo.
+Padarius prielaidą, kad skirtingos sisteminio neapibrėžtumo dedamosios yra tarpusavyje nepriklausomos, į pilnąją paklaidą jos
+buvo sudedamos pagal Pitagoro teoremą.
 
 
+\newpage
 \section{Rezultatai ir jų aptarimas}
-Drell-Yan proceso triukšmo įvykių skaičius, susijęs su $\DYtau$, $t\bar{t}\,$, $WW$, $tW$, $\bar{t}W$ procesais buvo įvertintas
-$\emu$ metodu ankstesniame darbe \cite{MAk2}.
-Šie triukšmo įvykiai sudaro $1.06\%$ visų $\mu\mu$ įvykių.
-Sisteminė $\emu$ metodo įverčio paklaida buvo įvertinta kaip skirtumo tarp modeliuoto ir $\emu$ metodo įverčio modulis, pagal
-CMS statistikos komiteto rekomendacijas.
-Invariantinės masės histogramų, kai naudojami vien modeliuoti įverčiai ir kai naudojamas $\emu$ metodas palyginimas pateikiamas
-\ref{fig:MassMCemu}~pav.
-Modeliuotų $\mu\mu$ triukšmo įvykių skaičius lygus $250500$, o įvertinus $\mu\mu$ triukšmo įvykių skaičių  $e\mu$ metodu
-gauta $241105$ įvykių.
-Lyginant su modeliavimu, $\emu$ metodas visoje tirtoje invariantinės masės srityje susumuotą triukšmo įvykių skaičių
-sumažino maždaug $4$-ais procentais.
-Abiejuose pateikiamuose grafikuose naudojami modeliuoti $\WZ$, $\ZZ$, $\WJets$ ir $\QCD$ procesų įverčiai.
+\ref{table:selection} lentelėje išvardintus atrankos kriterijus praėjusių leptonų porų invariantinės masės histogramos
+prieš klaidingo atpažinimo metodo pritaikymą pateikiamas \ref{fig:MassBefore}~pav.
+Šiose histogramose spalvotais stulpeliais pavaizduoti modeliuoti arba $\emu$ metodu įvertinti (kur įmanoma) įvykių skaičiai.
 Verta atkreipti dėmesį, kad modeliuoti $\WJets$ ir $\QCD$ procesų įverčiai turi netolydžius invariantinės masės pasiskirstymus:
 įvykių skaičiaus skirtumai tarp gretimų histogramos stulpelių vietomis skiriasi dešimtimis kartų, daug stulpelių yra tušti
 net žemų masių srityse (ypač $\QCD$ atveju).
 Tai rodo prastą šių dviejų procesų modeliavimo kokybę.
 $\QCD$ ir $\WJets$, lyginant su kitais Drell-Yan triukšmo procesais turi labai didelį reakcijos skerspjūvį, tačiau artimą
 nuliui tikimybę praeiti Drell-Yan proceso atranką.
-Sumodeliavus tiek su šiais procesais susijusių įvykių, kiek leidžia turimi skaičiavimo resursai ($2.8\cdot10^8$ $\QCD$ ir
-$6.3\cdot10^8$ $\WJets$ įvykių), iš jų Drell-Yan proceso atranką praeina vos $40$ $\QCD$ ir $1288$ $\WJets$ įvykiai.
+Sumodeliavus tiek su šiais procesais susijusių įvykių, kiek leidžia turimi skaičiavimo resursai ($5.8\!\times\!10^8$ $\QCD$ ir
+$6.3\!\times\!10^8$ $\WJets$ įvykių), iš jų Drell-Yan proceso miuonų kanalo atranką praeina vos $40$ $\QCD$ ir $1288$ $\WJets$,
+o elektronų kanalo -- $36$ $\QCD$ ir $4974$ $\WJets$ įvykiai.
 Dėl didelio reakcijos skerspjūvio šiems įvykiams priskiriami dideli svoriai, kurių vertės siekia net iki kelių tūkstančių:
-sunormavus įvykius pagal išmatuotą integruotąjį šviesį buvo gauta $1673\pm1498$ $\QCD$ ir $2704pm200$ $\WJets$ įvykių. 
-Tai paaiškina pasiskirstymuose matomus netolydumus ir yra pagrindinė priežastis, kodėl šių triukšmų indėlį reikia įvertinti
-matavimu grįstais metodais.
+sunormavus įvykius pagal integruotą šviesį buvo gauta $1673\pm1498$ $\QCD$ ir $2704\pm200$ $\WJets$ įvykių, patenkančių į
+$\mu\mu$ kanalą ir $3177\pm1897$ $\QCD$ bei $11176\pm105$ $\WJets$ įvykių, patenkančių į $ee$ kanalą. 
+Didžiuliai statistiniai neapibrėžtumai paaiškina, kodėl pasiskirstymuose matomi tokie smarkūs netolydumai.
+Tai yra pagrindinė priežastis, kodėl šių triukšmų indėlį reikėjo įvertinti matavimu grįstais metodais.
 
 \begin{figure}[b!]
-	\includegraphics[width=0.49\textwidth]{Kursinis3/mumu_mass_after_wQCD.png}
-	\includegraphics[width=0.49\textwidth]{Kursinis3/mumu_mass_wEMuEst.png}
+	\includegraphics[width=0.49\textwidth]{Magistrinis/MuMumass_beforeFR.png}
+	\includegraphics[width=0.49\textwidth]{Magistrinis/EEmass_beforeFR.png}
 	\vspace{-0.5cm}
-	\caption{\label{fig:MassMCemu}
-		Miuonų poros invariantinės masės pasiskirstymai pritaikius visas pataisas.
-		Juodi taškai vaizduoja CMS detektoriumi išmatuotus pasiskirstymus, o spalvoti stulpeliai -- modeliuotus (kairėje)
-		arba $\emu$ metodu įvertintus (dešinėje) įvykius.
-		Eksperimento ir įverčio santykio grafike esančios mėlynos juostos vaizduoja sumines paklaidas.}
+	\caption{\label{fig:MassBefore}
+		Miuonų (kairėje) ir elektronų (dešinėje) porų invariantinių masių pasiskirstymai prieš klaidingo atpažinimo metodo
+		pritaikymą.
+		Juodi taškai vaizduoja CMS detektoriumi išmatuotus pasiskirstymus, o spalvoti stulpeliai -- modeliuotus (legendoje
+		žymima \ltq{MC} arba $\emu$ metodu įvertintus (legendoje žymima \ltq{$\emu$}) įvykius.
+		Eksperimento ir įverčio santykio grafike esančios mėlynos juostos vaizduoja suminius (statistinius ir sisteminius)
+		neapibrėžtumus.}
 \end{figure}
 
 Įvykiai klaidingo atpažinimo tikimybei įvertinti buvo atrenkami pagal \ref{table:FR}~lentelėje nurodytus atrankos kriterijus.
-Drell-Yan signalo atrankoje naudoti vieno miuono trigeriai šiuo atveju buvo netinkami, nes juose yra užkoduotas ir miuono trajektorijos
-izoliuotumo reikalavimas, kuris šiuo atveju buvo nereikalingas.
-Dėl šios priežasties buvo pasirinktas kitas vieno miuono trigeris, kuris aktyvuojamas, kai aptinkamas miuonas su skersiniu impulsu,
-viršijančiu $50$~GeV. Šis trigeris neatsižvelgia į miuono izoliuotumą.
-Dėl pasikeitusio trigerio buvo naudojami ir kitokie kinematiniai reikalavimai: atrenkami miuonai su $\pT>52$~GeV.
-Miuonams buvo taikomas tas pats Drell-Yan signalo atrankoje naudotas \ttt{TightID} reikalavimas.
-Reikalavimai miuono krūviui ar įvykyje užregistruotų miuonų skaičiui nebuvo taikomi.
-Klaidingo atpažinimo tikimybė buvo įvertinta pagal \eqref{eq:realfake} formulę keliose skirtingose miuono skersinio impulso ir
-pseudospartos srityse ($f_{\mathrm{Signal} \, | \, \mathrm{Jet}}$ yra funkcija nuo $\pT$ ir $\eta$).
+Atranką praėjusių miuono objektų skersinių impulsų pasiskirstymai pateikti \ref{fig:FRpT_mu} pav.
+Su $\QCD$ procesu susijusių įvykių skaičiui (jie naudojami klaidingo atpažinimo tikimybei matuoti) detektoriaus išmatuotuose
+duomenyse įvertinti buvo pasitelkiami modeliuoti įvykių rinkiniai (žr.\ \ref{sec:FRmeasure} skyrių).
+Miuono objektams nesutapimas tarp išmatuoto ir modeliuoto skersinio impulso pasiskirstymo srityje iki $500$~GeV siekė $10-15\%$.
+Dėl tokio didelio skirtumo buvo laikoma, kad klaidingo atpažinimo tikimybės matavimas santykio metodu gali būti nepakankamai tikslus.
+Tikslesniam klaidingo atpažinimo tikimybės matavimui buvo pasitelktas šablonų priderinimo metodas.
+Prie eksperimento priderinus miuono trajektorijos izoliuotumo parametro pasiskirstymus (priderinti pasiskirstymai pateikiami prieduose)
+buvo gauti pataisos daugikliai modeliuotiems duomenų rinkiniams.
+$\QCD$ procesui pataisos daugiklis siekė vidutiniškai $0.75$ detektoriaus cilindrinėje ir $0.65$ antgalių dalyje.
+Šablonų priderinimo metodu pataisyti miuono objektų skersinio impulso pasiskirstymai pavaizduoti \ref{fig:FRpT_muTFIT} pav.
+Pritaikius šablonų priderinimą nesutapimas tarp eksperimentinių ir modeliuotų pasiskirstymų srityje iki $500$~GeV neviršija $10\%$
+(išskyrus vieną stulpelį), todėl centrine klaidingo atpažinimo tikimybės verte buvo laikoma gautoji šablonų priderinimo metodu.
 
-\begin{table}[t!]
-	\begin{tabular}{|c|c|}
-		\hline
-		\textbf{Signalo sritis} & \textbf{Kontrolinė sritis} \\
-		\hline\hline
-		\multicolumn{2}{|c|}{Aukšto lygio trigeris \ttt{Mu\_50}} \\
-		\hline
-		\multicolumn{2}{|c|}{$\pT>52$~GeV} \\
-		\hline
-		\multicolumn{2}{|c|}{$|\eta|<2.4$} \\
-		\hline
-		\multicolumn{2}{|c|}{\ttt{TightID} reikalavimai} \\
-		\hline
-		$I_{\mathrm{PF}}^{\mathrm{rel.}} < 0.15$ & $I_{\mathrm{PF}}^{\mathrm{rel.}} > 0.15$ \\
-		\hline
-	\end{tabular}
-	\caption{\label{table:FR} Naudoti miuonų atrankos kriterijai signalo ir kontrolinei sritims. Visi kriterijai, išskyrus vieną
-	abiem sritims yra vienodi.}
-\end{table}
-
-\begin{figure}[b!]
-	\includegraphics[width=0.48\textwidth]{Kursinis3/FRest_pT_deno_barrel.png}
-	\includegraphics[width=0.48\textwidth]{Kursinis3/FRest_pT_deno_endcap.png}
-	\vspace{-0.5cm}
-	\caption{\label{fig:jet_pT_before}
-		Klaidingo atpažinimo tikimybės įvertinimui atliktą įvykių atranką praėjusių miuonų kandidatų skersinių impulsų
-		pasiskirstymai, kai miuonas pataiko į detektoriaus cilindrinę (kairėje) ir antgalio (dešinėje) dalį.
-		Dėl nepakankamai tikslaus modeliavimo, jo sutapimas su eksperimento rezultatu yra prastas.}
-\end{figure}
-
-\begin{figure}[p!]
-	\includegraphics[width=0.45\textwidth]{Kursinis3/TFit_DB_50to70.png}
-	\includegraphics[width=0.45\textwidth]{Kursinis3/TFit_DE_50to70.png}
-	\includegraphics[width=0.45\textwidth]{Kursinis3/TFit_DB_70to100.png}
-	\includegraphics[width=0.45\textwidth]{Kursinis3/TFit_DE_70to100.png}
-	\includegraphics[width=0.45\textwidth]{Kursinis3/TFit_DB_100to500.png}
-	\includegraphics[width=0.45\textwidth]{Kursinis3/TFit_DE_100to500.png}
-	\vspace{-0.2cm}
-	\caption{\label{fig:templateFit}
-		Eksperimentiniai miuono trajektorijos izoliuotumo pasiskirstymai detektoriaus cilindrinėje (kairėje)
-		ir  antgalių (dešinėje) dalyse, bei prie jų pritaikyti modeliuoti šablonai.
-		Iš viršaus į apačią pavaizduoti pasiskirstimai miuonų kandidatams, kurių $\pT\in(52, 70)$~GeV,
-		$\pT\in[70, 100)$~GeV ir $\pT\in[100, 500)$~GeV.}
-\end{figure}
-
-\ref{fig:jet_pT_before}~pav.\ pavaizduoti atranką praėjusių miuonų skersinio impulso pasiskirstymai.
-Dėl nepakankamai tikslaus modeliavimo nesutapimas tarp eksperimento ir modeliavimo siekia $20\%$.
-Dėl šios priežasties buvo laikoma, jog klaidingo atpažinimo tikimybės įvertinimas naudojant santykio metodą gali būti
-nepakankamai teisingas.
-Kokybiškesnį įvertinimą buvo tikimasi gauti naudojant šablonų pritaikymo metodą.
-Jis buvo atliekamas prie matavimo pritaikant modeliuotus miuono trajektorijos izoliuotumo pasiskirstymus.
-Izoliuotumo pasiskirstymai buvo padalinti į šešias sritis: pirmiausia dalinama į dvi dalis pagal miuono pseudospartą
-($|\eta|<1.2$ atitinka miuonus, pataikiusius į detektoriaus cilindrinę dalį, o $|\eta|\geqslant 1.2$ -- į antgalių segmentus)
-bei į tris dalis pagal miuono skersinį impulsą ($\pT\in(52, 70)$~GeV, $\pT\in[70, 100)$~GeV ir $\pT\in[100, 500)$~GeV).
-Prie išmatuotų izoliuotumo pasiskirstymų pritaikyti šablonai pavaizduoti \ref{fig:templateFit}~pav.
-Iš šablonų pritaikymo gautos normavimo daugiklio vertės $\QCD$ pasiskirstymams siekė $0.72$-$0.75$ cilindrinėje detektoriaus
-srityje ir $0.60$-$0.66$ antgalių srityje.
-Šablonų pritaikymas pakoregavo modeliuotų pasiskirstymų normavimą taip, kad nesutapimas tarp matavimo ir modeliavimo
-sumažėjo iki $5\%$.
-Pernormuoti miuonų skersinio impulso pasiskirstymai pavaizduoti \ref{fig:jet_pT_after}~pav.
-Klaidingo atpažinimo tikimybė buvo įvertinta skirtingose miuono skersinio impulso srityse bei dviejose pseudospartos srityse
-(atitinkančiose detektoriaus cilindro ir antgalių segmentus) naudojantis \ref{eq:FR} formule.
-Klaidingo atpažinimo tikimybės vertės, gautos naudojant santykio ir šablonų pritaikymo metodus, pavaizduotos \ref{fig:FR}~pav.
-Šablonų pritaikymo metodu gautos klaidingo atpažinimo tikimybės vertės yra beveik $10\%$ didesnės, už įvertintas
-santykio metodu.
-Čiurkšlėms, pataikiusioms į cilindrinę detektoriaus dalį, klaidingo atpažinimo tikimybė kinta apytiksliai nuo $5\%$ iki $20\%$,
-o pataikiusioms į detektoriaus antgalį ji yra vidutiniškai $2.5$ karto didesnė ir kinta
-apytiksliai nuo $14\%$ iki $32\%$.
-
-\begin{figure}[p!]
-	\includegraphics[width=0.48\textwidth]{Kursinis3/FRfit_pT_deno_barrel.png}
-	\includegraphics[width=0.48\textwidth]{Kursinis3/FRfit_pT_deno_endcap.png}
-	\vspace{-0.4cm}
-	\caption{\label{fig:jet_pT_after}
-		Klaidingo atpažinimo tikimybės įvertinimui atliktą įvykių atranką praėjusių miuonų kandidatų skersinių impulsų
-		pasiskirstymai, kai miuonas pataiko į detektoriaus cilindrinę (kairėje) ir antgalio (dešinėje) dalį.
-		Šiuose grafikuose modeliuoti pasiskirstymai (parodyti \ref{fig:jet_pT_before}~pav.)\ yra pernormuoti, kad
-		atitiktų iš šablonų pritaikymo gautas vertes.}
-\end{figure}
-
-\begin{figure}[p]
-	\includegraphics[width=0.48\textwidth]{Kursinis3/FR_barrel.png}
-	\includegraphics[width=0.48\textwidth]{Kursinis3/FR_endcap.png}
-	\vspace{-0.3cm}
-	\caption{\label{fig:FR}
-		Apskaičiuota klaidingo atpažinimo tikimybė skirtingose skersinio impulso srityse.
-		Kairėje pateiktas rezultatas trajektorijoms, einančioms per detektoriaus cilindrinę, o dešinėje -- per antgalių dalis.
-		Skirtingos spalvos vaizduoja skirtingais metodais įvertintą tikimybę (žr.~legendą).}
-\end{figure}
-
-Apskaičiuota klaidingo atpažinimo tikimybė buvo panaudota įvertinant Drell-Yan proceso triukšmo įvykių skaičių, susijusį su
-$\QCD$ ir $\WJets$ procesais.
-Šių triukšmo įvykių skaičiaus įvertinimui buvo vykdoma atranka, kurios kriterijai nurodyti \ref{table:jetSelection}~lentelėje.
-Praktiškai visi taikyti atrankos kriterijai buvo identiški Drell-Yan signalo atrankos kriterijams, nurodytiems
-\ref{table:selection}~lentelėje, tačiau vienam arba dviems miuonams buvo taikomi invertuoti trajektorijos izoliuotumo
-reikalavimai (atitinkamai $\WJets$ arba $\QCD$ atrankoje).
-Taip pat šiuo atveju nebuvo naudojamas joks aukšto lygio trigeris (naudotas tik pirmo lygio vieno miuono trigeris, kuris
-ir taip buvo naudojamas visoje atliktoje analizėje), nes, norint teisingai įvertinti triukšmo įvykių skaičių
-svarbu, kad taikomi kinematiniai reikalavimai atitiktų naudojamus pagrindinėje analizėje.
-To nebūtų įmanoma padaryti naudojant klaidingo atpažinimo tikimybės įvertinimui naudotą trigerį \ttt{Mu\_50},
-o pagrindinės analizės trigeriai taip pat buvo netinkami dėl jau minėto reikalavimo miuonų izoliuotumui.
-Smarkaus skaičiavimo laiko išaugimo dėl aukšto lygio trigerio nenaudojimo buvo išvengta iškart atmetant visus įvykius,
-kuriuose nebuvo užfiksuota bent dviejų miuonų.
-
-\begin{table}[b!]
-	\begin{tabular}{|c|c|}
-		\hline
-		\textbf{$\WJets$ atranka} & \textbf{$\QCD$ atranka} \\
-		\hline\hline
-		\multicolumn{2}{|c|}{Trigeris: pirmo lygio \ttt{SingleMuon} trigeris, jokio aukšto lygio trigerio} \\
-		\hline
-		\multicolumn{2}{|c|}{$p_{\mathrm{T \, 1}} > 28$~GeV, $p_{\mathrm{T \, 2}} > 17$~GeV} \\
-		\hline
-		\multicolumn{2}{|c|}{$|\eta_1| < 2.4$, $|\eta_2| < 2.4$} \\
-		\hline
-		\multicolumn{2}{|c|}{\ttt{TightID} reikalavimai} \\
-		\hline
-		\multicolumn{2}{|c|}{\multirow{2}{37em}{\centering Pasirenkami 2 miuonai, kuriuos galima tiksliausiai suvesti į vieną
-		pirminę viršūnę su $\chi^2<20$}} \\
-		\multicolumn{2}{|c|}{} \\
-		\hline
-		\multicolumn{2}{|c|}{Priešingi elektriniai krūviai} \\
-		\hline
-		\multicolumn{2}{|c|}{Plokštuminis kampas $< \pi - 0.005$ rad} \\
-		\hline
-		\multirow{1}{22em}{\centering Vienam miuonui $I_{\mathrm{PF}}^{\mathrm{rel.}}<0.15$,
-			kitam -- $I_{\mathrm{PF}}^{\mathrm{rel.}}\geqslant 0.15$} &
-			\multirow{1}{15em}{\centering Abiems miuonams $I_{\mathrm{PF}}^{\mathrm{rel.}}\geqslant 0.15$} \\
-		\hline
-	\end{tabular}
-	\caption{\label{table:jetSelection}Apibendrinti $\WJets$ ir $\QCD$ įvykių atrankos kriterijai. Indeksai $1$ ir $2$ žymi
-	atitinkamai greitesnįjį ir lėtesnįjį miuoną. Šios dvi atrankos skiriasi tik vienu kriterijumi.}
-\end{table}
-
-$\QCD$ įvykių skaičius iš kontrolinės į signalo sritį buvo perkeliamas atranką praėjusiems įvykiams pritaikius svorinius
-daugiklius, apskaičiuojamus pagal \ref{eq:FRapply} formulę.
-\ref{fig:FR}~pav.\ pavaizduoti klaidingo atpažinimo tikimybės priklausomybės nuo skersinio impulso grafikai tampa
-plokšti mažų skersinių impulsų srityse, todėl atranką praėjusiems miuono kandidatams su $\pT<52$~GeV, buvo pritaikomi
-tokie patys svoriniai daugikliai, kaip ir kandidatams su $\pT=52$~GeV.
-Sisteminė įverčio paklaida buvo įvertinta pagal \ref{eq:systUncFR} formulę.
-\ref{fig:QCDselection}~pav.\ pateiktas atranką praėjusių į signalo sritį perkeltų miuonų porų pasiskirstymas.
-Modeliavimas sufleruoja, kad tokią įvykių atranką praeina ne tik $\QCD$ proceso įvykiai, tačiau pašaliniai įvykiai
-sudaro tik apie $25\%$ viso įvykių skaičiaus.
-$\QCD$ įvykių skaičius buvo gautas iš eksperimento metu išmatuoto pasiskirstymo atėmus modeliuotus pasiskirstymus.
-Įverčio rezultatas pavaizduotas \ref{fig:QCDest}~pav.
-Įvertintas su $\QCD$ procesu susijusių Drell-Yan proceso triukšmo įvykių skaičius yra $2884\pm 54 \pm 383$:
-$1.7$ karto daugiau, nei buvo įvertinta iš modeliavimo.
-
-\begin{figure}[b!]
+\begin{figure}[t!]
 	\RawFloats
-	\begin{minipage}{0.48\textwidth}
-		\vspace{-0.8cm}
-		\includegraphics[width=0.95\textwidth]{Kursinis3/QCDest_subtract.png}
-		\vspace{-0.53cm}
-		\caption{\label{fig:QCDselection}
-			$\QCD$ įvykių atranką praėjusių į signalo sritį perkeltų miuonų kandidatų porų invariantinės masės pasiskirstymas.
-			Spalvotais stulpeliais pavaizduoti perkelti modeliuoti su $\QCD$ procesu nesusiję pasiskirstymai, kurie buvo atimami iš
-			išmatuotojo pasiskirstymo.
-		}
-	\end{minipage}
-	\hfill
-	\begin{minipage}{0.48\textwidth}
-		\vspace{-0.5cm}
-		\includegraphics[width=0.95\textwidth]{Kursinis3/QCDest.png}
-		\vspace{-0.35cm}
-		\caption{\label{fig:QCDest}
-			Klaidingo atpažinimo metodu įvertintas $\QCD$ proceso indėlis į Drell-Yan proceso atranką praeinančių miuonų
-			porų invariantinės masės pasiskirstymą. Mėlynos juostos žymi sumines paklaidas. Legendoje esantis užrašas \ltq{m.g.}
-			žymi faktą, jog tai yra matavimu grįstas įvertis.
-		}
-	\end{minipage}
-	
-	\begin{minipage}{0.48\textwidth}
-		\vspace{-0.9cm}
-		\includegraphics[width=0.98\textwidth]{Kursinis3/TFit_WJETS.png}
-		\vspace{-0.4cm}
-		\captionof{figure}{\label{fig:TFit_WJets}
-			$\WJets$ įvykių atranką praėjusių į signalo sritį perkeltų miuonų kandidatų porų invariantinės masės pasiskirstymas
-			bei prie jo pritaikyti skirtingų procesų šablonai.
-		}
-	\end{minipage}
-	\hfill
-	\begin{minipage}{0.48\textwidth}
-		\includegraphics[width=0.9\textwidth]{Kursinis3/WJETSest.png}
-		\vspace{-0.4cm}
-		\captionof{figure}{\label{fig:WJetsEst}
-			Klaidingo atpažinimo metodu įvertintas $\WJets$ proceso indėlis į Drell-Yan proceso atranką praeinančių miuonų
-			porų invariantinės masės pasiskirstymą. Mėlynos juostos žymi sumines paklaidas, \ltq{m.g.} žymi, jog tai yra
-			matavimu grįstas įvertis.
-		}
-	\end{minipage}
+	\includegraphics[width=0.49\textwidth]{Magistrinis/pT_mu_barrel.png}
+	\includegraphics[width=0.49\textwidth]{Magistrinis/pT_mu_endcap.png}
+	\caption{\label{fig:FRpT_mu}
+		Klaidingo atpažinimo tikimybės įvertinimui skirtą atlaisvintą įvykių atranką praėjusių miuono objektų skersinio
+		impulso pasiskirstymai CMS detektoriaus cilindrinėje (kairėje) ir antgalių (dešinėje) dalyse.
+		Juodi brūkšniai vaizduoja tik statistinius neapibrėžtumus.}
+	\vspace{1cm}
+	\includegraphics[width=0.49\textwidth]{Magistrinis/pT_mu_barrel_FIT.png}
+	\includegraphics[width=0.49\textwidth]{Magistrinis/pT_mu_endcap_FIT.png}
+	\caption{\label{fig:FRpT_muTFIT}
+		Klaidingo atpažinimo tikimybės įvertinimui skirtą atlaisvintą įvykių atranką praėjusių miuono objektų skersinio
+		impulso pasiskirstymai, pataisyti naudojant šablonų priderinimą.
+		Kairėje pusėje pavaizduoti pasiskirstymai detektoriaus cilindrinei, o dešinėje -- antgalių dalims.
+		Vaizduojami tik statistiniai neapibrėžtumai.}
 \end{figure}
 
-$\WJets$ įvykių skaičius iš kontrolinės į signalo sritį buvo perkeliamas atranką praėjusiems įvykiams pritaikius svorinius
-daugiklius pagal \ref{eq:FRapply} formulę.
-Skirtingai nei $\QCD$ atranką, $\WJets$ atranką praeina didelė dalis pašalinių procesų: net $84.5\%$ visų įvykių yra
-nesusiję su $\WJets$.
-Modeliavimas sufleruoja, kad didžiausią indėlį į įvykių skaičių turi Drell-Yan ir $\ttbar$ procesai.
-Tokiu atveju iš išmatuotojo pasiskirstymo atimti modeliuotą nėra tinkama procedūra, tad $\WJets$ pasiskirstymas buvo
-gautas pasinaudojus šablonų pritaikymu.
-Šiuo atveju šablonai buvo pritaikomi prie į signalo sritį perkeltų $\WJets$ atranką praėjusių miuonų porų invariantinės
-masės pasiskirstymo.
-$\WJets$ pasiskirstymo šablonas buvo gautas iš $\WJets$ atranką praėjusių vienodo krūvio miuonų pasiskirstymo,
-kuris yra mažiau užterštas Drell-Yan proceso įvykiais.
-Vienodo krūvio $\WJets$ pasiskirstymą galima naudoti kaip šabloną priešingo krūvio pasiskirstymui, nes čiurkšlėje įmanoma pagaminti
-bet kokio krūvio miuoną ir vidutinė proceso kinematika nuo miuono krūvio neturėtų priklausyti.
-Turėtų skirtis tik šių procesų tikimybės, tad tikimasi, jog pasiskirstymai bus apytiksliai vienodos formos, bet turės skirtingą
-suintegruotą įvykių skaičių.
-Iš modeliavimo buvo įvertinta, kad priešingo krūvio $\WJets$ įvykiai yra maždaug 3 kartus dažnesni, nei vienodo krūvio,
-o jų pasiskirstymų forma yra panaši.
-$\QCD$ proceso šablonas buvo gautas panaudojant klaidingo atpažinimo metodu įvertintą $\QCD$ pasiskirstymą.
-Kitiems procesams buvo naudojami modeliuoti šablonai.
+Klaidingo atpažinimo tikimybei įvertinti naudota įvykių atranką praėjusių elektrono objektų skersinių impulsų pasiskirstymai
+pavaizduoti \ref{fig:FRpT_e} pav.
+Elektronų atveju modeliuotas $\QCD$ duomenų rinkinys nebuvo prieinamas (turėtas elektromagnetiniais objektais praturtintas
+$\QCD$ duomenų rinkinys davė dvigubai mažesnį rezultatą nei eksperimentas, o brėžti testiniai pasiskirstymai, lyginant su
+eksperimentu turėjo kokybinių skirtumų, todėl šio rinkinio naudojimo buvo atsisakyta įtariant, kad jame įskaitomos ne visos
+galimybės čiurkšlei imituoti elektroną).
+Dėl šios priežasties klaidingo atpažinimo tikimybei įvertinti buvo naudojamas atimties metodas (žr.\ \ref{sec:FRmeasure} skyrių).
+Visas \ref{fig:FRpT_e} pav.\ matomas skirtumas tarp eksperimentinių ir modeliuotų pasiskirstymų buvo priskirtas $\QCD$ procesui.
 
-Šablonų pritaikymo rezultatas yra pateiktas \ref{fig:TFit_WJets}~pav.
-Šablonų pritaikymas buvo atliktas tik iki $200$~GeV siekiančioje invariantinės masės srityje, nes prie aukštesnių
-masių naudoti pasiskirstymai turi labai didelį statistinį išsibarstymą.
-Gautas $\WJets$ įvykių skaičius yra lygus $3573 \pm 60 \pm 283$: $1.3$ karto daugiau, nei buvo įvertinta iš modeliavimo.
-Tai yra $2.6$ kartų daugiau, nei vienodo krūvio įvykių skaičius.
-Su $\WJets$ procesu susijusių triukšmo įvykių indėlio įvertis pavaizduotas \ref{fig:WJetsEst}~pav.
-Lyginti klaidingo atpažinimo metodu gautus triukšmo įvykių pasiskirstymus su modeliuotais atitinkamų procesų įverčiais
-nėra didelės prasmės, nes modeliuoti šių procesų pasiskirstymai yra smarkiai netolydūs dėl prastos statistikos.
-Atkreiptinas dėmesys, jog tiek $\QCD$, tiek $\WJets$ įverčio sisteminės paklaidos yra ganėtinai didelės -- sudaro
-reikšmingą dalį viso įvertinto įvykių skaičiaus ($13\%$ $\QCD$ atveju ir $7.4\%$ $\WJets$ atveju) bei kelis kartus
-viršija statistines paklaidas ($7$ kartus $\QCD$ atveju ir $4.6$ karto $\WJets$ atveju).
-Taip yra dėl to, jog įvertintas įvykių skaičius yra ganėtinai jautrus klaidingo atpažinimo tikimybės įvertinimo tikslumui
-(ypatingai $\QCD$ įvykiams, kur klaidingo atpažinimo tikimybė taikoma du kartus).
-Nepaisant to, toks įvertis yra gerokai kokybiškesnis už modeliuotą, kur vien statistinės paklaidos sudaro
-didesnę dalį įvykių skaičiaus (net $90\%$ $\QCD$ atveju ir $8\%$ $\WJets$ atveju), o patys modeliuoti pasiskirstymai yra netolydūs.
+\begin{figure}[t!]
+	\includegraphics[width=0.49\textwidth]{Magistrinis/pT_e_barrel.png}
+	\includegraphics[width=0.49\textwidth]{Magistrinis/pT_e_endcap.png}
+	\vspace{-0.5cm}
+	\caption{\label{fig:FRpT_e}
+		Klaidingo atpažinimo tikimybės įvertinimui skirtą atlaisvintą įvykių atranką praėjusių elektrono objektų skersinio
+		impulso pasiskirstymai CMS detektoriaus cilindrinėje (kairėje) ir antgalių (dešinėje) dalyse.
+		Vaizduoja tik statistiniai neapibrėžtumai.
+		Visas grafikuose matomas skirtumas tarp išmatuoto ir modeliuoto pasiskirstymų buvo priskiriamas $\QCD$ procesui.}
+\end{figure}
 
-Eksperimento metu išmatuoto Drell-Yan proceso atranką praėjusių miuonų porų invariantinių masių pasiskirstymo palyginimas
-su susumuotais skirtingų procesų įverčiais, iš kurių tik $\WZ$ ir $\ZZ$ yra modeliuoti, yra pateiktas \ref{fig:MassFinal}~pav.
-Lyginant su \ref{fig:MassMCemu}~pav.\ pateiktu grafiku, į kurį neįtraukti fizikinio objekto klaidingo atpažinimo metodo
-įverčiai, sutapimas tarp matavimo ir įverčio pagerėjo $0.02\%$.
-Nors pagerėjimas atrodo labai mažas, tačiau su čiurkšlėmis susiję atranką praėję įvykiai sudaro tik $0.03\%$ visų įvykių.
-Beveik visi šie įvykiai prisideda prie matavimo ir įverčio sutapimo pagerėjimo, taigi fizikinio objekto klaidingo
-atpažinimo metodo taikymas buvo naudingas.
+Buvo nustatyta, jog į signalo sritį patenka $2.91\!\times\!10^6$ klaidingai kaip miuonai ir $1.38\!\times\!10^8$ klaidingai
+kaip elektronai atpažintų čiurkšlių, o į kontrolinę sritį -- $2.87\!\times\!10^7$ klaidingai kaip miuonai ir $2.87\times10^9$
+klaidingai kaip elektronai atpažintų čiurkšlių.
+Tai duoda vidutines klaidingo atpažinimo tikimybes $\bar{f}_{\mu}=9.21\%$ ir $\bar{f}_{e}=4.59\%$ (kur $\bar{f}_{\mu}$ -- tikimybė
+klaidingai kaip miuonui atpažintai čiurkšlei patekti į signalo sritį, o $\bar{f}_{e}$ -- tikimybė klaidingai kaip elektronui
+atpažintai čiurkšlei patekti į signalo sritį).
+Tikslesnės klaidingo atpažinimo tikimybės, įvertintos kaip funkcijos nuo fizikinio objekto skersinio impulso ir pseudospartos,
+yra pateiktos \ref{fig:FRmu} pav.\ miuono objektams ir \ref{fig:FRe} pav.\ elektrono objektams.
+Buvo nustatyta, jog klaidingo atpažinimo tikimybė vidutiniškai yra didesnė, kai fizikinis objektas atkuriamas iš pataikymų į
+CMS detektoriaus antgalius.
+Taip pat tikimybė bendru atveju yra didesnė objektams su atkurtu didesniu skersiniu impulsu (išskyrus čiurkšlėms, imituojančioms
+į cilindrą pataikiusius elektronus).
+Miuono objektams klaidingo atpažinimo tikimybė kinta nuo $6\%$ iki $46\%$ cilindrinėje detektoriaus dalyje ir nuo $13\%$ iki
+$72\%$ detektoriaus antgaliuose, o elektrono objektams -- nuo $2.5\%$ iki $6.5\%$ cilindrinėje ir nuo $3\%$ iki $24\%$ antgalių dalyje. 
+Nors išmatuota klaidingo atpažinimo tikimybės vertė miuono objektams yra didesnė, tai nereiškia, kad čiurkšlės dažniau klaidingai
+atpažįstamos kaip miuonai, nei kaip elektronai.
+Iš tiesų yra atvirkščiai, o toks rezultatas gautas todėl, kad miuono objektams parinkta kontrolinė sritis buvo smarkiau apribota
+nei elektrono objektams.
 
-\begin{figure}[H]
-	\includegraphics[width=0.5\textwidth]{Kursinis3/Mass_allEst.png}
-	\vspace{-0.6cm}
+\begin{figure}[t!]
+	\RawFloats
+	\includegraphics[width=0.49\textwidth]{Magistrinis/FRmu_barrel.png}
+	\includegraphics[width=0.49\textwidth]{Magistrinis/FRmu_endcap.png}
+	\caption{\label{fig:FRmu}
+		Miuono objektams įvertintos klaidingo atpažinimo tikimybės priklausomybė nuo objekto skersinio impulso.
+		Kairėje pateiktas rezultatas trajektorijoms, einančioms per detektoriaus cilindrinę, o dešinėje -- per antgalių dalis.
+		Skirtingos spalvos vaizduoja skirtingais metodais įvertintą tikimybę (žr.\ legendą).}
+	\vspace{3cm}
+	\includegraphics[width=0.49\textwidth]{Magistrinis/FRe_barrel.png}
+	\includegraphics[width=0.49\textwidth]{Magistrinis/FRe_endcap.png}
+	\caption{\label{fig:FRe}
+		Elektrono objektams įvertintos klaidingo atpažinimo tikimybės priklausomybė nuo objekto skersinio impulso.
+		Kairėje pateiktas rezultatas trajektorijoms, einančioms per detektoriaus cilindrinę, o dešinėje -- per antgalių dalis.}
+\end{figure}
+
+Apskaičiuotos klaidingo atpažinimo tikimybės buvo panaudotos įvertinant su $\QCD$ ir $\WJets$ procesais susijusių Drell-Yan
+proceso triukšmo įvykių skaičių.
+Klaidingo atpažinimo tikimybė kiekvienam į kontrolinę sritį patekusiam leptono objektui buvo pritaikoma atitinkamai pagal
+jo skersinį impulsą ir pseudospartą.
+\ref{fig:FRmu}~pav.\ pavaizduoti klaidingo atpažinimo tikimybės priklausomybės nuo skersinio impulso grafikai tampa
+plokšti mažų skersinių impulsų srityse, todėl į kontrolinę sritį patekusiems miuono objektams su $\pT\!<\!52$~GeV, buvo galima
+naudoti tokią pačią klaidingo atpažinimo tikimybę, kaip ir objektams su $\pT\!=\!52$~GeV.
+Triukšmo įvykių skaičiaus įverčiai buvo gauti iš \ref{table:jetSelection} lentelėje nurodytą atranką praėjusių įvykių
+pasiskirstymų atimant su tikrais leptonais susijusius modeliuotus pasiskirstymus.
+Trys iš keturių triukšmo įverčių dėl nepakankamai tikslaus Drell-Yan signalo modeliavimo (modeliavimas nuvertina tikrąjį
+įvykių skaičių) įgijo maksimumus ties $Z$ bozono mase: vienos klaidingai kaip miuonas atpažintos čiurkšlės įvykiai bei
+vienos ir dviejų klaidingai kaip elektronai atpažintų čiurkšlių įvykiai.
+Teisingesni pasiskirstymai buvo gauti panaudojant šablonų priderinimą, kai su čiurkšlėmis susijusių pasiskirstymų šablonai
+buvo gaunami iš vienodo krūvio pasiskirstymų.
+Šablonų priderinimo rezultatai pavaizduoti \ref{fig:MassFit} pav.
+Jį pritaikius skirtumas tarp eksperimento ir šablonų sumos masių srityje iki $300$~GeV neviršija $10\%$.
+
+\begin{figure}[t!]
+	\includegraphics[width=0.325\textwidth]{Magistrinis/WJETmu_fit.png}
+	\includegraphics[width=0.325\textwidth]{Magistrinis/WJETe_fit.png}
+	\includegraphics[width=0.325\textwidth]{Magistrinis/QCDe_fit.png}
+	\vspace{-0.3cm}
+	\caption{\label{fig:MassFit}
+		Iš kairės į dešinę: $\WJets$ triukšmo įvykių skaičiui įvertinti miuonų ir elektronų kanaluose bei $\QCD$ įvykių
+		skaičiui įvertinti elektronų kanale skirti išmatuoti pasiskirstymai bei prie jų priderinti šablonai.
+		$\WJets$ (kairiajame ir viduriniame grafikuose) ir $\QCD$ (dešiniajame grafike) šablonai buvo gauti iš vienodo
+		krūvio leptono objektų porų pasiskirstymų.}
+\end{figure}
+
+Gauti triukšmo įvykių skaičiaus pasiskirstymo įverčiai pateikti \ref{fig:JETmumu} ir \ref{fig:JETee} pav.\ atitinkamai
+miuonų poros ir elektronų poros įvykiams.
+Nustatyta, kad miuonų poros įvykių atranką praeina $6647\pm 82 \pm 1384$, o elektronų poros -- $18903\pm 137\pm 7560$
+su klaidingai atpažintomis čiurkšlėmis susijusių įvykių.
+Atkreiptinas dėmesys į \ref{fig:JETee} pav.\ kairėje pavaizduotame pasiskirstyme esantį ryškų maksimumą ties ties $Z$
+bozono mase, kuris liko net ir pritaikius vienodo krūvio šabloną.
+Nors įvykių rinkinyje su vienodo krūvio leptono objektų poromis $Z$ maksimumo turėtų nebūti, dėl didelės tikimybės elektronui
+priskirti neteisingą krūvį (ji siekia apie $1.5\%$ \cite{EleID}), į jį vis tiek patenka pakankamai daug Drell-Yan proceso įvykių,
+kad šio proceso modeliavimo netobulumas paveiktų įverčio kokybę.
+Sisteminė įvykių su viena klaidingai kaip elektronas atpažinta čiurkšle skaičiaus paklaida $75-105$~GeV masės srityje siekia $100\%$.
+Ateityje šią problemą galimą būtų išspręsti pritaikius pataisą, įskaitančią tikimybę elektronui priskirti neteisingą krūvį,
+tačiau dabar galima daryti išvadą, kad klaidingo atpažinimo metodas yra paprasčiau pritaikomas įvertinti triukšmams, kuriuose
+čiurkšlė buvo klaidingai atpažinta kaip miuonas, nei kaip elektronas.
+
+\begin{figure}[t!]
+	\RawFloats
+	\includegraphics[width=0.48\textwidth]{Magistrinis/WJETest_mumu_final.png}
+	\includegraphics[width=0.48\textwidth]{Magistrinis/QCDest_mumu_final.png}
+	\vspace{-0.3cm}
+	\caption{\label{fig:JETmumu}
+		Su klaidingai atpažintomis čiurkšlėmis susijusių $\WJets$ (kairėje) $\QCD$ (dešinėje) procesų indėliai į Drell-Yan proceso
+		atranką praeinančių miuonų porų invariantinės masės pasiskirstymą.
+		Mėlynos juostos žymi sumines paklaidas.
+		Legendoje esantis užrašas \ltq{FR} žymi, kad įvertis gautas klaidingo atpažinimo metodu.
+	}	
+	\vspace{1cm}
+	\includegraphics[width=0.48\textwidth]{Magistrinis/WJETest_ee_final.png}
+	\includegraphics[width=0.48\textwidth]{Magistrinis/QCDest_ee_final.png}
+	\vspace{-0.3cm}
+	\captionof{figure}{\label{fig:JETee}
+		Su klaidingai atpažintomis čiurkšlėmis susijusių $\WJets$ (kairėje) $\QCD$ (dešinėje) procesų indėliai į Drell-Yan proceso
+		atranką praeinančių elektronų porų invariantinės masės pasiskirstymą.
+		Mėlynos juostos žymi sumines paklaidas.
+		Legendoje esantis užrašas \ltq{FR} žymi, kad įvertis gautas klaidingo atpažinimo metodu.
+	}
+\end{figure}
+
+Bendrai paėmus, kitų įverčių sisteminės paklaidos taip pat yra ganėtinai didelės ir siekia iki $34\%$.
+Pagrindinė to priežastis -- didelis įverčio jautrumas klaidingo atpažinimo tikimybės pokyčiams (ypač įvykiams, kuriuose yra
+dvi klaidingai atpažintos čiurkšlės, nes juose klaidingo atpažinimo tikimybė taikoma du kartus).
+Vis dėlto, vien atitinkamų procesų modeliuotų įverčių statistinės paklaidos yra ne mažesnės arba net gerokai didesnės ir
+siekia iki $90\%$ (o pabandžius apskaičiuoti sistemines paklaidas bendras neapibrėžtumas išaugtų dar labiau).
+Tiesiogiai lyginti klaidingo atpažinimo metodu gautų triukšmo įvykių pasiskirstymų formą su modeliuotais atitinkamų procesų įverčiais
+taip pat nėra didelės prasmės, nes modeliuoti šių procesų pasiskirstymai yra smarkiai netolydūs dėl prastos statistikos.
+Taigi, galima sakyti, kad klaidingo atpažinimo metodo įverčiai yra gerokai tikslesni už modeliuotus.
+
+Klaidingo atpažinimo metodą panaudojus $\emu$ metodo patikslinimui nustatyta, kad $6\%$ metodui naudotų įvykių yra susiję su
+klaidingai atpažintomis čiurkšlėmis.
+Su čiurkšlėmis susijusių triukšmo įvykių įverčiai, skirti $\emu$ metodui patikslinti, pateikiami prieduose.
+
+\ref{fig:MassFinal} pav.\ vaizduojami miuonų ir elektronų invariantinės masės pasiskirstymai palyginimai po klaidingo atpažinimo
+metodo pritaikymo.
+Grafikų apačioje esantys tamsiai ir šviesiai rudos spalvos pasiskirstymai vaizduoja atitinkamai dviejų ir vienos klaidingai
+atpažintos čiurkšlės įvykius.
+Palyginus su \ref{fig:MassBefore} pav.\ pateiktais grafikais galima pastebėti, kad ypatingai matavimu grįsti dviejų klaidingai
+atpažintų čiurkšlių įvykių pasiskirstymai yra gerokai kokybiškesni už modeliuotus įverčius, kurie yra netolydūs dėl labai
+didelio proceso reakcijos skerspjūvio ir labai mažos tikimybės praeiti signalo atranką (kokybiškesniam pasiskirstymui gauti
+šių įvykių reikėtų sumodeliuoti bent 1000 kartų daugiau, bet tokiu atveju įvykių atranka truktų kelis mėnesius).
+Klaidingo atpažinimo metodu įvertinti vienos klaidingai atpažintos čiurkšlės įvykių pasiskirstymai taip pat yra tolydesni,
+tačiau elektronų įvertį dar reikėtų patobulinti panaikinant jau minėtą su klaidingai atpažintomis čiurkšlėmis nesusijusį maksimumą.
+$\QCD$ ir $\WJets$ triukšmo įvykių skaičius sudaro $0.02\%$ visų miuonų poros įvykių ir $0.14\%$ visų elektronų poros įvykių,
+todėl kalbėti apie bendrą išmatuoto ir suminio skirtingų procesų įverčių pasiskirstymų sutapimo pagerėjimą nėra didelės prasmės.
+Gauti įverčiai (pritaikius reikalingą patobulinimą ateityje) bus panaudoti Drell-Yan signalo išskyrimui iš 2016 metais CERN CMS
+detektoriaus užregistruotų duomenų.
+Darbas bus tęsiamas bendradarbiaujant su tyrėjais iš JAV ir Pietų Korėjos.
+
+\begin{figure}[t!]
+	\includegraphics[width=0.49\textwidth]{Magistrinis/MuMumass_afterFR.png}
+	\includegraphics[width=0.49\textwidth]{Magistrinis/EEmass_afterFR.png}
+	\vspace{-0.3cm}
 	\caption{\label{fig:MassFinal}
-		Eksperimento metu išmatuoto miuonų poros invariantinės masės pasiskirstymo palyginimas su matavimu grįstais
-		skirtingų procesų indėlių įverčiais (pažymėta \ltq{m.g.}), išskyrus $\WZ$ ir $\ZZ$ procesų įverčius, kurie
-		yra modeliuoti (pažymėta \ltq{MC}) Mėlynos juostos žymi sumines paklaidas.}
+		Miuonų (kairėje) ir elektronų (dešinėje) porų invariantinių masių pasiskirstymai pritaikius klaidingo atpažinimo metodą.
+		Legendose esantys prierašai \ltq{FR} žymi klaidingo atpažinimo metodu gautus įverčius.
+		Eksperimento ir įverčio santykio grafike esančios mėlynos juostos vaizduoja suminius (statistinius ir sisteminius)
+		neapibrėžtumus.}
 \end{figure}
 
 
+\newpage
 \section{Išvados}
 \begin{enumerate}
-	\item Šablonų pritaikymo metodas duoda geresnį modeliuotų pasiskirstymų sutapimą su eksperimento metu išmatuotais
-	pasiskirstymais nei modeliuotų įvykių normavimas pagal išmatuotą integruotąjį šviesį, todėl manoma, kad šiuo metodu
-	įvertinta tikimybė, kad čiurkšlė bus klaidingai atpažintai kaip izoliuotas miuonas, yra teisingesnė.
-	\item Su čiurkšlėmis susijusių Drell-Yan proceso triukšmo įvykių skaičiaus įvertis yra labai jautrus
-	fizikinio objekto klaidingo atpažinimo tikimybės įvertinimo tikslumui, todėl įverčio sisteminė paklaida yra didelė.
-	\item Modeliuoti $\WJets$ ir $\QCD$ procesų įverčiai yra labai prastos kokybės dėl didelio šių procesų reakcijos
-	skerspjūvio ir itin mažos tikimybės, kad su jais susiję įvykiai praeis Drell-Yan proceso atranką.
-	\item Nors klaidingo atpažinimo metodu įvertintas $\WJets$ ir $\QCD$ procesų indėlis į miuonų poros invariantinės masės
-	pasiskirstymą turi nemažus neapibrėžtumus, šio įverčio kokybė yra žymiai geresnė nei modeliuoto, tad fizikinio
-	objekto klaidingo atpažinimo metodo taikymas buvo naudingas.
-	\item Triukšmo įvykių skaičiaus įvertinimas fizikinio objekto klaidingo atpažinimo metodu pagerino eksperimento
-	metu išmatuoto miuonų poros invariantinės masės pasiskirstymo sutapimą su skirtingų procesų įverčiais.
+	\item Išsamios informacijos apie klaidingo atpažinimo metodą publikuotoje mokslinėje literatūroje yra mažai, o metodo
+	įgyvendinimas turi nemažai variacijų, priklausančių nuo tyrimo pobūdžio.
+	\item Matuojamos klaidingo atpažinimo tikimybės nėra universalios ir priklauso nuo nuo tiriamų sričių apibrėžimų.
+	\item Šablonų priderinimas duoda geresnį modeliuotų pasiskirstymų sutapimą su išmatuotaisiais eksperimento metu 
+	nei normavimas pagal integruotą šviesį, todėl manoma, kad šiuo metodu įvertinta klaidingo atpažinimo tikimybė yra teisingesnė.
+	\item Modeliuotas su čiurkšlėmis susijusių Drell-Yan proceso triukšmo įvykių skaičiaus įvertis yra prastos kokybės
+	dėl didelio šių procesų reakcijos skerspjūvio ir labai mažos tikimybės praeiti Drell-Yan signalo atranką.
+	\item Klaidingo atpažinimo metodu įvertinto triukšmo įvykių skaičiaus sisteminis neapibrėžtumas yra didelis dėl įverčio
+	jautrumo klaidingo atpažinimo tikimybės įvertinimo tikslumui.
+	\item Modeliuoto triukšmo įvykių skaičiaus pasiskirstymų įverčiai yra netolydūs, o statistinė neapibrėžtis viršija
+	sumines klaidingo atpažinimo metodu nustatyto įvykių skaičiaus paklaidas (išskyrus įvykius, kuriuose viena čiurkšlė
+	buvo klaidingai atpažinta kaip elektronas), taigi klaidingo atpažinimo metodo taikymas padėjo pagerinti šių procesų įvertį. 
+	\item Klaidingo atpažinimo metodas paprasčiau pritaikomas įvykiams, kuriuose čiurkšlė buvo klaidingai atpažinta kaip
+	miuonas, nei kaip elektronas.
+	\item Triukšmo įvykių, kuriuose viena čiurkšlė buvo klaidingai atpažinta kaip elektronas, skaičiaus įvertinimo kokybę
+	gadina nepakankamai tikslus Drell-Yan proceso modeliavimas bei santykinai didelė tikimybė neteisingai nustatyti elektrono krūvį.
+	Įvertį galima būtų pagerinti pritaikant pataisą, įskaitančią neteisingo krūvio nustatymo tikimybę.
+
 \end{enumerate}
 
 
-\vspace{2cm}
+\newpage
 \addcontentsline{toc}{section}{6 \hspace{0.1cm} Naudotos literatūros sąrašas}
 \bibliography{KursinisDarbas}
 \bibliographystyle{unsrt}
 
 
+\newpage
 \section*{Santrauka}
-\addcontentsline{toc}{section}{Santrauka}
-Viena iš galimų reakcijų didelės energijos protonų susidūrimo metu yra kvarko-antikvarko anihiliacija, kurios
-produktas -- leptono ir antileptono pora.
+\addcontentsline{toc}{section}{Santrauka (LT)}
+Didelės energijos protonų susidūrimų metu kvarkas iš vieno protono gali anihiliuoti su antikvarku iš kito ir pagaminti
+leptono-antileptono porą.
 Tokia reakcija yra vadinama Drell-Yan procesu.
-Eksperimentinis šio proceso tyrimas pasitarnauja protono sandaros aprašymo tikslinimui bei teorinių modelių testavimui.
-Tirdami Drell-Yan procesą eksperimentatoriai ieško leptono-antileptono porų, tačiau jos gali susidaryti ne vien
-Drell-Yan proceso metu.
-Tokie pašaliniai įvykiai vadinami triukšmo įvykiais ir į jų indėlį svarbu atsižvelgti.
-Galimi ir tokie triukšmo įvykiai, kuriuose susidariusios hadronų čiurkšlės yra klaidingai atpažįstamos kaip leptonai.
+Šiais laikais vykdomi didelio tikslumo Drell-Yan proceso diferencialinio reakcijos skerspjūvio matavimai leidžia
+testuoti esamus teorinius modelius bei tikslinti protono sandaros aprašymą.
+Eksperimentatoriai, tiriantys Drell-Yan procesą, ieško protonų susidūrimus fiksuojančiais detektoriais užregistruotų
+priešingo krūvio leptonų porų.
+Du priešingo krūvio leptonai gali susidaryti ir kitų pašalinių procesų metu, kuriuos Drell-Yan proceso tyrėjai vadina
+triukšmo procesais.
+Galimi ir tokie triukšmai, kai protonų susidūrimo metu susidariusios hadronų čiurkšlės detektoriuje imituoja leptonų pėdsakus.
+Norint tiksliai išmatuoti Drell-Yan proceso reakcijos skerspjūvį, svarbu atsižvelgti į tokių procesų indėlį.
 
-Šiame darbe pristatomas Drell-Yan proceso triukšmo įvykių skaičiaus įvertinimas fizikinio objekto klaidingo
-atpažinimo metodu.
-Darbas buvo atliktas analizuojant CERN CMS eksperimento 2016 metais užregistruotus
-$13$~TeV energijos protonų susidūrimų duomenis, atitinkančius $35.9$~\invfb integruotąjį šviesį.
-Duomenų interpretavimui buvo pasitelkiami CMS kolektyvo paruošti modeliuoti protonų susidūrimų duomenų rinkiniai.
-Drell-Yan proceso įvykių atranką praėjusiems miuonams buvo pritaikytos skersinio impulso matavimo skalės pataisos.
-Modeliuotiems įvykiams buvo pritaikytas rinkinys pataisų, įskaitančių įvairius neatitikimus tarp eksperimento
-ir modeliavimo sąlygų.
+Šiame darbe pristatomas klaidingo atpažinimo metodas, kuris buvo naudojamas įvertinant su hadronų čiurkšlėmis susijusių
+Drell-Yan proceso triukšmo įvykių skaičių.
+Darbas buvo atliktas analizuojant 2016 metais CERN CMS eksperimento užregistruotus protonų susidūrimų duomenis,
+atitinkančius $35.9$~\invfb integruotą šviesį ($\sim\!2 \cdot 10^{15}$ protonų susidūrimų).
+Eksperimento metu užregistruotų duomenų interpretavimui buvo pasitelkiami CMS mokslinio kolektyvo paruošti
+modeliuoti duomenų rinkiniai.
+Vykdytą dviejų leptonų įvykių atranką praėjusiems elektronams ir miuonams buvo pritaikytos atitinkamai energijos ir
+skersinio impulso matavimo skalių pataisos.
+Modeliuotiems įvykiams buvo pritaikytas pataisų rinkinys, įskaitantis reikšmingiausius nesutapimus tarp realaus ir sumodeliuoto
+eksperimento sąlygų.
 
-Įvykdžius į Drell-Yan procesą panašių įvykių atranką buvo bandoma nustatyti, koks yra triukšmo įvykių, kuriuose
-viena ar kelios čiurkšlės buvo klaidingai atpažintos kaip miuonai, skaičius.
-Buvo įvertinta čiurkšlės klaidingo atpažinimo izoliuotu miuonu tikimybė.
-Šios tikimybės vertės buvo panaudotos įvertinant, kiek $\WJets$ (vienos čiurkšlės) ir $\QCD$ (kelių čiurkšlių)
-įvykių galėjo praeiti Drell-Yan proceso įvykių atranką bei koks šių procesų indėlis į eksperimento metu
-išmatuotą miuonų poros invariantinės masės pasiskirstymą.
-Nustatyta, jog su čiurkšlėmis susiję įvykiai sudaro $0.03\%$ visų Drell-Yan proceso atranką praėjusių įvykių.
+Įvykdžius į Drell-Yan procesą panašių dviejų leptonų įvykių atranką buvo nustatinėjamas su klaidingai kaip leptonai atpažintomis
+hadronų čiurkšlėmis susijusių triukšmo įvykių skaičius.
+Įvertintos tikimybės, kad klaidingai atpažintos čiurkšlės praeis Drell-Yan proceso leptonų (elektronų arba miuonų) atranką.
+Naudojantis apskaičiuota tikimybe buvo įvertinta, kiek $\WJets$ (vienos čiurkšlės) ir $\QCD$ (keleto čiurkšlių)
+įvykių galėjo praeiti Drell-Yan proceso atranką
+Nustatyta, jog su klaidingai atpažintomis hadronų čiurkšlėmis susiję įvykiai sudaro $0.02\%$ visų Drell-Yan proceso atranką
+praėjusių miuonų poros įvykių ir $0.14\%$ elektronų poros įvykių.
+
+
+\newpage
+\section*{Summary}
+\addcontentsline{toc}{section}{Santrauka (EN)}
+A lepton-antilepton pair production in proton-proton collisions is possible when a quark and an antiquark from colliding
+protons annihilate.
+This reaction is known as the Drell-Yan process.
+Currently performed precision measurements of Drell-Yan differential cross section have a high impact on the improvement
+of proton structure description as well as provide various tests for the current theoretical models.
+Scientific groups measure the Drell-Yan differential cross section by analyzing the proton-proton collision data and
+searching for opposite-charge lepton pairs.
+Though, there are many more physics processes that may produce a similar footprint.
+These additional processes are referred to as backgrounds.
+Most background processes produce genuine opposite-charge lepton pairs, though, there also exist ones that include hadronic
+jets, which were misreconstructed as leptons.
+All the most significant backgound contributions must be taken into account in order to produce an accurate measurement.
+
+
+This work presents an estimation of misrecontstructed-jet-related Drell-Yan backgrounds using a data-driven fake rate method.
+The work was performed by analyzing the proton-proton collision data collected by CERN CMS experiment in 2016.
+The ammount of collected data corresponds to an integrated luminosity of $35.9$~\invfb ($\sim\!2 \cdot 10^{15}$ $pp$ collisions).
+Simulated datasets provided by CMS collaboration were used to interpret the collected detector data.
+A dilepton event selection was performed after applying energy and momentum scale corrections to reconstructed electron and muon
+physical objects respectively.
+A number of other corrections were applied to simulated event distributions in order to match the observed experimental conditions.
+
+An estimation of the number of misreconstructed-jet-related background events was carried out after the event selection.
+A probability for a misreconstructed jet to pass the lepton identification requirements was estimated.
+The misidintefication probability was then used to extract the number of $\WJets$ (single jet) and $\QCD$ (multiple jets)
+events that pass the Drell-Yan dilepton selection.
+It was evaluated, that misreconstructed jet events correspond to $0.02\%$ and $0.14\%$ of all the selected dimuon and dielectron
+events respectively.
 
 \end{document}
