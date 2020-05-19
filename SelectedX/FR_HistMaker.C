@@ -3847,7 +3847,6 @@ void EMu_QCD_HistMaker (Bool_t DEBUG)
             h_mass_temp->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             h_mass_test->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
-
         }// End of event iteration
 
         cout << "\t " << nPass << " events have passed the selection." << endl;
@@ -3961,6 +3960,8 @@ void EMu_WJET_HistMaker (Bool_t DEBUG)
         TH1D* h_mass_test = new TH1D("h_mass_test_"+Mgr.Procname[pr], "h_mass_test_"+Mgr.Procname[pr], binnum, massbins); h_mass_test->Sumw2();
         TH1D* h_mass_test_ef = new TH1D("h_mass_test_elefail_"+Mgr.Procname[pr], "h_mass_test_elefail_"+Mgr.Procname[pr], binnum, massbins); h_mass_test_ef->Sumw2();
         TH1D* h_mass_test_mf = new TH1D("h_mass_test_mufail_"+Mgr.Procname[pr], "h_mass_test_mufail_"+Mgr.Procname[pr], binnum, massbins); h_mass_test_mf->Sumw2();
+        TH1D* h_pT_e = new TH1D("h_pT_e_"+Mgr.Procname[pr], "h_pT_e_"+Mgr.Procname[pr], 50, 0, 1000); h_pT_e->Sumw2();
+        TH1D* h_pT_mu = new TH1D("h_pT_mu_"+Mgr.Procname[pr], "h_pT_mu_"+Mgr.Procname[pr], 50, 0, 1000); h_pT_mu->Sumw2();
 
         Double_t e_p_T, e_eta, e_etaSC, e_phi;
         Int_t e_charge;
@@ -4155,6 +4156,10 @@ void EMu_WJET_HistMaker (Bool_t DEBUG)
 //                    effweight = analyzer->EfficiencySF_EventWeight_electronFR(ele1_SF, ele2_SF, 1);
 //                }
 //                h_mass_temp->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+//                if (e_charge != mu_charge)
+//                    h_mass->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
+//                else
+//                    h_mass_SS->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
                 if (Mgr.isMC == kFALSE)
                 {
                     n_mufail++;
@@ -4169,6 +4174,8 @@ void EMu_WJET_HistMaker (Bool_t DEBUG)
             // -- Histogram filling -- //
             h_nVTX->Fill(nVTX, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * FRweight);
             h_mass_test->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+            h_pT_e->Fill(e_p_T, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+            h_pT_mu->Fill(mu_p_T, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
         }// End of event iteration
 
@@ -4191,6 +4198,8 @@ void EMu_WJET_HistMaker (Bool_t DEBUG)
         h_mass_test->Write();
         h_mass_test_ef->Write();
         h_mass_test_mf->Write();
+        h_pT_e->Write();
+        h_pT_mu->Write();
 
         cout << " Finished.\n" << endl;
 

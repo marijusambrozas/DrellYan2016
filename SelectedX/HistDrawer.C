@@ -2022,7 +2022,7 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
     } // End of if(invm)
 
 //################################# Pt, RAPI, pT, ETA, PHI #################################################
-/*
+
     if (whichGraphs=="ALL" || whichGraphs.Contains("PT") || whichGraphs.Contains("ETA") || whichGraphs.Contains("PHI") || whichGraphs.Contains("RAPI"))
     {
         count_drawn++;
@@ -3442,7 +3442,7 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         cout << "There are " << EvtPercentage << "% of events in 10-30 nVTX range" << endl;
 
     } // End of if(nVTX)
-*/
+
 
     f_DY->Close();
     f_bkg->Close();
