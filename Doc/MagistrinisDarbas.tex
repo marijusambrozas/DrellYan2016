@@ -128,7 +128,7 @@ Instituto atstovas & prof.\ Egidijus Anisimovas\tabularnewline[0.5cm]
 \tableofcontents
 \clearpage
 
-\section{Įvadas}% \addcontentsline{toc}{section}{Įvadas}
+\section*{Įvadas} \addcontentsline{toc}{section}{Įvadas}
 Hadronų sandaros aprašymui didelių energijų fizikoje šiais laikais plačiai naudojamas R.\ Feinmano pasiūlytas
 partonų modelis \cite{FeynPartons}.
 Šiame modelyje visų hadronų sudėtis nusakoma partonų pasiskirstymo funkcijomis \cite{BjorkPartons}.
@@ -1375,6 +1375,8 @@ Trigerį aktyvavusiems elektrono objektams buvo taikomi papildomi atrankos reika
 atrankoje (žr.\ \ref{table:selection} lentelę) naudojamo dviejų elektronų trigerio taikomus reikalavimus fizikiniams objektams.
 Tai -- daugiausia reikalavimai elektrono objekto palikto signalo formai elektromagnetiniame kalorimetre bei reikalavimai
 trekų detektoriaus ir kalorimetro užregistruotos informacijos sutapimui.
+Taip pat buvo taikomas kriterijus, reikalaujantis ne daugiau kaip vieno trūkstamo pataikymo trekų detektoriuje toje vietoje, per
+kurią eina elektrono objekto trajektorija (trūkstami pataikymai gali byloti apie elektrono atsiradimą antrinių procesų metu).
 Atsižvelgiant į naudojamų trigerių ir CMS detektoriaus komponentų efektyvumus, buvo reikalaujama, kad elektronų skersinis
 impulsas viršytų $25$~GeV, o pseudosparta neviršytų $|\eta|<2.4$.
 Atlaisvintą atranką praėję elektronai į signalo ir kontrolinę sritis buvo skirstomi pagal tai, ar jie tenkina CMS elektrono
@@ -1434,8 +1436,9 @@ ir antgalius.
 		\hline
 		\multicolumn{2}{|c|}{$|\eta|<2.4$} & \multicolumn{2}{c|}{$|\eta|<2.4$}\\
 		\hline
-		\multicolumn{2}{|c|}{\multirow{5}{15em}{\centering \ltq{\ttt{TightID}} reikalavimai}} &
-			\multicolumn{2}{c|}{\multirow{3}{20em}{\centering Pataikymams į EM kalorimetro cilindrą:\\ $\sigma_{i\eta i\eta}<0.013$,
+		\multicolumn{2}{|c|}{\multirow{6}{15em}{\centering \ltq{\ttt{TightID}} reikalavimai}} &
+			\multicolumn{2}{c|}{Trūkstamų pataikymų skaičius $N_{MH}\leqslant1$} \\ \cline{3-4}
+		\multicolumn{2}{|c|}{ } & \multicolumn{2}{c|}{\multirow{3}{20em}{\centering Pataikymams į EM kalorimetro cilindrą:\\ $\sigma_{i\eta i\eta}<0.013$,
 				$H/E<0.13$,\\ $|\Delta\eta_{in}^{seed}|<0.01$, $|\Delta\phi_{in}|<0.07$}} \\
 		\multicolumn{2}{|c|}{ } & \multicolumn{2}{c|}{ } \\
 		\multicolumn{2}{|c|}{ } & \multicolumn{2}{c|}{ } \\ \cline{3-4}
@@ -1530,15 +1533,20 @@ tikimybes.
 		\multicolumn{2}{|c|}{$|\eta| < 2.4$} &
 			\multicolumn{2}{c|}{$|\eta_{\mathrm{SC}}| < 2.4$, išskyrus $1.4442 < |\eta_{\mathrm{SC}}| < 1.566$} \\
 		\hline
-		\multicolumn{2}{|c|}{\ttt{TightID} reikalavimai} &
-			\multicolumn{2}{c|}{\multirow{3}{19em}{\centering Pataikymams į EM kalorimetro cilindrą:\\ $\sigma_{i\eta i\eta}<0.013$,
-				$H/E<0.13$,\\ $|\Delta\eta_{in}^{seed}|<0.01$, $|\Delta\phi_{in}|<0.07$}} \\ \cline{1-2}
+		\multicolumn{2}{|c|}{\ltq{\ttt{TightID}} reikalavimai} &
+			\multicolumn{2}{c|}{Trūkstamų pataikymų skaičius $N_{MH}\leqslant1$} \\
+		\hline
 		\multicolumn{2}{|c|}{\multirow{3}{16em}{\centering Pasirenkami 2 miuonai, kuriuos galima tiksliausiai suvesti į vieną
-			pirminę viršūnę su $\chi^2<20$}} & \multicolumn{2}{c|}{ } \\
-		\multicolumn{2}{|c|}{ } & \multicolumn{2}{c|}{ } \\ \cline{3-4}
-		\multicolumn{2}{|c|}{ } & \multicolumn{2}{c|}{\multirow{2}{19em}{\centering Pataikymams į EM kalorimetro antgalius:\\
-			$\sigma_{i\eta i\eta}<0.035$, $H/E<0.13$}} \\ \cline{1-2}
-		\multicolumn{2}{|c|}{Priešingi elektriniai krūviai} & \multicolumn{2}{c|}{} \\
+			pirminę viršūnę su $\chi^2<20$}} &
+			\multicolumn{2}{c|}{\multirow{3}{19em}{\centering Pataikymams į EM kalorimetro cilindrą:\\ $\sigma_{i\eta i\eta}<0.013$,
+				$H/E<0.13$,\\ $|\Delta\eta_{in}^{seed}|<0.01$, $|\Delta\phi_{in}|<0.07$}} \\
+		\multicolumn{2}{|c|}{ } & \multicolumn{2}{c|}{ } \\
+		\multicolumn{2}{|c|}{ } & \multicolumn{2}{c|}{ } \\
+		\hline
+		\multicolumn{2}{|c|}{\multirow{2}{16em}{\centering Priešingi elektriniai krūviai}} &
+			\multicolumn{2}{c|}{\multirow{2}{19em}{\centering Pataikymams į EM kalorimetro antgalius:\\
+				$\sigma_{i\eta i\eta}<0.035$, $H/E<0.13$}} \\
+		\multicolumn{2}{|c|}{ } & \multicolumn{2}{c|}{ } \\
 		\hline
 		\multicolumn{2}{|c|}{\multirow{2}{16em}{\centering Plokštuminis kampas\\ $\alpha < \pi - 0.005$ rad}} & 
 			\multicolumn{2}{c|}{\multirow{2}{19em}{\centering Atrankos reikalavimus turi atitikti lygiai 2 elektronai}} \\
@@ -1868,7 +1876,7 @@ Darbas bus tęsiamas bendradarbiaujant su tyrėjais iš JAV ir Pietų Korėjos.
 
 
 \newpage
-\section{Išvados}
+\section*{Išvados} \addcontentsline{toc}{section}{Išvados}
 \begin{enumerate}
 	\item Išsamios informacijos apie klaidingo atpažinimo metodą publikuotoje mokslinėje literatūroje yra mažai, o metodo
 	įgyvendinimas turi nemažai variacijų, priklausančių nuo tyrimo pobūdžio.
@@ -1892,7 +1900,7 @@ Darbas bus tęsiamas bendradarbiaujant su tyrėjais iš JAV ir Pietų Korėjos.
 
 
 \newpage
-\addcontentsline{toc}{section}{6 \hspace{0.1cm} Naudotos literatūros sąrašas}
+\addcontentsline{toc}{section}{Naudotos literatūros sąrašas}
 \bibliography{KursinisDarbas}
 \bibliographystyle{unsrt}
 
@@ -1900,6 +1908,12 @@ Darbas bus tęsiamas bendradarbiaujant su tyrėjais iš JAV ir Pietų Korėjos.
 \newpage
 \section*{Santrauka}
 \addcontentsline{toc}{section}{Santrauka (LT)}
+\begin{centering}
+Marijus Ambrozas\\
+\textbf{Drell-Yan proceso triukšmo įvykių skaičiaus įvertinimas klaidingo atpažinimo metodu}\\
+\end{centering}
+\vspace{0.5cm}
+
 Didelės energijos protonų susidūrimų metu kvarkas iš vieno protono gali anihiliuoti su antikvarku iš kito ir pagaminti
 leptono-antileptono porą.
 Tokia reakcija yra vadinama Drell-Yan procesu.
@@ -1935,6 +1949,12 @@ praėjusių miuonų poros įvykių ir $0.14\%$ elektronų poros įvykių.
 \newpage
 \section*{Summary}
 \addcontentsline{toc}{section}{Santrauka (EN)}
+\begin{centering}
+Marijus Ambrozas\\
+\textbf{Drell-Yan Process Background Estimation Using the Fake Rate Method}\\
+\end{centering}
+\vspace{0.5cm}
+
 A lepton-antilepton pair production in proton-proton collisions is possible when a quark and an antiquark from colliding
 protons annihilate.
 This reaction is known as the Drell-Yan process.
@@ -1963,5 +1983,43 @@ The misidintefication probability was then used to extract the number of $\WJets
 events that pass the Drell-Yan dilepton selection.
 It was evaluated, that misreconstructed jet events correspond to $0.02\%$ and $0.14\%$ of all the selected dimuon and dielectron
 events respectively.
+
+
+\newpage
+\section*{Priedai} \addcontentsline{toc}{section}{Priedai}
+
+\subsection*{1 priedas. Elektrono \ltq{\ttt{MediumID}} kriterijai}
+
+\begin{table}[H]
+	\begin{tabular}{|c|c|}
+		\hline
+		\multicolumn{2}{|c|}{\ltq{\ttt{MediumID}} kriterijai elektrono objektams} \\
+		\hline
+		\multirow{2}{15em}{\centering EM kalorimetro cilindre $|\eta_{\mathrm{SC}}| \leqslant 1.479$} &
+			\multirow{2}{15em}{\centering EM kalorimetro antgaliuose $|\eta_{\mathrm{SC}}| > 1.479$} \\
+		 & \\
+		\hline
+		$\sigma_{i\eta i\eta}<0.00998$ & $\sigma_{i\eta i\eta}<0.0298$ \\
+		$|\Delta\eta_{\mathrm{in}}^{\mathrm{seed}}|<0.00311$ & $|\Delta\eta_{\mathrm{in}}^{\mathrm{seed}}|<0.00609$ \\
+		$|\Delta\phi_{\mathrm{in}}|<0.103$ & $|\Delta\phi_{\mathrm{in}}|<0.045$ \\
+		\multirow{2}{15em}{\centering$\displaystyle\frac{H}{E}<0.253$} &
+			\multirow{2}{15em}{\centering$\displaystyle\frac{H}{E}<0.0878$} \\
+		 & \\
+		$I_{\mathrm{PF}}^{\mathrm{rel.}}<0.0695$ & $I_{\mathrm{PF}}^{\mathrm{rel.}}<0.0821$ \\
+		\multirow{2}{15em}{\centering$\displaystyle \left| \frac{1}{E} - \frac{1}{p} \right|<0.134$} &
+			\multirow{2}{15em}{\centering$\displaystyle \left| \frac{1}{E} - \frac{1}{p} \right|<0.13$} \\
+		 & \\
+		$N_{\mathrm{MH}}\leqslant1$ & $N_{\mathrm{MH}}\leqslant1$ \\
+		\ttt{passConversionVeto} $=$ \ttt{True} & \ttt{passConversionVeto} $=$ \ttt{True} \\
+		\hline
+	\end{tabular}
+\end{table}
+
+
+\newpage
+\section*{Bibliografinis aprašas}
+Marijus Ambrozas. Drell-Yan proceso triukšmo įvykių skaičiaus įvertinimas klaidingo atpažinimo metodu.
+Teorinės fizikos ir astrofizikos magistro studijų programos baigiamasis darbas.
+Vad.\ Andrius Juodagalvis. Vilnius: Vilniaus universitetas, Fizikos fakultetas, 2020.
 
 \end{document}
