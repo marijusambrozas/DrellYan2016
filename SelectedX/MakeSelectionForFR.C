@@ -1309,6 +1309,13 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
                 Bool_t TriggerFlag = kTRUE; // We don't use trigger here
 //                TriggerFlag = ntuple->isTriggered(analyzer->HLT);
 
+                // DELETE THIS LATER
+                for( Int_t k = 0; k < ntuple->HLT_ntrig; k++ )
+                {
+                    cout << ntuple->HLT_trigName->at((unsigned int)k) << endl;
+                }
+                if (i == 50) break;
+
                 if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
                 {
                     // -- Reco level selection -- //
