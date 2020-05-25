@@ -149,11 +149,11 @@ void EE_HistDrawer (TString whichGraphs, TString type)
 
         for (SelProc_t pr = _EE_QCDEMEnriched_Full; pr > _EndOf_EE_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
         {
-            if (pr == _EE_QCDEMEnriched_Full)
-            {
-                iter++;
-                continue;
-            }
+//            if (pr == _EE_QCDEMEnriched_Full)
+//            {
+//                iter++;
+//                continue;
+//            }
 
             f_bkg->GetObject("h_mass_before_PUCorr_"+Mgr.Procname[pr], h_bkg_mass_before_PUCorr[iter]);
             f_bkg->GetObject("h_mass_before_EffCorr_"+Mgr.Procname[pr], h_bkg_mass_before_EffCorr[iter]);
@@ -360,7 +360,7 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         legend->AddEntry(h_bkg_mass[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         legend->AddEntry(h_bkg_mass[2], "#font[12]{#scale[1.1]{WW}}", "f");
         legend->AddEntry(h_bkg_mass[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
-//        legend->AddEntry(h_bkg_mass[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        legend->AddEntry(h_bkg_mass[0], "#font[12]{#scale[1.1]{QCD}}", "f");
 
         RP_mass_before_PUCorr->ImportLegend(legend);
         RP_mass_before_EffCorr->ImportLegend(legend);
@@ -513,11 +513,11 @@ void EE_HistDrawer (TString whichGraphs, TString type)
 
         for (SelProc_t pr = _EE_QCDEMEnriched_Full; pr > _EndOf_EE_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
         {
-            if (pr == _EE_QCDEMEnriched_Full)
-            {
-                iter++;
-                continue;
-            }
+//            if (pr == _EE_QCDEMEnriched_Full)
+//            {
+//                iter++;
+//                continue;
+//            }
             f_bkg->GetObject("h_pT_before_PUCorr_"+Mgr.Procname[pr], h_bkg_pT_before_PUCorr[iter]);
             f_bkg->GetObject("h_rapi_before_PUCorr_"+Mgr.Procname[pr], h_bkg_rapi_before_PUCorr[iter]);
             f_bkg->GetObject("h_pT_lead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_pT_lead_before_PUCorr[iter]);
@@ -1404,7 +1404,7 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         legend->AddEntry(h_bkg_pT[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         legend->AddEntry(h_bkg_pT[2], "#font[12]{#scale[1.1]{WW}}", "f");
         legend->AddEntry(h_bkg_pT[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
-//        legend->AddEntry(h_bkg_pT[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        legend->AddEntry(h_bkg_pT[0], "#font[12]{#scale[1.1]{QCD}}", "f");
 
         RP_pT_before_PUCorr->ImportLegend(legend);
         RP_rapi_before_PUCorr->ImportLegend(legend);
@@ -1523,11 +1523,11 @@ void EE_HistDrawer (TString whichGraphs, TString type)
 
         for (SelProc_t pr = _EE_QCDEMEnriched_Full; pr > _EndOf_EE_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
         {
-            if (pr == _EE_QCDEMEnriched_Full)
-            {
-                iter++;
-                continue;
-            }
+//            if (pr == _EE_QCDEMEnriched_Full)
+//            {
+//                iter++;
+//                continue;
+//            }
             f_bkg->GetObject("h_nVTX_before_PUCorr_"+Mgr.Procname[pr], h_bkg_nVTX_before_PUCorr[iter]);
             f_bkg->GetObject("h_nVTX_before_EffCorr_"+Mgr.Procname[pr], h_bkg_nVTX_before_EffCorr[iter]);
             f_bkg->GetObject("h_nVTX_"+Mgr.Procname[pr], h_bkg_nVTX[iter]);
@@ -1637,7 +1637,7 @@ void EE_HistDrawer (TString whichGraphs, TString type)
         legend->AddEntry(h_bkg_nVTX[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         legend->AddEntry(h_bkg_nVTX[2], "#font[12]{#scale[1.1]{WW}}", "f");
         legend->AddEntry(h_bkg_nVTX[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
-//        legend->AddEntry(h_bkg_nVTX[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        legend->AddEntry(h_bkg_nVTX[0], "#font[12]{#scale[1.1]{QCD}}", "f");
 
         RP_nVTX_before_PUCorr->ImportLegend(legend);
         RP_nVTX_before_EffCorr->ImportLegend(legend);
@@ -1762,6 +1762,8 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
             h_bkg_mass_before_RoccoR[iter]->SetLineColor(color);
             h_bkg_mass_before_RoccoR[iter]->SetDirectory(0);
             s_mass_before_RoccoR->Add(h_bkg_mass_before_RoccoR[iter]);
+            if (pr == _MuMu_QCDMuEnriched_Full)
+                s_mass_before_RoccoR->Add(h_bkg_mass_before_EffCorr[iter]);
 
             h_bkg_mass_before_EffCorr[iter]->SetFillColor(color);
             h_bkg_mass_before_EffCorr[iter]->SetLineColor(color);
@@ -2112,11 +2114,11 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
 
         for (SelProc_t pr = _MuMu_QCDMuEnriched_Full; pr > _EndOf_MuMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
         {
-            if (pr == _MuMu_QCDMuEnriched_Full)
-            {
-                iter++;
-                continue;
-            }
+//            if (pr == _MuMu_QCDMuEnriched_Full)
+//            {
+//                iter++;
+//                continue;
+//            }
             f_bkg->GetObject("h_pT_before_PUCorr_"+Mgr.Procname[pr], h_bkg_pT_before_PUCorr[iter]);
             f_bkg->GetObject("h_rapi_before_PUCorr_"+Mgr.Procname[pr], h_bkg_rapi_before_PUCorr[iter]);
             f_bkg->GetObject("h_pT_lead_before_PUCorr_"+Mgr.Procname[pr], h_bkg_pT_lead_before_PUCorr[iter]);
@@ -3172,7 +3174,7 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         legend->AddEntry(h_bkg_pT[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         legend->AddEntry(h_bkg_pT[2], "#font[12]{#scale[1.1]{WW}}", "f");
         legend->AddEntry(h_bkg_pT[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
-//        legend->AddEntry(h_bkg_pT[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        legend->AddEntry(h_bkg_pT[0], "#font[12]{#scale[1.1]{QCD}}", "f");
 
         RP_pT_before_PUCorr->ImportLegend(legend);
         RP_rapi_before_PUCorr->ImportLegend(legend);
@@ -3307,11 +3309,11 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
 
         for (SelProc_t pr = _MuMu_QCDMuEnriched_Full; pr > _EndOf_MuMu_ttbar_Normal; pr=SelProc_t((int)(pr-1)))
         {
-            if (pr == _MuMu_QCDMuEnriched_Full)
-            {
-                iter++;
-                continue;
-            }
+//            if (pr == _MuMu_QCDMuEnriched_Full)
+//            {
+//                iter++;
+//                continue;
+//            }
             f_bkg->GetObject("h_nVTX_before_PUCorr_"+Mgr.Procname[pr], h_bkg_nVTX_before_PUCorr[iter]);
             f_bkg->GetObject("h_nVTX_before_EffCorr_"+Mgr.Procname[pr], h_bkg_nVTX_before_EffCorr[iter]);
             f_bkg->GetObject("h_nVTX_"+Mgr.Procname[pr], h_bkg_nVTX[iter]);
@@ -3420,7 +3422,7 @@ void MuMu_HistDrawer (TString whichGraphs , TString type)
         legend->AddEntry(h_bkg_nVTX_before_PUCorr[3], "#font[12]{#scale[1.1]{WZ}}", "f");
         legend->AddEntry(h_bkg_nVTX_before_PUCorr[2], "#font[12]{#scale[1.1]{WW}}", "f");
         legend->AddEntry(h_bkg_nVTX_before_PUCorr[1], "#font[12]{#scale[1.1]{W}}+Jets", "f");
-//        legend->AddEntry(h_bkg_nVTX_before_PUCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
+        legend->AddEntry(h_bkg_nVTX_before_PUCorr[0], "#font[12]{#scale[1.1]{QCD}}", "f");
 
         RP_nVTX_before_PUCorr->ImportLegend(legend);
         RP_nVTX_before_EffCorr->ImportLegend(legend);
