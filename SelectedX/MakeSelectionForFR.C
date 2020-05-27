@@ -51,7 +51,15 @@ void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "D
         Debug = kTRUE;
         cout << "DEBUG MODE ON. Running on 100 events only" << endl;
     }
-    if (whichX.Contains("EMU") && whichX.Contains("EST"))
+    if (whichX.Contains("COUNT"))
+    {
+        Xselected++;
+        if (HLTname == "DEFAULT") HLT = "None";
+        else HLT = HLTname;
+        cout << "\n*******      CountObjectsInAcceptance (" << type << ", " << HLT << ")      *******" << endl;
+        CountObjectsInAcceptance(type, HLTname, Debug);
+    }
+    else if (whichX.Contains("EMU") && whichX.Contains("EST"))
     {
         Xselected++;
         if (HLTname == "DEFAULT") HLT = "IsoMu24_OR_IsoTkMu24";
@@ -95,14 +103,6 @@ void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "D
             cout << "\n*******      MakeSelectionForFR_E (" << type << ", " << HLT << ")      *******" << endl;
             MakeSelectionForFR_E(type, HLT, Debug);
         }
-    }
-    else if (whichX.Contains("COUNT"))
-    {
-        Xselected++;
-        if (HLTname == "DEFAULT") HLT = "None";
-        else HLT = HLTname;
-        cout << "\n*******      CountObjectsInAcceptance (" << type << ", " << HLT << ")      *******" << endl;
-        CountObjectsInAcceptance(type, HLTname, Debug);
     }
 
     if (Xselected == 0) {
