@@ -82,7 +82,7 @@ void myRatioPlot_t::SetPlots(TString xAxisName, Double_t xmin, Double_t xmax, TS
     PlotsSet++;
 } // End of SetPlots()
 
-void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX, TString option)
+void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX, TString option, TString yAxisName)
 {
     if(PlotsSet==1) {
 //        canvas = new TCanvas(CanvasName, CanvasName, 1000, 1000);
@@ -97,8 +97,7 @@ void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX, TString opti
         pad1->Draw();
         pad1->cd();
         s_stackedProcesses->Draw(option/*"HIST"*/);
-        s_stackedProcesses->GetYaxis()->SetTitle("Number of events");
-//        s_stackedProcesses->GetYaxis()->SetTitle("I_{#kern[-0.9]{#lower[0.1]{#scale[0.7]{c}}}}vykiu_{#kern[-0.8]{#lower[-0.34]{#scale[0.7]{c}}}} skai#check{c}ius");
+        s_stackedProcesses->GetYaxis()->SetTitle(yAxisName);
         s_stackedProcesses->GetYaxis()->SetTitleOffset(1/*1.1*/);
         s_stackedProcesses->GetYaxis()->SetTitleSize(0.07/*04*/);
         s_stackedProcesses->GetXaxis()->SetNoExponent(1);
