@@ -1871,16 +1871,16 @@ void CountObjectsInAcceptance (TString type, TString HLTname , Bool_t Debug)
 
                 for (Int_t i_pho=0; i_pho<ntuple->nPhotons; i_pho++)
                 {
-                    if (ntuple->Photon_pT[i_ele] > 28 && fabs(ntuple->Photon_etaSC[i_ele]) < 2.4 &&
-                        (fabs(ntuple->Photon_etaSC[i_ele]) < 1.4442 || fabs(ntuple->Photon_etaSC[i_ele]) > 1.566))
+                    if (ntuple->Photon_pT[i_pho] > 28 && fabs(ntuple->Photon_etaSC[i_pho]) < 2.4 &&
+                        (fabs(ntuple->Photon_etaSC[i_pho]) < 1.4442 || fabs(ntuple->Photon_etaSC[i_pho]) > 1.566))
                         n_28++;
-                    if (ntuple->Photon_pT[i_ele] > 17 && fabs(ntuple->Photon_etaSC[i_ele]) < 2.4 &&
-                        (fabs(ntuple->Photon_etaSC[i_ele]) < 1.4442 || fabs(ntuple->Photon_etaSC[i_ele]) > 1.566))
+                    if (ntuple->Photon_pT[i_pho] > 17 && fabs(ntuple->Photon_etaSC[i_pho]) < 2.4 &&
+                        (fabs(ntuple->Photon_etaSC[i_pho]) < 1.4442 || fabs(ntuple->Photon_etaSC[i_pho]) > 1.566))
                         n_17++;
                 }
 
                 if (n_28 > 0 && n_17 > 0)
-                    n_pass += gen_weight * Lumi * Mgr.Xsec / Mgr.Wsum;
+                    n_pass += gen_weight * Lumi * Mgr.Xsec[i_tup] / Mgr.Wsum[i_tup];
 
                 if (!Debug) bar.Draw(i);
             } // End of event iteration
