@@ -1829,7 +1829,6 @@ void CountObjectsInAcceptance (TString type, TString HLTname , Bool_t Debug)
 
             cout << "\t[Total Events: " << NEvents << "]" << endl;
             myProgressBar_t bar(NEvents);
-            Int_t timesPassed = 0;
 
             // Loop for all events in the chain
             for (Int_t i=0; i<NEvents; i++)
@@ -1848,7 +1847,7 @@ void CountObjectsInAcceptance (TString type, TString HLTname , Bool_t Debug)
                     if (ntuple->Electron_pT[i_ele] > 28 && fabs(ntuple->Electron_etaSC[i_ele]) < 2.4 &&
                         (fabs(ntuple->Electron_etaSC[i_ele]) < 1.4442 || fabs(ntuple->Electron_etaSC[i_ele]) > 1.566))
                         n_28++;
-                    if (ntuple->Electron_pT[i_ele] > 17 && fabs(ntuple->Electron_etaSC[i_ele]) < 2.4 &&
+                    else if (ntuple->Electron_pT[i_ele] > 17 && fabs(ntuple->Electron_etaSC[i_ele]) < 2.4 &&
                         (fabs(ntuple->Electron_etaSC[i_ele]) < 1.4442 || fabs(ntuple->Electron_etaSC[i_ele]) > 1.566))
                         n_17++;
                 }
@@ -1857,7 +1856,7 @@ void CountObjectsInAcceptance (TString type, TString HLTname , Bool_t Debug)
                 {
                     if (ntuple->Muon_pT[i_mu] > 28 && ntuple->Muon_eta[i_mu] < 2.4)
                         n_28++;
-                    if (ntuple->Muon_pT[i_mu] > 17 && ntuple->Muon_eta[i_mu] < 2.4)
+                    else if (ntuple->Muon_pT[i_mu] > 17 && ntuple->Muon_eta[i_mu] < 2.4)
                         n_17++;
                 }
 
@@ -1865,7 +1864,7 @@ void CountObjectsInAcceptance (TString type, TString HLTname , Bool_t Debug)
                 {
                     if (ntuple->Jet_pT[i_jet] > 28 && ntuple->Jet_eta[i_jet] < 2.4)
                         n_28++;
-                    if (ntuple->Jet_pT[i_jet] > 17 && ntuple->Jet_eta[i_jet] < 2.4)
+                    else if (ntuple->Jet_pT[i_jet] > 17 && ntuple->Jet_eta[i_jet] < 2.4)
                         n_17++;
                 }
 
@@ -1874,7 +1873,7 @@ void CountObjectsInAcceptance (TString type, TString HLTname , Bool_t Debug)
                     if (ntuple->Photon_pT[i_pho] > 28 && fabs(ntuple->Photon_etaSC[i_pho]) < 2.4 &&
                         (fabs(ntuple->Photon_etaSC[i_pho]) < 1.4442 || fabs(ntuple->Photon_etaSC[i_pho]) > 1.566))
                         n_28++;
-                    if (ntuple->Photon_pT[i_pho] > 17 && fabs(ntuple->Photon_etaSC[i_pho]) < 2.4 &&
+                    else if (ntuple->Photon_pT[i_pho] > 17 && fabs(ntuple->Photon_etaSC[i_pho]) < 2.4 &&
                         (fabs(ntuple->Photon_etaSC[i_pho]) < 1.4442 || fabs(ntuple->Photon_etaSC[i_pho]) > 1.566))
                         n_17++;
                 }
