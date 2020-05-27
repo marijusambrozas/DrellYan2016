@@ -31,6 +31,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug);
 void MakeSelectionForBKGest_EE (TString type, TString HLTname, Bool_t Debug);
 void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug);
 void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug);
+void CountObjectsInAcceptance (TString type, TString HLTname, Bool_t Debug);
 
 void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "DEFAULT")
 {
@@ -94,6 +95,14 @@ void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "D
             cout << "\n*******      MakeSelectionForFR_E (" << type << ", " << HLT << ")      *******" << endl;
             MakeSelectionForFR_E(type, HLT, Debug);
         }
+    }
+    else if (whichX.Contains("COUNT"))
+    {
+        Xselected++;
+        if (HLTname == "DEFAULT") HLT = "None";
+        else HLT = HLTname;
+        cout << "\n*******      CountObjectsInAcceptance (" << type << ", " << HLT << ")      *******" << endl;
+        CountObjectsInAcceptance(type, HLTname, Debug);
     }
 
     if (Xselected == 0) {
@@ -1754,3 +1763,143 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
     cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
 
 } // End of MakeSelectionForBKGest_EMu
+
+
+void CountObjectsInAcceptance (TString type, TString HLTname , Bool_t Debug)
+{
+    // -- Run2016 luminosity [/pb] -- //
+    Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
+    L = L_B2H;
+
+    TTimeStamp ts_start;
+    cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
+
+    TStopwatch totaltime;
+    totaltime.Start();
+
+    DYAnalyzer *analyzer = new DYAnalyzer(HLTname);
+
+    FileMgr Mgr;
+    vector<Process_t> Processes = Mgr.FindProc(type);
+    Int_t Nproc = Processes.size();
+    if (!Nproc)
+    {
+        cout << "No processes found." << endl;
+        return;
+    }
+
+    // Loop for all processes
+    for (Int_t i_proc=0; i_proc<Nproc; i_proc++)
+    {
+        Mgr.SetProc(Processes[i_proc], kTRUE);
+        cout << "===========================================================" << endl;
+        cout << "Type: " << Mgr.Type << endl;
+        cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
+        cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
+
+        Int_t Ntup = Mgr.FullLocation.size();
+
+        // Loop for all samples in a process
+        for (Int_t i_tup = 0; i_tup<Ntup; i_tup++)
+        {
+            TStopwatch looptime;
+            looptime.Start();
+
+            cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
+
+            TChain *chain = new TChain(Mgr.TreeName[i_tup]);
+            Mgr.SetupChain(i_tup, chain);
+
+            NtupleHandle *ntuple = new NtupleHandle(chain);
+            if (Mgr.isMC == kTRUE)
+            {
+                ntuple->TurnOnBranches_GenLepton(); // for all leptons
+                ntuple->TurnOnBranches_GenOthers(); // for quarks
+            }
+            ntuple->TurnOnBranches_Electron();
+            ntuple->TurnOnBranches_Photon();
+            ntuple->TurnOnBranches_Muon();
+            ntuple->TurnOnBranches_Jet();
+            ntuple->TurnOnBranches_MET();
+
+            Double_t n_pass = 0;
+
+            Int_t NEvents = chain->GetEntries();
+            if (Debug == kTRUE) NEvents = 1000; // using few events for debugging
+
+            cout << "\t[Total Events: " << NEvents << "]" << endl;
+            myProgressBar_t bar(NEvents);
+            Int_t timesPassed = 0;
+
+            // Loop for all events in the chain
+            for (Int_t i=0; i<NEvents; i++)
+            {
+                ntuple->GetEvent(i);
+                Int_t n_28=0, n_17=0;
+
+                Double_t gen_weight;
+                // -- Positive/Negative Gen-weights -- //
+                ntuple->GENEvt_weight < 0 ? gen_weight = -1 : gen_weight = 1;
+                if (Processes[i_proc] >= _GJets_20to100 && Processes[i_proc] <= _GJets_2000to5000)
+                    gen_weight = ntuple->GENEvt_weight; // Resetting to +-1 affects normalization
+
+                for (Int_t i_ele=0; i_ele<ntuple->Nelectrons; i_ele++)
+                {
+                    if (ntuple->Electron_pT[i_ele] > 28 && fabs(ntuple->Electron_etaSC[i_ele]) < 2.4 &&
+                        (fabs(ntuple->Electron_etaSC[i_ele]) < 1.4442 || fabs(ntuple->Electron_etaSC[i_ele]) > 1.566))
+                        n_28++;
+                    if (ntuple->Electron_pT[i_ele] > 17 && fabs(ntuple->Electron_etaSC[i_ele]) < 2.4 &&
+                        (fabs(ntuple->Electron_etaSC[i_ele]) < 1.4442 || fabs(ntuple->Electron_etaSC[i_ele]) > 1.566))
+                        n_17++;
+                }
+
+                for (Int_t i_mu=0; i_mu<ntuple->nMuon; i_mu++)
+                {
+                    if (ntuple->Muon_pT[i_mu] > 28 && ntuple->Muon_eta[i_mu] < 2.4)
+                        n_28++;
+                    if (ntuple->Muon_pT[i_mu] > 17 && ntuple->Muon_eta[i_mu] < 2.4)
+                        n_17++;
+                }
+
+                for (Int_t i_jet=0; i_jet<ntuple->Njets; i_jet++)
+                {
+                    if (ntuple->Jet_pT[i_jet] > 28 && ntuple->Jet_eta[i_jet] < 2.4)
+                        n_28++;
+                    if (ntuple->Jet_pT[i_jet] > 17 && ntuple->Jet_eta[i_jet] < 2.4)
+                        n_17++;
+                }
+
+                for (Int_t i_pho=0; i_pho<ntuple->nPhotons; i_pho++)
+                {
+                    if (ntuple->Photon_pT[i_ele] > 28 && fabs(ntuple->Photon_etaSC[i_ele]) < 2.4 &&
+                        (fabs(ntuple->Photon_etaSC[i_ele]) < 1.4442 || fabs(ntuple->Photon_etaSC[i_ele]) > 1.566))
+                        n_28++;
+                    if (ntuple->Photon_pT[i_ele] > 17 && fabs(ntuple->Photon_etaSC[i_ele]) < 2.4 &&
+                        (fabs(ntuple->Photon_etaSC[i_ele]) < 1.4442 || fabs(ntuple->Photon_etaSC[i_ele]) > 1.566))
+                        n_17++;
+                }
+
+                if (n_28 > 0 && n_17 > 0)
+                    n_pass += gen_weight * Lumi * Mgr.Xsec / Mgr.Wsum;
+
+                if (!Debug) bar.Draw(i);
+            } // End of event iteration
+
+            cout << "\t" << n_pass << " events have passed the event selection." << endl;
+
+            Double_t LoopRunTime = looptime.CpuTime();
+            cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
+
+        } // End of i_tup iteration
+
+        cout << "===========================================================\n" << endl;
+
+    } // End of i_proc iteration
+
+    Double_t TotalRunTime = totaltime.CpuTime();
+    cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
+
+    TTimeStamp ts_end;
+    cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
+
+} // End of CountObjectsInAcceptance
