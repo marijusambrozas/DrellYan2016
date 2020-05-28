@@ -1798,6 +1798,7 @@ void CountObjectsInAcceptance (TString type, TString HLTname , Bool_t Debug)
         cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
 
         Int_t Ntup = Mgr.FullLocation.size();
+        Double_t n_pass = 0;
 
         // Loop for all samples in a process
         for (Int_t i_tup = 0; i_tup<Ntup; i_tup++)
@@ -1821,8 +1822,6 @@ void CountObjectsInAcceptance (TString type, TString HLTname , Bool_t Debug)
             ntuple->TurnOnBranches_Muon();
             ntuple->TurnOnBranches_Jet();
             ntuple->TurnOnBranches_MET();
-
-            Double_t n_pass = 0;
 
             Int_t NEvents = chain->GetEntries();
             if (Debug == kTRUE) NEvents = 1000; // using few events for debugging
@@ -1884,13 +1883,13 @@ void CountObjectsInAcceptance (TString type, TString HLTname , Bool_t Debug)
                 if (!Debug) bar.Draw(i);
             } // End of event iteration
 
-            cout << "\t" << n_pass << " events have passed the event selection." << endl;
 
             Double_t LoopRunTime = looptime.CpuTime();
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
 
         } // End of i_tup iteration
 
+        cout << "\t" << n_pass << " events have passed the event selection." << endl;
         cout << "===========================================================\n" << endl;
 
     } // End of i_proc iteration
