@@ -5456,6 +5456,7 @@ void Est_HistDrawer(Int_t FR_systErr)
     Double_t dataerror_noZ_ee=0, MCerror_noZ_ee=0, dataintegral_noZ_ee=0, MCintegral_noZ_ee, temp_noZ_ee;
     Double_t qcdMCerror_ee=0, wjetsMCerror_ee=0, qcdMCintegral_ee=0, wjetsMCintegral_ee=0;
     Double_t qcdDDerror_ee=0, wjetsDDerror_ee=0, qcdDDintegral_ee=0, wjetsDDintegral_ee=0;
+    Double_t qcdDDerror_noZ_ee=0, wjetsDDerror_noZ_ee=0, qcdDDintegral_noZ_ee=0, wjetsDDintegral_noZ_ee=0;
 
     dataintegral_ee = h_data_mass_ee->IntegralAndError(1, h_data_mass_ee->GetSize()-2, dataerror_ee);
     MCintegral_ee = ((TH1D*)(s_mass_ee->GetStack()->Last()))->IntegralAndError(1, h_data_mass_ee->GetSize()-2, MCerror_ee);
@@ -5476,6 +5477,18 @@ void Est_HistDrawer(Int_t FR_systErr)
     MCerror_noZ_ee += temp_noZ_ee * temp_noZ_ee;
     MCerror_noZ_ee = sqrt(MCerror_noZ_ee);
 
+    qcdDDintegral_noZ_ee = h_fakes_mass_ee[0]->IntegralAndError(1, 9, temp_noZ_ee);
+    qcdDDerror_noZ_ee += temp_noZ_ee * temp_noZ_ee;
+    qcdDDintegral_noZ_ee += h_fakes_mass_ee[0]->IntegralAndError(23, h_data_mass_ee->GetSize()-2, temp_noZ_ee);
+    qcdDDerror_noZ_ee += temp_noZ_ee * temp_noZ_ee;
+    qcdDDerror_noZ_ee = sqrt(qcdDDerror_noZ_ee);
+
+    wjetsDDintegral_noZ_ee = h_fakes_mass_ee[1]->IntegralAndError(1, 9, temp_noZ_ee);
+    wjetsDDerror_noZ_ee += temp_noZ_ee * temp_noZ_ee;
+    wjetsDDintegral_noZ_ee += h_fakes_mass_ee[1]->IntegralAndError(23, h_data_mass_ee->GetSize()-2, temp_noZ_ee);
+    wjetsDDerror_noZ_ee += temp_noZ_ee * temp_noZ_ee;
+    wjetsDDerror_noZ_ee = sqrt(qcdDDerror_noZ_ee);
+
     qcdMCintegral_ee = h_bkg_mass_ee[0]->IntegralAndError(1, h_bkg_mass_ee[0]->GetSize()-2, qcdMCerror_ee);
     wjetsMCintegral_ee = h_bkg_mass_ee[1]->IntegralAndError(1, h_bkg_mass_ee[1]->GetSize()-2, wjetsMCerror_ee);
     qcdDDintegral_ee = h_fakes_mass_ee[0]->IntegralAndError(1, h_fakes_mass_ee[0]->GetSize()-2, qcdDDerror_ee);
@@ -5492,7 +5505,9 @@ void Est_HistDrawer(Int_t FR_systErr)
     std::cout << "ee Data events around Z (only EMu): " << dataintegralZ_ee << "+-" << dataerrorZ_ee << endl;
     std::cout << "ee MC events around Z (only EMu): " << MCintegralZ_ee << "+-" << MCerrorZ_ee << endl;
     std::cout << "ee Data events outside Z (only EMu): " << dataintegral_noZ_ee << "+-" << dataerror_noZ_ee << endl;
-    std::cout << "ee MC events outside Z (only EMu): " << MCintegral_noZ_ee << "+-" << MCerror_noZ_ee << endl << endl;
+    std::cout << "ee MC events outside Z (only EMu): " << MCintegral_noZ_ee << "+-" << MCerror_noZ_ee << endl;
+    std::cout << "ee QCD events outside Z (FR): " << qcdDDintegral_noZ_ee << "+-" << qcdDDerror_noZ_ee << endl;
+    std::cout << "ee W+Jets events outside Z (FR): " << wjetsDDintegral_noZ_ee << "+-" << wjetsDDerror_noZ_ee << endl << endl;
 
     std::cout << "ee MC+DD events (EMu+FR): " << MCintegral_ee_wFR << "+-" << MCerror_ee_wFR << endl;
     std::cout << "ee MC/Obs (EMu+FR): " << MCintegral_ee_wFR/dataintegral_ee << "+-" <<
@@ -5724,6 +5739,7 @@ void Est_HistDrawer(Int_t FR_systErr)
     Double_t dataerror_noZ_mumu=0, MCerror_noZ_mumu=0, dataintegral_noZ_mumu=0, MCintegral_noZ_mumu, temp_noZ_mumu;
     Double_t qcdMCerror_mumu=0, wjetsMCerror_mumu=0, qcdMCintegral_mumu=0, wjetsMCintegral_mumu=0;
     Double_t qcdDDerror_mumu=0, wjetsDDerror_mumu=0, qcdDDintegral_mumu=0, wjetsDDintegral_mumu=0;
+    Double_t qcdDDerror_noZ_mumu=0, wjetsDDerror_noZ_mumu=0, qcdDDintegral_noZ_mumu=0, wjetsDDintegral_noZ_mumu=0;
 
     dataintegral_mumu = h_data_mass_mumu->IntegralAndError(1, h_data_mass_mumu->GetSize()-2, dataerror_mumu);
     MCintegral_mumu = ((TH1D*)(s_mass_mumu->GetStack()->Last()))->IntegralAndError(1, h_data_mass_mumu->GetSize()-2, MCerror_mumu);
@@ -5749,6 +5765,18 @@ void Est_HistDrawer(Int_t FR_systErr)
     qcdDDintegral_mumu = h_fakes_mass_mumu[0]->IntegralAndError(1, h_fakes_mass_mumu[0]->GetSize()-2, qcdDDerror_mumu);
     wjetsDDintegral_mumu = h_fakes_mass_mumu[1]->IntegralAndError(1, h_fakes_mass_mumu[1]->GetSize()-2, wjetsDDerror_mumu);
 
+    qcdDDintegral_noZ_mumu = h_fakes_mass_mumu[0]->IntegralAndError(1, 9, temp_noZ_mumu);
+    qcdDDerror_noZ_mumu += temp_noZ_mumu * temp_noZ_mumu;
+    qcdDDintegral_noZ_mumu += h_fakes_mass_mumu[0]->IntegralAndError(23, h_data_mass_mumu->GetSize()-2, temp_noZ_mumu);
+    qcdDDerror_noZ_mumu += temp_noZ_mumu * temp_noZ_mumu;
+    qcdDDerror_noZ_mumu = sqrt(qcdDDerror_noZ_mumu);
+
+    wjetsDDintegral_noZ_mumu = h_fakes_mass_mumu[1]->IntegralAndError(1, 9, temp_noZ_mumu);
+    wjetsDDerror_noZ_mumu += temp_noZ_mumu * temp_noZ_mumu;
+    wjetsDDintegral_noZ_mumu += h_fakes_mass_mumu[1]->IntegralAndError(23, h_data_mass_mumu->GetSize()-2, temp_noZ_mumu);
+    wjetsDDerror_noZ_mumu += temp_noZ_mumu * temp_noZ_mumu;
+    wjetsDDerror_noZ_mumu = sqrt(qcdDDerror_noZ_mumu);
+
     std::cout << "MuMu Data events: " << dataintegral_mumu << "+-" << dataerror_mumu << endl;
     std::cout << "MuMu MC+DD events (only EMu): " << MCintegral_mumu << "+-" << MCerror_mumu << endl;
     std::cout << "MuMu MC/Obs (only EMu): " << MCintegral_mumu/dataintegral_mumu << "+-" <<
@@ -5760,7 +5788,10 @@ void Est_HistDrawer(Int_t FR_systErr)
     std::cout << "MuMu Data events around Z (only EMu): " << dataintegralZ_mumu << "+-" << dataerrorZ_mumu << endl;
     std::cout << "MuMu MC events around Z (only EMu): " << MCintegralZ_mumu << "+-" << MCerrorZ_mumu << endl;
     std::cout << "MuMu Data events outside Z (only EMu): " << dataintegral_noZ_mumu << "+-" << dataerror_noZ_mumu << endl;
-    std::cout << "MuMu MC events outside Z (only EMu): " << MCintegral_noZ_mumu << "+-" << MCerror_noZ_mumu << endl << endl;
+    std::cout << "MuMu MC events outside Z (only EMu): " << MCintegral_noZ_mumu << "+-" << MCerror_noZ_mumu << endl;
+    std::cout << "MuMu QCD events outside Z (FR): " << qcdDDintegral_noZ_mumu << "+-" << qcdDDerror_noZ_mumu << endl;
+    std::cout << "MuMu W+Jets events outside Z (FR): " << wjetsDDintegral_noZ_mumu << "+-" << wjetsDDerror_noZ_mumu << endl << endl;
+
 
     std::cout << "MuMu MC+DD events (EMu+FR): " << MCintegral_mumu_wFR << "+-" << MCerror_mumu_wFR << endl;
     std::cout << "MuMu MC/Obs (EMu+FR): " << MCintegral_mumu_wFR/dataintegral_mumu << "+-" <<
