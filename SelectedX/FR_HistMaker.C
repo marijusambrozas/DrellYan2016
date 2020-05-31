@@ -617,7 +617,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
 //                    if (HoverE->at(i_ele) > 0.13) continue;
 //                }
 
-                // Selecting leading electron (could also try finding a muon with the best isolation)
+                // Selecting leading electron (could also try finding a electron with the best isolation)
                 if (p_T->at(i_ele) > ele_lead.Pt())
                 {
                     Int_t matched = 0;

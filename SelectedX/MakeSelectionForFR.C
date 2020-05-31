@@ -72,7 +72,7 @@ void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "D
         Xselected++;
         if (whichX.Contains("EST"))
         {            
-            if (HLTname == "DEFAULT") HLT = "IsoMu24_OR_IsoTkMu24";
+            if (HLTname == "DEFAULT") HLT = "Mu_OR";
             else HLT = HLTname;
             cout << "\n*****  MakeSelectionForBKGest_MuMu (" << type << ", " << HLT << ")  *****" << endl;
             MakeSelectionForBKGest_MuMu(type, HLT, Debug);
@@ -1234,11 +1234,17 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<double> *TRKiso = new std::vector<double>;
+        std::vector<int> *trig_fired = new std::vector<int>;
+        std::vector<int> *trig_matched = new std::vector<int>;
+        std::vector<double> *trig_pT = new std::vector<double>;
+        std::vector<int> *prescale_factor = new std::vector<int>;
         Int_t nPU;
         Int_t nVTX;
         Double_t PVz;
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
+        Int_t runNum;
+        Int_t lumiBlock;
 
         TTree* MuonTree = new TTree("FRTree", "FRTree");
         // -- Creating SelectedMuMu variables to assign branches -- //
@@ -1248,6 +1254,10 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("charge", &charge);
         MuonTree->Branch("relPFiso", &relPFiso);
         MuonTree->Branch("TRKiso", &TRKiso);
+        MuonTree->Branch("trig_fired", &trig_fired);
+        MuonTree->Branch("trig_matched", &trig_matched);
+        MuonTree->Branch("trig_pT", &trig_pT);
+        MuonTree->Branch("prescale_factor", &prescale_factor);
         MuonTree->Branch("nPU", &nPU);
         MuonTree->Branch("nVTX", &nVTX);
         MuonTree->Branch("PVz", &PVz);
@@ -1256,6 +1266,8 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("prefiring_weight", &prefiring_weight);
         MuonTree->Branch("prefiring_weight_up", &prefiring_weight_up);
         MuonTree->Branch("prefiring_weight_down", &prefiring_weight_down);
+        MuonTree->Branch("runNum", &runNum);
+        MuonTree->Branch("lumiBlock", &lumiBlock);
 
         // -- For PU re-weighting -- //
         analyzer->SetupPileUpReWeighting_80X(Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root");
@@ -1315,8 +1327,8 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
 
                 if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += gen_weight;
 
-                Bool_t TriggerFlag = kTRUE; // We don't use trigger here
-//                TriggerFlag = ntuple->isTriggered(analyzer->HLT);
+                Bool_t TriggerFlag = kTRUE;
+                TriggerFlag = ntuple->isTriggered(analyzer->HLT);
 
                 if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
                 {
@@ -1366,6 +1378,10 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
                         charge->clear();
                         relPFiso->clear();
                         TRKiso->clear();
+                        trig_fired->clear();
+                        trig_matched->clear();
+                        trig_pT->clear();
+                        prescale_factor->clear();
 
                         // -- Top pT reweighting -- //
                         top_weight = 1;
@@ -1377,12 +1393,17 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
                         }
 
                         // -- Information for various other reweightings -- //
+                        runNum = ntuple->runNum;
+                        lumiBlock = ntuple->lumiBlock;
                         nPU = ntuple->nPileUp;
                         nVTX = ntuple->nVertices;
                         PVz = ntuple->PVz;
                         prefiring_weight = ntuple->_prefiringweight;
                         prefiring_weight_up = ntuple->_prefiringweightup;
                         prefiring_weight_down = ntuple->_prefiringweightdown;
+
+                        Int_t triggered = 0;
+                        triggered = analyzer->FindTriggerAndPrescale(SelectedMuonCollection, ntuple, trig_fired, prescale_factor, trig_matched, trig_pT);
 
                         // -- Vector filling -- //
                         for (UInt_t i=0; i<SelectedMuonCollection.size(); i++)
@@ -1399,7 +1420,7 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
 
                 } // End of if(isTriggered)
 
-                bar.Draw(i);
+                if (!Debug) bar.Draw(i);
 
             } // End of event iteration
             cout << "\t" << timesPassed << " events have passed the event selection." << endl;

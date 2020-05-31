@@ -272,6 +272,7 @@ public:
         Double_t PrescaleFactor2(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t PrescaleFactor3(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Int_t FindTriggerAndPrescale(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
+        Int_t FindTriggerAndPrescale(vector<Muon> MuonCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t getPrescale(Double_t Et);
         Double_t getPrescale_alt(Double_t Et);
         void SetupFRvalues_ele(TString filename, TString type="subtract", Int_t increaseLowPt=0);
@@ -380,6 +381,14 @@ void DYAnalyzer::AssignAccThreshold(TString HLTname, TString *HLT, Double_t *Lea
 		*LeadEtaCut = 2.4;
 		*SubEtaCut = 2.4;
 	}
+        else if(HLTname == "Mu_OR")
+        {
+                *HLT = "HLT_Mu20_v* || HLT_Mu27_v* || HLT_Mu50_v* || HLT_IsoMu24_v* || HLT_IsoTkMu24_v*";
+                *LeadPtCut = 28;
+                *SubPtCut = 17;
+                *LeadEtaCut = 2.4;
+                *SubEtaCut = 2.4;
+        }
         else if(HLTname == "IsoMu20_SymmetricPt25")
 	{
 		*HLT = "HLT_IsoMu20_v*";
@@ -6983,7 +6992,61 @@ Int_t DYAnalyzer::FindTriggerAndPrescale(vector<Electron> ElectronCollection, Nt
         }
     }
     return triggered;
-}// End of FindTriggerAndPrescale()
+}// End of FindTriggerAndPrescale(Electron)
+
+
+Int_t DYAnalyzer::FindTriggerAndPrescale(vector<Muon> MuonCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired,
+                                            std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT)
+{
+    Int_t triggered = 0;
+    Int_t Factor = -9999;
+    Double_t HLT_pT = -9999;
+    for(Int_t i_mu=0; i_mu<(Int_t)MuonCollection.size(); i_mu++)
+    {
+        Muon mu = MuonCollection[i_mu];
+        if (mu.isTrigMatched(ntuple, "HLT_Mu20_v*", &HLT_pT, &Factor))
+        {
+            triggered = 1;
+            trig_fired->push_back(20);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            trig_PS->push_back(Factor);
+        }
+        if (mu.isTrigMatched(ntuple, "HLT_Mu27_v*", &HLT_pT, &Factor))
+        {
+            triggered = 1;
+            trig_fired->push_back(27);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            trig_PS->push_back(Factor);
+        }
+        if (mu.isTrigMatched(ntuple, "HLT_Mu50_v*", &HLT_pT, &Factor))
+        {
+            triggered = 1;
+            trig_fired->push_back(1);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            trig_PS->push_back(Factor);
+        }
+        if (mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*", &HLT_pT, &Factor))
+        {
+            triggered = 1;
+            trig_fired->push_back(1);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            trig_PS->push_back(Factor);
+        }
+        if (mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*", &HLT_pT, &Factor))
+        {
+            triggered = 1;
+            trig_fired->push_back(1);
+            trig_matched->push_back(i_ele);
+            trig_pT->push_back(HLT_pT);
+            trig_PS->push_back(Factor);
+        }
+    }
+    return triggered;
+}// End of FindTriggerAndPrescale(Muon)
 
 
 Double_t DYAnalyzer::getPrescale(Double_t Et)

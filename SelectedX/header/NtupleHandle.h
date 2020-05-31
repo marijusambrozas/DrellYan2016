@@ -964,6 +964,23 @@ public:
                 }
             }
         }
+        else if ( HLT == "HLT_Mu20_v* || HLT_Mu27_v* || HLT_Mu50_v* || HLT_IsoMu24_v* || HLT_IsoTkMu24_v*" )
+        {
+            for( Int_t k = 0; k < HLT_ntrig; k++ )
+            {
+                if( (HLT_trigName->at((unsigned int)k)) == "HLT_Mu20_v*"  || (HLT_trigName->at((unsigned int)k)) == "HLT_Mu27_v*" ||
+                    (HLT_trigName->at((unsigned int)k)) == "HLT_Mu50_v*"  || (HLT_trigName->at((unsigned int)k)) == "HLT_IsoMu24_v*" ||
+                    (HLT_trigName->at((unsigned int)k)) == "HLT_IsoTkMu24_v*")
+                {
+                    if( HLT_trigFired[k] == 1 )
+                    {
+                        isTrigger = true;
+                        if (trigger) *trigger = HLT_trigName->at((unsigned int)k);
+                        break;
+                    }
+                }
+            }
+        }
         else if ( HLT == "HLT_Photon*" )
         {
             for( Int_t k = 0; k < HLT_ntrig; k++ )

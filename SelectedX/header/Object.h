@@ -1290,31 +1290,42 @@ public:
         }
 
 
-	Bool_t isTrigMatched(NtupleHandle *nh, TString HLT)
-	{
-		vector<string> *hlt_trigName = nh->HLT_trigName;
-		Int_t hlt_ntrig = nh->HLT_ntrig;
+        Bool_t isTrigMatched(NtupleHandle *nh, TString HLT, Double_t *HLT_pT=NULL, Int_t *HLT_PS=NULL)
+        {
+                vector<string> *hlt_trigName = nh->HLT_trigName;
+                Int_t hlt_ntrig = nh->HLT_ntrig;
 
-		Bool_t isTrigMatch = false;
+                Bool_t isTrigMatch = false;
                 for(Int_t k = 0; k < hlt_ntrig; k++)
-		{
+                {
                         if((hlt_trigName->at((unsigned int)k)) == HLT)
-			{
-				Double_t Lepton_eta = this->eta;
-				Double_t Lepton_phi = this->phi;
-				Double_t Trig_eta = nh->HLT_trigEta[k];
-				Double_t Trig_phi = nh->HLT_trigPhi[k];
+                        {
+                            Double_t Lepton_pT = this->Pt;
+                            Double_t Lepton_eta = this->eta;
+                            Double_t Lepton_phi = this->phi;
+                            Double_t Trig_pT = nh->HLT_trigPt[k];
+                            Double_t Trig_eta = nh->HLT_trigEta[k];
+                            Double_t Trig_phi = nh->HLT_trigPhi[k];
 
-                                Double_t dR = sqrt((Lepton_eta - Trig_eta)*(Lepton_eta - Trig_eta) + (Lepton_phi - Trig_phi)*(Lepton_phi - Trig_phi));
-                                if(dR < 0.3 && fabs(Lepton_eta) < 2.4)
-				{
-					isTrigMatch = true;
-					break;
-				}
-			}
-		}
-		return isTrigMatch;
-	}
+                            Double_t dR = sqrt((Lepton_eta - Trig_eta)*(Lepton_eta - Trig_eta) + (Lepton_phi - Trig_phi)*(Lepton_phi - Trig_phi));
+                            Double_t dpT = fabs(Lepton_pT - Trig_pT) / Trig_pT;
+                            if(dR < 0.3 && fabs(Lepton_eta) < 2.4)
+                            {
+//                                cout << "HLTname: " << hlt_trigName->at((unsigned int)k) <<"    pT: " << Lepton_pT << "   HLT pT: " << Trig_pT << endl;
+                                if (dpT < 0.2)
+                                {
+                                    isTrigMatch = true;
+                                    if (HLT_pT) *HLT_pT = Trig_pT;
+                                    if (HLT_PS) *HLT_PS = nh->HLT_trigPS->at(k);
+                                    break;
+                                }
+                            }
+                        }
+                }
+                return isTrigMatch;
+        }
+
+};
 
         Bool_t isTrigMatched(LongSelectedMuMu_t *nh, TString HLT)
         {
