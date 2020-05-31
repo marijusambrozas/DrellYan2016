@@ -262,7 +262,7 @@ public:
         Bool_t EventSelection_FR(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection_nume, vector<Muon> *SelectedMuonCollection_deno); // -- output: muons passing numerator and denominator selection -- //
         Bool_t EventSelection_FRdijetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection_fail); // -- output: two muons passing regular selection but failing isolation requirements-- //
         Bool_t EventSelection_FRsingleJetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple,  vector<Muon> *SelectedMuonCollection); // -- output: one muon passing full regular selection and another one passing the same selection but failing isolation requirements-- //
-        Bool_t EventSelection_FakeMuons_Triggerless(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection); // -- output: two muons passing regular selection but failing isolation requirements (at least one) -- //
+        Bool_t EventSelection_FakeMuons(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection); // -- output: two muons passing regular selection but failing isolation requirements (at least one) -- //
         Bool_t EventSelection_FR(vector<Electron> ElectronCollection, NtupleHandle *ntuple, vector<Electron> *SelectedElectronCollection); // Electron selection
         Bool_t EventSelection_FakeElectrons(vector<Electron> ElectronCollection, NtupleHandle *ntuple, vector<Electron> *SelectedElectronCollection);
         Bool_t EventSelection_FakeEMu(vector<Electron> ElectronCollection, vector<Muon> MuonCollection, NtupleHandle *ntuple, Electron *SelectedElectron, Muon *SelectedMuon);
@@ -6228,7 +6228,7 @@ Bool_t DYAnalyzer::EventSelection_FRdijetEst(vector<Muon> MuonCollection, Ntuple
 
 
 
-Bool_t DYAnalyzer::EventSelection_FakeMuons_Triggerless(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon>* SelectedMuonCollection)
+Bool_t DYAnalyzer::EventSelection_FakeMuons(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon>* SelectedMuonCollection)
 {
     Bool_t isPassEventSelection = kFALSE;
 
@@ -6238,6 +6238,19 @@ Bool_t DYAnalyzer::EventSelection_FakeMuons_Triggerless(vector<Muon> MuonCollect
     {
         if(MuonCollection[j].isTightMuon())//passTightID)
             QMuonCollection.push_back(MuonCollection[j]);
+    }
+
+    // -- Check the existence of at least one muon matched with HLT-object -- //
+    Bool_t isExistHLTMatchedMuon = kFALSE;
+    for(Int_t i_mu=0; i_mu<(Int_t)QMuonCollection.size(); i_mu++)
+    {
+            Muon mu = QMuonCollection[i_mu];
+            if(mu.isTrigMatched(ntuple, "HLT_Mu20_v*") || mu.isTrigMatched(ntuple, "HLT_Mu27_v*") || mu.isTrigMatched(ntuple, "HLT_Mu50_v*") ||
+               mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*") || mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*"))
+            {
+                    isExistHLTMatchedMuon = kTRUE;
+                    break;
+            }
     }
 
     Int_t nQMuons = (Int_t)QMuonCollection.size();
@@ -6466,6 +6479,19 @@ Bool_t DYAnalyzer::EventSelection_FakeEMu(vector<Electron> ElectronCollection, v
     {
         if(MuonCollection[j].isTightMuon() && MuonCollection[j].Pt > SubPtCut && fabs(MuonCollection[j].eta) < LeadEtaCut) // pT>17 && |eta|<2.4
             QMuonCollection.push_back(MuonCollection[j]);
+    }
+
+    // -- Check the existence of at least one muon matched with HLT-object -- //
+    Bool_t isExistHLTMatchedMuon = kFALSE;
+    for(Int_t i_mu=0; i_mu<(Int_t)QMuonCollection.size(); i_mu++)
+    {
+            Muon mu = QMuonCollection[i_mu];
+            if(mu.isTrigMatched(ntuple, "HLT_Mu20_v*") || mu.isTrigMatched(ntuple, "HLT_Mu27_v*") || mu.isTrigMatched(ntuple, "HLT_Mu50_v*") ||
+               mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*") || mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*"))
+            {
+                    isExistHLTMatchedMuon = kTRUE;
+                    break;
+            }
     }
 
     //Collect qualified electrons among electrons

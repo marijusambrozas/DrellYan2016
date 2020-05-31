@@ -410,6 +410,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
                         Int_t triggered = 0;
                         triggered = analyzer->FindTriggerAndPrescale(SelectedElectronCollection, ntuple, trig_fired, prescale_factor, trig_matched, trig_pT);
+                        if (!triggered) continue;
 
                         // -- Vector filling -- //
                         for (UInt_t i_ele=0; i_ele<SelectedElectronCollection.size(); i_ele++)
@@ -1367,7 +1368,7 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
                     // -- Event Selection -- //
                     vector< Muon > SelectedMuonCollection;
                     Bool_t isPassEventSelection = kFALSE;
-                    isPassEventSelection = analyzer->EventSelection_FakeMuons_Triggerless(MuonCollection, ntuple, &SelectedMuonCollection);
+                    isPassEventSelection = analyzer->EventSelection_FakeMuons(MuonCollection, ntuple, &SelectedMuonCollection);
 
                     if (isPassEventSelection == kTRUE)
                     {
@@ -1404,6 +1405,7 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
 
                         Int_t triggered = 0;
                         triggered = analyzer->FindTriggerAndPrescale(SelectedMuonCollection, ntuple, trig_fired, prescale_factor, trig_matched, trig_pT);
+                        if (!triggered) continue;
 
                         // -- Vector filling -- //
                         for (UInt_t i=0; i<SelectedMuonCollection.size(); i++)
@@ -1527,11 +1529,16 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
         Double_t mu_p_T, mu_eta, mu_phi;
         Int_t mu_charge;
         Double_t mu_relPFiso_dBeta;
+        Int_t trig_fired;
+        Double_t trig_pT;
+        Int_t prescale_factor;
         Double_t MET_pT, MET_phi;
         Int_t nPU, nVTX;
         Double_t PVz;
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
+        Int_t runNum;
+        Int_t lumiBlock;
 
         TTree* MuonTree = new TTree("FRTree", "FRTree");
         // -- Creating SelectedMuMu variables to assign branches -- //
@@ -1559,6 +1566,9 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("mu_phi", &mu_phi);
         MuonTree->Branch("mu_charge", &mu_charge);
         MuonTree->Branch("mu_relPFiso_dBeta", &mu_relPFiso_dBeta);
+        MuonTree->Branch("trig_fired", &trig_fired);
+        MuonTree->Branch("trig_pT", &trig_pT);
+        MuonTree->Branch("prescale_factor", &prescale_factor);
         MuonTree->Branch("MET_pT", &MET_pT);
         MuonTree->Branch("MET_phi", &MET_phi);
         MuonTree->Branch("nPU", &nPU);
@@ -1569,6 +1579,8 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("prefiring_weight", &prefiring_weight);
         MuonTree->Branch("prefiring_weight_up", &prefiring_weight_up);
         MuonTree->Branch("prefiring_weight_down", &prefiring_weight_down);
+        MuonTree->Branch("runNum", &runNum);
+        MuonTree->Branch("lumiBlock", &lumiBlock);
 
         // -- For PU re-weighting -- //
         analyzer->SetupPileUpReWeighting_80X(Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root");
@@ -1631,7 +1643,8 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
 
                 if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += gen_weight;
 
-                Bool_t TriggerFlag = kTRUE; // We don't use trigger here
+                Bool_t TriggerFlag = kTRUE;
+                TriggerFlag = ntuple->isTriggered(analyzer->HLT);
 
                 if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
                 {
@@ -1694,7 +1707,23 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
                             top_weight = sqrt(SF0 * SF1);
                         }
 
+                        // Trigger info
+                        Int_t triggered = 0;
+                        vector<Muon> SelectedMuonCollection;
+                        SelectedMuonCollection.push_back(SelectedMuon);
+                        vector<int> *trig_f = new vector<int>;
+                        vector<int> *trig_ps = new vector<int>;
+                        vector<int> *trig_m = new vector<int>;
+                        vector<double> *trig_pt = new vector<double>;
+                        triggered = analyzer->FindTriggerAndPrescale(SelectedMuonCollection, ntuple, trig_f, trig_ps, trig_m, trig_pt);
+                        if (!triggered || trig_f->size != 1 || trig_ps->size != 1 || trig_m->size != 1 || trig_pt->size != 1) continue;
+                        trig_fired = trig_f->at(0);
+                        prescale_factor = trig_ps->at(0);
+                        trig_pT = trig_pt->at(0);
+
                         // Information for reweightings
+                        runNum = ntuple->runNum;
+                        lumiBlock = ntuple->lumiBlock;
                         nPU = ntuple->nPileUp;
                         nVTX = ntuple->nVertices;
                         PVz = ntuple->PVz;
