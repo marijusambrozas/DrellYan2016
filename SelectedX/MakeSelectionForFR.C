@@ -1529,9 +1529,9 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
         Double_t mu_p_T, mu_eta, mu_phi;
         Int_t mu_charge;
         Double_t mu_relPFiso_dBeta;
-        Int_t trig_fired;
-        Double_t trig_pT;
-        Int_t prescale_factor;
+        std::vector<int> trig_fired = new std::vector<int>;
+        std::vector<double> trig_pT = new std::vector<double>;
+        std::vector<int> prescale_factor = new std::vector<int>;
         Double_t MET_pT, MET_phi;
         Int_t nPU, nVTX;
         Double_t PVz;
@@ -1697,6 +1697,9 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
                         if (SelectedElectron.passMediumID && SelectedMuon.RelPFIso_dBeta < 0.15) continue;
 
                         timesPassed++;
+                        trig_fired->clear();
+                        prescale_factor->clear();
+                        trig_pT->clear();
 
                         // -- Top pT reweighting -- //
                         top_weight = 1;
@@ -1711,15 +1714,9 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
                         Int_t triggered = 0;
                         vector<Muon> SelectedMuonCollection;
                         SelectedMuonCollection.push_back(SelectedMuon);
-                        vector<int> *trig_f = new vector<int>;
-                        vector<int> *trig_ps = new vector<int>;
-                        vector<int> *trig_m = new vector<int>;
-                        vector<double> *trig_pt = new vector<double>;
-                        triggered = analyzer->FindTriggerAndPrescale(SelectedMuonCollection, ntuple, trig_f, trig_ps, trig_m, trig_pt);
-                        if (!triggered || trig_f->size() != 1 || trig_ps->size() != 1 || trig_m->size() != 1 || trig_pt->size() != 1) continue;
-                        trig_fired = trig_f->at(0);
-                        prescale_factor = trig_ps->at(0);
-                        trig_pT = trig_pt->at(0);
+                        std::vector<int> *trig_m = new std::vector<int>;
+                        triggered = analyzer->FindTriggerAndPrescale(SelectedMuonCollection, ntuple, trig_fired, prescale_factor, trig_m, trig_pT);
+                        if (!triggered) continue;
 
                         // Information for reweightings
                         runNum = ntuple->runNum;
