@@ -8393,7 +8393,7 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
 
     // QCD estimation
     h_QCD_est = ((TH1D*)(h_mass[_DoubleEG_Full]->Clone("h_QCD_est")));
-    Double_t err_data=0, int_data=0, err_qcd=0, int_qcd=0;
+    Double_t err_data=0, int_data=0, err_qcd=0, int_qcd=0, err_dy=0, int_dy=0, err_tt=0, int_tt=0, err_vvnst=0, int_vvnst=0, err_wj=0, int_wj=0;
     int_data = h_QCD_est->IntegralAndError(1, h_QCD_est->GetSize()-2, err_data);
     h_QCD_est->SetTitle("");
     h_QCD_est->SetDirectory(0);
@@ -8416,8 +8416,16 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_QCD_est->SetLineColor(kBlack);
     h_QCD_est->SetMarkerStyle(0);
     int_qcd = h_QCD_est->IntegralAndError(1, h_QCD_est->GetSize()-2, err_qcd);
+    int_dy = h_mass[_DY_Full]->IntegralAndError(1, h_mass[_DY_Full]->GetSize()-2, err_dy);
+    int_tt = h_mass[_ttbar_Full]->IntegralAndError(1, h_mass[_ttbar_Full]->GetSize()-2, err_tt);
+    int_vvnst = h_mass[_VVnST]->IntegralAndError(1, h_mass[_VVnST]->GetSize()-2, err_vvnst);
+    int_wj = h_mass[_WJets_Full]->IntegralAndError(1, h_mass[_WJets_Full]->GetSize()-2, err_wj);
     cout << "Data events: " << int_data << "+-" << err_data << endl;
-    cout << "QCD est events: " << int_qcd << "+-" << err_qcd << endl;
+    cout << "QCD est events: " << int_qcd << "+-" << err_qcd << "(" << int_qcd/int_data << ")" << endl;
+    cout << "DY events: " << int_dy << "+-" << err_dy << "(" << int_dy/int_data << ")" << endl;
+    cout << "ttbar events: " << int_tt << "+-" << err_tt << "(" << int_tt/int_data << ")" << endl;
+    cout << "VVnST events: " << int_vvnst << "+-" << err_vvnst << "(" << int_vvnst/int_data << ")" << endl;
+    cout << "WJets events: " << int_wj << "+-" << err_wj << "(" << int_wj/int_data << ")" << endl;
 
     // Same-sign
     Double_t err_qcd_ss=0, int_qcd_ss=0;
@@ -8476,6 +8484,11 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     TH1D *h_ttbar_fit = ((TH1D*)(h_mass[_ttbar_Full]->Clone("h_ttbar_fit")));
     TH1D *h_VVnST_fit = ((TH1D*)(h_mass[_VVnST]->Clone("h_VVnST_fit")));
     TH1D *h_WJets_fit = ((TH1D*)(h_mass[_WJets_Full]->Clone("h_WJets_fit")));
+    cout << "QCD fit factor: " << 7.8129e+03/*8.4683e+03*/ / h_QCD_est_fit->Integral() << endl;
+    cout << "W+Jets fit factor: " << 1.2812e+02 / h_WJets_fit->Integral() << endl;
+    cout << "DY fit factor: " << 1.5534e+03 / h_DY_fit->Integral() << endl;
+    cout << "ttbar fit factor: " << 4.8172e+01 / h_ttbar_fit->Integral() << endl;
+    cout << "VVnST fit factor: " << 8.3653e+00 / h_VVnST_fit->Integral() << endl;
     h_QCD_est_fit->Scale(7.8129e+03/*8.4683e+03*/ / h_QCD_est_fit->Integral());
     h_WJets_fit->Scale(1.2812e+02 / h_WJets_fit->Integral());
     h_DY_fit->Scale(1.5534e+03 / h_DY_fit->Integral());
@@ -8538,6 +8551,13 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
 //    legend_wQCD->AddEntry(h_mass[_GJets_Full], "#gamma+Jets", "f");
     TLegend * legend_woQCD = ((TLegend*)(legend_wQCD->Clone()));
     legend_wQCD->AddEntry(h_mass[_QCDEMEnriched_20to30], "#font[12]{#scale[1.1]{QCD}}", "f");
+    TLegend *legend_fit = new TLegend(0.7, 0.64, 0.95, 0.95);
+    legend_fit->AddEntry(h_mass[_DoubleEG_B], "Data", "pl");
+    legend_fit->AddEntry(h_mass[_QCDEMEnriched_20to30], "#font[12]{#scale[1.1]{QCD}}", "f");
+    legend_fit->AddEntry(h_mass[_DY_10to50], "DY", "f");
+    legend_fit->AddEntry(h_mass[_ttbar], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+    legend_fit->AddEntry(h_mass[_WJets], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+    legend_fit->AddEntry(h_mass[_tbarW], "#font[12]{#scale[1.1]{tW+#bar{t}W+VV}}", "f");
 
     RP_mass_wQCD->ImportLegend(legend_wQCD);
     RP_mass_woQCD->ImportLegend(legend_woQCD);
@@ -8549,7 +8569,7 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     RP_mass_woQCD_test->ImportLegend(legend_woQCD);
     RP_pT->ImportLegend(legend_wQCD);
     RP_rapi->ImportLegend(legend_wQCD);
-    RP_mass_fit->ImportLegend(legend_wQCD);
+    RP_mass_fit->ImportLegend(legend_fit);
 
     RP_mass_wQCD->Draw(1e-3, 1e3, 1);
     RP_mass_woQCD->Draw(1e-3, 1e3, 1);
@@ -8561,7 +8581,7 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     RP_mass_woQCD_test->Draw(1e-2, 1e6, 1);
     RP_pT->Draw(1e-2, 1e6, 0);
     RP_rapi->Draw(1e-2, 1e6, 0);
-    RP_mass_fit->Draw(1e-2, 1e3, 1);
+    RP_mass_fit->Draw(1e-2, 1e4, 1);
 
     // Same-sign vs opposite-sign plots
     TH1D *h_mass_QCD_MC = ((TH1D*)(h_mass[_QCDEMEnriched_Full]->Clone("h_mass_QCD_MC")));
@@ -8600,7 +8620,7 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
 
     // Drawing estimated QCD
     TLegend * l_QCD_est = new TLegend(0.7, 0.88, 0.95, 0.95);
-    l_QCD_est->AddEntry(h_QCD_est, "#font[12]{#scale[1.1]{QCD}} (est.)", "f");
+    l_QCD_est->AddEntry(h_QCD_est, "#font[12]{#scale[1.1]{QCD}} (FR)", "f");
     TCanvas * c_QCD_est = new TCanvas("c_QCD_est", "QCD est", 750, 850);
     c_QCD_est->SetTopMargin(0.05);
     c_QCD_est->SetRightMargin(0.05);
@@ -9172,7 +9192,7 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     } // End of pr iteration
 
     // W+Jets estimation by subtraction
-    Double_t int_data=0, err_data=0, int_wjet=0, err_wjet=0;
+    Double_t int_data=0, err_data=0, int_wjet=0, err_wjet=0, int_DY=0, err_DY=0, int_tt=0, err_tt=0, int_vvnst=0, err_vvnst=0, int_qcd=0, err_qcd=0;
     h_WJET_est = ((TH1D*)(h_mass[_DoubleEG_Full]->Clone("h_WJET_est")));
     int_data = h_WJET_est->IntegralAndError(1, h_WJET_est->GetSize()-2, err_data);
     h_WJET_est->SetTitle("");
@@ -9196,8 +9216,16 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_WJET_est->SetLineColor(kBlack);
     h_WJET_est->SetMarkerStyle(0);
     int_wjet = h_WJET_est->IntegralAndError(1, h_WJET_est->GetSize()-2, err_wjet);
+    int_DY = h_mass[_DY_Full]->IntegralAndError(1, h_mass[_DY_Full]->GetSize()-2, err_DY);
+    int_tt = h_mass[_ttbar_Full]->IntegralAndError(1, h_mass[_ttbar_Full]->GetSize()-2, int_tt);
+    int_vvnst = h_mass[_VVnST]->IntegralAndError(1, h_mass[_VVnST]->GetSize()-2, int_vvnst);
+    int_qcd = h_QCD_est->IntegralAndError(1, h_QCD_est->GetSize()-2, int_qcd);
     cout << "Data events: " << int_data << "+-" << err_data << endl;
-    cout << "WJets est events (subraction): " << int_wjet << "+-" << err_wjet << endl;
+    cout << "WJets est events (subraction): " << int_wjet << "+-" << err_wjet << "(" << int_wjet/int_data << ")" << endl;
+    cout << "DY events (subraction): " << int_DY << "+-" << err_DY << "(" << int_DY/int_data << ")" << endl;
+    cout << "ttbar events (subraction): " << int_tt << "+-" << int_tt << "(" << int_tt/int_data << ")" << endl;
+    cout << "VVnST events (subraction): " << int_vvnst << "+-" << int_vvnst << "(" << int_vvnst/int_data << ")" << endl;
+    cout << "QCD events (subraction): " << int_qcd << "+-" << int_qcd << "(" << int_qcd/int_data << ")" << endl;
 
     // Same-sign template
     h_WJET_est_SS = ((TH1D*)(h_mass_SS[_DoubleEG_Full]->Clone("h_WJET_est_SS")));
@@ -9253,6 +9281,11 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     TH1D *h_ttbar_fit = ((TH1D*)(h_mass[_ttbar_Full]->Clone("h_ttbar_fit")));
     TH1D *h_VVnST_fit = ((TH1D*)(h_mass[_VVnST]->Clone("h_VVnST_fit")));
     TH1D *h_QCD_fit = ((TH1D*)(h_QCD_est_fit->Clone("h_QCD_fit")));
+    cout << "W+Jets fit factor: " << 1.1090e+04/*1.2992e+04*/ / h_WJET_est_fit->Integral() << endl;
+    cout << "DY fit factor: " << 2.9014e+05 / h_DY_fit->Integral() << endl;
+    cout << "ttbar fit factor: " << 3.9280e+03 / h_ttbar_fit->Integral() << endl;
+    cout << "VVnST fit factor: " << 1.3173e+03 / h_VVnST_fit->Integral() << endl;
+    cout << "QCD fit factor: " << 1.5424e+04 / h_QCD_fit->Integral() << endl;
     h_WJET_est_fit->Scale(1.1090e+04/*1.2992e+04*/ / h_WJET_est_fit->Integral()); // If SS template is used
     h_DY_fit->Scale(2.9014e+05 / h_DY_fit->Integral());
     h_ttbar_fit->Scale(3.9280e+03 / h_ttbar_fit->Integral());
@@ -9322,14 +9355,14 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     legend_wWJET->AddEntry(h_mass[_QCDEMEnriched_20to30], "#font[12]{#scale[1.1]{QCD}}", "f");
 //    legend_woWJET->AddEntry(h_mass[_GJets_20to100], "#gamma+Jets", "f");
     legend_woWJET->AddEntry(h_mass[_QCDEMEnriched_20to30], "#font[12]{#scale[1.1]{QCD}}", "f");
-    TLegend * legend_fit = new TLegend(0.8, 0.6, 0.95, 0.95);
+    TLegend * legend_fit = new TLegend(0.7, 0.64, 0.95, 0.95);
     legend_fit->AddEntry(h_mass[_DoubleEG_B], "Data", "pl");
     legend_fit->AddEntry(h_mass[_DY_10to50], "DY", "f");
-    legend_fit->AddEntry(h_mass[_ttbar], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
-    legend_fit->AddEntry(h_mass[_VVnST], "Diboson+ST", "f");
     legend_fit->AddEntry(h_mass[_WJets], "#font[12]{#scale[1.1]{W}}+Jets", "f");
-//    legend_fit->AddEntry(h_mass[_GJets_20to100], "#gamma+Jets", "f");
+    legend_fit->AddEntry(h_mass[_ttbar], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+    legend_fit->AddEntry(h_mass[_tbarW], "#font[12]{#scale[1.1]{tW+#bar{t}W+VV}}", "f");
     legend_fit->AddEntry(h_mass[_QCDEMEnriched_20to30], "#font[12]{#scale[1.1]{QCD}}", "f");
+//    legend_fit->AddEntry(h_mass[_GJets_20to100], "#gamma+Jets", "f");
 
     RP_MET->ImportLegend(legend_wWJET);
     RP_mass_wWJET->ImportLegend(legend_wWJET);
@@ -9341,7 +9374,7 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     RP_mass_test->ImportLegend(legend_wWJET);
     RP_pT->ImportLegend(legend_wWJET);
     RP_rapi->ImportLegend(legend_wWJET);
-    RP_mass_fit->ImportLegend(legend_wWJET);
+    RP_mass_fit->ImportLegend(legend_fit);
 
     RP_MET->Draw(1e-2, 1e5, 0);
     RP_mass_wWJET->Draw(1e-2, 1e5, 1);
@@ -9398,7 +9431,7 @@ void E_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     RP_mass_WJET_SSMCvsEst->Draw(5, 1e3, 1, "E");
 
     TLegend * l_WJET_est = new TLegend(0.7, 0.88, 0.95, 0.95);
-    l_WJET_est->AddEntry(h_WJET_est, "#font[12]{#scale[1.1]{W}}+Jets (est.)", "f");
+    l_WJET_est->AddEntry(h_WJET_est, "#font[12]{#scale[1.1]{W}}+Jets (FR)", "f");
 
     // Draw WJets from simple subtraction
     TCanvas * c_WJET_est = new TCanvas("c_WJET_est", "W+Jets est", 750, 850);
@@ -9832,7 +9865,7 @@ void Mu_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
 
     // QCD estimation
     h_QCD_est = ((TH1D*)(h_mass[_SingleMuon_Full]->Clone("h_QCD_est")));
-    Double_t err_data=0, int_data=0, err_qcd=0, int_qcd=0;
+    Double_t err_data=0, int_data=0, err_qcd=0, int_qcd=0, err_dy=0, int_dy=0, err_tt=0, int_tt=0, err_vvnst=0, int_vvnst=0, err_wj=0, int_wj=0;
     int_data = h_QCD_est->IntegralAndError(1, h_QCD_est->GetSize()-2, err_data);
     h_QCD_est->SetTitle("");
     h_QCD_est->SetDirectory(0);
@@ -9852,8 +9885,16 @@ void Mu_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_QCD_est->SetLineColor(kBlack);
     h_QCD_est->SetMarkerStyle(0);
     int_qcd = h_QCD_est->IntegralAndError(1, h_QCD_est->GetSize()-2, err_qcd);
+    int_dy = h_mass[_DY_Full]->IntegralAndError(1, h_mass[_DY_Full]->GetSize()-2, err_dy);
+    int_tt = h_mass[_ttbar_Full]->IntegralAndError(1, h_mass[_ttbar_Full]->GetSize()-2, err_tt);
+    int_vvnst = h_mass[_VVnST]->IntegralAndError(1, h_mass[_VVnST]->GetSize()-2, err_vvnst);
+    int_wj = h_mass[_WJets_Full]->IntegralAndError(1, h_mass[_WJets_Full]->GetSize()-2, err_wj);
     cout << "Data events: " << int_data << "+-" << err_data << endl;
     cout << "QCD est events: " << int_qcd << "+-" << err_qcd << endl;
+    cout << "DY events: " << int_dy << "+-" << err_dy << "(" << int_dy/int_data << ")" << endl;
+    cout << "ttbar events: " << int_tt << "+-" << err_tt << "(" << int_tt/int_data << ")" << endl;
+    cout << "VVnST events: " << int_vvnst << "+-" << err_vvnst << "(" << int_vvnst/int_data << ")" << endl;
+    cout << "WJets events: " << int_wj << "+-" << err_wj << "(" << int_wj/int_data << ")" << endl;
 
     h_QCD_est_SS = ((TH1D*)(h_mass_SS[_SingleMuon_Full]->Clone("h_QCD_est_SS")));
     h_QCD_est_SS->SetTitle("");
@@ -9910,7 +9951,7 @@ void Mu_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
 
     // Drawing estimated QCD
     TLegend * l_QCD_est = new TLegend(0.7, 0.88, 0.95, 0.95);
-    l_QCD_est->AddEntry(h_QCD_est, "#font[12]{#scale[1.1]{QCD}} (est.)", "f");
+    l_QCD_est->AddEntry(h_QCD_est, "#font[12]{#scale[1.1]{QCD}} (FR)", "f");
     TCanvas * c_QCD_est = new TCanvas("c_QCD_est", "QCD est", 750, 850);
     c_QCD_est->SetTopMargin(0.05);
     c_QCD_est->SetRightMargin(0.05);
@@ -10197,7 +10238,7 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     } // End of pr iteration
 
     // W+Jets estimation by subtraction
-    Double_t int_data=0, err_data=0, int_wjet=0, err_wjet=0;
+    Double_t int_data=0, err_data=0, int_wjet=0, err_wjet=0, int_dy=0, err_dy=0, int_tt=0, err_tt=0, int_vvnst=0, err_vvnst=0, int_qcd=0, err_qcd=0;
     h_WJET_est = ((TH1D*)(h_mass[_SingleMuon_Full]->Clone("h_WJET_est")));
     int_data = h_WJET_est->IntegralAndError(1, h_WJET_est->GetSize()-2, err_data);
     h_WJET_est->SetTitle("");
@@ -10210,8 +10251,16 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     h_WJET_est->SetFillColor(kRed - 2);
     h_WJET_est->SetLineColor(kRed - 2);  
     int_wjet = h_WJET_est->IntegralAndError(1, h_WJET_est->GetSize()-2, err_wjet);
+    int_dy = h_mass[_DY_Full]->IntegralAndError(1, h_mass[_DY_Full]->GetSize()-2, err_dy);
+    int_tt = h_mass[_ttbar_Full]->IntegralAndError(1, h_mass[_ttbar_Full]->GetSize()-2, err_tt);
+    int_vvnst = h_mass[_VVnST]->IntegralAndError(1, h_mass[_VVnST]->GetSize()-2, err_vvnst);
+    int_qcd = h_QCD_est->IntegralAndError(1, h_QCD_est->GetSize()-2, err_qcd);
     cout << "Data events: " << int_data << "+-" << err_data << endl;
     cout << "WJets est events (subraction): " << int_wjet << "+-" << err_wjet << endl;
+    cout << "DY events: " << int_dy << "+-" << err_dy << "(" << int_dy/int_data << ")" << endl;
+    cout << "ttbar events: " << int_tt << "+-" << err_tt << "(" << int_tt/int_data << ")" << endl;
+    cout << "VVnST events: " << int_vvnst << "+-" << err_vvnst << "(" << int_vvnst/int_data << ")" << endl;
+    cout << "QCD events: " << int_qcd << "+-" << err_qcd << "(" << int_qcd/int_data << ")" << endl;
 
     Double_t int_data_ss=0, err_data_ss=0, int_wjet_ss=0, err_wjet_ss=0;
     h_WJET_est_SS = ((TH1D*)(h_mass_SS[_SingleMuon_Full]->Clone("h_WJET_est_SS")));
@@ -10252,6 +10301,13 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     legend_wWJET->AddEntry(h_mass[_WJets], "#font[12]{#scale[1.1]{W}}+Jets", "f");
     legend_wWJET->AddEntry(h_mass[_QCDMuEnriched_15to20], "#font[12]{#scale[1.1]{QCD}}", "f");
     legend_woWJET->AddEntry(h_mass[_QCDMuEnriched_15to20], "#font[12]{#scale[1.1]{QCD}}", "f");
+    TLegend * legend_fit = new TLegend(0.7, 0.64, 0.95, 0.95);
+    legend_fit->AddEntry(h_mass[_SingleMuon_B], "Data", "pl");
+    legend_fit->AddEntry(h_mass[_DY_10to50], "DY", "f");
+    legend_fit->AddEntry(h_mass[_WJets], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+    legend_fit->AddEntry(h_mass[_ttbar], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+    legend_fit->AddEntry(h_mass[_tbarW], "#font[12]{#scale[1.1]{tW+#bar{t}W+VV}}", "f");
+    legend_fit->AddEntry(h_mass[_QCDMuEnriched_15to20], "#font[12]{#scale[1.1]{QCD}}", "f");
 
     RP_mass_wWJET->ImportLegend(legend_wWJET);
     RP_mass_woWJET->ImportLegend(legend_woWJET);
@@ -10264,7 +10320,7 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     RP_mass_SS_woWJET->Draw(1e-2, 1e5, 1);
 
     TLegend * l_WJET_est = new TLegend(0.7, 0.88, 0.95, 0.95);
-    l_WJET_est->AddEntry(h_WJET_est, "#font[12]{#scale[1.1]{W}}+Jets (est.)", "f");
+    l_WJET_est->AddEntry(h_WJET_est, "#font[12]{#scale[1.1]{W}}+Jets (FR)", "f");
 
     // Draw WJets from simple subtraction (opposite sign)
     TCanvas * c_WJET_est = new TCanvas("c_WJET_est", "W+Jets est OS", 750, 850);
@@ -10359,6 +10415,7 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     // Draw WJets from template fitting (Same-sign data template BUT THE ESTIMATE IS FOR OPPOSITE SIGN!)
     TH1D * h_WJET_fit_SS = ((TH1D*)(h_WJET_est_SS->Clone("h_WJET_fit_SS")));
     h_WJET_fit_SS->SetTitle("");
+    cout << "W+Jets fit factor: " << 3.1476e+03 / h_WJET_fit_SS->Integral() << endl;
     cout << "Same sign W+Jets integral: " << h_WJET_fit_SS->Integral(1,30) << endl;
 //    h_WJET_fit_SS->Scale(3.5028e+03 / h_WJET_fit_SS->Integral(1,30)); // from fitting with 5 GeV bins (my FR 2)
     h_WJET_fit_SS->Scale(3.1476e+03 / h_WJET_fit_SS->Integral()); // from fitting with 5 GeV bins (my FR 2)
@@ -10386,6 +10443,10 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     TH1D *h_ttbar_fit = ((TH1D*)(h_mass[_ttbar_Full]->Clone("h_ttbar_fit")));
     TH1D *h_VVnST_fit = ((TH1D*)(h_mass[_VVnST]->Clone("h_VVnST_fit")));
     TH1D *h_QCD_fit = ((TH1D*)(h_QCD_est->Clone("h_QCD_fit")));
+    cout << "DY fit factor: " << 3.0397e+05 / h_DY_fit->Integral() << endl;
+    cout << "ttbar fit factor: " << 1.0230e+04 / h_ttbar_fit->Integral() << endl;
+    cout << "VVnST fit factor: " << 2.2971e+03 / h_VVnST_fit->Integral() << endl;
+    cout << "QCD fit factor: " << 6.7421e+03 / h_QCD_fit->Integral() << endl;
 //    h_DY_fit->Scale(3.0356e+05 / h_DY_fit->Integral(1,30));
 //    h_ttbar_fit->Scale(3.9280e+03 / h_ttbar_fit->Integral(1,30));
 //    h_VVnST_fit->Scale(2.2021e+03 / h_VVnST_fit->Integral(1,30));
@@ -10407,7 +10468,7 @@ void Mu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
 
     myRatioPlot_t *RP_mass_fit = new myRatioPlot_t("c_mass_fit", s_mass_fit, h_mass[_SingleMuon_Full]);
     RP_mass_fit->SetPlots("m_{#lower[-0.2]{#scale[1.2]{#mu#mu}}} [GeV/c^{2}]", 15, 3000);
-    RP_mass_fit->ImportLegend(legend_wWJET);
+    RP_mass_fit->ImportLegend(legend_fit);
     RP_mass_fit->Draw(1e-2, 1e5, 1);
 
     // Starting writing
@@ -10931,7 +10992,7 @@ void EMu_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
 
     // Drawing estimated QCD
     TLegend * l_QCD_est = new TLegend(0.7, 0.88, 0.95, 0.95);
-    l_QCD_est->AddEntry(h_QCD_est, "#font[12]{#scale[1.1]{QCD}} (est.)", "f");
+    l_QCD_est->AddEntry(h_QCD_est, "#font[12]{#scale[1.1]{QCD}} (FR)", "f");
     TCanvas * c_QCD_est = new TCanvas("c_QCD_est", "QCD est", 750, 850);
     c_QCD_est->SetTopMargin(0.05);
     c_QCD_est->SetRightMargin(0.05);
@@ -11589,7 +11650,7 @@ void EMu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
     RP_pT_mu->Draw(1e-1, 1e7, 0);
 
     TLegend * l_WJET_est = new TLegend(0.7, 0.88, 0.95, 0.95);
-    l_WJET_est->AddEntry(h_WJET_est, "#font[12]{#scale[1.1]{W}}+Jets (est.)", "f");
+    l_WJET_est->AddEntry(h_WJET_est, "#font[12]{#scale[1.1]{W}}+Jets (FR)", "f");
 
     // Draw WJets from simple subtraction
     TCanvas * c_WJET_est = new TCanvas("c_WJET_est", "W+Jets est", 750, 850);

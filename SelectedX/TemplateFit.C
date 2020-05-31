@@ -5060,6 +5060,8 @@ void E_QCDest_Tfit()
     h_line->SetLineColor(kRed);
     h_line->Draw("LSAME");
 
+    cout << "Data / total template (before fit): " << h_data_mass->Integral() / N_mass_total << endl;
+
     //Chi^2
     RooAbsReal *chi2_mass = model_mass.createChi2(*rh_mass_data);
     cout << "chi2: " << chi2_mass->getVal() << endl;
