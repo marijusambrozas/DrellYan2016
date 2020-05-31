@@ -62,7 +62,7 @@ void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "D
     else if (whichX.Contains("EMU") && whichX.Contains("EST"))
     {
         Xselected++;
-        if (HLTname == "DEFAULT") HLT = "IsoMu24_OR_IsoTkMu24";
+        if (HLTname == "DEFAULT") HLT = "Mu_OR";
         else HLT = HLTname;
         cout << "\n*****  MakeSelectionForBKGest_EMu (" << type << ", " << HLT << ")  *****" << endl;
         MakeSelectionForBKGest_EMu(type, HLT, Debug);
