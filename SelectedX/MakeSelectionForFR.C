@@ -1529,9 +1529,9 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
         Double_t mu_p_T, mu_eta, mu_phi;
         Int_t mu_charge;
         Double_t mu_relPFiso_dBeta;
-        std::vector<int> trig_fired = new std::vector<int>;
-        std::vector<double> trig_pT = new std::vector<double>;
-        std::vector<int> prescale_factor = new std::vector<int>;
+        std::vector<int> *trig_fired = new std::vector<int>;
+        std::vector<double> *trig_pT = new std::vector<double>;
+        std::vector<int> *prescale_factor = new std::vector<int>;
         Double_t MET_pT, MET_phi;
         Int_t nPU, nVTX;
         Double_t PVz;
