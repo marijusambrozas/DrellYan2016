@@ -7008,7 +7008,7 @@ Int_t DYAnalyzer::FindTriggerAndPrescale(vector<Muon> MuonCollection, NtupleHand
         {
             triggered = 1;
             trig_fired->push_back(20);
-            trig_matched->push_back(i_ele);
+            trig_matched->push_back(i_mu);
             trig_pT->push_back(HLT_pT);
             trig_PS->push_back(Factor);
         }
@@ -7016,7 +7016,7 @@ Int_t DYAnalyzer::FindTriggerAndPrescale(vector<Muon> MuonCollection, NtupleHand
         {
             triggered = 1;
             trig_fired->push_back(27);
-            trig_matched->push_back(i_ele);
+            trig_matched->push_back(i_mu);
             trig_pT->push_back(HLT_pT);
             trig_PS->push_back(Factor);
         }
@@ -7024,7 +7024,7 @@ Int_t DYAnalyzer::FindTriggerAndPrescale(vector<Muon> MuonCollection, NtupleHand
         {
             triggered = 1;
             trig_fired->push_back(1);
-            trig_matched->push_back(i_ele);
+            trig_matched->push_back(i_mu);
             trig_pT->push_back(HLT_pT);
             trig_PS->push_back(Factor);
         }
@@ -7032,7 +7032,7 @@ Int_t DYAnalyzer::FindTriggerAndPrescale(vector<Muon> MuonCollection, NtupleHand
         {
             triggered = 1;
             trig_fired->push_back(1);
-            trig_matched->push_back(i_ele);
+            trig_matched->push_back(i_mu);
             trig_pT->push_back(HLT_pT);
             trig_PS->push_back(Factor);
         }
@@ -7040,7 +7040,7 @@ Int_t DYAnalyzer::FindTriggerAndPrescale(vector<Muon> MuonCollection, NtupleHand
         {
             triggered = 1;
             trig_fired->push_back(1);
-            trig_matched->push_back(i_ele);
+            trig_matched->push_back(i_mu);
             trig_pT->push_back(HLT_pT);
             trig_PS->push_back(Factor);
         }
