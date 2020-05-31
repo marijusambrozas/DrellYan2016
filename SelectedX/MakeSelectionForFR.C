@@ -1716,7 +1716,7 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
                         vector<int> *trig_m = new vector<int>;
                         vector<double> *trig_pt = new vector<double>;
                         triggered = analyzer->FindTriggerAndPrescale(SelectedMuonCollection, ntuple, trig_f, trig_ps, trig_m, trig_pt);
-                        if (!triggered || trig_f->size != 1 || trig_ps->size != 1 || trig_m->size != 1 || trig_pt->size != 1) continue;
+                        if (!triggered || trig_f->size() != 1 || trig_ps->size() != 1 || trig_m->size() != 1 || trig_pt->size() != 1) continue;
                         trig_fired = trig_f->at(0);
                         prescale_factor = trig_ps->at(0);
                         trig_pT = trig_pt->at(0);
