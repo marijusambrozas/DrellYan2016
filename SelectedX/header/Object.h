@@ -64,14 +64,14 @@ public:
 
 	void FillFromNtuple(NtupleHandle *ntuple, Int_t index)
 	{
-		Pt 		= ntuple->GenLepton_pT[index];
+                Pt 	= ntuple->GenLepton_pT[index];
 		eta 	= ntuple->GenLepton_eta[index];
 		phi 	= ntuple->GenLepton_phi[index];
-		Px 		= ntuple->GenLepton_px[index];
-		Py 		= ntuple->GenLepton_py[index];
-		Pz 		= ntuple->GenLepton_pz[index];
+                Px 	= ntuple->GenLepton_px[index];
+                Py 	= ntuple->GenLepton_py[index];
+                Pz 	= ntuple->GenLepton_pz[index];
 		Mother 	= ntuple->GenLepton_mother[index];
-		ID 		= ntuple->GenLepton_ID[index];
+                ID 	= ntuple->GenLepton_ID[index];
 		charge 	= ntuple->GenLepton_charge[index];
 		Status 	= ntuple->GenLepton_status[index];
 		
@@ -85,19 +85,19 @@ public:
 		Double_t E = sqrt(Px*Px + Py*Py + Pz*Pz + Mass*Mass);
 		Momentum.SetPxPyPzE(Px, Py, Pz, E);
 
-		isPrompt 									= ntuple->GenLepton_isPrompt[index];
-		isPromptFinalState 							= ntuple->GenLepton_isPromptFinalState[index];
-		isTauDecayProduct 							= ntuple->GenLepton_isTauDecayProduct[index];
-		isPromptTauDecayProduct 					= ntuple->GenLepton_isPromptTauDecayProduct[index];
+                isPrompt 					= ntuple->GenLepton_isPrompt[index];
+                isPromptFinalState 				= ntuple->GenLepton_isPromptFinalState[index];
+                isTauDecayProduct 				= ntuple->GenLepton_isTauDecayProduct[index];
+                isPromptTauDecayProduct 			= ntuple->GenLepton_isPromptTauDecayProduct[index];
 		isDirectPromptTauDecayProductFinalState 	= ntuple->GenLepton_isDirectPromptTauDecayProductFinalState[index];
-		isHardProcess 								= ntuple->GenLepton_isHardProcess[index];
-		isLastCopy 									= ntuple->GenLepton_isLastCopy[index];
-		isLastCopyBeforeFSR 						= ntuple->GenLepton_isLastCopyBeforeFSR[index];
-		isPromptDecayed 							= ntuple->GenLepton_isPromptDecayed[index];
-		isDecayedLeptonHadron 						= ntuple->GenLepton_isDecayedLeptonHadron[index];
-		fromHardProcessBeforeFSR 					= ntuple->GenLepton_fromHardProcessBeforeFSR[index];
-		fromHardProcessDecayed 						= ntuple->GenLepton_fromHardProcessDecayed[index];
-		fromHardProcessFinalState 					= ntuple->GenLepton_fromHardProcessFinalState[index];
+                isHardProcess 					= ntuple->GenLepton_isHardProcess[index];
+                isLastCopy 					= ntuple->GenLepton_isLastCopy[index];
+                isLastCopyBeforeFSR 				= ntuple->GenLepton_isLastCopyBeforeFSR[index];
+                isPromptDecayed 				= ntuple->GenLepton_isPromptDecayed[index];
+                isDecayedLeptonHadron 				= ntuple->GenLepton_isDecayedLeptonHadron[index];
+                fromHardProcessBeforeFSR 			= ntuple->GenLepton_fromHardProcessBeforeFSR[index];
+                fromHardProcessDecayed 				= ntuple->GenLepton_fromHardProcessDecayed[index];
+                fromHardProcessFinalState 			= ntuple->GenLepton_fromHardProcessFinalState[index];
 	}
 
 	Bool_t isElectron()
@@ -1287,8 +1287,7 @@ public:
                 passMediumID = ntuple->Muon_passMediumID;
                 passTightID = ntuple->Muon_passTightID;
                 passHighPtID = ntuple->Muon_passHighPtID;
-        }
-
+        }        
 
         Bool_t isTrigMatched(NtupleHandle *nh, TString HLT, Double_t *HLT_pT=NULL, Int_t *HLT_PS=NULL)
         {
@@ -1311,7 +1310,7 @@ public:
                             Double_t dpT = fabs(Lepton_pT - Trig_pT) / Trig_pT;
                             if(dR < 0.3 && fabs(Lepton_eta) < 2.4)
                             {
-//                                cout << "HLTname: " << hlt_trigName->at((unsigned int)k) <<"    pT: " << Lepton_pT << "   HLT pT: " << Trig_pT << endl;
+        //                                cout << "HLTname: " << hlt_trigName->at((unsigned int)k) <<"    pT: " << Lepton_pT << "   HLT pT: " << Trig_pT << endl;
                                 if (dpT < 0.2)
                                 {
                                     isTrigMatch = true;
@@ -1324,8 +1323,6 @@ public:
                 }
                 return isTrigMatch;
         }
-
-};
 
         Bool_t isTrigMatched(LongSelectedMuMu_t *nh, TString HLT)
         {
