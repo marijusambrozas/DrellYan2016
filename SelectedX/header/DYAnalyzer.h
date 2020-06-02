@@ -389,6 +389,14 @@ void DYAnalyzer::AssignAccThreshold(TString HLTname, TString *HLT, Double_t *Lea
                 *LeadEtaCut = 2.4;
                 *SubEtaCut = 2.4;
         }
+        else if (HLTname == "Mu20_OR_Mu27_OR_Mu50")
+        {
+            *HLT = "HLT_Mu20_v* || HLT_Mu27_v* || HLT_Mu50_v*";
+            *LeadPtCut = 22;
+            *SubPtCut = 17;
+            *LeadEtaCut = 2.4;
+            *SubEtaCut = 2.4;
+        }
         else if(HLTname == "IsoMu20_SymmetricPt25")
 	{
 		*HLT = "HLT_IsoMu20_v*";
@@ -7049,7 +7057,7 @@ Int_t DYAnalyzer::FindTriggerAndPrescale(vector<Muon> MuonCollection, NtupleHand
         if (mu.isTrigMatched(ntuple, "HLT_Mu50_v*", &HLT_pT, &Factor))
         {
             triggered = 1;
-            trig_fired->push_back(1);
+            trig_fired->push_back(50);
             trig_matched->push_back(i_mu);
             trig_pT->push_back(HLT_pT);
             trig_PS->push_back(Factor);
@@ -7057,7 +7065,7 @@ Int_t DYAnalyzer::FindTriggerAndPrescale(vector<Muon> MuonCollection, NtupleHand
         if (mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*", &HLT_pT, &Factor))
         {
             triggered = 1;
-            trig_fired->push_back(1);
+            trig_fired->push_back(24);
             trig_matched->push_back(i_mu);
             trig_pT->push_back(HLT_pT);
             trig_PS->push_back(Factor);
@@ -7065,7 +7073,7 @@ Int_t DYAnalyzer::FindTriggerAndPrescale(vector<Muon> MuonCollection, NtupleHand
         if (mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*", &HLT_pT, &Factor))
         {
             triggered = 1;
-            trig_fired->push_back(1);
+            trig_fired->push_back(24);
             trig_matched->push_back(i_mu);
             trig_pT->push_back(HLT_pT);
             trig_PS->push_back(Factor);

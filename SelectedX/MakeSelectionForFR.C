@@ -72,7 +72,7 @@ void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "D
         Xselected++;
         if (whichX.Contains("EST"))
         {            
-            if (HLTname == "DEFAULT") HLT = "Mu_OR";
+            if (HLTname == "DEFAULT") HLT = "Mu20_OR_Mu27_OR_Mu50";
             else HLT = HLTname;
             cout << "\n*****  MakeSelectionForBKGest_MuMu (" << type << ", " << HLT << ")  *****" << endl;
             MakeSelectionForBKGest_MuMu(type, HLT, Debug);
@@ -1147,7 +1147,7 @@ void MakeSelectionForBKGest_EE (TString type, TString HLTname, Bool_t Debug)
 
 } // End of MakeSelectionForBKGest_EE
 
-/// Muon QCD+WJET estimation WITHOUT TRIGGER
+/// Muon QCD+WJET estimation
 void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
 {
     // -- Run2016 luminosity [/pb] -- //
