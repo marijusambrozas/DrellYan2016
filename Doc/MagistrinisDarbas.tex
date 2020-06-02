@@ -170,7 +170,7 @@ hadronų čiurkšlėse susidarę leptonai buvo klaidingai atpažinti kaip tinkam
 
 \textbf{Šio darbo tikslas} -- įvertinti Drell-Yan proceso triukšmo įvykių skaičių klaidingo atpažinimo metodu.
 Tikslui pasiekti iškelti tokie uždaviniai:
-1) Įvertinti tikimybę, kad iš čiurkšlės kilęs leptonas, praėjęs dalinę atranką, taip pat praeis ir pilną leptono atranką;
+1) Įvertinti tikimybę, kad dalinę leptono atranką praėjusi čiurkšlė taip pat praeis ir pilną atranką;
 2) Pritaikyti įvertintą tikimybę, nustatant, kiek Drell-Yan proceso įvykių kandidatų yra susiję su hadronų čiurkšlėmis;
 3) Įvertinti gauto rezultato statistinius ir sisteminius neapibrėžtumus.
 Darbe buvo naudojami CERN CMS eksperimento 2016 metais užregistruoti protonų susidūrimų duomenys.
@@ -1778,8 +1778,37 @@ atpažinti leptono objektai turi vienodus ir priešingus krūvius, pasiskirstyma
 Konstantos vertę nustačius iš šablonų priderinimo, vienodo krūvio pasiskirstymus buvo galima naudoti kaip pagrindinei analizei skirtus
 triukšmo įvykių skaičiaus įverčius, kuriuose leptono objektai yra priešingo krūvio (miuonų atveju) arba į jų krūvius nekreipiama
 dėmesio (elektronų atveju).
+
+Galutinė klaidingo atpažinimo metodo taikymo schema, iliustruojanti triukšmo įverčiams gauti atliktas procedūras, pavaizduota
+\ref{fig:FRfinal} pav.
+Schemoje procentais išreišktas triukšmo įvykių skaičiaus įvertinimui pasirinktų $\QCD$ ir $\WJets$ atrankos sričių užterštumas
+pašaliniais procesais.
+Taip pat įvardijama, kuriose srityse buvo taikomas šablonų priderinimo metodas bei nurodoma, iš kur gaunami jam skirti šablonai.
+Vienodo krūvio šablonai buvo naudojami trijų įverčių pataisymui iš keturių: $\QCD$ įverčiui elektronų kanale ir $\WJets$ įverčiams
+elektronų bei miuonų kanaluose.
+
 Šablonų priderinimo rezultatai pavaizduoti \ref{fig:MassmumuFit} pav.\ miuonų kanalo ir \ref{fig:MasseeFit} elektronų kanalo įvykiams.
 Jį pritaikius skirtumas tarp eksperimento ir šablonų sumos masių srityje iki $300$~GeV neviršija $10\%$.
+Iš šablonų priderinimo gauti triukšmo įvykių skaičiaus pasiskirstymo įverčiai pateikti \ref{fig:JETmumufit} pav.\ miuonų kanalo
+ir \ref{fig:JETeefit} elektronų kanalo įvykiams.
+Siekiant atsižvelgti į naudotų šablonų galimai įneštus sisteminius nukrypimus, šiems įverčiams kaip papildoma sisteminio neapibrėžtumo
+dedamoji buvo įskaitomas skirtumas tarp pradinio triukšmo įvykių skaičiaus įverčio ir įverčio, gauto naudojant vienodo krūvio
+šablonus.
+
+\begin{figure}[t!]
+	\RawFloats\centering
+	\includegraphics[width=0.99\textwidth]{Magistrinis/FRtaikymas_ssos.png}
+	\caption{\label{fig:FRfinal}
+		Galutinė klaidingo atpažinimo metodo taikymo schema.
+		Indeksai \ltq{$ss$} žymi vienodo krūvio ($e^\pm e^\pm$ ir $\mu^\pm \mu^\pm$), \ltq{$os$} -- priešingo krūvio ($\mu^\pm\mu^\mp$),
+		o \ltq{$as$} -- bet kokio krūvio ($e^*e^*$) leptonų porų įvykius.
+		Ant ašių esantys žymėjimai $k_1$ ir $k_2$ vaizduoja atrankos kriterijų laisvumą, o $k_{1c}$ ir $k_{2c}$ -- kritines vertes, atitinkančias
+		pilną atranką.
+		Ant sričių $N_{SC}$ pateikti aprašymai taip pat galioja ir sritims $N_{CS}$.
+		Blyškesnėmis spalvomis pavaizduotos vienodo krūvio sritys, kurios nebuvo naudojamos pagrindinėje analizėje, o buvo skirtos tik
+		gauti ieškomų procesų ($\QCD$ ir $\WJets$) šablonams.}
+\end{figure}
+
 
 \begin{figure}[b!]
 	\RawFloats\centering
@@ -1823,14 +1852,6 @@ Jį pritaikius skirtumas tarp eksperimento ir šablonų sumos masių srityje iki
 		Legendoje esantys užrašai \ltq{FR} žymi, kad įverčiai gauti klaidingo atpažinimo metodu.
 	}	
 \end{figure}
-
-Iš šablonų priderinimo gauti triukšmo įvykių skaičiaus pasiskirstymo įverčiai pateikti \ref{fig:JETmumufit} pav.\ miuonų kanalo
-ir \ref{fig:JETeefit} elektronų kanalo įvykiams.
-Vienodo krūvio šablonai buvo naudojami trijų įverčių pataisymui iš keturių: $\QCD$ įverčiui elektronų kanale ir $\WJets$ įverčiams
-elektronų bei miuonų kanaluose.
-Siekiant atsižvelgti į naudotų šablonų galimai įneštus sisteminius nukrypimus, šiems įverčiams kaip papildoma sisteminio neapibrėžtumo
-dedamoji buvo įskaitomas skirtumas tarp pradinio triukšmo įvykių skaičiaus įverčio ir įverčio, gauto naudojant vienodo krūvio
-šablonus.
 
 Kaip galima pastebėti \ref{fig:JETeefit} pav.\ kairėje pavaizduotame pasiskirstyme, Drell-Yan proceso modeliavimo
 netikslumai paveikė net ir vienodo krūvio elektrono objektų porų pasiskirstymą -- lyginant su \ref{fig:JETee} pav.\ kairėje
@@ -1877,7 +1898,7 @@ todėl kalbėti apie bendrą išmatuoto ir suminio skirtingų procesų įverči�
 Gauti įverčiai (pritaikius reikalingą patobulinimą ateityje) bus panaudoti Drell-Yan signalo išskyrimui iš 2016 metais CMS
 detektoriaus užregistruotų duomenų.
 Darbas bus tęsiamas bendradarbiaujant su tyrėjais iš JAV ir Pietų Korėjos.
-\begin{figure}[t!]
+\begin{figure}[H]
 	\includegraphics[width=0.49\textwidth]{Magistrinis/MuMumass_afterFR.png}
 	\includegraphics[width=0.49\textwidth]{Magistrinis/EEmass_afterFR.png}
 	\vspace{-0.3cm}
