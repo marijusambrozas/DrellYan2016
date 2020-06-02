@@ -972,8 +972,29 @@ void E_EstFR(Int_t type)
     texte->Draw();
     c_FR_endcap->Update();
 
+    TCanvas *c_FR_allin1 = new TCanvas("c_FR_allin1", "c_FR_allin1", 800, 800);
+    c_FR_allin1->cd();
+    c_FR_allin1->SetGrid(1);
+    c_FR_allin1->SetRightMargin(0.05);
+    c_FR_allin1->SetTopMargin(0.05);
+    c_FR_allin1->SetBottomMargin(0.12);
+    c_FR_allin1->SetLeftMargin(0.13);
+    TH1D *h_FRsubtract_endcap1 = ((TH1D*)(h_FRsubtract_endcap->Clone("h_FRsubtract_endcap1")));
+    h_FRsubtract_endcap1->SetMarkerStyle(kFullSquare);
+    h_FRsubtract_endcap1->SetMarkerColor(kBlue);
+    h_FRsubtract_endcap1->GetYaxis()->SetTitle("Signalo srities tikimyb#dot{e}");
+    h_FRsubtract_endcap1->GetYaxis()->SetTitleSize(0.045);
+    h_FRsubtract_endcap1->GetYaxis()->SetTitleOffset(1.4);
+    h_FRsubtract_endcap1->Draw();
+    h_FRsubtract_barrel->Draw("same");
+    TLegend *legend1 = new TLegend(0.13, 0.77, 0.6, 0.95);
+    legend1->AddEntry(h_FRsubtract_barrel, "Atimties metodas (|#eta_{#lower[-0.2]{SC}}| < 1.4442)", "LP");
+    legend1->AddEntry(h_FRsubtract_endcap1, "Atimties metodas (|#eta_{#lower[-0.2]{SC}}| > 1.566)", "LP");
+    legend1->Draw();
+    c_FR_allin1->SetLogx();
+    c_FR_allin1->Update();
+
     TCanvas *c_FR_eta = new TCanvas("c_FR_eta", "c_FR_eta", 800, 800);
-    c_FR_eta->cd();
     c_FR_eta->cd();
     c_FR_eta->SetGrid(1);
     c_FR_eta->SetRightMargin(0.05);
@@ -1819,6 +1840,38 @@ void Mu_EstFR(Int_t type)
     texte->SetNDC(true);
     texte->Draw();
     c_FR_endcap->Update();
+
+    TCanvas *c_FR_allin1 = new TCanvas("c_FR_allin1", "c_FR_allin1", 800, 800);
+    c_FR_allin1->cd();
+    c_FR_allin1->SetGrid(1);
+    c_FR_allin1->SetRightMargin(0.05);
+    c_FR_allin1->SetTopMargin(0.05);
+    c_FR_allin1->SetBottomMargin(0.12);
+    c_FR_allin1->SetLeftMargin(0.13);
+    TH1D *h_FRsigCtrl_template_endcap1 = ((TH1D*)(h_FRsigCtrl_template_endcap->Clone("h_FRsigCtrl_template_endcap1")));
+    TH1D *h_FRratio_endcap1 = ((TH1D*)(h_FRratio_endcap->Clone("h_FRratio_endcap1")));
+    TH1D *h_FRratio_barrel1 = ((TH1D*)(h_FRratio_barrel->Clone("h_FRratio_barrel1")));
+    h_FRsigCtrl_template_endcap1->SetTitle("");
+    h_FRsigCtrl_template_endcap1->SetMarkerStyle(kFullSquare);
+    h_FRsigCtrl_template_endcap1->SetMarkerColor(kBlue);
+    h_FRratio_endcap1->GetYaxis()->SetTitle("Signalo srities tikimyb#dot{e}");
+    h_FRratio_endcap1->GetYaxis()->SetTitleSize(0.045);
+    h_FRratio_endcap1->GetYaxis()->SetTitleSize(0.045);
+    h_FRratio_endcap1->GetYaxis()->SetRangeUser(0, 1);
+    h_FRratio_endcap1->SetMarkerColor(kOrange+8);
+    h_FRratio_barrel1->SetMarkerStyle(kFullDotLarge);
+    h_FRratio_endcap1->Draw();
+    h_FRsigCtrl_template_endcap1->Draw("same");
+    h_FRsigCtrl_template_barrel->Draw("same");
+    h_FRratio_barrel1->Draw("same");
+    TLegend *legend1 = new TLegend(0.13, 0.77, 0.6, 0.95);
+    legend1->AddEntry(h_FRratio_barrel1, "Santykio metodas (|#eta| < 1.2)", "LP");
+    legend1->AddEntry(h_FRratio_endcap1, "Santykio metodas (|#eta| #geq 1.2)", "LP");
+    legend1->AddEntry(h_FRsigCtrl_template_barrel, "Sablonu priderinimas (|#eta| < 1.2)", "LP");
+    legend1->AddEntry(h_FRsigCtrl_template_endcap1, "Sablonu priderinimas (|#eta| #geq 1.2)", "LP");
+    legend1->Draw();
+    c_FR_allin1->SetLogx();
+    c_FR_allin1->Update();
 
 } // End of Mu_EstFR()
 
