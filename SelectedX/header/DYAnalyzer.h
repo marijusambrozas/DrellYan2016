@@ -273,6 +273,7 @@ public:
         Double_t PrescaleFactor3(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Int_t FindTriggerAndPrescale(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Int_t FindTriggerAndPrescale(vector<Muon> MuonCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
+        Int_t FindTriggerAndPrescale2(vector<Muon> MuonCollection, NtupleHandle *ntuple, std::vector<std::string> *trig_name, std::vector<int> *trig_fired, std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t getPrescale(Double_t Et);
         Double_t getPrescale_alt(Double_t Et);
         void SetupFRvalues_ele(TString filename, TString type="subtract", Int_t increaseLowPt=0);
@@ -7081,6 +7082,32 @@ Int_t DYAnalyzer::FindTriggerAndPrescale(vector<Muon> MuonCollection, NtupleHand
     }
     return triggered;
 }// End of FindTriggerAndPrescale(Muon)
+
+
+Int_t DYAnalyzer::FindTriggerAndPrescale2(vector<Muon> MuonCollection, NtupleHandle *ntuple, std::vector<std::string> *trig_name, std::vector<int> *trig_fired,
+                                          std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT)
+{
+    Int_t triggered = 0;
+    Int_t Factor = -9999;
+    Double_t HLT_pT = -9999;
+    for(Int_t i_mu=0; i_mu<(Int_t)MuonCollection.size(); i_mu++)
+    {
+        Muon mu = MuonCollection[i_mu];
+        for (Int_t i_trig; i_trig<ntuple->HLT_ntrig; i_trig++)
+        {
+            if (mu.isTrigMatched(ntuple, ntuple->HLT_trigName->at(i_trig), &HLT_pT, &Factor))
+            {
+                triggered = 1;
+                trig_name->push_back(ntuple->HLT_trigName->at(i_trig));
+                trig_fired->push_back(1);
+                trig_matched->push_back(i_mu);
+                trig_pT->push_back(HLT_pT);
+                trig_PS->push_back(Factor);
+            }
+        }
+    }
+    return triggered;
+}// End of FindTriggerAndPrescale2(Muon)
 
 
 Double_t DYAnalyzer::getPrescale(Double_t Et)

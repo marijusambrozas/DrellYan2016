@@ -939,7 +939,7 @@ public:
                             if(dR < 0.3 && fabs(Lepton_eta) < 2.5)
                             {
 //                                cout << "HLTname: " << hlt_trigName->at((unsigned int)k) <<"    pT: " << Lepton_pT << "   HLT pT: " << Trig_pT << endl;
-                                if (dpT < 0.2)
+                                if (dpT < 0.3)
                                 {
                                     isTrigMatch = true;
                                     if (HLT_pT) *HLT_pT = Trig_pT;

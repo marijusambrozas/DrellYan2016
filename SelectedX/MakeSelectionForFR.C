@@ -1235,6 +1235,7 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<double> *TRKiso = new std::vector<double>;
+        std::vector<string> *trig_name = new std::vector<int>;
         std::vector<int> *trig_fired = new std::vector<int>;
         std::vector<int> *trig_matched = new std::vector<int>;
         std::vector<double> *trig_pT = new std::vector<double>;
@@ -1255,6 +1256,7 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("charge", &charge);
         MuonTree->Branch("relPFiso", &relPFiso);
         MuonTree->Branch("TRKiso", &TRKiso);
+        MuonTree->Branch("trig_name", &trig_name);
         MuonTree->Branch("trig_fired", &trig_fired);
         MuonTree->Branch("trig_matched", &trig_matched);
         MuonTree->Branch("trig_pT", &trig_pT);
@@ -1329,7 +1331,7 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
                 if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += gen_weight;
 
                 Bool_t TriggerFlag = kTRUE;
-                TriggerFlag = ntuple->isTriggered(analyzer->HLT);
+//                TriggerFlag = ntuple->isTriggered(analyzer->HLT);
 
                 if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
                 {
@@ -1379,6 +1381,7 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
                         charge->clear();
                         relPFiso->clear();
                         TRKiso->clear();
+                        trig_name->clear();
                         trig_fired->clear();
                         trig_matched->clear();
                         trig_pT->clear();
@@ -1404,7 +1407,7 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
                         prefiring_weight_down = ntuple->_prefiringweightdown;
 
                         Int_t triggered = 0;
-                        triggered = analyzer->FindTriggerAndPrescale(SelectedMuonCollection, ntuple, trig_fired, prescale_factor, trig_matched, trig_pT);
+                        triggered = analyzer->FindTriggerAndPrescale2(SelectedMuonCollection, ntuple, trig_name, trig_fired, prescale_factor, trig_matched, trig_pT);
                         if (!triggered) continue;
 
                         // -- Vector filling -- //

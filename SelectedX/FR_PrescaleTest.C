@@ -30,7 +30,45 @@
 #include "./header/FileMgr.h"
 #include "./header/PrescaleProvider.h"
 
-void FR_PrescaleTest (Bool_t DEBUG = kFALSE)
+void E_FR_PrescaleTest (Bool_t DEBUG = kFALSE);
+void Mu_PrescaleTest (Bool_t DEBUG = kFALSE);
+void EMu_PrescaleTest (Bool_t DEBUG = kFALSE);
+
+void FR_PrescaleTest (TString WhichX = "")
+{
+    TString whichX = WhichX;
+    whichX.ToUpper();
+    Int_t Xselected = 0;
+    Bool_t DEBUG = kFALSE;
+    if (whichX.Contains("DEBUG"))
+    {
+        DEBUG = kTRUE;
+        cout << "**** DEBUG MODE: Running with 100 events only. ****" << endl;
+    }
+    if (whichX.Contains("EMU"))
+    {
+        Xselected++;
+        cout << "\n*****  EMu_PrescaleTest()  *****" << endl;
+        EMu_PrescaleTest(DEBUG); // not ready yet
+    }
+    else if (whichX.Contains("MU"))
+    {
+        Xselected++;
+        cout << "\n*****  Mu_PrescaleTest()  *****" << endl;
+        Mu_PrescaleTest(DEBUG); // not ready yet
+    }
+    else if (whichX.Contains("E"))
+    {
+        Xselected++;
+        cout << "\n*****  E_FR_PrescaleTest()  *****" << endl;
+        E_FR_PrescaleTest(DEBUG); // not ready yet
+    }
+
+    if (Xselected == 0) cout << "Wrong arument! \nType in: >> .x FR_PrescaleTest.C+(\"whichX\")" << endl;
+
+} // End of FR_PrescaleTest()
+
+void E_FR_PrescaleTest (Bool_t DEBUG)
 {
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
@@ -320,4 +358,421 @@ void FR_PrescaleTest (Bool_t DEBUG = kFALSE)
     TTimeStamp ts_end;
     cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
 
-} // End of FR_PrescaleTest()
+} // End of E_FR_PrescaleTest()
+
+
+void Mu_PrescaleTest (Bool_t DEBUG)
+{
+    TTimeStamp ts_start;
+    cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
+    TStopwatch totaltime;
+    totaltime.Start();
+
+    FileMgr Mgr;
+    PrescaleProvider pp("etc/prescale/triggerData2016");
+
+    TFile *f;
+//    TString Dir = "../";
+    TString Dir = "/media/sf_DATA/FR/Muon/";
+    TString debug = "";
+    if (DEBUG == kTRUE) debug = "_DEBUG";
+
+    Int_t n50=0, n2050=0, n2750=0;
+
+    cout << "Run " << 273158 << " LumiS " << 1 << " prescale " << pp.hltPrescale("HLT_Mu20_v", 273158, 1) << " " << pp.l1Prescale("L1_SingleMu22", 273158, 1) << endl;
+
+    for (Process_t pr=_SingleMuon_B; pr<=_SingleMuon_H; pr=next(pr))
+    {
+        Mgr.SetProc(pr);
+
+        // -- Output ROOTFile -- //
+        f = new TFile(Dir+"FR_Hist_TEST_Mu_"+Mgr.Procname[Mgr.CurrentProc]+debug+".root", "RECREATE");
+
+        cout << "===========================================================" << endl;
+        cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
+        cout << "Xsec: " << Mgr.Xsec[0] << endl;
+        cout << "Wsum: " << Mgr.Wsum[0] << endl;
+        cout << "Type: " << Mgr.Type << endl;
+        cout << "Directory: " << Dir << endl;
+
+        TStopwatch totaltime;
+        totaltime.Start();
+
+        // -- Creating Histograms -- //
+        TH1D* h_pT_uncorr = new TH1D("h_pT_uncorr", "h_pT_uncorr", 500, 0, 500); h_pT_uncorr->Sumw2();
+        TH1D* h_pT = new TH1D("h_pT", "h_pT", 500, 0, 500); h_pT->Sumw2();
+        TH1D* h_HLT_pT_uncorr = new TH1D("h_HLT_pT_uncorr", "h_HLT_pT_uncorr", 500, 0, 500); h_HLT_pT_uncorr->Sumw2();
+        TH1D* h_HLT_pT = new TH1D("h_HLT_pT", "h_HLT_pT", 500, 0, 500); h_HLT_pT->Sumw2();
+
+        std::vector<double> *p_T = new std::vector<double>;
+        std::vector<int> *trig_fired = new std::vector<int>;
+        std::vector<int> *trig_matched = new std::vector<int>;
+        std::vector<double> *trig_pT = new std::vector<double>;
+        std::vector<int> *prescale_factor = new std::vector<int>;
+        Int_t runNum;
+        Int_t lumiBlock;
+        Int_t prescale_alt;
+        Double_t prescale;
+
+        TChain *chain = new TChain("FRTree");
+
+        chain->Add(Dir+"SelectedForBKGest_Mu_Triggerless_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+//        chain->Add("~/Desktop/SelectedForBKGest_Mu_Triggerless_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+        if (DEBUG == kTRUE) cout << Dir+"SelectedForBKGest_Mu_Triggerless_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+        chain->SetBranchStatus("p_T", 1);
+        chain->SetBranchStatus("trig_fired", 1);
+        chain->SetBranchStatus("trig_matched", 1);
+        chain->SetBranchStatus("trig_pT", 1);
+        chain->SetBranchStatus("runNum", 1);
+        chain->SetBranchStatus("lumiBlock", 1);
+        chain->SetBranchAddress("p_T", &p_T);
+        chain->SetBranchAddress("trig_fired", &trig_fired);
+        chain->SetBranchAddress("trig_matched", &trig_matched);
+        chain->SetBranchAddress("trig_pT", &trig_pT);
+        chain->SetBranchAddress("prescale_factor", &prescale_factor);
+        chain->SetBranchAddress("runNum", &runNum);
+        chain->SetBranchAddress("lumiBlock", &lumiBlock);
+
+        Int_t NEvents = chain->GetEntries();
+        cout << "\t[Sum of weights: " << Mgr.Wsum[0] << "]" << endl;
+        cout << "\t[Number of events: " << NEvents << "]" << endl;
+
+        if (DEBUG == kTRUE) NEvents = 20;
+
+        myProgressBar_t bar(NEvents);
+
+        for(Int_t i=0; i<NEvents; i++)
+        {
+            chain->GetEntry(i);
+            if (DEBUG == kTRUE)
+            {
+                cout << "\nEvt " << i << endl;
+                cout << "nMu = " << p_T->size() << endl;
+                cout << "RunNum = " << runNum << "  LumiSection = " << lumiBlock << endl;
+            }
+
+            for (UInt_t i_mu=0; i_mu<p_T->size(); i_mu++)
+            {
+                if (p_T->at(i_mu) != p_T->at(i_mu))
+                {
+                    cout << p_T->at(i_mu) << endl;
+                    continue;
+                }
+                if (p_T->at(i_mu) <= 27) continue;
+                if (DEBUG == kTRUE) cout << "i_mu = " << i_mu << endl;
+
+                Int_t matched20=0, matched27=0, matched0=0, high20=0, high27=0, high50=0;
+                Int_t i_20=-1, i_27=-1, i_0=-1;
+                prescale_alt = 1;
+
+                for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
+                {
+                    if (trig_pT->at(i_tr) < 20) continue;
+                    if (((UInt_t)(trig_matched->at(i_tr))) == i_mu)
+                    {
+                        if (trig_fired->at(i_tr) == 1/* && trig_pT->at(i_tr) > 50*/)
+                        {
+                            i_0 = i_tr;
+                            matched0 = 1;
+                        }
+                        if (trig_fired->at(i_tr) == 20 && trig_pT->at(i_tr) > 20 && trig_pT->at(i_tr) <= 27)
+                        {
+                            i_20 = i_tr;
+                            matched20 = 1;
+                        }
+                        if (trig_fired->at(i_tr) == 27 && trig_pT->at(i_tr) > 27 && trig_pT->at(i_tr) <= 50)
+                        {
+                            i_27 = i_tr;
+                            matched27 = 1;
+                        }
+                        if (trig_fired->at(i_tr) == 1 && trig_pT->at(i_tr) > 50)
+                            high50++;
+                        if (trig_fired->at(i_tr) == 20 && trig_pT->at(i_tr) > 50)
+                            high20++;
+                        if (trig_fired->at(i_tr) == 27 && trig_pT->at(i_tr) > 50)
+                            high27++;
+                        if (DEBUG == kTRUE)
+                        {
+                            cout << "HLT: " << trig_fired->at(i_tr) << " matched to " << trig_matched->at(i_tr) << " with HLT_pT=" << trig_pT->at(i_tr);
+                            cout << ",  pT=" << p_T->at(trig_matched->at(i_tr)) << endl;
+                        }
+                    }
+                }
+                if (DEBUG == kTRUE)
+                {
+                    cout << "i_0=" << i_0 << "  i_20=" << i_20 << "  i_27=" << i_27 << "\nmatched0=" << matched0 << "  matched20=" << matched20;
+                    cout << "  matched27=" << matched27 << "\nhigh50=" << high50 << "  high20=" << high20 << "  high27=" << high27 << endl;
+                    if (matched20 || high20) cout << "Mu20 prescale: " << pp.hltPrescale("HLT_Mu20_v", runNum, lumiBlock) << " * "
+                                                  << pp.l1Prescale("L1_SingleMu18", runNum, lumiBlock) << endl;
+                    if (matched27 || high27) cout << "Mu27 prescale: " << pp.hltPrescale("HLT_Mu27_v", runNum, lumiBlock) << " * "
+                                                  << pp.l1Prescale("L1_SingleMu22", runNum, lumiBlock) << endl;
+                }
+                if (high50) n50++;
+                if (high20 && high50) n2050++;
+                if (high27 && high50) n2750++;
+
+                if (matched0 == 1)
+                {
+                    prescale_alt = 1;
+                    h_HLT_pT->Fill(trig_pT->at(i_0), prescale_alt);
+                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_0));
+                    h_pT->Fill(p_T->at(i_mu), prescale_alt);
+                    h_pT_uncorr->Fill(p_T->at(i_mu));
+                }
+                else if (matched20 == 1 && matched0 == 0)
+                {
+                    prescale_alt = pp.hltPrescale("HLT_Mu20_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleMu18", runNum, lumiBlock)/10;
+                    prescale = 1000/*4.44*/;
+                    h_HLT_pT->Fill(trig_pT->at(i_20), prescale_alt);
+                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_20));
+                    h_pT->Fill(p_T->at(i_mu), prescale_alt);
+                    h_pT_uncorr->Fill(p_T->at(i_mu));
+                }
+                else if (matched27 == 1 && matched0 == 0 && matched20 == 0)
+                {
+                    prescale_alt = pp.hltPrescale("HLT_Mu27_v", runNum, lumiBlock)/10;
+                    prescale = 2/*1.061*/;
+                    h_HLT_pT->Fill(trig_pT->at(i_27), prescale_alt);
+                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_27));
+                    h_pT->Fill(p_T->at(i_mu), prescale_alt);
+                    h_pT_uncorr->Fill(p_T->at(i_mu));
+                }
+                else continue;
+
+            }// End of i_mu iteration
+
+            if (DEBUG == kFALSE) bar.Draw(i);
+
+        }// End of event iteration
+
+        f->cd();
+        cout << "\tWriting into file...";
+
+        h_pT_uncorr->Write();
+        h_pT->Write();
+        h_HLT_pT_uncorr->Write();
+        h_HLT_pT->Write();
+        cout << " Finished.\n" << endl;
+
+        if (DEBUG == kTRUE && pr == _SingleMuon_B) break;
+
+        f->Close();
+        if (!f->IsOpen()) cout << "File " << Dir+"FR_Hist_TEST_Mu_"+Mgr.Procname[Mgr.CurrentProc]+debug+".root" << " has been closed successfully.\n" << endl;
+        else cout << "FILE " << Dir+"FR_Hist_TEST_Mu_"+Mgr.Procname[Mgr.CurrentProc]+debug+".root" << " COULD NOT BE CLOSED!\n" << endl;
+        cout << "===========================================================\n" << endl;
+    } // End of pr iteration
+
+    cout << "Mu50: " << n50 << endl;
+    cout << "Mu50 && Mu20: " << n2050 << endl;
+    cout << "Mu50 && Mu27: " << n2750 << endl;
+
+    Double_t TotalRunTime = totaltime.CpuTime();
+    cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
+
+    TTimeStamp ts_end;
+    cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
+
+} // End of Mu_PrescaleTest()
+
+
+void EMu_PrescaleTest (Bool_t DEBUG)
+{
+    TTimeStamp ts_start;
+    cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
+    TStopwatch totaltime;
+    totaltime.Start();
+
+    FileMgr Mgr;
+    PrescaleProvider pp("etc/prescale/triggerData2016");
+
+    TFile *f;
+//    TString Dir = "../";
+    TString Dir = "/media/sf_DATA/FR/EMu/";
+    TString debug = "";
+    if (DEBUG == kTRUE) debug = "_DEBUG";
+
+    Int_t n50=0, n2050=0, n2750=0;
+
+    cout << "Run " << 273158 << " LumiS " << 1 << " prescale " << pp.hltPrescale("HLT_Mu20_v", 273158, 1) << " " << pp.l1Prescale("L1_SingleMu22", 273158, 1) << endl;
+
+    for (Process_t pr=_SingleMuon_B; pr<=_SingleMuon_H; pr=next(pr))
+    {
+        Mgr.SetProc(pr);
+
+        // -- Output ROOTFile -- //
+        f = new TFile(Dir+"FR_Hist_TEST_EMu_"+Mgr.Procname[Mgr.CurrentProc]+debug+".root", "RECREATE");
+
+        cout << "===========================================================" << endl;
+        cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
+        cout << "Xsec: " << Mgr.Xsec[0] << endl;
+        cout << "Wsum: " << Mgr.Wsum[0] << endl;
+        cout << "Type: " << Mgr.Type << endl;
+        cout << "Directory: " << Dir << endl;
+
+        TStopwatch totaltime;
+        totaltime.Start();
+
+        // -- Creating Histograms -- //
+        TH1D* h_pT_uncorr = new TH1D("h_pT_uncorr", "h_pT_uncorr", 500, 0, 500); h_pT_uncorr->Sumw2();
+        TH1D* h_pT = new TH1D("h_pT", "h_pT", 500, 0, 500); h_pT->Sumw2();
+        TH1D* h_HLT_pT_uncorr = new TH1D("h_HLT_pT_uncorr", "h_HLT_pT_uncorr", 500, 0, 500); h_HLT_pT_uncorr->Sumw2();
+        TH1D* h_HLT_pT = new TH1D("h_HLT_pT", "h_HLT_pT", 500, 0, 500); h_HLT_pT->Sumw2();
+
+        Double_t mu_p_T;
+        std::vector<int> *trig_fired = new std::vector<int>;
+        std::vector<double> *trig_pT = new std::vector<double>;
+        std::vector<int> *prescale_factor = new std::vector<int>;
+        Int_t runNum;
+        Int_t lumiBlock;
+        Int_t prescale_alt;
+        Double_t prescale;
+
+        TChain *chain = new TChain("FRTree");
+
+        chain->Add(Dir+"SelectedForBKGest_EMu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+        if (DEBUG == kTRUE) cout << Dir+"SelectedForBKGest_EMu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+        chain->SetBranchStatus("mu_p_T", 1);
+        chain->SetBranchStatus("trig_fired", 1);
+        chain->SetBranchStatus("trig_pT", 1);
+        chain->SetBranchStatus("runNum", 1);
+        chain->SetBranchStatus("lumiBlock", 1);
+        chain->SetBranchAddress("mu_p_T", &mu_p_T);
+        chain->SetBranchAddress("trig_fired", &trig_fired);
+        chain->SetBranchAddress("trig_pT", &trig_pT);
+        chain->SetBranchAddress("prescale_factor", &prescale_factor);
+        chain->SetBranchAddress("runNum", &runNum);
+        chain->SetBranchAddress("lumiBlock", &lumiBlock);
+
+        Int_t NEvents = chain->GetEntries();
+        cout << "\t[Sum of weights: " << Mgr.Wsum[0] << "]" << endl;
+        cout << "\t[Number of events: " << NEvents << "]" << endl;
+
+        if (DEBUG == kTRUE) NEvents = 20;
+
+        myProgressBar_t bar(NEvents);
+
+        for(Int_t i=0; i<NEvents; i++)
+        {
+            chain->GetEntry(i);
+            if (DEBUG == kTRUE)
+            {
+                cout << "\nEvt " << i << endl;
+                cout << "RunNum = " << runNum << "  LumiSection = " << lumiBlock << endl;
+                cout << "nTrig = " << trig_fired->size() << endl;
+            }
+
+            if (mu_p_T != mu_p_T)
+            {
+                cout << mu_p_T << endl;
+                continue;
+            }
+            if (mu_p_T <= 27) continue;
+
+            Int_t matched20=0, matched27=0, matched0=0, high20=0, high27=0, high50=0;
+            Int_t i_20=-1, i_27=-1, i_0=-1;
+            prescale_alt = 1;
+
+            for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
+            {
+                if (trig_pT->at(i_tr) < 20) continue;
+                {
+                    if (trig_fired->at(i_tr) == 1 && trig_pT->at(i_tr) > 50)
+                    {
+                        i_0 = i_tr;
+                        matched0 = 1;
+                    }
+                    if (trig_fired->at(i_tr) == 20 && trig_pT->at(i_tr) > 20 && trig_pT->at(i_tr) <= 27)
+                    {
+                        i_20 = i_tr;
+                        matched20 = 1;
+                    }
+                    if (trig_fired->at(i_tr) == 27 && trig_pT->at(i_tr) > 27 && trig_pT->at(i_tr) <= 50)
+                    {
+                        i_27 = i_tr;
+                        matched27 = 1;
+                    }
+                    if (trig_fired->at(i_tr) == 1 && trig_pT->at(i_tr) > 50)
+                        high50++;
+                    if (trig_fired->at(i_tr) == 20 && trig_pT->at(i_tr) > 50)
+                        high20++;
+                    if (trig_fired->at(i_tr) == 27 && trig_pT->at(i_tr) > 50)
+                        high27++;
+                    if (DEBUG == kTRUE)
+                    {
+                        cout << "HLT: " << trig_fired->at(i_tr) << " with HLT_pT=" << trig_pT->at(i_tr) << ",  pT=" << mu_p_T << endl;
+                    }
+                }
+            }
+            if (DEBUG == kTRUE)
+            {
+                cout << "i_0=" << i_0 << "  i_20=" << i_20 << "  i_27=" << i_27 << "\nmatched0=" << matched0 << "  matched20=" << matched20;
+                cout << "  matched27=" << matched27 << "\nhigh50=" << high50 << "  high20=" << high20 << "  high27=" << high27 << endl;
+                if (matched20 || high20) cout << "Mu20 prescale: " << pp.hltPrescale("HLT_Mu20_v", runNum, lumiBlock) << " * "
+                                              << pp.l1Prescale("L1_SingleMu18", runNum, lumiBlock) << endl;
+                if (matched27 || high27) cout << "Mu27 prescale: " << pp.hltPrescale("HLT_Mu27_v", runNum, lumiBlock) << " * "
+                                              << pp.l1Prescale("L1_SingleMu22", runNum, lumiBlock) << endl;
+            }
+            if (high50) n50++;
+            if (high20 && high50) n2050++;
+            if (high27 && high50) n2750++;
+
+            if (matched0 == 1)
+            {
+                prescale_alt = 1;
+                h_HLT_pT->Fill(trig_pT->at(i_0), prescale_alt);
+                h_HLT_pT_uncorr->Fill(trig_pT->at(i_0));
+                h_pT->Fill(mu_p_T, prescale_alt);
+                h_pT_uncorr->Fill(mu_p_T);
+            }
+            else if (matched20 == 1)
+            {
+                prescale_alt = pp.hltPrescale("HLT_Mu20_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleMu18", runNum, lumiBlock);
+                prescale = 1000/*4.44*/;
+                h_HLT_pT->Fill(trig_pT->at(i_20), prescale_alt);
+                h_HLT_pT_uncorr->Fill(mu_p_T);
+                h_pT->Fill(mu_p_T, prescale_alt);
+                h_pT_uncorr->Fill(mu_p_T);
+            }
+            else if (matched27 == 1)
+            {
+                prescale_alt = pp.hltPrescale("HLT_Mu27_v", runNum, lumiBlock);
+                prescale = 2/*1.061*/;
+                h_HLT_pT->Fill(trig_pT->at(i_27), prescale_alt);
+                h_HLT_pT_uncorr->Fill(trig_pT->at(i_27));
+                h_pT->Fill(mu_p_T, prescale_alt);
+                h_pT_uncorr->Fill(mu_p_T);
+            }
+            else continue;
+
+            if (DEBUG == kFALSE) bar.Draw(i);
+
+        }// End of event iteration
+
+        f->cd();
+        cout << "\tWriting into file...";
+
+        h_pT_uncorr->Write();
+        h_pT->Write();
+        h_HLT_pT_uncorr->Write();
+        h_HLT_pT->Write();
+        cout << " Finished.\n" << endl;
+
+        if (DEBUG == kTRUE && pr == _SingleMuon_B) break;
+
+        f->Close();
+        if (!f->IsOpen()) cout << "File " << Dir+"FR_Hist_TEST_EMu_"+Mgr.Procname[Mgr.CurrentProc]+debug+".root" << " has been closed successfully.\n" << endl;
+        else cout << "FILE " << Dir+"FR_Hist_TEST_EMu_"+Mgr.Procname[Mgr.CurrentProc]+debug+".root" << " COULD NOT BE CLOSED!\n" << endl;
+        cout << "===========================================================\n" << endl;
+    } // End of pr iteration
+
+    cout << "Mu50: " << n50 << endl;
+    cout << "Mu50 && Mu20: " << n2050 << endl;
+    cout << "Mu50 && Mu27: " << n2750 << endl;
+
+    Double_t TotalRunTime = totaltime.CpuTime();
+    cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
+
+    TTimeStamp ts_end;
+    cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
+
+} // End of EMu_PrescaleTest()
