@@ -1313,6 +1313,11 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
             for (Int_t i=0; i<NEvents; i++)
             {
                 ntuple->GetEvent(i);
+                if (Debug == kTRUE)
+                {
+                    cout << "Evt " << i << endl;
+                    cout << "Nmuons: " << ntuple->nMuon << ",  Ntrig: " << ntuple->HLT_ntrig << endl;
+                }
 
                 // -- Positive/Negative Gen-weights -- //
                 ntuple->GENEvt_weight < 0 ? gen_weight = -1 : gen_weight = 1;
@@ -1335,6 +1340,8 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
 
                 if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
                 {
+                    if (Debug == kTRUE)
+                        cout << "PASS" << endl << endl;
                     // -- Reco level selection -- //
                     vector< Muon > MuonCollection;
                     Int_t NLeptons = ntuple->nMuon;
