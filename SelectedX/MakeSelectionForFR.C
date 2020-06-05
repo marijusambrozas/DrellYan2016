@@ -1373,6 +1373,7 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
                         MuonCollection.push_back(mu);
 
                     } // End of i_reco iteration
+                    if (Debug == kTRUE) cout << "Muons in collection: " << MuonCollection.size() << endl;
 
                     // -- Event Selection -- //
                     vector< Muon > SelectedMuonCollection;
