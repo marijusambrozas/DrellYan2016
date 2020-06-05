@@ -6245,22 +6245,22 @@ Bool_t DYAnalyzer::EventSelection_FakeMuons(vector<Muon> MuonCollection, NtupleH
     vector< Muon > QMuonCollection;
     for(Int_t j=0; j<(int)MuonCollection.size(); j++)
     {
-        if(MuonCollection[j].isTightMuon())//passTightID)
+        if(MuonCollection[j]./*isTightMuon())*/passTightID)
             QMuonCollection.push_back(MuonCollection[j]);
     }
 
     // -- Check the existence of at least one muon matched with HLT-object -- //
-    Bool_t isExistHLTMatchedMuon = kFALSE;
-    for(Int_t i_mu=0; i_mu<(Int_t)QMuonCollection.size(); i_mu++)
-    {
-            Muon mu = QMuonCollection[i_mu];
-            if(mu.isTrigMatched(ntuple, "HLT_Mu20_v*") || mu.isTrigMatched(ntuple, "HLT_Mu27_v*") || mu.isTrigMatched(ntuple, "HLT_Mu50_v*") ||
-               mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*") || mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*"))
-            {
-                    isExistHLTMatchedMuon = kTRUE;
-                    break;
-            }
-    }
+//    Bool_t isExistHLTMatchedMuon = kFALSE;
+//    for(Int_t i_mu=0; i_mu<(Int_t)QMuonCollection.size(); i_mu++)
+//    {
+//            Muon mu = QMuonCollection[i_mu];
+//            if(mu.isTrigMatched(ntuple, "HLT_Mu20_v*") || mu.isTrigMatched(ntuple, "HLT_Mu27_v*") || mu.isTrigMatched(ntuple, "HLT_Mu50_v*") ||
+//               mu.isTrigMatched(ntuple, "HLT_IsoMu24_v*") || mu.isTrigMatched(ntuple, "HLT_IsoTkMu24_v*"))
+//            {
+//                    isExistHLTMatchedMuon = kTRUE;
+//                    break;
+//            }
+//    }
 
     Int_t nQMuons = (Int_t)QMuonCollection.size();
     if (nQMuons >= 2)
