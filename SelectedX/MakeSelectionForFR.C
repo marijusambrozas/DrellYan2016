@@ -1315,7 +1315,7 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
                 ntuple->GetEvent(i);
                 if (Debug == kTRUE)
                 {
-                    cout << "Evt " << i << endl;
+                    cout << "\nEvt " << i << endl;
                     cout << "Nmuons: " << ntuple->nMuon << ",  Ntrig: " << ntuple->HLT_ntrig << endl;
                 }
 
@@ -1341,7 +1341,7 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
                 if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
                 {
                     if (Debug == kTRUE)
-                        cout << "PASS" << endl << endl;
+                        cout << "PASS" << endl;
                     // -- Reco level selection -- //
                     vector< Muon > MuonCollection;
                     Int_t NLeptons = ntuple->nMuon;
