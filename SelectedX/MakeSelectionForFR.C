@@ -1381,7 +1381,7 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
 
                     if (isPassEventSelection == kTRUE)
                     {
-                        timesPassed++;
+                        if (Debug == kTRUE) cout << "Selection passed" << endl;
                         p_T->clear();
                         eta->clear();
                         phi->clear();
@@ -1415,7 +1415,9 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
 
                         Int_t triggered = 0;
                         triggered = analyzer->FindTriggerAndPrescale2(SelectedMuonCollection, ntuple, trig_name, trig_fired, prescale_factor, trig_matched, trig_pT);
+                        if (Debug == kTRUE) cout << "triggered=" << triggered << endl;
                         if (!triggered) continue;
+                        timesPassed++;
 
                         // -- Vector filling -- //
                         for (UInt_t i=0; i<SelectedMuonCollection.size(); i++)
