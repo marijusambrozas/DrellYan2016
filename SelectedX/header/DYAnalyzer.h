@@ -7096,12 +7096,6 @@ Int_t DYAnalyzer::FindTriggerAndPrescale2(vector<Muon> MuonCollection, NtupleHan
         {
             if (Debug) cout << "Trigger " << i_trig << ": " << ntuple->HLT_trigName->at((unsigned int)i_trig) <<
                                "    pT: " << Lepton_pT << "   HLT pT: " << Trig_pT << endl;
-            Double_t Lepton_pT = this->Pt;
-            Double_t Lepton_eta = this->eta;
-            Double_t Lepton_phi = this->phi;
-            Double_t Trig_pT = nh->HLT_trigPt[k];
-            Double_t Trig_eta = nh->HLT_trigEta[k];
-            Double_t Trig_phi = nh->HLT_trigPhi[k];
 
             Double_t dR = sqrt((mu.eta - ntuple->HLT_trigEta[i_trig])*(mu.eta - ntuple->HLT_trigEta[i_trig]) +
                                (mu.phi - ntuple->HLT_trigPhi[i_trig])*(mu.phi - ntuple->HLT_trigPhi[i_trig]));
