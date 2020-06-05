@@ -1414,7 +1414,8 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
                         prefiring_weight_down = ntuple->_prefiringweightdown;
 
                         Int_t triggered = 0;
-                        triggered = analyzer->FindTriggerAndPrescale2(SelectedMuonCollection, ntuple, trig_name, trig_fired, prescale_factor, trig_matched, trig_pT);
+                        triggered = analyzer->FindTriggerAndPrescale2(SelectedMuonCollection, ntuple, trig_name, trig_fired, prescale_factor,
+                                                                      trig_matched, trig_pT, Debug);
                         if (Debug == kTRUE) cout << "triggered=" << triggered << endl;
                         if (!triggered) continue;
                         timesPassed++;

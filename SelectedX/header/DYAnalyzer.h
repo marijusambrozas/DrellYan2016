@@ -273,7 +273,7 @@ public:
         Double_t PrescaleFactor3(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Int_t FindTriggerAndPrescale(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Int_t FindTriggerAndPrescale(vector<Muon> MuonCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
-        Int_t FindTriggerAndPrescale2(vector<Muon> MuonCollection, NtupleHandle *ntuple, std::vector<std::string> *trig_name, std::vector<int> *trig_fired, std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
+        Int_t FindTriggerAndPrescale2(vector<Muon> MuonCollection, NtupleHandle *ntuple, std::vector<std::string> *trig_name, std::vector<int> *trig_fired, std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT, Bool_t Debug);
         Double_t getPrescale(Double_t Et);
         Double_t getPrescale_alt(Double_t Et);
         void SetupFRvalues_ele(TString filename, TString type="subtract", Int_t increaseLowPt=0);
@@ -7085,24 +7085,38 @@ Int_t DYAnalyzer::FindTriggerAndPrescale(vector<Muon> MuonCollection, NtupleHand
 
 
 Int_t DYAnalyzer::FindTriggerAndPrescale2(vector<Muon> MuonCollection, NtupleHandle *ntuple, std::vector<std::string> *trig_name, std::vector<int> *trig_fired,
-                                          std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT)
+                                          std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT, Bool_t Debug)
 {
     Int_t triggered = 0;
-    Int_t Factor = -9999;
-    Double_t HLT_pT = -9999;
     for(Int_t i_mu=0; i_mu<(Int_t)MuonCollection.size(); i_mu++)
     {
+        if (Debug) cout << "Muon " << i_mu;
         Muon mu = MuonCollection[i_mu];
         for (Int_t i_trig; i_trig<ntuple->HLT_ntrig; i_trig++)
         {
-            if (mu.isTrigMatched(ntuple, ntuple->HLT_trigName->at((unsigned int)i_trig), &HLT_pT, &Factor))
+            if (Debug) cout << "Trigger " << i_trig << ": " << ntuple->HLT_trigName->at((unsigned int)i_trig) <<
+                               "    pT: " << Lepton_pT << "   HLT pT: " << Trig_pT << endl;
+            Double_t Lepton_pT = this->Pt;
+            Double_t Lepton_eta = this->eta;
+            Double_t Lepton_phi = this->phi;
+            Double_t Trig_pT = nh->HLT_trigPt[k];
+            Double_t Trig_eta = nh->HLT_trigEta[k];
+            Double_t Trig_phi = nh->HLT_trigPhi[k];
+
+            Double_t dR = sqrt((mu.eta - ntuple->HLT_trigEta[i_trig])*(mu.eta - ntuple->HLT_trigEta[i_trig]) +
+                               (mu.phi - ntuple->HLT_trigPhi[i_trig])*(mu.phi - ntuple->HLT_trigPhi[i_trig]));
+            Double_t dpT = fabs(mu.pT - ntuple->HLT_trigPt[i_trig]) / ntuple->HLT_trigPt[i_trig];
+            if(dR < 0.3 && fabs(mu.eta) < 2.5)
             {
-                triggered = 1;
-                trig_name->push_back(ntuple->HLT_trigName->at(i_trig));
-                trig_fired->push_back(1);
-                trig_matched->push_back(i_mu);
-                trig_pT->push_back(HLT_pT);
-                trig_PS->push_back(Factor);
+                if (dpT < 0.3)
+                {
+                    triggered = 1;
+                    trig_name->push_back(ntuple->HLT_trigName->at(i_trig));
+                    trig_fired->push_back(1);
+                    trig_matched->push_back(i_mu);
+                    trig_pT->push_back(ntuple->HLT_trigPt[i_trig]);
+                    trig_PS->push_back(ntuple->HLT_trigPS->at(i_trig));
+                }
             }
         }
     }
