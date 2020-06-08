@@ -1297,7 +1297,7 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
             Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
 
             Int_t NEvents = chain->GetEntries();
-            if (Debug == kTRUE) NEvents = 300; // using few events for debugging
+            if (Debug == kTRUE) NEvents = 500; // using few events for debugging
 
             cout << "\t[Total Events: " << NEvents << "]" << endl;
             myProgressBar_t bar(NEvents);
@@ -1315,7 +1315,10 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
                 ntuple->GetEvent(i);
                 if (ntuple->nMuon < 2) continue;
                 Int_t nTight = 0;
-                for (Int_t i_mu=0; i_mu<ntuple->nMuon; i_mu++) { if (ntuple->Muon_passTightID[i_mu]) nTight++; }
+                for (Int_t i_mu=0; i_mu<ntuple->nMuon; i_mu++)
+                {
+                    if (ntuple->Muon_passTightID[i_mu] && ntuple->Muon_pT[i_mu] > 15) nTight++;
+                }
                 if (nTight < 2) continue;
 
                 if (Debug == kTRUE)
