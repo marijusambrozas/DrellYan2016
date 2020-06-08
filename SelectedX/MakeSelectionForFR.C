@@ -1297,7 +1297,7 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
             Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
 
             Int_t NEvents = chain->GetEntries();
-            if (Debug == kTRUE) NEvents = 500; // using few events for debugging
+            if (Debug == kTRUE) NEvents = 328; // using few events for debugging
 
             cout << "\t[Total Events: " << NEvents << "]" << endl;
             myProgressBar_t bar(NEvents);
