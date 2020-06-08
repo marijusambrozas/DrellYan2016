@@ -7092,7 +7092,7 @@ Int_t DYAnalyzer::FindTriggerAndPrescale2(vector<Muon> MuonCollection, NtupleHan
     {
         if (Debug) cout << "Muon " << i_mu;
         Muon mu = MuonCollection[i_mu];
-        for (Int_t i_trig; i_trig<ntuple->HLT_ntrig; i_trig++)
+        for (Int_t i_trig=0; i_trig<ntuple->HLT_ntrig; i_trig++)
         {
             if (Debug) cout << "Trigger " << i_trig << ": " << ntuple->HLT_trigName->at((unsigned int)i_trig) <<
                                "    pT: " << mu.Pt << "   HLT pT: " << ntuple->HLT_trigPt[i_trig] << endl;
