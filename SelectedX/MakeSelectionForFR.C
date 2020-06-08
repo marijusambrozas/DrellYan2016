@@ -1313,10 +1313,19 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
             for (Int_t i=0; i<NEvents; i++)
             {
                 ntuple->GetEvent(i);
+                if (ntuple->nMuon < 2) continue;
                 if (Debug == kTRUE)
                 {
                     cout << "\nEvt " << i << endl;
                     cout << "Nmuons: " << ntuple->nMuon << ",  Ntrig: " << ntuple->HLT_ntrig << endl;
+                    for (Int_t i_mu=0; i_mu<ntuple->nMuon; i_mu++)
+                    {
+                        cout << "\tmu" << i_mu << ": pT=" << ntuple->Muon_pT[i_mu] << "  eta=" << ntuple->Muon_eta[i_mu];
+                        Double_t PFiso = (ntuple->Muon_PfChargedHadronIsoR04[i_mu] +
+                                 max(0.0, ntuple->Muon_PfNeutralHadronIsoR04[i_mu] + ntuple->Muon_PfGammaIsoR04[i_mu] - 0.5*ntuple->Muon_PFSumPUIsoR04[i_mu]))
+                                 / ntuple->Muon_pT[i_mu];
+                        cout << "  isTight=" << ntuple->Muon_passTightID[i_mu] << "  PFiso=" << PFiso << endl;
+                    }
                 }
 
                 // -- Positive/Negative Gen-weights -- //
