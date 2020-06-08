@@ -1312,6 +1312,7 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
             // Loop for all events in the chain
             for (Int_t i=0; i<NEvents; i++)
             {
+                if (!Debug) bar.Draw(i);
                 ntuple->GetEvent(i);
                 if (ntuple->nMuon < 2) continue;
                 Int_t nTight = 0;
@@ -1450,9 +1451,7 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
                         MuonTree->Fill();
                     } // End of isPassEvtSelection
 
-                } // End of if(isTriggered)
-
-                if (!Debug) bar.Draw(i);
+                } // End of if(isTriggered)                
 
             } // End of event iteration
             cout << "\t" << timesPassed << " events have passed the event selection." << endl;
