@@ -1314,6 +1314,10 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
             {
                 ntuple->GetEvent(i);
                 if (ntuple->nMuon < 2) continue;
+                Int_t nTight = 0;
+                for (Int_t i_mu=0; i_mu<ntuple->nMuon; i_mu++) { if (ntuple->Muon_passTightID[i_mu]) nTight++; }
+                if (nTight < 2) continue;
+
                 if (Debug == kTRUE)
                 {
                     cout << "\nEvt " << i << endl;
