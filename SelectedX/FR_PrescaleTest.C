@@ -381,7 +381,7 @@ void Mu_PrescaleTest (Bool_t DEBUG)
 
     cout << "Run " << 273158 << " LumiS " << 1 << " prescale " << pp.hltPrescale("HLT_Mu20_v", 273158, 1) << " " << pp.l1Prescale("L1_SingleMu22", 273158, 1) << endl;
 
-    for (Process_t pr=_SingleMuon_B; pr<=_SingleMuon_H; pr=next(pr))
+    for (Process_t pr=_SingleMuon_F; pr<=_SingleMuon_F; pr=next(pr))
     {
         Mgr.SetProc(pr);
 
@@ -416,8 +416,8 @@ void Mu_PrescaleTest (Bool_t DEBUG)
 
         TChain *chain = new TChain("FRTree");
 
-        chain->Add(Dir+"SelectedForBKGest_Mu_Triggerless_"+Mgr.Procname[Mgr.CurrentProc]+".root");
-//        chain->Add("~/Desktop/SelectedForBKGest_Mu_Triggerless_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+//        chain->Add(Dir+"SelectedForBKGest_Mu_Triggerless_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+        chain->Add("~/Desktop/SelectedForBKGest_Mu_Triggerless_"+Mgr.Procname[Mgr.CurrentProc]+".root");
         if (DEBUG == kTRUE) cout << Dir+"SelectedForBKGest_Mu_Triggerless_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
         chain->SetBranchStatus("p_T", 1);
         chain->SetBranchStatus("trig_fired", 1);
@@ -451,95 +451,98 @@ void Mu_PrescaleTest (Bool_t DEBUG)
                 cout << "RunNum = " << runNum << "  LumiSection = " << lumiBlock << endl;
             }
 
-            for (UInt_t i_mu=0; i_mu<p_T->size(); i_mu++)
-            {
-                if (p_T->at(i_mu) != p_T->at(i_mu))
-                {
-                    cout << p_T->at(i_mu) << endl;
-                    continue;
-                }
-                if (p_T->at(i_mu) <= 27) continue;
-                if (DEBUG == kTRUE) cout << "i_mu = " << i_mu << endl;
+            if (p_T->at(0) > p_T->at(1)) h_pT->Fill(p_T->at(0));
+            else h_pT->Fill(p_T->at(1));
 
-                Int_t matched20=0, matched27=0, matched0=0, high20=0, high27=0, high50=0;
-                Int_t i_20=-1, i_27=-1, i_0=-1;
-                prescale_alt = 1;
+//            for (UInt_t i_mu=0; i_mu<p_T->size(); i_mu++)
+//            {
+//                if (p_T->at(i_mu) != p_T->at(i_mu))
+//                {
+//                    cout << p_T->at(i_mu) << endl;
+//                    continue;
+//                }
+//                if (p_T->at(i_mu) <= 27) continue;
+//                if (DEBUG == kTRUE) cout << "i_mu = " << i_mu << endl;
 
-                for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
-                {
-                    if (trig_pT->at(i_tr) < 20) continue;
-                    if (((UInt_t)(trig_matched->at(i_tr))) == i_mu)
-                    {
-                        if (trig_fired->at(i_tr) == 1/* && trig_pT->at(i_tr) > 50*/)
-                        {
-                            i_0 = i_tr;
-                            matched0 = 1;
-                        }
-                        if (trig_fired->at(i_tr) == 20 && trig_pT->at(i_tr) > 20 && trig_pT->at(i_tr) <= 27)
-                        {
-                            i_20 = i_tr;
-                            matched20 = 1;
-                        }
-                        if (trig_fired->at(i_tr) == 27 && trig_pT->at(i_tr) > 27 && trig_pT->at(i_tr) <= 50)
-                        {
-                            i_27 = i_tr;
-                            matched27 = 1;
-                        }
-                        if (trig_fired->at(i_tr) == 1 && trig_pT->at(i_tr) > 50)
-                            high50++;
-                        if (trig_fired->at(i_tr) == 20 && trig_pT->at(i_tr) > 50)
-                            high20++;
-                        if (trig_fired->at(i_tr) == 27 && trig_pT->at(i_tr) > 50)
-                            high27++;
-                        if (DEBUG == kTRUE)
-                        {
-                            cout << "HLT: " << trig_fired->at(i_tr) << " matched to " << trig_matched->at(i_tr) << " with HLT_pT=" << trig_pT->at(i_tr);
-                            cout << ",  pT=" << p_T->at(trig_matched->at(i_tr)) << endl;
-                        }
-                    }
-                }
-                if (DEBUG == kTRUE)
-                {
-                    cout << "i_0=" << i_0 << "  i_20=" << i_20 << "  i_27=" << i_27 << "\nmatched0=" << matched0 << "  matched20=" << matched20;
-                    cout << "  matched27=" << matched27 << "\nhigh50=" << high50 << "  high20=" << high20 << "  high27=" << high27 << endl;
-                    if (matched20 || high20) cout << "Mu20 prescale: " << pp.hltPrescale("HLT_Mu20_v", runNum, lumiBlock) << " * "
-                                                  << pp.l1Prescale("L1_SingleMu18", runNum, lumiBlock) << endl;
-                    if (matched27 || high27) cout << "Mu27 prescale: " << pp.hltPrescale("HLT_Mu27_v", runNum, lumiBlock) << " * "
-                                                  << pp.l1Prescale("L1_SingleMu22", runNum, lumiBlock) << endl;
-                }
-                if (high50) n50++;
-                if (high20 && high50) n2050++;
-                if (high27 && high50) n2750++;
+//                Int_t matched20=0, matched27=0, matched0=0, high20=0, high27=0, high50=0;
+//                Int_t i_20=-1, i_27=-1, i_0=-1;
+//                prescale_alt = 1;
 
-                if (matched0 == 1)
-                {
-                    prescale_alt = 1;
-                    h_HLT_pT->Fill(trig_pT->at(i_0), prescale_alt);
-                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_0));
-                    h_pT->Fill(p_T->at(i_mu), prescale_alt);
-                    h_pT_uncorr->Fill(p_T->at(i_mu));
-                }
-                else if (matched20 == 1 && matched0 == 0)
-                {
-                    prescale_alt = pp.hltPrescale("HLT_Mu20_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleMu18", runNum, lumiBlock)/10;
-                    prescale = 1000/*4.44*/;
-                    h_HLT_pT->Fill(trig_pT->at(i_20), prescale_alt);
-                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_20));
-                    h_pT->Fill(p_T->at(i_mu), prescale_alt);
-                    h_pT_uncorr->Fill(p_T->at(i_mu));
-                }
-                else if (matched27 == 1 && matched0 == 0 && matched20 == 0)
-                {
-                    prescale_alt = pp.hltPrescale("HLT_Mu27_v", runNum, lumiBlock)/10;
-                    prescale = 2/*1.061*/;
-                    h_HLT_pT->Fill(trig_pT->at(i_27), prescale_alt);
-                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_27));
-                    h_pT->Fill(p_T->at(i_mu), prescale_alt);
-                    h_pT_uncorr->Fill(p_T->at(i_mu));
-                }
-                else continue;
+//                for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
+//                {
+//                    if (trig_pT->at(i_tr) < 20) continue;
+//                    if (((UInt_t)(trig_matched->at(i_tr))) == i_mu)
+//                    {
+//                        if (trig_fired->at(i_tr) == 1/* && trig_pT->at(i_tr) > 50*/)
+//                        {
+//                            i_0 = i_tr;
+//                            matched0 = 1;
+//                        }
+//                        if (trig_fired->at(i_tr) == 20 && trig_pT->at(i_tr) > 20 && trig_pT->at(i_tr) <= 27)
+//                        {
+//                            i_20 = i_tr;
+//                            matched20 = 1;
+//                        }
+//                        if (trig_fired->at(i_tr) == 27 && trig_pT->at(i_tr) > 27 && trig_pT->at(i_tr) <= 50)
+//                        {
+//                            i_27 = i_tr;
+//                            matched27 = 1;
+//                        }
+//                        if (trig_fired->at(i_tr) == 1 && trig_pT->at(i_tr) > 50)
+//                            high50++;
+//                        if (trig_fired->at(i_tr) == 20 && trig_pT->at(i_tr) > 50)
+//                            high20++;
+//                        if (trig_fired->at(i_tr) == 27 && trig_pT->at(i_tr) > 50)
+//                            high27++;
+//                        if (DEBUG == kTRUE)
+//                        {
+//                            cout << "HLT: " << trig_fired->at(i_tr) << " matched to " << trig_matched->at(i_tr) << " with HLT_pT=" << trig_pT->at(i_tr);
+//                            cout << ",  pT=" << p_T->at(trig_matched->at(i_tr)) << endl;
+//                        }
+//                    }
+//                }
+//                if (DEBUG == kTRUE)
+//                {
+//                    cout << "i_0=" << i_0 << "  i_20=" << i_20 << "  i_27=" << i_27 << "\nmatched0=" << matched0 << "  matched20=" << matched20;
+//                    cout << "  matched27=" << matched27 << "\nhigh50=" << high50 << "  high20=" << high20 << "  high27=" << high27 << endl;
+//                    if (matched20 || high20) cout << "Mu20 prescale: " << pp.hltPrescale("HLT_Mu20_v", runNum, lumiBlock) << " * "
+//                                                  << pp.l1Prescale("L1_SingleMu18", runNum, lumiBlock) << endl;
+//                    if (matched27 || high27) cout << "Mu27 prescale: " << pp.hltPrescale("HLT_Mu27_v", runNum, lumiBlock) << " * "
+//                                                  << pp.l1Prescale("L1_SingleMu22", runNum, lumiBlock) << endl;
+//                }
+//                if (high50) n50++;
+//                if (high20 && high50) n2050++;
+//                if (high27 && high50) n2750++;
 
-            }// End of i_mu iteration
+//                if (matched0 == 1)
+//                {
+//                    prescale_alt = 1;
+//                    h_HLT_pT->Fill(trig_pT->at(i_0), prescale_alt);
+//                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_0));
+//                    h_pT->Fill(p_T->at(i_mu), prescale_alt);
+//                    h_pT_uncorr->Fill(p_T->at(i_mu));
+//                }
+//                else if (matched20 == 1 && matched0 == 0)
+//                {
+//                    prescale_alt = pp.hltPrescale("HLT_Mu20_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleMu18", runNum, lumiBlock)/10;
+//                    prescale = 1000/*4.44*/;
+//                    h_HLT_pT->Fill(trig_pT->at(i_20), prescale_alt);
+//                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_20));
+//                    h_pT->Fill(p_T->at(i_mu), prescale_alt);
+//                    h_pT_uncorr->Fill(p_T->at(i_mu));
+//                }
+//                else if (matched27 == 1 && matched0 == 0 && matched20 == 0)
+//                {
+//                    prescale_alt = pp.hltPrescale("HLT_Mu27_v", runNum, lumiBlock)/10;
+//                    prescale = 2/*1.061*/;
+//                    h_HLT_pT->Fill(trig_pT->at(i_27), prescale_alt);
+//                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_27));
+//                    h_pT->Fill(p_T->at(i_mu), prescale_alt);
+//                    h_pT_uncorr->Fill(p_T->at(i_mu));
+//                }
+//                else continue;
+//
+//            }// End of i_mu iteration
 
             if (DEBUG == kFALSE) bar.Draw(i);
 
