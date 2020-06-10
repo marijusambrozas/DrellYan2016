@@ -21,7 +21,7 @@ using namespace std;
 
 enum SelProc_t
 {
-    _None=0,
+    _SelProc_None=0,
     // "Normal" processes - related to the divisions of files
     _MuMu_DY_10to50, _MuMu_DY_50to100, _MuMu_DY_100to200, _MuMu_DY_200to400, _MuMu_DY_400to500, _MuMu_DY_500to700, _MuMu_DY_700to800, _MuMu_DY_800to1000,
     _MuMu_DY_1000to1500, _MuMu_DY_1500to2000, _MuMu_DY_2000to3000,
@@ -41,7 +41,7 @@ enum SelProc_t
     _MuMu_DYTauTau_Full, _MuMu_ttbar_Full, _MuMu_VVnST, _MuMu_WJets_Full, _MuMu_QCDMuEnriched_Full, _MuMu_Bkg_Full,
     _MuMu_SingleMuon_Full,
     _EndOf_MuMu_Special,
-    _Test_MuMu,
+    _MuMu_Test,
     _EndOf_MuMu,
 
     _EE_DY_10to50, _EE_DY_50to100, _EE_DY_100to200, _EE_DY_200to400, _EE_DY_400to500, _EE_DY_500to700, _EE_DY_700to800, _EE_DY_800to1000, _EE_DY_1000to1500,
@@ -64,7 +64,7 @@ enum SelProc_t
     _EE_DYTauTau_Full, _EE_ttbar_Full, _EE_VVnST, _EE_WJets_Full, _EE_QCDEMEnriched_Full, _EE_Bkg_Full,
     _EE_DoubleEG_Full,  _EE_SingleElectron_Full,
     _EndOf_EE_Special,
-    _Test_EE,
+    _EE_Test,
     _EndOf_EE,
 
     _EMu_DYTauTau_10to50, _EMu_DYTauTau_50toInf, _EndOf_EMu_DYTauTau_Normal,
@@ -77,7 +77,7 @@ enum SelProc_t
     _EMu_DYTauTau_Full, _EMu_ttbar_Full, _EMu_VVnST, _EMu_WJets_Full, _EMu_Bkg_Full,
     _EMu_SingleMuon_Full,
     _EndOf_EMu_Special,
-    _Test_EMu,
+    _EMu_Test,
     _EndOf_EMu
 };
 
@@ -89,9 +89,9 @@ SelProc_t next (SelProc_t pr)    // Processes that begin with "EndOf" will be sk
   else if (pr == _MuMu_QCDMuEnriched_1000toInf || pr == _EE_QCDEMEnriched_300toInf || pr == _EE_SingleElectron_H || pr == _EMu_WJets_ext2v5)
       return SelProc_t(int(pr)+3);
   else if (pr == _MuMu_DY_2000to3000 || pr == _MuMu_DYTauTau_50toInf || pr == _MuMu_ttbar_1000toInf || pr == _MuMu_WW || pr == _MuMu_WJets_ext2v5 ||
-            pr == _EndOf_MuMu_QCDMuEnriched_Normal || pr == _MuMu_SingleMuon_H || pr == _MuMu_SingleMuon_Full || pr == _Test_MuMu ||
+            pr == _EndOf_MuMu_QCDMuEnriched_Normal || pr == _MuMu_SingleMuon_H || pr == _MuMu_SingleMuon_Full || pr == _MuMu_Test ||
             pr == _EE_DY_2000to3000 || pr == _EE_DYTauTau_50toInf || pr == _EE_ttbar_1000toInf || pr == _EE_WW || pr == _EE_WJets_ext2v5 ||
-            pr == _EndOf_EE_QCDEMEnriched_Normal || pr == _EE_DoubleEG_H || pr == _EndOf_EE_SingleElectron_Normal ||  pr == _EE_SingleElectron_Full || pr == _Test_EE ||
+            pr == _EndOf_EE_QCDEMEnriched_Normal || pr == _EE_DoubleEG_H || pr == _EndOf_EE_SingleElectron_Normal ||  pr == _EE_SingleElectron_Full || pr == _EE_Test ||
             pr == _EMu_DYTauTau_50toInf || pr == _EMu_ttbar_1000toInf || pr == _EMu_WW || pr == _EMu_SingleMuon_H || pr == _EMu_SingleMuon_Full)
       return SelProc_t(int(pr)+2);
   else
@@ -120,11 +120,11 @@ public:
         map<SelProc_t, TString> Procname;
 
         // -- Constructor -- //
-        LocalFileMgr (SelProc_t pr = _None);
+        LocalFileMgr (SelProc_t pr = _SelProc_None);
 
         vector<SelProc_t> FindProc (TString search, Bool_t notify = kTRUE, Bool_t instaGet = kFALSE);
         void NextProc ();
-        void SetProc (SelProc_t pr = _None, Bool_t ClearOld = kTRUE);
+        void SetProc (SelProc_t pr = _SelProc_None, Bool_t ClearOld = kTRUE);
         void ClearProc ();
 
         void SwitchROCCORR();
@@ -162,9 +162,9 @@ void LocalFileMgr::NextProc()
 
 void LocalFileMgr::ClearProc()
 {
-    if (CurrentProc != _None)
+    if (CurrentProc != _SelProc_None)
     {
-        CurrentProc = _None;
+        CurrentProc = _SelProc_None;
         BaseLocation = "";
         HistLocation = "";
         Type = "";
@@ -192,7 +192,7 @@ void LocalFileMgr::SetProc (SelProc_t pr, Bool_t ClearOld)
 
     if (ROCCORR == kTRUE) RocCorr = "_roccor";
 
-    if (pr != _None)BaseLocation = "/media/sf_DATA/";
+    if (pr != _SelProc_None)BaseLocation = "/media/sf_DATA/";
 
     if (pr == _MuMu_DY_10to50) // Only MuMu evens are counted in Wsum and nEvents
     {
@@ -1503,7 +1503,7 @@ void LocalFileMgr::SetProc (SelProc_t pr, Bool_t ClearOld)
         Location = "SelectedMuMu/Data/SelectedMuMu_SingleMuon_Hver3"+RocCorr+".root";
         TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
-    else if (pr == _Test_MuMu)
+    else if (pr == _MuMu_Test)
     {
         isMC = kTRUE;
         Type = "TEST";
@@ -2439,7 +2439,7 @@ void LocalFileMgr::SetProc (SelProc_t pr, Bool_t ClearOld)
         Location = "SelectedEE/Data/SelectedEE_SingleElectron_Hver3.root";
         TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }    
-    else if (pr == _Test_EE)
+    else if (pr == _EE_Test)
     {
         isMC = kTRUE;
         Type = "TEST";
@@ -3128,7 +3128,7 @@ void LocalFileMgr::SetProc (SelProc_t pr, Bool_t ClearOld)
         Location = "SelectedEMu/Data/SelectedEMu_SingleMuon_Hver3"+RocCorr+".root";
         TreeName.push_back("DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
-    else if (pr == _Test_EMu)
+    else if (pr == _EMu_Test)
     {
         isMC = kTRUE;
         Type = "TEST";
@@ -3161,7 +3161,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
 
     if (notify == kTRUE) cout << "Searched for: " << search << "\nFound: ";
     vector<SelProc_t> Result;
-    SelProc_t first = _None, last = _None;
+    SelProc_t first = _SelProc_None, last = _SelProc_None;
     if (srch.Contains("DY"))
     {
         if (srch.Contains("TAUTAU"))
@@ -3231,7 +3231,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                         last = _EndOf_MuMu_MCsignal_Normal;
 
                     // Swapping first with last if necessary
-                    if (int(first)>int(last) && last!=_None)
+                    if (int(first)>int(last) && last!=_SelProc_None)
                     {
                         SelProc_t NewLast = SelProc_t(int(first)-1);
                         first = SelProc_t(int(last)+1);
@@ -3242,7 +3242,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                         Result.push_back(_MuMu_DYTauTau_Full);
                         if (notify == kTRUE) cout << Procname[_MuMu_DYTauTau_Full] << "." << endl;
                     }
-                    else if (first != _None && last != _None)
+                    else if (first != _SelProc_None && last != _SelProc_None)
                     {
                         for (SelProc_t pr=first; pr<=last; pr=next(pr))
                         {
@@ -3327,7 +3327,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                         last = _EndOf_EE_MCsignal_Normal;
 
                     // Swapping first with last if necessary
-                    if (int(first)>int(last) && last!=_None)
+                    if (int(first)>int(last) && last!=_SelProc_None)
                     {
                         SelProc_t NewLast = SelProc_t(int(first)-1);
                         first = SelProc_t(int(last)+1);
@@ -3338,7 +3338,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                         Result.push_back(_EE_DYTauTau_Full);
                         if (notify == kTRUE) cout << Procname[_EE_DYTauTau_Full] << "." << endl;
                     }
-                    else if (first != _None && last != _None)
+                    else if (first != _SelProc_None && last != _SelProc_None)
                     {
                         for (SelProc_t pr=first; pr<=last; pr=next(pr))
                         {
@@ -3423,7 +3423,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                         last = _EndOf_EE;
 
                     // Swapping first with last if necessary
-                    if (int(first)>int(last) && last!=_None)
+                    if (int(first)>int(last) && last!=_SelProc_None)
                     {
                         SelProc_t NewLast = SelProc_t(int(first)-1);
                         first = SelProc_t(int(last)+1);
@@ -3434,7 +3434,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                         Result.push_back(_EMu_DYTauTau_Full);
                         if (notify == kTRUE) cout << Procname[_EMu_DYTauTau_Full] << "." << endl;
                     }
-                    else if (first != _None && last != _None)
+                    else if (first != _SelProc_None && last != _SelProc_None)
                     {
                         for (SelProc_t pr=first; pr<=last; pr=next(pr))
                         {
@@ -3511,7 +3511,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
             else if (srch.Contains("TO50"))
                 last = _MuMu_DY_10to50;
             else if (srch.Contains("TO10"))
-                last = _None;
+                last = _SelProc_None;
 
             // Swapping first with last if necessary
             if (int(first)>int(last))
@@ -3525,7 +3525,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                 Result.push_back(_MuMu_DY_Full);
                 if (notify == kTRUE) cout << Procname[_MuMu_DY_Full] << "." << endl;
             }
-            else if (first != _None && last != _None)
+            else if (first != _SelProc_None && last != _SelProc_None)
             {
                 for (SelProc_t pr=first; pr<=last; pr=next(pr))
                 {
@@ -3603,7 +3603,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                 last = _EndOf_MuMu;
 
             // Swapping first with last if necessary
-            if (int(first)>int(last) && last!=_None)
+            if (int(first)>int(last) && last!=_SelProc_None)
             {
                 SelProc_t NewLast = SelProc_t(int(first)-1);
                 first = SelProc_t(int(last)+1);
@@ -3614,7 +3614,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                 Result.push_back(_EE_DY_Full);
                 if (notify == kTRUE) cout << Procname[_EE_DY_Full] << "." << endl;
             }
-            else if (first != _None && last != _None)
+            else if (first != _SelProc_None && last != _SelProc_None)
             {
                 for (SelProc_t pr=first; pr<=last; pr=next(pr))
                 {
@@ -3669,7 +3669,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
             else last = _MuMu_ttbar;
 
             // Swapping first with last if necessary
-            if (int(first)>int(last) && last!=_None)
+            if (int(first)>int(last) && last!=_SelProc_None)
             {
                 SelProc_t NewLast = SelProc_t(int(first)-1);
                 first = SelProc_t(int(last)+1);
@@ -3680,7 +3680,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                 Result.push_back(_MuMu_ttbar_Full);
                 if (notify == kTRUE) cout << Procname[_MuMu_ttbar_Full] << "." << endl;
             }
-            else if (first != _None && last != _None)
+            else if (first != _SelProc_None && last != _SelProc_None)
             {
                 for (SelProc_t pr=first; pr<=last; pr=next(pr))
                 {
@@ -3730,7 +3730,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
             else last = _EE_ttbar;
 
             // Swapping first with last if necessary
-            if (int(first)>int(last) && last!=_None)
+            if (int(first)>int(last) && last!=_SelProc_None)
             {
                 SelProc_t NewLast = SelProc_t(int(first)-1);
                 first = SelProc_t(int(last)+1);
@@ -3741,7 +3741,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                 Result.push_back(_EE_ttbar_Full);
                 if (notify == kTRUE) cout << Procname[_EE_ttbar_Full] << "." << endl;
             }
-            else if (first != _None && last != _None)
+            else if (first != _SelProc_None && last != _SelProc_None)
             {
                 for (SelProc_t pr=first; pr<=last; pr=next(pr))
                 {
@@ -3791,7 +3791,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
             else last = _EMu_ttbar;
 
             // Swapping first with last if necessary
-            if (int(first)>int(last) && last!=_None)
+            if (int(first)>int(last) && last!=_SelProc_None)
             {
                 SelProc_t NewLast = SelProc_t(int(first)-1);
                 first = SelProc_t(int(last)+1);
@@ -3802,7 +3802,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                 Result.push_back(_EMu_ttbar_Full);
                 if (notify == kTRUE) cout << Procname[_EMu_ttbar_Full] << "." << endl;
             }
-            else if (first != _None && last != _None)
+            else if (first != _SelProc_None && last != _SelProc_None)
             {
                 for (SelProc_t pr=first; pr<=last; pr=next(pr))
                 {
@@ -4081,7 +4081,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                 last = _EndOf_MuMu_WJets_Normal;
 
             // Swapping first with last if necessary
-            if (int(first)>int(last) && last!=_None)
+            if (int(first)>int(last) && last!=_SelProc_None)
             {
                 SelProc_t NewLast = SelProc_t(int(first)-1);
                 first = SelProc_t(int(last)+1);
@@ -4092,7 +4092,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                 Result.push_back(_MuMu_QCDMuEnriched_Full);
                 if (notify == kTRUE) cout << Procname[_MuMu_QCDMuEnriched_Full] << "." << endl;
             }
-            else if (first != _None && last != _None)
+            else if (first != _SelProc_None && last != _SelProc_None)
             {
                 for (SelProc_t pr=first; pr<=last; pr=next(pr))
                 {
@@ -4157,7 +4157,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                 last = _EndOf_EE_WJets_Normal;
 
             // Swapping first with last if necessary
-            if (int(first)>int(last)  && last!=_None)
+            if (int(first)>int(last)  && last!=_SelProc_None)
             {
                 SelProc_t NewLast = SelProc_t(int(first)-1);
                 first = SelProc_t(int(last)+1);
@@ -4168,7 +4168,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                 Result.push_back(_EE_QCDEMEnriched_Full);
                 if (notify == kTRUE) cout << Procname[_EE_QCDEMEnriched_Full] << "." << endl;
             }
-            else if (first != _None && last != _None)
+            else if (first != _SelProc_None && last != _SelProc_None)
             {
                 for (SelProc_t pr=first; pr<=last; pr=next(pr))
                 {
@@ -4226,7 +4226,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                 last = _EE_DoubleEG_H;
 
             // Swapping first with last if necessary
-            if (int(first)>int(last) && last!=_None)
+            if (int(first)>int(last) && last!=_SelProc_None)
             {
                 SelProc_t NewLast = first;
                 first = last;
@@ -4237,7 +4237,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                 Result.push_back(_EE_DoubleEG_Full);
                 if (notify == kTRUE) cout << Procname[_EE_DoubleEG_Full] << "." << endl;
             }
-            else if (first != _None && last != _None)
+            else if (first != _SelProc_None && last != _SelProc_None)
             {
                 for (SelProc_t pr=first; pr<=last; pr=next(pr))
                 {
@@ -4341,7 +4341,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                     last = _MuMu_SingleMuon_H;
 
                 // Swapping first with last if necessary
-                if (int(first)>int(last) && last!=_None)
+                if (int(first)>int(last) && last!=_SelProc_None)
                 {
                     SelProc_t NewLast = first;
                     first = last;
@@ -4352,7 +4352,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                     Result.push_back(_MuMu_SingleMuon_Full);
                     if (notify == kTRUE) cout << Procname[_MuMu_SingleMuon_Full] << "." << endl;
                 }
-                else if (first != _None && last != _None)
+                else if (first != _SelProc_None && last != _SelProc_None)
                 {
                     for (SelProc_t pr=first; pr<=last; pr=next(pr))
                     {
@@ -4446,7 +4446,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                     last = _EMu_SingleMuon_H;
 
                 // Swapping first with last if necessary
-                if (int(first)>int(last) && last!=_None)
+                if (int(first)>int(last) && last!=_SelProc_None)
                 {
                     SelProc_t NewLast = first;
                     first = last;
@@ -4457,7 +4457,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                     Result.push_back(_EMu_SingleMuon_Full);
                     if (notify == kTRUE) cout << Procname[_EMu_SingleMuon_Full] << "." << endl;
                 }
-                else if (first != _None && last != _None)
+                else if (first != _SelProc_None && last != _SelProc_None)
                 {
                     for (SelProc_t pr=first; pr<=last; pr=next(pr))
                     {
@@ -4553,7 +4553,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                 last = _EE_SingleElectron_H;
 
             // Swapping first with last if necessary
-            if (int(first)>int(last) && last!=_None)
+            if (int(first)>int(last) && last!=_SelProc_None)
             {
                 SelProc_t NewLast = first;
                 first = last;
@@ -4564,7 +4564,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
                 Result.push_back(_EE_SingleElectron_Full);
                 if (notify == kTRUE) cout << Procname[_EE_SingleElectron_Full] << "." << endl;
             }
-            else if (first != _None && last != _None)
+            else if (first != _SelProc_None && last != _SelProc_None)
             {
                 for (SelProc_t pr=first; pr<=last; pr=next(pr))
                 {
@@ -4663,25 +4663,25 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
     {
         if (srch.Contains("EE"))
         {
-            Result.push_back(_Test_EE);
-            if (notify == kTRUE)  cout << Procname[_Test_EE] << "." << endl;
+            Result.push_back(_EE_Test);
+            if (notify == kTRUE)  cout << Procname[_EE_Test] << "." << endl;
         }
         else if (srch.Contains("MUMU"))
         {
-            Result.push_back(_Test_MuMu);
-            if (notify == kTRUE)  cout << Procname[_Test_MuMu] << "." << endl;
+            Result.push_back(_MuMu_Test);
+            if (notify == kTRUE)  cout << Procname[_MuMu_Test] << "." << endl;
         }
         else if (srch.Contains("EMU"))
         {
-            Result.push_back(_Test_EMu);
-            if (notify == kTRUE)  cout << Procname[_Test_EMu] << "." << endl;
+            Result.push_back(_EMu_Test);
+            if (notify == kTRUE)  cout << Procname[_EMu_Test] << "." << endl;
         }
     }
 
     else
     {
-        Result.push_back(_None);
-        if (notify == kTRUE) cout << Procname[_None] << "." << endl;
+        Result.push_back(_SelProc_None);
+        if (notify == kTRUE) cout << Procname[_SelProc_None] << "." << endl;
     }
 
     if (instaGet == kTRUE)    // Applying SetProc if asked
@@ -4689,7 +4689,7 @@ vector<SelProc_t> LocalFileMgr::FindProc (TString search, Bool_t notify, Bool_t 
         cout << "Getting information for returned processes..";
         for (Int_t i=0; i<(int(Result.size())); i++)
         {
-            if (Result[i] != _None) this->SetProc(Result[i], kFALSE);
+            if (Result[i] != _SelProc_None) this->SetProc(Result[i], kFALSE);
         }
         cout << " Finished." << endl;
     }
@@ -4718,7 +4718,7 @@ void LocalFileMgr::SwitchROCCORR()
 
 void LocalFileMgr::PrepareProcNames ()
 {
-    Procname[_None] = "None";
+    Procname[_SelProc_None] = "None";
     Procname[_MuMu_DY_10to50] = "SelectedMuMu_DY_10to50";
     Procname[_MuMu_DY_50to100] = "SelectedMuMu_DY_50to100";
     Procname[_MuMu_DY_100to200] = "SelectedMuMu_DY_100to200";
@@ -4778,7 +4778,7 @@ void LocalFileMgr::PrepareProcNames ()
     Procname[_MuMu_Bkg_Full] = "SelectedMuMu_Bkg_Full";
     Procname[_MuMu_SingleMuon_Full] = "SelectedMuMu_SingleMuon_Full";
     Procname[_EndOf_MuMu_Special] = "EndOf_SelectedMuMu_Special";
-    Procname[_Test_MuMu] = "Test_SelectedMuMu";
+    Procname[_MuMu_Test] = "Test_SelectedMuMu";
     Procname[_EndOf_MuMu] = "EndOf_SelectedMuMu";
 
     Procname[_EE_DY_10to50] = "SelectedEE_DY_10to50";
@@ -4845,7 +4845,7 @@ void LocalFileMgr::PrepareProcNames ()
     Procname[_EE_DoubleEG_Full] = "SelectedEE_DoubleEG_Full";
     Procname[_EE_SingleElectron_Full] = "SelectedEE_SingleElectron_Full";
     Procname[_EndOf_EE_Special] = "EndOf_SelectedEE_Special";
-    Procname[_Test_EE] = "Test_SelectedEE";
+    Procname[_EE_Test] = "Test_SelectedEE";
     Procname[_EndOf_EE] = "EndOf_SelectedEE";
 
     Procname[_EMu_DYTauTau_10to50] = "SelectedEMu_DYTauTau_10to50";
@@ -4880,7 +4880,7 @@ void LocalFileMgr::PrepareProcNames ()
     Procname[_EMu_Bkg_Full] = "SelectedEMu_Bkg_Full";
     Procname[_EMu_SingleMuon_Full] = "SelectedEMu_SingleMuon_Full";
     Procname[_EndOf_EMu_Special] = "EndOf_SelectedEMu_Special";
-    Procname[_Test_EMu] = "Test_SelectedEMu";
+    Procname[_EMu_Test] = "Test_SelectedEMu";
     Procname[_EndOf_EMu] = "EndOf_SelectedEMu";
     return;
 
@@ -4964,7 +4964,7 @@ void LocalFileMgr::CheckProcesses()
                         cout << "Process " << Procname[pr] << ": FileLocation[" << i << "] does not have '.root'." << endl;
                         allOk = kFALSE;
                     }
-                    if ((pr > _None && pr < _EndOf_MuMu) || (pr > _EndOf_EE && pr < _EndOf_EMu))
+                    if ((pr > _SelProc_None && pr < _EndOf_MuMu) || (pr > _EndOf_EE && pr < _EndOf_EMu))
                     {
                         if (ROCCORR == kTRUE && !FileLocation[i].Contains("_roccor.root"))
                         {
@@ -5017,7 +5017,7 @@ void LocalFileMgr::CheckProcesses()
                         cout << "Process " << Procname[pr] << ": FullLocation[" << i << "] does not have '.root'." << endl;
                         allOk = kFALSE;
                     }
-                    if ((pr > _None && pr < _EndOf_MuMu) || (pr > _EndOf_EE && pr < _EndOf_EMu))
+                    if ((pr > _SelProc_None && pr < _EndOf_MuMu) || (pr > _EndOf_EE && pr < _EndOf_EMu))
                     {
                         if (ROCCORR == kTRUE && !FullLocation[i].Contains("_roccor.root"))
                         {
@@ -5025,7 +5025,7 @@ void LocalFileMgr::CheckProcesses()
                             allOk = kFALSE;
                         }
                     }
-                    if ((pr > _None && pr < _EndOf_MuMu_MCsignal_Normal) || pr == _MuMu_DY_Full)
+                    if ((pr > _SelProc_None && pr < _EndOf_MuMu_MCsignal_Normal) || pr == _MuMu_DY_Full)
                     {
                         if (!FullLocation[i].Contains("/media/sf_DATA/SelectedMuMu/MC_signal/"))
                         {
@@ -5064,7 +5064,7 @@ void LocalFileMgr::CheckProcesses()
                             allOk = kFALSE;
                         }
                     }
-                    if (pr == _Test_MuMu)
+                    if (pr == _MuMu_Test)
                     {
                         if (!FullLocation[i].Contains("/media/sf_DATA/test/"))
                         {
@@ -5116,7 +5116,7 @@ void LocalFileMgr::CheckProcesses()
                             allOk = kFALSE;
                         }
                     }
-                    if (pr == _Test_EE)
+                    if (pr == _EE_Test)
                     {
                         if (!FullLocation[i].Contains("/media/sf_DATA/test/"))
                         {
@@ -5155,7 +5155,7 @@ void LocalFileMgr::CheckProcesses()
                             allOk = kFALSE;
                         }
                     }
-                    if (pr == _Test_EMu)
+                    if (pr == _EMu_Test)
                     {
                         if (!FullLocation[i].Contains("/media/sf_DATA/test/"))
                         {
@@ -5285,7 +5285,7 @@ void LocalFileMgr::CheckProcesses()
         if (pr < _EndOf_MuMu_QCDMuEnriched_Normal || (pr > _EndOf_MuMu_Data_Normal && pr < _MuMu_SingleMuon_Full) |
              (pr > _EndOf_MuMu && pr < _EndOf_EE_QCDEMEnriched_Normal) || (pr > _EndOf_EE_Data_Normal && pr < _EE_DoubleEG_Full) ||
              (pr > _EndOf_EE && pr < _EndOf_EMu_MCbkg_Normal) || (pr > _EndOf_EMu_Data_Normal && pr < _EMu_SingleMuon_Full) ||
-             pr == _Test_MuMu || pr == _Test_EE || pr == _Test_EMu)
+             pr == _MuMu_Test || pr == _EE_Test || pr == _EMu_Test)
         {
             if (isMC == kFALSE)
             {
@@ -5365,7 +5365,7 @@ void LocalFileMgr::CheckProcesses()
                     allOk = kFALSE;
                 }
             }
-            else if (pr == _Test_MuMu || pr == _Test_EE || pr == _Test_EMu)
+            else if (pr == _MuMu_Test || pr == _EE_Test || pr == _EMu_Test)
             {
                 if (Type != "TEST")
                 {
@@ -5386,9 +5386,9 @@ void LocalFileMgr::CheckProcesses()
             allOk = kFALSE;
         }
         this->ClearProc();
-        if (CurrentProc != _None)
+        if (CurrentProc != _SelProc_None)
         {
-            cout << "Process " << Procname[pr] << ": Current proc is not _None after ClearProc()." << endl;
+            cout << "Process " << Procname[pr] << ": Current proc is not _SelProc_None after ClearProc()." << endl;
             allOk = kFALSE;
         }
         if (Tag.size())

@@ -114,7 +114,10 @@ public:
         Double_t FR_endcap_ele[nPtBin_ele];
         const double prescales[8] = {0.0016/36.47, 0.0066/36.47, 0.0132/36.47, 0.0264/36.47, 0.13/36.47, 0.26/36.47, 0.54/36.47, 1};
 
-	// -- Constructor -- //
+        Double_t Eff_DY[nPtBin_ele][2];
+        Double_t Ineff_DY[nPtBin_ele][2];
+
+        // -- Constructor -- //
 	DYAnalyzer(TString HLTname);
 
 	// -- Setup accetpance cuts -- //
@@ -278,6 +281,8 @@ public:
         Double_t getPrescale_alt(Double_t Et);
         void SetupFRvalues_ele(TString filename, TString type="subtract", Int_t increaseLowPt=0);
         Double_t FakeRate_ele(Double_t p_T, Double_t eta);
+        void SetupDYeff();
+        Double_t DYeff_evtWeight(Double_t pT1, Double_t eta1, Int_t passMediumID1, Double_t pT2, Double_t eta2, Int_t passMediumID2);
 
 	// -- pre-FSR functions -- //
 	void PostToPreFSR_byDressedLepton(NtupleHandle *ntuple, GenLepton *genlep_postFSR, Double_t dRCut, GenLepton *genlep_preFSR, vector< GenOthers >* GenPhotonCollection);
@@ -7151,6 +7156,104 @@ Double_t DYAnalyzer::getPrescale_alt(Double_t Et)
     return prescale;
 }
 
+
+void DYAnalyzer::SetupDYeff()
+{
+    cout << "Setting up DY efficiency for FR" << endl;
+    TString Location = "/media/sf_DATA/SelectedEE/Histos/";
+
+    // RECO
+    TFile *f = new TFile(Location+"DY_effcorr.root");
+    TH1D *h_eff_barrel = (TH1D*)f->Get("h_eff_ratio_barrel");
+    TH1D *h_eff_endcap = (TH1D*)f->Get("h_eff_ratio_endcap");
+    TH1D *h_ineff_barrel = (TH1D*)f->Get("h_ineff_ratio_barrel");
+    TH1D *h_ineff_endcap = (TH1D*)f->Get("h_ineff_ratio_endcap");
+
+    for (Int_t i=0; i<nPtBin_ele; i++)
+    {
+        if (h_eff_barrel->GetBinContent(i+1) > 0 && h_eff_barrel->GetBinContent(i+1) == h_eff_barrel->GetBinContent(i+1))
+            Eff_DY[i][0] = h_eff_barrel->GetBinContent(i+1);
+        else Eff_DY[i][0] = 1;
+        if (h_eff_endcap->GetBinContent(i+1) > 0 && h_eff_endcap->GetBinContent(i+1) == h_eff_endcap->GetBinContent(i+1))
+            Eff_DY[i][1] = h_eff_endcap->GetBinContent(i+1);
+        else Eff_DY[i][1] = 1;
+        if (h_ineff_barrel->GetBinContent(i+1) > 0 && h_ineff_barrel->GetBinContent(i+1) == h_ineff_barrel->GetBinContent(i+1))
+            Ineff_DY[i][0] = h_ineff_barrel->GetBinContent(i+1);
+        else Ineff_DY[i][0] = 1;
+        if (h_ineff_endcap->GetBinContent(i+1) > 0 && h_ineff_endcap->GetBinContent(i+1) == h_ineff_endcap->GetBinContent(i+1))
+            Ineff_DY[i][1] = h_ineff_endcap->GetBinContent(i+1);
+        else Ineff_DY[i][1] = 1;
+    }
+    f->Close();
+    std::cout << "Setting completed" << endl;
+} // End of SetupDYeff()
+
+
+Double_t DYAnalyzer::DYeff_evtWeight(Double_t pT1, Double_t eta1, Int_t passMediumID1, Double_t pT2, Double_t eta2, Int_t passMediumID2)
+{
+    Double_t weight = 1;
+
+    Int_t etabin1, etabin2;
+    Int_t i_bin1 = 0;
+    Int_t i_bin2 = 0;
+    Int_t stop = 0;
+    if (fabs(eta1) < 1.4442) // barrel
+    {
+        etabin1 = 0;
+        while (!stop)
+        {
+            if (pT1 < ptbin_ele[i_bin1 + 1] || i_bin1 >= nPtBin_ele-1) // Points exceeding boundaries are assigned last available value
+                stop = 1;
+            else
+                i_bin1++;
+        }
+    }
+    else if (fabs(eta1) > 1.566) // endcap
+    {
+        etabin1 = 1;
+        while (!stop)
+        {
+            if (pT1 < ptbin_ele[i_bin1 + 1] || i_bin1 >= nPtBin_ele-1) // Points exceeding boundaries are assigned last available value
+                stop = 1;
+            else
+                i_bin1++;
+        }
+    }
+    else return 0;
+
+    stop = 0;
+
+    if (fabs(eta2) < 1.4442) // barrel
+    {
+        etabin2 = 0;
+        while (!stop)
+        {
+            if (pT2 < ptbin_ele[i_bin2 + 1] || i_bin2 >= nPtBin_ele-1) // Points exceeding boundaries are assigned last available value
+                stop = 1;
+            else
+                i_bin2++;
+        }
+    }
+    else if (fabs(eta2) > 1.566) // endcap
+    {
+        etabin2 = 1;
+        while (!stop)
+        {
+            if (pT2 < ptbin_ele[i_bin2 + 1] || i_bin2 >= nPtBin_ele-1) // Points exceeding boundaries are assigned last available value
+                stop = 1;
+            else
+                i_bin2++;
+        }
+    }
+    else return 0;
+
+    if (passMediumID1) weight *= Eff_DY[i_bin1][etabin1];
+    else weight *= Ineff_DY[i_bin1][etabin1];
+    if (passMediumID2) weight *= Eff_DY[i_bin2][etabin2];
+    else weight *= Ineff_DY[i_bin2][etabin2];
+
+    return weight;
+}
 
 Bool_t DYAnalyzer::EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple,
                                              vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection)

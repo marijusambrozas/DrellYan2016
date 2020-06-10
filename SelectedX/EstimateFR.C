@@ -29,6 +29,8 @@
 
 void E_EstFR (Int_t type);
 void Mu_EstFR (Int_t type);
+void E_DYefficiency();
+
 Double_t CompChiSquared (TH1D *h_data, THStack *s_MC);
 Double_t CompAvgDataMCDifference (TH1D *h_data, THStack *s_MC);
 void removeNegativeBins(TH1D *h);
@@ -50,8 +52,16 @@ void EstimateFR (TString WhichX = "", Int_t type = 2)
     if (whichX.Contains("E"))
     {
         Xselected++;
-        cout << "\n*******      E_EstFR(" << type << ")      *******" << endl;
-        E_EstFR(type);
+        if (whichX.Contains("DY"))
+        {
+            cout << "\n*******      E_DYefficiency()      *******" << endl;
+            E_DYefficiency();
+        }
+        else
+        {
+            cout << "\n*******      E_EstFR(" << type << ")      *******" << endl;
+            E_EstFR(type);
+        }
     }
     if (whichX.Contains("MU"))
     {
@@ -1874,6 +1884,232 @@ void Mu_EstFR(Int_t type)
     c_FR_allin1->Update();
 
 } // End of Mu_EstFR()
+
+
+void E_DYefficiency()
+{
+    TFile *f = new TFile("/media/sf_DATA/SelectedEE/Histos/DYefficiency.root", "READ");
+
+    TH1D *h_pT_barrel_pass[3],
+         *h_pT_endcap_pass[3],
+         *h_pT_barrel_fail[3],
+         *h_pT_endcap_fail[3];
+    TString type[3] = {"data", "DY", "bkg"};
+
+    for (Int_t i=2; i>=0; i--)
+    {
+        f->GetObject("h_pT_barrel_pass_"+type[i], h_pT_barrel_pass[i]);
+        f->GetObject("h_pT_endcap_pass_"+type[i], h_pT_endcap_pass[i]);
+        f->GetObject("h_pT_barrel_fail_"+type[i], h_pT_barrel_fail[i]);
+        f->GetObject("h_pT_endcap_fail_"+type[i], h_pT_endcap_fail[i]);
+        h_pT_barrel_pass[i]->SetDirectory(0);
+        h_pT_endcap_pass[i]->SetDirectory(0);
+        h_pT_barrel_fail[i]->SetDirectory(0);
+        h_pT_endcap_fail[i]->SetDirectory(0);
+    }
+
+    TH1D *h_eff_data_barrel = ((TH1D*)(h_pT_barrel_pass[0]->Clone("h_eff_data_barrel")));
+    TH1D *h_eff_data_endcap = ((TH1D*)(h_pT_endcap_pass[0]->Clone("h_eff_data_endcap")));
+    TH1D *h_eff_MC_barrel = ((TH1D*)(h_pT_barrel_pass[1]->Clone("h_eff_MC_barrel")));
+    TH1D *h_eff_MC_endcap = ((TH1D*)(h_pT_endcap_pass[1]->Clone("h_eff_MC_endcap")));
+    TH1D *h_eff_bkg_barrel = ((TH1D*)(h_pT_barrel_pass[2]->Clone("h_eff_bkg_barrel")));
+    TH1D *h_eff_bkg_endcap = ((TH1D*)(h_pT_endcap_pass[2]->Clone("h_eff_bkg_endcap")));
+    h_eff_data_barrel->Add(h_eff_bkg_barrel, -1);
+    h_eff_data_endcap->Add(h_eff_bkg_endcap, -1);
+
+    TH1D *h_ineff_data_barrel = ((TH1D*)(h_pT_barrel_fail[0]->Clone("h_ineff_data_barrel")));
+    TH1D *h_ineff_data_endcap = ((TH1D*)(h_pT_endcap_fail[0]->Clone("h_ineff_data_endcap")));
+    TH1D *h_ineff_MC_barrel = ((TH1D*)(h_pT_barrel_fail[1]->Clone("h_ineff_MC_barrel")));
+    TH1D *h_ineff_MC_endcap = ((TH1D*)(h_pT_endcap_fail[1]->Clone("h_ineff_MC_endcap")));
+    TH1D *h_ineff_bkg_barrel = ((TH1D*)(h_pT_barrel_fail[2]->Clone("h_ineff_bkg_barrel")));
+    TH1D *h_ineff_bkg_endcap = ((TH1D*)(h_pT_endcap_fail[2]->Clone("h_ineff_bkg_endcap")));
+    h_ineff_data_barrel->Add(h_ineff_bkg_barrel, -1);
+    h_ineff_data_endcap->Add(h_ineff_bkg_endcap, -1);
+
+    TH1D *h_eff_data_barrel_deno = ((TH1D*)(h_pT_barrel_fail[0]->Clone("h_eff_data_barrel_deno")));
+    TH1D *h_eff_data_endcap_deno = ((TH1D*)(h_pT_barrel_fail[0]->Clone("h_eff_data_endcap_deno")));
+    TH1D *h_eff_MC_barrel_deno = ((TH1D*)(h_pT_barrel_fail[1]->Clone("h_eff_MC_barrel_deno")));
+    TH1D *h_eff_MC_endcap_deno = ((TH1D*)(h_pT_barrel_fail[1]->Clone("h_eff_MC_endcap_deno")));
+    TH1D *h_eff_bkg_barrel_deno = ((TH1D*)(h_pT_barrel_fail[2]->Clone("h_eff_bkg_barrel_deno")));
+    TH1D *h_eff_bkg_endcap_deno = ((TH1D*)(h_pT_barrel_fail[2]->Clone("h_eff_bkg_endcap_deno")));
+    h_eff_data_barrel_deno->Add(h_pT_barrel_pass[0]);
+    h_eff_data_endcap_deno->Add(h_pT_endcap_pass[0]);
+    h_eff_MC_barrel_deno->Add(h_pT_barrel_pass[1]);
+    h_eff_MC_endcap_deno->Add(h_pT_endcap_pass[1]);
+    h_eff_bkg_barrel_deno->Add(h_pT_barrel_pass[2]);
+    h_eff_bkg_endcap_deno->Add(h_pT_endcap_pass[2]);
+    h_eff_data_barrel_deno->Add(h_eff_bkg_barrel_deno, -1);
+    h_eff_data_endcap_deno->Add(h_eff_bkg_endcap_deno, -1);
+
+    h_eff_data_barrel->Divide(h_eff_data_barrel_deno);
+    h_eff_data_endcap->Divide(h_eff_data_endcap_deno);
+    h_eff_MC_barrel->Divide(h_eff_MC_barrel_deno);
+    h_eff_MC_endcap->Divide(h_eff_MC_endcap_deno);
+    h_ineff_data_barrel->Divide(h_eff_data_barrel_deno);
+    h_ineff_data_endcap->Divide(h_eff_data_endcap_deno);
+    h_ineff_MC_barrel->Divide(h_eff_MC_barrel_deno);
+    h_ineff_MC_endcap->Divide(h_eff_MC_endcap_deno);
+
+    h_eff_data_barrel->SetDirectory(0);
+    h_eff_data_barrel->SetMarkerStyle(kFullDotLarge);
+    h_eff_data_barrel->SetMarkerColor(kBlack);
+    h_eff_data_barrel->SetLineColor(kBlack);
+    h_eff_data_endcap->SetDirectory(0);
+    h_eff_data_endcap->SetMarkerStyle(kFullDotLarge);
+    h_eff_data_endcap->SetMarkerColor(kBlack);
+    h_eff_data_endcap->SetLineColor(kBlack);
+    h_eff_MC_barrel->SetDirectory(0);
+    h_eff_MC_barrel->SetMarkerStyle(kFullSquare);
+    h_eff_MC_barrel->SetMarkerColor(kRed);
+    h_eff_MC_barrel->SetLineColor(kRed);
+    h_eff_MC_endcap->SetDirectory(0);
+    h_eff_MC_endcap->SetMarkerStyle(kFullSquare);
+    h_eff_MC_endcap->SetMarkerColor(kRed);
+    h_eff_MC_endcap->SetLineColor(kRed);
+
+    h_ineff_data_barrel->SetDirectory(0);
+    h_ineff_data_barrel->SetMarkerStyle(kFullDotLarge);
+    h_ineff_data_barrel->SetMarkerColor(kBlack);
+    h_ineff_data_barrel->SetLineColor(kBlack);
+    h_ineff_data_endcap->SetDirectory(0);
+    h_ineff_data_endcap->SetMarkerStyle(kFullDotLarge);
+    h_ineff_data_endcap->SetMarkerColor(kBlack);
+    h_ineff_data_endcap->SetLineColor(kBlack);
+    h_ineff_MC_barrel->SetDirectory(0);
+    h_ineff_MC_barrel->SetMarkerStyle(kFullSquare);
+    h_ineff_MC_barrel->SetMarkerColor(kRed);
+    h_ineff_MC_barrel->SetLineColor(kRed);
+    h_ineff_MC_endcap->SetDirectory(0);
+    h_ineff_MC_endcap->SetMarkerStyle(kFullSquare);
+    h_ineff_MC_endcap->SetMarkerColor(kRed);
+    h_ineff_MC_endcap->SetLineColor(kRed);
+
+    TH1D *h_eff_ratio_barrel = ((TH1D*)(h_eff_data_barrel->Clone("h_eff_ratio_barrel")));
+    TH1D *h_eff_ratio_endcap = ((TH1D*)(h_eff_data_endcap->Clone("h_eff_ratio_endcap")));
+    TH1D *h_ineff_ratio_barrel = ((TH1D*)(h_ineff_data_barrel->Clone("h_ineff_ratio_barrel")));
+    TH1D *h_ineff_ratio_endcap = ((TH1D*)(h_ineff_data_endcap->Clone("h_ineff_ratio_endcap")));
+    h_eff_ratio_barrel->Divide(h_eff_MC_barrel);
+    h_eff_ratio_endcap->Divide(h_eff_MC_endcap);
+    h_eff_ratio_barrel->SetDirectory(0);
+    h_eff_ratio_endcap->SetDirectory(0);
+    h_eff_ratio_endcap->SetMarkerColor(kBlue);
+    h_eff_ratio_endcap->SetLineColor(kBlue);
+    h_ineff_ratio_barrel->Divide(h_ineff_MC_barrel);
+    h_ineff_ratio_endcap->Divide(h_ineff_MC_endcap);
+    h_ineff_ratio_barrel->SetDirectory(0);
+    h_ineff_ratio_endcap->SetDirectory(0);
+    h_ineff_ratio_endcap->SetMarkerColor(kBlue);
+    h_ineff_ratio_endcap->SetLineColor(kBlue);
+
+    // Creating and drawing ratio plots
+    myRatioPlot_t *RP_eff_barrel = new myRatioPlot_t("c_eff_barrel", h_eff_MC_barrel, h_eff_data_barrel);
+    myRatioPlot_t *RP_eff_endcap = new myRatioPlot_t("c_eff_endcap", h_eff_MC_endcap, h_eff_data_endcap);
+    myRatioPlot_t *RP_ineff_barrel = new myRatioPlot_t("c_ineff_barrel", h_ineff_MC_barrel, h_ineff_data_barrel);
+    myRatioPlot_t *RP_ineff_endcap = new myRatioPlot_t("c_ineff_endcap", h_ineff_MC_endcap, h_ineff_data_endcap);
+
+    RP_eff_barrel->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 5000);
+    RP_eff_endcap->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 5000);
+    RP_ineff_barrel->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 5000);
+    RP_ineff_endcap->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 5000);
+
+    TLegend * legend = new TLegend(0.7, 0.7, 0.95, 0.95);
+    legend->AddEntry(h_eff_data_barrel, "Data", "pl");
+    legend->AddEntry(h_eff_MC_barrel, "DY MC", "pl");
+
+    RP_eff_barrel->ImportLegend(legend);
+    RP_eff_endcap->ImportLegend(legend);
+    RP_ineff_barrel->ImportLegend(legend);
+    RP_ineff_endcap->ImportLegend(legend);    
+
+    RP_eff_barrel->Draw(0.01, 1, 1, "", "Efficiency");
+    RP_eff_endcap->Draw(0.01, 1, 1, "", "Efficiency");
+    RP_ineff_barrel->Draw(0.01, 1, 1, "", "Inefficiency");
+    RP_ineff_endcap->Draw(0.01, 1, 1, "", "Inefficiency");
+
+    RP_eff_barrel->pad1->SetLogy(0);
+    RP_eff_endcap->pad1->SetLogy(0);
+    RP_ineff_barrel->pad1->SetLogy(0);
+    RP_ineff_endcap->pad1->SetLogy(0);
+
+    TLegend *legend_ratio = new TLegend(0.7, 0.8, 0.95, 0.95);
+    legend_ratio->AddEntry(h_eff_ratio_barrel, "Barrel", "pl");
+    legend_ratio->AddEntry(h_eff_ratio_endcap, "Endcap", "pl");
+
+    TCanvas *c_eff_ratio = new TCanvas("c_eff_ratio", "c_eff_ratio", 800, 800);
+    c_eff_ratio->SetTopMargin(0.05);
+    c_eff_ratio->SetRightMargin(0.05);
+    c_eff_ratio->SetBottomMargin(0.15);
+    c_eff_ratio->SetLeftMargin(0.15);
+    h_eff_ratio_barrel->SetTitle("");
+    h_eff_ratio_barrel->GetXaxis()->SetTitle("p_{#lower[-0.2]{T}} [GeV/c]");
+    h_eff_ratio_barrel->GetXaxis()->SetTitleSize(0.062);
+    h_eff_ratio_barrel->GetXaxis()->SetTitleOffset(0.9);
+    h_eff_ratio_barrel->GetXaxis()->SetLabelSize(0.048);
+    h_eff_ratio_barrel->GetXaxis()->SetMoreLogLabels();
+    h_eff_ratio_barrel->GetXaxis()->SetNoExponent();
+    h_eff_ratio_barrel->GetYaxis()->SetTitle("Eff(Data)/Eff(MC)");
+    h_eff_ratio_barrel->GetYaxis()->SetTitleSize(0.05);
+    h_eff_ratio_barrel->GetYaxis()->SetTitleOffset(1.25);
+    h_eff_ratio_barrel->GetYaxis()->SetLabelSize(0.043);
+    h_eff_ratio_barrel->GetYaxis()->SetMoreLogLabels();
+    h_eff_ratio_barrel->GetYaxis()->SetNoExponent();
+    h_eff_ratio_barrel->Draw();
+    h_eff_ratio_barrel->GetYaxis()->SetRangeUser(0.3, 2);
+    h_eff_ratio_endcap->Draw("same");
+    legend_ratio->Draw();
+    c_eff_ratio->SetLogx();
+    c_eff_ratio->SetGridx();
+    c_eff_ratio->SetGridy();
+    c_eff_ratio->Update();
+
+    TCanvas *c_ineff_ratio = new TCanvas("c_ineff_ratio", "c_ineff_ratio", 800, 800);
+    c_ineff_ratio->SetTopMargin(0.05);
+    c_ineff_ratio->SetRightMargin(0.05);
+    c_ineff_ratio->SetBottomMargin(0.15);
+    c_ineff_ratio->SetLeftMargin(0.15);
+    h_ineff_ratio_barrel->SetTitle("");
+    h_ineff_ratio_barrel->GetXaxis()->SetTitle("p_{#lower[-0.2]{T}} [GeV/c]");
+    h_ineff_ratio_barrel->GetXaxis()->SetTitleSize(0.062);
+    h_ineff_ratio_barrel->GetXaxis()->SetTitleOffset(0.9);
+    h_ineff_ratio_barrel->GetXaxis()->SetLabelSize(0.048);
+    h_ineff_ratio_barrel->GetXaxis()->SetMoreLogLabels();
+    h_ineff_ratio_barrel->GetXaxis()->SetNoExponent();
+    h_ineff_ratio_barrel->GetYaxis()->SetTitle("Ineff(Data)/Ineff(MC)");
+    h_ineff_ratio_barrel->GetYaxis()->SetTitleSize(0.05);
+    h_ineff_ratio_barrel->GetYaxis()->SetTitleOffset(1.25);
+    h_ineff_ratio_barrel->GetYaxis()->SetLabelSize(0.043);
+    h_ineff_ratio_barrel->GetYaxis()->SetMoreLogLabels();
+    h_ineff_ratio_barrel->GetYaxis()->SetNoExponent();
+    h_ineff_ratio_barrel->Draw();
+    h_ineff_ratio_barrel->GetYaxis()->SetRangeUser(0.5, 2);
+    h_ineff_ratio_endcap->Draw("same");
+    legend_ratio->Draw();
+    c_ineff_ratio->SetLogx();
+    c_ineff_ratio->SetGridx();
+    c_ineff_ratio->SetGridy();
+    c_ineff_ratio->Update();
+
+    f->Close();
+    if (!f->IsOpen()) cout << "File " << "/media/sf_DATA/SelectedEE/Histos/DYefficiency.root" << " has been closed successfully.\n" << endl;
+    else cout << "FILE " <<"/media/sf_DATA/SelectedEE/Histos/DYefficiency.root" << " COULD NOT BE CLOSED!\n" << endl;
+
+    TFile *f_out = new TFile("/media/sf_DATA/SelectedEE/Histos/DY_effcorr.root", "RECREATE");
+    f_out->cd();
+    h_eff_data_barrel->Write();
+    h_eff_data_endcap->Write();
+    h_eff_MC_barrel->Write();
+    h_eff_MC_endcap->Write();
+    h_ineff_data_barrel->Write();
+    h_ineff_data_endcap->Write();
+    h_ineff_MC_barrel->Write();
+    h_ineff_MC_endcap->Write();
+    h_eff_ratio_barrel->Write();
+    h_eff_ratio_endcap->Write();
+    h_ineff_ratio_barrel->Write();
+    h_ineff_ratio_endcap->Write();
+    f_out->Close();
+
+} // End of E_DYefficiency
 
 
 /// ------------------------------- COMP CHI^2 ---------------------------------- ///
