@@ -1293,6 +1293,7 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
                 ntuple->TurnOnBranches_GenOthers(); // for quarks
             }
             ntuple->TurnOnBranches_Muon();
+            ntuple->TurnOnBranches_MET();
 
             Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
 
@@ -1633,6 +1634,7 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
             }
             ntuple->TurnOnBranches_Electron();
             ntuple->TurnOnBranches_Muon();
+            ntuple->TurnOnBranches_MET();
 
             Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
 
