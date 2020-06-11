@@ -75,7 +75,7 @@ public:
     Int_t HLT_ntrig;
     std::vector<int> *HLT_trigFired;
     std::vector<string> *HLT_trigName;
-//    std::vector<double> *HLT_trigPt;
+    std::vector<double> *HLT_trigPt;
     std::vector<double> *HLT_trigEta;
     std::vector<double> *HLT_trigPhi;
 
@@ -200,7 +200,7 @@ public:
     {
         HLT_trigFired = new std::vector<int>;
         HLT_trigName = new std::vector<string>;
-//        HLT_trigPt = new std::vector<double>;
+        HLT_trigPt = new std::vector<double>;
         HLT_trigEta = new std::vector<double>;
         HLT_trigPhi = new std::vector<double>;
 
@@ -338,7 +338,7 @@ public:
         chain->SetBranchAddress("HLT_trigName", &HLT_trigName);
         chain->SetBranchAddress("HLT_trigFired", &HLT_trigFired);
         chain->SetBranchAddress("HLT_ntrig", &HLT_ntrig);
-//        chain->SetBranchAddress("HLT_trigPt", &HLT_trigPt);
+        chain->SetBranchAddress("HLT_trigPt", &HLT_trigPt);
         chain->SetBranchAddress("HLT_trigEta", &HLT_trigEta);
         chain->SetBranchAddress("HLT_trigPhi", &HLT_trigPhi);
 
@@ -472,7 +472,7 @@ public:
         tree->Branch("HLT_ntrig", &this->HLT_ntrig);
         tree->Branch("HLT_trigFired", &this->HLT_trigFired);
         tree->Branch("HLT_trigName", &this->HLT_trigName);
-    //    tree->Branch("HLT_trigPt", &this->HLT_trigPt);
+        tree->Branch("HLT_trigPt", &this->HLT_trigPt);
         tree->Branch("HLT_trigEta", &this->HLT_trigEta);
         tree->Branch("HLT_trigPhi", &this->HLT_trigPhi);
         tree->Branch("isHardProcess", &this->isHardProcess);
@@ -691,7 +691,7 @@ public:
         chain->SetBranchStatus("HLT_trigName", 1);
         chain->SetBranchStatus("HLT_ntrig", 1);
         chain->SetBranchStatus("HLT_trigFired", 1);
-//        chain->SetBranchStatus("HLT_trigPt", 1);
+        chain->SetBranchStatus("HLT_trigPt", 1);
         chain->SetBranchStatus("HLT_trigEta", 1);
         chain->SetBranchStatus("HLT_trigPhi", 1);
 
@@ -1287,7 +1287,7 @@ public:
     Int_t HLT_ntrig;
     std::vector<int> *HLT_trigFired;
     std::vector<string> *HLT_trigName;
-//    std::vector<double> *HLT_trigPt;
+    std::vector<double> *HLT_trigPt;
     std::vector<double> *HLT_trigEta;
     std::vector<double> *HLT_trigPhi;
 
@@ -1362,7 +1362,7 @@ public:
     {
         HLT_trigFired = new std::vector<int>;
         HLT_trigName = new std::vector<string>;
-//        HLT_trigPt = new std::vector<double>;
+        HLT_trigPt = new std::vector<double>;
         HLT_trigEta = new std::vector<double>;
         HLT_trigPhi = new std::vector<double>;
 
@@ -1726,7 +1726,7 @@ public:
         chain->SetBranchStatus("HLT_trigName", 1);
         chain->SetBranchStatus("HLT_ntrig", 1);
         chain->SetBranchStatus("HLT_trigFired", 1);
-//        chain->SetBranchStatus("HLT_trigPt", 1);
+        chain->SetBranchStatus("HLT_trigPt", 1);
         chain->SetBranchStatus("HLT_trigEta", 1);
         chain->SetBranchStatus("HLT_trigPhi", 1);
 
@@ -2180,7 +2180,7 @@ public:
     Int_t HLT_ntrig;
     std::vector<int> *HLT_trigFired;
     std::vector<string> *HLT_trigName;
-//    std::vector<double> *HLT_trigPt;
+    std::vector<double> *HLT_trigPt;
     std::vector<double> *HLT_trigEta;
     std::vector<double> *HLT_trigPhi;
 
@@ -2419,7 +2419,7 @@ public:
         chain->SetBranchAddress("HLT_trigName", &HLT_trigName);
         chain->SetBranchAddress("HLT_trigFired", &HLT_trigFired);
         chain->SetBranchAddress("HLT_ntrig", &HLT_ntrig);
-//        chain->SetBranchAddress("HLT_trigPt", &HLT_trigPt);
+        chain->SetBranchAddress("HLT_trigPt", &HLT_trigPt);
         chain->SetBranchAddress("HLT_trigEta", &HLT_trigEta);
         chain->SetBranchAddress("HLT_trigPhi", &HLT_trigPhi);
 
@@ -2608,7 +2608,7 @@ public:
         tree->Branch("HLT_ntrig", &this->HLT_ntrig);
         tree->Branch("HLT_trigFired", &this->HLT_trigFired);
         tree->Branch("HLT_trigName", &this->HLT_trigName);
-    //    tree->Branch("HLT_trigPt", &this->HLT_trigPt);
+        tree->Branch("HLT_trigPt", &this->HLT_trigPt);
         tree->Branch("HLT_trigEta", &this->HLT_trigEta);
         tree->Branch("HLT_trigPhi", &this->HLT_trigPhi);
         tree->Branch("MET_pT", &this->MET_pT);
@@ -2794,7 +2794,7 @@ public:
         chain->SetBranchStatus("HLT_trigName", 1);
         chain->SetBranchStatus("HLT_ntrig", 1);
         chain->SetBranchStatus("HLT_trigFired", 1);
-//        chain->SetBranchStatus("HLT_trigPt", 1);
+        chain->SetBranchStatus("HLT_trigPt", 1);
         chain->SetBranchStatus("HLT_trigEta", 1);
         chain->SetBranchStatus("HLT_trigPhi", 1);
 
