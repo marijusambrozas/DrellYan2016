@@ -21,6 +21,7 @@
 #define nPtBinEndcap 9//8
 #define nPtBinBarrel 18//16
 #define nPtBin_ele 22
+#define nPtBin_DY 10
 
 class DYAnalyzer
 {
@@ -114,8 +115,9 @@ public:
         Double_t FR_endcap_ele[nPtBin_ele];
         const double prescales[8] = {0.0016/36.47, 0.0066/36.47, 0.0132/36.47, 0.0264/36.47, 0.13/36.47, 0.26/36.47, 0.54/36.47, 1};
 
-        Double_t Eff_DY[nPtBin_ele][2];
-        Double_t Ineff_DY[nPtBin_ele][2];
+        const double ptbin_DY[nPtBin_DY+1] = {17, 23, 28, 35, 45, 60, 80, 100, 150, 250, 1000};
+        Double_t Eff_DY[nPtBin_DY][2];
+        Double_t Ineff_DY[nPtBin_DY][2];
 
         // -- Constructor -- //
 	DYAnalyzer(TString HLTname);
@@ -7169,7 +7171,7 @@ void DYAnalyzer::SetupDYeff()
     TH1D *h_ineff_barrel = (TH1D*)f->Get("h_ineff_ratio_barrel");
     TH1D *h_ineff_endcap = (TH1D*)f->Get("h_ineff_ratio_endcap");
 
-    for (Int_t i=0; i<nPtBin_ele; i++)
+    for (Int_t i=0; i<nPtBin_DY; i++)
     {
         if (h_eff_barrel->GetBinContent(i+1) > 0 && h_eff_barrel->GetBinContent(i+1) == h_eff_barrel->GetBinContent(i+1))
             Eff_DY[i][0] = h_eff_barrel->GetBinContent(i+1);
@@ -7202,7 +7204,7 @@ Double_t DYAnalyzer::DYeff_evtWeight(Double_t pT1, Double_t eta1, Int_t passMedi
         etabin1 = 0;
         while (!stop)
         {
-            if (pT1 < ptbin_ele[i_bin1 + 1] || i_bin1 >= nPtBin_ele-1) // Points exceeding boundaries are assigned last available value
+            if (pT1 < ptbin_DY[i_bin1 + 1] || i_bin1 >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available value
                 stop = 1;
             else
                 i_bin1++;
@@ -7213,7 +7215,7 @@ Double_t DYAnalyzer::DYeff_evtWeight(Double_t pT1, Double_t eta1, Int_t passMedi
         etabin1 = 1;
         while (!stop)
         {
-            if (pT1 < ptbin_ele[i_bin1 + 1] || i_bin1 >= nPtBin_ele-1) // Points exceeding boundaries are assigned last available value
+            if (pT1 < ptbin_DY[i_bin1 + 1] || i_bin1 >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available value
                 stop = 1;
             else
                 i_bin1++;
@@ -7228,7 +7230,7 @@ Double_t DYAnalyzer::DYeff_evtWeight(Double_t pT1, Double_t eta1, Int_t passMedi
         etabin2 = 0;
         while (!stop)
         {
-            if (pT2 < ptbin_ele[i_bin2 + 1] || i_bin2 >= nPtBin_ele-1) // Points exceeding boundaries are assigned last available value
+            if (pT2 < ptbin_DY[i_bin2 + 1] || i_bin2 >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available value
                 stop = 1;
             else
                 i_bin2++;
@@ -7239,7 +7241,7 @@ Double_t DYAnalyzer::DYeff_evtWeight(Double_t pT1, Double_t eta1, Int_t passMedi
         etabin2 = 1;
         while (!stop)
         {
-            if (pT2 < ptbin_ele[i_bin2 + 1] || i_bin2 >= nPtBin_ele-1) // Points exceeding boundaries are assigned last available value
+            if (pT2 < ptbin_DY[i_bin2 + 1] || i_bin2 >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available value
                 stop = 1;
             else
                 i_bin2++;

@@ -289,6 +289,8 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
                         EE._prefiringweightup = ntuple->_prefiringweightup;
                         EE._prefiringweightdown = ntuple->_prefiringweightdown;
                         EE.PVz = ntuple->PVz;
+                        EE.MET_pT = ntuple->pfMET_pT;
+                        EE.MET_phi = ntuple->pfMET_phi;
                         EE.Electron_InvM = (ele1.Momentum + ele2.Momentum).M();
 
                         EE.Electron_pT->push_back(ele1.Pt);
@@ -646,6 +648,8 @@ void MakeSelectedMuMu (TString type, TString HLTname, Bool_t Debug)
                         MuMu._prefiringweightup = ntuple->_prefiringweightup;
                         MuMu._prefiringweightdown = ntuple->_prefiringweightdown;
                         MuMu.PVz = ntuple->PVz;
+                        MuMu.MET_pT = ntuple->pfMET_pT;
+                        MuMu.MET_phi = ntuple->pfMET_phi;
 
                         MuonTree->Fill();
                         isClear = MuMu.ClearVectors();
@@ -1013,6 +1017,9 @@ void MakeSelectedEMu (TString type, TString HLTname, Bool_t Debug)
 
                         EMu.nVertices = ntuple->nVertices;
                         EMu.nPileUp = ntuple->nPileUp;
+
+                        EMu.MET_pT = ntuple->pfMET_pT;
+                        EMu.MET_phi = ntuple->pfMET_phi;
 
                         EMuTree->Fill();
 

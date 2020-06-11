@@ -24,6 +24,8 @@ public:
     Double_t _prefiringweightup;
     Double_t _prefiringweightdown;
     Double_t PVz;
+    Double_t MET_pT;
+    Double_t MET_phi;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -340,6 +342,9 @@ public:
         chain->SetBranchAddress("HLT_trigEta", &HLT_trigEta);
         chain->SetBranchAddress("HLT_trigPhi", &HLT_trigPhi);
 
+        chain->SetBranchAddress("MET_pT", &MET_pT);
+        chain->SetBranchAddress("MET_phi", &MET_phi);
+
         chain->SetBranchAddress("Muon_InvM", &Muon_InvM);
 
         chain->SetBranchAddress("Muon_pT", &Muon_pT);
@@ -471,6 +476,9 @@ public:
         tree->Branch("HLT_trigEta", &this->HLT_trigEta);
         tree->Branch("HLT_trigPhi", &this->HLT_trigPhi);
         tree->Branch("isHardProcess", &this->isHardProcess);
+        tree->Branch("MET_pT", &this->MET_pT);
+        tree->Branch("MET_phi", &this->MET_phi);
+        tree->Branch("HLT_trigPhi", &this->HLT_trigPhi);
         tree->Branch("Muon_pT", &this->Muon_pT);
         tree->Branch("Muon_eta", &this->Muon_eta);
         tree->Branch("Muon_phi", &this->Muon_phi);
@@ -686,6 +694,9 @@ public:
 //        chain->SetBranchStatus("HLT_trigPt", 1);
         chain->SetBranchStatus("HLT_trigEta", 1);
         chain->SetBranchStatus("HLT_trigPhi", 1);
+
+        chain->SetBranchStatus("MET_pT", 1);
+        chain->SetBranchStatus("MET_phi", 1);
 
         chain->SetBranchStatus("Muon_InvM", 1);
 
@@ -1024,6 +1035,8 @@ public:
         chain->SetBranchAddress("_prefiringweightup", &_prefiringweightup);
         chain->SetBranchAddress("_prefiringweightdown", &_prefiringweightdown);
         chain->SetBranchAddress("PVz", &PVz);
+        chain->SetBranchAddress("MET_pT", &MET_pT);
+        chain->SetBranchAddress("MET_phi", &MET_phi);
         chain->SetBranchAddress("isSelPassed", &isSelPassed);
         chain->SetBranchAddress("Muon_InvM", &Muon_InvM);
         chain->SetBranchAddress("Muon_pT", &Muon_pT);
@@ -1050,6 +1063,8 @@ public:
         _prefiringweightup = Mu->_prefiringweightup;
         _prefiringweightdown = Mu->_prefiringweightdown;
         PVz = Mu->PVz;
+        MET_pT = Mu->MET_pT;
+        MET_phi = Mu->MET_phi;
         isSelPassed = SelPassed;
         Muon_InvM = Mu->Muon_InvM;
 
@@ -1076,6 +1091,8 @@ public:
         tree->Branch("_prefiringweightup", &this->_prefiringweightup);
         tree->Branch("_prefiringweightdown", &this->_prefiringweightdown);
         tree->Branch("PVz", &this->PVz);
+        tree->Branch("MET_pT", &this->MET_pT);
+        tree->Branch("MET_phi", &this->MET_phi);
         tree->Branch("Muon_pT", &this->Muon_pT);
         tree->Branch("Muon_eta", &this->Muon_eta);
         tree->Branch("Muon_phi", &this->Muon_phi);
@@ -1133,6 +1150,8 @@ public:
         chain->SetBranchStatus("_prefiringweightup", 1);
         chain->SetBranchStatus("_prefiringweightdown", 1);
         chain->SetBranchStatus("PVz", 1);
+        chain->SetBranchStatus("MET_pT", 1);
+        chain->SetBranchStatus("MET_phi", 1);
         chain->SetBranchStatus("isSelPassed", 1);
         chain->SetBranchStatus("Muon_InvM", 1);
         chain->SetBranchStatus("Muon_pT", 1);
@@ -1435,11 +1454,15 @@ public:
         chain->SetBranchAddress("HLT_trigName", &HLT_trigName);
         chain->SetBranchAddress("HLT_trigFired", &HLT_trigFired);
         chain->SetBranchAddress("HLT_ntrig", &HLT_ntrig);
-//        chain->SetBranchAddress("HLT_trigPt", &HLT_trigPt);
+        chain->SetBranchAddress("HLT_trigPt", &HLT_trigPt);
         chain->SetBranchAddress("HLT_trigEta", &HLT_trigEta);
         chain->SetBranchAddress("HLT_trigPhi", &HLT_trigPhi);
         chain->SetBranchAddress("GENEvt_weight", &GENEvt_weight);
         chain->SetBranchAddress("isHardProcess", &isHardProcess);
+
+        chain->SetBranchAddress("MET_pT", &MET_pT);
+        chain->SetBranchAddress("MET_phi", &MET_phi);
+
         chain->SetBranchAddress("Electron_InvM", &Electron_InvM);
 
         chain->SetBranchAddress("Electron_pT", &Electron_pT);
@@ -1522,9 +1545,11 @@ public:
         tree->Branch("HLT_ntrig", &this->HLT_ntrig);
         tree->Branch("HLT_trigFired", &this->HLT_trigFired);
         tree->Branch("HLT_trigName", &this->HLT_trigName);
-    //    tree->Branch("HLT_trigPt", &this->HLT_trigPt);
+        tree->Branch("HLT_trigPt", &this->HLT_trigPt);
         tree->Branch("HLT_trigEta", &this->HLT_trigEta);
         tree->Branch("HLT_trigPhi", &this->HLT_trigPhi);
+        tree->Branch("MET_pT", &this->MET_pT);
+        tree->Branch("MET_phi", &this->MET_phi);
         tree->Branch("isHardProcess", &this->isHardProcess);
         tree->Branch("Electron_InvM", &this->Electron_InvM);
         tree->Branch("Electron_pT", &this->Electron_pT);
@@ -1704,6 +1729,9 @@ public:
 //        chain->SetBranchStatus("HLT_trigPt", 1);
         chain->SetBranchStatus("HLT_trigEta", 1);
         chain->SetBranchStatus("HLT_trigPhi", 1);
+
+        chain->SetBranchStatus("MET_pT", 1);
+        chain->SetBranchStatus("MET_phi", 1);
 
         chain->SetBranchStatus("GENEvt_weight", 1);
         chain->SetBranchStatus("isHardProcess", 1);
@@ -1921,6 +1949,8 @@ public:
         chain->SetBranchAddress("_prefiringweightup", &_prefiringweightup);
         chain->SetBranchAddress("_prefiringweightdown", &_prefiringweightdown);
         chain->SetBranchAddress("PVz", &PVz);
+        chain->SetBranchAddress("MET_pT", &MET_pT);
+        chain->SetBranchAddress("MET_phi", &MET_phi);
         chain->SetBranchAddress("isSelPassed", &isSelPassed);
         chain->SetBranchAddress("Electron_InvM", &Electron_InvM);
         chain->SetBranchAddress("Electron_pT", &Electron_pT);
@@ -1949,6 +1979,9 @@ public:
         _prefiringweightdown = Ele->_prefiringweightdown;
         PVz = Ele->PVz;
 
+        MET_pT = Ele->MET_pT;
+        MET_phi = Ele->MET_phi;
+
         Electron_pT = Ele->Electron_pT;
         Electron_eta = Ele->Electron_eta;
         Electron_phi = Ele->Electron_phi;
@@ -1970,6 +2003,8 @@ public:
         tree->Branch("_prefiringweightdown", &this->_prefiringweightdown);
         tree->Branch("PVz", &this->PVz);
         tree->Branch("GENEvt_weight", &this->GENEvt_weight);
+        tree->Branch("MET_pT", &this->MET_pT);
+        tree->Branch("MET_phi", &this->MET_phi);
         tree->Branch("Electron_InvM", &this->Electron_InvM);
         tree->Branch("Electron_pT", &this->Electron_pT);
         tree->Branch("Electron_eta", &this->Electron_eta);
@@ -2023,6 +2058,8 @@ public:
         chain->SetBranchStatus("_prefiringweightup", 1);
         chain->SetBranchStatus("_prefiringweightdown", 1);
         chain->SetBranchStatus("PVz", 1);
+        chain->SetBranchStatus("MET_pT", 1);
+        chain->SetBranchStatus("MET_phi", 1);
         chain->SetBranchStatus("Electron_InvM", 1);
         chain->SetBranchStatus("Electron_pT", 1);
         chain->SetBranchStatus("Electron_eta", 1);
@@ -2386,6 +2423,9 @@ public:
         chain->SetBranchAddress("HLT_trigEta", &HLT_trigEta);
         chain->SetBranchAddress("HLT_trigPhi", &HLT_trigPhi);
 
+        chain->SetBranchAddress("MET_pT", &MET_pT);
+        chain->SetBranchAddress("MET_phi", &MET_phi);
+
         chain->SetBranchAddress("EMu_InvM", &EMu_InvM);
 
         // -- Muon information -- //
@@ -2571,6 +2611,8 @@ public:
     //    tree->Branch("HLT_trigPt", &this->HLT_trigPt);
         tree->Branch("HLT_trigEta", &this->HLT_trigEta);
         tree->Branch("HLT_trigPhi", &this->HLT_trigPhi);
+        tree->Branch("MET_pT", &this->MET_pT);
+        tree->Branch("MET_phi", &this->MET_phi);
         tree->Branch("isHardProcess", &this->isHardProcess);
         tree->Branch("EMu_InvM", &this->EMu_InvM);
         tree->Branch("Muon_pT", &this->Muon_pT);
@@ -2755,6 +2797,9 @@ public:
 //        chain->SetBranchStatus("HLT_trigPt", 1);
         chain->SetBranchStatus("HLT_trigEta", 1);
         chain->SetBranchStatus("HLT_trigPhi", 1);
+
+        chain->SetBranchStatus("MET_pT", 1);
+        chain->SetBranchStatus("MET_phi", 1);
 
         chain->SetBranchStatus("EMu_InvM", 1);
 
@@ -3140,6 +3185,8 @@ public:
         chain->SetBranchAddress("_prefiringweightup", &_prefiringweightup);
         chain->SetBranchAddress("_prefiringweightdown", &_prefiringweightdown);
         chain->SetBranchAddress("PVz", &PVz);
+        chain->SetBranchAddress("MET_pT", &MET_pT);
+        chain->SetBranchAddress("MET_phi", &MET_phi);
         chain->SetBranchAddress("isSelPassed", &isSelPassed);
         chain->SetBranchAddress("EMu_InvM", &EMu_InvM);
         chain->SetBranchAddress("Electron_pT", &Electron_pT);
@@ -3175,6 +3222,10 @@ public:
         _prefiringweightdown = EMu->_prefiringweightdown;
         PVz = EMu->PVz;
         isSelPassed = SelPassed;
+
+        MET_pT = EMu->MET_pT;
+        MET_phi = EMu->MET_phi;
+
         EMu_InvM = EMu->EMu_InvM;
 
         Muon_pT = EMu->Muon_pT;
@@ -3209,6 +3260,8 @@ public:
         tree->Branch("_prefiringweightup", &this->_prefiringweightup);
         tree->Branch("_prefiringweightdown", &this->_prefiringweightdown);
         tree->Branch("PVz", &this->PVz);
+        tree->Branch("MET_pT", &this->MET_pT);
+        tree->Branch("MET_phi", &this->MET_phi);
         tree->Branch("EMu_InvM", &this->EMu_InvM);
         tree->Branch("Muon_pT", &this->Muon_pT);
         tree->Branch("Muon_eta", &this->Muon_eta);
@@ -3255,6 +3308,8 @@ public:
         chain->SetBranchStatus("_prefiringweightsup", 1);
         chain->SetBranchStatus("_prefiringweightsdown", 1);
         chain->SetBranchStatus("PVz", 1);
+        chain->SetBranchStatus("MET_pT", 1);
+        chain->SetBranchStatus("MET_phi", 1);
         chain->SetBranchStatus("isSelPassed", 1);
         chain->SetBranchStatus("EMu_InvM", 1);
         chain->SetBranchStatus("Electron_pT", 1);

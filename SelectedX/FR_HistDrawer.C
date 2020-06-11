@@ -12222,20 +12222,20 @@ void E_DYefficiency()
 {
     TFile *f = new TFile("/media/sf_DATA/SelectedEE/Histos/DYefficiency.root", "READ");
 
-    TH1D *h_mass[3],
-         *h_pT_barrel_pass[3],
-         *h_pT_endcap_pass[3],
-         *h_pT_barrel_fail[3],
-         *h_pT_endcap_fail[3];
+    TH1D *h_mass[4],
+         *h_pT_barrel_pass[4],
+         *h_pT_endcap_pass[4],
+         *h_pT_barrel_fail[4],
+         *h_pT_endcap_fail[4];
     THStack *s_mass = new THStack("s_mass", "");
     THStack *s_pT_barrel_pass = new THStack("s_pT_barrel_pass", "");
     THStack *s_pT_endcap_pass = new THStack("s_pT_endcap_pass", "");
     THStack *s_pT_barrel_fail = new THStack("s_pT_barrel_fail", "");
     THStack *s_pT_endcap_fail = new THStack("s_pT_endcap_fail", "");
     Color_t color = kBlack;
-    TString type[3] = {"data", "DY", "bkg"};
+    TString type[4] = {"data", "DY", "bkgr", "bkgf"};
 
-    for (Int_t i=2; i>=0; i--)
+    for (Int_t i=3; i>=0; i--)
     {
         f->GetObject("h_mass_"+type[i], h_mass[i]);
         f->GetObject("h_pT_barrel_pass_"+type[i], h_pT_barrel_pass[i]);
@@ -12268,7 +12268,8 @@ void E_DYefficiency()
         else
         {
             if (i == 1) color = kOrange;
-            else color = kCyan + 2;
+            else if (i == 2) color = kCyan + 2;
+            else color = kRed + 3;
             h_mass[i]->SetFillColor(color);
             h_mass[i]->SetLineColor(color);
             h_pT_barrel_pass[i]->SetFillColor(color);
@@ -12305,7 +12306,8 @@ void E_DYefficiency()
     TLegend * legend = new TLegend(0.7, 0.7, 0.95, 0.95);
     legend->AddEntry(h_mass[0], "Data", "pl");
     legend->AddEntry(h_mass[1], "DY", "f");
-    legend->AddEntry(h_mass[2], "Others", "f");
+    legend->AddEntry(h_mass[2], "Bkg (real)", "f");
+    legend->AddEntry(h_mass[3], "Bkg (fake)", "f");
 
     RP_mass->ImportLegend(legend);
     RP_pT_barrel_pass->ImportLegend(legend);
