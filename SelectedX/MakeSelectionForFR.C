@@ -194,6 +194,10 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         std::vector<double> *eta = new std::vector<double>;
         std::vector<double> *phi = new std::vector<double>;
         std::vector<int> *charge = new std::vector<int>;
+        std::vector<int> *scPixCharge = new std::vector<int>;
+        std::vector<int> *isGsfCtfScPixConsistent = new std::vector<int>;
+        std::vector<int> *isGsfScPixConsistent = new std::vector<int>;
+        std::vector<int> *isGsfCtfConsistent = new std::vector<int>;
         std::vector<double> *Full5x5_SigmaIEtaIEta = new std::vector<double>;
         std::vector<double> *dEtaInSeed = new std::vector<double>;
         std::vector<double> *dPhiIn = new std::vector<double>;
@@ -227,6 +231,10 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         ElectronTree->Branch("eta", &eta);
         ElectronTree->Branch("phi", &phi);
         ElectronTree->Branch("charge", &charge);
+        ElectronTree->Branch("scPixCharge", &scPixCharge);
+        ElectronTree->Branch("isGsfCtfScPixConsistent", &isGsfCtfScPixConsistent);
+        ElectronTree->Branch("isGsfScPixConsistent", &isGsfScPixConsistent);
+        ElectronTree->Branch("isGsfCtfConsistent", &isGsfCtfConsistent);
         ElectronTree->Branch("Full5x5_SigmaIEtaIEta", &Full5x5_SigmaIEtaIEta);
         ElectronTree->Branch("dEtaInSeed", dEtaInSeed);
         ElectronTree->Branch("dPhiIn", &dPhiIn);
@@ -357,6 +365,10 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         eta->clear();
                         phi->clear();
                         charge->clear();
+                        scPixCharge->clear();
+                        isGsfCtfScPixConsistent->clear();
+                        isGsfScPixConsistent->clear();
+                        isGsfCtfConsistent->clear();
                         Full5x5_SigmaIEtaIEta->clear();
                         dEtaInSeed->clear();
                         dPhiIn->clear();
@@ -419,6 +431,10 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                             eta->push_back(SelectedElectronCollection[i_ele].etaSC);
                             phi->push_back(SelectedElectronCollection[i_ele].phi);
                             charge->push_back(SelectedElectronCollection[i_ele].charge);
+                            scPixCharge->push_back(SelectedElectronCollection[i_ele].scPixCharge);
+                            isGsfCtfScPixConsistent->push_back(SelectedElectronCollection[i_ele].isGsfCtfScPixConsistent);
+                            isGsfScPixConsistent->push_back(SelectedElectronCollection[i_ele].isGsfScPixConsistent);
+                            isGsfCtfConsistent->push_back(SelectedElectronCollection[i_ele].isGsfCtfConsistent);
                             Full5x5_SigmaIEtaIEta->push_back(SelectedElectronCollection[i_ele].Full5x5_SigmaIEtaIEta);
                             dEtaInSeed->push_back(SelectedElectronCollection[i_ele].dEtaInSeed);
                             dPhiIn->push_back(SelectedElectronCollection[i_ele].dPhiIn);
@@ -897,6 +913,10 @@ void MakeSelectionForBKGest_EE (TString type, TString HLTname, Bool_t Debug)
         std::vector<double> *etaSC = new std::vector<double>;
         std::vector<double> *phi = new std::vector<double>;
         std::vector<int> *charge = new std::vector<int>;
+        std::vector<int> *scPixCharge = new std::vector<int>;
+        std::vector<int> *isGsfCtfScPixConsistent = new std::vector<int>;
+        std::vector<int> *isGsfScPixConsistent = new std::vector<int>;
+        std::vector<int> *isGsfCtfConsistent = new std::vector<int>;
         std::vector<double> *Full5x5_SigmaIEtaIEta = new std::vector<double>;
         std::vector<double> *dEtaInSeed = new std::vector<double>;
         std::vector<double> *dPhiIn = new std::vector<double>;
@@ -925,6 +945,10 @@ void MakeSelectionForBKGest_EE (TString type, TString HLTname, Bool_t Debug)
         ElectronTree->Branch("etaSC", &etaSC);
         ElectronTree->Branch("phi", &phi);
         ElectronTree->Branch("charge", &charge);
+        ElectronTree->Branch("scPixCharge", &scPixCharge);
+        ElectronTree->Branch("isGsfCtfScPixConsistent", &isGsfCtfScPixConsistent);
+        ElectronTree->Branch("isGsfScPixConsistent", &isGsfScPixConsistent);
+        ElectronTree->Branch("isGsfCtfConsistent", &isGsfCtfConsistent);
         ElectronTree->Branch("Full5x5_SigmaIEtaIEta", &Full5x5_SigmaIEtaIEta);
         ElectronTree->Branch("dEtaInSeed", &dEtaInSeed);
         ElectronTree->Branch("dPhiIn", &dPhiIn);
@@ -1033,6 +1057,10 @@ void MakeSelectionForBKGest_EE (TString type, TString HLTname, Bool_t Debug)
                         etaSC->clear();
                         phi->clear();
                         charge->clear();
+                        scPixCharge->clear();
+                        isGsfCtfScPixConsistent->clear();
+                        isGsfScPixConsistent->clear();
+                        isGsfCtfConsistent->clear();
                         Full5x5_SigmaIEtaIEta->clear();
                         dEtaInSeed->clear();
                         dPhiIn->clear();
@@ -1077,6 +1105,10 @@ void MakeSelectionForBKGest_EE (TString type, TString HLTname, Bool_t Debug)
                             etaSC->push_back(SelectedElectronCollection[i_ele].etaSC);
                             phi->push_back(SelectedElectronCollection[i_ele].phi);
                             charge->push_back(SelectedElectronCollection[i_ele].charge);
+                            scPixCharge->push_back(SelectedElectronCollection[i_ele].scPixCharge);
+                            isGsfCtfScPixConsistent->push_back(SelectedElectronCollection[i_ele].isGsfCtfScPixConsistent);
+                            isGsfScPixConsistent->push_back(SelectedElectronCollection[i_ele].isGsfScPixConsistent);
+                            isGsfCtfConsistent->push_back(SelectedElectronCollection[i_ele].isGsfCtfConsistent);
                             Full5x5_SigmaIEtaIEta->push_back(SelectedElectronCollection[i_ele].Full5x5_SigmaIEtaIEta);
                             dEtaInSeed->push_back(SelectedElectronCollection[i_ele].dEtaInSeed);
                             dPhiIn->push_back(SelectedElectronCollection[i_ele].dPhiIn);

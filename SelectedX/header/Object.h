@@ -200,6 +200,10 @@ public:
 	Double_t Energy;
         Double_t Energy_uncorr;
 	Int_t charge;
+        Int_t scPixCharge;
+        Int_t isGsfCtfScPixConsistent;
+        Int_t isGsfScPixConsistent;
+        Int_t isGsfCtfConsistent;
 	Double_t gsfpT;
 	Double_t gsfPx;
 	Double_t gsfPy;
@@ -254,6 +258,10 @@ public:
 		eta = ntuple->Electron_eta[index];
 		phi = ntuple->Electron_phi[index];
 		charge = ntuple->Electron_charge[index];
+                scPixCharge = ntuple->Electron_scPixCharge[index];
+                isGsfCtfScPixConsistent = ntuple->Electron_isGsfCtfScPixConsistent[index];
+                isGsfScPixConsistent = ntuple->Electron_isGsfScPixConsistent[index];
+                isGsfCtfConsistent = ntuple->Electron_isGsfCtfConsistent[index];
 		gsfpT = ntuple->Electron_gsfpT[index];
 		gsfPx = ntuple->Electron_gsfPx[index];
 		gsfPy = ntuple->Electron_gsfPy[index];
@@ -312,6 +320,10 @@ public:
                 eta = ntuple->Electron_eta->at(index);
                 phi = ntuple->Electron_phi->at(index);
                 charge = ntuple->Electron_charge->at(index);
+                scPixCharge = ntuple->Electron_scPixCharge->at(index);
+                isGsfCtfScPixConsistent = ntuple->Electron_isGsfCtfScPixConsistent->at(index);
+                isGsfScPixConsistent = ntuple->Electron_isGsfScPixConsistent->at(index);
+                isGsfCtfConsistent = ntuple->Electron_isGsfCtfConsistent->at(index);
                 gsfpT = ntuple->Electron_gsfpT->at(index);
                 gsfPx = ntuple->Electron_gsfPx->at(index);
                 gsfPy = ntuple->Electron_gsfPy->at(index);
@@ -370,6 +382,10 @@ public:
                 eta = ntuple->Electron_eta;
                 phi = ntuple->Electron_phi;
                 charge = ntuple->Electron_charge;
+                scPixCharge = ntuple->Electron_scPixCharge;
+                isGsfCtfScPixConsistent = ntuple->Electron_isGsfCtfScPixConsistent;
+                isGsfScPixConsistent = ntuple->Electron_isGsfScPixConsistent;
+                isGsfCtfConsistent = ntuple->Electron_isGsfCtfConsistent;
                 gsfpT = ntuple->Electron_gsfpT;
                 gsfPx = ntuple->Electron_gsfPx;
                 gsfPy = ntuple->Electron_gsfPy;

@@ -1301,6 +1301,10 @@ public:
     std::vector<double> *Electron_phi;
     std::vector<double> *Electron_Energy;
     std::vector<int> *Electron_charge;
+    std::vector<int> *Electron_scPixCharge;
+    std::vector<int> *Electron_isGsfCtfScPixConsistent;
+    std::vector<int> *Electron_isGsfScPixConsistent;
+    std::vector<int> *Electron_isGsfCtfConsistent;
 
     std::vector<double> * Electron_Energy_uncorr;
 
@@ -1371,6 +1375,10 @@ public:
         Electron_phi = new std::vector<double>;
         Electron_Energy = new std::vector<double>;
         Electron_charge = new std::vector<int>;
+        Electron_scPixCharge = new std::vector<int>;
+        Electron_isGsfCtfScPixConsistent = new std::vector<int>;
+        Electron_isGsfScPixConsistent = new std::vector<int>;
+        Electron_isGsfCtfConsistent = new std::vector<int>;
 
         Electron_Energy_uncorr = new std::vector<double>;
 
@@ -1470,6 +1478,11 @@ public:
         chain->SetBranchAddress("Electron_phi", &Electron_phi);
         chain->SetBranchAddress("Electron_Energy", &Electron_Energy);
         chain->SetBranchAddress("Electron_charge", &Electron_charge);
+        chain->SetBranchAddress("Electron_scPixCharge", &Electron_scPixCharge);
+        chain->SetBranchAddress("Electron_isGsfCtfScPixConsistent", &Electron_isGsfCtfScPixConsistent);
+        chain->SetBranchAddress("Electron_isGsfScPixConsistent", &Electron_isGsfScPixConsistent);
+        chain->SetBranchAddress("Electron_isGsfCtfConsistent", &Electron_isGsfCtfConsistent);
+
         chain->SetBranchAddress("Electron_Energy_uncorr", &Electron_Energy_uncorr);
         chain->SetBranchAddress("Electron_gsfpT", &Electron_gsfpT);
         chain->SetBranchAddress("Electron_gsfPx", &Electron_gsfPx);
@@ -1557,6 +1570,10 @@ public:
         tree->Branch("Electron_phi", &this->Electron_phi);
         tree->Branch("Electron_Energy", &this->Electron_Energy);
         tree->Branch("Electron_charge", &this->Electron_charge);
+        tree->Branch("Electron_scPixCharge", &this->Electron_scPixCharge);
+        tree->Branch("Electron_isGsfCtfScPixConsistent", &this->Electron_isGsfCtfScPixConsistent);
+        tree->Branch("Electron_isGsfScPixConsistent", &this->Electron_isGsfScPixConsistent);
+        tree->Branch("Electron_isGsfCtfConsistent", &this->Electron_isGsfCtfConsistent);
         tree->Branch("Electron_Energy_uncorr", &this->Electron_Energy_uncorr);
         tree->Branch("Electron_gsfpT", &this->Electron_gsfpT);
         tree->Branch("Electron_gsfPx", &this->Electron_gsfPx);
@@ -1621,6 +1638,10 @@ public:
         Electron_phi->clear();
         Electron_Energy->clear();
         Electron_charge->clear();
+        Electron_scPixCharge->clear();
+        Electron_isGsfCtfScPixConsistent->clear();
+        Electron_isGsfScPixConsistent->clear();
+        Electron_isGsfCtfConsistent->clear();
         Electron_Energy_uncorr->clear();
         Electron_gsfpT->clear();
         Electron_gsfPx->clear();
@@ -1742,6 +1763,10 @@ public:
         chain->SetBranchStatus("Electron_phi", 1);
         chain->SetBranchStatus("Electron_Energy", 1);
         chain->SetBranchStatus("Electron_charge", 1);
+        chain->SetBranchStatus("Electron_scPixCharge", 1);
+        chain->SetBranchStatus("Electron_isGsfCtfScPixConsistent", 1);
+        chain->SetBranchStatus("Electron_isGsfScPixConsistent", 1);
+        chain->SetBranchStatus("Electron_isGsfCtfConsistent", 1);
         chain->SetBranchStatus("Electron_Energy_uncorr", 1);
         chain->SetBranchStatus("Electron_gsfpT", 1);
         chain->SetBranchStatus("Electron_gsfPx", 1);
@@ -1916,6 +1941,10 @@ public:
     std::vector<double> *Electron_phi;
     std::vector<double> *Electron_Energy;
     std::vector<int> *Electron_charge;
+    std::vector<int> *Electron_scPixCharge;
+    std::vector<int> *Electron_isGsfCtfScPixConsistent;
+    std::vector<int> *Electron_isGsfScPixConsistent;
+    std::vector<int> *Electron_isGsfCtfConsistent;
     std::vector<double> *Electron_etaSC;
     std::vector<double> *Electron_phiSC;
     std::vector<double> *Electron_Energy_uncorr;
@@ -1928,6 +1957,10 @@ public:
         Electron_phi = new std::vector<double>;
         Electron_Energy = new std::vector<double>;
         Electron_charge = new std::vector<int>;
+        Electron_scPixCharge = new std::vector<int>;
+        Electron_isGsfCtfScPixConsistent = new std::vector<int>;
+        Electron_isGsfScPixConsistent = new std::vector<int>;
+        Electron_isGsfCtfConsistent = new std::vector<int>;
         Electron_etaSC = new std::vector<double>;
         Electron_phiSC = new std::vector<double>;
         Electron_Energy_uncorr = new std::vector<double>;
@@ -1958,6 +1991,10 @@ public:
         chain->SetBranchAddress("Electron_phi", &Electron_phi);
         chain->SetBranchAddress("Electron_Energy", &Electron_Energy);
         chain->SetBranchAddress("Electron_charge", &Electron_charge);
+        chain->SetBranchAddress("Electron_scPixCharge", &Electron_scPixCharge);
+        chain->SetBranchAddress("Electron_isGsfCtfScPixConsistent", &Electron_isGsfCtfScPixConsistent);
+        chain->SetBranchAddress("Electron_isGsfScPixConsistent", &Electron_isGsfScPixConsistent);
+        chain->SetBranchAddress("Electron_isGsfCtfConsistent", &Electron_isGsfCtfConsistent);
         chain->SetBranchAddress("Electron_etaSC", &Electron_etaSC);
         chain->SetBranchAddress("Electron_phiSC", &Electron_phiSC);
         chain->SetBranchAddress("Electron_Energy_uncorr", &Electron_Energy_uncorr);
@@ -1987,6 +2024,10 @@ public:
         Electron_phi = Ele->Electron_phi;
         Electron_Energy = Ele->Electron_Energy;
         Electron_charge = Ele->Electron_charge;
+        Electron_scPixCharge = Ele->Electron_scPixCharge;
+        Electron_isGsfCtfScPixConsistent = Ele->Electron_isGsfCtfScPixConsistent;
+        Electron_isGsfScPixConsistent = Ele->Electron_isGsfScPixConsistent;
+        Electron_isGsfCtfConsistent = Ele->Electron_isGsfCtfConsistent;
         Electron_etaSC = Ele->Electron_etaSC;
         Electron_phiSC = Ele->Electron_phiSC;
         Electron_Energy_uncorr = Ele->Electron_Energy_uncorr;
@@ -2011,6 +2052,10 @@ public:
         tree->Branch("Electron_phi", &this->Electron_phi);
         tree->Branch("Electron_Energy", &this->Electron_Energy);
         tree->Branch("Electron_charge", &this->Electron_charge);
+        tree->Branch("Electron_scPixCharge", &this->Electron_scPixCharge);
+        tree->Branch("Electron_isGsfCtfScPixConsistent", &this->Electron_isGsfCtfScPixConsistent);
+        tree->Branch("Electron_isGsfScPixConsistent", &this->Electron_isGsfScPixConsistent);
+        tree->Branch("Electron_isGsfCtfConsistent", &this->Electron_isGsfCtfConsistent);
         tree->Branch("Electron_etaSC", &this->Electron_etaSC);
         tree->Branch("Electron_phiSC", &this->Electron_phiSC);
         tree->Branch("Electron_Energy_uncorr", &this->Electron_Energy_uncorr);
@@ -2023,6 +2068,10 @@ public:
         Electron_phi->clear();
         Electron_Energy->clear();
         Electron_charge->clear();
+        Electron_scPixCharge->clear();
+        Electron_isGsfCtfScPixConsistent->clear();
+        Electron_isGsfScPixConsistent->clear();
+        Electron_isGsfCtfConsistent->clear();
         Electron_etaSC->clear();
         Electron_phiSC->clear();
         Electron_Energy_uncorr->clear();
@@ -2066,6 +2115,10 @@ public:
         chain->SetBranchStatus("Electron_phi", 1);
         chain->SetBranchStatus("Electron_Energy", 1);
         chain->SetBranchStatus("Electron_charge", 1);
+        chain->SetBranchStatus("Electron_scPixCharge", 1);
+        chain->SetBranchStatus("Electron_isGsfCtfScPixConsistent", 1);
+        chain->SetBranchStatus("Electron_isGsfScPixConsistent", 1);
+        chain->SetBranchStatus("Electron_isGsfCtfConsistent", 1);
         chain->SetBranchStatus("Electron_etaSC", 1);
         chain->SetBranchStatus("Electron_phiSC", 1);
         chain->SetBranchStatus("Electron_Energy_uncorr", 1);
@@ -2306,6 +2359,10 @@ public:
     Double_t Electron_phi;
     Double_t Electron_Energy;
     Int_t Electron_charge;
+    Int_t Electron_scPixCharge;
+    Int_t Electron_isGsfCtfScPixConsistent;
+    Int_t Electron_isGsfScPixConsistent;
+    Int_t Electron_isGsfCtfConsistent;
     Double_t Electron_Energy_uncorr;
 
     Double_t Electron_gsfpT;
@@ -2533,6 +2590,10 @@ public:
         chain->SetBranchAddress("Electron_eta", &Electron_eta);
         chain->SetBranchAddress("Electron_phi", &Electron_phi);
         chain->SetBranchAddress("Electron_charge", &Electron_charge);
+        chain->SetBranchAddress("Electron_scPixCharge", &Electron_scPixCharge);
+        chain->SetBranchAddress("Electron_isGsfCtfScPixConsistent", &Electron_isGsfCtfScPixConsistent);
+        chain->SetBranchAddress("Electron_isGsfScPixConsistent", &Electron_isGsfScPixConsistent);
+        chain->SetBranchAddress("Electron_isGsfCtfConsistent", &Electron_isGsfCtfConsistent);
         chain->SetBranchAddress("Electron_Energy_uncorr", &Electron_Energy_uncorr);
         chain->SetBranchAddress("Electron_gsfpT", &Electron_gsfpT);
         chain->SetBranchAddress("Electron_gsfPx", &Electron_gsfPx);
@@ -2692,6 +2753,10 @@ public:
         tree->Branch("Electron_phi", &this->Electron_phi);
         tree->Branch("Electron_Energy", &this->Electron_Energy);
         tree->Branch("Electron_charge", &this->Electron_charge);
+        tree->Branch("Electron_scPixCharge", &this->Electron_scPixCharge);
+        tree->Branch("Electron_isGsfCtfScPixConsistent", &this->Electron_isGsfCtfScPixConsistent);
+        tree->Branch("Electron_isGsfScPixConsistent", &this->Electron_isGsfScPixConsistent);
+        tree->Branch("Electron_isGsfCtfConsistent", &this->Electron_isGsfCtfConsistent);
         tree->Branch("Electron_Energy_uncorr", &this->Electron_Energy_uncorr);
         tree->Branch("Electron_gsfpT", &this->Electron_gsfpT);
         tree->Branch("Electron_gsfPx", &this->Electron_gsfPx);
@@ -2902,6 +2967,10 @@ public:
         chain->SetBranchStatus("Electron_phi", 1);
         chain->SetBranchStatus("Electron_Energy", 1);
         chain->SetBranchStatus("Electron_charge", 1);
+        chain->SetBranchStatus("Electron_scPixCharge", 1);
+        chain->SetBranchStatus("Electron_isGsfCtfScPixConsistent", 1);
+        chain->SetBranchStatus("Electron_isGsfScPixConsistent", 1);
+        chain->SetBranchStatus("Electron_isGsfCtfConsistent", 1);
         chain->SetBranchStatus("Electron_Energy_uncorr", 1);
         chain->SetBranchStatus("Electron_gsfpT", 1);
         chain->SetBranchStatus("Electron_gsfPx", 1);
@@ -3148,6 +3217,10 @@ public:
     Double_t Electron_phi;
     Double_t Electron_Energy;
     Int_t Electron_charge;
+    Int_t Electron_scPixCharge;
+    Int_t Electron_isGsfCtfScPixConsistent;
+    Int_t Electron_isGsfScPixConsistent;
+    Int_t Electron_isGsfCtfConsistent;
     Double_t Electron_etaSC;
     Double_t Electron_phiSC;
     Double_t Electron_Energy_uncorr;
@@ -3194,6 +3267,10 @@ public:
         chain->SetBranchAddress("Electron_phi", &Electron_phi);
         chain->SetBranchAddress("Electron_Energy", &Electron_Energy);
         chain->SetBranchAddress("Electron_charge", &Electron_charge);
+        chain->SetBranchAddress("Electron_scPixCharge", &Electron_scPixCharge);
+        chain->SetBranchAddress("Electron_isGsfCtfScPixConsistent", &Electron_isGsfCtfScPixConsistent);
+        chain->SetBranchAddress("Electron_isGsfScPixConsistent", &Electron_isGsfScPixConsistent);
+        chain->SetBranchAddress("Electron_isGsfCtfConsistent", &Electron_isGsfCtfConsistent);
         chain->SetBranchAddress("Electron_etaSC", &Electron_etaSC);
         chain->SetBranchAddress("Electron_phiSC", &Electron_phiSC);
         chain->SetBranchAddress("Electron_Energy_uncorr", &Electron_Energy_uncorr);
@@ -3244,6 +3321,10 @@ public:
         Electron_phi = EMu->Electron_phi;
         Electron_Energy = EMu->Electron_Energy;
         Electron_charge = EMu->Electron_charge;
+        Electron_scPixCharge = EMu->Electron_scPixCharge;
+        Electron_isGsfCtfScPixConsistent = EMu->Electron_isGsfCtfScPixConsistent;
+        Electron_isGsfScPixConsistent = EMu->Electron_isGsfScPixConsistent;
+        Electron_isGsfCtfConsistent = EMu->Electron_isGsfCtfConsistent;
         Electron_etaSC = EMu->Electron_etaSC;
         Electron_phiSC = EMu->Electron_phiSC;
         Electron_Energy_uncorr = EMu->Electron_Energy_uncorr;
@@ -3278,6 +3359,10 @@ public:
         tree->Branch("Electron_phi", &this->Electron_phi);
         tree->Branch("Electron_Energy", &this->Electron_Energy);
         tree->Branch("Electron_charge", &this->Electron_charge);
+        tree->Branch("Electron_scPixCharge", &this->Electron_scPixCharge);
+        tree->Branch("Electron_isGsfCtfScPixConsistent", &this->Electron_isGsfCtfScPixConsistent);
+        tree->Branch("Electron_isGsfScPixConsistent", &this->Electron_isGsfScPixConsistent);
+        tree->Branch("Electron_isGsfCtfConsistent", &this->Electron_isGsfCtfConsistent);
         tree->Branch("Electron_etaSC", &this->Electron_etaSC);
         tree->Branch("Electron_phiSC", &this->Electron_phiSC);
         tree->Branch("Electron_Energy_uncorr", &this->Electron_Energy_uncorr);
@@ -3317,6 +3402,10 @@ public:
         chain->SetBranchStatus("Electron_phi", 1);
         chain->SetBranchStatus("Electron_Energy", 1);
         chain->SetBranchStatus("Electron_charge", 1);
+        chain->SetBranchStatus("Electron_scPixCharge", 1);
+        chain->SetBranchStatus("Electron_isGsfCtfScPixConsistent", 1);
+        chain->SetBranchStatus("Electron_isGsfScPixConsistent", 1);
+        chain->SetBranchStatus("Electron_isGsfCtfConsistent", 1);
         chain->SetBranchStatus("Electron_etaSC", 1);
         chain->SetBranchStatus("Electron_phiSC", 1);
         chain->SetBranchStatus("Electron_Energy_uncorr", 1);

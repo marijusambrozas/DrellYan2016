@@ -101,6 +101,10 @@ public:
     Double_t Electron_eta[MaxN];
     Double_t Electron_phi[MaxN];
     Int_t Electron_charge[MaxN];
+    Int_t Electron_scPixCharge[MaxN];
+    Bool_t Electron_isGsfCtfScPixConsistent[MaxN];
+    Bool_t Electron_isGsfScPixConsistent[MaxN];
+    Bool_t Electron_isGsfCtfConsistent[MaxN];
     Double_t Electron_gsfpT[MaxN];
     Double_t Electron_gsfPx[MaxN];
     Double_t Electron_gsfPy[MaxN];
@@ -688,6 +692,10 @@ public:
         chain->SetBranchStatus("Electron_eta", 1);
         chain->SetBranchStatus("Electron_phi", 1);
         chain->SetBranchStatus("Electron_charge", 1);
+        chain->SetBranchStatus("Electron_scPixCharge", 1);
+        chain->SetBranchStatus("Electron_isGsfCtfScPixConsistent", 1);
+        chain->SetBranchStatus("Electron_isGsfScPixConsistent", 1);
+        chain->SetBranchStatus("Electron_isGsfCtfConsistent", 1);
         chain->SetBranchStatus("Electron_gsfpT", 1);
         chain->SetBranchStatus("Electron_gsfPx", 1);
         chain->SetBranchStatus("Electron_gsfPy", 1);
@@ -760,6 +768,10 @@ public:
     	chain->SetBranchAddress("Electron_eta", &Electron_eta);
     	chain->SetBranchAddress("Electron_phi", &Electron_phi);
     	chain->SetBranchAddress("Electron_charge", &Electron_charge);
+        chain->SetBranchAddress("Electron_scPixCharge", &Electron_scPixCharge);
+        chain->SetBranchAddress("Electron_isGsfCtfScPixConsistent", &Electron_isGsfCtfScPixConsistent);
+        chain->SetBranchAddress("Electron_isGsfScPixConsistent", &Electron_isGsfScPixConsistent);
+        chain->SetBranchAddress("Electron_isGsfCtfConsistent", &Electron_isGsfCtfConsistent);
     	chain->SetBranchAddress("Electron_gsfpT", &Electron_gsfpT);
     	chain->SetBranchAddress("Electron_gsfPx", &Electron_gsfPx);
     	chain->SetBranchAddress("Electron_gsfPy", &Electron_gsfPy);
