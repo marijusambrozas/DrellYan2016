@@ -28,6 +28,7 @@
 #include "./etc/RoccoR/RoccoR.cc"
 
 void E_EstFR (Int_t type);
+void E_EstFR_alt ();
 void Mu_EstFR (Int_t type);
 void E_DYefficiency();
 
@@ -56,6 +57,11 @@ void EstimateFR (TString WhichX = "", Int_t type = 2)
         {
             cout << "\n*******      E_DYefficiency()      *******" << endl;
             E_DYefficiency();
+        }
+        else if (whichX.Contains("ALT"))
+        {
+            cout << "\n*******      E_EstFR_alt()      *******" << endl;
+            E_EstFR_alt();
         }
         else
         {
@@ -1045,6 +1051,154 @@ void E_EstFR(Int_t type)
 } // End of E_EstFR()
 
 
+void E_EstFR_alt()
+{
+    TFile *f = new TFile("/media/sf_DATA/FR/Electron/For_FakeRate_electron_alt.root", "READ");
+
+    TH1D *h_pT_barrel_pass[4],
+         *h_pT_endcap_pass[4],
+         *h_pT_barrel_fail[4],
+         *h_pT_endcap_fail[4];
+    TString type[4] = {"data", "DY", "bkgr", "bkgf"};
+
+    for (Int_t i=3; i>=0; i--)
+    {
+        f->GetObject("h_pT_barrel_pass_"+type[i], h_pT_barrel_pass[i]);
+        f->GetObject("h_pT_endcap_pass_"+type[i], h_pT_endcap_pass[i]);
+        f->GetObject("h_pT_barrel_fail_"+type[i], h_pT_barrel_fail[i]);
+        f->GetObject("h_pT_endcap_fail_"+type[i], h_pT_endcap_fail[i]);
+        h_pT_barrel_pass[i]->SetDirectory(0);
+        h_pT_endcap_pass[i]->SetDirectory(0);
+        h_pT_barrel_fail[i]->SetDirectory(0);
+        h_pT_endcap_fail[i]->SetDirectory(0);
+    }
+
+    TH1D *h_FR_subtract_barrel = ((TH1D*)(h_pT_barrel_pass[0]->Clone("h_FR_subtract_barrel")));
+    TH1D *h_FR_subtract_endcap = ((TH1D*)(h_pT_endcap_pass[0]->Clone("h_FR_subtract_endcap")));
+    TH1D *h_FR_MC_barrel = ((TH1D*)(h_pT_barrel_pass[3]->Clone("h_FR_MC_barrel")));
+    TH1D *h_FR_MC_endcap = ((TH1D*)(h_pT_endcap_pass[3]->Clone("h_FR_MC_endcap")));
+    h_FR_subtract_barrel->Add(h_pT_barrel_pass[1], -1);
+    h_FR_subtract_endcap->Add(h_pT_endcap_pass[1], -1);
+    h_FR_subtract_barrel->Add(h_pT_barrel_pass[2], -1);
+    h_FR_subtract_endcap->Add(h_pT_endcap_pass[2], -1);
+
+    TH1D *h_FR_subtract_barrel_deno = ((TH1D*)(h_pT_barrel_fail[0]->Clone("h_FR_subtract_barrel_deno")));
+    TH1D *h_FR_subtract_endcap_deno = ((TH1D*)(h_pT_barrel_fail[0]->Clone("h_FR_subtract_endcap_deno")));
+    TH1D *h_FR_MC_barrel_deno = ((TH1D*)(h_pT_barrel_fail[3]->Clone("h_FR_MC_barrel_deno")));
+    TH1D *h_FR_MC_endcap_deno = ((TH1D*)(h_pT_barrel_fail[3]->Clone("h_FR_MC_endcap_deno")));
+    h_FR_subtract_barrel_deno->Add(h_pT_barrel_pass[0]);
+    h_FR_subtract_endcap_deno->Add(h_pT_endcap_pass[0]);
+    h_FR_MC_barrel_deno->Add(h_pT_barrel_pass[3]);
+    h_FR_MC_endcap_deno->Add(h_pT_endcap_pass[3]);
+    h_FR_subtract_barrel_deno->Add(h_pT_barrel_fail[1], -1);
+    h_FR_subtract_endcap_deno->Add(h_pT_endcap_fail[1], -1);
+    h_FR_subtract_barrel_deno->Add(h_pT_barrel_fail[2], -1);
+    h_FR_subtract_endcap_deno->Add(h_pT_endcap_fail[2], -1);
+    h_FR_subtract_barrel_deno->Add(h_pT_barrel_pass[1], -1);
+    h_FR_subtract_endcap_deno->Add(h_pT_endcap_pass[1], -1);
+    h_FR_subtract_barrel_deno->Add(h_pT_barrel_pass[2], -1);
+    h_FR_subtract_endcap_deno->Add(h_pT_endcap_pass[2], -1);
+
+    h_FR_subtract_barrel->Divide(h_FR_subtract_barrel_deno);
+    h_FR_subtract_endcap->Divide(h_FR_subtract_endcap_deno);
+    h_FR_MC_barrel->Divide(h_FR_MC_barrel_deno);
+    h_FR_MC_endcap->Divide(h_FR_MC_endcap_deno);
+
+    h_FR_subtract_barrel->SetDirectory(0);
+    h_FR_subtract_barrel->SetStats(0);
+    h_FR_subtract_barrel->SetMarkerStyle(kFullDotLarge);
+    h_FR_subtract_barrel->SetMarkerColor(kBlack);
+    h_FR_subtract_barrel->SetLineColor(kBlack);
+    h_FR_subtract_endcap->SetDirectory(0);
+    h_FR_subtract_endcap->SetStats(0);
+    h_FR_subtract_endcap->SetMarkerStyle(kFullDotLarge);
+    h_FR_subtract_endcap->SetMarkerColor(kBlack);
+    h_FR_subtract_endcap->SetLineColor(kBlack);
+    h_FR_MC_barrel->SetDirectory(0);
+    h_FR_MC_barrel->SetStats(0);
+    h_FR_MC_barrel->SetMarkerStyle(kFullSquare);
+    h_FR_MC_barrel->SetMarkerColor(kRed);
+    h_FR_MC_barrel->SetLineColor(kRed);
+    h_FR_MC_endcap->SetDirectory(0);
+    h_FR_MC_endcap->SetStats(0);
+    h_FR_MC_endcap->SetMarkerStyle(kFullSquare);
+    h_FR_MC_endcap->SetMarkerColor(kRed);
+    h_FR_MC_endcap->SetLineColor(kRed);
+
+    // Creating and drawing FR plots
+    TLegend * legend = new TLegend(0.6, 0.8, 0.95, 0.95);
+    legend->AddEntry(h_FR_subtract_barrel, "Subtraction", "pl");
+    legend->AddEntry(h_FR_MC_barrel, "MC", "pl");
+
+    TCanvas *c_FR_barrel = new TCanvas("c_FR_barrel", "c_FR_barrel", 800, 800);
+    c_FR_barrel->SetTopMargin(0.05);
+    c_FR_barrel->SetRightMargin(0.05);
+    c_FR_barrel->SetBottomMargin(0.15);
+    c_FR_barrel->SetLeftMargin(0.15);
+    h_FR_subtract_barrel->SetTitle("");
+    h_FR_subtract_barrel->GetXaxis()->SetTitle("p_{#lower[-0.2]{T}} [GeV/c]");
+    h_FR_subtract_barrel->GetXaxis()->SetTitleSize(0.062);
+    h_FR_subtract_barrel->GetXaxis()->SetTitleOffset(0.9);
+    h_FR_subtract_barrel->GetXaxis()->SetLabelSize(0.048);
+    h_FR_subtract_barrel->GetXaxis()->SetMoreLogLabels();
+    h_FR_subtract_barrel->GetXaxis()->SetNoExponent();
+    h_FR_subtract_barrel->GetYaxis()->SetTitle("Fake Rate");
+    h_FR_subtract_barrel->GetYaxis()->SetTitleSize(0.05);
+    h_FR_subtract_barrel->GetYaxis()->SetTitleOffset(1.25);
+    h_FR_subtract_barrel->GetYaxis()->SetLabelSize(0.043);
+    h_FR_subtract_barrel->GetYaxis()->SetMoreLogLabels();
+    h_FR_subtract_barrel->GetYaxis()->SetNoExponent();
+    h_FR_subtract_barrel->Draw();
+    h_FR_subtract_barrel->GetYaxis()->SetRangeUser(0, 1);
+    h_FR_MC_barrel->Draw("same");
+    legend->Draw();
+    c_FR_barrel->SetLogx();
+    c_FR_barrel->SetGridx();
+    c_FR_barrel->SetGridy();
+    c_FR_barrel->Update();
+
+    TCanvas *c_FR_endcap = new TCanvas("c_FR_endcap", "c_FR_endcap", 800, 800);
+    c_FR_endcap->SetTopMargin(0.05);
+    c_FR_endcap->SetRightMargin(0.05);
+    c_FR_endcap->SetBottomMargin(0.15);
+    c_FR_endcap->SetLeftMargin(0.15);
+    h_FR_subtract_endcap->SetTitle("");
+    h_FR_subtract_endcap->GetXaxis()->SetTitle("p_{#lower[-0.2]{T}} [GeV/c]");
+    h_FR_subtract_endcap->GetXaxis()->SetTitleSize(0.062);
+    h_FR_subtract_endcap->GetXaxis()->SetTitleOffset(0.9);
+    h_FR_subtract_endcap->GetXaxis()->SetLabelSize(0.048);
+    h_FR_subtract_endcap->GetXaxis()->SetMoreLogLabels();
+    h_FR_subtract_endcap->GetXaxis()->SetNoExponent();
+    h_FR_subtract_endcap->GetYaxis()->SetTitle("Fake Rate");
+    h_FR_subtract_endcap->GetYaxis()->SetTitleSize(0.05);
+    h_FR_subtract_endcap->GetYaxis()->SetTitleOffset(1.25);
+    h_FR_subtract_endcap->GetYaxis()->SetLabelSize(0.043);
+    h_FR_subtract_endcap->GetYaxis()->SetMoreLogLabels();
+    h_FR_subtract_endcap->GetYaxis()->SetNoExponent();
+    h_FR_subtract_endcap->Draw();
+    h_FR_subtract_endcap->GetYaxis()->SetRangeUser(0, 1);
+    h_FR_MC_endcap->Draw("same");
+    legend->Draw();
+    c_FR_endcap->SetLogx();
+    c_FR_endcap->SetGridx();
+    c_FR_endcap->SetGridy();
+    c_FR_endcap->Update();
+
+    f->Close();
+    if (!f->IsOpen()) cout << "File " << "/media/sf_DATA/FR/Electron/For_FakeRate_electron_alt.root" << " has been closed successfully.\n" << endl;
+    else cout << "FILE " <<"/media/sf_DATA/FR/Electron/For_FakeRate_electron_alt.root" << " COULD NOT BE CLOSED!\n" << endl;
+
+    TFile *f_out = new TFile("/media/sf_DATA/FR/Electron/FakeRate_electron_alt.root", "RECREATE");
+    f_out->cd();
+    h_FR_subtract_barrel->Write();
+    h_FR_subtract_endcap->Write();
+    h_FR_MC_barrel->Write();
+    h_FR_MC_endcap->Write();
+    f_out->Close();
+
+} // End of E_EstFR_alt
+
+
 /// ################################################################################## ///
 /// -------------------------------- Muon Channel ------------------------------------ ///
 /// ################################################################################## ///
@@ -1890,13 +2044,13 @@ void E_DYefficiency()
 {
     TFile *f = new TFile("/media/sf_DATA/SelectedEE/Histos/DYefficiency.root", "READ");
 
-    TH1D *h_pT_barrel_pass[3],
-         *h_pT_endcap_pass[3],
-         *h_pT_barrel_fail[3],
-         *h_pT_endcap_fail[3];
-    TString type[3] = {"data", "DY", "bkg"};
+    TH1D *h_pT_barrel_pass[4],
+         *h_pT_endcap_pass[4],
+         *h_pT_barrel_fail[4],
+         *h_pT_endcap_fail[4];
+    TString type[4] = {"data", "DY", "bkgr", "bkgf"};
 
-    for (Int_t i=2; i>=0; i--)
+    for (Int_t i=3; i>=0; i--)
     {
         f->GetObject("h_pT_barrel_pass_"+type[i], h_pT_barrel_pass[i]);
         f->GetObject("h_pT_endcap_pass_"+type[i], h_pT_endcap_pass[i]);
@@ -1912,34 +2066,48 @@ void E_DYefficiency()
     TH1D *h_eff_data_endcap = ((TH1D*)(h_pT_endcap_pass[0]->Clone("h_eff_data_endcap")));
     TH1D *h_eff_MC_barrel = ((TH1D*)(h_pT_barrel_pass[1]->Clone("h_eff_MC_barrel")));
     TH1D *h_eff_MC_endcap = ((TH1D*)(h_pT_endcap_pass[1]->Clone("h_eff_MC_endcap")));
-    TH1D *h_eff_bkg_barrel = ((TH1D*)(h_pT_barrel_pass[2]->Clone("h_eff_bkg_barrel")));
-    TH1D *h_eff_bkg_endcap = ((TH1D*)(h_pT_endcap_pass[2]->Clone("h_eff_bkg_endcap")));
-    h_eff_data_barrel->Add(h_eff_bkg_barrel, -1);
-    h_eff_data_endcap->Add(h_eff_bkg_endcap, -1);
+    TH1D *h_eff_bkgr_barrel = ((TH1D*)(h_pT_barrel_pass[2]->Clone("h_eff_bkgr_barrel")));
+    TH1D *h_eff_bkgr_endcap = ((TH1D*)(h_pT_endcap_pass[2]->Clone("h_eff_bkgr_endcap")));
+    TH1D *h_eff_bkgf_barrel = ((TH1D*)(h_pT_barrel_pass[3]->Clone("h_eff_bkgf_barrel")));
+    TH1D *h_eff_bkgf_endcap = ((TH1D*)(h_pT_endcap_pass[3]->Clone("h_eff_bkgf_endcap")));
+    h_eff_data_barrel->Add(h_eff_bkgf_barrel, -1);
+    h_eff_data_endcap->Add(h_eff_bkgf_endcap, -1);
+    h_eff_data_barrel->Add(h_eff_bkgr_barrel, -1);
+    h_eff_data_endcap->Add(h_eff_bkgr_endcap, -1);
 
     TH1D *h_ineff_data_barrel = ((TH1D*)(h_pT_barrel_fail[0]->Clone("h_ineff_data_barrel")));
     TH1D *h_ineff_data_endcap = ((TH1D*)(h_pT_endcap_fail[0]->Clone("h_ineff_data_endcap")));
     TH1D *h_ineff_MC_barrel = ((TH1D*)(h_pT_barrel_fail[1]->Clone("h_ineff_MC_barrel")));
     TH1D *h_ineff_MC_endcap = ((TH1D*)(h_pT_endcap_fail[1]->Clone("h_ineff_MC_endcap")));
-    TH1D *h_ineff_bkg_barrel = ((TH1D*)(h_pT_barrel_fail[2]->Clone("h_ineff_bkg_barrel")));
-    TH1D *h_ineff_bkg_endcap = ((TH1D*)(h_pT_endcap_fail[2]->Clone("h_ineff_bkg_endcap")));
-    h_ineff_data_barrel->Add(h_ineff_bkg_barrel, -1);
-    h_ineff_data_endcap->Add(h_ineff_bkg_endcap, -1);
+    TH1D *h_ineff_bkgr_barrel = ((TH1D*)(h_pT_barrel_fail[2]->Clone("h_ineff_bkgr_barrel")));
+    TH1D *h_ineff_bkgr_endcap = ((TH1D*)(h_pT_endcap_fail[2]->Clone("h_ineff_bkgr_endcap")));
+    TH1D *h_ineff_bkgf_barrel = ((TH1D*)(h_pT_barrel_fail[3]->Clone("h_ineff_bkgf_barrel")));
+    TH1D *h_ineff_bkgf_endcap = ((TH1D*)(h_pT_endcap_fail[3]->Clone("h_ineff_bkgf_endcap")));
+    h_ineff_data_barrel->Add(h_ineff_bkgf_barrel, -1);
+    h_ineff_data_endcap->Add(h_ineff_bkgf_endcap, -1);
+    h_ineff_data_barrel->Add(h_ineff_bkgr_barrel, -1);
+    h_ineff_data_endcap->Add(h_ineff_bkgr_endcap, -1);
 
     TH1D *h_eff_data_barrel_deno = ((TH1D*)(h_pT_barrel_fail[0]->Clone("h_eff_data_barrel_deno")));
     TH1D *h_eff_data_endcap_deno = ((TH1D*)(h_pT_barrel_fail[0]->Clone("h_eff_data_endcap_deno")));
     TH1D *h_eff_MC_barrel_deno = ((TH1D*)(h_pT_barrel_fail[1]->Clone("h_eff_MC_barrel_deno")));
     TH1D *h_eff_MC_endcap_deno = ((TH1D*)(h_pT_barrel_fail[1]->Clone("h_eff_MC_endcap_deno")));
-    TH1D *h_eff_bkg_barrel_deno = ((TH1D*)(h_pT_barrel_fail[2]->Clone("h_eff_bkg_barrel_deno")));
-    TH1D *h_eff_bkg_endcap_deno = ((TH1D*)(h_pT_barrel_fail[2]->Clone("h_eff_bkg_endcap_deno")));
+    TH1D *h_eff_bkgr_barrel_deno = ((TH1D*)(h_pT_barrel_fail[2]->Clone("h_eff_bkgr_barrel_deno")));
+    TH1D *h_eff_bkgr_endcap_deno = ((TH1D*)(h_pT_barrel_fail[2]->Clone("h_eff_bkgr_endcap_deno")));
+    TH1D *h_eff_bkgf_barrel_deno = ((TH1D*)(h_pT_barrel_fail[3]->Clone("h_eff_bkgf_barrel_deno")));
+    TH1D *h_eff_bkgf_endcap_deno = ((TH1D*)(h_pT_barrel_fail[3]->Clone("h_eff_bkgf_endcap_deno")));
     h_eff_data_barrel_deno->Add(h_pT_barrel_pass[0]);
     h_eff_data_endcap_deno->Add(h_pT_endcap_pass[0]);
     h_eff_MC_barrel_deno->Add(h_pT_barrel_pass[1]);
     h_eff_MC_endcap_deno->Add(h_pT_endcap_pass[1]);
-    h_eff_bkg_barrel_deno->Add(h_pT_barrel_pass[2]);
-    h_eff_bkg_endcap_deno->Add(h_pT_endcap_pass[2]);
-    h_eff_data_barrel_deno->Add(h_eff_bkg_barrel_deno, -1);
-    h_eff_data_endcap_deno->Add(h_eff_bkg_endcap_deno, -1);
+    h_eff_bkgr_barrel_deno->Add(h_pT_barrel_pass[2]);
+    h_eff_bkgr_endcap_deno->Add(h_pT_endcap_pass[2]);
+    h_eff_bkgf_barrel_deno->Add(h_pT_barrel_pass[3]);
+    h_eff_bkgf_endcap_deno->Add(h_pT_endcap_pass[3]);
+    h_eff_data_barrel_deno->Add(h_eff_bkgf_barrel_deno, -1);
+    h_eff_data_endcap_deno->Add(h_eff_bkgf_endcap_deno, -1);
+    h_eff_data_barrel_deno->Add(h_eff_bkgr_barrel_deno, -1);
+    h_eff_data_endcap_deno->Add(h_eff_bkgr_endcap_deno, -1);
 
     h_eff_data_barrel->Divide(h_eff_data_barrel_deno);
     h_eff_data_endcap->Divide(h_eff_data_endcap_deno);

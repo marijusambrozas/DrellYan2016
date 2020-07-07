@@ -27,6 +27,7 @@
 #include "./etc/RoccoR/RoccoR.cc"
 
 void E_HistDrawer(Int_t type);
+void E_alt_HistDrawer();
 void Mu_HistDrawer(Int_t type);
 void Test_HistDrawer(Int_t type);
 void Fit_HistDrawer();
@@ -125,6 +126,11 @@ void FR_HistDrawer (TString WhichX = "", Int_t systErr = 0, Int_t type = 2)
         {
             cout << "\n*******     E_WJETest_HistDrawer(" << type << ", " << systErr << ")    *******" << endl;
             E_WJETest_HistDrawer(type, systErr);
+        }
+        else if (whichX.Contains("ALT"))
+        {
+            cout << "\n*******      E_alt_HistDrawer()      *******" << endl;
+            E_alt_HistDrawer();
         }
         else
         {
@@ -5427,6 +5433,130 @@ void E_HistDrawer(Int_t type)
     c_SSB->SetGridy();
     c_SSB->Update();
 } // End of EE_HistDrawer()
+
+
+void E_alt_HistDrawer()
+{
+    TFile *f = new TFile("/media/sf_DATA/FR/Electron/For_FakeRate_electron_alt.root", "READ");
+
+    TH1D *h_pT_barrel_pass[4],
+         *h_pT_endcap_pass[4],
+         *h_pT_barrel_fail[4],
+         *h_pT_endcap_fail[4],
+         *h_MET_fail[4],
+         *h_MT_fail[4];
+    THStack *s_pT_barrel_pass = new THStack("s_pT_barrel_pass", "");
+    THStack *s_pT_endcap_pass = new THStack("s_pT_endcap_pass", "");
+    THStack *s_pT_barrel_fail = new THStack("s_pT_barrel_fail", "");
+    THStack *s_pT_endcap_fail = new THStack("s_pT_endcap_fail", "");
+    THStack *s_MET_fail = new THStack("s_MET_fail", "");
+    THStack *s_MT_fail = new THStack("s_MT_fail", "");
+    Color_t color = kBlack;
+    TString type[4] = {"data", "DY", "bkgr", "bkgf"};
+
+    for (Int_t i=3; i>=0; i--)
+    {
+        f->GetObject("h_pT_barrel_pass_"+type[i], h_pT_barrel_pass[i]);
+        f->GetObject("h_pT_endcap_pass_"+type[i], h_pT_endcap_pass[i]);
+        f->GetObject("h_pT_barrel_fail_"+type[i], h_pT_barrel_fail[i]);
+        f->GetObject("h_pT_endcap_fail_"+type[i], h_pT_endcap_fail[i]);
+        f->GetObject("h_MET_fail_"+type[i], h_MET_fail[i]);
+        f->GetObject("h_MT_fail_"+type[i], h_MT_fail[i]);
+        h_pT_barrel_pass[i]->SetDirectory(0);
+        h_pT_endcap_pass[i]->SetDirectory(0);
+        h_pT_barrel_fail[i]->SetDirectory(0);
+        h_pT_endcap_fail[i]->SetDirectory(0);
+        h_MET_fail[i]->SetDirectory(0);
+        h_MT_fail[i]->SetDirectory(0);
+        if (i == 0)
+        {
+            h_pT_barrel_pass[i]->SetMarkerStyle(kFullDotLarge);
+            h_pT_barrel_pass[i]->SetMarkerColor(kBlack);
+            h_pT_barrel_pass[i]->SetLineColor(kBlack);
+            h_pT_endcap_pass[i]->SetMarkerStyle(kFullDotLarge);
+            h_pT_endcap_pass[i]->SetMarkerColor(kBlack);
+            h_pT_endcap_pass[i]->SetLineColor(kBlack);
+            h_pT_barrel_fail[i]->SetMarkerStyle(kFullDotLarge);
+            h_pT_barrel_fail[i]->SetMarkerColor(kBlack);
+            h_pT_barrel_fail[i]->SetLineColor(kBlack);
+            h_pT_endcap_fail[i]->SetMarkerStyle(kFullDotLarge);
+            h_pT_endcap_fail[i]->SetMarkerColor(kBlack);
+            h_pT_endcap_fail[i]->SetLineColor(kBlack);
+            h_MET_fail[i]->SetMarkerStyle(kFullDotLarge);
+            h_MET_fail[i]->SetMarkerColor(kBlack);
+            h_MET_fail[i]->SetLineColor(kBlack);
+            h_MT_fail[i]->SetMarkerStyle(kFullDotLarge);
+            h_MT_fail[i]->SetMarkerColor(kBlack);
+            h_MT_fail[i]->SetLineColor(kBlack);
+        }
+        else
+        {
+            if (i == 1) color = kOrange;
+            else if (i == 2) color = kCyan + 2;
+            else color = kRed + 3;
+            h_pT_barrel_pass[i]->SetFillColor(color);
+            h_pT_barrel_pass[i]->SetLineColor(color);
+            h_pT_endcap_pass[i]->SetFillColor(color);
+            h_pT_endcap_pass[i]->SetLineColor(color);
+            h_pT_barrel_fail[i]->SetFillColor(color);
+            h_pT_barrel_fail[i]->SetLineColor(color);
+            h_pT_endcap_fail[i]->SetFillColor(color);
+            h_pT_endcap_fail[i]->SetLineColor(color);
+            h_MET_fail[i]->SetFillColor(color);
+            h_MET_fail[i]->SetLineColor(color);
+            h_MT_fail[i]->SetFillColor(color);
+            h_MT_fail[i]->SetLineColor(color);
+
+            s_pT_barrel_pass->Add(h_pT_barrel_pass[i]);
+            s_pT_endcap_pass->Add(h_pT_endcap_pass[i]);
+            s_pT_barrel_fail->Add(h_pT_barrel_fail[i]);
+            s_pT_endcap_fail->Add(h_pT_endcap_fail[i]);
+            s_MET_fail->Add(h_MET_fail[i]);
+            s_MT_fail->Add(h_MT_fail[i]);
+        }
+    }
+
+
+    // Creating and drawing ratio plots
+    myRatioPlot_t *RP_pT_barrel_pass = new myRatioPlot_t("c_pT_barrel_pass", s_pT_barrel_pass, h_pT_barrel_pass[0]);
+    myRatioPlot_t *RP_pT_endcap_pass = new myRatioPlot_t("c_pT_endcap_pass", s_pT_endcap_pass, h_pT_endcap_pass[0]);
+    myRatioPlot_t *RP_pT_barrel_fail = new myRatioPlot_t("c_pT_barrel_fail", s_pT_barrel_fail, h_pT_barrel_fail[0]);
+    myRatioPlot_t *RP_pT_endcap_fail = new myRatioPlot_t("c_pT_endcap_fail", s_pT_endcap_fail, h_pT_endcap_fail[0]);
+    myRatioPlot_t *RP_MET_fail = new myRatioPlot_t("c_MET_fail", s_MET_fail, h_MET_fail[0]);
+    myRatioPlot_t *RP_MT_fail = new myRatioPlot_t("c_MT_fail", s_MT_fail, h_MT_fail[0]);
+
+    RP_pT_barrel_pass->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 1000);
+    RP_pT_endcap_pass->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 1000);
+    RP_pT_barrel_fail->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 1000);
+    RP_pT_endcap_fail->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 1000);
+    RP_MET_fail->SetPlots("E_{#lower[-0.2]{T}}^{miss} [GeV]", 0, 100);
+    RP_MT_fail->SetPlots("m_{#lower[-0.2]{T}} [GeV/c^{2}]", 0, 200);
+
+    TLegend * legend = new TLegend(0.7, 0.7, 0.95, 0.95);
+    legend->AddEntry(h_pT_barrel_pass[0], "Data", "pl");
+    legend->AddEntry(h_pT_barrel_pass[1], "DY", "f");
+    legend->AddEntry(h_pT_barrel_pass[2], "Bkg (real)", "f");
+    legend->AddEntry(h_pT_barrel_pass[3], "Bkg (fake)", "f");
+
+    RP_pT_barrel_pass->ImportLegend(legend);
+    RP_pT_endcap_pass->ImportLegend(legend);
+    RP_pT_barrel_fail->ImportLegend(legend);
+    RP_pT_endcap_fail->ImportLegend(legend);
+    RP_MET_fail->ImportLegend(legend);
+    RP_MT_fail->ImportLegend(legend);
+
+    RP_pT_barrel_pass->Draw(1e-1, 1e7, 1);
+    RP_pT_endcap_pass->Draw(1e-1, 1e7, 1);
+    RP_pT_barrel_fail->Draw(1e-1, 1e7, 1);
+    RP_pT_endcap_fail->Draw(1e-1, 1e7, 1);
+    RP_MET_fail->Draw(1e-1, 1e7, 0);
+    RP_MT_fail->Draw(1e-1, 1e7, 0);
+
+    f->Close();
+    if (!f->IsOpen()) cout << "File " << "/media/sf_DATA/FR/Electron/For_FakeRate_electron_alt.root" << " has been closed successfully.\n" << endl;
+    else cout << "FILE " <<"/media/sf_DATA/FR/Electron/For_FakeRate_electron_alt.root" << " COULD NOT BE CLOSED!\n" << endl;
+
+} // End of E_alt_HistDrawer()
 
 
 /// ################################################################################## ///
@@ -12160,6 +12290,145 @@ void EMu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr)
 } // End of EMu_WJETest_HistDrawer()
 
 
+void E_DYefficiency()
+{
+    TFile *f = new TFile("/media/sf_DATA/SelectedEE/Histos/DYefficiency.root", "READ");
+
+    TH1D *h_mass[4],
+         *h_pT_barrel_pass[4],
+         *h_pT_endcap_pass[4],
+         *h_pT_barrel_fail[4],
+         *h_pT_endcap_fail[4],
+         *h_MET_fail[4],
+         *h_MT_fail[4];
+    THStack *s_mass = new THStack("s_mass", "");
+    THStack *s_pT_barrel_pass = new THStack("s_pT_barrel_pass", "");
+    THStack *s_pT_endcap_pass = new THStack("s_pT_endcap_pass", "");
+    THStack *s_pT_barrel_fail = new THStack("s_pT_barrel_fail", "");
+    THStack *s_pT_endcap_fail = new THStack("s_pT_endcap_fail", "");
+    THStack *s_MET_fail = new THStack("s_MET_fail", "");
+    THStack *s_MT_fail = new THStack("s_MT_fail", "");
+    Color_t color = kBlack;
+    TString type[4] = {"data", "DY", "bkgr", "bkgf"};
+
+    for (Int_t i=3; i>=0; i--)
+    {
+        f->GetObject("h_mass_"+type[i], h_mass[i]);
+        f->GetObject("h_pT_barrel_pass_"+type[i], h_pT_barrel_pass[i]);
+        f->GetObject("h_pT_endcap_pass_"+type[i], h_pT_endcap_pass[i]);
+        f->GetObject("h_pT_barrel_fail_"+type[i], h_pT_barrel_fail[i]);
+        f->GetObject("h_pT_endcap_fail_"+type[i], h_pT_endcap_fail[i]);
+        f->GetObject("h_MET_fail_"+type[i], h_MET_fail[i]);
+        f->GetObject("h_MT_fail_"+type[i], h_MT_fail[i]);
+        h_mass[i]->SetDirectory(0);
+        h_pT_barrel_pass[i]->SetDirectory(0);
+        h_pT_endcap_pass[i]->SetDirectory(0);
+        h_pT_barrel_fail[i]->SetDirectory(0);
+        h_pT_endcap_fail[i]->SetDirectory(0);
+        h_MET_fail[i]->SetDirectory(0);
+        h_MT_fail[i]->SetDirectory(0);
+        if (i == 0)
+        {
+            h_mass[i]->SetMarkerStyle(kFullDotLarge);
+            h_mass[i]->SetMarkerColor(kBlack);
+            h_mass[i]->SetLineColor(kBlack);
+            h_pT_barrel_pass[i]->SetMarkerStyle(kFullDotLarge);
+            h_pT_barrel_pass[i]->SetMarkerColor(kBlack);
+            h_pT_barrel_pass[i]->SetLineColor(kBlack);
+            h_pT_endcap_pass[i]->SetMarkerStyle(kFullDotLarge);
+            h_pT_endcap_pass[i]->SetMarkerColor(kBlack);
+            h_pT_endcap_pass[i]->SetLineColor(kBlack);
+            h_pT_barrel_fail[i]->SetMarkerStyle(kFullDotLarge);
+            h_pT_barrel_fail[i]->SetMarkerColor(kBlack);
+            h_pT_barrel_fail[i]->SetLineColor(kBlack);
+            h_pT_endcap_fail[i]->SetMarkerStyle(kFullDotLarge);
+            h_pT_endcap_fail[i]->SetMarkerColor(kBlack);
+            h_pT_endcap_fail[i]->SetLineColor(kBlack);
+            h_MET_fail[i]->SetMarkerStyle(kFullDotLarge);
+            h_MET_fail[i]->SetMarkerColor(kBlack);
+            h_MET_fail[i]->SetLineColor(kBlack);
+            h_MT_fail[i]->SetMarkerStyle(kFullDotLarge);
+            h_MT_fail[i]->SetMarkerColor(kBlack);
+            h_MT_fail[i]->SetLineColor(kBlack);
+        }
+        else
+        {
+            if (i == 1) color = kOrange;
+            else if (i == 2) color = kCyan + 2;
+            else color = kRed + 3;
+            h_mass[i]->SetFillColor(color);
+            h_mass[i]->SetLineColor(color);
+            h_pT_barrel_pass[i]->SetFillColor(color);
+            h_pT_barrel_pass[i]->SetLineColor(color);
+            h_pT_endcap_pass[i]->SetFillColor(color);
+            h_pT_endcap_pass[i]->SetLineColor(color);
+            h_pT_barrel_fail[i]->SetFillColor(color);
+            h_pT_barrel_fail[i]->SetLineColor(color);
+            h_pT_endcap_fail[i]->SetFillColor(color);
+            h_pT_endcap_fail[i]->SetLineColor(color);
+            h_MET_fail[i]->SetFillColor(color);
+            h_MET_fail[i]->SetLineColor(color);
+            h_MT_fail[i]->SetFillColor(color);
+            h_MT_fail[i]->SetLineColor(color);
+
+
+            s_mass->Add(h_mass[i]);
+            s_pT_barrel_pass->Add(h_pT_barrel_pass[i]);
+            s_pT_endcap_pass->Add(h_pT_endcap_pass[i]);
+            s_pT_barrel_fail->Add(h_pT_barrel_fail[i]);
+            s_pT_endcap_fail->Add(h_pT_endcap_fail[i]);
+            s_MET_fail->Add(h_MET_fail[i]);
+            s_MT_fail->Add(h_MT_fail[i]);
+        }
+    }
+
+
+    // Creating and drawing ratio plots
+    myRatioPlot_t *RP_mass = new myRatioPlot_t("c_mass", s_mass, h_mass[0]);
+    myRatioPlot_t *RP_pT_barrel_pass = new myRatioPlot_t("c_pT_barrel_pass", s_pT_barrel_pass, h_pT_barrel_pass[0]);
+    myRatioPlot_t *RP_pT_endcap_pass = new myRatioPlot_t("c_pT_endcap_pass", s_pT_endcap_pass, h_pT_endcap_pass[0]);
+    myRatioPlot_t *RP_pT_barrel_fail = new myRatioPlot_t("c_pT_barrel_fail", s_pT_barrel_fail, h_pT_barrel_fail[0]);
+    myRatioPlot_t *RP_pT_endcap_fail = new myRatioPlot_t("c_pT_endcap_fail", s_pT_endcap_fail, h_pT_endcap_fail[0]);
+    myRatioPlot_t *RP_MET_fail = new myRatioPlot_t("c_MET_fail", s_MET_fail, h_MET_fail[0]);
+    myRatioPlot_t *RP_MT_fail = new myRatioPlot_t("c_MT_fail", s_MT_fail, h_MT_fail[0]);
+
+    RP_mass->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 81, 101);
+    RP_pT_barrel_pass->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 1000);
+    RP_pT_endcap_pass->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 1000);
+    RP_pT_barrel_fail->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 1000);
+    RP_pT_endcap_fail->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 1000);
+    RP_MET_fail->SetPlots("E_{#lower[-0.2]{T}}^{miss} [GeV]", 0, 100);
+    RP_MT_fail->SetPlots("m_{#lower[-0.2]{T}} [GeV/c^{2}]", 0, 200);
+
+    TLegend * legend = new TLegend(0.7, 0.7, 0.95, 0.95);
+    legend->AddEntry(h_mass[0], "Data", "pl");
+    legend->AddEntry(h_mass[1], "DY", "f");
+    legend->AddEntry(h_mass[2], "Bkg (real)", "f");
+    legend->AddEntry(h_mass[3], "Bkg (fake)", "f");
+
+    RP_mass->ImportLegend(legend);
+    RP_pT_barrel_pass->ImportLegend(legend);
+    RP_pT_endcap_pass->ImportLegend(legend);
+    RP_pT_barrel_fail->ImportLegend(legend);
+    RP_pT_endcap_fail->ImportLegend(legend);
+    RP_MET_fail->ImportLegend(legend);
+    RP_MT_fail->ImportLegend(legend);
+
+    RP_mass->Draw(1e-1, 1e8, 1);
+    RP_pT_barrel_pass->Draw(1e-1, 1e7, 1);
+    RP_pT_endcap_pass->Draw(1e-1, 1e7, 1);
+    RP_pT_barrel_fail->Draw(1e-1, 1e7, 1);
+    RP_pT_endcap_fail->Draw(1e-1, 1e7, 1);
+    RP_MET_fail->Draw(1e-1, 1e7, 0);
+    RP_MT_fail->Draw(1e-1, 1e7, 0);
+
+    f->Close();
+    if (!f->IsOpen()) cout << "File " << "/media/sf_DATA/SelectedEE/Histos/DYefficiency.root" << " has been closed successfully.\n" << endl;
+    else cout << "FILE " <<"/media/sf_DATA/SelectedEE/Histos/DYefficiency.root" << " COULD NOT BE CLOSED!\n" << endl;
+
+} // End of E_DYefficiency()
+
+
 /// ------------------------------- COMP CHI^2 ---------------------------------- ///
 Double_t CompChiSquared (TH1D *h_data, THStack *s_MC)
 {
@@ -12216,113 +12485,3 @@ void removeNegativeBins(TH1D *h)
         }
     }
 }
-
-
-void E_DYefficiency()
-{
-    TFile *f = new TFile("/media/sf_DATA/SelectedEE/Histos/DYefficiency.root", "READ");
-
-    TH1D *h_mass[4],
-         *h_pT_barrel_pass[4],
-         *h_pT_endcap_pass[4],
-         *h_pT_barrel_fail[4],
-         *h_pT_endcap_fail[4];
-    THStack *s_mass = new THStack("s_mass", "");
-    THStack *s_pT_barrel_pass = new THStack("s_pT_barrel_pass", "");
-    THStack *s_pT_endcap_pass = new THStack("s_pT_endcap_pass", "");
-    THStack *s_pT_barrel_fail = new THStack("s_pT_barrel_fail", "");
-    THStack *s_pT_endcap_fail = new THStack("s_pT_endcap_fail", "");
-    Color_t color = kBlack;
-    TString type[4] = {"data", "DY", "bkgr", "bkgf"};
-
-    for (Int_t i=3; i>=0; i--)
-    {
-        f->GetObject("h_mass_"+type[i], h_mass[i]);
-        f->GetObject("h_pT_barrel_pass_"+type[i], h_pT_barrel_pass[i]);
-        f->GetObject("h_pT_endcap_pass_"+type[i], h_pT_endcap_pass[i]);
-        f->GetObject("h_pT_barrel_fail_"+type[i], h_pT_barrel_fail[i]);
-        f->GetObject("h_pT_endcap_fail_"+type[i], h_pT_endcap_fail[i]);
-        h_mass[i]->SetDirectory(0);
-        h_pT_barrel_pass[i]->SetDirectory(0);
-        h_pT_endcap_pass[i]->SetDirectory(0);
-        h_pT_barrel_fail[i]->SetDirectory(0);
-        h_pT_endcap_fail[i]->SetDirectory(0);
-        if (i == 0)
-        {
-            h_mass[i]->SetMarkerStyle(kFullDotLarge);
-            h_mass[i]->SetMarkerColor(kBlack);
-            h_mass[i]->SetLineColor(kBlack);
-            h_pT_barrel_pass[i]->SetMarkerStyle(kFullDotLarge);
-            h_pT_barrel_pass[i]->SetMarkerColor(kBlack);
-            h_pT_barrel_pass[i]->SetLineColor(kBlack);
-            h_pT_endcap_pass[i]->SetMarkerStyle(kFullDotLarge);
-            h_pT_endcap_pass[i]->SetMarkerColor(kBlack);
-            h_pT_endcap_pass[i]->SetLineColor(kBlack);
-            h_pT_barrel_fail[i]->SetMarkerStyle(kFullDotLarge);
-            h_pT_barrel_fail[i]->SetMarkerColor(kBlack);
-            h_pT_barrel_fail[i]->SetLineColor(kBlack);
-            h_pT_endcap_fail[i]->SetMarkerStyle(kFullDotLarge);
-            h_pT_endcap_fail[i]->SetMarkerColor(kBlack);
-            h_pT_endcap_fail[i]->SetLineColor(kBlack);
-        }
-        else
-        {
-            if (i == 1) color = kOrange;
-            else if (i == 2) color = kCyan + 2;
-            else color = kRed + 3;
-            h_mass[i]->SetFillColor(color);
-            h_mass[i]->SetLineColor(color);
-            h_pT_barrel_pass[i]->SetFillColor(color);
-            h_pT_barrel_pass[i]->SetLineColor(color);
-            h_pT_endcap_pass[i]->SetFillColor(color);
-            h_pT_endcap_pass[i]->SetLineColor(color);
-            h_pT_barrel_fail[i]->SetFillColor(color);
-            h_pT_barrel_fail[i]->SetLineColor(color);
-            h_pT_endcap_fail[i]->SetFillColor(color);
-            h_pT_endcap_fail[i]->SetLineColor(color);
-
-            s_mass->Add(h_mass[i]);
-            s_pT_barrel_pass->Add(h_pT_barrel_pass[i]);
-            s_pT_endcap_pass->Add(h_pT_endcap_pass[i]);
-            s_pT_barrel_fail->Add(h_pT_barrel_fail[i]);
-            s_pT_endcap_fail->Add(h_pT_endcap_fail[i]);
-        }
-    }
-
-
-    // Creating and drawing ratio plots
-    myRatioPlot_t *RP_mass = new myRatioPlot_t("c_mass", s_mass, h_mass[0]);
-    myRatioPlot_t *RP_pT_barrel_pass = new myRatioPlot_t("c_pT_barrel_pass", s_pT_barrel_pass, h_pT_barrel_pass[0]);
-    myRatioPlot_t *RP_pT_endcap_pass = new myRatioPlot_t("c_pT_endcap_pass", s_pT_endcap_pass, h_pT_endcap_pass[0]);
-    myRatioPlot_t *RP_pT_barrel_fail = new myRatioPlot_t("c_pT_barrel_fail", s_pT_barrel_fail, h_pT_barrel_fail[0]);
-    myRatioPlot_t *RP_pT_endcap_fail = new myRatioPlot_t("c_pT_endcap_fail", s_pT_endcap_fail, h_pT_endcap_fail[0]);
-
-    RP_mass->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 81, 101);
-    RP_pT_barrel_pass->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 5000);
-    RP_pT_endcap_pass->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 5000);
-    RP_pT_barrel_fail->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 5000);
-    RP_pT_endcap_fail->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 5000);
-
-    TLegend * legend = new TLegend(0.7, 0.7, 0.95, 0.95);
-    legend->AddEntry(h_mass[0], "Data", "pl");
-    legend->AddEntry(h_mass[1], "DY", "f");
-    legend->AddEntry(h_mass[2], "Bkg (real)", "f");
-    legend->AddEntry(h_mass[3], "Bkg (fake)", "f");
-
-    RP_mass->ImportLegend(legend);
-    RP_pT_barrel_pass->ImportLegend(legend);
-    RP_pT_endcap_pass->ImportLegend(legend);
-    RP_pT_barrel_fail->ImportLegend(legend);
-    RP_pT_endcap_fail->ImportLegend(legend);
-
-    RP_mass->Draw(1e-1, 1e8, 1);
-    RP_pT_barrel_pass->Draw(1e-1, 1e7, 1);
-    RP_pT_endcap_pass->Draw(1e-1, 1e7, 1);
-    RP_pT_barrel_fail->Draw(1e-1, 1e7, 1);
-    RP_pT_endcap_fail->Draw(1e-1, 1e7, 1);
-
-    f->Close();
-    if (!f->IsOpen()) cout << "File " << "/media/sf_DATA/SelectedEE/Histos/DYefficiency.root" << " has been closed successfully.\n" << endl;
-    else cout << "FILE " <<"/media/sf_DATA/SelectedEE/Histos/DYefficiency.root" << " COULD NOT BE CLOSED!\n" << endl;
-
-} // End of E_DYefficiency()
