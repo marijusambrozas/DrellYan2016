@@ -113,6 +113,10 @@ public:
         const double ptbin_ele[nPtBin_ele+1] = {25,30,35,40,45,50,55,60,70,80,90,100,120,140,160,175,200,250,300,400,500,800,5000};
         Double_t FR_barrel_ele[nPtBin_ele];
         Double_t FR_endcap_ele[nPtBin_ele];
+        Double_t FR_barrel_ele_alt_lead[nPtBin_DY];
+        Double_t FR_endcap_ele_alt_lead[nPtBin_DY];
+        Double_t FR_barrel_ele_alt_sub[nPtBin_DY];
+        Double_t FR_endcap_ele_alt_sub[nPtBin_DY];
         const double prescales[8] = {0.0016/36.47, 0.0066/36.47, 0.0132/36.47, 0.0264/36.47, 0.13/36.47, 0.26/36.47, 0.54/36.47, 1};
 
         const double ptbin_DY[nPtBin_DY+1] = {17, 23, 28, 35, 45, 60, 80, 100, 150, 250, 1000};
@@ -263,7 +267,7 @@ public:
         Double_t EfficiencySF_EventWeight_emu_GtoH(Muon mu1, Electron ele2);
         Double_t EfficiencySF_EventWeight_emu_GtoH(SelectedEMu_t *EMu);
 
-        // -- Event selection for Fake Rate -- //
+        // -- Fake Rate method -- //
         Bool_t EventSelection_FR(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection_nume, vector<Muon> *SelectedMuonCollection_deno); // -- output: muons passing numerator and denominator selection -- //
         Bool_t EventSelection_FRdijetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection_fail); // -- output: two muons passing regular selection but failing isolation requirements-- //
         Bool_t EventSelection_FRsingleJetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple,  vector<Muon> *SelectedMuonCollection); // -- output: one muon passing full regular selection and another one passing the same selection but failing isolation requirements-- //
@@ -282,7 +286,10 @@ public:
         Double_t getPrescale(Double_t Et);
         Double_t getPrescale_alt(Double_t Et);
         void SetupFRvalues_ele(TString filename, TString type="subtract", Int_t increaseLowPt=0);
+        void SetupFRvalues_ele_alt(TString filename, TString type="subtract", Int_t increaseLowPt=0);
         Double_t FakeRate_ele(Double_t p_T, Double_t eta);
+        Double_t FakeRate_ele_alt_lead(Double_t p_T, Double_t eta);
+        Double_t FakeRate_ele_alt_sub(Double_t p_T, Double_t eta);
         void SetupDYeff();
         Double_t DYeff_evtWeight(Double_t pT1, Double_t eta1, Int_t passMediumID1, Double_t pT2, Double_t eta2, Int_t passMediumID2);
 
@@ -6662,6 +6669,79 @@ void DYAnalyzer::SetupFRvalues_ele(TString filename, TString type, Int_t increas
 } // End of SetupFRvalues_ele()
 
 
+void DYAnalyzer::SetupFRvalues_ele_alt(TString filename, TString type, Int_t increaseLowPt) // type can be "ratio", "template"
+{
+    // -- Setting up -- //
+    std::cout << "Setting up fake rate values from " << filename << endl;
+    std::cout << "Fake rate obtained using " << type << " method." << endl;
+    TFile *f = new TFile(filename, "READ");
+    TH1D *h_FR_barrel_lead, *h_FR_endcap_lead, *h_FR_barrel_sub, *h_FR_endcap_sub;
+    f->GetObject("h_FR_"+type+"_lead_barrel", h_FR_barrel_lead);  // +"up"  +"down"
+    f->GetObject("h_FR_"+type+"_lead_endcap", h_FR_endcap_lead);  // +"up"  +"down"
+    f->GetObject("h_FR_"+type+"_sub_barrel", h_FR_barrel_sub);  // +"up"  +"down"
+    f->GetObject("h_FR_"+type+"_sub_endcap", h_FR_endcap_sub);  // +"up"  +"down"
+
+    // -- Getting values from histograms -- //
+    for (Int_t i_bin=1; i_bin<=nPtBin_DY; i_bin++)
+    {
+        FR_barrel_ele_alt_lead[i_bin-1] = h_FR_barrel_lead->GetBinContent(i_bin);
+        FR_barrel_ele_alt_sub[i_bin-1] = h_FR_barrel_sub->GetBinContent(i_bin);
+        if (i_bin <= nPtBin_DY)
+        {
+            FR_endcap_ele_alt_lead[i_bin-1] = h_FR_endcap_lead->GetBinContent(i_bin); // Original FR
+            FR_endcap_ele_alt_sub[i_bin-1] = h_FR_endcap_sub->GetBinContent(i_bin); // Original FR
+//            FR_endcap_ele[i_bin-1] = h_FR_endcap->GetBinContent(i_bin) + h_FR_endcap->GetBinError(i_bin); // FR increased by 1 sigma (for syst.unc.)
+//            FR_endcap_ele[i_bin-1] = h_FR_endcap->GetBinContent(i_bin) - h_FR_endcap->GetBinError(i_bin); // FR reduced by 1 sigma (for syst.unc.)
+        }
+    }
+    if (increaseLowPt == 1)
+    {
+        FR_barrel_ele_alt_lead[0] = h_FR_barrel_lead->GetBinContent(1) + h_FR_barrel_lead->GetBinError(1);
+        FR_barrel_ele_alt_lead[1] = h_FR_barrel_lead->GetBinContent(2) + h_FR_barrel_lead->GetBinError(2);
+        FR_barrel_ele_alt_lead[2] = h_FR_barrel_lead->GetBinContent(3) + h_FR_barrel_lead->GetBinError(3);
+        FR_endcap_ele_alt_lead[0] = h_FR_endcap_lead->GetBinContent(1) + h_FR_endcap_lead->GetBinError(1);
+        FR_endcap_ele_alt_lead[1] = h_FR_endcap_lead->GetBinContent(2) + h_FR_endcap_lead->GetBinError(2);
+        FR_endcap_ele_alt_lead[2] = h_FR_endcap_lead->GetBinContent(3) + h_FR_endcap_lead->GetBinError(3);
+        FR_barrel_ele_alt_sub[0] = h_FR_barrel_sub->GetBinContent(1) + h_FR_barrel_sub->GetBinError(1);
+        FR_barrel_ele_alt_sub[1] = h_FR_barrel_sub->GetBinContent(2) + h_FR_barrel_sub->GetBinError(2);
+        FR_barrel_ele_alt_sub[2] = h_FR_barrel_sub->GetBinContent(3) + h_FR_barrel_sub->GetBinError(3);
+        FR_endcap_ele_alt_sub[0] = h_FR_endcap_sub->GetBinContent(1) + h_FR_endcap_sub->GetBinError(1);
+        FR_endcap_ele_alt_sub[1] = h_FR_endcap_sub->GetBinContent(2) + h_FR_endcap_sub->GetBinError(2);
+        FR_endcap_ele_alt_sub[2] = h_FR_endcap_sub->GetBinContent(3) + h_FR_endcap_sub->GetBinError(3);
+    }
+
+    // -- Checking if everything has been done correctly -- //
+    Int_t nProblem = 0;
+    for (Int_t i=0; i<nPtBin_DY; i++)
+    {
+        if (FR_barrel_ele_alt_lead[i] >= 1 || FR_barrel_ele_alt_lead[i] <= 0)
+        {
+            nProblem++; std::cout << "Barrel lead " << i << "  " << FR_barrel_ele_alt_lead[i] << endl;
+        }
+        if (FR_barrel_ele_alt_sub[i] >= 1 || FR_barrel_ele_alt_sub[i] <= 0)
+        {
+            nProblem++; std::cout << "Barrel sub " << i << "  " << FR_barrel_ele_alt_sub[i] << endl;
+        }
+        if (i < nPtBin_DY)
+        {
+            if (FR_endcap_ele_alt_lead[i] >= 1 || FR_endcap_ele_alt_lead[i] <= 0)
+            {
+                nProblem++; std::cout << "Endcap lead " << i << "  " << FR_endcap_ele_alt_lead[i] << endl;
+            }
+            if (FR_endcap_ele_alt_sub[i] >= 1 || FR_endcap_ele_alt_sub[i] <= 0)
+            {
+                nProblem++; std::cout << "Endcap sub " << i << "  " << FR_endcap_ele_alt_sub[i] << endl;
+            }
+        }
+    }
+    if (nProblem)
+        std::cout << "**************************************************\n" <<
+                     "Problems were detected: fake rate values exceeding 'regular' probability boundaries have been found.\n" <<
+                     "Please check the code.\n**************************************************" << endl;
+    else std::cout << "Fake rates have been set up successfully." << endl;
+    return;
+} // End of SetupFRvalues_ele_alt ()
+
 
 Double_t DYAnalyzer::FakeRate(Double_t p_T, Double_t eta)
 {
@@ -6720,6 +6800,66 @@ Double_t DYAnalyzer::FakeRate_ele(Double_t p_T, Double_t eta)
     }
     return 0;
 } // End of FakeRate_ele()
+
+
+Double_t DYAnalyzer::FakeRate_ele_alt_lead(Double_t p_T, Double_t eta)
+{
+    Int_t i_bin = 0;
+    Int_t stop = 0;
+    if (fabs(eta) < 1.4442) // barrel
+    {
+        while (!stop)
+        {
+            if (p_T < ptbin_DY[i_bin + 1] || i_bin >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available FR value
+                stop = 1;
+            else
+                i_bin++;
+        }
+        return FR_barrel_ele_alt_lead[i_bin];
+    }
+    else if (fabs(eta) > 1.566) // endcap
+    {
+        while (!stop)
+        {
+            if (p_T < ptbin_DY[i_bin + 1] || i_bin >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available FR value
+                stop = 1;
+            else
+                i_bin++;
+        }
+        return FR_endcap_ele_alt_lead[i_bin];
+    }
+    return 0;
+} // End of FakeRate_ele_alt_lead()
+
+
+Double_t DYAnalyzer::FakeRate_ele_alt_sub(Double_t p_T, Double_t eta)
+{
+    Int_t i_bin = 0;
+    Int_t stop = 0;
+    if (fabs(eta) < 1.4442) // barrel
+    {
+        while (!stop)
+        {
+            if (p_T < ptbin_DY[i_bin + 1] || i_bin >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available FR value
+                stop = 1;
+            else
+                i_bin++;
+        }
+        return FR_barrel_ele_alt_sub[i_bin];
+    }
+    else if (fabs(eta) > 1.566) // endcap
+    {
+        while (!stop)
+        {
+            if (p_T < ptbin_DY[i_bin + 1] || i_bin >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available FR value
+                stop = 1;
+            else
+                i_bin++;
+        }
+        return FR_endcap_ele_alt_sub[i_bin];
+    }
+    return 0;
+} // End of FakeRate_ele_alt_sub()
 
 
 /*
