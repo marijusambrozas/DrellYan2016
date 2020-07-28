@@ -6503,7 +6503,7 @@ Bool_t DYAnalyzer::EventSelection_FR_alt(vector<Electron> ElectronCollection, Nt
     // -- Check the existence of two electrons matched with HLT_Ele23Ele12 -- //
     Int_t nMatches = 0;
     Int_t i_lead = -1, i_sublead = -1;
-    Double_t pT_lead = -1., pT_sublead = -1.
+    Double_t pT_lead = -1., pT_sublead = -1.;
     for(Int_t i=0; i<nEle; i++)
     {
         Electron ele = ElectronCollection[i];
