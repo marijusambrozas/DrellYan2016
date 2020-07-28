@@ -273,6 +273,7 @@ public:
         Bool_t EventSelection_FRsingleJetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple,  vector<Muon> *SelectedMuonCollection); // -- output: one muon passing full regular selection and another one passing the same selection but failing isolation requirements-- //
         Bool_t EventSelection_FakeMuons(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection); // -- output: two muons passing regular selection but failing isolation requirements (at least one) -- //
         Bool_t EventSelection_FR(vector<Electron> ElectronCollection, NtupleHandle *ntuple, vector<Electron> *SelectedElectronCollection); // Electron selection
+        Bool_t EventSelection_FR_alt(vector<Electron> ElectronCollection, NtupleHandle *ntuple, vector<Electron> *SelectedElectronCollection); // Electron selection
         Bool_t EventSelection_FakeElectrons(vector<Electron> ElectronCollection, NtupleHandle *ntuple, vector<Electron> *SelectedElectronCollection);
         Bool_t EventSelection_FakeEMu(vector<Electron> ElectronCollection, vector<Muon> MuonCollection, NtupleHandle *ntuple, Electron *SelectedElectron, Muon *SelectedMuon);
         void SetupFRvalues(TString filename, TString type="sigCtrl_template");
@@ -6487,6 +6488,76 @@ Bool_t DYAnalyzer::EventSelection_FR(vector<Electron> ElectronCollection, Ntuple
 //        isPassEventSelection = kFALSE;
 //        SelectedElectronCollection->clear();
 //    }
+    return isPassEventSelection;
+}
+
+
+Bool_t DYAnalyzer::EventSelection_FR_alt(vector<Electron> ElectronCollection, NtupleHandle *ntuple, vector<Electron> *SelectedElectronCollection) // Electron selection
+{
+    Bool_t isPassEventSelection = kFALSE;
+    SelectedElectronCollection->clear();
+
+    Int_t nEle = (Int_t)ElectronCollection.size();
+    if (nEle < 2) return isPassEventSelection;
+
+    // -- Check the existence of two electrons matched with HLT_Ele23Ele12 -- //
+    Int_t nMatches = 0;
+    Int_t i_lead = -1, i_sublead = -1;
+    Double_t pT_lead = -1., pT_sublead = -1.
+    for(Int_t i=0; i<nEle; i++)
+    {
+        Electron ele = ElectronCollection[i];
+        if (ele.isTrigMatched(ntuple, "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*") && ele.passMediumID == kTRUE &&
+            ele.Pt > SubPtCut && fabs(ele.etaSC) < SubEtaCut && !(fabs(ele.etaSC) > 1.4442 && fabs(ele.etaSC) < 1.566))
+        {
+            nMatches += 1;
+            if (ele.Pt > pT_lead)
+            {
+                i_lead = i;
+                pT_lead = ele.Pt;
+            }
+            else if (ele.Pt > pT_sublead)
+            {
+                i_sublead = i;
+                pT_sublead = ele.Pt;
+            }
+        }
+    }
+
+    if (nMatches != 2 || pT_lead <= LeadPtCut) return isPassEventSelection;
+
+    // -- Check if the lead pair is DY -- //
+    TLorentzVector ele1 =  ElectronCollection[i_lead].Momentum;
+    TLorentzVector ele2 =  ElectronCollection[i_sublead].Momentum;
+    Double_t mass = (ele1+ele2).M();
+
+    if (mass < 91 || mass > 101) return isPassEventSelection;
+
+    // -- Find the third electron -- //
+    Int_t i_third = -1;
+    Double_t pT_third = -1.;
+    for(Int_t i=0; i<nEle; i++)
+    {
+        if (i == i_lead || i == i_sublead) continue;
+        Electron ele = ElectronCollection[i];
+        if (ele.Pt > SubPtCut-2.0 && fabs(ele.etaSC) < SubEtaCut && !(fabs(ele.etaSC) > 1.4442 && fabs(ele.etaSC) < 1.566))
+        {
+            if (ele.Pt > pT_third)
+            {
+                i_third = i;
+                pT_third = ele.Pt;
+            }
+        }
+    }
+
+    if (i_third >= 0)
+    {
+        isPassEventSelection = kTRUE;
+        SelectedElectronCollection->push_back(ElectronCollection[i_lead]);
+        SelectedElectronCollection->push_back(ElectronCollection[i_sublead]);
+        SelectedElectronCollection->push_back(ElectronCollection[i_third]);
+    }
+
     return isPassEventSelection;
 }
 
