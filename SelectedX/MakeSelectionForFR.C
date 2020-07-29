@@ -585,6 +585,7 @@ void MakeSelectionForFR_E_alt (TString type, TString HLTname , Bool_t Debug)
 
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
+        std::vector<double> *etaSC = new std::vector<double>;
         std::vector<double> *phi = new std::vector<double>;
         std::vector<int> *charge = new std::vector<int>;
         std::vector<int> *scPixCharge = new std::vector<int>;
@@ -618,6 +619,7 @@ void MakeSelectionForFR_E_alt (TString type, TString HLTname , Bool_t Debug)
         // -- Creating electron variables to assign branches -- //
         ElectronTree->Branch("p_T", &p_T);
         ElectronTree->Branch("eta", &eta);
+        ElectronTree->Branch("etaSC", &etaSC);
         ElectronTree->Branch("phi", &phi);
         ElectronTree->Branch("charge", &charge);
         ElectronTree->Branch("scPixCharge", &scPixCharge);
@@ -731,6 +733,7 @@ void MakeSelectionForFR_E_alt (TString type, TString HLTname , Bool_t Debug)
                         timesPassed++;
                         p_T->clear();
                         eta->clear();
+                        etaSC->clear();
                         phi->clear();
                         charge->clear();
                         scPixCharge->clear();
@@ -779,7 +782,8 @@ void MakeSelectionForFR_E_alt (TString type, TString HLTname , Bool_t Debug)
                         for (UInt_t i_ele=0; i_ele<SelectedElectronCollection.size(); i_ele++)
                         {
                             p_T->push_back(SelectedElectronCollection[i_ele].Pt);
-                            eta->push_back(SelectedElectronCollection[i_ele].etaSC);
+                            eta->push_back(SelectedElectronCollection[i_ele].eta);
+                            etaSC->push_back(SelectedElectronCollection[i_ele].etaSC);
                             phi->push_back(SelectedElectronCollection[i_ele].phi);
                             charge->push_back(SelectedElectronCollection[i_ele].charge);
                             scPixCharge->push_back(SelectedElectronCollection[i_ele].scPixCharge);
@@ -804,7 +808,8 @@ void MakeSelectionForFR_E_alt (TString type, TString HLTname , Bool_t Debug)
                             if (Debug == kTRUE)
                             {
                                 cout << "Passing electron " << i_ele << ": p_T = " << SelectedElectronCollection[i_ele].Pt;
-                                cout << "   eta = " << SelectedElectronCollection[i_ele].etaSC;
+                                cout << "   eta = " << SelectedElectronCollection[i_ele].eta;
+                                cout << "   etaSC = " << SelectedElectronCollection[i_ele].etaSC;
                                 cout << "   charge = " << SelectedElectronCollection[i_ele].charge;
                                 if (SelectedElectronCollection[i_ele].passMediumID == 1) cout << "   MediumID";
                                 cout << endl;
