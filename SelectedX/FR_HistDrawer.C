@@ -27,7 +27,8 @@
 #include "./etc/RoccoR/RoccoR.cc"
 
 void E_HistDrawer(Int_t type);
-void E_alt_HistDrawer();
+void E_HistDrawer_alt();
+void E_HistDrawer_alt2();
 void Mu_HistDrawer(Int_t type);
 void Test_HistDrawer(Int_t type);
 void Fit_HistDrawer();
@@ -127,10 +128,15 @@ void FR_HistDrawer (TString WhichX = "", Int_t systErr = 0, Int_t type = 2)
             cout << "\n*******     E_WJETest_HistDrawer(" << type << ", " << systErr << ")    *******" << endl;
             E_WJETest_HistDrawer(type, systErr);
         }
+        else if (whichX.Contains("ALT") && whichX.Contains("2"))
+        {
+            cout << "\n*******      E_HistDrawer_alt2()      *******" << endl;
+            E_HistDrawer_alt2();
+        }
         else if (whichX.Contains("ALT"))
         {
-            cout << "\n*******      E_alt_HistDrawer()      *******" << endl;
-            E_alt_HistDrawer();
+            cout << "\n*******      E_HistDrawer_alt()      *******" << endl;
+            E_HistDrawer_alt();
         }
         else
         {
@@ -5435,20 +5441,28 @@ void E_HistDrawer(Int_t type)
 } // End of EE_HistDrawer()
 
 
-void E_alt_HistDrawer()
+void E_HistDrawer_alt()
 {
     TFile *f = new TFile("/media/sf_DATA/FR/Electron/For_FakeRate_electron_alt.root", "READ");
 
-    TH1D *h_pT_barrel_pass[4],
-         *h_pT_endcap_pass[4],
-         *h_pT_barrel_fail[4],
-         *h_pT_endcap_fail[4],
+    TH1D *h_pT_barrel_lead_pass[4],
+         *h_pT_endcap_lead_pass[4],
+         *h_pT_barrel_lead_fail[4],
+         *h_pT_endcap_lead_fail[4],
+         *h_pT_barrel_sub_pass[4],
+         *h_pT_endcap_sub_pass[4],
+         *h_pT_barrel_sub_fail[4],
+         *h_pT_endcap_sub_fail[4],
          *h_MET_fail[4],
          *h_MT_fail[4];
-    THStack *s_pT_barrel_pass = new THStack("s_pT_barrel_pass", "");
-    THStack *s_pT_endcap_pass = new THStack("s_pT_endcap_pass", "");
-    THStack *s_pT_barrel_fail = new THStack("s_pT_barrel_fail", "");
-    THStack *s_pT_endcap_fail = new THStack("s_pT_endcap_fail", "");
+    THStack *s_pT_barrel_lead_pass = new THStack("s_pT_barrel_lead_pass", "");
+    THStack *s_pT_endcap_lead_pass = new THStack("s_pT_endcap_lead_pass", "");
+    THStack *s_pT_barrel_lead_fail = new THStack("s_pT_barrel_lead_fail", "");
+    THStack *s_pT_endcap_lead_fail = new THStack("s_pT_endcap_lead_fail", "");
+    THStack *s_pT_barrel_sub_pass = new THStack("s_pT_barrel_sub_pass", "");
+    THStack *s_pT_endcap_sub_pass = new THStack("s_pT_endcap_sub_pass", "");
+    THStack *s_pT_barrel_sub_fail = new THStack("s_pT_barrel_sub_fail", "");
+    THStack *s_pT_endcap_sub_fail = new THStack("s_pT_endcap_sub_fail", "");
     THStack *s_MET_fail = new THStack("s_MET_fail", "");
     THStack *s_MT_fail = new THStack("s_MT_fail", "");
     Color_t color = kBlack;
@@ -5456,32 +5470,52 @@ void E_alt_HistDrawer()
 
     for (Int_t i=3; i>=0; i--)
     {
-        f->GetObject("h_pT_barrel_pass_"+type[i], h_pT_barrel_pass[i]);
-        f->GetObject("h_pT_endcap_pass_"+type[i], h_pT_endcap_pass[i]);
-        f->GetObject("h_pT_barrel_fail_"+type[i], h_pT_barrel_fail[i]);
-        f->GetObject("h_pT_endcap_fail_"+type[i], h_pT_endcap_fail[i]);
+        f->GetObject("h_pT_barrel_lead_pass_"+type[i], h_pT_barrel_lead_pass[i]);
+        f->GetObject("h_pT_endcap_lead_pass_"+type[i], h_pT_endcap_lead_pass[i]);
+        f->GetObject("h_pT_barrel_lead_fail_"+type[i], h_pT_barrel_lead_fail[i]);
+        f->GetObject("h_pT_endcap_lead_fail_"+type[i], h_pT_endcap_lead_fail[i]);
+        f->GetObject("h_pT_barrel_sub_pass_"+type[i], h_pT_barrel_sub_pass[i]);
+        f->GetObject("h_pT_endcap_sub_pass_"+type[i], h_pT_endcap_sub_pass[i]);
+        f->GetObject("h_pT_barrel_sub_fail_"+type[i], h_pT_barrel_sub_fail[i]);
+        f->GetObject("h_pT_endcap_sub_fail_"+type[i], h_pT_endcap_sub_fail[i]);
         f->GetObject("h_MET_fail_"+type[i], h_MET_fail[i]);
         f->GetObject("h_MT_fail_"+type[i], h_MT_fail[i]);
-        h_pT_barrel_pass[i]->SetDirectory(0);
-        h_pT_endcap_pass[i]->SetDirectory(0);
-        h_pT_barrel_fail[i]->SetDirectory(0);
-        h_pT_endcap_fail[i]->SetDirectory(0);
+        h_pT_barrel_lead_pass[i]->SetDirectory(0);
+        h_pT_endcap_lead_pass[i]->SetDirectory(0);
+        h_pT_barrel_lead_fail[i]->SetDirectory(0);
+        h_pT_endcap_lead_fail[i]->SetDirectory(0);
+        h_pT_barrel_sub_pass[i]->SetDirectory(0);
+        h_pT_endcap_sub_pass[i]->SetDirectory(0);
+        h_pT_barrel_sub_fail[i]->SetDirectory(0);
+        h_pT_endcap_sub_fail[i]->SetDirectory(0);
         h_MET_fail[i]->SetDirectory(0);
         h_MT_fail[i]->SetDirectory(0);
         if (i == 0)
         {
-            h_pT_barrel_pass[i]->SetMarkerStyle(kFullDotLarge);
-            h_pT_barrel_pass[i]->SetMarkerColor(kBlack);
-            h_pT_barrel_pass[i]->SetLineColor(kBlack);
-            h_pT_endcap_pass[i]->SetMarkerStyle(kFullDotLarge);
-            h_pT_endcap_pass[i]->SetMarkerColor(kBlack);
-            h_pT_endcap_pass[i]->SetLineColor(kBlack);
-            h_pT_barrel_fail[i]->SetMarkerStyle(kFullDotLarge);
-            h_pT_barrel_fail[i]->SetMarkerColor(kBlack);
-            h_pT_barrel_fail[i]->SetLineColor(kBlack);
-            h_pT_endcap_fail[i]->SetMarkerStyle(kFullDotLarge);
-            h_pT_endcap_fail[i]->SetMarkerColor(kBlack);
-            h_pT_endcap_fail[i]->SetLineColor(kBlack);
+            h_pT_barrel_lead_pass[i]->SetMarkerStyle(kFullDotLarge);
+            h_pT_barrel_lead_pass[i]->SetMarkerColor(kBlack);
+            h_pT_barrel_lead_pass[i]->SetLineColor(kBlack);
+            h_pT_endcap_lead_pass[i]->SetMarkerStyle(kFullDotLarge);
+            h_pT_endcap_lead_pass[i]->SetMarkerColor(kBlack);
+            h_pT_endcap_lead_pass[i]->SetLineColor(kBlack);
+            h_pT_barrel_lead_fail[i]->SetMarkerStyle(kFullDotLarge);
+            h_pT_barrel_lead_fail[i]->SetMarkerColor(kBlack);
+            h_pT_barrel_lead_fail[i]->SetLineColor(kBlack);
+            h_pT_endcap_lead_fail[i]->SetMarkerStyle(kFullDotLarge);
+            h_pT_endcap_lead_fail[i]->SetMarkerColor(kBlack);
+            h_pT_endcap_lead_fail[i]->SetLineColor(kBlack);
+            h_pT_barrel_sub_pass[i]->SetMarkerStyle(kFullDotLarge);
+            h_pT_barrel_sub_pass[i]->SetMarkerColor(kBlack);
+            h_pT_barrel_sub_pass[i]->SetLineColor(kBlack);
+            h_pT_endcap_sub_pass[i]->SetMarkerStyle(kFullDotLarge);
+            h_pT_endcap_sub_pass[i]->SetMarkerColor(kBlack);
+            h_pT_endcap_sub_pass[i]->SetLineColor(kBlack);
+            h_pT_barrel_sub_fail[i]->SetMarkerStyle(kFullDotLarge);
+            h_pT_barrel_sub_fail[i]->SetMarkerColor(kBlack);
+            h_pT_barrel_sub_fail[i]->SetLineColor(kBlack);
+            h_pT_endcap_sub_fail[i]->SetMarkerStyle(kFullDotLarge);
+            h_pT_endcap_sub_fail[i]->SetMarkerColor(kBlack);
+            h_pT_endcap_sub_fail[i]->SetLineColor(kBlack);
             h_MET_fail[i]->SetMarkerStyle(kFullDotLarge);
             h_MET_fail[i]->SetMarkerColor(kBlack);
             h_MET_fail[i]->SetLineColor(kBlack);
@@ -5494,23 +5528,35 @@ void E_alt_HistDrawer()
             if (i == 1) color = kOrange;
             else if (i == 2) color = kCyan + 2;
             else color = kRed + 3;
-            h_pT_barrel_pass[i]->SetFillColor(color);
-            h_pT_barrel_pass[i]->SetLineColor(color);
-            h_pT_endcap_pass[i]->SetFillColor(color);
-            h_pT_endcap_pass[i]->SetLineColor(color);
-            h_pT_barrel_fail[i]->SetFillColor(color);
-            h_pT_barrel_fail[i]->SetLineColor(color);
-            h_pT_endcap_fail[i]->SetFillColor(color);
-            h_pT_endcap_fail[i]->SetLineColor(color);
+            h_pT_barrel_lead_pass[i]->SetFillColor(color);
+            h_pT_barrel_lead_pass[i]->SetLineColor(color);
+            h_pT_endcap_lead_pass[i]->SetFillColor(color);
+            h_pT_endcap_lead_pass[i]->SetLineColor(color);
+            h_pT_barrel_lead_fail[i]->SetFillColor(color);
+            h_pT_barrel_lead_fail[i]->SetLineColor(color);
+            h_pT_endcap_lead_fail[i]->SetFillColor(color);
+            h_pT_endcap_lead_fail[i]->SetLineColor(color);
+            h_pT_barrel_sub_pass[i]->SetFillColor(color);
+            h_pT_barrel_sub_pass[i]->SetLineColor(color);
+            h_pT_endcap_sub_pass[i]->SetFillColor(color);
+            h_pT_endcap_sub_pass[i]->SetLineColor(color);
+            h_pT_barrel_sub_fail[i]->SetFillColor(color);
+            h_pT_barrel_sub_fail[i]->SetLineColor(color);
+            h_pT_endcap_sub_fail[i]->SetFillColor(color);
+            h_pT_endcap_sub_fail[i]->SetLineColor(color);
             h_MET_fail[i]->SetFillColor(color);
             h_MET_fail[i]->SetLineColor(color);
             h_MT_fail[i]->SetFillColor(color);
             h_MT_fail[i]->SetLineColor(color);
 
-            s_pT_barrel_pass->Add(h_pT_barrel_pass[i]);
-            s_pT_endcap_pass->Add(h_pT_endcap_pass[i]);
-            s_pT_barrel_fail->Add(h_pT_barrel_fail[i]);
-            s_pT_endcap_fail->Add(h_pT_endcap_fail[i]);
+            s_pT_barrel_lead_pass->Add(h_pT_barrel_lead_pass[i]);
+            s_pT_endcap_lead_pass->Add(h_pT_endcap_lead_pass[i]);
+            s_pT_barrel_lead_fail->Add(h_pT_barrel_lead_fail[i]);
+            s_pT_endcap_lead_fail->Add(h_pT_endcap_lead_fail[i]);
+            s_pT_barrel_sub_pass->Add(h_pT_barrel_sub_pass[i]);
+            s_pT_endcap_sub_pass->Add(h_pT_endcap_sub_pass[i]);
+            s_pT_barrel_sub_fail->Add(h_pT_barrel_sub_fail[i]);
+            s_pT_endcap_sub_fail->Add(h_pT_endcap_sub_fail[i]);
             s_MET_fail->Add(h_MET_fail[i]);
             s_MT_fail->Add(h_MT_fail[i]);
         }
@@ -5518,37 +5564,53 @@ void E_alt_HistDrawer()
 
 
     // Creating and drawing ratio plots
-    myRatioPlot_t *RP_pT_barrel_pass = new myRatioPlot_t("c_pT_barrel_pass", s_pT_barrel_pass, h_pT_barrel_pass[0]);
-    myRatioPlot_t *RP_pT_endcap_pass = new myRatioPlot_t("c_pT_endcap_pass", s_pT_endcap_pass, h_pT_endcap_pass[0]);
-    myRatioPlot_t *RP_pT_barrel_fail = new myRatioPlot_t("c_pT_barrel_fail", s_pT_barrel_fail, h_pT_barrel_fail[0]);
-    myRatioPlot_t *RP_pT_endcap_fail = new myRatioPlot_t("c_pT_endcap_fail", s_pT_endcap_fail, h_pT_endcap_fail[0]);
+    myRatioPlot_t *RP_pT_barrel_lead_pass = new myRatioPlot_t("c_pT_barrel_lead_pass", s_pT_barrel_lead_pass, h_pT_barrel_lead_pass[0]);
+    myRatioPlot_t *RP_pT_endcap_lead_pass = new myRatioPlot_t("c_pT_endcap_lead_pass", s_pT_endcap_lead_pass, h_pT_endcap_lead_pass[0]);
+    myRatioPlot_t *RP_pT_barrel_lead_fail = new myRatioPlot_t("c_pT_barrel_lead_fail", s_pT_barrel_lead_fail, h_pT_barrel_lead_fail[0]);
+    myRatioPlot_t *RP_pT_endcap_lead_fail = new myRatioPlot_t("c_pT_endcap_lead_fail", s_pT_endcap_lead_fail, h_pT_endcap_lead_fail[0]);
+    myRatioPlot_t *RP_pT_barrel_sub_pass = new myRatioPlot_t("c_pT_barrel_sub_pass", s_pT_barrel_sub_pass, h_pT_barrel_sub_pass[0]);
+    myRatioPlot_t *RP_pT_endcap_sub_pass = new myRatioPlot_t("c_pT_endcap_sub_pass", s_pT_endcap_sub_pass, h_pT_endcap_sub_pass[0]);
+    myRatioPlot_t *RP_pT_barrel_sub_fail = new myRatioPlot_t("c_pT_barrel_sub_fail", s_pT_barrel_sub_fail, h_pT_barrel_sub_fail[0]);
+    myRatioPlot_t *RP_pT_endcap_sub_fail = new myRatioPlot_t("c_pT_endcap_sub_fail", s_pT_endcap_sub_fail, h_pT_endcap_sub_fail[0]);
     myRatioPlot_t *RP_MET_fail = new myRatioPlot_t("c_MET_fail", s_MET_fail, h_MET_fail[0]);
     myRatioPlot_t *RP_MT_fail = new myRatioPlot_t("c_MT_fail", s_MT_fail, h_MT_fail[0]);
 
-    RP_pT_barrel_pass->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 1000);
-    RP_pT_endcap_pass->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 1000);
-    RP_pT_barrel_fail->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 1000);
-    RP_pT_endcap_fail->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 1000);
+    RP_pT_barrel_lead_pass->SetPlots("p_{#lower[-0.2]{T}}^{lead} [GeV/c]", 0, 1000);
+    RP_pT_endcap_lead_pass->SetPlots("p_{#lower[-0.2]{T}}^{lead} [GeV/c]", 0, 1000);
+    RP_pT_barrel_lead_fail->SetPlots("p_{#lower[-0.2]{T}}^{lead} [GeV/c]", 0, 1000);
+    RP_pT_endcap_lead_fail->SetPlots("p_{#lower[-0.2]{T}}^{lead} [GeV/c]", 0, 1000);
+    RP_pT_barrel_sub_pass->SetPlots("p_{#lower[-0.2]{T}}^{sub} [GeV/c]", 0, 1000);
+    RP_pT_endcap_sub_pass->SetPlots("p_{#lower[-0.2]{T}}^{sub} [GeV/c]", 0, 1000);
+    RP_pT_barrel_sub_fail->SetPlots("p_{#lower[-0.2]{T}}^{sub} [GeV/c]", 0, 1000);
+    RP_pT_endcap_sub_fail->SetPlots("p_{#lower[-0.2]{T}}^{sub} [GeV/c]", 0, 1000);
     RP_MET_fail->SetPlots("E_{#lower[-0.2]{T}}^{miss} [GeV]", 0, 100);
     RP_MT_fail->SetPlots("m_{#lower[-0.2]{T}} [GeV/c^{2}]", 0, 200);
 
     TLegend * legend = new TLegend(0.7, 0.7, 0.95, 0.95);
-    legend->AddEntry(h_pT_barrel_pass[0], "Data", "pl");
-    legend->AddEntry(h_pT_barrel_pass[1], "DY", "f");
-    legend->AddEntry(h_pT_barrel_pass[2], "Bkg (real)", "f");
-    legend->AddEntry(h_pT_barrel_pass[3], "Bkg (fake)", "f");
+    legend->AddEntry(h_pT_barrel_lead_pass[0], "Data", "pl");
+    legend->AddEntry(h_pT_barrel_lead_pass[1], "DY", "f");
+    legend->AddEntry(h_pT_barrel_lead_pass[2], "Bkg (real)", "f");
+    legend->AddEntry(h_pT_barrel_lead_pass[3], "Bkg (fake)", "f");
 
-    RP_pT_barrel_pass->ImportLegend(legend);
-    RP_pT_endcap_pass->ImportLegend(legend);
-    RP_pT_barrel_fail->ImportLegend(legend);
-    RP_pT_endcap_fail->ImportLegend(legend);
+    RP_pT_barrel_lead_pass->ImportLegend(legend);
+    RP_pT_endcap_lead_pass->ImportLegend(legend);
+    RP_pT_barrel_lead_fail->ImportLegend(legend);
+    RP_pT_endcap_lead_fail->ImportLegend(legend);
+    RP_pT_barrel_sub_pass->ImportLegend(legend);
+    RP_pT_endcap_sub_pass->ImportLegend(legend);
+    RP_pT_barrel_sub_fail->ImportLegend(legend);
+    RP_pT_endcap_sub_fail->ImportLegend(legend);
     RP_MET_fail->ImportLegend(legend);
     RP_MT_fail->ImportLegend(legend);
 
-    RP_pT_barrel_pass->Draw(1e-1, 1e7, 1);
-    RP_pT_endcap_pass->Draw(1e-1, 1e7, 1);
-    RP_pT_barrel_fail->Draw(1e-1, 1e7, 1);
-    RP_pT_endcap_fail->Draw(1e-1, 1e7, 1);
+    RP_pT_barrel_lead_pass->Draw(1e-1, 1e7, 1);
+    RP_pT_endcap_lead_pass->Draw(1e-1, 1e7, 1);
+    RP_pT_barrel_lead_fail->Draw(1e-1, 1e7, 1);
+    RP_pT_endcap_lead_fail->Draw(1e-1, 1e7, 1);
+    RP_pT_barrel_sub_pass->Draw(1e-1, 1e7, 1);
+    RP_pT_endcap_sub_pass->Draw(1e-1, 1e7, 1);
+    RP_pT_barrel_sub_fail->Draw(1e-1, 1e7, 1);
+    RP_pT_endcap_sub_fail->Draw(1e-1, 1e7, 1);
     RP_MET_fail->Draw(1e-1, 1e7, 0);
     RP_MT_fail->Draw(1e-1, 1e7, 0);
 
@@ -5556,7 +5618,697 @@ void E_alt_HistDrawer()
     if (!f->IsOpen()) cout << "File " << "/media/sf_DATA/FR/Electron/For_FakeRate_electron_alt.root" << " has been closed successfully.\n" << endl;
     else cout << "FILE " <<"/media/sf_DATA/FR/Electron/For_FakeRate_electron_alt.root" << " COULD NOT BE CLOSED!\n" << endl;
 
-} // End of E_alt_HistDrawer()
+} // End of E_HistDrawer_alt()
+
+
+void E_HistDrawer_alt2()
+{
+    DYAnalyzer analyzer("Ele23Ele12");
+    FileMgr fm;
+    THStack *s_pT_barrel_nume = new THStack("s_pT_barrel_nume", "");
+    THStack *s_pT_endcap_nume = new THStack("s_pT_endcap_nume", "");
+    THStack *s_pT_barrel_ctrl = new THStack("s_pT_barrel_ctrl", "");
+    THStack *s_pT_endcap_ctrl = new THStack("s_pT_endcap_ctrl", "");
+    THStack *s_eta_nume = new THStack("s_eta_nume", "");
+    THStack *s_eta_ctrl = new THStack("s_eta_ctrl", "");
+    THStack *s_MET = new THStack("s_MET", "");
+    THStack *s_MT = new THStack("s_MT", "");
+    THStack *s_nVTX = new THStack("s_nVTX", "");
+    THStack *s_mass = new THStack("s_mass", "");
+
+    TH1D *h_pT_barrel_nume[_EndOf_Data_Special], *h_pT_endcap_nume[_EndOf_Data_Special],
+         *h_pT_barrel_ctrl[_EndOf_Data_Special], *h_pT_endcap_ctrl[_EndOf_Data_Special],
+         *h_eta_nume[_EndOf_Data_Special], *h_eta_ctrl[_EndOf_Data_Special],
+         *h_MET[_EndOf_Data_Special], *h_MT[_EndOf_Data_Special],
+         *h_nVTX[_EndOf_Data_Special], *h_mass[_EndOf_Data_Special];
+
+//----------------------------------- MC bkg -------------------------------------------------------
+
+    // Other MC
+    Int_t stop = 0;
+    Process_t pr = _WW;
+    while (!stop)
+    {
+        TFile *file = new TFile("/media/sf_DATA/FR/Electron/FR_Hist_E_alt_"+fm.Procname[pr]+".root", "READ");
+
+        file->GetObject("h_pT_barrel_nume", h_pT_barrel_nume[pr]);
+        file->GetObject("h_pT_endcap_nume", h_pT_endcap_nume[pr]);
+        file->GetObject("h_pT_barrel_ctrl", h_pT_barrel_ctrl[pr]);
+        file->GetObject("h_pT_endcap_ctrl", h_pT_endcap_ctrl[pr]);
+        file->GetObject("h_eta_nume", h_eta_nume[pr]);
+        file->GetObject("h_eta_ctrl", h_eta_ctrl[pr]);
+        file->GetObject("h_MET", h_MET[pr]);
+        file->GetObject("h_MT", h_MT[pr]);
+        file->GetObject("h_nVTX", h_nVTX[pr]);
+        file->GetObject("h_mass", h_mass[pr]);
+        removeNegativeBins(h_pT_barrel_nume[pr]);
+        removeNegativeBins(h_pT_endcap_nume[pr]);
+        removeNegativeBins(h_pT_barrel_ctrl[pr]);
+        removeNegativeBins(h_pT_endcap_ctrl[pr]);
+        removeNegativeBins(h_eta_nume[pr]);
+        removeNegativeBins(h_eta_ctrl[pr]);
+        removeNegativeBins(h_MET[pr]);
+        removeNegativeBins(h_MT[pr]);
+        removeNegativeBins(h_nVTX[pr]);
+        removeNegativeBins(h_mass[pr]);
+
+        Color_t color = kBlack;
+        if (pr == _WJets || pr == _WJets_ext2v5) color = kRed - 2;
+        if (pr == _VVnST) color = kMagenta - 5;
+        if (pr == _WW) color = kMagenta - 5;
+        if (pr == _WZ) color = kMagenta - 2;
+        if (pr == _ZZ) color = kMagenta - 6;
+        if (pr == _tbarW) color = kGreen - 2;
+        if (pr == _tW) color = kGreen + 2;
+        if (pr == _ttbar || pr == _ttbar_700to1000 || pr == _ttbar_1000toInf) color = kCyan + 2;
+
+        h_pT_barrel_nume[pr]->SetFillColor(color);
+        h_pT_endcap_nume[pr]->SetFillColor(color);
+        h_pT_barrel_ctrl[pr]->SetFillColor(color);
+        h_pT_endcap_ctrl[pr]->SetFillColor(color);
+        h_eta_nume[pr]      ->SetFillColor(color);
+        h_eta_ctrl[pr]      ->SetFillColor(color);
+        h_MET[pr]           ->SetFillColor(color);
+        h_MT[pr]            ->SetFillColor(color);
+        h_nVTX[pr]          ->SetFillColor(color);
+        h_mass[pr]          ->SetFillColor(color);
+
+        h_pT_barrel_nume[pr]->SetLineColor(color);
+        h_pT_endcap_nume[pr]->SetLineColor(color);
+        h_pT_barrel_ctrl[pr]->SetLineColor(color);
+        h_pT_endcap_ctrl[pr]->SetLineColor(color);
+        h_eta_nume[pr]      ->SetLineColor(color);
+        h_eta_ctrl[pr]      ->SetLineColor(color);
+        h_MET[pr]           ->SetLineColor(color);
+        h_MT[pr]            ->SetLineColor(color);
+        h_nVTX[pr]          ->SetLineColor(color);
+        h_mass[pr]          ->SetLineColor(color);
+
+        h_pT_barrel_nume[pr]->SetDirectory(0);
+        h_pT_endcap_nume[pr]->SetDirectory(0);
+        h_pT_barrel_ctrl[pr]->SetDirectory(0);
+        h_pT_endcap_ctrl[pr]->SetDirectory(0);
+        h_eta_nume[pr]      ->SetDirectory(0);
+        h_eta_ctrl[pr]      ->SetDirectory(0);
+        h_MET[pr]           ->SetDirectory(0);
+        h_MT[pr]            ->SetDirectory(0);
+        h_nVTX[pr]          ->SetDirectory(0);
+        h_mass[pr]          ->SetDirectory(0);
+
+        if (pr == _WJets)
+        {
+            h_pT_barrel_nume[_WJets_Full] = ((TH1D*)(h_pT_barrel_nume[pr]->Clone("h_pT_barrel_nume_WJets")));
+            h_pT_endcap_nume[_WJets_Full] = ((TH1D*)(h_pT_endcap_nume[pr]->Clone("h_pT_endcap_nume_WJets")));
+            h_pT_barrel_ctrl[_WJets_Full] = ((TH1D*)(h_pT_barrel_ctrl[pr]->Clone("h_pT_barrel_ctrl_WJets")));
+            h_pT_endcap_ctrl[_WJets_Full] = ((TH1D*)(h_pT_endcap_ctrl[pr]->Clone("h_pT_endcap_ctrl_WJets")));
+            h_eta_nume[_WJets_Full]       = ((TH1D*)(h_eta_nume[pr]      ->Clone("h_eta_nume_WJets")));
+            h_eta_ctrl[_WJets_Full]       = ((TH1D*)(h_eta_ctrl[pr]      ->Clone("h_eta_ctrl_WJets")));
+            h_MET[_WJets_Full]            = ((TH1D*)(h_MET[pr]           ->Clone("h_MET_WJets")));
+            h_MT[_WJets_Full]             = ((TH1D*)(h_MT[pr]            ->Clone("h_MT_WJets")));
+            h_nVTX[_WJets_Full]           = ((TH1D*)(h_nVTX[pr]          ->Clone("h_nVTX_WJets")));
+            h_mass[_WJets_Full]           = ((TH1D*)(h_mass[pr]          ->Clone("h_mass_WJets")));
+
+            h_pT_barrel_nume[_WJets_Full]->SetDirectory(0);
+            h_pT_endcap_nume[_WJets_Full]->SetDirectory(0);
+            h_pT_barrel_ctrl[_WJets_Full]->SetDirectory(0);
+            h_pT_endcap_ctrl[_WJets_Full]->SetDirectory(0);
+            h_eta_nume[_WJets_Full]      ->SetDirectory(0);
+            h_eta_ctrl[_WJets_Full]      ->SetDirectory(0);
+            h_MET[_WJets_Full]           ->SetDirectory(0);
+            h_MT[_WJets_Full]            ->SetDirectory(0);
+            h_nVTX[_WJets_Full]          ->SetDirectory(0);
+            h_mass[_WJets_Full]          ->SetDirectory(0);
+        }
+        else if (pr == _WJets_ext2v5)
+        {
+            h_pT_barrel_nume[_WJets_Full]->Add(h_pT_barrel_nume[pr]);
+            h_pT_endcap_nume[_WJets_Full]->Add(h_pT_endcap_nume[pr]);
+            h_pT_barrel_ctrl[_WJets_Full]->Add(h_pT_barrel_ctrl[pr]);
+            h_pT_endcap_ctrl[_WJets_Full]->Add(h_pT_endcap_ctrl[pr]);
+            h_eta_nume[_WJets_Full]      ->Add(h_eta_nume[pr]);
+            h_eta_ctrl[_WJets_Full]      ->Add(h_eta_ctrl[pr]);
+            h_MET[_WJets_Full]           ->Add(h_MET[pr]);
+            h_MT[_WJets_Full]            ->Add(h_MT[pr]);
+            h_nVTX[_WJets_Full]          ->Add(h_nVTX[pr]);
+            h_mass[_WJets_Full]          ->Add(h_mass[pr]);
+        }
+
+        s_pT_barrel_nume->Add(h_pT_barrel_nume[pr]);
+        s_pT_endcap_nume->Add(h_pT_endcap_nume[pr]);
+        s_pT_barrel_ctrl->Add(h_pT_barrel_ctrl[pr]);
+        s_pT_endcap_ctrl->Add(h_pT_endcap_ctrl[pr]);
+        s_eta_nume      ->Add(h_eta_nume[pr]);
+        s_eta_ctrl      ->Add(h_eta_ctrl[pr]);
+        s_MET           ->Add(h_MET[pr]);
+        s_MT            ->Add(h_MT[pr]);
+        s_nVTX          ->Add(h_nVTX[pr]);
+        s_mass          ->Add(h_mass[pr]);
+
+        file->Close();
+
+        if (pr == _WW) {pr = _WZ; continue;}
+        if (pr == _WZ) {pr = _ZZ; continue;}
+        if (pr == _ZZ) {pr = _tbarW; continue;}
+        if (pr == _tbarW) {pr = _tW; continue;}
+        if (pr == _tW) {pr = _ttbar; continue;}
+        if (pr == _ttbar) {pr = _ttbar_700to1000; continue;}
+        if (pr == _ttbar_700to1000) {pr = _ttbar_1000toInf; continue;}
+        if (pr == _ttbar_1000toInf) {pr = _WJets; continue;}
+        if (pr == _WJets) {pr = _WJets_ext2v5; continue;}
+        if (pr == _WJets_ext2v5) {stop = 1;}
+    }
+
+    // Drell-Yan
+    for (Process_t pr = _DY_10to50; pr <= _DY_2000to3000; pr=next(pr))
+    {
+        TFile *file = new TFile("/media/sf_DATA/FR/Electron/FR_Hist_E_alt_"+fm.Procname[pr]+".root", "READ");
+
+        file->GetObject("h_pT_barrel_nume", h_pT_barrel_nume[pr]);
+        file->GetObject("h_pT_endcap_nume", h_pT_endcap_nume[pr]);
+        file->GetObject("h_pT_barrel_ctrl", h_pT_barrel_ctrl[pr]);
+        file->GetObject("h_pT_endcap_ctrl", h_pT_endcap_ctrl[pr]);
+        file->GetObject("h_eta_nume", h_eta_nume[pr]);
+        file->GetObject("h_eta_ctrl", h_eta_ctrl[pr]);
+        file->GetObject("h_MET", h_MET[pr]);
+        file->GetObject("h_MT", h_MT[pr]);
+        file->GetObject("h_nVTX", h_nVTX[pr]);
+        file->GetObject("h_mass", h_mass[pr]);
+
+        removeNegativeBins(h_pT_barrel_nume[pr]);
+        removeNegativeBins(h_pT_endcap_nume[pr]);
+        removeNegativeBins(h_pT_barrel_ctrl[pr]);
+        removeNegativeBins(h_pT_endcap_ctrl[pr]);
+        removeNegativeBins(h_eta_nume[pr]);
+        removeNegativeBins(h_eta_ctrl[pr]);
+        removeNegativeBins(h_MET[pr]);
+        removeNegativeBins(h_MT[pr]);
+        removeNegativeBins(h_nVTX[pr]);
+        removeNegativeBins(h_mass[pr]);
+
+        Color_t color = kOrange - 5;
+        h_pT_barrel_nume[pr]->SetFillColor(color);
+        h_pT_endcap_nume[pr]->SetFillColor(color);
+        h_pT_barrel_ctrl[pr]->SetFillColor(color);
+        h_pT_endcap_ctrl[pr]->SetFillColor(color);
+        h_eta_nume[pr]      ->SetFillColor(color);
+        h_eta_ctrl[pr]      ->SetFillColor(color);
+        h_MET[pr]           ->SetFillColor(color);
+        h_MT[pr]            ->SetFillColor(color);
+        h_nVTX[pr]          ->SetFillColor(color);
+        h_mass[pr]          ->SetFillColor(color);
+
+        h_pT_barrel_nume[pr]->SetLineColor(color);
+        h_pT_endcap_nume[pr]->SetLineColor(color);
+        h_pT_barrel_ctrl[pr]->SetLineColor(color);
+        h_pT_endcap_ctrl[pr]->SetLineColor(color);
+        h_eta_nume[pr]      ->SetLineColor(color);
+        h_eta_ctrl[pr]      ->SetLineColor(color);
+        h_MET[pr]           ->SetLineColor(color);
+        h_MT[pr]            ->SetLineColor(color);
+        h_nVTX[pr]          ->SetLineColor(color);
+        h_mass[pr]          ->SetLineColor(color);
+
+        h_pT_barrel_nume[pr]->SetDirectory(0);
+        h_pT_endcap_nume[pr]->SetDirectory(0);
+        h_pT_barrel_ctrl[pr]->SetDirectory(0);
+        h_pT_endcap_ctrl[pr]->SetDirectory(0);
+        h_eta_nume[pr]      ->SetDirectory(0);
+        h_eta_ctrl[pr]      ->SetDirectory(0);
+        h_MET[pr]           ->SetDirectory(0);
+        h_MT[pr]            ->SetDirectory(0);
+        h_nVTX[pr]          ->SetDirectory(0);
+        h_mass[pr]          ->SetDirectory(0);
+
+        if (pr == _DY_10to50)
+        {
+            h_pT_barrel_nume[_DY_Full] = ((TH1D*)(h_pT_barrel_nume[pr]->Clone("h_pT_barrel_nume_DY")));
+            h_pT_endcap_nume[_DY_Full] = ((TH1D*)(h_pT_endcap_nume[pr]->Clone("h_pT_endcap_nume_DY")));
+            h_pT_barrel_ctrl[_DY_Full] = ((TH1D*)(h_pT_barrel_ctrl[pr]->Clone("h_pT_barrel_ctrl_DY")));
+            h_pT_endcap_ctrl[_DY_Full] = ((TH1D*)(h_pT_endcap_ctrl[pr]->Clone("h_pT_endcap_ctrl_DY")));
+            h_eta_nume[_DY_Full]       = ((TH1D*)(h_eta_nume[pr]      ->Clone("h_eta_nume_DY")));
+            h_eta_ctrl[_DY_Full]       = ((TH1D*)(h_eta_ctrl[pr]      ->Clone("h_eta_ctrl_DY")));
+            h_MET[_DY_Full]            = ((TH1D*)(h_MET[pr]           ->Clone("h_MET_DY")));
+            h_MT[_DY_Full]             = ((TH1D*)(h_MT[pr]            ->Clone("h_MT_DY")));
+            h_nVTX[_DY_Full]           = ((TH1D*)(h_nVTX[pr]          ->Clone("h_nVTX_DY")));
+            h_mass[_DY_Full]           = ((TH1D*)(h_mass[pr]          ->Clone("h_mass_DY")));
+
+            h_pT_barrel_nume[_DY_Full]->SetDirectory(0);
+            h_pT_endcap_nume[_DY_Full]->SetDirectory(0);
+            h_pT_barrel_ctrl[_DY_Full]->SetDirectory(0);
+            h_pT_endcap_ctrl[_DY_Full]->SetDirectory(0);
+            h_eta_nume[_DY_Full]      ->SetDirectory(0);
+            h_eta_ctrl[_DY_Full]      ->SetDirectory(0);
+            h_MET[_DY_Full]           ->SetDirectory(0);
+            h_MT[_DY_Full]            ->SetDirectory(0);
+            h_nVTX[_DY_Full]          ->SetDirectory(0);
+            h_mass[_DY_Full]          ->SetDirectory(0);
+        }
+        else
+        {
+            h_pT_barrel_nume[_DY_Full]->Add(h_pT_barrel_nume[pr]);
+            h_pT_endcap_nume[_DY_Full]->Add(h_pT_endcap_nume[pr]);
+            h_pT_barrel_ctrl[_DY_Full]->Add(h_pT_barrel_ctrl[pr]);
+            h_pT_endcap_ctrl[_DY_Full]->Add(h_pT_endcap_ctrl[pr]);
+            h_eta_nume[_DY_Full]      ->Add(h_eta_nume[pr]);
+            h_eta_ctrl[_DY_Full]      ->Add(h_eta_ctrl[pr]);
+            h_MET[_DY_Full]           ->Add(h_MET[pr]);
+            h_MT[_DY_Full]            ->Add(h_MT[pr]);
+            h_nVTX[_DY_Full]          ->Add(h_nVTX[pr]);
+            h_mass[_DY_Full]          ->Add(h_mass[pr]);
+        }
+
+        s_pT_barrel_nume->Add(h_pT_barrel_nume[pr]);
+        s_pT_endcap_nume->Add(h_pT_endcap_nume[pr]);
+        s_pT_barrel_ctrl->Add(h_pT_barrel_ctrl[pr]);
+        s_pT_endcap_ctrl->Add(h_pT_endcap_ctrl[pr]);
+        s_eta_nume      ->Add(h_eta_nume[pr]);
+        s_eta_ctrl      ->Add(h_eta_ctrl[pr]);
+        s_MET           ->Add(h_MET[pr]);
+        s_MT            ->Add(h_MT[pr]);
+        s_nVTX          ->Add(h_nVTX[pr]);
+        s_mass          ->Add(h_mass[pr]);
+
+        file->Close();
+    }
+
+    // QCD
+    for (Process_t pr = _QCDEMEnriched_20to30; pr <= _QCDEMEnriched_300toInf; pr=next(pr))
+    {
+        TFile *file = new TFile("/media/sf_DATA/FR/Electron/FR_Hist_E_alt_"+fm.Procname[pr]+".root", "READ");
+
+        file->GetObject("h_pT_barrel_nume", h_pT_barrel_nume[pr]);
+        file->GetObject("h_pT_endcap_nume", h_pT_endcap_nume[pr]);
+        file->GetObject("h_pT_barrel_ctrl", h_pT_barrel_ctrl[pr]);
+        file->GetObject("h_pT_endcap_ctrl", h_pT_endcap_ctrl[pr]);
+        file->GetObject("h_eta_nume", h_eta_nume[pr]);
+        file->GetObject("h_eta_ctrl", h_eta_ctrl[pr]);
+        file->GetObject("h_MET", h_MET[pr]);
+        file->GetObject("h_MT", h_MT[pr]);
+        file->GetObject("h_nVTX", h_nVTX[pr]);
+        file->GetObject("h_mass", h_mass[pr]);
+
+        removeNegativeBins(h_pT_barrel_nume[pr]);
+        removeNegativeBins(h_pT_endcap_nume[pr]);
+        removeNegativeBins(h_pT_barrel_ctrl[pr]);
+        removeNegativeBins(h_pT_endcap_ctrl[pr]);
+        removeNegativeBins(h_eta_nume[pr]);
+        removeNegativeBins(h_eta_ctrl[pr]);
+        removeNegativeBins(h_MET[pr]);
+        removeNegativeBins(h_MT[pr]);
+        removeNegativeBins(h_nVTX[pr]);
+        removeNegativeBins(h_mass[pr]);
+
+        Color_t color = kRed + 3;
+        h_pT_barrel_nume[pr]->SetFillColor(color);
+        h_pT_endcap_nume[pr]->SetFillColor(color);
+        h_pT_barrel_ctrl[pr]->SetFillColor(color);
+        h_pT_endcap_ctrl[pr]->SetFillColor(color);
+        h_eta_nume[pr]      ->SetFillColor(color);
+        h_eta_ctrl[pr]      ->SetFillColor(color);
+        h_MET[pr]           ->SetFillColor(color);
+        h_MT[pr]            ->SetFillColor(color);
+        h_nVTX[pr]          ->SetFillColor(color);
+        h_mass[pr]          ->SetFillColor(color);
+
+        h_pT_barrel_nume[pr]->SetLineColor(color);
+        h_pT_endcap_nume[pr]->SetLineColor(color);
+        h_pT_barrel_ctrl[pr]->SetLineColor(color);
+        h_pT_endcap_ctrl[pr]->SetLineColor(color);
+        h_eta_nume[pr]      ->SetLineColor(color);
+        h_eta_ctrl[pr]      ->SetLineColor(color);
+        h_MET[pr]           ->SetLineColor(color);
+        h_MT[pr]            ->SetLineColor(color);
+        h_nVTX[pr]          ->SetLineColor(color);
+        h_mass[pr]          ->SetLineColor(color);
+
+        h_pT_barrel_nume[pr]->SetDirectory(0);
+        h_pT_endcap_nume[pr]->SetDirectory(0);
+        h_pT_barrel_ctrl[pr]->SetDirectory(0);
+        h_pT_endcap_ctrl[pr]->SetDirectory(0);
+        h_eta_nume[pr]      ->SetDirectory(0);
+        h_eta_ctrl[pr]      ->SetDirectory(0);
+        h_MET[pr]           ->SetDirectory(0);
+        h_MT[pr]            ->SetDirectory(0);
+        h_nVTX[pr]          ->SetDirectory(0);
+        h_mass[pr]          ->SetDirectory(0);
+
+        if (pr == _QCDEMEnriched_20to30)
+        {
+            h_pT_barrel_nume[_QCDEMEnriched_Full] = ((TH1D*)(h_pT_barrel_nume[pr]->Clone("h_pT_barrel_nume_QCD")));
+            h_pT_endcap_nume[_QCDEMEnriched_Full] = ((TH1D*)(h_pT_endcap_nume[pr]->Clone("h_pT_endcap_nume_QCD")));
+            h_pT_barrel_ctrl[_QCDEMEnriched_Full] = ((TH1D*)(h_pT_barrel_ctrl[pr]->Clone("h_pT_barrel_ctrl_QCD")));
+            h_pT_endcap_ctrl[_QCDEMEnriched_Full] = ((TH1D*)(h_pT_endcap_ctrl[pr]->Clone("h_pT_endcap_ctrl_QCD")));
+            h_eta_nume[_QCDEMEnriched_Full]       = ((TH1D*)(h_eta_nume[pr]      ->Clone("h_eta_nume")));
+            h_eta_ctrl[_QCDEMEnriched_Full]       = ((TH1D*)(h_eta_ctrl[pr]      ->Clone("h_eta_ctrl")));
+            h_MET[_QCDEMEnriched_Full]            = ((TH1D*)(h_MET[pr]           ->Clone("h_MET_QCD")));
+            h_MT[_QCDEMEnriched_Full]             = ((TH1D*)(h_MT[pr]            ->Clone("h_MT_QCD")));
+            h_nVTX[_QCDEMEnriched_Full]           = ((TH1D*)(h_nVTX[pr]          ->Clone("h_nVTX_QCD")));
+            h_mass[_QCDEMEnriched_Full]           = ((TH1D*)(h_mass[pr]          ->Clone("h_mass_QCD")));
+
+            h_pT_barrel_nume[_QCDEMEnriched_Full]->SetDirectory(0);
+            h_pT_endcap_nume[_QCDEMEnriched_Full]->SetDirectory(0);
+            h_pT_barrel_ctrl[_QCDEMEnriched_Full]->SetDirectory(0);
+            h_pT_endcap_ctrl[_QCDEMEnriched_Full]->SetDirectory(0);
+            h_eta_nume[_QCDEMEnriched_Full]      ->SetDirectory(0);
+            h_eta_ctrl[_QCDEMEnriched_Full]      ->SetDirectory(0);
+            h_MET[_QCDEMEnriched_Full]           ->SetDirectory(0);
+            h_MT[_QCDEMEnriched_Full]            ->SetDirectory(0);
+            h_nVTX[_QCDEMEnriched_Full]          ->SetDirectory(0);
+            h_mass[_QCDEMEnriched_Full]          ->SetDirectory(0);
+        }
+        else
+        {
+            h_pT_barrel_nume[_QCDEMEnriched_Full]->Add(h_pT_barrel_nume[pr]);
+            h_pT_endcap_nume[_QCDEMEnriched_Full]->Add(h_pT_endcap_nume[pr]);
+            h_pT_barrel_ctrl[_QCDEMEnriched_Full]->Add(h_pT_barrel_ctrl[pr]);
+            h_pT_endcap_ctrl[_QCDEMEnriched_Full]->Add(h_pT_endcap_ctrl[pr]);
+            h_eta_nume[_QCDEMEnriched_Full]      ->Add(h_eta_nume[pr]);
+            h_eta_ctrl[_QCDEMEnriched_Full]      ->Add(h_eta_ctrl[pr]);
+            h_MET[_QCDEMEnriched_Full]           ->Add(h_MET[pr]);
+            h_MT[_QCDEMEnriched_Full]            ->Add(h_MT[pr]);
+            h_nVTX[_QCDEMEnriched_Full]          ->Add(h_nVTX[pr]);
+            h_mass[_QCDEMEnriched_Full]          ->Add(h_mass[pr]);
+        }
+
+        s_pT_barrel_nume->Add(h_pT_barrel_nume[pr]);
+        s_pT_endcap_nume->Add(h_pT_endcap_nume[pr]);
+        s_pT_barrel_ctrl->Add(h_pT_barrel_ctrl[pr]);
+        s_pT_endcap_ctrl->Add(h_pT_endcap_ctrl[pr]);
+        s_eta_nume      ->Add(h_eta_nume[pr]);
+        s_eta_ctrl      ->Add(h_eta_ctrl[pr]);
+        s_MET           ->Add(h_MET[pr]);
+        s_MT            ->Add(h_MT[pr]);
+        s_nVTX          ->Add(h_nVTX[pr]);
+        s_mass          ->Add(h_mass[pr]);
+
+        file->Close();
+    }
+
+    // GammaJets
+    for (Process_t pr = _GJets_20to100; pr <= _GJets_2000to5000; pr=next(pr))
+    {
+        TFile *file = new TFile("/media/sf_DATA/FR/Electron/FR_Hist_E_alt_"+fm.Procname[pr]+".root", "READ");
+
+        file->GetObject("h_pT_barrel_nume", h_pT_barrel_nume[pr]);
+        file->GetObject("h_pT_endcap_nume", h_pT_endcap_nume[pr]);
+        file->GetObject("h_pT_barrel_ctrl", h_pT_barrel_ctrl[pr]);
+        file->GetObject("h_pT_endcap_ctrl", h_pT_endcap_ctrl[pr]);
+        file->GetObject("h_eta_nume", h_eta_nume[pr]);
+        file->GetObject("h_eta_ctrl", h_eta_ctrl[pr]);
+        file->GetObject("h_MET", h_MET[pr]);
+        file->GetObject("h_MT", h_MT[pr]);
+        file->GetObject("h_nVTX", h_nVTX[pr]);
+        file->GetObject("h_mass", h_mass[pr]);
+
+        removeNegativeBins(h_pT_barrel_nume[pr]);
+        removeNegativeBins(h_pT_endcap_nume[pr]);
+        removeNegativeBins(h_pT_barrel_ctrl[pr]);
+        removeNegativeBins(h_pT_endcap_ctrl[pr]);
+        removeNegativeBins(h_eta_nume[pr]);
+        removeNegativeBins(h_eta_ctrl[pr]);
+        removeNegativeBins(h_MET[pr]);
+        removeNegativeBins(h_MT[pr]);
+        removeNegativeBins(h_nVTX[pr]);
+        removeNegativeBins(h_mass[pr]);
+
+        Color_t color = kYellow + 3;
+        h_pT_barrel_nume[pr]->SetFillColor(color);
+        h_pT_endcap_nume[pr]->SetFillColor(color);
+        h_pT_barrel_ctrl[pr]->SetFillColor(color);
+        h_pT_endcap_ctrl[pr]->SetFillColor(color);
+        h_eta_nume[pr]      ->SetFillColor(color);
+        h_eta_ctrl[pr]      ->SetFillColor(color);
+        h_MET[pr]           ->SetFillColor(color);
+        h_MT[pr]            ->SetFillColor(color);
+        h_nVTX[pr]          ->SetFillColor(color);
+        h_mass[pr]          ->SetFillColor(color);
+
+        h_pT_barrel_nume[pr]->SetLineColor(color);
+        h_pT_endcap_nume[pr]->SetLineColor(color);
+        h_pT_barrel_ctrl[pr]->SetLineColor(color);
+        h_pT_endcap_ctrl[pr]->SetLineColor(color);
+        h_eta_nume[pr]      ->SetLineColor(color);
+        h_eta_ctrl[pr]      ->SetLineColor(color);
+        h_MET[pr]           ->SetLineColor(color);
+        h_MT[pr]            ->SetLineColor(color);
+        h_nVTX[pr]          ->SetLineColor(color);
+        h_mass[pr]          ->SetLineColor(color);
+
+        h_pT_barrel_nume[pr]->SetDirectory(0);
+        h_pT_endcap_nume[pr]->SetDirectory(0);
+        h_pT_barrel_ctrl[pr]->SetDirectory(0);
+        h_pT_endcap_ctrl[pr]->SetDirectory(0);
+        h_eta_nume[pr]      ->SetDirectory(0);
+        h_eta_ctrl[pr]      ->SetDirectory(0);
+        h_MET[pr]           ->SetDirectory(0);
+        h_MT[pr]            ->SetDirectory(0);
+        h_nVTX[pr]          ->SetDirectory(0);
+        h_mass[pr]          ->SetDirectory(0);
+
+        if (pr == _GJets_20to100)
+        {
+            h_pT_barrel_nume[_GJets_Full] = ((TH1D*)(h_pT_barrel_nume[pr]->Clone("h_pT_barrel_nume_GJets")));
+            h_pT_endcap_nume[_GJets_Full] = ((TH1D*)(h_pT_endcap_nume[pr]->Clone("h_pT_endcap_nume_GJets")));
+            h_pT_barrel_ctrl[_GJets_Full] = ((TH1D*)(h_pT_barrel_ctrl[pr]->Clone("h_pT_barrel_ctrl_GJets")));
+            h_pT_endcap_ctrl[_GJets_Full] = ((TH1D*)(h_pT_endcap_ctrl[pr]->Clone("h_pT_endcap_ctrl_GJets")));
+            h_eta_nume[_GJets_Full]       = ((TH1D*)(h_eta_nume[pr]      ->Clone("h_eta_nume_GJets")));
+            h_eta_ctrl[_GJets_Full]       = ((TH1D*)(h_eta_ctrl[pr]      ->Clone("h_eta_ctrl_GJets")));
+            h_MET[_GJets_Full]            = ((TH1D*)(h_MET[pr]           ->Clone("h_MET_GJets")));
+            h_MT[_GJets_Full]             = ((TH1D*)(h_MT[pr]            ->Clone("h_MT_GJets")));
+            h_nVTX[_GJets_Full]           = ((TH1D*)(h_nVTX[pr]          ->Clone("h_nVTX_GJets")));
+            h_mass[_GJets_Full]           = ((TH1D*)(h_mass[pr]          ->Clone("h_mass_GJets")));
+
+            h_pT_barrel_nume[_GJets_Full]->SetDirectory(0);
+            h_pT_endcap_nume[_GJets_Full]->SetDirectory(0);
+            h_pT_barrel_ctrl[_GJets_Full]->SetDirectory(0);
+            h_pT_endcap_ctrl[_GJets_Full]->SetDirectory(0);
+            h_eta_nume[_GJets_Full]      ->SetDirectory(0);
+            h_eta_ctrl[_GJets_Full]      ->SetDirectory(0);
+            h_MET[_GJets_Full]           ->SetDirectory(0);
+            h_MT[_GJets_Full]            ->SetDirectory(0);
+            h_nVTX[_GJets_Full]          ->SetDirectory(0);
+            h_mass[_GJets_Full]          ->SetDirectory(0);
+        }
+        else
+        {
+            h_pT_barrel_nume[_GJets_Full]->Add(h_pT_barrel_nume[pr]);
+            h_pT_endcap_nume[_GJets_Full]->Add(h_pT_endcap_nume[pr]);
+            h_pT_barrel_ctrl[_GJets_Full]->Add(h_pT_barrel_ctrl[pr]);
+            h_pT_endcap_ctrl[_GJets_Full]->Add(h_pT_endcap_ctrl[pr]);
+            h_eta_nume[_GJets_Full]      ->Add(h_eta_nume[pr]);
+            h_eta_ctrl[_GJets_Full]      ->Add(h_eta_ctrl[pr]);
+            h_MET[_GJets_Full]           ->Add(h_MET[pr]);
+            h_MT[_GJets_Full]            ->Add(h_MT[pr]);
+            h_nVTX[_GJets_Full]          ->Add(h_nVTX[pr]);
+            h_mass[_GJets_Full]          ->Add(h_mass[pr]);
+        }
+
+        s_pT_barrel_nume->Add(h_pT_barrel_nume[pr]);
+        s_pT_endcap_nume->Add(h_pT_endcap_nume[pr]);
+        s_pT_barrel_ctrl->Add(h_pT_barrel_ctrl[pr]);
+        s_pT_endcap_ctrl->Add(h_pT_endcap_ctrl[pr]);
+        s_eta_nume      ->Add(h_eta_nume[pr]);
+        s_eta_ctrl      ->Add(h_eta_ctrl[pr]);
+        s_MET           ->Add(h_MET[pr]);
+        s_MT            ->Add(h_MT[pr]);
+        s_nVTX          ->Add(h_nVTX[pr]);
+        s_mass          ->Add(h_mass[pr]);
+
+        file->Close();
+    }
+
+//--------------------------------------- DATA -----------------------------------------------------
+
+    for (Process_t pr=_DoubleEG_B; pr<=_DoubleEG_H; pr=next(pr))
+    {
+        TFile *file = new TFile("/media/sf_DATA/FR/Electron/FR_Hist_E_alt_"+fm.Procname[pr]+".root", "READ");
+
+        file->GetObject("h_pT_barrel_nume", h_pT_barrel_nume[pr]);
+        file->GetObject("h_pT_endcap_nume", h_pT_endcap_nume[pr]);
+        file->GetObject("h_pT_barrel_ctrl", h_pT_barrel_ctrl[pr]);
+        file->GetObject("h_pT_endcap_ctrl", h_pT_endcap_ctrl[pr]);
+        file->GetObject("h_eta_nume", h_eta_nume[pr]);
+        file->GetObject("h_eta_ctrl", h_eta_ctrl[pr]);
+        file->GetObject("h_MET", h_MET[pr]);
+        file->GetObject("h_MT", h_MT[pr]);
+        file->GetObject("h_nVTX", h_nVTX[pr]);
+        file->GetObject("h_mass", h_mass[pr]);
+
+        removeNegativeBins(h_pT_barrel_nume[pr]);
+        removeNegativeBins(h_pT_endcap_nume[pr]);
+        removeNegativeBins(h_pT_barrel_ctrl[pr]);
+        removeNegativeBins(h_pT_endcap_ctrl[pr]);
+        removeNegativeBins(h_eta_nume[pr]);
+        removeNegativeBins(h_eta_ctrl[pr]);
+        removeNegativeBins(h_MET[pr]);
+        removeNegativeBins(h_MT[pr]);
+        removeNegativeBins(h_nVTX[pr]);
+        removeNegativeBins(h_mass[pr]);
+
+        if (pr == _DoubleEG_B)
+        {
+            h_pT_barrel_nume[_DoubleEG_Full] = ((TH1D*)(h_pT_barrel_nume[pr]->Clone("h_pT_barrel_nume_data")));
+            h_pT_endcap_nume[_DoubleEG_Full] = ((TH1D*)(h_pT_endcap_nume[pr]->Clone("h_pT_endcap_nume_data")));
+            h_pT_barrel_ctrl[_DoubleEG_Full] = ((TH1D*)(h_pT_barrel_ctrl[pr]->Clone("h_pT_barrel_ctrl_data")));
+            h_pT_endcap_ctrl[_DoubleEG_Full] = ((TH1D*)(h_pT_endcap_ctrl[pr]->Clone("h_pT_endcap_ctrl_data")));
+            h_eta_nume[_DoubleEG_Full]       = ((TH1D*)(h_eta_nume[pr]      ->Clone("h_eta_nume_data")));
+            h_eta_ctrl[_DoubleEG_Full]       = ((TH1D*)(h_eta_ctrl[pr]      ->Clone("h_eta_ctrl_data")));
+            h_MET[_DoubleEG_Full]            = ((TH1D*)(h_MET[pr]           ->Clone("h_MET_data")));
+            h_MT[_DoubleEG_Full]             = ((TH1D*)(h_MT[pr]            ->Clone("h_MT_data")));
+            h_nVTX[_DoubleEG_Full]           = ((TH1D*)(h_nVTX[pr]          ->Clone("h_nVTX_data")));
+            h_mass[_DoubleEG_Full]           = ((TH1D*)(h_mass[pr]          ->Clone("h_mass_data")));
+
+            h_pT_barrel_nume[_DoubleEG_Full]->SetDirectory(0);
+            h_pT_endcap_nume[_DoubleEG_Full]->SetDirectory(0);
+            h_pT_barrel_ctrl[_DoubleEG_Full]->SetDirectory(0);
+            h_pT_endcap_ctrl[_DoubleEG_Full]->SetDirectory(0);
+            h_eta_nume[_DoubleEG_Full]      ->SetDirectory(0);
+            h_eta_ctrl[_DoubleEG_Full]      ->SetDirectory(0);
+            h_MET[_DoubleEG_Full]           ->SetDirectory(0);
+            h_MT[_DoubleEG_Full]            ->SetDirectory(0);
+            h_nVTX[_DoubleEG_Full]          ->SetDirectory(0);
+            h_mass[_DoubleEG_Full]          ->SetDirectory(0);
+        }
+        else
+        {
+            h_pT_barrel_nume[_DoubleEG_Full]->Add(h_pT_barrel_nume[pr]);
+            h_pT_endcap_nume[_DoubleEG_Full]->Add(h_pT_endcap_nume[pr]);
+            h_pT_barrel_ctrl[_DoubleEG_Full]->Add(h_pT_barrel_ctrl[pr]);
+            h_pT_endcap_ctrl[_DoubleEG_Full]->Add(h_pT_endcap_ctrl[pr]);
+            h_eta_nume[_DoubleEG_Full]      ->Add(h_eta_nume[pr]);
+            h_eta_ctrl[_DoubleEG_Full]      ->Add(h_eta_ctrl[pr]);
+            h_MET[_DoubleEG_Full]           ->Add(h_MET[pr]);
+            h_MT[_DoubleEG_Full]            ->Add(h_MT[pr]);
+            h_nVTX[_DoubleEG_Full]          ->Add(h_nVTX[pr]);
+            h_mass[_DoubleEG_Full]          ->Add(h_mass[pr]);
+        }
+
+    }
+
+    h_pT_barrel_nume[_DoubleEG_Full]->SetMarkerStyle(kFullDotLarge);
+    h_pT_endcap_nume[_DoubleEG_Full]->SetMarkerStyle(kFullDotLarge);
+    h_pT_barrel_ctrl[_DoubleEG_Full]->SetMarkerStyle(kFullDotLarge);
+    h_pT_endcap_ctrl[_DoubleEG_Full]->SetMarkerStyle(kFullDotLarge);
+    h_eta_nume[_DoubleEG_Full]      ->SetMarkerStyle(kFullDotLarge);
+    h_eta_ctrl[_DoubleEG_Full]      ->SetMarkerStyle(kFullDotLarge);
+    h_MET[_DoubleEG_Full]           ->SetMarkerStyle(kFullDotLarge);
+    h_MT[_DoubleEG_Full]            ->SetMarkerStyle(kFullDotLarge);
+    h_nVTX[_DoubleEG_Full]          ->SetMarkerStyle(kFullDotLarge);
+    h_mass[_DoubleEG_Full]          ->SetMarkerStyle(kFullDotLarge);
+
+    h_pT_barrel_nume[_DoubleEG_Full]->SetMarkerColor(kBlack);
+    h_pT_endcap_nume[_DoubleEG_Full]->SetMarkerColor(kBlack);
+    h_pT_barrel_ctrl[_DoubleEG_Full]->SetMarkerColor(kBlack);
+    h_pT_endcap_ctrl[_DoubleEG_Full]->SetMarkerColor(kBlack);
+    h_eta_nume[_DoubleEG_Full]      ->SetMarkerColor(kBlack);
+    h_eta_ctrl[_DoubleEG_Full]      ->SetMarkerColor(kBlack);
+    h_MET[_DoubleEG_Full]           ->SetMarkerColor(kBlack);
+    h_MT[_DoubleEG_Full]            ->SetMarkerColor(kBlack);
+    h_nVTX[_DoubleEG_Full]          ->SetMarkerColor(kBlack);
+    h_mass[_DoubleEG_Full]          ->SetMarkerColor(kBlack);
+
+    h_pT_barrel_nume[_DoubleEG_Full]->SetLineColor(kBlack);
+    h_pT_endcap_nume[_DoubleEG_Full]->SetLineColor(kBlack);
+    h_pT_barrel_ctrl[_DoubleEG_Full]->SetLineColor(kBlack);
+    h_pT_endcap_ctrl[_DoubleEG_Full]->SetLineColor(kBlack);
+    h_eta_nume[_DoubleEG_Full]      ->SetLineColor(kBlack);
+    h_eta_ctrl[_DoubleEG_Full]      ->SetLineColor(kBlack);
+    h_MET[_DoubleEG_Full]           ->SetLineColor(kBlack);
+    h_MT[_DoubleEG_Full]            ->SetLineColor(kBlack);
+    h_nVTX[_DoubleEG_Full]          ->SetLineColor(kBlack);
+    h_mass[_DoubleEG_Full]          ->SetLineColor(kBlack);
+
+//--------------------------------- Ratio Plots --------------------------------------
+
+    myRatioPlot_t *RP_pT_barrel_nume = new myRatioPlot_t("RP_pT_barrel_nume", s_pT_barrel_nume, h_pT_barrel_nume[_DoubleEG_Full]);
+    myRatioPlot_t *RP_pT_endcap_nume = new myRatioPlot_t("RP_pT_endcap_nume", s_pT_endcap_nume, h_pT_endcap_nume[_DoubleEG_Full]);
+    myRatioPlot_t *RP_pT_barrel_ctrl = new myRatioPlot_t("RP_pT_barrel_ctrl", s_pT_barrel_ctrl, h_pT_barrel_ctrl[_DoubleEG_Full]);
+    myRatioPlot_t *RP_pT_endcap_ctrl = new myRatioPlot_t("RP_pT_endcap_ctrl", s_pT_endcap_ctrl, h_pT_endcap_ctrl[_DoubleEG_Full]);
+    myRatioPlot_t *RP_eta_nume       = new myRatioPlot_t("RP_eta_nume",       s_eta_nume,       h_eta_nume[_DoubleEG_Full]);
+    myRatioPlot_t *RP_eta_ctrl       = new myRatioPlot_t("RP_eta_ctrl",       s_eta_ctrl,       h_eta_ctrl[_DoubleEG_Full]);
+    myRatioPlot_t *RP_MET            = new myRatioPlot_t("RP_MET",            s_MET,            h_MET[_DoubleEG_Full]);
+    myRatioPlot_t *RP_MT             = new myRatioPlot_t("RP_MT",             s_MT,             h_MT[_DoubleEG_Full]);
+    myRatioPlot_t *RP_nVTX           = new myRatioPlot_t("RP_nVTX",           s_nVTX,           h_nVTX[_DoubleEG_Full]);
+    myRatioPlot_t *RP_mass           = new myRatioPlot_t("RP_mass",           s_mass,           h_mass[_DoubleEG_Full]);
+
+    RP_pT_barrel_nume->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{barrel}}^{signal}) [GeV/c]", 15, 10000);
+    RP_pT_endcap_nume->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{endcap}}^{signal}) [GeV/c]", 15, 10000);
+    RP_pT_barrel_ctrl->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{barrel}}^{non-signal}) [GeV/c]", 15, 10000);
+    RP_pT_endcap_ctrl->SetPlots("p_{#lower[-0.25]{T}} (e_{#lower[-0.4]{endcap}}^{non-signal}) [GeV/c]", 15, 10000);
+    RP_MET           ->SetPlots("E_{#lower[-0.25]{T}}^{miss} [GeV]", 0, 500);
+    RP_MT            ->SetPlots("m_{#lower[-0.25]{T}} (e_{#lower[-0.4]{lead}}, E_{#lower[-0.25]{T}}^{miss}) [GeV/c^{2}]", 0, 500);
+    RP_eta_nume      ->SetPlots("#eta (e_{#lower[-0.4]{signal}})", -3, 3);
+    RP_eta_ctrl      ->SetPlots("#eta (e_{#lower[-0.4]{non-signal}})", -3, 3);
+    RP_nVTX          ->SetPlots("N_{#lower[-0.25]{VTX}}", 0, 50);
+    RP_mass          ->SetPlots("m_{#lower[-0.25]{ee}} [GeV/c^{2}]", 15, 3000);
+
+    TLegend *legend = new TLegend(0.5, 0.65, 0.95, 0.95);
+
+    legend->AddEntry(h_pT_barrel_nume[_DoubleEG_Full], "Data", "lp");
+    legend->AddEntry(h_pT_barrel_nume[_DY_50to100], "DY", "f");
+    legend->AddEntry(h_pT_barrel_nume[_ttbar], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+    legend->AddEntry(h_pT_barrel_nume[_tW], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+    legend->AddEntry(h_pT_barrel_nume[_tbarW], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+    legend->AddEntry(h_pT_barrel_nume[_ZZ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+    legend->AddEntry(h_pT_barrel_nume[_WZ], "#font[12]{#scale[1.1]{WZ}}", "f");
+    legend->AddEntry(h_pT_barrel_nume[_WW], "#font[12]{#scale[1.1]{WW}}", "f");
+    legend->AddEntry(h_pT_barrel_nume[_WJets], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+    legend->AddEntry(h_pT_barrel_nume[_GJets_20to100], "#gamma+Jets", "f");
+    legend->SetNColumns(2);
+
+    RP_pT_barrel_nume->ImportLegend(legend);
+    RP_pT_endcap_nume->ImportLegend(legend);
+    RP_pT_barrel_ctrl->ImportLegend(legend);
+    RP_pT_endcap_ctrl->ImportLegend(legend);
+    RP_MET           ->ImportLegend(legend);
+    RP_MT            ->ImportLegend(legend);
+    RP_eta_nume      ->ImportLegend(legend);
+    RP_eta_ctrl      ->ImportLegend(legend);
+    RP_nVTX          ->ImportLegend(legend);
+    RP_mass          ->ImportLegend(legend);
+
+    RP_pT_barrel_nume->Draw(1e-1, 1e4, 1);
+    RP_pT_endcap_nume->Draw(1e-1, 1e4, 1);
+    RP_pT_barrel_ctrl->Draw(1e-1, 1e4, 1);
+    RP_pT_endcap_ctrl->Draw(1e-1, 1e4, 1);
+    RP_MET           ->Draw(1e-1, 1e4, 0);
+    RP_MT            ->Draw(1e-1, 1e4, 0);
+    RP_eta_nume      ->Draw(1e-1, 1e4, 0);
+    RP_eta_ctrl      ->Draw(1e-1, 1e4, 0);
+    RP_nVTX          ->Draw(1e-1, 1e4, 0);
+    RP_mass          ->Draw(1e-1, 1e4, 1);
+
+    cout << "MC integral (ctrl): " << ((TH1D*)(s_pT_barrel_ctrl->GetStack()->Last()))->Integral() +
+                                     ((TH1D*)(s_pT_endcap_ctrl->GetStack()->Last()))->Integral() << endl;
+    cout << "Data integral (ctrl): " << h_pT_barrel_ctrl[_DoubleEG_Full]->Integral() + h_pT_endcap_ctrl[_DoubleEG_Full]->Integral() << endl;
+    cout << "QCD integral (ctrl): " << h_pT_barrel_ctrl[_QCDEMEnriched_Full]->Integral()+h_pT_endcap_ctrl[_QCDEMEnriched_Full]->Integral() << endl;
+    cout << "Gamma+Jets integral (ctrl): " << h_pT_barrel_ctrl[_GJets_Full]->Integral()+h_pT_endcap_ctrl[_GJets_Full]->Integral() << endl;
+    cout << "DY integral (ctrl): " << h_pT_barrel_ctrl[_DY_Full]->Integral()+h_pT_endcap_ctrl[_DY_Full]->Integral() << endl;
+    cout << "MC integral(nume): " << ((TH1D*)(s_pT_barrel_nume->GetStack()->Last()))->Integral() +
+            ((TH1D*)(s_pT_endcap_nume->GetStack()->Last()))->Integral() << endl;
+    cout << "Data integral (nume): " << h_pT_barrel_nume[_DoubleEG_Full]->Integral() + h_pT_endcap_nume[_DoubleEG_Full]->Integral() << endl;
+    cout << "QCD integral (nume): " << h_pT_barrel_nume[_QCDEMEnriched_Full]->Integral()+h_pT_endcap_nume[_QCDEMEnriched_Full]->Integral() << endl;
+    cout << "Gamma+Jets integral (nume): " << h_pT_barrel_nume[_GJets_Full]->Integral()+h_pT_endcap_nume[_GJets_Full]->Integral() << endl;
+    cout << "DY integral (nume): " << h_pT_barrel_nume[_DY_Full]->Integral()+h_pT_endcap_nume[_DY_Full]->Integral() << endl;
+
+    cout << "\nMC integral (ctrl barrel): " << ((TH1D*)(s_pT_barrel_ctrl->GetStack()->Last()))->Integral() << endl;
+    cout << "Data integral (ctrl barrel): " << h_pT_barrel_ctrl[_DoubleEG_Full]->Integral() << endl;
+    cout << "QCD integral (ctrl barrel): " << h_pT_barrel_ctrl[_QCDEMEnriched_Full]->Integral() << endl;
+    cout << "Gamma+Jets integral (ctrl barrel): " << h_pT_barrel_ctrl[_GJets_Full]->Integral() << endl;
+    cout << "\nMC integral (nume barrel): " << ((TH1D*)(s_pT_barrel_nume->GetStack()->Last()))->Integral() << endl;
+    cout << "Data integral (nume barrel): " << h_pT_barrel_nume[_DoubleEG_Full]->Integral() << endl;
+    cout << "QCD integral (nume barrel): " << h_pT_barrel_nume[_QCDEMEnriched_Full]->Integral() << endl;
+    cout << "Gamma+Jets integral (nume barrel): " << h_pT_barrel_nume[_GJets_Full]->Integral() << endl;
+    cout << "\nMC integral (ctrl endcap): " << ((TH1D*)(s_pT_endcap_ctrl->GetStack()->Last()))->Integral() << endl;
+    cout << "Data integral (ctrl endcap): " << h_pT_endcap_ctrl[_DoubleEG_Full]->Integral() << endl;
+    cout << "QCD integral (ctrl endcap): " << h_pT_endcap_ctrl[_QCDEMEnriched_Full]->Integral() << endl;
+    cout << "Gamma+Jets integral (ctrl endcap): " << h_pT_endcap_ctrl[_GJets_Full]->Integral() << endl;
+    cout << "\nMC integral (nume endcap): " << ((TH1D*)(s_pT_endcap_nume->GetStack()->Last()))->Integral() << endl;
+    cout << "Data integral (nume endcap): " << h_pT_endcap_nume[_DoubleEG_Full]->Integral() << endl;
+    cout << "QCD integral (nume endcap): " << h_pT_endcap_nume[_QCDEMEnriched_Full]->Integral() << endl;
+    cout << "Gamma+Jets integral (nume endcap): " << h_pT_endcap_nume[_GJets_Full]->Integral() << endl;
+
+} // End of EE_HistDrawer_alt2()
 
 
 /// ################################################################################## ///

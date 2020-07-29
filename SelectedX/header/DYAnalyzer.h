@@ -22,6 +22,7 @@
 #define nPtBinBarrel 18//16
 #define nPtBin_ele 22
 #define nPtBin_DY 10
+#define nPtBin_ele_alt 5
 
 class DYAnalyzer
 {
@@ -113,11 +114,15 @@ public:
         const double ptbin_ele[nPtBin_ele+1] = {25,30,35,40,45,50,55,60,70,80,90,100,120,140,160,175,200,250,300,400,500,800,5000};
         Double_t FR_barrel_ele[nPtBin_ele];
         Double_t FR_endcap_ele[nPtBin_ele];
+        const double ptbin_ele_alt[nPtBin_ele_alt+1] = {15, 20, 30, 50, 100, 10000};
+        Double_t FR_barrel_ele_alt[nPtBin_ele_alt];
+        Double_t FR_endcap_ele_alt[nPtBin_ele_alt];
         Double_t FR_barrel_ele_alt_lead[nPtBin_DY];
         Double_t FR_endcap_ele_alt_lead[nPtBin_DY];
         Double_t FR_barrel_ele_alt_sub[nPtBin_DY];
         Double_t FR_endcap_ele_alt_sub[nPtBin_DY];
-        const double prescales[8] = {0.0016/36.47, 0.0066/36.47, 0.0132/36.47, 0.0264/36.47, 0.13/36.47, 0.26/36.47, 0.54/36.47, 1};
+
+        const double prescales[8] = {0.0016/36.47, 0.0066/36.47, 0.0132/36.47, 0.0264/36.47, 0.13/36.47, 0.26/36.47, 0.54/36.47, 1};        
 
         const double ptbin_DY[nPtBin_DY+1] = {17, 23, 28, 35, 45, 60, 80, 100, 150, 250, 1000};
         Double_t Eff_DY[nPtBin_DY][2];
