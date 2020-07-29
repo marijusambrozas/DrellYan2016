@@ -6531,7 +6531,7 @@ Bool_t DYAnalyzer::EventSelection_FR_alt(vector<Electron> ElectronCollection, Nt
     TLorentzVector ele2 =  ElectronCollection[i_sublead].Momentum;
     Double_t mass = (ele1+ele2).M();
 
-    if (mass < 91 || mass > 101) return isPassEventSelection;
+    if (mass < 86.0 || mass > 106.0) return isPassEventSelection;
 
     // -- Find the third electron -- //
     Int_t i_third = -1;
