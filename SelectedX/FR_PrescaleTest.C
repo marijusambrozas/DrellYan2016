@@ -183,6 +183,7 @@ void E_FR_PrescaleTest (Bool_t DEBUG)
                 if (DEBUG == kTRUE) cout << "i_ele = " << i_ele << endl;
 
                 Int_t matched22=0, matched30=0, matched36=0, matched50=0, matched75=0, matched90=0, matched120=0, matched175=0;
+                Int_t matched22_wopT=0, matched30_wopT=0, matched36_wopT=0, matched50_wopT=0, matched75_wopT=0, matched90_wopT=0, matched120_wopT=0;
                 Int_t i_22=-1, i_30=-1, i_36=-1, i_50=-1, i_75=-1, i_90=-1, i_120=-1, i_175=-1;
                 prescale_alt = 1;
 
@@ -191,40 +192,68 @@ void E_FR_PrescaleTest (Bool_t DEBUG)
                     if (trig_pT->at(i_tr) < 22) continue;
                     if (((UInt_t)(trig_matched->at(i_tr))) == i_ele)
                     {
-                        if (trig_fired->at(i_tr) == 22 && trig_pT->at(i_tr) > 22 && trig_pT->at(i_tr) <= 30)
+                        if (trig_fired->at(i_tr) == 22)
                         {
-                            i_22 = i_tr;
-                            matched22 = 1;
+                            matched22_wopT = 1;
+                            if (trig_pT->at(i_tr) > 22 && trig_pT->at(i_tr) <= 30)
+                            {
+                                i_22 = i_tr;
+                                matched22 = 1;
+                            }
                         }
-                        if (trig_fired->at(i_tr) == 30 && trig_pT->at(i_tr) > 30 && trig_pT->at(i_tr) <= 36)
+                        if (trig_fired->at(i_tr) == 30)
                         {
-                            i_30 = i_tr;
-                            matched30 = 1;
+                            matched30_wopT = 1;
+                            if (trig_pT->at(i_tr) > 30 && trig_pT->at(i_tr) <= 36)
+                            {
+                                i_30 = i_tr;
+                                matched30 = 1;
+                            }
                         }
-                        if (trig_fired->at(i_tr) == 36 && trig_pT->at(i_tr) > 36 && trig_pT->at(i_tr) <= 50)
+                        if (trig_fired->at(i_tr) == 36)
                         {
-                            i_36 = i_tr;
-                            matched36 = 1;
+                            matched36_wopT = 1;
+                            if (trig_pT->at(i_tr) > 36 && trig_pT->at(i_tr) <= 50)
+                            {
+                                i_36 = i_tr;
+                                matched36 = 1;
+                            }
                         }
-                        if (trig_fired->at(i_tr) == 50 && trig_pT->at(i_tr) > 50 && trig_pT->at(i_tr) <= 75)
+                        if (trig_fired->at(i_tr) == 50)
                         {
-                            i_50 = i_tr;
-                            matched50 = 1;
+                            matched50_wopT = 1;
+                            if (trig_pT->at(i_tr) > 50 && trig_pT->at(i_tr) <= 75)
+                            {
+                                i_50 = i_tr;
+                                matched50 = 1;
+                            }
                         }
-                        if (trig_fired->at(i_tr) == 75 && trig_pT->at(i_tr) > 75 && trig_pT->at(i_tr) <= 90)
+                        if (trig_fired->at(i_tr) == 75)
                         {
-                            i_75 = i_tr;
-                            matched75 = 1;
+                            matched75_wopT = 1;
+                            if (trig_pT->at(i_tr) > 75 && trig_pT->at(i_tr) <= 90)
+                            {
+                                i_75 = i_tr;
+                                matched75 = 1;
+                            }
                         }
-                        if (trig_fired->at(i_tr) == 90 && trig_pT->at(i_tr) > 90 && trig_pT->at(i_tr) <= 120)
+                        if (trig_fired->at(i_tr) == 90)
                         {
-                            i_90 = i_tr;
-                            matched90 = 1;
+                            matched90_wopT = 1;
+                            if (trig_pT->at(i_tr) > 90 && trig_pT->at(i_tr) <= 120)
+                            {
+                                i_90 = i_tr;
+                                matched90 = 1;
+                            }
                         }
-                        if (trig_fired->at(i_tr) == 120 && trig_pT->at(i_tr) > 120 && trig_pT->at(i_tr) <= 175)
+                        if (trig_fired->at(i_tr) == 120)
                         {
-                            i_120 = i_tr;
-                            matched120 = 1;
+                            matched120_wopT = 1;
+                            if (trig_pT->at(i_tr) > 120 && trig_pT->at(i_tr) <= 175)
+                            {
+                                i_120 = i_tr;
+                                matched120 = 1;
+                            }
                         }
                         if (trig_fired->at(i_tr) == 175 && trig_pT->at(i_tr) > 175)
                         {
@@ -234,24 +263,25 @@ void E_FR_PrescaleTest (Bool_t DEBUG)
 
                     }
                 }
-//                if (matched22+matched30+matched36+matched50+matched75+matched90+matched120+matched175 != 1) continue;
-                if (matched22 == 1)
-                {
+                if (matched22_wopT+matched30_wopT+matched36_wopT+matched50_wopT+matched75_wopT+matched90_wopT+matched120_wopT+matched175 != 1) continue;
+
+                if (matched22) // Matched an electron to HLT_Photon22 with 22<HLT_pT<30
+                { // get the prescale
                     prescale_alt = pp.hltPrescale("HLT_Photon22_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG18", runNum, lumiBlock);
-                    h_HLT_pT->Fill(trig_pT->at(i_22), prescale_alt);
-                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_22));
-                    h_pT->Fill(p_T->at(i_ele), prescale_alt);
-                    h_pT_uncorr->Fill(p_T->at(i_ele));
+                    h_HLT_pT->Fill(trig_pT->at(i_22), prescale_alt); // fill HLT_pT histo with HLT object pT using the prescale weight
+                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_22)); // fill HLT_pT histo with HLT object pT without weights
+                    h_pT->Fill(p_T->at(i_ele), prescale_alt); // fill pT histo with matched electron pT using the prescale weight
+                    h_pT_uncorr->Fill(p_T->at(i_ele)); // fill pT histo with matched electron pT without weights
                 }
-                else if (matched30 == 1)
+                else if (matched30) // Matched an electron to HLT_Photon22 with 30<HLT_pT<36
                 {
                     prescale_alt = pp.hltPrescale("HLT_Photon30_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG26", runNum, lumiBlock);
                     h_HLT_pT->Fill(trig_pT->at(i_30), prescale_alt);
                     h_HLT_pT_uncorr->Fill(trig_pT->at(i_30));
                     h_pT->Fill(p_T->at(i_ele), prescale_alt);
                     h_pT_uncorr->Fill(p_T->at(i_ele));
-                }
-                else if (matched36 == 1)
+               }
+                else if (matched36)
                 {
                     prescale_alt = pp.hltPrescale("HLT_Photon36_v", runNum, lumiBlock) * pp.l1Prescale("L1_SingleEG26", runNum, lumiBlock);
                     h_HLT_pT->Fill(trig_pT->at(i_36), prescale_alt);
@@ -259,7 +289,7 @@ void E_FR_PrescaleTest (Bool_t DEBUG)
                     h_pT->Fill(p_T->at(i_ele), prescale_alt);
                     h_pT_uncorr->Fill(p_T->at(i_ele));
                 }
-                else if (matched50 == 1)
+                else if (matched50)
                 {
                     prescale_alt = 0;
                     if (pp.l1Prescale("L1_SingleEG36", runNum, lumiBlock) != 0)
@@ -271,7 +301,7 @@ void E_FR_PrescaleTest (Bool_t DEBUG)
                     h_pT->Fill(p_T->at(i_ele), prescale_alt);
                     h_pT_uncorr->Fill(p_T->at(i_ele));
                 }
-                else if (matched75 == 1)
+                else if (matched75)
                 {
                     prescale_alt = 0;
                     if (pp.l1Prescale("L1_SingleEG36", runNum, lumiBlock) != 0)
@@ -283,7 +313,7 @@ void E_FR_PrescaleTest (Bool_t DEBUG)
                     h_pT->Fill(p_T->at(i_ele), prescale_alt);
                     h_pT_uncorr->Fill(p_T->at(i_ele));
                 }
-                else if (matched90 == 1)
+                else if (matched90)
                 {
                     prescale_alt = 0;
                     if (pp.l1Prescale("L1_SingleEG36", runNum, lumiBlock) != 0)
@@ -295,7 +325,7 @@ void E_FR_PrescaleTest (Bool_t DEBUG)
                     h_pT->Fill(p_T->at(i_ele), prescale_alt);
                     h_pT_uncorr->Fill(p_T->at(i_ele));
                 }
-                else if (matched120 == 1)
+                else if (matched120)
                 {
                     prescale_alt = 0;
                     if (pp.l1Prescale("L1_SingleEG36", runNum, lumiBlock) != 0)
@@ -307,7 +337,7 @@ void E_FR_PrescaleTest (Bool_t DEBUG)
                     h_pT->Fill(p_T->at(i_ele), prescale_alt);
                     h_pT_uncorr->Fill(p_T->at(i_ele));
                 }
-                else if (matched175 == 1)
+                else if (matched175)
                 {
                      prescale_alt = 0;
                      if (pp.l1Prescale("L1_SingleEG30", runNum, lumiBlock) != 0)
