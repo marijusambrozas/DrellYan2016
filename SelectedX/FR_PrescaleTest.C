@@ -263,7 +263,6 @@ void E_FR_PrescaleTest (Bool_t DEBUG)
 
                     }
                 }
-                if (matched22_wopT+matched30_wopT+matched36_wopT+matched50_wopT+matched75_wopT+matched90_wopT+matched120_wopT+matched175 != 1) continue;
 
                 if (matched22) // Matched an electron to HLT_Photon22 with 22<HLT_pT<30
                 { // get the prescale
