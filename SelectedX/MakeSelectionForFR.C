@@ -287,7 +287,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             TChain *chain = new TChain(Mgr.TreeName[i_tup]);
             Mgr.SetupChain(i_tup, chain);
 
-            std::map<std::tuple<int,int,int>, int> repeats; // to search for repeating events
+            std::map<std::tuple<int,int,unsigned long long>, int> repeats; // to search for repeating events
 
             NtupleHandle *ntuple = new NtupleHandle(chain);
             if (Mgr.isMC == kTRUE)
@@ -494,7 +494,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
 
             Int_t noreps, reps;
-            for (std::map<std::tuple<int,int,int>,int>::const_iterator it=repeats.begin(); it!=repeats.end(); it++)
+            for (std::map<std::tuple<int,int,unsigned long long>,int>::const_iterator it=repeats.begin(); it!=repeats.end(); it++)
             {
                 if (it->second == 1)noreps++;
                 else if (it->second == 0) cout << "0 repetitions.. What??" << endl;
