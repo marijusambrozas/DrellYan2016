@@ -16,6 +16,7 @@
 #include <TH1.h>
 #include <TCanvas.h>
 #include <TGraphAsymmErrors.h>
+#include <tuple>
 
 
 // -- Macro for making new data files with only selection-passing events  -- //
@@ -286,7 +287,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             TChain *chain = new TChain(Mgr.TreeName[i_tup]);
             Mgr.SetupChain(i_tup, chain);
 
-            std::map<std::pair<int,int>, int> repeats; // to search for repeating events
+            std::map<std::tuple<int,int,int>, int> repeats; // to search for repeating events
 
             NtupleHandle *ntuple = new NtupleHandle(chain);
             if (Mgr.isMC == kTRUE)
@@ -363,10 +364,10 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
                     if (isPassEventSelection == kTRUE)
                     {
-                        repeats[std::make_pair(ntuple->runNum, ntuple->evtNum)]++;
-                        if (repeats[std::make_pair(ntuple->runNum, ntuple->evtNum)] > 1)
-                            cout << "Evt " << ntuple->runNum << "; " << ntuple->evtNum << " repeated " <<
-                                    repeats[std::make_pair(ntuple->runNum, ntuple->evtNum)] << " times." << endl;
+                        repeats[std::make_tuple(ntuple->runNum, ntuple->lumiBlock, ntuple->evtNum)]++;
+                        if (repeats[std::make_tuple(ntuple->runNum, ntuple->lumiBlock, ntuple->evtNum)] > 1)
+                            cout << "Evt " << ntuple->runNum << "; " << ntuple->lumiBlock << "; " << ntuple->evtNum << " repeated " <<
+                                    repeats[std::make_tuple(ntuple->runNum, ntuple->lumiBlock, ntuple->evtNum)] << " times." << endl;
 
                         if (Debug == kTRUE) cout << "\nEvent " << i << endl << triggername << endl;
                         timesPassed++;
@@ -493,7 +494,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
 
             Int_t noreps, reps;
-            for (std::map<std::pair<int,int>,int>::iterator it=repeats.begin(); it!=repeats.end(); it++)
+            for (std::map<std::tuple<int,int,int>,int>::iterator it=repeats.begin(); it!=repeats.end(); it++)
             {
                 if (it->second == 1)noreps++;
                 else if (it->second == 0) cout << "0 repetitions.. What??" << endl;
