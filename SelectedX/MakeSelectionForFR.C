@@ -499,6 +499,11 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                 if (it->second == 1)noreps++;
                 else if (it->second == 0) cout << "0 repetitions.. What??" << endl;
                 else reps++;
+                if (Debug)
+                {
+                    cout << "RunNo=" << std::get<0>(it->first) << "  LumiSec=" << std::get<1>(it->first) << "  EvtNo=" << std::get<2>(it->first);
+                    cout << "   repeats " << it->second << " times." << endl;
+                }
             }
             cout << noreps << " events without repetitions\n" << reps << " events with repetitions" << endl;
 
