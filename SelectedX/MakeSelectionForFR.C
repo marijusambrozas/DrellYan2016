@@ -276,6 +276,11 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         ElectronTree->Branch("prefiring_weight_down", &prefiring_weight_down);
         ElectronTree->Branch("prescale_factor", &prescale_factor);
 
+        Int_t currentRunNo=-999, currentLumiSection=-999;
+        ofstream runOutput;
+        runOutput.open("~/DrellYan2016/Lumi_"+Mgr.Procname[Mgr.CurrentProc]+".txt");
+        runOutput << "RunNo\tLumiSection\n";
+
         // Loop for all samples in a process
         for (Int_t i_tup = 0; i_tup<Ntup; i_tup++)
         {
@@ -311,6 +316,18 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             for (Int_t i=0; i<NEvents; i++)
             {
                 ntuple->GetEvent(i);
+
+                if (ntuple->runNum != currentRunNo)
+                {
+                    currentRunNo = ntuple->runNum;
+                    currentLumiSection = ntuple->lumiBlock;
+                    runOutput << currentRunNo << "\t" << currentLumiSection << "\n";
+                }
+                else if (ntuple->lumiBlock != currentLumiSection)
+                {
+                    currentLumiSection = ntuple->lumiBlock;
+                    runOutput << currentRunNo << "\t" << currentLumiSection << "\n";
+                }
 
 //                if (ntuple->pfMET_pT >= 20) continue;
 
@@ -508,6 +525,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             cout << noreps << " events without repetitions\n" << reps << " events with repetitions" << endl;
 
         } // End of i_tup iteration
+
+        runOutput.close();
 
         // Writing
         cout << "Writing into file...";
