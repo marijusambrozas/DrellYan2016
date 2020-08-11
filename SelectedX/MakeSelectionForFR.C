@@ -278,7 +278,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
         Int_t currentRunNo=-999, currentLumiSection=-999;
         ofstream runOutput;
-        runOutput.open("~/DrellYan2016/Lumi_"+Mgr.Procname[Mgr.CurrentProc]+".txt");
+        runOutput.open("Lumi_"+Mgr.Procname[Mgr.CurrentProc]+".txt");
         runOutput << "RunNo\tLumiSection\n";
 
         // Loop for all samples in a process
