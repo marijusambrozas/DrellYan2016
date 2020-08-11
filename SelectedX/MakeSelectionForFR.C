@@ -277,9 +277,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         ElectronTree->Branch("prescale_factor", &prescale_factor);
 
         Int_t currentRunNo=-999, currentLumiSection=-999;
-        ofstream runOutput;
-        runOutput.open("Lumi_"+Mgr.Procname[Mgr.CurrentProc]+".txt");
-        runOutput << "RunNo\tLumiSection\n";
+        std::map<std::pair<int,int>,int> lumis; // to search present run numbers and lumi sections
 
         // Loop for all samples in a process
         for (Int_t i_tup = 0; i_tup<Ntup; i_tup++)
@@ -321,12 +319,12 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                 {
                     currentRunNo = ntuple->runNum;
                     currentLumiSection = ntuple->lumiBlock;
-                    runOutput << currentRunNo << "\t" << currentLumiSection << "\n";
+                    lumis[std::make_pair(currentRunNo, currentLumiSection)]++;
                 }
                 else if (ntuple->lumiBlock != currentLumiSection)
                 {
                     currentLumiSection = ntuple->lumiBlock;
-                    runOutput << currentRunNo << "\t" << currentLumiSection << "\n";
+                    lumis[std::make_pair(currentRunNo, currentLumiSection)]++;
                 }
 
 //                if (ntuple->pfMET_pT >= 20) continue;
@@ -525,6 +523,25 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             cout << noreps << " events without repetitions\n" << reps << " events with repetitions" << endl;
 
         } // End of i_tup iteration
+
+        ofstream runOutput;
+        runOutput.open("Lumi_"+Mgr.Procname[Mgr.CurrentProc]+".txt");
+        runOutput << "RunNo\tLumiSection\n";
+
+        for (Int_t rn=270000; rn<290000; rn++)
+        {
+            Int_t printed = 0;
+            for (Int_t ls=1; ls<4000; ls++)
+            {
+                for (std::map<std::pair<int,int>,int>::const_iterator it=lumis.begin(); it!=lumis.end(); it++)
+                {
+                    if (std::get<0>(it->first) != rn) continue;
+                    if (std::get<1>(it->first) != ls) continue;
+                    if (!printed) {printed++; runOutput << rn << "\n";}
+                    runOutput << "\t" << ls << "\n";
+                }
+            }
+        }
 
         runOutput.close();
 
