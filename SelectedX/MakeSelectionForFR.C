@@ -35,6 +35,8 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug);
 void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug);
 void CountObjectsInAcceptance (TString type, TString HLTname, Bool_t Debug);
 
+Int_t skipLumiSection (Int_t runNo, Int_t lumiSection);
+
 void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "DEFAULT")
 {
     TString whichX = WhichX;
@@ -276,8 +278,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         ElectronTree->Branch("prefiring_weight_down", &prefiring_weight_down);
         ElectronTree->Branch("prescale_factor", &prescale_factor);
 
-        Int_t currentRunNo=-999, currentLumiSection=-999;
-        std::map<std::pair<int,int>,int> lumis; // to search present run numbers and lumi sections
+//        Int_t currentRunNo=-999, currentLumiSection=-999;
+//        std::map<std::pair<int,int>,int> lumis; // to search present run numbers and lumi sections
 
         // Loop for all samples in a process
         for (Int_t i_tup = 0; i_tup<Ntup; i_tup++)
@@ -290,7 +292,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             TChain *chain = new TChain(Mgr.TreeName[i_tup]);
             Mgr.SetupChain(i_tup, chain);
 
-            std::map<std::tuple<int,int,unsigned long long>, int> repeats; // to search for repeating events
+//            std::map<std::tuple<int,int,unsigned long long>, int> repeats; // to search for repeating events
 
             NtupleHandle *ntuple = new NtupleHandle(chain);
             if (Mgr.isMC == kTRUE)
@@ -314,18 +316,20 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             for (Int_t i=0; i<NEvents; i++)
             {
                 ntuple->GetEvent(i);
+                Int_t skipLumi = skipLumiSection(ntuple->runNum, ntuple->lumiBlock);
+                if (skipLumi) continue;
 
-                if (ntuple->runNum != currentRunNo)
-                {
-                    currentRunNo = ntuple->runNum;
-                    currentLumiSection = ntuple->lumiBlock;
-                    lumis[std::make_pair(currentRunNo, currentLumiSection)]++;
-                }
-                else if (ntuple->lumiBlock != currentLumiSection)
-                {
-                    currentLumiSection = ntuple->lumiBlock;
-                    lumis[std::make_pair(currentRunNo, currentLumiSection)]++;
-                }
+//                if (ntuple->runNum != currentRunNo)
+//                {
+//                    currentRunNo = ntuple->runNum;
+//                    currentLumiSection = ntuple->lumiBlock;
+//                    lumis[std::make_pair(currentRunNo, currentLumiSection)]++;
+//                }
+//                else if (ntuple->lumiBlock != currentLumiSection)
+//                {
+//                    currentLumiSection = ntuple->lumiBlock;
+//                    lumis[std::make_pair(currentRunNo, currentLumiSection)]++;
+//                }
 
 //                if (ntuple->pfMET_pT >= 20) continue;
 
@@ -379,10 +383,10 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
                     if (isPassEventSelection == kTRUE)
                     {
-                        repeats[std::make_tuple(ntuple->runNum, ntuple->lumiBlock, ntuple->evtNum)]++;
-                        if (repeats[std::make_tuple(ntuple->runNum, ntuple->lumiBlock, ntuple->evtNum)] > 1)
-                            cout << "Evt " << ntuple->runNum << "; " << ntuple->lumiBlock << "; " << ntuple->evtNum << " repeated " <<
-                                    repeats[std::make_tuple(ntuple->runNum, ntuple->lumiBlock, ntuple->evtNum)] << " times." << endl;
+//                        repeats[std::make_tuple(ntuple->runNum, ntuple->lumiBlock, ntuple->evtNum)]++;
+//                        if (repeats[std::make_tuple(ntuple->runNum, ntuple->lumiBlock, ntuple->evtNum)] > 1)
+//                            cout << "Evt " << ntuple->runNum << "; " << ntuple->lumiBlock << "; " << ntuple->evtNum << " repeated " <<
+//                                    repeats[std::make_tuple(ntuple->runNum, ntuple->lumiBlock, ntuple->evtNum)] << " times." << endl;
 
                         if (Debug == kTRUE) cout << "\nEvent " << i << endl << triggername << endl;
                         timesPassed++;
@@ -508,42 +512,42 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             Double_t LoopRunTime = looptime.CpuTime();
             cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
 
-            Int_t noreps=0, reps=0;
-            for (std::map<std::tuple<int,int,unsigned long long>,int>::const_iterator it=repeats.begin(); it!=repeats.end(); it++)
-            {
-                if (it->second == 1)noreps++;
-                else if (it->second == 0) cout << "0 repetitions.. What??" << endl;
-                else reps++;
-                if (Debug)
-                {
-                    cout << "RunNo=" << std::get<0>(it->first) << "  LumiSec=" << std::get<1>(it->first) << "  EvtNo=" << std::get<2>(it->first);
-                    cout << "   repeats " << it->second << " times." << endl;
-                }
-            }
-            cout << noreps << " events without repetitions\n" << reps << " events with repetitions" << endl;
+//            Int_t noreps=0, reps=0;
+//            for (std::map<std::tuple<int,int,unsigned long long>,int>::const_iterator it=repeats.begin(); it!=repeats.end(); it++)
+//            {
+//                if (it->second == 1)noreps++;
+//                else if (it->second == 0) cout << "0 repetitions.. What??" << endl;
+//                else reps++;
+//                if (Debug)
+//                {
+//                    cout << "RunNo=" << std::get<0>(it->first) << "  LumiSec=" << std::get<1>(it->first) << "  EvtNo=" << std::get<2>(it->first);
+//                    cout << "   repeats " << it->second << " times." << endl;
+//                }
+//            }
+//            cout << noreps << " events without repetitions\n" << reps << " events with repetitions" << endl;
 
         } // End of i_tup iteration
 
-        ofstream runOutput;
-        runOutput.open("Lumi_"+Mgr.Procname[Mgr.CurrentProc]+".txt");
-        runOutput << "RunNo\tLumiSection\n";
+//        ofstream runOutput;
+//        runOutput.open("Lumi_"+Mgr.Procname[Mgr.CurrentProc]+".txt");
+//        runOutput << "RunNo\tLumiSection\n";
 
-        for (Int_t rn=270000; rn<290000; rn++)
-        {
-            Int_t printed = 0;
-            for (Int_t ls=1; ls<4000; ls++)
-            {
-                for (std::map<std::pair<int,int>,int>::const_iterator it=lumis.begin(); it!=lumis.end(); it++)
-                {
-                    if (std::get<0>(it->first) != rn) continue;
-                    if (std::get<1>(it->first) != ls) continue;
-                    if (!printed) {printed++; runOutput << rn << "\n";}
-                    runOutput << "\t" << ls << "\n";
-                }
-            }
-        }
+//        for (Int_t rn=270000; rn<290000; rn++)
+//        {
+//            Int_t printed = 0;
+//            for (Int_t ls=1; ls<4000; ls++)
+//            {
+//                for (std::map<std::pair<int,int>,int>::const_iterator it=lumis.begin(); it!=lumis.end(); it++)
+//                {
+//                    if (std::get<0>(it->first) != rn) continue;
+//                    if (std::get<1>(it->first) != ls) continue;
+//                    if (!printed) {printed++; runOutput << rn << "\n";}
+//                    runOutput << "\t" << ls << "\n";
+//                }
+//            }
+//        }
 
-        runOutput.close();
+//        runOutput.close();
 
         // Writing
         cout << "Writing into file...";
@@ -2403,3 +2407,405 @@ void CountObjectsInAcceptance (TString type, TString HLTname , Bool_t Debug)
     cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
 
 } // End of CountObjectsInAcceptance
+
+
+Int_t skipLumiSection(Int_t runNo, Int_t lumiSection)
+{
+    Int_t skip = 0;
+
+         if      (runNo == 273158 && (lumiSection == 1   || lumiSection == 1279)) skip = 1;
+         else if (runNo == 273302 && (lumiSection == 1   || lumiSection == 459 )) skip = 1;
+         else if (runNo == 273402 && (lumiSection == 100 || lumiSection == 292 )) skip = 1;
+         else if (runNo == 273403 && (lumiSection == 1   || lumiSection == 53  )) skip = 1;
+         else if (runNo == 273404 && (lumiSection == 1   || lumiSection == 18  )) skip = 1;
+         else if (runNo == 273405 && (lumiSection == 2   || lumiSection == 25  )) skip = 1;
+         else if (runNo == 273406 && (lumiSection == 1   || lumiSection == 112 )) skip = 1;
+         else if (runNo == 273408 && (lumiSection == 1   || lumiSection == 6   )) skip = 1;
+         else if (runNo == 273409 && (lumiSection == 1   || lumiSection == 309 )) skip = 1;
+         else if (runNo == 273410 && (lumiSection == 1   || lumiSection == 90  )) skip = 1;
+         else if (runNo == 273411 && (lumiSection == 1   || lumiSection == 29  )) skip = 1;
+         else if (runNo == 273425 && (lumiSection == 62  || lumiSection == 733 )) skip = 1;
+         else if (runNo == 273446 && (lumiSection == 1   || lumiSection == 33  )) skip = 1;
+         else if (runNo == 273447 && (lumiSection == 1   || lumiSection == 412 )) skip = 1;
+         else if (runNo == 273448 && (lumiSection == 1   || lumiSection == 391 )) skip = 1;
+         else if (runNo == 273449 && (lumiSection == 1   || lumiSection == 214 )) skip = 1;
+         else if (runNo == 273450 && (lumiSection == 1   || lumiSection == 647 )) skip = 1;
+         else if (runNo == 273492 && (lumiSection == 71  || lumiSection == 338 )) skip = 1;
+         else if (runNo == 273493 && (lumiSection == 1   || lumiSection == 233 )) skip = 1;
+         else if (runNo == 273494 && (lumiSection == 1   || lumiSection == 192 )) skip = 1;
+         else if (runNo == 273502 && (lumiSection == 73  || lumiSection == 1064)) skip = 1;
+         else if (runNo == 273503 && (lumiSection == 1   || lumiSection == 598 )) skip = 1;
+         else if (runNo == 273554 && (lumiSection == 77  || lumiSection == 437 )) skip = 1;
+         else if (runNo == 273555 && (lumiSection == 1   || lumiSection == 173 )) skip = 1;
+         else if (runNo == 273725 && (lumiSection == 83  || lumiSection == 2545)) skip = 1;
+         else if (runNo == 273728 && (lumiSection == 1   || lumiSection == 100 )) skip = 1;
+         else if (runNo == 273730 && (lumiSection == 1   || lumiSection == 2126)) skip = 1;
+         else if (runNo == 274094 && (lumiSection == 108 || lumiSection == 332 )) skip = 1;
+         else if (runNo == 274146 && (lumiSection == 1   || lumiSection == 67  )) skip = 1;
+         else if (runNo == 274157 && (lumiSection == 105 || lumiSection == 534 )) skip = 1;
+         else if (runNo == 274159 && (lumiSection == 1   || lumiSection == 43  )) skip = 1;
+         else if (runNo == 274160 && (lumiSection == 1   || lumiSection == 207 )) skip = 1;
+         else if (runNo == 274161 && (lumiSection == 1   || lumiSection == 516 )) skip = 1;
+         else if (runNo == 274172 && (lumiSection == 31  || lumiSection == 95  )) skip = 1;
+         else if (runNo == 274198 && (lumiSection == 81  || lumiSection == 191 )) skip = 1;
+         else if (runNo == 274199 && (lumiSection == 1   || lumiSection == 623 )) skip = 1;
+         else if (runNo == 274200 && (lumiSection == 1   || lumiSection == 678 )) skip = 1;
+         else if (runNo == 274240 && (lumiSection == 1   || lumiSection == 82  )) skip = 1;
+         else if (runNo == 274241 && (lumiSection == 1   || lumiSection == 1176)) skip = 1;
+         else if (runNo == 274244 && (lumiSection == 1   || lumiSection == 607 )) skip = 1;
+         else if (runNo == 274250 && (lumiSection == 1   || lumiSection == 701 )) skip = 1;
+         else if (runNo == 274251 && (lumiSection == 1   || lumiSection == 546 )) skip = 1;
+         else if (runNo == 274283 && (lumiSection == 2   || lumiSection == 19  )) skip = 1;
+         else if (runNo == 274284 && (lumiSection == 1   || lumiSection == 210 )) skip = 1;
+         else if (runNo == 274286 && (lumiSection == 1   || lumiSection == 154 )) skip = 1;
+         else if (runNo == 274314 && (lumiSection == 97  || lumiSection == 158 )) skip = 1;
+         else if (runNo == 274315 && (lumiSection == 1   || lumiSection == 424 )) skip = 1;
+         else if (runNo == 274316 && (lumiSection == 1   || lumiSection == 959 )) skip = 1;
+         else if (runNo == 274317 && (lumiSection == 1   || lumiSection == 3   )) skip = 1;
+         else if (runNo == 274319 && (lumiSection == 1   || lumiSection == 225 )) skip = 1;
+         else if (runNo == 274335 && (lumiSection == 60  || lumiSection == 1003)) skip = 1;
+         else if (runNo == 274336 && (lumiSection == 1   || lumiSection == 14  )) skip = 1;
+         else if (runNo == 274337 && (lumiSection == 3   || lumiSection == 17  )) skip = 1;
+         else if (runNo == 274338 && (lumiSection == 1   || lumiSection == 698 )) skip = 1;
+         else if (runNo == 274339 && (lumiSection == 1   || lumiSection == 93  )) skip = 1;
+         else if (runNo == 274344 && (lumiSection == 1   || lumiSection == 632 )) skip = 1;
+         else if (runNo == 274345 && (lumiSection == 1   || lumiSection == 170 )) skip = 1;
+         else if (runNo == 274382 && (lumiSection == 94  || lumiSection == 144 )) skip = 1;
+         else if (runNo == 274387 && (lumiSection == 88  || lumiSection == 439 )) skip = 1;
+         else if (runNo == 274388 && (lumiSection == 1   || lumiSection == 1820)) skip = 1;
+         else if (runNo == 274420 && (lumiSection == 94  || lumiSection == 268 )) skip = 1;
+         else if (runNo == 274421 && (lumiSection == 1   || lumiSection == 342 )) skip = 1;
+         else if (runNo == 274422 && (lumiSection == 1   || lumiSection == 2207)) skip = 1;
+         else if (runNo == 274440 && (lumiSection == 92  || lumiSection == 493 )) skip = 1;
+         else if (runNo == 274441 && (lumiSection == 1   || lumiSection == 431 )) skip = 1;
+         else if (runNo == 274442 && (lumiSection == 1   || lumiSection == 752 )) skip = 1;
+         else if (runNo == 274954 && (lumiSection == 37  || lumiSection == 57  )) skip = 1;
+         else if (runNo == 274955 && (lumiSection == 1   || lumiSection == 91  )) skip = 1;
+         else if (runNo == 274968 && (lumiSection == 1   || lumiSection == 1192)) skip = 1;
+         else if (runNo == 274969 && (lumiSection == 1   || lumiSection == 1003)) skip = 1;
+         else if (runNo == 274970 && (lumiSection == 1   || lumiSection == 47  )) skip = 1;
+         else if (runNo == 274971 && (lumiSection == 1   || lumiSection == 905 )) skip = 1;
+         else if (runNo == 274998 && (lumiSection == 64  || lumiSection == 782 )) skip = 1;
+         else if (runNo == 274999 && (lumiSection == 1   || lumiSection == 1241)) skip = 1;
+         else if (runNo == 275000 && (lumiSection == 1   || lumiSection == 136 )) skip = 1;
+         else if (runNo == 275001 && (lumiSection == 1   || lumiSection == 2061)) skip = 1;
+         else if (runNo == 275059 && (lumiSection == 78  || lumiSection == 137 )) skip = 1;
+         else if (runNo == 275066 && (lumiSection == 1   || lumiSection == 96  )) skip = 1;
+         else if (runNo == 275067 && (lumiSection == 1   || lumiSection == 392 )) skip = 1;
+         else if (runNo == 275068 && (lumiSection == 1   || lumiSection == 915 )) skip = 1;
+         else if (runNo == 275073 && (lumiSection == 1   || lumiSection == 517 )) skip = 1;
+         else if (runNo == 275074 && (lumiSection == 1   || lumiSection == 647 )) skip = 1;
+         else if (runNo == 275124 && (lumiSection == 106 || lumiSection == 431 )) skip = 1;
+         else if (runNo == 275125 && (lumiSection == 1   || lumiSection == 989 )) skip = 1;
+         else if (runNo == 275282 && (lumiSection == 91  || lumiSection == 180 )) skip = 1;
+         else if (runNo == 275283 && (lumiSection == 1   || lumiSection == 132 )) skip = 1;
+         else if (runNo == 275284 && (lumiSection == 1   || lumiSection == 74  )) skip = 1;
+         else if (runNo == 275290 && (lumiSection == 96  || lumiSection == 143 )) skip = 1;
+         else if (runNo == 275291 && (lumiSection == 1   || lumiSection == 347 )) skip = 1;
+         else if (runNo == 275292 && (lumiSection == 1   || lumiSection == 121 )) skip = 1;
+         else if (runNo == 275293 && (lumiSection == 1   || lumiSection == 201 )) skip = 1;
+         else if (runNo == 275309 && (lumiSection == 55  || lumiSection == 617 )) skip = 1;
+         else if (runNo == 275310 && (lumiSection == 1   || lumiSection == 1929)) skip = 1;
+         else if (runNo == 275311 && (lumiSection == 1   || lumiSection == 1253)) skip = 1;
+         else if (runNo == 275319 && (lumiSection == 141 || lumiSection == 282 )) skip = 1;
+         else if (runNo == 275337 && (lumiSection == 1   || lumiSection == 427 )) skip = 1;
+         else if (runNo == 275338 && (lumiSection == 1   || lumiSection == 520 )) skip = 1;
+         else if (runNo == 275344 && (lumiSection == 76  || lumiSection == 356 )) skip = 1;
+         else if (runNo == 275345 && (lumiSection == 1   || lumiSection == 353 )) skip = 1;
+         else if (runNo == 275370 && (lumiSection == 81  || lumiSection == 365 )) skip = 1;
+         else if (runNo == 275371 && (lumiSection == 1   || lumiSection == 569 )) skip = 1;
+         else if (runNo == 275375 && (lumiSection == 127 || lumiSection == 1449)) skip = 1;
+         else if (runNo == 275376 && (lumiSection == 1   || lumiSection == 3096)) skip = 1;
+         else if (runNo == 275657 && (lumiSection == 1   || lumiSection == 105 )) skip = 1;
+         else if (runNo == 275658 && (lumiSection == 1   || lumiSection == 337 )) skip = 1;
+         else if (runNo == 275659 && (lumiSection == 1   || lumiSection == 17  )) skip = 1;
+         else if (runNo == 275761 && (lumiSection == 1   || lumiSection == 9   )) skip = 1;
+         else if (runNo == 275767 && (lumiSection == 1   || lumiSection == 4   )) skip = 1;
+         else if (runNo == 275772 && (lumiSection == 1   || lumiSection == 56  )) skip = 1;
+         else if (runNo == 275773 && (lumiSection == 1   || lumiSection == 7   )) skip = 1;
+         else if (runNo == 275774 && (lumiSection == 1   || lumiSection == 315 )) skip = 1;
+         else if (runNo == 275776 && (lumiSection == 1   || lumiSection == 140 )) skip = 1;
+         else if (runNo == 275777 && (lumiSection == 1   || lumiSection == 300 )) skip = 1;
+         else if (runNo == 275778 && (lumiSection == 1   || lumiSection == 305 )) skip = 1;
+         else if (runNo == 275782 && (lumiSection == 1   || lumiSection == 762 )) skip = 1;
+         else if (runNo == 275832 && (lumiSection == 1   || lumiSection == 367 )) skip = 1;
+         else if (runNo == 275833 && (lumiSection == 1   || lumiSection == 251 )) skip = 1;
+         else if (runNo == 275834 && (lumiSection == 1   || lumiSection == 297 )) skip = 1;
+         else if (runNo == 275835 && (lumiSection == 1   || lumiSection == 13  )) skip = 1;
+         else if (runNo == 275836 && (lumiSection == 1   || lumiSection == 1293)) skip = 1;
+         else if (runNo == 275837 && (lumiSection == 1   || lumiSection == 726 )) skip = 1;
+         else if (runNo == 275847 && (lumiSection == 1   || lumiSection == 2263)) skip = 1;
+         else if (runNo == 275886 && (lumiSection == 73  || lumiSection == 109 )) skip = 1;
+         else if (runNo == 275890 && (lumiSection == 1   || lumiSection == 1393)) skip = 1;
+         else if (runNo == 275911 && (lumiSection == 62  || lumiSection == 440 )) skip = 1;
+         else if (runNo == 275912 && (lumiSection == 1   || lumiSection == 289 )) skip = 1;
+         else if (runNo == 275913 && (lumiSection == 1   || lumiSection == 475 )) skip = 1;
+         else if (runNo == 275918 && (lumiSection == 1   || lumiSection == 361 )) skip = 1;
+         else if (runNo == 275920 && (lumiSection == 5   || lumiSection == 463 )) skip = 1;
+         else if (runNo == 275921 && (lumiSection == 1   || lumiSection == 20  )) skip = 1;
+         else if (runNo == 275923 && (lumiSection == 3   || lumiSection == 126 )) skip = 1;
+         else if (runNo == 275931 && (lumiSection == 1   || lumiSection == 89  )) skip = 1;
+         else if (runNo == 275963 && (lumiSection == 82  || lumiSection == 172 )) skip = 1;
+         else if (runNo == 276092 && (lumiSection == 74  || lumiSection == 149 )) skip = 1;
+         else if (runNo == 276097 && (lumiSection == 1   || lumiSection == 507 )) skip = 1;
+         else if (runNo == 276242 && (lumiSection == 1   || lumiSection == 1664)) skip = 1;
+         else if (runNo == 276243 && (lumiSection == 1   || lumiSection == 611 )) skip = 1;
+         else if (runNo == 276244 && (lumiSection == 3   || lumiSection == 1202)) skip = 1;
+         else if (runNo == 276282 && (lumiSection == 75  || lumiSection == 1142)) skip = 1;
+         else if (runNo == 276283 && (lumiSection == 3   || lumiSection == 1087)) skip = 1;
+         else if (runNo == 276315 && (lumiSection == 40  || lumiSection == 217 )) skip = 1;
+         else if (runNo == 276317 && (lumiSection == 3   || lumiSection == 138 )) skip = 1;
+         else if (runNo == 276318 && (lumiSection == 3   || lumiSection == 570 )) skip = 1;
+         else if (runNo == 276355 && (lumiSection == 1   || lumiSection == 33  )) skip = 1;
+         else if (runNo == 276361 && (lumiSection == 1   || lumiSection == 833 )) skip = 1;
+         else if (runNo == 276363 && (lumiSection == 1   || lumiSection == 1482)) skip = 1;
+         else if (runNo == 276384 && (lumiSection == 2   || lumiSection == 1117)) skip = 1;
+         else if (runNo == 276437 && (lumiSection == 63  || lumiSection == 2190)) skip = 1;
+         else if (runNo == 276454 && (lumiSection == 1   || lumiSection == 527 )) skip = 1;
+         else if (runNo == 276458 && (lumiSection == 1   || lumiSection == 341 )) skip = 1;
+         else if (runNo == 276495 && (lumiSection == 87  || lumiSection == 268 )) skip = 1;
+         else if (runNo == 276501 && (lumiSection == 4   || lumiSection == 2547)) skip = 1;
+         else if (runNo == 276502 && (lumiSection == 2   || lumiSection == 741 )) skip = 1;
+         else if (runNo == 276525 && (lumiSection == 88  || lumiSection == 2893)) skip = 1;
+         else if (runNo == 276527 && (lumiSection == 1   || lumiSection == 214 )) skip = 1;
+         else if (runNo == 276528 && (lumiSection == 4   || lumiSection == 394 )) skip = 1;
+         else if (runNo == 276542 && (lumiSection == 74  || lumiSection == 857 )) skip = 1;
+         else if (runNo == 276543 && (lumiSection == 1   || lumiSection == 952 )) skip = 1;
+         else if (runNo == 276544 && (lumiSection == 2   || lumiSection == 161 )) skip = 1;
+         else if (runNo == 276545 && (lumiSection == 2   || lumiSection == 213 )) skip = 1;
+         else if (runNo == 276581 && (lumiSection == 79  || lumiSection == 444 )) skip = 1;
+         else if (runNo == 276582 && (lumiSection == 1   || lumiSection == 871 )) skip = 1;
+         else if (runNo == 276583 && (lumiSection == 1   || lumiSection == 52  )) skip = 1;
+         else if (runNo == 276584 && (lumiSection == 1   || lumiSection == 2   )) skip = 1;
+         else if (runNo == 276585 && (lumiSection == 1   || lumiSection == 246 )) skip = 1;
+         else if (runNo == 276586 && (lumiSection == 2   || lumiSection == 773 )) skip = 1;
+         else if (runNo == 276587 && (lumiSection == 1   || lumiSection == 1006)) skip = 1;
+         else if (runNo == 276653 && (lumiSection == 72  || lumiSection == 550 )) skip = 1;
+         else if (runNo == 276655 && (lumiSection == 1   || lumiSection == 1106)) skip = 1;
+         else if (runNo == 276659 && (lumiSection == 1   || lumiSection == 252 )) skip = 1;
+         else if (runNo == 276775 && (lumiSection == 96  || lumiSection == 1260)) skip = 1;
+         else if (runNo == 276776 && (lumiSection == 1   || lumiSection == 1823)) skip = 1;
+         else if (runNo == 276794 && (lumiSection == 1   || lumiSection == 885 )) skip = 1;
+         else if (runNo == 276807 && (lumiSection == 66  || lumiSection == 220 )) skip = 1;
+         else if (runNo == 276808 && (lumiSection == 1   || lumiSection == 875 )) skip = 1;
+         else if (runNo == 276810 && (lumiSection == 1   || lumiSection == 287 )) skip = 1;
+         else if (runNo == 276811 && (lumiSection == 1   || lumiSection == 2563)) skip = 1;
+         else if (runNo == 276831 && (lumiSection == 64  || lumiSection == 2702)) skip = 1;
+         else if (runNo == 276834 && (lumiSection == 1   || lumiSection == 720 )) skip = 1;
+         else if (runNo == 276870 && (lumiSection == 78  || lumiSection == 3484)) skip = 1;
+         else if (runNo == 276935 && (lumiSection == 79  || lumiSection == 906 )) skip = 1;
+         else if (runNo == 276940 && (lumiSection == 70  || lumiSection == 213 )) skip = 1;
+         else if (runNo == 276946 && (lumiSection == 1   || lumiSection == 27  )) skip = 1;
+         else if (runNo == 276947 && (lumiSection == 1   || lumiSection == 141 )) skip = 1;
+         else if (runNo == 276948 && (lumiSection == 1   || lumiSection == 474 )) skip = 1;
+         else if (runNo == 276950 && (lumiSection == 1   || lumiSection == 2353)) skip = 1;
+         else if (runNo == 277069 && (lumiSection == 81  || lumiSection == 390 )) skip = 1;
+         else if (runNo == 277070 && (lumiSection == 1   || lumiSection == 1059)) skip = 1;
+         else if (runNo == 277071 && (lumiSection == 1   || lumiSection == 178 )) skip = 1;
+         else if (runNo == 277072 && (lumiSection == 1   || lumiSection == 466 )) skip = 1;
+         else if (runNo == 277073 && (lumiSection == 1   || lumiSection == 90  )) skip = 1;
+         else if (runNo == 277076 && (lumiSection == 1   || lumiSection == 1037)) skip = 1;
+         else if (runNo == 277087 && (lumiSection == 204 || lumiSection == 1191)) skip = 1;
+         else if (runNo == 277094 && (lumiSection == 1   || lumiSection == 584 )) skip = 1;
+         else if (runNo == 277096 && (lumiSection == 1   || lumiSection == 2086)) skip = 1;
+         else if (runNo == 277112 && (lumiSection == 1   || lumiSection == 155 )) skip = 1;
+         else if (runNo == 277126 && (lumiSection == 42  || lumiSection == 59  )) skip = 1;
+         else if (runNo == 277127 && (lumiSection == 1   || lumiSection == 902 )) skip = 1;
+         else if (runNo == 277148 && (lumiSection == 83  || lumiSection == 700 )) skip = 1;
+         else if (runNo == 277166 && (lumiSection == 77  || lumiSection == 431 )) skip = 1;
+         else if (runNo == 277168 && (lumiSection == 1   || lumiSection == 2223)) skip = 1;
+         else if (runNo == 277180 && (lumiSection == 88  || lumiSection == 228 )) skip = 1;
+         else if (runNo == 277194 && (lumiSection == 113 || lumiSection == 2070)) skip = 1;
+         else if (runNo == 277305 && (lumiSection == 62  || lumiSection == 744 )) skip = 1;
+         else if (runNo == 277420 && (lumiSection == 84  || lumiSection == 346 )) skip = 1;
+         else if (runNo == 277981 && (lumiSection == 82  || lumiSection == 163 )) skip = 1;
+         else if (runNo == 277991 && (lumiSection == 1   || lumiSection == 98  )) skip = 1;
+         else if (runNo == 277992 && (lumiSection == 1   || lumiSection == 312 )) skip = 1;
+         else if (runNo == 278017 && (lumiSection == 77  || lumiSection == 589 )) skip = 1;
+         else if (runNo == 278018 && (lumiSection == 1   || lumiSection == 1181)) skip = 1;
+         else if (runNo == 278167 && (lumiSection == 87  || lumiSection == 2258)) skip = 1;
+         else if (runNo == 278175 && (lumiSection == 1   || lumiSection == 88  )) skip = 1;
+         else if (runNo == 278193 && (lumiSection == 77  || lumiSection == 231 )) skip = 1;
+         else if (runNo == 278239 && (lumiSection == 76  || lumiSection == 740 )) skip = 1;
+         else if (runNo == 278240 && (lumiSection == 1   || lumiSection == 1309)) skip = 1;
+         else if (runNo == 278273 && (lumiSection == 75  || lumiSection == 110 )) skip = 1;
+         else if (runNo == 278274 && (lumiSection == 1   || lumiSection == 85  )) skip = 1;
+         else if (runNo == 278288 && (lumiSection == 67  || lumiSection == 81  )) skip = 1;
+         else if (runNo == 278289 && (lumiSection == 1   || lumiSection == 52  )) skip = 1;
+         else if (runNo == 278290 && (lumiSection == 1   || lumiSection == 11  )) skip = 1;
+         else if (runNo == 278308 && (lumiSection == 87  || lumiSection == 1880)) skip = 1;
+         else if (runNo == 278310 && (lumiSection == 1   || lumiSection == 709 )) skip = 1;
+         else if (runNo == 278315 && (lumiSection == 73  || lumiSection == 767 )) skip = 1;
+         else if (runNo == 278345 && (lumiSection == 84  || lumiSection == 831 )) skip = 1;
+         else if (runNo == 278346 && (lumiSection == 1   || lumiSection == 117 )) skip = 1;
+         else if (runNo == 278349 && (lumiSection == 1   || lumiSection == 633 )) skip = 1;
+         else if (runNo == 278366 && (lumiSection == 1   || lumiSection == 453 )) skip = 1;
+         else if (runNo == 278406 && (lumiSection == 85  || lumiSection == 1682)) skip = 1;
+         else if (runNo == 278509 && (lumiSection == 91  || lumiSection == 1557)) skip = 1;
+         else if (runNo == 278769 && (lumiSection == 75  || lumiSection == 104 )) skip = 1;
+         else if (runNo == 278770 && (lumiSection == 1   || lumiSection == 767 )) skip = 1;
+         else if (runNo == 278801 && (lumiSection == 48  || lumiSection == 85  )) skip = 1;
+         else if (runNo == 278802 && (lumiSection == 1   || lumiSection == 17  )) skip = 1;
+         else if (runNo == 278803 && (lumiSection == 1   || lumiSection == 323 )) skip = 1;
+         else if (runNo == 278804 && (lumiSection == 1   || lumiSection == 4   )) skip = 1;
+         else if (runNo == 278805 && (lumiSection == 3   || lumiSection == 288 )) skip = 1;
+         else if (runNo == 278808 && (lumiSection == 1   || lumiSection == 1793)) skip = 1;
+         else if (runNo == 278820 && (lumiSection == 17  || lumiSection == 1533)) skip = 1;
+         else if (runNo == 278822 && (lumiSection == 1   || lumiSection == 1627)) skip = 1;
+         else if (runNo == 278873 && (lumiSection == 70  || lumiSection == 129 )) skip = 1;
+         else if (runNo == 278874 && (lumiSection == 1   || lumiSection == 478 )) skip = 1;
+         else if (runNo == 278875 && (lumiSection == 1   || lumiSection == 834 )) skip = 1;
+         else if (runNo == 278923 && (lumiSection == 55  || lumiSection == 467 )) skip = 1;
+         else if (runNo == 278957 && (lumiSection == 79  || lumiSection == 227 )) skip = 1;
+         else if (runNo == 278962 && (lumiSection == 68  || lumiSection == 408 )) skip = 1;
+         else if (runNo == 278963 && (lumiSection == 1   || lumiSection == 175 )) skip = 1;
+         else if (runNo == 278969 && (lumiSection == 70  || lumiSection == 1460)) skip = 1;
+         else if (runNo == 278975 && (lumiSection == 1   || lumiSection == 850 )) skip = 1;
+         else if (runNo == 278976 && (lumiSection == 1   || lumiSection == 20  )) skip = 1;
+         else if (runNo == 278986 && (lumiSection == 71  || lumiSection == 199 )) skip = 1;
+         else if (runNo == 279024 && (lumiSection == 82  || lumiSection == 382 )) skip = 1;
+         else if (runNo == 279029 && (lumiSection == 1   || lumiSection == 260 )) skip = 1;
+         else if (runNo == 279071 && (lumiSection == 71  || lumiSection == 244 )) skip = 1;
+         else if (runNo == 279080 && (lumiSection == 68  || lumiSection == 224 )) skip = 1;
+         else if (runNo == 279115 && (lumiSection == 118 || lumiSection == 524 )) skip = 1;
+         else if (runNo == 279116 && (lumiSection == 38  || lumiSection == 485 )) skip = 1;
+         else if (runNo == 279479 && (lumiSection == 86  || lumiSection == 190 )) skip = 1;
+         else if (runNo == 279588 && (lumiSection == 100 || lumiSection == 1259)) skip = 1;
+         else if (runNo == 279653 && (lumiSection == 77  || lumiSection == 261 )) skip = 1;
+         else if (runNo == 279654 && (lumiSection == 1   || lumiSection == 1299)) skip = 1;
+         else if (runNo == 279656 && (lumiSection == 1   || lumiSection == 43  )) skip = 1;
+         else if (runNo == 279658 && (lumiSection == 1   || lumiSection == 713 )) skip = 1;
+         else if (runNo == 279667 && (lumiSection == 68  || lumiSection == 1033)) skip = 1;
+         else if (runNo == 279681 && (lumiSection == 77  || lumiSection == 104 )) skip = 1;
+         else if (runNo == 279682 && (lumiSection == 1   || lumiSection == 38  )) skip = 1;
+         else if (runNo == 279683 && (lumiSection == 1   || lumiSection == 26  )) skip = 1;
+         else if (runNo == 279684 && (lumiSection == 1   || lumiSection == 22  )) skip = 1;
+         else if (runNo == 279685 && (lumiSection == 1   || lumiSection == 209 )) skip = 1;
+         else if (runNo == 279691 && (lumiSection == 71  || lumiSection == 113 )) skip = 1;
+         else if (runNo == 279694 && (lumiSection == 1   || lumiSection == 2235)) skip = 1;
+         else if (runNo == 279715 && (lumiSection == 71  || lumiSection == 691 )) skip = 1;
+         else if (runNo == 279716 && (lumiSection == 1   || lumiSection == 1653)) skip = 1;
+         else if (runNo == 279760 && (lumiSection == 68  || lumiSection == 728 )) skip = 1;
+         else if (runNo == 279766 && (lumiSection == 1   || lumiSection == 1689)) skip = 1;
+         else if (runNo == 279767 && (lumiSection == 1   || lumiSection == 776 )) skip = 1;
+         else if (runNo == 279794 && (lumiSection == 77  || lumiSection == 1100)) skip = 1;
+         else if (runNo == 279823 && (lumiSection == 61  || lumiSection == 395 )) skip = 1;
+         else if (runNo == 279841 && (lumiSection == 75  || lumiSection == 2122)) skip = 1;
+         else if (runNo == 279844 && (lumiSection == 72  || lumiSection == 295 )) skip = 1;
+         else if (runNo == 279887 && (lumiSection == 79  || lumiSection == 397 )) skip = 1;
+         else if (runNo == 279931 && (lumiSection == 84  || lumiSection == 3022)) skip = 1;
+         else if (runNo == 279966 && (lumiSection == 79  || lumiSection == 441 )) skip = 1;
+         else if (runNo == 279975 && (lumiSection == 70  || lumiSection == 1121)) skip = 1;
+         else if (runNo == 279993 && (lumiSection == 85  || lumiSection == 156 )) skip = 1;
+         else if (runNo == 279994 && (lumiSection == 1   || lumiSection == 47  )) skip = 1;
+         else if (runNo == 280013 && (lumiSection == 1   || lumiSection == 25  )) skip = 1;
+         else if (runNo == 280015 && (lumiSection == 1   || lumiSection == 580 )) skip = 1;
+         else if (runNo == 280016 && (lumiSection == 1   || lumiSection == 149 )) skip = 1;
+         else if (runNo == 280017 && (lumiSection == 1   || lumiSection == 608 )) skip = 1;
+         else if (runNo == 280018 && (lumiSection == 1   || lumiSection == 1281)) skip = 1;
+         else if (runNo == 280020 && (lumiSection == 1   || lumiSection == 45  )) skip = 1;
+         else if (runNo == 280024 && (lumiSection == 1   || lumiSection == 427 )) skip = 1;
+         else if (runNo == 280187 && (lumiSection == 4   || lumiSection == 60  )) skip = 1;
+         else if (runNo == 280188 && (lumiSection == 1   || lumiSection == 245 )) skip = 1;
+         else if (runNo == 280191 && (lumiSection == 1   || lumiSection == 900 )) skip = 1;
+         else if (runNo == 280194 && (lumiSection == 1   || lumiSection == 238 )) skip = 1;
+         else if (runNo == 280242 && (lumiSection == 1   || lumiSection == 627 )) skip = 1;
+         else if (runNo == 280249 && (lumiSection == 1   || lumiSection == 1433)) skip = 1;
+         else if (runNo == 280251 && (lumiSection == 1   || lumiSection == 372 )) skip = 1;
+         else if (runNo == 280327 && (lumiSection == 49  || lumiSection == 85  )) skip = 1;
+         else if (runNo == 280330 && (lumiSection == 1   || lumiSection == 857 )) skip = 1;
+         else if (runNo == 280349 && (lumiSection == 1   || lumiSection == 626 )) skip = 1;
+         else if (runNo == 280363 && (lumiSection == 1   || lumiSection == 359 )) skip = 1;
+         else if (runNo == 280364 && (lumiSection == 1   || lumiSection == 1363)) skip = 1;
+         else if (runNo == 280383 && (lumiSection == 64  || lumiSection == 65  )) skip = 1;
+         else if (runNo == 280384 && (lumiSection == 2   || lumiSection == 34  )) skip = 1;
+         else if (runNo == 280385 && (lumiSection == 1   || lumiSection == 2022)) skip = 1;
+         else if (runNo == 281613 && (lumiSection == 101 || lumiSection == 903 )) skip = 1;
+         else if (runNo == 281639 && (lumiSection == 1   || lumiSection == 132 )) skip = 1;
+         else if (runNo == 281641 && (lumiSection == 1   || lumiSection == 319 )) skip = 1;
+         else if (runNo == 281693 && (lumiSection == 1   || lumiSection == 2191)) skip = 1;
+         else if (runNo == 281707 && (lumiSection == 99  || lumiSection == 1065)) skip = 1;
+         else if (runNo == 281726 && (lumiSection == 1   || lumiSection == 288 )) skip = 1;
+         else if (runNo == 281727 && (lumiSection == 1   || lumiSection == 1605)) skip = 1;
+         else if (runNo == 281797 && (lumiSection == 125 || lumiSection == 2176)) skip = 1;
+         else if (runNo == 281975 && (lumiSection == 1   || lumiSection == 215 )) skip = 1;
+         else if (runNo == 281976 && (lumiSection == 1   || lumiSection == 2166)) skip = 1;
+         else if (runNo == 282033 && (lumiSection == 82  || lumiSection == 117 )) skip = 1;
+         else if (runNo == 282034 && (lumiSection == 1   || lumiSection == 33  )) skip = 1;
+         else if (runNo == 282035 && (lumiSection == 1   || lumiSection == 40  )) skip = 1;
+         else if (runNo == 282037 && (lumiSection == 1   || lumiSection == 1862)) skip = 1;
+         else if (runNo == 282092 && (lumiSection == 92  || lumiSection == 2276)) skip = 1;
+         else if (runNo == 282708 && (lumiSection == 1   || lumiSection == 8   )) skip = 1;
+         else if (runNo == 282710 && (lumiSection == 1   || lumiSection == 8   )) skip = 1;
+         else if (runNo == 282712 && (lumiSection == 1   || lumiSection == 68  )) skip = 1;
+         else if (runNo == 282730 && (lumiSection == 89  || lumiSection == 164))  skip = 1;
+         else if (runNo == 282731 && (lumiSection == 1   || lumiSection == 172 )) skip = 1;
+         else if (runNo == 282732 && (lumiSection == 1   || lumiSection == 69  )) skip = 1;
+         else if (runNo == 282733 && (lumiSection == 1   || lumiSection == 177 )) skip = 1;
+         else if (runNo == 282734 && (lumiSection == 1   || lumiSection == 327 )) skip = 1;
+         else if (runNo == 282735 && (lumiSection == 1   || lumiSection == 1823)) skip = 1;
+         else if (runNo == 282800 && (lumiSection == 1   || lumiSection == 377 )) skip = 1;
+         else if (runNo == 282807 && (lumiSection == 1   || lumiSection == 326 )) skip = 1;
+         else if (runNo == 282814 && (lumiSection == 1   || lumiSection == 1843)) skip = 1;
+         else if (runNo == 282842 && (lumiSection == 1   || lumiSection == 80  )) skip = 1;
+         else if (runNo == 282917 && (lumiSection == 117 || lumiSection == 191))  skip = 1;
+         else if (runNo == 282918 && (lumiSection == 1   || lumiSection == 51  )) skip = 1;
+         else if (runNo == 282919 && (lumiSection == 1   || lumiSection == 243 )) skip = 1;
+         else if (runNo == 282922 && (lumiSection == 1   || lumiSection == 131 )) skip = 1;
+         else if (runNo == 282923 && (lumiSection == 1   || lumiSection == 224 )) skip = 1;
+         else if (runNo == 283042 && (lumiSection == 1   || lumiSection == 6   )) skip = 1;
+         else if (runNo == 283043 && (lumiSection == 1   || lumiSection == 519 )) skip = 1;
+         else if (runNo == 283049 && (lumiSection == 82  || lumiSection == 93  )) skip = 1;
+         else if (runNo == 283050 && (lumiSection == 1   || lumiSection == 212 )) skip = 1;
+         else if (runNo == 283052 && (lumiSection == 1   || lumiSection == 111 )) skip = 1;
+         else if (runNo == 283059 && (lumiSection == 1   || lumiSection == 451 )) skip = 1;
+         else if (runNo == 283270 && (lumiSection == 76  || lumiSection == 1912)) skip = 1;
+         else if (runNo == 283283 && (lumiSection == 4   || lumiSection == 1748)) skip = 1;
+         else if (runNo == 283305 && (lumiSection == 79  || lumiSection == 85  )) skip = 1;
+         else if (runNo == 283306 && (lumiSection == 1   || lumiSection == 289 )) skip = 1;
+         else if (runNo == 283307 && (lumiSection == 1   || lumiSection == 456 )) skip = 1;
+         else if (runNo == 283308 && (lumiSection == 1   || lumiSection == 948 )) skip = 1;
+         else if (runNo == 283353 && (lumiSection == 80  || lumiSection == 822 )) skip = 1;
+         else if (runNo == 283358 && (lumiSection == 1   || lumiSection == 981 )) skip = 1;
+         else if (runNo == 283359 && (lumiSection == 1   || lumiSection == 428 )) skip = 1;
+         else if (runNo == 283407 && (lumiSection == 82  || lumiSection == 114 )) skip = 1;
+         else if (runNo == 283408 && (lumiSection == 1   || lumiSection == 2542)) skip = 1;
+         else if (runNo == 283416 && (lumiSection == 49  || lumiSection == 245 )) skip = 1;
+         else if (runNo == 283453 && (lumiSection == 83  || lumiSection == 537 )) skip = 1;
+         else if (runNo == 283469 && (lumiSection == 74  || lumiSection == 74  )) skip = 1;
+         else if (runNo == 283478 && (lumiSection == 76  || lumiSection == 969 )) skip = 1;
+         else if (runNo == 283548 && (lumiSection == 145 || lumiSection == 288 )) skip = 1;
+         else if (runNo == 283680 && (lumiSection == 1   || lumiSection == 81  )) skip = 1;
+         else if (runNo == 283681 && (lumiSection == 1   || lumiSection == 17  )) skip = 1;
+         else if (runNo == 283682 && (lumiSection == 1   || lumiSection == 384 )) skip = 1;
+         else if (runNo == 283685 && (lumiSection == 1   || lumiSection == 314 )) skip = 1;
+         else if (runNo == 283820 && (lumiSection == 67  || lumiSection == 1548)) skip = 1;
+         else if (runNo == 283830 && (lumiSection == 1   || lumiSection == 722 )) skip = 1;
+         else if (runNo == 283834 && (lumiSection == 1   || lumiSection == 82  )) skip = 1;
+         else if (runNo == 283835 && (lumiSection == 1   || lumiSection == 112 )) skip = 1;
+         else if (runNo == 283865 && (lumiSection == 1   || lumiSection == 1177)) skip = 1;
+         else if (runNo == 283876 && (lumiSection == 65  || lumiSection == 724 )) skip = 1;
+         else if (runNo == 283877 && (lumiSection == 1   || lumiSection == 1496)) skip = 1;
+         else if (runNo == 283884 && (lumiSection == 349 || lumiSection == 756 )) skip = 1;
+         else if (runNo == 283885 && (lumiSection == 1   || lumiSection == 1723)) skip = 1;
+         else if (runNo == 283933 && (lumiSection == 88  || lumiSection == 232 )) skip = 1;
+         else if (runNo == 283934 && (lumiSection == 1   || lumiSection == 1291)) skip = 1;
+         else if (runNo == 283946 && (lumiSection == 85  || lumiSection == 1462)) skip = 1;
+         else if (runNo == 283964 && (lumiSection == 1   || lumiSection == 388 )) skip = 1;
+         else if (runNo == 284006 && (lumiSection == 73  || lumiSection == 390 )) skip = 1;
+         else if (runNo == 284014 && (lumiSection == 1   || lumiSection == 266 )) skip = 1;
+         else if (runNo == 284025 && (lumiSection == 110 || lumiSection == 157 )) skip = 1;
+         else if (runNo == 284029 && (lumiSection == 1   || lumiSection == 112 )) skip = 1;
+         else if (runNo == 284035 && (lumiSection == 1   || lumiSection == 360 )) skip = 1;
+         else if (runNo == 284036 && (lumiSection == 1   || lumiSection == 348 )) skip = 1;
+         else if (runNo == 284037 && (lumiSection == 1   || lumiSection == 340 )) skip = 1;
+         else if (runNo == 284038 && (lumiSection == 1   || lumiSection == 55  )) skip = 1;
+         else if (runNo == 284039 && (lumiSection == 1   || lumiSection == 30  )) skip = 1;
+         else if (runNo == 284040 && (lumiSection == 1   || lumiSection == 33  )) skip = 1;
+         else if (runNo == 284041 && (lumiSection == 1   || lumiSection == 44  )) skip = 1;
+         else if (runNo == 284042 && (lumiSection == 1   || lumiSection == 129 )) skip = 1;
+         else if (runNo == 284043 && (lumiSection == 1   || lumiSection == 224 )) skip = 1;
+         else if (runNo == 284044 && (lumiSection == 1   || lumiSection == 30  )) skip = 1;
+
+    return skip;
+}
