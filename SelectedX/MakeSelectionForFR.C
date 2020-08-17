@@ -317,10 +317,10 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             for (Int_t i=0; i<NEvents; i++)
             {
                 ntuple->GetEvent(i);
-                Int_t skipLumi = skipLumiSection(ntuple->runNum, ntuple->lumiBlock);
-                Int_t skiprun = skipRun(ntuple->runNum);
-                if (skipLumi) continue;
-                if (skiprun) continue;
+//                Int_t skipLumi = skipLumiSection(ntuple->runNum, ntuple->lumiBlock);
+//                Int_t skiprun = skipRun(ntuple->runNum);
+//                if (skipLumi) continue;
+//                if (skiprun) continue;
 
 //                if (ntuple->runNum != currentRunNo)
 //                {
