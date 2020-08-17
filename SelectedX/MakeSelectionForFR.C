@@ -36,6 +36,7 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug);
 void CountObjectsInAcceptance (TString type, TString HLTname, Bool_t Debug);
 
 Int_t skipLumiSection (Int_t runNo, Int_t lumiSection);
+Int_t skipRun (Int_t runNo);
 
 void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "DEFAULT")
 {
@@ -317,7 +318,9 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             {
                 ntuple->GetEvent(i);
                 Int_t skipLumi = skipLumiSection(ntuple->runNum, ntuple->lumiBlock);
+                Int_t skipRun = skipRun(ntuple->runNum);
                 if (skipLumi) continue;
+                if (skipRun) continue;
 
 //                if (ntuple->runNum != currentRunNo)
 //                {
@@ -2806,6 +2809,39 @@ Int_t skipLumiSection(Int_t runNo, Int_t lumiSection)
          else if (runNo == 284042 && (lumiSection == 1   || lumiSection == 129 )) skip = 1;
          else if (runNo == 284043 && (lumiSection == 1   || lumiSection == 224 )) skip = 1;
          else if (runNo == 284044 && (lumiSection == 1   || lumiSection == 30  )) skip = 1;
+
+    return skip;
+}
+
+Int_t skipRun(Int_t runNo)
+{
+    Int_t skip = 0;
+
+         if      (runNo == 273158) skip = 1;
+         else if (runNo == 273402) skip = 1;
+         else if (runNo == 273425) skip = 1;
+         else if (runNo == 273449) skip = 1;
+         else if (runNo == 273492) skip = 1;
+         else if (runNo == 273493) skip = 1;
+         else if (runNo == 273554) skip = 1;
+         else if (runNo == 273728) skip = 1;
+         else if (runNo == 273730) skip = 1;
+         else if (runNo == 274146) skip = 1;
+         else if (runNo == 274157) skip = 1;
+         else if (runNo == 274198) skip = 1;
+         else if (runNo == 274200) skip = 1;
+         else if (runNo == 274244) skip = 1;
+         else if (runNo == 274250) skip = 1;
+         else if (runNo == 274314) skip = 1;
+         else if (runNo == 274339) skip = 1;
+         else if (runNo == 274344) skip = 1;
+         else if (runNo == 274440) skip = 1;
+         else if (runNo == 274954) skip = 1;
+         else if (runNo == 274969) skip = 1;
+         else if (runNo == 275124) skip = 1;
+         else if (runNo == 275309) skip = 1;
+         else if (runNo == 275319) skip = 1;
+         else if (runNo == 275370) skip = 1;
 
     return skip;
 }
