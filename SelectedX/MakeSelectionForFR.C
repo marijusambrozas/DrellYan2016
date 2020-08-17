@@ -318,9 +318,9 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             {
                 ntuple->GetEvent(i);
                 Int_t skipLumi = skipLumiSection(ntuple->runNum, ntuple->lumiBlock);
-                Int_t skipRun = skipRun(ntuple->runNum);
+                Int_t skiprun = skipRun(ntuple->runNum);
                 if (skipLumi) continue;
-                if (skipRun) continue;
+                if (skiprun) continue;
 
 //                if (ntuple->runNum != currentRunNo)
 //                {
