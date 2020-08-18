@@ -2840,35 +2840,121 @@ Int_t skipLumiSection(Int_t runNo, Int_t lumiSection)
     return skip;
 }
 
-Int_t skipRun(Int_t runNo)
+Int_t skipRun(Int_t runNo) // Option to skip runs which have at least one of the lumisections missing (compared to json file)
 {
     Int_t skip = 0;
-
-         if      (runNo == 273158) skip = 1;
-         else if (runNo == 273402) skip = 1;
-         else if (runNo == 273425) skip = 1;
-         else if (runNo == 273449) skip = 1;
-         else if (runNo == 273492) skip = 1;
-         else if (runNo == 273493) skip = 1;
-         else if (runNo == 273554) skip = 1;
-         else if (runNo == 273728) skip = 1;
-         else if (runNo == 273730) skip = 1;
-         else if (runNo == 274146) skip = 1;
-         else if (runNo == 274157) skip = 1;
-         else if (runNo == 274198) skip = 1;
-         else if (runNo == 274200) skip = 1;
-         else if (runNo == 274244) skip = 1;
-         else if (runNo == 274250) skip = 1;
-         else if (runNo == 274314) skip = 1;
-         else if (runNo == 274339) skip = 1;
-         else if (runNo == 274344) skip = 1;
-         else if (runNo == 274440) skip = 1;
-         else if (runNo == 274954) skip = 1;
-         else if (runNo == 274969) skip = 1;
-         else if (runNo == 275124) skip = 1;
-         else if (runNo == 275309) skip = 1;
-         else if (runNo == 275319) skip = 1;
-         else if (runNo == 275370) skip = 1;
+    // RunB
+    if      (runNo == 273158) skip = 1;
+    else if (runNo == 273402) skip = 1;
+    else if (runNo == 273425) skip = 1;
+    else if (runNo == 273449) skip = 1;
+    else if (runNo == 273492) skip = 1;
+    else if (runNo == 273493) skip = 1;
+    else if (runNo == 273554) skip = 1;
+    else if (runNo == 273728) skip = 1;
+    else if (runNo == 273730) skip = 1;
+    else if (runNo == 274146) skip = 1;
+    else if (runNo == 274157) skip = 1;
+    else if (runNo == 274198) skip = 1;
+    else if (runNo == 274200) skip = 1;
+    else if (runNo == 274244) skip = 1;
+    else if (runNo == 274250) skip = 1;
+    else if (runNo == 274314) skip = 1;
+    else if (runNo == 274339) skip = 1;
+    else if (runNo == 274344) skip = 1;
+    else if (runNo == 274440) skip = 1;
+    else if (runNo == 274954) skip = 1;
+    else if (runNo == 274969) skip = 1;
+    else if (runNo == 275124) skip = 1;
+    else if (runNo == 275309) skip = 1;
+    else if (runNo == 275319) skip = 1;
+    else if (runNo == 275370) skip = 1;
+    // RunC
+    else if (runNo == 275837) skip = 1;
+    else if (runNo == 275911) skip = 1;
+    else if (runNo == 276092) skip = 1;
+    else if (runNo == 276282) skip = 1;
+    // RunD
+    else if (runNo == 276437) skip = 1;
+    else if (runNo == 276495) skip = 1;
+    else if (runNo == 276581) skip = 1;
+    else if (runNo == 276775) skip = 1;
+    else if (runNo == 275807) skip = 1;
+    // RunE
+    else if (runNo == 276831) skip = 1;
+    else if (runNo == 276834) skip = 1;
+    else if (runNo == 276870) skip = 1;
+    else if (runNo == 276935) skip = 1;
+    else if (runNo == 276940) skip = 1;
+    else if (runNo == 276947) skip = 1;
+    else if (runNo == 277071) skip = 1;
+    else if (runNo == 277076) skip = 1;
+    else if (runNo == 277148) skip = 1;
+    else if (runNo == 277166) skip = 1;
+    else if (runNo == 277168) skip = 1;
+    else if (runNo == 277180) skip = 1;
+    else if (runNo == 277305) skip = 1;
+    else if (runNo == 277420) skip = 1;
+    // RunF
+    else if (runNo == 277981) skip = 1;
+    else if (runNo == 277991) skip = 1;
+    else if (runNo == 278017) skip = 1;
+    else if (runNo == 278167) skip = 1;
+    else if (runNo == 278239) skip = 1;
+    else if (runNo == 278273) skip = 1;
+    else if (runNo == 278288) skip = 1;
+    else if (runNo == 278349) skip = 1;
+    else if (runNo == 278406) skip = 1;
+    else if (runNo == 278509) skip = 1;
+    else if (runNo == 278769) skip = 1;
+    else if (runNo == 278801) skip = 1;
+    // RunG
+    else if (runNo == 278873) skip = 1;
+    else if (runNo == 278986) skip = 1;
+    else if (runNo == 279080) skip = 1;
+    else if (runNo == 279667) skip = 1;
+    else if (runNo == 279760) skip = 1;
+    else if (runNo == 279766) skip = 1;
+    else if (runNo == 279794) skip = 1;
+    else if (runNo == 279841) skip = 1;
+    else if (runNo == 279887) skip = 1;
+    else if (runNo == 279966) skip = 1;
+    else if (runNo == 279975) skip = 1;
+    else if (runNo == 279993) skip = 1;
+    else if (runNo == 280187) skip = 1;
+    else if (runNo == 280327) skip = 1;
+    else if (runNo == 280349) skip = 1;
+    else if (runNo == 280364) skip = 1;
+    // RunH
+    else if (runNo == 281613) skip = 1;
+    else if (runNo == 281641) skip = 1;
+    else if (runNo == 281693) skip = 1;
+    else if (runNo == 281707) skip = 1;
+    else if (runNo == 281727) skip = 1;
+    else if (runNo == 281797) skip = 1;
+    else if (runNo == 282092) skip = 1;
+    else if (runNo == 282710) skip = 1;
+    else if (runNo == 282917) skip = 1;
+    else if (runNo == 282923) skip = 1;
+    else if (runNo == 283049) skip = 1;
+    else if (runNo == 283059) skip = 1;
+    else if (runNo == 283270) skip = 1;
+    else if (runNo == 283283) skip = 1;
+    else if (runNo == 283305) skip = 1;
+    else if (runNo == 283353) skip = 1;
+    else if (runNo == 283359) skip = 1;
+    else if (runNo == 283407) skip = 1;
+    else if (runNo == 283408) skip = 1;
+    else if (runNo == 283416) skip = 1;
+    else if (runNo == 283453) skip = 1;
+    else if (runNo == 283469) skip = 1; // This has only 1 valid LS and does not exist in SinglePhoton_H file
+    else if (runNo == 283478) skip = 1;
+    else if (runNo == 283685) skip = 1;
+    else if (runNo == 283877) skip = 1;
+    else if (runNo == 283933) skip = 1;
+    else if (runNo == 283946) skip = 1;
+    else if (runNo == 284006) skip = 1;
+    else if (runNo == 284044) skip = 1;
 
     return skip;
 }
