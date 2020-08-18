@@ -279,8 +279,12 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         ElectronTree->Branch("prefiring_weight_down", &prefiring_weight_down);
         ElectronTree->Branch("prescale_factor", &prescale_factor);
 
-//        Int_t currentRunNo=-999, currentLumiSection=-999;
+        Int_t currentRunNo=-999, currentLumiSection=-999;
 //        std::map<std::pair<int,int>,int> lumis; // to search present run numbers and lumi sections
+
+        // to count #events in different runs
+        std::map<int, int> nEvtInRun;
+        Int_t nEvt=0, nEvtG=0, nLumis=0, nEvtInLumi=0, minEvtInLumi=99999999, maxEvtInLumi=-9999999;
 
         // Loop for all samples in a process
         for (Int_t i_tup = 0; i_tup<Ntup; i_tup++)
@@ -316,23 +320,35 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             // Loop for all events in the chain
             for (Int_t i=0; i<NEvents; i++)
             {
+                nEvt++;
                 ntuple->GetEvent(i);
 //                Int_t skipLumi = skipLumiSection(ntuple->runNum, ntuple->lumiBlock);
-//                Int_t skiprun = skipRun(ntuple->runNum);
+                Int_t skiprun = skipRun(ntuple->runNum);
 //                if (skipLumi) continue;
-//                if (skiprun) continue;
+                if (skiprun) continue;
+                nEvtG++;
+                nEvtInRun[ntuple->runNum]++;
 
-//                if (ntuple->runNum != currentRunNo)
-//                {
-//                    currentRunNo = ntuple->runNum;
-//                    currentLumiSection = ntuple->lumiBlock;
+                if (ntuple->runNum != currentRunNo)
+                {
+                    currentRunNo = ntuple->runNum;
+                    currentLumiSection = ntuple->lumiBlock;
+                    nLumis++;
+                    if (nEvtInLumi > maxEvtInLumi) maxEvtInLumi = nEvtInLumi;
+                    if (nEvtInLumi < minEvtInLumi) minEvtInLumi = nEvtInLumi;
+                    nEvtInLumi = 0
 //                    lumis[std::make_pair(currentRunNo, currentLumiSection)]++;
-//                }
-//                else if (ntuple->lumiBlock != currentLumiSection)
-//                {
-//                    currentLumiSection = ntuple->lumiBlock;
+                }
+                else if (ntuple->lumiBlock != currentLumiSection)
+                {
+                    currentLumiSection = ntuple->lumiBlock;
+                    nLumis++;
+                    if (nEvtInLumi > maxEvtInLumi) maxEvtInLumi = nEvtInLumi;
+                    if (nEvtInLumi < minEvtInLumi) minEvtInLumi = nEvtInLumi;
+                    nEvtInLumi = 0;
 //                    lumis[std::make_pair(currentRunNo, currentLumiSection)]++;
-//                }
+                }
+                nEvtInLumi++;
 
 //                if (ntuple->pfMET_pT >= 20) continue;
 
@@ -530,6 +546,17 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 //            cout << noreps << " events without repetitions\n" << reps << " events with repetitions" << endl;
 
         } // End of i_tup iteration
+
+        cout << "Full #events: " << nEvt << endl;
+        cout << "Good #events: " << nEvtG << endl;
+        cout << "#events by run:" << endl;
+        for (std::map<int,int>::const_iterator it=nEvtInRun.begin(); it!=nEvtInRun.end(); it++)
+        {
+            cout << "   Run " << it->first << ":  " << it->second << " events" << endl;
+        }
+        cout << "Avg #events in lumisection: " << ((float)nEvtG)/((float)nLumis) << endl;
+        cout << "Min #events in lumisection: " << minEvtInLumi << endl;
+        cout << "Max #events in lumisection: " << maxEvtInLumi << "\n" << endl;
 
 //        ofstream runOutput;
 //        runOutput.open("Lumi_"+Mgr.Procname[Mgr.CurrentProc]+".txt");
