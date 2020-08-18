@@ -334,8 +334,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                     currentRunNo = ntuple->runNum;
                     currentLumiSection = ntuple->lumiBlock;
                     nLumis++;
-                    if (nEvtInLumi > maxEvtInLumi) maxEvtInLumi = nEvtInLumi;
-                    if (nEvtInLumi < minEvtInLumi) minEvtInLumi = nEvtInLumi;
+                    if (nEvtInLumi > maxEvtInLumi && nEvtInLumi > 0) maxEvtInLumi = nEvtInLumi;
+                    if (nEvtInLumi < minEvtInLumi && nEvtInLumi > 0) minEvtInLumi = nEvtInLumi;
                     nEvtInLumi = 0;
 //                    lumis[std::make_pair(currentRunNo, currentLumiSection)]++;
                 }
@@ -343,8 +343,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                 {
                     currentLumiSection = ntuple->lumiBlock;
                     nLumis++;
-                    if (nEvtInLumi > maxEvtInLumi) maxEvtInLumi = nEvtInLumi;
-                    if (nEvtInLumi < minEvtInLumi) minEvtInLumi = nEvtInLumi;
+                    if (nEvtInLumi > maxEvtInLumi && nEvtInLumi > 0) maxEvtInLumi = nEvtInLumi;
+                    if (nEvtInLumi < minEvtInLumi && nEvtInLumi > 0) minEvtInLumi = nEvtInLumi;
                     nEvtInLumi = 0;
 //                    lumis[std::make_pair(currentRunNo, currentLumiSection)]++;
                 }
