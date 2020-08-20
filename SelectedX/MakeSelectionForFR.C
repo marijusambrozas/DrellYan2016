@@ -318,7 +318,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             Int_t timesPassed = 0;
 
             // Loop for all events in the chain
-            for (Int_t i=0; i<NEvents; i++)
+            for (Int_t i=0; i<NEvents/3; i++)
             {
                 nEvt++;
                 ntuple->GetEvent(i);
@@ -2862,6 +2862,7 @@ Int_t skipRun(Int_t runNo) // Option to skip runs which have at least one of the
     else if (runNo == 274314) skip = 1;
     else if (runNo == 274339) skip = 1;
     else if (runNo == 274344) skip = 1;
+    else if (runNo == 274387) skip = 1;
     else if (runNo == 274440) skip = 1;
     else if (runNo == 274954) skip = 1;
     else if (runNo == 274969) skip = 1;
