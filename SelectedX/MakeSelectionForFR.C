@@ -326,7 +326,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 //                Int_t skiprun = skipRun(ntuple->runNum);
 //                if (skipLumi) continue;
 //                if (skiprun) continue;
-                if (ntuple->runNum > 274200) continue;
+                if (ntuple->runNum < 274200) continue;
                 nEvtG++;
                 nEvtInRun[ntuple->runNum]++;
 
