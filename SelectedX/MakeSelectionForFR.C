@@ -318,14 +318,15 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             Int_t timesPassed = 0;
 
             // Loop for all events in the chain
-            for (Int_t i=0; i<NEvents/3; i++)
+            for (Int_t i=0; i<NEvents; i++) // CHANGE LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             {
                 nEvt++;
                 ntuple->GetEvent(i);
 //                Int_t skipLumi = skipLumiSection(ntuple->runNum, ntuple->lumiBlock);
-                Int_t skiprun = skipRun(ntuple->runNum);
+//                Int_t skiprun = skipRun(ntuple->runNum);
 //                if (skipLumi) continue;
-                if (skiprun) continue;
+//                if (skiprun) continue;
+                if (ntuple->runNum > 274200) continue;
                 nEvtG++;
                 nEvtInRun[ntuple->runNum]++;
 
