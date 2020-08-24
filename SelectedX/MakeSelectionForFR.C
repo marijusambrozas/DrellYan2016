@@ -335,7 +335,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         trig_fired->push_back(22);
                         trig_pT->push_back(ntuple->HLT_trigPt[k]);
                     }
-                    if ( (HLT_trigName->at((unsigned int)k)) == "HLT_Photon30_v*" && ntuple->HLT_trigFired[k] )
+                    if ( (ntuple->HLT_trigName->at((unsigned int)k)) == "HLT_Photon30_v*" && ntuple->HLT_trigFired[k] )
                     {
                         pass = 1;
                         trig_fired->push_back(30);
@@ -347,7 +347,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         trig_fired->push_back(36);
                         trig_pT->push_back(ntuple->HLT_trigPt[k]);
                     }
-                    if ( (HLT_trigName->at((unsigned int)k)) == "HLT_Photon50_v*" && ntuple->HLT_trigFired[k] )
+                    if ( (ntuple->HLT_trigName->at((unsigned int)k)) == "HLT_Photon50_v*" && ntuple->HLT_trigFired[k] )
                     {
                         pass = 1;
                         trig_fired->push_back(50);
@@ -359,7 +359,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         trig_fired->push_back(75);
                         trig_pT->push_back(ntuple->HLT_trigPt[k]);
                     }
-                    if ( (HLT_trigName->at((unsigned int)k)) == "HLT_Photon90_v*" && ntuple->HLT_trigFired[k] )
+                    if ( (ntuple->HLT_trigName->at((unsigned int)k)) == "HLT_Photon90_v*" && ntuple->HLT_trigFired[k] )
                     {
                         pass = 1;
                         trig_fired->push_back(90);
@@ -371,7 +371,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         trig_fired->push_back(120);
                         trig_pT->push_back(ntuple->HLT_trigPt[k]);
                     }
-                    if ( (HLT_trigName->at((unsigned int)k)) == "HLT_Photon175_v*" && ntuple->HLT_trigFired[k] )
+                    if ( (ntuple->HLT_trigName->at((unsigned int)k)) == "HLT_Photon175_v*" && ntuple->HLT_trigFired[k] )
                     {
                         pass = 1;
                         trig_fired->push_back(175);
