@@ -319,7 +319,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
             // Loop for all events in the chain
 //            for (Int_t i=0; i<NEvents; i++)
-            for (Int_t i=2*NEvents/3; i<NEvents; i++)
+            for (Int_t i=0; i<NEvents; i++)
             {
                 ntuple->GetEvent(i);
 
