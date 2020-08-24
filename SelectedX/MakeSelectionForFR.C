@@ -319,16 +319,76 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
             // Loop for all events in the chain
 //            for (Int_t i=0; i<NEvents; i++)
-            for (Int_t i=2*NEvents/3; i<NEvents; i++)
+            for (Int_t i=0; i<NEvents/3; i++)
             {
-                nEvt++;
                 ntuple->GetEvent(i);
+
+                //TEST/////////////////
+                Int_t pass = 0;
+                trig_fired->clear();
+                trig_pT->clear();
+                for( Int_t k = 0; k < HLT_ntrig; k++ )
+                {
+                    if ( (ntuple->HLT_trigName->at((unsigned int)k)) == "HLT_Photon22_v*" && ntuple->HLT_trigFired[k] )
+                    {
+                        pass = 1;
+                        trig_fired->push_back(22);
+                        trig_pT->push_back(ntuple->HLT_trigPt[k]);
+                    }
+                    if ( (HLT_trigName->at((unsigned int)k)) == "HLT_Photon30_v*" && ntuple->HLT_trigFired[k] )
+                    {
+                        pass = 1;
+                        trig_fired->push_back(30);
+                        trig_pT->push_back(ntuple->HLT_trigPt[k]);
+                    }
+                    if ( (ntuple->HLT_trigName->at((unsigned int)k)) == "HLT_Photon36_v*" && ntuple->HLT_trigFired[k] )
+                    {
+                        pass = 1;
+                        trig_fired->push_back(36);
+                        trig_pT->push_back(ntuple->HLT_trigPt[k]);
+                    }
+                    if ( (HLT_trigName->at((unsigned int)k)) == "HLT_Photon50_v*" && ntuple->HLT_trigFired[k] )
+                    {
+                        pass = 1;
+                        trig_fired->push_back(50);
+                        trig_pT->push_back(ntuple->HLT_trigPt[k]);
+                    }
+                    if ( (ntuple->HLT_trigName->at((unsigned int)k)) == "HLT_Photon75_v*" && ntuple->HLT_trigFired[k] )
+                    {
+                        pass = 1;
+                        trig_fired->push_back(75);
+                        trig_pT->push_back(ntuple->HLT_trigPt[k]);
+                    }
+                    if ( (HLT_trigName->at((unsigned int)k)) == "HLT_Photon90_v*" && ntuple->HLT_trigFired[k] )
+                    {
+                        pass = 1;
+                        trig_fired->push_back(90);
+                        trig_pT->push_back(ntuple->HLT_trigPt[k]);
+                    }
+                    if ( (ntuple->HLT_trigName->at((unsigned int)k)) == "HLT_Photon120_v*" && ntuple->HLT_trigFired[k] )
+                    {
+                        pass = 1;
+                        trig_fired->push_back(120);
+                        trig_pT->push_back(ntuple->HLT_trigPt[k]);
+                    }
+                    if ( (HLT_trigName->at((unsigned int)k)) == "HLT_Photon175_v*" && ntuple->HLT_trigFired[k] )
+                    {
+                        pass = 1;
+                        trig_fired->push_back(175);
+                        trig_pT->push_back(ntuple->HLT_trigPt[k]);
+                    }
+                    if (pass) ElectronTree->Fill();
+                }
+                // END TEST /////////////////////////////////////
+
+                /*
+//                nEvt++;
 //                Int_t skipLumi = skipLumiSection(ntuple->runNum, ntuple->lumiBlock);
 //                Int_t skiprun = skipRun(ntuple->runNum);
 //                if (skipLumi) continue;
 //                if (skiprun) continue;
 //                if (ntuple->runNum < 275900) continue;
-                nEvtG++;
+//                nEvtG++;
                 nEvtInRun[ntuple->runNum]++;
 
                 if (ntuple->runNum != currentRunNo)
@@ -372,16 +432,17 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
                 if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += gen_weight;
 
+
                 Bool_t TriggerFlag = kFALSE;
                 TString triggername;
                 TriggerFlag = ntuple->isTriggered(analyzer->HLT, &triggername);
 
                 if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
-                {                    
+                {
                     if (Debug == kTRUE && triggername == "HLT_Photon175_v*") {NEvents++; continue;} // FOR TEST
                     if (Debug == kTRUE)
                     {
-                        for (Int_t i_tr=0; i_tr<ntuple->/*HLT_trigPS->size()*/HLT_ntrig; i_tr++)
+                        for (Int_t i_tr=0; i_tr<ntuple->HLT_ntrig; i_tr++)
                         {
                             cout << ntuple->HLT_trigName->at(i_tr) << "   prescale=" << ntuple->HLT_trigPS->at(i_tr) << endl;
                         }
@@ -516,7 +577,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                     } // End of event selection
 
                 } // End of if(isTriggered)
-
+                   */
                 if (!Debug) bar.Draw(i);
             } // End of event iteration
 
@@ -549,16 +610,16 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
         } // End of i_tup iteration
 
-        cout << "Full #events: " << nEvt << endl;
-        cout << "Good #events: " << nEvtG << endl;
-        cout << "#events by run:" << endl;
-        for (std::map<int,int>::const_iterator it=nEvtInRun.begin(); it!=nEvtInRun.end(); it++)
-        {
-            cout << "   Run " << it->first << ":  " << it->second << " events" << endl;
-        }
-        cout << "Avg #events in lumisection: " << ((float)nEvtG)/((float)nLumis) << endl;
-        cout << "Min #events in lumisection: " << minEvtInLumi << endl;
-        cout << "Max #events in lumisection: " << maxEvtInLumi << "\n" << endl;
+//        cout << "Full #events: " << nEvt << endl;
+//        cout << "Good #events: " << nEvtG << endl;
+//        cout << "#events by run:" << endl;
+//        for (std::map<int,int>::const_iterator it=nEvtInRun.begin(); it!=nEvtInRun.end(); it++)
+//        {
+//            cout << "   Run " << it->first << ":  " << it->second << " events" << endl;
+//        }
+//        cout << "Avg #events in lumisection: " << ((float)nEvtG)/((float)nLumis) << endl;
+//        cout << "Min #events in lumisection: " << minEvtInLumi << endl;
+//        cout << "Max #events in lumisection: " << maxEvtInLumi << "\n" << endl;
 
 //        ofstream runOutput;
 //        runOutput.open("Lumi_"+Mgr.Procname[Mgr.CurrentProc]+".txt");
