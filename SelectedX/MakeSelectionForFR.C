@@ -327,7 +327,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                 Int_t pass = 0;
                 trig_fired->clear();
                 trig_pT->clear();
-                for( Int_t k = 0; k < HLT_ntrig; k++ )
+                for( Int_t k = 0; k < ntuple->HLT_ntrig; k++ )
                 {
                     if ( (ntuple->HLT_trigName->at((unsigned int)k)) == "HLT_Photon22_v*" && ntuple->HLT_trigFired[k] )
                     {
