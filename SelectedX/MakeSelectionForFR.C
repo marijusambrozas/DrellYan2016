@@ -319,7 +319,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
             // Loop for all events in the chain
 //            for (Int_t i=0; i<NEvents; i++)
-            for (Int_t i=2*NEvents/3; i<NEvents; i++)
+            for (Int_t i=0; i<NEvents/3; i++)
             {
                 ntuple->GetEvent(i);
 
@@ -377,7 +377,12 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         trig_fired->push_back(175);
                         trig_pT->push_back(ntuple->HLT_trigPt[k]);
                     }
-                    if (pass) ElectronTree->Fill();
+                    if (pass)
+                    {
+                        runNum = ntuple->runNum;
+                        lumiBlock = ntuple->lumiBlock;
+                        ElectronTree->Fill();
+                    }
                 }
                 // END TEST /////////////////////////////////////
 
