@@ -1003,13 +1003,13 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "BKG";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
 
         Tag.push_back("ttbar_M700to1000"); Xsec.push_back(76.605); nEvents.push_back(38487178);
         Wsum.push_back(38487178.0);
 //        Location = "TT_Mtt-700to1000_TuneCUETP8M2T4_13TeV-powheg-pythia8/crab_ttbar_M700to1000/180326_143059/0000/";
         Location = "ttbar_M700to1000/";
-        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(746); // One ntuple missing in v2.7 (745)
+//        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(746); // One ntuple missing in v2.7 (745)
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(746); // name in v2.8
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if(pr == _ttbar_1000toInf)
@@ -1043,15 +1043,14 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(1190);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/"; // REMOVE LATER
         Tag.push_back("ttbar_M700to1000"); Xsec.push_back(76.605); nEvents.push_back(38487178);
         Wsum.push_back(38487178.0);
 //        Location = "TT_Mtt-700to1000_TuneCUETP8M2T4_13TeV-powheg-pythia8/crab_ttbar_M700to1000/180326_143059/0000/";
         Location = "ttbar_M700to1000/";
-        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(746);
+//        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(746);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(746); // name in v2.8
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.8/";  // REMOVE LATER
         Tag.push_back("ttbar_M1000toInf"); Xsec.push_back(20.578); nEvents.push_back(24561630);
         Wsum.push_back(24561630.0);
 //        Location = "TT_Mtt-1000toInf_TuneCUETP8M2T4_13TeV-powheg-pythia8/crab_ttbar_M1000toInf/180326_143144/0000/";
@@ -1859,7 +1858,8 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         Wsum.push_back(38422582.0);
 //        Location = "TT_Mtt-700to1000_TuneCUETP8M2T4_13TeV-powheg-pythia8/crab_ttbar_M700to1000/180326_143059/0000/";
         Location = "ttbar_M700to1000/";
-        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(746);
+//        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(746);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(746);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("ttbar_M1000toInf"); Xsec.push_back(20.578); nEvents.push_back(24561630);
