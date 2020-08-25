@@ -195,12 +195,12 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "SIGNAL";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
 
         Tag.push_back("DY_M10to50_v1"); Xsec.push_back(6016.88*3); Wsum.push_back(22374898 + 47946333 + 29386420); nEvents.push_back(30751136);
 //        Location = "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000/";
         Location = "DYLL_M10to50_v1/";
-        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(237); // One ntuple missing in v2.7 (236)
+//        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(237); // One ntuple missing in v2.7 (236)
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(237); // v2.8 name
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation + Location);
 
         Tag.push_back("DY_M10to50_v2"); Xsec.push_back(6016.88*3); Wsum.push_back(22374898 + 47946333 + 29386420); nEvents.push_back(65887977);
@@ -345,12 +345,12 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "SIGNAL";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
 
         Tag.push_back("DY_M10to50_v1"); Xsec.push_back(6016.88*3); Wsum.push_back(22374898 + 47946333 + 29386420); nEvents.push_back(30751136);
 //        Location = "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000/";
         Location = "DYLL_M10to50_v1/";
-        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(237);
+//        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(237);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(237); // name in v2.8
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation + Location);
 
         Tag.push_back("DY_M10to50_v2"); Xsec.push_back(6016.88*3); Wsum.push_back(22374898 + 47946333 + 29386420); nEvents.push_back(65887977);
@@ -365,7 +365,6 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(467);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation + Location);
 
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.8/"; // REMOVE LATER
         Tag.push_back("DY_M50to100"); Xsec.push_back(1873.52*3); Wsum.push_back(78026576/*81780984*/); nEvents.push_back(121265767/*122055296*/);
 //        Location = "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000/";
         Location = "DYLL_50toInf/";
@@ -378,7 +377,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(213);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        // Not found in v2.6
+        // Not found in v2.6 and newer
 //        Tag.push_back("DY_M100to200_ext"); Xsec.push_back(76.2401*3); Wsum.push_back(703034 + 9607589); nEvents.push_back(15120677);
 //        Location = "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200_ext/180326_143324/0000/";
 //        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
@@ -436,12 +435,12 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "SIGNAL";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
 
         Tag.push_back("DYMuMu_M10to50_v1"); Xsec.push_back(6016.88); Wsum.push_back(7446893+16016651+9815322); nEvents.push_back(30650862);
 //        Location = "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000/";
         Location = "DYLL_M10to50_v1/";
-        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(237);
+//        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(237);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(237); // name in v2.8
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation + Location);
 
         Tag.push_back("DYMuMu_M10to50_v2"); Xsec.push_back(6016.88); Wsum.push_back(7446893+16016651+9815322); nEvents.push_back(65887977);
@@ -480,7 +479,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(213);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        // not found in v2.6
+        // not found in v2.6 and newer
 //        Tag.push_back("DYMuMu_M100to200_ext"); Xsec.push_back(76.2401); Wsum.push_back(233822+3199473); nEvents.push_back(15120677);
 //        Location = "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200_ext/180326_143324/0000/";
 //        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
@@ -586,12 +585,12 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "SIGNAL";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
 
         Tag.push_back("DYMuMu_M10to50_v1"); Xsec.push_back(6016.88); Wsum.push_back(7446893+16016651+9815322); nEvents.push_back(30650862);
 //        Location = "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000/";
         Location = "DYLL_M10to50_v1/";
-        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(237);
+//        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(237);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(237);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation + Location);
 
         Tag.push_back("DYMuMu_M10to50_v2"); Xsec.push_back(6016.88); Wsum.push_back(7446893+16016651+9815322); nEvents.push_back(65887977);
@@ -606,7 +605,6 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(467);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation + Location);
 
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.8/"; // REMOVE LATER
         Tag.push_back("DYMuMu_M50to100"); Xsec.push_back(1873.52); Wsum.push_back(26175605.0); nEvents.push_back(122055296);
 //        Location = "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000/";
         Location = "DYLL_M50toInf/";
@@ -677,12 +675,12 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "SIGNAL";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
 
         Tag.push_back("DYEE_M10to50_v1"); Xsec.push_back(6016.88); Wsum.push_back(7447023+16016761+9811434); nEvents.push_back(306508623);
 //        Location = "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000/";
         Location = "DYLL_M10to50_v1/";
-        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(237);
+//        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(237);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(237); // name in v2.8
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DYEE_M10to50_v2"); Xsec.push_back(6016.88); Wsum.push_back(7447023+16016761+9811434); nEvents.push_back(65887977);
@@ -721,7 +719,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(213);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        // Not found in v2.6
+        // Not found in v2.6 and newer
 //        Tag.push_back("DYEE_M100to200_ext"); Xsec.push_back(76.2401); Wsum.push_back(234322+3203563); nEvents.push_back(15120677);
 //        Location = "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200_ext/180326_143324/0000/";
 //        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
@@ -827,12 +825,12 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "SIGNAL";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
 
         Tag.push_back("DYEE_M10to50_v1"); Xsec.push_back(6016.88); Wsum.push_back(7447023+16016761+9811434); nEvents.push_back(306508623);
 //        Location = "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000/";
         Location = "DYLL_M10to50_v1/";
-        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(237);
+//        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(237);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(237); // name in v2.8
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DYEE_M10to50_v2"); Xsec.push_back(6016.88); Wsum.push_back(7447023+16016761+9811434); nEvents.push_back(65887977);
@@ -847,7 +845,6 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(467);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.8/"; // REMOVE LATER
         Tag.push_back("DYEE_M50to100"); Xsec.push_back(1873.52); Wsum.push_back(26166194.0); nEvents.push_back(122055296);
 //        Location = "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000/";
         Location = "DYLL_M50toInf/";
@@ -860,7 +857,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(213);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        // Not found in v2.6
+        // Not found in v2.6 and newer
 //        Tag.push_back("DYEE_M100to200_ext"); Xsec.push_back(76.2401); Wsum.push_back(234322+3203563); nEvents.push_back(15120677);
 //        Location = "DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M100to200_ext/180326_143324/0000/";
 //        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
@@ -918,12 +915,12 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "BKG";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
 
         Tag.push_back("DYTauTau_M10to50_v1"); Xsec.push_back(6016.88); Wsum.push_back(7407794+15912921+9759664); nEvents.push_back(30650862);
 //        Location = "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000/";
         Location = "DYLL_M10to50_v1/";
-        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(237);
+//        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(237);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(237); // name in v2.8
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DYTauTau_M10to50_v2"); Xsec.push_back(6016.88); Wsum.push_back(7407794+15912921+9759664); nEvents.push_back(65887977);
@@ -956,12 +953,12 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "BKG";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
 
         Tag.push_back("DYTauTau_M10to50_v1"); Xsec.push_back(6016.88); Wsum.push_back(7407794+15912921+9759664); nEvents.push_back(30650862);
 //        Location = "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000/";
         Location = "DYLL_M10to50_v1/";
-        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(237);
+//        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(237);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(237); // name in v2.8
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DYTauTau_M10to50_v2"); Xsec.push_back(6016.88); Wsum.push_back(7407794+15912921+9759664); nEvents.push_back(65887977);
@@ -976,7 +973,6 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(467);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.8/"; // REMOVE LATER
         Tag.push_back("DYTauTau_M50toInf"); Xsec.push_back(1952.68432327); Wsum.push_back(27277866.0); nEvents.push_back(122055296); //  NNLO Xsec
 //        Xsec->push_back(6104.0/3.0);
 //        Location = "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000/";
@@ -1164,12 +1160,12 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "BKG";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
 
         Tag.push_back("WJetsToLNu"); Xsec.push_back(61526.7); Wsum.push_back(16433848+161144203+253966720/*253933112*/); nEvents.push_back(24028444);
 //        Location = "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo/180326_144617/0000/";
         Location = "WJetsToLNu_amcatnlo/";
-        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(300); // One ntuple missing in v2.7 (299)
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(300); // One ntuple missing in v2.7 (299)
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(300); // name in v2.8
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("WJetsToLNu_ext"); Xsec.push_back(61526.7); Wsum.push_back(16433848+161144203+253966720/*253933112*/); nEvents.push_back(235575647);
@@ -1193,12 +1189,12 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "BKG";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.7/";
 
         Tag.push_back("WJetsToLNu"); Xsec.push_back(61526.7); Wsum.push_back(16433848+161144203+253966720/*253933112*/); nEvents.push_back(24028444);
 //        Location = "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo/180326_144617/0000/";
         Location = "WJetsToLNu_amcatnlo/";
-        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(300);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(300);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(300); // name in v2.8
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("WJetsToLNu_ext"); Xsec.push_back(61526.7); Wsum.push_back(16433848+161144203+253966720/*253933112*/); nEvents.push_back(235575647);
@@ -1235,7 +1231,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(152);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
-    else if(pr == _QCDMuEnriched_30to50) // UPDATE
+    else if(pr == _QCDMuEnriched_30to50)
     {
         isMC = kTRUE;
         Type = "BKG";
@@ -1243,7 +1239,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("QCDMuEnriched_Pt30to50"); Xsec.push_back(139803000*0.01182); Wsum.push_back(37147024.0/*29717171.0*/); nEvents.push_back(37147024/*29717171*/);
         Location = "QCDMuEnriched_Pt30to50/";
-        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(151);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(302);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if(pr == _QCDMuEnriched_50to80)
@@ -1257,15 +1253,15 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(96);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
-    else if(pr == _QCDMuEnriched_80to120) // UPDATE
+    else if(pr == _QCDMuEnriched_80to120)
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+//        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
         Tag.push_back("QCDMuEnriched_Pt80to120"); Xsec.push_back(2758420*0.03844); Wsum.push_back(18988888+11739922/*13555323+9797243*/); nEvents.push_back(18988888/*13555323*/);
         Location = "QCDMuEnriched_Pt80to120/";
-        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(73);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(146); // name in v2.8
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("QCDMuEnriched_Pt80to120_ext1"); Xsec.push_back(2758420*0.03844); Wsum.push_back(18988888+11739922/*13555323+9797243*/); nEvents.push_back(11739922/*9797243*/);
@@ -1289,11 +1285,11 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(137);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
-    else if(pr == _QCDMuEnriched_170to300) // UPDATE
+    else if(pr == _QCDMuEnriched_170to300)
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+//        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
         Tag.push_back("QCDMuEnriched_Pt170to300"); Xsec.push_back(117989*0.07335); Wsum.push_back(10502474+12643280+22080752/*7947158+9403070+19607775*/); nEvents.push_back(10502474/*7947158*/);
         Location = "QCDMuEnriched_Pt170to300/";
@@ -1307,7 +1303,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("QCDMuEnriched_Pt170to300_backup"); Xsec.push_back(117989*0.07335); Wsum.push_back(10502474+12643280+22080752/*7947158+9403070+19607775*/); nEvents.push_back(22080752/*19607775*/);
         Location = "QCDMuEnriched_Pt170to300_backup/";
-        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(192);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(383); // name in v2.8
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if(pr == _QCDMuEnriched_300to470)
@@ -1394,7 +1390,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(76);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
-    else if(pr == _QCDMuEnriched_1000toInf) // UPDATE
+    else if(pr == _QCDMuEnriched_1000toInf)
     {
         isMC = kTRUE;
         Type = "BKG";
@@ -1402,7 +1398,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("QCDMuEnriched_Pt1000toInf"); Xsec.push_back(10.4305*0.15544); Wsum.push_back(4945943+12500810/*3861436+9609820*/); nEvents.push_back(4945943/*3861436*/);
         Location = "QCDMuEnriched_Pt1000toInf/";
-        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(34);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(67); // name in v2.8
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("QCDMuEnriched_Pt1000toInf_ext1"); Xsec.push_back(10.4305*0.15544); Wsum.push_back(4945943+12500810/*3861436+9609820*/); nEvents.push_back(12500810/*9609820*/);
@@ -1428,7 +1424,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("QCDMuEnriched_Pt30to50"); Xsec.push_back(139803000*0.01182); Wsum.push_back(37147024.0/*29717171.0*/); nEvents.push_back(37147024/*29717171*/);
         Location = "QCDMuEnriched_Pt30to50/";
-        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(151);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(302);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("QCDMuEnriched_Pt50to80"); Xsec.push_back(19222500*0.02276); Wsum.push_back(26474018.0/*19806914.0*/); nEvents.push_back(26474018/*19806914*/);
@@ -1438,7 +1434,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("QCDMuEnriched_Pt80to120"); Xsec.push_back(2758420*0.03844); Wsum.push_back(18988888+11739922/*13555323+9797243*/); nEvents.push_back(18988888/*13555323*/);
         Location = "QCDMuEnriched_Pt80to120/";
-        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(73);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(146);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("QCDMuEnriched_Pt80to120_ext1"); Xsec.push_back(2758420*0.03844); Wsum.push_back(18988888+11739922/*13555323+9797243*/); nEvents.push_back(11739922/*9797243*/);
@@ -1468,7 +1464,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("QCDMuEnriched_Pt170to300_backup"); Xsec.push_back(117989*0.07335); Wsum.push_back(10502474+12643280+22080752/*7947158+9403070+19607775*/); nEvents.push_back(22080752/*19607775*/);
         Location = "QCDMuEnriched_Pt170to300_backup/";
-        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(192);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(383);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("QCDMuEnriched_Pt300to470"); Xsec.push_back(7820.25*0.10196); Wsum.push_back(10367112+21717615+32033109/*7937587+16452587+24605502*/); nEvents.push_back(10367112/*7937587*/);
@@ -1533,7 +1529,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("QCDMuEnriched_Pt1000toInf"); Xsec.push_back(10.4305*0.15544); Wsum.push_back(4945943+12500810/*3861436+9609820*/); nEvents.push_back(4945943/*3861436*/);
         Location = "QCDMuEnriched_Pt1000toInf/";
-        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(34);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(67); // name in v2.8
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("QCDMuEnriched_Pt1000toInf_ext1"); Xsec.push_back(10.4305*0.15544); Wsum.push_back(4945943+12500810/*3861436+9609820*/); nEvents.push_back(12500810/*9609820*/);
@@ -1589,7 +1585,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(148);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
-    else if (pr == _QCDEMEnriched_80to120) // old location
+    else if (pr == _QCDEMEnriched_80to120)
     {
         isMC = kTRUE;
         Type = "BKG";
@@ -1825,7 +1821,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         Tag.push_back("DYTauTau_M10to50_v1"); Xsec.push_back(6016.88); Wsum.push_back(33080379.0); nEvents.push_back(30650862);
 //        Location = "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M10to50_v1/180326_142925/0000/";
         Location = "DYLL_M10to50_v1/";
-        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(237);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(237);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DYTauTau_M10to50_v2"); Xsec.push_back(6016.88); Wsum.push_back(33080379.0); nEvents.push_back(65887977);
@@ -1906,7 +1902,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         Tag.push_back("WJetsToLNu"); Xsec.push_back(61526.7); Wsum.push_back(16433848+161144203+253966720/*253933112*/); nEvents.push_back(24028444);
 //        Location = "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo/180326_144617/0000/";
         Location = "WJetsToLNu_amcatnlo/";
-        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(300);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(300);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("WJetsToLNu_ext"); Xsec.push_back(61526.7); Wsum.push_back(16433848+161144203+253966720/*253933112*/); nEvents.push_back(235575647);
@@ -1932,7 +1928,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("QCDMuEnriched_Pt30to50"); Xsec.push_back(139803000*0.01182); Wsum.push_back(37147024.0/*29717171.0*/); nEvents.push_back(37147024/*29717171*/);
         Location = "QCDMuEnriched_Pt30to50/";
-        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(151);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(302);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("QCDMuEnriched_Pt50to80"); Xsec.push_back(19222500*0.02276); Wsum.push_back(26474018.0/*19806914.0*/); nEvents.push_back(26474018/*19806914*/);
@@ -1942,7 +1938,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("QCDMuEnriched_Pt80to120"); Xsec.push_back(2758420*0.03844); Wsum.push_back(18988888+11739922/*13555323+9797243*/); nEvents.push_back(18988888/*13555323*/);
         Location = "QCDMuEnriched_Pt80to120/";
-        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(73);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(146);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("QCDMuEnriched_Pt80to120_ext1"); Xsec.push_back(2758420*0.03844); Wsum.push_back(18988888+11739922/*13555323+9797243*/); nEvents.push_back(11739922/*9797243*/);
@@ -1972,7 +1968,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("QCDMuEnriched_Pt170to300_backup"); Xsec.push_back(117989*0.07335); Wsum.push_back(10502474+12643280+22080752/*7947158+9403070+19607775*/); nEvents.push_back(22080752/*19607775*/);
         Location = "QCDMuEnriched_Pt170to300_backup/";
-        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(192);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(383);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("QCDMuEnriched_Pt300to470"); Xsec.push_back(7820.25*0.10196); Wsum.push_back(10367112+21717615+32033109/*7937587+16452587+24605502*/); nEvents.push_back(10367112/*7937587*/);
@@ -2037,7 +2033,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("QCDMuEnriched_Pt1000toInf"); Xsec.push_back(10.4305*0.15544); Wsum.push_back(4945943+12500810/*3861436+9609820*/); nEvents.push_back(4945943/*3861436*/);
         Location = "QCDMuEnriched_Pt1000toInf/";
-        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(34);
+        NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(67);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("QCDMuEnriched_Pt1000toInf_ext1"); Xsec.push_back(10.4305*0.15544); Wsum.push_back(4945943+12500810/*3861436+9609820*/); nEvents.push_back(12500810/*9609820*/);
