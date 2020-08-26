@@ -148,8 +148,6 @@ void MakeSelectedEE (TString type, TString HLTname , Bool_t Debug)
             TStopwatch looptime;
             looptime.Start();
 
-            if (Mgr.Tag[i_tup] == "QCDEMEnriched_Pt120to170") continue; // One of the skims crashes here
-
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
             //Creating a file
