@@ -1229,7 +1229,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kTRUE;
         Type = "BKG";
-        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
+//        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
         Tag.push_back("QCDMuEnriched_Pt30to50"); Xsec.push_back(139803000.0 * 0.01182); Wsum.push_back(37147024.0); nEvents.push_back(37147024);
         Location = "QCDMuEnriched_Pt30to50/";
