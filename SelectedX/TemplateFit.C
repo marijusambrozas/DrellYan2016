@@ -5277,7 +5277,7 @@ void E_WJETSest_Tfit()
     file2->GetObject("h_QCD_est_SS", h_QCD_est_SS);
     file2->GetObject("h_QCD_est_template", h_QCD_est_temp);
 
-    // Making data-driven W+Jets template from same-sign high-MET distributions
+    // Making data-driven W+Jets template from same-sign distributions
     // Same-sign
     TH1D *h_WJets_est_temp = ((TH1D*)(h_data_mass_SS->Clone("h_WJets_est_template")));
     h_WJets_est_temp->Add(h_MC_mass_SS[_ttbar], -1);
@@ -5286,20 +5286,20 @@ void E_WJETSest_Tfit()
     h_WJets_est_temp->Add(h_QCD_est_SS, -2);
     h_WJets_est_temp->Scale(3);
     removeNegativeBins(h_WJets_est_temp);
-    // Optional same-sign + high-MET
+    // Tight same-sign
     TH1D *h_WJets_est_temp1 = ((TH1D*)(h_data_mass_temp->Clone("h_WJets_est_template1")));
     h_WJets_est_temp1->Add(h_MC_mass_temp[_ttbar], -1);
     h_WJets_est_temp1->Add(h_MC_mass_temp[_DY_Full], -1);
     h_WJets_est_temp1->Add(h_MC_mass_temp[_VVnST], -1);
     h_WJets_est_temp1->Add(h_QCD_est_temp, -2);
-    h_WJets_est_temp1->Scale(7);
+    h_WJets_est_temp1->Scale(4);
     removeNegativeBins(h_WJets_est_temp1);
 
 
     // Making RooDataHist
     RooRealVar mass("mass", "m_{#mu#mu} [GeV]", 15, 3000);
 
-    RooDataHist *rh_mass_WJets = new RooDataHist("rh_mass_WJets", "RooHist_mass_WJets", mass, h_WJets_est_temp);
+    RooDataHist *rh_mass_WJets = new RooDataHist("rh_mass_WJets", "RooHist_mass_WJets", mass, h_WJets_est_temp1);
     RooDataHist *rh_mass_QCD   = new RooDataHist("rh_mass_QCD",   "RooHist_mass_QCD",   mass, h_QCD_est);
     RooDataHist *rh_mass_DY    = new RooDataHist("rh_mass_DY",    "RooHist_mass_DY",    mass, h_MC_mass[_DY_Full]);
     RooDataHist *rh_mass_ttbar = new RooDataHist("rh_mass_ttbar", "RooHist_mass_ttbar", mass, h_MC_mass[_ttbar]);
@@ -5314,7 +5314,7 @@ void E_WJETSest_Tfit()
     RooHistPdf *pdf_mass_VVnST = new RooHistPdf("pdf_mass_VVnST", "MC VVnST mass template",      mass, *rh_mass_VVnST, 0);
 
     // Constraints for integrals
-    Double_t N_mass_WJets = h_WJets_est_temp->Integral();
+    Double_t N_mass_WJets = h_WJets_est_temp1->Integral();
     Double_t N_mass_QCD   = h_QCD_est->Integral();
     Double_t N_mass_ttbar = h_MC_mass[_ttbar]->Integral();
     Double_t N_mass_DY    = h_MC_mass[_DY_Full]->Integral();
