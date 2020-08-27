@@ -1,4 +1,4 @@
-﻿ #include <TROOT.h>
+﻿#include <TROOT.h>
 #include <TFile.h>
 #include <TH2.h>
 #include <TCanvas.h>
@@ -1004,14 +1004,14 @@ void E_EstFR(Int_t type)
     TH1D *h_FRsubtract_endcap1 = ((TH1D*)(h_FRsubtract_endcap->Clone("h_FRsubtract_endcap1")));
     h_FRsubtract_endcap1->SetMarkerStyle(kFullSquare);
     h_FRsubtract_endcap1->SetMarkerColor(kBlue);
-    h_FRsubtract_endcap1->GetYaxis()->SetTitle("Signalo srities tikimyb#dot{e}");
+    h_FRsubtract_endcap1->GetYaxis()->SetTitle("Fake rate");
     h_FRsubtract_endcap1->GetYaxis()->SetTitleSize(0.045);
     h_FRsubtract_endcap1->GetYaxis()->SetTitleOffset(1.4);
     h_FRsubtract_endcap1->Draw();
     h_FRsubtract_barrel->Draw("same");
     TLegend *legend1 = new TLegend(0.13, 0.77, 0.6, 0.95);
-    legend1->AddEntry(h_FRsubtract_barrel, "Atimties metodas (|#eta_{#lower[-0.2]{SC}}| < 1.4442)", "LP");
-    legend1->AddEntry(h_FRsubtract_endcap1, "Atimties metodas (|#eta_{#lower[-0.2]{SC}}| > 1.566)", "LP");
+    legend1->AddEntry(h_FRsubtract_barrel, "Subtraction (barrel)", "LP");
+    legend1->AddEntry(h_FRsubtract_endcap1, "Subtraction (endcap)", "LP");
     legend1->Draw();
     c_FR_allin1->SetLogx();
     c_FR_allin1->Update();
@@ -3084,7 +3084,7 @@ void Mu_EstFR(Int_t type)
     h_FRsigCtrl_template_endcap1->SetTitle("");
     h_FRsigCtrl_template_endcap1->SetMarkerStyle(kFullSquare);
     h_FRsigCtrl_template_endcap1->SetMarkerColor(kBlue);
-    h_FRratio_endcap1->GetYaxis()->SetTitle("Signalo srities tikimyb#dot{e}");
+    h_FRratio_endcap1->GetYaxis()->SetTitle("Fake rate");
     h_FRratio_endcap1->GetYaxis()->SetTitleSize(0.045);
     h_FRratio_endcap1->GetYaxis()->SetTitleSize(0.045);
     h_FRratio_endcap1->GetYaxis()->SetRangeUser(0, 1);
@@ -3095,10 +3095,10 @@ void Mu_EstFR(Int_t type)
     h_FRsigCtrl_template_barrel->Draw("same");
     h_FRratio_barrel1->Draw("same");
     TLegend *legend1 = new TLegend(0.13, 0.77, 0.6, 0.95);
-    legend1->AddEntry(h_FRratio_barrel1, "Santykio metodas (|#eta| < 1.2)", "LP");
-    legend1->AddEntry(h_FRratio_endcap1, "Santykio metodas (|#eta| #geq 1.2)", "LP");
-    legend1->AddEntry(h_FRsigCtrl_template_barrel, "Sablonu priderinimas (|#eta| < 1.2)", "LP");
-    legend1->AddEntry(h_FRsigCtrl_template_endcap1, "Sablonu priderinimas (|#eta| #geq 1.2)", "LP");
+    legend1->AddEntry(h_FRratio_barrel1, "Ratio (barrel)", "LP");
+    legend1->AddEntry(h_FRratio_endcap1, "Ratio (endcap)", "LP");
+    legend1->AddEntry(h_FRsigCtrl_template_barrel, "Template (barrel)", "LP");
+    legend1->AddEntry(h_FRsigCtrl_template_endcap1, "Template (endcap)", "LP");
     legend1->Draw();
     c_FR_allin1->SetLogx();
     c_FR_allin1->Update();
