@@ -2537,7 +2537,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("SinglePhoton_E"); nEvents.push_back(21053677);
         Location = "SinglePhoton_Run2016E/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(620);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(620);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _SinglePhoton_F)
@@ -2598,7 +2598,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("SinglePhoton_E"); nEvents.push_back(21053677);
         Location = "SinglePhoton_Run2016E/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(620);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(620);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("SinglePhoton_F"); nEvents.push_back(14291439);
