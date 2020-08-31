@@ -2534,7 +2534,6 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.7/";
 
         Tag.push_back("SinglePhoton_E"); nEvents.push_back(21053677);
         Location = "SinglePhoton_Run2016E/";
