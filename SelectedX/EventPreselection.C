@@ -22,6 +22,7 @@
 
 #include "./header/myProgressBar_t.cc"
 #include "./header/FileMgr.h"
+#include "./header/NtupleHandle.h"
 #include "./etc/RoccoR/RoccoR.cc"
 
 // "type" is a string with approximate file name, for example type="SinglePhoton_runB"
