@@ -61,7 +61,7 @@ void EventPreselection (TString type, Bool_t selection = kTRUE, Bool_t Debug = k
         TString out_base;
         TString out_dir;
         TFile* ElectronFile;
-        out_base = "/media/sf_DATA/test/";
+        out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
         out_dir = "SelectedForFR_E_"+Mgr.Procname[Mgr.CurrentProc];
         TString addition = "";
         if (Debug) addition = "_DEBUG";
