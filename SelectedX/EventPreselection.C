@@ -264,8 +264,8 @@ void EventPreselection (TString type, Bool_t selection = kTRUE, Bool_t Debug = k
                                                            (ntuple->Electron_phi[j] - ntuple->HLT_trigPhi[k])*(ntuple->Electron_phi[j] - ntuple->HLT_trigPhi[k]));
                                         if (dR < 0.3)
                                         { // Saving all HLTs that have been matched with selected electron
-                                            trig_matched->push_back(k);
-                                            trig_pT->push_back(ntuple->HLT_trigPt);
+                                            trig_matched->push_back(j);
+                                            trig_pT->push_back(ntuple->HLT_trigPt[k]);
                                             // Reducing output size: storing only trigger threshold value instead of full name
                                             if ( (ntuple->HLT_trigName->at((unsigned int)k)) == "HLT_Photon22_v*" ) trig_fired->push_back(22);
                                             if ( (ntuple->HLT_trigName->at((unsigned int)k)) == "HLT_Photon30_v*" ) trig_fired->push_back(30);
