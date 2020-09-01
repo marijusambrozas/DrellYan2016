@@ -33,10 +33,13 @@
 void EventPreselection (TString type, Bool_t selection = kTRUE, Bool_t Debug = kFALSE)
 {
     TTimeStamp ts_start;
-    cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;   
+    cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
 
     TStopwatch totaltime;
     totaltime.Start();
+
+    if (selection) cout << "Event preselection: YES" << endl;
+    else cout << "Event preselection: NO" << endl;
 
     FileMgr Mgr;
     vector<Process_t> Processes = Mgr.FindProc(type);
@@ -191,6 +194,7 @@ void EventPreselection (TString type, Bool_t selection = kTRUE, Bool_t Debug = k
 
                         if (pass)
                         {
+                            timesPassed++;
                             runNum = ntuple->runNum;
                             lumiBlock = ntuple->lumiBlock;
                             ElectronTree->Fill();

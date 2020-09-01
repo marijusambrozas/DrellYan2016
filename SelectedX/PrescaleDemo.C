@@ -34,7 +34,7 @@ void PrescaleDemo (Bool_t DEBUG = kFALSE)
     TString debug = "";
     if (DEBUG) debug = "_DEBUG";
 
-    for (Process_t pr=_SinglePhoton_B; pr<=_SinglePhoton_H; pr=next(pr))
+    for (Process_t pr=_SinglePhoton_E; pr<=_SinglePhoton_E; pr=next(pr))
     {
         Mgr.SetProc(pr);
 
@@ -122,8 +122,6 @@ void PrescaleDemo (Bool_t DEBUG = kFALSE)
         f->cd();
         cout << "\tWriting into file...";
 
-        h_pT_uncorr->Write();
-        h_pT->Write();
         h_HLT_pT_uncorr->Write();
         h_HLT_pT->Write();
         cout << " Finished.\n" << endl;
