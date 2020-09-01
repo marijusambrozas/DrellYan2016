@@ -249,7 +249,7 @@ void EventPreselection (TString type, Bool_t selection = kTRUE, Bool_t Debug = k
                         Bool_t isPassEventSelection = kFALSE;
                         for (Int_t j=0; j<ntuple->Nelectrons; j++)
                         {
-                            if(ntuple->Electron_pT[j] > 25 && fabs(ntuple->Electron_etaSC[j]) < 2.4 && ntuple->Electron_mHits[j] <= 3 &&
+                            if(ntuple->Electron_pT[j] > 25 && fabs(ntuple->Electron_etaSC[j]) < 2.4 && ntuple->Electron_mHits[j] <= 1/*3*/ &&
                                !(fabs(ntuple->Electron_etaSC[j]) > 1.4442 && fabs(ntuple->Electron_etaSC[j]) < 1.566)) // very relaxed preselection
                             {
                                 Bool_t pass = kFALSE;
