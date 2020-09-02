@@ -247,6 +247,7 @@ void EventPreselection (TString type, Bool_t selection = kTRUE, Bool_t Debug = k
                         // -- Event Selection -- //
                         // Go through all electrons, select only trigger matched ones that surpass minimum thresholds
                         Bool_t isPassEventSelection = kFALSE;
+                        Int_t i_pass = 0;
                         for (Int_t j=0; j<ntuple->Nelectrons; j++)
                         {
                             if(ntuple->Electron_pT[j] > 25 && fabs(ntuple->Electron_etaSC[j]) < 2.4 && ntuple->Electron_mHits[j] <= 1/*3*/ &&
@@ -272,7 +273,7 @@ void EventPreselection (TString type, Bool_t selection = kTRUE, Bool_t Debug = k
                                                            (ntuple->Electron_phi[j] - ntuple->HLT_trigPhi[k])*(ntuple->Electron_phi[j] - ntuple->HLT_trigPhi[k]));
                                         if (dR < 0.3)
                                         { // Saving all HLTs that have been matched with selected electron
-                                            trig_matched->push_back(j);
+                                            trig_matched->push_back(i_pass);
                                             trig_pT->push_back(ntuple->HLT_trigPt[k]);
                                             // Reducing output size: storing only trigger threshold value instead of full name
                                             if ( (ntuple->HLT_trigName->at((unsigned int)k)) == "HLT_Photon22_v*" ) trig_fired->push_back(22);
@@ -290,6 +291,7 @@ void EventPreselection (TString type, Bool_t selection = kTRUE, Bool_t Debug = k
 
                                 if (pass) // Fill electron vectors
                                 {
+                                    i_pass++;
                                     p_T->push_back(ntuple->Electron_pT[j]);
                                     eta->push_back(ntuple->Electron_eta[j]);
                                     etaSC->push_back(ntuple->Electron_etaSC[j]);
