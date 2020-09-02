@@ -1187,7 +1187,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             }
                         }
                         if (!written_already)
-                            HLTs->push_back(ntuple->HLT_trigName->at(i_trig));
+                            HLTs.push_back(ntuple->HLT_trigName->at(i_trig));
                     }
                 }
 
