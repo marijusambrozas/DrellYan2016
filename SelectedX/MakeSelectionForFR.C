@@ -1180,7 +1180,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         Int_t written_already = 0;
                         if (HLTs.size())
                         {
-                            for(i_tr=0; i_tr<(int)HLTs.size(); i_tr++)
+                            for(UInt_t i_tr=0; i_tr<HLTs.size(); i_tr++)
                             {
                                 if (HLTs[i_tr] == ntuple->HLT_trigName->at(i_trig))
                                     written_already = 1;
