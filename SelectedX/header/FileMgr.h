@@ -2218,7 +2218,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/";
 
         Tag.push_back("SingleMuon_B"); nEvents.push_back(108561074);
         Location = "SingleMuon_Run2016B/";
@@ -2229,7 +2229,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/";
 
         Tag.push_back("SingleMuon_C"); nEvents.push_back(64715287);
         Location = "SingleMuon_Run2016C/";
@@ -2240,7 +2240,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/";
 
         Tag.push_back("SingleMuon_D"); nEvents.push_back(96652779);
         Location = "SingleMuon_Run2016D/";
@@ -2251,7 +2251,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/";
 
         Tag.push_back("SingleMuon_E"); nEvents.push_back(87358348);
         Location = "SingleMuon_Run2016E/";
@@ -2262,7 +2262,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/";
 
         Tag.push_back("SingleMuon_F"); nEvents.push_back(64986568);
         Location = "SingleMuon_Run2016F/";
@@ -2273,7 +2273,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/";
 
         Tag.push_back("SingleMuon_G"); nEvents.push_back(138710659);
         Location = "SingleMuon_Run2016G/";
@@ -2284,7 +2284,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/";
 
         Tag.push_back("SingleMuon_Hver2"); nEvents.push_back(141936183);
         Location = "SingleMuon_Run2016Hver2/";
@@ -2300,7 +2300,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kFALSE;
         Type = "DATA";
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/dpai/_prime_/DYntuple/v2.6/";
+        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.6/";
 
         Tag.push_back("SingleMuon_B"); nEvents.push_back(108561074);
         Location = "SingleMuon_Run2016B/";
