@@ -22,21 +22,30 @@ PrescaleProvider pp("etc/prescale/triggerData2016");
 
 Double_t PrescalePhoton (Int_t trig_fired, Double_t HLT_pT, Int_t runNo, Int_t lumiSec);
 
-void PrescaleDemo (Bool_t DEBUG = kFALSE)
+void PrescaleDemo (TString type = "SinglePhoton_full", Bool_t trigPtMatching = kFALSE, Bool_t DEBUG = kFALSE)
 {
     TH1D *h_HLT_pT_full = new TH1D("h_HLT_pT_full", "", 500, 0, 500);
     TH1D *h_HLT_pT_uncorr_full = new TH1D("h_HLT_pT_uncorr_full", "", 500, 0, 500);
 
     FileMgr Mgr;
+    vector<Process_t> Processes = Mgr.FindProc(type);
+    Int_t Nproc = Processes.size();
+    if (!Nproc)
+    {
+        cout << "No processes found." << endl;
+        return;
+    }
 
     TFile *f;
-    TString Dir = "/media/sf_DATA/FR/Electron/";
+    TString Dir = "./";
     TString debug = "";
     if (DEBUG) debug = "_DEBUG";
 
-    for (Process_t pr=_SinglePhoton_E; pr<=_SinglePhoton_E; pr=next(pr))
+    // Loop for all datasets
+    for (Int_t i_proc=0; i_proc<Nproc; i_proc++)
     {
-        Mgr.SetProc(pr);
+        Mgr.SetProc(Processes[i_proc], kTRUE);
+        Process_t pr = Mgr.CurrentProc;
 
         // -- Output ROOTFile -- //
         f = new TFile(Dir+"FR_Hist_TEST_E_"+Mgr.Procname[Mgr.CurrentProc]+debug+".root", "RECREATE");
@@ -52,36 +61,44 @@ void PrescaleDemo (Bool_t DEBUG = kFALSE)
         TH1D* h_HLT_pT_uncorr = new TH1D("h_HLT_pT_uncorr", "h_HLT_pT_uncorr", 500, 0, 500); h_HLT_pT_uncorr->Sumw2();
         TH1D* h_HLT_pT = new TH1D("h_HLT_pT", "h_HLT_pT", 500, 0, 500); h_HLT_pT->Sumw2();
 
+        // Setting up variables
         std::vector<int> *trig_fired = new std::vector<int>;
+        std::vector<int> *trig_matched = new std::vector<int>;
         std::vector<double> *trig_pT = new std::vector<double>;
+        std::vector<double> *pT = new std::vector<double>;
         Int_t runNum;
         Int_t lumiBlock;
         Double_t prescale_alt;
 
+        // Setting up chain
         TChain *chain = new TChain("FRTree");
-
         chain->Add(Dir+"SelectedForFR_E_"+Mgr.Procname[Mgr.CurrentProc]+".root");
         if (DEBUG == kTRUE) cout << Dir+"SelectedForFR_E_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
         chain->SetBranchStatus("trig_fired", 1);
+        chain->SetBranchStatus("trig_matched", 1);
         chain->SetBranchStatus("trig_pT", 1);
+        chain->SetBranchStatus("p_T", 1);
         chain->SetBranchStatus("runNum", 1);
         chain->SetBranchStatus("lumiBlock", 1);
         chain->SetBranchAddress("trig_fired", &trig_fired);
+        chain->SetBranchAddress("trig_matched", &trig_matched);
         chain->SetBranchAddress("trig_pT", &trig_pT);
+        chain->SetBranchAddress("p_T", &pT);
         chain->SetBranchAddress("runNum", &runNum);
         chain->SetBranchAddress("lumiBlock", &lumiBlock);
 
         Int_t NEvents = chain->GetEntries();
         cout << "\t[Number of events: " << NEvents << "]" << endl;
-
-        if (DEBUG == kTRUE) NEvents = 100;
+        if (DEBUG) NEvents = 100;
 
         myProgressBar_t bar(NEvents);
 
         for(Int_t i=0; i<NEvents; i++)
         {
             chain->GetEntry(i);
-            if (DEBUG == kTRUE){
+            if (!DEBUG) bar.Draw(i);
+
+            if (DEBUG){
                 cout << "\nEvt " << i << endl;
                 cout << "nTrig = " << trig_fired->size() << endl;
                 cout << "Triggers:" << endl;
@@ -91,9 +108,15 @@ void PrescaleDemo (Bool_t DEBUG = kFALSE)
                 }
             }
 
-            std::vector<Double_t> pTs;
+            std::vector<Double_t> pTs; // Filling this to avoid double counting
             for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
             {
+                if (trigPtMatching)
+                {
+                    Double_t dpT = fabs(trig_pT->at(i_tr) - pT->at(trig_matched->at(i_tr)))/trig_pT->at(i_tr);
+                    if (dpT > 0.3) continue;
+                }
+
                 prescale_alt = PrescalePhoton(trig_fired->at(i_tr), trig_pT->at(i_tr), runNum, lumiBlock);
                 Int_t match_found = 0;
                 if (pTs.size())
@@ -113,11 +136,9 @@ void PrescaleDemo (Bool_t DEBUG = kFALSE)
                     h_HLT_pT_uncorr_full->Fill(trig_pT->at(i_tr));
                     h_HLT_pT_full->Fill(trig_pT->at(i_tr), prescale_alt);
                 }
-            }
+            }// End of for(triggers)
 
-            if (DEBUG == kFALSE) bar.Draw(i);
-
-        }// End of event iteration
+        }// End of event loop
 
         f->cd();
         cout << "\tWriting into file...";
@@ -134,6 +155,7 @@ void PrescaleDemo (Bool_t DEBUG = kFALSE)
         cout << "===========================================================\n" << endl;
     } // End of pr iteration
 
+    // Drawing
     TLegend *legend = new TLegend (0.55, 0.8, 0.95, 0.95);
     legend->AddEntry(h_HLT_pT_full, "Prescale weights applied", "l");
     legend->AddEntry(h_HLT_pT_uncorr_full, "Unweighted", "l");

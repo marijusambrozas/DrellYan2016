@@ -30,7 +30,7 @@
 //
 // Set selection to kFALSE if you want to save all the events with at least one
 // single photon trigger fired and no further event selection (but keeps only HLT info)
-void EventPreselection (TString type, Bool_t selection = kTRUE, Bool_t Debug = kFALSE)
+void EventPreselection (TString type = "SinglePhoton_B", Bool_t selection = kTRUE, Bool_t Debug = kFALSE)
 {
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
@@ -64,7 +64,7 @@ void EventPreselection (TString type, Bool_t selection = kTRUE, Bool_t Debug = k
         TString out_base;
         TString out_dir;
         TFile* ElectronFile;
-        out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
+        out_base = "./";
         out_dir = "SelectedForFR_E_"+Mgr.Procname[Mgr.CurrentProc];
         TString addition = "";
         if (Debug) addition = "_DEBUG";
@@ -250,7 +250,7 @@ void EventPreselection (TString type, Bool_t selection = kTRUE, Bool_t Debug = k
                         Int_t i_pass = 0;
                         for (Int_t j=0; j<ntuple->Nelectrons; j++)
                         {
-                            if(ntuple->Electron_pT[j] > 25 && fabs(ntuple->Electron_etaSC[j]) < 2.4 && ntuple->Electron_mHits[j] <= 1/*3*/ &&
+                            if(ntuple->Electron_pT[j] > 25 && fabs(ntuple->Electron_etaSC[j]) < 2.4 && ntuple->Electron_mHits[j] <= 1 &&
                                !(fabs(ntuple->Electron_etaSC[j]) >= 1.4442 && fabs(ntuple->Electron_etaSC[j]) <= 1.566) &&
                                ( (ntuple->Electron_etaSC[j] < 1.4442 && ntuple->Electron_Full5x5_SigmaIEtaIEta[j] < 0.013 &&
                                   ntuple->Electron_HoverE[j] < 0.13 && ntuple->Electron_dEtaInSeed[j] < 0.01 && ntuple->Electron_dPhiIn[j] < 0.07) ||
