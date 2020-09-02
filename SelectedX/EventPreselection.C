@@ -251,10 +251,10 @@ void EventPreselection (TString type, Bool_t selection = kTRUE, Bool_t Debug = k
                         {
                             if(ntuple->Electron_pT[j] > 25 && fabs(ntuple->Electron_etaSC[j]) < 2.4 && ntuple->Electron_mHits[j] <= 1/*3*/ &&
                                !(fabs(ntuple->Electron_etaSC[j]) >= 1.4442 && fabs(ntuple->Electron_etaSC[j]) <= 1.566) &&
-                               ( (ntuple->Electron_etaSC[j] < 1.4442 && ntuple->Electron_Full5x5_SigmaIEtaIEta < 0.013 &&
-                                  ntuple->Electron_HoverE < 0.13 && ntuple->Electron_dEtaInSeed < 0.01 && ntuple->Electron_dPhiIn < 0.07) ||
-                                 (ntuple->Electron_etaSC[j] > 1.566 && ntuple->Electron_Full5x5_SigmaIEtaIEta < 0.035 &&
-                                  ntuple->Electron_HoverE < 0.13) ) ) // very relaxed preselection
+                               ( (ntuple->Electron_etaSC[j] < 1.4442 && ntuple->Electron_Full5x5_SigmaIEtaIEta[j] < 0.013 &&
+                                  ntuple->Electron_HoverE[j] < 0.13 && ntuple->Electron_dEtaInSeed[j] < 0.01 && ntuple->Electron_dPhiIn[j] < 0.07) ||
+                                 (ntuple->Electron_etaSC[j] > 1.566 && ntuple->Electron_Full5x5_SigmaIEtaIEta[j] < 0.035 &&
+                                  ntuple->Electron_HoverE[j] < 0.13) ) ) // very relaxed preselection
                             {
                                 Bool_t pass = kFALSE;
                                 for (Int_t k = 0; k < ntuple->HLT_ntrig; k++) // HLT matching
