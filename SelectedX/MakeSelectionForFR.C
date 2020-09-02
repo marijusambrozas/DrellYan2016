@@ -1154,7 +1154,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
             Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
 
             Int_t NEvents = chain->GetEntries();
-            if (Debug == kTRUE) NEvents = 100; // using few events for debugging
+            if (Debug == kTRUE) NEvents = 1000; // using few events for debugging
 
             cout << "\t[Total Events: " << NEvents << "]" << endl;
             myProgressBar_t bar(NEvents);
@@ -1166,10 +1166,30 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
             else RCaddress = "/cms/ldap_home/mambroza/DrellYan2016/SelectedX/etc/RoccoR/rcdata.2016.v3";
             RoccoR rc(RCaddress);
 
+            std::vector<string> HLTs;
+
             // Loop for all events in the chain
             for (Int_t i=0; i<NEvents; i++)
             {
-                ntuple->GetEvent(i);               
+                ntuple->GetEvent(i);
+
+                if (Debug)
+                {
+                    for(Int_t i_trig=0; i_trig<ntuple->HLT_ntrig; i_trig++)
+                    {
+                        Int_t written_already = 0;
+                        if (HLTs.size())
+                        {
+                            for(i_tr=0; i_tr<(int)HLTs.size(); i_tr++)
+                            {
+                                if (HLTs[i_tr] == ntuple->HLT_trigName->at(i_trig))
+                                    written_already = 1;
+                            }
+                        }
+                        if (!written_already)
+                            HLTs->push_back(ntuple->HLT_trigName->at(i_trig));
+                    }
+                }
 
                 // -- Positive/Negative Gen-weights -- //
                 ntuple->GENEvt_weight < 0 ? gen_weight = -1 : gen_weight = 1;
@@ -1287,6 +1307,17 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                 printf("\tSum of weights of Separated events: %.1lf\n", SumWeight_Separated);
                 printf("\tSum of unchanged (to 1 or -1) weights: %.1lf\n", SumWeightRaw);
                 printf("\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup]);
+            }
+
+            if (Debug)
+            {
+                cout << "Available trigger names:" << endl;
+                if (HLTs.size())
+                {
+                    for(UInt_t i_tr=0; i_tr<HLTs.size(); i_tr++)
+                        cout << HLTs[i_tr] << endl;
+                    cout << endl;
+                }
             }
 
             Double_t LoopRunTime = looptime.CpuTime();
