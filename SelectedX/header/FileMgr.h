@@ -2268,7 +2268,8 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("DoubleEG_B"); nEvents.push_back(103625724);
         Location = "DoubleEG_Run2016B/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1318);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1318);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1318);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _DoubleEG_C)
@@ -2278,7 +2279,8 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("DoubleEG_C"); nEvents.push_back(45521797);
         Location = "DoubleEG_Run2016C/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(435);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(435);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(435);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _DoubleEG_D)
@@ -2288,7 +2290,8 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("DoubleEG_D"); nEvents.push_back(52422569);
         Location = "DoubleEG_Run2016D/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(729);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(729);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(729);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _DoubleEG_E)
@@ -2298,7 +2301,8 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("DoubleEG_E"); nEvents.push_back(47326656);
         Location = "DoubleEG_Run2016E/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(620);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(620);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(620);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _DoubleEG_F)
@@ -2308,7 +2312,8 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("DoubleEG_F"); nEvents.push_back(33943052);
         Location = "DoubleEG_Run2016F/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(452);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(452);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(452);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _DoubleEG_G)
@@ -2318,7 +2323,8 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("DoubleEG_G"); nEvents.push_back(71864512);
         Location = "DoubleEG_Run2016G/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1068);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1068);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1068);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _DoubleEG_H)
@@ -2328,12 +2334,14 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("DoubleEG_Hver2"); nEvents.push_back(68821231);
         Location = "DoubleEG_Run2016Hver2/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1156);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1156);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1156);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DoubleEG_Hver3"); nEvents.push_back(2021309);
         Location = "DoubleEG_Run2016Hver3/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(31);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(31);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(31);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _DoubleEG_Full)
@@ -2343,42 +2351,50 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("DoubleEG_B"); nEvents.push_back(103625724);
         Location = "DoubleEG_Run2016B/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1318);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1318);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1318);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DoubleEG_C"); nEvents.push_back(45521797);
         Location = "DoubleEG_Run2016C/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(435);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(435);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(435);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DoubleEG_D"); nEvents.push_back(52422569);
         Location = "DoubleEG_Run2016D/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(729);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(729);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(729);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DoubleEG_E"); nEvents.push_back(47326656);
         Location = "DoubleEG_Run2016E/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(620);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(620);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(620);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DoubleEG_F"); nEvents.push_back(33943052);
         Location = "DoubleEG_Run2016F/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(452);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(452);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(452);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DoubleEG_G"); nEvents.push_back(71864512);
         Location = "DoubleEG_Run2016G/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1068);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1068);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1068);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DoubleEG_Hver2"); nEvents.push_back(68821231);
         Location = "DoubleEG_Run2016Hver2/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1156);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1156);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1156);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("DoubleEG_Hver3"); nEvents.push_back(2021309);
         Location = "DoubleEG_Run2016Hver3/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(31);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(31);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(31);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _SingleMuon_B)
@@ -2674,7 +2690,8 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("SinglePhoton_B"); nEvents.push_back(53774727);
         Location = "SinglePhoton_Run2016B/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1318);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1318);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1318);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _SinglePhoton_C)
@@ -2684,7 +2701,8 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("SinglePhoton_C"); nEvents.push_back(22037173);
         Location = "SinglePhoton_Run2016C/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(435);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(435);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(435);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _SinglePhoton_D)
@@ -2694,7 +2712,8 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("SinglePhoton_D"); nEvents.push_back(29000395);
         Location = "SinglePhoton_Run2016D/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(729);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(729);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(729);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _SinglePhoton_E)
@@ -2704,6 +2723,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("SinglePhoton_E"); nEvents.push_back(21053677);
         Location = "SinglePhoton_Run2016E/";
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(620);
         NtupleName.push_back("ntuple_data_"); nNtuples.push_back(620);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
@@ -2714,7 +2734,8 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("SinglePhoton_F"); nEvents.push_back(14291439);
         Location = "SinglePhoton_Run2016F/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(452);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(452);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(452);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _SinglePhoton_G)
@@ -2724,7 +2745,8 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("SinglePhoton_G"); nEvents.push_back(31866122);
         Location = "SinglePhoton_Run2016G/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1068);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1068);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1068);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _SinglePhoton_H)
@@ -2734,12 +2756,14 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("SinglePhoton_Hver2"); nEvents.push_back(32767792);
         Location = "SinglePhoton_Run2016Hver2/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1156);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1156);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1156);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("SinglePhoton_Hver3"); nEvents.push_back(866051);
         Location = "SinglePhoton_Run2016Hver3/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(31);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(31);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(31);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
 
@@ -2750,17 +2774,20 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("SinglePhoton_B"); nEvents.push_back(53774727);
         Location = "SinglePhoton_Run2016B/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1318);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1318);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1318);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("SinglePhoton_C"); nEvents.push_back(22037173);
         Location = "SinglePhoton_Run2016C/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(435);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(435);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(435);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("SinglePhoton_D"); nEvents.push_back(29000395);
         Location = "SinglePhoton_Run2016D/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(729);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(729);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(729);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("SinglePhoton_E"); nEvents.push_back(21053677);
@@ -2770,22 +2797,26 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
 
         Tag.push_back("SinglePhoton_F"); nEvents.push_back(14291439);
         Location = "SinglePhoton_Run2016F/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(452);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(452);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(452);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("SinglePhoton_G"); nEvents.push_back(31866122);
         Location = "SinglePhoton_Run2016G/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1068);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1068);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1068);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("SinglePhoton_Hver2"); nEvents.push_back(32767792);
         Location = "SinglePhoton_Run2016Hver2/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1156);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1156);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1156);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("SinglePhoton_Hver3"); nEvents.push_back(866051);
         Location = "SinglePhoton_Run2016Hver3/";
-        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(31);
+//        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(31);
+        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(31);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _Test_MuMu)
