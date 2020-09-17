@@ -234,6 +234,9 @@ public:
 	Double_t nhIso03;
 	Double_t phIso03;
 	Double_t ChIso03FromPU;
+        Double_t trkIso03;
+        Double_t ecalIso03;
+        Double_t hcalIso03;
 	Int_t mHits;
 	Double_t EnergySC;
 	Double_t preEnergySC;
@@ -292,6 +295,9 @@ public:
 		nhIso03 = ntuple->Electron_nhIso03[index];
 		phIso03 = ntuple->Electron_phIso03[index];
 		ChIso03FromPU = ntuple->Electron_ChIso03FromPU[index];
+                trkIso03  = ntuple->Electron_trkIso03 [index];
+                ecalIso03 = ntuple->Electron_ecalIso03[index];
+                hcalIso03 = ntuple->Electron_hcalIso03[index];
 		mHits = ntuple->Electron_mHits[index];
 		EnergySC = ntuple->Electron_EnergySC[index];
 		preEnergySC = ntuple->Electron_preEnergySC[index];
@@ -354,6 +360,9 @@ public:
                 nhIso03 = ntuple->Electron_nhIso03->at(index);
                 phIso03 = ntuple->Electron_phIso03->at(index);
                 ChIso03FromPU = ntuple->Electron_ChIso03FromPU->at(index);
+                ecalIso03 = ntuple->Electron_ecalIso03->at(index);
+                hcalIso03 = ntuple->Electron_hcalIso03->at(index);
+                trkIso03 = ntuple->Electron_trkIso03->at(index);
                 mHits = ntuple->Electron_mHits->at(index);
                 EnergySC = ntuple->Electron_EnergySC->at(index);
                 preEnergySC = ntuple->Electron_preEnergySC->at(index);
@@ -416,6 +425,9 @@ public:
                 nhIso03 = ntuple->Electron_nhIso03;
                 phIso03 = ntuple->Electron_phIso03;
                 ChIso03FromPU = ntuple->Electron_ChIso03FromPU;
+                ecalIso03 = ntuple->Electron_ecalIso03;
+                hcalIso03 = ntuple->Electron_hcalIso03;
+                trkIso03 = ntuple->Electron_trkIso03;
                 mHits = ntuple->Electron_mHits;
                 EnergySC = ntuple->Electron_EnergySC;
                 preEnergySC = ntuple->Electron_preEnergySC;

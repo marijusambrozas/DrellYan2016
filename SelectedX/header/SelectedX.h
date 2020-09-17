@@ -1340,6 +1340,9 @@ public:
     std::vector<double> *Electron_nhIso03;
     std::vector<double> *Electron_phIso03;
     std::vector<double> *Electron_ChIso03FromPU;
+    std::vector<double> *Electron_ecalIso03;
+    std::vector<double> *Electron_hcalIso03;
+    std::vector<double> *Electron_trkIso03;
     std::vector<int> *Electron_mHits;
     std::vector<double> *Electron_EnergySC;
     std::vector<double> *Electron_preEnergySC;
@@ -1414,6 +1417,9 @@ public:
         Electron_nhIso03 = new std::vector<double>;
         Electron_phIso03 = new std::vector<double>;
         Electron_ChIso03FromPU = new std::vector<double>;
+        Electron_ecalIso03 = new std::vector<double>;
+        Electron_hcalIso03 = new std::vector<double>;
+        Electron_trkIso03 = new std::vector<double>;
         Electron_mHits = new std::vector<int>;
         Electron_EnergySC = new std::vector<double>;
         Electron_preEnergySC = new std::vector<double>;
@@ -1514,6 +1520,9 @@ public:
         chain->SetBranchAddress("Electron_nhIso03", &Electron_nhIso03);
         chain->SetBranchAddress("Electron_phIso03", &Electron_phIso03);
         chain->SetBranchAddress("Electron_ChIso03FromPU", &Electron_ChIso03FromPU);
+        chain->SetBranchAddress("Electron_ecalIso03", &Electron_ecalIso03);
+        chain->SetBranchAddress("Electron_hcalIso03", &Electron_hcalIso03);
+        chain->SetBranchAddress("Electron_trkIso03", &Electron_trkIso03);
         chain->SetBranchAddress("Electron_mHits", &Electron_mHits);
         chain->SetBranchAddress("Electron_EnergySC", &Electron_EnergySC);
         chain->SetBranchAddress("Electron_preEnergySC", &Electron_preEnergySC);
@@ -1605,6 +1614,9 @@ public:
         tree->Branch("Electron_nhIso03", &this->Electron_nhIso03);
         tree->Branch("Electron_phIso03", &this->Electron_phIso03);
         tree->Branch("Electron_ChIso03FromPU", &this->Electron_ChIso03FromPU);
+        tree->Branch("Electron_ecalIso03", &this->Electron_ecalIso03);
+        tree->Branch("Electron_hcalIso03", &this->Electron_hcalIso03);
+        tree->Branch("Electron_trkIso03", &this->Electron_trkIso03);
         tree->Branch("Electron_mHits", &this->Electron_mHits);
         tree->Branch("Electron_EnergySC", &this->Electron_EnergySC);
         tree->Branch("Electron_preEnergySC", &this->Electron_preEnergySC);
@@ -1673,6 +1685,9 @@ public:
         Electron_nhIso03->clear();
         Electron_phIso03->clear();
         Electron_ChIso03FromPU->clear();
+        Electron_ecalIso03->clear();
+        Electron_hcalIso03->clear();
+        Electron_trkIso03->clear();
         Electron_mHits->clear();
         Electron_EnergySC->clear();
         Electron_preEnergySC->clear();
@@ -1798,6 +1813,9 @@ public:
         chain->SetBranchStatus("Electron_nhIso03", 1);
         chain->SetBranchStatus("Electron_phIso03", 1);
         chain->SetBranchStatus("Electron_ChIso03FromPU", 1);
+        chain->SetBranchStatus("Electron_ecalIso03", 1);
+        chain->SetBranchStatus("Electron_hcalIso03", 1);
+        chain->SetBranchStatus("Electron_trkIso03", 1);
 
         chain->SetBranchStatus("Electron_mHits", 1);
         chain->SetBranchStatus("Electron_EnergySC", 1);
@@ -2397,6 +2415,9 @@ public:
     Double_t Electron_nhIso03;
     Double_t Electron_phIso03;
     Double_t Electron_ChIso03FromPU;
+    Double_t Electron_ecalIso03;
+    Double_t Electron_hcalIso03;
+    Double_t Electron_trkIso03;
     Int_t Electron_mHits;
     Double_t Electron_EnergySC;
     Double_t Electron_preEnergySC;
@@ -2625,6 +2646,9 @@ public:
         chain->SetBranchAddress("Electron_nhIso03", &Electron_nhIso03);
         chain->SetBranchAddress("Electron_phIso03", &Electron_phIso03);
         chain->SetBranchAddress("Electron_ChIso03FromPU", &Electron_ChIso03FromPU);
+        chain->SetBranchAddress("Electron_ecalIso03", &Electron_ecalIso03);
+        chain->SetBranchAddress("Electron_hcalIso03", &Electron_hcalIso03);
+        chain->SetBranchAddress("Electron_trkIso03", &Electron_trkIso03);
         chain->SetBranchAddress("Electron_mHits", &Electron_mHits);
         chain->SetBranchAddress("Electron_EnergySC", &Electron_EnergySC);
         chain->SetBranchAddress("Electron_preEnergySC", &Electron_preEnergySC);
@@ -2788,6 +2812,9 @@ public:
         tree->Branch("Electron_nhIso03", &this->Electron_nhIso03);
         tree->Branch("Electron_phIso03", &this->Electron_phIso03);
         tree->Branch("Electron_ChIso03FromPU", &this->Electron_ChIso03FromPU);
+        tree->Branch("Electron_ecalIso03", &this->Electron_ecalIso03);
+        tree->Branch("Electron_hcalIso03", &this->Electron_hcalIso03);
+        tree->Branch("Electron_trkIso03", &this->Electron_trkIso03);
         tree->Branch("Electron_mHits", &this->Electron_mHits);
         tree->Branch("Electron_EnergySC", &this->Electron_EnergySC);
         tree->Branch("Electron_preEnergySC", &this->Electron_preEnergySC);
@@ -3002,6 +3029,9 @@ public:
         chain->SetBranchStatus("Electron_nhIso03", 1);
         chain->SetBranchStatus("Electron_phIso03", 1);
         chain->SetBranchStatus("Electron_ChIso03FromPU", 1);
+        chain->SetBranchStatus("Electron_ecalIso03", 1);
+        chain->SetBranchStatus("Electron_hcalIso03", 1);
+        chain->SetBranchStatus("Electron_trkIso03", 1);
         chain->SetBranchStatus("Electron_mHits", 1);
         chain->SetBranchStatus("Electron_EnergySC", 1);
         chain->SetBranchStatus("Electron_preEnergySC", 1);

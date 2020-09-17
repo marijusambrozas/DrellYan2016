@@ -188,7 +188,8 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     CurrentProc = pr;
 
     if (pr != _None)
-        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.8/";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/v2p9/";
+//        BaseLocation = "root://cluster142.knu.ac.kr:1094//store/user/kplee/DYntuple/v2.8/";
 
     if (pr == _DY_10to50)
     {

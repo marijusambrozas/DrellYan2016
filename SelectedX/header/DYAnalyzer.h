@@ -124,7 +124,7 @@ public:
 
         const double prescales[8] = {0.0016/36.47, 0.0066/36.47, 0.0132/36.47, 0.0264/36.47, 0.13/36.47, 0.26/36.47, 0.54/36.47, 1};        
 
-        const double ptbin_DY[nPtBin_DY+1] = {17, 23, 28, 35, 45, 60, 80, 100, 150, 250, 1000};
+        const double ptbin_DY[nPtBin_DY+1] = {17, 23, 28, 35, 45, 60, 80, 100, 150, 250, 5000};
         Double_t Eff_DY[nPtBin_DY][2];
         Double_t Ineff_DY[nPtBin_DY][2];
 

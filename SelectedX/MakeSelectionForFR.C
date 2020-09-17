@@ -216,15 +216,13 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         std::vector<double> *dPhiIn = new std::vector<double>;
         std::vector<double> *HoverE = new std::vector<double>;
         std::vector<double> *InvEminusInvP = new std::vector<double>;
-        std::vector<double> *chIso03 = new std::vector<double>;
-        std::vector<double> *nhIso03 = new std::vector<double>;
-        std::vector<double> *phIso03 = new std::vector<double>;
-        std::vector<double> *ChIso03FromPU = new std::vector<double>;
         std::vector<int> *mHits = new std::vector<int>;
         std::vector<int> *passConvVeto = new std::vector<int>;
-        std::vector<double> *relPFiso_dBeta = new std::vector<double>;
         std::vector<double> *relPFiso_Rho = new std::vector<double>;
         std::vector<int> *passMediumID = new std::vector<int>;
+        std::vector<double> *relECALiso = new std::vector<double>;
+        std::vector<double> *relHCALiso = new std::vector<double>;
+        std::vector<double> *relTrkIso = new std::vector<double>;
         std::vector<int> *trig_fired = new std::vector<int>;
         std::vector<int> *trig_matched = new std::vector<int>;
         std::vector<double> *trig_pT = new std::vector<double>;
@@ -322,7 +320,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             for (Int_t i=0; i<NEvents; i++)
             {
                 ntuple->GetEvent(i);
-
+/*
                 //TEST/////////////////
                 Int_t pass = 0;
                 trig_fired->clear();
@@ -385,8 +383,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                     }
                 }
                 // END TEST /////////////////////////////////////
+*/
 
-                /*
 //                nEvt++;
 //                Int_t skipLumi = skipLumiSection(ntuple->runNum, ntuple->lumiBlock);
 //                Int_t skiprun = skipRun(ntuple->runNum);
@@ -490,15 +488,13 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         dPhiIn->clear();
                         HoverE->clear();
                         InvEminusInvP->clear();
-                        chIso03->clear();
-                        nhIso03->clear();
-                        phIso03->clear();
-                        ChIso03FromPU->clear();
                         mHits->clear();
                         passConvVeto->clear();
-                        relPFiso_dBeta->clear();
                         relPFiso_Rho->clear();
                         passMediumID->clear();
+                        relECALiso->clear();
+                        relHCALiso->clear();
+                        relTrkIso->clear();
                         trig_fired->clear();
                         trig_matched->clear();
                         trig_pT->clear();
@@ -556,15 +552,13 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                             dPhiIn->push_back(SelectedElectronCollection[i_ele].dPhiIn);
                             HoverE->push_back(SelectedElectronCollection[i_ele].HoverE);
                             InvEminusInvP->push_back(SelectedElectronCollection[i_ele].InvEminusInvP);
-                            chIso03->push_back(SelectedElectronCollection[i_ele].chIso03);
-                            nhIso03->push_back(SelectedElectronCollection[i_ele].nhIso03);
-                            phIso03->push_back(SelectedElectronCollection[i_ele].phIso03);
-                            ChIso03FromPU->push_back(SelectedElectronCollection[i_ele].ChIso03FromPU);
                             mHits->push_back(SelectedElectronCollection[i_ele].mHits);
                             passConvVeto->push_back(SelectedElectronCollection[i_ele].passConvVeto);
-                            relPFiso_dBeta->push_back(SelectedElectronCollection[i_ele].RelPFIso_dBeta);
                             relPFiso_Rho->push_back(SelectedElectronCollection[i_ele].RelPFIso_Rho);
                             passMediumID->push_back(SelectedElectronCollection[i_ele].passMediumID);
+                            relECALiso->push_back(SelectedElectronCollection[i_ele].ecalIso03 / SelectedElectronCollection[i_ele].Pt);
+                            relHCALiso->push_back(SelectedElectronCollection[i_ele].hcalIso03 / SelectedElectronCollection[i_ele].Pt);
+                            relTrkIso->push_back(SelectedElectronCollection[i_ele].trkIso03 / SelectedElectronCollection[i_ele].Pt);
 
                             if (Debug == kTRUE)
                             {
@@ -582,7 +576,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                     } // End of event selection
 
                 } // End of if(isTriggered)
-                   */
+
                 if (!Debug) bar.Draw(i);
             } // End of event iteration
 

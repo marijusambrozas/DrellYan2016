@@ -135,6 +135,9 @@ public:
     Double_t Electron_nhIso03[MaxN];
     Double_t Electron_phIso03[MaxN];
     Double_t Electron_ChIso03FromPU[MaxN];
+    Double_t Electron_ecalIso03[MaxN];
+    Double_t Electron_hcalIso03[MaxN];
+    Double_t Electron_trkIso03[MaxN];
     Int_t Electron_mHits[MaxN];
     Double_t Electron_EnergySC[MaxN];
     Double_t Electron_preEnergySC[MaxN];
@@ -726,6 +729,9 @@ public:
         chain->SetBranchStatus("Electron_nhIso03", 1);
         chain->SetBranchStatus("Electron_phIso03", 1);
         chain->SetBranchStatus("Electron_ChIso03FromPU", 1);
+        chain->SetBranchStatus("Electron_ecalIso03", 1);
+        chain->SetBranchStatus("Electron_hcalIso03", 1);
+        chain->SetBranchStatus("Electron_trkIso03", 1);
 
         chain->SetBranchStatus("Electron_mHits", 1);
         chain->SetBranchStatus("Electron_EnergySC", 1);
@@ -802,6 +808,9 @@ public:
     	chain->SetBranchAddress("Electron_nhIso03", &Electron_nhIso03);
     	chain->SetBranchAddress("Electron_phIso03", &Electron_phIso03);
     	chain->SetBranchAddress("Electron_ChIso03FromPU", &Electron_ChIso03FromPU);
+        chain->SetBranchAddress("Electron_ecalIso03", &Electron_ecalIso03);
+        chain->SetBranchAddress("Electron_hcalIso03", &Electron_hcalIso03);
+        chain->SetBranchAddress("Electron_trkIso03", &Electron_trkIso03);
 
     	chain->SetBranchAddress("Electron_mHits", &Electron_mHits);
     	chain->SetBranchAddress("Electron_EnergySC", &Electron_EnergySC);
