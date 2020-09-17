@@ -251,15 +251,13 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         ElectronTree->Branch("dPhiIn", &dPhiIn);
         ElectronTree->Branch("HoverE", &HoverE);
         ElectronTree->Branch("InvEminusInvP", &InvEminusInvP);
-        ElectronTree->Branch("chIso03", &chIso03);
-        ElectronTree->Branch("nhIso03", &nhIso03);
-        ElectronTree->Branch("phIso03", &phIso03);
-        ElectronTree->Branch("ChIso03FromPU", &ChIso03FromPU);
         ElectronTree->Branch("mHits", &mHits);
         ElectronTree->Branch("passConvVeto", &passConvVeto);
-        ElectronTree->Branch("relPFiso_dBeta", &relPFiso_dBeta);
         ElectronTree->Branch("relPFiso_Rho", &relPFiso_Rho);
         ElectronTree->Branch("passMediumID", &passMediumID);
+        ElectronTree->Branch("relECALiso", &relECALiso);
+        ElectronTree->Branch("relHCALiso", &relHCALiso);
+        ElectronTree->Branch("relTrkIso", &relTrkIso);
         ElectronTree->Branch("trig_fired", &trig_fired);
         ElectronTree->Branch("trig_matched", &trig_matched);
         ElectronTree->Branch("trig_pT", &trig_pT);
