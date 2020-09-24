@@ -1439,15 +1439,13 @@ void MakeSelectionForBKGest_EE (TString type, TString HLTname, Bool_t Debug)
         std::vector<double> *dPhiIn = new std::vector<double>;
         std::vector<double> *HoverE = new std::vector<double>;
         std::vector<double> *InvEminusInvP = new std::vector<double>;
-        std::vector<double> *chIso03 = new std::vector<double>;
-        std::vector<double> *nhIso03 = new std::vector<double>;
-        std::vector<double> *phIso03 = new std::vector<double>;
-        std::vector<double> *ChIso03FromPU = new std::vector<double>;
         std::vector<int> *mHits = new std::vector<int>;
         std::vector<int> *passConvVeto = new std::vector<int>;
-        std::vector<double> *relPFiso_dBeta = new std::vector<double>;
         std::vector<double> *relPFiso_Rho = new std::vector<double>;
         std::vector<int> *passMediumID = new std::vector<int>;
+        std::vector<double> *relTrkIso = new std::vector<double>;
+        std::vector<double> *relECALiso = new std::vector<double>;
+        std::vector<double> *relHCALiso = new std::vector<double>;
         Double_t MET_pT, MET_phi;
         Int_t nPU;
         Int_t nVTX;
@@ -1471,15 +1469,13 @@ void MakeSelectionForBKGest_EE (TString type, TString HLTname, Bool_t Debug)
         ElectronTree->Branch("dPhiIn", &dPhiIn);
         ElectronTree->Branch("HoverE", &HoverE);
         ElectronTree->Branch("InvEminusInvP", &InvEminusInvP);
-        ElectronTree->Branch("chIso03", &chIso03);
-        ElectronTree->Branch("nhIso03", &nhIso03);
-        ElectronTree->Branch("phIso03", &phIso03);
-        ElectronTree->Branch("ChIso03FromPU", &ChIso03FromPU);
         ElectronTree->Branch("mHits", &mHits);
         ElectronTree->Branch("passConvVeto", &passConvVeto);
-        ElectronTree->Branch("relPFiso_dBeta", &relPFiso_dBeta);
         ElectronTree->Branch("relPFiso_Rho", &relPFiso_Rho);
         ElectronTree->Branch("passMediumID", &passMediumID);
+        ElectronTree->Branch("relTrkIso", &relTrkIso);
+        ElectronTree->Branch("relECALiso", &relECALiso);
+        ElectronTree->Branch("relHCALiso", &relHCALiso);
         ElectronTree->Branch("MET_pT", &MET_pT);
         ElectronTree->Branch("MET_phi", &MET_phi);
         ElectronTree->Branch("nPU", &nPU);
@@ -1583,15 +1579,13 @@ void MakeSelectionForBKGest_EE (TString type, TString HLTname, Bool_t Debug)
                         dPhiIn->clear();
                         HoverE->clear();
                         InvEminusInvP->clear();
-                        chIso03->clear();
-                        nhIso03->clear();
-                        phIso03->clear();
-                        ChIso03FromPU->clear();
                         mHits->clear();
                         passConvVeto->clear();
-                        relPFiso_dBeta->clear();
                         relPFiso_Rho->clear();
                         passMediumID->clear();
+                        relTrkIso->clear();
+                        relECALiso->clear();
+                        relHCALiso->clear();
 
                         // -- Top pT reweighting -- //
                         top_weight = 1;
@@ -1631,15 +1625,13 @@ void MakeSelectionForBKGest_EE (TString type, TString HLTname, Bool_t Debug)
                             dPhiIn->push_back(SelectedElectronCollection[i_ele].dPhiIn);
                             HoverE->push_back(SelectedElectronCollection[i_ele].HoverE);
                             InvEminusInvP->push_back(SelectedElectronCollection[i_ele].InvEminusInvP);
-                            chIso03->push_back(SelectedElectronCollection[i_ele].chIso03);
-                            nhIso03->push_back(SelectedElectronCollection[i_ele].nhIso03);
-                            phIso03->push_back(SelectedElectronCollection[i_ele].phIso03);
-                            ChIso03FromPU->push_back(SelectedElectronCollection[i_ele].ChIso03FromPU);
                             mHits->push_back(SelectedElectronCollection[i_ele].mHits);
                             passConvVeto->push_back(SelectedElectronCollection[i_ele].passConvVeto);
-                            relPFiso_dBeta->push_back(SelectedElectronCollection[i_ele].RelPFIso_dBeta);
                             relPFiso_Rho->push_back(SelectedElectronCollection[i_ele].RelPFIso_Rho);
                             passMediumID->push_back(SelectedElectronCollection[i_ele].passMediumID);
+                            relTrkIso->push_back(SelectedElectronCollection[i_ele].trkIso03 / SelectedElectronCollection[i_ele].Pt);
+                            relECALiso->push_back(SelectedElectronCollection[i_ele].ecalIso03 / SelectedElectronCollection[i_ele].Pt);
+                            relHCALiso->push_back(SelectedElectronCollection[i_ele].hcalIso03 / SelectedElectronCollection[i_ele].Pt);
                         }
                         ElectronTree->Fill();
                     } // End of isPassEvtSelection
