@@ -224,7 +224,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         Type = "SIGNAL";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
-        Tag.push_back("DY_M50to100"); Xsec.push_back(1873.52 * 3.0); Wsum.push_back(78026576.0/*81780984.0*/); nEvents.push_back(121265767/*122055296*/);
+        Tag.push_back("DY_M50to100"); Xsec.push_back(1873.52 * 3.0); Wsum.push_back(78026549.0/*81780984.0*/); nEvents.push_back(121265767/*122055296*/);
 //        Location = "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000/";
         Location = "DYLL_M50toInf/";
 //        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(1451);
@@ -380,7 +380,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(467);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation + Location);
 
-        Tag.push_back("DY_M50to100"); Xsec.push_back(1873.52 * 3.0); Wsum.push_back(78026576.0); nEvents.push_back(121265767);
+        Tag.push_back("DY_M50to100"); Xsec.push_back(1873.52 * 3.0); Wsum.push_back(78026549.0); nEvents.push_back(121265767);
 //        Location = "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_DYLL_M50toInf/180326_143143/0000/";
         Location = "DYLL_50toInf/";
 //        NtupleName.push_back("ntuple_skim_sig_"); nNtuples.push_back(1451);
@@ -1226,14 +1226,14 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         Type = "BKG";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
-        Tag.push_back("WJetsToLNu"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253966720.0/*253933112.0*/); nEvents.push_back(24120297);
+        Tag.push_back("WJetsToLNu"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253933112.0); nEvents.push_back(24120297);
 //        Location = "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo/180326_144617/0000/";
         Location = "WJetsToLNu_amcatnlo/";
 //        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(300); // One ntuple missing in v2.7 (299)
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(300); // name in v2.8
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("WJetsToLNu_ext"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253966720.0/*253933112.0*/); nEvents.push_back(235575647);
+        Tag.push_back("WJetsToLNu_ext"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253933112.0); nEvents.push_back(235575647);
 //        Location = "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo_ext/180326_144652/0000/";
         Location = "WJetsToLNu_amcatnlo_ext/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(2672);
@@ -1245,7 +1245,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "BKG";
 
-        Tag.push_back("WJetsToLNu_ext2v5"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253966720.0/*253933112.0*/); nEvents.push_back(371209392);
+        Tag.push_back("WJetsToLNu_ext2v5"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253933112.0); nEvents.push_back(371209392);
         Location = "WJetsToLNu_amcatnlo_ext2v5/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(3568);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(3568);
@@ -1257,21 +1257,21 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         Type = "BKG";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
-        Tag.push_back("WJetsToLNu"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253966720.0); nEvents.push_back(24120297);
+        Tag.push_back("WJetsToLNu"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253933112.0); nEvents.push_back(24120297);
 //        Location = "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo/180326_144617/0000/";
         Location = "WJetsToLNu_amcatnlo/";
 //        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(300);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(300);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("WJetsToLNu_ext"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253966720.0); nEvents.push_back(235575647);
+        Tag.push_back("WJetsToLNu_ext"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253933112.0); nEvents.push_back(235575647);
 //        Location = "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo_ext/180326_144652/0000/";
         Location = "WJetsToLNu_amcatnlo_ext/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(2672);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(2672);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);;
 
-        Tag.push_back("WJetsToLNu_ext2v5"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253966720.0); nEvents.push_back(371209392);
+        Tag.push_back("WJetsToLNu_ext2v5"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253933112.0); nEvents.push_back(371209392);
         Location = "WJetsToLNu_amcatnlo_ext2v5/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(3568);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(3568);
@@ -1825,7 +1825,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "BKG";
 
-        Tag.push_back("GammaJets_Pt20to100"); Xsec.push_back(137800.0); Wsum.push_back(1.73524e+11); nEvents.push_back(498342); // Using actual wsum (weights not changed to +-1)
+        Tag.push_back("GammaJets_Pt20to100"); Xsec.push_back(137800.0); Wsum.push_back(173523853932.3); nEvents.push_back(498342); // Using actual wsum (weights not changed to +-1)
         Location = "GJets_Pt20to100_Sherpa/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(60);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(60);
@@ -1836,7 +1836,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "BKG";
 
-        Tag.push_back("GammaJets_Pt100to200"); Xsec.push_back(1024.0); Wsum.push_back(1.30426e+09); nEvents.push_back(496553);
+        Tag.push_back("GammaJets_Pt100to200"); Xsec.push_back(1024.0); Wsum.push_back(1304261585.6); nEvents.push_back(496553);
         Location = "GJets_Pt100to200_Sherpa/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(17);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(17);
@@ -1847,7 +1847,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "BKG";
 
-        Tag.push_back("GammaJets_Pt200to500"); Xsec.push_back(68.66); Wsum.push_back(8.2977e+07); nEvents.push_back(476054);
+        Tag.push_back("GammaJets_Pt200to500"); Xsec.push_back(68.66); Wsum.push_back(82977002.3); nEvents.push_back(476054);
         Location = "GJets_Pt200to500_Sherpa/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(19);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(19);
@@ -1858,7 +1858,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "BKG";
 
-        Tag.push_back("GammaJets_Pt500to1000"); Xsec.push_back(1.014); Wsum.push_back(1.42083e+06); nEvents.push_back(484865);
+        Tag.push_back("GammaJets_Pt500to1000"); Xsec.push_back(1.014); Wsum.push_back(1420832.5); nEvents.push_back(484865);
         Location = "GJets_Pt500to1000_Sherpa/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(38);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(38);
@@ -1891,37 +1891,37 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kTRUE;
         Type = "BKG";
 
-        Tag.push_back("GammaJets_Pt20to100"); Xsec.push_back(137800.0); Wsum.push_back(479734.0); nEvents.push_back(498342);
+        Tag.push_back("GammaJets_Pt20to100"); Xsec.push_back(137800.0); Wsum.push_back(173523853932.3); nEvents.push_back(498342);
         Location = "GJets_Pt20to100_Sherpa/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(60);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(60);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("GammaJets_Pt100to200"); Xsec.push_back(1024.0); Wsum.push_back(485683.0); nEvents.push_back(496553);
+        Tag.push_back("GammaJets_Pt100to200"); Xsec.push_back(1024.0); Wsum.push_back(1304261585.6); nEvents.push_back(496553);
         Location = "GJets_Pt100to200_Sherpa/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(17);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(17);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("GammaJets_Pt200to500"); Xsec.push_back(68.66); Wsum.push_back(465906.0); nEvents.push_back(476054);
+        Tag.push_back("GammaJets_Pt200to500"); Xsec.push_back(68.66); Wsum.push_back(82977002.3); nEvents.push_back(476054);
         Location = "GJets_Pt200to500_Sherpa/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(19);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(19);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("GammaJets_Pt500to1000"); Xsec.push_back(1.014); Wsum.push_back(473831.0); nEvents.push_back(484865);
+        Tag.push_back("GammaJets_Pt500to1000"); Xsec.push_back(1.014); Wsum.push_back(1420832.5); nEvents.push_back(484865);
         Location = "GJets_Pt500to1000_Sherpa/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(38);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(38);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("GammaJets_Pt1000to2000"); Xsec.push_back(0.02092); Wsum.push_back(383501.0); nEvents.push_back(395409);
+        Tag.push_back("GammaJets_Pt1000to2000"); Xsec.push_back(0.02092); Wsum.push_back(24997.5); nEvents.push_back(395409);
         Location = "GJets_Pt1000to2000_Sherpa/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(56);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(56);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("GammaJets_Pt2000to5000"); Xsec.push_back(7.476e-05); Wsum.push_back(225925.0); nEvents.push_back(299739);
+        Tag.push_back("GammaJets_Pt2000to5000"); Xsec.push_back(7.476e-05); Wsum.push_back(89.7406); nEvents.push_back(299739);
         Location = "GJets_Pt2000to5000_Sherpa/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(30);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(30);
@@ -2024,21 +2024,21 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(116);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("WJetsToLNu"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253966720.0); nEvents.push_back(24120297);
+        Tag.push_back("WJetsToLNu"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253933112.0); nEvents.push_back(24120297);
 //        Location = "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo/180326_144617/0000/";
         Location = "WJetsToLNu_amcatnlo/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(300);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(300);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("WJetsToLNu_ext"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253966720.0); nEvents.push_back(235575647);
+        Tag.push_back("WJetsToLNu_ext"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253933112.0); nEvents.push_back(235575647);
 //        Location = "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo_ext/180326_144652/0000/";
         Location = "WJetsToLNu_amcatnlo_ext/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(2672);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(2672);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("WJetsToLNu_ext2v5"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253966720.0); nEvents.push_back(177139200);
+        Tag.push_back("WJetsToLNu_ext2v5"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253933112.0); nEvents.push_back(177139200);
         Location = "WJetsToLNu_amcatnlo_ext2v5/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(3568);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(3568);
@@ -2239,37 +2239,37 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(93);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("GammaJets_Pt20to100"); Xsec.push_back(137800.0); Wsum.push_back(479734.0); nEvents.push_back(498342);
+        Tag.push_back("GammaJets_Pt20to100"); Xsec.push_back(137800.0); Wsum.push_back(173523853932.3); nEvents.push_back(498342);
         Location = "GJets_Pt20to100_Sherpa/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(60);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(60);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("GammaJets_Pt100to200"); Xsec.push_back(1024.0); Wsum.push_back(485683.0); nEvents.push_back(496553);
+        Tag.push_back("GammaJets_Pt100to200"); Xsec.push_back(1024.0); Wsum.push_back(1304261585.6); nEvents.push_back(496553);
         Location = "GJets_Pt100to200_Sherpa/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(17);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(17);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("GammaJets_Pt200to500"); Xsec.push_back(68.66); Wsum.push_back(465906.0); nEvents.push_back(476054);
+        Tag.push_back("GammaJets_Pt200to500"); Xsec.push_back(68.66); Wsum.push_back(82977002.3); nEvents.push_back(476054);
         Location = "GJets_Pt200to500_Sherpa/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(19);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(19);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("GammaJets_Pt500to1000"); Xsec.push_back(1.014); Wsum.push_back(473831.0); nEvents.push_back(484865);
+        Tag.push_back("GammaJets_Pt500to1000"); Xsec.push_back(1.014); Wsum.push_back(1420832.5); nEvents.push_back(484865);
         Location = "GJets_Pt500to1000_Sherpa/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(38);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(38);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("GammaJets_Pt1000to2000"); Xsec.push_back(0.02092); Wsum.push_back(383501.0); nEvents.push_back(395409);
+        Tag.push_back("GammaJets_Pt1000to2000"); Xsec.push_back(0.02092); Wsum.push_back(24997.5); nEvents.push_back(395409);
         Location = "GJets_Pt1000to2000_Sherpa/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(56);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(56);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("GammaJets_Pt2000to5000"); Xsec.push_back(7.476e-05); Wsum.push_back(225925.0); nEvents.push_back(299739);
+        Tag.push_back("GammaJets_Pt2000to5000"); Xsec.push_back(7.476e-05); Wsum.push_back(89.7406); nEvents.push_back(299739);
         Location = "GJets_Pt2000to5000_Sherpa/";
 //        NtupleName.push_back("ntuple_skim_mc_"); nNtuples.push_back(30);
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(30);
@@ -2280,7 +2280,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kFALSE;
         Type = "DATA";
 
-        Tag.push_back("DoubleEG_B"); nEvents.push_back(103625724);
+        Tag.push_back("DoubleEG_B"); nEvents.push_back(136656970);
         Location = "DoubleEG_Run2016B/";
 //        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1318);
         NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1318);
@@ -2335,7 +2335,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kFALSE;
         Type = "DATA";
 
-        Tag.push_back("DoubleEG_G"); nEvents.push_back(71864512);
+        Tag.push_back("DoubleEG_G"); nEvents.push_back(76534470);
         Location = "DoubleEG_Run2016G/";
 //        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1068);
         NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1068);
@@ -2346,7 +2346,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kFALSE;
         Type = "DATA";
 
-        Tag.push_back("DoubleEG_Hver2"); nEvents.push_back(68821231);
+        Tag.push_back("DoubleEG_Hver2"); nEvents.push_back(80523734);
         Location = "DoubleEG_Run2016Hver2/";
 //        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1156);
         NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1156);
@@ -2363,7 +2363,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         isMC = kFALSE;
         Type = "DATA";
 
-        Tag.push_back("DoubleEG_B"); nEvents.push_back(103625724);
+        Tag.push_back("DoubleEG_B"); nEvents.push_back(136656970);
         Location = "DoubleEG_Run2016B/";
 //        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1318);
         NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1318);
@@ -2393,13 +2393,13 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_data_"); nNtuples.push_back(452);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("DoubleEG_G"); nEvents.push_back(71864512);
+        Tag.push_back("DoubleEG_G"); nEvents.push_back(76534470);
         Location = "DoubleEG_Run2016G/";
 //        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1068);
         NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1068);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
-        Tag.push_back("DoubleEG_Hver2"); nEvents.push_back(68821231);
+        Tag.push_back("DoubleEG_Hver2"); nEvents.push_back(80523734);
         Location = "DoubleEG_Run2016Hver2/";
 //        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1156);
         NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1156);
