@@ -43,7 +43,7 @@ void Mu_QCD_HistMaker (Bool_t DEBUG);
 void Mu_WJET_HistMaker (Bool_t DEBUG);
 void EMu_QCD_HistMaker (Bool_t DEBUG);
 void EMu_WJET_HistMaker (Bool_t DEBUG);
-void E_DYefficiency (Bool_t DEBUG);
+void E_PR_HistMaker (Bool_t DEBUG); // PROMPT RATE
 
 // -- Drell-Yan mass bins -- //
 const Int_t binnum = 43;
@@ -129,10 +129,10 @@ void FR_HistMaker (TString WhichX = "", Int_t type=1)
     else if (whichX.Contains("E"))
     {
         Xselected++;
-        if (whichX.Contains("DY"))
+        if (whichX.Contains("PR"))
         {
-            cout << "\n*****  E_DYefficiency  *****" << endl;
-            E_DYefficiency(DEBUG);
+            cout << "\n*****  E_PR_HistMaker  *****" << endl;
+            E_PR_HistMaker(DEBUG);
         }
         else if (whichX.Contains("QCD"))
         {
@@ -266,6 +266,24 @@ void E_FR_HistMaker (Bool_t DEBUG)
         TH1D* h_InvEminusInvP_endcap_deno = new TH1D("h_InvEminusInvP_endcap_deno", "h_InvEminusInvP_endcap_deno", 120, -6, 6); h_InvEminusInvP_endcap_deno->Sumw2();
         TH1D* h_InvEminusInvP_barrel_ctrl = new TH1D("h_InvEminusInvP_barrel_ctrl", "h_InvEminusInvP_barrel_ctrl", 120, -6, 6); h_InvEminusInvP_barrel_ctrl->Sumw2();
         TH1D* h_InvEminusInvP_endcap_ctrl = new TH1D("h_InvEminusInvP_endcap_ctrl", "h_InvEminusInvP_endcap_ctrl", 120, -6, 6); h_InvEminusInvP_endcap_ctrl->Sumw2();
+        TH1D* h_TrkIso_barrel_nume = new TH1D("h_TrkIso_barrel_nume", "h_TrkIso_barrel_nume", 50, 0, 5); h_TrkIso_barrel_nume->Sumw2();
+        TH1D* h_TrkIso_endcap_nume = new TH1D("h_TrkIso_endcap_nume", "h_TrkIso_endcap_nume", 50, 0, 5); h_TrkIso_endcap_nume->Sumw2();
+        TH1D* h_TrkIso_barrel_deno = new TH1D("h_TrkIso_barrel_deno", "h_TrkIso_barrel_deno", 50, 0, 5); h_TrkIso_barrel_deno->Sumw2();
+        TH1D* h_TrkIso_endcap_deno = new TH1D("h_TrkIso_endcap_deno", "h_TrkIso_endcap_deno", 50, 0, 5); h_TrkIso_endcap_deno->Sumw2();
+        TH1D* h_TrkIso_barrel_ctrl = new TH1D("h_TrkIso_barrel_ctrl", "h_TrkIso_barrel_ctrl", 50, 0, 5); h_TrkIso_barrel_ctrl->Sumw2();
+        TH1D* h_TrkIso_endcap_ctrl = new TH1D("h_TrkIso_endcap_ctrl", "h_TrkIso_endcap_ctrl", 50, 0, 5); h_TrkIso_endcap_ctrl->Sumw2();
+        TH1D* h_ECALiso_barrel_nume = new TH1D("h_ECALiso_barrel_nume", "h_ECALiso_barrel_nume", 50, 0, 5); h_ECALiso_barrel_nume->Sumw2();
+        TH1D* h_ECALiso_endcap_nume = new TH1D("h_ECALiso_endcap_nume", "h_ECALiso_endcap_nume", 50, 0, 5); h_ECALiso_endcap_nume->Sumw2();
+        TH1D* h_ECALiso_barrel_deno = new TH1D("h_ECALiso_barrel_deno", "h_ECALiso_barrel_deno", 50, 0, 5); h_ECALiso_barrel_deno->Sumw2();
+        TH1D* h_ECALiso_endcap_deno = new TH1D("h_ECALiso_endcap_deno", "h_ECALiso_endcap_deno", 50, 0, 5); h_ECALiso_endcap_deno->Sumw2();
+        TH1D* h_ECALiso_barrel_ctrl = new TH1D("h_ECALiso_barrel_ctrl", "h_ECALiso_barrel_ctrl", 50, 0, 5); h_ECALiso_barrel_ctrl->Sumw2();
+        TH1D* h_ECALiso_endcap_ctrl = new TH1D("h_ECALiso_endcap_ctrl", "h_ECALiso_endcap_ctrl", 50, 0, 5); h_ECALiso_endcap_ctrl->Sumw2();
+        TH1D* h_HCALiso_barrel_nume = new TH1D("h_HCALiso_barrel_nume", "h_HCALiso_barrel_nume", 50, 0, 5); h_HCALiso_barrel_nume->Sumw2();
+        TH1D* h_HCALiso_endcap_nume = new TH1D("h_HCALiso_endcap_nume", "h_HCALiso_endcap_nume", 50, 0, 5); h_HCALiso_endcap_nume->Sumw2();
+        TH1D* h_HCALiso_barrel_deno = new TH1D("h_HCALiso_barrel_deno", "h_HCALiso_barrel_deno", 50, 0, 5); h_HCALiso_barrel_deno->Sumw2();
+        TH1D* h_HCALiso_endcap_deno = new TH1D("h_HCALiso_endcap_deno", "h_HCALiso_endcap_deno", 50, 0, 5); h_HCALiso_endcap_deno->Sumw2();
+        TH1D* h_HCALiso_barrel_ctrl = new TH1D("h_HCALiso_barrel_ctrl", "h_HCALiso_barrel_ctrl", 50, 0, 5); h_HCALiso_barrel_ctrl->Sumw2();
+        TH1D* h_HCALiso_endcap_ctrl = new TH1D("h_HCALiso_endcap_ctrl", "h_HCALiso_endcap_ctrl", 50, 0, 5); h_HCALiso_endcap_ctrl->Sumw2();
         TH1D* h_MET = new TH1D("h_MET", "h_MET", 100, 0, 100); h_MET->Sumw2();
         TH1D* h_MT_barrel_nume = new TH1D("h_MT_barrel_nume", "h_MT_barrel_nume", 500, 0, 1000); h_MT_barrel_nume->Sumw2();
         TH1D* h_MT_endcap_nume = new TH1D("h_MT_endcap_nume", "h_MT_endcap_nume", 500, 0, 1000); h_MT_endcap_nume->Sumw2();
@@ -358,15 +376,13 @@ void E_FR_HistMaker (Bool_t DEBUG)
         std::vector<double> *dPhiIn = new std::vector<double>;
         std::vector<double> *HoverE = new std::vector<double>;
         std::vector<double> *InvEminusInvP = new std::vector<double>;
-        std::vector<double> *chIso03 = new std::vector<double>;
-        std::vector<double> *nhIso03 = new std::vector<double>;
-        std::vector<double> *phIso03 = new std::vector<double>;
-        std::vector<double> *ChIso03FromPU = new std::vector<double>;
         std::vector<int> *mHits = new std::vector<int>;
-        std::vector<double> *relPFiso_dBeta = new std::vector<double>;
         std::vector<double> *relPFiso_Rho = new std::vector<double>;
         std::vector<int> *passConvVeto = new std::vector<int>;
         std::vector<int> *passMediumID = new std::vector<int>;
+        std::vector<double> *relECALiso = new std::vector<double>;
+        std::vector<double> *relHCALiso = new std::vector<double>;
+        std::vector<double> *relTrkIso = new std::vector<double>;
         std::vector<int> *trig_fired = new std::vector<int>;
         std::vector<int> *trig_matched = new std::vector<int>;
         std::vector<double> *trig_pT = new std::vector<double>;
@@ -392,15 +408,13 @@ void E_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchStatus("dPhiIn", 1);
         chain->SetBranchStatus("HoverE", 1);
         chain->SetBranchStatus("InvEminusInvP", 1);
-        chain->SetBranchStatus("chIso03", 1);
-        chain->SetBranchStatus("nhIso03", 1);
-        chain->SetBranchStatus("phIso03", 1);
-        chain->SetBranchStatus("ChIso03FromPU", 1);
         chain->SetBranchStatus("mHits", 1);
-        chain->SetBranchStatus("relPFiso_dBeta", 1);
         chain->SetBranchStatus("relPFiso_Rho", 1);
         chain->SetBranchStatus("passConvVeto", 1);
         chain->SetBranchStatus("passMediumID", 1);
+        chain->SetBranchStatus("relTrkIso", 1);
+        chain->SetBranchStatus("relECALiso", 1);
+        chain->SetBranchStatus("relHCALiso", 1);
         chain->SetBranchStatus("trig_fired", 1);
         chain->SetBranchStatus("trig_matched", 1);
         chain->SetBranchStatus("trig_pT", 1);
@@ -426,15 +440,13 @@ void E_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchAddress("dPhiIn", &dPhiIn);
         chain->SetBranchAddress("HoverE", &HoverE);
         chain->SetBranchAddress("InvEminusInvP", &InvEminusInvP);
-        chain->SetBranchAddress("chIso03", &chIso03);
-        chain->SetBranchAddress("nhIso03", &nhIso03);
-        chain->SetBranchAddress("phIso03", &phIso03);
-        chain->SetBranchAddress("ChIso03FromPU", &ChIso03FromPU);
         chain->SetBranchAddress("mHits", &mHits);
-        chain->SetBranchAddress("relPFiso_dBeta", &relPFiso_dBeta);
         chain->SetBranchAddress("relPFiso_Rho", &relPFiso_Rho);
         chain->SetBranchAddress("passConvVeto", &passConvVeto);
         chain->SetBranchAddress("passMediumID", &passMediumID);
+        chain->SetBranchAddress("relTrkIso", &relTrkIso);
+        chain->SetBranchAddress("relECALiso", &relECALiso);
+        chain->SetBranchAddress("relHCALiso", &relHCALiso);
         chain->SetBranchAddress("trig_fired", &trig_fired);
         chain->SetBranchAddress("trig_matched", &trig_matched);
         chain->SetBranchAddress("trig_pT", &trig_pT);
@@ -541,7 +553,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                     }
                     if (matched == 0) continue;
                     ele_lead.SetPtEtaPhiM(p_T->at(i_ele), eta->at(i_ele), phi->at(i_ele), M_Elec);
-                    iso_lead = relPFiso_dBeta->at(i_ele);
+                    iso_lead = relPFiso_Rho->at(i_ele);
                 }
             }
             if (i_lead<0) continue;
@@ -584,18 +596,18 @@ void E_FR_HistMaker (Bool_t DEBUG)
             {
                 if (p_T->at(i_ele) != p_T->at(i_ele))
                 {
-                    cout << p_T->at(i_ele) << " " << eta->at(i_ele) << " " << phi->at(i_ele) << " " << relPFiso_dBeta->at(i_ele) << endl;
+                    cout << p_T->at(i_ele) << " " << eta->at(i_ele) << " " << phi->at(i_ele) << " " << relPFiso_Rho->at(i_ele) << endl;
                     continue;
                 }
                 if (p_T->at(i_ele) <= 25) continue;
-                if (fabs(eta->at(i_ele)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.013 || HoverE->at(i_ele) >= 0.13 ||
-                                                      fabs(dEtaInSeed->at(i_ele)) >= 0.01 || fabs(dPhiIn->at(i_ele)) >= 0.07 ||
-                                                      chIso03->at(i_ele)+nhIso03->at(i_ele) >= 0.3*p_T->at(i_ele) ||
-                                                      phIso03->at(i_ele) >= 0.5*p_T->at(i_ele))) continue;
-                else if (fabs(eta->at(i_ele)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.035 || HoverE->at(i_ele) >= 0.13 ||
-                                                          chIso03->at(i_ele)+nhIso03->at(i_ele) >= 0.3*p_T->at(i_ele) ||
-                                                          phIso03->at(i_ele) >= 0.5*p_T->at(i_ele))) continue;
-                if (mHits->at(i_ele) > 1) continue;
+//                if (fabs(eta->at(i_ele)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.013 || HoverE->at(i_ele) >= 0.13 ||
+//                                                      fabs(dEtaInSeed->at(i_ele)) >= 0.01 || fabs(dPhiIn->at(i_ele)) >= 0.07 /*||
+//                                                      chIso03->at(i_ele)+nhIso03->at(i_ele) >= 0.3*p_T->at(i_ele) ||
+//                                                      phIso03->at(i_ele) >= 0.5*p_T->at(i_ele)*/)) continue;
+//                else if (fabs(eta->at(i_ele)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.035 || HoverE->at(i_ele) >= 0.13 /*||
+//                                                          chIso03->at(i_ele)+nhIso03->at(i_ele) >= 0.3*p_T->at(i_ele) ||
+//                                                          phIso03->at(i_ele) >= 0.5*p_T->at(i_ele)*/)) continue;
+//                if (mHits->at(i_ele) > 1) continue;
 
                 if (DEBUG == kTRUE) cout << "i_ele = " << i_ele << endl;
 
@@ -737,6 +749,9 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         h_dPhiIn_barrel_nume->Fill(dPhiIn->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_HoverE_barrel_nume->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_InvEminusInvP_barrel_nume->Fill(InvEminusInvP->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_TrkIso_barrel_nume->Fill(relTrkIso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_ECALiso_barrel_nume->Fill(relECALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_HCALiso_barrel_nume->Fill(relHCALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                     }
                     else if (fabs(eta->at(i_ele)) > 1.566) // Endcap
                     {
@@ -747,16 +762,19 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         h_dPhiIn_endcap_nume->Fill(dPhiIn->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_HoverE_endcap_nume->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_InvEminusInvP_endcap_nume->Fill(InvEminusInvP->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_TrkIso_endcap_nume->Fill(relTrkIso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_ECALiso_endcap_nume->Fill(relECALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_HCALiso_endcap_nume->Fill(relHCALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                     }
                 } // End of if(Signal/Numerator)
                 else // Control
                 {
                     h_eta_ctrl->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
-                    if (fabs(eta->at(i_ele)) < 1.4442 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.013 && HoverE->at(i_ele) < 0.13 &&
-                        fabs(dEtaInSeed->at(i_ele)) < 0.01 && fabs(dPhiIn->at(i_ele)) < 0.07 && mHits->at(i_ele) <= 1) // Barrel
-//                    if (fabs(eta->at(i_ele)) < 1.4442 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 && fabs(dEtaInSeed->at(i_ele)) < 0.00311 &&
-//                        fabs(dPhiIn->at(i_ele)) < 0.103 && HoverE->at(i_ele) < 0.253 && relPFiso_Rho->at(i_ele) >= 0.0695 &&
-//                        InvEminusInvP->at(i_ele) < 0.134 && mHits->at(i_ele) <= 1 && passConvVeto->at(i_ele)) // Barrel
+//                    if (fabs(eta->at(i_ele)) < 1.4442 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.013 && HoverE->at(i_ele) < 0.13 &&
+//                        fabs(dEtaInSeed->at(i_ele)) < 0.01 && fabs(dPhiIn->at(i_ele)) < 0.07 && mHits->at(i_ele) <= 1) // Barrel
+                    if (fabs(eta->at(i_ele)) < 1.4442 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 && fabs(dEtaInSeed->at(i_ele)) < 0.00311 &&
+                        fabs(dPhiIn->at(i_ele)) < /*0.07*/0.103 && HoverE->at(i_ele) < /*0.13*/0.253 && relPFiso_Rho->at(i_ele) >= 0.0695 &&
+                        InvEminusInvP->at(i_ele) < 0.134 && mHits->at(i_ele) <= 1 && passConvVeto->at(i_ele)) // Barrel
                     {
                         h_pT_barrel_ctrl->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_PFiso_Rho_barrel_ctrl->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
@@ -765,11 +783,14 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         h_dPhiIn_barrel_ctrl->Fill(dPhiIn->at(i_ele), TotWeight * PUWeight  * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_HoverE_barrel_ctrl->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_InvEminusInvP_barrel_ctrl->Fill(InvEminusInvP->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_TrkIso_barrel_ctrl->Fill(relTrkIso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_ECALiso_barrel_ctrl->Fill(relECALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_HCALiso_barrel_ctrl->Fill(relHCALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                     }
-                    else if (fabs(eta->at(i_ele)) > 1.566 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.035 && HoverE->at(i_ele) < 0.13 && mHits->at(i_ele) <= 1) // Endcap
-//                    else if (fabs(eta->at(i_ele)) > 1.566 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dEtaInSeed->at(i_ele)) < 0.00609 &&
-//                             fabs(dPhiIn->at(i_ele)) < 0.045 && HoverE->at(i_ele) < 0.0878 && relPFiso_Rho->at(i_ele) >= 0.0821 &&
-//                             InvEminusInvP->at(i_ele) < 0.13 && mHits->at(i_ele) <= 1 && passConvVeto->at(i_ele)) // Endcap
+//                    else if (fabs(eta->at(i_ele)) > 1.566 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.035 && HoverE->at(i_ele) < 0.13 && mHits->at(i_ele) <= 1) // Endcap
+                    else if (fabs(eta->at(i_ele)) > 1.566 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dEtaInSeed->at(i_ele)) < 0.00609 &&
+                             fabs(dPhiIn->at(i_ele)) < 0.045 && HoverE->at(i_ele) < 0.0878 && relPFiso_Rho->at(i_ele) >= 0.0821 &&
+                             InvEminusInvP->at(i_ele) < 0.13 && mHits->at(i_ele) <= 1 && passConvVeto->at(i_ele)) // Endcap
                     {
                         h_pT_endcap_ctrl->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_PFiso_Rho_endcap_ctrl->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
@@ -778,6 +799,9 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         h_dPhiIn_endcap_ctrl->Fill(dPhiIn->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_HoverE_endcap_ctrl->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_InvEminusInvP_endcap_ctrl->Fill(InvEminusInvP->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_TrkIso_endcap_ctrl->Fill(relTrkIso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_ECALiso_endcap_ctrl->Fill(relECALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_HCALiso_endcap_ctrl->Fill(relHCALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                     }
                 }// End of if(Control)
                 // Denominator
@@ -794,6 +818,9 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         h_dPhiIn_barrel_deno->Fill(dPhiIn->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_HoverE_barrel_deno->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_InvEminusInvP_barrel_deno->Fill(InvEminusInvP->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_TrkIso_barrel_deno->Fill(relTrkIso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_ECALiso_barrel_deno->Fill(relECALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_HCALiso_barrel_deno->Fill(relHCALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                     }
 
                     /// TEST PART ///
@@ -952,6 +979,9 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         h_dPhiIn_endcap_deno->Fill(dPhiIn->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_HoverE_endcap_deno->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_InvEminusInvP_endcap_deno->Fill(InvEminusInvP->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_TrkIso_endcap_deno->Fill(relTrkIso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_ECALiso_endcap_deno->Fill(relECALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_HCALiso_endcap_deno->Fill(relHCALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                     }
 
                     /// TEST PART ///
@@ -1160,6 +1190,24 @@ void E_FR_HistMaker (Bool_t DEBUG)
         h_InvEminusInvP_endcap_deno->Write();
         h_InvEminusInvP_barrel_ctrl->Write();
         h_InvEminusInvP_endcap_ctrl->Write();
+        h_TrkIso_barrel_nume->Write();
+        h_TrkIso_endcap_nume->Write();
+        h_TrkIso_barrel_deno->Write();
+        h_TrkIso_endcap_deno->Write();
+        h_TrkIso_barrel_ctrl->Write();
+        h_TrkIso_endcap_ctrl->Write();
+        h_ECALiso_barrel_nume->Write();
+        h_ECALiso_endcap_nume->Write();
+        h_ECALiso_barrel_deno->Write();
+        h_ECALiso_endcap_deno->Write();
+        h_ECALiso_barrel_ctrl->Write();
+        h_ECALiso_endcap_ctrl->Write();
+        h_HCALiso_barrel_nume->Write();
+        h_HCALiso_endcap_nume->Write();
+        h_HCALiso_barrel_deno->Write();
+        h_HCALiso_endcap_deno->Write();
+        h_HCALiso_barrel_ctrl->Write();
+        h_HCALiso_endcap_ctrl->Write();
         h_MET->Write();
         h_MT_barrel_nume->Write();
         h_MT_endcap_nume->Write();
@@ -2556,10 +2604,10 @@ void E_WJET_HistMaker (Bool_t DEBUG)
             else // Second fails, first passes
             {
                 FR = analyzer->FakeRate_ele(p_T->at(1), etaSC->at(1));
-//                if (Mgr.isMC == kTRUE)
-//                {
-//                    effweight = analyzer->EfficiencySF_EventWeight_electronFR(ele1_SF, ele2_SF, 1);
-//                }
+                if (Mgr.isMC == kTRUE)
+                {
+                    effweight = analyzer->EfficiencySF_EventWeight_electronFR(ele1_SF, ele2_SF, 1);
+                }
 
                 if (fabs(etaSC->at(1)) < 1.4442)
                 {
@@ -4127,7 +4175,7 @@ void EMu_WJET_HistMaker (Bool_t DEBUG)
 
 
 /// --------------------------- DY MediumID efficiency check ---------------------------- ///
-void E_DYefficiency (Bool_t DEBUG)
+void E_PR_HistMaker (Bool_t DEBUG)
 {
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
@@ -4208,13 +4256,8 @@ void E_DYefficiency (Bool_t DEBUG)
         std::vector<double> *dPhiIn = new std::vector<double>;
         std::vector<double> *HoverE = new std::vector<double>;
         std::vector<double> *InvEminusInvP = new std::vector<double>;
-        std::vector<double> *chIso03 = new std::vector<double>;
-        std::vector<double> *nhIso03 = new std::vector<double>;
-        std::vector<double> *phIso03 = new std::vector<double>;
-        std::vector<double> *ChIso03FromPU = new std::vector<double>;
         std::vector<int> *mHits = new std::vector<int>;
         std::vector<int> *passConvVeto = new std::vector<int>;
-        std::vector<double> *relPFiso_dBeta = new std::vector<double>;
         std::vector<double> *relPFiso_Rho = new std::vector<double>;
         std::vector<int> *passMediumID = new std::vector<int>;
         Double_t MET_pT, MET_phi;
@@ -4238,13 +4281,8 @@ void E_DYefficiency (Bool_t DEBUG)
         chain->SetBranchStatus("dPhiIn", 1);
         chain->SetBranchStatus("HoverE", 1);
         chain->SetBranchStatus("InvEminusInvP", 1);
-        chain->SetBranchStatus("chIso03", 1);
-        chain->SetBranchStatus("nhIso03", 1);
-        chain->SetBranchStatus("phIso03", 1);
-        chain->SetBranchStatus("ChIso03FromPU", 1);
         chain->SetBranchStatus("mHits", 1);
         chain->SetBranchStatus("passConvVeto", 1);
-        chain->SetBranchStatus("relPFiso_dBeta", 1);
         chain->SetBranchStatus("relPFiso_Rho", 1);
         chain->SetBranchStatus("passMediumID", 1);
         chain->SetBranchStatus("MET_pT", 1);
@@ -4268,13 +4306,8 @@ void E_DYefficiency (Bool_t DEBUG)
         chain->SetBranchAddress("dPhiIn", &dPhiIn);
         chain->SetBranchAddress("HoverE", &HoverE);
         chain->SetBranchAddress("InvEminusInvP", &InvEminusInvP);
-        chain->SetBranchAddress("chIso03", &chIso03);
-        chain->SetBranchAddress("nhIso03", &nhIso03);
-        chain->SetBranchAddress("phIso03", &phIso03);
-        chain->SetBranchAddress("ChIso03FromPU", &ChIso03FromPU);
         chain->SetBranchAddress("mHits", &mHits);
         chain->SetBranchAddress("passConvVeto", &passConvVeto);
-        chain->SetBranchAddress("relPFiso_dBeta", &relPFiso_dBeta);
         chain->SetBranchAddress("relPFiso_Rho", &relPFiso_Rho);
         chain->SetBranchAddress("passMediumID", &passMediumID);
         chain->SetBranchAddress("MET_pT", &MET_pT);
@@ -4299,29 +4332,28 @@ void E_DYefficiency (Bool_t DEBUG)
             chain->GetEntry(i);
             if (!DEBUG) bar.Draw(i);
 
-            // QCD selection
+            // Preselection
             if (p_T->size() != 2) continue;
             if ((fabs(etaSC->at(0)) > 1.4442 && fabs(etaSC->at(0)) < 1.566) || fabs((etaSC->at(1)) > 1.4442 && fabs(etaSC->at(1)) < 1.566)) continue;
-            if (fabs(etaSC->at(0)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.013 || HoverE->at(0) >= 0.13 ||
-                                                fabs(dEtaInSeed->at(0)) >= 0.01 || fabs(dPhiIn->at(0)) >= 0.07 || mHits->at(0) > 1)) continue;
-            if (fabs(etaSC->at(1)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.013 || HoverE->at(1) >= 0.13 ||
-                                                fabs(dEtaInSeed->at(1)) >= 0.01 || fabs(dPhiIn->at(1)) >= 0.07 || mHits->at(1) > 1)) continue;
-            if (fabs(etaSC->at(0)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.035 || HoverE->at(0) >= 0.13 || mHits->at(0) > 1)) continue;
-            if (fabs(etaSC->at(1)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.035 || HoverE->at(1) >= 0.13 || mHits->at(1) > 1)) continue;
+
+            if (fabs(etaSC->at(0)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.00998 || fabs(dEtaInSeed->at(0)) >= 0.00311 ||
+                fabs(dPhiIn->at(0)) >= 0.07/*0.103*/ || HoverE->at(0) >= 0.13/*0.253*/ || InvEminusInvP->at(0) >= 0.134 || mHits->at(0) > 1 || !passConvVeto->at(0)))
+                continue;
+            if (fabs(etaSC->at(0)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.0298 || fabs(dEtaInSeed->at(0)) >= 0.00609 ||
+                fabs(dPhiIn->at(0)) >= 0.045 || HoverE->at(0) >= 0.0878 || InvEminusInvP->at(0) >= 0.13 || mHits->at(0) > 1 || !passConvVeto->at(0)))
+                continue;
+            if (fabs(etaSC->at(1)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.00998 || fabs(dEtaInSeed->at(1)) >= 0.00311 ||
+                fabs(dPhiIn->at(1)) >= 0.07/*0.103*/ || HoverE->at(1) >= 0.13/*0.253*/ || InvEminusInvP->at(1) >= 0.134 || mHits->at(1) > 1 || !passConvVeto->at(1)))
+                continue;
+            if (fabs(etaSC->at(1)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.0298 || fabs(dEtaInSeed->at(1)) >= 0.00609 ||
+                fabs(dPhiIn->at(1)) >= 0.045 || HoverE->at(1) >= 0.0878 || InvEminusInvP->at(1) >= 0.13 || mHits->at(1) > 1 || !passConvVeto->at(1)))
+                continue;
+
             if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
             if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
-            if (!passMediumID->at(0) && !passMediumID->at(1)) continue;
 
             if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << charge->at(0) << " " << relPFiso_Rho->at(0) << endl;
             if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << charge->at(1) << " " << relPFiso_Rho->at(1) << endl;
-
-
-            Int_t i_lead = 0;
-//            if (p_T->at(1) > p_T->at(0)) i_lead = 1;
-            if (passMediumID->at(1)) i_lead = 1;
-//            if (MET_pT > 20) continue;
-
-            nPass++;
 
             if (DEBUG == kTRUE)
             {
@@ -4339,14 +4371,44 @@ void E_DYefficiency (Bool_t DEBUG)
                 cout << "\nPVz = " << PVz << endl;
             }
 
+            // Look for tight electron:
+            Int_t tight0=0, tight1=0, i_fill=-1;
+            if (fabs(etaSC->at(0)) < 1.4442 && Full5x5_SigmaIEtaIEta->at(0) < 0.00998 && fabs(dEtaInSeed->at(0)) < 0.00308 &&
+                fabs(dPhiIn->at(0)) < 0.07/*0.0816*/ && HoverE->at(0) < 0.0414 && relPFiso_Rho->at(0) < 0.0588 &&
+                InvEminusInvP->at(0) < 0.0129 && mHits->at(0) <= 1 && passConvVeto->at(0))
+                tight0 = 1;
+            if (fabs(etaSC->at(0)) > 1.566 && Full5x5_SigmaIEtaIEta->at(0) < 0.0292 && fabs(dEtaInSeed->at(0)) < 0.00605 &&
+                fabs(dPhiIn->at(0)) < 0.0394 && HoverE->at(0) < 0.0641 && relPFiso_Rho->at(0) < 0.0571 &&
+                InvEminusInvP->at(0) < 0.0129 && mHits->at(0) <= 1 && passConvVeto->at(0))
+                tight0 = 1;
+            if (fabs(etaSC->at(1)) < 1.4442 && Full5x5_SigmaIEtaIEta->at(1) < 0.00998 && fabs(dEtaInSeed->at(1)) < 0.00308 &&
+                fabs(dPhiIn->at(1)) < 0.07/*0.0816*/ && HoverE->at(1) < 0.0414 && relPFiso_Rho->at(1) < 0.0588 &&
+                InvEminusInvP->at(1) < 0.0129 && mHits->at(1) <= 1 && passConvVeto->at(1))
+                tight1 = 1;
+            if (fabs(etaSC->at(1)) > 1.566 && Full5x5_SigmaIEtaIEta->at(1) < 0.0292 && fabs(dEtaInSeed->at(1)) < 0.00605 &&
+                fabs(dPhiIn->at(1)) < 0.0394 && HoverE->at(1) < 0.0641 && relPFiso_Rho->at(1) < 0.0571 &&
+                InvEminusInvP->at(1) < 0.0129 && mHits->at(1) <= 1 && passConvVeto->at(1))
+                tight1 = 1;
+
+            if (!tight0 && !tight1) continue;
+            else if (tight0 && tight1)
+            {
+                if (p_T->at(0) > p_T->at(1)) i_fill = 1;
+                else i_fill = 0;
+            }
+            else if (tight0) i_fill = 1;
+            else if (tight1) i_fill = 0;
+
+            nPass++;            
+
             TLorentzVector ele1, ele2;
             ele1.SetPtEtaPhiM(p_T->at(0), eta->at(0), phi->at(0), M_Elec);
             ele2.SetPtEtaPhiM(p_T->at(1), eta->at(1), phi->at(1), M_Elec);
             Double_t mass = (ele1+ele2).M();
             if (mass < 76 || mass >106) continue;
-            Double_t dTheta = phi->at(i_lead) - MET_phi;
-            Double_t MT = sqrt(2 * p_T->at(i_lead) * MET_pT * (1 - cos(dTheta)));
-            if (MT >= 60) continue;
+            Double_t dTheta = phi->at(1-i_fill) - MET_phi;
+            Double_t MT = sqrt(2 * p_T->at(1-i_fill) * MET_pT * (1 - cos(dTheta)));
+//            if (MT >= 60) continue;
 
             // -- Pileup-Reweighting -- //
             Double_t PUWeight = 1;
@@ -4375,30 +4437,19 @@ void E_DYefficiency (Bool_t DEBUG)
             if (Mgr.Type == "SIGNAL")
             {
                 h_mass_DY->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                for (Int_t i_ele=0; i_ele<p_T->size(); i_ele++)
-//                {
-//                    if (fabs(eta->at(i_ele)) < 1.4442 && passMediumID->at(i_ele))
-//                        h_pT_barrel_pass_DY->Fill(p_T->at(i_ele), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                    else if (fabs(eta->at(i_ele)) > 1.566 && passMediumID->at(i_ele))
-//                        h_pT_endcap_pass_DY->Fill(p_T->at(i_ele), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                    else if (fabs(eta->at(i_ele)) < 1.4442 && !passMediumID->at(i_ele))
-//                        h_pT_barrel_fail_DY->Fill(p_T->at(i_ele), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                    else if (fabs(eta->at(i_ele)) > 1.566 && !passMediumID->at(i_ele))
-//                        h_pT_endcap_fail_DY->Fill(p_T->at(i_ele), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                }
-                if (fabs(eta->at(1-i_lead)) < 1.4442 && passMediumID->at(1-i_lead))
-                    h_pT_barrel_pass_DY->Fill(p_T->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                else if (fabs(eta->at(1-i_lead)) > 1.566 && passMediumID->at(1-i_lead))
-                    h_pT_endcap_pass_DY->Fill(p_T->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                else if (fabs(eta->at(1-i_lead)) < 1.4442 && !passMediumID->at(1-i_lead))
+                if (fabs(eta->at(i_fill)) < 1.4442 && passMediumID->at(i_fill))
+                    h_pT_barrel_pass_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                else if (fabs(eta->at(i_fill)) > 1.566 && passMediumID->at(i_fill))
+                    h_pT_endcap_pass_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                else if (fabs(eta->at(i_fill)) < 1.4442 && !passMediumID->at(i_fill))
                 {
-                    h_pT_barrel_fail_DY->Fill(p_T->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    h_pT_barrel_fail_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     h_MET_fail_DY->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     h_MT_fail_DY->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                 }
-                else if (fabs(eta->at(1-i_lead)) > 1.566 && !passMediumID->at(1-i_lead))
+                else if (fabs(eta->at(i_fill)) > 1.566 && !passMediumID->at(i_fill))
                 {
-                    h_pT_endcap_fail_DY->Fill(p_T->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    h_pT_endcap_fail_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     h_MET_fail_DY->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     h_MT_fail_DY->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                 }
@@ -4408,30 +4459,20 @@ void E_DYefficiency (Bool_t DEBUG)
                 if (Mgr.Tag[0].Contains("QCD") || Mgr.Tag[0].Contains("Jet"))
                 {
                     h_mass_bkgf->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                    for (Int_t i_ele=0; i_ele<p_T->size(); i_ele++)
-//                    {
-//                        if (fabs(eta->at(i_ele)) < 1.4442 && passMediumID->at(i_ele))
-//                            h_pT_barrel_pass_bkgf->Fill(p_T->at(i_ele), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                        else if (fabs(eta->at(i_ele)) > 1.566 && passMediumID->at(i_ele))
-//                            h_pT_endcap_pass_bkgf->Fill(p_T->at(i_ele), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                        else if (fabs(eta->at(i_ele)) < 1.4442 && !passMediumID->at(i_ele))
-//                            h_pT_barrel_fail_bkgf->Fill(p_T->at(i_ele), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                        else if (fabs(eta->at(i_ele)) > 1.566 && !passMediumID->at(i_ele))
-//                            h_pT_endcap_fail_bkgf->Fill(p_T->at(i_ele), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                    }
-                    if (fabs(eta->at(1-i_lead)) < 1.4442 && passMediumID->at(1-i_lead))
-                        h_pT_barrel_pass_bkgf->Fill(p_T->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    else if (fabs(eta->at(1-i_lead)) > 1.566 && passMediumID->at(1-i_lead))
-                        h_pT_endcap_pass_bkgf->Fill(p_T->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    else if (fabs(eta->at(1-i_lead)) < 1.4442 && !passMediumID->at(1-i_lead))
+
+                    if (fabs(eta->at(i_fill)) < 1.4442 && passMediumID->at(i_fill))
+                        h_pT_barrel_pass_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(eta->at(i_fill)) > 1.566 && passMediumID->at(i_fill))
+                        h_pT_endcap_pass_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(eta->at(i_fill)) < 1.4442 && !passMediumID->at(i_fill))
                     {
-                        h_pT_barrel_fail_bkgf->Fill(p_T->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        h_pT_barrel_fail_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                         h_MET_fail_bkgf->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                         h_MT_fail_bkgf->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     }
-                    else if (fabs(eta->at(1-i_lead)) > 1.566 && !passMediumID->at(1-i_lead))
+                    else if (fabs(eta->at(i_fill)) > 1.566 && !passMediumID->at(i_fill))
                     {
-                        h_pT_endcap_fail_bkgf->Fill(p_T->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        h_pT_endcap_fail_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                         h_MET_fail_bkgf->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                         h_MT_fail_bkgf->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     }
@@ -4439,30 +4480,19 @@ void E_DYefficiency (Bool_t DEBUG)
                 else
                 {
                     h_mass_bkgr->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                    for (Int_t i_ele=0; i_ele<p_T->size(); i_ele++)
-//                    {
-//                        if (fabs(eta->at(i_ele)) < 1.4442 && passMediumID->at(i_ele))
-//                            h_pT_barrel_pass_bkgr->Fill(p_T->at(i_ele), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                        else if (fabs(eta->at(i_ele)) > 1.566 && passMediumID->at(i_ele))
-//                            h_pT_endcap_pass_bkgr->Fill(p_T->at(i_ele), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                        else if (fabs(eta->at(i_ele)) < 1.4442 && !passMediumID->at(i_ele))
-//                            h_pT_barrel_fail_bkgr->Fill(p_T->at(i_ele), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                        else if (fabs(eta->at(i_ele)) > 1.566 && !passMediumID->at(i_ele))
-//                            h_pT_endcap_fail_bkgr->Fill(p_T->at(i_ele), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                    }
-                    if (fabs(eta->at(1-i_lead)) < 1.4442 && passMediumID->at(1-i_lead))
-                        h_pT_barrel_pass_bkgr->Fill(p_T->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    else if (fabs(eta->at(1-i_lead)) > 1.566 && passMediumID->at(1-i_lead))
-                        h_pT_endcap_pass_bkgr->Fill(p_T->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    else if (fabs(eta->at(1-i_lead)) < 1.4442 && !passMediumID->at(1-i_lead))
+                    if (fabs(eta->at(i_fill)) < 1.4442 && passMediumID->at(i_fill))
+                        h_pT_barrel_pass_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(eta->at(i_fill)) > 1.566 && passMediumID->at(i_fill))
+                        h_pT_endcap_pass_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(eta->at(i_fill)) < 1.4442 && !passMediumID->at(i_fill))
                     {
-                        h_pT_barrel_fail_bkgr->Fill(p_T->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        h_pT_barrel_fail_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                         h_MET_fail_bkgr->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                         h_MT_fail_bkgr->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     }
-                    else if (fabs(eta->at(1-i_lead)) > 1.566 && !passMediumID->at(1-i_lead))
+                    else if (fabs(eta->at(i_fill)) > 1.566 && !passMediumID->at(i_fill))
                     {
-                        h_pT_endcap_fail_bkgr->Fill(p_T->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        h_pT_endcap_fail_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                         h_MET_fail_bkgr->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                         h_MT_fail_bkgr->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     }
@@ -4471,30 +4501,19 @@ void E_DYefficiency (Bool_t DEBUG)
             else if (Mgr.Type == "DATA")
             {
                 h_mass_data->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                for (Int_t i_ele=0; i_ele<p_T->size(); i_ele++)
-//                {
-//                    if (fabs(eta->at(i_ele)) < 1.4442 && passMediumID->at(i_ele))
-//                        h_pT_barrel_pass_data->Fill(p_T->at(i_ele), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                    else if (fabs(eta->at(i_ele)) > 1.566 && passMediumID->at(i_ele))
-//                        h_pT_endcap_pass_data->Fill(p_T->at(i_ele), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                    else if (fabs(eta->at(i_ele)) < 1.4442 && !passMediumID->at(i_ele))
-//                        h_pT_barrel_fail_data->Fill(p_T->at(i_ele), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                    else if (fabs(eta->at(i_ele)) > 1.566 && !passMediumID->at(i_ele))
-//                        h_pT_endcap_fail_data->Fill(p_T->at(i_ele), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                }
-                if (fabs(eta->at(1-i_lead)) < 1.4442 && passMediumID->at(1-i_lead))
-                    h_pT_barrel_pass_data->Fill(p_T->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                else if (fabs(eta->at(1-i_lead)) > 1.566 && passMediumID->at(1-i_lead))
-                    h_pT_endcap_pass_data->Fill(p_T->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                else if (fabs(eta->at(1-i_lead)) < 1.4442 && !passMediumID->at(1-i_lead))
+                if (fabs(eta->at(i_fill)) < 1.4442 && passMediumID->at(i_fill))
+                    h_pT_barrel_pass_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                else if (fabs(eta->at(i_fill)) > 1.566 && passMediumID->at(i_fill))
+                    h_pT_endcap_pass_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                else if (fabs(eta->at(i_fill)) < 1.4442 && !passMediumID->at(i_fill))
                 {
-                    h_pT_barrel_fail_data->Fill(p_T->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    h_pT_barrel_fail_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     h_MET_fail_data->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     h_MT_fail_data->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                 }
-                else if (fabs(eta->at(1-i_lead)) > 1.566 && !passMediumID->at(1-i_lead))
+                else if (fabs(eta->at(i_fill)) > 1.566 && !passMediumID->at(i_fill))
                 {
-                    h_pT_endcap_fail_data->Fill(p_T->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    h_pT_endcap_fail_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     h_MET_fail_data->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     h_MT_fail_data->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                 }
@@ -4517,165 +4536,6 @@ void E_DYefficiency (Bool_t DEBUG)
 
         cout << "===========================================================\n" << endl;
     } // End of pr iteration
-
-    // Signal part (both electrons pas the selection)
-    LocalFileMgr LMgr;
-    for (SelProc_t pr=_EE_DY_10to50; pr<_EndOf_EE_DoubleEG_Normal; pr=next(pr))
-    {
-        LMgr.SetProc(pr);
-
-        cout << "Process: " << LMgr.Procname[pr] << endl;
-        cout << "Type: " << LMgr.Type << endl;
-        cout << "DATA location: " << LMgr.BaseLocation << endl;
-
-        //Loop for all samples
-        const Int_t Ntup = LMgr.FileLocation.size();
-        for(Int_t i_tup = 0; i_tup<Ntup; i_tup++)
-        {
-            cout << "\t<" << LMgr.Tag[i_tup] << ">" << endl;
-
-            TChain *chain = new TChain(LMgr.TreeName[i_tup]);
-            chain->Add(LMgr.FullLocation[i_tup]);
-
-            SelectedEE_t *EE = new SelectedEE_t();
-            EE->CreateFromChain(chain);
-
-            Int_t NEvents = chain->GetEntries();
-            if (NEvents != LMgr.nEvents[i_tup]) cout << "\tEvent numbers do not match!!!" << endl;
-            cout << "\t[Sum of weights:: " << LMgr.Wsum[i_tup] << "]" << endl;
-            cout << "\t[Selected Events: " << NEvents << "]" << endl;
-
-            if (DEBUG == kTRUE) NEvents = 10;
-            myProgressBar_t bar(NEvents);
-
-            for (Int_t i=0; i<NEvents; i++)
-            {
-                EE->GetEvent(i);
-                if (!DEBUG) bar.Draw(i);
-
-                if(!EE->isSelPassed) continue;
-//                if (EE->MET_pT > 20) continue;
-                Int_t i_lead = 0;
-//                if (EE->Electron_pT->at(1) > EE->Electron_pT->at(0)) i_lead = 1;
-
-                TLorentzVector ele1, ele2;
-                ele1.SetPtEtaPhiE(EE->Electron_pT->at(0), EE->Electron_eta->at(0), EE->Electron_phi->at(0), EE->Electron_Energy->at(0));
-                ele2.SetPtEtaPhiE(EE->Electron_pT->at(1), EE->Electron_eta->at(1), EE->Electron_phi->at(1), EE->Electron_Energy->at(1));
-                Double_t mass = (ele1 + ele2).M();
-                if (mass < 76 || mass >106) continue;
-
-                Double_t dTheta = EE->Electron_phi->at(0) - EE->MET_phi;
-                Double_t MT = sqrt(2 * EE->Electron_pT->at(0) * EE->MET_pT * (1 - cos(dTheta)));
-                if (MT >= 60) continue;
-
-                // -- Bring the weights -- //
-                Double_t GenWeight = EE->GENEvt_weight;
-                if (GenWeight > 1) GenWeight = 1;
-                else if (GenWeight < -1) GenWeight = -1;
-
-                // -- Pileup-Reweighting -- //
-                Double_t PUWeight = 1;
-                if(LMgr.isMC == kTRUE) PUWeight = analyzer->PileUpWeightValue_80X(EE->nPileUp);
-
-                // -- PVz weights -- //
-                Double_t PVzWeight = 1;
-                if(LMgr.isMC == kTRUE /*&& pr < _EE_QCDEMEnriched_20to30*/) PVzWeight = analyzer->PVzWeightValue(EE->PVz);
-
-                // -- L1 prefiring weights -- //
-                Double_t L1weight = 1;
-                if (LMgr.isMC == kTRUE /*&& pr < _EE_QCDEMEnriched_20to30*/) L1weight = EE->_prefiringweight;
-
-                // -- Top Pt weights -- //
-                Double_t TopPtWeight = 1;
-                if (LMgr.isMC == kTRUE /*&& pr < _EE_QCDEMEnriched_20to30*/) TopPtWeight = EE->_topPtWeight;
-
-                // -- Normalization -- //
-                Double_t TotWeight = GenWeight;
-                if (LMgr.isMC == kTRUE) TotWeight = (Lumi * LMgr.Xsec[i_tup] / LMgr.Wsum[i_tup]) * GenWeight;
-                if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl << endl;
-
-
-                if (LMgr.Type == "SIGNAL")
-                {
-                    h_mass_DY->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                    if (fabs(EE->Electron_eta->at(0)) < 1.4442)
-//                        h_pT_barrel_pass_DY->Fill(EE->Electron_pT->at(0), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                    else if (fabs(EE->Electron_eta->at(0)) > 1.566)
-//                        h_pT_endcap_pass_DY->Fill(EE->Electron_pT->at(0), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                    if (fabs(EE->Electron_eta->at(1)) < 1.4442)
-//                        h_pT_barrel_pass_DY->Fill(EE->Electron_pT->at(1), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                    else if (fabs(EE->Electron_eta->at(1)) > 1.566)
-//                        h_pT_endcap_pass_DY->Fill(EE->Electron_pT->at(1), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    if (fabs(EE->Electron_eta->at(1-i_lead)) < 1.4442)
-                        h_pT_barrel_pass_DY->Fill(EE->Electron_pT->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    else if (fabs(EE->Electron_eta->at(1-i_lead)) > 1.566)
-                        h_pT_endcap_pass_DY->Fill(EE->Electron_pT->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                }
-                else if (LMgr.Type == "BKG")
-                {
-                    if (LMgr.Tag[0].Contains("QCD") || LMgr.Tag[0].Contains("Jet"))
-                    {
-                        h_mass_bkgf->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                        if (fabs(EE->Electron_eta->at(0)) < 1.4442)
-//                            h_pT_barrel_pass_bkgf->Fill(EE->Electron_pT->at(0), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                        else if (fabs(EE->Electron_eta->at(0)) > 1.566)
-//                            h_pT_endcap_pass_bkgf->Fill(EE->Electron_pT->at(0), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                        if (fabs(EE->Electron_eta->at(1)) < 1.4442)
-//                            h_pT_barrel_pass_bkgf->Fill(EE->Electron_pT->at(1), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                        else if (fabs(EE->Electron_eta->at(1)) > 1.566)
-//                            h_pT_endcap_pass_bkgf->Fill(EE->Electron_pT->at(1), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                        if (fabs(EE->Electron_eta->at(1-i_lead)) < 1.4442)
-                            h_pT_barrel_pass_bkgf->Fill(EE->Electron_pT->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                        else if (fabs(EE->Electron_eta->at(1-i_lead)) > 1.566)
-                            h_pT_endcap_pass_bkgf->Fill(EE->Electron_pT->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    }
-                    else
-                    {
-                        h_mass_bkgr->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                        if (fabs(EE->Electron_eta->at(0)) < 1.4442)
-//                            h_pT_barrel_pass_bkgr->Fill(EE->Electron_pT->at(0), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                        else if (fabs(EE->Electron_eta->at(0)) > 1.566)
-//                            h_pT_endcap_pass_bkgr->Fill(EE->Electron_pT->at(0), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                        if (fabs(EE->Electron_eta->at(1)) < 1.4442)
-//                            h_pT_barrel_pass_bkgr->Fill(EE->Electron_pT->at(1), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                        else if (fabs(EE->Electron_eta->at(1)) > 1.566)
-//                            h_pT_endcap_pass_bkgr->Fill(EE->Electron_pT->at(1), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                        if (fabs(EE->Electron_eta->at(1-i_lead)) < 1.4442)
-                            h_pT_barrel_pass_bkgr->Fill(EE->Electron_pT->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                        else if (fabs(EE->Electron_eta->at(1-i_lead)) > 1.566)
-                            h_pT_endcap_pass_bkgr->Fill(EE->Electron_pT->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    }
-                }
-                else if (LMgr.Type == "DATA")
-                {
-                    h_mass_data->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                    if (fabs(EE->Electron_eta->at(0)) < 1.4442)
-//                        h_pT_barrel_pass_data->Fill(EE->Electron_pT->at(0), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                    else if (fabs(EE->Electron_eta->at(0)) > 1.566)
-//                        h_pT_endcap_pass_data->Fill(EE->Electron_pT->at(0), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                    if (fabs(EE->Electron_eta->at(1)) < 1.4442)
-//                        h_pT_barrel_pass_data->Fill(EE->Electron_pT->at(1), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-//                    else if (fabs(EE->Electron_eta->at(1)) > 1.566)
-//                        h_pT_endcap_pass_data->Fill(EE->Electron_pT->at(1), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    if (fabs(EE->Electron_eta->at(1-i_lead)) < 1.4442)
-                        h_pT_barrel_pass_data->Fill(EE->Electron_pT->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    else if (fabs(EE->Electron_eta->at(1-i_lead)) > 1.566)
-                        h_pT_endcap_pass_data->Fill(EE->Electron_pT->at(1-i_lead), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                }
-
-            } // End of event iteration
-
-            if(LMgr.isMC == kTRUE) printf("\tNormalization factor: %.8f\n", Lumi*LMgr.Xsec[i_tup]/LMgr.Wsum[i_tup]);
-
-        }// End of i_tup iteration
-
-        cout << " Finished.\n" << endl;
-
-        if (DEBUG == kTRUE && pr == _EE_DY_10to50) break;
-
-        cout << "===========================================================\n" << endl;
-
-    }// End of pr iteration
 
     f->cd();
     cout << "\tWriting into file...";
@@ -4719,7 +4579,7 @@ void E_DYefficiency (Bool_t DEBUG)
     TTimeStamp ts_end;
     cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
 
-} // End of E_DYefficiency()
+} // End of E_PR_HistDrawer()
 
 
 /// --------------------------- DY MediumID efficiency check ---------------------------- ///
