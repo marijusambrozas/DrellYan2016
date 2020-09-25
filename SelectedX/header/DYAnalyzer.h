@@ -286,7 +286,7 @@ public:
         Double_t PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t PrescaleFactor2(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t PrescaleFactor3(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
-        Int_t FindTriggerAndPrescale(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
+        Int_t FindTriggerAndPrescale(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *HLT_PS, std::vector<int> *L1seed_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Int_t FindTriggerAndPrescale(vector<Muon> MuonCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Int_t FindTriggerAndPrescale2(vector<Muon> MuonCollection, NtupleHandle *ntuple, std::vector<std::string> *trig_name, std::vector<int> *trig_fired, std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT, Bool_t Debug);
         Double_t getPrescale(Double_t Et);
@@ -7176,77 +7176,86 @@ Double_t DYAnalyzer::PrescaleFactor3(vector<Electron> ElectronCollection, Ntuple
 
 
 Int_t DYAnalyzer::FindTriggerAndPrescale(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired,
-                                            std::vector<int> *trig_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT)
+                                         std::vector<int> *HLT_PS, std::vector<int> *L1seed_PS, std::vector<int> *trig_matched, std::vector<double> *trig_pT)
 {
     Int_t triggered = 0;
-    Int_t Factor = -9999;
+    Int_t hlt_ps = -9999;
+    Int_t l1seed_ps = -9999;
     Double_t HLT_pT = -9999;
     for(Int_t i_ele=0; i_ele<(Int_t)ElectronCollection.size(); i_ele++)
     {
         Electron ele = ElectronCollection[i_ele];
-        if (ele.isTrigMatched(ntuple, "HLT_Photon22_v*", &HLT_pT, &Factor))
+        if (ele.isTrigMatched(ntuple, "HLT_Photon22_v*", &HLT_pT, &hlt_ps, &l1seed_ps))
         {
             triggered = 1;
             trig_fired->push_back(22);
             trig_matched->push_back(i_ele);
             trig_pT->push_back(HLT_pT);
-            trig_PS->push_back(Factor);
+            HLT_PS->push_back(hlt_ps);
+            L1seed_PS->push_back(l1seed_ps);
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon30_v*", &HLT_pT, &Factor))
+        if (ele.isTrigMatched(ntuple, "HLT_Photon30_v*", &HLT_pT, &hlt_ps, &l1seed_ps))
         {
             triggered = 1;
             trig_fired->push_back(30);
             trig_matched->push_back(i_ele);
             trig_pT->push_back(HLT_pT);
-            trig_PS->push_back(Factor);
+            HLT_PS->push_back(hlt_ps);
+            L1seed_PS->push_back(l1seed_ps);
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon36_v*", &HLT_pT, &Factor))
+        if (ele.isTrigMatched(ntuple, "HLT_Photon36_v*", &HLT_pT, &hlt_ps, &l1seed_ps))
         {
             triggered = 1;
             trig_fired->push_back(36);
             trig_matched->push_back(i_ele);
             trig_pT->push_back(HLT_pT);
-            trig_PS->push_back(Factor);
+            HLT_PS->push_back(hlt_ps);
+            L1seed_PS->push_back(l1seed_ps);
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon50_v*", &HLT_pT, &Factor))
+        if (ele.isTrigMatched(ntuple, "HLT_Photon50_v*", &HLT_pT, &hlt_ps, &l1seed_ps))
         {
             triggered = 1;
             trig_fired->push_back(50);
             trig_matched->push_back(i_ele);
             trig_pT->push_back(HLT_pT);
-            trig_PS->push_back(Factor);
+            HLT_PS->push_back(hlt_ps);
+            L1seed_PS->push_back(l1seed_ps);
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon75_v*", &HLT_pT, &Factor))
+        if (ele.isTrigMatched(ntuple, "HLT_Photon75_v*", &HLT_pT, &hlt_ps, &l1seed_ps))
         {
             triggered = 1;
             trig_fired->push_back(75);
             trig_matched->push_back(i_ele);
             trig_pT->push_back(HLT_pT);
-            trig_PS->push_back(Factor);
+            HLT_PS->push_back(hlt_ps);
+            L1seed_PS->push_back(l1seed_ps);
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon90_v*", &HLT_pT, &Factor))
+        if (ele.isTrigMatched(ntuple, "HLT_Photon90_v*", &HLT_pT, &hlt_ps, &l1seed_ps))
         {
             triggered = 1;
             trig_fired->push_back(90);
             trig_matched->push_back(i_ele);
             trig_pT->push_back(HLT_pT);
-            trig_PS->push_back(Factor);
+            HLT_PS->push_back(hlt_ps);
+            L1seed_PS->push_back(l1seed_ps);
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon120_v*", &HLT_pT, &Factor))
+        if (ele.isTrigMatched(ntuple, "HLT_Photon120_v*", &HLT_pT, &hlt_ps, &l1seed_ps))
         {
             triggered = 1;
             trig_fired->push_back(120);
             trig_matched->push_back(i_ele);
             trig_pT->push_back(HLT_pT);
-            trig_PS->push_back(Factor);
+            HLT_PS->push_back(hlt_ps);
+            L1seed_PS->push_back(l1seed_ps);
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon175_v*", &HLT_pT, &Factor))
+        if (ele.isTrigMatched(ntuple, "HLT_Photon175_v*", &HLT_pT, &hlt_ps, &l1seed_ps))
         {
             triggered = 1;
             trig_fired->push_back(175);
             trig_matched->push_back(i_ele);
             trig_pT->push_back(HLT_pT);
-            trig_PS->push_back(Factor);
+            HLT_PS->push_back(hlt_ps);
+            L1seed_PS->push_back(l1seed_ps);
         }
     }
     return triggered;

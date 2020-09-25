@@ -945,7 +945,7 @@ public:
 		return isPass;
 	}
 
-        Bool_t isTrigMatched(NtupleHandle *nh, TString HLT, Double_t *HLT_pT=NULL, Int_t *HLT_PS=NULL)
+        Bool_t isTrigMatched(NtupleHandle *nh, TString HLT, Double_t *HLT_pT=NULL, Int_t *HLT_PS=NULL, Int_t *L1seed_PS=NULL)
 	{
 		vector<string> *hlt_trigName = nh->HLT_trigName;
 		Int_t hlt_ntrig = nh->HLT_ntrig;
@@ -967,13 +967,14 @@ public:
                             if(dR < 0.3 && fabs(Lepton_eta) < 2.5)
                             {
 //                                cout << "HLTname: " << hlt_trigName->at((unsigned int)k) <<"    pT: " << Lepton_pT << "   HLT pT: " << Trig_pT << endl;
-                                if (dpT < 0.3)
-                                {
+//                                if (dpT < 0.3)
+//                                {
                                     isTrigMatch = true;
                                     if (HLT_pT) *HLT_pT = Trig_pT;
                                     if (HLT_PS) *HLT_PS = nh->HLT_trigPS->at(k);
+                                    if (L1seed_PS) *L1seed_PS = nh->L1seed_trigPS->at(k);
                                     break;
-                                }
+//                                }
                             }
 			}
 		}
