@@ -228,7 +228,6 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         std::vector<double> *trig_pT = new std::vector<double>;
         std::vector<int> *HLT_trigPS = new std::vector<int>;
         std::vector<int> *L1seed_trigPS = new std::vector<int>;
-        std::vector<int> *prescale_factor = new std::vector<int>;
         Double_t MET_pT, MET_phi;
         Int_t runNum;
         Int_t lumiBlock;
@@ -527,15 +526,6 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         prefiring_weight = ntuple->_prefiringweight;
                         prefiring_weight_up = ntuple->_prefiringweightup;
                         prefiring_weight_down = ntuple->_prefiringweightdown;
-
-//                        if (analyzer->HLT == "HLT_Photon*")
-//                            prescale_factor = analyzer->PrescaleFactor(SelectedElectronCollection, ntuple, trig_fired, trig_matched, trig_pT);
-//                        if (analyzer->HLT == "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v*")
-//                            prescale_factor = analyzer->PrescaleFactor2(SelectedElectronCollection, ntuple, trig_fired, trig_matched, trig_pT);
-//                        if (analyzer->HLT == "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v* && HLT_Photon*")
-//                            prescale_factor = analyzer->PrescaleFactor3(SelectedElectronCollection, ntuple, trig_fired, trig_matched, trig_pT);
-
-//                        if (prescale_factor < 0) continue; // If no trigger match between selected electrons
 
                         Int_t triggered = 0;
                         triggered = analyzer->FindTriggerAndPrescale(SelectedElectronCollection, ntuple, trig_fired, HLT_trigPS, L1seed_trigPS,
