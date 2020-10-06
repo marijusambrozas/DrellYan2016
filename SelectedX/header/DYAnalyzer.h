@@ -7271,56 +7271,56 @@ Int_t DYAnalyzer::FindTrigger(vector<Electron> ElectronCollection, NtupleHandle 
     for(Int_t i_ele=0; i_ele<(Int_t)ElectronCollection.size(); i_ele++)
     {
         Electron ele = ElectronCollection[i_ele];
-        if (ele.isTrigMatched(ntuple, "HLT_Photon22_v*", &trig_index))
+        if (ele.isTrigMatched(ntuple, "HLT_Photon22_v*", trig_index))
         {
             triggered = 1;
             trig_indices->push_back(trig_index);
             trig_fired->push_back(22);
             trig_matched->push_back(i_ele);
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon30_v*", &trig_index))
+        if (ele.isTrigMatched(ntuple, "HLT_Photon30_v*", trig_index))
         {
             triggered = 1;
             trig_indices->push_back(trig_index);
             trig_fired->push_back(30);
             trig_matched->push_back(i_ele);
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon36_v*", &trig_index))
+        if (ele.isTrigMatched(ntuple, "HLT_Photon36_v*", trig_index))
         {
             triggered = 1;
             trig_indices->push_back(trig_index);
             trig_fired->push_back(36);
             trig_matched->push_back(i_ele);
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon50_v*", &trig_index))
+        if (ele.isTrigMatched(ntuple, "HLT_Photon50_v*", trig_index))
         {
             triggered = 1;
             trig_indices->push_back(trig_index);
             trig_fired->push_back(50);
             trig_matched->push_back(i_ele);
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon75_v*", &trig_index))
+        if (ele.isTrigMatched(ntuple, "HLT_Photon75_v*", trig_index))
         {
             triggered = 1;
             trig_indices->push_back(trig_index);
             trig_fired->push_back(75);
             trig_matched->push_back(i_ele);
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon90_v*", &trig_index))
+        if (ele.isTrigMatched(ntuple, "HLT_Photon90_v*", trig_index))
         {
             triggered = 1;
             trig_indices->push_back(trig_index);
             trig_fired->push_back(90);
             trig_matched->push_back(i_ele);
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon120_v*", &trig_index))
+        if (ele.isTrigMatched(ntuple, "HLT_Photon120_v*", trig_index))
         {
             triggered = 1;
             trig_indices->push_back(trig_index);
             trig_fired->push_back(120);
             trig_matched->push_back(i_ele);
         }
-        if (ele.isTrigMatched(ntuple, "HLT_Photon175_v*", &trig_index))
+        if (ele.isTrigMatched(ntuple, "HLT_Photon175_v*", trig_index))
         {
             triggered = 1;
             trig_indices->push_back(trig_index);
