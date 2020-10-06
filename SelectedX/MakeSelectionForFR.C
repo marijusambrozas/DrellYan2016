@@ -173,31 +173,12 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         TString out_base;
         TString out_dir;
         TFile* ElectronFile;
-        if (Mgr.Type == "DATA")
-        {
-            out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
-            out_dir = "SelectedForFR_E_"+Mgr.Procname[Mgr.CurrentProc];
-        }
-        else if (Mgr.Type == "SIGNAL")
-        {
-            out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
-            out_dir = "SelectedForFR_E_"+Mgr.Procname[Mgr.CurrentProc];
-        }
-        else if (Mgr.Type == "BKG")
-        {
-            out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
-            out_dir = "SelectedForFR_E_"+Mgr.Procname[Mgr.CurrentProc];
-        }
-        else if (Mgr.Type == "TEST")
-        {
+        out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
+//        out_base = "~/Desktop/";
+        out_dir = "SelectedForFR_E_"+Mgr.Procname[Mgr.CurrentProc];
+
+        if (Mgr.Type == "TEST")
             out_base = "/media/sf_DATA/test/";
-            out_dir = "SelectedForFR_E_"+Mgr.Procname[Mgr.CurrentProc];
-        }
-        else
-        {
-            cout << "Problems with TYPE." << endl;
-            return;
-        }
 
         if (Debug == kTRUE)
             ElectronFile = TFile::Open(out_base+out_dir+"_DEBUG.root", "RECREATE");
@@ -230,7 +211,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         std::vector<double> *trig_pT = new std::vector<double>;
         std::vector<int> *HLT_trigPS = new std::vector<int>;
         std::vector<int> *L1seed_trigPS = new std::vector<int>;
-        std::vector<std::vector<std::pair<std::string, int>>> *L1seed_trigPSinDetail;
+        std::vector<std::vector<std::pair<std::string, int>>> L1seed_trigPSinDetail;
         Double_t MET_pT, MET_phi;
         Int_t runNum;
         Int_t lumiBlock;
@@ -298,6 +279,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
             TChain *chain = new TChain(Mgr.TreeName[i_tup]);
             // TEST
+//            chain->Add("~/Desktop/ntuple_data_7.root");
             chain->Add("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v10.1/SinglePhoton/crab_SinglePhoton_Run2016B/201005_142913/0000/*.root");
             chain->Add("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v10.1/SinglePhoton/crab_SinglePhoton_Run2016B/201005_142913/0001/*.root");
 //            Mgr.SetupChain(i_tup, chain);
@@ -507,7 +489,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         trig_pT->clear();
                         HLT_trigPS->clear();
                         L1seed_trigPS->clear();
-                        L1seed_trigPSinDetail->clear();
+                        L1seed_trigPSinDetail.clear();
 
                         // -- Top pT reweighting -- //
                         top_weight = 1;
@@ -543,7 +525,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                             trig_pT->push_back(ntuple->HLT_trigPt[trig_index[i_tr]]);
                             HLT_trigPS->push_back(ntuple->HLT_trigPS->at(trig_index[i_tr]));
                             L1seed_trigPS->push_back(ntuple->L1seed_trigPS->at(trig_index[i_tr]));
-                            L1seed_trigPSinDetail->push_back(ntuple->L1seed_trigPSinDetail->at(trig_index[i_tr]));
+                            L1seed_trigPSinDetail.push_back(ntuple->L1seed_trigPSinDetail->at(trig_index[i_tr]));
                         }
 
                         // -- Electron vector filling -- //
