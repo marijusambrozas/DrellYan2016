@@ -26,7 +26,7 @@ public:
     vector<string> *HLT_trigName;
     vector<int> *HLT_trigPS;
     vector<int> *L1seed_trigPS;
-    std::vector<std::vector<std::pair<std::string, int>>> L1seed_trigPSinDetail;
+    std::vector<std::vector<std::pair<std::string, int>>> *L1seed_trigPSinDetail;
     Double_t HLT_trigPt[MaxN];
     Double_t HLT_trigEta[MaxN];
     Double_t HLT_trigPhi[MaxN];

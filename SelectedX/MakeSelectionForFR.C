@@ -538,7 +538,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
                         // -- Trigger vector filling -- //
                         if (!triggered) continue;
-                        for (Uint_t i_tr=0; i_tr<trig_index.size(); i_tr++)
+                        for (UInt_t i_tr=0; i_tr<trig_index.size(); i_tr++)
                         {
                             trig_pT->push_back(ntuple->HLT_trigPt[trig_index[i_tr]]);
                             HLT_trigPS->push_back(ntuple->HLT_trigPS->at(trig_index[i_tr]));
