@@ -981,7 +981,7 @@ public:
 		return isTrigMatch;
 	}
 
-        Bool_t isTrigMatched(NtupleHandle *nh, TString HLT, Int_t *HLT_index=NULL)
+        Bool_t isTrigMatched(NtupleHandle *nh, TString HLT, Int_t &HLT_index)
         {
                 vector<string> *hlt_trigName = nh->HLT_trigName;
                 Int_t hlt_ntrig = nh->HLT_ntrig;
@@ -1006,7 +1006,7 @@ public:
 //                                if (dpT < 0.3)
 //                                {
                                     isTrigMatch = true;
-                                    if (HLT_index) *HLT_index = k;
+                                    HLT_index = k;
                                     break;
 //                                }
                             }
