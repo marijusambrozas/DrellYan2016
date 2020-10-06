@@ -64,5 +64,8 @@ Local/
 *.nav
 *.snm
 
+# dictionaries
+AutoDict*
+
 # rootlogon (different in different places)
 rootlogon.C

@@ -981,6 +981,40 @@ public:
 		return isTrigMatch;
 	}
 
+        Bool_t isTrigMatched(NtupleHandle *nh, TString HLT, Int_t *HLT_index=NULL)
+        {
+                vector<string> *hlt_trigName = nh->HLT_trigName;
+                Int_t hlt_ntrig = nh->HLT_ntrig;
+
+                Bool_t isTrigMatch = false;
+                for(Int_t k = 0; k < hlt_ntrig; k++)
+                {
+                        if((hlt_trigName->at((unsigned int)k)) == HLT)
+                        {
+                            Double_t Lepton_pT = this->Pt;
+                            Double_t Lepton_eta = this->eta;
+                            Double_t Lepton_phi = this->phi;
+                            Double_t Trig_pT = nh->HLT_trigPt[k];
+                            Double_t Trig_eta = nh->HLT_trigEta[k];
+                            Double_t Trig_phi = nh->HLT_trigPhi[k];
+
+                            Double_t dR = sqrt((Lepton_eta - Trig_eta)*(Lepton_eta - Trig_eta) + (Lepton_phi - Trig_phi)*(Lepton_phi - Trig_phi));
+                            Double_t dpT = fabs(Lepton_pT - Trig_pT) / Trig_pT;
+                            if(dR < 0.3 && fabs(Lepton_eta) < 2.5)
+                            {
+//                                cout << "HLTname: " << hlt_trigName->at((unsigned int)k) <<"    pT: " << Lepton_pT << "   HLT pT: " << Trig_pT << endl;
+//                                if (dpT < 0.3)
+//                                {
+                                    isTrigMatch = true;
+                                    if (HLT_index) *HLT_index = k;
+                                    break;
+//                                }
+                            }
+                        }
+                }
+                return isTrigMatch;
+        }
+
 };
 
 class Muon : public Object

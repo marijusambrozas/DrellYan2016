@@ -135,6 +135,8 @@ void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "D
 /// ----------------------------- Electron ------------------------------ ///
 void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 {
+    gInterpreter->GenerateDictionary("std::vector<std::vector<std::pair<std::string,int>>>", "vector");
+
     // -- Run2016 luminosity [/pb] -- //
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
     L = L_B2H;
@@ -228,6 +230,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         std::vector<double> *trig_pT = new std::vector<double>;
         std::vector<int> *HLT_trigPS = new std::vector<int>;
         std::vector<int> *L1seed_trigPS = new std::vector<int>;
+        std::vector<std::vector<std::pair<std::string, int>>> *L1seed_trigPSinDetail;
         Double_t MET_pT, MET_phi;
         Int_t runNum;
         Int_t lumiBlock;
@@ -276,6 +279,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         ElectronTree->Branch("prefiring_weight_down", &prefiring_weight_down);
         ElectronTree->Branch("HLT_trigPS", &HLT_trigPS);
         ElectronTree->Branch("L1seed_trigPS", &L1seed_trigPS);
+        ElectronTree->Branch("L1seed_trigPSinDetail", &L1seed_trigPSinDetail);
 
         Int_t currentRunNo=-999, currentLumiSection=-999;
 //        std::map<std::pair<int,int>,int> lumis; // to search present run numbers and lumi sections
@@ -294,8 +298,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
             TChain *chain = new TChain(Mgr.TreeName[i_tup]);
             // TEST
-            chain->Add("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v2.10/SinglePhoton/crab_SinglePhoton_Run2016B/200924_111657/0000/*.root");
-            chain->Add("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v2.10/SinglePhoton/crab_SinglePhoton_Run2016B/200924_111657/0001/*.root");
+            chain->Add("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v10.1/SinglePhoton/crab_SinglePhoton_Run2016B/201005_142913/0000/*.root");
+            chain->Add("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v10.1/SinglePhoton/crab_SinglePhoton_Run2016B/201005_142913/0001/*.root");
 //            Mgr.SetupChain(i_tup, chain);
 
 //            std::map<std::tuple<int,int,unsigned long long>, int> repeats; // to search for repeating events
@@ -503,6 +507,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         trig_pT->clear();
                         HLT_trigPS->clear();
                         L1seed_trigPS->clear();
+                        L1seed_trigPSinDetail->clear();
 
                         // -- Top pT reweighting -- //
                         top_weight = 1;
@@ -528,11 +533,20 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         prefiring_weight_down = ntuple->_prefiringweightdown;
 
                         Int_t triggered = 0;
-                        triggered = analyzer->FindTriggerAndPrescale(SelectedElectronCollection, ntuple, trig_fired, HLT_trigPS, L1seed_trigPS,
-                                                                     trig_matched, trig_pT);
-                        if (!triggered) continue;
+                        std::vector<int> trig_index;
+                        triggered = analyzer->FindTrigger(SelectedElectronCollection, ntuple, &trig_index, trig_fired, trig_matched);
 
-                        // -- Vector filling -- //
+                        // -- Trigger vector filling -- //
+                        if (!triggered) continue;
+                        for (Uint_t i_tr=0; i_tr<trig_index.size(); i_tr++)
+                        {
+                            trig_pT->push_back(ntuple->HLT_trigPt[trig_index[i_tr]]);
+                            HLT_trigPS->push_back(ntuple->HLT_trigPS->at(trig_index[i_tr]));
+                            L1seed_trigPS->push_back(ntuple->L1seed_trigPS->at(trig_index[i_tr]));
+                            L1seed_trigPSinDetail->push_back(ntuple->L1seed_trigPSinDetail->at(trig_index[i_tr]));
+                        }
+
+                        // -- Electron vector filling -- //
                         for (UInt_t i_ele=0; i_ele<SelectedElectronCollection.size(); i_ele++)
                         {
                             p_T->push_back(SelectedElectronCollection[i_ele].Pt);
