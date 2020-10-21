@@ -127,6 +127,7 @@ public:
         const double ptbin_DY[nPtBin_DY+1] = {17, 23, 28, 35, 45, 60, 80, 100, 150, 250, 5000};
         Double_t Eff_DY[nPtBin_DY][2];
         Double_t Ineff_DY[nPtBin_DY][2];
+        Double_t PR_ele[nPtBin_DY][2];
 
         // -- Constructor -- //
 	DYAnalyzer(TString HLTname);
@@ -299,6 +300,9 @@ public:
         Double_t FakeRate_ele_alt_sub(Double_t p_T, Double_t eta);
         void SetupDYeff();
         Double_t DYeff_evtWeight(Double_t pT1, Double_t eta1, Int_t passMediumID1, Double_t pT2, Double_t eta2, Int_t passMediumID2);
+        void SetupPRvalues_ele(TString filename, TString type="subtract", Int_t increaseLowPt=0);
+        Double_t PromptRate_ele(Double_t p_T, Double_t eta);
+        std::vector<double> MatrixMethod_evtWeight(Double_t pT1, Double_t eta1, Int_t passMediumID1, Double_t pT2, Double_t eta2, Int_t passMediumID2);
 
 	// -- pre-FSR functions -- //
 	void PostToPreFSR_byDressedLepton(NtupleHandle *ntuple, GenLepton *genlep_postFSR, Double_t dRCut, GenLepton *genlep_preFSR, vector< GenOthers >* GenPhotonCollection);
@@ -7486,6 +7490,29 @@ void DYAnalyzer::SetupDYeff()
 } // End of SetupDYeff()
 
 
+void DYAnalyzer::SetupPRvalues_ele(TString filename, TString type, Int_t increaseLowPt)
+{
+    cout << "Setting up PR values...";
+
+    // RECO
+    TFile *f = new TFile(filename);
+    TH1D *h_PR_barrel = (TH1D*)f->Get("h_PR_"+type+"_barrel");
+    TH1D *h_PR_endcap = (TH1D*)f->Get("h_PR_"+type+"_endcap");
+
+    for (Int_t i=0; i<nPtBin_DY; i++)
+    {
+        if (h_PR_barrel->GetBinContent(i+1) > 0 && h_PR_barrel->GetBinContent(i+1) == h_PR_barrel->GetBinContent(i+1))
+            PR_ele[i][0] = h_PR_barrel->GetBinContent(i+1);
+        else PR_ele[i][0] = 1;
+        if (h_PR_endcap->GetBinContent(i+1) > 0 && h_PR_endcap->GetBinContent(i+1) == h_PR_endcap->GetBinContent(i+1))
+            PR_ele[i][1] = h_PR_endcap->GetBinContent(i+1);
+        else PR_ele[i][1] = 1;
+    }
+    f->Close();
+    std::cout << "done." << endl;
+} // End of SetupPRvalues_ele()
+
+
 Double_t DYAnalyzer::DYeff_evtWeight(Double_t pT1, Double_t eta1, Int_t passMediumID1, Double_t pT2, Double_t eta2, Int_t passMediumID2)
 {
     Double_t weight = 1;
@@ -7551,6 +7578,95 @@ Double_t DYAnalyzer::DYeff_evtWeight(Double_t pT1, Double_t eta1, Int_t passMedi
 
     return weight;
 }
+
+
+Double_t DYAnalyzer::PromptRate_ele(Double_t p_T, Double_t eta)
+{
+    Double_t PR = 1;
+
+    Int_t etabin;
+    Int_t i_bin = 0;
+    Int_t stop = 0;
+    if (fabs(eta) < 1.4442) // barrel
+    {
+        etabin = 0;
+        while (!stop)
+        {
+            if (p_T < ptbin_DY[i_bin + 1] || i_bin >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available value
+                stop = 1;
+            else
+                i_bin++;
+        }
+    }
+    else if (fabs(eta) > 1.566) // endcap
+    {
+        etabin = 1;
+        while (!stop)
+        {
+            if (p_T < ptbin_DY[i_bin + 1] || i_bin >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available value
+                stop = 1;
+            else
+                i_bin++;
+        }
+    }
+    else return 0;
+
+    PR = PR_ele[i_bin][etabin];
+
+    return PR;
+} // end of PromptRate_ele
+
+
+std::vector<double> DYAnalyzer::MatrixMethod_evtWeight(Double_t pT1, Double_t eta1, Int_t passMediumID1, Double_t pT2, Double_t eta2, Int_t passMediumID2)
+{
+    std::vector<double> weights(4, 1.0);
+
+    Double_t FR1 = FakeRate_ele(pT1, eta1);
+    Double_t FR2 = FakeRate_ele(pT2, eta2);
+    Double_t PR1 = PromptRate_ele(pT1, eta1);
+    Double_t PR2 = PromptRate_ele(pT2, eta2);
+
+    Double_t prefix = 1 / ((FR1 - PR1) * (FR2 - PR2));
+    if (passMediumID1 && passMediumID2)
+    {
+        weights[0] = prefix * (1 - FR1) * (1 - FR2);
+        weights[1] = prefix * (FR1 - 1) * (1 - PR2);
+        weights[2] = prefix * (PR1 - 1) * (1 - FR2);
+        weights[3] = prefix * (1 - PR1) * (1 - PR2);
+    }
+    else if (passMediumID1 && !passMediumID2)
+    {
+        weights[0] = prefix * (FR1 - 1) * FR2;
+        weights[1] = prefix * (1 - FR1) * PR2;
+        weights[2] = prefix * (1 - PR1) * FR2;
+        weights[3] = prefix * (PR1 - 1) * PR2;
+    }
+    else if (!passMediumID1 && passMediumID2)
+    {
+        weights[0] = prefix * FR1 * (FR2 - 1);
+        weights[1] = prefix * FR1 * (1 - PR2);
+        weights[2] = prefix * PR1 * (1 - FR2);
+        weights[3] = prefix * PR1 * (PR2 - 1);
+    }
+    else
+    {
+        weights[0] = prefix * FR1 * FR2;
+        weights[1] = prefix * FR1 * PR2 * (-1.0);
+        weights[2] = prefix * PR1 * FR2 * (-1.0);
+        weights[3] = prefix * PR1 * PR2;
+    }
+
+    if (weights[0] != weights[0] || weights[1] != weights[1] || weights[2] != weights[2] || weights[3] != weights[3])
+    {
+        cout << "Some of weights are NaN.\nweights[0]=" << weights[0] << " weights[1]=" << weights[1] <<
+                " weights[2]=" << weights[2] << " weights[3]=" << weights[3] <<
+                "\npT1=" << pT1 << " eta1=" << eta1 << " passID1=" << passMediumID1 << " FR1=" << FR1 << " PR1=" << PR1 <<
+                " pT2=" << pT2 << " eta2=" << eta2 << " passID2=" << passMediumID2 << " FR2=" << FR2 << " PR2=" << PR2 << endl;
+    }
+
+    return weights;
+} // end of MatrixMethod_evtWeight
+
 
 Bool_t DYAnalyzer::EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple,
                                              vector< Muon >* SelectedMuonCollection, vector< Electron >* SelectedElectronCollection)

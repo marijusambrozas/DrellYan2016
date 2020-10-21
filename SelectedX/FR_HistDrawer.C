@@ -41,6 +41,7 @@ void EMu_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr);
 void EMu_WJETest_HistDrawer(Int_t remNegBins, Int_t systErr);
 
 void E_PR_HistDrawer();
+void E_MatrixMethod_HistDrawer(Int_t remNegBins, Int_t systErr);
 
 Double_t CompChiSquared(TH1D *h_data, THStack *s_MC);
 Double_t CompAvgDataMCDifference(TH1D *h_data, THStack *s_MC);
@@ -117,6 +118,11 @@ void FR_HistDrawer (TString WhichX = "", Int_t systErr = 0, Int_t type = 2)
         {
             cout << "\n*************     E_PR_HistDrawer()    *************" << endl;
             E_PR_HistDrawer();
+        }
+        else if (whichX.Contains("MATRIX") || whichX.Contains("MM"))
+        {
+            cout << "\n*******     E_MatrixMethod_HistDrawer(" << type << ", " << systErr << ")    *******" << endl;
+            E_MatrixMethod_HistDrawer(type, systErr);
         }
         else if (whichX.Contains("QCD"))
         {
@@ -5329,24 +5335,24 @@ void E_HistDrawer(Int_t type)
     RP_InvEminusInvP_endcap_deno->SetPlots("1/E-1/P (e_{#lower[-0.4]{endcap}}^{deno})", -6, 6);
     RP_InvEminusInvP_barrel_ctrl->SetPlots("1/E-1/P (e_{#lower[-0.4]{barrel}}^{control})", -6, 6);
     RP_InvEminusInvP_endcap_ctrl->SetPlots("1/E-1/P (e_{#lower[-0.4]{endcap}}^{control})", -6, 6);
-    RP_TrkIso_barrel_nume->SetPlots("relTrkIso (e_{#lower[-0.4]{barrel}}^{nume})", 0, 5);
-    RP_TrkIso_endcap_nume->SetPlots("relTrkIso (e_{#lower[-0.4]{endcap}}^{nume})", 0, 5);
-    RP_TrkIso_barrel_deno->SetPlots("relTrkIso (e_{#lower[-0.4]{barrel}}^{deno})", 0, 5);
-    RP_TrkIso_endcap_deno->SetPlots("relTrkIso (e_{#lower[-0.4]{endcap}}^{deno})", 0, 5);
-    RP_TrkIso_barrel_ctrl->SetPlots("relTrkIso (e_{#lower[-0.4]{barrel}}^{control})", 0, 5);
-    RP_TrkIso_endcap_ctrl->SetPlots("relTrkIso (e_{#lower[-0.4]{endcap}}^{control})", 0, 5);
-    RP_ECALiso_barrel_nume->SetPlots("relECALiso (e_{#lower[-0.4]{barrel}}^{nume})", 0, 5);
-    RP_ECALiso_endcap_nume->SetPlots("relECALiso (e_{#lower[-0.4]{endcap}}^{nume})", 0, 5);
-    RP_ECALiso_barrel_deno->SetPlots("relECALiso (e_{#lower[-0.4]{barrel}}^{deno})", 0, 5);
-    RP_ECALiso_endcap_deno->SetPlots("relECALiso (e_{#lower[-0.4]{endcap}}^{deno})", 0, 5);
-    RP_ECALiso_barrel_ctrl->SetPlots("relECALiso (e_{#lower[-0.4]{barrel}}^{control})", 0, 5);
-    RP_ECALiso_endcap_ctrl->SetPlots("relECALiso (e_{#lower[-0.4]{endcap}}^{control})", 0, 5);
-    RP_HCALiso_barrel_nume->SetPlots("relHCALiso (e_{#lower[-0.4]{barrel}}^{nume})", 0, 5);
-    RP_HCALiso_endcap_nume->SetPlots("relHCALiso (e_{#lower[-0.4]{endcap}}^{nume})", 0, 5);
-    RP_HCALiso_barrel_deno->SetPlots("relHCALiso (e_{#lower[-0.4]{barrel}}^{deno})", 0, 5);
-    RP_HCALiso_endcap_deno->SetPlots("relHCALiso (e_{#lower[-0.4]{endcap}}^{deno})", 0, 5);
-    RP_HCALiso_barrel_ctrl->SetPlots("relHCALiso (e_{#lower[-0.4]{barrel}}^{control})", 0, 5);
-    RP_HCALiso_endcap_ctrl->SetPlots("relHCALiso (e_{#lower[-0.4]{endcap}}^{control})", 0, 5);
+    RP_TrkIso_barrel_nume->SetPlots("relTrkIso (e_{#lower[-0.4]{barrel}}^{nume})", 0, 2);
+    RP_TrkIso_endcap_nume->SetPlots("relTrkIso (e_{#lower[-0.4]{endcap}}^{nume})", 0, 2);
+    RP_TrkIso_barrel_deno->SetPlots("relTrkIso (e_{#lower[-0.4]{barrel}}^{deno})", 0, 2);
+    RP_TrkIso_endcap_deno->SetPlots("relTrkIso (e_{#lower[-0.4]{endcap}}^{deno})", 0, 2);
+    RP_TrkIso_barrel_ctrl->SetPlots("relTrkIso (e_{#lower[-0.4]{barrel}}^{control})", 0, 2);
+    RP_TrkIso_endcap_ctrl->SetPlots("relTrkIso (e_{#lower[-0.4]{endcap}}^{control})", 0, 2);
+    RP_ECALiso_barrel_nume->SetPlots("relECALiso (e_{#lower[-0.4]{barrel}}^{nume})", 0, 2);
+    RP_ECALiso_endcap_nume->SetPlots("relECALiso (e_{#lower[-0.4]{endcap}}^{nume})", 0, 2);
+    RP_ECALiso_barrel_deno->SetPlots("relECALiso (e_{#lower[-0.4]{barrel}}^{deno})", 0, 2);
+    RP_ECALiso_endcap_deno->SetPlots("relECALiso (e_{#lower[-0.4]{endcap}}^{deno})", 0, 2);
+    RP_ECALiso_barrel_ctrl->SetPlots("relECALiso (e_{#lower[-0.4]{barrel}}^{control})", 0, 2);
+    RP_ECALiso_endcap_ctrl->SetPlots("relECALiso (e_{#lower[-0.4]{endcap}}^{control})", 0, 2);
+    RP_HCALiso_barrel_nume->SetPlots("relHCALiso (e_{#lower[-0.4]{barrel}}^{nume})", 0, 2);
+    RP_HCALiso_endcap_nume->SetPlots("relHCALiso (e_{#lower[-0.4]{endcap}}^{nume})", 0, 2);
+    RP_HCALiso_barrel_deno->SetPlots("relHCALiso (e_{#lower[-0.4]{barrel}}^{deno})", 0, 2);
+    RP_HCALiso_endcap_deno->SetPlots("relHCALiso (e_{#lower[-0.4]{endcap}}^{deno})", 0, 2);
+    RP_HCALiso_barrel_ctrl->SetPlots("relHCALiso (e_{#lower[-0.4]{barrel}}^{control})", 0, 2);
+    RP_HCALiso_endcap_ctrl->SetPlots("relHCALiso (e_{#lower[-0.4]{endcap}}^{control})", 0, 2);
     RP_MET->SetPlots("E_{#lower[-0.25]{T}}^{miss} [GeV]", 0, 500);
     RP_MT_barrel_nume->SetPlots("m_{#lower[-0.25]{T}} (e_{#lower[-0.4]{barrel}}^{nume}, E_{#lower[-0.25]{T}}^{miss}) [GeV/c^{2}]", 0, 500);
     RP_MT_endcap_nume->SetPlots("m_{#lower[-0.25]{T}} (e_{#lower[-0.4]{endcap}}^{nume}, E_{#lower[-0.25]{T}}^{miss}) [GeV/c^{2}]", 0, 500);
@@ -5914,6 +5920,884 @@ void E_HistDrawer(Int_t type)
     c_SSB->SetGridy();
     c_SSB->Update();
 } // End of EE_HistDrawer()
+
+
+/// ############################################################################# ///
+/// ------------------------------- Matrix method ------------------------------- ///
+/// ############################################################################# ///
+void E_MatrixMethod_HistDrawer(Int_t remNegBins, Int_t systErr)
+{
+    DYAnalyzer analyzer("Photon_OR");
+    FileMgr fm;
+    THStack *s_mass_PP = new THStack("s_mass_PP", "");
+    THStack *s_mass_PF = new THStack("s_mass_PF", "");
+    THStack *s_mass_FF = new THStack("s_mass_FF", "");
+    THStack *s_mass_PP_TT = new THStack("s_mass_PP_TT", "");
+    THStack *s_mass_PF_TT = new THStack("s_mass_PF_TT", "");
+    THStack *s_mass_FF_TT = new THStack("s_mass_FF_TT", "");
+    THStack *s_massSS_PP = new THStack("s_mass_PP", "");
+    THStack *s_massSS_PF = new THStack("s_mass_PF", "");
+    THStack *s_massSS_FF = new THStack("s_mass_FF", "");
+    THStack *s_massSS_PP_TT = new THStack("s_mass_PP_TT", "");
+    THStack *s_massSS_PF_TT = new THStack("s_mass_PF_TT", "");
+    THStack *s_massSS_FF_TT = new THStack("s_mass_FF_TT", "");
+
+    TH1D *h_mass_PP[_EndOf_Data_Special],
+         *h_mass_PF[_EndOf_Data_Special],
+         *h_mass_FF[_EndOf_Data_Special],
+         *h_mass_PP_TT[_EndOf_Data_Special],
+         *h_mass_PF_TT[_EndOf_Data_Special],
+         *h_mass_FF_TT[_EndOf_Data_Special],
+         *h_massSS_PP[_EndOf_Data_Special],
+         *h_massSS_PF[_EndOf_Data_Special],
+         *h_massSS_FF[_EndOf_Data_Special],
+         *h_massSS_PP_TT[_EndOf_Data_Special],
+         *h_massSS_PF_TT[_EndOf_Data_Special],
+         *h_massSS_FF_TT[_EndOf_Data_Special];
+
+    TFile *file = new TFile("/media/sf_DATA/FR/Electron/MatrixMethod_E.root", "READ");
+
+
+//----------------------------------- MC bkg -------------------------------------------------------
+
+    // Other MC
+    Int_t stop = 0;
+    Process_t pr1 = _WW;
+    while (!stop)
+    {
+        file->GetObject("h_mass_PP_"     +fm.Procname[pr1], h_mass_PP     [pr1]);
+        file->GetObject("h_mass_PF_"     +fm.Procname[pr1], h_mass_PF     [pr1]);
+        file->GetObject("h_mass_FF_"     +fm.Procname[pr1], h_mass_FF     [pr1]);
+        file->GetObject("h_mass_PP_TT_"  +fm.Procname[pr1], h_mass_PP_TT  [pr1]);
+        file->GetObject("h_mass_PF_TT_"  +fm.Procname[pr1], h_mass_PF_TT  [pr1]);
+        file->GetObject("h_mass_FF_TT_"  +fm.Procname[pr1], h_mass_FF_TT  [pr1]);
+        file->GetObject("h_massSS_PP_"   +fm.Procname[pr1], h_massSS_PP   [pr1]);
+        file->GetObject("h_massSS_PF_"   +fm.Procname[pr1], h_massSS_PF   [pr1]);
+        file->GetObject("h_massSS_FF_"   +fm.Procname[pr1], h_massSS_FF   [pr1]);
+        file->GetObject("h_massSS_PP_TT_"+fm.Procname[pr1], h_massSS_PP_TT[pr1]);
+        file->GetObject("h_massSS_PF_TT_"+fm.Procname[pr1], h_massSS_PF_TT[pr1]);
+        file->GetObject("h_massSS_FF_TT_"+fm.Procname[pr1], h_massSS_FF_TT[pr1]);
+
+        removeNegativeBins(h_mass_PP[pr1]);
+        removeNegativeBins(h_mass_PF[pr1]);
+        removeNegativeBins(h_mass_FF[pr1]);
+        removeNegativeBins(h_mass_PP_TT[pr1]);
+        removeNegativeBins(h_mass_PF_TT[pr1]);
+        removeNegativeBins(h_mass_FF_TT[pr1]);
+        removeNegativeBins(h_massSS_PP[pr1]);
+        removeNegativeBins(h_massSS_PF[pr1]);
+        removeNegativeBins(h_massSS_FF[pr1]);
+        removeNegativeBins(h_massSS_PP_TT[pr1]);
+        removeNegativeBins(h_massSS_PF_TT[pr1]);
+        removeNegativeBins(h_massSS_FF_TT[pr1]);
+
+        TH1D *h_mass_FP      = (TH1D*)(file->Get("h_mass_FP_"     +fm.Procname[pr1]));
+        TH1D *h_mass_FP_TT   = (TH1D*)(file->Get("h_mass_FP_TT_"  +fm.Procname[pr1]));
+        TH1D *h_massSS_FP    = (TH1D*)(file->Get("h_massSS_FP_"   +fm.Procname[pr1]));
+        TH1D *h_massSS_FP_TT = (TH1D*)(file->Get("h_massSS_FP_TT_"+fm.Procname[pr1]));
+        removeNegativeBins(h_mass_FP);
+        removeNegativeBins(h_mass_FP_TT);
+        removeNegativeBins(h_massSS_FP);
+        removeNegativeBins(h_massSS_FP_TT);
+        h_mass_PF     [pr1]->Add(h_mass_FP);
+        h_mass_PF_TT  [pr1]->Add(h_mass_FP_TT);
+        h_massSS_PF   [pr1]->Add(h_massSS_FP);
+        h_massSS_PF_TT[pr1]->Add(h_massSS_FP_TT);
+
+        Color_t color = kBlack;
+        if (pr1 == _WJets || pr1 == _WJets_ext2v5) color = kRed - 2;
+        if (pr1 == _VVnST) color = kMagenta - 5;
+        if (pr1 == _WW) color = kMagenta - 5;
+        if (pr1 == _WZ) color = kMagenta - 2;
+        if (pr1 == _ZZ) color = kMagenta - 6;
+        if (pr1 == _tbarW) color = kGreen - 2;
+        if (pr1 == _tW) color = kGreen + 2;
+        if (pr1 == _ttbar || pr1 == _ttbar_700to1000 || pr1 == _ttbar_1000toInf) color = kCyan + 2;
+
+        h_mass_PP     [pr1]->SetFillColor(color);
+        h_mass_PF     [pr1]->SetFillColor(color);
+        h_mass_FF     [pr1]->SetFillColor(color);
+        h_mass_PP_TT  [pr1]->SetFillColor(color);
+        h_mass_PF_TT  [pr1]->SetFillColor(color);
+        h_mass_FF_TT  [pr1]->SetFillColor(color);
+        h_massSS_PP   [pr1]->SetFillColor(color);
+        h_massSS_PF   [pr1]->SetFillColor(color);
+        h_massSS_FF   [pr1]->SetFillColor(color);
+        h_massSS_PP_TT[pr1]->SetFillColor(color);
+        h_massSS_PF_TT[pr1]->SetFillColor(color);
+        h_massSS_FF_TT[pr1]->SetFillColor(color);
+
+        h_mass_PP     [pr1]->SetLineColor(color);
+        h_mass_PF     [pr1]->SetLineColor(color);
+        h_mass_FF     [pr1]->SetLineColor(color);
+        h_mass_PP_TT  [pr1]->SetLineColor(color);
+        h_mass_PF_TT  [pr1]->SetLineColor(color);
+        h_mass_FF_TT  [pr1]->SetLineColor(color);
+        h_massSS_PP   [pr1]->SetLineColor(color);
+        h_massSS_PF   [pr1]->SetLineColor(color);
+        h_massSS_FF   [pr1]->SetLineColor(color);
+        h_massSS_PP_TT[pr1]->SetLineColor(color);
+        h_massSS_PF_TT[pr1]->SetLineColor(color);
+        h_massSS_FF_TT[pr1]->SetLineColor(color);
+
+        h_mass_PP     [pr1]->SetDirectory(0);
+        h_mass_PF     [pr1]->SetDirectory(0);
+        h_mass_FF     [pr1]->SetDirectory(0);
+        h_mass_PP_TT  [pr1]->SetDirectory(0);
+        h_mass_PF_TT  [pr1]->SetDirectory(0);
+        h_mass_FF_TT  [pr1]->SetDirectory(0);
+        h_massSS_PP   [pr1]->SetDirectory(0);
+        h_massSS_PF   [pr1]->SetDirectory(0);
+        h_massSS_FF   [pr1]->SetDirectory(0);
+        h_massSS_PP_TT[pr1]->SetDirectory(0);
+        h_massSS_PF_TT[pr1]->SetDirectory(0);
+        h_massSS_FF_TT[pr1]->SetDirectory(0);
+
+        if (pr1 == _WJets)
+        {
+            h_mass_PP     [_WJets_Full] = ((TH1D*)(h_mass_PP     [pr1]->Clone("h_mass_PP_WJets")));
+            h_mass_PF     [_WJets_Full] = ((TH1D*)(h_mass_PF     [pr1]->Clone("h_mass_PF_WJets")));
+            h_mass_FF     [_WJets_Full] = ((TH1D*)(h_mass_FF     [pr1]->Clone("h_mass_FF_WJets")));
+            h_mass_PP_TT  [_WJets_Full] = ((TH1D*)(h_mass_PP_TT  [pr1]->Clone("h_mass_PP_TT_WJets")));
+            h_mass_PF_TT  [_WJets_Full] = ((TH1D*)(h_mass_PF_TT  [pr1]->Clone("h_mass_PF_TT_WJets")));
+            h_mass_FF_TT  [_WJets_Full] = ((TH1D*)(h_mass_FF_TT  [pr1]->Clone("h_mass_FF_TT_WJets")));
+            h_massSS_PP   [_WJets_Full] = ((TH1D*)(h_massSS_PP   [pr1]->Clone("h_massSS_PP_WJets")));
+            h_massSS_PF   [_WJets_Full] = ((TH1D*)(h_massSS_PF   [pr1]->Clone("h_massSS_PF_WJets")));
+            h_massSS_FF   [_WJets_Full] = ((TH1D*)(h_massSS_FF   [pr1]->Clone("h_massSS_FF_WJets")));
+            h_massSS_PP_TT[_WJets_Full] = ((TH1D*)(h_massSS_PP_TT[pr1]->Clone("h_massSS_PP_TT_WJets")));
+            h_massSS_PF_TT[_WJets_Full] = ((TH1D*)(h_massSS_PF_TT[pr1]->Clone("h_massSS_PF_TT_WJets")));
+            h_massSS_FF_TT[_WJets_Full] = ((TH1D*)(h_massSS_FF_TT[pr1]->Clone("h_massSS_FF_TT_WJets")));
+
+            h_mass_PP     [_WJets_Full]->SetDirectory(0);
+            h_mass_PF     [_WJets_Full]->SetDirectory(0);
+            h_mass_FF     [_WJets_Full]->SetDirectory(0);
+            h_mass_PP_TT  [_WJets_Full]->SetDirectory(0);
+            h_mass_PF_TT  [_WJets_Full]->SetDirectory(0);
+            h_mass_FF_TT  [_WJets_Full]->SetDirectory(0);
+            h_massSS_PP   [_WJets_Full]->SetDirectory(0);
+            h_massSS_PF   [_WJets_Full]->SetDirectory(0);
+            h_massSS_FF   [_WJets_Full]->SetDirectory(0);
+            h_massSS_PP_TT[_WJets_Full]->SetDirectory(0);
+            h_massSS_PF_TT[_WJets_Full]->SetDirectory(0);
+            h_massSS_FF_TT[_WJets_Full]->SetDirectory(0);
+        }
+        else if (pr1 == _WJets_ext2v5)
+        {
+            h_mass_PP     [_WJets_Full]->Add(h_mass_PP     [pr1]);
+            h_mass_PF     [_WJets_Full]->Add(h_mass_PF     [pr1]);
+            h_mass_FF     [_WJets_Full]->Add(h_mass_FF     [pr1]);
+            h_mass_PP_TT  [_WJets_Full]->Add(h_mass_PP_TT  [pr1]);
+            h_mass_PF_TT  [_WJets_Full]->Add(h_mass_PF_TT  [pr1]);
+            h_mass_FF_TT  [_WJets_Full]->Add(h_mass_FF_TT  [pr1]);
+            h_massSS_PP   [_WJets_Full]->Add(h_massSS_PP   [pr1]);
+            h_massSS_PF   [_WJets_Full]->Add(h_massSS_PF   [pr1]);
+            h_massSS_FF   [_WJets_Full]->Add(h_massSS_FF   [pr1]);
+            h_massSS_PP_TT[_WJets_Full]->Add(h_massSS_PP_TT[pr1]);
+            h_massSS_PF_TT[_WJets_Full]->Add(h_massSS_PF_TT[pr1]);
+            h_massSS_FF_TT[_WJets_Full]->Add(h_massSS_FF_TT[pr1]);
+        }
+
+        s_mass_PP     ->Add(h_mass_PP     [pr1]);
+        s_mass_PF     ->Add(h_mass_PF     [pr1]);
+        s_mass_FF     ->Add(h_mass_FF     [pr1]);
+        s_mass_PP_TT  ->Add(h_mass_PP_TT  [pr1]);
+        s_mass_PF_TT  ->Add(h_mass_PF_TT  [pr1]);
+        s_mass_FF_TT  ->Add(h_mass_FF_TT  [pr1]);
+        s_massSS_PP   ->Add(h_massSS_PP   [pr1]);
+        s_massSS_PF   ->Add(h_massSS_PF   [pr1]);
+        s_massSS_FF   ->Add(h_massSS_FF   [pr1]);
+        s_massSS_PP_TT->Add(h_massSS_PP_TT[pr1]);
+        s_massSS_PF_TT->Add(h_massSS_PF_TT[pr1]);
+        s_massSS_FF_TT->Add(h_massSS_FF_TT[pr1]);
+
+        if (pr1 == _WW) {pr1 = _WZ; continue;}
+        if (pr1 == _WZ) {pr1 = _ZZ; continue;}
+        if (pr1 == _ZZ) {pr1 = _tbarW; continue;}
+        if (pr1 == _tbarW) {pr1 = _tW; continue;}
+        if (pr1 == _tW) {pr1 = _ttbar; continue;}
+        if (pr1 == _ttbar) {pr1 = _ttbar_700to1000; continue;}
+        if (pr1 == _ttbar_700to1000) {pr1 = _ttbar_1000toInf; continue;}
+        if (pr1 == _ttbar_1000toInf) {pr1 = _WJets; continue;}
+        if (pr1 == _WJets) {pr1 = _WJets_ext2v5; continue;}
+        if (pr1 == _WJets_ext2v5) {stop = 1;}
+    }
+
+    cout << "Main bkg received" << endl;
+    cout << "WJets number of FP+PF events: " << h_mass_PF[_WJets_Full]->Integral() << endl;
+
+    // Drell-Yan
+    for (Process_t pr = _DY_10to50; pr <= _DY_2000to3000; pr=next(pr))
+    {
+        file->GetObject("h_mass_PP_"     +fm.Procname[pr], h_mass_PP     [pr]);
+        file->GetObject("h_mass_PF_"     +fm.Procname[pr], h_mass_PF     [pr]);
+        file->GetObject("h_mass_FF_"     +fm.Procname[pr], h_mass_FF     [pr]);
+        file->GetObject("h_mass_PP_TT_"  +fm.Procname[pr], h_mass_PP_TT  [pr]);
+        file->GetObject("h_mass_PF_TT_"  +fm.Procname[pr], h_mass_PF_TT  [pr]);
+        file->GetObject("h_mass_FF_TT_"  +fm.Procname[pr], h_mass_FF_TT  [pr]);
+        file->GetObject("h_massSS_PP_"   +fm.Procname[pr], h_massSS_PP   [pr]);
+        file->GetObject("h_massSS_PF_"   +fm.Procname[pr], h_massSS_PF   [pr]);
+        file->GetObject("h_massSS_FF_"   +fm.Procname[pr], h_massSS_FF   [pr]);
+        file->GetObject("h_massSS_PP_TT_"+fm.Procname[pr], h_massSS_PP_TT[pr]);
+        file->GetObject("h_massSS_PF_TT_"+fm.Procname[pr], h_massSS_PF_TT[pr]);
+        file->GetObject("h_massSS_FF_TT_"+fm.Procname[pr], h_massSS_FF_TT[pr]);
+
+        removeNegativeBins(h_mass_PP     [pr]);
+        removeNegativeBins(h_mass_PF     [pr]);
+        removeNegativeBins(h_mass_FF     [pr]);
+        removeNegativeBins(h_mass_PP_TT  [pr]);
+        removeNegativeBins(h_mass_PF_TT  [pr]);
+        removeNegativeBins(h_mass_FF_TT  [pr]);
+        removeNegativeBins(h_massSS_PP   [pr]);
+        removeNegativeBins(h_massSS_PF   [pr]);
+        removeNegativeBins(h_massSS_FF   [pr]);
+        removeNegativeBins(h_massSS_PP_TT[pr]);
+        removeNegativeBins(h_massSS_PF_TT[pr]);
+        removeNegativeBins(h_massSS_FF_TT[pr]);
+
+        TH1D *h_mass_FP      = (TH1D*)(file->Get("h_mass_FP_"     +fm.Procname[pr]));
+        TH1D *h_mass_FP_TT   = (TH1D*)(file->Get("h_mass_FP_TT_"  +fm.Procname[pr]));
+        TH1D *h_massSS_FP    = (TH1D*)(file->Get("h_massSS_FP_"   +fm.Procname[pr]));
+        TH1D *h_massSS_FP_TT = (TH1D*)(file->Get("h_massSS_FP_TT_"+fm.Procname[pr]));
+        removeNegativeBins(h_mass_FP);
+        removeNegativeBins(h_mass_FP_TT);
+        removeNegativeBins(h_massSS_FP);
+        removeNegativeBins(h_massSS_FP_TT);
+        h_mass_PF     [pr]->Add(h_mass_FP);
+        h_mass_PF_TT  [pr]->Add(h_mass_FP_TT);
+        h_massSS_PF   [pr]->Add(h_massSS_FP);
+        h_massSS_PF_TT[pr]->Add(h_massSS_FP_TT);
+
+        Color_t color = kOrange - 5;
+        h_mass_PP     [pr]->SetFillColor(color);
+        h_mass_PF     [pr]->SetFillColor(color);
+        h_mass_FF     [pr]->SetFillColor(color);
+        h_mass_PP_TT  [pr]->SetFillColor(color);
+        h_mass_PF_TT  [pr]->SetFillColor(color);
+        h_mass_FF_TT  [pr]->SetFillColor(color);
+        h_massSS_PP   [pr]->SetFillColor(color);
+        h_massSS_PF   [pr]->SetFillColor(color);
+        h_massSS_FF   [pr]->SetFillColor(color);
+        h_massSS_PP_TT[pr]->SetFillColor(color);
+        h_massSS_PF_TT[pr]->SetFillColor(color);
+        h_massSS_FF_TT[pr]->SetFillColor(color);
+
+        h_mass_PP     [pr]->SetLineColor(color);
+        h_mass_PF     [pr]->SetLineColor(color);
+        h_mass_FF     [pr]->SetLineColor(color);
+        h_mass_PP_TT  [pr]->SetLineColor(color);
+        h_mass_PF_TT  [pr]->SetLineColor(color);
+        h_mass_FF_TT  [pr]->SetLineColor(color);
+        h_massSS_PP   [pr]->SetLineColor(color);
+        h_massSS_PF   [pr]->SetLineColor(color);
+        h_massSS_FF   [pr]->SetLineColor(color);
+        h_massSS_PP_TT[pr]->SetLineColor(color);
+        h_massSS_PF_TT[pr]->SetLineColor(color);
+        h_massSS_FF_TT[pr]->SetLineColor(color);
+
+        h_mass_PP     [pr]->SetDirectory(0);
+        h_mass_PF     [pr]->SetDirectory(0);
+        h_mass_FF     [pr]->SetDirectory(0);
+        h_mass_PP_TT  [pr]->SetDirectory(0);
+        h_mass_PF_TT  [pr]->SetDirectory(0);
+        h_mass_FF_TT  [pr]->SetDirectory(0);
+        h_massSS_PP   [pr]->SetDirectory(0);
+        h_massSS_PF   [pr]->SetDirectory(0);
+        h_massSS_FF   [pr]->SetDirectory(0);
+        h_massSS_PP_TT[pr]->SetDirectory(0);
+        h_massSS_PF_TT[pr]->SetDirectory(0);
+        h_massSS_FF_TT[pr]->SetDirectory(0);
+
+        if (pr == _DY_10to50)
+        {
+            h_mass_PP     [_DY_Full] = ((TH1D*)(h_mass_PP     [pr]->Clone("h_mass_PP_DY")));
+            h_mass_PF     [_DY_Full] = ((TH1D*)(h_mass_PF     [pr]->Clone("h_mass_PF_DY")));
+            h_mass_FF     [_DY_Full] = ((TH1D*)(h_mass_FF     [pr]->Clone("h_mass_FF_DY")));
+            h_mass_PP_TT  [_DY_Full] = ((TH1D*)(h_mass_PP_TT  [pr]->Clone("h_mass_PP_TT_DY")));
+            h_mass_PF_TT  [_DY_Full] = ((TH1D*)(h_mass_PF_TT  [pr]->Clone("h_mass_PF_TT_DY")));
+            h_mass_FF_TT  [_DY_Full] = ((TH1D*)(h_mass_FF_TT  [pr]->Clone("h_mass_FF_TT_DY")));
+            h_massSS_PP   [_DY_Full] = ((TH1D*)(h_massSS_PP   [pr]->Clone("h_massSS_PP_DY")));
+            h_massSS_PF   [_DY_Full] = ((TH1D*)(h_massSS_PF   [pr]->Clone("h_massSS_PF_DY")));
+            h_massSS_FF   [_DY_Full] = ((TH1D*)(h_massSS_FF   [pr]->Clone("h_massSS_FF_DY")));
+            h_massSS_PP_TT[_DY_Full] = ((TH1D*)(h_massSS_PP_TT[pr]->Clone("h_massSS_PP_TT_DY")));
+            h_massSS_PF_TT[_DY_Full] = ((TH1D*)(h_massSS_PF_TT[pr]->Clone("h_massSS_PF_TT_DY")));
+            h_massSS_FF_TT[_DY_Full] = ((TH1D*)(h_massSS_FF_TT[pr]->Clone("h_massSS_FF_TT_DY")));
+
+            h_mass_PP     [_DY_Full]->SetDirectory(0);
+            h_mass_PF     [_DY_Full]->SetDirectory(0);
+            h_mass_FF     [_DY_Full]->SetDirectory(0);
+            h_mass_PP_TT  [_DY_Full]->SetDirectory(0);
+            h_mass_PF_TT  [_DY_Full]->SetDirectory(0);
+            h_mass_FF_TT  [_DY_Full]->SetDirectory(0);
+            h_massSS_PP   [_DY_Full]->SetDirectory(0);
+            h_massSS_PF   [_DY_Full]->SetDirectory(0);
+            h_massSS_FF   [_DY_Full]->SetDirectory(0);
+            h_massSS_PP_TT[_DY_Full]->SetDirectory(0);
+            h_massSS_PF_TT[_DY_Full]->SetDirectory(0);
+            h_massSS_FF_TT[_DY_Full]->SetDirectory(0);
+        }
+        else
+        {
+            h_mass_PP     [_DY_Full]->Add(h_mass_PP     [pr]);
+            h_mass_PF     [_DY_Full]->Add(h_mass_PF     [pr]);
+            h_mass_FF     [_DY_Full]->Add(h_mass_FF     [pr]);
+            h_mass_PP_TT  [_DY_Full]->Add(h_mass_PP_TT  [pr]);
+            h_mass_PF_TT  [_DY_Full]->Add(h_mass_PF_TT  [pr]);
+            h_mass_FF_TT  [_DY_Full]->Add(h_mass_FF_TT  [pr]);
+            h_massSS_PP   [_DY_Full]->Add(h_massSS_PP   [pr]);
+            h_massSS_PF   [_DY_Full]->Add(h_massSS_PF   [pr]);
+            h_massSS_FF   [_DY_Full]->Add(h_massSS_FF   [pr]);
+            h_massSS_PP_TT[_DY_Full]->Add(h_massSS_PP_TT[pr]);
+            h_massSS_PF_TT[_DY_Full]->Add(h_massSS_PF_TT[pr]);
+            h_massSS_FF_TT[_DY_Full]->Add(h_massSS_FF_TT[pr]);
+        }
+
+        s_mass_PP     ->Add(h_mass_PP     [pr]);
+        s_mass_PF     ->Add(h_mass_PF     [pr]);
+        s_mass_FF     ->Add(h_mass_FF     [pr]);
+        s_mass_PP_TT  ->Add(h_mass_PP_TT  [pr]);
+        s_mass_PF_TT  ->Add(h_mass_PF_TT  [pr]);
+        s_mass_FF_TT  ->Add(h_mass_FF_TT  [pr]);
+        s_massSS_PP   ->Add(h_massSS_PP   [pr]);
+        s_massSS_PF   ->Add(h_massSS_PF   [pr]);
+        s_massSS_FF   ->Add(h_massSS_FF   [pr]);
+        s_massSS_PP_TT->Add(h_massSS_PP_TT[pr]);
+        s_massSS_PF_TT->Add(h_massSS_PF_TT[pr]);
+        s_massSS_FF_TT->Add(h_massSS_FF_TT[pr]);
+    }
+
+    cout << "DY received" << endl;
+
+    // QCD
+    for (Process_t pr = _QCDEMEnriched_20to30; pr <= _QCDEMEnriched_300toInf; pr=next(pr))
+    {
+        file->GetObject("h_mass_PP_"     +fm.Procname[pr], h_mass_PP     [pr]);
+        file->GetObject("h_mass_PF_"     +fm.Procname[pr], h_mass_PF     [pr]);
+        file->GetObject("h_mass_FF_"     +fm.Procname[pr], h_mass_FF     [pr]);
+        file->GetObject("h_mass_PP_TT_"  +fm.Procname[pr], h_mass_PP_TT  [pr]);
+        file->GetObject("h_mass_PF_TT_"  +fm.Procname[pr], h_mass_PF_TT  [pr]);
+        file->GetObject("h_mass_FF_TT_"  +fm.Procname[pr], h_mass_FF_TT  [pr]);
+        file->GetObject("h_massSS_PP_"   +fm.Procname[pr], h_massSS_PP   [pr]);
+        file->GetObject("h_massSS_PF_"   +fm.Procname[pr], h_massSS_PF   [pr]);
+        file->GetObject("h_massSS_FF_"   +fm.Procname[pr], h_massSS_FF   [pr]);
+        file->GetObject("h_massSS_PP_TT_"+fm.Procname[pr], h_massSS_PP_TT[pr]);
+        file->GetObject("h_massSS_PF_TT_"+fm.Procname[pr], h_massSS_PF_TT[pr]);
+        file->GetObject("h_massSS_FF_TT_"+fm.Procname[pr], h_massSS_FF_TT[pr]);
+
+        removeNegativeBins(h_mass_PP     [pr]);
+        removeNegativeBins(h_mass_PF     [pr]);
+        removeNegativeBins(h_mass_FF     [pr]);
+        removeNegativeBins(h_mass_PP_TT  [pr]);
+        removeNegativeBins(h_mass_PF_TT  [pr]);
+        removeNegativeBins(h_mass_FF_TT  [pr]);
+        removeNegativeBins(h_massSS_PP   [pr]);
+        removeNegativeBins(h_massSS_PF   [pr]);
+        removeNegativeBins(h_massSS_FF   [pr]);
+        removeNegativeBins(h_massSS_PP_TT[pr]);
+        removeNegativeBins(h_massSS_PF_TT[pr]);
+        removeNegativeBins(h_massSS_FF_TT[pr]);
+
+        TH1D *h_mass_FP      = (TH1D*)(file->Get("h_mass_FP_"     +fm.Procname[pr]));
+        TH1D *h_mass_FP_TT   = (TH1D*)(file->Get("h_mass_FP_TT_"  +fm.Procname[pr]));
+        TH1D *h_massSS_FP    = (TH1D*)(file->Get("h_massSS_FP_"   +fm.Procname[pr]));
+        TH1D *h_massSS_FP_TT = (TH1D*)(file->Get("h_massSS_FP_TT_"+fm.Procname[pr]));
+        removeNegativeBins(h_mass_FP);
+        removeNegativeBins(h_mass_FP_TT);
+        removeNegativeBins(h_massSS_FP);
+        removeNegativeBins(h_massSS_FP_TT);
+        h_mass_PF     [pr]->Add(h_mass_FP);
+        h_mass_PF_TT  [pr]->Add(h_mass_FP_TT);
+        h_massSS_PF   [pr]->Add(h_massSS_FP);
+        h_massSS_PF_TT[pr]->Add(h_massSS_FP_TT);
+
+        Color_t color = kRed + 3;
+        h_mass_PP     [pr]->SetFillColor(color);
+        h_mass_PF     [pr]->SetFillColor(color);
+        h_mass_FF     [pr]->SetFillColor(color);
+        h_mass_PP_TT  [pr]->SetFillColor(color);
+        h_mass_PF_TT  [pr]->SetFillColor(color);
+        h_mass_FF_TT  [pr]->SetFillColor(color);
+        h_massSS_PP   [pr]->SetFillColor(color);
+        h_massSS_PF   [pr]->SetFillColor(color);
+        h_massSS_FF   [pr]->SetFillColor(color);
+        h_massSS_PP_TT[pr]->SetFillColor(color);
+        h_massSS_PF_TT[pr]->SetFillColor(color);
+        h_massSS_FF_TT[pr]->SetFillColor(color);
+
+        h_mass_PP     [pr]->SetLineColor(color);
+        h_mass_PF     [pr]->SetLineColor(color);
+        h_mass_FF     [pr]->SetLineColor(color);
+        h_mass_PP_TT  [pr]->SetLineColor(color);
+        h_mass_PF_TT  [pr]->SetLineColor(color);
+        h_mass_FF_TT  [pr]->SetLineColor(color);
+        h_massSS_PP   [pr]->SetLineColor(color);
+        h_massSS_PF   [pr]->SetLineColor(color);
+        h_massSS_FF   [pr]->SetLineColor(color);
+        h_massSS_PP_TT[pr]->SetLineColor(color);
+        h_massSS_PF_TT[pr]->SetLineColor(color);
+        h_massSS_FF_TT[pr]->SetLineColor(color);
+
+        h_mass_PP     [pr]->SetDirectory(0);
+        h_mass_PF     [pr]->SetDirectory(0);
+        h_mass_FF     [pr]->SetDirectory(0);
+        h_mass_PP_TT  [pr]->SetDirectory(0);
+        h_mass_PF_TT  [pr]->SetDirectory(0);
+        h_mass_FF_TT  [pr]->SetDirectory(0);
+        h_massSS_PP   [pr]->SetDirectory(0);
+        h_massSS_PF   [pr]->SetDirectory(0);
+        h_massSS_FF   [pr]->SetDirectory(0);
+        h_massSS_PP_TT[pr]->SetDirectory(0);
+        h_massSS_PF_TT[pr]->SetDirectory(0);
+        h_massSS_FF_TT[pr]->SetDirectory(0);
+
+        if (pr == _QCDEMEnriched_20to30)
+        {
+            h_mass_PP     [_QCDEMEnriched_Full] = ((TH1D*)(h_mass_PP     [pr]->Clone("h_mass_PP_QCD")));
+            h_mass_PF     [_QCDEMEnriched_Full] = ((TH1D*)(h_mass_PF     [pr]->Clone("h_mass_PF_QCD")));
+            h_mass_FF     [_QCDEMEnriched_Full] = ((TH1D*)(h_mass_FF     [pr]->Clone("h_mass_FF_QCD")));
+            h_mass_PP_TT  [_QCDEMEnriched_Full] = ((TH1D*)(h_mass_PP_TT  [pr]->Clone("h_mass_PP_TT_QCD")));
+            h_mass_PF_TT  [_QCDEMEnriched_Full] = ((TH1D*)(h_mass_PF_TT  [pr]->Clone("h_mass_PF_TT_QCD")));
+            h_mass_FF_TT  [_QCDEMEnriched_Full] = ((TH1D*)(h_mass_FF_TT  [pr]->Clone("h_mass_FF_TT_QCD")));
+            h_massSS_PP   [_QCDEMEnriched_Full] = ((TH1D*)(h_massSS_PP   [pr]->Clone("h_massSS_PP_QCD")));
+            h_massSS_PF   [_QCDEMEnriched_Full] = ((TH1D*)(h_massSS_PF   [pr]->Clone("h_massSS_PF_QCD")));
+            h_massSS_FF   [_QCDEMEnriched_Full] = ((TH1D*)(h_massSS_FF   [pr]->Clone("h_massSS_FF_QCD")));
+            h_massSS_PP_TT[_QCDEMEnriched_Full] = ((TH1D*)(h_massSS_PP_TT[pr]->Clone("h_massSS_PP_TT_QCD")));
+            h_massSS_PF_TT[_QCDEMEnriched_Full] = ((TH1D*)(h_massSS_PF_TT[pr]->Clone("h_massSS_PF_TT_QCD")));
+            h_massSS_FF_TT[_QCDEMEnriched_Full] = ((TH1D*)(h_massSS_FF_TT[pr]->Clone("h_massSS_FF_TT_QCD")));
+
+            h_mass_PP     [_QCDEMEnriched_Full]->SetDirectory(0);
+            h_mass_PF     [_QCDEMEnriched_Full]->SetDirectory(0);
+            h_mass_FF     [_QCDEMEnriched_Full]->SetDirectory(0);
+            h_mass_PP_TT  [_QCDEMEnriched_Full]->SetDirectory(0);
+            h_mass_PF_TT  [_QCDEMEnriched_Full]->SetDirectory(0);
+            h_mass_FF_TT  [_QCDEMEnriched_Full]->SetDirectory(0);
+            h_massSS_PP   [_QCDEMEnriched_Full]->SetDirectory(0);
+            h_massSS_PF   [_QCDEMEnriched_Full]->SetDirectory(0);
+            h_massSS_FF   [_QCDEMEnriched_Full]->SetDirectory(0);
+            h_massSS_PP_TT[_QCDEMEnriched_Full]->SetDirectory(0);
+            h_massSS_PF_TT[_QCDEMEnriched_Full]->SetDirectory(0);
+            h_massSS_FF_TT[_QCDEMEnriched_Full]->SetDirectory(0);
+        }
+        else
+        {
+            h_mass_PP     [_QCDEMEnriched_Full]->Add(h_mass_PP     [pr]);
+            h_mass_PF     [_QCDEMEnriched_Full]->Add(h_mass_PF     [pr]);
+            h_mass_FF     [_QCDEMEnriched_Full]->Add(h_mass_FF     [pr]);
+            h_mass_PP_TT  [_QCDEMEnriched_Full]->Add(h_mass_PP_TT  [pr]);
+            h_mass_PF_TT  [_QCDEMEnriched_Full]->Add(h_mass_PF_TT  [pr]);
+            h_mass_FF_TT  [_QCDEMEnriched_Full]->Add(h_mass_FF_TT  [pr]);
+            h_massSS_PP   [_QCDEMEnriched_Full]->Add(h_massSS_PP   [pr]);
+            h_massSS_PF   [_QCDEMEnriched_Full]->Add(h_massSS_PF   [pr]);
+            h_massSS_FF   [_QCDEMEnriched_Full]->Add(h_massSS_FF   [pr]);
+            h_massSS_PP_TT[_QCDEMEnriched_Full]->Add(h_massSS_PP_TT[pr]);
+            h_massSS_PF_TT[_QCDEMEnriched_Full]->Add(h_massSS_PF_TT[pr]);
+            h_massSS_FF_TT[_QCDEMEnriched_Full]->Add(h_massSS_FF_TT[pr]);
+        }
+
+        s_mass_PP     ->Add(h_mass_PP     [pr]);
+        s_mass_PF     ->Add(h_mass_PF     [pr]);
+        s_mass_FF     ->Add(h_mass_FF     [pr]);
+        s_mass_PP_TT  ->Add(h_mass_PP_TT  [pr]);
+        s_mass_PF_TT  ->Add(h_mass_PF_TT  [pr]);
+        s_mass_FF_TT  ->Add(h_mass_FF_TT  [pr]);
+        s_massSS_PP   ->Add(h_massSS_PP   [pr]);
+        s_massSS_PF   ->Add(h_massSS_PF   [pr]);
+        s_massSS_FF   ->Add(h_massSS_FF   [pr]);
+        s_massSS_PP_TT->Add(h_massSS_PP_TT[pr]);
+        s_massSS_PF_TT->Add(h_massSS_PF_TT[pr]);
+        s_massSS_FF_TT->Add(h_massSS_FF_TT[pr]);
+    }
+
+    cout << "QCD received" << endl;
+
+    // GammaJets
+    for (Process_t pr = _GJets_20to100; pr <= _GJets_2000to5000; pr=next(pr))
+    {
+        file->GetObject("h_mass_PP_"     +fm.Procname[pr], h_mass_PP     [pr]);
+        file->GetObject("h_mass_PF_"     +fm.Procname[pr], h_mass_PF     [pr]);
+        file->GetObject("h_mass_FF_"     +fm.Procname[pr], h_mass_FF     [pr]);
+        file->GetObject("h_mass_PP_TT_"  +fm.Procname[pr], h_mass_PP_TT  [pr]);
+        file->GetObject("h_mass_PF_TT_"  +fm.Procname[pr], h_mass_PF_TT  [pr]);
+        file->GetObject("h_mass_FF_TT_"  +fm.Procname[pr], h_mass_FF_TT  [pr]);
+        file->GetObject("h_massSS_PP_"   +fm.Procname[pr], h_massSS_PP   [pr]);
+        file->GetObject("h_massSS_PF_"   +fm.Procname[pr], h_massSS_PF   [pr]);
+        file->GetObject("h_massSS_FF_"   +fm.Procname[pr], h_massSS_FF   [pr]);
+        file->GetObject("h_massSS_PP_TT_"+fm.Procname[pr], h_massSS_PP_TT[pr]);
+        file->GetObject("h_massSS_PF_TT_"+fm.Procname[pr], h_massSS_PF_TT[pr]);
+        file->GetObject("h_massSS_FF_TT_"+fm.Procname[pr], h_massSS_FF_TT[pr]);
+
+        removeNegativeBins(h_mass_PP     [pr]);
+        removeNegativeBins(h_mass_PF     [pr]);
+        removeNegativeBins(h_mass_FF     [pr]);
+        removeNegativeBins(h_mass_PP_TT  [pr]);
+        removeNegativeBins(h_mass_PF_TT  [pr]);
+        removeNegativeBins(h_mass_FF_TT  [pr]);
+        removeNegativeBins(h_massSS_PP   [pr]);
+        removeNegativeBins(h_massSS_PF   [pr]);
+        removeNegativeBins(h_massSS_FF   [pr]);
+        removeNegativeBins(h_massSS_PP_TT[pr]);
+        removeNegativeBins(h_massSS_PF_TT[pr]);
+        removeNegativeBins(h_massSS_FF_TT[pr]);
+
+        TH1D *h_mass_FP      = (TH1D*)(file->Get("h_mass_FP_"     +fm.Procname[pr]));
+        TH1D *h_mass_FP_TT   = (TH1D*)(file->Get("h_mass_FP_TT_"  +fm.Procname[pr]));
+        TH1D *h_massSS_FP    = (TH1D*)(file->Get("h_massSS_FP_"   +fm.Procname[pr]));
+        TH1D *h_massSS_FP_TT = (TH1D*)(file->Get("h_massSS_FP_TT_"+fm.Procname[pr]));
+        removeNegativeBins(h_mass_FP);
+        removeNegativeBins(h_mass_FP_TT);
+        removeNegativeBins(h_massSS_FP);
+        removeNegativeBins(h_massSS_FP_TT);
+        h_mass_PF     [pr]->Add(h_mass_FP);
+        h_mass_PF_TT  [pr]->Add(h_mass_FP_TT);
+        h_massSS_PF   [pr]->Add(h_massSS_FP);
+        h_massSS_PF_TT[pr]->Add(h_massSS_FP_TT);
+
+        Color_t color = kYellow + 3;
+        h_mass_PP     [pr]->SetFillColor(color);
+        h_mass_PF     [pr]->SetFillColor(color);
+        h_mass_FF     [pr]->SetFillColor(color);
+        h_mass_PP_TT  [pr]->SetFillColor(color);
+        h_mass_PF_TT  [pr]->SetFillColor(color);
+        h_mass_FF_TT  [pr]->SetFillColor(color);
+        h_massSS_PP   [pr]->SetFillColor(color);
+        h_massSS_PF   [pr]->SetFillColor(color);
+        h_massSS_FF   [pr]->SetFillColor(color);
+        h_massSS_PP_TT[pr]->SetFillColor(color);
+        h_massSS_PF_TT[pr]->SetFillColor(color);
+        h_massSS_FF_TT[pr]->SetFillColor(color);
+
+        h_mass_PP     [pr]->SetLineColor(color);
+        h_mass_PF     [pr]->SetLineColor(color);
+        h_mass_FF     [pr]->SetLineColor(color);
+        h_mass_PP_TT  [pr]->SetLineColor(color);
+        h_mass_PF_TT  [pr]->SetLineColor(color);
+        h_mass_FF_TT  [pr]->SetLineColor(color);
+        h_massSS_PP   [pr]->SetLineColor(color);
+        h_massSS_PF   [pr]->SetLineColor(color);
+        h_massSS_FF   [pr]->SetLineColor(color);
+        h_massSS_PP_TT[pr]->SetLineColor(color);
+        h_massSS_PF_TT[pr]->SetLineColor(color);
+        h_massSS_FF_TT[pr]->SetLineColor(color);
+
+        h_mass_PP     [pr]->SetDirectory(0);
+        h_mass_PF     [pr]->SetDirectory(0);
+        h_mass_FF     [pr]->SetDirectory(0);
+        h_mass_PP_TT  [pr]->SetDirectory(0);
+        h_mass_PF_TT  [pr]->SetDirectory(0);
+        h_mass_FF_TT  [pr]->SetDirectory(0);
+        h_massSS_PP   [pr]->SetDirectory(0);
+        h_massSS_PF   [pr]->SetDirectory(0);
+        h_massSS_FF   [pr]->SetDirectory(0);
+        h_massSS_PP_TT[pr]->SetDirectory(0);
+        h_massSS_PF_TT[pr]->SetDirectory(0);
+        h_massSS_FF_TT[pr]->SetDirectory(0);
+
+        if (pr == _GJets_20to100)
+        {
+            h_mass_PP     [_GJets_Full] = ((TH1D*)(h_mass_PP     [pr]->Clone("h_mass_PP_GJets")));
+            h_mass_PF     [_GJets_Full] = ((TH1D*)(h_mass_PF     [pr]->Clone("h_mass_PF_GJets")));
+            h_mass_FF     [_GJets_Full] = ((TH1D*)(h_mass_FF     [pr]->Clone("h_mass_FF_GJets")));
+            h_mass_PP_TT  [_GJets_Full] = ((TH1D*)(h_mass_PP_TT  [pr]->Clone("h_mass_PP_TT_GJets")));
+            h_mass_PF_TT  [_GJets_Full] = ((TH1D*)(h_mass_PF_TT  [pr]->Clone("h_mass_PF_TT_GJets")));
+            h_mass_FF_TT  [_GJets_Full] = ((TH1D*)(h_mass_FF_TT  [pr]->Clone("h_mass_FF_TT_GJets")));
+            h_massSS_PP   [_GJets_Full] = ((TH1D*)(h_massSS_PP   [pr]->Clone("h_massSS_PP_GJets")));
+            h_massSS_PF   [_GJets_Full] = ((TH1D*)(h_massSS_PF   [pr]->Clone("h_massSS_PF_GJets")));
+            h_massSS_FF   [_GJets_Full] = ((TH1D*)(h_massSS_FF   [pr]->Clone("h_massSS_FF_GJets")));
+            h_massSS_PP_TT[_GJets_Full] = ((TH1D*)(h_massSS_PP_TT[pr]->Clone("h_massSS_PP_TT_GJets")));
+            h_massSS_PF_TT[_GJets_Full] = ((TH1D*)(h_massSS_PF_TT[pr]->Clone("h_massSS_PF_TT_GJets")));
+            h_massSS_FF_TT[_GJets_Full] = ((TH1D*)(h_massSS_FF_TT[pr]->Clone("h_massSS_FF_TT_GJets")));
+
+            h_mass_PP     [_GJets_Full]->SetDirectory(0);
+            h_mass_PF     [_GJets_Full]->SetDirectory(0);
+            h_mass_FF     [_GJets_Full]->SetDirectory(0);
+            h_mass_PP_TT  [_GJets_Full]->SetDirectory(0);
+            h_mass_PF_TT  [_GJets_Full]->SetDirectory(0);
+            h_mass_FF_TT  [_GJets_Full]->SetDirectory(0);
+            h_massSS_PP   [_GJets_Full]->SetDirectory(0);
+            h_massSS_PF   [_GJets_Full]->SetDirectory(0);
+            h_massSS_FF   [_GJets_Full]->SetDirectory(0);
+            h_massSS_PP_TT[_GJets_Full]->SetDirectory(0);
+            h_massSS_PF_TT[_GJets_Full]->SetDirectory(0);
+            h_massSS_FF_TT[_GJets_Full]->SetDirectory(0);
+        }
+        else
+        {
+            h_mass_PP     [_GJets_Full]->Add(h_mass_PP     [pr]);
+            h_mass_PF     [_GJets_Full]->Add(h_mass_PF     [pr]);
+            h_mass_FF     [_GJets_Full]->Add(h_mass_FF     [pr]);
+            h_mass_PP_TT  [_GJets_Full]->Add(h_mass_PP_TT  [pr]);
+            h_mass_PF_TT  [_GJets_Full]->Add(h_mass_PF_TT  [pr]);
+            h_mass_FF_TT  [_GJets_Full]->Add(h_mass_FF_TT  [pr]);
+            h_massSS_PP   [_GJets_Full]->Add(h_massSS_PP   [pr]);
+            h_massSS_PF   [_GJets_Full]->Add(h_massSS_PF   [pr]);
+            h_massSS_FF   [_GJets_Full]->Add(h_massSS_FF   [pr]);
+            h_massSS_PP_TT[_GJets_Full]->Add(h_massSS_PP_TT[pr]);
+            h_massSS_PF_TT[_GJets_Full]->Add(h_massSS_PF_TT[pr]);
+            h_massSS_FF_TT[_GJets_Full]->Add(h_massSS_FF_TT[pr]);
+        }
+
+        s_mass_PP     ->Add(h_mass_PP     [pr]);
+        s_mass_PF     ->Add(h_mass_PF     [pr]);
+        s_mass_FF     ->Add(h_mass_FF     [pr]);
+        s_mass_PP_TT  ->Add(h_mass_PP_TT  [pr]);
+        s_mass_PF_TT  ->Add(h_mass_PF_TT  [pr]);
+        s_mass_FF_TT  ->Add(h_mass_FF_TT  [pr]);
+        s_massSS_PP   ->Add(h_massSS_PP   [pr]);
+        s_massSS_PF   ->Add(h_massSS_PF   [pr]);
+        s_massSS_FF   ->Add(h_massSS_FF   [pr]);
+        s_massSS_PP_TT->Add(h_massSS_PP_TT[pr]);
+        s_massSS_PF_TT->Add(h_massSS_PF_TT[pr]);
+        s_massSS_FF_TT->Add(h_massSS_FF_TT[pr]);
+    }
+
+    cout << "GJets received" << endl;
+
+//--------------------------------------- DATA -----------------------------------------------------
+
+    for (Process_t pr=_DoubleEG_B; pr<=_DoubleEG_H; pr=next(pr))
+    {
+        file->GetObject("h_mass_PP_"     +fm.Procname[pr], h_mass_PP     [pr]);
+        file->GetObject("h_mass_PF_"     +fm.Procname[pr], h_mass_PF     [pr]);
+        file->GetObject("h_mass_FF_"     +fm.Procname[pr], h_mass_FF     [pr]);
+        file->GetObject("h_mass_PP_TT_"  +fm.Procname[pr], h_mass_PP_TT  [pr]);
+        file->GetObject("h_mass_PF_TT_"  +fm.Procname[pr], h_mass_PF_TT  [pr]);
+        file->GetObject("h_mass_FF_TT_"  +fm.Procname[pr], h_mass_FF_TT  [pr]);
+        file->GetObject("h_massSS_PP_"   +fm.Procname[pr], h_massSS_PP   [pr]);
+        file->GetObject("h_massSS_PF_"   +fm.Procname[pr], h_massSS_PF   [pr]);
+        file->GetObject("h_massSS_FF_"   +fm.Procname[pr], h_massSS_FF   [pr]);
+        file->GetObject("h_massSS_PP_TT_"+fm.Procname[pr], h_massSS_PP_TT[pr]);
+        file->GetObject("h_massSS_PF_TT_"+fm.Procname[pr], h_massSS_PF_TT[pr]);
+        file->GetObject("h_massSS_FF_TT_"+fm.Procname[pr], h_massSS_FF_TT[pr]);
+
+        removeNegativeBins(h_mass_PP     [pr]);
+        removeNegativeBins(h_mass_PF     [pr]);
+        removeNegativeBins(h_mass_FF     [pr]);
+        removeNegativeBins(h_mass_PP_TT  [pr]);
+        removeNegativeBins(h_mass_PF_TT  [pr]);
+        removeNegativeBins(h_mass_FF_TT  [pr]);
+        removeNegativeBins(h_massSS_PP   [pr]);
+        removeNegativeBins(h_massSS_PF   [pr]);
+        removeNegativeBins(h_massSS_FF   [pr]);
+        removeNegativeBins(h_massSS_PP_TT[pr]);
+        removeNegativeBins(h_massSS_PF_TT[pr]);
+        removeNegativeBins(h_massSS_FF_TT[pr]);
+
+        TH1D *h_mass_FP      = (TH1D*)(file->Get("h_mass_FP_"     +fm.Procname[pr]));
+        TH1D *h_mass_FP_TT   = (TH1D*)(file->Get("h_mass_FP_TT_"  +fm.Procname[pr]));
+        TH1D *h_massSS_FP    = (TH1D*)(file->Get("h_massSS_FP_"   +fm.Procname[pr]));
+        TH1D *h_massSS_FP_TT = (TH1D*)(file->Get("h_massSS_FP_TT_"+fm.Procname[pr]));
+        removeNegativeBins(h_mass_FP);
+        removeNegativeBins(h_mass_FP_TT);
+        removeNegativeBins(h_massSS_FP);
+        removeNegativeBins(h_massSS_FP_TT);
+        h_mass_PF     [pr]->Add(h_mass_FP);
+        h_mass_PF_TT  [pr]->Add(h_mass_FP_TT);
+        h_massSS_PF   [pr]->Add(h_massSS_FP);
+        h_massSS_PF_TT[pr]->Add(h_massSS_FP_TT);
+
+        h_mass_PP     [pr]->SetMarkerStyle(kFullDotLarge);
+        h_mass_PF     [pr]->SetMarkerStyle(kFullDotLarge);
+        h_mass_FF     [pr]->SetMarkerStyle(kFullDotLarge);
+        h_mass_PP_TT  [pr]->SetMarkerStyle(kFullDotLarge);
+        h_mass_PF_TT  [pr]->SetMarkerStyle(kFullDotLarge);
+        h_mass_FF_TT  [pr]->SetMarkerStyle(kFullDotLarge);
+        h_massSS_PP   [pr]->SetMarkerStyle(kFullDotLarge);
+        h_massSS_PF   [pr]->SetMarkerStyle(kFullDotLarge);
+        h_massSS_FF   [pr]->SetMarkerStyle(kFullDotLarge);
+        h_massSS_PP_TT[pr]->SetMarkerStyle(kFullDotLarge);
+        h_massSS_PF_TT[pr]->SetMarkerStyle(kFullDotLarge);
+        h_massSS_FF_TT[pr]->SetMarkerStyle(kFullDotLarge);
+
+        h_mass_PP     [pr]->SetMarkerColor(kBlack);
+        h_mass_PF     [pr]->SetMarkerColor(kBlack);
+        h_mass_FF     [pr]->SetMarkerColor(kBlack);
+        h_mass_PP_TT  [pr]->SetMarkerColor(kBlack);
+        h_mass_PF_TT  [pr]->SetMarkerColor(kBlack);
+        h_mass_FF_TT  [pr]->SetMarkerColor(kBlack);
+        h_massSS_PP   [pr]->SetMarkerColor(kBlack);
+        h_massSS_PF   [pr]->SetMarkerColor(kBlack);
+        h_massSS_FF   [pr]->SetMarkerColor(kBlack);
+        h_massSS_PP_TT[pr]->SetMarkerColor(kBlack);
+        h_massSS_PF_TT[pr]->SetMarkerColor(kBlack);
+        h_massSS_FF_TT[pr]->SetMarkerColor(kBlack);
+
+        h_mass_PP     [pr]->SetLineColor(kBlack);
+        h_mass_PF     [pr]->SetLineColor(kBlack);
+        h_mass_FF     [pr]->SetLineColor(kBlack);
+        h_mass_PP_TT  [pr]->SetLineColor(kBlack);
+        h_mass_PF_TT  [pr]->SetLineColor(kBlack);
+        h_mass_FF_TT  [pr]->SetLineColor(kBlack);
+        h_massSS_PP   [pr]->SetLineColor(kBlack);
+        h_massSS_PF   [pr]->SetLineColor(kBlack);
+        h_massSS_FF   [pr]->SetLineColor(kBlack);
+        h_massSS_PP_TT[pr]->SetLineColor(kBlack);
+        h_massSS_PF_TT[pr]->SetLineColor(kBlack);
+        h_massSS_FF_TT[pr]->SetLineColor(kBlack);
+
+        h_mass_PP     [pr]->SetDirectory(0);
+        h_mass_PF     [pr]->SetDirectory(0);
+        h_mass_FF     [pr]->SetDirectory(0);
+        h_mass_PP_TT  [pr]->SetDirectory(0);
+        h_mass_PF_TT  [pr]->SetDirectory(0);
+        h_mass_FF_TT  [pr]->SetDirectory(0);
+        h_massSS_PP   [pr]->SetDirectory(0);
+        h_massSS_PF   [pr]->SetDirectory(0);
+        h_massSS_FF   [pr]->SetDirectory(0);
+        h_massSS_PP_TT[pr]->SetDirectory(0);
+        h_massSS_PF_TT[pr]->SetDirectory(0);
+        h_massSS_FF_TT[pr]->SetDirectory(0);
+
+        if (pr == _DoubleEG_B)
+        {
+            h_mass_PP     [_DoubleEG_Full] = ((TH1D*)(h_mass_PP     [pr]->Clone("h_mass_PP_DoubleEG")));
+            h_mass_PF     [_DoubleEG_Full] = ((TH1D*)(h_mass_PF     [pr]->Clone("h_mass_PF_DoubleEG")));
+            h_mass_FF     [_DoubleEG_Full] = ((TH1D*)(h_mass_FF     [pr]->Clone("h_mass_FF_DoubleEG")));
+            h_mass_PP_TT  [_DoubleEG_Full] = ((TH1D*)(h_mass_PP_TT  [pr]->Clone("h_mass_PP_TT_DoubleEG")));
+            h_mass_PF_TT  [_DoubleEG_Full] = ((TH1D*)(h_mass_PF_TT  [pr]->Clone("h_mass_PF_TT_DoubleEG")));
+            h_mass_FF_TT  [_DoubleEG_Full] = ((TH1D*)(h_mass_FF_TT  [pr]->Clone("h_mass_FF_TT_DoubleEG")));
+            h_massSS_PP   [_DoubleEG_Full] = ((TH1D*)(h_massSS_PP   [pr]->Clone("h_massSS_PP_DoubleEG")));
+            h_massSS_PF   [_DoubleEG_Full] = ((TH1D*)(h_massSS_PF   [pr]->Clone("h_massSS_PF_DoubleEG")));
+            h_massSS_FF   [_DoubleEG_Full] = ((TH1D*)(h_massSS_FF   [pr]->Clone("h_massSS_FF_DoubleEG")));
+            h_massSS_PP_TT[_DoubleEG_Full] = ((TH1D*)(h_massSS_PP_TT[pr]->Clone("h_massSS_PP_TT_DoubleEG")));
+            h_massSS_PF_TT[_DoubleEG_Full] = ((TH1D*)(h_massSS_PF_TT[pr]->Clone("h_massSS_PF_TT_DoubleEG")));
+            h_massSS_FF_TT[_DoubleEG_Full] = ((TH1D*)(h_massSS_FF_TT[pr]->Clone("h_massSS_FF_TT_DoubleEG")));
+
+            h_mass_PP     [_DoubleEG_Full]->SetDirectory(0);
+            h_mass_PF     [_DoubleEG_Full]->SetDirectory(0);
+            h_mass_FF     [_DoubleEG_Full]->SetDirectory(0);
+            h_mass_PP_TT  [_DoubleEG_Full]->SetDirectory(0);
+            h_mass_PF_TT  [_DoubleEG_Full]->SetDirectory(0);
+            h_mass_FF_TT  [_DoubleEG_Full]->SetDirectory(0);
+            h_massSS_PP   [_DoubleEG_Full]->SetDirectory(0);
+            h_massSS_PF   [_DoubleEG_Full]->SetDirectory(0);
+            h_massSS_FF   [_DoubleEG_Full]->SetDirectory(0);
+            h_massSS_PP_TT[_DoubleEG_Full]->SetDirectory(0);
+            h_massSS_PF_TT[_DoubleEG_Full]->SetDirectory(0);
+            h_massSS_FF_TT[_DoubleEG_Full]->SetDirectory(0);
+        }
+        else
+        {
+            h_mass_PP     [_DoubleEG_Full]->Add(h_mass_PP     [pr]);
+            h_mass_PF     [_DoubleEG_Full]->Add(h_mass_PF     [pr]);
+            h_mass_FF     [_DoubleEG_Full]->Add(h_mass_FF     [pr]);
+            h_mass_PP_TT  [_DoubleEG_Full]->Add(h_mass_PP_TT  [pr]);
+            h_mass_PF_TT  [_DoubleEG_Full]->Add(h_mass_PF_TT  [pr]);
+            h_mass_FF_TT  [_DoubleEG_Full]->Add(h_mass_FF_TT  [pr]);
+            h_massSS_PP   [_DoubleEG_Full]->Add(h_massSS_PP   [pr]);
+            h_massSS_PF   [_DoubleEG_Full]->Add(h_massSS_PF   [pr]);
+            h_massSS_FF   [_DoubleEG_Full]->Add(h_massSS_FF   [pr]);
+            h_massSS_PP_TT[_DoubleEG_Full]->Add(h_massSS_PP_TT[pr]);
+            h_massSS_PF_TT[_DoubleEG_Full]->Add(h_massSS_PF_TT[pr]);
+            h_massSS_FF_TT[_DoubleEG_Full]->Add(h_massSS_FF_TT[pr]);
+        }
+    }
+
+    file->Close();
+
+    cout << "Data received" << endl;
+
+//--------------------------------- Ratio Plots --------------------------------------
+
+    myRatioPlot_t *RP_mass_PP      = new myRatioPlot_t("RP_mass_PP     ", s_mass_PP     , h_mass_PP     [_DoubleEG_Full]);
+    myRatioPlot_t *RP_mass_PF      = new myRatioPlot_t("RP_mass_PF     ", s_mass_PF     , h_mass_PF     [_DoubleEG_Full]);
+    myRatioPlot_t *RP_mass_FF      = new myRatioPlot_t("RP_mass_FF     ", s_mass_FF     , h_mass_FF     [_DoubleEG_Full]);
+    myRatioPlot_t *RP_mass_PP_TT   = new myRatioPlot_t("RP_mass_PP_TT  ", s_mass_PP_TT  , h_mass_PP_TT  [_DoubleEG_Full]);
+    myRatioPlot_t *RP_mass_PF_TT   = new myRatioPlot_t("RP_mass_PF_TT  ", s_mass_PF_TT  , h_mass_PF_TT  [_DoubleEG_Full]);
+    myRatioPlot_t *RP_mass_FF_TT   = new myRatioPlot_t("RP_mass_FF_TT  ", s_mass_FF_TT  , h_mass_FF_TT  [_DoubleEG_Full]);
+    myRatioPlot_t *RP_massSS_PP    = new myRatioPlot_t("RP_massSS_PP   ", s_massSS_PP   , h_massSS_PP   [_DoubleEG_Full]);
+    myRatioPlot_t *RP_massSS_PF    = new myRatioPlot_t("RP_massSS_PF   ", s_massSS_PF   , h_massSS_PF   [_DoubleEG_Full]);
+    myRatioPlot_t *RP_massSS_FF    = new myRatioPlot_t("RP_massSS_FF   ", s_massSS_FF   , h_massSS_FF   [_DoubleEG_Full]);
+    myRatioPlot_t *RP_massSS_PP_TT = new myRatioPlot_t("RP_massSS_PP_TT", s_massSS_PP_TT, h_massSS_PP_TT[_DoubleEG_Full]);
+    myRatioPlot_t *RP_massSS_PF_TT = new myRatioPlot_t("RP_massSS_PF_TT", s_massSS_PF_TT, h_massSS_PF_TT[_DoubleEG_Full]);
+    myRatioPlot_t *RP_massSS_FF_TT = new myRatioPlot_t("RP_massSS_FF_TT", s_massSS_FF_TT, h_massSS_FF_TT[_DoubleEG_Full]);
+
+    RP_mass_PP     ->SetPlots("m_{ee} [GeV/c^{2}]", 15, 3000);
+    RP_mass_PF     ->SetPlots("m_{ee} [GeV/c^{2}]", 15, 3000);
+    RP_mass_FF     ->SetPlots("m_{ee} [GeV/c^{2}]", 15, 3000);
+    RP_mass_PP_TT  ->SetPlots("m_{ee} [GeV/c^{2}]", 15, 3000);
+    RP_mass_PF_TT  ->SetPlots("m_{ee} [GeV/c^{2}]", 15, 3000);
+    RP_mass_FF_TT  ->SetPlots("m_{ee} [GeV/c^{2}]", 15, 3000);
+    RP_massSS_PP   ->SetPlots("m_{ee} [GeV/c^{2}] (same-sign)", 15, 3000);
+    RP_massSS_PF   ->SetPlots("m_{ee} [GeV/c^{2}] (same-sign)", 15, 3000);
+    RP_massSS_FF   ->SetPlots("m_{ee} [GeV/c^{2}] (same-sign)", 15, 3000);
+    RP_massSS_PP_TT->SetPlots("m_{ee} [GeV/c^{2}] (same-sign)", 15, 3000);
+    RP_massSS_PF_TT->SetPlots("m_{ee} [GeV/c^{2}] (same-sign)", 15, 3000);
+    RP_massSS_FF_TT->SetPlots("m_{ee} [GeV/c^{2}] (same-sign)", 15, 3000);
+
+    TLegend *legend = new TLegend(0.5, 0.65, 0.95, 0.95);
+
+    legend->AddEntry(h_mass_PP[_DoubleEG_Full], "Data", "lp");
+    legend->AddEntry(h_mass_PP[_DY_50to100], "DY", "f");
+    legend->AddEntry(h_mass_PP[_ttbar], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "f");
+    legend->AddEntry(h_mass_PP[_tW], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "f");
+    legend->AddEntry(h_mass_PP[_tbarW], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "f");
+    legend->AddEntry(h_mass_PP[_ZZ], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "f");
+    legend->AddEntry(h_mass_PP[_WZ], "#font[12]{#scale[1.1]{WZ}}", "f");
+    legend->AddEntry(h_mass_PP[_WW], "#font[12]{#scale[1.1]{WW}}", "f");
+    legend->AddEntry(h_mass_PP[_WJets], "#font[12]{#scale[1.1]{W}}+Jets", "f");
+    legend->AddEntry(h_mass_PP[_QCDEMEnriched_20to30], "#font[12]{#scale[1.1]{QCD}}", "f");
+    legend->AddEntry(h_mass_PP[_GJets_20to100], "#gamma+Jets", "f");
+    legend->SetNColumns(2);
+
+    RP_mass_PP     ->ImportLegend(legend);
+    RP_mass_PF     ->ImportLegend(legend);
+    RP_mass_FF     ->ImportLegend(legend);
+    RP_mass_PP_TT  ->ImportLegend(legend);
+    RP_mass_PF_TT  ->ImportLegend(legend);
+    RP_mass_FF_TT  ->ImportLegend(legend);
+    RP_massSS_PP   ->ImportLegend(legend);
+    RP_massSS_PF   ->ImportLegend(legend);
+    RP_massSS_FF   ->ImportLegend(legend);
+    RP_massSS_PP_TT->ImportLegend(legend);
+    RP_massSS_PF_TT->ImportLegend(legend);
+    RP_massSS_FF_TT->ImportLegend(legend);
+
+    RP_mass_PP     ->Draw(1, 1e9, 1, "HIST", "N_{PP}");
+    RP_mass_PF     ->Draw(1, 1e9, 1, "HIST", "N_{PF+FP}");
+    RP_mass_FF     ->Draw(1, 1e9, 1, "HIST", "N_{FF}");
+    RP_mass_PP_TT  ->Draw(1, 1e9, 1, "HIST", "N_{PP}^{TT}");
+    RP_mass_PF_TT  ->Draw(1, 1e9, 1, "HIST", "N_{PF+FP}^{TT}");
+    RP_mass_FF_TT  ->Draw(1, 1e9, 1, "HIST", "N_{FF}^{TT}");
+    RP_massSS_PP   ->Draw(1, 1e9, 1, "HIST", "N_{PP}");
+    RP_massSS_PF   ->Draw(1, 1e9, 1, "HIST", "N_{PF+FP}");
+    RP_massSS_FF   ->Draw(1, 1e9, 1, "HIST", "N_{FF}");
+    RP_massSS_PP_TT->Draw(1, 1e9, 1, "HIST", "N_{PP}^{TT}");
+    RP_massSS_PF_TT->Draw(1, 1e9, 1, "HIST", "N_{PF+FP}^{TT}");
+    RP_massSS_FF_TT->Draw(1, 1e9, 1, "HIST", "N_{FF}^{TT}");
+
+    cout << "Main histos drawn." << endl;
+
+
+//    cout << "MC integral (deno): " << ((TH1D*)(s_pT_barrel_deno->GetStack()->Last()))->Integral() +
+//                                     ((TH1D*)(s_pT_endcap_deno->GetStack()->Last()))->Integral() << endl;
+//    cout << "Data integral (deno): " << h_pT_barrel_data_deno->Integral() + h_pT_endcap_data_deno->Integral() << endl;
+//    cout << "QCD integral (deno): " << h_pT_barrel_MC_deno[_QCDEMEnriched_Full]->Integral()+h_pT_endcap_MC_deno[_QCDEMEnriched_Full]->Integral() << endl;
+//    cout << "Gamma+Jets integral (deno): " << h_pT_barrel_MC_deno[_GJets_Full]->Integral()+h_pT_endcap_MC_deno[_GJets_Full]->Integral() << endl;
+//    cout << "DY integral (deno): " << h_pT_barrel_MC_deno[_DY_Full]->Integral()+h_pT_endcap_MC_deno[_DY_Full]->Integral() << endl;
+//    cout << "MC integral(nume): " << ((TH1D*)(s_pT_barrel_nume->GetStack()->Last()))->Integral() +
+//            ((TH1D*)(s_pT_endcap_nume->GetStack()->Last()))->Integral() << endl;
+//    cout << "Data integral (nume): " << h_pT_barrel_data_nume->Integral() + h_pT_endcap_data_nume->Integral() << endl;
+//    cout << "QCD integral (nume): " << h_pT_barrel_MC_nume[_QCDEMEnriched_Full]->Integral()+h_pT_endcap_MC_nume[_QCDEMEnriched_Full]->Integral() << endl;
+//    cout << "Gamma+Jets integral (nume): " << h_pT_barrel_MC_nume[_GJets_Full]->Integral()+h_pT_endcap_MC_nume[_GJets_Full]->Integral() << endl;
+//    cout << "DY integral (nume): " << h_pT_barrel_MC_nume[_DY_Full]->Integral()+h_pT_endcap_MC_nume[_DY_Full]->Integral() << endl;
+
+//    cout << "\nMC integral (deno barrel): " << ((TH1D*)(s_pT_barrel_deno->GetStack()->Last()))->Integral() << endl;
+//    cout << "Data integral (deno barrel): " << h_pT_barrel_data_deno->Integral() << endl;
+//    cout << "QCD integral (deno barrel): " << h_pT_barrel_MC_deno[_QCDEMEnriched_Full]->Integral() << endl;
+//    cout << "Gamma+Jets integral (deno barrel): " << h_pT_barrel_MC_deno[_GJets_Full]->Integral() << endl;
+//    cout << "\nMC integral (nume barrel): " << ((TH1D*)(s_pT_barrel_nume->GetStack()->Last()))->Integral() << endl;
+//    cout << "Data integral (nume barrel): " << h_pT_barrel_data_nume->Integral() << endl;
+//    cout << "QCD integral (nume barrel): " << h_pT_barrel_MC_nume[_QCDEMEnriched_Full]->Integral() << endl;
+//    cout << "Gamma+Jets integral (nume barrel): " << h_pT_barrel_MC_nume[_GJets_Full]->Integral() << endl;
+//    cout << "\nMC integral (deno endcap): " << ((TH1D*)(s_pT_endcap_deno->GetStack()->Last()))->Integral() << endl;
+//    cout << "Data integral (deno endcap): " << h_pT_endcap_data_deno->Integral() << endl;
+//    cout << "QCD integral (deno endcap): " << h_pT_endcap_MC_deno[_QCDEMEnriched_Full]->Integral() << endl;
+//    cout << "Gamma+Jets integral (deno endcap): " << h_pT_endcap_MC_deno[_GJets_Full]->Integral() << endl;
+//    cout << "\nMC integral (nume endcap): " << ((TH1D*)(s_pT_endcap_nume->GetStack()->Last()))->Integral() << endl;
+//    cout << "Data integral (nume endcap): " << h_pT_endcap_data_nume->Integral() << endl;
+//    cout << "QCD integral (nume endcap): " << h_pT_endcap_MC_nume[_QCDEMEnriched_Full]->Integral() << endl;
+//    cout << "Gamma+Jets integral (nume endcap): " << h_pT_endcap_MC_nume[_GJets_Full]->Integral() << endl;
+
+} // End of E_MatrixMethod_HistDrawer()
 
 
 void E_HistDrawer_alt()
@@ -9476,13 +10360,13 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
          *h_mass_test[_EndOf_Data_Special],
          *h_pT[_EndOf_Data_Special], *h_rapi[_EndOf_Data_Special],
          *h_PFiso_barrel[_EndOf_Data_Special],
-         *h_chiso_barrel[_EndOf_Data_Special],
-         *h_nhiso_barrel[_EndOf_Data_Special],
-         *h_phiso_barrel[_EndOf_Data_Special],
+         *h_TrkIso_barrel[_EndOf_Data_Special],
+         *h_ECALiso_barrel[_EndOf_Data_Special],
+         *h_HCALiso_barrel[_EndOf_Data_Special],
          *h_PFiso_endcap[_EndOf_Data_Special],
-         *h_chiso_endcap[_EndOf_Data_Special],
-         *h_nhiso_endcap[_EndOf_Data_Special],
-         *h_phiso_endcap[_EndOf_Data_Special];
+         *h_TrkIso_endcap[_EndOf_Data_Special],
+         *h_ECALiso_endcap[_EndOf_Data_Special],
+         *h_HCALiso_endcap[_EndOf_Data_Special];
     TH1D *h_QCD_est, *h_QCD_est_SS, *h_QCD_est_temp;
     THStack *s_mass_wQCD = new THStack("s_mass_wQCD", "");
     THStack *s_mass_woQCD = new THStack("s_mass_woQCD_SS", "");
@@ -9495,13 +10379,13 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     THStack *s_pT = new THStack("s_pT", "");
     THStack *s_rapi = new THStack("s_rapi", "");
     THStack *s_PFiso_barrel = new THStack("s_PFiso_barrel", "");
-    THStack *s_chiso_barrel = new THStack("s_chiso_barrel", "");
-    THStack *s_nhiso_barrel = new THStack("s_nhiso_barrel", "");
-    THStack *s_phiso_barrel = new THStack("s_phiso_barrel", "");
+    THStack *s_TrkIso_barrel = new THStack("s_TrkIso_barrel", "");
+    THStack *s_ECALiso_barrel = new THStack("s_ECALiso_barrel", "");
+    THStack *s_HCALiso_barrel = new THStack("s_HCALiso_barrel", "");
     THStack *s_PFiso_endcap = new THStack("s_PFiso_endcap", "");
-    THStack *s_chiso_endcap = new THStack("s_chiso_endcap", "");
-    THStack *s_nhiso_endcap = new THStack("s_nhiso_endcap", "");
-    THStack *s_phiso_endcap = new THStack("s_phiso_endcap", "");
+    THStack *s_TrkIso_endcap = new THStack("s_TrkIso_endcap", "");
+    THStack *s_ECALiso_endcap = new THStack("s_ECALiso_endcap", "");
+    THStack *s_HCALiso_endcap = new THStack("s_HCALiso_endcap", "");
     Color_t color = kBlack;
 
     // Loop over all processes (adding all histograms)
@@ -9516,13 +10400,13 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
         f->GetObject("h_pT_"+Mgr.Procname[pr], h_pT[pr]);
         f->GetObject("h_rapi_"+Mgr.Procname[pr], h_rapi[pr]);
         f->GetObject("h_PFiso_Rho_barrel_ctrl_"+Mgr.Procname[pr], h_PFiso_barrel[pr]);
-        f->GetObject("h_chiso_barrel_ctrl_"+Mgr.Procname[pr], h_chiso_barrel[pr]);
-        f->GetObject("h_nhiso_barrel_ctrl_"+Mgr.Procname[pr], h_nhiso_barrel[pr]);
-        f->GetObject("h_phiso_barrel_ctrl_"+Mgr.Procname[pr], h_phiso_barrel[pr]);
+        f->GetObject("h_TrkIso_barrel_ctrl_"+Mgr.Procname[pr], h_TrkIso_barrel[pr]);
+        f->GetObject("h_ECALiso_barrel_ctrl_"+Mgr.Procname[pr], h_ECALiso_barrel[pr]);
+        f->GetObject("h_HCALiso_barrel_ctrl_"+Mgr.Procname[pr], h_HCALiso_barrel[pr]);
         f->GetObject("h_PFiso_Rho_endcap_ctrl_"+Mgr.Procname[pr], h_PFiso_endcap[pr]);
-        f->GetObject("h_chiso_endcap_ctrl_"+Mgr.Procname[pr], h_chiso_endcap[pr]);
-        f->GetObject("h_nhiso_endcap_ctrl_"+Mgr.Procname[pr], h_nhiso_endcap[pr]);
-        f->GetObject("h_phiso_endcap_ctrl_"+Mgr.Procname[pr], h_phiso_endcap[pr]);
+        f->GetObject("h_TrkIso_endcap_ctrl_"+Mgr.Procname[pr], h_TrkIso_endcap[pr]);
+        f->GetObject("h_ECALiso_endcap_ctrl_"+Mgr.Procname[pr], h_ECALiso_endcap[pr]);
+        f->GetObject("h_HCALiso_endcap_ctrl_"+Mgr.Procname[pr], h_HCALiso_endcap[pr]);
         h_mass[pr]->SetDirectory(0);
         h_mass_SS[pr]->SetDirectory(0);
         h_mass_temp[pr]->SetDirectory(0);
@@ -9530,13 +10414,13 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
         h_pT[pr]->SetDirectory(0);
         h_rapi[pr]->SetDirectory(0);
         h_PFiso_barrel[pr]->SetDirectory(0);
-        h_chiso_barrel[pr]->SetDirectory(0);
-        h_nhiso_barrel[pr]->SetDirectory(0);
-        h_phiso_barrel[pr]->SetDirectory(0);
+        h_TrkIso_barrel[pr]->SetDirectory(0);
+        h_ECALiso_barrel[pr]->SetDirectory(0);
+        h_HCALiso_barrel[pr]->SetDirectory(0);
         h_PFiso_endcap[pr]->SetDirectory(0);
-        h_chiso_endcap[pr]->SetDirectory(0);
-        h_nhiso_endcap[pr]->SetDirectory(0);
-        h_phiso_endcap[pr]->SetDirectory(0);
+        h_TrkIso_endcap[pr]->SetDirectory(0);
+        h_ECALiso_endcap[pr]->SetDirectory(0);
+        h_HCALiso_endcap[pr]->SetDirectory(0);
 
 
         // 2 -- use negative bin removal, 1 -- do not use
@@ -9549,13 +10433,13 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             removeNegativeBins(h_pT[pr]);
             removeNegativeBins(h_rapi[pr]);
             removeNegativeBins(h_PFiso_barrel[pr]);
-            removeNegativeBins(h_chiso_barrel[pr]);
-            removeNegativeBins(h_nhiso_barrel[pr]);
-            removeNegativeBins(h_phiso_barrel[pr]);
+            removeNegativeBins(h_TrkIso_barrel[pr]);
+            removeNegativeBins(h_ECALiso_barrel[pr]);
+            removeNegativeBins(h_HCALiso_barrel[pr]);
             removeNegativeBins(h_PFiso_endcap[pr]);
-            removeNegativeBins(h_chiso_endcap[pr]);
-            removeNegativeBins(h_nhiso_endcap[pr]);
-            removeNegativeBins(h_phiso_endcap[pr]);
+            removeNegativeBins(h_TrkIso_endcap[pr]);
+            removeNegativeBins(h_ECALiso_endcap[pr]);
+            removeNegativeBins(h_HCALiso_endcap[pr]);
         }
 
         if (pr < _EndOf_DY_Normal) color = kOrange - 5;
@@ -9584,21 +10468,21 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_rapi[pr]->SetFillColor(color);
             h_rapi[pr]->SetLineColor(color);
             h_PFiso_barrel[pr]->SetFillColor(color);
-            h_chiso_barrel[pr]->SetFillColor(color);
-            h_nhiso_barrel[pr]->SetFillColor(color);
-            h_phiso_barrel[pr]->SetFillColor(color);
+            h_TrkIso_barrel[pr]->SetFillColor(color);
+            h_ECALiso_barrel[pr]->SetFillColor(color);
+            h_HCALiso_barrel[pr]->SetFillColor(color);
             h_PFiso_endcap[pr]->SetFillColor(color);
-            h_chiso_endcap[pr]->SetFillColor(color);
-            h_nhiso_endcap[pr]->SetFillColor(color);
-            h_phiso_endcap[pr]->SetFillColor(color);
+            h_TrkIso_endcap[pr]->SetFillColor(color);
+            h_ECALiso_endcap[pr]->SetFillColor(color);
+            h_HCALiso_endcap[pr]->SetFillColor(color);
             h_PFiso_barrel[pr]->SetLineColor(color);
-            h_chiso_barrel[pr]->SetLineColor(color);
-            h_nhiso_barrel[pr]->SetLineColor(color);
-            h_phiso_barrel[pr]->SetLineColor(color);
+            h_TrkIso_barrel[pr]->SetLineColor(color);
+            h_ECALiso_barrel[pr]->SetLineColor(color);
+            h_HCALiso_barrel[pr]->SetLineColor(color);
             h_PFiso_endcap[pr]->SetLineColor(color);
-            h_chiso_endcap[pr]->SetLineColor(color);
-            h_nhiso_endcap[pr]->SetLineColor(color);
-            h_phiso_endcap[pr]->SetLineColor(color);
+            h_TrkIso_endcap[pr]->SetLineColor(color);
+            h_ECALiso_endcap[pr]->SetLineColor(color);
+            h_HCALiso_endcap[pr]->SetLineColor(color);
         }
         else // Data coloring
         {
@@ -9621,29 +10505,29 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_rapi[pr]->SetMarkerColor(kBlack);
             h_rapi[pr]->SetLineColor(kBlack);
             h_PFiso_barrel[pr]->SetMarkerStyle(kFullDotLarge);
-            h_chiso_barrel[pr]->SetMarkerStyle(kFullDotLarge);
-            h_nhiso_barrel[pr]->SetMarkerStyle(kFullDotLarge);
-            h_phiso_barrel[pr]->SetMarkerStyle(kFullDotLarge);
+            h_TrkIso_barrel[pr]->SetMarkerStyle(kFullDotLarge);
+            h_ECALiso_barrel[pr]->SetMarkerStyle(kFullDotLarge);
+            h_HCALiso_barrel[pr]->SetMarkerStyle(kFullDotLarge);
             h_PFiso_endcap[pr]->SetMarkerStyle(kFullDotLarge);
-            h_chiso_endcap[pr]->SetMarkerStyle(kFullDotLarge);
-            h_nhiso_endcap[pr]->SetMarkerStyle(kFullDotLarge);
-            h_phiso_endcap[pr]->SetMarkerStyle(kFullDotLarge);
+            h_TrkIso_endcap[pr]->SetMarkerStyle(kFullDotLarge);
+            h_ECALiso_endcap[pr]->SetMarkerStyle(kFullDotLarge);
+            h_HCALiso_endcap[pr]->SetMarkerStyle(kFullDotLarge);
             h_PFiso_barrel[pr]->SetMarkerColor(kBlack);
-            h_chiso_barrel[pr]->SetMarkerColor(kBlack);
-            h_nhiso_barrel[pr]->SetMarkerColor(kBlack);
-            h_phiso_barrel[pr]->SetMarkerColor(kBlack);
+            h_TrkIso_barrel[pr]->SetMarkerColor(kBlack);
+            h_ECALiso_barrel[pr]->SetMarkerColor(kBlack);
+            h_HCALiso_barrel[pr]->SetMarkerColor(kBlack);
             h_PFiso_endcap[pr]->SetMarkerColor(kBlack);
-            h_chiso_endcap[pr]->SetMarkerColor(kBlack);
-            h_nhiso_endcap[pr]->SetMarkerColor(kBlack);
-            h_phiso_endcap[pr]->SetMarkerColor(kBlack);
+            h_TrkIso_endcap[pr]->SetMarkerColor(kBlack);
+            h_ECALiso_endcap[pr]->SetMarkerColor(kBlack);
+            h_HCALiso_endcap[pr]->SetMarkerColor(kBlack);
             h_PFiso_barrel[pr]->SetLineColor(kBlack);
-            h_chiso_barrel[pr]->SetLineColor(kBlack);
-            h_nhiso_barrel[pr]->SetLineColor(kBlack);
-            h_phiso_barrel[pr]->SetLineColor(kBlack);
+            h_TrkIso_barrel[pr]->SetLineColor(kBlack);
+            h_ECALiso_barrel[pr]->SetLineColor(kBlack);
+            h_HCALiso_barrel[pr]->SetLineColor(kBlack);
             h_PFiso_endcap[pr]->SetLineColor(kBlack);
-            h_chiso_endcap[pr]->SetLineColor(kBlack);
-            h_nhiso_endcap[pr]->SetLineColor(kBlack);
-            h_phiso_endcap[pr]->SetLineColor(kBlack);
+            h_TrkIso_endcap[pr]->SetLineColor(kBlack);
+            h_ECALiso_endcap[pr]->SetLineColor(kBlack);
+            h_HCALiso_endcap[pr]->SetLineColor(kBlack);
         }
 
         // Adding hists to THStacks
@@ -9680,21 +10564,21 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_rapi[_DY_Full] = ((TH1D*)(h_rapi[pr]->Clone("h_rapi_DY_Full")));
             h_rapi[_DY_Full]->SetDirectory(0);
             h_PFiso_barrel[_DY_Full] = ((TH1D*)(h_PFiso_barrel[pr]->Clone("h_PFiso_barrel_DY_Full")));
-            h_chiso_barrel[_DY_Full] = ((TH1D*)(h_chiso_barrel[pr]->Clone("h_chiso_barrel_DY_Full")));
-            h_nhiso_barrel[_DY_Full] = ((TH1D*)(h_nhiso_barrel[pr]->Clone("h_nhiso_barrel_DY_Full")));
-            h_phiso_barrel[_DY_Full] = ((TH1D*)(h_phiso_barrel[pr]->Clone("h_phiso_barrel_DY_Full")));
+            h_TrkIso_barrel[_DY_Full] = ((TH1D*)(h_TrkIso_barrel[pr]->Clone("h_TrkIso_barrel_DY_Full")));
+            h_ECALiso_barrel[_DY_Full] = ((TH1D*)(h_ECALiso_barrel[pr]->Clone("h_ECALiso_barrel_DY_Full")));
+            h_HCALiso_barrel[_DY_Full] = ((TH1D*)(h_HCALiso_barrel[pr]->Clone("h_HCALiso_barrel_DY_Full")));
             h_PFiso_endcap[_DY_Full] = ((TH1D*)(h_PFiso_endcap[pr]->Clone("h_PFiso_endcap_DY_Full")));
-            h_chiso_endcap[_DY_Full] = ((TH1D*)(h_chiso_endcap[pr]->Clone("h_chiso_endcap_DY_Full")));
-            h_nhiso_endcap[_DY_Full] = ((TH1D*)(h_nhiso_endcap[pr]->Clone("h_nhiso_endcap_DY_Full")));
-            h_phiso_endcap[_DY_Full] = ((TH1D*)(h_phiso_endcap[pr]->Clone("h_phiso_endcap_DY_Full")));
+            h_TrkIso_endcap[_DY_Full] = ((TH1D*)(h_TrkIso_endcap[pr]->Clone("h_TrkIso_endcap_DY_Full")));
+            h_ECALiso_endcap[_DY_Full] = ((TH1D*)(h_ECALiso_endcap[pr]->Clone("h_ECALiso_endcap_DY_Full")));
+            h_HCALiso_endcap[_DY_Full] = ((TH1D*)(h_HCALiso_endcap[pr]->Clone("h_HCALiso_endcap_DY_Full")));
             h_PFiso_barrel[_DY_Full]->SetDirectory(0);
-            h_chiso_barrel[_DY_Full]->SetDirectory(0);
-            h_nhiso_barrel[_DY_Full]->SetDirectory(0);
-            h_phiso_barrel[_DY_Full]->SetDirectory(0);
+            h_TrkIso_barrel[_DY_Full]->SetDirectory(0);
+            h_ECALiso_barrel[_DY_Full]->SetDirectory(0);
+            h_HCALiso_barrel[_DY_Full]->SetDirectory(0);
             h_PFiso_endcap[_DY_Full]->SetDirectory(0);
-            h_chiso_endcap[_DY_Full]->SetDirectory(0);
-            h_nhiso_endcap[_DY_Full]->SetDirectory(0);
-            h_phiso_endcap[_DY_Full]->SetDirectory(0);
+            h_TrkIso_endcap[_DY_Full]->SetDirectory(0);
+            h_ECALiso_endcap[_DY_Full]->SetDirectory(0);
+            h_HCALiso_endcap[_DY_Full]->SetDirectory(0);
         }
         else if (pr < _EndOf_DY_Normal)
         {
@@ -9705,13 +10589,13 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_pT[_DY_Full]->Add(h_pT[pr]);
             h_rapi[_DY_Full]->Add(h_rapi[pr]);
             h_PFiso_barrel[_DY_Full]->Add(h_PFiso_barrel[pr]);
-            h_chiso_barrel[_DY_Full]->Add(h_chiso_barrel[pr]);
-            h_nhiso_barrel[_DY_Full]->Add(h_nhiso_barrel[pr]);
-            h_phiso_barrel[_DY_Full]->Add(h_phiso_barrel[pr]);
+            h_TrkIso_barrel[_DY_Full]->Add(h_TrkIso_barrel[pr]);
+            h_ECALiso_barrel[_DY_Full]->Add(h_ECALiso_barrel[pr]);
+            h_HCALiso_barrel[_DY_Full]->Add(h_HCALiso_barrel[pr]);
             h_PFiso_endcap[_DY_Full]->Add(h_PFiso_endcap[pr]);
-            h_chiso_endcap[_DY_Full]->Add(h_chiso_endcap[pr]);
-            h_nhiso_endcap[_DY_Full]->Add(h_nhiso_endcap[pr]);
-            h_phiso_endcap[_DY_Full]->Add(h_phiso_endcap[pr]);
+            h_TrkIso_endcap[_DY_Full]->Add(h_TrkIso_endcap[pr]);
+            h_ECALiso_endcap[_DY_Full]->Add(h_ECALiso_endcap[pr]);
+            h_HCALiso_endcap[_DY_Full]->Add(h_HCALiso_endcap[pr]);
         }
         else if (pr == _ttbar)
         {
@@ -9728,21 +10612,21 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_rapi[_ttbar_Full] = ((TH1D*)(h_rapi[pr]->Clone("h_rapi_ttbar_Full")));
             h_rapi[_ttbar_Full]->SetDirectory(0);
             h_PFiso_barrel[_ttbar_Full] = ((TH1D*)(h_PFiso_barrel[pr]->Clone("h_PFiso_barrel_ttbar_Full")));
-            h_chiso_barrel[_ttbar_Full] = ((TH1D*)(h_chiso_barrel[pr]->Clone("h_chiso_barrel_ttbar_Full")));
-            h_nhiso_barrel[_ttbar_Full] = ((TH1D*)(h_nhiso_barrel[pr]->Clone("h_nhiso_barrel_ttbar_Full")));
-            h_phiso_barrel[_ttbar_Full] = ((TH1D*)(h_phiso_barrel[pr]->Clone("h_phiso_barrel_ttbar_Full")));
+            h_TrkIso_barrel[_ttbar_Full] = ((TH1D*)(h_TrkIso_barrel[pr]->Clone("h_TrkIso_barrel_ttbar_Full")));
+            h_ECALiso_barrel[_ttbar_Full] = ((TH1D*)(h_ECALiso_barrel[pr]->Clone("h_ECALiso_barrel_ttbar_Full")));
+            h_HCALiso_barrel[_ttbar_Full] = ((TH1D*)(h_HCALiso_barrel[pr]->Clone("h_HCALiso_barrel_ttbar_Full")));
             h_PFiso_endcap[_ttbar_Full] = ((TH1D*)(h_PFiso_endcap[pr]->Clone("h_PFiso_endcap_ttbar_Full")));
-            h_chiso_endcap[_ttbar_Full] = ((TH1D*)(h_chiso_endcap[pr]->Clone("h_chiso_endcap_ttbar_Full")));
-            h_nhiso_endcap[_ttbar_Full] = ((TH1D*)(h_nhiso_endcap[pr]->Clone("h_nhiso_endcap_ttbar_Full")));
-            h_phiso_endcap[_ttbar_Full] = ((TH1D*)(h_phiso_endcap[pr]->Clone("h_phiso_endcap_ttbar_Full")));
+            h_TrkIso_endcap[_ttbar_Full] = ((TH1D*)(h_TrkIso_endcap[pr]->Clone("h_TrkIso_endcap_ttbar_Full")));
+            h_ECALiso_endcap[_ttbar_Full] = ((TH1D*)(h_ECALiso_endcap[pr]->Clone("h_ECALiso_endcap_ttbar_Full")));
+            h_HCALiso_endcap[_ttbar_Full] = ((TH1D*)(h_HCALiso_endcap[pr]->Clone("h_HCALiso_endcap_ttbar_Full")));
             h_PFiso_barrel[_ttbar_Full]->SetDirectory(0);
-            h_chiso_barrel[_ttbar_Full]->SetDirectory(0);
-            h_nhiso_barrel[_ttbar_Full]->SetDirectory(0);
-            h_phiso_barrel[_ttbar_Full]->SetDirectory(0);
+            h_TrkIso_barrel[_ttbar_Full]->SetDirectory(0);
+            h_ECALiso_barrel[_ttbar_Full]->SetDirectory(0);
+            h_HCALiso_barrel[_ttbar_Full]->SetDirectory(0);
             h_PFiso_endcap[_ttbar_Full]->SetDirectory(0);
-            h_chiso_endcap[_ttbar_Full]->SetDirectory(0);
-            h_nhiso_endcap[_ttbar_Full]->SetDirectory(0);
-            h_phiso_endcap[_ttbar_Full]->SetDirectory(0);
+            h_TrkIso_endcap[_ttbar_Full]->SetDirectory(0);
+            h_ECALiso_endcap[_ttbar_Full]->SetDirectory(0);
+            h_HCALiso_endcap[_ttbar_Full]->SetDirectory(0);
         }
         else if (pr < _EndOf_ttbar_Normal)
         {
@@ -9753,13 +10637,13 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_pT[_ttbar_Full]->Add(h_pT[pr]);
             h_rapi[_ttbar_Full]->Add(h_rapi[pr]);
             h_PFiso_barrel[_ttbar_Full]->Add(h_PFiso_barrel[pr]);
-            h_chiso_barrel[_ttbar_Full]->Add(h_chiso_barrel[pr]);
-            h_nhiso_barrel[_ttbar_Full]->Add(h_nhiso_barrel[pr]);
-            h_phiso_barrel[_ttbar_Full]->Add(h_phiso_barrel[pr]);
+            h_TrkIso_barrel[_ttbar_Full]->Add(h_TrkIso_barrel[pr]);
+            h_ECALiso_barrel[_ttbar_Full]->Add(h_ECALiso_barrel[pr]);
+            h_HCALiso_barrel[_ttbar_Full]->Add(h_HCALiso_barrel[pr]);
             h_PFiso_endcap[_ttbar_Full]->Add(h_PFiso_endcap[pr]);
-            h_chiso_endcap[_ttbar_Full]->Add(h_chiso_endcap[pr]);
-            h_nhiso_endcap[_ttbar_Full]->Add(h_nhiso_endcap[pr]);
-            h_phiso_endcap[_ttbar_Full]->Add(h_phiso_endcap[pr]);
+            h_TrkIso_endcap[_ttbar_Full]->Add(h_TrkIso_endcap[pr]);
+            h_ECALiso_endcap[_ttbar_Full]->Add(h_ECALiso_endcap[pr]);
+            h_HCALiso_endcap[_ttbar_Full]->Add(h_HCALiso_endcap[pr]);
         }
         else if (pr == _tW)
         {
@@ -9776,21 +10660,21 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_rapi[_VVnST] = ((TH1D*)(h_rapi[pr]->Clone("h_rapi_VVnST")));
             h_rapi[_VVnST]->SetDirectory(0);
             h_PFiso_barrel[_VVnST] = ((TH1D*)(h_PFiso_barrel[pr]->Clone("h_PFiso_barrel_VVnST")));
-            h_chiso_barrel[_VVnST] = ((TH1D*)(h_chiso_barrel[pr]->Clone("h_chiso_barrel_VVnST")));
-            h_nhiso_barrel[_VVnST] = ((TH1D*)(h_nhiso_barrel[pr]->Clone("h_nhiso_barrel_VVnST")));
-            h_phiso_barrel[_VVnST] = ((TH1D*)(h_phiso_barrel[pr]->Clone("h_phiso_barrel_VVnST")));
+            h_TrkIso_barrel[_VVnST] = ((TH1D*)(h_TrkIso_barrel[pr]->Clone("h_TrkIso_barrel_VVnST")));
+            h_ECALiso_barrel[_VVnST] = ((TH1D*)(h_ECALiso_barrel[pr]->Clone("h_ECALiso_barrel_VVnST")));
+            h_HCALiso_barrel[_VVnST] = ((TH1D*)(h_HCALiso_barrel[pr]->Clone("h_HCALiso_barrel_VVnST")));
             h_PFiso_endcap[_VVnST] = ((TH1D*)(h_PFiso_endcap[pr]->Clone("h_PFiso_endcap_VVnST")));
-            h_chiso_endcap[_VVnST] = ((TH1D*)(h_chiso_endcap[pr]->Clone("h_chiso_endcap_VVnST")));
-            h_nhiso_endcap[_VVnST] = ((TH1D*)(h_nhiso_endcap[pr]->Clone("h_nhiso_endcap_VVnST")));
-            h_phiso_endcap[_VVnST] = ((TH1D*)(h_phiso_endcap[pr]->Clone("h_phiso_endcap_VVnST")));
+            h_TrkIso_endcap[_VVnST] = ((TH1D*)(h_TrkIso_endcap[pr]->Clone("h_TrkIso_endcap_VVnST")));
+            h_ECALiso_endcap[_VVnST] = ((TH1D*)(h_ECALiso_endcap[pr]->Clone("h_ECALiso_endcap_VVnST")));
+            h_HCALiso_endcap[_VVnST] = ((TH1D*)(h_HCALiso_endcap[pr]->Clone("h_HCALiso_endcap_VVnST")));
             h_PFiso_barrel[_VVnST]->SetDirectory(0);
-            h_chiso_barrel[_VVnST]->SetDirectory(0);
-            h_nhiso_barrel[_VVnST]->SetDirectory(0);
-            h_phiso_barrel[_VVnST]->SetDirectory(0);
+            h_TrkIso_barrel[_VVnST]->SetDirectory(0);
+            h_ECALiso_barrel[_VVnST]->SetDirectory(0);
+            h_HCALiso_barrel[_VVnST]->SetDirectory(0);
             h_PFiso_endcap[_VVnST]->SetDirectory(0);
-            h_chiso_endcap[_VVnST]->SetDirectory(0);
-            h_nhiso_endcap[_VVnST]->SetDirectory(0);
-            h_phiso_endcap[_VVnST]->SetDirectory(0);
+            h_TrkIso_endcap[_VVnST]->SetDirectory(0);
+            h_ECALiso_endcap[_VVnST]->SetDirectory(0);
+            h_HCALiso_endcap[_VVnST]->SetDirectory(0);
         }
         else if (pr < _EndOf_VVnST_Normal)
         {
@@ -9801,13 +10685,13 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_pT[_VVnST]->Add(h_pT[pr]);
             h_rapi[_VVnST]->Add(h_rapi[pr]);
             h_PFiso_barrel[_VVnST]->Add(h_PFiso_barrel[pr]);
-            h_chiso_barrel[_VVnST]->Add(h_chiso_barrel[pr]);
-            h_nhiso_barrel[_VVnST]->Add(h_nhiso_barrel[pr]);
-            h_phiso_barrel[_VVnST]->Add(h_phiso_barrel[pr]);
+            h_TrkIso_barrel[_VVnST]->Add(h_TrkIso_barrel[pr]);
+            h_ECALiso_barrel[_VVnST]->Add(h_ECALiso_barrel[pr]);
+            h_HCALiso_barrel[_VVnST]->Add(h_HCALiso_barrel[pr]);
             h_PFiso_endcap[_VVnST]->Add(h_PFiso_endcap[pr]);
-            h_chiso_endcap[_VVnST]->Add(h_chiso_endcap[pr]);
-            h_nhiso_endcap[_VVnST]->Add(h_nhiso_endcap[pr]);
-            h_phiso_endcap[_VVnST]->Add(h_phiso_endcap[pr]);
+            h_TrkIso_endcap[_VVnST]->Add(h_TrkIso_endcap[pr]);
+            h_ECALiso_endcap[_VVnST]->Add(h_ECALiso_endcap[pr]);
+            h_HCALiso_endcap[_VVnST]->Add(h_HCALiso_endcap[pr]);
         }
         else if (pr == _WJets)
         {
@@ -9824,21 +10708,21 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_rapi[_WJets_Full] = ((TH1D*)(h_rapi[pr]->Clone("h_rapi_WJets_Full")));
             h_rapi[_WJets_Full]->SetDirectory(0);
             h_PFiso_barrel[_WJets_Full] = ((TH1D*)(h_PFiso_barrel[pr]->Clone("h_PFiso_barrel_WJets_Full")));
-            h_chiso_barrel[_WJets_Full] = ((TH1D*)(h_chiso_barrel[pr]->Clone("h_chiso_barrel_WJets_Full")));
-            h_nhiso_barrel[_WJets_Full] = ((TH1D*)(h_nhiso_barrel[pr]->Clone("h_nhiso_barrel_WJets_Full")));
-            h_phiso_barrel[_WJets_Full] = ((TH1D*)(h_phiso_barrel[pr]->Clone("h_phiso_barrel_WJets_Full")));
+            h_TrkIso_barrel[_WJets_Full] = ((TH1D*)(h_TrkIso_barrel[pr]->Clone("h_TrkIso_barrel_WJets_Full")));
+            h_ECALiso_barrel[_WJets_Full] = ((TH1D*)(h_ECALiso_barrel[pr]->Clone("h_ECALiso_barrel_WJets_Full")));
+            h_HCALiso_barrel[_WJets_Full] = ((TH1D*)(h_HCALiso_barrel[pr]->Clone("h_HCALiso_barrel_WJets_Full")));
             h_PFiso_endcap[_WJets_Full] = ((TH1D*)(h_PFiso_endcap[pr]->Clone("h_PFiso_endcap_WJets_Full")));
-            h_chiso_endcap[_WJets_Full] = ((TH1D*)(h_chiso_endcap[pr]->Clone("h_chiso_endcap_WJets_Full")));
-            h_nhiso_endcap[_WJets_Full] = ((TH1D*)(h_nhiso_endcap[pr]->Clone("h_nhiso_endcap_WJets_Full")));
-            h_phiso_endcap[_WJets_Full] = ((TH1D*)(h_phiso_endcap[pr]->Clone("h_phiso_endcap_WJets_Full")));
+            h_TrkIso_endcap[_WJets_Full] = ((TH1D*)(h_TrkIso_endcap[pr]->Clone("h_TrkIso_endcap_WJets_Full")));
+            h_ECALiso_endcap[_WJets_Full] = ((TH1D*)(h_ECALiso_endcap[pr]->Clone("h_ECALiso_endcap_WJets_Full")));
+            h_HCALiso_endcap[_WJets_Full] = ((TH1D*)(h_HCALiso_endcap[pr]->Clone("h_HCALiso_endcap_WJets_Full")));
             h_PFiso_barrel[_WJets_Full]->SetDirectory(0);
-            h_chiso_barrel[_WJets_Full]->SetDirectory(0);
-            h_nhiso_barrel[_WJets_Full]->SetDirectory(0);
-            h_phiso_barrel[_WJets_Full]->SetDirectory(0);
+            h_TrkIso_barrel[_WJets_Full]->SetDirectory(0);
+            h_ECALiso_barrel[_WJets_Full]->SetDirectory(0);
+            h_HCALiso_barrel[_WJets_Full]->SetDirectory(0);
             h_PFiso_endcap[_WJets_Full]->SetDirectory(0);
-            h_chiso_endcap[_WJets_Full]->SetDirectory(0);
-            h_nhiso_endcap[_WJets_Full]->SetDirectory(0);
-            h_phiso_endcap[_WJets_Full]->SetDirectory(0);
+            h_TrkIso_endcap[_WJets_Full]->SetDirectory(0);
+            h_ECALiso_endcap[_WJets_Full]->SetDirectory(0);
+            h_HCALiso_endcap[_WJets_Full]->SetDirectory(0);
         }
         else if (pr < _EndOf_WJets_Normal)
         {
@@ -9849,13 +10733,13 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_pT[_WJets_Full]->Add(h_pT[pr]);
             h_rapi[_WJets_Full]->Add(h_rapi[pr]);
             h_PFiso_barrel[_WJets_Full]->Add(h_PFiso_barrel[pr]);
-            h_chiso_barrel[_WJets_Full]->Add(h_chiso_barrel[pr]);
-            h_nhiso_barrel[_WJets_Full]->Add(h_nhiso_barrel[pr]);
-            h_phiso_barrel[_WJets_Full]->Add(h_phiso_barrel[pr]);
+            h_TrkIso_barrel[_WJets_Full]->Add(h_TrkIso_barrel[pr]);
+            h_ECALiso_barrel[_WJets_Full]->Add(h_ECALiso_barrel[pr]);
+            h_HCALiso_barrel[_WJets_Full]->Add(h_HCALiso_barrel[pr]);
             h_PFiso_endcap[_WJets_Full]->Add(h_PFiso_endcap[pr]);
-            h_chiso_endcap[_WJets_Full]->Add(h_chiso_endcap[pr]);
-            h_nhiso_endcap[_WJets_Full]->Add(h_nhiso_endcap[pr]);
-            h_phiso_endcap[_WJets_Full]->Add(h_phiso_endcap[pr]);
+            h_TrkIso_endcap[_WJets_Full]->Add(h_TrkIso_endcap[pr]);
+            h_ECALiso_endcap[_WJets_Full]->Add(h_ECALiso_endcap[pr]);
+            h_HCALiso_endcap[_WJets_Full]->Add(h_HCALiso_endcap[pr]);
         }
         else if (pr == _QCDEMEnriched_20to30)
         {
@@ -9872,21 +10756,21 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_rapi[_QCDEMEnriched_Full] = ((TH1D*)(h_rapi[pr]->Clone("h_rapi_QCDEMEnriched_Full")));
             h_rapi[_QCDEMEnriched_Full]->SetDirectory(0);
             h_PFiso_barrel[_QCDEMEnriched_Full] = ((TH1D*)(h_PFiso_barrel[pr]->Clone("h_PFiso_barrel_QCDEMEnriched_Full")));
-            h_chiso_barrel[_QCDEMEnriched_Full] = ((TH1D*)(h_chiso_barrel[pr]->Clone("h_chiso_barrel_QCDEMEnriched_Full")));
-            h_nhiso_barrel[_QCDEMEnriched_Full] = ((TH1D*)(h_nhiso_barrel[pr]->Clone("h_nhiso_barrel_QCDEMEnriched_Full")));
-            h_phiso_barrel[_QCDEMEnriched_Full] = ((TH1D*)(h_phiso_barrel[pr]->Clone("h_phiso_barrel_QCDEMEnriched_Full")));
+            h_TrkIso_barrel[_QCDEMEnriched_Full] = ((TH1D*)(h_TrkIso_barrel[pr]->Clone("h_TrkIso_barrel_QCDEMEnriched_Full")));
+            h_ECALiso_barrel[_QCDEMEnriched_Full] = ((TH1D*)(h_ECALiso_barrel[pr]->Clone("h_ECALiso_barrel_QCDEMEnriched_Full")));
+            h_HCALiso_barrel[_QCDEMEnriched_Full] = ((TH1D*)(h_HCALiso_barrel[pr]->Clone("h_HCALiso_barrel_QCDEMEnriched_Full")));
             h_PFiso_endcap[_QCDEMEnriched_Full] = ((TH1D*)(h_PFiso_endcap[pr]->Clone("h_PFiso_endcap_QCDEMEnriched_Full")));
-            h_chiso_endcap[_QCDEMEnriched_Full] = ((TH1D*)(h_chiso_endcap[pr]->Clone("h_chiso_endcap_QCDEMEnriched_Full")));
-            h_nhiso_endcap[_QCDEMEnriched_Full] = ((TH1D*)(h_nhiso_endcap[pr]->Clone("h_nhiso_endcap_QCDEMEnriched_Full")));
-            h_phiso_endcap[_QCDEMEnriched_Full] = ((TH1D*)(h_phiso_endcap[pr]->Clone("h_phiso_endcap_QCDEMEnriched_Full")));
+            h_TrkIso_endcap[_QCDEMEnriched_Full] = ((TH1D*)(h_TrkIso_endcap[pr]->Clone("h_TrkIso_endcap_QCDEMEnriched_Full")));
+            h_ECALiso_endcap[_QCDEMEnriched_Full] = ((TH1D*)(h_ECALiso_endcap[pr]->Clone("h_ECALiso_endcap_QCDEMEnriched_Full")));
+            h_HCALiso_endcap[_QCDEMEnriched_Full] = ((TH1D*)(h_HCALiso_endcap[pr]->Clone("h_HCALiso_endcap_QCDEMEnriched_Full")));
             h_PFiso_barrel[_QCDEMEnriched_Full]->SetDirectory(0);
-            h_chiso_barrel[_QCDEMEnriched_Full]->SetDirectory(0);
-            h_nhiso_barrel[_QCDEMEnriched_Full]->SetDirectory(0);
-            h_phiso_barrel[_QCDEMEnriched_Full]->SetDirectory(0);
+            h_TrkIso_barrel[_QCDEMEnriched_Full]->SetDirectory(0);
+            h_ECALiso_barrel[_QCDEMEnriched_Full]->SetDirectory(0);
+            h_HCALiso_barrel[_QCDEMEnriched_Full]->SetDirectory(0);
             h_PFiso_endcap[_QCDEMEnriched_Full]->SetDirectory(0);
-            h_chiso_endcap[_QCDEMEnriched_Full]->SetDirectory(0);
-            h_nhiso_endcap[_QCDEMEnriched_Full]->SetDirectory(0);
-            h_phiso_endcap[_QCDEMEnriched_Full]->SetDirectory(0);
+            h_TrkIso_endcap[_QCDEMEnriched_Full]->SetDirectory(0);
+            h_ECALiso_endcap[_QCDEMEnriched_Full]->SetDirectory(0);
+            h_HCALiso_endcap[_QCDEMEnriched_Full]->SetDirectory(0);
         }
         else if (pr < _EndOf_QCDEMEnriched_Normal)
         {
@@ -9897,13 +10781,13 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_pT[_QCDEMEnriched_Full]->Add(h_pT[pr]);
             h_rapi[_QCDEMEnriched_Full]->Add(h_rapi[pr]);
             h_PFiso_barrel[_QCDEMEnriched_Full]->Add(h_PFiso_barrel[pr]);
-            h_chiso_barrel[_QCDEMEnriched_Full]->Add(h_chiso_barrel[pr]);
-            h_nhiso_barrel[_QCDEMEnriched_Full]->Add(h_nhiso_barrel[pr]);
-            h_phiso_barrel[_QCDEMEnriched_Full]->Add(h_phiso_barrel[pr]);
+            h_TrkIso_barrel[_QCDEMEnriched_Full]->Add(h_TrkIso_barrel[pr]);
+            h_ECALiso_barrel[_QCDEMEnriched_Full]->Add(h_ECALiso_barrel[pr]);
+            h_HCALiso_barrel[_QCDEMEnriched_Full]->Add(h_HCALiso_barrel[pr]);
             h_PFiso_endcap[_QCDEMEnriched_Full]->Add(h_PFiso_endcap[pr]);
-            h_chiso_endcap[_QCDEMEnriched_Full]->Add(h_chiso_endcap[pr]);
-            h_nhiso_endcap[_QCDEMEnriched_Full]->Add(h_nhiso_endcap[pr]);
-            h_phiso_endcap[_QCDEMEnriched_Full]->Add(h_phiso_endcap[pr]);
+            h_TrkIso_endcap[_QCDEMEnriched_Full]->Add(h_TrkIso_endcap[pr]);
+            h_ECALiso_endcap[_QCDEMEnriched_Full]->Add(h_ECALiso_endcap[pr]);
+            h_HCALiso_endcap[_QCDEMEnriched_Full]->Add(h_HCALiso_endcap[pr]);
         }
         else if (pr == _GJets_20to100)
         {
@@ -9920,21 +10804,21 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_rapi[_GJets_Full] = ((TH1D*)(h_rapi[pr]->Clone("h_rapi_GJets_Full")));
             h_rapi[_GJets_Full]->SetDirectory(0);
             h_PFiso_barrel[_GJets_Full] = ((TH1D*)(h_PFiso_barrel[pr]->Clone("h_PFiso_barrel_GJets_Full")));
-            h_chiso_barrel[_GJets_Full] = ((TH1D*)(h_chiso_barrel[pr]->Clone("h_chiso_barrel_GJets_Full")));
-            h_nhiso_barrel[_GJets_Full] = ((TH1D*)(h_nhiso_barrel[pr]->Clone("h_nhiso_barrel_GJets_Full")));
-            h_phiso_barrel[_GJets_Full] = ((TH1D*)(h_phiso_barrel[pr]->Clone("h_phiso_barrel_GJets_Full")));
+            h_TrkIso_barrel[_GJets_Full] = ((TH1D*)(h_TrkIso_barrel[pr]->Clone("h_TrkIso_barrel_GJets_Full")));
+            h_ECALiso_barrel[_GJets_Full] = ((TH1D*)(h_ECALiso_barrel[pr]->Clone("h_ECALiso_barrel_GJets_Full")));
+            h_HCALiso_barrel[_GJets_Full] = ((TH1D*)(h_HCALiso_barrel[pr]->Clone("h_HCALiso_barrel_GJets_Full")));
             h_PFiso_endcap[_GJets_Full] = ((TH1D*)(h_PFiso_endcap[pr]->Clone("h_PFiso_endcap_GJets_Full")));
-            h_chiso_endcap[_GJets_Full] = ((TH1D*)(h_chiso_endcap[pr]->Clone("h_chiso_endcap_GJets_Full")));
-            h_nhiso_endcap[_GJets_Full] = ((TH1D*)(h_nhiso_endcap[pr]->Clone("h_nhiso_endcap_GJets_Full")));
-            h_phiso_endcap[_GJets_Full] = ((TH1D*)(h_phiso_endcap[pr]->Clone("h_phiso_endcap_GJets_Full")));
+            h_TrkIso_endcap[_GJets_Full] = ((TH1D*)(h_TrkIso_endcap[pr]->Clone("h_TrkIso_endcap_GJets_Full")));
+            h_ECALiso_endcap[_GJets_Full] = ((TH1D*)(h_ECALiso_endcap[pr]->Clone("h_ECALiso_endcap_GJets_Full")));
+            h_HCALiso_endcap[_GJets_Full] = ((TH1D*)(h_HCALiso_endcap[pr]->Clone("h_HCALiso_endcap_GJets_Full")));
             h_PFiso_barrel[_GJets_Full]->SetDirectory(0);
-            h_chiso_barrel[_GJets_Full]->SetDirectory(0);
-            h_nhiso_barrel[_GJets_Full]->SetDirectory(0);
-            h_phiso_barrel[_GJets_Full]->SetDirectory(0);
+            h_TrkIso_barrel[_GJets_Full]->SetDirectory(0);
+            h_ECALiso_barrel[_GJets_Full]->SetDirectory(0);
+            h_HCALiso_barrel[_GJets_Full]->SetDirectory(0);
             h_PFiso_endcap[_GJets_Full]->SetDirectory(0);
-            h_chiso_endcap[_GJets_Full]->SetDirectory(0);
-            h_nhiso_endcap[_GJets_Full]->SetDirectory(0);
-            h_phiso_endcap[_GJets_Full]->SetDirectory(0);
+            h_TrkIso_endcap[_GJets_Full]->SetDirectory(0);
+            h_ECALiso_endcap[_GJets_Full]->SetDirectory(0);
+            h_HCALiso_endcap[_GJets_Full]->SetDirectory(0);
         }
         else if (pr < _EndOf_GJets_Normal)
         {
@@ -9945,13 +10829,13 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_pT[_GJets_Full]->Add(h_pT[pr]);
             h_rapi[_GJets_Full]->Add(h_rapi[pr]);
             h_PFiso_barrel[_GJets_Full]->Add(h_PFiso_barrel[pr]);
-            h_chiso_barrel[_GJets_Full]->Add(h_chiso_barrel[pr]);
-            h_nhiso_barrel[_GJets_Full]->Add(h_nhiso_barrel[pr]);
-            h_phiso_barrel[_GJets_Full]->Add(h_phiso_barrel[pr]);
+            h_TrkIso_barrel[_GJets_Full]->Add(h_TrkIso_barrel[pr]);
+            h_ECALiso_barrel[_GJets_Full]->Add(h_ECALiso_barrel[pr]);
+            h_HCALiso_barrel[_GJets_Full]->Add(h_HCALiso_barrel[pr]);
             h_PFiso_endcap[_GJets_Full]->Add(h_PFiso_endcap[pr]);
-            h_chiso_endcap[_GJets_Full]->Add(h_chiso_endcap[pr]);
-            h_nhiso_endcap[_GJets_Full]->Add(h_nhiso_endcap[pr]);
-            h_phiso_endcap[_GJets_Full]->Add(h_phiso_endcap[pr]);
+            h_TrkIso_endcap[_GJets_Full]->Add(h_TrkIso_endcap[pr]);
+            h_ECALiso_endcap[_GJets_Full]->Add(h_ECALiso_endcap[pr]);
+            h_HCALiso_endcap[_GJets_Full]->Add(h_HCALiso_endcap[pr]);
         }
         else if (pr == _DoubleEG_B)
         {
@@ -9968,21 +10852,21 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_rapi[_DoubleEG_Full] = ((TH1D*)(h_rapi[pr]->Clone("h_rapi_DoubleEG_Full")));
             h_rapi[_DoubleEG_Full]->SetDirectory(0);
             h_PFiso_barrel[_DoubleEG_Full] = ((TH1D*)(h_PFiso_barrel[pr]->Clone("h_PFiso_barrel_DoubleEG_Full")));
-            h_chiso_barrel[_DoubleEG_Full] = ((TH1D*)(h_chiso_barrel[pr]->Clone("h_chiso_barrel_DoubleEG_Full")));
-            h_nhiso_barrel[_DoubleEG_Full] = ((TH1D*)(h_nhiso_barrel[pr]->Clone("h_nhiso_barrel_DoubleEG_Full")));
-            h_phiso_barrel[_DoubleEG_Full] = ((TH1D*)(h_phiso_barrel[pr]->Clone("h_phiso_barrel_DoubleEG_Full")));
+            h_TrkIso_barrel[_DoubleEG_Full] = ((TH1D*)(h_TrkIso_barrel[pr]->Clone("h_TrkIso_barrel_DoubleEG_Full")));
+            h_ECALiso_barrel[_DoubleEG_Full] = ((TH1D*)(h_ECALiso_barrel[pr]->Clone("h_ECALiso_barrel_DoubleEG_Full")));
+            h_HCALiso_barrel[_DoubleEG_Full] = ((TH1D*)(h_HCALiso_barrel[pr]->Clone("h_HCALiso_barrel_DoubleEG_Full")));
             h_PFiso_endcap[_DoubleEG_Full] = ((TH1D*)(h_PFiso_endcap[pr]->Clone("h_PFiso_endcap_DoubleEG_Full")));
-            h_chiso_endcap[_DoubleEG_Full] = ((TH1D*)(h_chiso_endcap[pr]->Clone("h_chiso_endcap_DoubleEG_Full")));
-            h_nhiso_endcap[_DoubleEG_Full] = ((TH1D*)(h_nhiso_endcap[pr]->Clone("h_nhiso_endcap_DoubleEG_Full")));
-            h_phiso_endcap[_DoubleEG_Full] = ((TH1D*)(h_phiso_endcap[pr]->Clone("h_phiso_endcap_DoubleEG_Full")));
+            h_TrkIso_endcap[_DoubleEG_Full] = ((TH1D*)(h_TrkIso_endcap[pr]->Clone("h_TrkIso_endcap_DoubleEG_Full")));
+            h_ECALiso_endcap[_DoubleEG_Full] = ((TH1D*)(h_ECALiso_endcap[pr]->Clone("h_ECALiso_endcap_DoubleEG_Full")));
+            h_HCALiso_endcap[_DoubleEG_Full] = ((TH1D*)(h_HCALiso_endcap[pr]->Clone("h_HCALiso_endcap_DoubleEG_Full")));
             h_PFiso_barrel[_DoubleEG_Full]->SetDirectory(0);
-            h_chiso_barrel[_DoubleEG_Full]->SetDirectory(0);
-            h_nhiso_barrel[_DoubleEG_Full]->SetDirectory(0);
-            h_phiso_barrel[_DoubleEG_Full]->SetDirectory(0);
+            h_TrkIso_barrel[_DoubleEG_Full]->SetDirectory(0);
+            h_ECALiso_barrel[_DoubleEG_Full]->SetDirectory(0);
+            h_HCALiso_barrel[_DoubleEG_Full]->SetDirectory(0);
             h_PFiso_endcap[_DoubleEG_Full]->SetDirectory(0);
-            h_chiso_endcap[_DoubleEG_Full]->SetDirectory(0);
-            h_nhiso_endcap[_DoubleEG_Full]->SetDirectory(0);
-            h_phiso_endcap[_DoubleEG_Full]->SetDirectory(0);
+            h_TrkIso_endcap[_DoubleEG_Full]->SetDirectory(0);
+            h_ECALiso_endcap[_DoubleEG_Full]->SetDirectory(0);
+            h_HCALiso_endcap[_DoubleEG_Full]->SetDirectory(0);
         }
         else if (pr < _EndOf_SingleMuon_Normal)
         {
@@ -9993,13 +10877,13 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
             h_pT[_DoubleEG_Full]->Add(h_pT[pr]);
             h_rapi[_DoubleEG_Full]->Add(h_rapi[pr]);
             h_PFiso_barrel[_DoubleEG_Full]->Add(h_PFiso_barrel[pr]);
-            h_chiso_barrel[_DoubleEG_Full]->Add(h_chiso_barrel[pr]);
-            h_nhiso_barrel[_DoubleEG_Full]->Add(h_nhiso_barrel[pr]);
-            h_phiso_barrel[_DoubleEG_Full]->Add(h_phiso_barrel[pr]);
+            h_TrkIso_barrel[_DoubleEG_Full]->Add(h_TrkIso_barrel[pr]);
+            h_ECALiso_barrel[_DoubleEG_Full]->Add(h_ECALiso_barrel[pr]);
+            h_HCALiso_barrel[_DoubleEG_Full]->Add(h_HCALiso_barrel[pr]);
             h_PFiso_endcap[_DoubleEG_Full]->Add(h_PFiso_endcap[pr]);
-            h_chiso_endcap[_DoubleEG_Full]->Add(h_chiso_endcap[pr]);
-            h_nhiso_endcap[_DoubleEG_Full]->Add(h_nhiso_endcap[pr]);
-            h_phiso_endcap[_DoubleEG_Full]->Add(h_phiso_endcap[pr]);
+            h_TrkIso_endcap[_DoubleEG_Full]->Add(h_TrkIso_endcap[pr]);
+            h_ECALiso_endcap[_DoubleEG_Full]->Add(h_ECALiso_endcap[pr]);
+            h_HCALiso_endcap[_DoubleEG_Full]->Add(h_HCALiso_endcap[pr]);
         }
 
         if (pr == _DY_2000to3000) pr = _EndOf_DYTauTau_Normal; // next -- ttbar
@@ -10008,77 +10892,77 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     } // End of pr iteration
 
     s_PFiso_barrel->Add(h_PFiso_barrel[_WW]);
-    s_chiso_barrel->Add(h_chiso_barrel[_WW]);
-    s_nhiso_barrel->Add(h_nhiso_barrel[_WW]);
-    s_phiso_barrel->Add(h_phiso_barrel[_WW]);
+    s_TrkIso_barrel->Add(h_TrkIso_barrel[_WW]);
+    s_ECALiso_barrel->Add(h_ECALiso_barrel[_WW]);
+    s_HCALiso_barrel->Add(h_HCALiso_barrel[_WW]);
     s_PFiso_endcap->Add(h_PFiso_endcap[_WW]);
-    s_chiso_endcap->Add(h_chiso_endcap[_WW]);
-    s_nhiso_endcap->Add(h_nhiso_endcap[_WW]);
-    s_phiso_endcap->Add(h_phiso_endcap[_WW]);
+    s_TrkIso_endcap->Add(h_TrkIso_endcap[_WW]);
+    s_ECALiso_endcap->Add(h_ECALiso_endcap[_WW]);
+    s_HCALiso_endcap->Add(h_HCALiso_endcap[_WW]);
     s_PFiso_barrel->Add(h_PFiso_barrel[_WZ]);
-    s_chiso_barrel->Add(h_chiso_barrel[_WZ]);
-    s_nhiso_barrel->Add(h_nhiso_barrel[_WZ]);
-    s_phiso_barrel->Add(h_phiso_barrel[_WZ]);
+    s_TrkIso_barrel->Add(h_TrkIso_barrel[_WZ]);
+    s_ECALiso_barrel->Add(h_ECALiso_barrel[_WZ]);
+    s_HCALiso_barrel->Add(h_HCALiso_barrel[_WZ]);
     s_PFiso_endcap->Add(h_PFiso_endcap[_WZ]);
-    s_chiso_endcap->Add(h_chiso_endcap[_WZ]);
-    s_nhiso_endcap->Add(h_nhiso_endcap[_WZ]);
-    s_phiso_endcap->Add(h_phiso_endcap[_WZ]);
+    s_TrkIso_endcap->Add(h_TrkIso_endcap[_WZ]);
+    s_ECALiso_endcap->Add(h_ECALiso_endcap[_WZ]);
+    s_HCALiso_endcap->Add(h_HCALiso_endcap[_WZ]);
     s_PFiso_barrel->Add(h_PFiso_barrel[_ZZ]);
-    s_chiso_barrel->Add(h_chiso_barrel[_ZZ]);
-    s_nhiso_barrel->Add(h_nhiso_barrel[_ZZ]);
-    s_phiso_barrel->Add(h_phiso_barrel[_ZZ]);
+    s_TrkIso_barrel->Add(h_TrkIso_barrel[_ZZ]);
+    s_ECALiso_barrel->Add(h_ECALiso_barrel[_ZZ]);
+    s_HCALiso_barrel->Add(h_HCALiso_barrel[_ZZ]);
     s_PFiso_endcap->Add(h_PFiso_endcap[_ZZ]);
-    s_chiso_endcap->Add(h_chiso_endcap[_ZZ]);
-    s_nhiso_endcap->Add(h_nhiso_endcap[_ZZ]);
-    s_phiso_endcap->Add(h_phiso_endcap[_ZZ]);
+    s_TrkIso_endcap->Add(h_TrkIso_endcap[_ZZ]);
+    s_ECALiso_endcap->Add(h_ECALiso_endcap[_ZZ]);
+    s_HCALiso_endcap->Add(h_HCALiso_endcap[_ZZ]);
     s_PFiso_barrel->Add(h_PFiso_barrel[_tbarW]);
-    s_chiso_barrel->Add(h_chiso_barrel[_tbarW]);
-    s_nhiso_barrel->Add(h_nhiso_barrel[_tbarW]);
-    s_phiso_barrel->Add(h_phiso_barrel[_tbarW]);
+    s_TrkIso_barrel->Add(h_TrkIso_barrel[_tbarW]);
+    s_ECALiso_barrel->Add(h_ECALiso_barrel[_tbarW]);
+    s_HCALiso_barrel->Add(h_HCALiso_barrel[_tbarW]);
     s_PFiso_endcap->Add(h_PFiso_endcap[_tbarW]);
-    s_chiso_endcap->Add(h_chiso_endcap[_tbarW]);
-    s_nhiso_endcap->Add(h_nhiso_endcap[_tbarW]);
-    s_phiso_endcap->Add(h_phiso_endcap[_tbarW]);
+    s_TrkIso_endcap->Add(h_TrkIso_endcap[_tbarW]);
+    s_ECALiso_endcap->Add(h_ECALiso_endcap[_tbarW]);
+    s_HCALiso_endcap->Add(h_HCALiso_endcap[_tbarW]);
     s_PFiso_barrel->Add(h_PFiso_barrel[_tW]);
-    s_chiso_barrel->Add(h_chiso_barrel[_tW]);
-    s_nhiso_barrel->Add(h_nhiso_barrel[_tW]);
-    s_phiso_barrel->Add(h_phiso_barrel[_tW]);
+    s_TrkIso_barrel->Add(h_TrkIso_barrel[_tW]);
+    s_ECALiso_barrel->Add(h_ECALiso_barrel[_tW]);
+    s_HCALiso_barrel->Add(h_HCALiso_barrel[_tW]);
     s_PFiso_endcap->Add(h_PFiso_endcap[_tW]);
-    s_chiso_endcap->Add(h_chiso_endcap[_tW]);
-    s_nhiso_endcap->Add(h_nhiso_endcap[_tW]);
-    s_phiso_endcap->Add(h_phiso_endcap[_tW]);
+    s_TrkIso_endcap->Add(h_TrkIso_endcap[_tW]);
+    s_ECALiso_endcap->Add(h_ECALiso_endcap[_tW]);
+    s_HCALiso_endcap->Add(h_HCALiso_endcap[_tW]);
     s_PFiso_barrel->Add(h_PFiso_barrel[_ttbar_Full]);
-    s_chiso_barrel->Add(h_chiso_barrel[_ttbar_Full]);
-    s_nhiso_barrel->Add(h_nhiso_barrel[_ttbar_Full]);
-    s_phiso_barrel->Add(h_phiso_barrel[_ttbar_Full]);
+    s_TrkIso_barrel->Add(h_TrkIso_barrel[_ttbar_Full]);
+    s_ECALiso_barrel->Add(h_ECALiso_barrel[_ttbar_Full]);
+    s_HCALiso_barrel->Add(h_HCALiso_barrel[_ttbar_Full]);
     s_PFiso_endcap->Add(h_PFiso_endcap[_ttbar_Full]);
-    s_chiso_endcap->Add(h_chiso_endcap[_ttbar_Full]);
-    s_nhiso_endcap->Add(h_nhiso_endcap[_ttbar_Full]);
-    s_phiso_endcap->Add(h_phiso_endcap[_ttbar_Full]);
+    s_TrkIso_endcap->Add(h_TrkIso_endcap[_ttbar_Full]);
+    s_ECALiso_endcap->Add(h_ECALiso_endcap[_ttbar_Full]);
+    s_HCALiso_endcap->Add(h_HCALiso_endcap[_ttbar_Full]);
     s_PFiso_barrel->Add(h_PFiso_barrel[_WJets_Full]);
-    s_chiso_barrel->Add(h_chiso_barrel[_WJets_Full]);
-    s_nhiso_barrel->Add(h_nhiso_barrel[_WJets_Full]);
-    s_phiso_barrel->Add(h_phiso_barrel[_WJets_Full]);
+    s_TrkIso_barrel->Add(h_TrkIso_barrel[_WJets_Full]);
+    s_ECALiso_barrel->Add(h_ECALiso_barrel[_WJets_Full]);
+    s_HCALiso_barrel->Add(h_HCALiso_barrel[_WJets_Full]);
     s_PFiso_endcap->Add(h_PFiso_endcap[_WJets_Full]);
-    s_chiso_endcap->Add(h_chiso_endcap[_WJets_Full]);
-    s_nhiso_endcap->Add(h_nhiso_endcap[_WJets_Full]);
-    s_phiso_endcap->Add(h_phiso_endcap[_WJets_Full]);
+    s_TrkIso_endcap->Add(h_TrkIso_endcap[_WJets_Full]);
+    s_ECALiso_endcap->Add(h_ECALiso_endcap[_WJets_Full]);
+    s_HCALiso_endcap->Add(h_HCALiso_endcap[_WJets_Full]);
     s_PFiso_barrel->Add(h_PFiso_barrel[_DY_Full]);
-    s_chiso_barrel->Add(h_chiso_barrel[_DY_Full]);
-    s_nhiso_barrel->Add(h_nhiso_barrel[_DY_Full]);
-    s_phiso_barrel->Add(h_phiso_barrel[_DY_Full]);
+    s_TrkIso_barrel->Add(h_TrkIso_barrel[_DY_Full]);
+    s_ECALiso_barrel->Add(h_ECALiso_barrel[_DY_Full]);
+    s_HCALiso_barrel->Add(h_HCALiso_barrel[_DY_Full]);
     s_PFiso_endcap->Add(h_PFiso_endcap[_DY_Full]);
-    s_chiso_endcap->Add(h_chiso_endcap[_DY_Full]);
-    s_nhiso_endcap->Add(h_nhiso_endcap[_DY_Full]);
-    s_phiso_endcap->Add(h_phiso_endcap[_DY_Full]);
+    s_TrkIso_endcap->Add(h_TrkIso_endcap[_DY_Full]);
+    s_ECALiso_endcap->Add(h_ECALiso_endcap[_DY_Full]);
+    s_HCALiso_endcap->Add(h_HCALiso_endcap[_DY_Full]);
     s_PFiso_barrel->Add(h_PFiso_barrel[_GJets_Full]);
-    s_chiso_barrel->Add(h_chiso_barrel[_GJets_Full]);
-    s_nhiso_barrel->Add(h_nhiso_barrel[_GJets_Full]);
-    s_phiso_barrel->Add(h_phiso_barrel[_GJets_Full]);
+    s_TrkIso_barrel->Add(h_TrkIso_barrel[_GJets_Full]);
+    s_ECALiso_barrel->Add(h_ECALiso_barrel[_GJets_Full]);
+    s_HCALiso_barrel->Add(h_HCALiso_barrel[_GJets_Full]);
     s_PFiso_endcap->Add(h_PFiso_endcap[_GJets_Full]);
-    s_chiso_endcap->Add(h_chiso_endcap[_GJets_Full]);
-    s_nhiso_endcap->Add(h_nhiso_endcap[_GJets_Full]);
-    s_phiso_endcap->Add(h_phiso_endcap[_GJets_Full]);
+    s_TrkIso_endcap->Add(h_TrkIso_endcap[_GJets_Full]);
+    s_ECALiso_endcap->Add(h_ECALiso_endcap[_GJets_Full]);
+    s_HCALiso_endcap->Add(h_HCALiso_endcap[_GJets_Full]);
 
     // QCD estimation
     h_QCD_est = ((TH1D*)(h_mass[_DoubleEG_Full]->Clone("h_QCD_est")));
@@ -10239,13 +11123,13 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     myRatioPlot_t *RP_rapi = new myRatioPlot_t("c_rapi", s_rapi, h_rapi[_DoubleEG_Full]);
     myRatioPlot_t *RP_mass_fit = new myRatioPlot_t("c_mass_fit", s_mass_fit, h_mass[_DoubleEG_Full]);
     myRatioPlot_t *RP_PFiso_barrel = new myRatioPlot_t("c_PFiso_barrel", s_PFiso_barrel, h_PFiso_barrel[_DoubleEG_Full]);
-    myRatioPlot_t *RP_chiso_barrel = new myRatioPlot_t("c_chiso_barrel", s_chiso_barrel, h_chiso_barrel[_DoubleEG_Full]);
-    myRatioPlot_t *RP_nhiso_barrel = new myRatioPlot_t("c_nhiso_barrel", s_nhiso_barrel, h_nhiso_barrel[_DoubleEG_Full]);
-    myRatioPlot_t *RP_phiso_barrel = new myRatioPlot_t("c_phiso_barrel", s_phiso_barrel, h_phiso_barrel[_DoubleEG_Full]);
+    myRatioPlot_t *RP_TrkIso_barrel = new myRatioPlot_t("c_TrkIso_barrel", s_TrkIso_barrel, h_TrkIso_barrel[_DoubleEG_Full]);
+    myRatioPlot_t *RP_ECALiso_barrel = new myRatioPlot_t("c_ECALiso_barrel", s_ECALiso_barrel, h_ECALiso_barrel[_DoubleEG_Full]);
+    myRatioPlot_t *RP_HCALiso_barrel = new myRatioPlot_t("c_HCALiso_barrel", s_HCALiso_barrel, h_HCALiso_barrel[_DoubleEG_Full]);
     myRatioPlot_t *RP_PFiso_endcap = new myRatioPlot_t("c_PFiso_endcap", s_PFiso_endcap, h_PFiso_endcap[_DoubleEG_Full]);
-    myRatioPlot_t *RP_chiso_endcap = new myRatioPlot_t("c_chiso_endcap", s_chiso_endcap, h_chiso_endcap[_DoubleEG_Full]);
-    myRatioPlot_t *RP_nhiso_endcap = new myRatioPlot_t("c_nhiso_endcap", s_nhiso_endcap, h_nhiso_endcap[_DoubleEG_Full]);
-    myRatioPlot_t *RP_phiso_endcap = new myRatioPlot_t("c_phiso_endcap", s_phiso_endcap, h_phiso_endcap[_DoubleEG_Full]);
+    myRatioPlot_t *RP_TrkIso_endcap = new myRatioPlot_t("c_TrkIso_endcap", s_TrkIso_endcap, h_TrkIso_endcap[_DoubleEG_Full]);
+    myRatioPlot_t *RP_ECALiso_endcap = new myRatioPlot_t("c_ECALiso_endcap", s_ECALiso_endcap, h_ECALiso_endcap[_DoubleEG_Full]);
+    myRatioPlot_t *RP_HCALiso_endcap = new myRatioPlot_t("c_HCALiso_endcap", s_HCALiso_endcap, h_HCALiso_endcap[_DoubleEG_Full]);
 
     RP_mass_wQCD->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000);
     RP_mass_woQCD->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000);
@@ -10259,13 +11143,13 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     RP_rapi->SetPlots("y_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}}", -4, 4);
     RP_mass_fit->SetPlots("m_{#lower[-0.2]{#font[12]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000);
     RP_PFiso_barrel->SetPlots(/*"I_{PF}^{rel.}"*/"relPFiso_Rho", 0, 5);
-    RP_chiso_barrel->SetPlots("I_{Ch.had.}^{rel.}", 0, 10);
-    RP_nhiso_barrel->SetPlots("I_{N.had.}^{rel.}", 0, 10);
-    RP_phiso_barrel->SetPlots("I_{#gamma}^{rel.}", 0, 10);
+    RP_TrkIso_barrel->SetPlots("I_{Trk}^{rel.}", 0, 2);
+    RP_ECALiso_barrel->SetPlots("I_{ECAL}^{rel.}", 0, 2);
+    RP_HCALiso_barrel->SetPlots("I_{HCAL}^{rel.}", 0, 2);
     RP_PFiso_endcap->SetPlots(/*"I_{PF}^{rel.}"*/"relPFiso_Rho", 0, 5);
-    RP_chiso_endcap->SetPlots("I_{Ch.had.}^{rel.}", 0, 10);
-    RP_nhiso_endcap->SetPlots("I_{N.had.}^{rel.}", 0, 10);
-    RP_phiso_endcap->SetPlots("I_{#gamma}^{rel.}", 0, 10);
+    RP_TrkIso_endcap->SetPlots("I_{Trk}^{rel.}", 0, 2);
+    RP_ECALiso_endcap->SetPlots("I_{ECAL}^{rel.}", 0, 2);
+    RP_HCALiso_endcap->SetPlots("I_{HCAL}^{rel.}", 0, 2);
 
     TLegend * legend_wQCD = new TLegend(0.8, 0.52, 0.95, 0.95);
     legend_wQCD->AddEntry(h_mass[_DoubleEG_B], "Data", "pl");
@@ -10301,13 +11185,13 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     RP_rapi->ImportLegend(legend_wQCD);
     RP_mass_fit->ImportLegend(legend_fit);
     RP_PFiso_barrel->ImportLegend(legend_woQCD);
-    RP_chiso_barrel->ImportLegend(legend_woQCD);
-    RP_nhiso_barrel->ImportLegend(legend_woQCD);
-    RP_phiso_barrel->ImportLegend(legend_woQCD);
+    RP_TrkIso_barrel->ImportLegend(legend_woQCD);
+    RP_ECALiso_barrel->ImportLegend(legend_woQCD);
+    RP_HCALiso_barrel->ImportLegend(legend_woQCD);
     RP_PFiso_endcap->ImportLegend(legend_woQCD);
-    RP_chiso_endcap->ImportLegend(legend_woQCD);
-    RP_nhiso_endcap->ImportLegend(legend_woQCD);
-    RP_phiso_endcap->ImportLegend(legend_woQCD);
+    RP_TrkIso_endcap->ImportLegend(legend_woQCD);
+    RP_ECALiso_endcap->ImportLegend(legend_woQCD);
+    RP_HCALiso_endcap->ImportLegend(legend_woQCD);
 
     RP_mass_wQCD->Draw(1e-3, 1e3, 1);
     RP_mass_woQCD->Draw(1e-3, 1e3, 1);
@@ -10321,13 +11205,13 @@ void E_QCDest_HistDrawer(Int_t remNegBins, Int_t systErr)
     RP_rapi->Draw(1e-2, 1e6, 0);
     RP_mass_fit->Draw(1e-2, 1e4, 1);
     RP_PFiso_barrel->Draw(1e-1, 1e8, 0);
-    RP_chiso_barrel->Draw(1e-1, 1e8, 0);
-    RP_nhiso_barrel->Draw(1e-1, 1e8, 0);
-    RP_phiso_barrel->Draw(1e-1, 1e8, 0);
+    RP_TrkIso_barrel->Draw(1e-1, 1e8, 0);
+    RP_ECALiso_barrel->Draw(1e-1, 1e8, 0);
+    RP_HCALiso_barrel->Draw(1e-1, 1e8, 0);
     RP_PFiso_endcap->Draw(1e-1, 1e8, 0);
-    RP_chiso_endcap->Draw(1e-1, 1e8, 0);
-    RP_nhiso_endcap->Draw(1e-1, 1e8, 0);
-    RP_phiso_endcap->Draw(1e-1, 1e8, 0);
+    RP_TrkIso_endcap->Draw(1e-1, 1e8, 0);
+    RP_ECALiso_endcap->Draw(1e-1, 1e8, 0);
+    RP_HCALiso_endcap->Draw(1e-1, 1e8, 0);
 
     // Same-sign vs opposite-sign plots
     TH1D *h_mass_QCD_MC = ((TH1D*)(h_mass[_QCDEMEnriched_Full]->Clone("h_mass_QCD_MC")));
