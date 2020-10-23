@@ -972,7 +972,7 @@ public:
                                     isTrigMatch = true;
                                     if (HLT_pT) *HLT_pT = Trig_pT;
                                     if (HLT_PS) *HLT_PS = nh->HLT_trigPS->at(k);
-                                    if (L1seed_PS) *L1seed_PS = nh->L1seed_trigPS->at(k);
+//                                    if (L1seed_PS) *L1seed_PS = nh->L1seed_trigPS->at(k);
                                     break;
 //                                }
                             }
