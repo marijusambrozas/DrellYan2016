@@ -25,8 +25,8 @@ public:
     Int_t HLT_trigFired[MaxN];
     vector<string> *HLT_trigName;
     vector<int> *HLT_trigPS;
-    vector<int> *L1seed_trigPS;
-    std::vector<std::vector<std::pair<std::string, int>>> *L1seed_trigPSinDetail;
+    vector<int> *L1_trigPS;
+//    std::vector<std::vector<std::pair<std::string, int>>> *L1seed_trigPSinDetail;
     Double_t HLT_trigPt[MaxN];
     Double_t HLT_trigEta[MaxN];
     Double_t HLT_trigPhi[MaxN];
@@ -357,8 +357,8 @@ public:
     	chain->SetBranchStatus("HLT_ntrig", 1);
     	chain->SetBranchStatus("HLT_trigFired", 1);
         chain->SetBranchStatus("HLT_trigPS", 1);
-        chain->SetBranchStatus("L1seed_trigPS", 1);
-        chain->SetBranchStatus("L1seed_trigPSinDetail", 1);
+        chain->SetBranchStatus("L1_trigPS", 1);
+//        chain->SetBranchStatus("L1seed_trigPSinDetail", 1);
         chain->SetBranchStatus("HLT_trigPt", 1);
         chain->SetBranchStatus("HLT_trigEta", 1);
     	chain->SetBranchStatus("HLT_trigPhi", 1);
@@ -367,8 +367,8 @@ public:
         chain->SetBranchAddress("HLT_trigFired", &HLT_trigFired);
     	chain->SetBranchAddress("HLT_ntrig", &HLT_ntrig);
         chain->SetBranchAddress("HLT_trigPS", &HLT_trigPS);
-        chain->SetBranchAddress("L1seed_trigPS", &L1seed_trigPS);
-        chain->SetBranchAddress("L1seed_trigPSinDetail", &L1seed_trigPSinDetail);
+        chain->SetBranchAddress("L1_trigPS", &L1_trigPS);
+//        chain->SetBranchAddress("L1seed_trigPSinDetail", &L1seed_trigPSinDetail);
         chain->SetBranchAddress("HLT_trigPt", &HLT_trigPt);
         chain->SetBranchAddress("HLT_trigEta", &HLT_trigEta);
     	chain->SetBranchAddress("HLT_trigPhi", &HLT_trigPhi);

@@ -210,8 +210,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         std::vector<int> *trig_matched = new std::vector<int>;
         std::vector<double> *trig_pT = new std::vector<double>;
         std::vector<int> *HLT_trigPS = new std::vector<int>;
-        std::vector<int> *L1seed_trigPS = new std::vector<int>;
-        std::vector<std::vector<std::pair<std::string, int>>> L1seed_trigPSinDetail;
+        std::vector<int> *L1_trigPS = new std::vector<int>;
+//        std::vector<std::vector<std::pair<std::string, int>>> L1seed_trigPSinDetail;
         Double_t MET_pT, MET_phi;
         Int_t runNum;
         Int_t lumiBlock;
@@ -259,8 +259,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         ElectronTree->Branch("prefiring_weight_up", &prefiring_weight_up);
         ElectronTree->Branch("prefiring_weight_down", &prefiring_weight_down);
         ElectronTree->Branch("HLT_trigPS", &HLT_trigPS);
-        ElectronTree->Branch("L1seed_trigPS", &L1seed_trigPS);
-        ElectronTree->Branch("L1seed_trigPSinDetail", &L1seed_trigPSinDetail);
+        ElectronTree->Branch("L1_trigPS", &L1_trigPS);
+//        ElectronTree->Branch("L1seed_trigPSinDetail", &L1seed_trigPSinDetail);
 
         Int_t currentRunNo=-999, currentLumiSection=-999;
 //        std::map<std::pair<int,int>,int> lumis; // to search present run numbers and lumi sections
@@ -280,8 +280,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             TChain *chain = new TChain(Mgr.TreeName[i_tup]);
             // TEST
 //            chain->Add("~/Desktop/ntuple_data_7.root");
-            chain->Add("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v10.1/SinglePhoton/crab_SinglePhoton_Run2016B/201005_142913/0000/*.root");
-            chain->Add("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v10.1/SinglePhoton/crab_SinglePhoton_Run2016B/201005_142913/0001/*.root");
+            chain->Add("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v2.10.4/SinglePhoton/crab_SinglePhoton_Run2016B/201022_090619/0000/*.root");
+            chain->Add("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v2.10.4/SinglePhoton/crab_SinglePhoton_Run2016B/201022_090619/0001/*.root");
 //            Mgr.SetupChain(i_tup, chain);
 
 //            std::map<std::tuple<int,int,unsigned long long>, int> repeats; // to search for repeating events
@@ -488,8 +488,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         trig_matched->clear();
                         trig_pT->clear();
                         HLT_trigPS->clear();
-                        L1seed_trigPS->clear();
-                        L1seed_trigPSinDetail.clear();
+                        L1_trigPS->clear();
+//                        L1seed_trigPSinDetail.clear();
 
                         // -- Top pT reweighting -- //
                         top_weight = 1;
@@ -524,9 +524,11 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         {
                             trig_pT->push_back(ntuple->HLT_trigPt[trig_index[i_tr]]);
                             HLT_trigPS->push_back(ntuple->HLT_trigPS->at(trig_index[i_tr]));
-                            L1seed_trigPS->push_back(ntuple->L1seed_trigPS->at(trig_index[i_tr]));
-                            L1seed_trigPSinDetail.push_back(ntuple->L1seed_trigPSinDetail->at(trig_index[i_tr]));
+//                            L1seed_trigPS->push_back(ntuple->L1seed_trigPS->at(trig_index[i_tr]));
+//                            L1seed_trigPSinDetail.push_back(ntuple->L1seed_trigPSinDetail->at(trig_index[i_tr]));
                         }
+                        for (Int_t i_L1=0; i_L1<4; i_L1++)
+                            L1_trigPS->push_back(ntuple->L1_trigPS->at(i_L1));
 
                         // -- Electron vector filling -- //
                         for (UInt_t i_ele=0; i_ele<SelectedElectronCollection.size(); i_ele++)
