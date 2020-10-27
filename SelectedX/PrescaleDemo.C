@@ -21,8 +21,12 @@
 PrescaleProvider pp("etc/prescale/triggerData2016");
 
 Double_t PrescalePhoton (Int_t trig_fired, Double_t HLT_pT, Int_t runNo, Int_t lumiSec);
+Double_t HLT_PrescalePhoton (Int_t trig_fired, Int_t runNo, Int_t lumiSec);
+Double_t L1_PrescalePhoton (Int_t trig_fired, Int_t runNo, Int_t lumiSec);
+Int_t isValid (Int_t trig_fired, Double_t HLT_pT);
+void PrescaleDemo2 (TString type, Bool_t trigPtMatching, Bool_t DEBUG);
 
-void PrescaleDemo (TString type = "SinglePhoton_full", Bool_t trigPtMatching = kFALSE, Bool_t DEBUG = kFALSE)
+void PrescaleDemo (TString type = "SinglePhoton_B", Bool_t trigPtMatching = kFALSE, Bool_t DEBUG = kFALSE)
 {
     TH1D *h_HLT_pT_full = new TH1D("h_HLT_pT_full", "", 500, 0, 500);
     TH1D *h_HLT_pT_uncorr_full = new TH1D("h_HLT_pT_uncorr_full", "", 500, 0, 500);
@@ -37,7 +41,212 @@ void PrescaleDemo (TString type = "SinglePhoton_full", Bool_t trigPtMatching = k
     }
 
     TFile *f;
-    TString Dir = "./";
+    TString Dir = "/media/sf_DATA/FR/Electron/";
+    TString debug = "";
+    if (DEBUG) debug = "_DEBUG";
+
+    // Loop for all datasets
+    for (Int_t i_proc=0; i_proc<Nproc; i_proc++)
+    {
+        Mgr.SetProc(Processes[i_proc], kTRUE);
+        Process_t pr = Mgr.CurrentProc;
+
+        // -- Output ROOTFile -- //
+        f = new TFile(Dir+"FR_Hist_TEST_E_"+Mgr.Procname[Mgr.CurrentProc]+debug+".root", "RECREATE");
+
+        cout << "===========================================================" << endl;
+        cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
+        cout << "Xsec: " << Mgr.Xsec[0] << endl;
+        cout << "Wsum: " << Mgr.Wsum[0] << endl;
+        cout << "Type: " << Mgr.Type << endl;
+        cout << "Directory: " << Dir << endl;
+
+        // -- Creating Histograms -- //
+        TH1D* h_HLT_pT_uncorr = new TH1D("h_HLT_pT_uncorr", "h_HLT_pT_uncorr", 500, 0, 500); h_HLT_pT_uncorr->Sumw2();
+        TH1D* h_HLT_pT = new TH1D("h_HLT_pT", "h_HLT_pT", 500, 0, 500); h_HLT_pT->Sumw2();
+
+        // Setting up variables
+        std::vector<int> *trig_fired = new std::vector<int>;
+        std::vector<int> *trig_matched = new std::vector<int>;
+        std::vector<double> *trig_pT = new std::vector<double>;
+        std::vector<double> *pT = new std::vector<double>;
+        std::vector<int> *HLT_trigPS = new std::vector<int>;
+        std::vector<int> *L1seed_trigPS = new std::vector<int>;
+        std::vector<std::vector<std::pair<std::string, int>>> *L1seed_trigPSinDetail = new std::vector<std::vector<std::pair<std::string, int>>>;
+        Int_t runNum;
+        Int_t lumiBlock;
+        Double_t prescale;
+        Double_t prescale_alt;
+        Double_t prescale_alt_alt;
+
+        // Setting up chain
+        TChain *chain = new TChain("FRTree");
+        TString DirTEST = "/media/sf_DATA/";
+        chain->Add(DirTEST+"SelectedForFR_E_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+        if (DEBUG == kTRUE) cout << Dir+"SelectedForFR_E_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+        chain->SetBranchStatus("trig_fired", 1);
+        chain->SetBranchStatus("trig_matched", 1);
+        chain->SetBranchStatus("trig_pT", 1);
+        chain->SetBranchStatus("p_T", 1);
+        chain->SetBranchStatus("HLT_trigPS", 1);
+        chain->SetBranchStatus("L1seed_trigPS", 1);
+        chain->SetBranchStatus("L1seed_trigPSinDetail", 1);
+        chain->SetBranchStatus("runNum", 1);
+        chain->SetBranchStatus("lumiBlock", 1);
+        chain->SetBranchAddress("trig_fired", &trig_fired);
+        chain->SetBranchAddress("trig_matched", &trig_matched);
+        chain->SetBranchAddress("trig_pT", &trig_pT);
+        chain->SetBranchAddress("p_T", &pT);
+        chain->SetBranchAddress("HLT_trigPS", &HLT_trigPS);
+        chain->SetBranchAddress("L1seed_trigPS", &L1seed_trigPS);
+        chain->SetBranchAddress("L1seed_trigPSinDetail", &L1seed_trigPSinDetail);
+        chain->SetBranchAddress("runNum", &runNum);
+        chain->SetBranchAddress("lumiBlock", &lumiBlock);
+
+        Int_t NEvents = chain->GetEntries();
+        cout << "\t[Number of events: " << NEvents << "]" << endl;
+        if (DEBUG) NEvents = 100;
+
+        myProgressBar_t bar(NEvents);
+
+        for(Int_t i=0; i<NEvents; i++)
+        {
+            chain->GetEntry(i);
+            if (!DEBUG) bar.Draw(i);
+
+            if (DEBUG){
+                cout << "\nEvt " << i << endl;
+                cout << "nTrig = " << trig_fired->size() << endl;
+                cout << "Triggers:" << endl;
+                for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
+                {
+                    cout << "Photon" << trig_fired->at(i_tr) << "  p_T: " << trig_pT->at(i_tr) << endl;
+                }
+            }
+
+            std::vector<Double_t> pTs; // Filling this to avoid double counting
+            for (UInt_t i_tr=0; i_tr<trig_fired->size(); i_tr++)
+            {
+                if (trigPtMatching)
+                {
+                    Double_t dpT = fabs(trig_pT->at(i_tr) - pT->at(trig_matched->at(i_tr)))/trig_pT->at(i_tr);
+                    if (dpT > 0.3) continue;
+                }
+
+                if (DEBUG)
+                {
+
+                    cout << "HLT_Photon" << trig_fired->at(i_tr) << " L1 seeds:" << endl;
+                    for (UInt_t i_l1=0; i_l1<L1seed_trigPSinDetail->at(i_tr).size(); i_l1++)
+                    {
+                        cout << "   " << L1seed_trigPSinDetail->at(i_tr)[i_l1].first << "  prescale = " << L1seed_trigPSinDetail->at(i_tr)[i_l1].second << endl;
+                    }
+                }
+
+                Int_t L1_smallestPS = 9999;
+                for (UInt_t i_l1=0; i_l1<L1seed_trigPSinDetail->at(i_tr).size(); i_l1++)
+                {
+                    if (L1seed_trigPSinDetail->at(i_tr)[i_l1].second < L1_smallestPS)
+                        L1_smallestPS = L1seed_trigPSinDetail->at(i_tr)[i_l1].second;
+                    if (L1seed_trigPSinDetail->at(i_tr)[i_l1].second != 1)
+                        cout << "Found non-1 L1 prescale!!!\n  " << L1seed_trigPSinDetail->at(i_tr)[i_l1].first << " prescale=" << L1seed_trigPSinDetail->at(i_tr)[i_l1].second << endl;
+                }
+                prescale = HLT_trigPS->at(i_tr) * L1_smallestPS * isValid(trig_fired->at(i_tr), trig_pT->at(i_tr));
+//                prescale = HLT_trigPS->at(i_tr) * L1_PrescalePhoton(trig_fired->at(i_tr), runNum, lumiBlock) * isValid(trig_fired->at(i_tr), trig_pT->at(i_tr));
+                prescale_alt = PrescalePhoton(trig_fired->at(i_tr), trig_pT->at(i_tr), runNum, lumiBlock);
+                prescale_alt_alt = HLT_trigPS->at(i_tr) * L1seed_trigPS->at(i_tr) * isValid(trig_fired->at(i_tr), trig_pT->at(i_tr));
+                if (DEBUG && prescale != prescale_alt)
+                {
+                    cout << "  Prescales do not match!!!:" << endl;
+                    cout << "    Prescale from CMSSW: HLT=" << HLT_trigPS->at(i_tr) << "  L1=" << L1seed_trigPS->at(i_tr) << endl;
+                    cout << "    Prescale from  JSON: HLT=" << HLT_PrescalePhoton(trig_fired->at(i_tr), runNum, lumiBlock);
+                    cout << "  L1=" << L1_PrescalePhoton(trig_fired->at(i_tr), runNum, lumiBlock) << endl;
+                }
+
+                Int_t match_found = 0;
+                if (pTs.size())
+                {
+                    for (UInt_t i=0; i<pTs.size(); i++)
+                    {
+                        if (trig_pT->at(i_tr) == pTs[i])
+                            match_found = 1;
+                        else if (prescale > 0) pTs.push_back(trig_pT->at(i_tr));
+                    }
+                }
+                else if (prescale > 0) pTs.push_back(trig_pT->at(i_tr));
+                if (!match_found && prescale > 0)
+                {
+                    h_HLT_pT_uncorr->Fill(trig_pT->at(i_tr));
+                    h_HLT_pT->Fill(trig_pT->at(i_tr), prescale);
+                    h_HLT_pT_uncorr_full->Fill(trig_pT->at(i_tr));
+                    h_HLT_pT_full->Fill(trig_pT->at(i_tr), prescale);
+                }
+            }// End of for(triggers)
+
+        }// End of event loop
+
+        f->cd();
+        cout << "\tWriting into file...";
+
+        h_HLT_pT_uncorr->Write();
+        h_HLT_pT->Write();
+        cout << " Finished.\n" << endl;
+
+        if (DEBUG == kTRUE && pr == _SinglePhoton_B) break;
+
+        f->Close();
+        if (!f->IsOpen()) cout << "File " << Dir+"FR_Hist_TEST_"+Mgr.Procname[Mgr.CurrentProc]+debug+".root" << " has been closed successfully.\n" << endl;
+        else cout << "FILE " << Dir+"FR_Hist_TEST_"+Mgr.Procname[Mgr.CurrentProc]+debug+".root" << " COULD NOT BE CLOSED!\n" << endl;
+        cout << "===========================================================\n" << endl;
+    } // End of pr iteration
+
+    // Drawing
+    TLegend *legend = new TLegend (0.55, 0.8, 0.95, 0.95);
+    legend->AddEntry(h_HLT_pT_full, "Prescale weights applied", "l");
+    legend->AddEntry(h_HLT_pT_uncorr_full, "Unweighted", "l");
+    TCanvas *c_HLT_pT_full = new TCanvas("c", "", 800, 800);
+    c_HLT_pT_full->SetTopMargin(0.05);
+    c_HLT_pT_full->SetRightMargin(0.05);
+    c_HLT_pT_full->SetBottomMargin(0.15);
+    c_HLT_pT_full->SetLeftMargin(0.15);
+    h_HLT_pT_full->SetStats(0);
+    h_HLT_pT_uncorr_full->SetStats(0);
+    h_HLT_pT_full->SetLineColor(kRed);
+    h_HLT_pT_full->GetXaxis()->SetTitle("HLT object p_{#lower[-0.2]{T}} [GeV/c]");
+    h_HLT_pT_full->GetXaxis()->SetTitleSize(0.062);
+    h_HLT_pT_full->GetXaxis()->SetTitleOffset(0.95);
+    h_HLT_pT_full->GetXaxis()->SetLabelSize(0.048);
+    h_HLT_pT_full->GetXaxis()->SetNdivisions(6);
+    h_HLT_pT_full->GetYaxis()->SetTitle("Number of events");
+    h_HLT_pT_full->GetYaxis()->SetTitleSize(0.05);
+    h_HLT_pT_full->GetYaxis()->SetTitleOffset(1.4);
+    h_HLT_pT_full->GetYaxis()->SetLabelSize(0.043);
+    h_HLT_pT_full->Draw("hist");
+    h_HLT_pT_uncorr_full->Draw("samehist");
+    c_HLT_pT_full->SetLogy();
+    c_HLT_pT_full->SetGridy();
+    c_HLT_pT_full->SetGridx();
+    legend->Draw();
+    c_HLT_pT_full->Update();
+
+} // End of PrescaleDemo()
+
+void PrescaleDemo2 (TString type = "SinglePhoton_full", Bool_t trigPtMatching = kFALSE, Bool_t DEBUG = kFALSE)
+{
+    TH1D *h_HLT_pT_full = new TH1D("h_HLT_pT_full", "", 500, 0, 500);
+    TH1D *h_HLT_pT_uncorr_full = new TH1D("h_HLT_pT_uncorr_full", "", 500, 0, 500);
+
+    FileMgr Mgr;
+    vector<Process_t> Processes = Mgr.FindProc(type);
+    Int_t Nproc = Processes.size();
+    if (!Nproc)
+    {
+        cout << "No processes found." << endl;
+        return;
+    }
+
+    TFile *f;
+    TString Dir = "/media/sf_DATA/FR/Electron/";
     TString debug = "";
     if (DEBUG) debug = "_DEBUG";
 
@@ -229,4 +438,77 @@ Double_t PrescalePhoton (Int_t trig_fired, Double_t HLT_pT, Int_t runNo, Int_t l
         prescale = 1.0; // unprescaled
 
     return prescale;
+}
+
+
+Double_t L1_PrescalePhoton (Int_t trig_fired, Int_t runNo, Int_t lumiSec)
+{
+    Int_t prescale = 0;
+    if (trig_fired == 22)
+        prescale = pp.l1Prescale("L1_SingleEG18", runNo, lumiSec);
+    else if (trig_fired == 30)
+        prescale = pp.l1Prescale("L1_SingleEG26", runNo, lumiSec);
+    else if (trig_fired == 36)
+        prescale = pp.l1Prescale("L1_SingleEG26", runNo, lumiSec);
+    else if (trig_fired == 50)
+        prescale = 1;
+    else if (trig_fired == 75)
+        prescale = 1;
+    else if (trig_fired == 90)
+        prescale = 1;
+    else if (trig_fired == 120)
+        prescale = 1;
+    else if (trig_fired == 175)
+        prescale = 1;
+
+    return (Double_t)prescale;
+}
+
+
+Double_t HLT_PrescalePhoton (Int_t trig_fired, Int_t runNo, Int_t lumiSec)
+{
+    Int_t prescale = 0;
+    if (trig_fired == 22)
+        prescale = pp.hltPrescale("HLT_Photon22_v", runNo, lumiSec);
+    else if (trig_fired == 30)
+        prescale = pp.hltPrescale("HLT_Photon30_v", runNo, lumiSec);
+    else if (trig_fired == 36)
+        prescale = pp.hltPrescale("HLT_Photon36_v", runNo, lumiSec);
+    else if (trig_fired == 50)
+        prescale = pp.hltPrescale("HLT_Photon50_v", runNo, lumiSec);
+    else if (trig_fired == 75)
+        prescale = pp.hltPrescale("HLT_Photon75_v", runNo, lumiSec);
+    else if (trig_fired == 90)
+        prescale = pp.hltPrescale("HLT_Photon90_v", runNo, lumiSec);
+    else if (trig_fired == 120)
+        prescale = pp.hltPrescale("HLT_Photon120_v", runNo, lumiSec);
+    else if (trig_fired == 175)
+        prescale = 1;
+
+    return (Double_t)prescale;
+}
+
+
+Int_t isValid (Int_t trig_fired, Double_t HLT_pT)
+{
+    Int_t retVal = 0;
+
+    if (trig_fired == 22 && HLT_pT > 22 && HLT_pT < 30)
+        retVal = 1;
+    else if (trig_fired == 30 && HLT_pT > 30 && HLT_pT < 36)
+        retVal = 1;
+    else if (trig_fired == 36 && HLT_pT > 36 && HLT_pT < 50)
+        retVal = 1;
+    else if (trig_fired == 50 && HLT_pT > 50 && HLT_pT < 75)
+        retVal = 1;
+    else if (trig_fired == 75 && HLT_pT > 75 && HLT_pT < 90)
+        retVal = 1;
+    else if (trig_fired == 90 && HLT_pT > 90 && HLT_pT < 120)
+        retVal = 1;
+    else if (trig_fired == 120 && HLT_pT > 120 && HLT_pT < 175)
+        retVal = 1;
+    else if (trig_fired == 175 && HLT_pT > 175)
+        retVal = 1;
+
+    return retVal;
 }

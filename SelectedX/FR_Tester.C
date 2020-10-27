@@ -32,6 +32,8 @@
 
 void E_QCD_Tester (TString FRtype, Bool_t DEBUG);
 void E_WJET_Tester (TString FRtype, Bool_t DEBUG);
+void E_QCD_Tester_alt (TString FRtype, Bool_t DEBUG);
+void E_WJET_Tester_alt (TString FRtype, Bool_t DEBUG);
 void Mu_QCD_Tester (TString FRtype, Bool_t DEBUG);
 void Mu_WJET_Tester (TString FRtype, Bool_t DEBUG);
 void EMu_WJET_Tester (TString FRtype, Bool_t DEBUG);
@@ -79,14 +81,30 @@ void FR_Tester (TString WhichX = "", TString FRtype = "MC")
         if (whichX.Contains("QCD"))
         {
             Xselected++;
-            cout << "\n*****  E_QCD_Tester(" << FRtype << ")  *****" << endl;
-            E_QCD_Tester(FRtype, DEBUG);
+            if (whichX.Contains("ALT"))
+            {
+                cout << "\n*****  E_QCD_Tester_alt(" << FRtype << ")  *****" << endl;
+                E_QCD_Tester_alt(FRtype, DEBUG);
+            }
+            else
+            {
+                cout << "\n*****  E_QCD_Tester(" << FRtype << ")  *****" << endl;
+                E_QCD_Tester(FRtype, DEBUG);
+            }
         }
         else if (whichX.Contains("W") && whichX.Contains("JET"))
         {
             Xselected++;
-            cout << "\n*****  E_WJET_Tester(" << FRtype << ")  *****" << endl;
-            E_WJET_Tester(FRtype, DEBUG);
+            if (whichX.Contains("ALT"))
+            {
+                cout << "\n*****  E_WJET_Tester_alt(" << FRtype << ")  *****" << endl;
+                E_WJET_Tester_alt(FRtype, DEBUG);
+            }
+            else
+            {
+                cout << "\n*****  E_WJET_Tester(" << FRtype << ")  *****" << endl;
+                E_WJET_Tester(FRtype, DEBUG);
+            }
         }
     }
 
@@ -562,6 +580,486 @@ void E_WJET_Tester (TString FRtype, Bool_t DEBUG)
     TTimeStamp ts_end;
     cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
 } // End of E_WJET_Tester()
+
+
+void E_WJET_Tester_alt (TString FRtype, Bool_t DEBUG)
+{
+    TTimeStamp ts_start;
+    cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
+    TStopwatch totaltime;
+    totaltime.Start();
+
+    FileMgr Mgr;
+
+    TFile *f;
+    TString Dir = "/media/sf_DATA/FR/Electron/";
+    TString debug = "";
+    if (DEBUG == kTRUE) debug = "_DEBUG";
+
+    DYAnalyzer *analyzer = new DYAnalyzer("Ele23Ele12");
+
+    // -- For QCD estimation from Fake Rate -- //
+    analyzer->SetupFRvalues_ele_alt(Dir+"FakeRate_electron_alt.root", FRtype, 1);
+
+    TH1D *h_mass, *h_mass_compare;
+    TH1D *h_mass_1FR = new TH1D("h_mass_1FR", "h_mass_1FR", binnum, massbins);
+
+    for (Process_t pr=_WJets; pr<=_WJets_ext2v5; pr=next(pr))
+    {
+        Mgr.SetProc(pr);
+
+        cout << "===========================================================" << endl;
+        cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
+        cout << "Xsec: " << Mgr.Xsec[0] << endl;
+        cout << "Wsum: " << Mgr.Wsum[0] << endl;
+        cout << "Type: " << Mgr.Type << endl;
+        cout << "Directory: " << Dir << endl;
+
+        TStopwatch totaltime;
+        totaltime.Start();
+
+        // -- For PU re-weighting -- //
+        analyzer->SetupPileUpReWeighting_80X(Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root");
+
+        // -- For PVz reweighting -- //
+        analyzer->SetupPVzWeights(Mgr.isMC, "ee", "./etc/PVzWeights.root");
+
+        std::vector<double> *p_T = new std::vector<double>;
+        std::vector<double> *eta = new std::vector<double>;
+        std::vector<double> *phi = new std::vector<double>;
+        std::vector<double> *etaSC = new std::vector<double>;
+        std::vector<double> *Full5x5_SigmaIEtaIEta = new std::vector<double>;
+        std::vector<double> *HoverE = new std::vector<double>;
+        std::vector<double> *dEtaInSeed = new std::vector<double>;
+        std::vector<double> *dPhiIn = new std::vector<double>;
+        std::vector<int> *mHits = new std::vector<int>;
+        std::vector<int> *passMediumID = new std::vector<int>;
+        Int_t nPU;
+        Double_t PVz;
+        Double_t gen_weight;
+        Double_t prefiring_weight;
+
+        TChain *chain = new TChain("FRTree");
+        chain->Add(Dir+"SelectedForBKGest_E_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+        if (DEBUG == kTRUE) cout << Dir+"SelectedForBKGest_E_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+
+        chain->SetBranchStatus("p_T", 1);
+        chain->SetBranchStatus("eta", 1);
+        chain->SetBranchStatus("phi", 1);
+        chain->SetBranchStatus("etaSC", 1);
+        chain->SetBranchStatus("Full5x5_SigmaIEtaIEta", 1);
+        chain->SetBranchStatus("HoverE", 1);
+        chain->SetBranchStatus("dEtaInSeed", 1);
+        chain->SetBranchStatus("dPhiIn", 1);
+        chain->SetBranchStatus("mHits", 1);
+        chain->SetBranchStatus("passMediumID", 1);
+        chain->SetBranchStatus("nPU", 1);
+        chain->SetBranchStatus("PVz", 1);
+        chain->SetBranchStatus("gen_weight", 1);
+        chain->SetBranchStatus("prefiring_weight", 1);
+
+        chain->SetBranchAddress("p_T", &p_T);
+        chain->SetBranchAddress("eta", &eta);
+        chain->SetBranchAddress("phi", &phi);
+        chain->SetBranchAddress("etaSC", &etaSC);
+        chain->SetBranchAddress("Full5x5_SigmaIEtaIEta", &Full5x5_SigmaIEtaIEta);
+        chain->SetBranchAddress("HoverE", &HoverE);
+        chain->SetBranchAddress("dEtaInSeed", &dEtaInSeed);
+        chain->SetBranchAddress("dPhiIn", &dPhiIn);
+        chain->SetBranchAddress("mHits", &mHits);
+        chain->SetBranchAddress("passMediumID", &passMediumID);
+        chain->SetBranchAddress("nPU", &nPU);
+        chain->SetBranchAddress("PVz", &PVz);
+        chain->SetBranchAddress("gen_weight", &gen_weight);
+        chain->SetBranchAddress("prefiring_weight", &prefiring_weight);
+
+        Int_t NEvents = chain->GetEntries();
+        cout << "\t[Sum of weights: " << Mgr.Wsum[0] << "]" << endl;
+        cout << "\t[Number of events: " << NEvents << "]" << endl;
+
+
+        myProgressBar_t bar(NEvents);
+
+        for(Int_t i=0; i<NEvents; i++)
+        {
+            chain->GetEntry(i);
+            if (!DEBUG) bar.Draw(i);
+
+            // QCD selection
+            if (p_T->size() != 2) continue;
+            if (passMediumID->at(0) == 1 && passMediumID->at(1)  == 1) continue;
+            if (passMediumID->at(0) == 0 && passMediumID->at(1)  == 0) continue;
+            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
+            if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
+            if ((fabs(etaSC->at(0)) > 1.4442 && fabs(etaSC->at(0)) < 1.566) || fabs((etaSC->at(1)) > 1.4442 && fabs(etaSC->at(1)) < 1.566)) continue;
+
+            if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << passMediumID->at(0) << endl;
+            if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << passMediumID->at(1) << endl;
+
+            Double_t pT_lead = p_T->at(0);
+            if (p_T->at(1) > p_T->at(0)) pT_lead = p_T->at(1);
+
+            if (DEBUG == kTRUE)
+            {
+                cout << "Evt " << i << endl;
+                cout << "nElectrons = " << p_T->size() << endl;
+                cout << "p_T[0] = " << p_T->at(0);
+                cout << "\teta[0] = " << eta->at(0);
+                cout << "\tphi[0] = " << phi->at(0) << endl;
+                cout << "\tpassMediumID[0] = " << passMediumID->at(0) << endl;
+                cout << "p_T[1] = " << p_T->at(1);
+                cout << "\teta[1] = " << eta->at(1);
+                cout << "\tphi[1] = " << phi->at(1) << endl;
+                cout << "\tpassMediumID[1] = " << passMediumID->at(1) << endl;
+                cout << "\nPVz = " << PVz << endl;
+            }
+
+            TLorentzVector ele1, ele2;
+            ele1.SetPtEtaPhiM(p_T->at(0), eta->at(0), phi->at(0), M_Elec);
+            ele2.SetPtEtaPhiM(p_T->at(1), eta->at(1), phi->at(1), M_Elec);
+            Double_t mass = (ele1+ele2).M();
+
+            // -- Pileup-Reweighting -- //
+            Double_t PUWeight = analyzer->PileUpWeightValue_80X(nPU);
+            if (DEBUG == kTRUE) cout << "PU weight " << PUWeight << endl;
+
+            // -- PVz weights -- //
+            Double_t PVzWeight = analyzer->PVzWeightValue(PVz);
+
+            // -- L1 prefiring weights -- //
+            Double_t L1weight = prefiring_weight;
+
+            if (DEBUG == kTRUE) cout << "PU weight: " << PUWeight << "\tPVz weight: " << PVzWeight << "\nL1 weight:" << L1weight << endl;
+
+            // -- Normalization -- //
+            Double_t TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
+            if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl << endl;
+
+            // -- FR WEIGHTS -- //
+            Double_t FRweight=1, FR=-1;
+            if (passMediumID->at(0) == 1 && passMediumID->at(1) == 0) // First passing
+            {
+                if (p_T->at(1) >= pT_lead) FR = analyzer->FakeRate_ele_alt_lead(p_T->at(1), etaSC->at(1));
+                else FR = analyzer->FakeRate_ele_alt_sub(p_T->at(1), etaSC->at(1));
+            }
+            else if (passMediumID->at(0) == 0 && passMediumID->at(1) == 1) // First failing
+            {
+                if (p_T->at(0) >= pT_lead) FR = analyzer->FakeRate_ele_alt_lead(p_T->at(0), etaSC->at(0));
+                else FR = analyzer->FakeRate_ele_alt_sub(p_T->at(0), etaSC->at(0));
+            }
+            FRweight = FR / (1 - FR);
+            h_mass_1FR->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * FRweight);
+
+        }// End of event iteration
+
+        cout << " Finished.\n" << endl;
+
+        cout << "===========================================================\n" << endl;
+    } // End of pr iteration
+
+    TFile *f_orig = new TFile("/media/sf_DATA/SelectedEE/Histos/Hist_SelectedEE_Bkg_Full.root", "READ");
+    f_orig->GetObject("h_mass_SelectedEE_WJets_Full", h_mass);
+    h_mass->SetDirectory(0);
+    f_orig->Close();
+    TFile *f_est = new TFile("/media/sf_DATA/SelectedEE/Histos/EstWJets_EE.root", "READ");
+    f_est->GetObject("h_WJET_est_fit", h_mass_compare);
+    h_mass_compare->SetDirectory(0);
+    f_est->Close();
+
+    TCanvas *c_comparison = new TCanvas("FR test","FR test (W+Jets)", 800, 800);
+    c_comparison->SetRightMargin(0.05);
+    c_comparison->SetTopMargin(0.05);
+    c_comparison->SetBottomMargin(0.12);
+    c_comparison->SetLeftMargin(0.13);
+    h_mass_1FR->SetDirectory(0);
+    h_mass->SetStats(0);
+    h_mass_1FR->SetStats(0);
+    h_mass_compare->SetStats(0);
+    h_mass->SetMarkerStyle(kFullDotLarge);
+    h_mass_1FR->SetMarkerStyle(kFullSquare);
+    h_mass_compare->SetMarkerStyle(33);
+    h_mass->SetLineColor(kBlack);
+    h_mass_1FR->SetLineColor(kRed);
+    h_mass_1FR->SetMarkerColor(kRed);
+    h_mass_compare->SetLineColor(kGreen+2);
+    h_mass_compare->SetMarkerColor(kGreen+2);
+    h_mass_compare->SetMarkerSize(1.5);
+    h_mass->GetXaxis()->SetTitle("m_{ee} [GeV/c^{2}]");
+    h_mass->GetXaxis()->SetNoExponent(1);
+    h_mass->GetXaxis()->SetMoreLogLabels(1);
+    h_mass->GetXaxis()->SetTitleOffset(1);
+    h_mass->GetXaxis()->SetTitleSize(0.05);
+    h_mass->GetXaxis()->SetLabelSize(0.04);
+    h_mass->GetYaxis()->SetTitle("Number of events");
+    h_mass->GetYaxis()->SetTitleSize(0.05);
+    h_mass->GetYaxis()->SetTitleOffset(1.25);
+    h_mass->GetYaxis()->SetLabelSize(0.04);
+    h_mass->GetYaxis()->SetRangeUser(1, 1e4);
+    TLegend *legend = new TLegend(0.5, 0.7, 0.95, 0.95);
+    legend->AddEntry(h_mass, "W+Jets MC (2 pass)", "lp");
+    legend->AddEntry(h_mass_1FR, "W+Jets MC (1 fail, FR applied)", "lp");
+//    legend->AddEntry(h_mass_compare, "W+Jets est (data-driven template)", "lp");
+    h_mass->Draw();
+    h_mass_1FR->Draw("same");
+//    h_mass_compare->Draw("same");
+    legend->Draw();
+    c_comparison->SetLogx();
+    c_comparison->SetLogy();
+    c_comparison->SetGridx();
+    c_comparison->SetGridy();
+    c_comparison->Update();
+
+    Double_t TotalRunTime = totaltime.CpuTime();
+    cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
+
+    TTimeStamp ts_end;
+    cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
+} // End of E_WJET_Tester_alt()
+
+
+
+/// -------------------------------- Electron Channel ------------------------------------ ///
+void E_QCD_Tester_alt (TString FRtype, Bool_t DEBUG)
+{
+    TTimeStamp ts_start;
+    cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
+    TStopwatch totaltime;
+    totaltime.Start();
+
+    FileMgr Mgr;
+
+    TFile *f;
+    TString Dir = "/media/sf_DATA/FR/Electron/";
+    TString debug = "";
+    if (DEBUG == kTRUE) debug = "_DEBUG";
+
+    DYAnalyzer *analyzer = new DYAnalyzer("Ele23Ele12");
+
+    // -- For QCD estimation from Fake Rate -- //
+    analyzer->SetupFRvalues_ele_alt(Dir+"FakeRate_electron_alt.root", FRtype);
+
+    TH1D *h_mass_2FR = new TH1D("h_mass_2FR", "", 10, 0, 1000);
+    TH1D *h_mass_1FR = new TH1D("h_mass_1FR", "", 10, 0, 1000);
+
+    for (Process_t pr=_QCDEMEnriched_20to30; pr<_EndOf_QCDEMEnriched_Normal; pr=next(pr))
+    {
+        Mgr.SetProc(pr);
+
+        cout << "===========================================================" << endl;
+        cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
+        cout << "Xsec: " << Mgr.Xsec[0] << endl;
+        cout << "Wsum: " << Mgr.Wsum[0] << endl;
+        cout << "Type: " << Mgr.Type << endl;
+        cout << "Directory: " << Dir << endl;
+
+        TStopwatch totaltime;
+        totaltime.Start();
+
+        // -- For PU re-weighting -- //
+        analyzer->SetupPileUpReWeighting_80X(Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root");
+
+        // -- For PVz reweighting -- //
+        analyzer->SetupPVzWeights(Mgr.isMC, "ee", "./etc/PVzWeights.root");
+
+        std::vector<double> *p_T = new std::vector<double>;
+        std::vector<double> *eta = new std::vector<double>;
+        std::vector<double> *phi = new std::vector<double>;
+        std::vector<double> *etaSC = new std::vector<double>;
+        std::vector<double> *Full5x5_SigmaIEtaIEta = new std::vector<double>;
+        std::vector<double> *HoverE = new std::vector<double>;
+        std::vector<double> *dEtaInSeed = new std::vector<double>;
+        std::vector<double> *dPhiIn = new std::vector<double>;
+        std::vector<int> *mHits = new std::vector<int>;
+        std::vector<int> *passMediumID = new std::vector<int>;
+        Int_t nPU;
+        Double_t PVz;
+        Double_t gen_weight;
+        Double_t prefiring_weight;
+
+        TChain *chain = new TChain("FRTree");
+        chain->Add(Dir+"SelectedForBKGest_E_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+        if (DEBUG == kTRUE) cout << Dir+"SelectedForBKGest_E_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+
+        chain->SetBranchStatus("p_T", 1);
+        chain->SetBranchStatus("eta", 1);
+        chain->SetBranchStatus("phi", 1);
+        chain->SetBranchStatus("etaSC", 1);
+        chain->SetBranchStatus("Full5x5_SigmaIEtaIEta", 1);
+        chain->SetBranchStatus("HoverE", 1);
+        chain->SetBranchStatus("dEtaInSeed", 1);
+        chain->SetBranchStatus("dPhiIn", 1);
+        chain->SetBranchStatus("mHits", 1);
+        chain->SetBranchStatus("passMediumID", 1);
+        chain->SetBranchStatus("nPU", 1);
+        chain->SetBranchStatus("PVz", 1);
+        chain->SetBranchStatus("gen_weight", 1);
+        chain->SetBranchStatus("prefiring_weight", 1);
+
+        chain->SetBranchAddress("p_T", &p_T);
+        chain->SetBranchAddress("eta", &eta);
+        chain->SetBranchAddress("phi", &phi);
+        chain->SetBranchAddress("etaSC", &etaSC);
+        chain->SetBranchAddress("Full5x5_SigmaIEtaIEta", &Full5x5_SigmaIEtaIEta);
+        chain->SetBranchAddress("HoverE", &HoverE);
+        chain->SetBranchAddress("dEtaInSeed", &dEtaInSeed);
+        chain->SetBranchAddress("dPhiIn", &dPhiIn);
+        chain->SetBranchAddress("mHits", &mHits);
+        chain->SetBranchAddress("passMediumID", &passMediumID);
+        chain->SetBranchAddress("nPU", &nPU);
+        chain->SetBranchAddress("PVz", &PVz);
+        chain->SetBranchAddress("gen_weight", &gen_weight);
+        chain->SetBranchAddress("prefiring_weight", &prefiring_weight);
+
+        Int_t NEvents = chain->GetEntries();
+        cout << "\t[Sum of weights: " << Mgr.Wsum[0] << "]" << endl;
+        cout << "\t[Number of events: " << NEvents << "]" << endl;
+
+
+        myProgressBar_t bar(NEvents);
+
+        for(Int_t i=0; i<NEvents; i++)
+        {
+            chain->GetEntry(i);
+            if (!DEBUG) bar.Draw(i);
+
+            // QCD selection
+            if (p_T->size() != 2) continue;
+            if ((fabs(etaSC->at(0)) > 1.4442 && fabs(etaSC->at(0)) < 1.566) || fabs((etaSC->at(1)) > 1.4442 && fabs(etaSC->at(1)) < 1.566)) continue;
+            if (passMediumID->at(0) == 1 && passMediumID->at(1)  == 1) continue;
+            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
+            if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
+            if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << passMediumID->at(0) << endl;
+            if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << passMediumID->at(1) << endl;
+
+            Double_t pT_lead = p_T->at(0);
+            if (p_T->at(1) > p_T->at(0)) pT_lead = p_T->at(1);
+
+            if (DEBUG == kTRUE)
+            {
+                cout << "Evt " << i << endl;
+                cout << "nElectrons = " << p_T->size() << endl;
+                cout << "p_T[0] = " << p_T->at(0);
+                cout << "\teta[0] = " << eta->at(0);
+                cout << "\tphi[0] = " << phi->at(0) << endl;
+                cout << "\tpassMediumID[0] = " << passMediumID->at(0) << endl;
+                cout << "p_T[1] = " << p_T->at(1);
+                cout << "\teta[1] = " << eta->at(1);
+                cout << "\tphi[1] = " << phi->at(1) << endl;
+                cout << "\tpassMediumID[1] = " << passMediumID->at(1) << endl;
+                cout << "\nPVz = " << PVz << endl;
+            }
+
+            TLorentzVector ele1, ele2;
+            ele1.SetPtEtaPhiM(p_T->at(0), eta->at(0), phi->at(0), M_Elec);
+            ele2.SetPtEtaPhiM(p_T->at(1), eta->at(1), phi->at(1), M_Elec);
+            Double_t mass = (ele1+ele2).M();
+
+            // -- Pileup-Reweighting -- //
+            Double_t PUWeight = analyzer->PileUpWeightValue_80X(nPU);
+            if (DEBUG == kTRUE) cout << "PU weight " << PUWeight << endl;
+
+            // -- PVz weights -- //
+            Double_t PVzWeight = analyzer->PVzWeightValue(PVz);
+
+            // -- L1 prefiring weights -- //
+            Double_t L1weight = prefiring_weight;
+
+            if (DEBUG == kTRUE) cout << "PU weight: " << PUWeight << "\tPVz weight: " << PVzWeight << "\nL1 weight:" << L1weight << endl;
+
+            // -- Normalization -- //
+            Double_t TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
+            if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl << endl;
+
+            // -- FR WEIGHTS -- //
+            if (passMediumID->at(0) == 1 && passMediumID->at(1) == 0) // First passing
+            {
+                Double_t FRweight, FR;
+                if (p_T->at(1) >= pT_lead) FR = analyzer->FakeRate_ele_alt_lead(p_T->at(1), etaSC->at(1));
+                else FR = analyzer->FakeRate_ele_alt_sub(p_T->at(1), etaSC->at(1));
+                FRweight = FR / (1 - FR);
+                h_mass_1FR->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * FRweight);
+            }
+            else if (passMediumID->at(0) == 0 && passMediumID->at(1) == 1) // Second passing
+            {
+                Double_t FRweight, FR;
+                if (p_T->at(0) >= pT_lead) FR = analyzer->FakeRate_ele_alt_lead(p_T->at(0), etaSC->at(0));
+                else FR = analyzer->FakeRate_ele_alt_sub(p_T->at(0), etaSC->at(0));
+                FRweight = FR / (1 - FR);
+                h_mass_1FR->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * FRweight);
+            }
+            else // Both failing
+            {
+                Double_t FRweight = 1;
+                Double_t FR1, FR2;
+                if (p_T->at(0) >= pT_lead)
+                {
+                    FR1 = analyzer->FakeRate_ele_alt_lead(p_T->at(0), etaSC->at(0));
+                    FR2 = analyzer->FakeRate_ele_alt_sub(p_T->at(1), etaSC->at(1));
+                }
+                else
+                {
+                    FR1 = analyzer->FakeRate_ele_alt_sub(p_T->at(0), etaSC->at(0));
+                    FR2 = analyzer->FakeRate_ele_alt_lead(p_T->at(1), etaSC->at(1));
+                }
+                FRweight = (FR1 / (1 - FR1)) * (FR2 / (1 - FR2));
+                if (DEBUG == kTRUE) cout << "FR1 = " << FR1 << "   FR2 = " << FR2 << "   FRweight = " << FRweight << endl;
+                h_mass_2FR->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * FRweight);
+            }
+
+        }// End of event iteration
+
+        cout << " Finished.\n" << endl;
+
+        cout << "===========================================================\n" << endl;
+    } // End of pr iteration
+
+    TCanvas *c_comparison = new TCanvas("FR test","FR test (QCD)", 800, 800);
+    c_comparison->SetRightMargin(0.05);
+    c_comparison->SetTopMargin(0.05);
+    c_comparison->SetBottomMargin(0.12);
+    c_comparison->SetLeftMargin(0.13);
+    h_mass_1FR->SetDirectory(0);
+    h_mass_2FR->SetDirectory(0);
+//    for (Int_t i=1; i<=10; i++)
+//    {
+//        h_mass_2FR->SetBinError(i, sqrt(h_mass_2FR->GetBinContent(i)));
+//    }
+    h_mass_1FR->SetStats(0);
+    h_mass_2FR->SetStats(0);
+    h_mass_1FR->SetMarkerStyle(kFullDotLarge);
+    h_mass_2FR->SetMarkerStyle(kFullSquare);
+    h_mass_1FR->SetLineColor(kBlack);
+    h_mass_2FR->SetLineColor(kRed);
+    h_mass_2FR->SetMarkerColor(kRed);
+    h_mass_1FR->GetXaxis()->SetTitle("m_{ee} [GeV/c^{2}]");
+    h_mass_1FR->GetXaxis()->SetNoExponent(1);
+    h_mass_1FR->GetXaxis()->SetMoreLogLabels(1);
+    h_mass_1FR->GetXaxis()->SetTitleOffset(1);
+    h_mass_1FR->GetXaxis()->SetTitleSize(0.05);
+    h_mass_1FR->GetXaxis()->SetLabelSize(0.04);
+    h_mass_1FR->GetYaxis()->SetTitle("Number of events");
+    h_mass_1FR->GetYaxis()->SetTitleSize(0.05);
+    h_mass_1FR->GetYaxis()->SetTitleOffset(1.25);
+    h_mass_1FR->GetYaxis()->SetLabelSize(0.04);
+    h_mass_1FR->GetYaxis()->SetRangeUser(10, 1e6);
+    TLegend *legend = new TLegend(0.4, 0.8, 0.95, 0.95);
+    legend->AddEntry(h_mass_1FR, "QCD MC (1 fail, FR applied)", "lp");
+    legend->AddEntry(h_mass_2FR, "QCD MC (2 fail, FR applied x2)", "lp");
+    h_mass_1FR->Draw();
+    h_mass_2FR->Draw("same");
+    legend->Draw();
+    c_comparison->SetLogy();
+    c_comparison->SetGridx();
+    c_comparison->SetGridy();
+    c_comparison->Update();
+
+    Double_t TotalRunTime = totaltime.CpuTime();
+    cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
+
+    TTimeStamp ts_end;
+    cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
+
+} // End of E_QCD_Tester_alt()
 
 
 /// -------------------------------- Muon Channel ------------------------------------ ///

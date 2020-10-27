@@ -3339,6 +3339,39 @@ void E_EstPR()
     c_ineff_ratio->Update();
 */
 
+    TCanvas *c_PR_allin1 = new TCanvas("c_PR_allin1", "c_PR_allin1", 800, 800);
+    c_PR_allin1->cd();
+    c_PR_allin1->SetGrid(1);
+    c_PR_allin1->SetRightMargin(0.05);
+    c_PR_allin1->SetTopMargin(0.05);
+    c_PR_allin1->SetBottomMargin(0.12);
+    c_PR_allin1->SetLeftMargin(0.13);
+    TH1D *h_eff_data_endcap1 = ((TH1D*)(h_eff_data_endcap->Clone("h_eff_data_endcap1")));
+    h_eff_data_endcap1->SetDirectory(0);
+    h_eff_data_endcap1->SetTitle("");
+    h_eff_data_endcap1->SetMarkerStyle(kFullSquare);
+    h_eff_data_endcap1->SetMarkerColor(kBlue);
+    h_eff_data_endcap1->GetYaxis()->SetTitle("Prompt rate");
+    h_eff_data_endcap1->GetYaxis()->SetTitleSize(0.05);
+    h_eff_data_endcap1->GetYaxis()->SetLabelSize(0.04);
+    h_eff_data_endcap1->GetYaxis()->SetTitleOffset(1.12);
+    h_eff_data_endcap1->GetYaxis()->SetRangeUser(0, 1.2);
+    h_eff_data_endcap1->GetXaxis()->SetRangeUser(0, 5000);
+    h_eff_data_endcap1->GetXaxis()->SetNoExponent();
+    h_eff_data_endcap1->GetXaxis()->SetMoreLogLabels();
+    h_eff_data_endcap1->GetXaxis()->SetTitle("p_{T} (#font[12]{e}) [GeV/c]");
+    h_eff_data_endcap1->GetXaxis()->SetTitleOffset(1);
+    h_eff_data_endcap1->GetXaxis()->SetTitleSize(0.05);
+    h_eff_data_endcap1->GetXaxis()->SetLabelSize(0.04);
+    h_eff_data_endcap1->Draw();
+    h_eff_data_barrel->Draw("same");
+    TLegend *legend1 = new TLegend(0.13, 0.77, 0.6, 0.95);
+    legend1->AddEntry(h_eff_data_barrel, "Subtraction (barrel)", "LP");
+    legend1->AddEntry(h_eff_data_endcap1, "Subtraction (endcap)", "LP");
+    legend1->Draw();
+    c_PR_allin1->SetLogx();
+    c_PR_allin1->Update();
+
     f->Close();
     if (!f->IsOpen()) cout << "File " << inName << " has been closed successfully.\n" << endl;
     else cout << "FILE " << inName << " COULD NOT BE CLOSED!\n" << endl;
