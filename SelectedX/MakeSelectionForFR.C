@@ -2451,6 +2451,7 @@ void MakeSelectionForPR_Mu (TString type, TString HLTname, Bool_t Debug)
         Int_t nPU;
         Int_t nVTX;
         Double_t PVz;
+        Double_t MET_pT, MET_phi;
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
         Int_t runNum;
@@ -2472,6 +2473,8 @@ void MakeSelectionForPR_Mu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("nPU", &nPU);
         MuonTree->Branch("nVTX", &nVTX);
         MuonTree->Branch("PVz", &PVz);
+        MuonTree->Branch("MET_pT", &MET_pT);
+        MuonTree->Branch("MET_phi", &MET_phi);
         MuonTree->Branch("gen_weight", &gen_weight);
         MuonTree->Branch("top_weight", &top_weight);
         MuonTree->Branch("prefiring_weight", &prefiring_weight);
@@ -2623,6 +2626,10 @@ void MakeSelectionForPR_Mu (TString type, TString HLTname, Bool_t Debug)
                             Double_t SF1 = exp(0.0615 - (0.0005 * GenTopCollection[1].Pt));
                             top_weight = sqrt(SF0 * SF1);
                         }
+
+                        // -- MET information -- //
+                        MET_pT = ntuple->pfMET_pT;
+                        MET_phi = ntuple->pfMET_phi;
 
                         // -- Information for various other reweightings -- //
                         runNum = ntuple->runNum;
