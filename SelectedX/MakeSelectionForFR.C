@@ -29,6 +29,8 @@
 void MakeSelectionForFR_E (TString type, TString HLTname, Bool_t Debug);
 void MakeSelectionForFR_E_alt (TString type, TString HLTname, Bool_t Debug);
 void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug);
+// PROMPT RATE
+void MakeSelectionForPR_Mu (TString type, TString HLTname, Bool_t Debug);
 
 void MakeSelectionForBKGest_EE (TString type, TString HLTname, Bool_t Debug);
 void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug);
@@ -81,6 +83,13 @@ void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "D
             else HLT = HLTname;
             cout << "\n*****  MakeSelectionForBKGest_MuMu (" << type << ", " << HLT << ")  *****" << endl;
             MakeSelectionForBKGest_MuMu(type, HLT, Debug);
+        }
+        else if (whichX.Contains("PR"))
+        {
+            if (HLTname == "DEFAULT") HLT = "Mu50";
+            else HLT = HLTname;
+            cout << "\n*****  MakeSelectionForPR_Mu (" << type << ", " << HLT << ")  *****" << endl;
+            MakeSelectionForPR_Mu(type, HLT, Debug);
         }
         else
         {
@@ -2378,6 +2387,322 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
     cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
 
 } // End of MakeSelectionForBKGest_EMu
+
+
+/// Muon PROMPT RATE estimation
+void MakeSelectionForPR_Mu (TString type, TString HLTname, Bool_t Debug)
+{
+    // -- Run2016 luminosity [/pb] -- //
+    Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
+    L = L_B2H;
+
+    TTimeStamp ts_start;
+    cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
+
+    TStopwatch totaltime;
+    totaltime.Start();
+
+    DYAnalyzer *analyzer = new DYAnalyzer(HLTname);
+    // -- For Rochester correction -- //
+    TRandom3 *r1 = new TRandom3(0);
+
+    FileMgr Mgr;
+    vector<Process_t> Processes = Mgr.FindProc(type);
+    Int_t Nproc = Processes.size();
+    if (!Nproc)
+    {
+        cout << "No processes found." << endl;
+        return;
+    }
+
+    // Loop for all processes
+    for (Int_t i_proc=0; i_proc<Nproc; i_proc++)
+    {
+        Mgr.SetProc(Processes[i_proc], kTRUE);
+        cout << "===========================================================" << endl;
+        cout << "Type: " << Mgr.Type << endl;
+        cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
+        cout << "BaseLocation: " << Mgr.BaseLocation << endl << endl;
+
+        Int_t Ntup = Mgr.FullLocation.size();
+
+        //Creating a file
+        TString out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
+        TString out_dir = "SelectedForPR_Mu_"+Mgr.Procname[Mgr.CurrentProc];
+        TFile* MuonFile;
+
+        if (Debug == kTRUE)
+            MuonFile = TFile::Open(out_base+out_dir+"_DEBUG.root", "RECREATE");
+        else
+            MuonFile = TFile::Open(out_base+out_dir+".root", "RECREATE");
+        MuonFile->cd();
+
+        std::vector<double> *p_T = new std::vector<double>;
+        std::vector<double> *eta = new std::vector<double>;
+        std::vector<double> *phi = new std::vector<double>;
+        std::vector<int> *charge = new std::vector<int>;
+        std::vector<double> *relPFiso = new std::vector<double>;
+        std::vector<double> *TRKiso = new std::vector<double>;
+        std::vector<string> *trig_name = new std::vector<string>;
+        std::vector<int> *trig_fired = new std::vector<int>;
+        std::vector<int> *trig_matched = new std::vector<int>;
+        std::vector<double> *trig_pT = new std::vector<double>;
+        std::vector<int> *prescale_factor = new std::vector<int>;
+        Int_t nPU;
+        Int_t nVTX;
+        Double_t PVz;
+        Double_t gen_weight, top_weight;
+        Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
+        Int_t runNum;
+        Int_t lumiBlock;
+
+        TTree* MuonTree = new TTree("FRTree", "FRTree");
+        // -- Creating SelectedMuMu variables to assign branches -- //
+        MuonTree->Branch("p_T", &p_T);
+        MuonTree->Branch("eta", &eta);
+        MuonTree->Branch("phi", &phi);
+        MuonTree->Branch("charge", &charge);
+        MuonTree->Branch("relPFiso", &relPFiso);
+        MuonTree->Branch("TRKiso", &TRKiso);
+        MuonTree->Branch("trig_name", &trig_name);
+        MuonTree->Branch("trig_fired", &trig_fired);
+        MuonTree->Branch("trig_matched", &trig_matched);
+        MuonTree->Branch("trig_pT", &trig_pT);
+        MuonTree->Branch("prescale_factor", &prescale_factor);
+        MuonTree->Branch("nPU", &nPU);
+        MuonTree->Branch("nVTX", &nVTX);
+        MuonTree->Branch("PVz", &PVz);
+        MuonTree->Branch("gen_weight", &gen_weight);
+        MuonTree->Branch("top_weight", &top_weight);
+        MuonTree->Branch("prefiring_weight", &prefiring_weight);
+        MuonTree->Branch("prefiring_weight_up", &prefiring_weight_up);
+        MuonTree->Branch("prefiring_weight_down", &prefiring_weight_down);
+        MuonTree->Branch("runNum", &runNum);
+        MuonTree->Branch("lumiBlock", &lumiBlock);
+
+        // -- For PU re-weighting -- //
+        analyzer->SetupPileUpReWeighting_80X(Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root");
+
+        // Loop for all samples in a process
+        for (Int_t i_tup = 0; i_tup<Ntup; i_tup++)
+        {
+            TStopwatch looptime;
+            looptime.Start();
+
+            cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
+
+            TChain *chain = new TChain(Mgr.TreeName[i_tup]);
+            Mgr.SetupChain(i_tup, chain);
+
+            NtupleHandle *ntuple = new NtupleHandle(chain);
+            if (Mgr.isMC == kTRUE)
+            {
+                ntuple->TurnOnBranches_GenLepton(); // for all leptons
+                ntuple->TurnOnBranches_GenOthers(); // for quarks
+            }
+            ntuple->TurnOnBranches_Muon();
+            ntuple->TurnOnBranches_MET();
+
+            Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
+
+            Int_t NEvents = chain->GetEntries();
+            if (Debug == kTRUE) NEvents = 1000; // using few events for debugging
+
+            cout << "\t[Total Events: " << NEvents << "]" << endl;
+            myProgressBar_t bar(NEvents);
+            Int_t timesPassed = 0;
+
+            std::string RCaddress;
+            if (Mgr.Type == "TEST")
+                RCaddress = "./etc/RoccoR/rcdata.2016.v3";
+            else RCaddress = "/cms/ldap_home/mambroza/DrellYan2016/SelectedX/etc/RoccoR/rcdata.2016.v3";
+            RoccoR rc(RCaddress);
+
+            // Loop for all events in the chain
+            for (Int_t i=0; i<NEvents; i++)
+            {
+                if (!Debug) bar.Draw(i);
+                ntuple->GetEvent(i);
+                if (ntuple->nMuon < 2) continue;
+
+                if (Debug == kTRUE)
+                {
+                    cout << "\nEvt " << i << endl;
+                    cout << "Nmuons: " << ntuple->nMuon << ",  Ntrig: " << ntuple->HLT_ntrig << endl;
+                    for (Int_t i_mu=0; i_mu<ntuple->nMuon; i_mu++)
+                    {
+                        cout << "\tmu" << i_mu << ": pT=" << ntuple->Muon_pT[i_mu] << "  eta=" << ntuple->Muon_eta[i_mu];
+                        Double_t PFiso = (ntuple->Muon_PfChargedHadronIsoR04[i_mu] +
+                                 max(0.0, ntuple->Muon_PfNeutralHadronIsoR04[i_mu] + ntuple->Muon_PfGammaIsoR04[i_mu] - 0.5*ntuple->Muon_PFSumPUIsoR04[i_mu]))
+                                 / ntuple->Muon_pT[i_mu];
+                        cout << "  isTight=" << ntuple->Muon_passTightID[i_mu] << "  PFiso=" << PFiso << endl;
+                    }
+                }
+
+                // -- Positive/Negative Gen-weights -- //
+                ntuple->GENEvt_weight < 0 ? gen_weight = -1 : gen_weight = 1;
+                SumWeight += gen_weight;
+                SumWeightRaw += ntuple->GENEvt_weight;
+
+                // -- Separate DYLL samples -- //
+                Bool_t GenFlag = kFALSE;
+                GenFlag = analyzer->SeparateDYLLSample_isHardProcess(Mgr.Tag[i_tup], ntuple);
+
+                // -- Get GenTopCollection -- //
+                Bool_t GenFlag_top = kFALSE;
+                vector<GenOthers> GenTopCollection;
+                GenFlag_top = analyzer->Separate_ttbarSample(Mgr.Tag[i_tup], ntuple, &GenTopCollection);
+
+                if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += gen_weight;
+
+                Bool_t TriggerFlag = kTRUE;
+                TriggerFlag = ntuple->isTriggered(analyzer->HLT);
+
+                if (TriggerFlag == kTRUE && GenFlag == kTRUE && GenFlag_top == kTRUE)
+                {
+                    if (Debug == kTRUE)
+                        cout << "PASS" << endl;
+                    // -- Reco level selection -- //
+                    vector< Muon > MuonCollection;
+                    Int_t NLeptons = ntuple->nMuon;
+                    for (Int_t i_reco=0; i_reco<NLeptons; i_reco++)
+                    {
+                        Muon mu;
+                        mu.FillFromNtuple(ntuple, i_reco);
+
+                        // -- Rochester correction -- //
+                        Double_t rndm[2], SF=0; r1->RndmArray(2, rndm);
+                        Int_t s, m;
+                        if(Mgr.isMC == kFALSE)
+                            SF = rc.kScaleDT(mu.charge, mu.Pt, mu.eta, mu.phi, s=0, m=0);
+                        else
+                        {
+                            Double_t genPt = analyzer->GenMuonPt("finalState_OR_hadronDecay", ntuple, mu);
+                            if (genPt > 0)
+                                SF = rc.kScaleFromGenMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, genPt, rndm[0], s=0, m=0);
+                            else
+                                SF = rc.kScaleAndSmearMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, rndm[0], rndm[1], s=0, m=0);
+                            if (mu.Pt != mu.Pt || SF != SF || SF*mu.Pt != SF*mu.Pt)
+                                cout << "\nGenPt: " << genPt << "  Pt: " << mu.Pt << "  Corr Pt: " << SF*mu.Pt << "  multiplier: " << SF
+                                     << "\nEta: " << mu.eta << "   Phi: " << mu.phi << "  Charge: " << mu.charge << "\ntrLayers: " << mu.trackerLayers
+                                     << "  PFiso: " << mu.relPFiso << endl;
+                        }
+                        mu.Pt = SF*mu.Pt;
+                        mu.Momentum.SetPtEtaPhiM(mu.Pt, mu.eta, mu.phi, M_Mu);
+
+                        MuonCollection.push_back(mu);
+
+                    } // End of i_reco iteration
+                    if (Debug == kTRUE) cout << "Muons in collection: " << MuonCollection.size() << endl;
+
+                    // -- Event Selection -- //
+                    vector< Muon > SelectedMuonCollection;
+                    Bool_t isPassEventSelection = kFALSE;
+                    isPassEventSelection = analyzer->EventSelection_PR(MuonCollection, ntuple, &SelectedMuonCollection);
+
+                    if (isPassEventSelection == kTRUE)
+                    {
+                        if (Debug == kTRUE) cout << "Selection passed" << endl;
+                        p_T->clear();
+                        eta->clear();
+                        phi->clear();
+                        charge->clear();
+                        relPFiso->clear();
+                        TRKiso->clear();
+                        trig_name->clear();
+                        trig_fired->clear();
+                        trig_matched->clear();
+                        trig_pT->clear();
+                        prescale_factor->clear();
+
+                        // -- Top pT reweighting -- //
+                        top_weight = 1;
+                        if (Mgr.Tag[i_tup].Contains("ttbar"))
+                        {
+                            Double_t SF0 = exp(0.0615 - (0.0005 * GenTopCollection[0].Pt));
+                            Double_t SF1 = exp(0.0615 - (0.0005 * GenTopCollection[1].Pt));
+                            top_weight = sqrt(SF0 * SF1);
+                        }
+
+                        // -- Information for various other reweightings -- //
+                        runNum = ntuple->runNum;
+                        lumiBlock = ntuple->lumiBlock;
+                        nPU = ntuple->nPileUp;
+                        nVTX = ntuple->nVertices;
+                        PVz = ntuple->PVz;
+                        prefiring_weight = ntuple->_prefiringweight;
+                        prefiring_weight_up = ntuple->_prefiringweightup;
+                        prefiring_weight_down = ntuple->_prefiringweightdown;
+
+                        Int_t triggered = 0;
+                        triggered = analyzer->FindTriggerAndPrescale2(SelectedMuonCollection, ntuple, trig_name, trig_fired, prescale_factor,
+                                                                      trig_matched, trig_pT, Debug);
+                        if (Debug == kTRUE) cout << "triggered=" << triggered << endl;
+                        if (!triggered) continue;
+                        timesPassed++;
+
+                        // -- Vector filling -- //
+                        for (UInt_t i=0; i<SelectedMuonCollection.size(); i++)
+                        {
+                            p_T->push_back(SelectedMuonCollection[i].Pt);
+                            eta->push_back(SelectedMuonCollection[i].eta);
+                            phi->push_back(SelectedMuonCollection[i].phi);
+                            charge->push_back(SelectedMuonCollection[i].charge);
+                            relPFiso->push_back(SelectedMuonCollection[i].RelPFIso_dBeta);
+                            TRKiso->push_back(SelectedMuonCollection[i].trkiso);
+                        }
+                        MuonTree->Fill();
+                    } // End of isPassEvtSelection
+
+                } // End of if(isTriggered)
+
+            } // End of event iteration
+            cout << "\t" << timesPassed << " events have passed the event selection." << endl;
+
+            if (Mgr.isMC == kTRUE)
+            {
+                printf("\tTotal sum of weights: %.1lf\n", SumWeight);
+                printf("\tSum of weights of Separated events: %.1lf\n", SumWeight_Separated);
+                printf("\tSum of unchanged (to 1 or -1) weights: %.1lf\n", SumWeightRaw);
+                printf("\tNormalization factor: %.8f\n", L*Mgr.Xsec[i_tup]/Mgr.Wsum[i_tup]);
+            }
+
+            Double_t LoopRunTime = looptime.CpuTime();
+            cout << "\tLoop RunTime(" << Mgr.Tag[i_tup] << "): " << LoopRunTime << " seconds\n" << endl;
+
+        } // End of i_tup iteration
+
+        // Writing
+        cout << "Writing into files...";
+        MuonFile->cd();
+        Int_t write;
+        write = MuonTree->Write();
+
+        TString addition = "";
+        if (Debug == kTRUE) addition = "_DEBUG";
+        if (write)
+        {
+            cout << " Tree writing finished." << endl << "Closing a file..." << endl;
+            MuonFile->Close();
+            if (!MuonFile->IsOpen()) cout << "File SelectedForPR_Mu_" << Mgr.Procname[Mgr.CurrentProc]+addition << ".root has been closed successfully.\n" << endl;
+            else cout << "FILE SelectedForPR_Mu_" << Mgr.Procname[Mgr.CurrentProc]+addition << ".root COULD NOT BE CLOSED!\n" << endl;
+        }
+        else
+        {
+            cout << " Writing was NOT successful!" << endl;
+            MuonFile->Close();
+        }
+        cout << "===========================================================\n" << endl;
+
+    } // End of i_proc iteration
+
+    Double_t TotalRunTime = totaltime.CpuTime();
+    cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
+
+    TTimeStamp ts_end;
+    cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
+
+} // End of MakeSelectionForPR_Mu
 
 
 void CountObjectsInAcceptance (TString type, TString HLTname , Bool_t Debug)

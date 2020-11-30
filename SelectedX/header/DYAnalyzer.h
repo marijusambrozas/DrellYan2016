@@ -20,8 +20,8 @@
 #define nMassBin2 86
 #define nPtBinEndcap 9//8
 #define nPtBinBarrel 18//16
-#define nPtBin_ele 22
-#define nPtBin_DY 10
+#define nPtBin_ele 16
+#define nPtBin_DY 16
 #define nPtBin_ele_alt 5
 
 class DYAnalyzer
@@ -111,23 +111,36 @@ public:
         const double ptbin_endcap[nPtBinEndcap+1] = {52,60,70,80,90,100,150,200,500,1000};
         Double_t FR_barrel[nPtBinBarrel];
         Double_t FR_endcap[nPtBinEndcap];
-        const double ptbin_ele[nPtBin_ele+1] = {25,30,35,40,45,50,55,60,70,80,90,100,120,140,160,175,200,250,300,400,500,800,5000};
+        const double ptbin_ele[nPtBin_ele+1] = {25,30,35,40,45,50,60,70,80,100,120,150,200,300,400,500,5000};
         Double_t FR_barrel_ele[nPtBin_ele];
         Double_t FR_endcap_ele[nPtBin_ele];
-        const double ptbin_ele_alt[nPtBin_ele_alt+1] = {15, 20, 30, 50, 100, 10000};
+        Double_t FR_endcap2_ele[nPtBin_ele];
+        const double ptbin_ele_alt[nPtBin_ele_alt+1] = {15, 20, 30, 50, 90, 5000};
         Double_t FR_barrel_ele_alt[nPtBin_ele_alt];
         Double_t FR_endcap_ele_alt[nPtBin_ele_alt];
         Double_t FR_barrel_ele_alt_lead[nPtBin_DY];
         Double_t FR_endcap_ele_alt_lead[nPtBin_DY];
         Double_t FR_barrel_ele_alt_sub[nPtBin_DY];
         Double_t FR_endcap_ele_alt_sub[nPtBin_DY];
+        std::vector<TF1> FRfit_barrel_ele;
+        std::vector<TF1> FRfit_endcap_ele;
+        std::vector<TF1> FRfit_endcap2_ele;
+        std::vector<double> FR_func_bins_barrel_ele;
+        std::vector<double> FR_func_bins_endcap_ele;
+        std::vector<double> FR_func_bins_endcap2_ele;
 
         const double prescales[8] = {0.0016/36.47, 0.0066/36.47, 0.0132/36.47, 0.0264/36.47, 0.13/36.47, 0.26/36.47, 0.54/36.47, 1};        
 
-        const double ptbin_DY[nPtBin_DY+1] = {17, 23, 28, 35, 45, 60, 80, 100, 150, 250, 5000};
+        const double ptbin_DY[nPtBin_DY+1] = {17,20,23,26,29,32,35,40,45,50,60,70,80,110,130,200,5000};
         Double_t Eff_DY[nPtBin_DY][2];
         Double_t Ineff_DY[nPtBin_DY][2];
-        Double_t PR_ele[nPtBin_DY][2];
+        Double_t PR_ele[nPtBin_DY][3];
+        std::vector<TF1> PRfit_barrel_ele;
+        std::vector<TF1> PRfit_endcap_ele;
+        std::vector<TF1> PRfit_endcap2_ele;
+        std::vector<double> PR_func_bins_barrel_ele;
+        std::vector<double> PR_func_bins_endcap_ele;
+        std::vector<double> PR_func_bins_endcap2_ele;
 
         // -- Constructor -- //
 	DYAnalyzer(TString HLTname);
@@ -275,6 +288,7 @@ public:
 
         // -- Fake Rate method -- //
         Bool_t EventSelection_FR(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection_nume, vector<Muon> *SelectedMuonCollection_deno); // -- output: muons passing numerator and denominator selection -- //
+        Bool_t EventSelection_PR(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection);
         Bool_t EventSelection_FRdijetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection_fail); // -- output: two muons passing regular selection but failing isolation requirements-- //
         Bool_t EventSelection_FRsingleJetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple,  vector<Muon> *SelectedMuonCollection); // -- output: one muon passing full regular selection and another one passing the same selection but failing isolation requirements-- //
         Bool_t EventSelection_FakeMuons(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon> *SelectedMuonCollection); // -- output: two muons passing regular selection but failing isolation requirements (at least one) -- //
@@ -294,15 +308,24 @@ public:
         Double_t getPrescale(Double_t Et);
         Double_t getPrescale_alt(Double_t Et);
         void SetupFRvalues_ele(TString filename, TString type="subtract", Int_t increaseLowPt=0);
+        void SetupFRvalues_ele_old(TString filename, TString type="subtract", Int_t increaseLowPt=0);
         void SetupFRvalues_ele_alt(TString filename, TString type="subtract", Int_t increaseLowPt=0);
+        void SetupFRvalues_ele_fit(TString filename, Int_t relaxedFR=1);
         Double_t FakeRate_ele(Double_t p_T, Double_t eta);
+        Double_t FakeRate_ele_fit(Double_t p_T, Double_t eta);
+        Double_t FakeRate_ele_old(Double_t p_T, Double_t eta);
         Double_t FakeRate_ele_alt_lead(Double_t p_T, Double_t eta);
         Double_t FakeRate_ele_alt_sub(Double_t p_T, Double_t eta);
         void SetupDYeff();
         Double_t DYeff_evtWeight(Double_t pT1, Double_t eta1, Int_t passMediumID1, Double_t pT2, Double_t eta2, Int_t passMediumID2);
         void SetupPRvalues_ele(TString filename, TString type="subtract", Int_t increaseLowPt=0);
+        void SetupPRvalues_ele_old(TString filename, TString type="subtract", Int_t increaseLowPt=0);
+        void SetupPRvalues_ele_fit(TString filename);
         Double_t PromptRate_ele(Double_t p_T, Double_t eta);
+        Double_t PromptRate_ele_fit(Double_t p_T, Double_t eta);
+        Double_t PromptRate_ele_old(Double_t p_T, Double_t eta);
         std::vector<double> MatrixMethod_evtWeight(Double_t pT1, Double_t eta1, Int_t passMediumID1, Double_t pT2, Double_t eta2, Int_t passMediumID2);
+        std::vector<double> MatrixMethod_evtWeight_fit(Double_t pT1, Double_t eta1, Int_t passMediumID1, Double_t pT2, Double_t eta2, Int_t passMediumID2);
 
 	// -- pre-FSR functions -- //
 	void PostToPreFSR_byDressedLepton(NtupleHandle *ntuple, GenLepton *genlep_postFSR, Double_t dRCut, GenLepton *genlep_preFSR, vector< GenOthers >* GenPhotonCollection);
@@ -403,7 +426,7 @@ void DYAnalyzer::AssignAccThreshold(TString HLTname, TString *HLT, Double_t *Lea
 	{
 		*HLT = "HLT_Mu50_v*";
                 *LeadPtCut = 52;
-                *SubPtCut = 0;
+                *SubPtCut = 17;
 		*LeadEtaCut = 2.4;
 		*SubEtaCut = 2.4;
 	}
@@ -6238,6 +6261,138 @@ Bool_t DYAnalyzer::EventSelection_FR(vector<Muon> MuonCollection, NtupleHandle *
 } // End of EventSelection_FR()
 
 
+Bool_t DYAnalyzer::EventSelection_PR(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon>* SelectedMuonCollection)
+{
+    Bool_t isPassEventSelection = kFALSE;
+
+    //Collect qualified muons among muons
+    vector< Muon > QMuonCollection;
+    for(Int_t j=0; j<(int)MuonCollection.size(); j++)
+    {
+        if(MuonCollection[j].passTightID)
+            QMuonCollection.push_back(MuonCollection[j]);
+    }
+
+    // -- Check the existence of at least one muon matched with HLT-object -- //
+    Bool_t isExistHLTMatchedMuon = kFALSE;
+    for(Int_t i_mu=0; i_mu<(Int_t)QMuonCollection.size(); i_mu++)
+    {
+            Muon mu = QMuonCollection[i_mu];
+            if(mu.isTrigMatched(ntuple, "HLT_Mu50_v*"))
+            {
+                    isExistHLTMatchedMuon = kTRUE;
+                    break;
+            }
+    }
+
+    if(isExistHLTMatchedMuon == kTRUE)
+    {
+            Int_t nQMuons = (Int_t)QMuonCollection.size();
+            if(nQMuons == 2)
+            {
+                    Muon recolep1 = QMuonCollection[0];
+                    Muon recolep2 = QMuonCollection[1];
+
+                    // -- Check the Accpetance -- //
+                    Bool_t isPassAcc = kFALSE;
+                    isPassAcc = isPassAccCondition_Muon(recolep1, recolep2);
+
+                    Double_t reco_M = (recolep1.Momentum + recolep2.Momentum).M();
+
+                    Double_t VtxProb = -999;
+                    Double_t VtxNormChi2 = 999;
+                    DimuonVertexProbNormChi2(ntuple, recolep1.Inner_pT, recolep2.Inner_pT, &VtxProb, &VtxNormChi2);
+
+                    TLorentzVector inner_v1 = recolep1.Momentum_Inner;
+                    TLorentzVector inner_v2 = recolep2.Momentum_Inner;
+
+                    // -- 3D open angle -- //
+                    Double_t Angle = recolep1.Momentum.Angle(recolep2.Momentum.Vect());
+
+                    Bool_t isOS = kFALSE;
+                    if(recolep1.charge != recolep2.charge) isOS = kTRUE;
+
+                    if(reco_M > 10 && isPassAcc == kTRUE && VtxNormChi2 < 20 && Angle < TMath::Pi() - 0.005 && isOS == kTRUE)
+                    {
+                            isPassEventSelection = kTRUE;
+                            SelectedMuonCollection->push_back(recolep1);
+                            SelectedMuonCollection->push_back(recolep2);
+                    }
+            }
+            else if(nQMuons > 2)
+            {
+                    Double_t VtxProb_BestPair = -1;
+                    Double_t VtxNormChi2_BestPair = 999;
+                    Muon mu1_BestPair;
+                    Muon mu2_BestPair;
+
+                    for(Int_t i_mu=0; i_mu<nQMuons; i_mu++)
+                    {
+                            Muon Mu = QMuonCollection[i_mu];
+
+                            // -- at least 1 muon should be matched with HLT objects in best pair -- //
+                            if(Mu.isTrigMatched(ntuple, "HLT_Mu50_v*"))
+                            {
+                                    // -- Mu in this loop: QMuon Matched with HLT object -- //
+
+                                    // -- Start another loop for finding second muon (for second muon, we don't need to check trigger matching) -- //
+                                    for(Int_t j_mu=0; j_mu<nQMuons; j_mu++)
+                                    {
+                                            Muon Mu_jth = QMuonCollection[j_mu];
+
+                                            if(j_mu != i_mu) // -- do not calculate vertex variables(prob, chi2). with itself -- //
+                                            {
+                                                    // -- Check that this pair is within acceptance -- //
+                                                    Bool_t isPassAcc = kFALSE;
+                                                    isPassAcc = isPassAccCondition_Muon(Mu, Mu_jth);
+
+                                                    if(isPassAcc == kTRUE) // -- Find best pair ONLY for the pairs within acceptance -- //
+                                                    {
+                                                            Double_t VtxProb_temp = -999;
+                                                            Double_t VtxNormChi2_temp = 999;
+                                                            DimuonVertexProbNormChi2(ntuple, Mu.Inner_pT, Mu_jth.Inner_pT, &VtxProb_temp, &VtxNormChi2_temp);
+
+                                                            // -- Find best pair by selecting smallest Chi2/dnof(VTX) value -- //
+                                                            if(VtxNormChi2_temp < VtxNormChi2_BestPair)
+                                                            {
+                                                                    VtxNormChi2_BestPair = VtxNormChi2_temp;
+                                                                    mu1_BestPair = Mu;
+                                                                    mu2_BestPair = Mu_jth;
+                                                            }
+                                                    }
+                                            }
+                                    } // -- end of the loop for j_mu (finding for second muon)
+                            }
+                    } // -- end of the loop for i_mu (finding for the first muon matched with HLT matching)
+
+                    if(VtxNormChi2_BestPair < 999) // -- If at least one pair within acceptance & with at least one muon matched with HLT object exists -- //
+                    {
+                            TLorentzVector reco_v1 = mu1_BestPair.Momentum;
+                            TLorentzVector reco_v2 = mu2_BestPair.Momentum;
+                            Double_t reco_M = (reco_v1 + reco_v2).M();
+
+                            // -- 3D open angle is calculated using inner track information -- //
+                            // -- 3D open angle -- //
+                            Double_t Angle = reco_v1.Angle(reco_v2.Vect());
+
+                            Bool_t isOS = kFALSE;
+                            if(mu1_BestPair.charge != mu2_BestPair.charge) isOS = kTRUE;
+
+                            if(reco_M > 10 && VtxNormChi2_BestPair < 20 && Angle < TMath::Pi() - 0.005 && isOS == kTRUE)
+                            {
+                                    isPassEventSelection = kTRUE;
+                                    SelectedMuonCollection->push_back(mu1_BestPair);
+                                    SelectedMuonCollection->push_back(mu2_BestPair);
+                            }
+                    }
+
+            } // -- End of else if(nQMuons > 2) -- //
+
+    } // -- End of if(isExistHLTMatchedMuon == kTRUE) -- //
+
+    return isPassEventSelection;
+} // End of EventSelection_PR()
+
 
 Bool_t DYAnalyzer::EventSelection_FRdijetEst(vector<Muon> MuonCollection, NtupleHandle *ntuple, vector<Muon>* SelectedMuonCollection_fail)
 {
@@ -6703,7 +6858,146 @@ void DYAnalyzer::SetupFRvalues(TString filename, TString type) // type can be "r
 } // End of SetupFRvalues()
 
 
+void DYAnalyzer::SetupFRvalues_ele_fit(TString filename, Int_t relaxedFR)
+{
+    // -- Setting up -- //
+    std::cout << "Setting up fake rate values from " << filename << endl;
+    TFile *f = new TFile(filename, "READ");
+    TF1 *f1_temp;
+    FR_func_bins_barrel_ele.push_back(17);
+    f->GetObject("f_barrel_25to38", f1_temp);
+    FRfit_barrel_ele.push_back(*f1_temp);
+    FR_func_bins_barrel_ele.push_back(38);
+    f->GetObject("f_barrel_38to180", f1_temp);
+    FRfit_barrel_ele.push_back(*f1_temp);
+    FR_func_bins_barrel_ele.push_back(180);
+    f->GetObject("f_barrel_180to350", f1_temp);
+    FRfit_barrel_ele.push_back(*f1_temp);
+    FR_func_bins_barrel_ele.push_back(350);
+    f->GetObject("f_barrel_350to5000", f1_temp);
+    FRfit_barrel_ele.push_back(*f1_temp);
+    FR_func_bins_barrel_ele.push_back(5000);
+
+    FR_func_bins_endcap_ele.push_back(17);
+    f->GetObject("f_endcap_25to108", f1_temp);
+    FRfit_endcap_ele.push_back(*f1_temp);
+    FR_func_bins_endcap_ele.push_back(108);
+    f->GetObject("f_endcap_108to350", f1_temp);
+    FRfit_endcap_ele.push_back(*f1_temp);
+    FR_func_bins_endcap_ele.push_back(350);
+    f->GetObject("f_endcap_350to5000", f1_temp);
+    FRfit_endcap_ele.push_back(*f1_temp);
+    FR_func_bins_endcap_ele.push_back(5000);
+
+    FR_func_bins_endcap2_ele.push_back(17);
+    f->GetObject("f_endcap2_25to200", f1_temp);
+    FRfit_endcap2_ele.push_back(*f1_temp);
+    FR_func_bins_endcap2_ele.push_back(200);
+    f->GetObject("f_endcap2_200to350", f1_temp);
+    FRfit_endcap2_ele.push_back(*f1_temp);
+    FR_func_bins_endcap2_ele.push_back(350);
+    f->GetObject("f_endcap2_350to5000", f1_temp);
+    FRfit_endcap2_ele.push_back(*f1_temp);
+    FR_func_bins_endcap2_ele.push_back(5000);
+
+    if (FR_func_bins_barrel_ele.size() != FRfit_barrel_ele.size()+1)
+        cout << "ERROR: vector sizes in barrel do not match!\n  Function bins vec size = " << FR_func_bins_barrel_ele.size() <<
+                "\n  Functions vector size = " << FRfit_barrel_ele.size() << endl;
+    if (FR_func_bins_endcap_ele.size() != FRfit_endcap_ele.size()+1)
+        cout << "ERROR: vector sizes in endcap do not match!\n  Function bins vec size = " << FR_func_bins_endcap_ele.size() <<
+                "\n  Functions vector size = " << FRfit_endcap_ele.size() << endl;
+    if (FR_func_bins_endcap2_ele.size() != FRfit_endcap2_ele.size()+1)
+        cout << "ERROR: vector sizes in far endcap do not match!\n  Function bins vec size = " << FR_func_bins_endcap2_ele.size() <<
+                "\n  Functions vector size = " << FRfit_endcap2_ele.size() << endl;
+
+    f->Close();
+    std::cout << "Setup finished." << endl;
+
+} // End of SetupFRvalues_ele_fit()
+
+
 void DYAnalyzer::SetupFRvalues_ele(TString filename, TString type, Int_t increaseLowPt) // type can be "ratio", "template"
+{
+    // -- Setting up -- //
+    std::cout << "Setting up fake rate values from " << filename << endl;
+    std::cout << "Fake rate obtained using " << type << " method." << endl;
+    TFile *f = new TFile(filename, "READ");
+    TH1D *h_FR_barrel, *h_FR_endcap, *h_FR_endcap2;
+    f->GetObject("h_FR"+type+"_barrel", h_FR_barrel);  // +"up"  +"down"
+    f->GetObject("h_FR"+type+"_endcap", h_FR_endcap);  // +"up"  +"down"
+    f->GetObject("h_FR"+type+"_endcap2", h_FR_endcap2);  // +"up"  +"down"
+    Int_t nProblem = 0;
+
+    // -- Getting values from histograms -- //
+    for (Int_t i_bin=1; i_bin<=nPtBin_ele; i_bin++)
+    {
+        FR_barrel_ele[i_bin-1] = h_FR_barrel->GetBinContent(i_bin);
+        if (FR_barrel_ele[i_bin-1] > 1)
+        {
+            nProblem++;
+            std::cout << i_bin-1 << "  " << FR_barrel_ele[i_bin-1] << endl;
+            FR_barrel_ele[i_bin-1] = 1;
+        }
+        else if (FR_barrel_ele[i_bin-1] < 0)
+        {
+            FR_barrel_ele[i_bin-1] = 0;
+            std::cout << i_bin-1 << "  " << FR_barrel_ele[i_bin-1] << endl;
+            FR_barrel_ele[i_bin-1] = 1;
+        }
+        if (i_bin <= nPtBin_ele)
+        {
+            FR_endcap_ele[i_bin-1] = h_FR_endcap->GetBinContent(i_bin); // Original FR
+            if (FR_endcap_ele[i_bin-1] > 1)
+            {
+                nProblem++;
+                std::cout << i_bin-1 << "  " << FR_endcap_ele[i_bin-1] << endl;
+                FR_endcap_ele[i_bin-1] = 1;
+            }
+            if (FR_endcap_ele[i_bin-1] < 0)
+            {
+                nProblem++;
+                std::cout << i_bin-1 << "  " << FR_endcap_ele[i_bin-1] << endl;
+                FR_endcap_ele[i_bin-1] = 0;
+            }
+
+            FR_endcap2_ele[i_bin-1] = h_FR_endcap2->GetBinContent(i_bin); // Original FR
+            if (FR_endcap2_ele[i_bin-1] > 1)
+            {
+                nProblem++;
+                std::cout << i_bin-1 << "  " << FR_endcap2_ele[i_bin-1] << endl;
+                FR_endcap2_ele[i_bin-1] = 1;
+            }
+            if (FR_endcap2_ele[i_bin-1] < 0)
+            {
+                nProblem++;
+                std::cout << i_bin-1 << "  " << FR_endcap2_ele[i_bin-1] << endl;
+                FR_endcap2_ele[i_bin-1] = 0;
+            }
+        }
+    }
+    if (increaseLowPt == 1)
+    {
+        FR_barrel_ele[0] = h_FR_barrel->GetBinContent(1) + h_FR_barrel->GetBinError(1);
+        FR_barrel_ele[1] = h_FR_barrel->GetBinContent(2) + h_FR_barrel->GetBinError(2);
+        FR_barrel_ele[2] = h_FR_barrel->GetBinContent(3) + h_FR_barrel->GetBinError(3);
+        FR_endcap_ele[0] = h_FR_endcap->GetBinContent(1) + h_FR_endcap->GetBinError(1);
+        FR_endcap_ele[1] = h_FR_endcap->GetBinContent(2) + h_FR_endcap->GetBinError(2);
+        FR_endcap_ele[2] = h_FR_endcap->GetBinContent(3) + h_FR_endcap->GetBinError(3);
+        FR_endcap2_ele[0] = h_FR_endcap2->GetBinContent(1) + h_FR_endcap2->GetBinError(1);
+        FR_endcap2_ele[1] = h_FR_endcap2->GetBinContent(2) + h_FR_endcap2->GetBinError(2);
+        FR_endcap2_ele[2] = h_FR_endcap2->GetBinContent(3) + h_FR_endcap2->GetBinError(3);
+    }
+
+    if (nProblem)
+        std::cout << "**************************************************\n" <<
+                     "Problems were detected: fake rate values exceeding 'regular' probability boundaries have been found.\n" <<
+                     "Please check the code.\n**************************************************" << endl;
+    else std::cout << "Fake rates have been set up successfully." << endl;
+    return;
+} // End of SetupFRvalues_ele()
+
+
+void DYAnalyzer::SetupFRvalues_ele_old(TString filename, TString type, Int_t increaseLowPt) // type can be "ratio", "template"
 {
     // -- Setting up -- //
     std::cout << "Setting up fake rate values from " << filename << endl;
@@ -6747,7 +7041,7 @@ void DYAnalyzer::SetupFRvalues_ele(TString filename, TString type, Int_t increas
                      "Please check the code.\n**************************************************" << endl;
     else std::cout << "Fake rates have been set up successfully." << endl;
     return;
-} // End of SetupFRvalues_ele()
+} // End of SetupFRvalues_ele_old()
 
 
 void DYAnalyzer::SetupFRvalues_ele_alt(TString filename, TString type, Int_t increaseLowPt) // type can be "ratio", "template"
@@ -6853,7 +7147,89 @@ Double_t DYAnalyzer::FakeRate(Double_t p_T, Double_t eta)
 } // End of FakeRate()
 
 
+Double_t DYAnalyzer::FakeRate_ele_fit(Double_t p_T, Double_t eta)
+{
+    Double_t FR = -1;
+    if (fabs(eta) < 1.4442) // barrel
+    {
+        for (UInt_t i_func=0; i_func<FRfit_barrel_ele.size(); i_func++)
+        {
+            if (p_T > FR_func_bins_barrel_ele[i_func] && p_T <=  FR_func_bins_barrel_ele[i_func+1])
+            {
+                FR = FRfit_barrel_ele[i_func].Eval(p_T, 0, 0);
+                break;
+            }
+        }
+    }
+    else if (fabs(eta) > 1.566 && fabs(eta) < 2.2) // endcap
+    {
+        for (UInt_t i_func=0; i_func<FRfit_endcap_ele.size(); i_func++)
+        {
+            if (p_T > FR_func_bins_endcap_ele[i_func] && p_T <=  FR_func_bins_endcap_ele[i_func+1])
+            {
+                FR = FRfit_endcap_ele[i_func].Eval(p_T, 0, 0);
+                break;
+            }
+        }
+    }
+    else if (fabs(eta) >= 2.2 && fabs(eta) < 2.4) // far endcap
+    {
+        for (UInt_t i_func=0; i_func<FRfit_endcap2_ele.size(); i_func++)
+        {
+            if (p_T > FR_func_bins_endcap2_ele[i_func] && p_T <=  FR_func_bins_endcap2_ele[i_func+1])
+            {
+                FR = FRfit_endcap2_ele[i_func].Eval(p_T, 0, 0);
+                break;
+            }
+        }
+    }
+    if (FR == -1) cout << "FR = -1;  p_T = " << p_T <<";  eta = " << eta << endl;
+    return FR;
+} // End of FakeRate_ele_fit()
+
+
 Double_t DYAnalyzer::FakeRate_ele(Double_t p_T, Double_t eta)
+{
+    Int_t i_bin = 0;
+    Int_t stop = 0;
+    if (fabs(eta) < 1.4442) // barrel
+    {
+        while (!stop)
+        {
+            if (p_T < ptbin_ele[i_bin + 1] || i_bin >= nPtBin_ele-1) // Points exceeding boundaries are assigned last available FR value
+                stop = 1;
+            else
+                i_bin++;
+        }
+        return FR_barrel_ele[i_bin];
+    }
+    else if (fabs(eta) > 1.566 && fabs(eta) < 2.2) // endcap
+    {
+        while (!stop)
+        {
+            if (p_T < ptbin_ele[i_bin + 1] || i_bin >= nPtBin_ele-1) // Points exceeding boundaries are assigned last available FR value
+                stop = 1;
+            else
+                i_bin++;
+        }
+        return FR_endcap_ele[i_bin];
+    }
+    else if (fabs(eta) >= 2.2 && fabs(eta) < 2.4) // far endcap
+    {
+        while (!stop)
+        {
+            if (p_T < ptbin_ele[i_bin + 1] || i_bin >= nPtBin_ele-1) // Points exceeding boundaries are assigned last available FR value
+                stop = 1;
+            else
+                i_bin++;
+        }
+        return FR_endcap2_ele[i_bin];
+    }
+    return -1;
+} // End of FakeRate_ele()
+
+
+Double_t DYAnalyzer::FakeRate_ele_old(Double_t p_T, Double_t eta)
 {
     Int_t i_bin = 0;
     Int_t stop = 0;
@@ -6880,7 +7256,7 @@ Double_t DYAnalyzer::FakeRate_ele(Double_t p_T, Double_t eta)
         return FR_endcap_ele[i_bin];
     }
     return 0;
-} // End of FakeRate_ele()
+} // End of FakeRate_ele_old()
 
 
 Double_t DYAnalyzer::FakeRate_ele_alt_lead(Double_t p_T, Double_t eta)
@@ -7400,23 +7776,21 @@ Int_t DYAnalyzer::FindTriggerAndPrescale2(vector<Muon> MuonCollection, NtupleHan
         Muon mu = MuonCollection[i_mu];
         for (Int_t i_trig=0; i_trig<ntuple->HLT_ntrig; i_trig++)
         {
+            if (!(HLT_trigName->at(i_trig).Contains("HLT_Mu50_v"))) continue;
             if (Debug) cout << "Trigger " << i_trig << ": " << ntuple->HLT_trigName->at((unsigned int)i_trig) <<
                                "    pT: " << mu.Pt << "   HLT pT: " << ntuple->HLT_trigPt[i_trig] << endl;
 
             Double_t dR = sqrt((mu.eta - ntuple->HLT_trigEta[i_trig])*(mu.eta - ntuple->HLT_trigEta[i_trig]) +
                                (mu.phi - ntuple->HLT_trigPhi[i_trig])*(mu.phi - ntuple->HLT_trigPhi[i_trig]));
-            Double_t dpT = fabs(mu.Pt - ntuple->HLT_trigPt[i_trig]) / ntuple->HLT_trigPt[i_trig];
             if(dR < 0.3 && fabs(mu.eta) < 2.5)
             {
-                if (dpT < 0.3)
-                {
-                    triggered = 1;
-                    trig_name->push_back(ntuple->HLT_trigName->at(i_trig));
-                    trig_fired->push_back(1);
-                    trig_matched->push_back(i_mu);
-                    trig_pT->push_back(ntuple->HLT_trigPt[i_trig]);
-                    trig_PS->push_back(ntuple->HLT_trigPS->at(i_trig));
-                }
+                triggered = 1;
+                trig_name->push_back(ntuple->HLT_trigName->at(i_trig));
+                trig_fired->push_back(1);
+
+                trig_matched->push_back(i_mu);
+                trig_pT->push_back(ntuple->HLT_trigPt[i_trig]);
+                trig_PS->push_back(ntuple->HLT_trigPS->at(i_trig));
             }
         }
     }
@@ -7490,7 +7864,127 @@ void DYAnalyzer::SetupDYeff()
 } // End of SetupDYeff()
 
 
+void DYAnalyzer::SetupPRvalues_ele_fit(TString filename)
+{
+    // -- Setting up -- //
+    std::cout << "Setting up prompt rate values from " << filename << endl;
+    TFile *f = new TFile(filename, "READ");
+    TF1 *f1_temp;
+    PR_func_bins_barrel_ele.push_back(17);
+    f->GetObject("f_barrel_17to43", f1_temp);
+    PRfit_barrel_ele.push_back(*f1_temp);
+    PR_func_bins_barrel_ele.push_back(43);
+    f->GetObject("f_barrel_43to56", f1_temp);
+    PRfit_barrel_ele.push_back(*f1_temp);
+    PR_func_bins_barrel_ele.push_back(56);
+    f->GetObject("f_barrel_56to95", f1_temp);
+    PRfit_barrel_ele.push_back(*f1_temp);
+    PR_func_bins_barrel_ele.push_back(95);
+    f->GetObject("f_barrel_95to5000", f1_temp);
+    PRfit_barrel_ele.push_back(*f1_temp);
+    PR_func_bins_barrel_ele.push_back(5000);
+
+    PR_func_bins_endcap_ele.push_back(17);
+    f->GetObject("f_endcap_17to42p5", f1_temp);
+    PRfit_endcap_ele.push_back(*f1_temp);
+    PR_func_bins_endcap_ele.push_back(42.5);
+    f->GetObject("f_endcap_42p5to55", f1_temp);
+    PRfit_endcap_ele.push_back(*f1_temp);
+    PR_func_bins_endcap_ele.push_back(55);
+    f->GetObject("f_endcap_55to5000", f1_temp);
+    PRfit_endcap_ele.push_back(*f1_temp);
+    PR_func_bins_endcap_ele.push_back(5000);
+
+    PR_func_bins_endcap2_ele.push_back(17);
+    f->GetObject("f_endcap2_17to42p5", f1_temp);
+    PRfit_endcap2_ele.push_back(*f1_temp);
+    PR_func_bins_endcap2_ele.push_back(42.5);
+    f->GetObject("f_endcap2_42p5to56", f1_temp);
+    PRfit_endcap2_ele.push_back(*f1_temp);
+    PR_func_bins_endcap2_ele.push_back(56);
+    f->GetObject("f_endcap2_56to76", f1_temp);
+    PRfit_endcap2_ele.push_back(*f1_temp);
+    PR_func_bins_endcap2_ele.push_back(76);
+    f->GetObject("f_endcap2_76to5000", f1_temp);
+    PRfit_endcap2_ele.push_back(*f1_temp);
+    PR_func_bins_endcap2_ele.push_back(5000);
+
+    if (PR_func_bins_barrel_ele.size() != PRfit_barrel_ele.size()+1)
+        cout << "ERROR: vector sizes in barrel do not match!\n  Function bins vec size = " << PR_func_bins_barrel_ele.size() <<
+                "\n  Functions vector size = " << PRfit_barrel_ele.size() << endl;
+    if (PR_func_bins_endcap_ele.size() != PRfit_endcap_ele.size()+1)
+        cout << "ERROR: vector sizes in endcap do not match!\n  Function bins vec size = " << PR_func_bins_endcap_ele.size() <<
+                "\n  Functions vector size = " << PRfit_endcap_ele.size() << endl;
+    if (PR_func_bins_endcap2_ele.size() != PRfit_endcap2_ele.size()+1)
+        cout << "ERROR: vector sizes in far endcap do not match!\n  Function bins vec size = " << PR_func_bins_endcap2_ele.size() <<
+                "\n  Functions vector size = " << PRfit_endcap2_ele.size() << endl;
+
+    f->Close();
+    std::cout << "Setup finished." << endl;
+} // End of SetupPRvalues_ele_fit()
+
+
 void DYAnalyzer::SetupPRvalues_ele(TString filename, TString type, Int_t increaseLowPt)
+{
+    cout << "Setting up PR values...";
+
+    // RECO
+    TFile *f = new TFile(filename);
+    TH1D *h_PR_barrel = (TH1D*)f->Get("h_PR_"+type+"_barrel");
+    TH1D *h_PR_endcap = (TH1D*)f->Get("h_PR_"+type+"_endcap");
+    TH1D *h_PR_endcap2 = (TH1D*)f->Get("h_PR_"+type+"_endcap2");
+    Int_t nProblems = 0;
+
+    for (Int_t i=0; i<nPtBin_DY; i++)
+    {
+        PR_ele[i][0] = h_PR_barrel->GetBinContent(i+1);
+        if (PR_ele[i][0] < 0)
+        {
+            nProblems++;
+            std::cout << i << "  " << PR_ele[i][0] << endl;
+            PR_ele[i][0] = 0;
+        }
+        if (PR_ele[i][0] > 1)
+        {
+            nProblems++;
+            std::cout << i << "  " << PR_ele[i][0] << endl;
+            PR_ele[i][0] = 1;
+        }
+
+        PR_ele[i][1] = h_PR_endcap->GetBinContent(i+1);
+        if (PR_ele[i][1] < 0)
+        {
+            nProblems++;
+            std::cout << i << "  " << PR_ele[i][1] << endl;
+            PR_ele[i][1] = 0;
+        }
+        if (PR_ele[i][1] > 1)
+        {
+            nProblems++;
+            std::cout << i << "  " << PR_ele[i][1] << endl;
+            PR_ele[i][1] = 1;
+        }
+
+        PR_ele[i][2] = h_PR_endcap2->GetBinContent(i+1);
+        if (PR_ele[i][2] < 0)
+        {
+            nProblems++;
+            std::cout << i << "  " << PR_ele[i][2] << endl;
+            PR_ele[i][2] = 0;
+        }
+        if (PR_ele[i][2] > 1)
+        {
+            nProblems++;
+            std::cout << i << "  " << PR_ele[i][2] << endl;
+            PR_ele[i][2] = 1;
+        }
+    }
+    f->Close();
+    std::cout << "done." << endl;
+} // End of SetupPRvalues_ele()
+
+
+void DYAnalyzer::SetupPRvalues_ele_old(TString filename, TString type, Int_t increaseLowPt)
 {
     cout << "Setting up PR values...";
 
@@ -7510,7 +8004,7 @@ void DYAnalyzer::SetupPRvalues_ele(TString filename, TString type, Int_t increas
     }
     f->Close();
     std::cout << "done." << endl;
-} // End of SetupPRvalues_ele()
+} // End of SetupPRvalues_ele_old()
 
 
 Double_t DYAnalyzer::DYeff_evtWeight(Double_t pT1, Double_t eta1, Int_t passMediumID1, Double_t pT2, Double_t eta2, Int_t passMediumID2)
@@ -7580,7 +8074,95 @@ Double_t DYAnalyzer::DYeff_evtWeight(Double_t pT1, Double_t eta1, Int_t passMedi
 }
 
 
+Double_t DYAnalyzer::PromptRate_ele_fit(Double_t p_T, Double_t eta)
+{
+    Double_t PR = -1;
+    if (fabs(eta) < 1.4442) // barrel
+    {
+        for (UInt_t i_func=0; i_func<PRfit_barrel_ele.size(); i_func++)
+        {
+            if (p_T > PR_func_bins_barrel_ele[i_func] && p_T <= PR_func_bins_barrel_ele[i_func+1])
+            {
+                PR = PRfit_barrel_ele[i_func].Eval(p_T, 0, 0);
+                break;
+            }
+        }
+    }
+    else if (fabs(eta) > 1.566 && fabs(eta) < 2.1) // endcap
+    {
+        for (UInt_t i_func=0; i_func<PRfit_endcap_ele.size(); i_func++)
+        {
+            if (p_T > PR_func_bins_endcap_ele[i_func] && p_T <= PR_func_bins_endcap_ele[i_func+1])
+            {
+                PR = PRfit_endcap_ele[i_func].Eval(p_T, 0, 0);
+                break;
+            }
+        }
+    }
+    else if (fabs(eta) >= 2.1 && fabs(eta) < 2.4) // far endcap
+    {
+        for (UInt_t i_func=0; i_func<PRfit_endcap2_ele.size(); i_func++)        {
+            if (p_T > PR_func_bins_endcap2_ele[i_func] && p_T <= PR_func_bins_endcap2_ele[i_func+1])
+            {
+                PR = PRfit_endcap2_ele[i_func].Eval(p_T, 0, 0);
+                break;
+            }
+        }
+    }
+    if (PR == -1) cout << "PR = -1;  p_T = " << p_T <<";  eta = " << eta << endl;
+    return PR;
+} // End of PromptRate_ele_fit()
+
+
 Double_t DYAnalyzer::PromptRate_ele(Double_t p_T, Double_t eta)
+{
+    Double_t PR = 1;
+
+    Int_t etabin;
+    Int_t i_bin = 0;
+    Int_t stop = 0;
+    if (fabs(eta) < 1.4442) // barrel
+    {
+        etabin = 0;
+        while (!stop)
+        {
+            if (p_T < ptbin_DY[i_bin + 1] || i_bin >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available value
+                stop = 1;
+            else
+                i_bin++;
+        }
+    }
+    else if (fabs(eta) > 1.566 && fabs(eta) < 2.1) // endcap
+    {
+        etabin = 1;
+        while (!stop)
+        {
+            if (p_T < ptbin_DY[i_bin + 1] || i_bin >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available value
+                stop = 1;
+            else
+                i_bin++;
+        }
+    }
+    else if (fabs(eta) >= 2.1 && fabs(eta) < 2.4) // endcap
+    {
+        etabin = 2;
+        while (!stop)
+        {
+            if (p_T < ptbin_DY[i_bin + 1] || i_bin >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available value
+                stop = 1;
+            else
+                i_bin++;
+        }
+    }
+    else return -1;
+
+    PR = PR_ele[i_bin][etabin];
+
+    return PR;
+} // end of PromptRate_ele
+
+
+Double_t DYAnalyzer::PromptRate_ele_old(Double_t p_T, Double_t eta)
 {
     Double_t PR = 1;
 
@@ -7614,7 +8196,58 @@ Double_t DYAnalyzer::PromptRate_ele(Double_t p_T, Double_t eta)
     PR = PR_ele[i_bin][etabin];
 
     return PR;
-} // end of PromptRate_ele
+} // end of PromptRate_ele_old
+
+
+std::vector<double> DYAnalyzer::MatrixMethod_evtWeight_fit(Double_t pT1, Double_t eta1, Int_t passMediumID1, Double_t pT2, Double_t eta2, Int_t passMediumID2)
+{
+    std::vector<double> weights(4, 1.0);
+
+    Double_t FR1 = FakeRate_ele_fit(pT1, eta1);//-0.2 < 0 ? 0 : FakeRate_ele_fit(pT1, eta1)-0.2;
+    Double_t FR2 = FakeRate_ele_fit(pT2, eta2);//-0.2 < 0 ? 0 : FakeRate_ele_fit(pT2, eta2)-0.2;
+    Double_t PR1 = PromptRate_ele_fit(pT1, eta1);//-0.2 < 0 ? 0 : PromptRate_ele_fit(pT1, eta1)-0.2;
+    Double_t PR2 = PromptRate_ele_fit(pT2, eta2);//-0.2 < 0 ? 0 : PromptRate_ele_fit(pT2, eta2)-0.2;
+
+    Double_t prefix = 1 / ((FR1 - PR1) * (FR2 - PR2));
+    if (passMediumID1 && passMediumID2)
+    {
+        weights[0] = prefix * (1 - FR1) * (1 - FR2);
+        weights[1] = prefix * (FR1 - 1) * (1 - PR2);
+        weights[2] = prefix * (PR1 - 1) * (1 - FR2);
+        weights[3] = prefix * (1 - PR1) * (1 - PR2);
+    }
+    else if (passMediumID1 && !passMediumID2)
+    {
+        weights[0] = prefix * (FR1 - 1) * FR2;
+        weights[1] = prefix * (1 - FR1) * PR2;
+        weights[2] = prefix * (1 - PR1) * FR2;
+        weights[3] = prefix * (PR1 - 1) * PR2;
+    }
+    else if (!passMediumID1 && passMediumID2)
+    {
+        weights[0] = prefix * FR1 * (FR2 - 1);
+        weights[1] = prefix * FR1 * (1 - PR2);
+        weights[2] = prefix * PR1 * (1 - FR2);
+        weights[3] = prefix * PR1 * (PR2 - 1);
+    }
+    else
+    {
+        weights[0] = prefix * FR1 * FR2;
+        weights[1] = prefix * FR1 * PR2 * (-1.0);
+        weights[2] = prefix * PR1 * FR2 * (-1.0);
+        weights[3] = prefix * PR1 * PR2;
+    }
+
+    if (weights[0] != weights[0] || weights[1] != weights[1] || weights[2] != weights[2] || weights[3] != weights[3])
+    {
+        cout << "Some of weights are NaN.\nweights[0]=" << weights[0] << " weights[1]=" << weights[1] <<
+                " weights[2]=" << weights[2] << " weights[3]=" << weights[3] <<
+                "\npT1=" << pT1 << " eta1=" << eta1 << " passID1=" << passMediumID1 << " FR1=" << FR1 << " PR1=" << PR1 <<
+                " pT2=" << pT2 << " eta2=" << eta2 << " passID2=" << passMediumID2 << " FR2=" << FR2 << " PR2=" << PR2 << endl;
+    }
+
+    return weights;
+} // end of MatrixMethod_evtWeight_fit
 
 
 std::vector<double> DYAnalyzer::MatrixMethod_evtWeight(Double_t pT1, Double_t eta1, Int_t passMediumID1, Double_t pT2, Double_t eta2, Int_t passMediumID2)
