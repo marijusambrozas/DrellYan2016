@@ -12,6 +12,8 @@
 #include <TGraphAsymmErrors.h>
 #include <TSystem.h>
 #include <iostream>
+#include <TF1.h>
+#include <vector>
 
 #define Lumi 35867 // -- from Run2016B to Run2016H, JSON. unit: /pb, Updated at 2017.07.30 -- //
 #define Lumi_BtoF 19721 // -- from Run2016B to Run2016F, JSON. unit: /pb, Updated at 2018.05.17 -- //
@@ -7156,7 +7158,7 @@ Double_t DYAnalyzer::FakeRate_ele_fit(Double_t p_T, Double_t eta)
         {
             if (p_T > FR_func_bins_barrel_ele[i_func] && p_T <=  FR_func_bins_barrel_ele[i_func+1])
             {
-                FR = FRfit_barrel_ele[i_func].Eval(p_T, 0, 0);
+                FR = FRfit_barrel_ele[i_func].Eval(p_T);
                 break;
             }
         }
@@ -7167,7 +7169,7 @@ Double_t DYAnalyzer::FakeRate_ele_fit(Double_t p_T, Double_t eta)
         {
             if (p_T > FR_func_bins_endcap_ele[i_func] && p_T <=  FR_func_bins_endcap_ele[i_func+1])
             {
-                FR = FRfit_endcap_ele[i_func].Eval(p_T, 0, 0);
+                FR = FRfit_endcap_ele[i_func].Eval(p_T);
                 break;
             }
         }
@@ -7178,7 +7180,7 @@ Double_t DYAnalyzer::FakeRate_ele_fit(Double_t p_T, Double_t eta)
         {
             if (p_T > FR_func_bins_endcap2_ele[i_func] && p_T <=  FR_func_bins_endcap2_ele[i_func+1])
             {
-                FR = FRfit_endcap2_ele[i_func].Eval(p_T, 0, 0);
+                FR = FRfit_endcap2_ele[i_func].Eval(p_T);
                 break;
             }
         }
@@ -7776,7 +7778,7 @@ Int_t DYAnalyzer::FindTriggerAndPrescale2(vector<Muon> MuonCollection, NtupleHan
         Muon mu = MuonCollection[i_mu];
         for (Int_t i_trig=0; i_trig<ntuple->HLT_ntrig; i_trig++)
         {
-            if (!(HLT_trigName->at(i_trig).Contains("HLT_Mu50_v"))) continue;
+            if (ntuple->HLT_trigName->at(i_trig) != "HLT_Mu50_v*") continue;
             if (Debug) cout << "Trigger " << i_trig << ": " << ntuple->HLT_trigName->at((unsigned int)i_trig) <<
                                "    pT: " << mu.Pt << "   HLT pT: " << ntuple->HLT_trigPt[i_trig] << endl;
 
@@ -8083,7 +8085,7 @@ Double_t DYAnalyzer::PromptRate_ele_fit(Double_t p_T, Double_t eta)
         {
             if (p_T > PR_func_bins_barrel_ele[i_func] && p_T <= PR_func_bins_barrel_ele[i_func+1])
             {
-                PR = PRfit_barrel_ele[i_func].Eval(p_T, 0, 0);
+                PR = PRfit_barrel_ele[i_func].Eval(p_T);
                 break;
             }
         }
@@ -8094,7 +8096,7 @@ Double_t DYAnalyzer::PromptRate_ele_fit(Double_t p_T, Double_t eta)
         {
             if (p_T > PR_func_bins_endcap_ele[i_func] && p_T <= PR_func_bins_endcap_ele[i_func+1])
             {
-                PR = PRfit_endcap_ele[i_func].Eval(p_T, 0, 0);
+                PR = PRfit_endcap_ele[i_func].Eval(p_T);
                 break;
             }
         }
@@ -8104,7 +8106,7 @@ Double_t DYAnalyzer::PromptRate_ele_fit(Double_t p_T, Double_t eta)
         for (UInt_t i_func=0; i_func<PRfit_endcap2_ele.size(); i_func++)        {
             if (p_T > PR_func_bins_endcap2_ele[i_func] && p_T <= PR_func_bins_endcap2_ele[i_func+1])
             {
-                PR = PRfit_endcap2_ele[i_func].Eval(p_T, 0, 0);
+                PR = PRfit_endcap2_ele[i_func].Eval(p_T);
                 break;
             }
         }
