@@ -44,6 +44,7 @@ void Mu_WJET_HistMaker (Bool_t DEBUG);
 void EMu_QCD_HistMaker (Bool_t DEBUG);
 void EMu_WJET_HistMaker (Bool_t DEBUG);
 void E_PR_HistMaker (Bool_t DEBUG); // PROMPT RATE
+void Mu_PR_HistMaker (Bool_t DEBUG);
 
 // -- Drell-Yan mass bins -- //
 const Int_t binnum = 43;
@@ -58,8 +59,10 @@ const Double_t massbins2[87] = {15, 17.5, 20, 22.5, 25, 27.5, 30, 32.5, 35, 37.5
                                 210, 220, 231.5, 243, 258, 273, 296.5, 320, 350, 380, 410, 440, 475, 510, 555, 600, 650, 700, 765, 830,
                                 915, 1000, 1250, 1500, 2250, 3000};
 
-const Double_t etabins[51] = {-2.4,-2.3,-2.2,-2.1,-2.0,-1.9,-1.8,-1.7,-1.6,-1.566,-1.4442,-1.4,-1.3,-1.2,-1.1,-1.0,-0.9,-0.8,-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,
-                              0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.4442,1.566,1.6,1.7,1.8,1.9,2.0,2.1,2.2,2.3,2.4};
+const Double_t etabins[67] = {-2.4,-2.35,-2.3,-2.25,-2.2,-2.15,-2.1,-2.05,-2.0,-1.95,-1.9,-1.85,-1.8,-1.75,-1.7,-1.65,-1.6,-1.566,
+                              -1.4442,-1.4,-1.3,-1.2,-1.1,-1.0,-0.9,-0.8,-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0.0,
+                              0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.4442,1.566,
+                              1.6,1.65,1.7,1.75,1.8,1.85,1.9,1.95,2.0,2.05,2.1,2.15,2.2,2.25,2.3,2.35,2.4};
 const Double_t etabins2[6] = {0, 0.7, 1.4442, 1.566, 2.0, 2.4};
 
 // -- RelPFiso bins for electron FR templates -- //
@@ -110,7 +113,12 @@ void FR_HistMaker (TString WhichX = "", Int_t type=1)
     else if (whichX.Contains("MU"))
     {
         Xselected++;
-        if (whichX.Contains("QCD"))
+        if (whichX.Contains("PR"))
+        {
+            cout << "\n*****  Mu_PR_HistMaker()  *****" << endl;
+            Mu_PR_HistMaker(DEBUG);
+        }
+        else if (whichX.Contains("QCD"))
         {
             cout << "\n*****  Mu_QCD_HistMaker()  *****" << endl;
             Mu_QCD_HistMaker(DEBUG);
@@ -119,7 +127,7 @@ void FR_HistMaker (TString WhichX = "", Int_t type=1)
         {
             cout << "\n*****  Mu_WJET_HistMaker()  *****" << endl;
             Mu_WJET_HistMaker(DEBUG);
-        }
+        }        
         else
         {
             cout << "\n*****  Mu_FR_HistMaker  *****" << endl;
@@ -221,88 +229,123 @@ void E_FR_HistMaker (Bool_t DEBUG)
         analyzer->SetupPVzWeights(Mgr.isMC, "ee", "./etc/PVzWeights.root");
 
         // -- Creating Histograms -- //
-        TH1D* h_pT_barrel_nume = new TH1D("h_pT_barrel_nume", "h_pT_barrel_nume", nPtBin_ele, analyzer->ptbin_ele /*250, 0, 500*/); h_pT_barrel_nume->Sumw2();
-        TH1D* h_pT_endcap_nume = new TH1D("h_pT_endcap_nume", "h_pT_endcap_nume", nPtBin_ele, analyzer->ptbin_ele /*250, 0, 500*/); h_pT_endcap_nume->Sumw2();
-        TH1D* h_pT_barrel_deno = new TH1D("h_pT_barrel_deno", "h_pT_barrel_deno", nPtBin_ele, analyzer->ptbin_ele /*250, 0, 500*/); h_pT_barrel_deno->Sumw2();
-        TH1D* h_pT_endcap_deno = new TH1D("h_pT_endcap_deno", "h_pT_endcap_deno", nPtBin_ele, analyzer->ptbin_ele /*250, 0, 500*/); h_pT_endcap_deno->Sumw2();
-        TH1D* h_pT_barrel_ctrl = new TH1D("h_pT_barrel_ctrl", "h_pT_barrel_ctrl", nPtBin_ele, analyzer->ptbin_ele /*250, 0, 500*/); h_pT_barrel_ctrl->Sumw2();
-        TH1D* h_pT_endcap_ctrl = new TH1D("h_pT_endcap_ctrl", "h_pT_endcap_ctrl", nPtBin_ele, analyzer->ptbin_ele /*250, 0, 500*/); h_pT_endcap_ctrl->Sumw2();
-        TH1D* h_eta_nume = new TH1D("h_eta_nume", "h_eta_nume", 50, etabins); h_eta_nume->Sumw2();
-        TH1D* h_eta_deno = new TH1D("h_eta_deno", "h_eta_deno", 50, etabins); h_eta_deno->Sumw2();
-        TH1D* h_eta_ctrl = new TH1D("h_eta_ctrl", "h_eta_ctrl", 50, etabins); h_eta_ctrl->Sumw2();
+        TH1D* h_pT_barrel_nume = new TH1D("h_pT_barrel_nume", "h_pT_barrel_nume", nPtBin_ele, analyzer->ptbin_ele); h_pT_barrel_nume->Sumw2();
+        TH1D* h_pT_endcap_nume = new TH1D("h_pT_endcap_nume", "h_pT_endcap_nume", nPtBin_ele, analyzer->ptbin_ele); h_pT_endcap_nume->Sumw2();
+        TH1D* h_pT_endcap2_nume = new TH1D("h_pT_endcap2_nume", "h_pT_endcap2_nume", nPtBin_ele, analyzer->ptbin_ele); h_pT_endcap2_nume->Sumw2();
+        TH1D* h_pT_barrel_deno = new TH1D("h_pT_barrel_deno", "h_pT_barrel_deno", nPtBin_ele, analyzer->ptbin_ele); h_pT_barrel_deno->Sumw2();
+        TH1D* h_pT_endcap_deno = new TH1D("h_pT_endcap_deno", "h_pT_endcap_deno", nPtBin_ele, analyzer->ptbin_ele); h_pT_endcap_deno->Sumw2();
+        TH1D* h_pT_endcap2_deno = new TH1D("h_pT_endcap2_deno", "h_pT_endcap2_deno", nPtBin_ele, analyzer->ptbin_ele); h_pT_endcap2_deno->Sumw2();
+        TH1D* h_pT_barrel_ctrl = new TH1D("h_pT_barrel_ctrl", "h_pT_barrel_ctrl", nPtBin_ele, analyzer->ptbin_ele); h_pT_barrel_ctrl->Sumw2();
+        TH1D* h_pT_endcap_ctrl = new TH1D("h_pT_endcap_ctrl", "h_pT_endcap_ctrl", nPtBin_ele, analyzer->ptbin_ele); h_pT_endcap_ctrl->Sumw2();
+        TH1D* h_pT_endcap2_ctrl = new TH1D("h_pT_endcap2_ctrl", "h_pT_endcap2_ctrl", nPtBin_ele, analyzer->ptbin_ele); h_pT_endcap2_ctrl->Sumw2();
+        TH1D* h_eta_nume = new TH1D("h_eta_nume", "h_eta_nume", 66, etabins); h_eta_nume->Sumw2();
+        TH1D* h_eta_deno = new TH1D("h_eta_deno", "h_eta_deno", 66, etabins); h_eta_deno->Sumw2();
+        TH1D* h_eta_ctrl = new TH1D("h_eta_ctrl", "h_eta_ctrl", 66, etabins); h_eta_ctrl->Sumw2();
         TH1D* h_PFiso_Rho_barrel_nume = new TH1D("h_PFiso_Rho_barrel_nume", "h_PFiso_Rho_barrel_nume", 20, 0, 0.2); h_PFiso_Rho_barrel_nume->Sumw2();
         TH1D* h_PFiso_Rho_endcap_nume = new TH1D("h_PFiso_Rho_endcap_nume", "h_PFiso_Rho_endcap_nume", 20, 0, 0.2); h_PFiso_Rho_endcap_nume->Sumw2();
+        TH1D* h_PFiso_Rho_endcap2_nume = new TH1D("h_PFiso_Rho_endcap2_nume", "h_PFiso_Rho_endcap2_nume", 20, 0, 0.2); h_PFiso_Rho_endcap2_nume->Sumw2();
         TH1D* h_PFiso_Rho_barrel_deno = new TH1D("h_PFiso_Rho_barrel_deno", "h_PFiso_Rho_barrel_deno", 50, 0, 5); h_PFiso_Rho_barrel_deno->Sumw2();
         TH1D* h_PFiso_Rho_endcap_deno = new TH1D("h_PFiso_Rho_endcap_deno", "h_PFiso_Rho_endcap_deno", 50, 0, 5); h_PFiso_Rho_endcap_deno->Sumw2();
+        TH1D* h_PFiso_Rho_endcap2_deno = new TH1D("h_PFiso_Rho_endcap2_deno", "h_PFiso_Rho_endcap2_deno", 50, 0, 5); h_PFiso_Rho_endcap2_deno->Sumw2();
         TH1D* h_PFiso_Rho_barrel_ctrl = new TH1D("h_PFiso_Rho_barrel_ctrl", "h_PFiso_Rho_barrel_ctrl", 50, 0, 5); h_PFiso_Rho_barrel_ctrl->Sumw2();
         TH1D* h_PFiso_Rho_endcap_ctrl = new TH1D("h_PFiso_Rho_endcap_ctrl", "h_PFiso_Rho_endcap_ctrl", 50, 0, 5); h_PFiso_Rho_endcap_ctrl->Sumw2();
+        TH1D* h_PFiso_Rho_endcap2_ctrl = new TH1D("h_PFiso_Rho_endcap2_ctrl", "h_PFiso_Rho_endcap2_ctrl", 50, 0, 5); h_PFiso_Rho_endcap2_ctrl->Sumw2();
         TH1D* h_SigmaIEtaIEta_barrel_nume = new TH1D("h_SigmaIEtaIEta_barrel_nume", "h_SigmaIEtaIEta_barrel_nume", 10, 0, 0.01); h_SigmaIEtaIEta_barrel_nume->Sumw2();
         TH1D* h_SigmaIEtaIEta_endcap_nume = new TH1D("h_SigmaIEtaIEta_endcap_nume", "h_SigmaIEtaIEta_endcap_nume", 30, 0, 0.03); h_SigmaIEtaIEta_endcap_nume->Sumw2();
+        TH1D* h_SigmaIEtaIEta_endcap2_nume = new TH1D("h_SigmaIEtaIEta_endcap2_nume", "h_SigmaIEtaIEta_endcap2_nume", 30, 0, 0.03); h_SigmaIEtaIEta_endcap2_nume->Sumw2();
         TH1D* h_SigmaIEtaIEta_barrel_deno = new TH1D("h_SigmaIEtaIEta_barrel_deno", "h_SigmaIEtaIEta_barrel_deno", 50, 0, 0.05); h_SigmaIEtaIEta_barrel_deno->Sumw2();
         TH1D* h_SigmaIEtaIEta_endcap_deno = new TH1D("h_SigmaIEtaIEta_endcap_deno", "h_SigmaIEtaIEta_endcap_deno", 50, 0, 0.1);  h_SigmaIEtaIEta_endcap_deno->Sumw2();
+        TH1D* h_SigmaIEtaIEta_endcap2_deno = new TH1D("h_SigmaIEtaIEta_endcap2_deno", "h_SigmaIEtaIEta_endcap2_deno", 50, 0, 0.1);  h_SigmaIEtaIEta_endcap2_deno->Sumw2();
         TH1D* h_SigmaIEtaIEta_barrel_ctrl = new TH1D("h_SigmaIEtaIEta_barrel_ctrl", "h_SigmaIEtaIEta_barrel_ctrl", 50, 0, 0.05); h_SigmaIEtaIEta_barrel_ctrl->Sumw2();
         TH1D* h_SigmaIEtaIEta_endcap_ctrl = new TH1D("h_SigmaIEtaIEta_endcap_ctrl", "h_SigmaIEtaIEta_endcap_ctrl", 50, 0, 0.1);  h_SigmaIEtaIEta_endcap_ctrl->Sumw2();
+        TH1D* h_SigmaIEtaIEta_endcap2_ctrl = new TH1D("h_SigmaIEtaIEta_endcap2_ctrl", "h_SigmaIEtaIEta_endcap2_ctrl", 50, 0, 0.1);  h_SigmaIEtaIEta_endcap2_ctrl->Sumw2();
         TH1D* h_dEtaInSeed_barrel_nume = new TH1D("h_dEtaInSeed_barrel_nume", "h_dEtaInSeed_barrel_nume", 20, -0.1, 0.1); h_dEtaInSeed_barrel_nume->Sumw2();
         TH1D* h_dEtaInSeed_endcap_nume = new TH1D("h_dEtaInSeed_endcap_nume", "h_dEtaInSeed_endcap_nume", 20, -0.1, 0.1); h_dEtaInSeed_endcap_nume->Sumw2();
+        TH1D* h_dEtaInSeed_endcap2_nume = new TH1D("h_dEtaInSeed_endcap2_nume", "h_dEtaInSeed_endcap2_nume", 20, -0.1, 0.1); h_dEtaInSeed_endcap2_nume->Sumw2();
         TH1D* h_dEtaInSeed_barrel_deno = new TH1D("h_dEtaInSeed_barrel_deno", "h_dEtaInSeed_barrel_deno", 100, -1, 1); h_dEtaInSeed_barrel_deno->Sumw2();
         TH1D* h_dEtaInSeed_endcap_deno = new TH1D("h_dEtaInSeed_endcap_deno", "h_dEtaInSeed_endcap_deno", 100, -1, 1); h_dEtaInSeed_endcap_deno->Sumw2();
+        TH1D* h_dEtaInSeed_endcap2_deno = new TH1D("h_dEtaInSeed_endcap2_deno", "h_dEtaInSeed_endcap2_deno", 100, -1, 1); h_dEtaInSeed_endcap2_deno->Sumw2();
         TH1D* h_dEtaInSeed_barrel_ctrl = new TH1D("h_dEtaInSeed_barrel_ctrl", "h_dEtaInSeed_barrel_ctrl", 100, -1, 1); h_dEtaInSeed_barrel_ctrl->Sumw2();
         TH1D* h_dEtaInSeed_endcap_ctrl = new TH1D("h_dEtaInSeed_endcap_ctrl", "h_dEtaInSeed_endcap_ctrl", 100, -1, 1); h_dEtaInSeed_endcap_ctrl->Sumw2();
+        TH1D* h_dEtaInSeed_endcap2_ctrl = new TH1D("h_dEtaInSeed_endcap2_ctrl", "h_dEtaInSeed_endcap2_ctrl", 100, -1, 1); h_dEtaInSeed_endcap2_ctrl->Sumw2();
         TH1D* h_dPhiIn_barrel_nume = new TH1D("h_dPhiIn_barrel_nume", "h_dPhiIn_barrel_nume", 20, -0.1, 0.1); h_dPhiIn_barrel_nume->Sumw2();
         TH1D* h_dPhiIn_endcap_nume = new TH1D("h_dPhiIn_endcap_nume", "h_dPhiIn_endcap_nume", 20, -0.1, 0.1); h_dPhiIn_endcap_nume->Sumw2();
+        TH1D* h_dPhiIn_endcap2_nume = new TH1D("h_dPhiIn_endcap2_nume", "h_dPhiIn_endcap2_nume", 20, -0.1, 0.1); h_dPhiIn_endcap2_nume->Sumw2();
         TH1D* h_dPhiIn_barrel_deno = new TH1D("h_dPhiIn_barrel_deno", "h_dPhiIn_barrel_deno", 20, -0.1, 0.1); h_dPhiIn_barrel_deno->Sumw2();
         TH1D* h_dPhiIn_endcap_deno = new TH1D("h_dPhiIn_endcap_deno", "h_dPhiIn_endcap_deno", 100, -1, 1);    h_dPhiIn_endcap_deno->Sumw2();
+        TH1D* h_dPhiIn_endcap2_deno = new TH1D("h_dPhiIn_endcap2_deno", "h_dPhiIn_endcap2_deno", 100, -1, 1);    h_dPhiIn_endcap2_deno->Sumw2();
         TH1D* h_dPhiIn_barrel_ctrl = new TH1D("h_dPhiIn_barrel_ctrl", "h_dPhiIn_barrel_ctrl", 20, -0.1, 0.1); h_dPhiIn_barrel_ctrl->Sumw2();
         TH1D* h_dPhiIn_endcap_ctrl = new TH1D("h_dPhiIn_endcap_ctrl", "h_dPhiIn_endcap_ctrl", 100, -1, 1);    h_dPhiIn_endcap_ctrl->Sumw2();
+        TH1D* h_dPhiIn_endcap2_ctrl = new TH1D("h_dPhiIn_endcap2_ctrl", "h_dPhiIn_endcap2_ctrl", 100, -1, 1);    h_dPhiIn_endcap2_ctrl->Sumw2();
         TH1D* h_HoverE_barrel_nume = new TH1D("h_HoverE_barrel_nume", "h_HoverE_barrel_nume", 20, 0, 0.1); h_HoverE_barrel_nume->Sumw2();
         TH1D* h_HoverE_endcap_nume = new TH1D("h_HoverE_endcap_nume", "h_HoverE_endcap_nume", 30, 0, 0.15); h_HoverE_endcap_nume->Sumw2();
+        TH1D* h_HoverE_endcap2_nume = new TH1D("h_HoverE_endcap2_nume", "h_HoverE_endcap2_nume", 30, 0, 0.15); h_HoverE_endcap2_nume->Sumw2();
         TH1D* h_HoverE_barrel_deno = new TH1D("h_HoverE_barrel_deno", "h_HoverE_barrel_deno", 100, 0, 1);  h_HoverE_barrel_deno->Sumw2();
         TH1D* h_HoverE_endcap_deno = new TH1D("h_HoverE_endcap_deno", "h_HoverE_endcap_deno", 100, 0, 1); h_HoverE_endcap_deno->Sumw2();
+        TH1D* h_HoverE_endcap2_deno = new TH1D("h_HoverE_endcap2_deno", "h_HoverE_endcap2_deno", 100, 0, 1); h_HoverE_endcap2_deno->Sumw2();
         TH1D* h_HoverE_barrel_ctrl = new TH1D("h_HoverE_barrel_ctrl", "h_HoverE_barrel_ctrl", 100, 0, 1);  h_HoverE_barrel_ctrl->Sumw2();
         TH1D* h_HoverE_endcap_ctrl = new TH1D("h_HoverE_endcap_ctrl", "h_HoverE_endcap_ctrl", 100, 0, 1); h_HoverE_endcap_ctrl->Sumw2();
+        TH1D* h_HoverE_endcap2_ctrl = new TH1D("h_HoverE_endcap2_ctrl", "h_HoverE_endcap2_ctrl", 100, 0, 1); h_HoverE_endcap2_ctrl->Sumw2();
         TH1D* h_InvEminusInvP_barrel_nume = new TH1D("h_InvEminusInvP_barrel_nume", "h_InvEminusInvP_barrel_nume", 100, -0.5, 0.5); h_InvEminusInvP_barrel_nume->Sumw2();
         TH1D* h_InvEminusInvP_endcap_nume = new TH1D("h_InvEminusInvP_endcap_nume", "h_InvEminusInvP_endcap_nume", 100, -0.5, 0.5); h_InvEminusInvP_endcap_nume->Sumw2();
+        TH1D* h_InvEminusInvP_endcap2_nume = new TH1D("h_InvEminusInvP_endcap2_nume", "h_InvEminusInvP_endcap2_nume", 100, -0.5, 0.5); h_InvEminusInvP_endcap2_nume->Sumw2();
         TH1D* h_InvEminusInvP_barrel_deno = new TH1D("h_InvEminusInvP_barrel_deno", "h_InvEminusInvP_barrel_deno", 120, -6, 6); h_InvEminusInvP_barrel_deno->Sumw2();
         TH1D* h_InvEminusInvP_endcap_deno = new TH1D("h_InvEminusInvP_endcap_deno", "h_InvEminusInvP_endcap_deno", 120, -6, 6); h_InvEminusInvP_endcap_deno->Sumw2();
+        TH1D* h_InvEminusInvP_endcap2_deno = new TH1D("h_InvEminusInvP_endcap2_deno", "h_InvEminusInvP_endcap2_deno", 120, -6, 6); h_InvEminusInvP_endcap2_deno->Sumw2();
         TH1D* h_InvEminusInvP_barrel_ctrl = new TH1D("h_InvEminusInvP_barrel_ctrl", "h_InvEminusInvP_barrel_ctrl", 120, -6, 6); h_InvEminusInvP_barrel_ctrl->Sumw2();
         TH1D* h_InvEminusInvP_endcap_ctrl = new TH1D("h_InvEminusInvP_endcap_ctrl", "h_InvEminusInvP_endcap_ctrl", 120, -6, 6); h_InvEminusInvP_endcap_ctrl->Sumw2();
+        TH1D* h_InvEminusInvP_endcap2_ctrl = new TH1D("h_InvEminusInvP_endcap2_ctrl", "h_InvEminusInvP_endcap2_ctrl", 120, -6, 6); h_InvEminusInvP_endcap2_ctrl->Sumw2();
         TH1D* h_TrkIso_barrel_nume = new TH1D("h_TrkIso_barrel_nume", "h_TrkIso_barrel_nume", 50, 0, 5); h_TrkIso_barrel_nume->Sumw2();
         TH1D* h_TrkIso_endcap_nume = new TH1D("h_TrkIso_endcap_nume", "h_TrkIso_endcap_nume", 50, 0, 5); h_TrkIso_endcap_nume->Sumw2();
+        TH1D* h_TrkIso_endcap2_nume = new TH1D("h_TrkIso_endcap2_nume", "h_TrkIso_endcap2_nume", 50, 0, 5); h_TrkIso_endcap2_nume->Sumw2();
         TH1D* h_TrkIso_barrel_deno = new TH1D("h_TrkIso_barrel_deno", "h_TrkIso_barrel_deno", 50, 0, 5); h_TrkIso_barrel_deno->Sumw2();
         TH1D* h_TrkIso_endcap_deno = new TH1D("h_TrkIso_endcap_deno", "h_TrkIso_endcap_deno", 50, 0, 5); h_TrkIso_endcap_deno->Sumw2();
+        TH1D* h_TrkIso_endcap2_deno = new TH1D("h_TrkIso_endcap2_deno", "h_TrkIso_endcap2_deno", 50, 0, 5); h_TrkIso_endcap2_deno->Sumw2();
         TH1D* h_TrkIso_barrel_ctrl = new TH1D("h_TrkIso_barrel_ctrl", "h_TrkIso_barrel_ctrl", 50, 0, 5); h_TrkIso_barrel_ctrl->Sumw2();
         TH1D* h_TrkIso_endcap_ctrl = new TH1D("h_TrkIso_endcap_ctrl", "h_TrkIso_endcap_ctrl", 50, 0, 5); h_TrkIso_endcap_ctrl->Sumw2();
+        TH1D* h_TrkIso_endcap2_ctrl = new TH1D("h_TrkIso_endcap2_ctrl", "h_TrkIso_endcap2_ctrl", 50, 0, 5); h_TrkIso_endcap2_ctrl->Sumw2();
         TH1D* h_ECALiso_barrel_nume = new TH1D("h_ECALiso_barrel_nume", "h_ECALiso_barrel_nume", 50, 0, 5); h_ECALiso_barrel_nume->Sumw2();
         TH1D* h_ECALiso_endcap_nume = new TH1D("h_ECALiso_endcap_nume", "h_ECALiso_endcap_nume", 50, 0, 5); h_ECALiso_endcap_nume->Sumw2();
+        TH1D* h_ECALiso_endcap2_nume = new TH1D("h_ECALiso_endcap2_nume", "h_ECALiso_endcap2_nume", 50, 0, 5); h_ECALiso_endcap2_nume->Sumw2();
         TH1D* h_ECALiso_barrel_deno = new TH1D("h_ECALiso_barrel_deno", "h_ECALiso_barrel_deno", 50, 0, 5); h_ECALiso_barrel_deno->Sumw2();
         TH1D* h_ECALiso_endcap_deno = new TH1D("h_ECALiso_endcap_deno", "h_ECALiso_endcap_deno", 50, 0, 5); h_ECALiso_endcap_deno->Sumw2();
+        TH1D* h_ECALiso_endcap2_deno = new TH1D("h_ECALiso_endcap2_deno", "h_ECALiso_endcap2_deno", 50, 0, 5); h_ECALiso_endcap2_deno->Sumw2();
         TH1D* h_ECALiso_barrel_ctrl = new TH1D("h_ECALiso_barrel_ctrl", "h_ECALiso_barrel_ctrl", 50, 0, 5); h_ECALiso_barrel_ctrl->Sumw2();
         TH1D* h_ECALiso_endcap_ctrl = new TH1D("h_ECALiso_endcap_ctrl", "h_ECALiso_endcap_ctrl", 50, 0, 5); h_ECALiso_endcap_ctrl->Sumw2();
+        TH1D* h_ECALiso_endcap2_ctrl = new TH1D("h_ECALiso_endcap2_ctrl", "h_ECALiso_endcap2_ctrl", 50, 0, 5); h_ECALiso_endcap2_ctrl->Sumw2();
         TH1D* h_HCALiso_barrel_nume = new TH1D("h_HCALiso_barrel_nume", "h_HCALiso_barrel_nume", 50, 0, 5); h_HCALiso_barrel_nume->Sumw2();
         TH1D* h_HCALiso_endcap_nume = new TH1D("h_HCALiso_endcap_nume", "h_HCALiso_endcap_nume", 50, 0, 5); h_HCALiso_endcap_nume->Sumw2();
+        TH1D* h_HCALiso_endcap2_nume = new TH1D("h_HCALiso_endcap2_nume", "h_HCALiso_endcap2_nume", 50, 0, 5); h_HCALiso_endcap2_nume->Sumw2();
         TH1D* h_HCALiso_barrel_deno = new TH1D("h_HCALiso_barrel_deno", "h_HCALiso_barrel_deno", 50, 0, 5); h_HCALiso_barrel_deno->Sumw2();
         TH1D* h_HCALiso_endcap_deno = new TH1D("h_HCALiso_endcap_deno", "h_HCALiso_endcap_deno", 50, 0, 5); h_HCALiso_endcap_deno->Sumw2();
+        TH1D* h_HCALiso_endcap2_deno = new TH1D("h_HCALiso_endcap2_deno", "h_HCALiso_endcap2_deno", 50, 0, 5); h_HCALiso_endcap2_deno->Sumw2();
         TH1D* h_HCALiso_barrel_ctrl = new TH1D("h_HCALiso_barrel_ctrl", "h_HCALiso_barrel_ctrl", 50, 0, 5); h_HCALiso_barrel_ctrl->Sumw2();
         TH1D* h_HCALiso_endcap_ctrl = new TH1D("h_HCALiso_endcap_ctrl", "h_HCALiso_endcap_ctrl", 50, 0, 5); h_HCALiso_endcap_ctrl->Sumw2();
+        TH1D* h_HCALiso_endcap2_ctrl = new TH1D("h_HCALiso_endcap2_ctrl", "h_HCALiso_endcap2_ctrl", 50, 0, 5); h_HCALiso_endcap2_ctrl->Sumw2();
         TH1D* h_MET = new TH1D("h_MET", "h_MET", 100, 0, 100); h_MET->Sumw2();
         TH1D* h_MT_barrel_nume = new TH1D("h_MT_barrel_nume", "h_MT_barrel_nume", 500, 0, 1000); h_MT_barrel_nume->Sumw2();
         TH1D* h_MT_endcap_nume = new TH1D("h_MT_endcap_nume", "h_MT_endcap_nume", 500, 0, 1000); h_MT_endcap_nume->Sumw2();
+        TH1D* h_MT_endcap2_nume = new TH1D("h_MT_endcap2_nume", "h_MT_endcap2_nume", 500, 0, 1000); h_MT_endcap2_nume->Sumw2();
         TH1D* h_MT_barrel_deno = new TH1D("h_MT_barrel_deno", "h_MT_barrel_deno", 500, 0, 1000); h_MT_barrel_deno->Sumw2();
         TH1D* h_MT_endcap_deno = new TH1D("h_MT_endcap_deno", "h_MT_endcap_deno", 500, 0, 1000); h_MT_endcap_deno->Sumw2();
+        TH1D* h_MT_endcap2_deno = new TH1D("h_MT_endcap2_deno", "h_MT_endcap2_deno", 500, 0, 1000); h_MT_endcap2_deno->Sumw2();
         TH1D* h_MT_barrel_ctrl = new TH1D("h_MT_barrel_ctrl", "h_MT_barrel_ctrl", 500, 0, 1000); h_MT_barrel_ctrl->Sumw2();
         TH1D* h_MT_endcap_ctrl = new TH1D("h_MT_endcap_ctrl", "h_MT_endcap_ctrl", 500, 0, 1000); h_MT_endcap_ctrl->Sumw2();
+        TH1D* h_MT_endcap2_ctrl = new TH1D("h_MT_endcap2_ctrl", "h_MT_endcap2_ctrl", 500, 0, 1000); h_MT_endcap2_ctrl->Sumw2();
         TH1D* h_nVTX = new TH1D("h_nVTX", "h_nVTX", 50, 0, 50); h_nVTX->Sumw2();
 
         TH1D* h_HoverE_barrel_template_int = new TH1D("h_HoverE_barrel_template_int", "h_HoverE_barrel_template_int", binnum_ele_template, bins_ele_HE_barrel); h_HoverE_barrel_template_int->Sumw2();
         TH1D* h_HoverE_endcap_template_int = new TH1D("h_HoverE_endcap_template_int", "h_HoverE_endcap_template_int", binnum_ele_template, bins_ele_HE_endcap); h_HoverE_endcap_template_int->Sumw2();
+        TH1D* h_HoverE_endcap2_template_int = new TH1D("h_HoverE_endcap2_template_int", "h_HoverE_endcap2_template_int", binnum_ele_template, bins_ele_HE_endcap); h_HoverE_endcap2_template_int->Sumw2();
         TH1D* h_HoverE_barrel_jetTemplate_int = new TH1D("h_HoverE_barrel_jetTemplate_int", "h_HoverE_barrel_jetTemplate_int", binnum_ele_template, bins_ele_HE_barrel); h_HoverE_barrel_jetTemplate_int->Sumw2();
         TH1D* h_HoverE_endcap_jetTemplate_int = new TH1D("h_HoverE_endcap_jetTemplate_int", "h_HoverE_endcap_jetTemplate_int", binnum_ele_template, bins_ele_HE_endcap); h_HoverE_endcap_jetTemplate_int->Sumw2();
+        TH1D* h_HoverE_endcap2_jetTemplate_int = new TH1D("h_HoverE_endcap2_jetTemplate_int", "h_HoverE_endcap2_jetTemplate_int", binnum_ele_template, bins_ele_HE_endcap); h_HoverE_endcap2_jetTemplate_int->Sumw2();
 
-        TH1D *h_PFiso_Rho_barrel_template[nPtBin_ele],       *h_PFiso_Rho_endcap_template[nPtBin_ele],
-             *h_PFiso_Rho_barrel_jetTemplate[nPtBin_ele],    *h_PFiso_Rho_endcap_jetTemplate[nPtBin_ele],
-             *h_PFiso_Rho_barrel_badJetTemplate[nPtBin_ele], *h_PFiso_Rho_endcap_badJetTemplate[nPtBin_ele],
-             *h_HoverE_barrel_template[nPtBin_ele],       *h_HoverE_endcap_template[nPtBin_ele],
-             *h_HoverE_barrel_jetTemplate[nPtBin_ele],    *h_HoverE_endcap_jetTemplate[nPtBin_ele];
+        TH1D *h_PFiso_Rho_barrel_template[nPtBin_ele],       *h_PFiso_Rho_endcap_template[nPtBin_ele],       *h_PFiso_Rho_endcap2_template[nPtBin_ele],
+             *h_PFiso_Rho_barrel_jetTemplate[nPtBin_ele],    *h_PFiso_Rho_endcap_jetTemplate[nPtBin_ele],    *h_PFiso_Rho_endcap2_jetTemplate[nPtBin_ele],
+             *h_PFiso_Rho_barrel_badJetTemplate[nPtBin_ele], *h_PFiso_Rho_endcap_badJetTemplate[nPtBin_ele], *h_PFiso_Rho_endcap2_badJetTemplate[nPtBin_ele],
+             *h_HoverE_barrel_template[nPtBin_ele],          *h_HoverE_endcap_template[nPtBin_ele],          *h_HoverE_endcap2_template[nPtBin_ele],
+             *h_HoverE_barrel_jetTemplate[nPtBin_ele],       *h_HoverE_endcap_jetTemplate[nPtBin_ele],       *h_HoverE_endcap2_jetTemplate[nPtBin_ele];
         for (Int_t ih=0; ih<nPtBin_ele; ih++)
         {
             h_PFiso_Rho_barrel_template[ih] = new TH1D("h_PFiso_Rho_barrel_template_"+TString::Itoa(ih, 10),
@@ -334,6 +377,21 @@ void E_FR_HistMaker (Bool_t DEBUG)
                                                     binnum_ele_template, bins_ele_HE_endcap);
             h_HoverE_endcap_jetTemplate[ih] = new TH1D("h_HoverE_endcap_jetTemplate_"+TString::Itoa(ih, 10),
                                                        "h_HoverE_endcap_jetTemplate_"+TString::Itoa(ih, 10),
+                                                       binnum_ele_template, bins_ele_HE_endcap);            
+            h_PFiso_Rho_endcap2_template[ih] = new TH1D("h_PFiso_Rho_endcap2_template_"+TString::Itoa(ih, 10),
+                                                       "h_PFiso_Rho_endcap2_template_"+TString::Itoa(ih, 10),
+                                                       binnum_ele_template, bins_ele_template_endcap);
+            h_PFiso_Rho_endcap2_jetTemplate[ih] = new TH1D("h_PFiso_Rho_endcap2_jetTemplate_"+TString::Itoa(ih, 10),
+                                                          "h_PFiso_Rho_endcap2_jetTemplate_"+TString::Itoa(ih, 10),
+                                                          binnum_ele_template, bins_ele_template_endcap);
+            h_PFiso_Rho_endcap2_badJetTemplate[ih] = new TH1D("h_PFiso_Rho_endcap2_badJetTemplate_"+TString::Itoa(ih, 10),
+                                                             "h_PFiso_Rho_endcap2_badJetTemplate_"+TString::Itoa(ih, 10),
+                                                             binnum_ele_template, bins_ele_template_endcap);
+            h_HoverE_endcap2_template[ih] = new TH1D("h_HoverE_endcap2_template_"+TString::Itoa(ih, 10),
+                                                    "h_HoverE_endcap2_template_"+TString::Itoa(ih, 10),
+                                                    binnum_ele_template, bins_ele_HE_endcap);
+            h_HoverE_endcap2_jetTemplate[ih] = new TH1D("h_HoverE_endcap2_jetTemplate_"+TString::Itoa(ih, 10),
+                                                       "h_HoverE_endcap2_jetTemplate_"+TString::Itoa(ih, 10),
                                                        binnum_ele_template, bins_ele_HE_endcap);
             h_PFiso_Rho_barrel_template[ih]->Sumw2();
             h_PFiso_Rho_barrel_jetTemplate[ih]->Sumw2();
@@ -344,27 +402,41 @@ void E_FR_HistMaker (Bool_t DEBUG)
             h_PFiso_Rho_endcap_jetTemplate[ih]->Sumw2();
             h_PFiso_Rho_endcap_badJetTemplate[ih]->Sumw2();
             h_HoverE_endcap_template[ih]->Sumw2();
-            h_HoverE_endcap_jetTemplate[ih]->Sumw2();           
+            h_HoverE_endcap_jetTemplate[ih]->Sumw2();
+            h_PFiso_Rho_endcap2_template[ih]->Sumw2();
+            h_PFiso_Rho_endcap2_jetTemplate[ih]->Sumw2();
+            h_PFiso_Rho_endcap2_badJetTemplate[ih]->Sumw2();
+            h_HoverE_endcap2_template[ih]->Sumw2();
+            h_HoverE_endcap2_jetTemplate[ih]->Sumw2();
         }
 
         TH1D* h_PFiso_Rho_barrel_separate = new TH1D("h_PFiso_Rho_barrel_separate", "h_PFiso_Rho_barrel_separate", 80, 0, 0.8); h_PFiso_Rho_barrel_separate->Sumw2();
         TH1D* h_PFiso_Rho_endcap_separate = new TH1D("h_PFiso_Rho_endcap_separate", "h_PFiso_Rho_endcap_separate", 80, 0, 0.8); h_PFiso_Rho_endcap_separate->Sumw2();
+        TH1D* h_PFiso_Rho_endcap2_separate = new TH1D("h_PFiso_Rho_endcap2_separate", "h_PFiso_Rho_endcap2_separate", 80, 0, 0.8); h_PFiso_Rho_endcap2_separate->Sumw2();
         TH1D* h_SigmaIEtaIEta_barrel_separate = new TH1D("h_SigmaIEtaIEta_barrel_separate", "h_SigmaIEtaIEta_barrel_separate", 13, 0, 0.013); h_SigmaIEtaIEta_barrel_separate->Sumw2();
         TH1D* h_SigmaIEtaIEta_endcap_separate = new TH1D("h_SigmaIEtaIEta_endcap_separate", "h_SigmaIEtaIEta_endcap_separate", 35, 0, 0.035);  h_SigmaIEtaIEta_endcap_separate->Sumw2();
+        TH1D* h_SigmaIEtaIEta_endcap2_separate = new TH1D("h_SigmaIEtaIEta_endcap2_separate", "h_SigmaIEtaIEta_endcap2_separate", 35, 0, 0.035);  h_SigmaIEtaIEta_endcap2_separate->Sumw2();
         TH1D* h_dEtaInSeed_barrel_separate = new TH1D("h_dEtaInSeed_barrel_separate", "h_dEtaInSeed_barrel_separate", 10, 0, 0.01); h_dEtaInSeed_barrel_separate->Sumw2();
         TH1D* h_dEtaInSeed_endcap_separate = new TH1D("h_dEtaInSeed_endcap_separate", "h_dEtaInSeed_endcap_separate", 30, 0, 0.03); h_dEtaInSeed_endcap_separate->Sumw2();
+        TH1D* h_dEtaInSeed_endcap2_separate = new TH1D("h_dEtaInSeed_endcap2_separate", "h_dEtaInSeed_endcap2_separate", 30, 0, 0.03); h_dEtaInSeed_endcap2_separate->Sumw2();
         TH1D* h_dPhiIn_barrel_separate = new TH1D("h_dPhiIn_barrel_separate", "h_dPhiIn_barrel_separate", 10, 0, 0.1); h_dPhiIn_barrel_separate->Sumw2();
         TH1D* h_dPhiIn_endcap_separate = new TH1D("h_dPhiIn_endcap_separate", "h_dPhiIn_endcap_separate", 30, 0, 0.3);    h_dPhiIn_endcap_separate->Sumw2();
+        TH1D* h_dPhiIn_endcap2_separate = new TH1D("h_dPhiIn_endcap2_separate", "h_dPhiIn_endcap2_separate", 30, 0, 0.3);    h_dPhiIn_endcap2_separate->Sumw2();
         TH1D* h_HoverE_barrel_separate = new TH1D("h_HoverE_barrel_separate", "h_HoverE_barrel_separate", 15, 0, 0.15);  h_HoverE_barrel_separate->Sumw2();
         TH1D* h_HoverE_endcap_separate = new TH1D("h_HoverE_endcap_separate", "h_HoverE_endcap_separate", 15, 0, 0.15); h_HoverE_endcap_separate->Sumw2();
+        TH1D* h_HoverE_endcap2_separate = new TH1D("h_HoverE_endcap2_separate", "h_HoverE_endcap2_separate", 15, 0, 0.15); h_HoverE_endcap2_separate->Sumw2();
         TH1D* h_InvEminusInvP_barrel_separate = new TH1D("h_InvEminusInvP_barrel_separate", "h_InvEminusInvP_barrel_separate", 10, 0, 1); h_InvEminusInvP_barrel_separate->Sumw2();
         TH1D* h_InvEminusInvP_endcap_separate = new TH1D("h_InvEminusInvP_endcap_separate", "h_InvEminusInvP_endcap_separate", 10, 0, 1); h_InvEminusInvP_endcap_separate->Sumw2();
+        TH1D* h_InvEminusInvP_endcap2_separate = new TH1D("h_InvEminusInvP_endcap2_separate", "h_InvEminusInvP_endcap2_separate", 10, 0, 1); h_InvEminusInvP_endcap2_separate->Sumw2();
         TH1D* h_mHits_barrel_separate = new TH1D("h_mHits_barrel_separate", "h_mHits_barrel_separate", 3, 0-0.5, 3-0.5); h_mHits_barrel_separate->Sumw2();
         TH1D* h_mHits_endcap_separate = new TH1D("h_mHits_endcap_separate", "h_mHits_endcap_separate", 3, 0-0.5, 3-0.5); h_mHits_endcap_separate->Sumw2();
+        TH1D* h_mHits_endcap2_separate = new TH1D("h_mHits_endcap2_separate", "h_mHits_endcap2_separate", 3, 0-0.5, 3-0.5); h_mHits_endcap2_separate->Sumw2();
         TH1D* h_passConvVeto_barrel_separate = new TH1D("h_passConvVeto_barrel_separate", "h_passConvVeto_barrel_separate", 2, 0-0.5, 2-0.5); h_passConvVeto_barrel_separate->Sumw2();
         TH1D* h_passConvVeto_endcap_separate = new TH1D("h_passConvVeto_endcap_separate", "h_passConvVeto_endcap_separate", 2, 0-0.5, 2-0.5); h_passConvVeto_endcap_separate->Sumw2();
+        TH1D* h_passConvVeto_endcap2_separate = new TH1D("h_passConvVeto_endcap2_separate", "h_passConvVeto_endcap2_separate", 2, 0-0.5, 2-0.5); h_passConvVeto_endcap2_separate->Sumw2();
         TH1D* h_passMediumID_barrel_separate = new TH1D("h_passMediumID_barrel_separate", "h_passMediumID_barrel_separate", 2, 0-0.5, 2-0.5); h_passMediumID_barrel_separate->Sumw2();
         TH1D* h_passMediumID_endcap_separate = new TH1D("h_passMediumID_endcap_separate", "h_passMediumID_endcap_separate", 2, 0-0.5, 2-0.5); h_passMediumID_endcap_separate->Sumw2();
+        TH1D* h_passMediumID_endcap2_separate = new TH1D("h_passMediumID_endcap2_separate", "h_passMediumID_endcap2_separate", 2, 0-0.5, 2-0.5); h_passMediumID_endcap2_separate->Sumw2();
 
         TH1D* h_mass_test = new TH1D("h_mass_test", "h_mass_test", binnum, massbins); h_mass_test->Sumw2();
 
@@ -598,18 +670,19 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 }
                 if (p_T->at(i_ele) <= 25) continue;
                 if (fabs(eta->at(i_ele)) >= 1.4442 && fabs(eta->at(i_ele)) <= 1.566) continue;
+                if (fabs(eta->at(i_ele)) >= 2.4) continue;
 
-//                if (fabs(eta->at(i_ele)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.013 || HoverE->at(i_ele) >= 0.13 ||
-//                                                      fabs(dEtaInSeed->at(i_ele)) >= 0.01 || fabs(dPhiIn->at(i_ele)) >= 0.07)) continue;
-//                else if (fabs(eta->at(i_ele)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.035 || HoverE->at(i_ele) >= 0.13)) continue;
+                if (fabs(eta->at(i_ele)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.013 || HoverE->at(i_ele) >= 0.13 ||
+                                                      fabs(dEtaInSeed->at(i_ele)) >= 0.01 || fabs(dPhiIn->at(i_ele)) >= 0.07)) continue;
+                else if (fabs(eta->at(i_ele)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.035 || HoverE->at(i_ele) >= 0.13)) continue;
 
-                if (fabs(eta->at(i_ele)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.00998 || fabs(dEtaInSeed->at(i_ele)) >= 0.00311 ||
-                    fabs(dPhiIn->at(i_ele)) >= 0.07/*0.103*/ || HoverE->at(i_ele) >= 0.13/*0.253*/ || InvEminusInvP->at(i_ele) >= 0.134))
-                    continue;
-                if (fabs(eta->at(i_ele)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.0298 || fabs(dEtaInSeed->at(i_ele)) >= 0.00609 ||
-                    fabs(dPhiIn->at(i_ele)) >= 0.045 || HoverE->at(i_ele) >= 0.0878 || InvEminusInvP->at(i_ele) >= 0.13 ))
-                    continue;
-                if (mHits->at(i_ele) > 1 || !passConvVeto->at(i_ele) || relECALiso->at(i_ele) >= 0.5 || relHCALiso->at(i_ele) >= 0.5 || relTrkIso->at(i_ele) >= 0.2) continue;
+//                if (fabs(eta->at(i_ele)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.00998 || fabs(dEtaInSeed->at(i_ele)) >= 0.00311 ||
+//                    fabs(dPhiIn->at(i_ele)) >= 0.07/*0.103*/ || HoverE->at(i_ele) >= 0.13/*0.253*/ || InvEminusInvP->at(i_ele) >= 0.134))
+//                    continue;
+//                if (fabs(eta->at(i_ele)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.0298 || fabs(dEtaInSeed->at(i_ele)) >= 0.00609 ||
+//                    fabs(dPhiIn->at(i_ele)) >= 0.045 || HoverE->at(i_ele) >= 0.0878 || InvEminusInvP->at(i_ele) >= 0.13 ))
+//                    continue;
+                if (mHits->at(i_ele) > 1 /*|| !passConvVeto->at(i_ele)*/ || relECALiso->at(i_ele) >= 0.5 || relHCALiso->at(i_ele) >= 0.5 || relTrkIso->at(i_ele) >= 0.2) continue;
 
                 if (DEBUG == kTRUE) cout << "i_ele = " << i_ele << endl;
 
@@ -755,7 +828,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         h_ECALiso_barrel_nume->Fill(relECALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_HCALiso_barrel_nume->Fill(relHCALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                     }
-                    else if (fabs(eta->at(i_ele)) > 1.566) // Endcap
+                    else if (fabs(eta->at(i_ele)) > 1.566 && fabs(eta->at(i_ele)) < 2.2) // Endcap
                     {
                         h_pT_endcap_nume->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_PFiso_Rho_endcap_nume->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
@@ -768,15 +841,24 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         h_ECALiso_endcap_nume->Fill(relECALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_HCALiso_endcap_nume->Fill(relHCALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                     }
+                    else if (fabs(eta->at(i_ele)) >= 2.2 && fabs(eta->at(i_ele)) < 2.4) // Far endcap
+                    {
+                        h_pT_endcap2_nume->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_PFiso_Rho_endcap2_nume->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_SigmaIEtaIEta_endcap2_nume->Fill(Full5x5_SigmaIEtaIEta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_dEtaInSeed_endcap2_nume->Fill(dEtaInSeed->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_dPhiIn_endcap2_nume->Fill(dPhiIn->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_HoverE_endcap2_nume->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_InvEminusInvP_endcap2_nume->Fill(InvEminusInvP->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_TrkIso_endcap2_nume->Fill(relTrkIso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_ECALiso_endcap2_nume->Fill(relECALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_HCALiso_endcap2_nume->Fill(relHCALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                    }
                 } // End of if(Signal/Numerator)
                 else // Control
                 {
                     h_eta_ctrl->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
-                    if (fabs(eta->at(i_ele)) < 1.4442/* && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.013 && HoverE->at(i_ele) < 0.13 &&
-                        fabs(dEtaInSeed->at(i_ele)) < 0.01 && fabs(dPhiIn->at(i_ele)) < 0.07 && mHits->at(i_ele) <= 1*/) // Barrel
-//                    if (fabs(eta->at(i_ele)) < 1.4442 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.00998 && fabs(dEtaInSeed->at(i_ele)) < 0.00311 &&
-//                        fabs(dPhiIn->at(i_ele)) < /*0.07*/0.103 && HoverE->at(i_ele) < /*0.13*/0.253 && relPFiso_Rho->at(i_ele) >= 0.0695 &&
-//                        InvEminusInvP->at(i_ele) < 0.134 && mHits->at(i_ele) <= 1 && passConvVeto->at(i_ele)) // Barrel
+                    if (fabs(eta->at(i_ele)) < 1.4442) // Barrel
                     {
                         h_pT_barrel_ctrl->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_PFiso_Rho_barrel_ctrl->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
@@ -789,10 +871,7 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         h_ECALiso_barrel_ctrl->Fill(relECALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_HCALiso_barrel_ctrl->Fill(relHCALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                     }
-                    else if (fabs(eta->at(i_ele)) > 1.566/* && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.035 && HoverE->at(i_ele) < 0.13 && mHits->at(i_ele) <= 1*/) // Endcap
-//                    else if (fabs(eta->at(i_ele)) > 1.566 && Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dEtaInSeed->at(i_ele)) < 0.00609 &&
-//                             fabs(dPhiIn->at(i_ele)) < 0.045 && HoverE->at(i_ele) < 0.0878 && relPFiso_Rho->at(i_ele) >= 0.0821 &&
-//                             InvEminusInvP->at(i_ele) < 0.13 && mHits->at(i_ele) <= 1 && passConvVeto->at(i_ele)) // Endcap
+                    else if (fabs(eta->at(i_ele)) > 1.566 && fabs(eta->at(i_ele)) < 2.2) // Endcap
                     {
                         h_pT_endcap_ctrl->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_PFiso_Rho_endcap_ctrl->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
@@ -804,6 +883,19 @@ void E_FR_HistMaker (Bool_t DEBUG)
                         h_TrkIso_endcap_ctrl->Fill(relTrkIso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_ECALiso_endcap_ctrl->Fill(relECALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         h_HCALiso_endcap_ctrl->Fill(relHCALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                    }
+                    else if (fabs(eta->at(i_ele)) >= 2.2 && fabs(eta->at(i_ele)) < 2.4) // Far endcap
+                    {
+                        h_pT_endcap2_ctrl->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_PFiso_Rho_endcap2_ctrl->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_SigmaIEtaIEta_endcap2_ctrl->Fill(Full5x5_SigmaIEtaIEta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_dEtaInSeed_endcap2_ctrl->Fill(dEtaInSeed->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_dPhiIn_endcap2_ctrl->Fill(dPhiIn->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_HoverE_endcap2_ctrl->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_InvEminusInvP_endcap2_ctrl->Fill(InvEminusInvP->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_TrkIso_endcap2_ctrl->Fill(relTrkIso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_ECALiso_endcap2_ctrl->Fill(relECALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_HCALiso_endcap2_ctrl->Fill(relHCALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                     }
                 }// End of if(Control)
                 // Denominator
@@ -968,8 +1060,8 @@ void E_FR_HistMaker (Bool_t DEBUG)
                                 h_HoverE_barrel_jetTemplate[ih]->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         }
                     }
-                }
-                else if (fabs(eta->at(i_ele)) > 1.566) // Endcap
+                }// End of if(barrel)
+                else if (fabs(eta->at(i_ele)) > 1.566 && fabs(eta->at(i_ele)) < 2.2) // Endcap
                 {
                     if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.035 && HoverE->at(i_ele) < 0.13 && mHits->at(i_ele) <= 1)
                     {
@@ -1124,7 +1216,163 @@ void E_FR_HistMaker (Bool_t DEBUG)
                                 h_HoverE_endcap_jetTemplate[ih]->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
                         }
                     }
-                }
+                }// End of if(endcap)
+                else if (fabs(eta->at(i_ele)) >= 2.2 && fabs(eta->at(i_ele)) < 2.4) // Far endcap
+                {
+                    if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.035 && HoverE->at(i_ele) < 0.13 && mHits->at(i_ele) <= 1)
+                    {
+                        h_eta_deno->Fill(eta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_pT_endcap2_deno->Fill(p_T->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_PFiso_Rho_endcap2_deno->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_SigmaIEtaIEta_endcap2_deno->Fill(Full5x5_SigmaIEtaIEta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_dEtaInSeed_endcap2_deno->Fill(dEtaInSeed->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_dPhiIn_endcap2_deno->Fill(dPhiIn->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_HoverE_endcap2_deno->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_InvEminusInvP_endcap2_deno->Fill(InvEminusInvP->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_TrkIso_endcap2_deno->Fill(relTrkIso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_ECALiso_endcap2_deno->Fill(relECALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        h_HCALiso_endcap2_deno->Fill(relHCALiso->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                    }
+
+                    /// TEST PART ///
+                    // MediumID minus SigmaIEtaIEta
+                    if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.035 // relaxed
+                        && fabs(dEtaInSeed->at(i_ele)) < 0.00609
+                        && fabs(dPhiIn->at(i_ele)) < 0.045
+                        && HoverE->at(i_ele) < 0.0878
+                        && relPFiso_Rho->at(i_ele) < 0.0821
+                        && InvEminusInvP->at(i_ele) < 0.13
+                        && mHits->at(i_ele) <= 1
+                        && passConvVeto->at(i_ele))
+                        h_SigmaIEtaIEta_endcap2_separate->Fill(Full5x5_SigmaIEtaIEta->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+
+                    // MediumID minus dEtaInSeed
+                    if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298
+                        && fabs(dPhiIn->at(i_ele)) < 0.045
+                        && HoverE->at(i_ele) < 0.0878
+                        && relPFiso_Rho->at(i_ele) < 0.0821
+                        && InvEminusInvP->at(i_ele) < 0.13
+                        && mHits->at(i_ele) <= 1
+                        && passConvVeto->at(i_ele))
+                        h_dEtaInSeed_endcap2_separate->Fill(fabs(dEtaInSeed->at(i_ele)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+
+                    // MediumID minus dPhiIn
+                    if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298
+                        && fabs(dEtaInSeed->at(i_ele)) < 0.00609
+                        && HoverE->at(i_ele) < 0.0878
+                        && relPFiso_Rho->at(i_ele) < 0.0821
+                        && InvEminusInvP->at(i_ele) < 0.13
+                        && mHits->at(i_ele) <= 1
+                        && passConvVeto->at(i_ele))
+                        h_dPhiIn_endcap2_separate->Fill(fabs(dPhiIn->at(i_ele)), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+
+                    // MediumID minus HoverE
+                    if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298
+                        && fabs(dEtaInSeed->at(i_ele)) < 0.00609
+                        && HoverE->at(i_ele) < 0.13 // relaxed (Ele23Ele12 threshold)
+                        && relPFiso_Rho->at(i_ele) < 0.0821
+                        && InvEminusInvP->at(i_ele) < 0.13
+                        && mHits->at(i_ele) <= 1
+                        && passConvVeto->at(i_ele))
+                        h_HoverE_endcap2_separate->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+
+                    // MediumID minus RelPFIso
+                    if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298
+                        && fabs(dEtaInSeed->at(i_ele)) < 0.00609
+                        && fabs(dPhiIn->at(i_ele)) < 0.045
+                        && HoverE->at(i_ele) < 0.0878
+                        && InvEminusInvP->at(i_ele) < 0.13
+                        && mHits->at(i_ele) <= 1
+                        && passConvVeto->at(i_ele))
+                        h_PFiso_Rho_endcap2_separate->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+
+                    // MediumID minus InvEminusInvP
+                    if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298
+                        && fabs(dEtaInSeed->at(i_ele)) < 0.00609
+                        && fabs(dPhiIn->at(i_ele)) < 0.045 // Tighter by Ele23Ele12
+                        && HoverE->at(i_ele) < 0.0878 // Tighter by Ele23Ele12
+                        && relPFiso_Rho->at(i_ele) < 0.0821
+                        && mHits->at(i_ele) <= 1
+                        && passConvVeto->at(i_ele))
+                        h_InvEminusInvP_endcap2_separate->Fill(InvEminusInvP->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+
+                    // MediumID minus mHits
+                    if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298
+                        && fabs(dEtaInSeed->at(i_ele)) < 0.00609
+                        && fabs(dPhiIn->at(i_ele)) < 0.045
+                        && HoverE->at(i_ele) < 0.0878
+                        && relPFiso_Rho->at(i_ele) < 0.0821
+                        && InvEminusInvP->at(i_ele) < 0.13
+                        && passConvVeto->at(i_ele))
+                        h_mHits_endcap2_separate->Fill(mHits->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+
+                    // MediumID minus passConvVeto
+                    if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298
+                        && fabs(dEtaInSeed->at(i_ele)) < 0.00609
+                        && fabs(dPhiIn->at(i_ele)) < 0.045
+                        && HoverE->at(i_ele) < 0.0878
+                        && relPFiso_Rho->at(i_ele) < 0.0821
+                        && InvEminusInvP->at(i_ele) < 0.13
+                        && mHits->at(i_ele) <= 1)
+                        h_passConvVeto_endcap2_separate->Fill(passConvVeto->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+
+                    // MediumID yes or no
+                    if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.035
+                        && HoverE->at(i_ele) < 0.13
+                        && mHits->at(i_ele) <= 1)
+                        h_passMediumID_endcap2_separate->Fill(passMediumID->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+
+                    /// End test part ///
+
+                    if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dEtaInSeed->at(i_ele)) < 0.00609 && fabs(dPhiIn->at(i_ele)) < 0.045 &&
+                        HoverE->at(i_ele) < 0.0878 && fabs(InvEminusInvP->at(i_ele)) < 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h_PFiso_Rho_endcap2_template[ih]->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        }
+                    }
+                    else if (HoverE->at(i_ele) < 0.0878 && (fabs(InvEminusInvP->at(i_ele)) >= 0.13 || Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.0298 ||
+                             fabs(dEtaInSeed->at(i_ele)) >= 0.00609 || fabs(dPhiIn->at(i_ele)) >= 0.045 || !passConvVeto->at(i_ele) || mHits->at(i_ele) > 1))
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h_PFiso_Rho_endcap2_jetTemplate[ih]->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        }
+                    }
+                    else if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dEtaInSeed->at(i_ele)) < 0.00609 && fabs(dPhiIn->at(i_ele)) < 0.045 &&
+                             HoverE->at(i_ele) < 0.0878 && fabs(InvEminusInvP->at(i_ele)) >= 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h_PFiso_Rho_endcap2_badJetTemplate[ih]->Fill(relPFiso_Rho->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        }
+                    }
+
+                    if (Full5x5_SigmaIEtaIEta->at(i_ele) < 0.0298 && fabs(dEtaInSeed->at(i_ele)) < 0.00609 && fabs(dPhiIn->at(i_ele)) < 0.045 &&
+                        relPFiso_Rho->at(i_ele) < 0.0821 && fabs(InvEminusInvP->at(i_ele)) < 0.13 && passConvVeto->at(i_ele) && mHits->at(i_ele) <= 1)
+                    {
+                        h_HoverE_endcap_template_int->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h_HoverE_endcap2_template[ih]->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        }
+                    }
+                    else if (relPFiso_Rho->at(i_ele) < 0.0821 && (Full5x5_SigmaIEtaIEta->at(i_ele) >= 0.0298 || fabs(dEtaInSeed->at(i_ele)) >= 0.00609 ||
+                             fabs(dPhiIn->at(i_ele)) >= 0.045 || fabs(InvEminusInvP->at(i_ele)) >= 0.13 || !passConvVeto->at(i_ele) || mHits->at(i_ele) > 1))
+                    {
+                        h_HoverE_endcap_jetTemplate_int->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        for (Int_t ih=0; ih<nPtBin_ele; ih++)
+                        {
+                            if (p_T->at(i_ele) > analyzer->ptbin_ele[ih] && p_T->at(i_ele) < analyzer->ptbin_ele[ih+1])
+                                h_HoverE_endcap2_jetTemplate[ih]->Fill(HoverE->at(i_ele), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_alt);
+                        }
+                    }
+                }// End of if(far endcap)
             }// End of i_ele iteration
 
             if (fabs(ele_lead.Eta()) < 1.4442) // Barrel
@@ -1133,11 +1381,17 @@ void E_FR_HistMaker (Bool_t DEBUG)
                 if (iso_lead < 0.15) h_MT_barrel_nume->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_lead);
                 else h_MT_barrel_ctrl->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_lead);
             }
-            else if (fabs(ele_lead.Eta()) > 1.566) // Endcap
+            else if (fabs(ele_lead.Eta()) > 1.566 && fabs(ele_lead.Eta()) < 2.2) // Endcap
             {
                 h_MT_endcap_deno->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_lead);
                 if (iso_lead < 0.15) h_MT_endcap_nume->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_lead);
                 else h_MT_endcap_ctrl->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_lead);
+            }
+            else if (fabs(ele_lead.Eta()) >= 2.2 && fabs(ele_lead.Eta()) < 2.4) // Far endcap
+            {
+                h_MT_endcap2_deno->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_lead);
+                if (iso_lead < 0.15) h_MT_endcap2_nume->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_lead);
+                else h_MT_endcap2_ctrl->Fill(MT, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * prescale_lead);
             }
 
         }// End of event iteration
@@ -1149,99 +1403,143 @@ void E_FR_HistMaker (Bool_t DEBUG)
 
         h_pT_barrel_nume->Write();
         h_pT_endcap_nume->Write();
+        h_pT_endcap2_nume->Write();
         h_pT_barrel_deno->Write();
         h_pT_endcap_deno->Write();
+        h_pT_endcap2_deno->Write();
         h_pT_barrel_ctrl->Write();
         h_pT_endcap_ctrl->Write();
+        h_pT_endcap2_ctrl->Write();
         h_eta_nume->Write();
         h_eta_deno->Write();
         h_eta_ctrl->Write();
         h_PFiso_Rho_barrel_nume->Write();
         h_PFiso_Rho_endcap_nume->Write();
+        h_PFiso_Rho_endcap2_nume->Write();
         h_PFiso_Rho_barrel_deno->Write();
         h_PFiso_Rho_endcap_deno->Write();
+        h_PFiso_Rho_endcap2_deno->Write();
         h_PFiso_Rho_barrel_ctrl->Write();
         h_PFiso_Rho_endcap_ctrl->Write();
+        h_PFiso_Rho_endcap2_ctrl->Write();
         h_SigmaIEtaIEta_barrel_nume->Write();
         h_SigmaIEtaIEta_endcap_nume->Write();
+        h_SigmaIEtaIEta_endcap2_nume->Write();
         h_SigmaIEtaIEta_barrel_deno->Write();
         h_SigmaIEtaIEta_endcap_deno->Write();
+        h_SigmaIEtaIEta_endcap2_deno->Write();
         h_SigmaIEtaIEta_barrel_ctrl->Write();
         h_SigmaIEtaIEta_endcap_ctrl->Write();
+        h_SigmaIEtaIEta_endcap2_ctrl->Write();
         h_dEtaInSeed_barrel_nume->Write();
         h_dEtaInSeed_endcap_nume->Write();
+        h_dEtaInSeed_endcap2_nume->Write();
         h_dEtaInSeed_barrel_deno->Write();
         h_dEtaInSeed_endcap_deno->Write();
+        h_dEtaInSeed_endcap2_deno->Write();
         h_dEtaInSeed_barrel_ctrl->Write();
         h_dEtaInSeed_endcap_ctrl->Write();
+        h_dEtaInSeed_endcap2_ctrl->Write();
         h_dPhiIn_barrel_nume->Write();
         h_dPhiIn_endcap_nume->Write();
+        h_dPhiIn_endcap2_nume->Write();
         h_dPhiIn_barrel_deno->Write();
         h_dPhiIn_endcap_deno->Write();
+        h_dPhiIn_endcap2_deno->Write();
         h_dPhiIn_barrel_ctrl->Write();
         h_dPhiIn_endcap_ctrl->Write();
+        h_dPhiIn_endcap2_ctrl->Write();
         h_HoverE_barrel_nume->Write();
         h_HoverE_endcap_nume->Write();
+        h_HoverE_endcap2_nume->Write();
         h_HoverE_barrel_deno->Write();
         h_HoverE_endcap_deno->Write();
+        h_HoverE_endcap2_deno->Write();
         h_HoverE_barrel_ctrl->Write();
         h_HoverE_endcap_ctrl->Write();
+        h_HoverE_endcap2_ctrl->Write();
         h_InvEminusInvP_barrel_nume->Write();
         h_InvEminusInvP_endcap_nume->Write();
+        h_InvEminusInvP_endcap2_nume->Write();
         h_InvEminusInvP_barrel_deno->Write();
         h_InvEminusInvP_endcap_deno->Write();
+        h_InvEminusInvP_endcap2_deno->Write();
         h_InvEminusInvP_barrel_ctrl->Write();
         h_InvEminusInvP_endcap_ctrl->Write();
+        h_InvEminusInvP_endcap2_ctrl->Write();
         h_TrkIso_barrel_nume->Write();
         h_TrkIso_endcap_nume->Write();
+        h_TrkIso_endcap2_nume->Write();
         h_TrkIso_barrel_deno->Write();
         h_TrkIso_endcap_deno->Write();
+        h_TrkIso_endcap2_deno->Write();
         h_TrkIso_barrel_ctrl->Write();
         h_TrkIso_endcap_ctrl->Write();
+        h_TrkIso_endcap2_ctrl->Write();
         h_ECALiso_barrel_nume->Write();
         h_ECALiso_endcap_nume->Write();
+        h_ECALiso_endcap2_nume->Write();
         h_ECALiso_barrel_deno->Write();
         h_ECALiso_endcap_deno->Write();
+        h_ECALiso_endcap2_deno->Write();
         h_ECALiso_barrel_ctrl->Write();
         h_ECALiso_endcap_ctrl->Write();
+        h_ECALiso_endcap2_ctrl->Write();
         h_HCALiso_barrel_nume->Write();
         h_HCALiso_endcap_nume->Write();
+        h_HCALiso_endcap2_nume->Write();
         h_HCALiso_barrel_deno->Write();
         h_HCALiso_endcap_deno->Write();
+        h_HCALiso_endcap2_deno->Write();
         h_HCALiso_barrel_ctrl->Write();
         h_HCALiso_endcap_ctrl->Write();
+        h_HCALiso_endcap2_ctrl->Write();
         h_MET->Write();
         h_MT_barrel_nume->Write();
         h_MT_endcap_nume->Write();
+        h_MT_endcap2_nume->Write();
         h_MT_barrel_deno->Write();
         h_MT_endcap_deno->Write();
+        h_MT_endcap2_deno->Write();
         h_MT_barrel_ctrl->Write();
         h_MT_endcap_ctrl->Write();
+        h_MT_endcap2_ctrl->Write();
         h_nVTX->Write();
 
         h_HoverE_barrel_template_int->Write();
         h_HoverE_barrel_jetTemplate_int->Write();
         h_HoverE_endcap_template_int->Write();
         h_HoverE_endcap_jetTemplate_int->Write();
+        h_HoverE_endcap2_template_int->Write();
+        h_HoverE_endcap2_jetTemplate_int->Write();
 
         h_PFiso_Rho_barrel_separate->Write();
         h_PFiso_Rho_endcap_separate->Write();
+        h_PFiso_Rho_endcap2_separate->Write();
         h_SigmaIEtaIEta_barrel_separate->Write();
         h_SigmaIEtaIEta_endcap_separate->Write();
+        h_SigmaIEtaIEta_endcap2_separate->Write();
         h_dEtaInSeed_barrel_separate->Write();
         h_dEtaInSeed_endcap_separate->Write();
+        h_dEtaInSeed_endcap2_separate->Write();
         h_dPhiIn_barrel_separate->Write();
         h_dPhiIn_endcap_separate->Write();
+        h_dPhiIn_endcap2_separate->Write();
         h_HoverE_barrel_separate->Write();
         h_HoverE_endcap_separate->Write();
+        h_HoverE_endcap2_separate->Write();
         h_InvEminusInvP_barrel_separate->Write();
         h_InvEminusInvP_endcap_separate->Write();
+        h_InvEminusInvP_endcap2_separate->Write();
         h_mHits_barrel_separate->Write();
         h_mHits_endcap_separate->Write();
+        h_mHits_endcap2_separate->Write();
         h_passConvVeto_barrel_separate->Write();
         h_passConvVeto_endcap_separate->Write();
+        h_passConvVeto_endcap2_separate->Write();
         h_passMediumID_barrel_separate->Write();
         h_passMediumID_endcap_separate->Write();
+        h_passMediumID_endcap2_separate->Write();
 
         for (Int_t ih=0; ih<nPtBin_ele; ih++)
         {
@@ -1256,6 +1554,12 @@ void E_FR_HistMaker (Bool_t DEBUG)
             h_PFiso_Rho_endcap_badJetTemplate[ih]->Write();
             h_HoverE_endcap_template[ih]->Write();
             h_HoverE_endcap_jetTemplate[ih]->Write();
+
+            h_PFiso_Rho_endcap2_template[ih]->Write();
+            h_PFiso_Rho_endcap2_jetTemplate[ih]->Write();
+            h_PFiso_Rho_endcap2_badJetTemplate[ih]->Write();
+            h_HoverE_endcap2_template[ih]->Write();
+            h_HoverE_endcap2_jetTemplate[ih]->Write();
         }
 
         h_mass_test->Write();
@@ -1334,19 +1638,25 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
         // -- Creating Histograms -- //
         TH1D* h_pT_barrel_nume = new TH1D("h_pT_barrel_nume", "h_pT_barrel_nume", nPtBinBarrel, analyzer->ptbin_barrel); h_pT_barrel_nume->Sumw2();
         TH1D* h_pT_endcap_nume = new TH1D("h_pT_endcap_nume", "h_pT_endcap_nume", nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap_nume->Sumw2();
+        TH1D* h_pT_endcap2_nume = new TH1D("h_pT_endcap2_nume", "h_pT_endcap2_nume", nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap2_nume->Sumw2();
         TH1D* h_pT_barrel_deno = new TH1D("h_pT_barrel_deno", "h_pT_barrel_deno", nPtBinBarrel, analyzer->ptbin_barrel); h_pT_barrel_deno->Sumw2();
         TH1D* h_pT_endcap_deno = new TH1D("h_pT_endcap_deno", "h_pT_endcap_deno", nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap_deno->Sumw2();
+        TH1D* h_pT_endcap2_deno = new TH1D("h_pT_endcap2_deno", "h_pT_endcap2_deno", nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap2_deno->Sumw2();
         TH1D* h_pT_barrel_ctrl = new TH1D("h_pT_barrel_ctrl", "h_pT_barrel_ctrl", nPtBinBarrel, analyzer->ptbin_barrel); h_pT_barrel_ctrl->Sumw2();
         TH1D* h_pT_endcap_ctrl = new TH1D("h_pT_endcap_ctrl", "h_pT_endcap_ctrl", nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap_ctrl->Sumw2();
-        TH1D* h_eta_nume = new TH1D("h_eta_nume", "h_eta_nume", 48, -2.4, 2.4); h_eta_nume->Sumw2();
-        TH1D* h_eta_deno = new TH1D("h_eta_deno", "h_eta_deno", 48, -2.4, 2.4); h_eta_deno->Sumw2();
-        TH1D* h_eta_ctrl = new TH1D("h_eta_ctrl", "h_eta_ctrl", 48, -2.4, 2.4); h_eta_ctrl->Sumw2();
+        TH1D* h_pT_endcap2_ctrl = new TH1D("h_pT_endcap2_ctrl", "h_pT_endcap2_ctrl", nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap2_ctrl->Sumw2();
+        TH1D* h_eta_nume = new TH1D("h_eta_nume", "h_eta_nume", 96, -2.4, 2.4); h_eta_nume->Sumw2();
+        TH1D* h_eta_deno = new TH1D("h_eta_deno", "h_eta_deno", 96, -2.4, 2.4); h_eta_deno->Sumw2();
+        TH1D* h_eta_ctrl = new TH1D("h_eta_ctrl", "h_eta_ctrl", 96, -2.4, 2.4); h_eta_ctrl->Sumw2();
         TH1D* h_PFiso_barrel_nume = new TH1D("h_PFiso_barrel_nume", "h_PFiso_barrel_nume", 30, 0, 0.15); h_PFiso_barrel_nume->Sumw2();
         TH1D* h_PFiso_endcap_nume = new TH1D("h_PFiso_endcap_nume", "h_PFiso_endcap_nume", 30, 0, 0.15); h_PFiso_endcap_nume->Sumw2();
+        TH1D* h_PFiso_endcap2_nume = new TH1D("h_PFiso_endcap2_nume", "h_PFiso_endcap2_nume", 30, 0, 0.15); h_PFiso_endcap2_nume->Sumw2();
         TH1D* h_PFiso_barrel_deno = new TH1D("h_PFiso_barrel_deno", "h_PFiso_barrel_deno", 100, 0, 5); h_PFiso_barrel_deno->Sumw2();
         TH1D* h_PFiso_endcap_deno = new TH1D("h_PFiso_endcap_deno", "h_PFiso_endcap_deno", 100, 0, 5); h_PFiso_endcap_deno->Sumw2();
+        TH1D* h_PFiso_endcap2_deno = new TH1D("h_PFiso_endcap2_deno", "h_PFiso_endcap2_deno", 100, 0, 5); h_PFiso_endcap2_deno->Sumw2();
         TH1D* h_PFiso_barrel_ctrl = new TH1D("h_PFiso_barrel_ctrl", "h_PFiso_barrel_ctrl", 100, 0, 5); h_PFiso_barrel_ctrl->Sumw2();
         TH1D* h_PFiso_endcap_ctrl = new TH1D("h_PFiso_endcap_ctrl", "h_PFiso_endcap_ctrl", 100, 0, 5); h_PFiso_endcap_ctrl->Sumw2();
+        TH1D* h_PFiso_endcap2_ctrl = new TH1D("h_PFiso_endcap2_ctrl", "h_PFiso_endcap2_ctrl", 100, 0, 5); h_PFiso_endcap2_ctrl->Sumw2();
         TH1D* h_TRKiso_barrel_nume = new TH1D("h_TRKiso_barrel_nume", "h_TRKiso_barrel_nume", 50, 0, 1); h_TRKiso_barrel_nume->Sumw2();
         TH1D* h_TRKiso_endcap_nume = new TH1D("h_TRKiso_endcap_nume", "h_TRKiso_endcap_nume", 50, 0, 1); h_TRKiso_endcap_nume->Sumw2();
         TH1D* h_TRKiso_barrel_deno = new TH1D("h_TRKiso_barrel_deno", "h_TRKiso_barrel_deno", 100, 0, 5); h_TRKiso_barrel_deno->Sumw2();
@@ -1364,41 +1674,59 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
 
         TH1D* h_PFiso_barrel_nume_50to70   = new TH1D("h_PFiso_barrel_nume_50to70",   "h_PFiso_barrel_nume_50to70",   15, 0, 0.15); h_PFiso_barrel_nume_50to70  ->Sumw2();
         TH1D* h_PFiso_endcap_nume_50to70   = new TH1D("h_PFiso_endcap_nume_50to70",   "h_PFiso_endcap_nume_50to70",   15, 0, 0.15); h_PFiso_endcap_nume_50to70  ->Sumw2();
+        TH1D* h_PFiso_endcap2_nume_50to70   = new TH1D("h_PFiso_endcap2_nume_50to70",   "h_PFiso_endcap2_nume_50to70",   15, 0, 0.15); h_PFiso_endcap2_nume_50to70  ->Sumw2();
         TH1D* h_PFiso_barrel_deno_50to70   = new TH1D("h_PFiso_barrel_deno_50to70",   "h_PFiso_barrel_deno_50to70",   50, 0, 5);    h_PFiso_barrel_deno_50to70  ->Sumw2();
         TH1D* h_PFiso_endcap_deno_50to70   = new TH1D("h_PFiso_endcap_deno_50to70",   "h_PFiso_endcap_deno_50to70",   50, 0, 5);    h_PFiso_endcap_deno_50to70  ->Sumw2();
+        TH1D* h_PFiso_endcap2_deno_50to70   = new TH1D("h_PFiso_endcap2_deno_50to70",   "h_PFiso_endcap2_deno_50to70",   50, 0, 5);    h_PFiso_endcap2_deno_50to70  ->Sumw2();
         TH1D* h_PFiso_barrel_ctrl_50to70   = new TH1D("h_PFiso_barrel_ctrl_50to70",   "h_PFiso_barrel_ctrl_50to70",   50, 0.15, 5);    h_PFiso_barrel_ctrl_50to70  ->Sumw2();
         TH1D* h_PFiso_endcap_ctrl_50to70   = new TH1D("h_PFiso_endcap_ctrl_50to70",   "h_PFiso_endcap_ctrl_50to70",   50, 0.15, 5);    h_PFiso_endcap_ctrl_50to70  ->Sumw2();
+        TH1D* h_PFiso_endcap2_ctrl_50to70   = new TH1D("h_PFiso_endcap2_ctrl_50to70",   "h_PFiso_endcap2_ctrl_50to70",   50, 0.15, 5);    h_PFiso_endcap2_ctrl_50to70  ->Sumw2();
         TH1D* h_PFiso_barrel_nume_70to100  = new TH1D("h_PFiso_barrel_nume_70to100",  "h_PFiso_barrel_nume_70to100",  15, 0, 0.15); h_PFiso_barrel_nume_70to100 ->Sumw2();
         TH1D* h_PFiso_endcap_nume_70to100  = new TH1D("h_PFiso_endcap_nume_70to100",  "h_PFiso_endcap_nume_70to100",  15, 0, 0.15); h_PFiso_endcap_nume_70to100 ->Sumw2();
+        TH1D* h_PFiso_endcap2_nume_70to100  = new TH1D("h_PFiso_endcap2_nume_70to100",  "h_PFiso_endcap2_nume_70to100",  15, 0, 0.15); h_PFiso_endcap2_nume_70to100 ->Sumw2();
         TH1D* h_PFiso_barrel_deno_70to100  = new TH1D("h_PFiso_barrel_deno_70to100",  "h_PFiso_barrel_deno_70to100",  50, 0, 5);    h_PFiso_barrel_deno_70to100 ->Sumw2();
         TH1D* h_PFiso_endcap_deno_70to100  = new TH1D("h_PFiso_endcap_deno_70to100",  "h_PFiso_endcap_deno_70to100",  50, 0, 5);    h_PFiso_endcap_deno_70to100 ->Sumw2();
+        TH1D* h_PFiso_endcap2_deno_70to100  = new TH1D("h_PFiso_endcap2_deno_70to100",  "h_PFiso_endcap2_deno_70to100",  50, 0, 5);    h_PFiso_endcap2_deno_70to100 ->Sumw2();
         TH1D* h_PFiso_barrel_ctrl_70to100  = new TH1D("h_PFiso_barrel_ctrl_70to100",  "h_PFiso_barrel_ctrl_70to100",  50, 0.15, 5);    h_PFiso_barrel_ctrl_70to100 ->Sumw2();
         TH1D* h_PFiso_endcap_ctrl_70to100  = new TH1D("h_PFiso_endcap_ctrl_70to100",  "h_PFiso_endcap_ctrl_70to100",  50, 0.15, 5);    h_PFiso_endcap_ctrl_70to100 ->Sumw2();
+        TH1D* h_PFiso_endcap2_ctrl_70to100  = new TH1D("h_PFiso_endcap2_ctrl_70to100",  "h_PFiso_endcap2_ctrl_70to100",  50, 0.15, 5);    h_PFiso_endcap2_ctrl_70to100 ->Sumw2();
         TH1D* h_PFiso_barrel_nume_100to500 = new TH1D("h_PFiso_barrel_nume_100to500", "h_PFiso_barrel_nume_100to500", 15, 0, 0.15); h_PFiso_barrel_nume_100to500->Sumw2();
         TH1D* h_PFiso_endcap_nume_100to500 = new TH1D("h_PFiso_endcap_nume_100to500", "h_PFiso_endcap_nume_100to500", 15, 0, 0.15); h_PFiso_endcap_nume_100to500->Sumw2();
+        TH1D* h_PFiso_endcap2_nume_100to500 = new TH1D("h_PFiso_endcap2_nume_100to500", "h_PFiso_endcap2_nume_100to500", 15, 0, 0.15); h_PFiso_endcap2_nume_100to500->Sumw2();
         TH1D* h_PFiso_barrel_deno_100to500 = new TH1D("h_PFiso_barrel_deno_100to500", "h_PFiso_barrel_deno_100to500", 50, 0, 5);    h_PFiso_barrel_deno_100to500->Sumw2();
         TH1D* h_PFiso_endcap_deno_100to500 = new TH1D("h_PFiso_endcap_deno_100to500", "h_PFiso_endcap_deno_100to500", 50, 0, 5);    h_PFiso_endcap_deno_100to500->Sumw2();
+        TH1D* h_PFiso_endcap2_deno_100to500 = new TH1D("h_PFiso_endcap2_deno_100to500", "h_PFiso_endcap2_deno_100to500", 50, 0, 5);    h_PFiso_endcap2_deno_100to500->Sumw2();
         TH1D* h_PFiso_barrel_ctrl_100to500 = new TH1D("h_PFiso_barrel_ctrl_100to500", "h_PFiso_barrel_ctrl_100to500", 50, 0.15, 5);    h_PFiso_barrel_ctrl_100to500->Sumw2();
         TH1D* h_PFiso_endcap_ctrl_100to500 = new TH1D("h_PFiso_endcap_ctrl_100to500", "h_PFiso_endcap_ctrl_100to500", 50, 0.15, 5);    h_PFiso_endcap_ctrl_100to500->Sumw2();
+        TH1D* h_PFiso_endcap2_ctrl_100to500 = new TH1D("h_PFiso_endcap2_ctrl_100to500", "h_PFiso_endcap2_ctrl_100to500", 50, 0.15, 5);    h_PFiso_endcap2_ctrl_100to500->Sumw2();
 
         TH1D* h_pT_barrel_nume_50to70   = new TH1D("h_pT_barrel_nume_50to70 ",  "h_pT_barrel_nume_50to70 ",  nPtBinBarrel, analyzer->ptbin_barrel); h_pT_barrel_nume_50to70  ->Sumw2();
         TH1D* h_pT_endcap_nume_50to70   = new TH1D("h_pT_endcap_nume_50to70 ",  "h_pT_endcap_nume_50to70 ",  nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap_nume_50to70  ->Sumw2();
+        TH1D* h_pT_endcap2_nume_50to70   = new TH1D("h_pT_endcap2_nume_50to70 ",  "h_pT_endcap2_nume_50to70 ",  nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap2_nume_50to70  ->Sumw2();
         TH1D* h_pT_barrel_deno_50to70   = new TH1D("h_pT_barrel_deno_50to70 ",  "h_pT_barrel_deno_50to70 ",  nPtBinBarrel, analyzer->ptbin_barrel); h_pT_barrel_deno_50to70  ->Sumw2();
         TH1D* h_pT_endcap_deno_50to70   = new TH1D("h_pT_endcap_deno_50to70 ",  "h_pT_endcap_deno_50to70 ",  nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap_deno_50to70  ->Sumw2();
+        TH1D* h_pT_endcap2_deno_50to70   = new TH1D("h_pT_endcap2_deno_50to70 ",  "h_pT_endcap2_deno_50to70 ",  nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap2_deno_50to70  ->Sumw2();
         TH1D* h_pT_barrel_ctrl_50to70   = new TH1D("h_pT_barrel_ctrl_50to70 ",  "h_pT_barrel_ctrl_50to70 ",  nPtBinBarrel, analyzer->ptbin_barrel); h_pT_barrel_ctrl_50to70  ->Sumw2();
         TH1D* h_pT_endcap_ctrl_50to70   = new TH1D("h_pT_endcap_ctrl_50to70 ",  "h_pT_endcap_ctrl_50to70 ",  nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap_ctrl_50to70  ->Sumw2();
+        TH1D* h_pT_endcap2_ctrl_50to70   = new TH1D("h_pT_endcap2_ctrl_50to70 ",  "h_pT_endcap2_ctrl_50to70 ",  nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap2_ctrl_50to70  ->Sumw2();
         TH1D* h_pT_barrel_nume_70to100  = new TH1D("h_pT_barrel_nume_70to100",  "h_pT_barrel_nume_70to100",  nPtBinBarrel, analyzer->ptbin_barrel); h_pT_barrel_nume_70to100 ->Sumw2();
         TH1D* h_pT_endcap_nume_70to100  = new TH1D("h_pT_endcap_nume_70to100",  "h_pT_endcap_nume_70to100",  nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap_nume_70to100 ->Sumw2();
+        TH1D* h_pT_endcap2_nume_70to100  = new TH1D("h_pT_endcap2_nume_70to100",  "h_pT_endcap2_nume_70to100",  nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap2_nume_70to100 ->Sumw2();
         TH1D* h_pT_barrel_deno_70to100  = new TH1D("h_pT_barrel_deno_70to100",  "h_pT_barrel_deno_70to100",  nPtBinBarrel, analyzer->ptbin_barrel); h_pT_barrel_deno_70to100 ->Sumw2();
         TH1D* h_pT_endcap_deno_70to100  = new TH1D("h_pT_endcap_deno_70to100",  "h_pT_endcap_deno_70to100",  nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap_deno_70to100 ->Sumw2();
+        TH1D* h_pT_endcap2_deno_70to100  = new TH1D("h_pT_endcap2_deno_70to100",  "h_pT_endcap2_deno_70to100",  nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap2_deno_70to100 ->Sumw2();
         TH1D* h_pT_barrel_ctrl_70to100  = new TH1D("h_pT_barrel_ctrl_70to100",  "h_pT_barrel_ctrl_70to100",  nPtBinBarrel, analyzer->ptbin_barrel); h_pT_barrel_ctrl_70to100 ->Sumw2();
         TH1D* h_pT_endcap_ctrl_70to100  = new TH1D("h_pT_endcap_ctrl_70to100",  "h_pT_endcap_ctrl_70to100",  nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap_ctrl_70to100 ->Sumw2();
+        TH1D* h_pT_endcap2_ctrl_70to100  = new TH1D("h_pT_endcap2_ctrl_70to100",  "h_pT_endcap2_ctrl_70to100",  nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap2_ctrl_70to100 ->Sumw2();
         TH1D* h_pT_barrel_nume_100to500 = new TH1D("h_pT_barrel_nume_100to500", "h_pT_barrel_nume_200to500", nPtBinBarrel, analyzer->ptbin_barrel); h_pT_barrel_nume_100to500->Sumw2();
         TH1D* h_pT_endcap_nume_100to500 = new TH1D("h_pT_endcap_nume_100to500", "h_pT_endcap_nume_200to500", nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap_nume_100to500->Sumw2();
+        TH1D* h_pT_endcap2_nume_100to500 = new TH1D("h_pT_endcap2_nume_100to500", "h_pT_endcap2_nume_200to500", nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap2_nume_100to500->Sumw2();
         TH1D* h_pT_barrel_deno_100to500 = new TH1D("h_pT_barrel_deno_100to500", "h_pT_barrel_deno_200to500", nPtBinBarrel, analyzer->ptbin_barrel); h_pT_barrel_deno_100to500->Sumw2();
         TH1D* h_pT_endcap_deno_100to500 = new TH1D("h_pT_endcap_deno_100to500", "h_pT_endcap_deno_200to500", nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap_deno_100to500->Sumw2();
+        TH1D* h_pT_endcap2_deno_100to500 = new TH1D("h_pT_endcap2_deno_100to500", "h_pT_endcap2_deno_200to500", nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap2_deno_100to500->Sumw2();
         TH1D* h_pT_barrel_ctrl_100to500 = new TH1D("h_pT_barrel_ctrl_100to500", "h_pT_barrel_ctrl_200to500", nPtBinBarrel, analyzer->ptbin_barrel); h_pT_barrel_ctrl_100to500->Sumw2();
         TH1D* h_pT_endcap_ctrl_100to500 = new TH1D("h_pT_endcap_ctrl_100to500", "h_pT_endcap_ctrl_200to500", nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap_ctrl_100to500->Sumw2();
+        TH1D* h_pT_endcap2_ctrl_100to500 = new TH1D("h_pT_endcap2_ctrl_100to500", "h_pT_endcap2_ctrl_200to500", nPtBinEndcap, analyzer->ptbin_endcap); h_pT_endcap2_ctrl_100to500->Sumw2();
 
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
@@ -1571,7 +1899,7 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
                             h_PFiso_barrel_nume_100to500->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                     }
-                    else // Endcap
+                    else if (fabs(eta->at(i_mu)) >= 1.2 && fabs(eta->at(i_mu)) < 1.8) // Endcap
                     {
                         h_pT_endcap_nume->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         h_PFiso_endcap_nume->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
@@ -1591,6 +1919,27 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
                         {
                             h_pT_endcap_nume_100to500->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                             h_PFiso_endcap_nume_100to500->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        }
+                    }
+                    else if (fabs(eta->at(i_mu)) >= 1.8 && fabs(eta->at(i_mu)) < 2.4) // Far endcap
+                    {
+                        h_pT_endcap2_nume->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_endcap2_nume->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+
+                        if (p_T->at(i_mu) < 70)
+                        {
+                            h_pT_endcap2_nume_50to70->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_endcap2_nume_50to70->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        }
+                        else if (p_T->at(i_mu) < 100)
+                        {
+                            h_pT_endcap2_nume_70to100->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_endcap2_nume_70to100->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        }
+                        else //if (p_T->at(i_mu) < 500)
+                        {
+                            h_pT_endcap2_nume_100to500->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_endcap2_nume_100to500->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                     }
                 } // End of if(Signal/Numerator)
@@ -1619,7 +1968,7 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
                             h_PFiso_barrel_ctrl_100to500->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                     }
-                    else // Endcap
+                    else if (fabs(eta->at(i_mu)) >= 1.2 && fabs(eta->at(i_mu)) < 1.8) // Endcap
                     {
                         h_pT_endcap_ctrl->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         h_PFiso_endcap_ctrl->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
@@ -1639,6 +1988,27 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
                         {
                             h_pT_endcap_ctrl_100to500->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                             h_PFiso_endcap_ctrl_100to500->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        }
+                    }
+                    else if (fabs(eta->at(i_mu)) >= 1.8 && fabs(eta->at(i_mu)) < 2.4) // Far endcap
+                    {
+                        h_pT_endcap2_ctrl->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_endcap2_ctrl->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+
+                        if (p_T->at(i_mu) < 70)
+                        {
+                            h_pT_endcap2_ctrl_50to70->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_endcap2_ctrl_50to70->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        }
+                        else if (p_T->at(i_mu) < 100)
+                        {
+                            h_pT_endcap2_ctrl_70to100->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_endcap2_ctrl_70to100->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        }
+                        else //if (p_T->at(i_mu) < 500)
+                        {
+                            h_pT_endcap2_ctrl_100to500->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                            h_PFiso_endcap2_ctrl_100to500->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         }
                     }
                 }// End of if(Control)
@@ -1666,7 +2036,7 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
                         h_PFiso_barrel_deno_100to500->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                 }
-                else // Endcap
+                else if (fabs(eta->at(i_mu)) >= 1.2 && fabs(eta->at(i_mu)) < 1.8) // Endcap
                 {
                     h_pT_endcap_deno->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     h_PFiso_endcap_deno->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
@@ -1686,6 +2056,27 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
                     {
                         h_pT_endcap_deno_100to500->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                         h_PFiso_endcap_deno_100to500->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    }
+                }
+                else if (fabs(eta->at(i_mu)) >= 1.8 && fabs(eta->at(i_mu)) < 2.4) // Endcap
+                {
+                    h_pT_endcap2_deno->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_PFiso_endcap2_deno->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+
+                    if (p_T->at(i_mu) < 70)
+                    {
+                        h_pT_endcap2_deno_50to70->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_endcap2_deno_50to70->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    }
+                    else if (p_T->at(i_mu) < 100)
+                    {
+                        h_pT_endcap2_deno_70to100->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_endcap2_deno_70to100->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    }
+                    else //if (p_T->at(i_mu) < 500)
+                    {
+                        h_pT_endcap2_deno_100to500->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PFiso_endcap2_deno_100to500->Fill(relPFiso->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                 }
             }// End of i_mu iteration
@@ -1714,19 +2105,25 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
 
         h_pT_barrel_nume->Write();
         h_pT_endcap_nume->Write();
+        h_pT_endcap2_nume->Write();
         h_pT_barrel_deno->Write();
         h_pT_endcap_deno->Write();
+        h_pT_endcap2_deno->Write();
         h_pT_barrel_ctrl->Write();
         h_pT_endcap_ctrl->Write();
+        h_pT_endcap2_ctrl->Write();
         h_eta_nume->Write();
         h_eta_deno->Write();
         h_eta_ctrl->Write();
         h_PFiso_barrel_nume->Write();
         h_PFiso_endcap_nume->Write();
+        h_PFiso_endcap2_nume->Write();
         h_PFiso_barrel_deno->Write();
         h_PFiso_endcap_deno->Write();
+        h_PFiso_endcap2_deno->Write();
         h_PFiso_barrel_ctrl->Write();
         h_PFiso_endcap_ctrl->Write();
+        h_PFiso_endcap2_ctrl->Write();
         h_TRKiso_barrel_nume->Write();
         h_TRKiso_endcap_nume->Write();
         h_TRKiso_barrel_deno->Write();
@@ -1744,41 +2141,59 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
 
         h_pT_barrel_nume_50to70->Write();
         h_pT_endcap_nume_50to70->Write();
+        h_pT_endcap2_nume_50to70->Write();
         h_pT_barrel_deno_50to70->Write();
         h_pT_endcap_deno_50to70->Write();
+        h_pT_endcap2_deno_50to70->Write();
         h_pT_barrel_ctrl_50to70->Write();
         h_pT_endcap_ctrl_50to70->Write();
+        h_pT_endcap2_ctrl_50to70->Write();
         h_pT_barrel_nume_70to100->Write();
         h_pT_endcap_nume_70to100->Write();
+        h_pT_endcap2_nume_70to100->Write();
         h_pT_barrel_deno_70to100->Write();
         h_pT_endcap_deno_70to100->Write();
+        h_pT_endcap2_deno_70to100->Write();
         h_pT_barrel_ctrl_70to100->Write();
         h_pT_endcap_ctrl_70to100->Write();
+        h_pT_endcap2_ctrl_70to100->Write();
         h_pT_barrel_nume_100to500->Write();
         h_pT_endcap_nume_100to500->Write();
+        h_pT_endcap2_nume_100to500->Write();
         h_pT_barrel_deno_100to500->Write();
         h_pT_endcap_deno_100to500->Write();
+        h_pT_endcap2_deno_100to500->Write();
         h_pT_barrel_ctrl_100to500->Write();
         h_pT_endcap_ctrl_100to500->Write();
+        h_pT_endcap2_ctrl_100to500->Write();
 
         h_PFiso_barrel_nume_50to70->Write();
         h_PFiso_endcap_nume_50to70->Write();
+        h_PFiso_endcap2_nume_50to70->Write();
         h_PFiso_barrel_deno_50to70->Write();
         h_PFiso_endcap_deno_50to70->Write();
+        h_PFiso_endcap2_deno_50to70->Write();
         h_PFiso_barrel_ctrl_50to70->Write();
         h_PFiso_endcap_ctrl_50to70->Write();
+        h_PFiso_endcap2_ctrl_50to70->Write();
         h_PFiso_barrel_nume_70to100->Write();
         h_PFiso_endcap_nume_70to100->Write();
+        h_PFiso_endcap2_nume_70to100->Write();
         h_PFiso_barrel_deno_70to100->Write();
         h_PFiso_endcap_deno_70to100->Write();
+        h_PFiso_endcap2_deno_70to100->Write();
         h_PFiso_barrel_ctrl_70to100->Write();
         h_PFiso_endcap_ctrl_70to100->Write();
+        h_PFiso_endcap2_ctrl_70to100->Write();
         h_PFiso_barrel_nume_100to500->Write();
         h_PFiso_endcap_nume_100to500->Write();
+        h_PFiso_endcap2_nume_100to500->Write();
         h_PFiso_barrel_deno_100to500->Write();
         h_PFiso_endcap_deno_100to500->Write();
+        h_PFiso_endcap2_deno_100to500->Write();
         h_PFiso_barrel_ctrl_100to500->Write();
         h_PFiso_endcap_ctrl_100to500->Write();
+        h_PFiso_endcap2_ctrl_100to500->Write();
 
         cout << " Finished.\n" << endl;
 
@@ -1828,9 +2243,10 @@ void E_QCD_HistMaker (Bool_t DEBUG)
     analyzer->SetupEfficiencyScaleFactor_electron();
 
     // -- For QCD estimation from Fake Rate -- //
-    analyzer->SetupFRvalues_ele(Dir+"FakeRate_electron.root", "subtract", 1);
+//    analyzer->SetupFRvalues_ele(Dir+"FakeRate_electron.root", "subtract", 1);
+    analyzer->SetupFRvalues_ele_fit(Dir+"FakeRate_electron.root");
 
-    TH1D* h_FRweight = new TH1D("h_FRweight", "FR weights", 100, 0, 0.01);
+    TH1D* h_FRweight = new TH1D("h_FRweight", "FR weights", 100, 0, 0.1);
 
     // Sign-missasignment correction
     TFile *f_ch = new TFile("~/DrellYan2016/SelectedX/etc/misid_majority.root");
@@ -1999,39 +2415,41 @@ void E_QCD_HistMaker (Bool_t DEBUG)
 
             // QCD selection
             if (p_T->size() != 2) continue;
+
+            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
+            if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
+            if (fabs(etaSC->at(0)) >= 2.4 || fabs(etaSC->at(1)) >= 2.4) continue;
             if ((fabs(etaSC->at(0)) > 1.4442 && fabs(etaSC->at(0)) < 1.566) || fabs((etaSC->at(1)) > 1.4442 && fabs(etaSC->at(1)) < 1.566)) continue;
-//            if (fabs(etaSC->at(0)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.013 || HoverE->at(0) >= 0.13 ||
-//                                                fabs(dEtaInSeed->at(0)) >= 0.01 || fabs(dPhiIn->at(0)) >= 0.07 || mHits->at(0) > 1)) continue;
-//            if (fabs(etaSC->at(1)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.013 || HoverE->at(1) >= 0.13 ||
-//                                                fabs(dEtaInSeed->at(1)) >= 0.01 || fabs(dPhiIn->at(1)) >= 0.07 || mHits->at(1) > 1)) continue;
-//            if (fabs(etaSC->at(0)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.035 || HoverE->at(0) >= 0.13 || mHits->at(0) > 1)) continue;
-//            if (fabs(etaSC->at(1)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.035 || HoverE->at(1) >= 0.13 || mHits->at(1) > 1)) continue;
+            if (passMediumID->at(0) == 1 || passMediumID->at(1)  == 1) continue;
+            if (mHits->at(0) > 1 /*|| !passConvVeto->at(0)*/ || relECALiso->at(0) >= 0.5 || relHCALiso->at(0) >= 0.5 || relTrkIso->at(0) >= 0.2) continue;
+            if (mHits->at(1) > 1 /*|| !passConvVeto->at(1)*/ || relECALiso->at(1) >= 0.5 || relHCALiso->at(1) >= 0.5 || relTrkIso->at(1) >= 0.2) continue;
+
+            if (fabs(etaSC->at(0)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.013 || HoverE->at(0) >= 0.13 ||
+                                                fabs(dEtaInSeed->at(0)) >= 0.01 || fabs(dPhiIn->at(0)) >= 0.07 || mHits->at(0) > 1)) continue;
+            if (fabs(etaSC->at(1)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.013 || HoverE->at(1) >= 0.13 ||
+                                                fabs(dEtaInSeed->at(1)) >= 0.01 || fabs(dPhiIn->at(1)) >= 0.07 || mHits->at(1) > 1)) continue;
+            if (fabs(etaSC->at(0)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.035 || HoverE->at(0) >= 0.13 || mHits->at(0) > 1)) continue;
+            if (fabs(etaSC->at(1)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.035 || HoverE->at(1) >= 0.13 || mHits->at(1) > 1)) continue;
+
+//            // ALTERNATIVE FR (allowing only relPFiso to fail)        
+//            if (fabs(etaSC->at(0)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.00998 || fabs(dEtaInSeed->at(0)) >= 0.00311 ||
+//                fabs(dPhiIn->at(0)) >= 0.07/*0.103*/ || HoverE->at(0) >= 0.13/*0.253*/ || InvEminusInvP->at(0) >= 0.134))
+//                continue;
+//            if (fabs(etaSC->at(0)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.0298 || fabs(dEtaInSeed->at(0)) >= 0.00609 ||
+//                fabs(dPhiIn->at(0)) >= 0.045 || HoverE->at(0) >= 0.0878 || InvEminusInvP->at(0) >= 0.13 ))
+//                continue;
+//            if (fabs(etaSC->at(1)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.00998 || fabs(dEtaInSeed->at(1)) >= 0.00311 ||
+//                fabs(dPhiIn->at(1)) >= 0.07/*0.103*/ || HoverE->at(1) >= 0.13/*0.253*/ || InvEminusInvP->at(1) >= 0.134))
+//                continue;
+//            if (fabs(etaSC->at(1)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.0298 || fabs(dEtaInSeed->at(1)) >= 0.00609 ||
+//                fabs(dPhiIn->at(1)) >= 0.045 || HoverE->at(1) >= 0.0878 || InvEminusInvP->at(1) >= 0.13))
+//                continue;
 
             if (charge->at(0) == charge->at(1)) nSameSign++;
 //            if (scPixCharge->at(0) == scPixCharge->at(1) && isGsfCtfScPixConsistent->at(0) && isGsfCtfScPixConsistent->at(1)) nSameSignTight++;
 //            if (charge->at(0) == scPixCharge->at(0) && isGsfCtfScPixConsistent->at(0)) n_charge_tightCharge_match++;
 //            if (charge->at(1) == scPixCharge->at(1) && isGsfCtfScPixConsistent->at(1)) n_charge_tightCharge_match++;
             nEle += 2;
-
-            if (passMediumID->at(0) == 1 || passMediumID->at(1)  == 1) continue;
-            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
-            if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
-
-//            // ALTERNATIVE FR (allowing only relPFiso to fail)        
-            if (fabs(etaSC->at(0)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.00998 || fabs(dEtaInSeed->at(0)) >= 0.00311 ||
-                fabs(dPhiIn->at(0)) >= 0.07/*0.103*/ || HoverE->at(0) >= 0.13/*0.253*/ || InvEminusInvP->at(0) >= 0.134))
-                continue;
-            if (fabs(etaSC->at(0)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.0298 || fabs(dEtaInSeed->at(0)) >= 0.00609 ||
-                fabs(dPhiIn->at(0)) >= 0.045 || HoverE->at(0) >= 0.0878 || InvEminusInvP->at(0) >= 0.13 ))
-                continue;
-            if (fabs(etaSC->at(1)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.00998 || fabs(dEtaInSeed->at(1)) >= 0.00311 ||
-                fabs(dPhiIn->at(1)) >= 0.07/*0.103*/ || HoverE->at(1) >= 0.13/*0.253*/ || InvEminusInvP->at(1) >= 0.134))
-                continue;
-            if (fabs(etaSC->at(1)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.0298 || fabs(dEtaInSeed->at(1)) >= 0.00609 ||
-                fabs(dPhiIn->at(1)) >= 0.045 || HoverE->at(1) >= 0.0878 || InvEminusInvP->at(1) >= 0.13))
-                continue;
-            if (mHits->at(0) > 1 || !passConvVeto->at(0) || relECALiso->at(0) >= 0.5 || relHCALiso->at(0) >= 0.5 || relTrkIso->at(0) >= 0.2) continue;
-            if (mHits->at(1) > 1 || !passConvVeto->at(1) || relECALiso->at(1) >= 0.5 || relHCALiso->at(1) >= 0.5 || relTrkIso->at(1) >= 0.2) continue;
 
             if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << charge->at(0) << " " << relPFiso_Rho->at(0) << endl;
             if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << charge->at(1) << " " << relPFiso_Rho->at(1) << endl;
@@ -2093,8 +2511,8 @@ void E_QCD_HistMaker (Bool_t DEBUG)
             // -- FR WEIGHTS -- //
             Double_t FRweight = 1;
             Double_t FR1, FR2;
-            FR1 = analyzer->FakeRate_ele(p_T->at(0), etaSC->at(0));
-            FR2 = analyzer->FakeRate_ele(p_T->at(1), etaSC->at(1));
+            FR1 = analyzer->FakeRate_ele_fit(p_T->at(0), etaSC->at(0));
+            FR2 = analyzer->FakeRate_ele_fit(p_T->at(1), etaSC->at(1));
             FRweight = FR1 / (1 - FR1) * FR2 / (1 - FR2);
             if (DEBUG == kTRUE) cout << "FR1 = " << FR1 << "   FR2 = " << FR2 << "   FRweight = " << FRweight << endl;
             avgFRweight += FRweight;
@@ -2314,7 +2732,8 @@ void E_WJET_HistMaker (Bool_t DEBUG)
     analyzer->SetupEfficiencyScaleFactor_electron();
 
     // -- For W+Jets estimation from Fake Rate -- //
-    analyzer->SetupFRvalues_ele(Dir+"FakeRate_electron.root", "subtract", 1);
+//    analyzer->SetupFRvalues_ele(Dir+"FakeRate_electron.root", "subtract", 1);
+    analyzer->SetupFRvalues_ele_fit(Dir+"FakeRate_electron.root");
 
     TH1D* h_FRweight = new TH1D("h_FRweight", "FR weights", 100, 0, 0.5);
     TH1D* h_DYweight = new TH1D("h_DYweight", "DY eff weights", 100, 0.5, 1.5);
@@ -2468,35 +2887,37 @@ void E_WJET_HistMaker (Bool_t DEBUG)
             if (!DEBUG) bar.Draw(i);
 
             // W+Jets selection
-            if (p_T->size() != 2) continue;
-            if (passMediumID->at(0) == 1 && passMediumID->at(1) == 1) continue;
-            if (passMediumID->at(0) == 0 && passMediumID->at(1) == 0) continue;
+            if (p_T->size() != 2) continue;           
             if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
             if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
             if ((fabs(etaSC->at(0)) > 1.4442 && fabs(etaSC->at(0)) < 1.566) || (fabs(etaSC->at(1)) > 1.4442 && fabs(etaSC->at(1)) < 1.566)) continue;
-//            if (fabs(etaSC->at(0)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.013 || HoverE->at(0) >= 0.13 ||
-//                                                fabs(dEtaInSeed->at(0)) >= 0.01 || fabs(dPhiIn->at(0)) >= 0.07 || mHits->at(0) > 1)) continue;
-//            if (fabs(etaSC->at(1)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.013 || HoverE->at(1) >= 0.13 ||
-//                                                fabs(dEtaInSeed->at(1)) >= 0.01 || fabs(dPhiIn->at(1)) >= 0.07 || mHits->at(1) > 1)) continue;
-//            if (fabs(etaSC->at(0)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.035 || HoverE->at(0) >= 0.13 || mHits->at(0) > 1)) continue;
-//            if (fabs(etaSC->at(1)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.035 || HoverE->at(1) >= 0.13 || mHits->at(1) > 1)) continue;
+            if (fabs(etaSC->at(0)) >= 2.4 || fabs(etaSC->at(0)) >= 2.4) continue;
+            if (passMediumID->at(0) == 1 && passMediumID->at(1) == 1) continue;
+            if (passMediumID->at(0) == 0 && passMediumID->at(1) == 0) continue;
+
+            if (fabs(etaSC->at(0)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.013 || HoverE->at(0) >= 0.13 ||
+                                                fabs(dEtaInSeed->at(0)) >= 0.01 || fabs(dPhiIn->at(0)) >= 0.07 || mHits->at(0) > 1)) continue;
+            if (fabs(etaSC->at(1)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.013 || HoverE->at(1) >= 0.13 ||
+                                                fabs(dEtaInSeed->at(1)) >= 0.01 || fabs(dPhiIn->at(1)) >= 0.07 || mHits->at(1) > 1)) continue;
+            if (fabs(etaSC->at(0)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.035 || HoverE->at(0) >= 0.13 || mHits->at(0) > 1)) continue;
+            if (fabs(etaSC->at(1)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.035 || HoverE->at(1) >= 0.13 || mHits->at(1) > 1)) continue;
+
+            if (mHits->at(0) > 1 /*|| !passConvVeto->at(0)*/ || relECALiso->at(0) >= 0.5 || relHCALiso->at(0) >= 0.5 || relTrkIso->at(0) >= 0.2) continue;
+            if (mHits->at(1) > 1 /*|| !passConvVeto->at(1)*/ || relECALiso->at(1) >= 0.5 || relHCALiso->at(1) >= 0.5 || relTrkIso->at(1) >= 0.2) continue;
 
             // ALTERNATIVE FR (allowing only relPFiso to fail)
-            if (fabs(etaSC->at(0)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.00998 || fabs(dEtaInSeed->at(0)) >= 0.00311 ||
-                fabs(dPhiIn->at(0)) >= 0.07/*0.103*/ || HoverE->at(0) >= 0.13/*0.253*/ || InvEminusInvP->at(0) >= 0.134))
-                continue;
-            if (fabs(etaSC->at(0)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.0298 || fabs(dEtaInSeed->at(0)) >= 0.00609 ||
-                fabs(dPhiIn->at(0)) >= 0.045 || HoverE->at(0) >= 0.0878 || InvEminusInvP->at(0) >= 0.13))
-                continue;
-            if (fabs(etaSC->at(1)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.00998 || fabs(dEtaInSeed->at(1)) >= 0.00311 ||
-                fabs(dPhiIn->at(1)) >= 0.07/*0.103*/ || HoverE->at(1) >= 0.13/*0.253*/ || InvEminusInvP->at(1) >= 0.134))
-                continue;
-            if (fabs(etaSC->at(1)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.0298 || fabs(dEtaInSeed->at(1)) >= 0.00609 ||
-                fabs(dPhiIn->at(1)) >= 0.045 || HoverE->at(1) >= 0.0878 || InvEminusInvP->at(1) >= 0.13))
-                continue;
-            if (mHits->at(0) > 1 || !passConvVeto->at(0) || relECALiso->at(0) >= 0.5 || relHCALiso->at(0) >= 0.5 || relTrkIso->at(0) >= 0.2) continue;
-            if (mHits->at(1) > 1 || !passConvVeto->at(1) || relECALiso->at(1) >= 0.5 || relHCALiso->at(1) >= 0.5 || relTrkIso->at(1) >= 0.2) continue;
-
+//            if (fabs(etaSC->at(0)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.00998 || fabs(dEtaInSeed->at(0)) >= 0.00311 ||
+//                fabs(dPhiIn->at(0)) >= 0.07/*0.103*/ || HoverE->at(0) >= 0.13/*0.253*/ || InvEminusInvP->at(0) >= 0.134))
+//                continue;
+//            if (fabs(etaSC->at(0)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.0298 || fabs(dEtaInSeed->at(0)) >= 0.00609 ||
+//                fabs(dPhiIn->at(0)) >= 0.045 || HoverE->at(0) >= 0.0878 || InvEminusInvP->at(0) >= 0.13))
+//                continue;
+//            if (fabs(etaSC->at(1)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.00998 || fabs(dEtaInSeed->at(1)) >= 0.00311 ||
+//                fabs(dPhiIn->at(1)) >= 0.07/*0.103*/ || HoverE->at(1) >= 0.13/*0.253*/ || InvEminusInvP->at(1) >= 0.134))
+//                continue;
+//            if (fabs(etaSC->at(1)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.0298 || fabs(dEtaInSeed->at(1)) >= 0.00609 ||
+//                fabs(dPhiIn->at(1)) >= 0.045 || HoverE->at(1) >= 0.0878 || InvEminusInvP->at(1) >= 0.13))
+//                continue;
 
             if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << charge->at(0) << " " << relPFiso_Rho->at(0) << endl;
             if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << charge->at(1) << " " << relPFiso_Rho->at(1) << endl;
@@ -2568,7 +2989,7 @@ void E_WJET_HistMaker (Bool_t DEBUG)
             Double_t FR;
             if (passMediumID->at(0) == 0 && passMediumID->at(1) == 1) // First fails, second passes
             {
-                FR = analyzer->FakeRate_ele(p_T->at(0), etaSC->at(0));
+                FR = analyzer->FakeRate_ele_fit(p_T->at(0), etaSC->at(0));
                 if (Mgr.isMC == kTRUE)
                 {
                     effweight = analyzer->EfficiencySF_EventWeight_electronFR(ele1_SF, ele2_SF, 2);
@@ -2598,7 +3019,7 @@ void E_WJET_HistMaker (Bool_t DEBUG)
             }
             else // Second fails, first passes
             {
-                FR = analyzer->FakeRate_ele(p_T->at(1), etaSC->at(1));
+                FR = analyzer->FakeRate_ele_fit(p_T->at(1), etaSC->at(1));
                 if (Mgr.isMC == kTRUE)
                 {
                     effweight = analyzer->EfficiencySF_EventWeight_electronFR(ele1_SF, ele2_SF, 1);
@@ -2816,10 +3237,10 @@ void Mu_QCD_HistMaker (Bool_t DEBUG)
         std::vector<int> *trig_matched = new std::vector<int>;
         std::vector<double> *trig_pT = new std::vector<double>;
         std::vector<int> *prescale_factor = new std::vector<int>;
+        Double_t MET_pT, MET_Phi;
         Int_t nPU;
         Int_t nVTX;
         Double_t PVz;
-        Double_t evt_weight;
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
 
@@ -2890,7 +3311,7 @@ void Mu_QCD_HistMaker (Bool_t DEBUG)
 //            if (charge->at(0) == charge->at(1)) continue;
             if (relPFiso->at(0) < 0.15 || relPFiso->at(1) < 0.15) continue;
             if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
-            if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
+            if (p_T->at(0) < 52 && p_T->at(1) < 52) continue;
 //            if (p_T->at(0) < 2 || p_T->at(1) < 2) continue;
 
             if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << charge->at(0) << " " << relPFiso->at(0) << endl;
@@ -4169,7 +4590,7 @@ void EMu_WJET_HistMaker (Bool_t DEBUG)
 } // End of EMu_WJET_HistMaker()
 
 
-/// --------------------------- PROMPT RATE ---------------------------- ///
+/// --------------------------- ELECTRON PROMPT RATE ---------------------------- ///
 void E_PR_HistMaker (Bool_t DEBUG)
 {
     TTimeStamp ts_start;
@@ -4203,6 +4624,14 @@ void E_PR_HistMaker (Bool_t DEBUG)
     TH1D *h_pT_endcap_pass_DY = new TH1D ("h_pT_endcap_pass_DY", "h_pT_endcap_pass_DY", nPtBin_DY, analyzer->ptbin_DY);
     TH1D *h_pT_endcap_pass_bkgr = new TH1D ("h_pT_endcap_pass_bkgr", "h_pT_endcap_pass_bkgr", nPtBin_DY, analyzer->ptbin_DY);
     TH1D *h_pT_endcap_pass_bkgf = new TH1D ("h_pT_endcap_pass_bkgf", "h_pT_endcap_pass_bkgf", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap2_pass_data = new TH1D ("h_pT_endcap2_pass_data", "h_pT_endcap2_pass_data", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap2_pass_DY = new TH1D ("h_pT_endcap2_pass_DY", "h_pT_endcap2_pass_DY", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap2_pass_bkgr = new TH1D ("h_pT_endcap2_pass_bkgr", "h_pT_endcap2_pass_bkgr", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap2_pass_bkgf = new TH1D ("h_pT_endcap2_pass_bkgf", "h_pT_endcap2_pass_bkgf", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D* h_eta_pass_data = new TH1D("h_eta_pass_data", "h_eta_pass_data", 66, etabins);
+    TH1D* h_eta_pass_DY = new TH1D("h_eta_pass_DY", "h_eta_pass_DY", 66, etabins);
+    TH1D* h_eta_pass_bkgr = new TH1D("h_eta_pass_bkgr", "h_eta_pass_bkgr", 66, etabins);
+    TH1D* h_eta_pass_bkgf = new TH1D("h_eta_pass_bkgf", "h_eta_pass_bkgf", 66, etabins);
     TH1D *h_pT_barrel_fail_data = new TH1D ("h_pT_barrel_fail_data", "h_pT_barrel_fail_data", nPtBin_DY, analyzer->ptbin_DY);
     TH1D *h_pT_barrel_fail_DY = new TH1D ("h_pT_barrel_fail_DY", "h_pT_barrel_fail_DY", nPtBin_DY, analyzer->ptbin_DY);
     TH1D *h_pT_barrel_fail_bkgr = new TH1D ("h_pT_barrel_fail_bkgr", "h_pT_barrel_fail_bkgr", nPtBin_DY, analyzer->ptbin_DY);
@@ -4211,6 +4640,14 @@ void E_PR_HistMaker (Bool_t DEBUG)
     TH1D *h_pT_endcap_fail_DY = new TH1D ("h_pT_endcap_fail_DY", "h_pT_endcap_fail_DY", nPtBin_DY, analyzer->ptbin_DY);
     TH1D *h_pT_endcap_fail_bkgr = new TH1D ("h_pT_endcap_fail_bkgr", "h_pT_endcap_fail_bkgr", nPtBin_DY, analyzer->ptbin_DY);
     TH1D *h_pT_endcap_fail_bkgf = new TH1D ("h_pT_endcap_fail_bkgf", "h_pT_endcap_fail_bkgf", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap2_fail_data = new TH1D ("h_pT_endcap2_fail_data", "h_pT_endcap2_fail_data", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap2_fail_DY = new TH1D ("h_pT_endcap2_fail_DY", "h_pT_endcap2_fail_DY", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap2_fail_bkgr = new TH1D ("h_pT_endcap2_fail_bkgr", "h_pT_endcap2_fail_bkgr", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap2_fail_bkgf = new TH1D ("h_pT_endcap2_fail_bkgf", "h_pT_endcap2_fail_bkgf", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D* h_eta_fail_data = new TH1D("h_eta_fail_data", "h_eta_fail_data", 66, etabins);
+    TH1D* h_eta_fail_DY = new TH1D("h_eta_fail_DY", "h_eta_fail_DY", 66, etabins);
+    TH1D* h_eta_fail_bkgr = new TH1D("h_eta_fail_bkgr", "h_eta_fail_bkgr", 66, etabins);
+    TH1D* h_eta_fail_bkgf = new TH1D("h_eta_fail_bkgf", "h_eta_fail_bkgf", 66, etabins);
     TH1D *h_MET_fail_data = new TH1D ("h_MET_fail_data", "h_MET_fail_data", 50, 0, 100);
     TH1D *h_MET_fail_DY = new TH1D ("h_MET_fail_DY", "h_MET_fail_DY", 50, 0, 100);
     TH1D *h_MET_fail_bkgr = new TH1D ("h_MET_fail_bkgr", "h_MET_fail_bkgr", 50, 0, 100);
@@ -4339,33 +4776,33 @@ void E_PR_HistMaker (Bool_t DEBUG)
 
             // Preselection
             if (p_T->size() != 2) continue;
-            if ((fabs(etaSC->at(0)) > 1.4442 && fabs(etaSC->at(0)) < 1.566) || fabs((etaSC->at(1)) > 1.4442 && fabs(etaSC->at(1)) < 1.566)) continue;
-
-//            if (fabs(eta->at(0)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.013 || HoverE->at(0) >= 0.13 ||
-//                                              fabs(dEtaInSeed->at(0)) >= 0.01 || fabs(dPhiIn->at(0)) >= 0.07)) continue;
-//            else if (fabs(eta->at(0)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.035 || HoverE->at(0) >= 0.13)) continue;
-//            if (fabs(eta->at(1)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.013 || HoverE->at(1) >= 0.13 ||
-//                                              fabs(dEtaInSeed->at(1)) >= 0.01 || fabs(dPhiIn->at(1)) >= 0.07)) continue;
-//            else if (fabs(eta->at(1)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.035 || HoverE->at(1) >= 0.13)) continue;
-
-            if (fabs(etaSC->at(0)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.00998 || fabs(dEtaInSeed->at(0)) >= 0.00311 ||
-                fabs(dPhiIn->at(0)) >= 0.07/*0.103*/ || HoverE->at(0) >= 0.13/*0.253*/ || InvEminusInvP->at(0) >= 0.134))
-                continue;
-            if (fabs(etaSC->at(0)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.0298 || fabs(dEtaInSeed->at(0)) >= 0.00609 ||
-                fabs(dPhiIn->at(0)) >= 0.045 || HoverE->at(0) >= 0.0878 || InvEminusInvP->at(0) >= 0.13))
-                continue;
-            if (fabs(etaSC->at(1)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.00998 || fabs(dEtaInSeed->at(1)) >= 0.00311 ||
-                fabs(dPhiIn->at(1)) >= 0.07/*0.103*/ || HoverE->at(1) >= 0.13/*0.253*/ || InvEminusInvP->at(1) >= 0.134))
-                continue;
-            if (fabs(etaSC->at(1)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.0298 || fabs(dEtaInSeed->at(1)) >= 0.00609 ||
-                fabs(dPhiIn->at(1)) >= 0.045 || HoverE->at(1) >= 0.0878 || InvEminusInvP->at(1) >= 0.13))
-                continue;
-
-            if (mHits->at(0) > 1 || !passConvVeto->at(0) || relECALiso->at(0) >= 0.5 || relHCALiso->at(0) >= 0.5 || relTrkIso->at(0) >= 0.2) continue;
-            if (mHits->at(1) > 1 || !passConvVeto->at(1) || relECALiso->at(1) >= 0.5 || relHCALiso->at(1) >= 0.5 || relTrkIso->at(1) >= 0.2) continue;
-
             if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
             if (p_T->at(0) < 28 && p_T->at(1) < 28) continue;
+            if (fabs(etaSC->at(0)) >= 2.4 || fabs(etaSC->at(1)) >= 2.4) continue;
+            if ((fabs(etaSC->at(0)) > 1.4442 && fabs(etaSC->at(0)) < 1.566) || fabs((etaSC->at(1)) > 1.4442 && fabs(etaSC->at(1)) < 1.566)) continue;
+
+            if (fabs(eta->at(0)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.013 || HoverE->at(0) >= 0.13 ||
+                                              fabs(dEtaInSeed->at(0)) >= 0.01 || fabs(dPhiIn->at(0)) >= 0.07)) continue;
+            else if (fabs(eta->at(0)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.035 || HoverE->at(0) >= 0.13)) continue;
+            if (fabs(eta->at(1)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.013 || HoverE->at(1) >= 0.13 ||
+                                              fabs(dEtaInSeed->at(1)) >= 0.01 || fabs(dPhiIn->at(1)) >= 0.07)) continue;
+            else if (fabs(eta->at(1)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.035 || HoverE->at(1) >= 0.13)) continue;
+
+//            if (fabs(etaSC->at(0)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.00998 || fabs(dEtaInSeed->at(0)) >= 0.00311 ||
+//                fabs(dPhiIn->at(0)) >= 0.07/*0.103*/ || HoverE->at(0) >= 0.13/*0.253*/ || InvEminusInvP->at(0) >= 0.134))
+//                continue;
+//            if (fabs(etaSC->at(0)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(0) >= 0.0298 || fabs(dEtaInSeed->at(0)) >= 0.00609 ||
+//                fabs(dPhiIn->at(0)) >= 0.045 || HoverE->at(0) >= 0.0878 || InvEminusInvP->at(0) >= 0.13))
+//                continue;
+//            if (fabs(etaSC->at(1)) < 1.4442 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.00998 || fabs(dEtaInSeed->at(1)) >= 0.00311 ||
+//                fabs(dPhiIn->at(1)) >= 0.07/*0.103*/ || HoverE->at(1) >= 0.13/*0.253*/ || InvEminusInvP->at(1) >= 0.134))
+//                continue;
+//            if (fabs(etaSC->at(1)) > 1.566 && (Full5x5_SigmaIEtaIEta->at(1) >= 0.0298 || fabs(dEtaInSeed->at(1)) >= 0.00609 ||
+//                fabs(dPhiIn->at(1)) >= 0.045 || HoverE->at(1) >= 0.0878 || InvEminusInvP->at(1) >= 0.13))
+//                continue;
+
+            if (mHits->at(0) > 1 /*|| !passConvVeto->at(0)*/ || relECALiso->at(0) >= 0.5 || relHCALiso->at(0) >= 0.5 || relTrkIso->at(0) >= 0.2) continue;
+            if (mHits->at(1) > 1 /*|| !passConvVeto->at(1)*/ || relECALiso->at(1) >= 0.5 || relHCALiso->at(1) >= 0.5 || relTrkIso->at(1) >= 0.2) continue;
 
             if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << charge->at(0) << " " << relPFiso_Rho->at(0) << endl;
             if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << charge->at(1) << " " << relPFiso_Rho->at(1) << endl;
@@ -4452,22 +4889,29 @@ void E_PR_HistMaker (Bool_t DEBUG)
             if (Mgr.Type == "SIGNAL")
             {
                 h_mass_DY->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                if (fabs(eta->at(i_fill)) < 1.4442 && passMediumID->at(i_fill))
-                    h_pT_barrel_pass_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                else if (fabs(eta->at(i_fill)) > 1.566 && passMediumID->at(i_fill))
-                    h_pT_endcap_pass_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                else if (fabs(eta->at(i_fill)) < 1.4442 && !passMediumID->at(i_fill))
+                if (passMediumID->at(i_fill))
                 {
-                    h_pT_barrel_fail_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    h_eta_pass_DY->Fill(etaSC->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    if (fabs(etaSC->at(i_fill)) < 1.4442) // Barrel
+                        h_pT_barrel_pass_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(etaSC->at(i_fill)) > 1.566 && fabs(etaSC->at(i_fill)) < 2.1) // Endcap
+                        h_pT_endcap_pass_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(etaSC->at(i_fill)) >= 2.1 && fabs(etaSC->at(i_fill)) < 2.4) // Far endcap
+                        h_pT_endcap2_pass_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                }
+                else
+                {
+                    h_eta_fail_DY->Fill(etaSC->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     h_MET_fail_DY->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     h_MT_fail_DY->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    if (fabs(etaSC->at(i_fill)) < 1.4442) // Barrel
+                        h_pT_barrel_fail_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(etaSC->at(i_fill)) > 1.566 && fabs(etaSC->at(i_fill)) < 2.1) // Endcap
+                        h_pT_endcap_fail_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(etaSC->at(i_fill)) >= 2.1 && fabs(etaSC->at(i_fill)) < 2.4) // Far endcap
+                        h_pT_endcap2_fail_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                 }
-                else if (fabs(eta->at(i_fill)) > 1.566 && !passMediumID->at(i_fill))
-                {
-                    h_pT_endcap_fail_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    h_MET_fail_DY->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    h_MT_fail_DY->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                }
+
             }
             else if (Mgr.Type == "BKG")
             {
@@ -4475,62 +4919,84 @@ void E_PR_HistMaker (Bool_t DEBUG)
                 {
                     h_mass_bkgf->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
 
-                    if (fabs(eta->at(i_fill)) < 1.4442 && passMediumID->at(i_fill))
-                        h_pT_barrel_pass_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    else if (fabs(eta->at(i_fill)) > 1.566 && passMediumID->at(i_fill))
-                        h_pT_endcap_pass_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    else if (fabs(eta->at(i_fill)) < 1.4442 && !passMediumID->at(i_fill))
+                    if (passMediumID->at(i_fill))
                     {
-                        h_pT_barrel_fail_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        h_eta_pass_bkgf->Fill(etaSC->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        if (fabs(etaSC->at(i_fill)) < 1.4442)
+                            h_pT_barrel_pass_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(etaSC->at(i_fill)) > 1.566 && fabs(etaSC->at(i_fill)) < 2.1)
+                            h_pT_endcap_pass_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(etaSC->at(i_fill)) >= 2.1 && fabs(etaSC->at(i_fill)) < 2.4)
+                            h_pT_endcap2_pass_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    }
+                    else
+                    {
+                        h_eta_fail_bkgf->Fill(etaSC->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                         h_MET_fail_bkgf->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                         h_MT_fail_bkgf->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+
+                        if (fabs(etaSC->at(i_fill)) < 1.4442)
+                            h_pT_barrel_fail_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(etaSC->at(i_fill)) > 1.566 && fabs(etaSC->at(i_fill)) < 2.1)
+                            h_pT_endcap_fail_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(etaSC->at(i_fill)) >= 2.1 && fabs(etaSC->at(i_fill)) < 2.4)
+                            h_pT_endcap2_fail_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     }
-                    else if (fabs(eta->at(i_fill)) > 1.566 && !passMediumID->at(i_fill))
-                    {
-                        h_pT_endcap_fail_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                        h_MET_fail_bkgf->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                        h_MT_fail_bkgf->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    }
+
                 }
                 else
                 {
                     h_mass_bkgr->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    if (fabs(eta->at(i_fill)) < 1.4442 && passMediumID->at(i_fill))
-                        h_pT_barrel_pass_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    else if (fabs(eta->at(i_fill)) > 1.566 && passMediumID->at(i_fill))
-                        h_pT_endcap_pass_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    else if (fabs(eta->at(i_fill)) < 1.4442 && !passMediumID->at(i_fill))
+                    if (passMediumID->at(i_fill))
                     {
-                        h_pT_barrel_fail_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                        h_MET_fail_bkgr->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                        h_MT_fail_bkgr->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        h_eta_pass_bkgr->Fill(etaSC->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        if (fabs(etaSC->at(i_fill)) < 1.4442)
+                            h_pT_barrel_pass_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(etaSC->at(i_fill)) > 1.566 && fabs(etaSC->at(i_fill)) < 2.1)
+                            h_pT_endcap_pass_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(etaSC->at(i_fill)) >= 2.1 && fabs(etaSC->at(i_fill)) < 2.4)
+                            h_pT_endcap2_pass_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     }
-                    else if (fabs(eta->at(i_fill)) > 1.566 && !passMediumID->at(i_fill))
+                    else
                     {
-                        h_pT_endcap_fail_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        h_eta_fail_bkgr->Fill(etaSC->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                         h_MET_fail_bkgr->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                         h_MT_fail_bkgr->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+
+                        if (fabs(etaSC->at(i_fill)) < 1.4442)
+                            h_pT_barrel_fail_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(etaSC->at(i_fill)) > 1.566 && fabs(etaSC->at(i_fill)) < 2.1)
+                            h_pT_endcap_fail_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(etaSC->at(i_fill)) >= 2.1 && fabs(etaSC->at(i_fill)) < 2.4)
+                            h_pT_endcap2_fail_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     }
                 }
             }
             else if (Mgr.Type == "DATA")
             {
                 h_mass_data->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                if (fabs(eta->at(i_fill)) < 1.4442 && passMediumID->at(i_fill))
-                    h_pT_barrel_pass_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                else if (fabs(eta->at(i_fill)) > 1.566 && passMediumID->at(i_fill))
-                    h_pT_endcap_pass_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                else if (fabs(eta->at(i_fill)) < 1.4442 && !passMediumID->at(i_fill))
+                if (passMediumID->at(i_fill))
                 {
-                    h_pT_barrel_fail_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    h_MET_fail_data->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
-                    h_MT_fail_data->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    h_eta_pass_data->Fill(etaSC->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    if (fabs(etaSC->at(i_fill)) < 1.4442)
+                        h_pT_barrel_pass_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(etaSC->at(i_fill)) > 1.566 && fabs(etaSC->at(i_fill)) < 2.1)
+                        h_pT_endcap_pass_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(etaSC->at(i_fill)) >= 2.1 && fabs(etaSC->at(i_fill)) < 2.4)
+                        h_pT_endcap2_pass_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                 }
-                else if (fabs(eta->at(i_fill)) > 1.566 && !passMediumID->at(i_fill))
+                else
                 {
-                    h_pT_endcap_fail_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    h_eta_fail_data->Fill(etaSC->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     h_MET_fail_data->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                     h_MT_fail_data->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+
+                    if (fabs(etaSC->at(i_fill)) < 1.4442 && !passMediumID->at(i_fill))
+                        h_pT_barrel_fail_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(etaSC->at(i_fill)) > 1.566 && fabs(etaSC->at(i_fill)) < 2.1)
+                        h_pT_endcap_fail_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(etaSC->at(i_fill)) >= 2.1 && fabs(etaSC->at(i_fill)) < 2.4)
+                        h_pT_endcap2_fail_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
                 }
             }
 
@@ -4567,6 +5033,14 @@ void E_PR_HistMaker (Bool_t DEBUG)
     h_pT_endcap_pass_bkgr->Write();
     h_pT_endcap_pass_bkgf->Write();
     h_pT_endcap_pass_data->Write();
+    h_pT_endcap2_pass_DY->Write();
+    h_pT_endcap2_pass_bkgr->Write();
+    h_pT_endcap2_pass_bkgf->Write();
+    h_pT_endcap2_pass_data->Write();
+    h_eta_pass_DY->Write();
+    h_eta_pass_bkgr->Write();
+    h_eta_pass_bkgf->Write();
+    h_eta_pass_data->Write();
     h_pT_barrel_fail_DY->Write();
     h_pT_barrel_fail_bkgr->Write();
     h_pT_barrel_fail_bkgf->Write();
@@ -4575,6 +5049,14 @@ void E_PR_HistMaker (Bool_t DEBUG)
     h_pT_endcap_fail_bkgr->Write();
     h_pT_endcap_fail_bkgf->Write();
     h_pT_endcap_fail_data->Write();
+    h_pT_endcap2_fail_DY->Write();
+    h_pT_endcap2_fail_bkgr->Write();
+    h_pT_endcap2_fail_bkgf->Write();
+    h_pT_endcap2_fail_data->Write();
+    h_eta_fail_DY->Write();
+    h_eta_fail_bkgr->Write();
+    h_eta_fail_bkgf->Write();
+    h_eta_fail_data->Write();
     h_MET_fail_DY->Write();
     h_MET_fail_bkgr->Write();
     h_MET_fail_bkgf->Write();
@@ -4595,6 +5077,452 @@ void E_PR_HistMaker (Bool_t DEBUG)
     cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
 
 } // End of E_PR_HistDrawer()
+
+
+/// --------------------------- MUON PROMPT RATE ---------------------------- ///
+void Mu_PR_HistMaker (Bool_t DEBUG)
+{
+    TTimeStamp ts_start;
+    cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
+    TStopwatch totaltime;
+    totaltime.Start();
+
+    FileMgr Mgr;
+
+    TFile *f;
+    TString Dir1 = "/media/sf_DATA/FR/Muon/";
+    TString debug = "";
+    if (DEBUG == kTRUE) debug = "_DEBUG";
+
+    // -- Output ROOTFile -- //
+    TString outName = Dir1+"PR_Hist_Mu"+debug+".root";
+    f = new TFile(outName, "RECREATE");
+
+    DYAnalyzer *analyzer = new DYAnalyzer("Mu50");
+
+    TH1D *h_mass_data = new TH1D ("h_mass_data", "h_mass_data", 20, 81, 101);
+    TH1D *h_mass_DY = new TH1D ("h_mass_DY", "h_mass_DY", 20, 81, 101);
+    TH1D *h_mass_bkgr = new TH1D ("h_mass_bkgr", "h_mass_bkgr", 20, 81, 101);
+    TH1D *h_mass_bkgf = new TH1D ("h_mass_bkgf", "h_mass_bkgf", 20, 81, 101);
+    TH1D *h_pT_barrel_pass_data = new TH1D ("h_pT_barrel_pass_data", "h_pT_barrel_pass_data", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_barrel_pass_DY = new TH1D ("h_pT_barrel_pass_DY", "h_pT_barrel_pass_DY", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_barrel_pass_bkgr = new TH1D ("h_pT_barrel_pass_bkgr", "h_pT_barrel_pass_bkgr", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_barrel_pass_bkgf = new TH1D ("h_pT_barrel_pass_bkgf", "h_pT_barrel_pass_bkgf", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_barrel2_pass_data = new TH1D ("h_pT_barrel2_pass_data", "h_pT_barrel2_pass_data", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_barrel2_pass_DY = new TH1D ("h_pT_barrel2_pass_DY", "h_pT_barrel2_pass_DY", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_barrel2_pass_bkgr = new TH1D ("h_pT_barrel2_pass_bkgr", "h_pT_barrel2_pass_bkgr", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_barrel2_pass_bkgf = new TH1D ("h_pT_barrel2_pass_bkgf", "h_pT_barrel2_pass_bkgf", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap_pass_data = new TH1D ("h_pT_endcap_pass_data", "h_pT_endcap_pass_data", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap_pass_DY = new TH1D ("h_pT_endcap_pass_DY", "h_pT_endcap_pass_DY", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap_pass_bkgr = new TH1D ("h_pT_endcap_pass_bkgr", "h_pT_endcap_pass_bkgr", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap_pass_bkgf = new TH1D ("h_pT_endcap_pass_bkgf", "h_pT_endcap_pass_bkgf", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap2_pass_data = new TH1D ("h_pT_endcap2_pass_data", "h_pT_endcap2_pass_data", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap2_pass_DY = new TH1D ("h_pT_endcap2_pass_DY", "h_pT_endcap2_pass_DY", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap2_pass_bkgr = new TH1D ("h_pT_endcap2_pass_bkgr", "h_pT_endcap2_pass_bkgr", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap2_pass_bkgf = new TH1D ("h_pT_endcap2_pass_bkgf", "h_pT_endcap2_pass_bkgf", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_eta_pass_data = new TH1D("h_eta_pass_data", "h_eta_pass_data", 96, -2.4, 2.4);
+    TH1D *h_eta_pass_DY = new TH1D("h_eta_pass_DY", "h_eta_pass_DY", 96, -2.4, 2.4);
+    TH1D *h_eta_pass_bkgr = new TH1D("h_eta_pass_bkgr", "h_eta_pass_bkgr", 96, -2.4, 2.4);
+    TH1D *h_eta_pass_bkgf = new TH1D("h_eta_pass_bkgf", "h_eta_pass_bkgf", 96, -2.4, 2.4);
+    TH1D *h_pT_barrel_fail_data = new TH1D ("h_pT_barrel_fail_data", "h_pT_barrel_fail_data", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_barrel_fail_DY = new TH1D ("h_pT_barrel_fail_DY", "h_pT_barrel_fail_DY", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_barrel_fail_bkgr = new TH1D ("h_pT_barrel_fail_bkgr", "h_pT_barrel_fail_bkgr", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_barrel_fail_bkgf = new TH1D ("h_pT_barrel_fail_bkgf", "h_pT_barrel_fail_bkgf", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_barrel2_fail_data = new TH1D ("h_pT_barrel2_fail_data", "h_pT_barrel2_fail_data", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_barrel2_fail_DY = new TH1D ("h_pT_barrel2_fail_DY", "h_pT_barrel2_fail_DY", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_barrel2_fail_bkgr = new TH1D ("h_pT_barrel2_fail_bkgr", "h_pT_barrel2_fail_bkgr", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_barrel2_fail_bkgf = new TH1D ("h_pT_barrel2_fail_bkgf", "h_pT_barrel2_fail_bkgf", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap_fail_data = new TH1D ("h_pT_endcap_fail_data", "h_pT_endcap_fail_data", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap_fail_DY = new TH1D ("h_pT_endcap_fail_DY", "h_pT_endcap_fail_DY", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap_fail_bkgr = new TH1D ("h_pT_endcap_fail_bkgr", "h_pT_endcap_fail_bkgr", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap_fail_bkgf = new TH1D ("h_pT_endcap_fail_bkgf", "h_pT_endcap_fail_bkgf", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap2_fail_data = new TH1D ("h_pT_endcap2_fail_data", "h_pT_endcap2_fail_data", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap2_fail_DY = new TH1D ("h_pT_endcap2_fail_DY", "h_pT_endcap2_fail_DY", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap2_fail_bkgr = new TH1D ("h_pT_endcap2_fail_bkgr", "h_pT_endcap2_fail_bkgr", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_pT_endcap2_fail_bkgf = new TH1D ("h_pT_endcap2_fail_bkgf", "h_pT_endcap2_fail_bkgf", nPtBin_DY, analyzer->ptbin_DY);
+    TH1D *h_eta_fail_data = new TH1D("h_eta_fail_data", "h_eta_fail_data", 96, -2.4, 2.4);
+    TH1D *h_eta_fail_DY = new TH1D("h_eta_fail_DY", "h_eta_fail_DY", 96, -2.4, 2.4);
+    TH1D *h_eta_fail_bkgr = new TH1D("h_eta_fail_bkgr", "h_eta_fail_bkgr", 96, -2.4, 2.4);
+    TH1D *h_eta_fail_bkgf = new TH1D("h_eta_fail_bkgf", "h_eta_fail_bkgf", 96, -2.4, 2.4);
+    TH1D *h_MET_fail_data = new TH1D ("h_MET_fail_data", "h_MET_fail_data", 50, 0, 100);
+    TH1D *h_MET_fail_DY = new TH1D ("h_MET_fail_DY", "h_MET_fail_DY", 50, 0, 100);
+    TH1D *h_MET_fail_bkgr = new TH1D ("h_MET_fail_bkgr", "h_MET_fail_bkgr", 50, 0, 100);
+    TH1D *h_MET_fail_bkgf = new TH1D ("h_MET_fail_bkgf", "h_MET_fail_bkgf", 50, 0, 100);
+    TH1D *h_MT_fail_data = new TH1D ("h_MT_fail_data", "h_MT_fail_data", 100, 0, 200);
+    TH1D *h_MT_fail_DY = new TH1D ("h_MT_fail_DY", "h_MT_fail_DY", 100, 0, 200);
+    TH1D *h_MT_fail_bkgr = new TH1D ("h_MT_fail_bkgr", "h_MT_fail_bkgr", 100, 0, 200);
+    TH1D *h_MT_fail_bkgf = new TH1D ("h_MT_fail_bkgf", "h_MT_fail_bkgf", 100, 0, 200);
+
+    // -- For PU re-weighting -- //
+    analyzer->SetupPileUpReWeighting_80X(Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root");
+
+    // -- For PVz reweighting -- //
+    analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
+
+    for (Process_t pr=_DY_10to50; pr<_EndOf_SingleMuon_Normal; pr=next(pr))
+    {
+        Mgr.SetProc(pr);
+
+        cout << "===========================================================" << endl;
+        cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
+        cout << "Xsec: " << Mgr.Xsec[0] << endl;
+        cout << "Wsum: " << Mgr.Wsum[0] << endl;
+        cout << "Type: " << Mgr.Type << endl;
+        cout << "Directory: " << Dir1 << endl;
+
+        TStopwatch totaltime;
+        totaltime.Start();
+        Int_t nPass = 0;
+
+        std::vector<double> *p_T = new std::vector<double>;
+        std::vector<double> *eta = new std::vector<double>;
+        std::vector<double> *phi = new std::vector<double>;
+        std::vector<int> *charge = new std::vector<int>;
+        std::vector<double> *relPFiso = new std::vector<double>;
+        std::vector<double> *TRKiso = new std::vector<double>;
+        std::vector<string> *trig_name = new std::vector<string>;
+        std::vector<int> *trig_fired = new std::vector<int>;
+        std::vector<int> *trig_matched = new std::vector<int>;
+        std::vector<double> *trig_pT = new std::vector<double>;
+        std::vector<int> *prescale_factor = new std::vector<int>;
+        Int_t nPU;
+        Int_t nVTX;
+        Double_t PVz;
+        Double_t MET_pT, MET_phi;
+        Double_t gen_weight, top_weight;
+        Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
+
+        TChain *chain = new TChain("FRTree");
+        chain->Add(Dir1+"SelectedForPR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+        if (DEBUG == kTRUE) cout << Dir1+"SelectedForPR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+
+        chain->SetBranchStatus("p_T", 1);
+        chain->SetBranchStatus("eta", 1);
+        chain->SetBranchStatus("phi", 1);
+        chain->SetBranchStatus("relPFiso", 1);
+        chain->SetBranchStatus("TRKiso", 1);
+        chain->SetBranchStatus("trig_name", 1);
+        chain->SetBranchStatus("trig_fired", 1);
+        chain->SetBranchStatus("trig_matched", 1);
+        chain->SetBranchStatus("trig_pT", 1);
+        chain->SetBranchStatus("prescale_factor", 1);
+        chain->SetBranchStatus("nPU", 1);
+        chain->SetBranchStatus("nVTX", 1);
+        chain->SetBranchStatus("PVz", 1);
+        chain->SetBranchStatus("MET_pT", 1);
+        chain->SetBranchStatus("MET_phi", 1);
+        chain->SetBranchStatus("gen_weight", 1);
+        chain->SetBranchStatus("top_weight", 1);
+        chain->SetBranchStatus("prefiring_weight", 1);
+        chain->SetBranchStatus("prefiring_weight_up", 1);
+        chain->SetBranchStatus("prefiring_weight_down", 1);
+
+        chain->SetBranchAddress("p_T", &p_T);
+        chain->SetBranchAddress("eta", &eta);
+        chain->SetBranchAddress("phi", &phi);
+        chain->SetBranchAddress("charge", &charge);
+        chain->SetBranchAddress("relPFiso", &relPFiso);
+        chain->SetBranchAddress("TRKiso", &TRKiso);
+        chain->SetBranchAddress("trig_name", &trig_name);
+        chain->SetBranchAddress("trig_fired", &trig_fired);
+        chain->SetBranchAddress("trig_matched", &trig_matched);
+        chain->SetBranchAddress("trig_pT", &trig_pT);
+        chain->SetBranchAddress("prescale_factor", &prescale_factor);
+        chain->SetBranchAddress("nPU", &nPU);
+        chain->SetBranchAddress("nVTX", &nVTX);
+        chain->SetBranchAddress("PVz", &PVz);
+        chain->SetBranchAddress("MET_pT", &MET_pT);
+        chain->SetBranchAddress("MET_phi", &MET_phi);
+        chain->SetBranchAddress("gen_weight", &gen_weight);
+        chain->SetBranchAddress("top_weight", &top_weight);
+        chain->SetBranchAddress("prefiring_weight", &prefiring_weight);
+        chain->SetBranchAddress("prefiring_weight_up", &prefiring_weight_up);
+        chain->SetBranchAddress("prefiring_weight_down", &prefiring_weight_down);
+
+        Int_t NEvents = chain->GetEntries();
+        cout << "\t[Sum of weights: " << Mgr.Wsum[0] << "]" << endl;
+        cout << "\t[Number of events: " << NEvents << "]" << endl;
+
+        myProgressBar_t bar(NEvents);
+
+        for(Int_t i=0; i<NEvents; i++)
+        {
+            chain->GetEntry(i);
+            if (!DEBUG) bar.Draw(i);
+
+            if (p_T->size() != 2) continue;
+            if (charge->at(0) == charge->at(1)) continue;
+            if (p_T->at(0) <= 17 || p_T->at(1) <= 17) continue;
+            if (p_T->at(0) <= 52 && p_T->at(1) <= 52) continue;
+
+            if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << charge->at(0) << " " << relPFiso->at(0) << endl;
+            if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << charge->at(1) << " " << relPFiso->at(1) << endl;
+
+            // Look for tight electron:
+            Int_t tight0=0, tight1=0, i_fill=-1;
+            if (relPFiso->at(0) < 0.10)
+                tight0 = 1;
+            if (relPFiso->at(1) < 0.10)
+                tight1 = 1;
+
+            if (!tight0 && !tight1) continue;
+            else if (tight0 && tight1)
+            {
+                if (p_T->at(0) > p_T->at(1)) i_fill = 1;
+                else i_fill = 0;
+            }
+            else if (tight0) i_fill = 1;
+            else if (tight1) i_fill = 0;
+
+            TLorentzVector mu1, mu2;
+            mu1.SetPtEtaPhiM(p_T->at(0), eta->at(0), phi->at(0), M_Elec);
+            mu2.SetPtEtaPhiM(p_T->at(1), eta->at(1), phi->at(1), M_Elec);
+            Double_t mass = (mu1+mu2).M();
+            if (mass < 76 || mass >106) continue;
+            Double_t dTheta = phi->at(1-i_fill) - MET_phi;
+            Double_t MT = sqrt(2 * p_T->at(1-i_fill) * MET_pT * (1 - cos(dTheta)));
+//            if (MT >= 60) continue;
+            nPass++;
+
+            // -- Pileup-Reweighting -- //
+            Double_t PUWeight = 1;
+            if (Mgr.isMC == kTRUE) PUWeight = analyzer->PileUpWeightValue_80X(nPU);
+            if (DEBUG == kTRUE) cout << "PU weight " << PUWeight << endl;
+
+            // -- PVz weights -- //
+            Double_t PVzWeight = 1;
+            if (Mgr.isMC == kTRUE) PVzWeight = analyzer->PVzWeightValue(PVz);
+
+            // -- L1 prefiring weights -- //
+            Double_t L1weight = 1;
+            if (Mgr.isMC == kTRUE) L1weight = prefiring_weight;
+
+            // -- Top pT weights -- //
+            Double_t TopPtWeight = 1;
+            if (Mgr.isMC == kTRUE && Mgr.Tag[0].Contains("ttbar")) TopPtWeight = top_weight;
+
+            if (DEBUG == kTRUE) cout << "\tPVz weight: " << PVzWeight << "\nL1 weight:" << L1weight << "\tTop pT weight: " << TopPtWeight << endl;
+
+            // -- Normalization -- //
+            Double_t TotWeight = 1;
+            if (Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
+            if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl << endl;
+
+            if (Mgr.Type == "SIGNAL")
+            {
+                h_mass_DY->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                if (relPFiso->at(i_fill) < 0.15)
+                {
+                    h_eta_pass_DY->Fill(eta->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    if (fabs(eta->at(i_fill)) < 0.7) // Barrel
+                        h_pT_barrel_pass_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(eta->at(i_fill)) >= 0.7 && fabs(eta->at(i_fill)) < 1.2) // Far barrel
+                        h_pT_barrel2_pass_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(eta->at(i_fill)) >= 1.2 && fabs(eta->at(i_fill)) < 1.8) // Endcap
+                        h_pT_endcap_pass_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(eta->at(i_fill)) >= 1.8 && fabs(eta->at(i_fill)) < 2.4) // Far endcap
+                        h_pT_endcap2_pass_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                }
+                else
+                {
+                    h_eta_fail_DY->Fill(eta->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    h_MET_fail_DY->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    h_MT_fail_DY->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    if (fabs(eta->at(i_fill)) < 0.7) // Barrel
+                        h_pT_barrel_fail_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(eta->at(i_fill)) >= 0.7 && fabs(eta->at(i_fill)) < 1.2) // Far barrel
+                        h_pT_barrel2_fail_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(eta->at(i_fill)) >= 1.2 && fabs(eta->at(i_fill)) < 1.8) // Endcap
+                        h_pT_endcap_fail_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(eta->at(i_fill)) >= 1.8 && fabs(eta->at(i_fill)) < 2.4) // Far endcap
+                        h_pT_endcap2_fail_DY->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                }
+
+            }
+            else if (Mgr.Type == "BKG")
+            {
+                if (Mgr.Tag[0].Contains("QCD") || Mgr.Tag[0].Contains("Jet"))
+                {
+                    h_mass_bkgf->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+
+                    if (relPFiso->at(i_fill) < 0.15)
+                    {
+                        h_eta_pass_bkgf->Fill(eta->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        if (fabs(eta->at(i_fill)) < 0.7) // Barrel
+                            h_pT_barrel_pass_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(eta->at(i_fill)) >= 0.7 && fabs(eta->at(i_fill)) < 1.2) // Far barrel
+                            h_pT_barrel2_pass_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(eta->at(i_fill)) >= 1.2 && fabs(eta->at(i_fill)) < 1.8)
+                            h_pT_endcap_pass_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(eta->at(i_fill)) >= 1.8 && fabs(eta->at(i_fill)) < 2.4)
+                            h_pT_endcap2_pass_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    }
+                    else
+                    {
+                        h_eta_fail_bkgf->Fill(eta->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        h_MET_fail_bkgf->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        h_MT_fail_bkgf->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+
+                        if (fabs(eta->at(i_fill)) < 0.7) // Barrel
+                            h_pT_barrel_fail_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(eta->at(i_fill)) >= 0.7 && fabs(eta->at(i_fill)) < 1.2) // Far barrel
+                            h_pT_barrel2_fail_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(eta->at(i_fill)) >= 1.2 && fabs(eta->at(i_fill)) < 1.8)
+                            h_pT_endcap_fail_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(eta->at(i_fill)) >= 1.8 && fabs(eta->at(i_fill)) < 2.4)
+                            h_pT_endcap2_fail_bkgf->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    }
+
+                }
+                else
+                {
+                    h_mass_bkgr->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    if (relPFiso->at(i_fill) < 0.15)
+                    {
+                        h_eta_pass_bkgr->Fill(eta->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        if (fabs(eta->at(i_fill)) < 0.7) // Barrel
+                            h_pT_barrel_pass_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(eta->at(i_fill)) >= 0.7 && fabs(eta->at(i_fill)) < 1.2) // Far barrel
+                            h_pT_barrel2_pass_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(eta->at(i_fill)) >= 1.2 && fabs(eta->at(i_fill)) < 1.8)
+                            h_pT_endcap_pass_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(eta->at(i_fill)) >= 1.8 && fabs(eta->at(i_fill)) < 2.4)
+                            h_pT_endcap2_pass_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    }
+                    else
+                    {
+                        h_eta_fail_bkgr->Fill(eta->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        h_MET_fail_bkgr->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        h_MT_fail_bkgr->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+
+                        if (fabs(eta->at(i_fill)) < 0.7) // Barrel
+                            h_pT_barrel_fail_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(eta->at(i_fill)) >= 0.7 && fabs(eta->at(i_fill)) < 1.2) // Far barrel
+                            h_pT_barrel2_fail_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(eta->at(i_fill)) >= 1.2 && fabs(eta->at(i_fill)) < 1.8)
+                            h_pT_endcap_fail_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                        else if (fabs(eta->at(i_fill)) >= 1.8 && fabs(eta->at(i_fill)) < 2.4)
+                            h_pT_endcap2_fail_bkgr->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    }
+                }
+            }
+            else if (Mgr.Type == "DATA")
+            {
+                h_mass_data->Fill(mass, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                if (relPFiso->at(i_fill) < 0.15)
+                {
+                    h_eta_pass_data->Fill(eta->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    if (fabs(eta->at(i_fill)) < 0.7) // Barrel
+                        h_pT_barrel_pass_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(eta->at(i_fill)) >= 0.7 && fabs(eta->at(i_fill)) < 1.2) // Far barrel
+                        h_pT_barrel2_pass_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(eta->at(i_fill)) >= 1.2 && fabs(eta->at(i_fill)) < 1.8)
+                        h_pT_endcap_pass_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(eta->at(i_fill)) >= 1.8 && fabs(eta->at(i_fill)) < 2.4)
+                        h_pT_endcap2_pass_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                }
+                else
+                {
+                    h_eta_fail_data->Fill(eta->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    h_MET_fail_data->Fill(MET_pT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    h_MT_fail_data->Fill(MT, TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+
+                    if (fabs(eta->at(i_fill)) < 0.7) // Barrel
+                        h_pT_barrel_fail_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(eta->at(i_fill)) >= 0.7 && fabs(eta->at(i_fill)) < 1.2) // Far barrel
+                        h_pT_barrel2_fail_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(eta->at(i_fill)) >= 1.2 && fabs(eta->at(i_fill)) < 1.8)
+                        h_pT_endcap_fail_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                    else if (fabs(eta->at(i_fill)) >= 1.8 && fabs(eta->at(i_fill)) < 2.4)
+                        h_pT_endcap2_fail_data->Fill(p_T->at(i_fill), TotWeight * PUWeight * PVzWeight * L1weight * TopPtWeight);
+                }
+            }
+
+        }// End of event iteration
+
+        if(Mgr.isMC == kTRUE)
+        {
+            cout << "\t *** Cross section: " << Mgr.Xsec[0] << endl;
+            cout << "\t *** Sum of weights: " << Mgr.Wsum[0] << endl;
+            printf("\t *** Normalization factor: %.8f\n\n", Lumi*Mgr.Xsec[0]/Mgr.Wsum[0]);
+        }
+
+        cout << " Finished.\n" << endl;
+
+        if (DEBUG == kTRUE && pr == _DY_10to50) break;
+        if (pr == _DY_2000to3000) pr = _EndOf_DYTauTau_Normal; // next -- ttbar
+        if (pr == _QCDMuEnriched_1000toInf) pr = _EndOf_DoubleEG_Normal; // next -- SingleMuon_B
+
+        cout << "===========================================================\n" << endl;
+    } // End of pr iteration
+
+    f->cd();
+    cout << "\tWriting into file...";
+
+    h_mass_DY->Write();
+    h_mass_bkgr->Write();
+    h_mass_bkgf->Write();
+    h_mass_data->Write();
+    h_pT_barrel_pass_DY->Write();
+    h_pT_barrel_pass_bkgr->Write();
+    h_pT_barrel_pass_bkgf->Write();
+    h_pT_barrel_pass_data->Write();
+    h_pT_barrel2_pass_DY->Write();
+    h_pT_barrel2_pass_bkgr->Write();
+    h_pT_barrel2_pass_bkgf->Write();
+    h_pT_barrel2_pass_data->Write();
+    h_pT_endcap_pass_DY->Write();
+    h_pT_endcap_pass_bkgr->Write();
+    h_pT_endcap_pass_bkgf->Write();
+    h_pT_endcap_pass_data->Write();
+    h_pT_endcap2_pass_DY->Write();
+    h_pT_endcap2_pass_bkgr->Write();
+    h_pT_endcap2_pass_bkgf->Write();
+    h_pT_endcap2_pass_data->Write();
+    h_eta_pass_DY->Write();
+    h_eta_pass_bkgr->Write();
+    h_eta_pass_bkgf->Write();
+    h_eta_pass_data->Write();
+    h_pT_barrel_fail_DY->Write();
+    h_pT_barrel_fail_bkgr->Write();
+    h_pT_barrel_fail_bkgf->Write();
+    h_pT_barrel_fail_data->Write();
+    h_pT_barrel2_fail_DY->Write();
+    h_pT_barrel2_fail_bkgr->Write();
+    h_pT_barrel2_fail_bkgf->Write();
+    h_pT_barrel2_fail_data->Write();
+    h_pT_endcap_fail_DY->Write();
+    h_pT_endcap_fail_bkgr->Write();
+    h_pT_endcap_fail_bkgf->Write();
+    h_pT_endcap_fail_data->Write();
+    h_pT_endcap2_fail_DY->Write();
+    h_pT_endcap2_fail_bkgr->Write();
+    h_pT_endcap2_fail_bkgf->Write();
+    h_pT_endcap2_fail_data->Write();
+    h_eta_fail_DY->Write();
+    h_eta_fail_bkgr->Write();
+    h_eta_fail_bkgf->Write();
+    h_eta_fail_data->Write();
+    h_MET_fail_DY->Write();
+    h_MET_fail_bkgr->Write();
+    h_MET_fail_bkgf->Write();
+    h_MET_fail_data->Write();
+    h_MT_fail_DY->Write();
+    h_MT_fail_bkgr->Write();
+    h_MT_fail_bkgf->Write();
+    h_MT_fail_data->Write();
+
+    f->Close();
+    if (!f->IsOpen()) cout << "File " << outName << " has been closed successfully.\n" << endl;
+    else cout << "FILE " << outName << " COULD NOT BE CLOSED!\n" << endl;
+
+    Double_t TotalRunTime = totaltime.CpuTime();
+    cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
+
+    TTimeStamp ts_end;
+    cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
+
+} // End of Mu_PR_HistDrawer()
 
 
 /// --------------------------- DY MediumID efficiency check ---------------------------- ///
