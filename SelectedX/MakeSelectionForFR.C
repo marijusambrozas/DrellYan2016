@@ -1097,7 +1097,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<double> *TRKiso = new std::vector<double>;
-        Double_t MET_pT, MET_phi, MET_sumEt;
+        Double_t MET_pT, MET_phi;
         Int_t nPU;
         Int_t nVTX;
         Double_t PVz;
@@ -1114,7 +1114,6 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("TRKiso", &TRKiso);
         MuonTree->Branch("MET_pT", &MET_pT);
         MuonTree->Branch("MET_phi", &MET_phi);
-        MuonTree->Branch("MET_sumEt", &MET_sumEt);
         MuonTree->Branch("nPU", &nPU);
         MuonTree->Branch("nVTX", &nVTX);
         MuonTree->Branch("PVz", &PVz);
@@ -1268,7 +1267,6 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         // -- MET information -- //
                         MET_pT = ntuple->pfMET_pT;
                         MET_phi = ntuple->pfMET_phi;
-                        MET_sumEt = ntuple->pfMET_SumEt;
 
                         // -- Information for various other reweightings -- //
                         nPU = ntuple->nPileUp;

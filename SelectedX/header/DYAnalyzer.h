@@ -6251,7 +6251,8 @@ Bool_t DYAnalyzer::EventSelection_FR(vector<Muon> MuonCollection, NtupleHandle *
     Bool_t skip = kTRUE;
     for(Int_t j=0; j<(int)MuonCollection.size(); j++)
     { // Asking for only one tight muon to surpass trigger threshold
-        if(MuonCollection[j].Pt > LeadPtCut && fabs(MuonCollection[j].eta) < SubEtaCut && MuonCollection[j].isTightMuon())
+        if(MuonCollection[j].Pt > LeadPtCut && fabs(MuonCollection[j].eta) < SubEtaCut && MuonCollection[j].isTightMuon() &&
+           MuonCollection[j].isTrigMatched(ntuple, "HLT_Mu50_v*"))
             skip = kFALSE;
     }
     if (skip == kTRUE)
