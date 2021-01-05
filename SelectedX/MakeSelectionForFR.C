@@ -288,9 +288,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
             TChain *chain = new TChain(Mgr.TreeName[i_tup]);
             // TEST
-//            chain->Add("~/Desktop/ntuple_data_7.root");
-            chain->Add("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v2.10.4/SinglePhoton/crab_SinglePhoton_Run2016B/201022_090619/0000/*.root");
-            chain->Add("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v2.10.4/SinglePhoton/crab_SinglePhoton_Run2016B/201022_090619/0001/*.root");
+            chain->Add(Mgr.FullLocation[i_tup]);
 //            Mgr.SetupChain(i_tup, chain);
 
 //            std::map<std::tuple<int,int,unsigned long long>, int> repeats; // to search for repeating events
