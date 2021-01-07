@@ -1358,9 +1358,12 @@ void E_EstFR(Int_t type)
     h_FRsubtract_endcap2_plot->Draw("same");
     h_FRsubtract_barrel->Draw("same");
     TLegend *legend1 = new TLegend(0.13, 0.77, 0.6, 0.95);
-    legend1->AddEntry(h_FRsubtract_barrel, "Subtraction (barrel)", "LP");
-    legend1->AddEntry(h_FRsubtract_endcap_plot, "Subtraction (endcap #eta < 2.2)", "LP");
-    legend1->AddEntry(h_FRsubtract_endcap2_plot, "Subtraction (endcap #eta #geq 2.2)", "LP");
+//    legend1->AddEntry(h_FRsubtract_barrel, "Subtraction (barrel)", "LP");
+//    legend1->AddEntry(h_FRsubtract_endcap_plot, "Subtraction (endcap |#eta| < 2.2)", "LP");
+//    legend1->AddEntry(h_FRsubtract_endcap2_plot, "Subtraction (endcap |#eta| #geq 2.2)", "LP");
+    legend1->AddEntry(h_FRsubtract_barrel, "|#eta| < 1.4442", "LP");
+    legend1->AddEntry(h_FRsubtract_endcap_plot, "1.566 < |#eta| < 2.2", "LP");
+    legend1->AddEntry(h_FRsubtract_endcap2_plot, "|#eta| #geq 2.2", "LP");
     legend1->Draw();
     f_barrel_25to38->Draw("same");
     f_barrel_38to180->Draw("same");
@@ -3366,12 +3369,12 @@ void Mu_EstFR(Int_t type)
 //--------------------------------- FR by template --------------------------------------  
 
     // Barrel
-    h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(1.0329e+06/h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Integral());
-    h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(1.5561e+07/h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
-    h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(2.6989e+05/h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
-    h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(4.4143e+06/h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
-    h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Scale(5.8952e+04/h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
-    h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Scale(9.3010e+05/h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
+    h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(1.0265e+06/h_pT_barrel_template_nume_50to70  [_QCDMuEnriched_Full]->Integral());
+    h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(1.5464e+07/h_pT_barrel_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
+    h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(2.6875e+05/h_pT_barrel_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
+    h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(4.3278e+06/h_pT_barrel_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
+    h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Scale(5.6599e+04/h_pT_barrel_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
+    h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Scale(8.9442e+05/h_pT_barrel_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
 
 
 //    Double_t nevt=0, err=0;
@@ -3406,12 +3409,12 @@ void Mu_EstFR(Int_t type)
 //    h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Scale(5.9687e+04/h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
 //    h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Scale(3.4903e+05/h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
     // Two endcap bins
-    h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(6.3333e+05/h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(5.1278e+06/h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(1.4795e+05/h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(1.3331e+06/h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Scale(2.7196e+04/h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Scale(2.4446e+05/h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(6.2621e+05/h_pT_endcap_template_nume_50to70  [_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(5.0765e+06/h_pT_endcap_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(1.4418e+05/h_pT_endcap_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(1.2941e+06/h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Scale(2.5725e+04/h_pT_endcap_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Scale(2.2921e+05/h_pT_endcap_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
 
     TH1D *h_FRtemplate_endcap_deno = ((TH1D*)(h_pT_endcap_template_deno_50to70[_QCDMuEnriched_Full]->Clone("h_FRtemplate_endcap_deno")));
     h_FRtemplate_endcap_deno->Add(h_pT_endcap_template_deno_70to100 [_QCDMuEnriched_Full]);
@@ -3434,12 +3437,12 @@ void Mu_EstFR(Int_t type)
     }
 
     // Far endcap
-    h_pT_endcap2_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(5.4514e+05/h_pT_endcap2_template_nume_50to70  [_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap2_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(2.5873e+06/h_pT_endcap2_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap2_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(1.3595e+05/h_pT_endcap2_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap2_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(6.4212e+05/h_pT_endcap2_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap2_template_nume_100to500[_QCDMuEnriched_Full]->Scale(3.4099e+04/h_pT_endcap2_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap2_template_deno_100to500[_QCDMuEnriched_Full]->Scale(1.0641e+05/h_pT_endcap2_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap2_template_nume_50to70  [_QCDMuEnriched_Full]->Scale(5.1056e+05/h_pT_endcap2_template_nume_50to70  [_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap2_template_deno_50to70  [_QCDMuEnriched_Full]->Scale(2.5062e+06/h_pT_endcap2_template_deno_50to70  [_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap2_template_nume_70to100 [_QCDMuEnriched_Full]->Scale(1.2484e+05/h_pT_endcap2_template_nume_70to100 [_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap2_template_deno_70to100 [_QCDMuEnriched_Full]->Scale(5.9138e+05/h_pT_endcap2_template_deno_70to100 [_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap2_template_nume_100to500[_QCDMuEnriched_Full]->Scale(2.3828e+04/h_pT_endcap2_template_nume_100to500[_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap2_template_deno_100to500[_QCDMuEnriched_Full]->Scale(8.7950e+04/h_pT_endcap2_template_deno_100to500[_QCDMuEnriched_Full]->Integral());
 
     TH1D *h_FRtemplate_endcap2_deno = ((TH1D*)(h_pT_endcap2_template_deno_50to70[_QCDMuEnriched_Full]->Clone("h_FRtemplate_endcap2_deno")));
     h_FRtemplate_endcap2_deno->Add(h_pT_endcap2_template_deno_70to100 [_QCDMuEnriched_Full]);
@@ -3552,20 +3555,20 @@ void Mu_EstFR(Int_t type)
     h_FRsigCtrl_template_endcap2->Add(h_pT_endcap2_template_nume_100to500[_QCDMuEnriched_Full]);
 
     // ---- Denominator ---- //
-    h_pT_barrel_template_ctrl_50to70  [_QCDMuEnriched_Full]->Scale(1.4762e+07/h_pT_barrel_template_ctrl_50to70  [_QCDMuEnriched_Full]->Integral());
-    h_pT_barrel_template_ctrl_70to100 [_QCDMuEnriched_Full]->Scale(4.2131e+06/h_pT_barrel_template_ctrl_70to100 [_QCDMuEnriched_Full]->Integral());
-    h_pT_barrel_template_ctrl_100to500[_QCDMuEnriched_Full]->Scale(8.9296e+05/h_pT_barrel_template_ctrl_100to500[_QCDMuEnriched_Full]->Integral());
+    h_pT_barrel_template_ctrl_50to70  [_QCDMuEnriched_Full]->Scale(1.4666e+07/h_pT_barrel_template_ctrl_50to70  [_QCDMuEnriched_Full]->Integral());
+    h_pT_barrel_template_ctrl_70to100 [_QCDMuEnriched_Full]->Scale(4.1323e+06/h_pT_barrel_template_ctrl_70to100 [_QCDMuEnriched_Full]->Integral());
+    h_pT_barrel_template_ctrl_100to500[_QCDMuEnriched_Full]->Scale(8.5056e+05/h_pT_barrel_template_ctrl_100to500[_QCDMuEnriched_Full]->Integral());
     // One endcap bin
 //    h_pT_endcap_template_ctrl_50to70  [_QCDMuEnriched_Full]->Scale(6.8002e+06/h_pT_endcap_template_ctrl_50to70  [_QCDMuEnriched_Full]->Integral());
 //    h_pT_endcap_template_ctrl_70to100 [_QCDMuEnriched_Full]->Scale(1.7355e+06/h_pT_endcap_template_ctrl_70to100 [_QCDMuEnriched_Full]->Integral());
 //    h_pT_endcap_template_ctrl_100to500[_QCDMuEnriched_Full]->Scale(3.0191e+05/h_pT_endcap_template_ctrl_100to500[_QCDMuEnriched_Full]->Integral());
     // Two endcap bins
-    h_pT_endcap_template_ctrl_50to70  [_QCDMuEnriched_Full]->Scale(4.6394e+06/h_pT_endcap_template_ctrl_50to70  [_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap_template_ctrl_70to100 [_QCDMuEnriched_Full]->Scale(1.2152e+06/h_pT_endcap_template_ctrl_70to100 [_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap_template_ctrl_100to500[_QCDMuEnriched_Full]->Scale(2.1908e+05/h_pT_endcap_template_ctrl_100to500[_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap2_template_ctrl_50to70  [_QCDMuEnriched_Full]->Scale(2.1687e+06/h_pT_endcap2_template_ctrl_50to70  [_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap2_template_ctrl_70to100 [_QCDMuEnriched_Full]->Scale(5.2704e+05/h_pT_endcap2_template_ctrl_70to100 [_QCDMuEnriched_Full]->Integral());
-    h_pT_endcap2_template_ctrl_100to500[_QCDMuEnriched_Full]->Scale(8.3104e+04/h_pT_endcap2_template_ctrl_100to500[_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap_template_ctrl_50to70  [_QCDMuEnriched_Full]->Scale(4.5911e+06/h_pT_endcap_template_ctrl_50to70  [_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap_template_ctrl_70to100 [_QCDMuEnriched_Full]->Scale(1.1797e+06/h_pT_endcap_template_ctrl_70to100 [_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap_template_ctrl_100to500[_QCDMuEnriched_Full]->Scale(2.0436e+05/h_pT_endcap_template_ctrl_100to500[_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap2_template_ctrl_50to70  [_QCDMuEnriched_Full]->Scale(2.0989e+06/h_pT_endcap2_template_ctrl_50to70  [_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap2_template_ctrl_70to100 [_QCDMuEnriched_Full]->Scale(4.8647e+05/h_pT_endcap2_template_ctrl_70to100 [_QCDMuEnriched_Full]->Integral());
+    h_pT_endcap2_template_ctrl_100to500[_QCDMuEnriched_Full]->Scale(7.1678e+04/h_pT_endcap2_template_ctrl_100to500[_QCDMuEnriched_Full]->Integral());
 
     TH1D *h_DenoSigCtrl_template_barrel = ((TH1D*)(h_pT_barrel_template_ctrl_50to70[_QCDMuEnriched_Full]->Clone("h_DenoSigCtrl_template_barrel")));
     h_DenoSigCtrl_template_barrel->Add(h_pT_barrel_template_ctrl_70to100 [_QCDMuEnriched_Full]);
@@ -4469,9 +4472,9 @@ void E_EstPR()
     h_eff_data_endcap2_draw->Draw("same");
     h_eff_data_barrel->Draw("same");
     TLegend *legend1 = new TLegend(0.5, 0.72, 0.95, 0.95);
-    legend1->AddEntry(h_eff_data_barrel, "Barrel", "LP");
-    legend1->AddEntry(h_eff_data_endcap_draw, "Endcap |#eta| < 2.1", "LP");
-    legend1->AddEntry(h_eff_data_endcap2_draw, "Endcap |#eta| #geq 2.1", "LP");
+    legend1->AddEntry(h_eff_data_barrel, "|#eta| < 1.4442", "LP");
+    legend1->AddEntry(h_eff_data_endcap_draw, "1.566 < |#eta| < 2.1", "LP");
+    legend1->AddEntry(h_eff_data_endcap2_draw, "|#eta| #geq 2.1", "LP");
     legend1->Draw();
     f_barrel_17to43->Draw("same");
     f_barrel_43to56->Draw("same");

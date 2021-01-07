@@ -71,6 +71,7 @@ void PrescaleDemo (TString type = "SinglePhoton_B", Bool_t trigPtMatching = kFAL
         std::vector<double> *trig_pT = new std::vector<double>;
         std::vector<double> *pT = new std::vector<double>;
         std::vector<int> *HLT_trigPS = new std::vector<int>;
+        std::vector<int> *L1_trigPS = new std::vector<int>;
         std::vector<int> *L1seed_trigPS = new std::vector<int>;
         std::vector<std::vector<std::pair<std::string, int>>> *L1seed_trigPSinDetail = new std::vector<std::vector<std::pair<std::string, int>>>;
         Int_t runNum;
@@ -81,7 +82,7 @@ void PrescaleDemo (TString type = "SinglePhoton_B", Bool_t trigPtMatching = kFAL
 
         // Setting up chain
         TChain *chain = new TChain("FRTree");
-        TString DirTEST = "/media/sf_DATA/";
+        TString DirTEST = "/media/sf_DATA/FR/";
         chain->Add(DirTEST+"SelectedForFR_E_"+Mgr.Procname[Mgr.CurrentProc]+".root");
         if (DEBUG == kTRUE) cout << Dir+"SelectedForFR_E_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
         chain->SetBranchStatus("trig_fired", 1);
@@ -89,8 +90,9 @@ void PrescaleDemo (TString type = "SinglePhoton_B", Bool_t trigPtMatching = kFAL
         chain->SetBranchStatus("trig_pT", 1);
         chain->SetBranchStatus("p_T", 1);
         chain->SetBranchStatus("HLT_trigPS", 1);
-        chain->SetBranchStatus("L1seed_trigPS", 1);
-        chain->SetBranchStatus("L1seed_trigPSinDetail", 1);
+        chain->SetBranchStatus("L1_trigPS", 1);
+//        chain->SetBranchStatus("L1seed_trigPS", 1);
+//        chain->SetBranchStatus("L1seed_trigPSinDetail", 1);
         chain->SetBranchStatus("runNum", 1);
         chain->SetBranchStatus("lumiBlock", 1);
         chain->SetBranchAddress("trig_fired", &trig_fired);
@@ -98,8 +100,9 @@ void PrescaleDemo (TString type = "SinglePhoton_B", Bool_t trigPtMatching = kFAL
         chain->SetBranchAddress("trig_pT", &trig_pT);
         chain->SetBranchAddress("p_T", &pT);
         chain->SetBranchAddress("HLT_trigPS", &HLT_trigPS);
-        chain->SetBranchAddress("L1seed_trigPS", &L1seed_trigPS);
-        chain->SetBranchAddress("L1seed_trigPSinDetail", &L1seed_trigPSinDetail);
+        chain->SetBranchAddress("L1_trigPS", &L1_trigPS);
+//        chain->SetBranchAddress("L1seed_trigPS", &L1seed_trigPS);
+//        chain->SetBranchAddress("L1seed_trigPSinDetail", &L1seed_trigPSinDetail);
         chain->SetBranchAddress("runNum", &runNum);
         chain->SetBranchAddress("lumiBlock", &lumiBlock);
 
@@ -137,28 +140,28 @@ void PrescaleDemo (TString type = "SinglePhoton_B", Bool_t trigPtMatching = kFAL
                 {
 
                     cout << "HLT_Photon" << trig_fired->at(i_tr) << " L1 seeds:" << endl;
-                    for (UInt_t i_l1=0; i_l1<L1seed_trigPSinDetail->at(i_tr).size(); i_l1++)
-                    {
-                        cout << "   " << L1seed_trigPSinDetail->at(i_tr)[i_l1].first << "  prescale = " << L1seed_trigPSinDetail->at(i_tr)[i_l1].second << endl;
-                    }
+//                    for (UInt_t i_l1=0; i_l1<L1seed_trigPSinDetail->at(i_tr).size(); i_l1++)
+//                    {
+//                        cout << "   " << L1seed_trigPSinDetail->at(i_tr)[i_l1].first << "  prescale = " << L1seed_trigPSinDetail->at(i_tr)[i_l1].second << endl;
+//                    }
                 }
 
-                Int_t L1_smallestPS = 9999;
-                for (UInt_t i_l1=0; i_l1<L1seed_trigPSinDetail->at(i_tr).size(); i_l1++)
-                {
-                    if (L1seed_trigPSinDetail->at(i_tr)[i_l1].second < L1_smallestPS)
-                        L1_smallestPS = L1seed_trigPSinDetail->at(i_tr)[i_l1].second;
-                    if (L1seed_trigPSinDetail->at(i_tr)[i_l1].second != 1)
-                        cout << "Found non-1 L1 prescale!!!\n  " << L1seed_trigPSinDetail->at(i_tr)[i_l1].first << " prescale=" << L1seed_trigPSinDetail->at(i_tr)[i_l1].second << endl;
-                }
-                prescale = HLT_trigPS->at(i_tr) * L1_smallestPS * isValid(trig_fired->at(i_tr), trig_pT->at(i_tr));
+//                Int_t L1_smallestPS = 9999;
+//                for (UInt_t i_l1=0; i_l1<L1seed_trigPSinDetail->at(i_tr).size(); i_l1++)
+//                {
+//                    if (L1seed_trigPSinDetail->at(i_tr)[i_l1].second < L1_smallestPS)
+//                        L1_smallestPS = L1seed_trigPSinDetail->at(i_tr)[i_l1].second;
+//                    if (L1seed_trigPSinDetail->at(i_tr)[i_l1].second != 1)
+//                        cout << "Found non-1 L1 prescale!!!\n  " << L1seed_trigPSinDetail->at(i_tr)[i_l1].first << " prescale=" << L1seed_trigPSinDetail->at(i_tr)[i_l1].second << endl;
+//                }
+                prescale = HLT_trigPS->at(i_tr) * L1_trigPS->at(0) /*L1_smallestPS*/ * isValid(trig_fired->at(i_tr), trig_pT->at(i_tr));
 //                prescale = HLT_trigPS->at(i_tr) * L1_PrescalePhoton(trig_fired->at(i_tr), runNum, lumiBlock) * isValid(trig_fired->at(i_tr), trig_pT->at(i_tr));
                 prescale_alt = PrescalePhoton(trig_fired->at(i_tr), trig_pT->at(i_tr), runNum, lumiBlock);
-                prescale_alt_alt = HLT_trigPS->at(i_tr) * L1seed_trigPS->at(i_tr) * isValid(trig_fired->at(i_tr), trig_pT->at(i_tr));
+                prescale_alt_alt = HLT_trigPS->at(i_tr) /* L1seed_trigPS->at(i_tr)*/ * isValid(trig_fired->at(i_tr), trig_pT->at(i_tr));
                 if (DEBUG && prescale != prescale_alt)
                 {
                     cout << "  Prescales do not match!!!:" << endl;
-                    cout << "    Prescale from CMSSW: HLT=" << HLT_trigPS->at(i_tr) << "  L1=" << L1seed_trigPS->at(i_tr) << endl;
+                    cout << "    Prescale from CMSSW: HLT=" << HLT_trigPS->at(i_tr) << "  L1=" << /*L1seed_trigPS*/L1_trigPS->at(i_tr) << endl;
                     cout << "    Prescale from  JSON: HLT=" << HLT_PrescalePhoton(trig_fired->at(i_tr), runNum, lumiBlock);
                     cout << "  L1=" << L1_PrescalePhoton(trig_fired->at(i_tr), runNum, lumiBlock) << endl;
                 }

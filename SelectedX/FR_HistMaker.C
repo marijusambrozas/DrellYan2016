@@ -1734,7 +1734,7 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<double> *TRKiso = new std::vector<double>;
-        Double_t MET_pT, MET_phi, MET_sumEt;
+        Double_t MET_pT, MET_phi;
         Int_t nPU;
         Int_t nVTX;
         Double_t PVz;
@@ -1753,7 +1753,6 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchStatus("TRKiso", 1);
         chain->SetBranchStatus("MET_pT", 1);
         chain->SetBranchStatus("MET_phi", 1);
-        chain->SetBranchStatus("MET_sumEt", 1);
         chain->SetBranchStatus("nPU", 1);
         chain->SetBranchStatus("nVTX", 1);
         chain->SetBranchStatus("PVz", 1);
@@ -1771,7 +1770,6 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
         chain->SetBranchAddress("TRKiso", &TRKiso);
         chain->SetBranchAddress("MET_pT", &MET_pT);
         chain->SetBranchAddress("MET_phi", &MET_phi);
-        chain->SetBranchAddress("MET_sumEt", &MET_sumEt);
         chain->SetBranchAddress("nPU", &nPU);
         chain->SetBranchAddress("nVTX", &nVTX);
         chain->SetBranchAddress("PVz", &PVz);

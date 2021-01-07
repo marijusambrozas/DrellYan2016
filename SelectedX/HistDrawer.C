@@ -5274,7 +5274,7 @@ void Est_HistDrawer(Int_t FR_systErr)
     h_fakes_mass_ee[0]->SetDirectory(0);
     s_mass_ee_wFR->Add(h_fakes_mass_ee[0]);
 
-    f_WJets_est_ee->GetObject("h_WJET_est_fit", h_fakes_mass_ee[1]);
+    f_WJets_est_ee->GetObject("h_WJET_est_fit_2", h_fakes_mass_ee[1]);
     removeNegativeBins(h_fakes_mass_ee[1]);
     h_fakes_mass_ee[1]->SetFillColor(kRed - 2);
     h_fakes_mass_ee[1]->SetLineColor(kRed - 2);

@@ -325,8 +325,6 @@ public:
     Double_t pfMET_Type1_Py;
     Double_t pfMET_Type1_SumEt;
 
-
-
     // -- Constructor -- //
     NtupleHandle(TChain *chainptr)
     {
