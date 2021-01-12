@@ -1096,6 +1096,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<double> *TRKiso = new std::vector<double>;
+        std::vector<int> *isGenMatched = new std::vector<int>;
         Double_t MET_pT, MET_phi;
         Int_t nPU;
         Int_t nVTX;
@@ -1123,6 +1124,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("charge", &charge);
         MuonTree->Branch("relPFiso", &relPFiso);
         MuonTree->Branch("TRKiso", &TRKiso);
+        MuonTree->Branch("isGenMatched", &isGenMatched);
         MuonTree->Branch("MET_pT", &MET_pT);
         MuonTree->Branch("MET_phi", &MET_phi);
         MuonTree->Branch("nPU", &nPU);
@@ -1279,6 +1281,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         charge->clear();
                         relPFiso->clear();
                         TRKiso->clear();
+                        isGenMatched->clear();
                         ele_pT->clear();
                         ele_eta->clear();
                         ele_etaSC->clear();
@@ -1320,6 +1323,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             charge->push_back(SelectedMuonCollection_deno[i].charge);
                             relPFiso->push_back(SelectedMuonCollection_deno[i].RelPFIso_dBeta);
                             TRKiso->push_back(SelectedMuonCollection_deno[i].trkiso);
+                            isGenMatched->push_back(analyzer->isGenMatched(SelectedMuonCollection_deno[i], "fromHardProcess", ntuple));
                         }
                         nElectrons = ntuple->Nelectrons;
                         for (Int_t i_ele=0; i_ele<nElectrons; i_ele++)

@@ -344,7 +344,8 @@ public:
         Double_t Calc_dR_GenLepton_GenOthers(GenLepton genlep1, GenOthers genlep2);
 
 	// -- miscellaneous -- //
-	void GenMatching(TString MuonType, NtupleHandle* ntuple, vector<Muon>* MuonCollection);
+        void GenMatching(TString MuonType, NtupleHandle* ntuple, vector<Muon>* MuonCollection);
+        Int_t isGenMatched(Muon muon, TString MuonType, NtupleHandle* ntuple);
         void ConvertToTunePInfo(Muon &mu);
         void PrintOutDoubleMuInfo(Muon mu1, Muon mu2);
         Double_t GenMuonPt(TString MuonType, NtupleHandle* ntuple, Muon reco_mu);
@@ -9931,6 +9932,91 @@ void DYAnalyzer::GenMatching(TString MuonType, NtupleHandle* ntuple, vector<Muon
 
 	return;
 }
+
+
+Int_t DYAnalyzer::isGenMatched(Muon muon, TString MuonType, NtupleHandle* ntuple)
+{
+    vector<GenLepton> GenLeptonCollection;
+    Int_t NGenLeptons = ntuple->gnpair;
+
+    if(MuonType == "PromptFinalState")
+    {
+        for(Int_t i_gen=0; i_gen<NGenLeptons; i_gen++)
+        {
+            GenLepton genlep;
+            genlep.FillFromNtuple(ntuple, i_gen);
+            if(genlep.isMuon() && genlep.isPromptFinalState)
+                GenLeptonCollection.push_back(genlep);
+        }
+    }
+    else if(MuonType == "fromTau")
+    {
+        for(Int_t i_gen=0; i_gen<NGenLeptons; i_gen++)
+        {
+            GenLepton genlep;
+            genlep.FillFromNtuple(ntuple, i_gen);
+            if(genlep.isMuon() && genlep.isDirectPromptTauDecayProductFinalState)
+                GenLeptonCollection.push_back(genlep);
+        }
+
+    }
+    else if(MuonType == "fromHardProcess")
+    {
+        for(Int_t i_gen=0; i_gen<NGenLeptons; i_gen++)
+        {
+            GenLepton genlep;
+            genlep.FillFromNtuple(ntuple, i_gen);
+            if(genlep.isMuon() && genlep.fromHardProcessFinalState)
+                GenLeptonCollection.push_back(genlep);
+        }
+    }
+    else if (MuonType == "decayedHadron")
+    {
+        for(Int_t i_gen=0; i_gen<NGenLeptons; i_gen++)
+        {
+            GenLepton genlep;
+            genlep.FillFromNtuple(ntuple, i_gen);
+            if(genlep.isMuon() && genlep.isDecayedLeptonHadron)
+                GenLeptonCollection.push_back(genlep);
+        }
+    }
+    else
+    {
+        std::cout << "Incorrect MuonType!" << endl;
+        return 0;
+    }
+
+    Int_t is_matched = 0;
+    Double_t dPtMin = 1e10;
+
+    Double_t reco_Pt = muon.Pt;
+    Double_t reco_eta = muon.eta;
+    Double_t reco_phi = muon.phi;
+
+    Int_t NGen = (Int_t)GenLeptonCollection.size();
+    for(Int_t i_gen=0; i_gen<NGen; i_gen++)
+    {
+        GenLepton genlep = GenLeptonCollection[i_gen];
+        Double_t gen_Pt = genlep.Pt;
+        Double_t gen_eta = genlep.eta;
+        Double_t gen_phi = genlep.phi;
+
+        Double_t dR = sqrt((gen_eta-reco_eta)*(gen_eta-reco_eta) + (gen_phi-reco_phi)*(gen_phi-reco_phi));
+        Double_t dPt = fabs(gen_Pt - reco_Pt);
+        if(dR < 0.3)
+        {
+            if(dPt < dPtMin)
+            {
+                is_matched = 1;
+                dPtMin = dPt;
+            }
+        }
+
+    }
+
+    return is_matched;
+}
+
 
 void DYAnalyzer::ConvertToTunePInfo(Muon &mu)
 {
