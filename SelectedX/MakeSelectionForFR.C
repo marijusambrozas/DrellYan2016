@@ -2498,6 +2498,7 @@ void MakeSelectionForPR_Mu (TString type, TString HLTname, Bool_t Debug)
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<double> *TRKiso = new std::vector<double>;
+        std::vector<int> *isGenMatched = new std::vector<int>;
         std::vector<string> *trig_name = new std::vector<string>;
         std::vector<int> *trig_fired = new std::vector<int>;
         std::vector<int> *trig_matched = new std::vector<int>;
@@ -2511,6 +2512,17 @@ void MakeSelectionForPR_Mu (TString type, TString HLTname, Bool_t Debug)
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
         Int_t runNum;
         Int_t lumiBlock;
+        Int_t nElectrons;
+        std::vector<double> *ele_pT = new std::vector<double>;
+        std::vector<double> *ele_eta = new std::vector<double>;
+        std::vector<double> *ele_etaSC = new std::vector<double>;
+        std::vector<double> *ele_phi = new std::vector<double>;
+        std::vector<int> *ele_charge = new std::vector<int>;
+        Int_t nJets;
+        std::vector<double> *jet_pT = new std::vector<double>;
+        std::vector<double> *jet_eta = new std::vector<double>;
+        std::vector<double> *jet_phi = new std::vector<double>;
+        std::vector<int> *jet_charge = new std::vector<int>;
 
         TTree* MuonTree = new TTree("FRTree", "FRTree");
         // -- Creating SelectedMuMu variables to assign branches -- //
@@ -2520,6 +2532,7 @@ void MakeSelectionForPR_Mu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("charge", &charge);
         MuonTree->Branch("relPFiso", &relPFiso);
         MuonTree->Branch("TRKiso", &TRKiso);
+        MuonTree->Branch("isGenMatched", &isGenMatched);
         MuonTree->Branch("trig_name", &trig_name);
         MuonTree->Branch("trig_fired", &trig_fired);
         MuonTree->Branch("trig_matched", &trig_matched);
@@ -2537,6 +2550,17 @@ void MakeSelectionForPR_Mu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("prefiring_weight_down", &prefiring_weight_down);
         MuonTree->Branch("runNum", &runNum);
         MuonTree->Branch("lumiBlock", &lumiBlock);
+        MuonTree->Branch("nElectrons", &nElectrons);
+        MuonTree->Branch("ele_pT", &ele_pT);
+        MuonTree->Branch("ele_eta", &ele_eta);
+        MuonTree->Branch("ele_etaSC", &ele_etaSC);
+        MuonTree->Branch("ele_phi", &ele_phi);
+        MuonTree->Branch("ele_charge", &ele_charge);
+        MuonTree->Branch("nJets", &nJets);
+        MuonTree->Branch("jet_pT", &jet_pT);
+        MuonTree->Branch("jet_eta", &jet_eta);
+        MuonTree->Branch("jet_phi", &jet_phi);
+        MuonTree->Branch("jet_charge", &jet_charge);
 
         // -- For PU re-weighting -- //
         analyzer->SetupPileUpReWeighting_80X(Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root");
@@ -2667,11 +2691,21 @@ void MakeSelectionForPR_Mu (TString type, TString HLTname, Bool_t Debug)
                         charge->clear();
                         relPFiso->clear();
                         TRKiso->clear();
+                        isGenMatched->clear();
                         trig_name->clear();
                         trig_fired->clear();
                         trig_matched->clear();
                         trig_pT->clear();
                         prescale_factor->clear();
+                        ele_pT->clear();
+                        ele_eta->clear();
+                        ele_etaSC->clear();
+                        ele_phi->clear();
+                        ele_charge->clear();
+                        jet_pT->clear();
+                        jet_eta->clear();
+                        jet_phi->clear();
+                        jet_charge->clear();
 
                         // -- Top pT reweighting -- //
                         top_weight = 1;
@@ -2712,6 +2746,24 @@ void MakeSelectionForPR_Mu (TString type, TString HLTname, Bool_t Debug)
                             charge->push_back(SelectedMuonCollection[i].charge);
                             relPFiso->push_back(SelectedMuonCollection[i].RelPFIso_dBeta);
                             TRKiso->push_back(SelectedMuonCollection[i].trkiso);
+                            isGenMatched->push_back(analyzer->isGenMatched(SelectedMuonCollection[i], "fromHardProcess", ntuple));
+                        }                        
+                        nElectrons = ntuple->Nelectrons;
+                        for (Int_t i_ele=0; i_ele<nElectrons; i_ele++)
+                        {
+                            ele_pT->push_back(ntuple->Electron_pT[i_ele]);
+                            ele_eta->push_back(ntuple->Electron_eta[i_ele]);
+                            ele_etaSC->push_back(ntuple->Electron_etaSC[i_ele]);
+                            ele_phi->push_back(ntuple->Electron_phi[i_ele]);
+                            ele_charge->push_back(ntuple->Electron_charge[i_ele]);
+                        }
+                        nJets = ntuple->Njets;
+                        for (Int_t i_jet=0; i_jet<nJets; i_jet++)
+                        {
+                            jet_pT->push_back(ntuple->Jet_pT[i_jet]);
+                            jet_eta->push_back(ntuple->Jet_eta[i_jet]);
+                            jet_phi->push_back(ntuple->Jet_phi[i_jet]);
+                            jet_charge->push_back(ntuple->Jet_Charge[i_jet]);
                         }
                         MuonTree->Fill();
                     } // End of isPassEvtSelection
