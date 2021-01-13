@@ -6282,124 +6282,136 @@ Bool_t DYAnalyzer::EventSelection_PR(vector<Muon> MuonCollection, NtupleHandle *
     {
         if(MuonCollection[j].passTightID)
             QMuonCollection.push_back(MuonCollection[j]);
-    }
+    }    
 
-    // -- Check the existence of at least one muon matched with HLT-object -- //
-    Bool_t isExistHLTMatchedMuon = kFALSE;
-    for(Int_t i_mu=0; i_mu<(Int_t)QMuonCollection.size(); i_mu++)
+    Int_t nQMuons = (Int_t)QMuonCollection.size();
+    if(nQMuons == 2)
     {
-            Muon mu = QMuonCollection[i_mu];
-            if(mu.isTrigMatched(ntuple, "HLT_Mu50_v*"))
-            {
-                    isExistHLTMatchedMuon = kTRUE;
-                    break;
-            }
-    }
+        Muon recolep1 = QMuonCollection[0];
+        Muon recolep2 = QMuonCollection[1];
 
-    if(isExistHLTMatchedMuon == kTRUE)
+        // -- Check the Accpetance -- //
+        Bool_t isPassAcc = kFALSE;
+        isPassAcc = isPassAccCondition_Muon(recolep1, recolep2);
+
+        Double_t reco_M = (recolep1.Momentum + recolep2.Momentum).M();
+
+        Double_t VtxProb = -999;
+        Double_t VtxNormChi2 = 999;
+        DimuonVertexProbNormChi2(ntuple, recolep1.Inner_pT, recolep2.Inner_pT, &VtxProb, &VtxNormChi2);
+
+        TLorentzVector inner_v1 = recolep1.Momentum_Inner;
+        TLorentzVector inner_v2 = recolep2.Momentum_Inner;
+
+        // -- 3D open angle -- //
+        Double_t Angle = recolep1.Momentum.Angle(recolep2.Momentum.Vect());
+
+        Bool_t isOS = kFALSE;
+        if(recolep1.charge != recolep2.charge) isOS = kTRUE;
+
+        if(reco_M > 10 && isPassAcc == kTRUE && VtxNormChi2 < 20 && Angle < TMath::Pi() - 0.005/* && isOS == kTRUE*/)
+        {
+            SelectedMuonCollection->push_back(recolep1);
+            SelectedMuonCollection->push_back(recolep2);
+            // Checking if we have an HLT match
+            Bool_t isExistHLTMatchedMuon = kFALSE;
+            if(recolep1.isTrigMatched(ntuple, "HLT_Mu50_v*") || recolep2.isTrigMatched(ntuple, "HLT_Mu50_v*"))
+                isExistHLTMatchedMuon = kTRUE;
+
+            if (isExistHLTMatchedMuon) isPassEventSelection = kTRUE;
+            else SelectedMuonCollection->clear();
+        } // End of if(reco_M, isPassAcc, VtxChi2, Angle)
+
+    } // End of if (nQMuons == 2)
+
+    else if(nQMuons > 2)
     {
-            Int_t nQMuons = (Int_t)QMuonCollection.size();
-            if(nQMuons == 2)
+        Double_t VtxProb_BestPair = -1;
+        Double_t VtxNormChi2_BestPair = 999;
+        Muon mu1_BestPair;
+        Muon mu2_BestPair;
+
+        for(Int_t i_mu=0; i_mu<nQMuons; i_mu++)
+        {
+            Muon Mu = QMuonCollection[i_mu];
+
+            // -- at least 1 muon should be matched with HLT objects in best pair -- //
+            if(Mu.isTrigMatched(ntuple, "HLT_Mu50_v*"))
             {
-                    Muon recolep1 = QMuonCollection[0];
-                    Muon recolep2 = QMuonCollection[1];
+                // -- Mu in this loop: QMuon Matched with HLT object -- //
 
-                    // -- Check the Accpetance -- //
-                    Bool_t isPassAcc = kFALSE;
-                    isPassAcc = isPassAccCondition_Muon(recolep1, recolep2);
+                // -- Start another loop for finding second muon (for second muon, we don't need to check trigger matching) -- //
+                for(Int_t j_mu=0; j_mu<nQMuons; j_mu++)
+                {
+                    Muon Mu_jth = QMuonCollection[j_mu];
 
-                    Double_t reco_M = (recolep1.Momentum + recolep2.Momentum).M();
-
-                    Double_t VtxProb = -999;
-                    Double_t VtxNormChi2 = 999;
-                    DimuonVertexProbNormChi2(ntuple, recolep1.Inner_pT, recolep2.Inner_pT, &VtxProb, &VtxNormChi2);
-
-                    TLorentzVector inner_v1 = recolep1.Momentum_Inner;
-                    TLorentzVector inner_v2 = recolep2.Momentum_Inner;
-
-                    // -- 3D open angle -- //
-                    Double_t Angle = recolep1.Momentum.Angle(recolep2.Momentum.Vect());
-
-                    Bool_t isOS = kFALSE;
-                    if(recolep1.charge != recolep2.charge) isOS = kTRUE;
-
-                    if(reco_M > 10 && isPassAcc == kTRUE && VtxNormChi2 < 20 && Angle < TMath::Pi() - 0.005/* && isOS == kTRUE*/)
+                    if(j_mu != i_mu) // -- do not calculate vertex variables(prob, chi2). with itself -- //
                     {
-                            isPassEventSelection = kTRUE;
-                            SelectedMuonCollection->push_back(recolep1);
-                            SelectedMuonCollection->push_back(recolep2);
-                    }
-            }
-            else if(nQMuons > 2)
-            {
-                    Double_t VtxProb_BestPair = -1;
-                    Double_t VtxNormChi2_BestPair = 999;
-                    Muon mu1_BestPair;
-                    Muon mu2_BestPair;
+                        // -- Check that this pair is within acceptance -- //
+                        Bool_t isPassAcc = kFALSE;
+                        isPassAcc = isPassAccCondition_Muon(Mu, Mu_jth);
 
+                        if(isPassAcc == kTRUE) // -- Find best pair ONLY for the pairs within acceptance -- //
+                        {
+                            Double_t VtxProb_temp = -999;
+                            Double_t VtxNormChi2_temp = 999;
+                            DimuonVertexProbNormChi2(ntuple, Mu.Inner_pT, Mu_jth.Inner_pT, &VtxProb_temp, &VtxNormChi2_temp);
+
+                            // -- Find best pair by selecting smallest Chi2/dnof(VTX) value -- //
+                            if(VtxNormChi2_temp < VtxNormChi2_BestPair)
+                            {
+                                VtxNormChi2_BestPair = VtxNormChi2_temp;
+                                mu1_BestPair = Mu;
+                                mu2_BestPair = Mu_jth;
+                            }
+                        } // End of if(isPassAcc)
+                    }
+                } // -- end of the loop for j_mu (finding for second muon)
+            }
+        } // -- end of the loop for i_mu (finding for the first muon matched with HLT matching)
+
+        if(VtxNormChi2_BestPair < 999) // -- If at least one pair within acceptance & with at least one muon matched with HLT object exists -- //
+        {
+            TLorentzVector reco_v1 = mu1_BestPair.Momentum;
+            TLorentzVector reco_v2 = mu2_BestPair.Momentum;
+            Double_t reco_M = (reco_v1 + reco_v2).M();
+
+            // -- 3D open angle is calculated using inner track information -- //
+            // -- 3D open angle -- //
+            Double_t Angle = reco_v1.Angle(reco_v2.Vect());
+
+            Bool_t isOS = kFALSE;
+            if(mu1_BestPair.charge != mu2_BestPair.charge) isOS = kTRUE;
+
+            if(reco_M > 10 && VtxNormChi2_BestPair < 20 && Angle < TMath::Pi() - 0.005/* && isOS == kTRUE*/)
+            {
+                SelectedMuonCollection->push_back(mu1_BestPair);
+                SelectedMuonCollection->push_back(mu2_BestPair);
+
+                // Checking if we have an HLT match
+                Bool_t isExistHLTMatchedMuon = kFALSE;
+                if(mu1_BestPair.isTrigMatched(ntuple, "HLT_Mu50_v*") || mu2_BestPair.isTrigMatched(ntuple, "HLT_Mu50_v*"))
+                    isExistHLTMatchedMuon = kTRUE;
+
+                if (isExistHLTMatchedMuon)
+                {
+                    isPassEventSelection = kTRUE;
+                    // Also saving other muons which might be fakes
                     for(Int_t i_mu=0; i_mu<nQMuons; i_mu++)
                     {
-                            Muon Mu = QMuonCollection[i_mu];
-
-                            // -- at least 1 muon should be matched with HLT objects in best pair -- //
-                            if(Mu.isTrigMatched(ntuple, "HLT_Mu50_v*"))
-                            {
-                                    // -- Mu in this loop: QMuon Matched with HLT object -- //
-
-                                    // -- Start another loop for finding second muon (for second muon, we don't need to check trigger matching) -- //
-                                    for(Int_t j_mu=0; j_mu<nQMuons; j_mu++)
-                                    {
-                                            Muon Mu_jth = QMuonCollection[j_mu];
-
-                                            if(j_mu != i_mu) // -- do not calculate vertex variables(prob, chi2). with itself -- //
-                                            {
-                                                    // -- Check that this pair is within acceptance -- //
-                                                    Bool_t isPassAcc = kFALSE;
-                                                    isPassAcc = isPassAccCondition_Muon(Mu, Mu_jth);
-
-                                                    if(isPassAcc == kTRUE) // -- Find best pair ONLY for the pairs within acceptance -- //
-                                                    {
-                                                            Double_t VtxProb_temp = -999;
-                                                            Double_t VtxNormChi2_temp = 999;
-                                                            DimuonVertexProbNormChi2(ntuple, Mu.Inner_pT, Mu_jth.Inner_pT, &VtxProb_temp, &VtxNormChi2_temp);
-
-                                                            // -- Find best pair by selecting smallest Chi2/dnof(VTX) value -- //
-                                                            if(VtxNormChi2_temp < VtxNormChi2_BestPair)
-                                                            {
-                                                                    VtxNormChi2_BestPair = VtxNormChi2_temp;
-                                                                    mu1_BestPair = Mu;
-                                                                    mu2_BestPair = Mu_jth;
-                                                            }
-                                                    }
-                                            }
-                                    } // -- end of the loop for j_mu (finding for second muon)
-                            }
-                    } // -- end of the loop for i_mu (finding for the first muon matched with HLT matching)
-
-                    if(VtxNormChi2_BestPair < 999) // -- If at least one pair within acceptance & with at least one muon matched with HLT object exists -- //
-                    {
-                            TLorentzVector reco_v1 = mu1_BestPair.Momentum;
-                            TLorentzVector reco_v2 = mu2_BestPair.Momentum;
-                            Double_t reco_M = (reco_v1 + reco_v2).M();
-
-                            // -- 3D open angle is calculated using inner track information -- //
-                            // -- 3D open angle -- //
-                            Double_t Angle = reco_v1.Angle(reco_v2.Vect());
-
-                            Bool_t isOS = kFALSE;
-                            if(mu1_BestPair.charge != mu2_BestPair.charge) isOS = kTRUE;
-
-                            if(reco_M > 10 && VtxNormChi2_BestPair < 20 && Angle < TMath::Pi() - 0.005/* && isOS == kTRUE*/)
-                            {
-                                    isPassEventSelection = kTRUE;
-                                    SelectedMuonCollection->push_back(mu1_BestPair);
-                                    SelectedMuonCollection->push_back(mu2_BestPair);
-                            }
+                        Muon Mu = QMuonCollection[i_mu];
+                        if (Mu.Pt == mu1_BestPair.Pt && Mu.eta == mu1_BestPair.eta && Mu.phi == mu1_BestPair.phi) continue;
+                        else if (Mu.Pt == mu2_BestPair.Pt && Mu.eta == mu2_BestPair.eta && Mu.phi == mu2_BestPair.phi) continue;
+                        else SelectedMuonCollection->push_back(Mu);
                     }
+                } // End of if(isExistHLTMatchedMuon)
+                else SelectedMuonCollection->clear();
 
-            } // -- End of else if(nQMuons > 2) -- //
+            } // End of if(reco_M, VtxChi2, Angle)
 
-    } // -- End of if(isExistHLTMatchedMuon == kTRUE) -- //
+        } // End of if (VtxChi2 < 999)
+
+    } // -- End of else if(nQMuons > 2) -- //
 
     return isPassEventSelection;
 } // End of EventSelection_PR()
