@@ -2583,6 +2583,8 @@ void MakeSelectionForPR_Mu (TString type, TString HLTname, Bool_t Debug)
                 ntuple->TurnOnBranches_GenOthers(); // for quarks
             }
             ntuple->TurnOnBranches_Muon();
+            ntuple->TurnOnBranches_Electron();
+            ntuple->TurnOnBranches_Jet();
             ntuple->TurnOnBranches_MET();
 
             Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
