@@ -138,6 +138,7 @@ public:
         Double_t Eff_DY[nPtBin_DY][2];
         Double_t Ineff_DY[nPtBin_DY][2];
         Double_t PR[nPtBin_DY][4];
+        Double_t PR_alt[nPtBinEndcap][4];
         Double_t PR_ele[nPtBin_DY][3];
         std::vector<TF1> PRfit_barrel_ele;
         std::vector<TF1> PRfit_endcap_ele;
@@ -304,9 +305,9 @@ public:
         void SetupFRvalues_old(TString filename, TString type="sigCtrl_template");
         Double_t FakeRate(Double_t p_T, Double_t eta);
         Double_t FakeRate_old(Double_t p_T, Double_t eta);
-        void SetupPRvalues(TString filename, TString type="ratio");
-        Double_t PromptRate(Double_t p_T, Double_t eta);
-        std::vector<double> MatrixMethod_evtWeight(Double_t pT1, Double_t eta1, Double_t relPFiso1, Double_t pT2, Double_t eta2, Double_t relPFiso2);
+        void SetupPRvalues(TString filename, TString type="ratio", Int_t alt=0);
+        Double_t PromptRate(Double_t p_T, Double_t eta, Int_t alt=0);
+        std::vector<double> MatrixMethod_evtWeight(Double_t pT1, Double_t eta1, Double_t relPFiso1, Double_t pT2, Double_t eta2, Double_t relPFiso2, Int_t alt=0);
         Double_t PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t PrescaleFactor2(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t PrescaleFactor3(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
@@ -346,6 +347,7 @@ public:
 	// -- miscellaneous -- //
         void GenMatching(TString MuonType, NtupleHandle* ntuple, vector<Muon>* MuonCollection);
         Int_t isGenMatched(Muon muon, TString MuonType, NtupleHandle* ntuple);
+        Int_t GenMatchType(Muon muon, NtupleHandle* ntuple);
         void ConvertToTunePInfo(Muon &mu);
         void PrintOutDoubleMuInfo(Muon mu1, Muon mu2);
         Double_t GenMuonPt(TString MuonType, NtupleHandle* ntuple, Muon reco_mu);
@@ -6929,7 +6931,7 @@ void DYAnalyzer::SetupFRvalues_old(TString filename, TString type) // type can b
 } // End of SetupFRvalues_old()
 
 
-void DYAnalyzer::SetupPRvalues(TString filename, TString type) // type can be "ratio", "template", "mixed", "sigCtrl_template" (default)
+void DYAnalyzer::SetupPRvalues(TString filename, TString type, Int_t alt) // type can be "ratio", "template", "mixed", "sigCtrl_template" (default)
 {
     cout << "Setting up PR values...";
 
@@ -6940,65 +6942,130 @@ void DYAnalyzer::SetupPRvalues(TString filename, TString type) // type can be "r
     TH1D *h_PR_endcap  = (TH1D*)f->Get("h_PR_"+type+"_endcap");
     TH1D *h_PR_endcap2 = (TH1D*)f->Get("h_PR_"+type+"_endcap2");
     Int_t nProblems = 0;
-
-    for (Int_t i=0; i<nPtBin_DY; i++)
+    if (!alt)
     {
-        PR[i][0] = h_PR_barrel->GetBinContent(i+1);
-        if (PR[i][0] < 0)
+        for (Int_t i=0; i<nPtBin_DY; i++)
         {
-            nProblems++;
-            std::cout << i << "  " << PR[i][0] << endl;
-            PR[i][0] = 0;
-        }
-        if (PR[i][0] > 1)
-        {
-            nProblems++;
-            std::cout << i << "  " << PR[i][0] << endl;
-            PR[i][0] = 1;
-        }
+            PR[i][0] = h_PR_barrel->GetBinContent(i+1);
+            if (PR[i][0] < 0)
+            {
+                nProblems++;
+                std::cout << i << "  " << PR[i][0] << endl;
+                PR[i][0] = 0;
+            }
+            if (PR[i][0] > 1)
+            {
+                nProblems++;
+                std::cout << i << "  " << PR[i][0] << endl;
+                PR[i][0] = 1;
+            }
 
-        PR[i][1] = h_PR_barrel2->GetBinContent(i+1);
-        if (PR[i][1] < 0)
-        {
-            nProblems++;
-            std::cout << i << "  " << PR[i][1] << endl;
-            PR[i][1] = 0;
-        }
-        if (PR[i][1] > 1)
-        {
-            nProblems++;
-            std::cout << i << "  " << PR[i][1] << endl;
-            PR[i][1] = 1;
-        }
+            PR[i][1] = h_PR_barrel2->GetBinContent(i+1);
+            if (PR[i][1] < 0)
+            {
+                nProblems++;
+                std::cout << i << "  " << PR[i][1] << endl;
+                PR[i][1] = 0;
+            }
+            if (PR[i][1] > 1)
+            {
+                nProblems++;
+                std::cout << i << "  " << PR[i][1] << endl;
+                PR[i][1] = 1;
+            }
 
-        PR[i][2] = h_PR_endcap->GetBinContent(i+1);
-        if (PR[i][2] < 0)
-        {
-            nProblems++;
-            std::cout << i << "  " << PR[i][2] << endl;
-            PR[i][2] = 0;
-        }
-        if (PR[i][2] > 1)
-        {
-            nProblems++;
-            std::cout << i << "  " << PR[i][2] << endl;
-            PR[i][2] = 1;
-        }
+            PR[i][2] = h_PR_endcap->GetBinContent(i+1);
+            if (PR[i][2] < 0)
+            {
+                nProblems++;
+                std::cout << i << "  " << PR[i][2] << endl;
+                PR[i][2] = 0;
+            }
+            if (PR[i][2] > 1)
+            {
+                nProblems++;
+                std::cout << i << "  " << PR[i][2] << endl;
+                PR[i][2] = 1;
+            }
 
-        PR[i][3] = h_PR_endcap2->GetBinContent(i+1);
-        if (PR[i][3] < 0)
+            PR[i][3] = h_PR_endcap2->GetBinContent(i+1);
+            if (PR[i][3] < 0)
+            {
+                nProblems++;
+                std::cout << i << "  " << PR[i][3] << endl;
+                PR[i][3] = 0;
+            }
+            if (PR[i][3] > 1)
+            {
+                nProblems++;
+                std::cout << i << "  " << PR[i][3] << endl;
+                PR[i][3] = 1;
+            }
+        }// End of for(bins)
+
+    }// End of if(!alt)
+    else
+    {
+        for (Int_t i=0; i<nPtBinEndcap; i++)
         {
-            nProblems++;
-            std::cout << i << "  " << PR[i][3] << endl;
-            PR[i][3] = 0;
-        }
-        if (PR[i][3] > 1)
-        {
-            nProblems++;
-            std::cout << i << "  " << PR[i][3] << endl;
-            PR[i][3] = 1;
-        }
-    }
+            PR_alt[i][0] = h_PR_barrel->GetBinContent(i+1);
+            if (PR_alt[i][0] < 0)
+            {
+                nProblems++;
+                std::cout << i << "  " << PR_alt[i][0] << endl;
+                PR_alt[i][0] = 0;
+            }
+            if (PR_alt[i][0] > 1)
+            {
+                nProblems++;
+                std::cout << i << "  " << PR_alt[i][0] << endl;
+                PR_alt[i][0] = 1;
+            }
+
+            PR_alt[i][1] = h_PR_barrel2->GetBinContent(i+1);
+            if (PR_alt[i][1] < 0)
+            {
+                nProblems++;
+                std::cout << i << "  " << PR_alt[i][1] << endl;
+                PR_alt[i][1] = 0;
+            }
+            if (PR_alt[i][1] > 1)
+            {
+                nProblems++;
+                std::cout << i << "  " << PR_alt[i][1] << endl;
+                PR_alt[i][1] = 1;
+            }
+
+            PR_alt[i][2] = h_PR_endcap->GetBinContent(i+1);
+            if (PR_alt[i][2] < 0)
+            {
+                nProblems++;
+                std::cout << i << "  " << PR_alt[i][2] << endl;
+                PR_alt[i][2] = 0;
+            }
+            if (PR_alt[i][2] > 1)
+            {
+                nProblems++;
+                std::cout << i << "  " << PR_alt[i][2] << endl;
+                PR_alt[i][2] = 1;
+            }
+
+            PR_alt[i][3] = h_PR_endcap2->GetBinContent(i+1);
+            if (PR_alt[i][3] < 0)
+            {
+                nProblems++;
+                std::cout << i << "  " << PR_alt[i][3] << endl;
+                PR_alt[i][3] = 0;
+            }
+            if (PR_alt[i][3] > 1)
+            {
+                nProblems++;
+                std::cout << i << "  " << PR_alt[i][3] << endl;
+                PR_alt[i][3] = 1;
+            }
+        }// End of for(bins)
+
+    }// End of if(alt)
     f->Close();
     std::cout << "done." << endl;
 } // End of SetupPRvalues()
@@ -7334,73 +7401,126 @@ Double_t DYAnalyzer::FakeRate_old(Double_t p_T, Double_t eta)
 } // End of FakeRate_old()
 
 
-Double_t DYAnalyzer::PromptRate(Double_t p_T, Double_t eta)
+Double_t DYAnalyzer::PromptRate(Double_t p_T, Double_t eta, Int_t alt)
 {
     Double_t PRate = 1;
 
     Int_t etabin;
     Int_t i_bin = 0;
     Int_t stop = 0;
-    if (fabs(eta) < 0.7) // barrel
+    if (!alt) // PR from DY events
     {
-        etabin = 0;
-        while (!stop)
+        if (fabs(eta) < 0.7) // barrel
         {
-            if (p_T < ptbin_DY[i_bin + 1] || i_bin >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available value
-                stop = 1;
-            else
-                i_bin++;
+            etabin = 0;
+            while (!stop)
+            {
+                if (p_T < ptbin_DY[i_bin + 1] || i_bin >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available value
+                    stop = 1;
+                else
+                    i_bin++;
+            }
         }
-    }
-    else if (fabs(eta) >= 0.7 && fabs(eta) < 1.2) // endcap
-    {
-        etabin = 1;
-        while (!stop)
+        else if (fabs(eta) >= 0.7 && fabs(eta) < 1.2) // endcap
         {
-            if (p_T < ptbin_DY[i_bin + 1] || i_bin >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available value
-                stop = 1;
-            else
-                i_bin++;
+            etabin = 1;
+            while (!stop)
+            {
+                if (p_T < ptbin_DY[i_bin + 1] || i_bin >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available value
+                    stop = 1;
+                else
+                    i_bin++;
+            }
         }
-    }
-    else if (fabs(eta) >= 1.2 && fabs(eta) < 1.8) // endcap
-    {
-        etabin = 2;
-        while (!stop)
+        else if (fabs(eta) >= 1.2 && fabs(eta) < 1.8) // endcap
         {
-            if (p_T < ptbin_DY[i_bin + 1] || i_bin >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available value
-                stop = 1;
-            else
-                i_bin++;
+            etabin = 2;
+            while (!stop)
+            {
+                if (p_T < ptbin_DY[i_bin + 1] || i_bin >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available value
+                    stop = 1;
+                else
+                    i_bin++;
+            }
         }
-    }
-    else if (fabs(eta) >= 1.8 && fabs(eta) < 2.4) // endcap
-    {
-        etabin = 3;
-        while (!stop)
+        else if (fabs(eta) >= 1.8 && fabs(eta) < 2.4) // endcap
         {
-            if (p_T < ptbin_DY[i_bin + 1] || i_bin >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available value
-                stop = 1;
-            else
-                i_bin++;
+            etabin = 3;
+            while (!stop)
+            {
+                if (p_T < ptbin_DY[i_bin + 1] || i_bin >= nPtBin_DY-1) // Points exceeding boundaries are assigned last available value
+                    stop = 1;
+                else
+                    i_bin++;
+            }
         }
-    }
-    else return -1;
+        else return -1;
 
-    PRate = PR[i_bin][etabin];
+        PRate = PR[i_bin][etabin];
+    }// End of if(!alt)
+    else // PR from WJets events
+    {
+        if (fabs(eta) < 0.7) // barrel
+        {
+            etabin = 0;
+            while (!stop)
+            {
+                if (p_T < ptbin_endcap[i_bin + 1] || i_bin >= nPtBinEndcap-1) // Points exceeding boundaries are assigned last available value
+                    stop = 1;
+                else
+                    i_bin++;
+            }
+        }
+        else if (fabs(eta) >= 0.7 && fabs(eta) < 1.2) // endcap
+        {
+            etabin = 1;
+            while (!stop)
+            {
+                if (p_T < ptbin_endcap[i_bin + 1] || i_bin >= nPtBinEndcap-1) // Points exceeding boundaries are assigned last available value
+                    stop = 1;
+                else
+                    i_bin++;
+            }
+        }
+        else if (fabs(eta) >= 1.2 && fabs(eta) < 1.8) // endcap
+        {
+            etabin = 2;
+            while (!stop)
+            {
+                if (p_T < ptbin_endcap[i_bin + 1] || i_bin >= nPtBinEndcap-1) // Points exceeding boundaries are assigned last available value
+                    stop = 1;
+                else
+                    i_bin++;
+            }
+        }
+        else if (fabs(eta) >= 1.8 && fabs(eta) < 2.4) // endcap
+        {
+            etabin = 3;
+            while (!stop)
+            {
+                if (p_T < ptbin_endcap[i_bin + 1] || i_bin >= nPtBinEndcap-1) // Points exceeding boundaries are assigned last available value
+                    stop = 1;
+                else
+                    i_bin++;
+            }
+        }
+        else return -1;
+
+        PRate = PR_alt[i_bin][etabin];
+    }// End of if(alt)
 
     return PRate;
 } // End of PromptRate()
 
 
-std::vector<double> DYAnalyzer::MatrixMethod_evtWeight(Double_t pT1, Double_t eta1, Double_t relPFiso1, Double_t pT2, Double_t eta2, Double_t relPFiso2)
+std::vector<double> DYAnalyzer::MatrixMethod_evtWeight(Double_t pT1, Double_t eta1, Double_t relPFiso1, Double_t pT2, Double_t eta2, Double_t relPFiso2, Int_t alt)
 {
     std::vector<double> weights(4, 1.0);
 
     Double_t FR1 = FakeRate(pT1, eta1);//-0.1 < 0 ? 0 : FakeRate(pT1, eta1)-0.1;
     Double_t FR2 = FakeRate(pT2, eta2);//-0.1 < 0 ? 0 : FakeRate(pT2, eta2)-0.1;
-    Double_t PR1 = PromptRate(pT1, eta1);//+0.1 > 1 ? 1 : PromptRate(pT1, eta1)+0.1;
-    Double_t PR2 = PromptRate(pT2, eta2);//+0.1 > 1 ? 1 : PromptRate(pT2, eta2)+0.1;
+    Double_t PR1 = PromptRate(pT1, eta1, alt);//+0.1 > 1 ? 1 : PromptRate(pT1, eta1)+0.1;
+    Double_t PR2 = PromptRate(pT2, eta2, alt);//+0.1 > 1 ? 1 : PromptRate(pT2, eta2)+0.1;
 
     Double_t prefix = 1 / ((FR1 - PR1) * (FR2 - PR2));
     if (relPFiso1 < 0.15 && relPFiso2 < 0.15)
@@ -10027,7 +10147,119 @@ Int_t DYAnalyzer::isGenMatched(Muon muon, TString MuonType, NtupleHandle* ntuple
     }
 
     return is_matched;
-}
+} // End of isGenMatched
+
+
+Int_t DYAnalyzer::GenMatchType(Muon muon, NtupleHandle* ntuple)
+{
+    vector<GenLepton> GenLeptonCollection_finalState;
+    vector<GenLepton> GenLeptonCollection_fromTau;
+    vector<GenLepton> GenLeptonCollection_hardProcess;
+    vector<GenLepton> GenLeptonCollection_fromHadron;
+    Int_t NGenLeptons = ntuple->gnpair;
+
+    for(Int_t i_gen=0; i_gen<NGenLeptons; i_gen++)
+    {
+        GenLepton genlep;
+        genlep.FillFromNtuple(ntuple, i_gen);
+        if(genlep.isMuon() && genlep.isDecayedLeptonHadron)
+            GenLeptonCollection_fromHadron.push_back(genlep);
+        if(genlep.isMuon() && genlep.isDirectPromptTauDecayProductFinalState)
+            GenLeptonCollection_fromTau.push_back(genlep);
+        if(genlep.isMuon() && genlep.isPromptFinalState)
+            GenLeptonCollection_finalState.push_back(genlep);
+        if(genlep.isMuon() && genlep.fromHardProcessFinalState)
+            GenLeptonCollection_hardProcess.push_back(genlep);
+
+    }
+
+    Int_t matched_fromHadron = 0;
+    Int_t matched_fromTau = 0;
+    Int_t matched_finalState = 0;
+    Int_t matched_hardProcess = 0;
+
+    Double_t dPtMin = 1e10;
+    Double_t reco_Pt = muon.Pt;
+    Double_t reco_eta = muon.eta;
+    Double_t reco_phi = muon.phi;
+
+    for(Int_t i_gen=0; i_gen<(Int_t)GenLeptonCollection_fromHadron.size(); i_gen++)
+    {
+        GenLepton genlep = GenLeptonCollection_fromHadron[i_gen];
+        Double_t gen_Pt = genlep.Pt;
+        Double_t gen_eta = genlep.eta;
+        Double_t gen_phi = genlep.phi;
+
+        Double_t dR = sqrt((gen_eta-reco_eta)*(gen_eta-reco_eta) + (gen_phi-reco_phi)*(gen_phi-reco_phi));
+        Double_t dPt = fabs(gen_Pt - reco_Pt);
+        if(dR < 0.3)
+        {
+            if(dPt < dPtMin)
+            {
+                matched_fromHadron = 1;
+                dPtMin = dPt;
+            }
+        }
+    }
+    for(Int_t i_gen=0; i_gen<(Int_t)GenLeptonCollection_fromTau.size(); i_gen++)
+    {
+        GenLepton genlep = GenLeptonCollection_fromTau[i_gen];
+        Double_t gen_Pt = genlep.Pt;
+        Double_t gen_eta = genlep.eta;
+        Double_t gen_phi = genlep.phi;
+
+        Double_t dR = sqrt((gen_eta-reco_eta)*(gen_eta-reco_eta) + (gen_phi-reco_phi)*(gen_phi-reco_phi));
+        Double_t dPt = fabs(gen_Pt - reco_Pt);
+        if(dR < 0.3)
+        {
+            if(dPt < dPtMin)
+            {
+                matched_fromTau = 1;
+                dPtMin = dPt;
+            }
+        }
+    }
+    for(Int_t i_gen=0; i_gen<(Int_t)GenLeptonCollection_finalState.size(); i_gen++)
+    {
+        GenLepton genlep = GenLeptonCollection_finalState[i_gen];
+        Double_t gen_Pt = genlep.Pt;
+        Double_t gen_eta = genlep.eta;
+        Double_t gen_phi = genlep.phi;
+
+        Double_t dR = sqrt((gen_eta-reco_eta)*(gen_eta-reco_eta) + (gen_phi-reco_phi)*(gen_phi-reco_phi));
+        Double_t dPt = fabs(gen_Pt - reco_Pt);
+        if(dR < 0.3)
+        {
+            if(dPt < dPtMin)
+            {
+                matched_finalState = 1;
+                dPtMin = dPt;
+            }
+        }
+    }
+    for(Int_t i_gen=0; i_gen<(Int_t)GenLeptonCollection_hardProcess.size(); i_gen++)
+    {
+        GenLepton genlep = GenLeptonCollection_hardProcess[i_gen];
+        Double_t gen_Pt = genlep.Pt;
+        Double_t gen_eta = genlep.eta;
+        Double_t gen_phi = genlep.phi;
+
+        Double_t dR = sqrt((gen_eta-reco_eta)*(gen_eta-reco_eta) + (gen_phi-reco_phi)*(gen_phi-reco_phi));
+        Double_t dPt = fabs(gen_Pt - reco_Pt);
+        if(dR < 0.3)
+        {
+            if(dPt < dPtMin)
+            {
+                matched_hardProcess = 1;
+                dPtMin = dPt;
+            }
+        }
+    }
+
+    Int_t matching_result = 1000*matched_fromHadron + 100*matched_fromTau + 10*matched_finalState + matched_hardProcess;
+
+    return matching_result;
+} // End of GenMatchType
 
 
 void DYAnalyzer::ConvertToTunePInfo(Muon &mu)

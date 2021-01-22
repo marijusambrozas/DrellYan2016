@@ -1323,7 +1323,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             charge->push_back(SelectedMuonCollection_deno[i].charge);
                             relPFiso->push_back(SelectedMuonCollection_deno[i].RelPFIso_dBeta);
                             TRKiso->push_back(SelectedMuonCollection_deno[i].trkiso);
-                            isGenMatched->push_back(analyzer->isGenMatched(SelectedMuonCollection_deno[i], "fromHardProcess", ntuple));
+                            isGenMatched->push_back(analyzer->GenMatchType(SelectedMuonCollection_deno[i], ntuple));
                         }
                         nElectrons = ntuple->Nelectrons;
                         for (Int_t i_ele=0; i_ele<nElectrons; i_ele++)
