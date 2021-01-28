@@ -1019,6 +1019,8 @@ void MakeSelectionForFR_E_alt (TString type, TString HLTname , Bool_t Debug)
 /// -------------------------------- Muon ------------------------------------ ///
 void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
 {
+    gInterpreter->GenerateDictionary("std::vector<std::vector<int>>", "vector");
+
     // -- Run2016 luminosity [/pb] -- //
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
     L = L_B2H;
@@ -1097,6 +1099,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<double> *TRKiso = new std::vector<double>;
         std::vector<int> *isGenMatched = new std::vector<int>;
+        std::vector<std::vector<int>> *genMatchTypes = new std::vector<std::vector<int>>;
         Double_t MET_pT, MET_phi;
         Int_t nPU;
         Int_t nVTX;
@@ -1125,6 +1128,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("relPFiso", &relPFiso);
         MuonTree->Branch("TRKiso", &TRKiso);
         MuonTree->Branch("isGenMatched", &isGenMatched);
+        MuonTree->Branch("genMatchTypes", &genMatchTypes);
         MuonTree->Branch("MET_pT", &MET_pT);
         MuonTree->Branch("MET_phi", &MET_phi);
         MuonTree->Branch("nPU", &nPU);
@@ -1282,6 +1286,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         relPFiso->clear();
                         TRKiso->clear();
                         isGenMatched->clear();
+                        genMatchTypes->clear();
                         ele_pT->clear();
                         ele_eta->clear();
                         ele_etaSC->clear();
@@ -1323,7 +1328,9 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             charge->push_back(SelectedMuonCollection_deno[i].charge);
                             relPFiso->push_back(SelectedMuonCollection_deno[i].RelPFIso_dBeta);
                             TRKiso->push_back(SelectedMuonCollection_deno[i].trkiso);
-                            isGenMatched->push_back(analyzer->GenMatchType(SelectedMuonCollection_deno[i], ntuple));
+                            std::vector<int> genTypes;
+                            isGenMatched->push_back(analyzer->GenMatchType(SelectedMuonCollection_deno[i], ntuple, &genTypes));
+                            genMatchTypes->push_back(genTypes);
                         }
                         nElectrons = ntuple->Nelectrons;
                         for (Int_t i_ele=0; i_ele<nElectrons; i_ele++)

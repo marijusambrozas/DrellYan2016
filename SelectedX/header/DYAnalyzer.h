@@ -25,6 +25,7 @@
 #define nPtBin_ele 16
 #define nPtBin_DY 16
 #define nPtBin_ele_alt 5
+#define nPtBinMC 5
 
 class DYAnalyzer
 {
@@ -131,6 +132,11 @@ public:
         std::vector<double> FR_func_bins_barrel_ele;
         std::vector<double> FR_func_bins_endcap_ele;
         std::vector<double> FR_func_bins_endcap2_ele;
+        const double ptbin_MC[nPtBinMC+1] = {52,65,80,100,140,5000};
+        Double_t FR_barrel_MC[4][nPtBinMC];
+        Double_t FR_endcap_MC[4][nPtBinMC];
+        Double_t FR_endcap2_MC[4][nPtBinMC];
+        Double_t FR_eta_MC[4][48];
 
         const double prescales[8] = {0.0016/36.47, 0.0066/36.47, 0.0132/36.47, 0.0264/36.47, 0.13/36.47, 0.26/36.47, 0.54/36.47, 1};        
 
@@ -146,6 +152,10 @@ public:
         std::vector<double> PR_func_bins_barrel_ele;
         std::vector<double> PR_func_bins_endcap_ele;
         std::vector<double> PR_func_bins_endcap2_ele;
+        Double_t PR_barrel_MC[4][nPtBinMC];
+        Double_t PR_endcap_MC[4][nPtBinMC];
+        Double_t PR_endcap2_MC[4][nPtBinMC];
+        Double_t PR_eta_MC[4][48];
 
         // -- Constructor -- //
 	DYAnalyzer(TString HLTname);
@@ -303,11 +313,18 @@ public:
         Bool_t EventSelection_FakeEMu(vector<Electron> ElectronCollection, vector<Muon> MuonCollection, NtupleHandle *ntuple, Electron *SelectedElectron, Muon *SelectedMuon);
         void SetupFRvalues(TString filename, TString type="sigCtrl_template");
         void SetupFRvalues_old(TString filename, TString type="sigCtrl_template");
+        void SetupFRandPRvalues_MC();
         Double_t FakeRate(Double_t p_T, Double_t eta);
         Double_t FakeRate_old(Double_t p_T, Double_t eta);
+        Double_t FakeRate_MC(Double_t p_T, Double_t eta, TString type);
+        Double_t FakeRate_eta_MC(Double_t eta, TString type);
         void SetupPRvalues(TString filename, TString type="ratio", Int_t alt=0);
         Double_t PromptRate(Double_t p_T, Double_t eta, Int_t alt=0);
+        Double_t PromptRate_MC(Double_t p_T, Double_t eta, TString type);
+        Double_t PromptRate_eta_MC(Double_t eta, TString type);
         std::vector<double> MatrixMethod_evtWeight(Double_t pT1, Double_t eta1, Double_t relPFiso1, Double_t pT2, Double_t eta2, Double_t relPFiso2, Int_t alt=0);
+        std::vector<double> MatrixMethod_MC(Double_t pT1, Double_t eta1, Double_t relPFiso1, Double_t pT2, Double_t eta2, Double_t relPFiso2, TString PRtype="DY", TString FRtype="QCD");
+        std::vector<double> MatrixMethod_eta_MC(Double_t eta1, Double_t relPFiso1, Double_t eta2, Double_t relPFiso2, TString PRtype="DY", TString FRtype="QCD");
         Double_t PrescaleFactor(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t PrescaleFactor2(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
         Double_t PrescaleFactor3(vector<Electron> ElectronCollection, NtupleHandle *ntuple, std::vector<int> *trig_fired, std::vector<int> *trig_matched, std::vector<double> *trig_pT);
@@ -347,7 +364,8 @@ public:
 	// -- miscellaneous -- //
         void GenMatching(TString MuonType, NtupleHandle* ntuple, vector<Muon>* MuonCollection);
         Int_t isGenMatched(Muon muon, TString MuonType, NtupleHandle* ntuple);
-        Int_t GenMatchType(Muon muon, NtupleHandle* ntuple);
+        Int_t GenMatchType(Muon muon, NtupleHandle* ntuple, std::vector<int>* genTypes);
+        Int_t GenMatchType_old(Muon muon, NtupleHandle* ntuple);
         void ConvertToTunePInfo(Muon &mu);
         void PrintOutDoubleMuInfo(Muon mu1, Muon mu2);
         Double_t GenMuonPt(TString MuonType, NtupleHandle* ntuple, Muon reco_mu);
@@ -6931,6 +6949,123 @@ void DYAnalyzer::SetupFRvalues_old(TString filename, TString type) // type can b
 } // End of SetupFRvalues_old()
 
 
+void DYAnalyzer::SetupFRandPRvalues_MC()
+{
+    TString filename = "/media/sf_DATA/FR/Muon/MC_FakeRates.root";
+    TString type[4] = {"DY", "ttbar", "WJets", "QCD"};
+    // -- Setting up -- //
+    std::cout << "Setting up fake rate values from " << filename << endl;
+    TFile *f = new TFile(filename, "READ");
+    TH1D *h_FR_barrel[4], *h_FR_endcap[4], *h_FR_endcap2[4], *h_FR_eta[4], *h_PR_barrel[4], *h_PR_endcap[4], *h_PR_endcap2[4], *h_PR_eta[4];
+    Int_t nProblem = 0;
+    for (Int_t i=0; i<4; i++)
+    {
+        f->GetObject("h_FR_barrel_" +type[i], h_FR_barrel [i]);
+        f->GetObject("h_FR_endcap_" +type[i], h_FR_endcap [i]);
+        f->GetObject("h_FR_endcap2_"+type[i], h_FR_endcap2[i]);
+        f->GetObject("h_FR_eta_"    +type[i], h_FR_eta    [i]);
+        f->GetObject("h_PR_barrel_" +type[i], h_PR_barrel [i]);
+        f->GetObject("h_PR_endcap_" +type[i], h_PR_endcap [i]);
+        f->GetObject("h_PR_endcap2_"+type[i], h_PR_endcap2[i]);
+        f->GetObject("h_PR_eta_"    +type[i], h_PR_eta    [i]);
+
+        // -- Getting values from histograms -- //
+        for (Int_t i_bin=1; i_bin<=nPtBinMC; i_bin++)
+        {
+            FR_barrel_MC [i][i_bin-1] = h_FR_barrel [i]->GetBinContent(i_bin);
+            FR_endcap_MC [i][i_bin-1] = h_FR_endcap [i]->GetBinContent(i_bin);
+            FR_endcap2_MC[i][i_bin-1] = h_FR_endcap2[i]->GetBinContent(i_bin);
+            if (FR_barrel_MC[i][i_bin-1] > 1 || FR_barrel_MC[i][i_bin-1] < 0)
+            {
+                nProblem++;
+                std::cout << type[i] << " FR Barrel bin " << i_bin-1 << ": " << FR_barrel_MC[i][i_bin-1] << endl;
+                if (FR_barrel_MC[i][i_bin-1] > 1) FR_barrel_MC[i][i_bin-1] = 1;
+                else if (FR_barrel_MC[i][i_bin-1] < 0) FR_barrel_MC[i][i_bin-1] = 0;
+            }
+            else if (FR_endcap_MC[i][i_bin-1] > 1 || FR_endcap_MC[i][i_bin-1] < 0)
+            {
+                nProblem++;
+                std::cout << type[i] << " FR Endcap bin " << i_bin-1 << ": " << FR_endcap_MC[i][i_bin-1] << endl;
+                if (FR_endcap_MC[i][i_bin-1] > 1) FR_endcap_MC[i][i_bin-1] = 1;
+                else if (FR_endcap_MC[i][i_bin-1] < 0) FR_endcap_MC[i][i_bin-1] = 0;
+            }
+            else if (FR_endcap2_MC[i][i_bin-1] > 1 || FR_endcap2_MC[i][i_bin-1] < 0)
+            {
+                nProblem++;
+                std::cout << type[i] << " FR Endcap2 bin " << i_bin-1 << ": " << FR_endcap2_MC[i][i_bin-1] << endl;
+                if (FR_endcap2_MC[i][i_bin-1] > 1) FR_endcap2_MC[i][i_bin-1] = 1;
+                else if (FR_endcap2_MC[i][i_bin-1] < 0) FR_endcap2_MC[i][i_bin-1] = 0;
+            }
+
+            if (i < 3)
+            {
+                PR_barrel_MC [i][i_bin-1] = h_PR_barrel [i]->GetBinContent(i_bin);
+                PR_endcap_MC [i][i_bin-1] = h_PR_endcap [i]->GetBinContent(i_bin);
+                PR_endcap2_MC[i][i_bin-1] = h_PR_endcap2[i]->GetBinContent(i_bin);
+                if (PR_barrel_MC[i][i_bin-1] > 1 || PR_barrel_MC[i][i_bin-1] < 0)
+                {
+                    nProblem++;
+                    std::cout << type[i] << " PR Barrel bin " << i_bin-1 << ": " << PR_barrel_MC[i][i_bin-1] << endl;
+                    if (PR_barrel_MC[i][i_bin-1] > 1) PR_barrel_MC[i][i_bin-1] = 1;
+                    else if (PR_barrel_MC[i][i_bin-1] < 0) PR_barrel_MC[i][i_bin-1] = 0;
+                }
+                else if (PR_endcap_MC[i][i_bin-1] > 1 || PR_endcap_MC[i][i_bin-1] < 0)
+                {
+                    nProblem++;
+                    std::cout << type[i] << " PR Endcap bin " << i_bin-1 << ": " << PR_endcap_MC[i][i_bin-1] << endl;
+                    if (PR_endcap_MC[i][i_bin-1] > 1) PR_endcap_MC[i][i_bin-1] = 1;
+                    else if (PR_endcap_MC[i][i_bin-1] < 0) PR_endcap_MC[i][i_bin-1] = 0;
+                }
+                else if (PR_endcap2_MC[i][i_bin-1] > 1 || PR_endcap2_MC[i][i_bin-1] < 0)
+                {
+                    nProblem++;
+                    std::cout << type[i] << " PR Endcap2 bin " << i_bin-1 << ": " << PR_endcap2_MC[i][i_bin-1] << endl;
+                    if (PR_endcap2_MC[i][i_bin-1] > 1) PR_endcap2_MC[i][i_bin-1] = 1;
+                    else if (PR_endcap2_MC[i][i_bin-1] < 0) PR_endcap2_MC[i][i_bin-1] = 0;
+                }
+            }
+            else
+            {
+                PR_barrel_MC [i][i_bin-1] = 0;
+                PR_endcap_MC [i][i_bin-1] = 0;
+                PR_endcap2_MC[i][i_bin-1] = 0;
+            }
+        } // End of loop over pT bins
+
+        for (Int_t i_bin=1; i_bin<=48; i_bin++)
+        {
+            FR_eta_MC [i][i_bin-1] = h_FR_eta [i]->GetBinContent(i_bin);
+            if (FR_eta_MC[i][i_bin-1] > 1 || FR_eta_MC[i][i_bin-1] < 0)
+            {
+                nProblem++;
+                std::cout << type[i] << " FR eta bin " << i_bin-1 << ": " << FR_eta_MC[i][i_bin-1] << endl;
+                if (FR_eta_MC[i][i_bin-1] > 1) FR_eta_MC[i][i_bin-1] = 1;
+                else if (FR_eta_MC[i][i_bin-1] < 0) FR_eta_MC[i][i_bin-1] = 0;
+            }
+            if (i < 3)
+            {
+                PR_eta_MC [i][i_bin-1] = h_PR_eta [i]->GetBinContent(i_bin);
+                if (PR_eta_MC[i][i_bin-1] > 1 || PR_eta_MC[i][i_bin-1] < 0)
+                {
+                    nProblem++;
+                    std::cout << type[i] << " PR eta bin " << i_bin-1 << ": " << PR_eta_MC[i][i_bin-1] << endl;
+                    if (PR_eta_MC[i][i_bin-1] > 1) PR_eta_MC[i][i_bin-1] = 1;
+                    else if (PR_eta_MC[i][i_bin-1] < 0) PR_eta_MC[i][i_bin-1] = 0;
+                }
+            }
+        } // End of loop over eta bins
+
+    } // End of loop over MC processes
+
+    if (nProblem)
+        std::cout << "**************************************************\n" <<
+                     "Problems were detected: fake rate values exceeding 'regular' probability boundaries have been found.\n" <<
+                     "Please check the code.\n**************************************************" << endl;
+    else std::cout << "Fake rates have been set up successfully." << endl;
+    return;
+} // End of SetupFRvalues_MC()
+
+
 void DYAnalyzer::SetupPRvalues(TString filename, TString type, Int_t alt) // type can be "ratio", "template", "mixed", "sigCtrl_template" (default)
 {
     cout << "Setting up PR values...";
@@ -7401,6 +7536,94 @@ Double_t DYAnalyzer::FakeRate_old(Double_t p_T, Double_t eta)
 } // End of FakeRate_old()
 
 
+Double_t DYAnalyzer::FakeRate_MC(Double_t p_T, Double_t eta, TString type)
+{
+    TString Type = type;
+    Type.ToUpper();
+    Int_t i_type = -1;
+    if (Type.Contains("DY")) i_type = 0;
+    else if (Type.Contains("TTBAR")) i_type = 1;
+    else if (Type.Contains("W") && Type.Contains("JET")) i_type = 2;
+    else if (Type.Contains("QCD")) i_type = 3;
+    else return -1;
+
+    Int_t i_bin = 0;
+    Int_t stop = 0;
+    if (fabs(eta) < 1.2) // barrel
+    {
+        while (!stop)
+        {
+            if (p_T < ptbin_MC[i_bin + 1] || i_bin >= nPtBinMC-1) // Points exceeding boundaries are assigned last available FR value
+                stop = 1;
+            else
+                i_bin++;
+        }
+        return FR_barrel_MC[i_type][i_bin];
+    }
+    else if (fabs(eta) >= 1.2 && fabs(eta) < 1.8) // endcap
+    {
+        while (!stop)
+        {
+            if (p_T < ptbin_MC[i_bin + 1] || i_bin >= nPtBinMC-1) // Points exceeding boundaries are assigned last available FR value
+                stop = 1;
+            else
+                i_bin++;
+        }
+        return FR_endcap_MC[i_type][i_bin];
+    }
+    else if (fabs(eta) >= 1.8 && fabs(eta) < 2.4) // far endcap
+    {
+        while (!stop)
+        {
+            if (p_T < ptbin_MC[i_bin + 1] || i_bin >= nPtBinMC-1) // Points exceeding boundaries are assigned last available FR value
+                stop = 1;
+            else
+                i_bin++;
+        }
+        return FR_endcap2_MC[i_type][i_bin];
+    }
+    return -1;
+} // End of FakeRate_MC()
+
+
+Double_t DYAnalyzer::FakeRate_eta_MC(Double_t eta, TString type)
+{
+    TString Type = type;
+    Type.ToUpper();
+    Int_t i_type = -1;
+    if (Type.Contains("DY")) i_type = 0;
+    else if (Type.Contains("TTBAR")) i_type = 1;
+    else if (Type.Contains("W") && Type.Contains("JET")) i_type = 2;
+    else if (Type.Contains("QCD")) i_type = 3;
+    else
+    {
+        std::cout << "Wrong type!" << endl;
+        return -1;
+    }
+
+    Int_t i_bin = 0;
+    Double_t FR = 0;
+
+    for (Double_t eta_bin=-2.3; eta_bin<2.41; eta_bin+=0.1)
+    {
+        if (eta < eta_bin)
+        {
+            FR = FR_eta_MC[i_type][i_bin];
+            break;
+        }
+        else if (eta >= 2.4)
+        {
+            FR = FR_eta_MC[i_type][47];
+            break;
+        }
+        else
+            i_bin++;
+    }
+    return FR;
+
+} // End of FakeRate_eta_MC()
+
+
 Double_t DYAnalyzer::PromptRate(Double_t p_T, Double_t eta, Int_t alt)
 {
     Double_t PRate = 1;
@@ -7513,6 +7736,93 @@ Double_t DYAnalyzer::PromptRate(Double_t p_T, Double_t eta, Int_t alt)
 } // End of PromptRate()
 
 
+Double_t DYAnalyzer::PromptRate_MC(Double_t p_T, Double_t eta, TString type)
+{
+    TString Type = type;
+    Type.ToUpper();
+    Int_t i_type = -1;
+    if (Type.Contains("DY")) i_type = 0;
+    else if (Type.Contains("TTBAR")) i_type = 1;
+    else if (Type.Contains("W") && Type.Contains("JET")) i_type = 2;
+    else if (Type.Contains("QCD")) i_type = 3;
+    else return -1;
+
+    Int_t i_bin = 0;
+    Int_t stop = 0;
+    if (fabs(eta) < 1.2) // barrel
+    {
+        while (!stop)
+        {
+            if (p_T < ptbin_MC[i_bin + 1] || i_bin >= nPtBinMC-1) // Points exceeding boundaries are assigned last available FR value
+                stop = 1;
+            else
+                i_bin++;
+        }
+        return PR_barrel_MC[i_type][i_bin];
+    }
+    else if (fabs(eta) >= 1.2 && fabs(eta) < 1.8) // endcap
+    {
+        while (!stop)
+        {
+            if (p_T < ptbin_MC[i_bin + 1] || i_bin >= nPtBinMC-1) // Points exceeding boundaries are assigned last available FR value
+                stop = 1;
+            else
+                i_bin++;
+        }
+        return PR_endcap_MC[i_type][i_bin];
+    }
+    else if (fabs(eta) >= 1.8 && fabs(eta) < 2.4) // far endcap
+    {
+        while (!stop)
+        {
+            if (p_T < ptbin_MC[i_bin + 1] || i_bin >= nPtBinMC-1) // Points exceeding boundaries are assigned last available FR value
+                stop = 1;
+            else
+                i_bin++;
+        }
+        return PR_endcap2_MC[i_type][i_bin];
+    }
+    return -1;
+} // End of PromptRate_MC()
+
+
+Double_t DYAnalyzer::PromptRate_eta_MC(Double_t eta, TString type)
+{
+    TString Type = type;
+    Type.ToUpper();
+    Int_t i_type = -1;
+    if (Type.Contains("DY")) i_type = 0;
+    else if (Type.Contains("TTBAR")) i_type = 1;
+    else if (Type.Contains("W") && Type.Contains("JET")) i_type = 2;
+    else
+    {
+        std::cout << "Wrong type!" << endl;
+        return -1;
+    }
+
+    Int_t i_bin = 0;
+    Double_t PR = 0;
+
+    for (Double_t eta_bin=-2.3; eta_bin<2.41; eta_bin+=0.1)
+    {
+        if (eta < eta_bin)
+        {
+            PR = PR_eta_MC[i_type][i_bin];
+            break;
+        }
+        else if (eta >= 2.4)
+        {
+            PR = PR_eta_MC[i_type][47];
+            break;
+        }
+        else
+            i_bin++;
+    }
+    return PR;
+
+} // End of PromptRate_eta_MC()
+
+
 std::vector<double> DYAnalyzer::MatrixMethod_evtWeight(Double_t pT1, Double_t eta1, Double_t relPFiso1, Double_t pT2, Double_t eta2, Double_t relPFiso2, Int_t alt)
 {
     std::vector<double> weights(4, 1.0);
@@ -7562,6 +7872,108 @@ std::vector<double> DYAnalyzer::MatrixMethod_evtWeight(Double_t pT1, Double_t et
 
     return weights;
 } // End of MatrixMethod_evtWeight()
+
+
+std::vector<double> DYAnalyzer::MatrixMethod_MC(Double_t pT1, Double_t eta1, Double_t relPFiso1, Double_t pT2, Double_t eta2, Double_t relPFiso2, TString PRtype, TString FRtype)
+{
+    std::vector<double> weights(4, 1.0);
+
+    Double_t FR1 = 0;//FakeRate_MC(pT1, eta1, FRtype);//-0.1 < 0 ? 0 : FakeRate(pT1, eta1)-0.1;
+    Double_t FR2 = 0;//FakeRate_MC(pT2, eta2, FRtype);//-0.1 < 0 ? 0 : FakeRate(pT2, eta2)-0.1;
+    Double_t PR1 = 1;//PromptRate_MC(pT1, eta1, PRtype);//+0.1 > 1 ? 1 : PromptRate(pT1, eta1)+0.1;
+    Double_t PR2 = 1;//PromptRate_MC(pT2, eta2, PRtype);//+0.1 > 1 ? 1 : PromptRate(pT2, eta2)+0.1;
+
+    Double_t prefix = 1 / ((FR1 - PR1) * (FR2 - PR2));
+    if (relPFiso1 < 0.15 && relPFiso2 < 0.15)
+    {
+        weights[0] = prefix * (1 - FR1) * (1 - FR2);
+        weights[1] = prefix * (FR1 - 1) * (1 - PR2);
+        weights[2] = prefix * (PR1 - 1) * (1 - FR2);
+        weights[3] = prefix * (1 - PR1) * (1 - PR2);
+    }
+    else if (relPFiso1 < 0.15 && relPFiso2 >= 0.15)
+    {
+        weights[0] = prefix * (FR1 - 1) * FR2;
+        weights[1] = prefix * (1 - FR1) * PR2;
+        weights[2] = prefix * (1 - PR1) * FR2;
+        weights[3] = prefix * (PR1 - 1) * PR2;
+    }
+    else if (relPFiso1 >= 0.15 && relPFiso2 < 0.15)
+    {
+        weights[0] = prefix * FR1 * (FR2 - 1);
+        weights[1] = prefix * FR1 * (1 - PR2);
+        weights[2] = prefix * PR1 * (1 - FR2);
+        weights[3] = prefix * PR1 * (PR2 - 1);
+    }
+    else
+    {
+        weights[0] = prefix * FR1 * FR2;
+        weights[1] = prefix * FR1 * PR2 * (-1.0);
+        weights[2] = prefix * PR1 * FR2 * (-1.0);
+        weights[3] = prefix * PR1 * PR2;
+    }
+
+    if (weights[0] != weights[0] || weights[1] != weights[1] || weights[2] != weights[2] || weights[3] != weights[3])
+    {
+        cout << "Some of weights are NaN.\nweights[0]=" << weights[0] << " weights[1]=" << weights[1] <<
+                " weights[2]=" << weights[2] << " weights[3]=" << weights[3] <<
+                "\npT1=" << pT1 << " eta1=" << eta1 << " relPFiso1=" << relPFiso1 << " FR1=" << FR1 << " PR1=" << PR1 <<
+                " pT2=" << pT2 << " eta2=" << eta2 << " relPFiso2=" << relPFiso2 << " FR2=" << FR2 << " PR2=" << PR2 << endl;
+    }
+
+    return weights;
+} // End of MatrixMethod_MC()
+
+
+std::vector<double> DYAnalyzer::MatrixMethod_eta_MC(Double_t eta1, Double_t relPFiso1, Double_t eta2, Double_t relPFiso2, TString PRtype, TString FRtype)
+{
+    std::vector<double> weights(4, 1.0);
+
+    Double_t FR1 = FakeRate_eta_MC(eta1, FRtype);
+    Double_t FR2 = FakeRate_eta_MC(eta2, FRtype);
+    Double_t PR1 = PromptRate_eta_MC(eta1, PRtype);
+    Double_t PR2 = PromptRate_eta_MC(eta2, PRtype);
+
+    Double_t prefix = 1 / ((FR1 - PR1) * (FR2 - PR2));
+    if (relPFiso1 < 0.15 && relPFiso2 < 0.15)
+    {
+        weights[0] = prefix * (1 - FR1) * (1 - FR2);
+        weights[1] = prefix * (FR1 - 1) * (1 - PR2);
+        weights[2] = prefix * (PR1 - 1) * (1 - FR2);
+        weights[3] = prefix * (1 - PR1) * (1 - PR2);
+    }
+    else if (relPFiso1 < 0.15 && relPFiso2 >= 0.15)
+    {
+        weights[0] = prefix * (FR1 - 1) * FR2;
+        weights[1] = prefix * (1 - FR1) * PR2;
+        weights[2] = prefix * (1 - PR1) * FR2;
+        weights[3] = prefix * (PR1 - 1) * PR2;
+    }
+    else if (relPFiso1 >= 0.15 && relPFiso2 < 0.15)
+    {
+        weights[0] = prefix * FR1 * (FR2 - 1);
+        weights[1] = prefix * FR1 * (1 - PR2);
+        weights[2] = prefix * PR1 * (1 - FR2);
+        weights[3] = prefix * PR1 * (PR2 - 1);
+    }
+    else
+    {
+        weights[0] = prefix * FR1 * FR2;
+        weights[1] = prefix * FR1 * PR2 * (-1.0);
+        weights[2] = prefix * PR1 * FR2 * (-1.0);
+        weights[3] = prefix * PR1 * PR2;
+    }
+
+    if (weights[0] != weights[0] || weights[1] != weights[1] || weights[2] != weights[2] || weights[3] != weights[3])
+    {
+        cout << "Some of weights are NaN.\nweights[0]=" << weights[0] << " weights[1]=" << weights[1] <<
+                " weights[2]=" << weights[2] << " weights[3]=" << weights[3] <<
+                "\neta1=" << eta1 << " relPFiso1=" << relPFiso1 << " FR1=" << FR1 << " PR1=" << PR1 <<
+                " eta2=" << eta2 << " relPFiso2=" << relPFiso2 << " FR2=" << FR2 << " PR2=" << PR2 << endl;
+    }
+
+    return weights;
+} // End of MatrixMethod_eta_MC()
 
 
 Double_t DYAnalyzer::FakeRate_ele_fit(Double_t p_T, Double_t eta)
@@ -10150,7 +10562,70 @@ Int_t DYAnalyzer::isGenMatched(Muon muon, TString MuonType, NtupleHandle* ntuple
 } // End of isGenMatched
 
 
-Int_t DYAnalyzer::GenMatchType(Muon muon, NtupleHandle* ntuple)
+Int_t DYAnalyzer::GenMatchType(Muon muon, NtupleHandle* ntuple, std::vector<int> *genTypes)
+{
+    genTypes->clear();
+    vector<GenLepton> GenLeptonCollection;
+    Int_t NGenLeptons = ntuple->gnpair;
+
+    for(Int_t i_gen=0; i_gen<NGenLeptons; i_gen++)
+    {
+        GenLepton genlep;
+        genlep.FillFromNtuple(ntuple, i_gen);
+        if(genlep.isMuon()) GenLeptonCollection.push_back(genlep);
+
+    }
+
+    Int_t matched = 0;
+
+    Double_t dPtMin = 1e10;
+    Double_t reco_Pt = muon.Pt;
+    Double_t reco_eta = muon.eta;
+    Double_t reco_phi = muon.phi;
+
+    Int_t i_match = -1;
+    for(Int_t i_gen=0; i_gen<(Int_t)GenLeptonCollection.size(); i_gen++)
+    {
+        GenLepton genlep = GenLeptonCollection[i_gen];
+        Double_t gen_Pt = genlep.Pt;
+        Double_t gen_eta = genlep.eta;
+        Double_t gen_phi = genlep.phi;
+
+        Double_t dR = sqrt((gen_eta-reco_eta)*(gen_eta-reco_eta) + (gen_phi-reco_phi)*(gen_phi-reco_phi));
+        Double_t dPt = fabs(gen_Pt - reco_Pt);
+        if(dR < 0.3)
+        {
+            if(dPt < dPtMin)
+            {
+                matched = 1;
+                i_match = i_gen;
+                dPtMin = dPt;
+            }
+        }
+    } // End of loop over gen muons
+
+    if (!matched) return 0;
+
+    GenLepton match = GenLeptonCollection[i_match];
+    genTypes->push_back(match.isPrompt);
+    genTypes->push_back(match.isPromptFinalState);
+    genTypes->push_back(match.isTauDecayProduct);
+    genTypes->push_back(match.isPromptTauDecayProduct);
+    genTypes->push_back(match.isDirectPromptTauDecayProductFinalState);
+    genTypes->push_back(match.isHardProcess);
+    genTypes->push_back(match.isLastCopy);
+    genTypes->push_back(match.isLastCopyBeforeFSR);
+    genTypes->push_back(match.isPromptDecayed);
+    genTypes->push_back(match.isDecayedLeptonHadron);
+    genTypes->push_back(match.fromHardProcessBeforeFSR);
+    genTypes->push_back(match.fromHardProcessDecayed);
+    genTypes->push_back(match.fromHardProcessFinalState);
+
+    return matched;
+} // End of GenMatchType
+
+
+Int_t DYAnalyzer::GenMatchType_old(Muon muon, NtupleHandle* ntuple)
 {
     vector<GenLepton> GenLeptonCollection_finalState;
     vector<GenLepton> GenLeptonCollection_fromTau;
@@ -10259,7 +10734,7 @@ Int_t DYAnalyzer::GenMatchType(Muon muon, NtupleHandle* ntuple)
     Int_t matching_result = 1000*matched_fromHadron + 100*matched_fromTau + 10*matched_finalState + matched_hardProcess;
 
     return matching_result;
-} // End of GenMatchType
+} // End of GenMatchType_old
 
 
 void DYAnalyzer::ConvertToTunePInfo(Muon &mu)
