@@ -1019,8 +1019,6 @@ void MakeSelectionForFR_E_alt (TString type, TString HLTname , Bool_t Debug)
 /// -------------------------------- Muon ------------------------------------ ///
 void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
 {
-    gInterpreter->GenerateDictionary("std::vector<std::vector<int>>", "vector");
-
     // -- Run2016 luminosity [/pb] -- //
     Double_t L_B2F = 19721.0, L_G2H = 16146.0, L_B2H = 35867.0, L = 0;
     L = L_B2H;
@@ -1098,8 +1096,6 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<double> *TRKiso = new std::vector<double>;
-        std::vector<int> *isGenMatched = new std::vector<int>;
-        std::vector<std::vector<int>> *genMatchTypes = new std::vector<std::vector<int>>;
         Double_t MET_pT, MET_phi;
         Int_t nPU;
         Int_t nVTX;
@@ -1117,6 +1113,24 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         std::vector<double> *jet_eta = new std::vector<double>;
         std::vector<double> *jet_phi = new std::vector<double>;
         std::vector<int> *jet_charge = new std::vector<int>;
+        Int_t nGenMuons;
+        std::vector<double> *genMu_pT = new std::vector<double>;
+        std::vector<double> *genMu_eta = new std::vector<double>;
+        std::vector<double> *genMu_phi = new std::vector<double>;
+        std::vector<int> *genMu_charge = new std::vector<int>;
+        std::vector<int> *genMu_isPrompt = new std::vector<int>;
+        std::vector<int> *genMu_isPromptFinalState = new std::vector<int>;
+        std::vector<int> *genMu_isTauDecayProduct = new std::vector<int>;
+        std::vector<int> *genMu_isPromptTauDecayProduct = new std::vector<int>;
+        std::vector<int> *genMu_isDirectPromptTauDecayProductFinalState = new std::vector<int>;
+        std::vector<int> *genMu_isHardProcess = new std::vector<int>;
+        std::vector<int> *genMu_isLastCopy = new std::vector<int>;
+        std::vector<int> *genMu_isLastCopyBeforeFSR = new std::vector<int>;
+        std::vector<int> *genMu_isPromptDecayed = new std::vector<int>;
+        std::vector<int> *genMu_isDecayedLeptonHadron = new std::vector<int>;
+        std::vector<int> *genMu_fromHardProcessBeforeFSR = new std::vector<int>;
+        std::vector<int> *genMu_fromHardProcessDecayed = new std::vector<int>;
+        std::vector<int> *genMu_fromHardProcessFinalState = new std::vector<int>;
 
         TTree* MuonTree = new TTree("FRTree", "FRTree");
         // -- Creating muon variables to assign branches -- //
@@ -1127,8 +1141,6 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("charge", &charge);
         MuonTree->Branch("relPFiso", &relPFiso);
         MuonTree->Branch("TRKiso", &TRKiso);
-        MuonTree->Branch("isGenMatched", &isGenMatched);
-        MuonTree->Branch("genMatchTypes", &genMatchTypes);
         MuonTree->Branch("MET_pT", &MET_pT);
         MuonTree->Branch("MET_phi", &MET_phi);
         MuonTree->Branch("nPU", &nPU);
@@ -1150,6 +1162,24 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("jet_eta", &jet_eta);
         MuonTree->Branch("jet_phi", &jet_phi);
         MuonTree->Branch("jet_charge", &jet_charge);
+        MuonTree->Branch("nGenMuons", &nGenMuons);
+        MuonTree->Branch("genMu_pT", &genMu_pT);
+        MuonTree->Branch("genMu_eta", &genMu_eta);
+        MuonTree->Branch("genMu_phi", &genMu_phi);
+        MuonTree->Branch("genMu_charge", &genMu_charge);
+        MuonTree->Branch("genMu_isPrompt", &genMu_isPrompt);
+        MuonTree->Branch("genMu_isPromptFinalState", &genMu_isPromptFinalState);
+        MuonTree->Branch("genMu_isTauDecayProduct", &genMu_isTauDecayProduct);
+        MuonTree->Branch("genMu_isPromptTauDecayProduct", &genMu_isPromptTauDecayProduct);
+        MuonTree->Branch("genMu_isDirectPromptTauDecayProductFinalState", &genMu_isDirectPromptTauDecayProductFinalState);
+        MuonTree->Branch("genMu_isHardProcess", &genMu_isHardProcess);
+        MuonTree->Branch("genMu_isLastCopy", &genMu_isLastCopy);
+        MuonTree->Branch("genMu_isLastCopyBeforeFSR", &genMu_isLastCopyBeforeFSR);
+        MuonTree->Branch("genMu_isPromptDecayed", &genMu_isPromptDecayed);
+        MuonTree->Branch("genMu_isDecayedLeptonHadron", &genMu_isDecayedLeptonHadron);
+        MuonTree->Branch("genMu_fromHardProcessBeforeFSR", &genMu_fromHardProcessBeforeFSR);
+        MuonTree->Branch("genMu_fromHardProcessDecayed", &genMu_fromHardProcessDecayed);
+        MuonTree->Branch("genMu_fromHardProcessFinalState", &genMu_fromHardProcessFinalState);
 
         // -- For PU re-weighting -- //
         analyzer->SetupPileUpReWeighting_80X(Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root");
@@ -1217,6 +1247,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             HLTs.push_back(ntuple->HLT_trigName->at(i_trig));
                     }
                 }
+                else bar.Draw(i);
 
                 // -- Positive/Negative Gen-weights -- //
                 ntuple->GENEvt_weight < 0 ? gen_weight = -1 : gen_weight = 1;
@@ -1285,8 +1316,6 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         charge->clear();
                         relPFiso->clear();
                         TRKiso->clear();
-                        isGenMatched->clear();
-                        genMatchTypes->clear();
                         ele_pT->clear();
                         ele_eta->clear();
                         ele_etaSC->clear();
@@ -1296,6 +1325,24 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         jet_eta->clear();
                         jet_phi->clear();
                         jet_charge->clear();
+                        nGenMuons = 0;
+                        genMu_pT ->clear();
+                        genMu_eta->clear();
+                        genMu_phi->clear();
+                        genMu_charge->clear();
+                        genMu_isPrompt->clear();
+                        genMu_isPromptFinalState->clear();
+                        genMu_isTauDecayProduct->clear();
+                        genMu_isPromptTauDecayProduct->clear();
+                        genMu_isDirectPromptTauDecayProductFinalState->clear();
+                        genMu_isHardProcess->clear();
+                        genMu_isLastCopy->clear();
+                        genMu_isLastCopyBeforeFSR->clear();
+                        genMu_isPromptDecayed->clear();
+                        genMu_isDecayedLeptonHadron->clear();
+                        genMu_fromHardProcessBeforeFSR->clear();
+                        genMu_fromHardProcessDecayed->clear();
+                        genMu_fromHardProcessFinalState->clear();
 
                         // -- Top pT reweighting -- //
                         top_weight = 1;
@@ -1349,13 +1396,37 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             jet_phi->push_back(ntuple->Jet_phi[i_jet]);
                             jet_charge->push_back(ntuple->Jet_Charge[i_jet]);
                         }
+                        for (Int_t i_gen=0; i_gen<ntuple->gnpair; i_gen++)
+                        {
+                            GenLepton genlep;
+                            genlep.FillFromNtuple(ntuple, i_gen);
+                            if(genlep.isMuon())
+                            {
+                                nGenMuons++;
+                                genMu_pT->push_back(genlep.Pt);
+                                genMu_eta->push_back(genlep.eta);
+                                genMu_phi->push_back(genlep.phi);
+                                genMu_charge->push_back(genlep.charge);
+                                genMu_isPrompt->push_back(genlep.isPrompt);
+                                genMu_isPromptFinalState->push_back(genlep.isPromptFinalState);
+                                genMu_isTauDecayProduct->push_back(genlep.isTauDecayProduct);
+                                genMu_isPromptTauDecayProduct->push_back(genlep.isPromptTauDecayProduct);
+                                genMu_isDirectPromptTauDecayProductFinalState->push_back(genlep.isDirectPromptTauDecayProductFinalState);
+                                genMu_isHardProcess->push_back(genlep.isHardProcess);
+                                genMu_isLastCopy->push_back(genlep.isLastCopy);
+                                genMu_isLastCopyBeforeFSR->push_back(genlep.isLastCopyBeforeFSR);
+                                genMu_isPromptDecayed->push_back(genlep.isPromptDecayed);
+                                genMu_isDecayedLeptonHadron->push_back(genlep.isDecayedLeptonHadron);
+                                genMu_fromHardProcessBeforeFSR->push_back(genlep.fromHardProcessBeforeFSR);
+                                genMu_fromHardProcessDecayed->push_back(genlep.fromHardProcessDecayed);
+                                genMu_fromHardProcessFinalState->push_back(genlep.fromHardProcessFinalState);
+                            }
+                        }
 
                         MuonTree->Fill();
                     } // End of isPassEvtSelection
 
                 } // End of if(isTriggered)
-
-                bar.Draw(i);
 
             } // End of event iteration
             cout << "\t" << timesPassed << " events have passed the event selection." << endl;
