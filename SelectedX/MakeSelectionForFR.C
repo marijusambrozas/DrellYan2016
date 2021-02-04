@@ -1375,9 +1375,6 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             charge->push_back(SelectedMuonCollection_deno[i].charge);
                             relPFiso->push_back(SelectedMuonCollection_deno[i].RelPFIso_dBeta);
                             TRKiso->push_back(SelectedMuonCollection_deno[i].trkiso);
-                            std::vector<int> genTypes;
-                            isGenMatched->push_back(analyzer->GenMatchType(SelectedMuonCollection_deno[i], ntuple, &genTypes));
-                            genMatchTypes->push_back(genTypes);
                         }
                         nElectrons = ntuple->Nelectrons;
                         for (Int_t i_ele=0; i_ele<nElectrons; i_ele++)
