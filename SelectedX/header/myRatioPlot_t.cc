@@ -82,7 +82,7 @@ void myRatioPlot_t::SetPlots(TString xAxisName, Double_t xmin, Double_t xmax, TS
     PlotsSet++;
 } // End of SetPlots()
 
-void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX, TString option, TString yAxisName)
+void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX, TString option, TString yAxisName, UInt_t logY)
 {
     if(PlotsSet==1) {
 //        canvas = new TCanvas(CanvasName, CanvasName, 1000, 1000);
@@ -119,7 +119,7 @@ void myRatioPlot_t::Draw(Double_t ymin, Double_t ymax, UInt_t logX, TString opti
         else std::cout << "myRatioPlot: Legend was not set properly.\n";
 
         if(logX) pad1->SetLogx();
-        pad1->SetLogy();
+        if(logY) pad1->SetLogy();
         pad1->SetTickx(1);
         pad1->SetTicky(1);
         pad1->SetGridx(1);
