@@ -2243,6 +2243,7 @@ void Mu_FR_HistMaker (Bool_t DEBUG)
 
 void Mu_MCFR_HistMaker (Bool_t DEBUG)
 {
+    gInterpreter->GenerateDictionary("std::vector<std::vector<int>>", "vector");
     TTimeStamp ts_start;
     cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
     TStopwatch totaltime;
@@ -2339,6 +2340,7 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
         std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<double> *TRKiso = new std::vector<double>;
         std::vector<int> *isGenMatched = new std::vector<int>;
+        std::vector<std::vector<int>> *genMatchTypes = new std::vector<std::vector<int>>;
         Double_t MET_pT, MET_phi;
         Int_t nPU;
         Int_t nVTX;
@@ -2357,6 +2359,7 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
         chain->SetBranchStatus("relPFiso", 1);
         chain->SetBranchStatus("TRKiso", 1);
         chain->SetBranchStatus("isGenMatched", 1);
+        chain->SetBranchStatus("genMatchTypes", 1);
         chain->SetBranchStatus("MET_pT", 1);
         chain->SetBranchStatus("MET_phi", 1);
         chain->SetBranchStatus("nPU", 1);
@@ -2375,6 +2378,7 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
         chain->SetBranchAddress("relPFiso", &relPFiso);
         chain->SetBranchAddress("TRKiso", &TRKiso);
         chain->SetBranchAddress("isGenMatched", &isGenMatched);
+        chain->SetBranchAddress("genMatchTypes", &genMatchTypes);
         chain->SetBranchAddress("MET_pT", &MET_pT);
         chain->SetBranchAddress("MET_phi", &MET_phi);
         chain->SetBranchAddress("nPU", &nPU);
@@ -2399,13 +2403,12 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
         for(Int_t i=0; i<NEvents; i++)
         {
             chain->GetEntry(i);
+
             if (DEBUG == kTRUE){
                 cout << "Evt " << i << endl;
-                cout << "nMuons = " << p_T->size() << endl;
-                cout << "p_T[1] = " << p_T->at(0) << endl;
-                cout << "eta[1] = " << eta->at(0) << endl;
-                cout << "phi[1] = " << phi->at(0) << endl;
+                cout << "nMuons = " << p_T->size() << endl;                
             }
+            else bar.Draw(i);
 
             // -- Pileup-Reweighting -- //
             Double_t PUWeight = 1;
@@ -2436,15 +2439,37 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
 
             for (UInt_t i_mu=0; i_mu<p_T->size(); i_mu++)
             {
-                if (DEBUG == kTRUE) cout << "i_mu = " << i_mu << endl;
+                if (DEBUG == kTRUE)
+                {
+                    cout << "i_mu = " << i_mu << endl;
+                    cout << "   p_T = " << p_T->at(i_mu) << "   eta = " << eta->at(i_mu) << "   phi = " << phi->at(i_mu) << endl;
+                    cout << "  isGenMatched = " << isGenMatched->at(i_mu) << endl;
+                    cout << "  Matched gen lepton: flag vector size = "<< genMatchTypes->at(i_mu).size() << endl;
+                    if (genMatchTypes->at(i_mu).size())
+                    {
+                        cout << "   isPrompt = " << genMatchTypes->at(i_mu)[0] << endl;
+                        cout << "   isPromptFinalState = " << genMatchTypes->at(i_mu)[1] << endl;
+                        cout << "   isTauDecayProduct = " << genMatchTypes->at(i_mu)[2] << endl;
+                        cout << "   isPromptTauDecayProduct = " << genMatchTypes->at(i_mu)[3] << endl;
+                        cout << "   isDirectPromptTauDecayProductFinalState = " << genMatchTypes->at(i_mu)[4] << endl;
+                        cout << "   isHardProcess = " << genMatchTypes->at(i_mu)[5] << endl;
+                        cout << "   isLastCopy = " << genMatchTypes->at(i_mu)[6] << endl;
+                        cout << "   isLastCopyBeforeFSR = " << genMatchTypes->at(i_mu)[7] << endl;
+                        cout << "   isPromptDecayed = " << genMatchTypes->at(i_mu)[8] << endl;
+                        cout << "   isDecayedLeptonHadron = " << genMatchTypes->at(i_mu)[9] << endl;
+                        cout << "   fromHardProcessBeforeFSR = " << genMatchTypes->at(i_mu)[10] << endl;
+                        cout << "   fromHardProcessDecayed = " << genMatchTypes->at(i_mu)[11] << endl;
+                        cout << "   fromHardProcessFinalState = " << genMatchTypes->at(i_mu)[12] << endl;
+                    }
+                }
                 if (p_T->at(i_mu) != p_T->at(i_mu))
                 {
                     cout << p_T->at(i_mu) << " " << eta->at(i_mu) << " " << phi->at(i_mu) << " " << charge->at(i_mu) << " " << relPFiso->at(i_mu) << endl;
                     continue;
                 }
-                if (/*p_T->at(i_mu) <= 52 || */fabs(eta->at(i_mu)) >= 2.4) continue;
+                if (p_T->at(i_mu) <= 52 || fabs(eta->at(i_mu)) >= 2.4) continue;
                 h_genMatching[i_type]->Fill(isGenMatched->at(i_mu));
-                if (isGenMatched->at(i_mu) < 1000 && isGenMatched->at(i_mu) > 0)
+                if (isGenMatched->at(i_mu))
                 {
                     nMatches++;
                     PR_indices.push_back(i_mu);
@@ -2566,8 +2591,6 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
                     h_FR_pT_endcap2_deno[i_type]->Fill(p_T->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                 }
             } // End of for(fakes)
-
-            bar.Draw(i);
 
         }// End of event iteration
 
