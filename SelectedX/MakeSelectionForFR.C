@@ -195,6 +195,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             ElectronFile = TFile::Open(out_base+out_dir+".root", "RECREATE");
         ElectronFile->cd();
 
+        Int_t nElectrons;
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
         std::vector<double> *phi = new std::vector<double>;
@@ -230,8 +231,37 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
 
+        Int_t nMuons;
+        std::vector<double> *mu_pT = new std::vector<double>;
+        std::vector<double> *mu_eta = new std::vector<double>;
+        std::vector<double> *mu_phi = new std::vector<double>;
+        std::vector<int> *mu_isTightMuon = new std::vector<int>;
+        std::vector<double> *mu_relPFiso = new std::vector<double>;
+        std::vector<int> *mu_charge = new std::vector<int>;
+        Int_t nJets;
+        std::vector<double> *jet_pT = new std::vector<double>;
+        std::vector<double> *jet_eta = new std::vector<double>;
+        std::vector<double> *jet_phi = new std::vector<double>;
+        std::vector<int> *jet_charge = new std::vector<int>;
+        Int_t nGenElectrons;
+        std::vector<double> *genEle_pT = new std::vector<double>;
+        std::vector<double> *genEle_eta = new std::vector<double>;
+        std::vector<double> *genEle_phi = new std::vector<double>;
+        std::vector<int> *genEle_charge = new std::vector<int>;
+        std::vector<int> *genEle_isPrompt = new std::vector<int>;
+        std::vector<int> *genEle_isPromptFinalState = new std::vector<int>;
+        std::vector<int> *genEle_isTauDecayProduct = new std::vector<int>;
+        std::vector<int> *genEle_isPromptTauDecayProduct = new std::vector<int>;
+        std::vector<int> *genEle_isDirectPromptTauDecayProductFinalState = new std::vector<int>;
+        std::vector<int> *genEle_isHardProcess = new std::vector<int>;
+        std::vector<int> *genEle_isLastCopy = new std::vector<int>;
+        std::vector<int> *genEle_isLastCopyBeforeFSR = new std::vector<int>;
+        std::vector<int> *genEle_fromHardProcessBeforeFSR = new std::vector<int>;
+        std::vector<int> *genEle_fromHardProcessFinalState = new std::vector<int>;
+
         TTree* ElectronTree = new TTree("FRTree", "FRTree");
         // -- Creating electron variables to assign branches -- //
+        ElectronTree->Branch("nElectrons", &nElectrons);
         ElectronTree->Branch("p_T", &p_T);
         ElectronTree->Branch("eta", &eta);
         ElectronTree->Branch("phi", &phi);
@@ -270,6 +300,33 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         ElectronTree->Branch("HLT_trigPS", &HLT_trigPS);
         ElectronTree->Branch("L1_trigPS", &L1_trigPS);
 //        ElectronTree->Branch("L1seed_trigPSinDetail", &L1seed_trigPSinDetail);
+        ElectronTree->Branch("nMuons", &nMuons);
+        ElectronTree->Branch("mu_pT", &mu_pT);
+        ElectronTree->Branch("mu_eta", &mu_eta);
+        ElectronTree->Branch("mu_phi", &mu_phi);
+        ElectronTree->Branch("mu_isTightMuon", &mu_isTightMuon);
+        ElectronTree->Branch("mu_relPFiso", &mu_relPFiso);
+        ElectronTree->Branch("mu_charge", &mu_charge);
+        ElectronTree->Branch("nJets", &nJets);
+        ElectronTree->Branch("jet_pT", &jet_pT);
+        ElectronTree->Branch("jet_eta", &jet_eta);
+        ElectronTree->Branch("jet_phi", &jet_phi);
+        ElectronTree->Branch("jet_charge", &jet_charge);
+        ElectronTree->Branch("nGenElectrons", &nGenElectrons);
+        ElectronTree->Branch("genEle_pT", &genEle_pT);
+        ElectronTree->Branch("genEle_eta", &genEle_eta);
+        ElectronTree->Branch("genEle_phi", &genEle_phi);
+        ElectronTree->Branch("genEle_charge", &genEle_charge);
+        ElectronTree->Branch("genEle_isPrompt", &genEle_isPrompt);
+        ElectronTree->Branch("genEle_isPromptFinalState", &genEle_isPromptFinalState);
+        ElectronTree->Branch("genEle_isTauDecayProduct", &genEle_isTauDecayProduct);
+        ElectronTree->Branch("genEle_isPromptTauDecayProduct", &genEle_isPromptTauDecayProduct);
+        ElectronTree->Branch("genEle_isDirectPromptTauDecayProductFinalState", &genEle_isDirectPromptTauDecayProductFinalState);
+        ElectronTree->Branch("genEle_isHardProcess", &genEle_isHardProcess);
+        ElectronTree->Branch("genEle_isLastCopy", &genEle_isLastCopy);
+        ElectronTree->Branch("genEle_isLastCopyBeforeFSR", &genEle_isLastCopyBeforeFSR);
+        ElectronTree->Branch("genEle_fromHardProcessBeforeFSR", &genEle_fromHardProcessBeforeFSR);
+        ElectronTree->Branch("genEle_fromHardProcessFinalState", &genEle_fromHardProcessFinalState);
 
         Int_t currentRunNo=-999, currentLumiSection=-999;
 //        std::map<std::pair<int,int>,int> lumis; // to search present run numbers and lumi sections
@@ -300,6 +357,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                 ntuple->TurnOnBranches_GenOthers(); // for quarks
             }
             ntuple->TurnOnBranches_Electron();
+            ntuple->TurnOnBranches_Muon();
+            ntuple->TurnOnBranches_Jet();
             ntuple->TurnOnBranches_MET();
 
             Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
@@ -431,7 +490,6 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
                 if (GenFlag == kTRUE && GenFlag_top == kTRUE) SumWeight_Separated += gen_weight;
 
-
                 Bool_t TriggerFlag = kFALSE;
                 TString triggername;
                 TriggerFlag = ntuple->isTriggered(analyzer->HLT, &triggername);
@@ -497,6 +555,31 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                         HLT_trigPS->clear();
                         L1_trigPS->clear();
 //                        L1seed_trigPSinDetail.clear();
+                        mu_pT->clear();
+                        mu_eta->clear();
+                        mu_phi->clear();
+                        mu_isTightMuon->clear();
+                        mu_relPFiso->clear();
+                        mu_charge->clear();
+                        jet_pT->clear();
+                        jet_eta->clear();
+                        jet_phi->clear();
+                        jet_charge->clear();
+                        nGenElectrons = 0;
+                        genEle_pT ->clear();
+                        genEle_eta->clear();
+                        genEle_phi->clear();
+                        genEle_charge->clear();
+                        genEle_isPrompt->clear();
+                        genEle_isPromptFinalState->clear();
+                        genEle_isTauDecayProduct->clear();
+                        genEle_isPromptTauDecayProduct->clear();
+                        genEle_isDirectPromptTauDecayProductFinalState->clear();
+                        genEle_isHardProcess->clear();
+                        genEle_isLastCopy->clear();
+                        genEle_isLastCopyBeforeFSR->clear();
+                        genEle_fromHardProcessBeforeFSR->clear();
+                        genEle_fromHardProcessFinalState->clear();
 
                         // -- Top pT reweighting -- //
                         top_weight = 1;
@@ -538,7 +621,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                             L1_trigPS->push_back(ntuple->L1_trigPS->at(i_L1));
 
                         // -- Electron vector filling -- //
-                        for (UInt_t i_ele=0; i_ele<SelectedElectronCollection.size(); i_ele++)
+                        nElectrons = SelectedElectronCollection.size();
+                        for (Int_t i_ele=0; i_ele<nElectrons; i_ele++)
                         {
                             p_T->push_back(SelectedElectronCollection[i_ele].Pt);
                             eta->push_back(SelectedElectronCollection[i_ele].etaSC);
@@ -572,6 +656,52 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
                                     cout << "Trigger Photon" << trig_fired->at(i_ele) << " HLT pT: " << trig_pT->at(i_ele) << endl;
                             }
                         }
+                        nMuons = ntuple->nMuon;
+                        for (Int_t i_mu=0; i_mu<nMuons; i_mu++)
+                        {
+                            mu_pT->push_back(ntuple->Muon_pT[i_mu]);
+                            mu_eta->push_back(ntuple->Muon_eta[i_mu]);
+                            mu_phi->push_back(ntuple->Muon_phi[i_mu]);
+                            mu_isTightMuon->push_back(ntuple->Muon_passTightID[i_mu]);
+                            Double_t muon_relPFiso = (ntuple->Muon_PfChargedHadronIsoR04[i_mu] +
+                                                      max(0.0, ntuple->Muon_PfNeutralHadronIsoR04[i_mu] + ntuple->Muon_PfGammaIsoR04[i_mu] -
+                                                               0.5*ntuple->Muon_PFSumPUIsoR04[i_mu])) /
+                                                      ntuple->Muon_pT[i_mu];
+                            mu_relPFiso->push_back(muon_relPFiso);
+                            mu_charge->push_back(ntuple->Muon_charge[i_mu]);
+                        }
+                        nJets = ntuple->Njets;
+                        for (Int_t i_jet=0; i_jet<nJets; i_jet++)
+                        {
+                            jet_pT->push_back(ntuple->Jet_pT[i_jet]);
+                            jet_eta->push_back(ntuple->Jet_eta[i_jet]);
+                            jet_phi->push_back(ntuple->Jet_phi[i_jet]);
+                            jet_charge->push_back(ntuple->Jet_Charge[i_jet]);
+                        }
+                        for (Int_t i_gen=0; i_gen<ntuple->gnpair; i_gen++)
+                        {
+                            GenLepton genlep;
+                            genlep.FillFromNtuple(ntuple, i_gen);
+                            if(genlep.isElectron())
+                            {
+                                nGenElectrons++;
+                                genEle_pT->push_back(genlep.Pt);
+                                genEle_eta->push_back(genlep.eta);
+                                genEle_phi->push_back(genlep.phi);
+                                genEle_charge->push_back(genlep.charge);
+                                genEle_isPrompt->push_back(genlep.isPrompt);
+                                genEle_isPromptFinalState->push_back(genlep.isPromptFinalState);
+                                genEle_isTauDecayProduct->push_back(genlep.isTauDecayProduct);
+                                genEle_isPromptTauDecayProduct->push_back(genlep.isPromptTauDecayProduct);
+                                genEle_isDirectPromptTauDecayProductFinalState->push_back(genlep.isDirectPromptTauDecayProductFinalState);
+                                genEle_isHardProcess->push_back(genlep.isHardProcess);
+                                genEle_isLastCopy->push_back(genlep.isLastCopy);
+                                genEle_isLastCopyBeforeFSR->push_back(genlep.isLastCopyBeforeFSR);
+                                genEle_fromHardProcessBeforeFSR->push_back(genlep.fromHardProcessBeforeFSR);
+                                genEle_fromHardProcessFinalState->push_back(genlep.fromHardProcessFinalState);
+                            }
+                        }
+
                         ElectronTree->Fill();
 
                     } // End of event selection
@@ -1205,7 +1335,6 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
             ntuple->TurnOnBranches_Muon();
             ntuple->TurnOnBranches_Electron();
             ntuple->TurnOnBranches_Jet();
-
             ntuple->TurnOnBranches_MET();
 
             Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
@@ -2227,10 +2356,10 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
         MuonFile->cd();
 
         Double_t e_p_T, e_eta, e_etaSC, e_phi;
-        Int_t e_charge;
+        Int_t e_charge, e_scPixCharge, e_isGsfCtfScPixConsistent, e_isGsfScPixConsistent, e_isGsfCtfConsistent;
         Double_t e_Full5x5_SigmaIEtaIEta, e_dEtaInSeed, e_dPhiIn, e_HoverE, e_InvEminusInvP;
-        Double_t e_relPFiso_dBeta, e_relPFiso_Rho;
-        Double_t e_chIso03, e_nhIso03, e_phIso03, e_ChIso03FromPU;
+        Double_t e_relPFiso_Rho;
+        Double_t e_relECALiso, e_relHCALiso, e_relTrkIso;
         Int_t e_mHits, e_passConvVeto, e_passMediumID;
         Double_t mu_p_T, mu_eta, mu_phi;
         Int_t mu_charge;
@@ -2253,18 +2382,20 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("e_etaSC", &e_etaSC);
         MuonTree->Branch("e_phi", &e_phi);
         MuonTree->Branch("e_charge", &e_charge);
+        MuonTree->Branch("e_scPixCharge", &e_scPixCharge);
+        MuonTree->Branch("e_isGsfCtfScPixConsistent", &e_isGsfCtfScPixConsistent);
+        MuonTree->Branch("e_isGsfScPixConsistent", &e_isGsfScPixConsistent);
+        MuonTree->Branch("e_isGsfCtfConsistent", &e_isGsfCtfConsistent);
         MuonTree->Branch("e_Full5x5_SigmaIEtaIEta", &e_Full5x5_SigmaIEtaIEta);
         MuonTree->Branch("e_dEtaInSeed", &e_dEtaInSeed);
         MuonTree->Branch("e_dPhiIn", &e_dPhiIn);
         MuonTree->Branch("e_HoverE", &e_HoverE);
         MuonTree->Branch("e_InvEminusInvP", &e_InvEminusInvP);
-        MuonTree->Branch("e_chIso03", &e_chIso03);
-        MuonTree->Branch("e_nhIso03", &e_nhIso03);
-        MuonTree->Branch("e_phIso03", &e_phIso03);
-        MuonTree->Branch("e_ChIso03FromPU", &e_ChIso03FromPU);
+        MuonTree->Branch("e_relECALiso", &e_relECALiso);
+        MuonTree->Branch("e_relHCALiso", &e_relHCALiso);
+        MuonTree->Branch("e_relTrkIso", &e_relTrkIso);
         MuonTree->Branch("e_mHits", &e_mHits);
         MuonTree->Branch("e_passConvVeto", &e_passConvVeto);
-        MuonTree->Branch("e_relPFiso_dBeta", &e_relPFiso_dBeta);
         MuonTree->Branch("e_relPFiso_Rho", &e_relPFiso_Rho);
         MuonTree->Branch("e_passMediumID", &e_passMediumID);
         MuonTree->Branch("mu_p_T", &mu_p_T);
@@ -2443,18 +2574,20 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
                         e_etaSC = SelectedElectron.etaSC;
                         e_phi = SelectedElectron.phi;
                         e_charge = SelectedElectron.charge;
+                        e_charge = SelectedElectron.scPixCharge;
+                        e_charge = SelectedElectron.isGsfCtfScPixConsistent;
+                        e_charge = SelectedElectron.isGsfScPixConsistent;
+                        e_charge = SelectedElectron.isGsfCtfConsistent;
                         e_Full5x5_SigmaIEtaIEta = SelectedElectron.Full5x5_SigmaIEtaIEta;
                         e_dEtaInSeed = SelectedElectron.dEtaInSeed;
                         e_dPhiIn = SelectedElectron.dPhiIn;
                         e_HoverE = SelectedElectron.HoverE;
                         e_InvEminusInvP = SelectedElectron.InvEminusInvP;
-                        e_chIso03 = SelectedElectron.chIso03;
-                        e_nhIso03 = SelectedElectron.nhIso03;
-                        e_phIso03 = SelectedElectron.phIso03;
-                        e_ChIso03FromPU = SelectedElectron.ChIso03FromPU;
+                        e_relECALiso = SelectedElectron.ecalIso03 / SelectedElectron.Pt;
+                        e_relHCALiso = SelectedElectron.hcalIso03 / SelectedElectron.Pt;
+                        e_relTrkIso = SelectedElectron.trkIso03 / SelectedElectron.Pt;
                         e_mHits = SelectedElectron.mHits;
                         e_passConvVeto = SelectedElectron.passConvVeto;
-                        e_relPFiso_dBeta = SelectedElectron.RelPFIso_dBeta;
                         e_relPFiso_Rho = SelectedElectron.RelPFIso_Rho;
                         e_passMediumID = SelectedElectron.passMediumID;
                         mu_p_T = SelectedMuon.Pt;
