@@ -371,7 +371,6 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
             Int_t timesPassed = 0;
 
             // Loop for all events in the chain
-//            for (Int_t i=0; i<NEvents; i++)
             for (Int_t i=0; i<NEvents; i++)
             {
                 ntuple->GetEvent(i);
@@ -447,28 +446,28 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 //                if (skiprun) continue;
 //                if (ntuple->runNum < 275900) continue;
 //                nEvtG++;
-                nEvtInRun[ntuple->runNum]++;
+//                nEvtInRun[ntuple->runNum]++;
 
-                if (ntuple->runNum != currentRunNo)
-                {
-                    currentRunNo = ntuple->runNum;
-                    currentLumiSection = ntuple->lumiBlock;
-                    nLumis++;
-                    if (nEvtInLumi > maxEvtInLumi && nEvtInLumi > 0) maxEvtInLumi = nEvtInLumi;
-                    if (nEvtInLumi < minEvtInLumi && nEvtInLumi > 0) minEvtInLumi = nEvtInLumi;
-                    nEvtInLumi = 0;
+//                if (ntuple->runNum != currentRunNo)
+//                {
+//                    currentRunNo = ntuple->runNum;
+//                    currentLumiSection = ntuple->lumiBlock;
+//                    nLumis++;
+//                    if (nEvtInLumi > maxEvtInLumi && nEvtInLumi > 0) maxEvtInLumi = nEvtInLumi;
+//                    if (nEvtInLumi < minEvtInLumi && nEvtInLumi > 0) minEvtInLumi = nEvtInLumi;
+//                    nEvtInLumi = 0;
 //                    lumis[std::make_pair(currentRunNo, currentLumiSection)]++;
-                }
-                else if (ntuple->lumiBlock != currentLumiSection)
-                {
-                    currentLumiSection = ntuple->lumiBlock;
-                    nLumis++;
-                    if (nEvtInLumi > maxEvtInLumi && nEvtInLumi > 0) maxEvtInLumi = nEvtInLumi;
-                    if (nEvtInLumi < minEvtInLumi && nEvtInLumi > 0) minEvtInLumi = nEvtInLumi;
-                    nEvtInLumi = 0;
+//                }
+//                else if (ntuple->lumiBlock != currentLumiSection)
+//                {
+//                    currentLumiSection = ntuple->lumiBlock;
+//                    nLumis++;
+//                    if (nEvtInLumi > maxEvtInLumi && nEvtInLumi > 0) maxEvtInLumi = nEvtInLumi;
+//                    if (nEvtInLumi < minEvtInLumi && nEvtInLumi > 0) minEvtInLumi = nEvtInLumi;
+//                    nEvtInLumi = 0;
 //                    lumis[std::make_pair(currentRunNo, currentLumiSection)]++;
-                }
-                nEvtInLumi++;
+//                }
+//                nEvtInLumi++;
 
 //                if (ntuple->pfMET_pT >= 20) continue;
 
@@ -617,8 +616,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 //                            L1seed_trigPS->push_back(ntuple->L1seed_trigPS->at(trig_index[i_tr]));
 //                            L1seed_trigPSinDetail.push_back(ntuple->L1seed_trigPSinDetail->at(trig_index[i_tr]));
                         }
-                        for (Int_t i_L1=0; i_L1<4; i_L1++)
-                            L1_trigPS->push_back(ntuple->L1_trigPS->at(i_L1));
+//                        for (Int_t i_L1=0; i_L1<4; i_L1++)
+//                            L1_trigPS->push_back(ntuple->L1_trigPS->at(i_L1));
 
                         // -- Electron vector filling -- //
                         nElectrons = SelectedElectronCollection.size();
