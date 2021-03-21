@@ -345,8 +345,8 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
 
             TChain *chain = new TChain(Mgr.TreeName[i_tup]);
             // TEST
-            chain->Add(Mgr.FullLocation[i_tup]);
-//            Mgr.SetupChain(i_tup, chain);
+//            chain->Add(Mgr.FullLocation[i_tup]);
+            Mgr.SetupChain(i_tup, chain);
 
 //            std::map<std::tuple<int,int,unsigned long long>, int> repeats; // to search for repeating events
 
