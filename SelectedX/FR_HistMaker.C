@@ -2263,12 +2263,26 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
     TH1D *h_FR_pT_barrel_nume[4], *h_FR_pT_endcap_nume[4], *h_FR_pT_endcap2_nume[4];
     TH1D *h_FR_pT_barrel_deno[4], *h_FR_pT_endcap_deno[4], *h_FR_pT_endcap2_deno[4];
     TH1D *h_FR_pT_barrel_ctrl[4], *h_FR_pT_endcap_ctrl[4], *h_FR_pT_endcap2_ctrl[4];
+    TH1D *h_FR_iso_barrel_nume[4], *h_FR_iso_endcap_nume[4], *h_FR_iso_endcap2_nume[4];
+    TH1D *h_FR_iso_barrel_deno[4], *h_FR_iso_endcap_deno[4], *h_FR_iso_endcap2_deno[4];
+    TH1D *h_FR_iso_barrel_ctrl[4], *h_FR_iso_endcap_ctrl[4], *h_FR_iso_endcap2_ctrl[4];
     TH1D *h_FR_eta_nume[4],       *h_FR_eta_deno[4],       *h_FR_eta_ctrl[4];
     TH1D *h_PR_pT_barrel_nume[4], *h_PR_pT_endcap_nume[4], *h_PR_pT_endcap2_nume[4];
     TH1D *h_PR_pT_barrel_deno[4], *h_PR_pT_endcap_deno[4], *h_PR_pT_endcap2_deno[4];
     TH1D *h_PR_pT_barrel_ctrl[4], *h_PR_pT_endcap_ctrl[4], *h_PR_pT_endcap2_ctrl[4];
+    TH1D *h_PR_genpT_barrel_nume[4], *h_PR_genpT_endcap_nume[4], *h_PR_genpT_endcap2_nume[4];
+    TH1D *h_PR_genpT_barrel_deno[4], *h_PR_genpT_endcap_deno[4], *h_PR_genpT_endcap2_deno[4];
+    TH1D *h_PR_genpT_barrel_ctrl[4], *h_PR_genpT_endcap_ctrl[4], *h_PR_genpT_endcap2_ctrl[4];
+    TH1D *h_PR_iso_barrel_nume[4], *h_PR_iso_endcap_nume[4], *h_PR_iso_endcap2_nume[4];
+    TH1D *h_PR_iso_barrel_deno[4], *h_PR_iso_endcap_deno[4], *h_PR_iso_endcap2_deno[4];
+    TH1D *h_PR_iso_barrel_ctrl[4], *h_PR_iso_endcap_ctrl[4], *h_PR_iso_endcap2_ctrl[4];
+    TH1D *h_PR_dR_barrel_nume[4], *h_PR_dR_endcap_nume[4], *h_PR_dR_endcap2_nume[4];
+    TH1D *h_PR_dR_barrel_deno[4], *h_PR_dR_endcap_deno[4], *h_PR_dR_endcap2_deno[4];
+    TH1D *h_PR_dR_barrel_ctrl[4], *h_PR_dR_endcap_ctrl[4], *h_PR_dR_endcap2_ctrl[4];
+    TH1D *h_PR_dpT_barrel_nume[4], *h_PR_dpT_endcap_nume[4], *h_PR_dpT_endcap2_nume[4];
+    TH1D *h_PR_dpT_barrel_deno[4], *h_PR_dpT_endcap_deno[4], *h_PR_dpT_endcap2_deno[4];
+    TH1D *h_PR_dpT_barrel_ctrl[4], *h_PR_dpT_endcap_ctrl[4], *h_PR_dpT_endcap2_ctrl[4];
     TH1D *h_PR_eta_nume[4],       *h_PR_eta_deno[4],       *h_PR_eta_ctrl[4];
-    TH1D *h_genMatching[4];
 
     for (Int_t i_type=0; i_type<4; i_type++)
     {
@@ -2282,10 +2296,18 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
         h_FR_pT_barrel_ctrl[i_type]  = new TH1D("h_FR_pT_barrel_ctrl_"+h_types[i_type],  "", nPtBinMC, analyzer->ptbin_MC);
         h_FR_pT_endcap_ctrl[i_type]  = new TH1D("h_FR_pT_endcap_ctrl_"+h_types[i_type],  "", nPtBinMC, analyzer->ptbin_MC);
         h_FR_pT_endcap2_ctrl[i_type] = new TH1D("h_FR_pT_endcap2_ctrl_"+h_types[i_type], "", nPtBinMC, analyzer->ptbin_MC);
+        h_FR_iso_barrel_nume[i_type]  = new TH1D("h_FR_iso_barrel_nume_"+h_types[i_type],  "", 16, 0, 0.16);
+        h_FR_iso_endcap_nume[i_type]  = new TH1D("h_FR_iso_endcap_nume_"+h_types[i_type],  "", 16, 0, 0.16);
+        h_FR_iso_endcap2_nume[i_type] = new TH1D("h_FR_iso_endcap2_nume_"+h_types[i_type], "", 16, 0, 0.16);
+        h_FR_iso_barrel_deno[i_type]  = new TH1D("h_FR_iso_barrel_deno_"+h_types[i_type],  "", 60, 0, 3);
+        h_FR_iso_endcap_deno[i_type]  = new TH1D("h_FR_iso_endcap_deno_"+h_types[i_type],  "", 60, 0, 3);
+        h_FR_iso_endcap2_deno[i_type] = new TH1D("h_FR_iso_endcap2_deno_"+h_types[i_type], "", 60, 0, 3);
+        h_FR_iso_barrel_ctrl[i_type]  = new TH1D("h_FR_iso_barrel_ctrl_"+h_types[i_type],  "", 60, 0, 3);
+        h_FR_iso_endcap_ctrl[i_type]  = new TH1D("h_FR_iso_endcap_ctrl_"+h_types[i_type],  "", 60, 0, 3);
+        h_FR_iso_endcap2_ctrl[i_type] = new TH1D("h_FR_iso_endcap2_ctrl_"+h_types[i_type], "", 60, 0, 3);
         h_FR_eta_nume[i_type] = new TH1D("h_FR_eta_nume_"+h_types[i_type], "", 48, -2.4, 2.4);
         h_FR_eta_deno[i_type] = new TH1D("h_FR_eta_deno_"+h_types[i_type], "", 48, -2.4, 2.4);
         h_FR_eta_ctrl[i_type] = new TH1D("h_FR_eta_ctrl_"+h_types[i_type], "", 48, -2.4, 2.4);
-
         h_PR_pT_barrel_nume[i_type]  = new TH1D("h_PR_pT_barrel_nume_"+h_types[i_type],  "", nPtBinMC, analyzer->ptbin_MC);
         h_PR_pT_endcap_nume[i_type]  = new TH1D("h_PR_pT_endcap_nume_"+h_types[i_type],  "", nPtBinMC, analyzer->ptbin_MC);
         h_PR_pT_endcap2_nume[i_type] = new TH1D("h_PR_pT_endcap2_nume_"+h_types[i_type], "", nPtBinMC, analyzer->ptbin_MC);
@@ -2295,11 +2317,45 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
         h_PR_pT_barrel_ctrl[i_type]  = new TH1D("h_PR_pT_barrel_ctrl_"+h_types[i_type],  "", nPtBinMC, analyzer->ptbin_MC);
         h_PR_pT_endcap_ctrl[i_type]  = new TH1D("h_PR_pT_endcap_ctrl_"+h_types[i_type],  "", nPtBinMC, analyzer->ptbin_MC);
         h_PR_pT_endcap2_ctrl[i_type] = new TH1D("h_PR_pT_endcap2_ctrl_"+h_types[i_type], "", nPtBinMC, analyzer->ptbin_MC);
+        h_PR_iso_barrel_nume[i_type]  = new TH1D("h_PR_iso_barrel_nume_"+h_types[i_type],  "", 16, 0, 0.16);
+        h_PR_iso_endcap_nume[i_type]  = new TH1D("h_PR_iso_endcap_nume_"+h_types[i_type],  "", 16, 0, 0.16);
+        h_PR_iso_endcap2_nume[i_type] = new TH1D("h_PR_iso_endcap2_nume_"+h_types[i_type], "", 16, 0, 0.16);
+        h_PR_iso_barrel_deno[i_type]  = new TH1D("h_PR_iso_barrel_deno_"+h_types[i_type],  "", 60, 0, 3);
+        h_PR_iso_endcap_deno[i_type]  = new TH1D("h_PR_iso_endcap_deno_"+h_types[i_type],  "", 60, 0, 3);
+        h_PR_iso_endcap2_deno[i_type] = new TH1D("h_PR_iso_endcap2_deno_"+h_types[i_type], "", 60, 0, 3);
+        h_PR_iso_barrel_ctrl[i_type]  = new TH1D("h_PR_iso_barrel_ctrl_"+h_types[i_type],  "", 60, 0, 3);
+        h_PR_iso_endcap_ctrl[i_type]  = new TH1D("h_PR_iso_endcap_ctrl_"+h_types[i_type],  "", 60, 0, 3);
+        h_PR_iso_endcap2_ctrl[i_type] = new TH1D("h_PR_iso_endcap2_ctrl_"+h_types[i_type], "", 60, 0, 3);
+        h_PR_genpT_barrel_nume[i_type]  = new TH1D("h_PR_genpT_barrel_nume_"+h_types[i_type],  "", nPtBinMC, analyzer->ptbin_MC);
+        h_PR_genpT_endcap_nume[i_type]  = new TH1D("h_PR_genpT_endcap_nume_"+h_types[i_type],  "", nPtBinMC, analyzer->ptbin_MC);
+        h_PR_genpT_endcap2_nume[i_type] = new TH1D("h_PR_genpT_endcap2_nume_"+h_types[i_type], "", nPtBinMC, analyzer->ptbin_MC);
+        h_PR_genpT_barrel_deno[i_type]  = new TH1D("h_PR_genpT_barrel_deno_"+h_types[i_type],  "", nPtBinMC, analyzer->ptbin_MC);
+        h_PR_genpT_endcap_deno[i_type]  = new TH1D("h_PR_genpT_endcap_deno_"+h_types[i_type],  "", nPtBinMC, analyzer->ptbin_MC);
+        h_PR_genpT_endcap2_deno[i_type] = new TH1D("h_PR_genpT_endcap2_deno_"+h_types[i_type], "", nPtBinMC, analyzer->ptbin_MC);
+        h_PR_genpT_barrel_ctrl[i_type]  = new TH1D("h_PR_genpT_barrel_ctrl_"+h_types[i_type],  "", nPtBinMC, analyzer->ptbin_MC);
+        h_PR_genpT_endcap_ctrl[i_type]  = new TH1D("h_PR_genpT_endcap_ctrl_"+h_types[i_type],  "", nPtBinMC, analyzer->ptbin_MC);
+        h_PR_genpT_endcap2_ctrl[i_type] = new TH1D("h_PR_genpT_endcap2_ctrl_"+h_types[i_type], "", nPtBinMC, analyzer->ptbin_MC);
+        h_PR_dR_barrel_nume[i_type]  = new TH1D("h_PR_dR_barrel_nume_"+h_types[i_type],  "", 31, 0, 0.31);
+        h_PR_dR_endcap_nume[i_type]  = new TH1D("h_PR_dR_endcap_nume_"+h_types[i_type],  "", 31, 0, 0.31);
+        h_PR_dR_endcap2_nume[i_type] = new TH1D("h_PR_dR_endcap2_nume_"+h_types[i_type], "", 31, 0, 0.31);
+        h_PR_dR_barrel_deno[i_type]  = new TH1D("h_PR_dR_barrel_deno_"+h_types[i_type],  "", 31, 0, 0.31);
+        h_PR_dR_endcap_deno[i_type]  = new TH1D("h_PR_dR_endcap_deno_"+h_types[i_type],  "", 31, 0, 0.31);
+        h_PR_dR_endcap2_deno[i_type] = new TH1D("h_PR_dR_endcap2_deno_"+h_types[i_type], "", 31, 0, 0.31);
+        h_PR_dR_barrel_ctrl[i_type]  = new TH1D("h_PR_dR_barrel_ctrl_"+h_types[i_type],  "", 31, 0, 0.31);
+        h_PR_dR_endcap_ctrl[i_type]  = new TH1D("h_PR_dR_endcap_ctrl_"+h_types[i_type],  "", 31, 0, 0.31);
+        h_PR_dR_endcap2_ctrl[i_type] = new TH1D("h_PR_dR_endcap2_ctrl_"+h_types[i_type], "", 31, 0, 0.31);
+        h_PR_dpT_barrel_nume[i_type]  = new TH1D("h_PR_dpT_barrel_nume_"+h_types[i_type],  "", 51, 0, 0.51);
+        h_PR_dpT_endcap_nume[i_type]  = new TH1D("h_PR_dpT_endcap_nume_"+h_types[i_type],  "", 51, 0, 0.51);
+        h_PR_dpT_endcap2_nume[i_type] = new TH1D("h_PR_dpT_endcap2_nume_"+h_types[i_type], "", 51, 0, 0.51);
+        h_PR_dpT_barrel_deno[i_type]  = new TH1D("h_PR_dpT_barrel_deno_"+h_types[i_type],  "", 51, 0, 0.51);
+        h_PR_dpT_endcap_deno[i_type]  = new TH1D("h_PR_dpT_endcap_deno_"+h_types[i_type],  "", 51, 0, 0.51);
+        h_PR_dpT_endcap2_deno[i_type] = new TH1D("h_PR_dpT_endcap2_deno_"+h_types[i_type], "", 51, 0, 0.51);
+        h_PR_dpT_barrel_ctrl[i_type]  = new TH1D("h_PR_dpT_barrel_ctrl_"+h_types[i_type],  "", 51, 0, 0.51);
+        h_PR_dpT_endcap_ctrl[i_type]  = new TH1D("h_PR_dpT_endcap_ctrl_"+h_types[i_type],  "", 51, 0, 0.51);
+        h_PR_dpT_endcap2_ctrl[i_type] = new TH1D("h_PR_dpT_endcap2_ctrl_"+h_types[i_type], "", 51, 0, 0.51);
         h_PR_eta_nume[i_type] = new TH1D("h_PR_eta_nume_"+h_types[i_type], "", 48, -2.4, 2.4);
         h_PR_eta_deno[i_type] = new TH1D("h_PR_eta_deno_"+h_types[i_type], "", 48, -2.4, 2.4);
         h_PR_eta_ctrl[i_type] = new TH1D("h_PR_eta_ctrl_"+h_types[i_type], "", 48, -2.4, 2.4);
-
-        h_genMatching[i_type] = new TH1D("h_genMatching_"+h_types[i_type], "", 1111, 0, 1111);
     }
 
     Int_t i_type = -1;
@@ -2333,14 +2389,31 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
         // -- For PVz reweighting -- //
         analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");        
 
+        Int_t nMuons;
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
         std::vector<double> *phi = new std::vector<double>;
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<double> *TRKiso = new std::vector<double>;
-        std::vector<int> *isGenMatched = new std::vector<int>;
-        std::vector<std::vector<int>> *genMatchTypes = new std::vector<std::vector<int>>;
+        Int_t nGenMuons;
+        std::vector<double> *genMu_pT = new std::vector<double>;
+        std::vector<double> *genMu_eta = new std::vector<double>;
+        std::vector<double> *genMu_phi = new std::vector<double>;
+        std::vector<int> *genMu_charge = new std::vector<int>;
+        std::vector<int> *genMu_isPrompt = new std::vector<int>;
+        std::vector<int> *genMu_isPromptFinalState = new std::vector<int>;
+        std::vector<int> *genMu_isTauDecayProduct = new std::vector<int>;
+        std::vector<int> *genMu_isPromptTauDecayProduct = new std::vector<int>;
+        std::vector<int> *genMu_isDirectPromptTauDecayProductFinalState = new std::vector<int>;
+        std::vector<int> *genMu_isHardProcess = new std::vector<int>;
+        std::vector<int> *genMu_isLastCopy = new std::vector<int>;
+        std::vector<int> *genMu_isLastCopyBeforeFSR = new std::vector<int>;
+        std::vector<int> *genMu_isPromptDecayed = new std::vector<int>;
+        std::vector<int> *genMu_isDecayedLeptonHadron = new std::vector<int>;
+        std::vector<int> *genMu_fromHardProcessBeforeFSR = new std::vector<int>;
+        std::vector<int> *genMu_fromHardProcessDecayed = new std::vector<int>;
+        std::vector<int> *genMu_fromHardProcessFinalState = new std::vector<int>;
         Double_t MET_pT, MET_phi;
         Int_t nPU;
         Int_t nVTX;
@@ -2353,50 +2426,83 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
 
         chain->Add(Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
         if (DEBUG == kTRUE) cout << Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+        chain->SetBranchStatus("nMuons", 1);
         chain->SetBranchStatus("p_T", 1);
         chain->SetBranchStatus("eta", 1);
         chain->SetBranchStatus("phi", 1);
         chain->SetBranchStatus("relPFiso", 1);
         chain->SetBranchStatus("TRKiso", 1);
-        chain->SetBranchStatus("isGenMatched", 1);
-        chain->SetBranchStatus("genMatchTypes", 1);
         chain->SetBranchStatus("MET_pT", 1);
         chain->SetBranchStatus("MET_phi", 1);
         chain->SetBranchStatus("nPU", 1);
         chain->SetBranchStatus("nVTX", 1);
         chain->SetBranchStatus("PVz", 1);
-//        chain->SetBranchStatus("evt_weight", 1);
         chain->SetBranchStatus("gen_weight", 1);
         chain->SetBranchStatus("top_weight", 1);
         chain->SetBranchStatus("prefiring_weight", 1);
         chain->SetBranchStatus("prefiring_weight_up", 1);
         chain->SetBranchStatus("prefiring_weight_down", 1);
+        chain->SetBranchStatus("nGenMuons", 1);
+        chain->SetBranchStatus("genMu_pT", 1);
+        chain->SetBranchStatus("genMu_eta", 1);
+        chain->SetBranchStatus("genMu_phi", 1);
+        chain->SetBranchStatus("genMu_charge", 1);
+        chain->SetBranchStatus("genMu_isPrompt", 1);
+        chain->SetBranchStatus("genMu_isPromptFinalState", 1);
+        chain->SetBranchStatus("genMu_isTauDecayProduct", 1);
+        chain->SetBranchStatus("genMu_isPromptTauDecayProduct", 1);
+        chain->SetBranchStatus("genMu_isDirectPromptTauDecayProductFinalState", 1);
+        chain->SetBranchStatus("genMu_isHardProcess", 1);
+        chain->SetBranchStatus("genMu_isLastCopy", 1);
+        chain->SetBranchStatus("genMu_isLastCopyBeforeFSR", 1);
+        chain->SetBranchStatus("genMu_isPromptDecayed", 1);
+        chain->SetBranchStatus("genMu_isDecayedLeptonHadron", 1);
+        chain->SetBranchStatus("genMu_fromHardProcessBeforeFSR", 1);
+        chain->SetBranchStatus("genMu_fromHardProcessDecayed", 1);
+        chain->SetBranchStatus("genMu_fromHardProcessFinalState", 1);
+
+        chain->SetBranchAddress("nMuons", &nMuons);
         chain->SetBranchAddress("p_T", &p_T);
         chain->SetBranchAddress("eta", &eta);
         chain->SetBranchAddress("phi", &phi);
         chain->SetBranchAddress("charge", &charge);
         chain->SetBranchAddress("relPFiso", &relPFiso);
         chain->SetBranchAddress("TRKiso", &TRKiso);
-        chain->SetBranchAddress("isGenMatched", &isGenMatched);
-        chain->SetBranchAddress("genMatchTypes", &genMatchTypes);
         chain->SetBranchAddress("MET_pT", &MET_pT);
         chain->SetBranchAddress("MET_phi", &MET_phi);
         chain->SetBranchAddress("nPU", &nPU);
         chain->SetBranchAddress("nVTX", &nVTX);
         chain->SetBranchAddress("PVz", &PVz);
-//        chain->SetBranchAddress("evt_weight", &evt_weight);
         chain->SetBranchAddress("gen_weight", &gen_weight);
         chain->SetBranchAddress("top_weight", &top_weight);
         chain->SetBranchAddress("prefiring_weight", &prefiring_weight);
         chain->SetBranchAddress("prefiring_weight_up", &prefiring_weight_up);
         chain->SetBranchAddress("prefiring_weight_down", &prefiring_weight_down);
+        chain->SetBranchAddress("nGenMuons", &nGenMuons);
+        chain->SetBranchAddress("genMu_pT", &genMu_pT);
+        chain->SetBranchAddress("genMu_eta", &genMu_eta);
+        chain->SetBranchAddress("genMu_phi", &genMu_phi);
+        chain->SetBranchAddress("genMu_charge", &genMu_charge);
+        chain->SetBranchAddress("genMu_isPrompt", &genMu_isPrompt);
+        chain->SetBranchAddress("genMu_isPromptFinalState", &genMu_isPromptFinalState);
+        chain->SetBranchAddress("genMu_isTauDecayProduct", &genMu_isTauDecayProduct);
+        chain->SetBranchAddress("genMu_isPromptTauDecayProduct", &genMu_isPromptTauDecayProduct);
+        chain->SetBranchAddress("genMu_isDirectPromptTauDecayProductFinalState", &genMu_isDirectPromptTauDecayProductFinalState);
+        chain->SetBranchAddress("genMu_isHardProcess", &genMu_isHardProcess);
+        chain->SetBranchAddress("genMu_isLastCopy", &genMu_isLastCopy);
+        chain->SetBranchAddress("genMu_isLastCopyBeforeFSR", &genMu_isLastCopyBeforeFSR);
+        chain->SetBranchAddress("genMu_isPromptDecayed", &genMu_isPromptDecayed);
+        chain->SetBranchAddress("genMu_isDecayedLeptonHadron", &genMu_isDecayedLeptonHadron);
+        chain->SetBranchAddress("genMu_fromHardProcessBeforeFSR", &genMu_fromHardProcessBeforeFSR);
+        chain->SetBranchAddress("genMu_fromHardProcessDecayed", &genMu_fromHardProcessDecayed);
+        chain->SetBranchAddress("genMu_fromHardProcessFinalState", &genMu_fromHardProcessFinalState);
 
         Int_t NEvents = chain->GetEntries();
         cout << "\t[Sum of weights: " << Mgr.Wsum[0] << "]" << endl;
         cout << "\t[Number of events: " << NEvents << "]" << endl;
-        Int_t nMatches=0, nNoMatches=0;
+        Int_t nMatches=0, nNoMatches=0, nLost=0;
 
-        if (DEBUG == kTRUE) NEvents = 100;
+        if (DEBUG == kTRUE) NEvents = 10;
 
         myProgressBar_t bar(NEvents);
 
@@ -2405,8 +2511,9 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
             chain->GetEntry(i);
 
             if (DEBUG == kTRUE){
-                cout << "Evt " << i << endl;
-                cout << "nMuons = " << p_T->size() << endl;                
+                cout << "\nEvt " << i << endl;
+                cout << "nMuons=" << nMuons << "  nGenMuons=" << nGenMuons;// << endl;
+                cout << "  " << genMu_charge->size() << "  " << genMu_pT->size() << "  " << genMu_isPrompt->size() << endl;
             }
             else bar.Draw(i);
 
@@ -2435,63 +2542,120 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
             if (Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
             if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl;
 
-            std::vector<int> FR_indices, PR_indices;
+            std::vector<int> FR_indices, PR_indices, PR_genIndices;
+            std::vector<double> PR_dRs, PR_dpTs;
 
-            for (UInt_t i_mu=0; i_mu<p_T->size(); i_mu++)
+            for (Int_t i_mu=0; i_mu<nMuons; i_mu++)
             {
-                if (DEBUG == kTRUE)
+                if (DEBUG)
                 {
                     cout << "i_mu = " << i_mu << endl;
-                    cout << "   p_T = " << p_T->at(i_mu) << "   eta = " << eta->at(i_mu) << "   phi = " << phi->at(i_mu) << endl;
-                    cout << "  isGenMatched = " << isGenMatched->at(i_mu) << endl;
-                    cout << "  Matched gen lepton: flag vector size = "<< genMatchTypes->at(i_mu).size() << endl;
-                    if (genMatchTypes->at(i_mu).size())
-                    {
-                        cout << "   isPrompt = " << genMatchTypes->at(i_mu)[0] << endl;
-                        cout << "   isPromptFinalState = " << genMatchTypes->at(i_mu)[1] << endl;
-                        cout << "   isTauDecayProduct = " << genMatchTypes->at(i_mu)[2] << endl;
-                        cout << "   isPromptTauDecayProduct = " << genMatchTypes->at(i_mu)[3] << endl;
-                        cout << "   isDirectPromptTauDecayProductFinalState = " << genMatchTypes->at(i_mu)[4] << endl;
-                        cout << "   isHardProcess = " << genMatchTypes->at(i_mu)[5] << endl;
-                        cout << "   isLastCopy = " << genMatchTypes->at(i_mu)[6] << endl;
-                        cout << "   isLastCopyBeforeFSR = " << genMatchTypes->at(i_mu)[7] << endl;
-                        cout << "   isPromptDecayed = " << genMatchTypes->at(i_mu)[8] << endl;
-                        cout << "   isDecayedLeptonHadron = " << genMatchTypes->at(i_mu)[9] << endl;
-                        cout << "   fromHardProcessBeforeFSR = " << genMatchTypes->at(i_mu)[10] << endl;
-                        cout << "   fromHardProcessDecayed = " << genMatchTypes->at(i_mu)[11] << endl;
-                        cout << "   fromHardProcessFinalState = " << genMatchTypes->at(i_mu)[12] << endl;
-                    }
+                    cout << "  p_T = " << p_T->at(i_mu) << "  eta = " << eta->at(i_mu) << "  phi = " << phi->at(i_mu);
+                    cout << "  charge=" << charge->at(i_mu) << endl;
                 }
+
                 if (p_T->at(i_mu) != p_T->at(i_mu))
                 {
                     cout << p_T->at(i_mu) << " " << eta->at(i_mu) << " " << phi->at(i_mu) << " " << charge->at(i_mu) << " " << relPFiso->at(i_mu) << endl;
                     continue;
                 }
                 if (p_T->at(i_mu) <= 52 || fabs(eta->at(i_mu)) >= 2.4) continue;
-                h_genMatching[i_type]->Fill(isGenMatched->at(i_mu));
-                if (isGenMatched->at(i_mu))
+
+                std::vector<int> matches;
+                Double_t dRmin = 9999;
+                Double_t rel_dpTmin = 9999;
+                Int_t i_bestmatch = -1;
+                Int_t veto = 0; // used to find fake leptons
+                for (UInt_t i_gen=0; i_gen<genMu_pT->size(); i_gen++)
+                {
+                    Double_t dEta = eta->at(i_mu) - genMu_eta->at(i_gen);
+                    Double_t dPhi = phi->at(i_mu) - genMu_phi->at(i_gen);
+                    Double_t dR = sqrt(dEta*dEta + dPhi*dPhi);
+                    Double_t rel_dpT = fabs(p_T->at(i_mu) - genMu_pT->at(i_gen)) / p_T->at(i_mu);
+                    if (dR < 0.3)
+                    {
+                        if (genMu_isPrompt->at(i_gen) || genMu_isPromptFinalState->at(i_gen) || genMu_isTauDecayProduct->at(i_gen) ||
+                            genMu_isPromptTauDecayProduct->at(i_gen) || genMu_isDirectPromptTauDecayProductFinalState->at(i_gen) ||
+                            genMu_isHardProcess->at(i_gen) || genMu_fromHardProcessBeforeFSR->at(i_gen) || genMu_fromHardProcessFinalState->at(i_gen))
+                            veto = 1;
+                        if (rel_dpT < 0.5)
+                        {
+                            matches.push_back(i_gen);
+                            if (genMu_isLastCopy->at(i_gen) && (genMu_isPrompt->at(i_gen) || genMu_isPromptFinalState->at(i_gen)))
+                            {
+                                if (dR < dRmin || (dR == dRmin && rel_dpT <= rel_dpTmin))
+                                {
+                                    dRmin = dR;
+                                    rel_dpTmin = rel_dpT;
+                                    i_bestmatch = i_gen;
+                                }
+                                if (genMu_isDecayedLeptonHadron->at(i_gen))
+                                {
+                                    cout << "  GEN LEPTON " << i_gen << " IS PROMPT BUT DECAYED!!" << endl;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (i_bestmatch >= 0)
                 {
                     nMatches++;
                     PR_indices.push_back(i_mu);
+                    PR_genIndices.push_back(i_bestmatch);
+                    PR_dRs.push_back(dRmin);
+                    PR_dpTs.push_back(rel_dpTmin);
+
+                    if (DEBUG)
+                    {
+                        cout << "  isGenMatched = 1\n  Matched with " << matches.size() <<" gen leptons. Best match = " << i_bestmatch << endl;
+                        for (UInt_t i_match=0; i_match<matches.size(); i_match++)
+                        {
+                            cout << "    match" << i_match << ":  pT=" << genMu_pT->at(matches[i_match]);
+                            cout << "  eta=" << genMu_eta->at(matches[i_match]) << "  phi=" << genMu_phi->at(matches[i_match]);
+                            cout << "  charge=" << genMu_charge->at(matches[i_match]) << endl;
+                            cout << "     isPrompt = " << genMu_isPrompt->at(matches[i_match]) << endl;
+                            cout << "     isPromptFinalState = " << genMu_isPromptFinalState->at(matches[i_match]) << endl;
+                            cout << "     isTauDecayProduct = " << genMu_isTauDecayProduct->at(matches[i_match]) << endl;
+                            cout << "     isPromptTauDecayProduct = " << genMu_isPromptTauDecayProduct->at(matches[i_match]) << endl;
+                            cout << "     isDirectPromptTauDecayProductFinalState = " << genMu_isDirectPromptTauDecayProductFinalState->at(matches[i_match]) << endl;
+                            cout << "     isHardProcess = " << genMu_isHardProcess->at(matches[i_match]) << endl;
+                            cout << "     isLastCopy = " << genMu_isLastCopy->at(matches[i_match]) << endl;
+                            cout << "     isLastCopyBeforeFSR = " << genMu_isLastCopyBeforeFSR->at(matches[i_match]) << endl;
+                            cout << "     isPromptDecayed = " << genMu_isPromptDecayed->at(matches[i_match]) << endl;
+                            cout << "     isDecayedLeptonHadron = " << genMu_isDecayedLeptonHadron->at(matches[i_match]) << endl;
+                            cout << "     fromHardProcessBeforeFSR = " << genMu_fromHardProcessBeforeFSR->at(matches[i_match]) << endl;
+                            cout << "     fromHardProcessDecayed = " << genMu_fromHardProcessDecayed->at(matches[i_match]) << endl;
+                            cout << "     fromHardProcessFinalState = " << genMu_fromHardProcessFinalState->at(matches[i_match]) << endl;
+                        }
+                    }
                 }
-                else
+                else if (!veto)
                 {
                     nNoMatches++;
                     FR_indices.push_back(i_mu);
+
+                    if (DEBUG) cout << "  isGenMatched = 0" << endl;
+                }
+                else
+                {
+                    nLost++;
+                    if (DEBUG) cout << " isGenMatched = -1 (not matched but vetoed as fake)" << endl;
                 }
             }// End of i_mu iteration
 
-            if (pr >= _DY_10to50 && pr < _EndOf_DY_Normal && PR_indices.size() > 2)
-            {
-                cout << "\nStrange DY event:" << endl;
-                for (UInt_t i_mu=0; i_mu<p_T->size(); i_mu++)
-                {
-                    cout << "Muon " << i_mu << ": p_T=" << p_T->at(i_mu) << "  eta=" << eta->at(i_mu) << "  ISO=" << relPFiso->at(i_mu);
-                    cout << "  GenMatch=" << isGenMatched->at(i_mu) << endl;
-                }
-                cout << endl;
-            }
+//            if (pr >= _DY_10to50 && pr < _EndOf_DY_Normal && PR_indices.size() > 2)
+//            {
+//                cout << "\nStrange DY event:" << endl;
+//                for (UInt_t i_mu=0; i_mu<p_T->size(); i_mu++)
+//                {
+//                    cout << "Muon " << i_mu << ": p_T=" << p_T->at(i_mu) << "  eta=" << eta->at(i_mu) << "  ISO=" << relPFiso->at(i_mu);
+//                    cout << "  GenMatch=" << isGenMatched->at(i_mu) << endl;
+//                }
+//                cout << endl;
+//            }
 
+            if (DEBUG) cout << "  nPRindices=" << PR_indices.size() << "  nFRindices=" << FR_indices.size() << endl;
             for (UInt_t i_pr=0; i_pr<PR_indices.size(); i_pr++)
             {
                 if (relPFiso->at(PR_indices[i_pr]) < 0.15) // Signal/Numerator
@@ -2500,14 +2664,26 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
                     if (fabs(eta->at(PR_indices[i_pr])) < 1.2) // Barrel
                     {
                         h_PR_pT_barrel_nume[i_type]->Fill(p_T->at(PR_indices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_iso_barrel_nume[i_type]->Fill(relPFiso->at(PR_indices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_genpT_barrel_nume[i_type]->Fill(genMu_pT->at(PR_genIndices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_dR_barrel_nume[i_type]->Fill(PR_dRs[i_pr], TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_dpT_barrel_nume[i_type]->Fill(PR_dpTs[i_pr], TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                     else if (fabs(eta->at(PR_indices[i_pr])) >= 1.2 && fabs(eta->at(PR_indices[i_pr])) < 1.8) // Endcap
                     {
                         h_PR_pT_endcap_nume[i_type]->Fill(p_T->at(PR_indices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_iso_endcap_nume[i_type]->Fill(relPFiso->at(PR_indices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_genpT_endcap_nume[i_type]->Fill(genMu_pT->at(PR_genIndices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_dR_endcap_nume[i_type]->Fill(PR_dRs[i_pr], TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_dpT_endcap_nume[i_type]->Fill(PR_dpTs[i_pr], TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                     else if (fabs(eta->at(PR_indices[i_pr])) >= 1.8 && fabs(eta->at(PR_indices[i_pr])) < 2.4) // Far endcap
                     {
                         h_PR_pT_endcap2_nume[i_type]->Fill(p_T->at(PR_indices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_iso_endcap2_nume[i_type]->Fill(relPFiso->at(PR_indices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_genpT_endcap2_nume[i_type]->Fill(genMu_pT->at(PR_genIndices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_dR_endcap2_nume[i_type]->Fill(PR_dRs[i_pr], TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_dpT_endcap2_nume[i_type]->Fill(PR_dpTs[i_pr], TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                 } // End of if(Signal/Numerator)
                 else // Control
@@ -2516,14 +2692,26 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
                     if (fabs(eta->at(PR_indices[i_pr])) < 1.2) // Barrel
                     {
                         h_PR_pT_barrel_ctrl[i_type]->Fill(p_T->at(PR_indices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_iso_barrel_ctrl[i_type]->Fill(relPFiso->at(PR_indices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_genpT_barrel_ctrl[i_type]->Fill(genMu_pT->at(PR_genIndices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_dR_barrel_ctrl[i_type]->Fill(PR_dRs[i_pr], TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_dpT_barrel_ctrl[i_type]->Fill(PR_dpTs[i_pr], TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                     else if (fabs(eta->at(PR_indices[i_pr])) >= 1.2 && fabs(eta->at(PR_indices[i_pr])) < 1.8) // Endcap
                     {
                         h_PR_pT_endcap_ctrl[i_type]->Fill(p_T->at(PR_indices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_iso_endcap_ctrl[i_type]->Fill(relPFiso->at(PR_indices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_genpT_endcap_ctrl[i_type]->Fill(genMu_pT->at(PR_genIndices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_dR_endcap_ctrl[i_type]->Fill(PR_dRs[i_pr], TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_dpT_endcap_ctrl[i_type]->Fill(PR_dpTs[i_pr], TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                     else if (fabs(eta->at(PR_indices[i_pr])) >= 1.8 && fabs(eta->at(PR_indices[i_pr])) < 2.4) // Far endcap
                     {
                         h_PR_pT_endcap2_ctrl[i_type]->Fill(p_T->at(PR_indices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_iso_endcap2_ctrl[i_type]->Fill(relPFiso->at(PR_indices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_genpT_endcap2_ctrl[i_type]->Fill(genMu_pT->at(PR_genIndices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_dR_endcap2_ctrl[i_type]->Fill(PR_dRs[i_pr], TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_PR_dpT_endcap2_ctrl[i_type]->Fill(PR_dpTs[i_pr], TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                 }// End of if(Control)
                 // Denominator
@@ -2531,16 +2719,29 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
                 if (fabs(eta->at(PR_indices[i_pr])) < 1.2) // Barrel
                 {
                     h_PR_pT_barrel_deno[i_type]->Fill(p_T->at(PR_indices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_PR_iso_barrel_deno[i_type]->Fill(relPFiso->at(PR_indices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_PR_genpT_barrel_deno[i_type]->Fill(genMu_pT->at(PR_genIndices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_PR_dR_barrel_deno[i_type]->Fill(PR_dRs[i_pr], TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_PR_dpT_barrel_deno[i_type]->Fill(PR_dpTs[i_pr], TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                 }
                 else if (fabs(eta->at(PR_indices[i_pr])) >= 1.2 && fabs(eta->at(PR_indices[i_pr])) < 1.8) // Endcap
                 {
                     h_PR_pT_endcap_deno[i_type]->Fill(p_T->at(PR_indices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_PR_iso_endcap_deno[i_type]->Fill(relPFiso->at(PR_indices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_PR_genpT_endcap_deno[i_type]->Fill(genMu_pT->at(PR_genIndices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_PR_dR_endcap_deno[i_type]->Fill(PR_dRs[i_pr], TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_PR_dpT_endcap_deno[i_type]->Fill(PR_dpTs[i_pr], TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                 }
                 else if (fabs(eta->at(PR_indices[i_pr])) >= 1.8 && fabs(eta->at(PR_indices[i_pr])) < 2.4) // Endcap
                 {
                     h_PR_pT_endcap2_deno[i_type]->Fill(p_T->at(PR_indices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_PR_iso_endcap2_deno[i_type]->Fill(relPFiso->at(PR_indices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_PR_genpT_endcap2_deno[i_type]->Fill(genMu_pT->at(PR_genIndices[i_pr]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_PR_dR_endcap2_deno[i_type]->Fill(PR_dRs[i_pr], TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_PR_dpT_endcap2_deno[i_type]->Fill(PR_dpTs[i_pr], TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                 }
             } // End of for(prompts)
+
 
             for (UInt_t i_fake=0; i_fake<FR_indices.size(); i_fake++)
             {
@@ -2550,14 +2751,17 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
                     if (fabs(eta->at(FR_indices[i_fake])) < 1.2) // Barrel
                     {
                         h_FR_pT_barrel_nume[i_type]->Fill(p_T->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_FR_iso_barrel_nume[i_type]->Fill(relPFiso->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                     else if (fabs(eta->at(FR_indices[i_fake])) >= 1.2 && fabs(eta->at(FR_indices[i_fake])) < 1.8) // Endcap
                     {
                         h_FR_pT_endcap_nume[i_type]->Fill(p_T->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_FR_iso_endcap_nume[i_type]->Fill(relPFiso->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                     else if (fabs(eta->at(FR_indices[i_fake])) >= 1.8 && fabs(eta->at(FR_indices[i_fake])) < 2.4) // Far endcap
                     {
                         h_FR_pT_endcap2_nume[i_type]->Fill(p_T->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_FR_iso_endcap2_nume[i_type]->Fill(relPFiso->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                 } // End of if(Signal/Numerator)
                 else // Control
@@ -2566,14 +2770,17 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
                     if (fabs(eta->at(FR_indices[i_fake])) < 1.2) // Barrel
                     {
                         h_FR_pT_barrel_ctrl[i_type]->Fill(p_T->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_FR_iso_barrel_ctrl[i_type]->Fill(relPFiso->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                     else if (fabs(eta->at(FR_indices[i_fake])) >= 1.2 && fabs(eta->at(FR_indices[i_fake])) < 1.8) // Endcap
                     {
                         h_FR_pT_endcap_ctrl[i_type]->Fill(p_T->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_FR_iso_endcap_ctrl[i_type]->Fill(relPFiso->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                     else if (fabs(eta->at(FR_indices[i_fake])) >= 1.8 && fabs(eta->at(FR_indices[i_fake])) < 2.4) // Far endcap
                     {
                         h_FR_pT_endcap2_ctrl[i_type]->Fill(p_T->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                        h_FR_iso_endcap2_ctrl[i_type]->Fill(relPFiso->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                     }
                 }// End of if(Control)
                 // Denominator
@@ -2581,14 +2788,17 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
                 if (fabs(eta->at(FR_indices[i_fake])) < 1.2) // Barrel
                 {
                     h_FR_pT_barrel_deno[i_type]->Fill(p_T->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_FR_iso_barrel_deno[i_type]->Fill(relPFiso->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                 }
                 else if (fabs(eta->at(FR_indices[i_fake])) >= 1.2 && fabs(eta->at(FR_indices[i_fake])) < 1.8) // Endcap
                 {
                     h_FR_pT_endcap_deno[i_type]->Fill(p_T->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_FR_iso_endcap_deno[i_type]->Fill(relPFiso->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                 }
                 else if (fabs(eta->at(FR_indices[i_fake])) >= 1.8 && fabs(eta->at(FR_indices[i_fake])) < 2.4) // Endcap
                 {
                     h_FR_pT_endcap2_deno[i_type]->Fill(p_T->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                    h_FR_iso_endcap2_deno[i_type]->Fill(relPFiso->at(FR_indices[i_fake]), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
                 }
             } // End of for(fakes)
 
@@ -2602,6 +2812,7 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
 
         cout << "Average # of gen-matched muons in the event " << (double)nMatches/(double)NEvents << endl;
         cout << "Average # of non-matched muons in the event " << (double)nNoMatches/(double)NEvents << endl;
+        cout << "Average # of excluded muons in the event " << (double)nLost/(double)NEvents << endl;
         cout << "===========================================================\n" << endl;
     } // End of pr iteration
 
@@ -2618,6 +2829,15 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
         h_FR_pT_barrel_ctrl[i]->Write();
         h_FR_pT_endcap_ctrl[i]->Write();
         h_FR_pT_endcap2_ctrl[i]->Write();
+        h_FR_iso_barrel_nume[i]->Write();
+        h_FR_iso_endcap_nume[i]->Write();
+        h_FR_iso_endcap2_nume[i]->Write();
+        h_FR_iso_barrel_deno[i]->Write();
+        h_FR_iso_endcap_deno[i]->Write();
+        h_FR_iso_endcap2_deno[i]->Write();
+        h_FR_iso_barrel_ctrl[i]->Write();
+        h_FR_iso_endcap_ctrl[i]->Write();
+        h_FR_iso_endcap2_ctrl[i]->Write();
         h_FR_eta_nume[i]->Write();
         h_FR_eta_deno[i]->Write();
         h_FR_eta_ctrl[i]->Write();
@@ -2630,10 +2850,45 @@ void Mu_MCFR_HistMaker (Bool_t DEBUG)
         h_PR_pT_barrel_ctrl[i]->Write();
         h_PR_pT_endcap_ctrl[i]->Write();
         h_PR_pT_endcap2_ctrl[i]->Write();
+        h_PR_iso_barrel_nume[i]->Write();
+        h_PR_iso_endcap_nume[i]->Write();
+        h_PR_iso_endcap2_nume[i]->Write();
+        h_PR_iso_barrel_deno[i]->Write();
+        h_PR_iso_endcap_deno[i]->Write();
+        h_PR_iso_endcap2_deno[i]->Write();
+        h_PR_iso_barrel_ctrl[i]->Write();
+        h_PR_iso_endcap_ctrl[i]->Write();
+        h_PR_iso_endcap2_ctrl[i]->Write();
+        h_PR_genpT_barrel_nume[i]->Write();
+        h_PR_genpT_endcap_nume[i]->Write();
+        h_PR_genpT_endcap2_nume[i]->Write();
+        h_PR_genpT_barrel_deno[i]->Write();
+        h_PR_genpT_endcap_deno[i]->Write();
+        h_PR_genpT_endcap2_deno[i]->Write();
+        h_PR_genpT_barrel_ctrl[i]->Write();
+        h_PR_genpT_endcap_ctrl[i]->Write();
+        h_PR_genpT_endcap2_ctrl[i]->Write();
+        h_PR_dR_barrel_nume[i]->Write();
+        h_PR_dR_endcap_nume[i]->Write();
+        h_PR_dR_endcap2_nume[i]->Write();
+        h_PR_dR_barrel_deno[i]->Write();
+        h_PR_dR_endcap_deno[i]->Write();
+        h_PR_dR_endcap2_deno[i]->Write();
+        h_PR_dR_barrel_ctrl[i]->Write();
+        h_PR_dR_endcap_ctrl[i]->Write();
+        h_PR_dR_endcap2_ctrl[i]->Write();
+        h_PR_dpT_barrel_nume[i]->Write();
+        h_PR_dpT_endcap_nume[i]->Write();
+        h_PR_dpT_endcap2_nume[i]->Write();
+        h_PR_dpT_barrel_deno[i]->Write();
+        h_PR_dpT_endcap_deno[i]->Write();
+        h_PR_dpT_endcap2_deno[i]->Write();
+        h_PR_dpT_barrel_ctrl[i]->Write();
+        h_PR_dpT_endcap_ctrl[i]->Write();
+        h_PR_dpT_endcap2_ctrl[i]->Write();
         h_PR_eta_nume[i]->Write();
         h_PR_eta_deno[i]->Write();
         h_PR_eta_ctrl[i]->Write();
-        h_genMatching[i]->Write();
     }
     cout << " Finished.\n" << endl;
 

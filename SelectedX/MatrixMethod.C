@@ -48,11 +48,13 @@ const Double_t massbins2[87] = {15, 17.5, 20, 22.5, 25, 27.5, 30, 32.5, 35, 37.5
 void MatrixMethod_ele (Bool_t DEBUG);
 void MatrixMethod_mu (Bool_t DEBUG);
 void MatrixMethod_mu_MC (Bool_t DEBUG);
+void MatrixMethod_singleMu_MC (Bool_t DEBUG);
 
 void MatrixMethod (TString WhichX = "", Bool_t DEBUG=kFALSE)
 {
     TString whichX = WhichX;
     whichX.ToUpper();
+    if (whichX.Contains("DEBUG")) DEBUG = kTRUE;
     Int_t Xselected = 0;
 
     if (whichX.Contains("MU"))
@@ -60,8 +62,16 @@ void MatrixMethod (TString WhichX = "", Bool_t DEBUG=kFALSE)
         Xselected++;
         if (whichX.Contains("MC"))
         {
-            cout << "\n*****  MatrixMethod_mu_MC  *****" << endl;
-            MatrixMethod_mu_MC(DEBUG);
+            if (whichX.Contains("SINGLE"))
+            {
+                cout << "\n*****  MatrixMethod_singleMu_MC  *****" << endl;
+                MatrixMethod_singleMu_MC(DEBUG);
+            }
+            else
+            {
+                cout << "\n*****  MatrixMethod_mu_MC  *****" << endl;
+                MatrixMethod_mu_MC(DEBUG);
+            }
         }
         else
         {
@@ -106,10 +116,10 @@ void MatrixMethod_ele (Bool_t DEBUG=kFALSE)
     analyzer->SetupEfficiencyScaleFactor_electron();
 
     // -- For QCD estimation from Fake Rate -- //
-//    analyzer->SetupFRvalues_ele(Dir+"FakeRate_electron.root", "subtract");
-    analyzer->SetupFRvalues_ele_fit(Dir+"FakeRate_electron.root");
-//    analyzer->SetupPRvalues_ele(Dir+"PromptRate_electron.root", "subtract");
-    analyzer->SetupPRvalues_ele_fit(Dir+"PromptRate_electron.root");
+    analyzer->SetupFRvalues_ele(Dir+"FakeRate_electron.root", "subtract");
+//    analyzer->SetupFRvalues_ele_fit(Dir+"FakeRate_electron.root");
+    analyzer->SetupPRvalues_ele(Dir+"PromptRate_electron_alt.root", "MC");
+//    analyzer->SetupPRvalues_ele_fit(Dir+"PromptRate_electron.root");
 
     for (Process_t pr=_DY_10to50; pr<_EndOf_DoubleEG_Normal; pr=next(pr))
     {
@@ -142,6 +152,10 @@ void MatrixMethod_ele (Bool_t DEBUG=kFALSE)
         TH1D* h_mass_PF_TT = new TH1D("h_mass_PF_TT_"+Mgr.Procname[pr], "h_mass_PF_TT_"+Mgr.Procname[pr], binnum, massbins); h_mass_PF_TT->Sumw2();
         TH1D* h_mass_FP_TT = new TH1D("h_mass_FP_TT_"+Mgr.Procname[pr], "h_mass_FP_TT_"+Mgr.Procname[pr], binnum, massbins); h_mass_FP_TT->Sumw2();
         TH1D* h_mass_FF_TT = new TH1D("h_mass_FF_TT_"+Mgr.Procname[pr], "h_mass_FF_TT_"+Mgr.Procname[pr], binnum, massbins); h_mass_FF_TT->Sumw2();
+        TH1D* h_mass_TT = new TH1D("h_mass_TT_"+Mgr.Procname[pr], "h_mass_TT_"+Mgr.Procname[pr], binnum, massbins); h_mass_TT->Sumw2();
+        TH1D* h_mass_TN = new TH1D("h_mass_TN_"+Mgr.Procname[pr], "h_mass_TN_"+Mgr.Procname[pr], binnum, massbins); h_mass_TN->Sumw2();
+        TH1D* h_mass_NT = new TH1D("h_mass_NT_"+Mgr.Procname[pr], "h_mass_NT_"+Mgr.Procname[pr], binnum, massbins); h_mass_NT->Sumw2();
+        TH1D* h_mass_NN = new TH1D("h_mass_NN_"+Mgr.Procname[pr], "h_mass_NN_"+Mgr.Procname[pr], binnum, massbins); h_mass_NN->Sumw2();
 
         TH1D* h_massSS_PP = new TH1D("h_massSS_PP_"+Mgr.Procname[pr], "h_massSS_PP_"+Mgr.Procname[pr], binnum, massbins); h_massSS_PP->Sumw2();
         TH1D* h_massSS_PF = new TH1D("h_massSS_PF_"+Mgr.Procname[pr], "h_massSS_PF_"+Mgr.Procname[pr], binnum, massbins); h_massSS_PF->Sumw2();
@@ -368,19 +382,29 @@ void MatrixMethod_ele (Bool_t DEBUG=kFALSE)
             Double_t FR1=0, FR2=0, PR1=1, PR2=1;
             if (p_T->at(0) >= p_T->at(1))
             {
-                MatrixMethod_weights = analyzer->MatrixMethod_evtWeight_ele_fit(p_T->at(0), etaSC->at(0), passMediumID->at(0), p_T->at(1), etaSC->at(1), passMediumID->at(1));
-                FR1 = analyzer->FakeRate_ele_fit(p_T->at(0), etaSC->at(0));
-                FR2 = analyzer->FakeRate_ele_fit(p_T->at(1), etaSC->at(1));
-                PR1 = analyzer->PromptRate_ele_fit(p_T->at(0), etaSC->at(0));
-                PR2 = analyzer->PromptRate_ele_fit(p_T->at(1), etaSC->at(1));
+//                MatrixMethod_weights = analyzer->MatrixMethod_evtWeight_ele_fit(p_T->at(0), etaSC->at(0), passMediumID->at(0), p_T->at(1), etaSC->at(1), passMediumID->at(1));
+//                FR1 = analyzer->FakeRate_ele_fit(p_T->at(0), etaSC->at(0));
+//                FR2 = analyzer->FakeRate_ele_fit(p_T->at(1), etaSC->at(1));
+//                PR1 = analyzer->PromptRate_ele_fit(p_T->at(0), etaSC->at(0));
+//                PR2 = analyzer->PromptRate_ele_fit(p_T->at(1), etaSC->at(1));
+                MatrixMethod_weights = analyzer->MatrixMethod_evtWeight_ele(p_T->at(0), etaSC->at(0), passMediumID->at(0), p_T->at(1), etaSC->at(1), passMediumID->at(1));
+                FR1 = analyzer->FakeRate_ele(p_T->at(0), etaSC->at(0));
+                FR2 = analyzer->FakeRate_ele(p_T->at(1), etaSC->at(1));
+                PR1 = analyzer->PromptRate_ele(p_T->at(0), etaSC->at(0));
+                PR2 = analyzer->PromptRate_ele(p_T->at(1), etaSC->at(1));
             }
             else
             {
-                MatrixMethod_weights = analyzer->MatrixMethod_evtWeight_ele_fit(p_T->at(1), etaSC->at(1), passMediumID->at(1), p_T->at(0), etaSC->at(0), passMediumID->at(0));
-                FR1 = analyzer->FakeRate_ele_fit(p_T->at(1), etaSC->at(1));
-                FR2 = analyzer->FakeRate_ele_fit(p_T->at(0), etaSC->at(0));
-                PR1 = analyzer->PromptRate_ele_fit(p_T->at(1), etaSC->at(1));
-                PR2 = analyzer->PromptRate_ele_fit(p_T->at(0), etaSC->at(0));
+//                MatrixMethod_weights = analyzer->MatrixMethod_evtWeight_ele_fit(p_T->at(1), etaSC->at(1), passMediumID->at(1), p_T->at(0), etaSC->at(0), passMediumID->at(0));
+//                FR1 = analyzer->FakeRate_ele_fit(p_T->at(1), etaSC->at(1));
+//                FR2 = analyzer->FakeRate_ele_fit(p_T->at(0), etaSC->at(0));
+//                PR1 = analyzer->PromptRate_ele_fit(p_T->at(1), etaSC->at(1));
+//                PR2 = analyzer->PromptRate_ele_fit(p_T->at(0), etaSC->at(0));
+                MatrixMethod_weights = analyzer->MatrixMethod_evtWeight_ele(p_T->at(1), etaSC->at(1), passMediumID->at(1), p_T->at(0), etaSC->at(0), passMediumID->at(0));
+                FR1 = analyzer->FakeRate_ele(p_T->at(1), etaSC->at(1));
+                FR2 = analyzer->FakeRate_ele(p_T->at(0), etaSC->at(0));
+                PR1 = analyzer->PromptRate_ele(p_T->at(1), etaSC->at(1));
+                PR2 = analyzer->PromptRate_ele(p_T->at(0), etaSC->at(0));
             }
 
             // -- Normalization -- //
@@ -498,7 +522,7 @@ void MatrixMethod_mu (Bool_t DEBUG=kFALSE)
 
     // -- For QCD estimation from Fake Rate -- //
     analyzer->SetupFRvalues(Dir+"FakeRate_muon.root");
-    analyzer->SetupPRvalues(Dir+"PromptRate_muon.root", "ratio"/*, 1*/);
+    analyzer->SetupPRvalues(Dir+"PromptRate_muon_alt.root", "ratio", 1);
 
     for (Process_t pr=_DY_10to50; pr<_EndOf_SingleMuon_Normal; pr=next(pr))
     {
@@ -523,14 +547,14 @@ void MatrixMethod_mu (Bool_t DEBUG=kFALSE)
         analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
 
         // -- Creating Histograms -- //
-        TH1D* h_mass_PP = new TH1D("h_mass_PP_"+Mgr.Procname[pr], "h_mass_PP_"+Mgr.Procname[pr], binnum, massbins); h_mass_PP->Sumw2();
-        TH1D* h_mass_PF = new TH1D("h_mass_PF_"+Mgr.Procname[pr], "h_mass_PF_"+Mgr.Procname[pr], binnum, massbins); h_mass_PF->Sumw2();
-        TH1D* h_mass_FP = new TH1D("h_mass_FP_"+Mgr.Procname[pr], "h_mass_FP_"+Mgr.Procname[pr], binnum, massbins); h_mass_FP->Sumw2();
-        TH1D* h_mass_FF = new TH1D("h_mass_FF_"+Mgr.Procname[pr], "h_mass_FF_"+Mgr.Procname[pr], binnum, massbins); h_mass_FF->Sumw2();
-        TH1D* h_mass_PP_TT = new TH1D("h_mass_PP_TT_"+Mgr.Procname[pr], "h_mass_PP_TT_"+Mgr.Procname[pr], binnum, massbins); h_mass_PP_TT->Sumw2();
-        TH1D* h_mass_PF_TT = new TH1D("h_mass_PF_TT_"+Mgr.Procname[pr], "h_mass_PF_TT_"+Mgr.Procname[pr], binnum, massbins); h_mass_PF_TT->Sumw2();
-        TH1D* h_mass_FP_TT = new TH1D("h_mass_FP_TT_"+Mgr.Procname[pr], "h_mass_FP_TT_"+Mgr.Procname[pr], binnum, massbins); h_mass_FP_TT->Sumw2();
-        TH1D* h_mass_FF_TT = new TH1D("h_mass_FF_TT_"+Mgr.Procname[pr], "h_mass_FF_TT_"+Mgr.Procname[pr], binnum, massbins); h_mass_FF_TT->Sumw2();
+        TH1D* h_mass_PP = new TH1D("h_mass_PP_"+Mgr.Procname[pr], "h_mass_PP_"+Mgr.Procname[pr], 48,-2.4,2.4/*binnum, massbins*/); h_mass_PP->Sumw2();
+        TH1D* h_mass_PF = new TH1D("h_mass_PF_"+Mgr.Procname[pr], "h_mass_PF_"+Mgr.Procname[pr], 48,-2.4,2.4/*binnum, massbins*/); h_mass_PF->Sumw2();
+        TH1D* h_mass_FP = new TH1D("h_mass_FP_"+Mgr.Procname[pr], "h_mass_FP_"+Mgr.Procname[pr], 48,-2.4,2.4/*binnum, massbins*/); h_mass_FP->Sumw2();
+        TH1D* h_mass_FF = new TH1D("h_mass_FF_"+Mgr.Procname[pr], "h_mass_FF_"+Mgr.Procname[pr], 48,-2.4,2.4/*binnum, massbins*/); h_mass_FF->Sumw2();
+        TH1D* h_mass_PP_TT = new TH1D("h_mass_PP_TT_"+Mgr.Procname[pr], "h_mass_PP_TT_"+Mgr.Procname[pr], 48,-2.4,2.4/*binnum, massbins*/); h_mass_PP_TT->Sumw2();
+        TH1D* h_mass_PF_TT = new TH1D("h_mass_PF_TT_"+Mgr.Procname[pr], "h_mass_PF_TT_"+Mgr.Procname[pr], 48,-2.4,2.4/*binnum, massbins*/); h_mass_PF_TT->Sumw2();
+        TH1D* h_mass_FP_TT = new TH1D("h_mass_FP_TT_"+Mgr.Procname[pr], "h_mass_FP_TT_"+Mgr.Procname[pr], 48,-2.4,2.4/*binnum, massbins*/); h_mass_FP_TT->Sumw2();
+        TH1D* h_mass_FF_TT = new TH1D("h_mass_FF_TT_"+Mgr.Procname[pr], "h_mass_FF_TT_"+Mgr.Procname[pr], 48,-2.4,2.4/*binnum, massbins*/); h_mass_FF_TT->Sumw2();
 
         TH1D* h_massSS_PP = new TH1D("h_massSS_PP_"+Mgr.Procname[pr], "h_massSS_PP_"+Mgr.Procname[pr], binnum, massbins); h_massSS_PP->Sumw2();
         TH1D* h_massSS_PF = new TH1D("h_massSS_PF_"+Mgr.Procname[pr], "h_massSS_PF_"+Mgr.Procname[pr], binnum, massbins); h_massSS_PF->Sumw2();
@@ -661,6 +685,8 @@ void MatrixMethod_mu (Bool_t DEBUG=kFALSE)
             mu1.SetPtEtaPhiM(p_T->at(0), eta->at(0), phi->at(0), M_Elec);
             mu2.SetPtEtaPhiM(p_T->at(1), eta->at(1), phi->at(1), M_Elec);
             Double_t mass = (mu1+mu2).M();
+            Double_t pTll = (mu1+mu2).Pt();
+            Double_t etall = (mu1+mu2).Eta();
 
             // -- Pileup-Reweighting -- //
             Double_t PUWeight = 1;
@@ -697,19 +723,19 @@ void MatrixMethod_mu (Bool_t DEBUG=kFALSE)
             Double_t FR1=0, FR2=0, PR1=1, PR2=1;
             if (p_T->at(0) >= p_T->at(1))
             {
-                MatrixMethod_weights = analyzer->MatrixMethod_evtWeight(p_T->at(0), eta->at(0), relPFiso->at(0), p_T->at(1), eta->at(1), relPFiso->at(1)/*, 1*/);
+                MatrixMethod_weights = analyzer->MatrixMethod_evtWeight(p_T->at(0), eta->at(0), relPFiso->at(0), p_T->at(1), eta->at(1), relPFiso->at(1), 1);
                 FR1 = analyzer->FakeRate(p_T->at(0), eta->at(0));
                 FR2 = analyzer->FakeRate(p_T->at(1), eta->at(1));
-                PR1 = analyzer->PromptRate(p_T->at(0), eta->at(0)/*, 1*/);
-                PR2 = analyzer->PromptRate(p_T->at(1), eta->at(1)/*, 1*/);
+                PR1 = analyzer->PromptRate(p_T->at(0), eta->at(0), 1);
+                PR2 = analyzer->PromptRate(p_T->at(1), eta->at(1), 1);
             }
             else
             {
-                MatrixMethod_weights = analyzer->MatrixMethod_evtWeight(p_T->at(1), eta->at(1), relPFiso->at(1), p_T->at(0), eta->at(0), relPFiso->at(0)/*, 1*/);
+                MatrixMethod_weights = analyzer->MatrixMethod_evtWeight(p_T->at(1), eta->at(1), relPFiso->at(1), p_T->at(0), eta->at(0), relPFiso->at(0), 1);
                 FR1 = analyzer->FakeRate(p_T->at(1), eta->at(1));
                 FR2 = analyzer->FakeRate(p_T->at(0), eta->at(0));
-                PR1 = analyzer->PromptRate(p_T->at(1), eta->at(1)/*, 1*/);
-                PR2 = analyzer->PromptRate(p_T->at(0), eta->at(0)/*, 1*/);
+                PR1 = analyzer->PromptRate(p_T->at(1), eta->at(1), 1);
+                PR2 = analyzer->PromptRate(p_T->at(0), eta->at(0), 1);
             }
 
             // -- Normalization -- //
@@ -717,14 +743,14 @@ void MatrixMethod_mu (Bool_t DEBUG=kFALSE)
             if (Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
             if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl << endl;
 
-            h_mass_PP->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[0]);
-            h_mass_PF->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[1]);
-            h_mass_FP->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[2]);
-            h_mass_FF->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[3]);
-            h_mass_PP_TT->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[0] * PR1 * PR2);
-            h_mass_PF_TT->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[1] * PR1 * FR2);
-            h_mass_FP_TT->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[2] * FR1 * PR2);
-            h_mass_FF_TT->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[3] * FR1 * FR2);
+            h_mass_PP->Fill(etall/*mass*/, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[0]);
+            h_mass_PF->Fill(etall/*mass*/, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[1]);
+            h_mass_FP->Fill(etall/*mass*/, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[2]);
+            h_mass_FF->Fill(etall/*mass*/, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[3]);
+            h_mass_PP_TT->Fill(etall/*mass*/, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[0] * PR1 * PR2);
+            h_mass_PF_TT->Fill(etall/*mass*/, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[1] * PR1 * FR2);
+            h_mass_FP_TT->Fill(etall/*mass*/, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[2] * FR1 * PR2);
+            h_mass_FF_TT->Fill(etall/*mass*/, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[3] * FR1 * FR2);
             if (charge->at(0) == charge->at(1))
             {
                 h_massSS_PP->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[0]);
@@ -853,7 +879,9 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
     }
     Int_t i_type = 0;
 
-    for (Process_t pr=_DY_10to50; pr<_EndOf_QCDMuEnriched_Normal; pr=next(pr))
+    Process_t pr_first = _DY_10to50, pr_last = _EndOf_QCDMuEnriched_Normal;
+    if (DEBUG) pr_first = _ttbar, pr_last = _ttbar_700to1000;
+    for (Process_t pr=pr_first; pr<pr_last; pr=next(pr))
     {
         Mgr.SetProc(pr);
 
@@ -880,16 +908,36 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
         // -- For PVz reweighting -- //
         analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
 
+        Int_t nMuons;
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
         std::vector<double> *phi = new std::vector<double>;
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
-        std::vector<int> *genMatching = new std::vector<int>;
+        std::vector<double> *TRKiso = new std::vector<double>;
+        Int_t nGenMuons;
+        std::vector<double> *genMu_pT = new std::vector<double>;
+        std::vector<double> *genMu_eta = new std::vector<double>;
+        std::vector<double> *genMu_phi = new std::vector<double>;
+        std::vector<int> *genMu_charge = new std::vector<int>;
+        std::vector<int> *genMu_isPrompt = new std::vector<int>;
+        std::vector<int> *genMu_isPromptFinalState = new std::vector<int>;
+        std::vector<int> *genMu_isTauDecayProduct = new std::vector<int>;
+        std::vector<int> *genMu_isPromptTauDecayProduct = new std::vector<int>;
+        std::vector<int> *genMu_isDirectPromptTauDecayProductFinalState = new std::vector<int>;
+        std::vector<int> *genMu_isHardProcess = new std::vector<int>;
+        std::vector<int> *genMu_isLastCopy = new std::vector<int>;
+        std::vector<int> *genMu_isLastCopyBeforeFSR = new std::vector<int>;
+        std::vector<int> *genMu_isPromptDecayed = new std::vector<int>;
+        std::vector<int> *genMu_isDecayedLeptonHadron = new std::vector<int>;
+        std::vector<int> *genMu_fromHardProcessBeforeFSR = new std::vector<int>;
+        std::vector<int> *genMu_fromHardProcessDecayed = new std::vector<int>;
+        std::vector<int> *genMu_fromHardProcessFinalState = new std::vector<int>;
         Double_t MET_pT, MET_phi;
         Int_t nPU;
         Int_t nVTX;
         Double_t PVz;
+//        Double_t evt_weight;
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
 
@@ -897,40 +945,80 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
         chain->Add(Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
         if (DEBUG == kTRUE) cout << Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
 
+        chain->Add(Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+        if (DEBUG == kTRUE) cout << Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+        chain->SetBranchStatus("nMuons", 1);
         chain->SetBranchStatus("p_T", 1);
         chain->SetBranchStatus("eta", 1);
         chain->SetBranchStatus("phi", 1);
         chain->SetBranchStatus("relPFiso", 1);
-        chain->SetBranchStatus("isGenMatched", 1);
+        chain->SetBranchStatus("TRKiso", 1);
+        chain->SetBranchStatus("MET_pT", 1);
+        chain->SetBranchStatus("MET_phi", 1);
         chain->SetBranchStatus("nPU", 1);
         chain->SetBranchStatus("nVTX", 1);
         chain->SetBranchStatus("PVz", 1);
-        chain->SetBranchStatus("MET_pT", 1);
-        chain->SetBranchStatus("MET_phi", 1);
         chain->SetBranchStatus("gen_weight", 1);
         chain->SetBranchStatus("top_weight", 1);
         chain->SetBranchStatus("prefiring_weight", 1);
         chain->SetBranchStatus("prefiring_weight_up", 1);
         chain->SetBranchStatus("prefiring_weight_down", 1);
+        chain->SetBranchStatus("nGenMuons", 1);
+        chain->SetBranchStatus("genMu_pT", 1);
+        chain->SetBranchStatus("genMu_eta", 1);
+        chain->SetBranchStatus("genMu_phi", 1);
+        chain->SetBranchStatus("genMu_charge", 1);
+        chain->SetBranchStatus("genMu_isPrompt", 1);
+        chain->SetBranchStatus("genMu_isPromptFinalState", 1);
+        chain->SetBranchStatus("genMu_isTauDecayProduct", 1);
+        chain->SetBranchStatus("genMu_isPromptTauDecayProduct", 1);
+        chain->SetBranchStatus("genMu_isDirectPromptTauDecayProductFinalState", 1);
+        chain->SetBranchStatus("genMu_isHardProcess", 1);
+        chain->SetBranchStatus("genMu_isLastCopy", 1);
+        chain->SetBranchStatus("genMu_isLastCopyBeforeFSR", 1);
+        chain->SetBranchStatus("genMu_isPromptDecayed", 1);
+        chain->SetBranchStatus("genMu_isDecayedLeptonHadron", 1);
+        chain->SetBranchStatus("genMu_fromHardProcessBeforeFSR", 1);
+        chain->SetBranchStatus("genMu_fromHardProcessDecayed", 1);
+        chain->SetBranchStatus("genMu_fromHardProcessFinalState", 1);
 
+        chain->SetBranchAddress("nMuons", &nMuons);
         chain->SetBranchAddress("p_T", &p_T);
         chain->SetBranchAddress("eta", &eta);
         chain->SetBranchAddress("phi", &phi);
         chain->SetBranchAddress("charge", &charge);
         chain->SetBranchAddress("relPFiso", &relPFiso);
-        chain->SetBranchAddress("isGenMatched", &genMatching);
+        chain->SetBranchAddress("TRKiso", &TRKiso);
+        chain->SetBranchAddress("MET_pT", &MET_pT);
+        chain->SetBranchAddress("MET_phi", &MET_phi);
         chain->SetBranchAddress("nPU", &nPU);
         chain->SetBranchAddress("nVTX", &nVTX);
         chain->SetBranchAddress("PVz", &PVz);
-        chain->SetBranchAddress("MET_pT", &MET_pT);
-        chain->SetBranchAddress("MET_phi", &MET_phi);
         chain->SetBranchAddress("gen_weight", &gen_weight);
         chain->SetBranchAddress("top_weight", &top_weight);
         chain->SetBranchAddress("prefiring_weight", &prefiring_weight);
         chain->SetBranchAddress("prefiring_weight_up", &prefiring_weight_up);
         chain->SetBranchAddress("prefiring_weight_down", &prefiring_weight_down);
+        chain->SetBranchAddress("genMu_pT", &genMu_pT);
+        chain->SetBranchAddress("genMu_eta", &genMu_eta);
+        chain->SetBranchAddress("genMu_phi", &genMu_phi);
+        chain->SetBranchAddress("genMu_charge", &genMu_charge);
+        chain->SetBranchAddress("genMu_isPrompt", &genMu_isPrompt);
+        chain->SetBranchAddress("genMu_isPromptFinalState", &genMu_isPromptFinalState);
+        chain->SetBranchAddress("genMu_isTauDecayProduct", &genMu_isTauDecayProduct);
+        chain->SetBranchAddress("genMu_isPromptTauDecayProduct", &genMu_isPromptTauDecayProduct);
+        chain->SetBranchAddress("genMu_isDirectPromptTauDecayProductFinalState", &genMu_isDirectPromptTauDecayProductFinalState);
+        chain->SetBranchAddress("genMu_isHardProcess", &genMu_isHardProcess);
+        chain->SetBranchAddress("genMu_isLastCopy", &genMu_isLastCopy);
+        chain->SetBranchAddress("genMu_isLastCopyBeforeFSR", &genMu_isLastCopyBeforeFSR);
+        chain->SetBranchAddress("genMu_isPromptDecayed", &genMu_isPromptDecayed);
+        chain->SetBranchAddress("genMu_isDecayedLeptonHadron", &genMu_isDecayedLeptonHadron);
+        chain->SetBranchAddress("genMu_fromHardProcessBeforeFSR", &genMu_fromHardProcessBeforeFSR);
+        chain->SetBranchAddress("genMu_fromHardProcessDecayed", &genMu_fromHardProcessDecayed);
+        chain->SetBranchAddress("genMu_fromHardProcessFinalState", &genMu_fromHardProcessFinalState);
 
         Int_t NEvents = chain->GetEntries();
+        if (DEBUG) NEvents = 1000;
         cout << "\t[Sum of weights: " << Mgr.Wsum[0] << "]" << endl;
         cout << "\t[Number of events: " << NEvents << "]" << endl;
 
@@ -942,7 +1030,6 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
 
         for(Int_t i=0; i<NEvents; i++)
         {
-//            if (pr == _ttbar) continue;
             chain->GetEntry(i);
             for (UInt_t mu=0; mu<relPFiso->size(); mu++)
             {
@@ -960,27 +1047,16 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
             if (charge->at(0) == charge->at(1)) {nSameSign++; continue;}
             nMu += 2;
 
+            if (DEBUG)
+            {
+                if (nPass >= 10) break;
+                cout << "Evt " << i << endl;
+            }
+
             if (p_T->at(0) != p_T->at(0)) cout << p_T->at(0) << " " << eta->at(0) << " " << phi->at(0) << " " << charge->at(0) << " " << relPFiso->at(0) << endl;
             if (p_T->at(1) != p_T->at(1)) cout << p_T->at(1) << " " << eta->at(1) << " " << phi->at(1) << " " << charge->at(1) << " " << relPFiso->at(1) << endl;
 
-            nPass++;
-
-            if (DEBUG == kTRUE)
-            {
-                if (nPass >= 5) break;
-                cout << "Evt " << i << endl;
-                cout << "nMuons = " << p_T->size() << endl;
-                cout << "p_T[0] = " << p_T->at(0);
-                cout << "\teta[0] = " << eta->at(0);
-                cout << "\tphi[0] = " << phi->at(0) << endl;
-                cout << "\trelPFiso[0] = " << relPFiso->at(0) << endl;
-                cout << "p_T[1] = " << p_T->at(1);
-                cout << "\teta[1] = " << eta->at(1);
-                cout << "\tphi[1] = " << phi->at(1) << endl;
-                cout << "\trelPFiso[1] = " << relPFiso->at(1) << endl;
-                cout << "\nPVz = " << PVz << endl;
-            }
-
+            Int_t i_lead = (p_T->at(0) >= p_T->at(1)) ? 0 : 1;
             TLorentzVector mu1, mu2;
             mu1.SetPtEtaPhiM(p_T->at(0), eta->at(0), phi->at(0), M_Elec);
             mu2.SetPtEtaPhiM(p_T->at(1), eta->at(1), phi->at(1), M_Elec);
@@ -1014,13 +1090,119 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
             if (Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
             if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl << endl;
 
+            std::vector<int> matches_lead;
+            std::vector<int> matches_sub;
+            Double_t dRmin_lead = 9999;
+            Double_t dRmin_sub = 9999;
+            Double_t rel_dpTmin_lead = 9999;
+            Double_t rel_dpTmin_sub = 9999;
+            Int_t i_bestmatch_lead = -1;
+            Int_t i_bestmatch_sub = -1;
+            Int_t veto_lead = 0; // used to find fake leptons
+            Int_t veto_sub = 0; // used to find fake leptons
+            if (DEBUG) cout << "  nGenMuons = " << genMu_pT->size() << endl;
+            for (UInt_t i_gen=0; i_gen<genMu_pT->size(); i_gen++)
+            {
+                if (DEBUG)
+                {
+                    cout << "   GenMuon" << i_gen << ":  p_T=" << genMu_pT->at(i_gen);
+                    cout << "  eta=" << genMu_eta->at(i_gen) << "  phi=" << genMu_phi->at(i_gen) << endl;
+                    cout << "    isPrompt=" << genMu_isPrompt->at(i_gen) << "  isLastCopy=" << genMu_isLastCopy->at(i_gen);
+                    cout << "  iLCbeforeFSR=" << genMu_isLastCopyBeforeFSR->at(i_gen) << endl;
+                }
+
+                Double_t dEta_lead = eta->at(i_lead) - genMu_eta->at(i_gen);
+                Double_t dPhi_lead = phi->at(i_lead) - genMu_phi->at(i_gen);
+                Double_t dR_lead = sqrt(dEta_lead*dEta_lead + dPhi_lead*dPhi_lead);
+                Double_t rel_dpT_lead = fabs(p_T->at(i_lead) - genMu_pT->at(i_gen)) / p_T->at(i_lead);
+
+                Double_t dEta_sub = eta->at(1-i_lead) - genMu_eta->at(i_gen);
+                Double_t dPhi_sub = phi->at(1-i_lead) - genMu_phi->at(i_gen);
+                Double_t dR_sub = sqrt(dEta_sub*dEta_sub + dPhi_sub*dPhi_sub);
+                Double_t rel_dpT_sub = fabs(p_T->at(1-i_lead) - genMu_pT->at(i_gen)) / p_T->at(1-i_lead);
+                if (dR_lead < 0.3)
+                {
+                    if (genMu_isPrompt->at(i_gen) || genMu_isPromptFinalState->at(i_gen) || genMu_isTauDecayProduct->at(i_gen) ||
+                        genMu_isPromptTauDecayProduct->at(i_gen) || genMu_isDirectPromptTauDecayProductFinalState->at(i_gen) ||
+                        genMu_isHardProcess->at(i_gen) || genMu_fromHardProcessBeforeFSR->at(i_gen) || genMu_fromHardProcessFinalState->at(i_gen))
+                        veto_lead = 1;
+                    if (rel_dpT_lead < 0.5)
+                    {
+                        matches_lead.push_back(i_gen);
+                        if (genMu_isLastCopy->at(i_gen) && (genMu_isPrompt->at(i_gen) || genMu_isPromptFinalState->at(i_gen)))
+                        {
+                            if (dR_lead < dRmin_lead || (dR_lead == dRmin_lead && rel_dpT_lead <= rel_dpTmin_lead))
+                            {
+                                dRmin_lead = dR_lead;
+                                rel_dpTmin_lead = rel_dpT_lead;
+                                i_bestmatch_lead = i_gen;
+                            }
+                        }
+                    }
+                }
+                if (dR_sub < 0.3)
+                {
+                    if (genMu_isPrompt->at(i_gen) || genMu_isPromptFinalState->at(i_gen) || genMu_isTauDecayProduct->at(i_gen) ||
+                        genMu_isPromptTauDecayProduct->at(i_gen) || genMu_isDirectPromptTauDecayProductFinalState->at(i_gen) ||
+                        genMu_isHardProcess->at(i_gen) || genMu_fromHardProcessBeforeFSR->at(i_gen) || genMu_fromHardProcessFinalState->at(i_gen))
+                        veto_sub = 1;
+                    if (rel_dpT_sub < 0.5)
+                    {
+                        matches_sub.push_back(i_gen);
+                        if (genMu_isLastCopy->at(i_gen) && (genMu_isPrompt->at(i_gen) || genMu_isPromptFinalState->at(i_gen)))
+                        {
+                            if (dR_sub < dRmin_sub || (dR_sub == dRmin_sub && rel_dpT_sub <= rel_dpTmin_sub))
+                            {
+                                dRmin_sub = dR_sub;
+                                rel_dpTmin_sub = rel_dpT_sub;
+                                i_bestmatch_sub = i_gen;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (DEBUG)
+            {
+                cout << "\n  nMuons = " << p_T->size() << endl;
+                cout << "   p_T[0] = " << p_T->at(0);
+                cout << "\teta[0] = " << eta->at(0);
+                cout << "\tphi[0] = " << phi->at(0) << endl;
+                cout << "\trelPFiso[0] = " << relPFiso->at(0);
+                Int_t printval = (i_lead == 0)?i_bestmatch_lead:i_bestmatch_sub;
+                cout << "\tMatched to " << printval;
+                if ((i_lead == 0 && veto_lead) || (i_lead != 0 && veto_sub))
+                    cout << "\tVETOED";
+                cout << endl;
+                cout << "   p_T[1] = " << p_T->at(1);
+                cout << "\teta[1] = " << eta->at(1);
+                cout << "\tphi[1] = " << phi->at(1) << endl;
+                cout << "\trelPFiso[1] = " << relPFiso->at(1);
+                printval = (i_lead == 1)?i_bestmatch_lead:i_bestmatch_sub;
+                cout << "\tMatched to " << printval;
+                if ((i_lead == 1 && veto_lead) || (i_lead != 1 && veto_sub))
+                    cout << "\tVETOED";
+                cout << endl;
+            }
+
+            if ((i_bestmatch_lead < 0 && veto_lead) || (i_bestmatch_sub < 0 && veto_sub)) continue;
+            nPass++;
+
+            if (i_bestmatch_lead >= 0 && i_bestmatch_sub >= 0)
+                h_mass_PP_true[i_type]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+            if (i_bestmatch_lead >= 0 && (i_bestmatch_sub < 0 && !veto_sub))
+                h_mass_PF_true[i_type]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+            if ((i_bestmatch_lead < 0 && !veto_lead) && i_bestmatch_sub >= 0)
+                h_mass_FP_true[i_type]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+            if ((i_bestmatch_lead < 0 && !veto_lead) && (i_bestmatch_sub < 0 && !veto_sub))
+                h_mass_FF_true[i_type]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+
             // -- FR WEIGHTS -- //
             std::vector<double> MMweights(4, 1.0);
             Double_t FR1=0, FR2=0, PR1=1, PR2=1;
-            Int_t i_lead = (p_T->at(0) >= p_T->at(1)) ? 0 : 1;
 
             MMweights = analyzer->MatrixMethod_MC(p_T->at(i_lead), eta->at(i_lead), relPFiso->at(i_lead),
-                                                  p_T->at(1-i_lead), eta->at(1-i_lead), relPFiso->at(1-i_lead), "ttbar", "ttbar");
+                                                  p_T->at(1-i_lead), eta->at(1-i_lead), relPFiso->at(1-i_lead), "DY", "QCD");
             FR1 = analyzer->FakeRate_MC(p_T->at(i_lead), eta->at(i_lead), "QCD");
             FR2 = analyzer->FakeRate_MC(p_T->at(1-i_lead), eta->at(1-i_lead), "QCD");
             PR1 = analyzer->PromptRate_MC(p_T->at(i_lead), eta->at(i_lead), "DY");
@@ -1046,22 +1228,6 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
                 h_mass_NT[i_type]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
             else if(relPFiso->at(i_lead) >= 0.15 && relPFiso->at(1-i_lead) >= 0.15)
                 h_mass_NN[i_type]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-
-            Int_t isGenMatched[2];
-            if (genMatching->at(i_lead) < 1000 && genMatching->at(i_lead) > 0) isGenMatched[0] = 1;
-            else isGenMatched[0] = 0;
-            if (genMatching->at(1-i_lead) < 1000 && genMatching->at(1-i_lead) > 0) isGenMatched[1] = 1;
-            else isGenMatched[1] = 0;
-
-            if (isGenMatched[0] && isGenMatched[1])
-                h_mass_PP_true[i_type]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-            if (isGenMatched[0] && !isGenMatched[1])
-                h_mass_PF_true[i_type]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-            if (!isGenMatched[0] && isGenMatched[1])
-                h_mass_FP_true[i_type]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-            if (!isGenMatched[0] && !isGenMatched[1])
-                h_mass_FF_true[i_type]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
-
 
         }// End of event iteration
 
@@ -1116,3 +1282,392 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
     cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
 
 } // End of MatrixMethod_mu_MC()
+
+
+void MatrixMethod_singleMu_MC (Bool_t DEBUG=kFALSE)
+{
+    TTimeStamp ts_start;
+    cout << "[Start Time(local time): " << ts_start.AsString("l") << "]" << endl;
+    TStopwatch totaltime;
+    totaltime.Start();
+
+    FileMgr Mgr;
+
+    TFile *f;
+    TString Dir = "/media/sf_DATA/FR/Muon/";
+    TString debug = "";
+    if (DEBUG) debug = "_DEBUG";
+
+    // -- Output ROOTFile -- //
+    TString outName = Dir+"MatrixMethod_singleMu_MC"+debug+".root";
+    f = new TFile(outName, "RECREATE");
+
+    DYAnalyzer *analyzer = new DYAnalyzer("Mu50");
+
+    // -- For efficiency SF -- //
+    analyzer->SetupEfficiencyScaleFactor_BtoF();
+    analyzer->SetupEfficiencyScaleFactor_GtoH();
+
+    // -- For QCD estimation from Fake Rate -- //
+    analyzer->SetupFRandPRvalues_MC();
+
+    // Histogram containers
+    TH1D* h_pT_P[4];
+    TH1D* h_pT_F[4];
+    TH1D* h_pT_T[4];
+    TH1D* h_pT_N[4];
+    TH1D* h_pT_P_true[4];
+    TH1D* h_pT_F_true[4];
+
+    TString names[4] = {"DY", "ttbar", "WJets", "QCD"};
+    // -- Creating Histograms -- //
+    for (Int_t i_type=0; i_type<4; i_type++)
+    {
+        h_pT_P[i_type] = new TH1D("h_pT_P_"+names[i_type], "", nPtBinEndcap, analyzer->ptbin_endcap);
+        h_pT_F[i_type] = new TH1D("h_pT_F_"+names[i_type], "", nPtBinEndcap, analyzer->ptbin_endcap);
+        h_pT_T[i_type] = new TH1D("h_pT_T_"+names[i_type], "", nPtBinEndcap, analyzer->ptbin_endcap);
+        h_pT_N[i_type] = new TH1D("h_pT_N_"+names[i_type], "", nPtBinEndcap, analyzer->ptbin_endcap);
+        h_pT_P_true[i_type] = new TH1D("h_pT_P_true_"+names[i_type], "", nPtBinEndcap, analyzer->ptbin_endcap);
+        h_pT_F_true[i_type] = new TH1D("h_pT_F_true_"+names[i_type], "", nPtBinEndcap, analyzer->ptbin_endcap);
+    }
+    Int_t i_type = 0;
+
+    Process_t pr_first = _DY_10to50, pr_last = _EndOf_QCDMuEnriched_Normal;
+    if (DEBUG) pr_first = _ttbar, pr_last = _ttbar_700to1000;
+    for (Process_t pr=pr_first; pr<pr_last; pr=next(pr))
+    {
+        Mgr.SetProc(pr);
+
+        if (pr < _EndOf_DY_Normal) i_type = 0;
+        else if (pr < _EndOf_ttbar_Normal) i_type = 1;
+        else if (pr < _EndOf_WJets_Normal) i_type = 2;
+        else if (pr < _EndOf_QCDMuEnriched_Normal) i_type = 3;
+
+        cout << "===========================================================" << endl;
+        cout << "Process: " << Mgr.Procname[Mgr.CurrentProc] << endl;
+        cout << "Xsec: " << Mgr.Xsec[0] << endl;
+        cout << "Wsum: " << Mgr.Wsum[0] << endl;
+        cout << "Type: " << Mgr.Type << endl;
+        cout << "Directory: " << Dir << endl;
+
+        TStopwatch totaltime;
+        totaltime.Start();
+        Int_t nPass = 0;
+        Double_t avgFRweight = 0;
+
+        // -- For PU re-weighting -- //
+        analyzer->SetupPileUpReWeighting_80X(Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root");
+
+        // -- For PVz reweighting -- //
+        analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
+
+        Int_t nMuons;
+        std::vector<double> *p_T = new std::vector<double>;
+        std::vector<double> *eta = new std::vector<double>;
+        std::vector<double> *phi = new std::vector<double>;
+        std::vector<int> *charge = new std::vector<int>;
+        std::vector<double> *relPFiso = new std::vector<double>;
+        std::vector<double> *TRKiso = new std::vector<double>;
+        Int_t nGenMuons;
+        std::vector<double> *genMu_pT = new std::vector<double>;
+        std::vector<double> *genMu_eta = new std::vector<double>;
+        std::vector<double> *genMu_phi = new std::vector<double>;
+        std::vector<int> *genMu_charge = new std::vector<int>;
+        std::vector<int> *genMu_isPrompt = new std::vector<int>;
+        std::vector<int> *genMu_isPromptFinalState = new std::vector<int>;
+        std::vector<int> *genMu_isTauDecayProduct = new std::vector<int>;
+        std::vector<int> *genMu_isPromptTauDecayProduct = new std::vector<int>;
+        std::vector<int> *genMu_isDirectPromptTauDecayProductFinalState = new std::vector<int>;
+        std::vector<int> *genMu_isHardProcess = new std::vector<int>;
+        std::vector<int> *genMu_isLastCopy = new std::vector<int>;
+        std::vector<int> *genMu_isLastCopyBeforeFSR = new std::vector<int>;
+        std::vector<int> *genMu_isPromptDecayed = new std::vector<int>;
+        std::vector<int> *genMu_isDecayedLeptonHadron = new std::vector<int>;
+        std::vector<int> *genMu_fromHardProcessBeforeFSR = new std::vector<int>;
+        std::vector<int> *genMu_fromHardProcessDecayed = new std::vector<int>;
+        std::vector<int> *genMu_fromHardProcessFinalState = new std::vector<int>;
+        Double_t MET_pT, MET_phi;
+        Int_t nPU;
+        Int_t nVTX;
+        Double_t PVz;
+//        Double_t evt_weight;
+        Double_t gen_weight, top_weight;
+        Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
+
+        TChain *chain = new TChain("FRTree");
+        chain->Add(Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+        if (DEBUG == kTRUE) cout << Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+
+        chain->Add(Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+        if (DEBUG == kTRUE) cout << Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+        chain->SetBranchStatus("nMuons", 1);
+        chain->SetBranchStatus("p_T", 1);
+        chain->SetBranchStatus("eta", 1);
+        chain->SetBranchStatus("phi", 1);
+        chain->SetBranchStatus("relPFiso", 1);
+        chain->SetBranchStatus("TRKiso", 1);
+        chain->SetBranchStatus("MET_pT", 1);
+        chain->SetBranchStatus("MET_phi", 1);
+        chain->SetBranchStatus("nPU", 1);
+        chain->SetBranchStatus("nVTX", 1);
+        chain->SetBranchStatus("PVz", 1);
+        chain->SetBranchStatus("gen_weight", 1);
+        chain->SetBranchStatus("top_weight", 1);
+        chain->SetBranchStatus("prefiring_weight", 1);
+        chain->SetBranchStatus("prefiring_weight_up", 1);
+        chain->SetBranchStatus("prefiring_weight_down", 1);
+        chain->SetBranchStatus("nGenMuons", 1);
+        chain->SetBranchStatus("genMu_pT", 1);
+        chain->SetBranchStatus("genMu_eta", 1);
+        chain->SetBranchStatus("genMu_phi", 1);
+        chain->SetBranchStatus("genMu_charge", 1);
+        chain->SetBranchStatus("genMu_isPrompt", 1);
+        chain->SetBranchStatus("genMu_isPromptFinalState", 1);
+        chain->SetBranchStatus("genMu_isTauDecayProduct", 1);
+        chain->SetBranchStatus("genMu_isPromptTauDecayProduct", 1);
+        chain->SetBranchStatus("genMu_isDirectPromptTauDecayProductFinalState", 1);
+        chain->SetBranchStatus("genMu_isHardProcess", 1);
+        chain->SetBranchStatus("genMu_isLastCopy", 1);
+        chain->SetBranchStatus("genMu_isLastCopyBeforeFSR", 1);
+        chain->SetBranchStatus("genMu_isPromptDecayed", 1);
+        chain->SetBranchStatus("genMu_isDecayedLeptonHadron", 1);
+        chain->SetBranchStatus("genMu_fromHardProcessBeforeFSR", 1);
+        chain->SetBranchStatus("genMu_fromHardProcessDecayed", 1);
+        chain->SetBranchStatus("genMu_fromHardProcessFinalState", 1);
+
+        chain->SetBranchAddress("nMuons", &nMuons);
+        chain->SetBranchAddress("p_T", &p_T);
+        chain->SetBranchAddress("eta", &eta);
+        chain->SetBranchAddress("phi", &phi);
+        chain->SetBranchAddress("charge", &charge);
+        chain->SetBranchAddress("relPFiso", &relPFiso);
+        chain->SetBranchAddress("TRKiso", &TRKiso);
+        chain->SetBranchAddress("MET_pT", &MET_pT);
+        chain->SetBranchAddress("MET_phi", &MET_phi);
+        chain->SetBranchAddress("nPU", &nPU);
+        chain->SetBranchAddress("nVTX", &nVTX);
+        chain->SetBranchAddress("PVz", &PVz);
+        chain->SetBranchAddress("gen_weight", &gen_weight);
+        chain->SetBranchAddress("top_weight", &top_weight);
+        chain->SetBranchAddress("prefiring_weight", &prefiring_weight);
+        chain->SetBranchAddress("prefiring_weight_up", &prefiring_weight_up);
+        chain->SetBranchAddress("prefiring_weight_down", &prefiring_weight_down);
+        chain->SetBranchAddress("nGenMuons", &nGenMuons);
+        chain->SetBranchAddress("genMu_pT", &genMu_pT);
+        chain->SetBranchAddress("genMu_eta", &genMu_eta);
+        chain->SetBranchAddress("genMu_phi", &genMu_phi);
+        chain->SetBranchAddress("genMu_charge", &genMu_charge);
+        chain->SetBranchAddress("genMu_isPrompt", &genMu_isPrompt);
+        chain->SetBranchAddress("genMu_isPromptFinalState", &genMu_isPromptFinalState);
+        chain->SetBranchAddress("genMu_isTauDecayProduct", &genMu_isTauDecayProduct);
+        chain->SetBranchAddress("genMu_isPromptTauDecayProduct", &genMu_isPromptTauDecayProduct);
+        chain->SetBranchAddress("genMu_isDirectPromptTauDecayProductFinalState", &genMu_isDirectPromptTauDecayProductFinalState);
+        chain->SetBranchAddress("genMu_isHardProcess", &genMu_isHardProcess);
+        chain->SetBranchAddress("genMu_isLastCopy", &genMu_isLastCopy);
+        chain->SetBranchAddress("genMu_isLastCopyBeforeFSR", &genMu_isLastCopyBeforeFSR);
+        chain->SetBranchAddress("genMu_isPromptDecayed", &genMu_isPromptDecayed);
+        chain->SetBranchAddress("genMu_isDecayedLeptonHadron", &genMu_isDecayedLeptonHadron);
+        chain->SetBranchAddress("genMu_fromHardProcessBeforeFSR", &genMu_fromHardProcessBeforeFSR);
+        chain->SetBranchAddress("genMu_fromHardProcessDecayed", &genMu_fromHardProcessDecayed);
+        chain->SetBranchAddress("genMu_fromHardProcessFinalState", &genMu_fromHardProcessFinalState);
+
+        Int_t NEvents = chain->GetEntries();
+        if (DEBUG) NEvents = 1000;
+        cout << "\t[Sum of weights: " << Mgr.Wsum[0] << "]" << endl;
+        cout << "\t[Number of events: " << NEvents << "]" << endl;
+
+        UInt_t nPassMu=0, nFailMu=0;
+        UInt_t nSameSign=0;
+        UInt_t nMu=0;
+
+        myProgressBar_t bar(NEvents);
+
+        for(Int_t i=0; i<NEvents; i++)
+        {
+            chain->GetEntry(i);
+            if (!DEBUG) bar.Draw(i);
+            else
+            {
+                cout << "Evt " << i << endl;
+                cout << "  mMuons=" << p_T->size() << endl;
+            }
+
+            // -- Pileup-Reweighting -- //
+            Double_t PUWeight = 1;
+            if (Mgr.isMC == kTRUE) PUWeight = analyzer->PileUpWeightValue_80X(nPU);
+            if (DEBUG == kTRUE) cout << "PU weight " << PUWeight << endl;
+
+            // -- efficiency weights -- //
+            Double_t effweight = 1;
+
+            // -- PVz weights -- //
+            Double_t PVzWeight = 1;
+            if (Mgr.isMC == kTRUE) PVzWeight = analyzer->PVzWeightValue(PVz);
+
+            // -- L1 prefiring weights -- //
+            Double_t L1weight = 1;
+            if (Mgr.isMC == kTRUE) L1weight = prefiring_weight;
+
+            // -- Top pT weights -- //
+            Double_t TopPtWeight = 1;
+            if (Mgr.isMC == kTRUE && Mgr.Tag[0].Contains("ttbar")) TopPtWeight = top_weight;
+
+            if (DEBUG == kTRUE) cout << "Eff weight: " << effweight << "\tPVz weight: " << PVzWeight << "\nL1 weight:" << L1weight <<
+                                        "\tTop pT weight: " << TopPtWeight << endl;
+
+            // -- Normalization -- //
+            Double_t TotWeight = 1;
+            if (Mgr.isMC == kTRUE) TotWeight = (Lumi * Mgr.Xsec[0] / Mgr.Wsum[0]) * gen_weight;
+            if (DEBUG == kTRUE) cout << "Total weight " << TotWeight << endl << endl;
+
+            for (UInt_t i_mu=0; i_mu<relPFiso->size(); i_mu++)
+            {
+                if (relPFiso->at(i_mu) < 0.15) nPassMu++;
+                else nFailMu++;
+
+                //Preselection
+                if (p_T->at(i_mu) < 52 || fabs(eta->at(i_mu)) >= 2.4) continue;
+                if (p_T->at(i_mu) != p_T->at(i_mu)) cout << p_T->at(i_mu) << " " << eta->at(i_mu) << " " << phi->at(i_mu) <<
+                                                            " " << charge->at(i_mu) << " " << relPFiso->at(i_mu) << endl;
+
+                std::vector<int> matches;
+                Double_t dRmin = 9999;
+                Double_t rel_dpTmin = 9999;
+                Int_t i_bestmatch = -1;
+                Int_t veto = 0; // used to find fake leptons
+                for (UInt_t i_gen=0; i_gen<genMu_pT->size(); i_gen++)
+                {
+                    Double_t dEta = eta->at(i_mu) - genMu_eta->at(i_gen);
+                    Double_t dPhi = phi->at(i_mu) - genMu_phi->at(i_gen);
+                    Double_t dR = sqrt(dEta*dEta + dPhi*dPhi);
+                    Double_t rel_dpT = fabs(p_T->at(i_mu) - genMu_pT->at(i_gen)) / p_T->at(i_mu);
+                    if (dR < 0.3)
+                    {
+                        if (genMu_isPrompt->at(i_gen) || genMu_isPromptFinalState->at(i_gen) || genMu_isTauDecayProduct->at(i_gen) ||
+                            genMu_isPromptTauDecayProduct->at(i_gen) || genMu_isDirectPromptTauDecayProductFinalState->at(i_gen) ||
+                            genMu_isHardProcess->at(i_gen) || genMu_fromHardProcessBeforeFSR->at(i_gen) || genMu_fromHardProcessFinalState->at(i_gen))
+                            veto = 1;
+                        if (rel_dpT < 0.5)
+                        {
+                            matches.push_back(i_gen);
+                            if (genMu_isLastCopy->at(i_gen) && (genMu_isPrompt->at(i_gen) || genMu_isPromptFinalState->at(i_gen)))
+                            {
+                                if (dR < dRmin || (dR == dRmin && rel_dpT <= rel_dpTmin))
+                                {
+                                    dRmin = dR;
+                                    rel_dpTmin = rel_dpT;
+                                    i_bestmatch = i_gen;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Double_t FR = analyzer->FakeRate_MC(p_T->at(i_mu), eta->at(i_mu), "ttbar");
+                Double_t PR = analyzer->PromptRate_MC(p_T->at(i_mu), eta->at(i_mu), "ttbar");
+
+                if (i_bestmatch >= 0)
+                {
+                    if (DEBUG)
+                    {
+                        cout << "  isGenMatched = 1\n  Matched with " << matches.size() <<" gen leptons. Best match = " << i_bestmatch << endl;
+                        for (UInt_t i_match=0; i_match<matches.size(); i_match++)
+                        {
+                            cout << "    match" << i_match << ":  pT=" << genMu_pT->at(matches[i_match]);
+                            cout << "  eta=" << genMu_eta->at(matches[i_match]) << "  phi=" << genMu_phi->at(matches[i_match]);
+                            cout << "  charge=" << genMu_charge->at(matches[i_match]) << endl;
+                            cout << "     isPrompt = " << genMu_isPrompt->at(matches[i_match]) << endl;
+                            cout << "     isPromptFinalState = " << genMu_isPromptFinalState->at(matches[i_match]) << endl;
+                            cout << "     isTauDecayProduct = " << genMu_isTauDecayProduct->at(matches[i_match]) << endl;
+                            cout << "     isPromptTauDecayProduct = " << genMu_isPromptTauDecayProduct->at(matches[i_match]) << endl;
+                            cout << "     isDirectPromptTauDecayProductFinalState = " << genMu_isDirectPromptTauDecayProductFinalState->at(matches[i_match]) << endl;
+                            cout << "     isHardProcess = " << genMu_isHardProcess->at(matches[i_match]) << endl;
+                            cout << "     isLastCopy = " << genMu_isLastCopy->at(matches[i_match]) << endl;
+                            cout << "     isLastCopyBeforeFSR = " << genMu_isLastCopyBeforeFSR->at(matches[i_match]) << endl;
+                            cout << "     isPromptDecayed = " << genMu_isPromptDecayed->at(matches[i_match]) << endl;
+                            cout << "     isDecayedLeptonHadron = " << genMu_isDecayedLeptonHadron->at(matches[i_match]) << endl;
+                            cout << "     fromHardProcessBeforeFSR = " << genMu_fromHardProcessBeforeFSR->at(matches[i_match]) << endl;
+                            cout << "     fromHardProcessDecayed = " << genMu_fromHardProcessDecayed->at(matches[i_match]) << endl;
+                            cout << "     fromHardProcessFinalState = " << genMu_fromHardProcessFinalState->at(matches[i_match]) << endl;
+                        }
+                    }
+                    h_pT_P_true[i_type]->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+
+                }
+                else if (!veto)
+                {
+                    h_pT_F_true[i_type]->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+
+                    if (DEBUG) cout << "  isGenMatched = 0" << endl;
+                }
+                else
+                {
+                    if (DEBUG) cout << " isGenMatched = -1 (not matched but also vetoed as fake)" << endl;
+                    continue;
+                }
+
+                if (relPFiso->at(i_mu) < 0.15)
+                {
+                    Double_t MM_weight1 = (1-FR) / (PR - FR); // contribution to prompt events
+                    Double_t MM_weight2 = (PR-1) / (PR - FR); // contribution to fake events
+                    h_pT_P[i_type]->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MM_weight1);
+                    h_pT_F[i_type]->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MM_weight2);
+                    h_pT_T[i_type]->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                }
+                else
+                {
+                    Double_t MM_weight1 = -FR / (PR - FR); // contribution to prompt events
+                    Double_t MM_weight2 =  PR / (PR - FR); // contribution to fake events
+                    h_pT_P[i_type]->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MM_weight1);
+                    h_pT_F[i_type]->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MM_weight2);
+                    h_pT_N[i_type]->Fill(p_T->at(i_mu), TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                }
+
+            }
+
+        }// End of event iteration
+
+        if(Mgr.isMC == kTRUE)
+        {
+            cout << "\t *** Cross section: " << Mgr.Xsec[0] << endl;
+            cout << "\t *** Sum of weights: " << Mgr.Wsum[0] << endl;
+            printf("\t *** Normalization factor: %.8f\n\n", Lumi*Mgr.Xsec[0]/Mgr.Wsum[0]);
+        }
+        cout << "\t # passed muons: " << nPassMu << endl;
+        cout << "\t # failed muons: " << nFailMu << endl;
+
+        f->cd();
+        cout << "\tWriting into file...";
+
+        cout << " Finished.\n" << endl;
+
+        if (DEBUG == kTRUE && pr == _DY_10to50) break;
+        if (pr == _DY_2000to3000) pr = _EndOf_DYTauTau_Normal; // next -- ttbar
+        if (pr == _ttbar_1000toInf) pr = _EndOf_VVnST_Normal; // next -- WJets
+
+        cout << "nSameSign = " << nSameSign << endl;
+        cout << "===========================================================\n" << endl;
+    } // End of pr iteration
+
+    for (Int_t i=0; i<4; i++)
+    {
+        h_pT_P[i]->Write();
+        h_pT_F[i]->Write();
+        h_pT_T[i]->Write();
+        h_pT_N[i]->Write();
+        h_pT_P_true[i]->Write();
+        h_pT_F_true[i]->Write();
+    }
+
+    f->Close();
+    if (!f->IsOpen()) cout << "File " << outName << " has been closed successfully.\n" << endl;
+    else cout << "FILE " << outName << " COULD NOT BE CLOSED!\n" << endl;
+
+    Double_t TotalRunTime = totaltime.CpuTime();
+    cout << "Total RunTime: " << TotalRunTime << " seconds" << endl;
+
+    TTimeStamp ts_end;
+    cout << "[End Time(local time): " << ts_end.AsString("l") << "]" << endl;
+
+} // End of MatrixMethod_singleMu_MC()
+

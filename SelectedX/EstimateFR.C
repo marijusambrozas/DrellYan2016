@@ -32,6 +32,7 @@ void E_EstFR_alt();
 void E_EstFR_alt2();
 void Mu_EstFR (Int_t type);
 void E_EstPR(); // PROMPT RATE
+void E_EstPR_alt(); // PROMPT RATE
 void Mu_EstPR();
 void Mu_EstPR_alt();
 void Mu_EstFRandPR_MC ();
@@ -59,8 +60,16 @@ void EstimateFR (TString WhichX = "", Int_t type = 2)
         Xselected++;
         if (whichX.Contains("PR"))
         {
-            cout << "\n*******      E_EstPR()      *******" << endl;
-            E_EstPR();
+            if (whichX.Contains("ALT"))
+            {
+                cout << "\n*******      E_EstPR_alt()      *******" << endl;
+                E_EstPR_alt();
+            }
+            else
+            {
+                cout << "\n*******      E_EstPR()      *******" << endl;
+                E_EstPR();
+            }
         }
         else if (whichX.Contains("ALT") && whichX.Contains("2"))
         {
@@ -3903,26 +3912,35 @@ void Mu_EstFR(Int_t type)
     c_FR_allin1->SetTopMargin(0.05);
     c_FR_allin1->SetBottomMargin(0.12);
     c_FR_allin1->SetLeftMargin(0.13);
+    h_FRsigCtrl_template_barrel->SetTitle("");
     TH1D *h_FRsigCtrl_template_endcap_draw = ((TH1D*)(h_FRsigCtrl_template_endcap->Clone("h_FRsigCtrl_template_endcap_draw")));
     TH1D *h_FRsigCtrl_template_endcap2_draw = ((TH1D*)(h_FRsigCtrl_template_endcap2->Clone("h_FRsigCtrl_template_endcap2_draw")));
     TH1D *h_FRratio_barrel_draw = ((TH1D*)(h_FRratio_barrel->Clone("h_FRratio_barrel_draw")));
     TH1D *h_FRratio_endcap_draw = ((TH1D*)(h_FRratio_endcap->Clone("h_FRratio_endcap_draw")));
     TH1D *h_FRratio_endcap2_draw = ((TH1D*)(h_FRratio_endcap2->Clone("h_FRratio_endcap2_draw")));
-    h_FRsigCtrl_template_endcap_draw->SetTitle("");
-    h_FRsigCtrl_template_endcap_draw->SetMarkerStyle(kFullSquare);
-    h_FRsigCtrl_template_endcap_draw->SetMarkerColor(kBlue);
-    h_FRsigCtrl_template_endcap_draw->SetLineColor(kBlue);
     h_FRsigCtrl_template_endcap2_draw->SetTitle("");
-    h_FRsigCtrl_template_endcap2_draw->SetMarkerStyle(33);
-    h_FRsigCtrl_template_endcap2_draw->SetMarkerSize(1.5);
-    h_FRsigCtrl_template_endcap2_draw->SetMarkerColor(kMagenta+3);
-    h_FRsigCtrl_template_endcap2_draw->SetLineColor(kMagenta+3);
-    h_FRratio_endcap_draw->GetYaxis()->SetTitle("Fake rate");
-    h_FRratio_endcap_draw->GetYaxis()->SetTitleSize(0.045);
-    h_FRratio_endcap_draw->GetYaxis()->SetTitleSize(0.045);
-    h_FRratio_endcap_draw->GetYaxis()->SetRangeUser(0, 1);
-    h_FRratio_endcap_draw->SetMarkerColor(kOrange+8);
-    h_FRratio_endcap_draw->SetLineColor(kOrange+8);
+    h_FRsigCtrl_template_endcap2_draw->SetMarkerStyle(kFullSquare);
+    h_FRsigCtrl_template_endcap2_draw->SetMarkerColor(kBlue);
+    h_FRsigCtrl_template_endcap2_draw->SetLineColor(kBlue);
+    h_FRsigCtrl_template_endcap_draw->SetTitle("");
+    h_FRsigCtrl_template_endcap_draw->SetMarkerStyle(33);
+    h_FRsigCtrl_template_endcap_draw->SetMarkerSize(1.5);
+    h_FRsigCtrl_template_endcap_draw->SetMarkerColor(kOrange+8);
+    h_FRsigCtrl_template_endcap_draw->SetLineColor(kOrange+8);
+    h_FRsigCtrl_template_endcap_draw->GetXaxis()->SetTitle("p_{T} (#mu) [GeV/c]");
+    h_FRsigCtrl_template_endcap_draw->GetXaxis()->SetTitleOffset(1);
+    h_FRsigCtrl_template_endcap_draw->GetXaxis()->SetTitleSize(0.05);
+    h_FRsigCtrl_template_endcap_draw->GetXaxis()->SetLabelSize(0.04);
+    h_FRsigCtrl_template_endcap_draw->GetXaxis()->SetNoExponent(1);
+    h_FRsigCtrl_template_endcap_draw->GetXaxis()->SetMoreLogLabels(1);
+    h_FRsigCtrl_template_endcap_draw->GetXaxis()->SetRangeUser(52, 1000);
+    h_FRsigCtrl_template_endcap_draw->GetYaxis()->SetTitle("Fake rate");
+    h_FRsigCtrl_template_endcap_draw->GetYaxis()->SetTitleSize(0.045);
+    h_FRsigCtrl_template_endcap_draw->GetYaxis()->SetTitleOffset(1.25);
+    h_FRsigCtrl_template_endcap_draw->GetYaxis()->SetLabelSize(0.04);
+    h_FRsigCtrl_template_endcap_draw->GetYaxis()->SetRangeUser(0, 1);
+    h_FRratio_endcap_draw->SetMarkerColor(kMagenta+3);
+    h_FRratio_endcap_draw->SetLineColor(kMagenta+3);
     h_FRratio_endcap2_draw->GetYaxis()->SetTitle("Fake rate");
     h_FRratio_endcap2_draw->GetYaxis()->SetTitleSize(0.045);
     h_FRratio_endcap2_draw->GetYaxis()->SetTitleSize(0.045);
@@ -3932,19 +3950,22 @@ void Mu_EstFR(Int_t type)
     h_FRratio_endcap2_draw->SetMarkerColor(kOrange+1);
     h_FRratio_endcap2_draw->SetLineColor(kOrange+1);
     h_FRratio_barrel_draw->SetMarkerStyle(kFullDotLarge);
-    h_FRratio_endcap_draw->Draw();
-    h_FRratio_endcap2_draw->Draw("same");
-    h_FRratio_barrel_draw->Draw("same");
+//    h_FRratio_endcap_draw->Draw();
+//    h_FRratio_endcap2_draw->Draw("same");
+//    h_FRratio_barrel_draw->Draw("same");
+    h_FRsigCtrl_template_endcap_draw->Draw();
     h_FRsigCtrl_template_barrel->Draw("same");
-    h_FRsigCtrl_template_endcap_draw->Draw("same");
     h_FRsigCtrl_template_endcap2_draw->Draw("same");
-    TLegend *legend1 = new TLegend(0.13, 0.77, 0.6, 0.95);
-    legend1->AddEntry(h_FRratio_barrel_draw, "Ratio (barrel)", "LP");
-    legend1->AddEntry(h_FRratio_endcap_draw, "Ratio (endcap |#eta<1.8|)", "LP");
-    legend1->AddEntry(h_FRratio_endcap2_draw, "Ratio (endcap |1.8#leq#eta<2.4|)", "LP");
-    legend1->AddEntry(h_FRsigCtrl_template_barrel, "Template (barrel)", "LP");
-    legend1->AddEntry(h_FRsigCtrl_template_endcap_draw, "Template (endcap |#eta<1.8|)", "LP");
-    legend1->AddEntry(h_FRsigCtrl_template_endcap2_draw, "Template (endcap |1.8#leq#eta<2.4|)", "LP");
+    TLegend *legend1 = new TLegend(0.13, 0.81, 0.5, 0.95);
+//    legend1->AddEntry(h_FRratio_barrel_draw, "Ratio (barrel)", "LP");
+//    legend1->AddEntry(h_FRratio_endcap_draw, "Ratio (endcap |#eta<1.8|)", "LP");
+//    legend1->AddEntry(h_FRratio_endcap2_draw, "Ratio (endcap |1.8#leq#eta<2.4|)", "LP");
+//    legend1->AddEntry(h_FRsigCtrl_template_barrel, "Template (barrel)", "LP");
+//    legend1->AddEntry(h_FRsigCtrl_template_endcap_draw, "Template (endcap |#eta<1.8|)", "LP");
+//    legend1->AddEntry(h_FRsigCtrl_template_endcap2_draw, "Template (endcap |1.8#leq#eta<2.4|)", "LP");
+    legend1->AddEntry(h_FRsigCtrl_template_barrel, "|#eta|<1.2", "LP");
+    legend1->AddEntry(h_FRsigCtrl_template_endcap_draw, "1.2#leq|#eta|<1.8", "LP");
+    legend1->AddEntry(h_FRsigCtrl_template_endcap2_draw, "1.8#leq|#eta|<2.4", "LP");
     legend1->Draw();
     c_FR_allin1->SetLogx();
     c_FR_allin1->Update();
@@ -4578,6 +4599,640 @@ void E_EstPR()
     f_out->Close();
 
 } // End of E_EstimatePR
+
+
+void E_EstPR_alt()
+{
+    TString inName = "/media/sf_DATA/FR/Electron/PR_Hist_E_alt.root";
+    TFile *f = new TFile(inName, "READ");
+
+    TH1D *h_pT_barrel_pass[4],
+         *h_pT_endcap_pass[4],
+         *h_pT_endcap2_pass[4],
+         *h_eta_pass[4],
+         *h_pT_barrel_fail[4],
+         *h_pT_endcap_fail[4],
+         *h_pT_endcap2_fail[4],
+         *h_eta_fail[4];
+    TString type[4] = {"data", "wjet", "bkgr", "bkgf"};
+
+    for (Int_t i=3; i>=0; i--)
+    {
+        f->GetObject("h_pT_barrel_pass_"+type[i], h_pT_barrel_pass[i]);
+        f->GetObject("h_pT_endcap_pass_"+type[i], h_pT_endcap_pass[i]);
+        f->GetObject("h_pT_endcap2_pass_"+type[i], h_pT_endcap2_pass[i]);
+        f->GetObject("h_eta_pass_"+type[i], h_eta_pass[i]);
+        f->GetObject("h_pT_barrel_fail_"+type[i], h_pT_barrel_fail[i]);
+        f->GetObject("h_pT_endcap_fail_"+type[i], h_pT_endcap_fail[i]);
+        f->GetObject("h_pT_endcap2_fail_"+type[i], h_pT_endcap2_fail[i]);
+        f->GetObject("h_eta_fail_"+type[i], h_eta_fail[i]);
+        h_pT_barrel_pass[i]->SetDirectory(0);
+        h_pT_endcap_pass[i]->SetDirectory(0);
+        h_pT_endcap2_pass[i]->SetDirectory(0);
+        h_eta_pass[i]->SetDirectory(0);
+        h_pT_barrel_fail[i]->SetDirectory(0);
+        h_pT_endcap_fail[i]->SetDirectory(0);
+        h_pT_endcap2_fail[i]->SetDirectory(0);
+        h_eta_fail[i]->SetDirectory(0);
+    }
+
+    TH1D *h_eff_data_barrel = ((TH1D*)(h_pT_barrel_pass[0]->Clone("h_PR_subtract_barrel")));
+    TH1D *h_eff_data_endcap = ((TH1D*)(h_pT_endcap_pass[0]->Clone("h_PR_subtract_endcap")));
+    TH1D *h_eff_data_endcap2 = ((TH1D*)(h_pT_endcap2_pass[0]->Clone("h_PR_subtract_endcap2")));
+    TH1D *h_eff_data_eta = ((TH1D*)(h_eta_pass[0]->Clone("h_PR_subtract_eta")));
+    TH1D *h_eff_MC_barrel = ((TH1D*)(h_pT_barrel_pass[1]->Clone("h_PR_MC_barrel")));
+    TH1D *h_eff_MC_endcap = ((TH1D*)(h_pT_endcap_pass[1]->Clone("h_PR_MC_endcap")));
+    TH1D *h_eff_MC_endcap2 = ((TH1D*)(h_pT_endcap2_pass[1]->Clone("h_PR_MC_endcap2")));
+    TH1D *h_eff_MC_eta = ((TH1D*)(h_eta_pass[1]->Clone("h_PR_MC_eta")));
+    TH1D *h_eff_bkgr_barrel = ((TH1D*)(h_pT_barrel_pass[2]->Clone("h_PR_bkgr_barrel")));
+    TH1D *h_eff_bkgr_endcap = ((TH1D*)(h_pT_endcap_pass[2]->Clone("h_PR_bkgr_endcap")));
+    TH1D *h_eff_bkgr_endcap2 = ((TH1D*)(h_pT_endcap2_pass[2]->Clone("h_PR_bkgr_endcap2")));
+    TH1D *h_eff_bkgr_eta = ((TH1D*)(h_eta_pass[2]->Clone("h_PR_bkgr_eta")));
+    TH1D *h_eff_bkgf_barrel = ((TH1D*)(h_pT_barrel_pass[3]->Clone("h_PR_bkgf_barrel")));
+    TH1D *h_eff_bkgf_endcap = ((TH1D*)(h_pT_endcap_pass[3]->Clone("h_PR_bkgf_endcap")));
+    TH1D *h_eff_bkgf_endcap2 = ((TH1D*)(h_pT_endcap2_pass[3]->Clone("h_PR_bkgf_endcap2")));
+    TH1D *h_eff_bkgf_eta = ((TH1D*)(h_eta_pass[3]->Clone("h_PR_bkgf_eta")));
+    h_eff_data_barrel->Add(h_eff_bkgf_barrel, -1);
+    h_eff_data_endcap->Add(h_eff_bkgf_endcap, -1);
+    h_eff_data_endcap2->Add(h_eff_bkgf_endcap2, -1);
+    h_eff_data_eta->Add(h_eff_bkgf_eta, -1);
+    h_eff_data_barrel->Add(h_eff_bkgr_barrel, -1);
+    h_eff_data_endcap->Add(h_eff_bkgr_endcap, -1);
+    h_eff_data_endcap2->Add(h_eff_bkgr_endcap2, -1);
+    h_eff_data_eta->Add(h_eff_bkgr_eta, -1);
+    removeNegativeBins(h_eff_data_barrel);
+    removeNegativeBins(h_eff_data_endcap);
+    removeNegativeBins(h_eff_data_endcap2);
+    removeNegativeBins(h_eff_data_eta);
+
+    TH1D *h_ineff_data_barrel = ((TH1D*)(h_pT_barrel_fail[0]->Clone("h_1-PR_subtract_barrel")));
+    TH1D *h_ineff_data_endcap = ((TH1D*)(h_pT_endcap_fail[0]->Clone("h_1-PR_subtract_endcap")));
+    TH1D *h_ineff_data_endcap2 = ((TH1D*)(h_pT_endcap2_fail[0]->Clone("h_1-PR_subtract_endcap2")));
+    TH1D *h_ineff_data_eta = ((TH1D*)(h_eta_fail[0]->Clone("h_1-PR_subtract_eta")));
+    TH1D *h_ineff_MC_barrel = ((TH1D*)(h_pT_barrel_fail[1]->Clone("h_1-PR_MC_barrel")));
+    TH1D *h_ineff_MC_endcap = ((TH1D*)(h_pT_endcap_fail[1]->Clone("h_1-PR_MC_endcap")));
+    TH1D *h_ineff_MC_endcap2 = ((TH1D*)(h_pT_endcap2_fail[1]->Clone("h_1-PR_MC_endcap2")));
+    TH1D *h_ineff_MC_eta = ((TH1D*)(h_eta_fail[1]->Clone("h_1-PR_MC_eta")));
+    TH1D *h_ineff_bkgr_barrel = ((TH1D*)(h_pT_barrel_fail[2]->Clone("h_1-PR_bkgr_barrel")));
+    TH1D *h_ineff_bkgr_endcap = ((TH1D*)(h_pT_endcap_fail[2]->Clone("h_1-PR_bkgr_endcap")));
+    TH1D *h_ineff_bkgr_endcap2 = ((TH1D*)(h_pT_endcap2_fail[2]->Clone("h_1-PR_bkgr_endcap2")));
+    TH1D *h_ineff_bkgr_eta = ((TH1D*)(h_eta_fail[2]->Clone("h_1-PR_bkgr_eta")));
+    TH1D *h_ineff_bkgf_barrel = ((TH1D*)(h_pT_barrel_fail[3]->Clone("h_1-PR_bkgf_barrel")));
+    TH1D *h_ineff_bkgf_endcap = ((TH1D*)(h_pT_endcap_fail[3]->Clone("h_1-PR_bkgf_endcap")));
+    TH1D *h_ineff_bkgf_endcap2 = ((TH1D*)(h_pT_endcap2_fail[3]->Clone("h_1-PR_bkgf_endcap2")));
+    TH1D *h_ineff_bkgf_eta = ((TH1D*)(h_eta_fail[3]->Clone("h_1-PR_bkgf_eta")));
+    h_ineff_data_barrel->Add(h_ineff_bkgf_barrel, -1);
+    h_ineff_data_endcap->Add(h_ineff_bkgf_endcap, -1);
+    h_ineff_data_endcap2->Add(h_ineff_bkgf_endcap2, -1);
+    h_ineff_data_eta->Add(h_ineff_bkgf_eta, -1);
+    h_ineff_data_barrel->Add(h_ineff_bkgr_barrel, -1);
+    h_ineff_data_endcap->Add(h_ineff_bkgr_endcap, -1);
+    h_ineff_data_endcap2->Add(h_ineff_bkgr_endcap2, -1);
+    h_ineff_data_eta->Add(h_ineff_bkgr_eta, -1);
+    removeNegativeBins(h_ineff_data_barrel);
+    removeNegativeBins(h_ineff_data_endcap);
+    removeNegativeBins(h_ineff_data_endcap2);
+    removeNegativeBins(h_ineff_data_eta);
+
+    TH1D *h_eff_data_barrel_deno = ((TH1D*)(h_eff_data_barrel->Clone("h_PR_subtract_barrel_deno")));
+    TH1D *h_eff_data_endcap_deno = ((TH1D*)(h_eff_data_endcap->Clone("h_PR_subtract_endcap_deno")));
+    TH1D *h_eff_data_endcap2_deno = ((TH1D*)(h_eff_data_endcap2->Clone("h_PR_subtract_endcap2_deno")));
+    TH1D *h_eff_data_eta_deno = ((TH1D*)(h_eff_data_eta->Clone("h_PR_subtract_eta_deno")));
+    h_eff_data_barrel_deno->Add(h_ineff_data_barrel);
+    h_eff_data_endcap_deno->Add(h_ineff_data_endcap);
+    h_eff_data_endcap2_deno->Add(h_ineff_data_endcap2);
+    h_eff_data_eta_deno->Add(h_ineff_data_eta);
+
+    TH1D *h_eff_MC_barrel_deno = ((TH1D*)(h_eff_MC_barrel->Clone("h_PR_MC_barrel_deno")));
+    TH1D *h_eff_MC_endcap_deno = ((TH1D*)(h_eff_MC_endcap->Clone("h_PR_MC_endcap_deno")));
+    TH1D *h_eff_MC_endcap2_deno = ((TH1D*)(h_eff_MC_endcap2->Clone("h_PR_MC_endcap2_deno")));
+    TH1D *h_eff_MC_eta_deno = ((TH1D*)(h_eff_MC_eta->Clone("h_PR_MC_eta_deno")));
+    h_eff_MC_barrel_deno->Add(h_ineff_MC_barrel);
+    h_eff_MC_endcap_deno->Add(h_ineff_MC_endcap);
+    h_eff_MC_endcap2_deno->Add(h_ineff_MC_endcap2);
+    h_eff_MC_eta_deno->Add(h_ineff_MC_eta);
+
+//    TH1D *h_eff_data_barrel_deno = ((TH1D*)(h_pT_barrel_fail[0]->Clone("h_PR_subtract_barrel_deno")));
+//    TH1D *h_eff_data_endcap_deno = ((TH1D*)(h_pT_endcap_fail[0]->Clone("h_PR_subtract_endcap_deno")));
+//    TH1D *h_eff_data_endcap2_deno = ((TH1D*)(h_pT_endcap2_fail[0]->Clone("h_PR_subtract_endcap2_deno")));
+//    TH1D *h_eff_data_eta_deno = ((TH1D*)(h_eta_fail[0]->Clone("h_PR_subtract_eta_deno")));
+//    TH1D *h_eff_MC_barrel_deno = ((TH1D*)(h_pT_barrel_fail[1]->Clone("h_PR_MC_barrel_deno")));
+//    TH1D *h_eff_MC_endcap_deno = ((TH1D*)(h_pT_endcap_fail[1]->Clone("h_PR_MC_endcap_deno")));
+//    TH1D *h_eff_MC_endcap2_deno = ((TH1D*)(h_pT_endcap2_fail[1]->Clone("h_PR_MC_endcap2_deno")));
+//    TH1D *h_eff_MC_eta_deno = ((TH1D*)(h_eta_fail[1]->Clone("h_PR_MC_eta_deno")));
+//    TH1D *h_eff_bkgr_barrel_deno = ((TH1D*)(h_pT_barrel_fail[2]->Clone("h_1-PR_bkgr_barrel_deno")));
+//    TH1D *h_eff_bkgr_endcap_deno = ((TH1D*)(h_pT_endcap_fail[2]->Clone("h_1-PR_bkgr_endcap_deno")));
+//    TH1D *h_eff_bkgr_endcap2_deno = ((TH1D*)(h_pT_endcap2_fail[2]->Clone("h_1-PR_bkgr_endcap2_deno")));
+//    TH1D *h_eff_bkgr_eta_deno = ((TH1D*)(h_eta_fail[2]->Clone("h_1-PR_bkgr_eta_deno")));
+//    TH1D *h_eff_bkgf_barrel_deno = ((TH1D*)(h_pT_barrel_fail[3]->Clone("h_1-PR_bkgf_barrel_deno")));
+//    TH1D *h_eff_bkgf_endcap_deno = ((TH1D*)(h_pT_endcap_fail[3]->Clone("h_1-PR_bkgf_endcap_deno")));
+//    TH1D *h_eff_bkgf_endcap2_deno = ((TH1D*)(h_pT_endcap2_fail[3]->Clone("h_1-PR_bkgf_endcap2_deno")));
+//    TH1D *h_eff_bkgf_eta_deno = ((TH1D*)(h_eta_fail[3]->Clone("h_1-PR_bkgf_eta_deno")));
+//    h_eff_data_barrel_deno->Add(h_pT_barrel_pass[0]);
+//    h_eff_data_endcap_deno->Add(h_pT_endcap_pass[0]);
+//    h_eff_data_endcap2_deno->Add(h_pT_endcap2_pass[0]);
+//    h_eff_data_eta_deno->Add(h_eta_pass[0]);
+//    h_eff_MC_barrel_deno->Add(h_pT_barrel_pass[1]);
+//    h_eff_MC_endcap_deno->Add(h_pT_endcap_pass[1]);
+//    h_eff_MC_endcap2_deno->Add(h_pT_endcap2_pass[1]);
+//    h_eff_MC_eta_deno->Add(h_eta_pass[1]);
+//    h_eff_bkgr_barrel_deno->Add(h_pT_barrel_pass[2]);
+//    h_eff_bkgr_endcap_deno->Add(h_pT_endcap_pass[2]);
+//    h_eff_bkgr_endcap2_deno->Add(h_pT_endcap2_pass[2]);
+//    h_eff_bkgr_eta_deno->Add(h_eta_pass[2]);
+//    h_eff_bkgf_barrel_deno->Add(h_pT_barrel_pass[3]);
+//    h_eff_bkgf_endcap_deno->Add(h_pT_endcap_pass[3]);
+//    h_eff_bkgf_endcap2_deno->Add(h_pT_endcap2_pass[3]);
+//    h_eff_bkgf_eta_deno->Add(h_eta_pass[3]);
+//    h_eff_data_barrel_deno->Add(h_eff_bkgf_barrel_deno, -1);
+//    h_eff_data_endcap_deno->Add(h_eff_bkgf_endcap_deno, -1);
+//    h_eff_data_endcap2_deno->Add(h_eff_bkgf_endcap2_deno, -1);
+//    h_eff_data_eta_deno->Add(h_eff_bkgf_eta_deno, -1);
+//    h_eff_data_barrel_deno->Add(h_eff_bkgr_barrel_deno, -1);
+//    h_eff_data_endcap_deno->Add(h_eff_bkgr_endcap_deno, -1);
+//    h_eff_data_endcap2_deno->Add(h_eff_bkgr_endcap2_deno, -1);
+//    h_eff_data_eta_deno->Add(h_eff_bkgr_eta_deno, -1);
+
+    h_eff_data_barrel->Divide(h_eff_data_barrel_deno);
+    h_eff_data_endcap->Divide(h_eff_data_endcap_deno);
+    h_eff_data_endcap2->Divide(h_eff_data_endcap2_deno);
+    h_eff_data_eta->Divide(h_eff_data_eta_deno);
+    h_eff_MC_barrel->Divide(h_eff_MC_barrel_deno);
+    h_eff_MC_endcap->Divide(h_eff_MC_endcap_deno);
+    h_eff_MC_endcap2->Divide(h_eff_MC_endcap2_deno);
+    h_eff_MC_eta->Divide(h_eff_MC_eta_deno);
+    h_ineff_data_barrel->Divide(h_eff_data_barrel_deno);
+    h_ineff_data_endcap->Divide(h_eff_data_endcap_deno);
+    h_ineff_data_endcap2->Divide(h_eff_data_endcap2_deno);
+    h_ineff_data_eta->Divide(h_eff_data_eta_deno);
+    h_ineff_MC_barrel->Divide(h_eff_MC_barrel_deno);
+    h_ineff_MC_endcap->Divide(h_eff_MC_endcap_deno);
+    h_ineff_MC_endcap2->Divide(h_eff_MC_endcap2_deno);
+    h_ineff_MC_eta->Divide(h_eff_MC_eta_deno);
+
+    h_eff_data_barrel->SetDirectory(0);
+    h_eff_data_barrel->SetMarkerStyle(kFullDotLarge);
+    h_eff_data_barrel->SetMarkerColor(kBlack);
+    h_eff_data_barrel->SetLineColor(kBlack);
+    h_eff_data_endcap->SetDirectory(0);
+    h_eff_data_endcap->SetMarkerStyle(kFullDotLarge);
+    h_eff_data_endcap->SetMarkerColor(kBlack);
+    h_eff_data_endcap->SetLineColor(kBlack);
+    h_eff_data_endcap2->SetDirectory(0);
+    h_eff_data_endcap2->SetMarkerStyle(kFullDotLarge);
+    h_eff_data_endcap2->SetMarkerColor(kBlack);
+    h_eff_data_endcap2->SetLineColor(kBlack);
+    h_eff_data_eta->SetDirectory(0);
+    h_eff_data_eta->SetMarkerStyle(kFullDotLarge);
+    h_eff_data_eta->SetMarkerColor(kBlack);
+    h_eff_data_eta->SetLineColor(kBlack);
+    h_eff_MC_barrel->SetDirectory(0);
+    h_eff_MC_barrel->SetMarkerStyle(kFullSquare);
+    h_eff_MC_barrel->SetMarkerColor(kRed);
+    h_eff_MC_barrel->SetLineColor(kRed);
+    h_eff_MC_endcap->SetDirectory(0);
+    h_eff_MC_endcap->SetMarkerStyle(kFullSquare);
+    h_eff_MC_endcap->SetMarkerColor(kRed);
+    h_eff_MC_endcap->SetLineColor(kRed);
+    h_eff_MC_endcap2->SetDirectory(0);
+    h_eff_MC_endcap2->SetMarkerStyle(kFullSquare);
+    h_eff_MC_endcap2->SetMarkerColor(kRed);
+    h_eff_MC_endcap2->SetLineColor(kRed);
+    h_eff_MC_eta->SetDirectory(0);
+    h_eff_MC_eta->SetMarkerStyle(kFullSquare);
+    h_eff_MC_eta->SetMarkerColor(kRed);
+    h_eff_MC_eta->SetLineColor(kRed);
+
+    h_ineff_data_barrel->SetDirectory(0);
+    h_ineff_data_barrel->SetMarkerStyle(kFullDotLarge);
+    h_ineff_data_barrel->SetMarkerColor(kBlack);
+    h_ineff_data_barrel->SetLineColor(kBlack);
+    h_ineff_data_endcap->SetDirectory(0);
+    h_ineff_data_endcap->SetMarkerStyle(kFullDotLarge);
+    h_ineff_data_endcap->SetMarkerColor(kBlack);
+    h_ineff_data_endcap->SetLineColor(kBlack);
+    h_ineff_data_endcap2->SetDirectory(0);
+    h_ineff_data_endcap2->SetMarkerStyle(kFullDotLarge);
+    h_ineff_data_endcap2->SetMarkerColor(kBlack);
+    h_ineff_data_endcap2->SetLineColor(kBlack);
+    h_ineff_data_eta->SetDirectory(0);
+    h_ineff_data_eta->SetMarkerStyle(kFullDotLarge);
+    h_ineff_data_eta->SetMarkerColor(kBlack);
+    h_ineff_data_eta->SetLineColor(kBlack);
+    h_ineff_MC_barrel->SetDirectory(0);
+    h_ineff_MC_barrel->SetMarkerStyle(kFullSquare);
+    h_ineff_MC_barrel->SetMarkerColor(kRed);
+    h_ineff_MC_barrel->SetLineColor(kRed);
+    h_ineff_MC_endcap->SetDirectory(0);
+    h_ineff_MC_endcap->SetMarkerStyle(kFullSquare);
+    h_ineff_MC_endcap->SetMarkerColor(kRed);
+    h_ineff_MC_endcap->SetLineColor(kRed);
+    h_ineff_MC_endcap2->SetDirectory(0);
+    h_ineff_MC_endcap2->SetMarkerStyle(kFullSquare);
+    h_ineff_MC_endcap2->SetMarkerColor(kRed);
+    h_ineff_MC_endcap2->SetLineColor(kRed);
+    h_ineff_MC_eta->SetDirectory(0);
+    h_ineff_MC_eta->SetMarkerStyle(kFullSquare);
+    h_ineff_MC_eta->SetMarkerColor(kRed);
+    h_ineff_MC_eta->SetLineColor(kRed);
+
+    TH1D *h_eff_ratio_barrel = ((TH1D*)(h_eff_data_barrel->Clone("h_PR_ratio_barrel")));
+    TH1D *h_eff_ratio_endcap = ((TH1D*)(h_eff_data_endcap->Clone("h_PR_ratio_endcap")));
+    TH1D *h_eff_ratio_endcap2 = ((TH1D*)(h_eff_data_endcap2->Clone("h_PR_ratio_endcap2")));
+    TH1D *h_eff_ratio_eta = ((TH1D*)(h_eff_data_eta->Clone("h_PR_ratio_eta")));
+    TH1D *h_ineff_ratio_barrel = ((TH1D*)(h_ineff_data_barrel->Clone("h_1-PR_ratio_barrel")));
+    TH1D *h_ineff_ratio_endcap = ((TH1D*)(h_ineff_data_endcap->Clone("h_1-PR_ratio_endcap")));
+    TH1D *h_ineff_ratio_endcap2 = ((TH1D*)(h_ineff_data_endcap2->Clone("h_1-PR_ratio_endcap2")));
+    TH1D *h_ineff_ratio_eta = ((TH1D*)(h_ineff_data_eta->Clone("h_1-PR_ratio_eta")));
+    h_eff_ratio_barrel->Divide(h_eff_MC_barrel);
+    h_eff_ratio_endcap->Divide(h_eff_MC_endcap);
+    h_eff_ratio_endcap2->Divide(h_eff_MC_endcap2);
+    h_eff_ratio_eta->Divide(h_eff_MC_eta);
+    h_eff_ratio_barrel->SetDirectory(0);
+    h_eff_ratio_endcap->SetDirectory(0);
+    h_eff_ratio_endcap->SetMarkerColor(kBlue);
+    h_eff_ratio_endcap->SetLineColor(kBlue);
+    h_eff_ratio_endcap2->SetDirectory(0);
+    h_eff_ratio_endcap2->SetMarkerColor(kBlue);
+    h_eff_ratio_endcap2->SetLineColor(kBlue);
+    h_eff_ratio_eta->SetDirectory(0);
+    h_eff_ratio_eta->SetMarkerColor(kBlue);
+    h_eff_ratio_eta->SetLineColor(kBlue);
+    h_ineff_ratio_barrel->Divide(h_ineff_MC_barrel);
+    h_ineff_ratio_endcap->Divide(h_ineff_MC_endcap);
+    h_ineff_ratio_endcap2->Divide(h_ineff_MC_endcap2);
+    h_ineff_ratio_eta->Divide(h_ineff_MC_eta);
+    h_ineff_ratio_barrel->SetDirectory(0);
+    h_ineff_ratio_endcap->SetDirectory(0);
+    h_ineff_ratio_endcap->SetMarkerColor(kBlue);
+    h_ineff_ratio_endcap->SetLineColor(kBlue);
+    h_ineff_ratio_endcap2->SetDirectory(0);
+    h_ineff_ratio_endcap2->SetMarkerColor(kBlue);
+    h_ineff_ratio_endcap2->SetLineColor(kBlue);
+    h_ineff_ratio_eta->SetDirectory(0);
+    h_ineff_ratio_eta->SetMarkerColor(kBlue);
+    h_ineff_ratio_eta->SetLineColor(kBlue);
+
+    // Creating and drawing ratio plots
+    myRatioPlot_t *RP_eff_barrel = new myRatioPlot_t("RP_PR_barrel", h_eff_MC_barrel, h_eff_data_barrel);
+    myRatioPlot_t *RP_eff_endcap = new myRatioPlot_t("RP_PR_endcap", h_eff_MC_endcap, h_eff_data_endcap);
+    myRatioPlot_t *RP_eff_endcap2 = new myRatioPlot_t("RP_PR_endcap2", h_eff_MC_endcap2, h_eff_data_endcap2);
+    myRatioPlot_t *RP_eff_eta = new myRatioPlot_t("RP_PR_eta", h_eff_MC_eta, h_eff_data_eta);
+    myRatioPlot_t *RP_ineff_barrel = new myRatioPlot_t("RP_1-PR_barrel", h_ineff_MC_barrel, h_ineff_data_barrel);
+    myRatioPlot_t *RP_ineff_endcap = new myRatioPlot_t("RP_1-PR_endcap", h_ineff_MC_endcap, h_ineff_data_endcap);
+    myRatioPlot_t *RP_ineff_endcap2 = new myRatioPlot_t("RP_1-PR_endcap2", h_ineff_MC_endcap2, h_ineff_data_endcap2);
+    myRatioPlot_t *RP_ineff_eta = new myRatioPlot_t("RP_1-PR_eta", h_ineff_MC_eta, h_ineff_data_eta);
+
+    RP_eff_barrel->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 5000);
+    RP_eff_endcap->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 5000);
+    RP_eff_endcap2->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 5000);
+    RP_eff_eta->SetPlots("#eta", -2.4, 2.4);
+    RP_ineff_barrel->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 5000);
+    RP_ineff_endcap->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 5000);
+    RP_ineff_endcap2->SetPlots("p_{#lower[-0.2]{T}} [GeV/c]", 0, 5000);
+    RP_ineff_eta->SetPlots("#eta", -2.4, 2.4);
+
+    TLegend * legend = new TLegend(0.7, 0.7, 0.95, 0.95);
+    legend->AddEntry(h_eff_data_barrel, "Data", "pl");
+    legend->AddEntry(h_eff_MC_barrel, "DY MC", "pl");
+
+    RP_eff_barrel->ImportLegend(legend);
+    RP_eff_endcap->ImportLegend(legend);
+    RP_eff_endcap2->ImportLegend(legend);
+    RP_eff_eta->ImportLegend(legend);
+    RP_ineff_barrel->ImportLegend(legend);
+    RP_ineff_endcap->ImportLegend(legend);
+    RP_ineff_endcap2->ImportLegend(legend);
+    RP_ineff_eta->ImportLegend(legend);
+
+//    RP_eff_barrel->Draw(0.01, 1, 1, "", "Prompt rate");
+//    RP_eff_endcap->Draw(0.01, 1, 1, "", "Prompt rate");
+//    RP_eff_endcap2->Draw(0.01, 1, 1, "", "Prompt rate");
+//    RP_eff_eta->Draw(0.01, 1, 0, "", "Prompt rate");
+//    RP_ineff_barrel->Draw(0.01, 1, 1, "", "1-PR");
+//    RP_ineff_endcap->Draw(0.01, 1, 1, "", "1-PR");
+//    RP_ineff_endcap2->Draw(0.01, 1, 1, "", "1-PR");
+//    RP_ineff_eta->Draw(0.01, 1, 1, "", "1-PR");
+
+//    RP_eff_barrel->pad1->SetLogy(0);
+//    RP_eff_endcap->pad1->SetLogy(0);
+//    RP_eff_endcap2->pad1->SetLogy(0);
+//    RP_eff_eta->pad1->SetLogy(0);
+//    RP_ineff_barrel->pad1->SetLogy(0);
+//    RP_ineff_endcap->pad1->SetLogy(0);
+//    RP_ineff_endcap2->pad1->SetLogy(0);
+//    RP_ineff_eta->pad1->SetLogy(0);
+
+    TCanvas *c_PR_barrel = new TCanvas("c_PR_barrel", "c_PR_barrel", 800, 800);
+    c_PR_barrel->cd();
+    c_PR_barrel->SetGrid(1);
+    c_PR_barrel->SetLogx(1);
+    c_PR_barrel->SetRightMargin(0.05);
+    c_PR_barrel->SetTopMargin(0.05);
+    c_PR_barrel->SetBottomMargin(0.12);
+    c_PR_barrel->SetLeftMargin(0.13);
+//    TH1D *h_eff_data_barrel_draw = ((TH1D*)(h_eff_data_barrel->Clone("h_eff_data_barrel_draw")));
+//    h_eff_data_barrel_draw->SetDirectory(0);
+//    h_eff_data_barrel_draw->SetMarkerStyle(kFullDotLarge);
+//    h_eff_data_barrel_draw->SetMarkerColor(kBlack);
+//    h_eff_data_barrel_draw->SetLineColor(kBlack);
+//    h_eff_data_barrel_draw->SetStats(kFALSE);
+//    h_eff_data_barrel_draw->SetTitle("");
+//    h_eff_data_barrel_draw->GetXaxis()->SetTitle("p_{T} (#font[12]{e}) [GeV/c]");
+//    h_eff_data_barrel_draw->GetXaxis()->SetTitleOffset(1);
+//    h_eff_data_barrel_draw->GetXaxis()->SetTitleSize(0.05);
+//    h_eff_data_barrel_draw->GetXaxis()->SetLabelSize(0.04);
+//    h_eff_data_barrel_draw->GetYaxis()->SetTitle("Prompt rate");
+//    h_eff_data_barrel_draw->GetYaxis()->SetTitleSize(0.05);
+//    h_eff_data_barrel_draw->GetYaxis()->SetTitleOffset(1.25);
+//    h_eff_data_barrel_draw->GetYaxis()->SetLabelSize(0.04);
+//    h_eff_data_barrel_draw->GetXaxis()->SetNoExponent(1);
+//    h_eff_data_barrel_draw->GetXaxis()->SetMoreLogLabels(1);
+//    h_eff_data_barrel_draw->GetXaxis()->SetRangeUser(17, 3000);
+//    h_eff_data_barrel_draw->GetYaxis()->SetRangeUser(0.3, 1.1);
+//    h_eff_data_barrel_draw->Draw();
+
+    TH1D *h_eff_MC_barrel_draw = ((TH1D*)(h_eff_MC_barrel->Clone("h_eff_MC_barrel_draw")));
+    h_eff_MC_barrel_draw->SetDirectory(0);
+    h_eff_MC_barrel_draw->SetMarkerStyle(kFullDotLarge);
+    h_eff_MC_barrel_draw->SetMarkerColor(kBlack);
+    h_eff_MC_barrel_draw->SetLineColor(kBlack);
+    h_eff_MC_barrel_draw->SetStats(kFALSE);
+    h_eff_MC_barrel_draw->SetTitle("");
+    h_eff_MC_barrel_draw->GetXaxis()->SetTitle("p_{T} (#font[12]{e}) [GeV/c]");
+    h_eff_MC_barrel_draw->GetXaxis()->SetTitleOffset(1);
+    h_eff_MC_barrel_draw->GetXaxis()->SetTitleSize(0.05);
+    h_eff_MC_barrel_draw->GetXaxis()->SetLabelSize(0.04);
+    h_eff_MC_barrel_draw->GetYaxis()->SetTitle("Prompt rate");
+    h_eff_MC_barrel_draw->GetYaxis()->SetTitleSize(0.05);
+    h_eff_MC_barrel_draw->GetYaxis()->SetTitleOffset(1.25);
+    h_eff_MC_barrel_draw->GetYaxis()->SetLabelSize(0.04);
+    h_eff_MC_barrel_draw->GetXaxis()->SetNoExponent(1);
+    h_eff_MC_barrel_draw->GetXaxis()->SetMoreLogLabels(1);
+    h_eff_MC_barrel_draw->GetXaxis()->SetRangeUser(17, 3000);
+    h_eff_MC_barrel_draw->GetYaxis()->SetRangeUser(0.5, 1.1);
+    h_eff_MC_barrel_draw->Draw();
+    c_PR_barrel->Update();
+
+
+    TCanvas *c_PR_endcap = new TCanvas("c_PR_endcap", "c_PR_endcap", 800, 800);
+    c_PR_endcap->cd();
+    c_PR_endcap->SetGrid(1);
+    c_PR_endcap->SetLogx(1);
+    c_PR_endcap->SetRightMargin(0.05);
+    c_PR_endcap->SetTopMargin(0.05);
+    c_PR_endcap->SetBottomMargin(0.12);
+    c_PR_endcap->SetLeftMargin(0.13);
+//    TH1D *h_eff_data_endcap_draw = ((TH1D*)(h_eff_data_endcap->Clone("h_eff_data_endcap_draw")));
+//    h_eff_data_endcap_draw->SetDirectory(0);
+//    h_eff_data_endcap_draw->SetMarkerStyle(kFullDotLarge);
+//    h_eff_data_endcap_draw->SetMarkerColor(kBlack);
+//    h_eff_data_endcap_draw->SetLineColor(kBlack);
+//    h_eff_data_endcap_draw->SetStats(kFALSE);
+//    h_eff_data_endcap_draw->SetTitle("");
+//    h_eff_data_endcap_draw->GetXaxis()->SetTitle("p_{T} (#font[12]{e}) [GeV/c]");
+//    h_eff_data_endcap_draw->GetXaxis()->SetTitleOffset(1);
+//    h_eff_data_endcap_draw->GetXaxis()->SetTitleSize(0.05);
+//    h_eff_data_endcap_draw->GetXaxis()->SetLabelSize(0.04);
+//    h_eff_data_endcap_draw->GetYaxis()->SetTitle("Prompt rate");
+//    h_eff_data_endcap_draw->GetYaxis()->SetTitleSize(0.05);
+//    h_eff_data_endcap_draw->GetYaxis()->SetTitleOffset(1.25);
+//    h_eff_data_endcap_draw->GetYaxis()->SetLabelSize(0.04);
+//    h_eff_data_endcap_draw->GetXaxis()->SetNoExponent(1);
+//    h_eff_data_endcap_draw->GetXaxis()->SetMoreLogLabels(1);
+//    h_eff_data_endcap_draw->GetXaxis()->SetRangeUser(17, 3000);
+//    h_eff_data_endcap_draw->GetYaxis()->SetRangeUser(0.3, 1.1);
+//    h_eff_data_endcap_draw->Draw();
+
+    TH1D *h_eff_MC_endcap_draw = ((TH1D*)(h_eff_MC_endcap->Clone("h_eff_MC_endcap_draw")));
+    h_eff_MC_endcap_draw->SetDirectory(0);
+    h_eff_MC_endcap_draw->SetMarkerStyle(kFullDotLarge);
+    h_eff_MC_endcap_draw->SetMarkerColor(kBlack);
+    h_eff_MC_endcap_draw->SetLineColor(kBlack);
+    h_eff_MC_endcap_draw->SetStats(kFALSE);
+    h_eff_MC_endcap_draw->SetTitle("");
+    h_eff_MC_endcap_draw->GetXaxis()->SetTitle("p_{T} (#font[12]{e}) [GeV/c]");
+    h_eff_MC_endcap_draw->GetXaxis()->SetTitleOffset(1);
+    h_eff_MC_endcap_draw->GetXaxis()->SetTitleSize(0.05);
+    h_eff_MC_endcap_draw->GetXaxis()->SetLabelSize(0.04);
+    h_eff_MC_endcap_draw->GetYaxis()->SetTitle("Prompt rate");
+    h_eff_MC_endcap_draw->GetYaxis()->SetTitleSize(0.05);
+    h_eff_MC_endcap_draw->GetYaxis()->SetTitleOffset(1.25);
+    h_eff_MC_endcap_draw->GetYaxis()->SetLabelSize(0.04);
+    h_eff_MC_endcap_draw->GetXaxis()->SetNoExponent(1);
+    h_eff_MC_endcap_draw->GetXaxis()->SetMoreLogLabels(1);
+    h_eff_MC_endcap_draw->GetXaxis()->SetRangeUser(17, 3000);
+    h_eff_MC_endcap_draw->GetYaxis()->SetRangeUser(0.5, 1.1);
+    h_eff_MC_endcap_draw->Draw();
+    c_PR_endcap->Update();
+
+
+    TCanvas *c_PR_endcap2 = new TCanvas("c_PR_endcap2", "c_PR_endcap2", 800, 800);
+    c_PR_endcap2->cd();
+    c_PR_endcap2->SetGrid(1);
+    c_PR_endcap2->SetLogx(1);
+    c_PR_endcap2->SetRightMargin(0.05);
+    c_PR_endcap2->SetTopMargin(0.05);
+    c_PR_endcap2->SetBottomMargin(0.12);
+    c_PR_endcap2->SetLeftMargin(0.13);
+//    TH1D *h_eff_data_endcap2_draw = ((TH1D*)(h_eff_data_endcap2->Clone("h_eff_data_endcap2_draw")));
+//    h_eff_data_endcap2_draw->SetDirectory(0);
+//    h_eff_data_endcap2_draw->SetMarkerStyle(kFullDotLarge);
+//    h_eff_data_endcap2_draw->SetMarkerColor(kBlack);
+//    h_eff_data_endcap2_draw->SetLineColor(kBlack);
+//    h_eff_data_endcap2_draw->SetStats(kFALSE);
+//    h_eff_data_endcap2_draw->SetTitle("");
+//    h_eff_data_endcap2_draw->GetXaxis()->SetTitle("p_{T} (#font[12]{e}) [GeV/c]");
+//    h_eff_data_endcap2_draw->GetXaxis()->SetTitleOffset(1);
+//    h_eff_data_endcap2_draw->GetXaxis()->SetTitleSize(0.05);
+//    h_eff_data_endcap2_draw->GetXaxis()->SetLabelSize(0.04);
+//    h_eff_data_endcap2_draw->GetYaxis()->SetTitle("Prompt rate");
+//    h_eff_data_endcap2_draw->GetYaxis()->SetTitleSize(0.05);
+//    h_eff_data_endcap2_draw->GetYaxis()->SetTitleOffset(1.25);
+//    h_eff_data_endcap2_draw->GetYaxis()->SetLabelSize(0.04);
+//    h_eff_data_endcap2_draw->GetXaxis()->SetNoExponent(1);
+//    h_eff_data_endcap2_draw->GetXaxis()->SetMoreLogLabels(1);
+//    h_eff_data_endcap2_draw->GetXaxis()->SetRangeUser(17, 3000);
+//    h_eff_data_endcap2_draw->GetYaxis()->SetRangeUser(0, 0.8);
+//    h_eff_data_endcap2_draw->Draw();
+
+    TH1D *h_eff_MC_endcap2_draw = ((TH1D*)(h_eff_MC_endcap2->Clone("h_eff_MC_endcap2_draw")));
+    h_eff_MC_endcap2_draw->SetDirectory(0);
+    h_eff_MC_endcap2_draw->SetMarkerStyle(kFullDotLarge);
+    h_eff_MC_endcap2_draw->SetMarkerColor(kBlack);
+    h_eff_MC_endcap2_draw->SetLineColor(kBlack);
+    h_eff_MC_endcap2_draw->SetStats(kFALSE);
+    h_eff_MC_endcap2_draw->SetTitle("");
+    h_eff_MC_endcap2_draw->GetXaxis()->SetTitle("p_{T} (#font[12]{e}) [GeV/c]");
+    h_eff_MC_endcap2_draw->GetXaxis()->SetTitleOffset(1);
+    h_eff_MC_endcap2_draw->GetXaxis()->SetTitleSize(0.05);
+    h_eff_MC_endcap2_draw->GetXaxis()->SetLabelSize(0.04);
+    h_eff_MC_endcap2_draw->GetYaxis()->SetTitle("Prompt rate");
+    h_eff_MC_endcap2_draw->GetYaxis()->SetTitleSize(0.05);
+    h_eff_MC_endcap2_draw->GetYaxis()->SetTitleOffset(1.25);
+    h_eff_MC_endcap2_draw->GetYaxis()->SetLabelSize(0.04);
+    h_eff_MC_endcap2_draw->GetXaxis()->SetNoExponent(1);
+    h_eff_MC_endcap2_draw->GetXaxis()->SetMoreLogLabels(1);
+    h_eff_MC_endcap2_draw->GetXaxis()->SetRangeUser(17, 3000);
+    h_eff_MC_endcap2_draw->GetYaxis()->SetRangeUser(0.5, 1.1);
+    h_eff_MC_endcap2_draw->Draw();
+    c_PR_endcap->Update();
+
+
+    TCanvas *c_PR_allin1 = new TCanvas("c_PR_allin1", "c_PR_allin1", 800, 800);
+    c_PR_allin1->cd();
+    c_PR_allin1->SetGrid(1);
+    c_PR_allin1->SetRightMargin(0.05);
+    c_PR_allin1->SetTopMargin(0.05);
+    c_PR_allin1->SetBottomMargin(0.12);
+    c_PR_allin1->SetLeftMargin(0.13);
+//    h_eff_data_endcap_draw->SetDirectory(0);
+//    h_eff_data_endcap_draw->SetTitle("");
+//    h_eff_data_endcap_draw->SetMarkerStyle(kFullSquare);
+//    h_eff_data_endcap_draw->SetMarkerColor(kBlue);
+//    h_eff_data_endcap_draw->SetLineColor(kBlue);
+//    h_eff_data_endcap_draw->GetYaxis()->SetTitle("Prompt rate");
+//    h_eff_data_endcap_draw->GetYaxis()->SetTitleSize(0.05);
+//    h_eff_data_endcap_draw->GetYaxis()->SetLabelSize(0.04);
+//    h_eff_data_endcap_draw->GetYaxis()->SetTitleOffset(1.12);
+//    h_eff_data_endcap_draw->GetYaxis()->SetRangeUser(0.2, 0.9);
+//    h_eff_data_endcap_draw->GetXaxis()->SetRangeUser(0, 5000);
+//    h_eff_data_endcap_draw->GetXaxis()->SetNoExponent();
+//    h_eff_data_endcap_draw->GetXaxis()->SetMoreLogLabels();
+//    h_eff_data_endcap_draw->GetXaxis()->SetTitle("p_{T} (#font[12]{e}) [GeV/c]");
+//    h_eff_data_endcap_draw->GetXaxis()->SetTitleOffset(1);
+//    h_eff_data_endcap_draw->GetXaxis()->SetTitleSize(0.05);
+//    h_eff_data_endcap_draw->GetXaxis()->SetLabelSize(0.04);
+//    h_eff_data_endcap2_draw->SetDirectory(0);
+//    h_eff_data_endcap2_draw->SetMarkerStyle(33);
+//    h_eff_data_endcap2_draw->SetMarkerSize(1.5);
+//    h_eff_data_endcap2_draw->SetMarkerColor(kOrange-3);
+//    h_eff_data_endcap2_draw->SetLineColor(kOrange-3);
+//    h_eff_data_endcap_draw->Draw();
+//    h_eff_data_endcap2_draw->Draw("same");
+//    h_eff_data_barrel->Draw("same");
+//    TLegend *legend1 = new TLegend(0.5, 0.72, 0.95, 0.95);
+//    legend1->AddEntry(h_eff_data_barrel, "|#eta| < 1.4442", "LP");
+//    legend1->AddEntry(h_eff_data_endcap_draw, "1.566 < |#eta| < 2.1", "LP");
+//    legend1->AddEntry(h_eff_data_endcap2_draw, "|#eta| #geq 2.1", "LP");
+//    legend1->Draw();
+
+    h_eff_MC_endcap_draw->SetDirectory(0);
+    h_eff_MC_endcap_draw->SetTitle("");
+    h_eff_MC_endcap_draw->SetMarkerStyle(kFullSquare);
+    h_eff_MC_endcap_draw->SetMarkerColor(kBlue);
+    h_eff_MC_endcap_draw->SetLineColor(kBlue);
+    h_eff_MC_endcap_draw->GetYaxis()->SetTitle("Prompt rate");
+    h_eff_MC_endcap_draw->GetYaxis()->SetTitleSize(0.05);
+    h_eff_MC_endcap_draw->GetYaxis()->SetLabelSize(0.04);
+    h_eff_MC_endcap_draw->GetYaxis()->SetTitleOffset(1.12);
+    h_eff_MC_endcap_draw->GetYaxis()->SetRangeUser(0.5, 1.1);
+    h_eff_MC_endcap_draw->GetXaxis()->SetRangeUser(0, 5000);
+    h_eff_MC_endcap_draw->GetXaxis()->SetNoExponent();
+    h_eff_MC_endcap_draw->GetXaxis()->SetMoreLogLabels();
+    h_eff_MC_endcap_draw->GetXaxis()->SetTitle("p_{T} (#font[12]{e}) [GeV/c]");
+    h_eff_MC_endcap_draw->GetXaxis()->SetTitleOffset(1);
+    h_eff_MC_endcap_draw->GetXaxis()->SetTitleSize(0.05);
+    h_eff_MC_endcap_draw->GetXaxis()->SetLabelSize(0.04);
+    h_eff_MC_endcap2_draw->SetDirectory(0);
+    h_eff_MC_endcap2_draw->SetMarkerStyle(33);
+    h_eff_MC_endcap2_draw->SetMarkerSize(1.5);
+    h_eff_MC_endcap2_draw->SetMarkerColor(kOrange-3);
+    h_eff_MC_endcap2_draw->SetLineColor(kOrange-3);
+    h_eff_MC_endcap_draw->Draw();
+    h_eff_MC_endcap2_draw->Draw("same");
+    h_eff_MC_barrel->Draw("same");
+    TLegend *legend1 = new TLegend(0.6, 0.77, 0.95, 0.95);
+    legend1->AddEntry(h_eff_MC_barrel, "|#eta| < 1.4442", "LP");
+    legend1->AddEntry(h_eff_MC_endcap_draw, "1.566 < |#eta| < 2.1", "LP");
+    legend1->AddEntry(h_eff_MC_endcap2_draw, "|#eta| #geq 2.1", "LP");
+    legend1->Draw();
+    c_PR_allin1->SetLogx();
+    c_PR_allin1->Update();
+
+    TCanvas *c_PR_eta = new TCanvas("c_PR_eta", "c_PR_eta", 800, 800);
+    c_PR_eta->cd();
+    c_PR_eta->SetGrid(1);
+    c_PR_eta->SetRightMargin(0.05);
+    c_PR_eta->SetTopMargin(0.05);
+    c_PR_eta->SetBottomMargin(0.12);
+    c_PR_eta->SetLeftMargin(0.13);
+//    h_eff_data_eta->SetDirectory(0);
+//    h_eff_data_eta->SetTitle("");
+//    h_eff_data_eta->SetMarkerStyle(kFullDotLarge);
+//    h_eff_data_eta->SetMarkerColor(kBlack);
+//    h_eff_data_eta->GetYaxis()->SetTitle("Prompt rate");
+//    h_eff_data_eta->GetYaxis()->SetTitleSize(0.05);
+//    h_eff_data_eta->GetYaxis()->SetLabelSize(0.04);
+//    h_eff_data_eta->GetYaxis()->SetTitleOffset(1.12);
+//    h_eff_data_eta->GetYaxis()->SetRangeUser(0.5, 1);
+//    h_eff_data_eta->GetXaxis()->SetRangeUser(-2.4, 2.4);
+//    h_eff_data_eta->GetXaxis()->SetNoExponent();
+//    h_eff_data_eta->GetXaxis()->SetMoreLogLabels();
+//    h_eff_data_eta->GetXaxis()->SetTitle("#eta");
+//    h_eff_data_eta->GetXaxis()->SetTitleOffset(1);
+//    h_eff_data_eta->GetXaxis()->SetTitleSize(0.05);
+//    h_eff_data_eta->GetXaxis()->SetLabelSize(0.04);
+//    h_eff_data_eta->Draw();
+//    TLegend *legend_eta = new TLegend(0.13, 0.85, 0.4, 0.95);
+//    legend_eta->AddEntry(h_eff_data_eta, "Subtraction", "LP");
+//    legend_eta->Draw();
+    h_eff_MC_eta->SetDirectory(0);
+    h_eff_MC_eta->SetTitle("");
+    h_eff_MC_eta->SetMarkerStyle(kFullDotLarge);
+    h_eff_MC_eta->SetMarkerColor(kBlack);
+    h_eff_MC_eta->GetYaxis()->SetTitle("Prompt rate");
+    h_eff_MC_eta->GetYaxis()->SetTitleSize(0.05);
+    h_eff_MC_eta->GetYaxis()->SetLabelSize(0.04);
+    h_eff_MC_eta->GetYaxis()->SetTitleOffset(1.12);
+    h_eff_MC_eta->GetYaxis()->SetRangeUser(0.5, 1.1);
+    h_eff_MC_eta->GetXaxis()->SetRangeUser(-2.4, 2.4);
+    h_eff_MC_eta->GetXaxis()->SetNoExponent();
+    h_eff_MC_eta->GetXaxis()->SetMoreLogLabels();
+    h_eff_MC_eta->GetXaxis()->SetTitle("#eta");
+    h_eff_MC_eta->GetXaxis()->SetTitleOffset(1);
+    h_eff_MC_eta->GetXaxis()->SetTitleSize(0.05);
+    h_eff_MC_eta->GetXaxis()->SetLabelSize(0.04);
+    h_eff_MC_eta->Draw();
+    TLegend *legend_eta = new TLegend(0.13, 0.85, 0.4, 0.95);
+    legend_eta->AddEntry(h_eff_MC_eta, "W+Jets MC", "LP");
+    legend_eta->Draw();
+    c_PR_eta->Update();
+
+    f->Close();
+    if (!f->IsOpen()) cout << "File " << inName << " has been closed successfully.\n" << endl;
+    else cout << "FILE " << inName << " COULD NOT BE CLOSED!\n" << endl;
+
+    TFile *f_out = new TFile("/media/sf_DATA/FR/Electron/PromptRate_electron_alt.root", "RECREATE");
+    f_out->cd();
+    h_eff_data_barrel->Write();
+    h_eff_data_endcap->Write();
+    h_eff_data_endcap2->Write();
+    h_eff_data_eta->Write();
+    h_eff_MC_barrel->Write();
+    h_eff_MC_endcap->Write();
+    h_eff_MC_endcap2->Write();
+    h_eff_MC_eta->Write();
+    h_ineff_data_barrel->Write();
+    h_ineff_data_endcap->Write();
+    h_ineff_data_endcap2->Write();
+    h_ineff_data_eta->Write();
+    h_ineff_MC_barrel->Write();
+    h_ineff_MC_endcap->Write();
+    h_ineff_MC_endcap2->Write();
+    h_ineff_MC_eta->Write();
+    h_eff_ratio_barrel->Write();
+    h_eff_ratio_endcap->Write();
+    h_eff_ratio_endcap2->Write();
+    h_eff_ratio_eta->Write();
+    h_ineff_ratio_barrel->Write();
+    h_ineff_ratio_endcap->Write();
+    h_ineff_ratio_endcap2->Write();
+    h_ineff_ratio_eta->Write();
+    f_out->Close();
+
+} // End of E_EstimatePR_alt
+
 
 
 void Mu_EstPR()
@@ -5509,6 +6164,13 @@ void Mu_EstPR_alt()
         h_pT_endcap_fail[i]->SetDirectory(0);
         h_pT_endcap2_fail[i]->SetDirectory(0);
         h_eta_fail[i]->SetDirectory(0);
+
+
+        // FOR TEST: AVERAGING
+        h_pT_barrel_pass[i]->Add(h_pT_barrel2_pass[i]);
+        h_pT_endcap_pass[i]->Add(h_pT_endcap2_pass[i]);
+        h_pT_barrel_fail[i]->Add(h_pT_barrel2_fail[i]);
+        h_pT_endcap_fail[i]->Add(h_pT_endcap2_fail[i]);
     }
 
     // Subtraction and MC methods
@@ -6219,14 +6881,17 @@ void Mu_EstPR_alt()
     h_PR_ratio_endcap_draw->GetYaxis()->SetTitleSize(0.05);
     h_PR_ratio_endcap_draw->GetYaxis()->SetLabelSize(0.04);
     h_PR_ratio_endcap_draw->GetYaxis()->SetTitleOffset(1.12);
-    h_PR_ratio_endcap_draw->GetYaxis()->SetRangeUser(0.4, 1.1);
-    h_PR_ratio_endcap_draw->GetXaxis()->SetRangeUser(0, 5000);
+    h_PR_ratio_endcap_draw->GetYaxis()->SetRangeUser(0.5, 1.5);
+    h_PR_ratio_endcap_draw->GetXaxis()->SetRangeUser(52, 1000);
     h_PR_ratio_endcap_draw->GetXaxis()->SetNoExponent();
     h_PR_ratio_endcap_draw->GetXaxis()->SetMoreLogLabels();
     h_PR_ratio_endcap_draw->GetXaxis()->SetTitle("p_{T} (#mu) [GeV/c]");
     h_PR_ratio_endcap_draw->GetXaxis()->SetTitleOffset(1);
     h_PR_ratio_endcap_draw->GetXaxis()->SetTitleSize(0.05);
     h_PR_ratio_endcap_draw->GetXaxis()->SetLabelSize(0.04);
+    h_PR_ratio_barrel->SetMarkerStyle(kFullDotLarge);
+    h_PR_ratio_barrel->SetMarkerColor(kBlack);
+    h_PR_ratio_barrel->SetLineColor(kBlack);
     h_PR_ratio_endcap2_draw->SetDirectory(0);
     h_PR_ratio_endcap2_draw->SetMarkerStyle(33);
     h_PR_ratio_endcap2_draw->SetMarkerSize(1.5);
@@ -6236,15 +6901,44 @@ void Mu_EstPR_alt()
     h_PR_ratio_barrel2_draw->SetMarkerStyle(23);
     h_PR_ratio_barrel2_draw->SetMarkerColor(kRed-3);
     h_PR_ratio_barrel2_draw->SetLineColor(kRed-3);
-    h_PR_ratio_endcap_draw->Draw();
-    h_PR_ratio_endcap2_draw->Draw("same");
+//    h_PR_ratio_endcap_draw->Draw();
+//    h_PR_ratio_endcap2_draw->Draw("same");
+    // Making a shifted histogram for easier viewing
+    Double_t shifted_bins[10] = {52,63,72,83,93,105,160,213,540,1050};
+    TH1D *h_PR_ratio_endcap_shifted = new TH1D("h_PR_ratio_endcap_shifted", "", 9, shifted_bins);
+    for (Int_t i=1; i<=9; i++)
+    {
+        h_PR_ratio_endcap_shifted->SetBinContent(i, h_PR_ratio_endcap_draw->GetBinContent(i));
+        h_PR_ratio_endcap_shifted->SetBinError(i, h_PR_ratio_endcap_draw->GetBinError(i));
+    }
+    h_PR_ratio_endcap_shifted->SetDirectory(0);
+    h_PR_ratio_endcap_shifted->SetMarkerStyle(kFullSquare);
+    h_PR_ratio_endcap_shifted->SetMarkerSize(1.4);
+    h_PR_ratio_endcap_shifted->SetMarkerColor(kBlue);
+    h_PR_ratio_endcap_shifted->SetLineColor(kBlue);
+    h_PR_ratio_endcap_shifted->GetYaxis()->SetTitle("Prompt selection efficiency");
+    h_PR_ratio_endcap_shifted->GetYaxis()->SetTitleSize(0.05);
+    h_PR_ratio_endcap_shifted->GetYaxis()->SetLabelSize(0.04);
+    h_PR_ratio_endcap_shifted->GetYaxis()->SetTitleOffset(1.12);
+    h_PR_ratio_endcap_shifted->GetYaxis()->SetRangeUser(0.5, 1.5);
+    h_PR_ratio_endcap_shifted->GetXaxis()->SetRangeUser(52, 500);
+    h_PR_ratio_endcap_shifted->GetXaxis()->SetNoExponent();
+    h_PR_ratio_endcap_shifted->GetXaxis()->SetMoreLogLabels();
+    h_PR_ratio_endcap_shifted->GetXaxis()->SetTitle("p_{T} (#mu) [GeV/c]");
+    h_PR_ratio_endcap_shifted->GetXaxis()->SetTitleOffset(1);
+    h_PR_ratio_endcap_shifted->GetXaxis()->SetTitleSize(0.05);
+    h_PR_ratio_endcap_shifted->GetXaxis()->SetLabelSize(0.04);
+    h_PR_ratio_endcap_shifted->Draw();
+
     h_PR_ratio_barrel->Draw("same");
-    h_PR_ratio_barrel2_draw->Draw("same");
-    TLegend *legend_allin1 = new TLegend(0.5, 0.72, 0.95, 0.95);
-    legend_allin1->AddEntry(h_PR_ratio_barrel, "Barrel |#eta| < 0.7", "LP");
-    legend_allin1->AddEntry(h_PR_ratio_barrel2_draw, "Barrel 0.7 #leq |#eta| < 1.2", "LP");
-    legend_allin1->AddEntry(h_PR_ratio_endcap_draw, "Endcap 1.2 #leq |#eta| < 1.8", "LP");
-    legend_allin1->AddEntry(h_PR_ratio_endcap2_draw, "Endcap 1.8 #leq |#eta| < 2.4", "LP");
+//    h_PR_ratio_barrel2_draw->Draw("same");
+    TLegend *legend_allin1 = new TLegend(0.13, 0.8, 0.4, 0.95);
+//    legend_allin1->AddEntry(h_PR_ratio_barrel, "|#eta| < 0.7", "LP");
+//    legend_allin1->AddEntry(h_PR_ratio_barrel2_draw, "0.7 #leq |#eta| < 1.2", "LP");
+//    legend_allin1->AddEntry(h_PR_ratio_endcap_draw, "1.2 #leq |#eta| < 1.8", "LP");
+//    legend_allin1->AddEntry(h_PR_ratio_endcap2_draw, "1.8 #leq |#eta| < 2.4", "LP");
+    legend_allin1->AddEntry(h_PR_ratio_barrel, "|#eta| < 1.2", "LP");
+    legend_allin1->AddEntry(h_PR_ratio_endcap_draw, "1.2 #leq |#eta| < 2.4", "LP");
     legend_allin1->Draw();
 //    f_barrel_17to43->Draw("same");
 //    f_barrel_43to56->Draw("same");
@@ -6371,6 +7065,7 @@ void Mu_EstFRandPR_MC()
     TH1D *h_PR_pT_barrel_nume[4], *h_PR_pT_barrel2_nume[4], *h_PR_pT_endcap_nume[4], *h_PR_pT_endcap2_nume[4];
     TH1D *h_PR_pT_barrel_deno[4], *h_PR_pT_barrel2_deno[4], *h_PR_pT_endcap_deno[4], *h_PR_pT_endcap2_deno[4];
     TH1D *h_PR_eta_nume[4],       *h_PR_eta_deno[4];
+    TH1D *h_FR_nume_sum[4],       *h_FR_deno_sum[4],        *h_PR_nume_sum[4],       *h_PR_deno_sum[4];
 
     TString type[4] = {"DY", "ttbar", "WJets", "QCD"};
     Color_t colors[4] = {kOrange, kCyan+2, kRed-2, kRed+3};
@@ -6487,6 +7182,26 @@ void Mu_EstFRandPR_MC()
         h_PR_eta_nume[i]       ->SetStats(0);
 
         // Calculating rates
+        // Average rates
+        h_FR_nume_sum[i] = ((TH1D*)(h_FR_pT_barrel_nume[i]->Clone("h_FR_nume_sum_"+type[i])));
+        h_FR_nume_sum[i]->SetDirectory(0);
+        h_FR_nume_sum[i]->Add(h_FR_pT_endcap_nume[i]);
+        h_FR_nume_sum[i]->Add(h_FR_pT_endcap2_nume[i]);
+        h_FR_deno_sum[i] = ((TH1D*)(h_FR_pT_barrel_deno[i]->Clone("h_FR_deno_sum_"+type[i])));
+        h_FR_deno_sum[i]->SetDirectory(0);
+        h_FR_deno_sum[i]->Add(h_FR_pT_endcap_deno[i]);
+        h_FR_deno_sum[i]->Add(h_FR_pT_endcap2_deno[i]);
+
+        h_PR_nume_sum[i] = ((TH1D*)(h_PR_pT_barrel_nume[i]->Clone("h_FR_nume_sum_"+type[i])));
+        h_PR_nume_sum[i]->SetDirectory(0);
+        h_PR_nume_sum[i]->Add(h_PR_pT_endcap_nume[i]);
+        h_PR_nume_sum[i]->Add(h_PR_pT_endcap2_nume[i]);
+        h_PR_deno_sum[i] = ((TH1D*)(h_PR_pT_barrel_deno[i]->Clone("h_FR_deno_sum_"+type[i])));
+        h_PR_deno_sum[i]->SetDirectory(0);
+        h_PR_deno_sum[i]->Add(h_PR_pT_endcap_deno[i]);
+        h_PR_deno_sum[i]->Add(h_PR_pT_endcap2_deno[i]);
+
+        // Full rates
         h_FR_pT_barrel_nume[i] ->Divide(h_FR_pT_barrel_deno[i] );
 //        h_FR_pT_barrel2_nume[i]->Divide(h_FR_pT_barrel2_deno[i]);
         h_FR_pT_endcap_nume[i] ->Divide(h_FR_pT_endcap_deno[i] );
@@ -6530,7 +7245,7 @@ void Mu_EstFRandPR_MC()
     h_FR_pT_barrel_nume[0]->GetXaxis()->SetNoExponent(1);
     h_FR_pT_barrel_nume[0]->GetXaxis()->SetMoreLogLabels(1);
     h_FR_pT_barrel_nume[0]->GetXaxis()->SetRangeUser(52, 1000);
-    h_FR_pT_barrel_nume[0]->GetYaxis()->SetRangeUser(0, 1.2);
+    h_FR_pT_barrel_nume[0]->GetYaxis()->SetRangeUser(0, 0.24);
     h_FR_pT_barrel_nume[0]->Draw();
     h_FR_pT_barrel_nume[1]->Draw("same");
     h_FR_pT_barrel_nume[2]->Draw("same");
@@ -6562,7 +7277,7 @@ void Mu_EstFRandPR_MC()
     h_FR_pT_endcap_nume[0]->GetXaxis()->SetNoExponent(1);
     h_FR_pT_endcap_nume[0]->GetXaxis()->SetMoreLogLabels(1);
     h_FR_pT_endcap_nume[0]->GetXaxis()->SetRangeUser(52, 1000);
-    h_FR_pT_endcap_nume[0]->GetYaxis()->SetRangeUser(0, 1.2);
+    h_FR_pT_endcap_nume[0]->GetYaxis()->SetRangeUser(0, 0.26);
     h_FR_pT_endcap_nume[0]->Draw();
     h_FR_pT_endcap_nume[1]->Draw("same");
     h_FR_pT_endcap_nume[2]->Draw("same");
@@ -6589,7 +7304,7 @@ void Mu_EstFRandPR_MC()
     h_FR_pT_endcap2_nume[0]->GetXaxis()->SetNoExponent(1);
     h_FR_pT_endcap2_nume[0]->GetXaxis()->SetMoreLogLabels(1);
     h_FR_pT_endcap2_nume[0]->GetXaxis()->SetRangeUser(52, 1000);
-    h_FR_pT_endcap2_nume[0]->GetYaxis()->SetRangeUser(0, 1.2);
+    h_FR_pT_endcap2_nume[0]->GetYaxis()->SetRangeUser(0, 0.64);
     h_FR_pT_endcap2_nume[0]->Draw();
     h_FR_pT_endcap2_nume[1]->Draw("same");
     h_FR_pT_endcap2_nume[2]->Draw("same");
@@ -6733,6 +7448,9 @@ void Mu_EstFRandPR_MC()
     legend->Draw();
     c_PR_eta->Update();    
 
+//    DYAnalyzer a("");
+//    a.SaveCanvases("ALL", "~/Desktop/LastCopy_DYQCD", "png");
+
     // Writing
     TString outname = "/media/sf_DATA/FR/Muon/MC_FakeRates.root";
     cout << "Writing to " << outname << " ... ";
@@ -6752,6 +7470,15 @@ void Mu_EstFRandPR_MC()
     cout << "Finished." << endl;
     if (!f->IsOpen()) cout << "File has been closed successfully.\n" << endl;
     else cout << "FILE COULD NOT BE CLOSED!\n" << endl;
+
+    cout << "Average rates:" << endl;
+    for (Int_t i=0; i<4; i++)
+    {
+        Double_t FRavg = h_FR_nume_sum[i]->Integral() / h_FR_deno_sum[i]->Integral();
+        Double_t PRavg = h_PR_nume_sum[i]->Integral() / h_PR_deno_sum[i]->Integral();
+        cout << type[i] << ": FR = " << FRavg << "   PR = " << PRavg << endl;
+    }
+    cout << endl;
 
 } // End of Mu_EstFRandPR_MC()
 
