@@ -2429,8 +2429,8 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
             TChain *chain = new TChain(Mgr.TreeName[i_tup]);
-            if (!Mgr.isMC) chain->Add(Mgr.FullLocation[i_tup]);
-            else Mgr.SetupChain(i_tup, chain);
+//            if (!Mgr.isMC) chain->Add(Mgr.FullLocation[i_tup]);
+            Mgr.SetupChain(i_tup, chain);
 
             NtupleHandle *ntuple = new NtupleHandle(chain);
             if (Mgr.isMC == kTRUE)
