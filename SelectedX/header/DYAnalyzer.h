@@ -9531,8 +9531,8 @@ std::vector<double> DYAnalyzer::MatrixMethod_ele_eta_MC(Double_t eta1, Int_t pas
     {
         cout << "Some of weights are NaN.\nweights[0]=" << weights[0] << " weights[1]=" << weights[1] <<
                 " weights[2]=" << weights[2] << " weights[3]=" << weights[3] <<
-                "\neta1=" << eta1 << " relPFiso1=" << relPFiso1 << " FR1=" << FR1 << " PR1=" << PR1 <<
-                " eta2=" << eta2 << " relPFiso2=" << relPFiso2 << " FR2=" << FR2 << " PR2=" << PR2 << endl;
+                "\neta1=" << eta1 << " passMediumID1=" << passMediumID1 << " FR1=" << FR1 << " PR1=" << PR1 <<
+                " eta2=" << eta2 << " passMediumID2=" << passMediumID2 << " FR2=" << FR2 << " PR2=" << PR2 << endl;
     }
 
     return weights;
