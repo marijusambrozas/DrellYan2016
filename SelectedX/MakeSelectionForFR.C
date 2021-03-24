@@ -230,7 +230,6 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         Double_t PVz;
         Double_t gen_weight, top_weight;
         Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
-
         Int_t nMuons;
         std::vector<double> *mu_pT = new std::vector<double>;
         std::vector<double> *mu_eta = new std::vector<double>;
@@ -271,7 +270,7 @@ void MakeSelectionForFR_E (TString type, TString HLTname , Bool_t Debug)
         ElectronTree->Branch("isGsfScPixConsistent", &isGsfScPixConsistent);
         ElectronTree->Branch("isGsfCtfConsistent", &isGsfCtfConsistent);
         ElectronTree->Branch("Full5x5_SigmaIEtaIEta", &Full5x5_SigmaIEtaIEta);
-        ElectronTree->Branch("dEtaInSeed", dEtaInSeed);
+        ElectronTree->Branch("dEtaInSeed", &dEtaInSeed);
         ElectronTree->Branch("dPhiIn", &dPhiIn);
         ElectronTree->Branch("HoverE", &HoverE);
         ElectronTree->Branch("InvEminusInvP", &InvEminusInvP);
@@ -2430,7 +2429,8 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
             cout << "\t<" << Mgr.Tag[i_tup] << ">" << endl;
 
             TChain *chain = new TChain(Mgr.TreeName[i_tup]);
-            Mgr.SetupChain(i_tup, chain);
+            if (!Mgr.isMC) chain->Add(Mgr.FullLocation[i_tup]);
+            else Mgr.SetupChain(i_tup, chain);
 
             NtupleHandle *ntuple = new NtupleHandle(chain);
             if (Mgr.isMC == kTRUE)
