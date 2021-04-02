@@ -368,6 +368,7 @@ public:
         std::vector<double> MatrixMethod_evtWeight_ele_fit(Double_t pT1, Double_t eta1, Int_t passMediumID1, Double_t pT2, Double_t eta2, Int_t passMediumID2);
         std::vector<double> MatrixMethod_ele_MC(Double_t pT1, Double_t eta1, Int_t passMediumID1, Double_t pT2, Double_t eta2, Int_t passMediumID2, TString PRtype="DY", TString FRtype="QCD");
         std::vector<double> MatrixMethod_ele_eta_MC(Double_t eta1, Int_t passMediumID1, Double_t eta2, Int_t passMediumID2, TString PRtype="DY", TString FRtype="QCD");
+        std::vector<double> MatrixMethod_evtWeight_EMu(Double_t mu_pT, Double_t mu_eta, Double_t mu_relPFiso, Double_t e_pT, Double_t e_eta, Int_t e_passMediumID);
 
         // -- pre-FSR functions -- //
         void PostToPreFSR_byDressedLepton(NtupleHandle *ntuple, GenLepton *genlep_postFSR, Double_t dRCut, GenLepton *genlep_preFSR, vector< GenOthers >* GenPhotonCollection);
@@ -9537,6 +9538,57 @@ std::vector<double> DYAnalyzer::MatrixMethod_ele_eta_MC(Double_t eta1, Int_t pas
 
     return weights;
 } // End of MatrixMethod_ele_eta_MC()
+
+
+std::vector<double> DYAnalyzer::MatrixMethod_evtWeight_EMu(Double_t mu_pT, Double_t mu_eta, Double_t mu_relPFiso, Double_t e_pT, Double_t e_eta, Int_t e_passMediumID)
+{
+    std::vector<double> weights(4, 1.0);
+
+    Double_t FRmu = FakeRate(mu_pT, mu_eta);
+    Double_t FRe  = FakeRate_ele(e_pT, e_eta);
+    Double_t PRmu = PromptRate(mu_pT, mu_eta, 1);
+    Double_t PRe  = PromptRate_ele(e_pT, e_eta);
+
+    Double_t prefix = 1 / ((FRmu - PRmu) * (FRe - PRe));
+    if (mu_relPFiso < 0.15 && e_passMediumID)
+    {
+        weights[0] = prefix * (1 - FRmu) * (1 - FRe);
+        weights[1] = prefix * (FRmu - 1) * (1 - PRe);
+        weights[2] = prefix * (PRmu - 1) * (1 - FRe);
+        weights[3] = prefix * (1 - PRmu) * (1 - PRe);
+    }
+    else if (mu_relPFiso < 0.15 && !e_passMediumID)
+    {
+        weights[0] = prefix * (FRmu - 1) * FRe;
+        weights[1] = prefix * (1 - FRmu) * PRe;
+        weights[2] = prefix * (1 - PRmu) * FRe;
+        weights[3] = prefix * (PRmu - 1) * PRe;
+    }
+    else if (mu_relPFiso >= 0.15 && e_passMediumID)
+    {
+        weights[0] = prefix * FRmu * (FRe - 1);
+        weights[1] = prefix * FRmu * (1 - PRe);
+        weights[2] = prefix * PRmu * (1 - FRe);
+        weights[3] = prefix * PRmu * (PRe - 1);
+    }
+    else
+    {
+        weights[0] = prefix * FRmu * FRe;
+        weights[1] = prefix * FRmu * PRe * (-1.0);
+        weights[2] = prefix * PRmu * FRe * (-1.0);
+        weights[3] = prefix * PRmu * PRe;
+    }
+
+    if (weights[0] != weights[0] || weights[1] != weights[1] || weights[2] != weights[2] || weights[3] != weights[3])
+    {
+        cout << "Some of weights are NaN.\nweights[0]=" << weights[0] << " weights[1]=" << weights[1] <<
+                " weights[2]=" << weights[2] << " weights[3]=" << weights[3] <<
+                "\nmu_pT=" << mu_pT << " mu_eta=" << mu_eta << " mu_relPFiso=" << mu_relPFiso << " FRmu=" << FRmu << " PRmu=" << PRmu <<
+                " e_pT=" << e_pT << " e_eta=" << e_eta << " e_passMediumID=" << e_passMediumID << " FRe=" << FRe << " PRe=" << PRe << endl;
+    }
+
+    return weights;
+} // end of MatrixMethod_evtWeight_EMu
 
 
 Bool_t DYAnalyzer::EventSelection_emu_method(vector< Muon > MuonCollection, vector< Electron > ElectronCollection, NtupleHandle *ntuple,

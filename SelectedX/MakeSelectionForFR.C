@@ -1183,41 +1183,17 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
 
         //Creating a file
         TString out_base;
-        TString out_dir;
+        TString out_dir = "SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc];
         TFile* MuonFile;
-        if (Mgr.Type == "DATA")
-        {
-            out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
-            out_dir = "SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc];
-        }
-        else if (Mgr.Type == "SIGNAL")
-        {
-            out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
-            out_dir = "SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc];
-        }
-        else if (Mgr.Type == "BKG")
-        {
-            out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
-            out_dir = "SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc];
-        }
-        else if (Mgr.Type == "TEST")
-        {
-            out_base = "/media/sf_DATA/test/";
-            out_dir = "SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc];
-        }
-        else
-        {
-            cout << "Problems with TYPE." << endl;
-            return;
-        }
+        if (Mgr.Type == "TEST") out_base = "/media/sf_DATA/test/";
+        else out_base = "/cms/ldap_home/mambroza/DrellYan2016/";
 
-        if (Debug == kTRUE)
+        if (Debug)
             MuonFile = TFile::Open(out_base+out_dir+"_DEBUG.root", "RECREATE");
         else
             MuonFile = TFile::Open(out_base+out_dir+".root", "RECREATE");
         MuonFile->cd();
 
-        Int_t nMuons;
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
         std::vector<double> *phi = new std::vector<double>;
@@ -1229,40 +1205,36 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         Int_t nVTX;
         Double_t PVz;
         Double_t gen_weight, top_weight;
-        Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
-        Int_t nElectrons;
+        Double_t prefiring_weight;
         std::vector<double> *ele_pT = new std::vector<double>;
         std::vector<double> *ele_eta = new std::vector<double>;
         std::vector<double> *ele_etaSC = new std::vector<double>;
         std::vector<double> *ele_phi = new std::vector<double>;
         std::vector<int> *ele_charge = new std::vector<int>;
-        Int_t nJets;
+        std::vector<int> *ele_passMediumID = new std::vector<int>;
+        std::vector<int> *ele_passFRpreselection = new std::vector<int>;
         std::vector<double> *jet_pT = new std::vector<double>;
         std::vector<double> *jet_eta = new std::vector<double>;
         std::vector<double> *jet_phi = new std::vector<double>;
         std::vector<int> *jet_charge = new std::vector<int>;
-        Int_t nGenMuons;
-        std::vector<double> *genMu_pT = new std::vector<double>;
-        std::vector<double> *genMu_eta = new std::vector<double>;
-        std::vector<double> *genMu_phi = new std::vector<double>;
-        std::vector<int> *genMu_charge = new std::vector<int>;
-        std::vector<int> *genMu_isPrompt = new std::vector<int>;
-        std::vector<int> *genMu_isPromptFinalState = new std::vector<int>;
-        std::vector<int> *genMu_isTauDecayProduct = new std::vector<int>;
-        std::vector<int> *genMu_isPromptTauDecayProduct = new std::vector<int>;
-        std::vector<int> *genMu_isDirectPromptTauDecayProductFinalState = new std::vector<int>;
-        std::vector<int> *genMu_isHardProcess = new std::vector<int>;
-        std::vector<int> *genMu_isLastCopy = new std::vector<int>;
-        std::vector<int> *genMu_isLastCopyBeforeFSR = new std::vector<int>;
-        std::vector<int> *genMu_isPromptDecayed = new std::vector<int>;
-        std::vector<int> *genMu_isDecayedLeptonHadron = new std::vector<int>;
-        std::vector<int> *genMu_fromHardProcessBeforeFSR = new std::vector<int>;
-        std::vector<int> *genMu_fromHardProcessDecayed = new std::vector<int>;
-        std::vector<int> *genMu_fromHardProcessFinalState = new std::vector<int>;
+        std::vector<double> *gen_pT = new std::vector<double>;
+        std::vector<double> *gen_eta = new std::vector<double>;
+        std::vector<double> *gen_phi = new std::vector<double>;
+        std::vector<int> *gen_charge = new std::vector<int>;
+        std::vector<int> *gen_isPrompt = new std::vector<int>;
+        std::vector<int> *gen_isPromptFinalState = new std::vector<int>;
+        std::vector<int> *gen_isTauDecayProduct = new std::vector<int>;
+        std::vector<int> *gen_isHardProcess = new std::vector<int>;
+        std::vector<int> *gen_fromHardProcessFinalState = new std::vector<int>;
+        std::vector<int> *gen_isLastCopy = new std::vector<int>;
+        std::vector<int> *gen_isLastCopyBeforeFSR = new std::vector<int>;
+        std::vector<int> *gen_isDecayedLeptonHadron = new std::vector<int>;
+        std::vector<int> *gen_ID = new std::vector<int>;
+        std::vector<int> *gen_motherID = new std::vector<int>;
+
 
         TTree* MuonTree = new TTree("FRTree", "FRTree");
         // -- Creating muon variables to assign branches -- //
-        MuonTree->Branch("nMuons", &nMuons);
         MuonTree->Branch("p_T", &p_T);
         MuonTree->Branch("eta", &eta);
         MuonTree->Branch("phi", &phi);
@@ -1277,37 +1249,31 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("gen_weight", &gen_weight);
         MuonTree->Branch("top_weight", &top_weight);
         MuonTree->Branch("prefiring_weight", &prefiring_weight);
-        MuonTree->Branch("prefiring_weight_up", &prefiring_weight_up);
-        MuonTree->Branch("prefiring_weight_down", &prefiring_weight_down);
-        MuonTree->Branch("nElectrons", &nElectrons);
         MuonTree->Branch("ele_pT", &ele_pT);
         MuonTree->Branch("ele_eta", &ele_eta);
         MuonTree->Branch("ele_etaSC", &ele_etaSC);
         MuonTree->Branch("ele_phi", &ele_phi);
         MuonTree->Branch("ele_charge", &ele_charge);
-        MuonTree->Branch("nJets", &nJets);
+        MuonTree->Branch("ele_passMediumID", &ele_passMediumID);
+        MuonTree->Branch("ele_passFRpreselection", &ele_passFRpreselection);
         MuonTree->Branch("jet_pT", &jet_pT);
         MuonTree->Branch("jet_eta", &jet_eta);
         MuonTree->Branch("jet_phi", &jet_phi);
         MuonTree->Branch("jet_charge", &jet_charge);
-        MuonTree->Branch("nGenMuons", &nGenMuons);
-        MuonTree->Branch("genMu_pT", &genMu_pT);
-        MuonTree->Branch("genMu_eta", &genMu_eta);
-        MuonTree->Branch("genMu_phi", &genMu_phi);
-        MuonTree->Branch("genMu_charge", &genMu_charge);
-        MuonTree->Branch("genMu_isPrompt", &genMu_isPrompt);
-        MuonTree->Branch("genMu_isPromptFinalState", &genMu_isPromptFinalState);
-        MuonTree->Branch("genMu_isTauDecayProduct", &genMu_isTauDecayProduct);
-        MuonTree->Branch("genMu_isPromptTauDecayProduct", &genMu_isPromptTauDecayProduct);
-        MuonTree->Branch("genMu_isDirectPromptTauDecayProductFinalState", &genMu_isDirectPromptTauDecayProductFinalState);
-        MuonTree->Branch("genMu_isHardProcess", &genMu_isHardProcess);
-        MuonTree->Branch("genMu_isLastCopy", &genMu_isLastCopy);
-        MuonTree->Branch("genMu_isLastCopyBeforeFSR", &genMu_isLastCopyBeforeFSR);
-        MuonTree->Branch("genMu_isPromptDecayed", &genMu_isPromptDecayed);
-        MuonTree->Branch("genMu_isDecayedLeptonHadron", &genMu_isDecayedLeptonHadron);
-        MuonTree->Branch("genMu_fromHardProcessBeforeFSR", &genMu_fromHardProcessBeforeFSR);
-        MuonTree->Branch("genMu_fromHardProcessDecayed", &genMu_fromHardProcessDecayed);
-        MuonTree->Branch("genMu_fromHardProcessFinalState", &genMu_fromHardProcessFinalState);
+        MuonTree->Branch("gen_pT", &gen_pT);
+        MuonTree->Branch("gen_eta", &gen_eta);
+        MuonTree->Branch("gen_phi", &gen_phi);
+        MuonTree->Branch("gen_charge", &gen_charge);
+        MuonTree->Branch("gen_isPrompt", &gen_isPrompt);
+        MuonTree->Branch("gen_isPromptFinalState", &gen_isPromptFinalState);
+        MuonTree->Branch("gen_isTauDecayProduct", &gen_isTauDecayProduct);
+        MuonTree->Branch("gen_isHardProcess", &gen_isHardProcess);
+        MuonTree->Branch("gen_fromHardProcessFinalState", &gen_fromHardProcessFinalState);
+        MuonTree->Branch("gen_isLastCopy", &gen_isLastCopy);
+        MuonTree->Branch("gen_isLastCopyBeforeFSR", &gen_isLastCopyBeforeFSR);
+        MuonTree->Branch("gen_isDecayedLeptonHadron", &gen_isDecayedLeptonHadron);
+        MuonTree->Branch("gen_ID", &gen_ID);
+        MuonTree->Branch("gen_motherID", &gen_motherID);
 
         // -- For PU re-weighting -- //
         analyzer->SetupPileUpReWeighting_80X(Mgr.isMC, "ROOTFile_PUReWeight_80X_v20170817_64mb.root");
@@ -1448,28 +1414,26 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         ele_etaSC->clear();
                         ele_phi->clear();
                         ele_charge->clear();
+                        ele_passMediumID->clear();
+                        ele_passFRpreselection->clear();
                         jet_pT->clear();
                         jet_eta->clear();
                         jet_phi->clear();
                         jet_charge->clear();
-                        nGenMuons = 0;
-                        genMu_pT ->clear();
-                        genMu_eta->clear();
-                        genMu_phi->clear();
-                        genMu_charge->clear();
-                        genMu_isPrompt->clear();
-                        genMu_isPromptFinalState->clear();
-                        genMu_isTauDecayProduct->clear();
-                        genMu_isPromptTauDecayProduct->clear();
-                        genMu_isDirectPromptTauDecayProductFinalState->clear();
-                        genMu_isHardProcess->clear();
-                        genMu_isLastCopy->clear();
-                        genMu_isLastCopyBeforeFSR->clear();
-                        genMu_isPromptDecayed->clear();
-                        genMu_isDecayedLeptonHadron->clear();
-                        genMu_fromHardProcessBeforeFSR->clear();
-                        genMu_fromHardProcessDecayed->clear();
-                        genMu_fromHardProcessFinalState->clear();
+                        gen_pT ->clear();
+                        gen_eta->clear();
+                        gen_phi->clear();
+                        gen_charge->clear();
+                        gen_isPrompt->clear();
+                        gen_isPromptFinalState->clear();
+                        gen_isTauDecayProduct->clear();
+                        gen_isHardProcess->clear();
+                        gen_isLastCopy->clear();
+                        gen_isLastCopyBeforeFSR->clear();
+                        gen_isDecayedLeptonHadron->clear();
+                        gen_fromHardProcessFinalState->clear();
+                        gen_ID->clear();
+                        gen_motherID->clear();
 
                         // -- Top pT reweighting -- //
                         top_weight = 1;
@@ -1489,10 +1453,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         nVTX = ntuple->nVertices;
                         PVz = ntuple->PVz;
                         prefiring_weight = ntuple->_prefiringweight;
-                        prefiring_weight_up = ntuple->_prefiringweightup;
-                        prefiring_weight_down = ntuple->_prefiringweightdown;
 
-                        nMuons = SelectedMuonCollection_deno.size();
                         // -- Vector filling -- //
                         for (UInt_t i=0; i<SelectedMuonCollection_deno.size(); i++)
                         {
@@ -1503,17 +1464,30 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             relPFiso->push_back(SelectedMuonCollection_deno[i].RelPFIso_dBeta);
                             TRKiso->push_back(SelectedMuonCollection_deno[i].trkiso);
                         }
-                        nElectrons = ntuple->Nelectrons;
-                        for (Int_t i_ele=0; i_ele<nElectrons; i_ele++)
+                        for (Int_t i_ele=0; i_ele<ntuple->Nelectrons; i_ele++)
                         {
                             ele_pT->push_back(ntuple->Electron_pT[i_ele]);
                             ele_eta->push_back(ntuple->Electron_eta[i_ele]);
                             ele_etaSC->push_back(ntuple->Electron_etaSC[i_ele]);
                             ele_phi->push_back(ntuple->Electron_phi[i_ele]);
                             ele_charge->push_back(ntuple->Electron_charge[i_ele]);
+                            ele_passMediumID->push_back(ntuple->Electron_passMediumID[i_ele]);
+                            if (ntuple->Electron_mHits[i_ele] <= 1 && ntuple->Electron_ecalIso03[i_ele]/ntuple->Electron_pT[i_ele] < 0.5 &&
+                                ntuple->Electron_hcalIso03[i_ele]/ntuple->Electron_pT[i_ele] < 0.3 &&
+                                ntuple->Electron_trkIso03[i_ele]/ntuple->Electron_pT[i_ele] < 0.2)
+                            {
+                                if (fabs(ntuple->Electron_etaSC[i_ele]) < 1.4442 && ntuple->Electron_Full5x5_SigmaIEtaIEta[i_ele] < 0.013 &&
+                                    ntuple->Electron_HoverE[i_ele] < 0.13 && fabs(ntuple->Electron_dEtaInSeed[i_ele]) < 0.01 &&
+                                    fabs(ntuple->Electron_dPhiIn[i_ele]) < 0.07)
+                                    ele_passFRpreselection->push_back(1);
+                                else if (fabs(ntuple->Electron_etaSC[i_ele]) > 1.566 && ntuple->Electron_Full5x5_SigmaIEtaIEta[i_ele] < 0.035 &&
+                                         ntuple->Electron_HoverE[i_ele] < 0.13)
+                                    ele_passFRpreselection->push_back(1);
+                                else ele_passFRpreselection->push_back(0);
+                            }
+                            else ele_passFRpreselection->push_back(0);
                         }
-                        nJets = ntuple->Njets;
-                        for (Int_t i_jet=0; i_jet<nJets; i_jet++)
+                        for (Int_t i_jet=0; i_jet<ntuple->Njets; i_jet++)
                         {
                             jet_pT->push_back(ntuple->Jet_pT[i_jet]);
                             jet_eta->push_back(ntuple->Jet_eta[i_jet]);
@@ -1524,27 +1498,39 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         {
                             GenLepton genlep;
                             genlep.FillFromNtuple(ntuple, i_gen);
-                            if(genlep.isMuon())
-                            {
-                                nGenMuons++;
-                                genMu_pT->push_back(genlep.Pt);
-                                genMu_eta->push_back(genlep.eta);
-                                genMu_phi->push_back(genlep.phi);
-                                genMu_charge->push_back(genlep.charge);
-                                genMu_isPrompt->push_back(genlep.isPrompt);
-                                genMu_isPromptFinalState->push_back(genlep.isPromptFinalState);
-                                genMu_isTauDecayProduct->push_back(genlep.isTauDecayProduct);
-                                genMu_isPromptTauDecayProduct->push_back(genlep.isPromptTauDecayProduct);
-                                genMu_isDirectPromptTauDecayProductFinalState->push_back(genlep.isDirectPromptTauDecayProductFinalState);
-                                genMu_isHardProcess->push_back(genlep.isHardProcess);
-                                genMu_isLastCopy->push_back(genlep.isLastCopy);
-                                genMu_isLastCopyBeforeFSR->push_back(genlep.isLastCopyBeforeFSR);
-                                genMu_isPromptDecayed->push_back(genlep.isPromptDecayed);
-                                genMu_isDecayedLeptonHadron->push_back(genlep.isDecayedLeptonHadron);
-                                genMu_fromHardProcessBeforeFSR->push_back(genlep.fromHardProcessBeforeFSR);
-                                genMu_fromHardProcessDecayed->push_back(genlep.fromHardProcessDecayed);
-                                genMu_fromHardProcessFinalState->push_back(genlep.fromHardProcessFinalState);
-                            }
+                            gen_pT->push_back(genlep.Pt);
+                            gen_eta->push_back(genlep.eta);
+                            gen_phi->push_back(genlep.phi);
+                            gen_charge->push_back(genlep.charge);
+                            gen_isPrompt->push_back(genlep.isPrompt);
+                            gen_isPromptFinalState->push_back(genlep.isPromptFinalState);
+                            gen_isTauDecayProduct->push_back(genlep.isTauDecayProduct);
+                            gen_isHardProcess->push_back(genlep.isHardProcess);
+                            gen_isLastCopy->push_back(genlep.isLastCopy);
+                            gen_isLastCopyBeforeFSR->push_back(genlep.isLastCopyBeforeFSR);
+                            gen_isDecayedLeptonHadron->push_back(genlep.isDecayedLeptonHadron);
+                            gen_fromHardProcessFinalState->push_back(genlep.fromHardProcessFinalState);
+                            gen_ID->push_back(genlep.ID);
+                            gen_motherID->push_back(genlep.Mother);
+                        }
+                        for (Int_t i_gen=0; i_gen<ntuple->nGenOthers; i_gen++)
+                        {
+                            GenOthers gen;
+                            gen.FillFromNtuple(ntuple, i_gen);
+                            gen_pT->push_back(gen.Pt);
+                            gen_eta->push_back(gen.eta);
+                            gen_phi->push_back(gen.phi);
+                            gen_charge->push_back(gen.charge);
+                            gen_isPrompt->push_back(gen.isPrompt);
+                            gen_isPromptFinalState->push_back(gen.isPromptFinalState);
+                            gen_isTauDecayProduct->push_back(gen.isTauDecayProduct);
+                            gen_isHardProcess->push_back(gen.isHardProcess);
+                            gen_isLastCopy->push_back(gen.isLastCopy);
+                            gen_isLastCopyBeforeFSR->push_back(gen.isLastCopyBeforeFSR);
+                            gen_isDecayedLeptonHadron->push_back(gen.isDecayedLeptonHadron);
+                            gen_fromHardProcessFinalState->push_back(gen.fromHardProcessFinalState);
+                            gen_ID->push_back(gen.ID);
+                            gen_motherID->push_back(gen.Mother);
                         }
 
                         MuonTree->Fill();
