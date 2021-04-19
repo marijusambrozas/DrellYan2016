@@ -298,3 +298,114 @@ void myRatioPlot_t::DrawOnTop(TH1D* h1_onTop, TString option)
     canvas->cd();
     canvas->Update();
 }
+
+// NOT WORKING, DO NOT USE!!
+void myRatioPlot_t::DrawWithExpectationBar(TH1D *h_up, TH1D *h_down, Double_t ymin, Double_t ymax, UInt_t logX, TString option, TString yAxisName, UInt_t logY)
+{
+    if(PlotsSet==1) {
+//        canvas = new TCanvas(CanvasName, CanvasName, 1000, 1000);
+        canvas = new TCanvas(CanvasName, CanvasName, 750, 850);
+//        canvas = new TCanvas(CanvasName, CanvasName, 1500, 1000);
+        pad1 = new TPad("pad1", "pad1", 0, 0.36, 1, 1);
+        pad1->SetNumber(1);
+        pad1->SetBottomMargin(0.008);
+        pad1->SetTopMargin(0.05);
+        pad1->SetRightMargin(0.05);
+        pad1->SetLeftMargin(0.15);
+        pad1->Draw();
+        pad1->cd();
+        h_up->SetMarkerStyle(0);
+        h_up->SetFillColor(38);
+        h_up->SetFillStyle(3244);
+        h_up->SetLineColor(39);
+        h_down->SetMarkerStyle(0);
+        h_down->SetFillColor(38);
+        h_down->SetFillStyle(3244);
+        h_down->SetLineColor(39);
+        s_stackedProcesses->Draw(option/*"HIST"*/);
+        s_stackedProcesses->GetYaxis()->SetTitle(yAxisName);
+        s_stackedProcesses->GetYaxis()->SetTitleOffset(1/*1.1*/);
+        s_stackedProcesses->GetYaxis()->SetTitleSize(0.07/*04*/);
+        s_stackedProcesses->GetXaxis()->SetNoExponent(1);
+        s_stackedProcesses->GetXaxis()->SetTitleOffset(10);
+        s_stackedProcesses->SetMinimum(ymin);
+        s_stackedProcesses->SetMaximum(ymax);
+        if(logX) s_stackedProcesses->GetXaxis()->SetMoreLogLabels(1);
+        s_stackedProcesses->GetXaxis()->SetRangeUser(x1, x2);
+        s_stackedProcesses->GetYaxis()->SetLabelSize(0.06/*04*/);
+        h_up->Draw("samehist");
+        s_stackedProcesses->Draw("sameaxis");
+        h1_data->Draw("same E");
+        ((TH1D*)(s_stackedProcesses->GetStack()->Last()))->Add(h_down, -100000);
+        s_stackedProcesses->Draw("samehist");
+        h1_data->Draw("sameaxis");
+        h1_data->SetDirectory(0);
+
+        if(legendSet==1) {
+            if(legendEntries) legend->Draw();
+            else std::cout << "myRatioPlot: Legend has " << legendEntries << " entries and cannot be drawn.\n";
+        }
+        else std::cout << "myRatioPlot: Legend was not set properly.\n";
+
+        if(logX) pad1->SetLogx();
+        if(logY) pad1->SetLogy();
+        pad1->SetTickx(1);
+        pad1->SetTicky(1);
+        pad1->SetGridx(1);
+        pad1->SetGridy(1);
+//        text = new TText (.1, .91, "CMS Work in progress");
+//        text->SetTextAlign(11);
+//        text->SetTextSize(0.05);
+//        text->SetNDC(true);
+//        text->Draw();
+        pad1->Update();
+        canvas->cd();
+
+        pad2 = new TPad("pad2", "pad2", 0, 0, 1, 0.355);
+        pad2->SetNumber(2);
+        pad2->SetTopMargin(0);
+        pad2->SetBottomMargin(0.4/*3*/);
+        pad2->SetRightMargin(0.05);
+        pad2->SetLeftMargin(0.15);
+        pad2->Draw();
+        pad2->cd();
+        h1_dataovermc->Draw("E0");
+        h1_dataovermc->SetDirectory(0);
+        if (systSet)
+        {
+            h1_fullunc->Draw("same E2");
+            h1_fullunc->SetDirectory(0);
+            h1_dataovermc->Draw("same E0");
+        }
+        h1_one = ((TH1D*)(h1_dataovermc->Clone("h1_one")));
+        for (Int_t i=0; i<h1_dataovermc->GetSize(); i++)
+        {
+            h1_one->SetBinContent(i, 1);
+            h1_one->SetBinError(i, 0);
+        }
+        h1_one->SetLineColor(kRed);
+        h1_one->SetFillStyle(0);
+        h1_one->SetLineWidth(2);
+        h1_one->SetDirectory(0);
+        h1_one->Draw("samehist][");
+        h1_one->Draw("sameaxis");
+        if (systSet)
+        {
+            h1_fullunc->Draw("sameaxis");
+            h1_dataovermc->Draw("samehist P");
+            h1_one->Draw("samehist][");
+            h1_one->Draw("sameaxis");
+        }
+        h1_dataovermc->Draw("same E0");
+        if(logX) pad2->SetLogx();
+        pad2->SetTickx(1);
+        pad2->SetTicky(1);
+        pad2->SetGridx(1);
+        pad2->SetGridy(1);
+        pad2->Update();
+        canvas->cd();
+
+        canvas->Update();
+    }
+    else { std::cout << "myRatioPlot: Plots were not set properly.\n"; return; }
+}// End of DrawWithExpectationBar()

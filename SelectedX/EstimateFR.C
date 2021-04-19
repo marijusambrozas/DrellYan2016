@@ -30,12 +30,13 @@
 void E_EstFR (Int_t type);
 void E_EstFR_alt();
 void E_EstFR_alt2();
-void Mu_EstFR (Int_t type);
 void E_EstPR(); // PROMPT RATE
 void E_EstPR_alt(); // PROMPT RATE
+void E_EstFRandPR_MC();
+void Mu_EstFR (Int_t type);
 void Mu_EstPR();
 void Mu_EstPR_alt();
-void Mu_EstFRandPR_MC ();
+void Mu_EstFRandPR_MC();
 
 Double_t CompChiSquared (TH1D *h_data, THStack *s_MC);
 Double_t CompAvgDataMCDifference (TH1D *h_data, THStack *s_MC);
@@ -58,7 +59,12 @@ void EstimateFR (TString WhichX = "", Int_t type = 2)
     if (whichX.Contains("E"))
     {
         Xselected++;
-        if (whichX.Contains("PR"))
+        if (whichX.Contains("MC"))
+        {
+            cout << "\n*******      E_EstFRandPR_MC()      *******" << endl;
+            E_EstFRandPR_MC();
+        }
+        else if (whichX.Contains("PR"))
         {
             if (whichX.Contains("ALT"))
             {
@@ -900,6 +906,7 @@ void E_EstFR(Int_t type)
     h_FRsubtract_eta->Divide(h_eta_deno_sub);
     h_FRsubtract_eta->SetDirectory(0);
 
+    // NOT PREPARED
 //--------------------------------- FR by template -------------------------------------- (deno = nume + ctrl)
 /*
     //                  QCD_nume(from ABCD)
@@ -1171,10 +1178,10 @@ void E_EstFR(Int_t type)
     h_FRsubtract_barrel->Fit("f_barrel_38to180", "R");
     h_FRsubtract_barrel->Fit("f_barrel_180to350", "R");
     h_FRsubtract_barrel->Fit("f_barrel_350to5000", "R");
-    f_barrel_25to38->Draw("same");
-    f_barrel_38to180->Draw("same");
-    f_barrel_180to350->Draw("same");
-    f_barrel_350to5000->Draw("same");
+//    f_barrel_25to38->Draw("same");
+//    f_barrel_38to180->Draw("same");
+//    f_barrel_180to350->Draw("same");
+//    f_barrel_350to5000->Draw("same");
     Double_t chi2_barrel_50 = f_barrel_25to38->GetChisquare();
     Double_t chi2_barrel_180 = f_barrel_38to180->GetChisquare();
     Double_t chi2_barrel_500 = f_barrel_180to350->GetChisquare();
@@ -1255,9 +1262,9 @@ void E_EstFR(Int_t type)
     h_FRsubtract_endcap->Fit("f_endcap_25to108", "R");
     h_FRsubtract_endcap->Fit("f_endcap_108to350", "R");
     h_FRsubtract_endcap->Fit("f_endcap_350to5000", "R");
-    f_endcap_25to108->Draw("same");
-    f_endcap_108to350->Draw("same");
-    f_endcap_350to5000->Draw("same");
+//    f_endcap_25to108->Draw("same");
+//    f_endcap_108to350->Draw("same");
+//    f_endcap_350to5000->Draw("same");
     Double_t chi2_endcap_100 = f_endcap_25to108->GetChisquare();
     Double_t chi2_endcap_400 = f_endcap_108to350->GetChisquare();
     Double_t chi2_endcap_1000 = f_endcap_350to5000->GetChisquare();
@@ -1340,9 +1347,9 @@ void E_EstFR(Int_t type)
     h_FRsubtract_endcap2->Fit("f_endcap2_25to200", "R");
     h_FRsubtract_endcap2->Fit("f_endcap2_200to350", "R");
     h_FRsubtract_endcap2->Fit("f_endcap2_350to5000", "R");
-    f_endcap2_25to200->Draw("same");
-    f_endcap2_200to350->Draw("same");
-    f_endcap2_350to5000->Draw("same");
+//    f_endcap2_25to200->Draw("same");
+//    f_endcap2_200to350->Draw("same");
+//    f_endcap2_350to5000->Draw("same");
     Double_t chi2_endcap2_200 = f_endcap2_25to200->GetChisquare();
     Double_t chi2_endcap2_400 = f_endcap2_200to350->GetChisquare();
     Double_t chi2_endcap2_5000 = f_endcap2_350to5000->GetChisquare();
@@ -1389,16 +1396,16 @@ void E_EstFR(Int_t type)
     legend1->AddEntry(h_FRsubtract_endcap_plot, "1.566 < |#eta| < 2.2", "LP");
     legend1->AddEntry(h_FRsubtract_endcap2_plot, "|#eta| #geq 2.2", "LP");
     legend1->Draw();
-    f_barrel_25to38->Draw("same");
-    f_barrel_38to180->Draw("same");
-    f_barrel_180to350->Draw("same");
-    f_barrel_350to5000->Draw("same");
-    f_endcap_25to108->Draw("same");
-    f_endcap_108to350->Draw("same");
-    f_endcap_350to5000->Draw("same");
-    f_endcap2_25to200->Draw("same");
-    f_endcap2_200to350->Draw("same");
-    f_endcap2_350to5000->Draw("same");
+//    f_barrel_25to38->Draw("same");
+//    f_barrel_38to180->Draw("same");
+//    f_barrel_180to350->Draw("same");
+//    f_barrel_350to5000->Draw("same");
+//    f_endcap_25to108->Draw("same");
+//    f_endcap_108to350->Draw("same");
+//    f_endcap_350to5000->Draw("same");
+//    f_endcap2_25to200->Draw("same");
+//    f_endcap2_200to350->Draw("same");
+//    f_endcap2_350to5000->Draw("same");
     c_FR_allin1->SetLogx();
     c_FR_allin1->Update();
 
@@ -2684,6 +2691,402 @@ void E_EstFR_alt2()
 } // End of E_EstFR_alt2()
 
 
+void E_EstFRandPR_MC()
+{
+    TString filename = "/media/sf_DATA/FR/Electron/MCFR_Hists_E.root";
+    TFile *f = new TFile(filename, "READ");
+    cout << "Reading from file " << filename << " ... ";
+
+    TH1D *h_FR_pT_barrel_nume[4], *h_FR_pT_endcap_nume[4], *h_FR_pT_endcap2_nume[4];
+    TH1D *h_FR_pT_barrel_deno[4], *h_FR_pT_endcap_deno[4], *h_FR_pT_endcap2_deno[4];
+    TH1D *h_FR_eta_nume[4],       *h_FR_eta_deno[4];
+    TH1D *h_PR_pT_barrel_nume[4], *h_PR_pT_endcap_nume[4], *h_PR_pT_endcap2_nume[4];
+    TH1D *h_PR_pT_barrel_deno[4], *h_PR_pT_endcap_deno[4], *h_PR_pT_endcap2_deno[4];
+    TH1D *h_PR_eta_nume[4],       *h_PR_eta_deno[4];
+    TH1D *h_FR_nume_sum[4],       *h_FR_deno_sum[4],        *h_PR_nume_sum[4],       *h_PR_deno_sum[4];
+
+    TString type[4] = {"DY", "ttbar", "WJets", "QCD"};
+    Color_t colors[4] = {kOrange, kCyan+2, kRed-2, kRed+3};
+    Style_t markers[4] = {kFullDotLarge, kFullSquare, kFullDiamond, kFullTriangleDown};
+    Float_t sizes[4] = {1, 1, 1.5, 1};
+
+    for (Int_t i=0; i<4; i++)
+    {
+        f->GetObject("h_FR_pT_barrel_nume_"+type[i],  h_FR_pT_barrel_nume[i]);
+        f->GetObject("h_FR_pT_endcap_nume_"+type[i],  h_FR_pT_endcap_nume[i]);
+        f->GetObject("h_FR_pT_endcap2_nume_"+type[i], h_FR_pT_endcap2_nume[i]);
+        f->GetObject("h_FR_eta_nume_"+type[i],        h_FR_eta_nume[i]);
+        f->GetObject("h_FR_pT_barrel_deno_"+type[i],  h_FR_pT_barrel_deno[i]);
+        f->GetObject("h_FR_pT_endcap_deno_"+type[i],  h_FR_pT_endcap_deno[i]);
+        f->GetObject("h_FR_pT_endcap2_deno_"+type[i], h_FR_pT_endcap2_deno[i]);
+        f->GetObject("h_FR_eta_deno_"+type[i],        h_FR_eta_deno[i]);
+        f->GetObject("h_PR_pT_barrel_nume_"+type[i],  h_PR_pT_barrel_nume[i]);
+        f->GetObject("h_PR_pT_endcap_nume_"+type[i],  h_PR_pT_endcap_nume[i]);
+        f->GetObject("h_PR_pT_endcap2_nume_"+type[i], h_PR_pT_endcap2_nume[i]);
+        f->GetObject("h_PR_eta_nume_"+type[i],        h_PR_eta_nume[i]);
+        f->GetObject("h_PR_pT_barrel_deno_"+type[i],  h_PR_pT_barrel_deno[i]);
+        f->GetObject("h_PR_pT_endcap_deno_"+type[i],  h_PR_pT_endcap_deno[i]);
+        f->GetObject("h_PR_pT_endcap2_deno_"+type[i], h_PR_pT_endcap2_deno[i]);
+        f->GetObject("h_PR_eta_deno_"+type[i],        h_PR_eta_deno[i]);
+        h_FR_pT_barrel_nume[i]->SetDirectory(0);
+        h_FR_pT_endcap_nume[i]->SetDirectory(0);
+        h_FR_pT_endcap2_nume[i]->SetDirectory(0);
+        h_FR_eta_nume[i]->SetDirectory(0);
+        h_FR_pT_barrel_deno[i]->SetDirectory(0);
+        h_FR_pT_endcap_deno[i]->SetDirectory(0);
+        h_FR_pT_endcap2_deno[i]->SetDirectory(0);
+        h_FR_eta_deno[i]->SetDirectory(0);
+        h_PR_pT_barrel_nume[i]->SetDirectory(0);
+        h_PR_pT_endcap_nume[i]->SetDirectory(0);
+        h_PR_pT_endcap2_nume[i]->SetDirectory(0);
+        h_PR_eta_nume[i]->SetDirectory(0);
+        h_PR_pT_barrel_deno[i]->SetDirectory(0);
+        h_PR_pT_endcap_deno[i]->SetDirectory(0);
+        h_PR_pT_endcap2_deno[i]->SetDirectory(0);
+        h_PR_eta_deno[i]->SetDirectory(0);
+
+        removeNegativeBins(h_FR_pT_barrel_nume[i] );
+        removeNegativeBins(h_FR_pT_endcap_nume[i] );
+        removeNegativeBins(h_FR_pT_endcap2_nume[i]);
+        removeNegativeBins(h_FR_eta_nume[i]       );
+        removeNegativeBins(h_PR_pT_barrel_nume[i] );
+        removeNegativeBins(h_PR_pT_endcap_nume[i] );
+        removeNegativeBins(h_PR_pT_endcap2_nume[i]);
+        removeNegativeBins(h_PR_eta_nume[i]       );
+
+        h_FR_pT_barrel_nume[i] ->SetLineColor(colors[i]);
+        h_FR_pT_endcap_nume[i] ->SetLineColor(colors[i]);
+        h_FR_pT_endcap2_nume[i]->SetLineColor(colors[i]);
+        h_FR_eta_nume[i]       ->SetLineColor(colors[i]);
+        h_PR_pT_barrel_nume[i] ->SetLineColor(colors[i]);
+        h_PR_pT_endcap_nume[i] ->SetLineColor(colors[i]);
+        h_PR_pT_endcap2_nume[i]->SetLineColor(colors[i]);
+        h_PR_eta_nume[i]       ->SetLineColor(colors[i]);
+
+        h_FR_pT_barrel_nume[i] ->SetMarkerColor(colors[i]);
+        h_FR_pT_endcap_nume[i] ->SetMarkerColor(colors[i]);
+        h_FR_pT_endcap2_nume[i]->SetMarkerColor(colors[i]);
+        h_FR_eta_nume[i]       ->SetMarkerColor(colors[i]);
+        h_PR_pT_barrel_nume[i] ->SetMarkerColor(colors[i]);
+        h_PR_pT_endcap_nume[i] ->SetMarkerColor(colors[i]);
+        h_PR_pT_endcap2_nume[i]->SetMarkerColor(colors[i]);
+        h_PR_eta_nume[i]       ->SetMarkerColor(colors[i]);
+
+        h_FR_pT_barrel_nume[i] ->SetMarkerStyle(markers[i]);
+        h_FR_pT_endcap_nume[i] ->SetMarkerStyle(markers[i]);
+        h_FR_pT_endcap2_nume[i]->SetMarkerStyle(markers[i]);
+        h_FR_eta_nume[i]       ->SetMarkerStyle(markers[i]);
+        h_PR_pT_barrel_nume[i] ->SetMarkerStyle(markers[i]);
+        h_PR_pT_endcap_nume[i] ->SetMarkerStyle(markers[i]);
+        h_PR_pT_endcap2_nume[i]->SetMarkerStyle(markers[i]);
+        h_PR_eta_nume[i]       ->SetMarkerStyle(markers[i]);
+
+        h_FR_pT_barrel_nume[i] ->SetMarkerSize(sizes[i]);
+        h_FR_pT_endcap_nume[i] ->SetMarkerSize(sizes[i]);
+        h_FR_pT_endcap2_nume[i]->SetMarkerSize(sizes[i]);
+        h_FR_eta_nume[i]       ->SetMarkerSize(sizes[i]);
+        h_PR_pT_barrel_nume[i] ->SetMarkerSize(sizes[i]);
+        h_PR_pT_endcap_nume[i] ->SetMarkerSize(sizes[i]);
+        h_PR_pT_endcap2_nume[i]->SetMarkerSize(sizes[i]);
+        h_PR_eta_nume[i]       ->SetMarkerSize(sizes[i]);
+
+        h_FR_pT_barrel_nume[i] ->SetStats(0);
+        h_FR_pT_endcap_nume[i] ->SetStats(0);
+        h_FR_pT_endcap2_nume[i]->SetStats(0);
+        h_FR_eta_nume[i]       ->SetStats(0);
+        h_PR_pT_barrel_nume[i] ->SetStats(0);
+        h_PR_pT_endcap_nume[i] ->SetStats(0);
+        h_PR_pT_endcap2_nume[i]->SetStats(0);
+        h_PR_eta_nume[i]       ->SetStats(0);
+
+        // Calculating rates
+        // Average rates
+        h_FR_nume_sum[i] = ((TH1D*)(h_FR_pT_barrel_nume[i]->Clone("h_FR_nume_sum_"+type[i])));
+        h_FR_nume_sum[i]->SetDirectory(0);
+        h_FR_nume_sum[i]->Add(h_FR_pT_endcap_nume[i]);
+        h_FR_nume_sum[i]->Add(h_FR_pT_endcap2_nume[i]);
+        h_FR_deno_sum[i] = ((TH1D*)(h_FR_pT_barrel_deno[i]->Clone("h_FR_deno_sum_"+type[i])));
+        h_FR_deno_sum[i]->SetDirectory(0);
+        h_FR_deno_sum[i]->Add(h_FR_pT_endcap_deno[i]);
+        h_FR_deno_sum[i]->Add(h_FR_pT_endcap2_deno[i]);
+
+        h_PR_nume_sum[i] = ((TH1D*)(h_PR_pT_barrel_nume[i]->Clone("h_FR_nume_sum_"+type[i])));
+        h_PR_nume_sum[i]->SetDirectory(0);
+        h_PR_nume_sum[i]->Add(h_PR_pT_endcap_nume[i]);
+        h_PR_nume_sum[i]->Add(h_PR_pT_endcap2_nume[i]);
+        h_PR_deno_sum[i] = ((TH1D*)(h_PR_pT_barrel_deno[i]->Clone("h_FR_deno_sum_"+type[i])));
+        h_PR_deno_sum[i]->SetDirectory(0);
+        h_PR_deno_sum[i]->Add(h_PR_pT_endcap_deno[i]);
+        h_PR_deno_sum[i]->Add(h_PR_pT_endcap2_deno[i]);
+
+        // Full rates
+        h_FR_pT_barrel_nume[i] ->Divide(h_FR_pT_barrel_deno[i] );
+        h_FR_pT_endcap_nume[i] ->Divide(h_FR_pT_endcap_deno[i] );
+        h_FR_pT_endcap2_nume[i]->Divide(h_FR_pT_endcap2_deno[i]);
+        h_FR_eta_nume[i]       ->Divide(h_FR_eta_deno[i]       );
+        h_PR_pT_barrel_nume[i] ->Divide(h_PR_pT_barrel_deno[i] );
+        h_PR_pT_endcap_nume[i] ->Divide(h_PR_pT_endcap_deno[i] );
+        h_PR_pT_endcap2_nume[i]->Divide(h_PR_pT_endcap2_deno[i]);
+        h_PR_eta_nume[i]       ->Divide(h_PR_eta_deno[i]       );
+    }
+
+    cout << "finished." << endl;
+    f->Close();
+    if (!f->IsOpen()) cout << "File has been closed successfully.\n" << endl;
+    else cout << "FILE " << filename << " COULD NOT BE CLOSED!\n" << endl;
+
+    // Drawing
+    TLegend *legend = new TLegend(0.65, 0.8, 0.95, 0.95);
+    legend->AddEntry(h_FR_pT_barrel_nume[0], "DY", "lp");
+    legend->AddEntry(h_FR_pT_barrel_nume[1], "t#bar{t}", "lp");
+    legend->AddEntry(h_FR_pT_barrel_nume[2], "W+Jets", "lp");
+    legend->AddEntry(h_FR_pT_barrel_nume[3], "QCD", "lp");
+
+    TCanvas *c_FR_barrel  = new TCanvas("c_FR_barrel",  "FR barrel", 800, 800);
+    c_FR_barrel->cd();
+    c_FR_barrel->SetGrid(1);
+    c_FR_barrel->SetLogx(1);
+    c_FR_barrel->SetRightMargin(0.05);
+    c_FR_barrel->SetTopMargin(0.05);
+    c_FR_barrel->SetBottomMargin(0.12);
+    c_FR_barrel->SetLeftMargin(0.13);
+    h_FR_pT_barrel_nume[0]->GetXaxis()->SetTitle("p_{T} (#mu) [GeV/c]");
+    h_FR_pT_barrel_nume[0]->GetXaxis()->SetTitleOffset(1);
+    h_FR_pT_barrel_nume[0]->GetXaxis()->SetTitleSize(0.05);
+    h_FR_pT_barrel_nume[0]->GetXaxis()->SetLabelSize(0.04);
+    h_FR_pT_barrel_nume[0]->GetYaxis()->SetTitle("Fake rate");
+    h_FR_pT_barrel_nume[0]->GetYaxis()->SetTitleSize(0.05);
+    h_FR_pT_barrel_nume[0]->GetYaxis()->SetTitleOffset(1.25);
+    h_FR_pT_barrel_nume[0]->GetYaxis()->SetLabelSize(0.04);
+    h_FR_pT_barrel_nume[0]->GetXaxis()->SetNoExponent(1);
+    h_FR_pT_barrel_nume[0]->GetXaxis()->SetMoreLogLabels(1);
+    h_FR_pT_barrel_nume[0]->GetXaxis()->SetRangeUser(52, 1000);
+    h_FR_pT_barrel_nume[0]->GetYaxis()->SetRangeUser(0, 0.24);
+    h_FR_pT_barrel_nume[0]->Draw();
+    h_FR_pT_barrel_nume[1]->Draw("same");
+    h_FR_pT_barrel_nume[2]->Draw("same");
+    h_FR_pT_barrel_nume[3]->Draw("same");
+    legend->Draw();
+    c_FR_barrel->Update();
+
+    TCanvas *c_FR_endcap  = new TCanvas("c_FR_endcap",  "FR endcap", 800, 800);
+    c_FR_endcap->cd();
+    c_FR_endcap->SetGrid(1);
+    c_FR_endcap->SetLogx(1);
+    c_FR_endcap->SetRightMargin(0.05);
+    c_FR_endcap->SetTopMargin(0.05);
+    c_FR_endcap->SetBottomMargin(0.12);
+    c_FR_endcap->SetLeftMargin(0.13);
+    h_FR_pT_endcap_nume[0]->GetXaxis()->SetTitle("p_{T} (#mu) [GeV/c]");
+    h_FR_pT_endcap_nume[0]->GetXaxis()->SetTitleOffset(1);
+    h_FR_pT_endcap_nume[0]->GetXaxis()->SetTitleSize(0.05);
+    h_FR_pT_endcap_nume[0]->GetXaxis()->SetLabelSize(0.04);
+    h_FR_pT_endcap_nume[0]->GetYaxis()->SetTitle("Fake rate");
+    h_FR_pT_endcap_nume[0]->GetYaxis()->SetTitleSize(0.05);
+    h_FR_pT_endcap_nume[0]->GetYaxis()->SetTitleOffset(1.25);
+    h_FR_pT_endcap_nume[0]->GetYaxis()->SetLabelSize(0.04);
+    h_FR_pT_endcap_nume[0]->GetXaxis()->SetNoExponent(1);
+    h_FR_pT_endcap_nume[0]->GetXaxis()->SetMoreLogLabels(1);
+    h_FR_pT_endcap_nume[0]->GetXaxis()->SetRangeUser(52, 1000);
+    h_FR_pT_endcap_nume[0]->GetYaxis()->SetRangeUser(0, 0.26);
+    h_FR_pT_endcap_nume[0]->Draw();
+    h_FR_pT_endcap_nume[1]->Draw("same");
+    h_FR_pT_endcap_nume[2]->Draw("same");
+    h_FR_pT_endcap_nume[3]->Draw("same");
+    legend->Draw();
+    c_FR_endcap->Update();
+
+    TCanvas *c_FR_endcap2 = new TCanvas("c_FR_endcap2", "FR endcap2", 800, 800);
+    c_FR_endcap2->cd();
+    c_FR_endcap2->SetGrid(1);
+    c_FR_endcap2->SetLogx(1);
+    c_FR_endcap2->SetRightMargin(0.05);
+    c_FR_endcap2->SetTopMargin(0.05);
+    c_FR_endcap2->SetBottomMargin(0.12);
+    c_FR_endcap2->SetLeftMargin(0.13);
+    h_FR_pT_endcap2_nume[0]->GetXaxis()->SetTitle("p_{T} (#mu) [GeV/c]");
+    h_FR_pT_endcap2_nume[0]->GetXaxis()->SetTitleOffset(1);
+    h_FR_pT_endcap2_nume[0]->GetXaxis()->SetTitleSize(0.05);
+    h_FR_pT_endcap2_nume[0]->GetXaxis()->SetLabelSize(0.04);
+    h_FR_pT_endcap2_nume[0]->GetYaxis()->SetTitle("Fake rate");
+    h_FR_pT_endcap2_nume[0]->GetYaxis()->SetTitleSize(0.05);
+    h_FR_pT_endcap2_nume[0]->GetYaxis()->SetTitleOffset(1.25);
+    h_FR_pT_endcap2_nume[0]->GetYaxis()->SetLabelSize(0.04);
+    h_FR_pT_endcap2_nume[0]->GetXaxis()->SetNoExponent(1);
+    h_FR_pT_endcap2_nume[0]->GetXaxis()->SetMoreLogLabels(1);
+    h_FR_pT_endcap2_nume[0]->GetXaxis()->SetRangeUser(52, 1000);
+    h_FR_pT_endcap2_nume[0]->GetYaxis()->SetRangeUser(0, 0.64);
+    h_FR_pT_endcap2_nume[0]->Draw();
+    h_FR_pT_endcap2_nume[1]->Draw("same");
+    h_FR_pT_endcap2_nume[2]->Draw("same");
+    h_FR_pT_endcap2_nume[3]->Draw("same");
+    legend->Draw();
+    c_FR_endcap2->Update();
+
+    TCanvas *c_FR_eta = new TCanvas("c_FR_eta", "FR eta", 800, 800);
+    c_FR_eta->cd();
+    c_FR_eta->SetGrid(1);
+    c_FR_eta->SetRightMargin(0.05);
+    c_FR_eta->SetTopMargin(0.05);
+    c_FR_eta->SetBottomMargin(0.12);
+    c_FR_eta->SetLeftMargin(0.13);
+    h_FR_eta_nume[0]->GetXaxis()->SetTitle("#eta (#mu)");
+    h_FR_eta_nume[0]->GetXaxis()->SetTitleOffset(1);
+    h_FR_eta_nume[0]->GetXaxis()->SetTitleSize(0.05);
+    h_FR_eta_nume[0]->GetXaxis()->SetLabelSize(0.04);
+    h_FR_eta_nume[0]->GetYaxis()->SetTitle("Fake rate");
+    h_FR_eta_nume[0]->GetYaxis()->SetTitleSize(0.05);
+    h_FR_eta_nume[0]->GetYaxis()->SetTitleOffset(1.25);
+    h_FR_eta_nume[0]->GetYaxis()->SetLabelSize(0.04);
+    h_FR_eta_nume[0]->GetXaxis()->SetNoExponent(1);
+    h_FR_eta_nume[0]->GetXaxis()->SetMoreLogLabels(1);
+    h_FR_eta_nume[0]->GetXaxis()->SetRangeUser(-2.4, 2.4);
+    h_FR_eta_nume[0]->GetYaxis()->SetRangeUser(0, 0.7);
+    h_FR_eta_nume[0]->Draw();
+    h_FR_eta_nume[1]->Draw("same");
+    h_FR_eta_nume[2]->Draw("same");
+    h_FR_eta_nume[3]->Draw("same");
+    legend->Draw();
+    c_FR_eta->Update();
+
+    TCanvas *c_PR_barrel  = new TCanvas("c_PR_barrel",  "PR barrel", 800, 800);
+    c_PR_barrel->cd();
+    c_PR_barrel->SetGrid(1);
+    c_PR_barrel->SetLogx(1);
+    c_PR_barrel->SetRightMargin(0.05);
+    c_PR_barrel->SetTopMargin(0.05);
+    c_PR_barrel->SetBottomMargin(0.12);
+    c_PR_barrel->SetLeftMargin(0.13);
+    h_PR_pT_barrel_nume[0]->GetXaxis()->SetTitle("p_{T} (#mu) [GeV/c]");
+    h_PR_pT_barrel_nume[0]->GetXaxis()->SetTitleOffset(1);
+    h_PR_pT_barrel_nume[0]->GetXaxis()->SetTitleSize(0.05);
+    h_PR_pT_barrel_nume[0]->GetXaxis()->SetLabelSize(0.04);
+    h_PR_pT_barrel_nume[0]->GetYaxis()->SetTitle("Prompt rate");
+    h_PR_pT_barrel_nume[0]->GetYaxis()->SetTitleSize(0.05);
+    h_PR_pT_barrel_nume[0]->GetYaxis()->SetTitleOffset(1.25);
+    h_PR_pT_barrel_nume[0]->GetYaxis()->SetLabelSize(0.04);
+    h_PR_pT_barrel_nume[0]->GetXaxis()->SetNoExponent(1);
+    h_PR_pT_barrel_nume[0]->GetXaxis()->SetMoreLogLabels(1);
+    h_PR_pT_barrel_nume[0]->GetXaxis()->SetRangeUser(52, 1000);
+    h_PR_pT_barrel_nume[0]->GetYaxis()->SetRangeUser(0.8, 1.1);
+    h_PR_pT_barrel_nume[0]->Draw();
+    h_PR_pT_barrel_nume[1]->Draw("same");
+    h_PR_pT_barrel_nume[2]->Draw("same");
+    legend->Draw();
+    c_PR_barrel->Update();
+
+    TCanvas *c_PR_endcap  = new TCanvas("c_PR_endcap",  "PR endcap", 800, 800);
+    c_PR_endcap->cd();
+    c_PR_endcap->SetGrid(1);
+    c_PR_endcap->SetLogx(1);
+    c_PR_endcap->SetRightMargin(0.05);
+    c_PR_endcap->SetTopMargin(0.05);
+    c_PR_endcap->SetBottomMargin(0.12);
+    c_PR_endcap->SetLeftMargin(0.13);
+    h_PR_pT_endcap_nume[0]->GetXaxis()->SetTitle("p_{T} (#mu) [GeV/c]");
+    h_PR_pT_endcap_nume[0]->GetXaxis()->SetTitleOffset(1);
+    h_PR_pT_endcap_nume[0]->GetXaxis()->SetTitleSize(0.05);
+    h_PR_pT_endcap_nume[0]->GetXaxis()->SetLabelSize(0.04);
+    h_PR_pT_endcap_nume[0]->GetYaxis()->SetTitle("Prompt rate");
+    h_PR_pT_endcap_nume[0]->GetYaxis()->SetTitleSize(0.05);
+    h_PR_pT_endcap_nume[0]->GetYaxis()->SetTitleOffset(1.25);
+    h_PR_pT_endcap_nume[0]->GetYaxis()->SetLabelSize(0.04);
+    h_PR_pT_endcap_nume[0]->GetXaxis()->SetNoExponent(1);
+    h_PR_pT_endcap_nume[0]->GetXaxis()->SetMoreLogLabels(1);
+    h_PR_pT_endcap_nume[0]->GetXaxis()->SetRangeUser(52, 1000);
+    h_PR_pT_endcap_nume[0]->GetYaxis()->SetRangeUser(0.8, 1.1);
+    h_PR_pT_endcap_nume[0]->Draw();
+    h_PR_pT_endcap_nume[1]->Draw("same");
+    h_PR_pT_endcap_nume[2]->Draw("same");
+    legend->Draw();
+    c_PR_endcap->Update();
+
+    TCanvas *c_PR_endcap2 = new TCanvas("c_PR_endcap2", "PR endcap2", 800, 800);
+    c_PR_endcap2->cd();
+    c_PR_endcap2->SetGrid(1);
+    c_PR_endcap2->SetLogx(1);
+    c_PR_endcap2->SetRightMargin(0.05);
+    c_PR_endcap2->SetTopMargin(0.05);
+    c_PR_endcap2->SetBottomMargin(0.12);
+    c_PR_endcap2->SetLeftMargin(0.13);
+    h_PR_pT_endcap2_nume[0]->GetXaxis()->SetTitle("p_{T} (#mu) [GeV/c]");
+    h_PR_pT_endcap2_nume[0]->GetXaxis()->SetTitleOffset(1);
+    h_PR_pT_endcap2_nume[0]->GetXaxis()->SetTitleSize(0.05);
+    h_PR_pT_endcap2_nume[0]->GetXaxis()->SetLabelSize(0.04);
+    h_PR_pT_endcap2_nume[0]->GetYaxis()->SetTitle("Prompt rate");
+    h_PR_pT_endcap2_nume[0]->GetYaxis()->SetTitleSize(0.05);
+    h_PR_pT_endcap2_nume[0]->GetYaxis()->SetTitleOffset(1.25);
+    h_PR_pT_endcap2_nume[0]->GetYaxis()->SetLabelSize(0.04);
+    h_PR_pT_endcap2_nume[0]->GetXaxis()->SetNoExponent(1);
+    h_PR_pT_endcap2_nume[0]->GetXaxis()->SetMoreLogLabels(1);
+    h_PR_pT_endcap2_nume[0]->GetXaxis()->SetRangeUser(52, 1000);
+    h_PR_pT_endcap2_nume[0]->GetYaxis()->SetRangeUser(0.8, 1.1);
+    h_PR_pT_endcap2_nume[0]->Draw();
+    h_PR_pT_endcap2_nume[1]->Draw("same");
+    h_PR_pT_endcap2_nume[2]->Draw("same");
+    legend->Draw();
+    c_PR_endcap2->Update();
+
+    TCanvas *c_PR_eta = new TCanvas("c_PR_eta", "PR eta", 800, 800);
+    c_PR_eta->cd();
+    c_PR_eta->SetGrid(1);
+    c_PR_eta->SetRightMargin(0.05);
+    c_PR_eta->SetTopMargin(0.05);
+    c_PR_eta->SetBottomMargin(0.12);
+    c_PR_eta->SetLeftMargin(0.13);
+    h_PR_eta_nume[0]->GetXaxis()->SetTitle("#eta (#mu)");
+    h_PR_eta_nume[0]->GetXaxis()->SetTitleOffset(1);
+    h_PR_eta_nume[0]->GetXaxis()->SetTitleSize(0.05);
+    h_PR_eta_nume[0]->GetXaxis()->SetLabelSize(0.04);
+    h_PR_eta_nume[0]->GetYaxis()->SetTitle("Prompt rate");
+    h_PR_eta_nume[0]->GetYaxis()->SetTitleSize(0.05);
+    h_PR_eta_nume[0]->GetYaxis()->SetTitleOffset(1.25);
+    h_PR_eta_nume[0]->GetYaxis()->SetLabelSize(0.04);
+    h_PR_eta_nume[0]->GetXaxis()->SetNoExponent(1);
+    h_PR_eta_nume[0]->GetXaxis()->SetMoreLogLabels(1);
+    h_PR_eta_nume[0]->GetXaxis()->SetRangeUser(-2.4, 2.4);
+    h_PR_eta_nume[0]->GetYaxis()->SetRangeUser(0.8, 1.1);
+    h_PR_eta_nume[0]->Draw();
+    h_PR_eta_nume[1]->Draw("same");
+    h_PR_eta_nume[2]->Draw("same");
+    legend->Draw();
+    c_PR_eta->Update();
+
+//    DYAnalyzer a("");
+//    a.SaveCanvases("ALL", "~/Desktop/LastCopy_DYQCD", "png");
+
+    // Writing
+    TString outname = "/media/sf_DATA/FR/Electron/MC_FakeRates.root";
+    cout << "Writing to " << outname << " ... ";
+    TFile *f_out = new TFile(outname, "RECREATE");
+    for (Int_t i=0; i<4; i++)
+    {
+        f_out->WriteObjectAny(h_FR_pT_barrel_nume[i],  "TH1D", "h_FR_barrel_" +type[i]);
+        f_out->WriteObjectAny(h_FR_pT_endcap_nume[i],  "TH1D", "h_FR_endcap_" +type[i]);
+        f_out->WriteObjectAny(h_FR_pT_endcap2_nume[i], "TH1D", "h_FR_endcap2_"+type[i]);
+        f_out->WriteObjectAny(h_FR_eta_nume[i],        "TH1D", "h_FR_eta_"    +type[i]);
+        f_out->WriteObjectAny(h_PR_pT_barrel_nume[i],  "TH1D", "h_PR_barrel_" +type[i]);
+        f_out->WriteObjectAny(h_PR_pT_endcap_nume[i],  "TH1D", "h_PR_endcap_" +type[i]);
+        f_out->WriteObjectAny(h_PR_pT_endcap2_nume[i], "TH1D", "h_PR_endcap2_"+type[i]);
+        f_out->WriteObjectAny(h_PR_eta_nume[i],        "TH1D", "h_PR_eta_"    +type[i]);
+    }
+    f_out->Close();
+    cout << "Finished." << endl;
+    if (!f->IsOpen()) cout << "File has been closed successfully.\n" << endl;
+    else cout << "FILE COULD NOT BE CLOSED!\n" << endl;
+
+    cout << "Average rates:" << endl;
+    for (Int_t i=0; i<4; i++)
+    {
+        Double_t FRavg = h_FR_nume_sum[i]->Integral() / h_FR_deno_sum[i]->Integral();
+        Double_t PRavg = h_PR_nume_sum[i]->Integral() / h_PR_deno_sum[i]->Integral();
+        cout << type[i] << ": FR = " << FRavg << "   PR = " << PRavg << endl;
+    }
+    cout << endl;
+
+} // End of E_EstFRandPR_MC()
+
+
 /// ################################################################################## ///
 /// -------------------------------- Muon Channel ------------------------------------ ///
 /// ################################################################################## ///
@@ -3658,6 +4061,46 @@ void Mu_EstFR(Int_t type)
         }
     }
 
+    TH1D* h_FRsigCtrl_template_barrel_plus   = ((TH1D*)(h_FRsigCtrl_template_barrel ->Clone("h_FRsigCtrl_template_plus_barrel")));
+    TH1D* h_FRsigCtrl_template_endcap_plus   = ((TH1D*)(h_FRsigCtrl_template_endcap ->Clone("h_FRsigCtrl_template_plus_endcap")));
+    TH1D* h_FRsigCtrl_template_endcap2_plus  = ((TH1D*)(h_FRsigCtrl_template_endcap2->Clone("h_FRsigCtrl_template_plus_endcap2")));
+    TH1D* h_FRsigCtrl_template_barrel_minus  = ((TH1D*)(h_FRsigCtrl_template_barrel ->Clone("h_FRsigCtrl_template_minus_barrel")));
+    TH1D* h_FRsigCtrl_template_endcap_minus  = ((TH1D*)(h_FRsigCtrl_template_endcap ->Clone("h_FRsigCtrl_template_minus_endcap")));
+    TH1D* h_FRsigCtrl_template_endcap2_minus = ((TH1D*)(h_FRsigCtrl_template_endcap2->Clone("h_FRsigCtrl_template_minus_endcap2")));
+    h_FRsigCtrl_template_barrel_plus  ->SetDirectory(0);
+    h_FRsigCtrl_template_endcap_plus  ->SetDirectory(0);
+    h_FRsigCtrl_template_endcap2_plus ->SetDirectory(0);
+    h_FRsigCtrl_template_barrel_minus ->SetDirectory(0);
+    h_FRsigCtrl_template_endcap_minus ->SetDirectory(0);
+    h_FRsigCtrl_template_endcap2_minus->SetDirectory(0);
+    for (Int_t i_bin=1; i_bin<=18; i_bin++)
+    {
+        if (h_FRsigCtrl_template_barrel_plus ->GetBinContent(i_bin) + h_FRsigCtrl_template_barrel_plus ->GetBinError(i_bin) < 1)
+            h_FRsigCtrl_template_barrel_plus ->SetBinContent(i_bin, h_FRsigCtrl_template_barrel_plus ->GetBinContent(i_bin) + h_FRsigCtrl_template_barrel_plus ->GetBinError(i_bin));
+        else h_FRsigCtrl_template_barrel_plus ->SetBinContent(i_bin, 1);
+
+        if (h_FRsigCtrl_template_barrel_minus ->GetBinContent(i_bin) - h_FRsigCtrl_template_barrel_minus ->GetBinError(i_bin) > 0)
+            h_FRsigCtrl_template_barrel_minus ->SetBinContent(i_bin, h_FRsigCtrl_template_barrel_minus ->GetBinContent(i_bin) - h_FRsigCtrl_template_barrel_minus ->GetBinError(i_bin));
+        else h_FRsigCtrl_template_barrel_minus ->SetBinContent(i_bin, 0);
+
+        if (i_bin <= 9)
+        {
+            if (h_FRsigCtrl_template_endcap_plus ->GetBinContent(i_bin) + h_FRsigCtrl_template_endcap_plus ->GetBinError(i_bin) < 1)
+                h_FRsigCtrl_template_endcap_plus ->SetBinContent(i_bin, h_FRsigCtrl_template_endcap_plus ->GetBinContent(i_bin) + h_FRsigCtrl_template_endcap_plus ->GetBinError(i_bin));
+            else h_FRsigCtrl_template_endcap_plus ->SetBinContent(i_bin, 1);
+            if (h_FRsigCtrl_template_endcap2_plus->GetBinContent(i_bin) + h_FRsigCtrl_template_endcap2_plus->GetBinError(i_bin) < 1)
+                h_FRsigCtrl_template_endcap2_plus->SetBinContent(i_bin, h_FRsigCtrl_template_endcap2_plus->GetBinContent(i_bin) + h_FRsigCtrl_template_endcap2_plus->GetBinError(i_bin));
+            else h_FRsigCtrl_template_endcap2_plus->SetBinContent(i_bin, 1);
+
+            if (h_FRsigCtrl_template_endcap_minus ->GetBinContent(i_bin) - h_FRsigCtrl_template_endcap_minus ->GetBinError(i_bin) > 0)
+                h_FRsigCtrl_template_endcap_minus ->SetBinContent(i_bin, h_FRsigCtrl_template_endcap_minus ->GetBinContent(i_bin) - h_FRsigCtrl_template_endcap_minus ->GetBinError(i_bin));
+            else h_FRsigCtrl_template_endcap_minus ->SetBinContent(i_bin, 0);
+            if (h_FRsigCtrl_template_endcap2_minus->GetBinContent(i_bin) - h_FRsigCtrl_template_endcap2_minus->GetBinError(i_bin) > 0)
+                h_FRsigCtrl_template_endcap2_minus->SetBinContent(i_bin, h_FRsigCtrl_template_endcap2_minus->GetBinContent(i_bin) - h_FRsigCtrl_template_endcap2_minus->GetBinError(i_bin));
+            else h_FRsigCtrl_template_endcap2_minus->SetBinContent(i_bin,0);
+        }
+    }
+
 //--------------------------------- Dalmin's FR --------------------------------------
     h_FRdalmin_barrel = ((TH1D*)(h_FRmixed_barrel->Clone("h_FRdalmin_barrel")));
     h_FRdalmin_barrel->SetDirectory(0);
@@ -3714,6 +4157,12 @@ void Mu_EstFR(Int_t type)
     h_FRsigCtrl_template_barrel->Write();
     h_FRsigCtrl_template_endcap->Write();
     h_FRsigCtrl_template_endcap2->Write();
+    h_FRsigCtrl_template_barrel_plus ->Write();
+    h_FRsigCtrl_template_endcap_plus ->Write();
+    h_FRsigCtrl_template_endcap2_plus ->Write();
+    h_FRsigCtrl_template_barrel_minus ->Write();
+    h_FRsigCtrl_template_endcap_minus ->Write();
+    h_FRsigCtrl_template_endcap2_minus->Write();
     h_FRdalmin_barrel->Write();
     h_FRdalmin_endcap->Write();
     cout << "Finished. Closing the file.." << endl;
@@ -4652,9 +5101,9 @@ void E_EstPR_alt()
     TH1D *h_eff_bkgf_endcap = ((TH1D*)(h_pT_endcap_pass[3]->Clone("h_PR_bkgf_endcap")));
     TH1D *h_eff_bkgf_endcap2 = ((TH1D*)(h_pT_endcap2_pass[3]->Clone("h_PR_bkgf_endcap2")));
     TH1D *h_eff_bkgf_eta = ((TH1D*)(h_eta_pass[3]->Clone("h_PR_bkgf_eta")));
-    h_eff_data_barrel->Add(h_eff_bkgf_barrel, -1);
-    h_eff_data_endcap->Add(h_eff_bkgf_endcap, -1);
-    h_eff_data_endcap2->Add(h_eff_bkgf_endcap2, -1);
+//    h_eff_data_barrel->Add(h_eff_bkgf_barrel, -1);
+//    h_eff_data_endcap->Add(h_eff_bkgf_endcap, -1);
+//    h_eff_data_endcap2->Add(h_eff_bkgf_endcap2, -1);
     h_eff_data_eta->Add(h_eff_bkgf_eta, -1);
     h_eff_data_barrel->Add(h_eff_bkgr_barrel, -1);
     h_eff_data_endcap->Add(h_eff_bkgr_endcap, -1);
@@ -4681,9 +5130,9 @@ void E_EstPR_alt()
     TH1D *h_ineff_bkgf_endcap = ((TH1D*)(h_pT_endcap_fail[3]->Clone("h_1-PR_bkgf_endcap")));
     TH1D *h_ineff_bkgf_endcap2 = ((TH1D*)(h_pT_endcap2_fail[3]->Clone("h_1-PR_bkgf_endcap2")));
     TH1D *h_ineff_bkgf_eta = ((TH1D*)(h_eta_fail[3]->Clone("h_1-PR_bkgf_eta")));
-    h_ineff_data_barrel->Add(h_ineff_bkgf_barrel, -1);
-    h_ineff_data_endcap->Add(h_ineff_bkgf_endcap, -1);
-    h_ineff_data_endcap2->Add(h_ineff_bkgf_endcap2, -1);
+//    h_ineff_data_barrel->Add(h_ineff_bkgf_barrel, -1);
+//    h_ineff_data_endcap->Add(h_ineff_bkgf_endcap, -1);
+//    h_ineff_data_endcap2->Add(h_ineff_bkgf_endcap2, -1);
     h_ineff_data_eta->Add(h_ineff_bkgf_eta, -1);
     h_ineff_data_barrel->Add(h_ineff_bkgr_barrel, -1);
     h_ineff_data_endcap->Add(h_ineff_bkgr_endcap, -1);
@@ -6174,26 +6623,46 @@ void Mu_EstPR_alt()
     }
 
     // Subtraction and MC methods
-    TH1D *h_eff_data_barrel = ((TH1D*)(h_pT_barrel_pass[0]->Clone("h_PR_subtract_barrel")));
+    TH1D *h_eff_data_barrel  = ((TH1D*)(h_pT_barrel_pass[0]->Clone("h_PR_subtract_barrel")));
     TH1D *h_eff_data_barrel2 = ((TH1D*)(h_pT_barrel2_pass[0]->Clone("h_PR_subtract_barrel2")));
-    TH1D *h_eff_data_endcap = ((TH1D*)(h_pT_endcap_pass[0]->Clone("h_PR_subtract_endcap")));
+    TH1D *h_eff_data_endcap  = ((TH1D*)(h_pT_endcap_pass[0]->Clone("h_PR_subtract_endcap")));
     TH1D *h_eff_data_endcap2 = ((TH1D*)(h_pT_endcap2_pass[0]->Clone("h_PR_subtract_endcap2")));
-    TH1D *h_eff_data_eta = ((TH1D*)(h_eta_pass[0]->Clone("h_PR_subtract_eta")));
-    TH1D *h_eff_MC_barrel = ((TH1D*)(h_pT_barrel_pass[1]->Clone("h_PR_MC_barrel")));
-    TH1D *h_eff_MC_barrel2 = ((TH1D*)(h_pT_barrel2_pass[1]->Clone("h_PR_MC_barrel2")));
-    TH1D *h_eff_MC_endcap = ((TH1D*)(h_pT_endcap_pass[1]->Clone("h_PR_MC_endcap")));
-    TH1D *h_eff_MC_endcap2 = ((TH1D*)(h_pT_endcap2_pass[1]->Clone("h_PR_MC_endcap2")));
-    TH1D *h_eff_MC_eta = ((TH1D*)(h_eta_pass[1]->Clone("h_PR_MC_eta")));
-    TH1D *h_eff_bkgr_barrel = ((TH1D*)(h_pT_barrel_pass[2]->Clone("h_PR_bkgr_barrel")));
+    TH1D *h_eff_data_eta     = ((TH1D*)(h_eta_pass[0]->Clone("h_PR_subtract_eta")));
+    TH1D *h_eff_MC_barrel    = ((TH1D*)(h_pT_barrel_pass[1]->Clone("h_PR_MC_barrel")));
+    TH1D *h_eff_MC_barrel2   = ((TH1D*)(h_pT_barrel2_pass[1]->Clone("h_PR_MC_barrel2")));
+    TH1D *h_eff_MC_endcap    = ((TH1D*)(h_pT_endcap_pass[1]->Clone("h_PR_MC_endcap")));
+    TH1D *h_eff_MC_endcap2   = ((TH1D*)(h_pT_endcap2_pass[1]->Clone("h_PR_MC_endcap2")));
+    TH1D *h_eff_MC_eta       = ((TH1D*)(h_eta_pass[1]->Clone("h_PR_MC_eta")));
+    TH1D *h_eff_bkgr_barrel  = ((TH1D*)(h_pT_barrel_pass[2]->Clone("h_PR_bkgr_barrel")));
     TH1D *h_eff_bkgr_barrel2 = ((TH1D*)(h_pT_barrel2_pass[2]->Clone("h_PR_bkgr_barrel2")));
-    TH1D *h_eff_bkgr_endcap = ((TH1D*)(h_pT_endcap_pass[2]->Clone("h_PR_bkgr_endcap")));
+    TH1D *h_eff_bkgr_endcap  = ((TH1D*)(h_pT_endcap_pass[2]->Clone("h_PR_bkgr_endcap")));
     TH1D *h_eff_bkgr_endcap2 = ((TH1D*)(h_pT_endcap2_pass[2]->Clone("h_PR_bkgr_endcap2")));
-    TH1D *h_eff_bkgr_eta = ((TH1D*)(h_eta_pass[2]->Clone("h_PR_bkgr_eta")));
-    TH1D *h_eff_bkgf_barrel = ((TH1D*)(h_pT_barrel_pass[3]->Clone("h_PR_bkgf_barrel")));
+    TH1D *h_eff_bkgr_eta     = ((TH1D*)(h_eta_pass[2]->Clone("h_PR_bkgr_eta")));
+    TH1D *h_eff_bkgf_barrel  = ((TH1D*)(h_pT_barrel_pass[3]->Clone("h_PR_bkgf_barrel")));
     TH1D *h_eff_bkgf_barrel2 = ((TH1D*)(h_pT_barrel2_pass[3]->Clone("h_PR_bkgf_barrel2")));
-    TH1D *h_eff_bkgf_endcap = ((TH1D*)(h_pT_endcap_pass[3]->Clone("h_PR_bkgf_endcap")));
+    TH1D *h_eff_bkgf_endcap  = ((TH1D*)(h_pT_endcap_pass[3]->Clone("h_PR_bkgf_endcap")));
     TH1D *h_eff_bkgf_endcap2 = ((TH1D*)(h_pT_endcap2_pass[3]->Clone("h_PR_bkgf_endcap2")));
-    TH1D *h_eff_bkgf_eta = ((TH1D*)(h_eta_pass[3]->Clone("h_PR_bkgf_eta")));
+    TH1D *h_eff_bkgf_eta     = ((TH1D*)(h_eta_pass[3]->Clone("h_PR_bkgf_eta")));
+    h_eff_data_barrel ->SetDirectory(0);
+    h_eff_data_barrel2->SetDirectory(0);
+    h_eff_data_endcap ->SetDirectory(0);
+    h_eff_data_endcap2->SetDirectory(0);
+    h_eff_data_eta    ->SetDirectory(0);
+    h_eff_MC_barrel   ->SetDirectory(0);
+    h_eff_MC_barrel2  ->SetDirectory(0);
+    h_eff_MC_endcap   ->SetDirectory(0);
+    h_eff_MC_endcap2  ->SetDirectory(0);
+    h_eff_MC_eta      ->SetDirectory(0);
+    h_eff_bkgr_barrel ->SetDirectory(0);
+    h_eff_bkgr_barrel2->SetDirectory(0);
+    h_eff_bkgr_endcap ->SetDirectory(0);
+    h_eff_bkgr_endcap2->SetDirectory(0);
+    h_eff_bkgr_eta    ->SetDirectory(0);
+    h_eff_bkgf_barrel ->SetDirectory(0);
+    h_eff_bkgf_barrel2->SetDirectory(0);
+    h_eff_bkgf_endcap ->SetDirectory(0);
+    h_eff_bkgf_endcap2->SetDirectory(0);
+    h_eff_bkgf_eta    ->SetDirectory(0);
 //    h_eff_data_barrel->Add(h_eff_bkgf_barrel, -1);
 //    h_eff_data_barrel2->Add(h_eff_bkgf_barrel2, -1);
 //    h_eff_data_endcap->Add(h_eff_bkgf_endcap, -1);
@@ -6204,11 +6673,30 @@ void Mu_EstPR_alt()
     h_eff_data_endcap->Add(h_eff_bkgr_endcap, -1);
     h_eff_data_endcap2->Add(h_eff_bkgr_endcap2, -1);
     h_eff_data_eta->Add(h_eff_bkgr_eta, -1);
-    removeNegativeBins(h_eff_data_barrel);
-    removeNegativeBins(h_eff_data_barrel2);
-    removeNegativeBins(h_eff_data_endcap);
-    removeNegativeBins(h_eff_data_endcap2);
-    removeNegativeBins(h_eff_data_eta);
+    // FOR ERRORS
+    Double_t val_signal_barrel[nPtBinEndcap], val_signal_barrel2[nPtBinEndcap], val_signal_endcap[nPtBinEndcap], val_signal_endcap2[nPtBinEndcap];
+    Double_t err_signal_barrel[nPtBinEndcap], err_signal_barrel2[nPtBinEndcap], err_signal_endcap[nPtBinEndcap], err_signal_endcap2[nPtBinEndcap];
+    cout << "SIGNAL" << endl;
+    for (Int_t i_bin=1; i_bin<=nPtBinEndcap; i_bin++)
+    {
+        val_signal_barrel[i_bin-1] = h_eff_data_barrel->GetBinContent(i_bin);
+        err_signal_barrel[i_bin-1] = h_eff_data_barrel->GetBinError(i_bin);
+        val_signal_barrel2[i_bin-1] = h_eff_data_barrel2->GetBinContent(i_bin);
+        err_signal_barrel2[i_bin-1] = h_eff_data_barrel2->GetBinError(i_bin);
+        val_signal_endcap[i_bin-1] = h_eff_data_endcap->GetBinContent(i_bin);
+        err_signal_endcap[i_bin-1] = h_eff_data_endcap->GetBinError(i_bin);
+        val_signal_endcap2[i_bin-1] = h_eff_data_endcap2->GetBinContent(i_bin);
+        err_signal_endcap2[i_bin-1] = h_eff_data_endcap2->GetBinError(i_bin);
+        cout << "Bin" << i_bin << ":\t" << val_signal_barrel[i_bin-1] << "+-" << err_signal_barrel[i_bin-1] << "(b)\t";
+        cout << val_signal_barrel2[i_bin-1] << "+-" << err_signal_barrel2[i_bin-1] << "(b2)\t";
+        cout << val_signal_endcap[i_bin-1] << "+-" << err_signal_endcap[i_bin-1] << "(e)\t";
+        cout << val_signal_endcap2[i_bin-1] << "+-" << err_signal_endcap2[i_bin-1] << "(e2)\t" << endl;
+    }
+//    removeNegativeBins(h_eff_data_barrel);
+//    removeNegativeBins(h_eff_data_barrel2);
+//    removeNegativeBins(h_eff_data_endcap);
+//    removeNegativeBins(h_eff_data_endcap2);
+//    removeNegativeBins(h_eff_data_eta);
 
     TH1D *h_ineff_data_barrel  = ((TH1D*)(h_pT_barrel_fail [0]->Clone("h_1-PR_subtract_barrel")));
     TH1D *h_ineff_data_barrel2 = ((TH1D*)(h_pT_barrel2_fail[0]->Clone("h_1-PR_subtract2_barrel")));
@@ -6230,6 +6718,26 @@ void Mu_EstPR_alt()
     TH1D *h_ineff_bkgf_endcap  = ((TH1D*)(h_pT_endcap_fail [3]->Clone("h_1-PR_bkgf_endcap")));
     TH1D *h_ineff_bkgf_endcap2 = ((TH1D*)(h_pT_endcap2_fail[3]->Clone("h_1-PR_bkgf_endcap2")));
     TH1D *h_ineff_bkgf_eta     = ((TH1D*)(h_eta_fail       [3]->Clone("h_1-PR_bkgf_eta")));
+    h_ineff_data_barrel ->SetDirectory(0);
+    h_ineff_data_barrel2->SetDirectory(0);
+    h_ineff_data_endcap ->SetDirectory(0);
+    h_ineff_data_endcap2->SetDirectory(0);
+    h_ineff_data_eta    ->SetDirectory(0);
+    h_ineff_MC_barrel   ->SetDirectory(0);
+    h_ineff_MC_barrel2  ->SetDirectory(0);
+    h_ineff_MC_endcap   ->SetDirectory(0);
+    h_ineff_MC_endcap2  ->SetDirectory(0);
+    h_ineff_MC_eta      ->SetDirectory(0);
+    h_ineff_bkgr_barrel ->SetDirectory(0);
+    h_ineff_bkgr_barrel2->SetDirectory(0);
+    h_ineff_bkgr_endcap ->SetDirectory(0);
+    h_ineff_bkgr_endcap2->SetDirectory(0);
+    h_ineff_bkgr_eta    ->SetDirectory(0);
+    h_ineff_bkgf_barrel ->SetDirectory(0);
+    h_ineff_bkgf_barrel2->SetDirectory(0);
+    h_ineff_bkgf_endcap ->SetDirectory(0);
+    h_ineff_bkgf_endcap2->SetDirectory(0);
+    h_ineff_bkgf_eta    ->SetDirectory(0);
 //    h_ineff_data_barrel ->Add(h_ineff_bkgf_barrel,  -1);
 //    h_ineff_data_barrel2->Add(h_ineff_bkgf_barrel2, -1);
 //    h_ineff_data_endcap ->Add(h_ineff_bkgf_endcap,  -1);
@@ -6240,11 +6748,31 @@ void Mu_EstPR_alt()
     h_ineff_data_endcap ->Add(h_ineff_bkgr_endcap,  -1);
     h_ineff_data_endcap2->Add(h_ineff_bkgr_endcap2, -1);
     h_ineff_data_eta    ->Add(h_ineff_bkgr_eta,     -1);
-    removeNegativeBins(h_ineff_data_barrel);
-    removeNegativeBins(h_ineff_data_barrel2);
-    removeNegativeBins(h_ineff_data_endcap);
-    removeNegativeBins(h_ineff_data_endcap2);
-    removeNegativeBins(h_ineff_data_eta);
+    // FOR ERRORS
+    Double_t val_control_barrel[nPtBinEndcap], val_control_barrel2[nPtBinEndcap], val_control_endcap[nPtBinEndcap], val_control_endcap2[nPtBinEndcap];
+    Double_t err_control_barrel[nPtBinEndcap], err_control_barrel2[nPtBinEndcap], err_control_endcap[nPtBinEndcap], err_control_endcap2[nPtBinEndcap];
+    cout << "CONTROL" << endl;
+    for (Int_t i_bin=1; i_bin<=nPtBinEndcap; i_bin++)
+    {
+        val_control_barrel[i_bin-1] = h_ineff_data_barrel->GetBinContent(i_bin);
+        err_control_barrel[i_bin-1] = h_ineff_data_barrel->GetBinError(i_bin);
+        val_control_barrel2[i_bin-1] = h_ineff_data_barrel2->GetBinContent(i_bin);
+        err_control_barrel2[i_bin-1] = h_ineff_data_barrel2->GetBinError(i_bin);
+        val_control_endcap[i_bin-1] = h_ineff_data_endcap->GetBinContent(i_bin);
+        err_control_endcap[i_bin-1] = h_ineff_data_endcap->GetBinError(i_bin);
+        val_control_endcap2[i_bin-1] = h_ineff_data_endcap2->GetBinContent(i_bin);
+        err_control_endcap2[i_bin-1] = h_ineff_data_endcap2->GetBinError(i_bin);
+
+        cout << "Bin" << i_bin << ":\t" << val_control_barrel[i_bin-1] << "+-" << err_control_barrel[i_bin-1] << "(b)\t";
+        cout << val_control_barrel2[i_bin-1] << "+-" << err_control_barrel2[i_bin-1] << "(b2)\t";
+        cout << val_control_endcap[i_bin-1] << "+-" << err_control_endcap[i_bin-1] << "(e)\t";
+        cout << val_control_endcap2[i_bin-1] << "+-" << err_control_endcap2[i_bin-1] << "(e2)\t" << endl;
+    }
+//    removeNegativeBins(h_ineff_data_barrel);
+//    removeNegativeBins(h_ineff_data_barrel2);
+//    removeNegativeBins(h_ineff_data_endcap);
+//    removeNegativeBins(h_ineff_data_endcap2);
+//    removeNegativeBins(h_ineff_data_eta);
 
     TH1D *h_eff_data_barrel_deno  = ((TH1D*)(h_eff_data_barrel ->Clone("h_PR_subtract_barrel_deno")));
     TH1D *h_eff_data_barrel2_deno = ((TH1D*)(h_eff_data_barrel2->Clone("h_PR_subtract_barrel2_deno")));
@@ -6268,6 +6796,17 @@ void Mu_EstPR_alt()
     h_eff_MC_endcap2_deno->Add(h_ineff_MC_endcap2);
     h_eff_MC_eta_deno    ->Add(h_ineff_MC_eta);
 
+    h_eff_data_barrel_deno ->SetDirectory(0);
+    h_eff_data_barrel2_deno->SetDirectory(0);
+    h_eff_data_endcap_deno ->SetDirectory(0);
+    h_eff_data_endcap2_deno->SetDirectory(0);
+    h_eff_data_eta_deno    ->SetDirectory(0);
+    h_eff_MC_barrel_deno   ->SetDirectory(0);
+    h_eff_MC_barrel2_deno  ->SetDirectory(0);
+    h_eff_MC_endcap_deno   ->SetDirectory(0);
+    h_eff_MC_endcap2_deno  ->SetDirectory(0);
+    h_eff_MC_eta_deno      ->SetDirectory(0);
+
     h_eff_data_barrel   ->Divide(h_eff_data_barrel_deno);
     h_eff_data_barrel2  ->Divide(h_eff_data_barrel2_deno);
     h_eff_data_endcap   ->Divide(h_eff_data_endcap_deno);
@@ -6289,6 +6828,126 @@ void Mu_EstPR_alt()
     h_ineff_MC_endcap2  ->Divide(h_eff_MC_endcap2_deno);
     h_ineff_MC_eta      ->Divide(h_eff_MC_eta_deno);
 
+    // Getting the errrors
+    cout << "PR ERRORS" << endl;
+    for (Int_t i_bin=1; i_bin<=nPtBinEndcap; i_bin++)
+    {
+        Double_t err_barrel = 1;
+        if (val_signal_barrel[i_bin-1] > 0 && val_control_barrel[i_bin-1] > 0) // calculate normally
+        {
+            err_barrel = sqrt((err_signal_barrel[i_bin-1]*err_signal_barrel[i_bin-1])/(val_signal_barrel[i_bin-1]*val_signal_barrel[i_bin-1]) +
+                              (err_control_barrel[i_bin-1]*err_control_barrel[i_bin-1])/(val_control_barrel[i_bin-1]*val_control_barrel[i_bin-1]));
+            err_barrel *= val_signal_barrel[i_bin-1] * val_control_barrel[i_bin-1] / ((val_signal_barrel[i_bin-1] + val_control_barrel[i_bin-1]) *
+                                                                                      (val_signal_barrel[i_bin-1] + val_control_barrel[i_bin-1]));
+        }
+        else if (val_signal_barrel[i_bin-1] > 0) // remove control part from calculation
+            err_barrel = err_signal_barrel[i_bin-1]/val_signal_barrel[i_bin-1];
+        else if (val_control_barrel[i_bin-1] > 0) // remove control part from calculation
+            err_barrel = err_control_barrel[i_bin-1]/val_control_barrel[i_bin-1];
+
+        if (err_barrel > 1) err_barrel = 1;
+        h_eff_data_barrel->SetBinError(i_bin, err_barrel);
+
+        Double_t err_barrel2 = 1;
+        if (val_signal_barrel2[i_bin-1] > 0 && val_control_barrel2[i_bin-1] > 0) // calculate normally
+        {
+            err_barrel2 = sqrt((err_signal_barrel2[i_bin-1]*err_signal_barrel2[i_bin-1])/(val_signal_barrel2[i_bin-1]*val_signal_barrel2[i_bin-1]) +
+                              (err_control_barrel2[i_bin-1]*err_control_barrel2[i_bin-1])/(val_control_barrel2[i_bin-1]*val_control_barrel2[i_bin-1]));
+            err_barrel2 *= val_signal_barrel2[i_bin-1] * val_control_barrel2[i_bin-1] / ((val_signal_barrel2[i_bin-1] + val_control_barrel2[i_bin-1]) *
+                                                                                      (val_signal_barrel2[i_bin-1] + val_control_barrel2[i_bin-1]));
+        }
+        else if (val_signal_barrel2[i_bin-1] > 0) // remove control part from calculation
+            err_barrel2 = err_signal_barrel2[i_bin-1]/val_signal_barrel2[i_bin-1];
+        else if (val_control_barrel2[i_bin-1] > 0) // remove control part from calculation
+            err_barrel2 = err_control_barrel2[i_bin-1]/val_control_barrel2[i_bin-1];
+
+        if (err_barrel2 > 1) err_barrel2 = 1;
+        h_eff_data_barrel2->SetBinError(i_bin, err_barrel2);
+
+        Double_t err_endcap = 1;
+        if (val_signal_endcap[i_bin-1] > 0 && val_control_endcap[i_bin-1] > 0) // calculate normally
+        {
+            err_endcap = sqrt((err_signal_endcap[i_bin-1]*err_signal_endcap[i_bin-1])/(val_signal_endcap[i_bin-1]*val_signal_endcap[i_bin-1]) +
+                              (err_control_endcap[i_bin-1]*err_control_endcap[i_bin-1])/(val_control_endcap[i_bin-1]*val_control_endcap[i_bin-1]));
+            err_endcap *= val_signal_endcap[i_bin-1] * val_control_endcap[i_bin-1] / ((val_signal_endcap[i_bin-1] + val_control_endcap[i_bin-1]) *
+                                                                                      (val_signal_endcap[i_bin-1] + val_control_endcap[i_bin-1]));
+        }
+        else if (val_signal_endcap[i_bin-1] > 0) // remove control part from calculation
+            err_endcap = err_signal_endcap[i_bin-1]/val_signal_endcap[i_bin-1];
+        else if (val_control_endcap[i_bin-1] > 0) // remove control part from calculation
+            err_endcap = err_control_endcap[i_bin-1]/val_control_endcap[i_bin-1];
+
+        if (err_endcap > 1) err_endcap = 1;
+        h_eff_data_endcap->SetBinError(i_bin, err_endcap);
+
+        Double_t err_endcap2 = 1;
+        if (val_signal_endcap2[i_bin-1] > 0 && val_control_endcap2[i_bin-1] > 0) // calculate normally
+        {
+            err_endcap2 = sqrt((err_signal_endcap2[i_bin-1]*err_signal_endcap2[i_bin-1])/(val_signal_endcap2[i_bin-1]*val_signal_endcap2[i_bin-1]) +
+                               (err_control_endcap2[i_bin-1]*err_control_endcap2[i_bin-1])/(val_control_endcap2[i_bin-1]*val_control_endcap2[i_bin-1]));
+            err_endcap2 *= val_signal_endcap2[i_bin-1] * val_control_endcap2[i_bin-1] / ((val_signal_endcap2[i_bin-1] + val_control_endcap2[i_bin-1]) *
+                                                                                         (val_signal_endcap2[i_bin-1] + val_control_endcap2[i_bin-1]));
+        }
+        else if (val_signal_endcap2[i_bin-1] > 0) // remove control part from calculation
+            err_endcap2 = err_signal_endcap2[i_bin-1]/val_signal_endcap2[i_bin-1];
+        else if (val_control_endcap2[i_bin-1] > 0) // remove control part from calculation
+            err_endcap2 = err_control_endcap2[i_bin-1]/val_control_endcap2[i_bin-1];
+
+        if (err_endcap2 > 1) err_endcap2 = 1;
+        h_eff_data_endcap2->SetBinError(i_bin, err_endcap2);
+
+        cout << "Bin" << i_bin << ":\t" << err_barrel << "(b)\t";
+        cout << err_barrel2 << "(b2)\t";
+        cout << err_endcap << "(e)\t";
+        cout << err_endcap2 << "(e2)\t" << endl;
+    }
+
+    //  For systematics
+    TH1D* h_PR_subtract_barrel_plus = ((TH1D*)(h_eff_data_barrel->Clone("h_PR_subtract_plus_barrel")));
+    TH1D* h_PR_subtract_barrel2_plus = ((TH1D*)(h_eff_data_barrel2->Clone("h_PR_subtract_plus_barrel2")));
+    TH1D* h_PR_subtract_endcap_plus = ((TH1D*)(h_eff_data_endcap->Clone("h_PR_subtract_plus_endcap")));
+    TH1D* h_PR_subtract_endcap2_plus = ((TH1D*)(h_eff_data_endcap2->Clone("h_PR_subtract_plus_endcap2")));
+    TH1D* h_PR_subtract_barrel_minus = ((TH1D*)(h_eff_data_barrel->Clone("h_PR_subtract_minus_barrel")));
+    TH1D* h_PR_subtract_barrel2_minus = ((TH1D*)(h_eff_data_barrel2->Clone("h_PR_subtract_minus_barrel2")));
+    TH1D* h_PR_subtract_endcap_minus = ((TH1D*)(h_eff_data_endcap->Clone("h_PR_subtract_minus_endcap")));
+    TH1D* h_PR_subtract_endcap2_minus = ((TH1D*)(h_eff_data_endcap2->Clone("h_PR_subtract_minus_endcap2")));
+    h_PR_subtract_barrel_plus  ->SetDirectory(0);
+    h_PR_subtract_barrel2_plus  ->SetDirectory(0);
+    h_PR_subtract_endcap_plus  ->SetDirectory(0);
+    h_PR_subtract_endcap2_plus ->SetDirectory(0);
+    h_PR_subtract_barrel_minus ->SetDirectory(0);
+    h_PR_subtract_barrel2_minus ->SetDirectory(0);
+    h_PR_subtract_endcap_minus ->SetDirectory(0);
+    h_PR_subtract_endcap2_minus->SetDirectory(0);
+    for (Int_t i_bin=1; i_bin<=nPtBinEndcap; i_bin++)
+    {
+        if (h_PR_subtract_barrel_plus ->GetBinContent(i_bin) + h_PR_subtract_barrel_plus ->GetBinError(i_bin) < 1)
+            h_PR_subtract_barrel_plus ->SetBinContent(i_bin, h_PR_subtract_barrel_plus ->GetBinContent(i_bin) + h_PR_subtract_barrel_plus ->GetBinError(i_bin));
+        else h_PR_subtract_barrel_plus ->SetBinContent(i_bin, 1);
+        if (h_PR_subtract_barrel2_plus ->GetBinContent(i_bin) + h_PR_subtract_barrel2_plus ->GetBinError(i_bin) < 1)
+            h_PR_subtract_barrel2_plus ->SetBinContent(i_bin, h_PR_subtract_barrel2_plus ->GetBinContent(i_bin) + h_PR_subtract_barrel2_plus ->GetBinError(i_bin));
+        else h_PR_subtract_barrel2_plus ->SetBinContent(i_bin, 1);
+        if (h_PR_subtract_endcap_plus ->GetBinContent(i_bin) + h_PR_subtract_endcap_plus ->GetBinError(i_bin) < 1)
+            h_PR_subtract_endcap_plus ->SetBinContent(i_bin, h_PR_subtract_endcap_plus ->GetBinContent(i_bin) + h_PR_subtract_endcap_plus ->GetBinError(i_bin));
+        else h_PR_subtract_endcap_plus ->SetBinContent(i_bin, 1);
+        if (h_PR_subtract_endcap2_plus->GetBinContent(i_bin) + h_PR_subtract_endcap2_plus->GetBinError(i_bin) < 1)
+            h_PR_subtract_endcap2_plus->SetBinContent(i_bin, h_PR_subtract_endcap2_plus->GetBinContent(i_bin) + h_PR_subtract_endcap2_plus->GetBinError(i_bin));
+        else h_PR_subtract_endcap2_plus->SetBinContent(i_bin, 1);
+
+        if (h_PR_subtract_barrel_minus ->GetBinContent(i_bin) - h_PR_subtract_barrel_minus ->GetBinError(i_bin) > 0)
+            h_PR_subtract_barrel_minus ->SetBinContent(i_bin, h_PR_subtract_barrel_minus ->GetBinContent(i_bin) - h_PR_subtract_barrel_minus ->GetBinError(i_bin));
+        else h_PR_subtract_barrel_minus ->SetBinContent(i_bin, 0);
+        if (h_PR_subtract_barrel2_minus ->GetBinContent(i_bin) - h_PR_subtract_barrel2_minus ->GetBinError(i_bin) > 0)
+            h_PR_subtract_barrel2_minus ->SetBinContent(i_bin, h_PR_subtract_barrel2_minus ->GetBinContent(i_bin) - h_PR_subtract_barrel2_minus ->GetBinError(i_bin));
+        else h_PR_subtract_barrel2_minus ->SetBinContent(i_bin, 0);
+        if (h_PR_subtract_endcap_minus ->GetBinContent(i_bin) - h_PR_subtract_endcap_minus ->GetBinError(i_bin) > 0)
+            h_PR_subtract_endcap_minus ->SetBinContent(i_bin, h_PR_subtract_endcap_minus ->GetBinContent(i_bin) - h_PR_subtract_endcap_minus ->GetBinError(i_bin));
+        else h_PR_subtract_endcap_minus ->SetBinContent(i_bin, 0);
+        if (h_PR_subtract_endcap2_minus->GetBinContent(i_bin) - h_PR_subtract_endcap2_minus->GetBinError(i_bin) > 0)
+            h_PR_subtract_endcap2_minus->SetBinContent(i_bin, h_PR_subtract_endcap2_minus->GetBinContent(i_bin) - h_PR_subtract_endcap2_minus->GetBinError(i_bin));
+        else h_PR_subtract_endcap2_minus->SetBinContent(i_bin,0);
+    }
+
     // Ratio method
     TH1D *h_PR_ratio_barrel_deno  = ((TH1D*)(h_pT_barrel_pass [1]->Clone("h_PR_ratio_barrel_deno")));
     TH1D *h_PR_ratio_barrel2_deno = ((TH1D*)(h_pT_barrel2_pass[1]->Clone("h_PR_ratio_barrel2_deno")));
@@ -6296,15 +6955,15 @@ void Mu_EstPR_alt()
     TH1D *h_PR_ratio_endcap2_deno = ((TH1D*)(h_pT_endcap2_pass[1]->Clone("h_PR_ratio_endcap2_deno")));
     TH1D *h_PR_ratio_eta_deno     = ((TH1D*)(h_eta_pass       [1]->Clone("h_PR_ratio_eta_deno")));
     h_PR_ratio_barrel_deno ->Add(h_pT_barrel_pass [2]);
-//    h_PR_ratio_barrel_deno ->Add(h_pT_barrel_pass [3]);
+    h_PR_ratio_barrel_deno ->Add(h_pT_barrel_pass [3]);
     h_PR_ratio_barrel2_deno->Add(h_pT_barrel2_pass[2]);
-//    h_PR_ratio_barrel2_deno->Add(h_pT_barrel2_pass[3]);
+    h_PR_ratio_barrel2_deno->Add(h_pT_barrel2_pass[3]);
     h_PR_ratio_endcap_deno ->Add(h_pT_endcap_pass [2]);
-//    h_PR_ratio_endcap_deno ->Add(h_pT_endcap_pass [3]);
+    h_PR_ratio_endcap_deno ->Add(h_pT_endcap_pass [3]);
     h_PR_ratio_endcap2_deno->Add(h_pT_endcap2_pass[2]);
-//    h_PR_ratio_endcap2_deno->Add(h_pT_endcap2_pass[3]);
+    h_PR_ratio_endcap2_deno->Add(h_pT_endcap2_pass[3]);
     h_PR_ratio_eta_deno    ->Add(h_eta_pass       [2]);
-//    h_PR_ratio_eta_deno    ->Add(h_eta_pass       [3]);
+    h_PR_ratio_eta_deno    ->Add(h_eta_pass       [3]);
 
     TH1D *h_PR_ratio_barrel  = ((TH1D*)(h_pT_barrel_fail [1]->Clone("h_PR_ratio_barrel")));
     TH1D *h_PR_ratio_barrel2 = ((TH1D*)(h_pT_barrel2_fail[1]->Clone("h_PR_ratio_barrel2")));
@@ -6312,19 +6971,19 @@ void Mu_EstPR_alt()
     TH1D *h_PR_ratio_endcap2 = ((TH1D*)(h_pT_endcap2_fail[1]->Clone("h_PR_ratio_endcap2")));
     TH1D *h_PR_ratio_eta     = ((TH1D*)(h_eta_fail       [1]->Clone("h_PR_ratio_eta")));
     h_PR_ratio_barrel ->Add(h_pT_barrel_fail[2]);
-//    h_PR_ratio_barrel ->Add(h_pT_barrel_fail[3]);
+    h_PR_ratio_barrel ->Add(h_pT_barrel_fail[3]);
     h_PR_ratio_barrel ->Add(h_PR_ratio_barrel_deno);
     h_PR_ratio_barrel2->Add(h_pT_barrel2_fail[2]);
-//    h_PR_ratio_barrel2->Add(h_pT_barrel2_fail[3]);
+    h_PR_ratio_barrel2->Add(h_pT_barrel2_fail[3]);
     h_PR_ratio_barrel2->Add(h_PR_ratio_barrel2_deno);
     h_PR_ratio_endcap ->Add(h_pT_endcap_fail[2]);
-//    h_PR_ratio_endcap ->Add(h_pT_endcap_fail[3]);
+    h_PR_ratio_endcap ->Add(h_pT_endcap_fail[3]);
     h_PR_ratio_endcap ->Add(h_PR_ratio_endcap_deno);
     h_PR_ratio_endcap2->Add(h_pT_endcap2_fail[2]);
-//    h_PR_ratio_endcap2->Add(h_pT_endcap2_fail[3]);
+    h_PR_ratio_endcap2->Add(h_pT_endcap2_fail[3]);
     h_PR_ratio_endcap2->Add(h_PR_ratio_endcap2_deno);
     h_PR_ratio_eta    ->Add(h_eta_fail[2]);
-//    h_PR_ratio_eta    ->Add(h_eta_fail[3]);
+    h_PR_ratio_eta    ->Add(h_eta_fail[3]);
     h_PR_ratio_eta    ->Add(h_PR_ratio_eta_deno);
 
     h_PR_ratio_barrel ->Divide(h_PR_ratio_barrel_deno);
@@ -6378,7 +7037,6 @@ void Mu_EstPR_alt()
     h_PR_ratio_endcap ->Divide(h_PR_ratio_endcap_deno);
     h_PR_ratio_endcap2->Divide(h_PR_ratio_endcap2_deno);
     h_PR_ratio_eta    ->Divide(h_PR_ratio_eta_deno);
-
 
     // Drawing
     h_eff_data_barrel->SetDirectory(0);
@@ -7003,6 +7661,14 @@ void Mu_EstPR_alt()
     h_eff_data_endcap    ->Write();
     h_eff_data_endcap2   ->Write();
     h_eff_data_eta       ->Write();
+    h_PR_subtract_barrel_plus ->Write();
+    h_PR_subtract_barrel2_plus ->Write();
+    h_PR_subtract_endcap_plus ->Write();
+    h_PR_subtract_endcap2_plus ->Write();
+    h_PR_subtract_barrel_minus ->Write();
+    h_PR_subtract_barrel2_minus ->Write();
+    h_PR_subtract_endcap_minus ->Write();
+    h_PR_subtract_endcap2_minus->Write();
     h_eff_MC_barrel      ->Write();
     h_eff_MC_barrel2     ->Write();
     h_eff_MC_endcap      ->Write();
@@ -7059,124 +7725,104 @@ void Mu_EstFRandPR_MC()
     TFile *f = new TFile(filename, "READ");
     cout << "Reading from file " << filename << " ... ";
 
-    TH1D *h_FR_pT_barrel_nume[4], *h_FR_pT_barrel2_nume[4], *h_FR_pT_endcap_nume[4], *h_FR_pT_endcap2_nume[4];
-    TH1D *h_FR_pT_barrel_deno[4], *h_FR_pT_barrel2_deno[4], *h_FR_pT_endcap_deno[4], *h_FR_pT_endcap2_deno[4];
-    TH1D *h_FR_eta_nume[4],       *h_FR_eta_deno[4];
-    TH1D *h_PR_pT_barrel_nume[4], *h_PR_pT_barrel2_nume[4], *h_PR_pT_endcap_nume[4], *h_PR_pT_endcap2_nume[4];
-    TH1D *h_PR_pT_barrel_deno[4], *h_PR_pT_barrel2_deno[4], *h_PR_pT_endcap_deno[4], *h_PR_pT_endcap2_deno[4];
-    TH1D *h_PR_eta_nume[4],       *h_PR_eta_deno[4];
-    TH1D *h_FR_nume_sum[4],       *h_FR_deno_sum[4],        *h_PR_nume_sum[4],       *h_PR_deno_sum[4];
+    TH1D *h_FR_pT_barrel_nume[6], *h_FR_pT_endcap_nume[6], *h_FR_pT_endcap2_nume[6];
+    TH1D *h_FR_pT_barrel_deno[6], *h_FR_pT_endcap_deno[6], *h_FR_pT_endcap2_deno[6];
+    TH1D *h_FR_eta_nume[6],       *h_FR_eta_deno[6];
+    TH1D *h_PR_pT_barrel_nume[6], *h_PR_pT_endcap_nume[6], *h_PR_pT_endcap2_nume[6];
+    TH1D *h_PR_pT_barrel_deno[6], *h_PR_pT_endcap_deno[6], *h_PR_pT_endcap2_deno[6];
+    TH1D *h_PR_eta_nume[6],       *h_PR_eta_deno[6];
+    TH1D *h_FR_nume_sum[6],       *h_FR_deno_sum[6],        *h_PR_nume_sum[6],       *h_PR_deno_sum[6];
 
-    TString type[4] = {"DY", "ttbar", "WJets", "QCD"};
-    Color_t colors[4] = {kOrange, kCyan+2, kRed-2, kRed+3};
-    Style_t markers[4] = {kFullDotLarge, kFullSquare, kFullDiamond, kFullTriangleDown};
-    Float_t sizes[4] = {1, 1, 1.5, 1};
+    TString type[6] = {"DY", "ttbar", "tW", "diboson", "WJets", "QCD"};
+    Color_t colors[6] = {kOrange, kCyan+2, kGreen+2, kMagenta-6, kRed-2, kRed+3};
+    Style_t markers[6] = {kFullDotLarge, kFullSquare, kFullDiamond, kFullTriangleDown, kFullDotLarge, kFullTriangleUp};
+    Float_t sizes[6] = {1, 1, 1.5, 1, 1, 1, };
 
-    for (Int_t i=0; i<4; i++)
+    for (Int_t i=0; i<6; i++)
     {
         f->GetObject("h_FR_pT_barrel_nume_"+type[i],  h_FR_pT_barrel_nume[i]);
-//        f->GetObject("h_FR_pT_barrel2_nume_"+type[i], h_FR_pT_barrel2_nume[i]);
         f->GetObject("h_FR_pT_endcap_nume_"+type[i],  h_FR_pT_endcap_nume[i]);
         f->GetObject("h_FR_pT_endcap2_nume_"+type[i], h_FR_pT_endcap2_nume[i]);
         f->GetObject("h_FR_eta_nume_"+type[i],        h_FR_eta_nume[i]);
         f->GetObject("h_FR_pT_barrel_deno_"+type[i],  h_FR_pT_barrel_deno[i]);
-//        f->GetObject("h_FR_pT_barrel2_deno_"+type[i], h_FR_pT_barrel2_deno[i]);
         f->GetObject("h_FR_pT_endcap_deno_"+type[i],  h_FR_pT_endcap_deno[i]);
         f->GetObject("h_FR_pT_endcap2_deno_"+type[i], h_FR_pT_endcap2_deno[i]);
         f->GetObject("h_FR_eta_deno_"+type[i],        h_FR_eta_deno[i]);
         f->GetObject("h_PR_pT_barrel_nume_"+type[i],  h_PR_pT_barrel_nume[i]);
-//        f->GetObject("h_PR_pT_barrel2_nume_"+type[i], h_PR_pT_barrel2_nume[i]);
         f->GetObject("h_PR_pT_endcap_nume_"+type[i],  h_PR_pT_endcap_nume[i]);
         f->GetObject("h_PR_pT_endcap2_nume_"+type[i], h_PR_pT_endcap2_nume[i]);
         f->GetObject("h_PR_eta_nume_"+type[i],        h_PR_eta_nume[i]);
         f->GetObject("h_PR_pT_barrel_deno_"+type[i],  h_PR_pT_barrel_deno[i]);
-//        f->GetObject("h_PR_pT_barrel2_deno_"+type[i], h_PR_pT_barrel2_deno[i]);
         f->GetObject("h_PR_pT_endcap_deno_"+type[i],  h_PR_pT_endcap_deno[i]);
         f->GetObject("h_PR_pT_endcap2_deno_"+type[i], h_PR_pT_endcap2_deno[i]);
         f->GetObject("h_PR_eta_deno_"+type[i],        h_PR_eta_deno[i]);
         h_FR_pT_barrel_nume[i]->SetDirectory(0);
-//        h_FR_pT_barrel2_nume[i]->SetDirectory(0);
         h_FR_pT_endcap_nume[i]->SetDirectory(0);
         h_FR_pT_endcap2_nume[i]->SetDirectory(0);
         h_FR_eta_nume[i]->SetDirectory(0);
         h_FR_pT_barrel_deno[i]->SetDirectory(0);
-//        h_FR_pT_barrel2_deno[i]->SetDirectory(0);
         h_FR_pT_endcap_deno[i]->SetDirectory(0);
         h_FR_pT_endcap2_deno[i]->SetDirectory(0);
         h_FR_eta_deno[i]->SetDirectory(0);
         h_PR_pT_barrel_nume[i]->SetDirectory(0);
-//        h_PR_pT_barrel2_nume[i]->SetDirectory(0);
         h_PR_pT_endcap_nume[i]->SetDirectory(0);
         h_PR_pT_endcap2_nume[i]->SetDirectory(0);
         h_PR_eta_nume[i]->SetDirectory(0);
         h_PR_pT_barrel_deno[i]->SetDirectory(0);
-//        h_PR_pT_barrel2_deno[i]->SetDirectory(0);
         h_PR_pT_endcap_deno[i]->SetDirectory(0);
         h_PR_pT_endcap2_deno[i]->SetDirectory(0);
         h_PR_eta_deno[i]->SetDirectory(0);
 
         removeNegativeBins(h_FR_pT_barrel_nume[i] );
-//        removeNegativeBins(h_FR_pT_barrel2_nume[i]);
         removeNegativeBins(h_FR_pT_endcap_nume[i] );
         removeNegativeBins(h_FR_pT_endcap2_nume[i]);
         removeNegativeBins(h_FR_eta_nume[i]       );
         removeNegativeBins(h_PR_pT_barrel_nume[i] );
-//        removeNegativeBins(h_PR_pT_barrel2_nume[i]);
         removeNegativeBins(h_PR_pT_endcap_nume[i] );
         removeNegativeBins(h_PR_pT_endcap2_nume[i]);
         removeNegativeBins(h_PR_eta_nume[i]       );
 
         h_FR_pT_barrel_nume[i] ->SetLineColor(colors[i]);
-//        h_FR_pT_barrel2_nume[i]->SetLineColor(colors[i]);
         h_FR_pT_endcap_nume[i] ->SetLineColor(colors[i]);
         h_FR_pT_endcap2_nume[i]->SetLineColor(colors[i]);
         h_FR_eta_nume[i]       ->SetLineColor(colors[i]);
         h_PR_pT_barrel_nume[i] ->SetLineColor(colors[i]);
-//        h_PR_pT_barrel2_nume[i]->SetLineColor(colors[i]);
         h_PR_pT_endcap_nume[i] ->SetLineColor(colors[i]);
         h_PR_pT_endcap2_nume[i]->SetLineColor(colors[i]);
         h_PR_eta_nume[i]       ->SetLineColor(colors[i]);
 
         h_FR_pT_barrel_nume[i] ->SetMarkerColor(colors[i]);
-//        h_FR_pT_barrel2_nume[i]->SetMarkerColor(colors[i]);
         h_FR_pT_endcap_nume[i] ->SetMarkerColor(colors[i]);
         h_FR_pT_endcap2_nume[i]->SetMarkerColor(colors[i]);
         h_FR_eta_nume[i]       ->SetMarkerColor(colors[i]);
         h_PR_pT_barrel_nume[i] ->SetMarkerColor(colors[i]);
-//        h_PR_pT_barrel2_nume[i]->SetMarkerColor(colors[i]);
         h_PR_pT_endcap_nume[i] ->SetMarkerColor(colors[i]);
         h_PR_pT_endcap2_nume[i]->SetMarkerColor(colors[i]);
         h_PR_eta_nume[i]       ->SetMarkerColor(colors[i]);
 
         h_FR_pT_barrel_nume[i] ->SetMarkerStyle(markers[i]);
-//        h_FR_pT_barrel2_nume[i]->SetMarkerStyle(markers[i]);
         h_FR_pT_endcap_nume[i] ->SetMarkerStyle(markers[i]);
         h_FR_pT_endcap2_nume[i]->SetMarkerStyle(markers[i]);
         h_FR_eta_nume[i]       ->SetMarkerStyle(markers[i]);
         h_PR_pT_barrel_nume[i] ->SetMarkerStyle(markers[i]);
-//        h_PR_pT_barrel2_nume[i]->SetMarkerStyle(markers[i]);
         h_PR_pT_endcap_nume[i] ->SetMarkerStyle(markers[i]);
         h_PR_pT_endcap2_nume[i]->SetMarkerStyle(markers[i]);
         h_PR_eta_nume[i]       ->SetMarkerStyle(markers[i]);
 
         h_FR_pT_barrel_nume[i] ->SetMarkerSize(sizes[i]);
-//        h_FR_pT_barrel2_nume[i]->SetMarkerSize(sizes[i]);
         h_FR_pT_endcap_nume[i] ->SetMarkerSize(sizes[i]);
         h_FR_pT_endcap2_nume[i]->SetMarkerSize(sizes[i]);
         h_FR_eta_nume[i]       ->SetMarkerSize(sizes[i]);
         h_PR_pT_barrel_nume[i] ->SetMarkerSize(sizes[i]);
-//        h_PR_pT_barrel2_nume[i]->SetMarkerSize(sizes[i]);
         h_PR_pT_endcap_nume[i] ->SetMarkerSize(sizes[i]);
         h_PR_pT_endcap2_nume[i]->SetMarkerSize(sizes[i]);
         h_PR_eta_nume[i]       ->SetMarkerSize(sizes[i]);
 
         h_FR_pT_barrel_nume[i] ->SetStats(0);
-//        h_FR_pT_barrel2_nume[i]->SetStats(0);
         h_FR_pT_endcap_nume[i] ->SetStats(0);
         h_FR_pT_endcap2_nume[i]->SetStats(0);
         h_FR_eta_nume[i]       ->SetStats(0);
         h_PR_pT_barrel_nume[i] ->SetStats(0);
-//        h_PR_pT_barrel2_nume[i]->SetStats(0);
         h_PR_pT_endcap_nume[i] ->SetStats(0);
         h_PR_pT_endcap2_nume[i]->SetStats(0);
         h_PR_eta_nume[i]       ->SetStats(0);
@@ -7203,12 +7849,10 @@ void Mu_EstFRandPR_MC()
 
         // Full rates
         h_FR_pT_barrel_nume[i] ->Divide(h_FR_pT_barrel_deno[i] );
-//        h_FR_pT_barrel2_nume[i]->Divide(h_FR_pT_barrel2_deno[i]);
         h_FR_pT_endcap_nume[i] ->Divide(h_FR_pT_endcap_deno[i] );
         h_FR_pT_endcap2_nume[i]->Divide(h_FR_pT_endcap2_deno[i]);
         h_FR_eta_nume[i]       ->Divide(h_FR_eta_deno[i]       );
         h_PR_pT_barrel_nume[i] ->Divide(h_PR_pT_barrel_deno[i] );
-//        h_PR_pT_barrel2_nume[i]->Divide(h_PR_pT_barrel2_deno[i]);
         h_PR_pT_endcap_nume[i] ->Divide(h_PR_pT_endcap_deno[i] );
         h_PR_pT_endcap2_nume[i]->Divide(h_PR_pT_endcap2_deno[i]);
         h_PR_eta_nume[i]       ->Divide(h_PR_eta_deno[i]       );
@@ -7220,11 +7864,14 @@ void Mu_EstFRandPR_MC()
     else cout << "FILE " << filename << " COULD NOT BE CLOSED!\n" << endl;
 
     // Drawing
-    TLegend *legend = new TLegend(0.65, 0.8, 0.95, 0.95);
+    TLegend *legend = new TLegend(0.5, 0.7, 0.95, 0.95);
+    legend->SetNColumns(2);
     legend->AddEntry(h_FR_pT_barrel_nume[0], "DY", "lp");
     legend->AddEntry(h_FR_pT_barrel_nume[1], "t#bar{t}", "lp");
-    legend->AddEntry(h_FR_pT_barrel_nume[2], "W+Jets", "lp");
-    legend->AddEntry(h_FR_pT_barrel_nume[3], "QCD", "lp");
+    legend->AddEntry(h_FR_pT_barrel_nume[2], "tW", "lp");
+    legend->AddEntry(h_FR_pT_barrel_nume[3], "diboson", "lp");
+    legend->AddEntry(h_FR_pT_barrel_nume[4], "W+Jets", "lp");
+    legend->AddEntry(h_FR_pT_barrel_nume[5], "QCD", "lp");
 
     TCanvas *c_FR_barrel  = new TCanvas("c_FR_barrel",  "FR barrel", 800, 800);
     c_FR_barrel->cd();
@@ -7250,13 +7897,10 @@ void Mu_EstFRandPR_MC()
     h_FR_pT_barrel_nume[1]->Draw("same");
     h_FR_pT_barrel_nume[2]->Draw("same");
     h_FR_pT_barrel_nume[3]->Draw("same");
+    h_FR_pT_barrel_nume[4]->Draw("same");
+    h_FR_pT_barrel_nume[5]->Draw("same");
     legend->Draw();
     c_FR_barrel->Update();
-
-//    TCanvas *c_FR_barrel2 = new TCanvas("c_FR_barrel2", "FR barrel2", 800, 800);
-//    s_FR_pT_barrel2_nume->Draw("hist");
-//    legend->Draw();
-//    c_FR_barrel2->Update();
 
     TCanvas *c_FR_endcap  = new TCanvas("c_FR_endcap",  "FR endcap", 800, 800);
     c_FR_endcap->cd();
@@ -7282,6 +7926,8 @@ void Mu_EstFRandPR_MC()
     h_FR_pT_endcap_nume[1]->Draw("same");
     h_FR_pT_endcap_nume[2]->Draw("same");
     h_FR_pT_endcap_nume[3]->Draw("same");
+    h_FR_pT_endcap_nume[4]->Draw("same");
+    h_FR_pT_endcap_nume[5]->Draw("same");
     legend->Draw();
     c_FR_endcap->Update();
 
@@ -7309,6 +7955,8 @@ void Mu_EstFRandPR_MC()
     h_FR_pT_endcap2_nume[1]->Draw("same");
     h_FR_pT_endcap2_nume[2]->Draw("same");
     h_FR_pT_endcap2_nume[3]->Draw("same");
+    h_FR_pT_endcap2_nume[4]->Draw("same");
+    h_FR_pT_endcap2_nume[5]->Draw("same");
     legend->Draw();
     c_FR_endcap2->Update();
 
@@ -7335,6 +7983,8 @@ void Mu_EstFRandPR_MC()
     h_FR_eta_nume[1]->Draw("same");
     h_FR_eta_nume[2]->Draw("same");
     h_FR_eta_nume[3]->Draw("same");
+    h_FR_eta_nume[4]->Draw("same");
+    h_FR_eta_nume[5]->Draw("same");
     legend->Draw();
     c_FR_eta->Update();
 
@@ -7361,15 +8011,11 @@ void Mu_EstFRandPR_MC()
     h_PR_pT_barrel_nume[0]->Draw();
     h_PR_pT_barrel_nume[1]->Draw("same");
     h_PR_pT_barrel_nume[2]->Draw("same");
+    h_PR_pT_barrel_nume[3]->Draw("same");
+    h_PR_pT_barrel_nume[4]->Draw("same");
+    h_PR_pT_barrel_nume[5]->Draw("same");
     legend->Draw();
     c_PR_barrel->Update();
-
-//    TCanvas *c_PR_barrel2 = new TCanvas("c_PR_barrel2", "PR barrel2", 800, 800);
-//    h_PR_pT_barrel2_nume[0]->Draw();
-//    h_PR_pT_barrel2_nume[1]->Draw("same");
-//    h_PR_pT_barrel2_nume[2]->Draw("same");
-//    legend->Draw();
-//    c_PR_barrel2->Update();
 
     TCanvas *c_PR_endcap  = new TCanvas("c_PR_endcap",  "PR endcap", 800, 800);
     c_PR_endcap->cd();
@@ -7394,6 +8040,9 @@ void Mu_EstFRandPR_MC()
     h_PR_pT_endcap_nume[0]->Draw();
     h_PR_pT_endcap_nume[1]->Draw("same");
     h_PR_pT_endcap_nume[2]->Draw("same");
+    h_PR_pT_endcap_nume[3]->Draw("same");
+    h_PR_pT_endcap_nume[4]->Draw("same");
+    h_PR_pT_endcap_nume[5]->Draw("same");
     legend->Draw();
     c_PR_endcap->Update();
 
@@ -7420,6 +8069,9 @@ void Mu_EstFRandPR_MC()
     h_PR_pT_endcap2_nume[0]->Draw();
     h_PR_pT_endcap2_nume[1]->Draw("same");
     h_PR_pT_endcap2_nume[2]->Draw("same");
+    h_PR_pT_endcap2_nume[3]->Draw("same");
+    h_PR_pT_endcap2_nume[4]->Draw("same");
+    h_PR_pT_endcap2_nume[5]->Draw("same");
     legend->Draw();
     c_PR_endcap2->Update();
 
@@ -7445,6 +8097,9 @@ void Mu_EstFRandPR_MC()
     h_PR_eta_nume[0]->Draw();
     h_PR_eta_nume[1]->Draw("same");
     h_PR_eta_nume[2]->Draw("same");
+    h_PR_eta_nume[3]->Draw("same");
+    h_PR_eta_nume[4]->Draw("same");
+    h_PR_eta_nume[5]->Draw("same");
     legend->Draw();
     c_PR_eta->Update();    
 
@@ -7455,7 +8110,7 @@ void Mu_EstFRandPR_MC()
     TString outname = "/media/sf_DATA/FR/Muon/MC_FakeRates.root";
     cout << "Writing to " << outname << " ... ";
     TFile *f_out = new TFile(outname, "RECREATE");
-    for (Int_t i=0; i<4; i++)
+    for (Int_t i=0; i<6; i++)
     {
         f_out->WriteObjectAny(h_FR_pT_barrel_nume[i],  "TH1D", "h_FR_barrel_" +type[i]);
         f_out->WriteObjectAny(h_FR_pT_endcap_nume[i],  "TH1D", "h_FR_endcap_" +type[i]);
@@ -7472,7 +8127,7 @@ void Mu_EstFRandPR_MC()
     else cout << "FILE COULD NOT BE CLOSED!\n" << endl;
 
     cout << "Average rates:" << endl;
-    for (Int_t i=0; i<4; i++)
+    for (Int_t i=0; i<6; i++)
     {
         Double_t FRavg = h_FR_nume_sum[i]->Integral() / h_FR_deno_sum[i]->Integral();
         Double_t PRavg = h_PR_nume_sum[i]->Integral() / h_PR_deno_sum[i]->Integral();

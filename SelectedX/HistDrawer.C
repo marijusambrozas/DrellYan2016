@@ -5401,8 +5401,8 @@ void Est_HistDrawer(Int_t FR_systErr)
     RP_mass_ee2->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+est)   ");
 //    RP_mass_ee2->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000, "Eksp./(MC+i_{#kern[-0.8]{#lower[-0.3]{#scale[0.7]{c}}}}v.)     ");
     RP_mass_ee_wFR->SetPlots("m_{#font[12]{#lower[-0.2]{#scale[1.2]{ee}}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+est)   ");
-    RP_mass_ee->SetSystematics(NULL, estSystematics_ee, systematics_ee);
-    RP_mass_ee2->SetSystematics(NULL, estSystematics_ee2, systematics_ee2);
+//    RP_mass_ee->SetSystematics(NULL, estSystematics_ee, systematics_ee);
+//    RP_mass_ee2->SetSystematics(NULL, estSystematics_ee2, systematics_ee2);
     if (FR_systErr > 0)
     {
         TH1D *h_QCD_systErr, *h_WJets_systErr;
@@ -5419,30 +5419,52 @@ void Est_HistDrawer(Int_t FR_systErr)
     }
 
     TLegend *legend_ee = new TLegend(0.8, 0.45, 0.95, 0.95);
+//    legend_ee->AddEntry(h_data_mass_ee, "Data", "lp");
+//    legend_ee->AddEntry(h_DY_mass_ee, "DY#rightarrow #font[12]{ee} (MC)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[2], "#font[12]{#scale[1.1]{WW}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[1], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
+//    legend_ee->AddEntry(h_bkg_mass_ee[0], "#font[12]{#scale[1.1]{QCD}} (MC)", "f");
     legend_ee->AddEntry(h_data_mass_ee, "Data", "lp");
     legend_ee->AddEntry(h_DY_mass_ee, "DY#rightarrow #font[12]{ee} (MC)", "f");
-    legend_ee->AddEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (#font[12]{#scale[1.1]{e}#mu})", "f");
-    legend_ee->AddEntry(h_bkg_mass_ee[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
-    legend_ee->AddEntry(h_bkg_mass_ee[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
-    legend_ee->AddEntry(h_bkg_mass_ee[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+    legend_ee->AddEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (est.)", "f");
+    legend_ee->AddEntry(h_bkg_mass_ee[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (est.)", "f");
+    legend_ee->AddEntry(h_bkg_mass_ee[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (est.)", "f");
+    legend_ee->AddEntry(h_bkg_mass_ee[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (est.)", "f");
     legend_ee->AddEntry(h_bkg_mass_ee[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
     legend_ee->AddEntry(h_bkg_mass_ee[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
-    legend_ee->AddEntry(h_bkg_mass_ee[2], "#font[12]{#scale[1.1]{WW}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+    legend_ee->AddEntry(h_bkg_mass_ee[2], "#font[12]{#scale[1.1]{WW}} (est.)", "f");
     legend_ee->AddEntry(h_bkg_mass_ee[1], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
     legend_ee->AddEntry(h_bkg_mass_ee[0], "#font[12]{#scale[1.1]{QCD}} (MC)", "f");
 
     TLegend *legend_ee_wFR = new TLegend(0.8, 0.45, 0.95, 0.95);
+//    legend_ee_wFR->AddEntry(h_data_mass_ee, "Data", "lp");
+//    legend_ee_wFR->AddEntry(h_DY_mass_ee, "DY#rightarrow#font[12]{ee} (MC)", "f");
+//    legend_ee_wFR->AddEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_ee_wFR->AddEntry(h_bkg_mass_ee[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_ee_wFR->AddEntry(h_bkg_mass_ee[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_ee_wFR->AddEntry(h_bkg_mass_ee[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_ee_wFR->AddEntry(h_bkg_mass_ee[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
+//    legend_ee_wFR->AddEntry(h_bkg_mass_ee[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
+//    legend_ee_wFR->AddEntry(h_bkg_mass_ee[2], "#font[12]{#scale[1.1]{WW}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_ee_wFR->AddEntry(h_fakes_mass_ee[1], "#font[12]{#scale[1.1]{W}}+Jets (FR)", "f");
+//    legend_ee_wFR->AddEntry(h_fakes_mass_ee[0], "#font[12]{#scale[1.1]{QCD}} (FR)", "f");
     legend_ee_wFR->AddEntry(h_data_mass_ee, "Data", "lp");
     legend_ee_wFR->AddEntry(h_DY_mass_ee, "DY#rightarrow#font[12]{ee} (MC)", "f");
-    legend_ee_wFR->AddEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (#font[12]{#scale[1.1]{e}#mu})", "f");
-    legend_ee_wFR->AddEntry(h_bkg_mass_ee[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
-    legend_ee_wFR->AddEntry(h_bkg_mass_ee[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
-    legend_ee_wFR->AddEntry(h_bkg_mass_ee[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+    legend_ee_wFR->AddEntry(h_bkg_mass_ee[8], "DY#rightarrow #tau#tau (est.)", "f");
+    legend_ee_wFR->AddEntry(h_bkg_mass_ee[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (est.)", "f");
+    legend_ee_wFR->AddEntry(h_bkg_mass_ee[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (est.)", "f");
+    legend_ee_wFR->AddEntry(h_bkg_mass_ee[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (est.)", "f");
     legend_ee_wFR->AddEntry(h_bkg_mass_ee[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
     legend_ee_wFR->AddEntry(h_bkg_mass_ee[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
-    legend_ee_wFR->AddEntry(h_bkg_mass_ee[2], "#font[12]{#scale[1.1]{WW}} (#font[12]{#scale[1.1]{e}#mu})", "f");
-    legend_ee_wFR->AddEntry(h_fakes_mass_ee[1], "#font[12]{#scale[1.1]{W}}+Jets (FR)", "f");
-    legend_ee_wFR->AddEntry(h_fakes_mass_ee[0], "#font[12]{#scale[1.1]{QCD}} (FR)", "f");
+    legend_ee_wFR->AddEntry(h_bkg_mass_ee[2], "#font[12]{#scale[1.1]{WW}} (est.)", "f");
+    legend_ee_wFR->AddEntry(h_fakes_mass_ee[1], "#font[12]{#scale[1.1]{W}}+Jets (est.)", "f");
+    legend_ee_wFR->AddEntry(h_fakes_mass_ee[0], "#font[12]{#scale[1.1]{QCD}} (est.)", "f");
 
     RP_mass_ee->ImportLegend(legend_ee);
     RP_mass_ee2->ImportLegend(legend_ee);
@@ -5682,8 +5704,8 @@ void Est_HistDrawer(Int_t FR_systErr)
     RP_mass_mumu->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+est)   ");
     RP_mass_mumu2->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+est)    ");
     RP_mass_mumu_wFR->SetPlots("m_{#lower[-0.2]{#scale[1.15]{#mu#mu}}} [GeV/c^{2}]", 15, 3000, "Data/(MC+est)");
-    RP_mass_mumu->SetSystematics(NULL, estSystematics_mumu, systematics_mumu);
-    RP_mass_mumu2->SetSystematics(NULL, estSystematics_mumu2, systematics_mumu2);
+//    RP_mass_mumu->SetSystematics(NULL, estSystematics_mumu, systematics_mumu);
+//    RP_mass_mumu2->SetSystematics(NULL, estSystematics_mumu2, systematics_mumu2);
     if (FR_systErr > 0)
     {
         TH1D *h_QCD_systErr, *h_WJets_systErr;
@@ -5703,29 +5725,50 @@ void Est_HistDrawer(Int_t FR_systErr)
     TLegend *legend_mumu_wFR = new TLegend(0.8, 0.45, 0.95, 0.95);
 
     // Legend
+//    legend_mumu->AddEntry(h_data_mass_mumu, "Data", "lp");
+//    legend_mumu->AddEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[2], "#font[12]{#scale[1.1]{WW}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[1], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
+//    legend_mumu->AddEntry(h_bkg_mass_mumu[0], "#font[12]{#scale[1.1]{QCD}} (MC)", "f");
     legend_mumu->AddEntry(h_data_mass_mumu, "Data", "lp");
     legend_mumu->AddEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
-    legend_mumu->AddEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (#font[12]{#scale[1.1]{e}#mu})", "f");
-    legend_mumu->AddEntry(h_bkg_mass_mumu[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
-    legend_mumu->AddEntry(h_bkg_mass_mumu[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
-    legend_mumu->AddEntry(h_bkg_mass_mumu[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (est.)", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (est.)", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (est.)", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (est.)", "f");
     legend_mumu->AddEntry(h_bkg_mass_mumu[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
     legend_mumu->AddEntry(h_bkg_mass_mumu[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
-    legend_mumu->AddEntry(h_bkg_mass_mumu[2], "#font[12]{#scale[1.1]{WW}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+    legend_mumu->AddEntry(h_bkg_mass_mumu[2], "#font[12]{#scale[1.1]{WW}} (est.)", "f");
     legend_mumu->AddEntry(h_bkg_mass_mumu[1], "#font[12]{#scale[1.1]{W}}+Jets (MC)", "f");
     legend_mumu->AddEntry(h_bkg_mass_mumu[0], "#font[12]{#scale[1.1]{QCD}} (MC)", "f");
 
+//    legend_mumu_wFR->AddEntry(h_data_mass_mumu, "Data", "lp");
+//    legend_mumu_wFR->AddEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
+//    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
+//    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
+//    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[2], "#font[12]{#scale[1.1]{WW}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+//    legend_mumu_wFR->AddEntry(h_fakes_mass_mumu[1], "#font[12]{#scale[1.1]{W}}+Jets (FR)", "f");
+//    legend_mumu_wFR->AddEntry(h_fakes_mass_mumu[0], "#font[12]{#scale[1.1]{QCD}} (FR)", "f");
     legend_mumu_wFR->AddEntry(h_data_mass_mumu, "Data", "lp");
     legend_mumu_wFR->AddEntry(h_DY_mass_mumu, "DY#rightarrow#mu#mu (MC)", "f");
-    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (#font[12]{#scale[1.1]{e}#mu})", "f");
-    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
-    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[6], "#kern[0.1]{#font[12]{#scale[1.1]{tW}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
-    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (#font[12]{#scale[1.1]{e}#mu})", "f");
+    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[8], "DY#rightarrow #tau#tau (est.)", "f");
+    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[7], "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}} (est.)", "f");
+    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[5], "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}} (est.)", "f");
     legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[4], "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}} (MC)", "f");
     legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[3], "#font[12]{#scale[1.1]{WZ}} (MC)", "f");
-    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[2], "#font[12]{#scale[1.1]{WW}} (#font[12]{#scale[1.1]{e}#mu})", "f");
-    legend_mumu_wFR->AddEntry(h_fakes_mass_mumu[1], "#font[12]{#scale[1.1]{W}}+Jets (FR)", "f");
-    legend_mumu_wFR->AddEntry(h_fakes_mass_mumu[0], "#font[12]{#scale[1.1]{QCD}} (FR)", "f");
+    legend_mumu_wFR->AddEntry(h_bkg_mass_mumu[2], "#font[12]{#scale[1.1]{WW}} (est.)", "f");
+    legend_mumu_wFR->AddEntry(h_fakes_mass_mumu[1], "#font[12]{#scale[1.1]{W}}+Jets (est.)", "f");
+    legend_mumu_wFR->AddEntry(h_fakes_mass_mumu[0], "#font[12]{#scale[1.1]{QCD}} (est.)", "f");
 
     RP_mass_mumu->ImportLegend(legend_mumu);
     RP_mass_mumu->Draw(0.5, 1e7, 1);

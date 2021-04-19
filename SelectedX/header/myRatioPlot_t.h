@@ -36,6 +36,7 @@ public :
    int GetAutoCleanUp() const { return autoCleanUp; }
 
    void Draw(Double_t ymin, Double_t ymax, UInt_t logX=0, TString option="HIST", TString yAxisName="Number of events", UInt_t logY=1);
+   void DrawWithExpectationBar(TH1D *h_up, TH1D *h_down, Double_t ymin, Double_t ymax, UInt_t logX=0, TString option="HIST", TString yAxisName="Number of events", UInt_t logY=1); // NOT WORKING PROPERLY!!!
    void SetPlots(TString xAxisName, Double_t xmin, Double_t xmax, TString DataMCname="Data/MC", Double_t *statunc=NULL);
    void SetLegend(Double_t xb=0.7, Double_t yb=0.5, Double_t xe=0.9, Double_t ye=0.9);
    void AddLegendEntry(TH1D *h, TString name, TString option);
