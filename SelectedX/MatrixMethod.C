@@ -1358,7 +1358,7 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
     analyzer->SetupEfficiencyScaleFactor_GtoH();
 
     // -- For QCD estimation from Fake Rate -- //
-    analyzer->SetupFRandPRvalues_MC();
+    analyzer->SetupFRandPRvalues_MC("NONE");
 
     // Histogram containers
     TH1D* h_mass_PP[4];
@@ -1714,7 +1714,7 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
             Double_t FR1=0, FR2=0, PR1=1, PR2=1;
 
             MMweights = analyzer->MatrixMethod_MC(p_T->at(i_lead), eta->at(i_lead), relPFiso->at(i_lead),
-                                                  p_T->at(1-i_lead), eta->at(1-i_lead), relPFiso->at(1-i_lead), "DY", "QCD");
+                                                  p_T->at(1-i_lead), eta->at(1-i_lead), relPFiso->at(1-i_lead), "ttbar", "ttbar");
             FR1 = analyzer->FakeRate_MC(p_T->at(i_lead), eta->at(i_lead), "QCD");
             FR2 = analyzer->FakeRate_MC(p_T->at(1-i_lead), eta->at(1-i_lead), "QCD");
             PR1 = analyzer->PromptRate_MC(p_T->at(i_lead), eta->at(i_lead), "DY");
