@@ -300,7 +300,7 @@ void myRatioPlot_t::DrawOnTop(TH1D* h1_onTop, TString option)
 }
 
 // NOT WORKING, DO NOT USE!!
-void myRatioPlot_t::DrawWithExpectationBar(TH1D *h_up, TH1D *h_down, Double_t ymin, Double_t ymax, UInt_t logX, TString option, TString yAxisName, UInt_t logY)
+void myRatioPlot_t::DrawWithExpectationBar(TH1D *h_errs, Double_t ymin, Double_t ymax, UInt_t logX, TString option, TString yAxisName, UInt_t logY)
 {
     if(PlotsSet==1) {
 //        canvas = new TCanvas(CanvasName, CanvasName, 1000, 1000);
@@ -314,14 +314,10 @@ void myRatioPlot_t::DrawWithExpectationBar(TH1D *h_up, TH1D *h_down, Double_t ym
         pad1->SetLeftMargin(0.15);
         pad1->Draw();
         pad1->cd();
-        h_up->SetMarkerStyle(0);
-        h_up->SetFillColor(38);
-        h_up->SetFillStyle(3244);
-        h_up->SetLineColor(39);
-        h_down->SetMarkerStyle(0);
-        h_down->SetFillColor(38);
-        h_down->SetFillStyle(3244);
-        h_down->SetLineColor(39);
+        h_errs->SetMarkerStyle(0);
+        h_errs->SetFillColor(38);
+        h_errs->SetFillStyle(3244);
+        h_errs->SetLineColor(0);
         s_stackedProcesses->Draw(option/*"HIST"*/);
         s_stackedProcesses->GetYaxis()->SetTitle(yAxisName);
         s_stackedProcesses->GetYaxis()->SetTitleOffset(1/*1.1*/);
@@ -333,12 +329,10 @@ void myRatioPlot_t::DrawWithExpectationBar(TH1D *h_up, TH1D *h_down, Double_t ym
         if(logX) s_stackedProcesses->GetXaxis()->SetMoreLogLabels(1);
         s_stackedProcesses->GetXaxis()->SetRangeUser(x1, x2);
         s_stackedProcesses->GetYaxis()->SetLabelSize(0.06/*04*/);
-        h_up->Draw("samehist");
+        s_stackedProcesses->Draw("hist");
         s_stackedProcesses->Draw("sameaxis");
+        h_errs->Draw("e2same");
         h1_data->Draw("same E");
-        ((TH1D*)(s_stackedProcesses->GetStack()->Last()))->Add(h_down, -100000);
-        s_stackedProcesses->Draw("samehist");
-        h1_data->Draw("sameaxis");
         h1_data->SetDirectory(0);
 
         if(legendSet==1) {
