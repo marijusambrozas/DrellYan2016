@@ -23,6 +23,7 @@
 #define M_Mu 0.1056583715 // -- GeV -- //
 #define M_Elec 0.000510998 // -- GeV -- //
 #define M_Tau 1.77682 // -- GeV -- //
+#define M_Bottom 4.18 // -- GeV -- //
 #define M_Top 172.5 // -- GeV -- //
 
 class Object
@@ -1877,3 +1878,25 @@ public:
 
 };
 
+class LHE : public Object
+{
+public:
+        Double_t Px;
+        Double_t Py;
+        Double_t Pz;
+        Double_t Energy;
+        Int_t ID;
+        Int_t Status;
+
+        void FillFromNtuple(NtupleHandle *ntuple, Int_t index)
+        {
+                Px 		= ntuple->LHEParticle_Px[index];
+                Py 		= ntuple->LHEParticle_Py[index];
+                Pz 		= ntuple->LHEParticle_Pz[index];
+                Energy		= ntuple->LHEParticle_E[index];
+                ID 		= ntuple->LHEParticle_ID[index];
+                Status		= ntuple->LHEParticle_status[index];
+
+                Momentum.SetPxPyPzE(Px, Py, Pz, Energy);
+        }
+};

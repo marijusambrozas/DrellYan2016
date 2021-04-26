@@ -325,6 +325,15 @@ public:
     Double_t pfMET_Type1_Py;
     Double_t pfMET_Type1_SumEt;
 
+    // -- LHE Information -- //
+    Int_t nLHEParticle;
+    Double_t LHEParticle_Px[MaxN];
+    Double_t LHEParticle_Py[MaxN];
+    Double_t LHEParticle_Pz[MaxN];
+    Double_t LHEParticle_E[MaxN];
+    Int_t LHEParticle_ID[MaxN];
+    Int_t LHEParticle_status[MaxN];
+
     // -- Constructor -- //
     NtupleHandle(TChain *chainptr)
     {
@@ -947,6 +956,25 @@ public:
     	chain->SetBranchAddress("pfMET_Type1_Px", &pfMET_Type1_Px);
     	chain->SetBranchAddress("pfMET_Type1_Py", &pfMET_Type1_Py);
     	chain->SetBranchAddress("pfMET_Type1_SumEt", &pfMET_Type1_SumEt);
+    }
+
+    void TurnOnBranches_LHE()
+    {
+        chain->SetBranchStatus("nLHEParticle", 1);
+        chain->SetBranchStatus("LHEParticle_Px", 1);
+        chain->SetBranchStatus("LHEParticle_Py", 1);
+        chain->SetBranchStatus("LHEParticle_Pz", 1);
+        chain->SetBranchStatus("LHEParticle_E", 1);
+        chain->SetBranchStatus("LHEParticle_ID", 1);
+        chain->SetBranchStatus("LHEParticle_status", 1);
+
+        chain->SetBranchAddress("nLHEParticle", &nLHEParticle);
+        chain->SetBranchAddress("LHEParticle_Px", &LHEParticle_Px);
+        chain->SetBranchAddress("LHEParticle_Py", &LHEParticle_Py);
+        chain->SetBranchAddress("LHEParticle_Pz", &LHEParticle_Pz);
+        chain->SetBranchAddress("LHEParticle_E", &LHEParticle_E);
+        chain->SetBranchAddress("LHEParticle_ID", &LHEParticle_ID);
+        chain->SetBranchAddress("LHEParticle_status", &LHEParticle_status);
     }
 
     void GetEvent(Int_t i)

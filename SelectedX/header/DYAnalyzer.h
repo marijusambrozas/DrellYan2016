@@ -321,7 +321,7 @@ public:
         Bool_t EventSelection_FakeEMu(vector<Electron> ElectronCollection, vector<Muon> MuonCollection, NtupleHandle *ntuple, Electron *SelectedElectron, Muon *SelectedMuon);
         void SetupFRvalues(TString filename, TString type="sigCtrl_template");
         void SetupFRvalues_old(TString filename, TString type="sigCtrl_template");
-        void SetupFRandPRvalues_MC();
+        void SetupFRandPRvalues_MC(TString option="NONE"); // use "UP" or "DOWN" for increasing/decreasing by uncertainty
         Double_t FakeRate(Double_t p_T, Double_t eta);
         Double_t FakeRate_old(Double_t p_T, Double_t eta);
         Double_t FakeRate_MC(Double_t p_T, Double_t eta, TString type);
@@ -6965,7 +6965,7 @@ void DYAnalyzer::SetupFRvalues_old(TString filename, TString type) // type can b
 } // End of SetupFRvalues_old()
 
 
-void DYAnalyzer::SetupFRandPRvalues_MC()
+void DYAnalyzer::SetupFRandPRvalues_MC(TString option)
 {
     TString filename = "/media/sf_DATA/FR/Muon/MC_FakeRates.root";
     TString type[4] = {"DY", "ttbar", "WJets", "QCD"};
@@ -6988,9 +6988,22 @@ void DYAnalyzer::SetupFRandPRvalues_MC()
         // -- Getting values from histograms -- //
         for (Int_t i_bin=1; i_bin<=nPtBinMC; i_bin++)
         {
-            FR_barrel_MC [i][i_bin-1] = h_FR_barrel [i]->GetBinContent(i_bin);
-            FR_endcap_MC [i][i_bin-1] = h_FR_endcap [i]->GetBinContent(i_bin);
-            FR_endcap2_MC[i][i_bin-1] = h_FR_endcap2[i]->GetBinContent(i_bin);
+            Double_t FR_addition_barrel=0, FR_addition_endcap=0, FR_addition_endcap2=0;
+            if (option.Contains("FR=UP"))
+            {
+                FR_addition_barrel  = h_FR_barrel [i]->GetBinError(i_bin);
+                FR_addition_endcap  = h_FR_endcap [i]->GetBinError(i_bin);
+                FR_addition_endcap2 = h_FR_endcap2[i]->GetBinError(i_bin);
+            }
+            else if (option.Contains("FR=DOWN"))
+            {
+                FR_addition_barrel  = -h_FR_barrel [i]->GetBinError(i_bin);
+                FR_addition_endcap  = -h_FR_endcap [i]->GetBinError(i_bin);
+                FR_addition_endcap2 = -h_FR_endcap2[i]->GetBinError(i_bin);
+            }
+            FR_barrel_MC [i][i_bin-1] = h_FR_barrel [i]->GetBinContent(i_bin) + FR_addition_barrel;
+            FR_endcap_MC [i][i_bin-1] = h_FR_endcap [i]->GetBinContent(i_bin) + FR_addition_endcap;
+            FR_endcap2_MC[i][i_bin-1] = h_FR_endcap2[i]->GetBinContent(i_bin) + FR_addition_endcap2;
             if (FR_barrel_MC[i][i_bin-1] > 1 || FR_barrel_MC[i][i_bin-1] < 0)
             {
                 nProblem++;
@@ -7015,9 +7028,23 @@ void DYAnalyzer::SetupFRandPRvalues_MC()
 
             if (i < 3)
             {
-                PR_barrel_MC [i][i_bin-1] = h_PR_barrel [i]->GetBinContent(i_bin);
-                PR_endcap_MC [i][i_bin-1] = h_PR_endcap [i]->GetBinContent(i_bin);
-                PR_endcap2_MC[i][i_bin-1] = h_PR_endcap2[i]->GetBinContent(i_bin);
+                Double_t PR_addition_barrel=0, PR_addition_endcap=0, PR_addition_endcap2=0;
+                if (option.Contains("PR=UP"))
+                {
+                    PR_addition_barrel  = h_PR_barrel [i]->GetBinError(i_bin);
+                    PR_addition_endcap  = h_PR_endcap [i]->GetBinError(i_bin);
+                    PR_addition_endcap2 = h_PR_endcap2[i]->GetBinError(i_bin);
+                }
+                else if (option.Contains("PR=DOWN"))
+                {
+                    PR_addition_barrel  = -h_PR_barrel [i]->GetBinError(i_bin);
+                    PR_addition_endcap  = -h_PR_endcap [i]->GetBinError(i_bin);
+                    PR_addition_endcap2 = -h_PR_endcap2[i]->GetBinError(i_bin);
+                }
+
+                PR_barrel_MC [i][i_bin-1] = h_PR_barrel [i]->GetBinContent(i_bin) + PR_addition_barrel ;
+                PR_endcap_MC [i][i_bin-1] = h_PR_endcap [i]->GetBinContent(i_bin) + PR_addition_endcap ;
+                PR_endcap2_MC[i][i_bin-1] = h_PR_endcap2[i]->GetBinContent(i_bin) + PR_addition_endcap2;
                 if (PR_barrel_MC[i][i_bin-1] > 1 || PR_barrel_MC[i][i_bin-1] < 0)
                 {
                     nProblem++;
@@ -7050,7 +7077,16 @@ void DYAnalyzer::SetupFRandPRvalues_MC()
 
         for (Int_t i_bin=1; i_bin<=48; i_bin++)
         {
-            FR_eta_MC [i][i_bin-1] = h_FR_eta [i]->GetBinContent(i_bin);
+            Double_t FR_addition_eta=0;
+            if (option.Contains("FR=UP"))
+            {
+                FR_addition_eta  = h_FR_eta[i]->GetBinError(i_bin);
+            }
+            else if (option.Contains("FR=DOWN"))
+            {
+                FR_addition_eta  = -h_FR_eta [i]->GetBinError(i_bin);
+            }
+            FR_eta_MC [i][i_bin-1] = h_FR_eta [i]->GetBinContent(i_bin) + FR_addition_eta;
             if (FR_eta_MC[i][i_bin-1] > 1 || FR_eta_MC[i][i_bin-1] < 0)
             {
                 nProblem++;
@@ -7060,7 +7096,16 @@ void DYAnalyzer::SetupFRandPRvalues_MC()
             }
             if (i < 3)
             {
-                PR_eta_MC [i][i_bin-1] = h_PR_eta [i]->GetBinContent(i_bin);
+                Double_t PR_addition_eta=0;
+                if (option.Contains("PR=UP"))
+                {
+                    PR_addition_eta  = h_PR_eta[i]->GetBinError(i_bin);
+                }
+                else if (option.Contains("PR=DOWN"))
+                {
+                    PR_addition_eta  = -h_PR_eta [i]->GetBinError(i_bin);
+                }
+                PR_eta_MC [i][i_bin-1] = h_PR_eta [i]->GetBinContent(i_bin) + PR_addition_eta;
                 if (PR_eta_MC[i][i_bin-1] > 1 || PR_eta_MC[i][i_bin-1] < 0)
                 {
                     nProblem++;
