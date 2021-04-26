@@ -1217,6 +1217,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         std::vector<double> *jet_eta = new std::vector<double>;
         std::vector<double> *jet_phi = new std::vector<double>;
         std::vector<int> *jet_charge = new std::vector<int>;
+        std::vector<int> *jet_btag = new std::vector<int>;
         std::vector<double> *gen_pT = new std::vector<double>;
         std::vector<double> *gen_eta = new std::vector<double>;
         std::vector<double> *gen_phi = new std::vector<double>;
@@ -1261,6 +1262,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         MuonTree->Branch("jet_eta", &jet_eta);
         MuonTree->Branch("jet_phi", &jet_phi);
         MuonTree->Branch("jet_charge", &jet_charge);
+        MuonTree->Branch("jet_btag", &jet_btag);
         MuonTree->Branch("gen_pT", &gen_pT);
         MuonTree->Branch("gen_eta", &gen_eta);
         MuonTree->Branch("gen_phi", &gen_phi);
@@ -1497,6 +1499,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             jet_eta->push_back(ntuple->Jet_eta[i_jet]);
                             jet_phi->push_back(ntuple->Jet_phi[i_jet]);
                             jet_charge->push_back(ntuple->Jet_Charge[i_jet]);
+                            jet_btag->push_back(ntuple->Jet_bTag[i_jet]);
                         }
                         for (Int_t i_gen=0; i_gen<ntuple->gnpair; i_gen++)
                         {
