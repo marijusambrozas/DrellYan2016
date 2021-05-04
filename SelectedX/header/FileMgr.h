@@ -1038,6 +1038,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kTRUE;
         Type = "BKG";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/v2p10/";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
         Tag.push_back("ttbar"); Xsec.push_back(734.577); Wsum.push_back(67632273.0 + 68317507.0); nEvents.push_back(77081149); //M(ttbar) < 700GeV, ttbar+ttbarBackup
@@ -1058,6 +1059,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kTRUE;
         Type = "BKG";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/v2p10/";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
         Tag.push_back("ttbar_M700to1000"); Xsec.push_back(76.605); Wsum.push_back(38578324.0); nEvents.push_back(38578324);
@@ -1071,6 +1073,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kTRUE;
         Type = "BKG";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/v2p10/";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
         Tag.push_back("ttbar_M1000toInf"); Xsec.push_back(20.578); Wsum.push_back(24561630.0); nEvents.push_back(24561630);
@@ -1084,6 +1087,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kTRUE;
         Type = "BKG";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/v2p10/";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
         Tag.push_back("ttbar"); Xsec.push_back(734.577); Wsum.push_back(67632273.0 + 68317507.0); nEvents.push_back(77081149); //M(ttbar) < 700GeV, ttbar+ttbarBackup
@@ -1118,6 +1122,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kTRUE;
         Type = "BKG";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/v2p10/";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
         Tag.push_back("tW"); Xsec.push_back(35.85); Wsum.push_back(6952830.0); nEvents.push_back(6952830);
@@ -1131,6 +1136,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kTRUE;
         Type = "BKG";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/v2p10/";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
         Tag.push_back("tbarW"); Xsec.push_back(35.85); Wsum.push_back(6933093.0); nEvents.push_back(6933093);
@@ -1185,6 +1191,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         Type = "BKG";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/v2p10/";
         Tag.push_back("tW"); Xsec.push_back(35.85); Wsum.push_back(6952830.0); nEvents.push_back(6952830);
 //        Location = "ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/crab_ST_tW/180326_143800/0000/";
         Location = "ST_tW/";
@@ -1199,6 +1206,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(144);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/v2p9/";
         Tag.push_back("ZZ"); Xsec.push_back(16.523); Wsum.push_back(998034.0); nEvents.push_back(998034);
 //        Location = "ZZ_TuneCUETP8M1_13TeV-pythia8/crab_ZZ/180326_143627/0000/";
         Location = "ZZ/";
@@ -1224,6 +1232,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kTRUE;
         Type = "BKG";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/v2p10/";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
         Tag.push_back("WJetsToLNu"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253933112.0); nEvents.push_back(24120297);
@@ -1244,6 +1253,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kTRUE;
         Type = "BKG";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/v2p10/";
 
         Tag.push_back("WJetsToLNu_ext2v5"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253933112.0); nEvents.push_back(371209392);
         Location = "WJetsToLNu_amcatnlo_ext2v5/";
@@ -1255,6 +1265,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
     {
         isMC = kTRUE;
         Type = "BKG";
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/v2p10/";
 //        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/dpai/_v2p3_/"; // old location
 
         Tag.push_back("WJetsToLNu"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253933112.0); nEvents.push_back(24120297);
@@ -1961,6 +1972,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(1451);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/v2p10/";
         Tag.push_back("ttbar"); Xsec.push_back(734.577); Wsum.push_back(67632273.0 + 68317507.0); nEvents.push_back(77081149); //M(ttbar) < 700GeV, ttbar+ttbarBackup
 //        Location = "TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/crab_ttbar/180326_142926/0000/";
         Location = "ttbar/";
@@ -2003,6 +2015,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(144);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/v2p9/";
         Tag.push_back("ZZ"); Xsec.push_back(16.523); Wsum.push_back(998034.0); nEvents.push_back(998034);
 //        Location = "ZZ_TuneCUETP8M1_13TeV-pythia8/crab_ZZ/180326_143627/0000/";
         Location = "ZZ/";
@@ -2024,6 +2037,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         NtupleName.push_back("ntuple_mc_"); nNtuples.push_back(116);
         TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
+        BaseLocation = "root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/v2p10/";
         Tag.push_back("WJetsToLNu"); Xsec.push_back(61526.7); Wsum.push_back(16497009.0 + 161144203.0 + 253933112.0); nEvents.push_back(24120297);
 //        Location = "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_WJetsToLNu_amcatnlo/180326_144617/0000/";
         Location = "WJetsToLNu_amcatnlo/";
