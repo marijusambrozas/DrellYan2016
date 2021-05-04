@@ -1425,6 +1425,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         jet_eta->clear();
                         jet_phi->clear();
                         jet_charge->clear();
+                        jet_btag->clear();
                         gen_pT ->clear();
                         gen_eta->clear();
                         gen_phi->clear();
