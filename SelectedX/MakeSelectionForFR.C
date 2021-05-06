@@ -1217,7 +1217,7 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
         std::vector<double> *jet_eta = new std::vector<double>;
         std::vector<double> *jet_phi = new std::vector<double>;
         std::vector<int> *jet_charge = new std::vector<int>;
-        std::vector<int> *jet_btag = new std::vector<int>;
+        std::vector<double> *jet_btag = new std::vector<double>;
         std::vector<double> *gen_pT = new std::vector<double>;
         std::vector<double> *gen_eta = new std::vector<double>;
         std::vector<double> *gen_phi = new std::vector<double>;
