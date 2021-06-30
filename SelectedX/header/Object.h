@@ -982,7 +982,7 @@ public:
 		return isTrigMatch;
 	}
 
-        Bool_t isTrigMatched(NtupleHandle *nh, TString HLT, Int_t &HLT_index)
+        Bool_t isTrigMatched(NtupleHandle *nh, TString HLT, Int_t *HLT_index)
         {
                 vector<string> *hlt_trigName = nh->HLT_trigName;
                 Int_t hlt_ntrig = nh->HLT_ntrig;
@@ -1007,7 +1007,7 @@ public:
 //                                if (dpT < 0.3)
 //                                {
                                     isTrigMatch = true;
-                                    HLT_index = k;
+                                    *HLT_index = k;
                                     break;
 //                                }
                             }
@@ -1351,16 +1351,41 @@ public:
                 passMediumID = ntuple->Muon_passMediumID;
                 passTightID = ntuple->Muon_passTightID;
                 passHighPtID = ntuple->Muon_passHighPtID;
-        }        
+        }
 
-        Bool_t isTrigMatched(NtupleHandle *nh, TString HLT, Double_t *HLT_pT=NULL, Int_t *HLT_PS=NULL)
+        Bool_t isTrigMatched(NtupleHandle *nh, TString HLT, Double_t *HLT_pT=NULL, Int_t *HLT_PS=NULL, Int_t *L1seed_PS=NULL)
         {
-                vector<string> *hlt_trigName = nh->HLT_trigName;
-                Int_t hlt_ntrig = nh->HLT_ntrig;
+            vector<string> *hlt_trigName = nh->HLT_trigName;
+            Int_t hlt_ntrig = nh->HLT_ntrig;
 
-                Bool_t isTrigMatch = false;
-                for(Int_t k = 0; k < hlt_ntrig; k++)
-                {
+            Bool_t isTrigMatch = false;
+            for(Int_t k = 0; k < hlt_ntrig; k++)
+            {
+                    if (HLT == "HLT_Mu17_v* || HLT_Mu20_v* || HLT_Mu27_v* || HLT_Mu50_v*")
+                    {
+                        if((hlt_trigName->at((unsigned int)k)) == "HLT_Mu17_v*" || (hlt_trigName->at((unsigned int)k)) == "HLT_Mu20_v*" ||
+                           (hlt_trigName->at((unsigned int)k)) == "HLT_Mu27_v*" || (hlt_trigName->at((unsigned int)k)) == "HLT_Mu50 _v*")
+                        {
+                            Double_t Lepton_pT = this->Pt;
+                            Double_t Lepton_eta = this->eta;
+                            Double_t Lepton_phi = this->phi;
+                            Double_t Trig_pT = nh->HLT_trigPt[k];
+                            Double_t Trig_eta = nh->HLT_trigEta[k];
+                            Double_t Trig_phi = nh->HLT_trigPhi[k];
+
+                            Double_t dR = sqrt((Lepton_eta - Trig_eta)*(Lepton_eta - Trig_eta) + (Lepton_phi - Trig_phi)*(Lepton_phi - Trig_phi));
+                            Double_t dpT = fabs(Lepton_pT - Trig_pT) / Trig_pT;
+                            if(dR < 0.3 && fabs(Lepton_eta) < 2.4)
+                            {
+                                isTrigMatch = true;
+                                if (HLT_pT) *HLT_pT = Trig_pT;
+                                if (HLT_PS) *HLT_PS = nh->HLT_trigPS->at(k);
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
                         if((hlt_trigName->at((unsigned int)k)) == HLT)
                         {
                             Double_t Lepton_pT = this->Pt;
@@ -1381,6 +1406,66 @@ public:
                                     if (HLT_pT) *HLT_pT = Trig_pT;
                                     if (HLT_PS) *HLT_PS = nh->HLT_trigPS->at(k);
                                     break;
+                                }
+                            }
+                        }
+                    }
+            }
+            return isTrigMatch;
+        }
+
+        Bool_t isTrigMatched(NtupleHandle *nh, TString HLT, Int_t *HLT_index)
+        {
+                vector<string> *hlt_trigName = nh->HLT_trigName;
+                Int_t hlt_ntrig = nh->HLT_ntrig;
+
+                Bool_t isTrigMatch = false;
+                for(Int_t k = 0; k < hlt_ntrig; k++)
+                {
+                        if (HLT == "HLT_Mu17_v* || HLT_Mu20_v* || HLT_Mu27_v* || HLT_Mu50_v*")
+                        {
+                            if((hlt_trigName->at((unsigned int)k)) == "HLT_Mu17_v*" || (hlt_trigName->at((unsigned int)k)) == "HLT_Mu20_v*" ||
+                               (hlt_trigName->at((unsigned int)k)) == "HLT_Mu27_v*" || (hlt_trigName->at((unsigned int)k)) == "HLT_Mu50 _v*")
+                            {
+                                Double_t Lepton_pT = this->Pt;
+                                Double_t Lepton_eta = this->eta;
+                                Double_t Lepton_phi = this->phi;
+                                Double_t Trig_pT = nh->HLT_trigPt[k];
+                                Double_t Trig_eta = nh->HLT_trigEta[k];
+                                Double_t Trig_phi = nh->HLT_trigPhi[k];
+
+                                Double_t dR = sqrt((Lepton_eta - Trig_eta)*(Lepton_eta - Trig_eta) + (Lepton_phi - Trig_phi)*(Lepton_phi - Trig_phi));
+                                Double_t dpT = fabs(Lepton_pT - Trig_pT) / Trig_pT;
+                                if(dR < 0.3 && fabs(Lepton_eta) < 2.4)
+                                {
+                                    isTrigMatch = true;
+                                    *HLT_index = k;
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if((hlt_trigName->at((unsigned int)k)) == HLT)
+                            {
+                                Double_t Lepton_pT = this->Pt;
+                                Double_t Lepton_eta = this->eta;
+                                Double_t Lepton_phi = this->phi;
+                                Double_t Trig_pT = nh->HLT_trigPt[k];
+                                Double_t Trig_eta = nh->HLT_trigEta[k];
+                                Double_t Trig_phi = nh->HLT_trigPhi[k];
+
+                                Double_t dR = sqrt((Lepton_eta - Trig_eta)*(Lepton_eta - Trig_eta) + (Lepton_phi - Trig_phi)*(Lepton_phi - Trig_phi));
+                                Double_t dpT = fabs(Lepton_pT - Trig_pT) / Trig_pT;
+                                if(dR < 0.3 && fabs(Lepton_eta) < 2.4)
+                                {
+            //                                cout << "HLTname: " << hlt_trigName->at((unsigned int)k) <<"    pT: " << Lepton_pT << "   HLT pT: " << Trig_pT << endl;
+                                    if (dpT < 0.2)
+                                    {
+                                        isTrigMatch = true;
+                                        *HLT_index = k;
+                                        break;
+                                    }
                                 }
                             }
                         }

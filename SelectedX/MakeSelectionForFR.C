@@ -79,7 +79,7 @@ void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "D
         Xselected++;
         if (whichX.Contains("EST"))
         {            
-            if (HLTname == "DEFAULT") HLT = "Mu20_OR_Mu27_OR_Mu50";
+            if (HLTname == "DEFAULT") HLT = "Mu_OR";
             else HLT = HLTname;
             cout << "\n*****  MakeSelectionForBKGest_MuMu (" << type << ", " << HLT << ")  *****" << endl;
             MakeSelectionForBKGest_MuMu(type, HLT, Debug);
@@ -93,7 +93,7 @@ void MakeSelectionForFR (TString WhichX, TString type = "", TString HLTname = "D
         }
         else
         {
-            if (HLTname == "DEFAULT") HLT = "Mu50";
+            if (HLTname == "DEFAULT") HLT = "Mu_OR";
             else HLT = HLTname;
             cout << "\n*****  MakeSelectionForFR_Mu (" << type << ", " << HLT << ")  *****" << endl;
             MakeSelectionForFR_Mu(type, HLT, Debug);
@@ -1194,12 +1194,16 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
             MuonFile = TFile::Open(out_base+out_dir+".root", "RECREATE");
         MuonFile->cd();
 
+        Int_t runNum;
+        Int_t lumiBlock;
+        std::vector<int> *trig_fired = new std::vector<int>;
+        std::vector<int> *trig_matched = new std::vector<int>;
+        std::vector<double> *trig_pT = new std::vector<double>;
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
         std::vector<double> *phi = new std::vector<double>;
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
-        std::vector<double> *TRKiso = new std::vector<double>;
         Double_t MET_pT, MET_phi;
         Int_t nPU;
         Int_t nVTX;
@@ -1237,12 +1241,16 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
 
         TTree* MuonTree = new TTree("FRTree", "FRTree");
         // -- Creating muon variables to assign branches -- //
+        MuonTree->Branch("runNum", &runNum);
+        MuonTree->Branch("lumiBlock", &lumiBlock);
+        MuonTree->Branch("trig_fired", &trig_fired);
+        MuonTree->Branch("trig_matched", &trig_matched);
+        MuonTree->Branch("trig_pT", &trig_pT);
         MuonTree->Branch("p_T", &p_T);
         MuonTree->Branch("eta", &eta);
         MuonTree->Branch("phi", &phi);
         MuonTree->Branch("charge", &charge);
         MuonTree->Branch("relPFiso", &relPFiso);
-        MuonTree->Branch("TRKiso", &TRKiso);
         MuonTree->Branch("MET_pT", &MET_pT);
         MuonTree->Branch("MET_phi", &MET_phi);
         MuonTree->Branch("nPU", &nPU);
@@ -1299,12 +1307,12 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
             {
                 ntuple->TurnOnBranches_GenLepton(); // for all leptons
                 ntuple->TurnOnBranches_GenOthers(); // for quarks
+                ntuple->TurnOnBranches_LHE();
             }
             ntuple->TurnOnBranches_Muon();
             ntuple->TurnOnBranches_Electron();
             ntuple->TurnOnBranches_Jet();
             ntuple->TurnOnBranches_MET();
-            ntuple->TurnOnBranches_LHE();
 
             Double_t SumWeight = 0, SumWeight_Separated = 0, SumWeightRaw = 0;
 
@@ -1379,11 +1387,11 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         // -- Rochester correction -- //
                         Double_t rndm[2], SF=0; r1->RndmArray(2, rndm);
                         Int_t s, m;
-                        if(Mgr.isMC == kFALSE)
+                        if(!Mgr.isMC)
                             SF = rc.kScaleDT(mu.charge, mu.Pt, mu.eta, mu.phi, s=0, m=0);
                         else
                         {
-                            Double_t genPt = analyzer->GenMuonPt("finalState_OR_hadronDecay", ntuple, mu);
+                            Double_t genPt = analyzer->GenMuonPt(ntuple, mu);
                             if (genPt > 0)
                                 SF = rc.kScaleFromGenMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, genPt, rndm[0], s=0, m=0);
                             else
@@ -1401,19 +1409,21 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                     } // End of i_reco iteration
 
                     // -- Event Selection -- //
-                    vector< Muon > SelectedMuonCollection_nume, SelectedMuonCollection_deno;
+                    vector< Muon > SelectedMuonCollection;
                     Bool_t isPassEventSelection = kFALSE;
-                    isPassEventSelection = analyzer->EventSelection_FR(MuonCollection, ntuple, &SelectedMuonCollection_nume, &SelectedMuonCollection_deno);
+                    isPassEventSelection = analyzer->EventSelection_FR(MuonCollection, ntuple, &SelectedMuonCollection);
 
                     if (isPassEventSelection == kTRUE)
                     {
                         timesPassed++;
+                        trig_fired->clear();
+                        trig_matched->clear();
+                        trig_pT->clear();
                         p_T->clear();
                         eta->clear();
                         phi->clear();
                         charge->clear();
                         relPFiso->clear();
-                        TRKiso->clear();
                         ele_pT->clear();
                         ele_eta->clear();
                         ele_etaSC->clear();
@@ -1442,6 +1452,10 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         LHE_ID->clear();
                         LHE_status->clear();
 
+                        // -- Event info -- //
+                        runNum = ntuple->runNum;
+                        lumiBlock = ntuple->lumiBlock;
+
                         // -- Top pT reweighting -- //
                         top_weight = 1;
                         if (Mgr.Tag[i_tup].Contains("ttbar"))
@@ -1462,14 +1476,13 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         prefiring_weight = ntuple->_prefiringweight;
 
                         // -- Vector filling -- //
-                        for (UInt_t i=0; i<SelectedMuonCollection_deno.size(); i++)
+                        for (UInt_t i=0; i<SelectedMuonCollection.size(); i++)
                         {
-                            p_T->push_back(SelectedMuonCollection_deno[i].Pt);
-                            eta->push_back(SelectedMuonCollection_deno[i].eta);
-                            phi->push_back(SelectedMuonCollection_deno[i].phi);
-                            charge->push_back(SelectedMuonCollection_deno[i].charge);
-                            relPFiso->push_back(SelectedMuonCollection_deno[i].RelPFIso_dBeta);
-                            TRKiso->push_back(SelectedMuonCollection_deno[i].trkiso);
+                            p_T->push_back(SelectedMuonCollection[i].Pt);
+                            eta->push_back(SelectedMuonCollection[i].eta);
+                            phi->push_back(SelectedMuonCollection[i].phi);
+                            charge->push_back(SelectedMuonCollection[i].charge);
+                            relPFiso->push_back(SelectedMuonCollection[i].RelPFIso_dBeta);
                         }
                         for (Int_t i_ele=0; i_ele<ntuple->Nelectrons; i_ele++)
                         {
@@ -1502,49 +1515,62 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                             jet_charge->push_back(ntuple->Jet_Charge[i_jet]);
                             jet_btag->push_back(ntuple->Jet_bTag[i_jet]);
                         }
-                        for (Int_t i_gen=0; i_gen<ntuple->gnpair; i_gen++)
+
+                        // -- Trigger info filling -- //
+                        Int_t triggered = 0;
+                        std::vector<int> trig_index;
+                        triggered = analyzer->FindTrigger(SelectedMuonCollection, ntuple, &trig_index, trig_fired, trig_matched);
+                        if (!triggered) continue;
+                        for (UInt_t i_tr=0; i_tr<trig_index.size(); i_tr++)
+                            trig_pT->push_back(ntuple->HLT_trigPt[trig_index[i_tr]]);
+
+                        // -- Gen and LHE info filling -- //
+                        if (Mgr.isMC)
                         {
-                            GenLepton genlep;
-                            genlep.FillFromNtuple(ntuple, i_gen);
-                            // Keeping only first and final versions
-                            if (genlep.ID == genlep.Mother && !genlep.isLastCopy && !genlep.isLastCopyBeforeFSR) continue;
-                            gen_pT->push_back(genlep.Pt);
-                            gen_eta->push_back(genlep.eta);
-                            gen_phi->push_back(genlep.phi);
-                            gen_isPrompt->push_back(genlep.isPrompt);
-                            gen_isTauDecayProduct->push_back(genlep.isTauDecayProduct);
-                            gen_isLastCopy->push_back(genlep.isLastCopy);
-                            gen_isLastCopyBeforeFSR->push_back(genlep.isLastCopyBeforeFSR);
-                            gen_ID->push_back(genlep.ID);
-                            gen_motherID->push_back(genlep.Mother);
-                        }
-                        for (Int_t i_gen=0; i_gen<ntuple->nGenOthers; i_gen++)
-                        {
-                            GenOthers gen;
-                            gen.FillFromNtuple(ntuple, i_gen);
-                            // Keeping only first and final versions
-                            if (gen.ID == gen.Mother && !gen.isLastCopy && !gen.isLastCopyBeforeFSR) continue;
-                            gen_pT->push_back(gen.Pt);
-                            gen_eta->push_back(gen.eta);
-                            gen_phi->push_back(gen.phi);
-                            gen_isPrompt->push_back(gen.isPrompt);
-                            gen_isTauDecayProduct->push_back(gen.isTauDecayProduct);
-                            gen_isLastCopy->push_back(gen.isLastCopy);
-                            gen_isLastCopyBeforeFSR->push_back(gen.isLastCopyBeforeFSR);
-                            gen_ID->push_back(gen.ID);
-                            gen_motherID->push_back(gen.Mother);
-                        }
-                        for (Int_t i_lhe=0; i_lhe<ntuple->nLHEParticle; i_lhe++)
-                        {
-                            LHE lhe;
-                            lhe.FillFromNtuple(ntuple, i_lhe);
-                            LHE_px->push_back(lhe.Px);
-                            LHE_py->push_back(lhe.Py);
-                            LHE_pz->push_back(lhe.Pz);
-                            LHE_E ->push_back(lhe.Energy);
-                            LHE_ID->push_back(lhe.ID);
-                            LHE_status->push_back(lhe.Status);
-                        }
+                            for (Int_t i_gen=0; i_gen<ntuple->gnpair; i_gen++)
+                            {
+                                GenLepton genlep;
+                                genlep.FillFromNtuple(ntuple, i_gen);
+                                // Keeping only first and final versions
+                                if (genlep.ID == genlep.Mother && !genlep.isLastCopy && !genlep.isLastCopyBeforeFSR) continue;
+                                gen_pT->push_back(genlep.Pt);
+                                gen_eta->push_back(genlep.eta);
+                                gen_phi->push_back(genlep.phi);
+                                gen_isPrompt->push_back(genlep.isPrompt);
+                                gen_isTauDecayProduct->push_back(genlep.isTauDecayProduct);
+                                gen_isLastCopy->push_back(genlep.isLastCopy);
+                                gen_isLastCopyBeforeFSR->push_back(genlep.isLastCopyBeforeFSR);
+                                gen_ID->push_back(genlep.ID);
+                                gen_motherID->push_back(genlep.Mother);
+                            }
+                            for (Int_t i_gen=0; i_gen<ntuple->nGenOthers; i_gen++)
+                            {
+                                GenOthers gen;
+                                gen.FillFromNtuple(ntuple, i_gen);
+                                // Keeping only first and final versions
+                                if (gen.ID == gen.Mother && !gen.isLastCopy && !gen.isLastCopyBeforeFSR) continue;
+                                gen_pT->push_back(gen.Pt);
+                                gen_eta->push_back(gen.eta);
+                                gen_phi->push_back(gen.phi);
+                                gen_isPrompt->push_back(gen.isPrompt);
+                                gen_isTauDecayProduct->push_back(gen.isTauDecayProduct);
+                                gen_isLastCopy->push_back(gen.isLastCopy);
+                                gen_isLastCopyBeforeFSR->push_back(gen.isLastCopyBeforeFSR);
+                                gen_ID->push_back(gen.ID);
+                                gen_motherID->push_back(gen.Mother);
+                            }
+                            for (Int_t i_lhe=0; i_lhe<ntuple->nLHEParticle; i_lhe++)
+                            {
+                                LHE lhe;
+                                lhe.FillFromNtuple(ntuple, i_lhe);
+                                LHE_px->push_back(lhe.Px);
+                                LHE_py->push_back(lhe.Py);
+                                LHE_pz->push_back(lhe.Pz);
+                                LHE_E ->push_back(lhe.Energy);
+                                LHE_ID->push_back(lhe.ID);
+                                LHE_status->push_back(lhe.Status);
+                            }
+                        }// End of if(isMC)
 
                         MuonTree->Fill();
                     } // End of isPassEvtSelection
@@ -2177,7 +2203,7 @@ void MakeSelectionForBKGest_MuMu (TString type, TString HLTname, Bool_t Debug)
                             SF = rc.kScaleDT(mu.charge, mu.Pt, mu.eta, mu.phi, s=0, m=0);
                         else
                         {
-                            Double_t genPt = analyzer->GenMuonPt("finalState_OR_hadronDecay", ntuple, mu);
+                            Double_t genPt = analyzer->GenMuonPt(ntuple, mu);
                             if (genPt > 0)
                                 SF = rc.kScaleFromGenMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, genPt, rndm[0], s=0, m=0);
                             else
@@ -2499,7 +2525,7 @@ void MakeSelectionForBKGest_EMu (TString type, TString HLTname, Bool_t Debug)
                             SF = rc.kScaleDT(mu.charge, mu.Pt, mu.eta, mu.phi, s=0, m=0);
                         else
                         {
-                            Double_t genPt = analyzer->GenMuonPt("finalState_OR_hadronDecay", ntuple, mu);
+                            Double_t genPt = analyzer->GenMuonPt(ntuple, mu);
                             if (genPt > 0)
                                 SF = rc.kScaleFromGenMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, genPt, rndm[0], s=0, m=0);
                             else
@@ -2867,7 +2893,7 @@ void MakeSelectionForPR_Mu (TString type, TString HLTname, Bool_t Debug)
                             SF = rc.kScaleDT(mu.charge, mu.Pt, mu.eta, mu.phi, s=0, m=0);
                         else
                         {
-                            Double_t genPt = analyzer->GenMuonPt("finalState_OR_hadronDecay", ntuple, mu);
+                            Double_t genPt = analyzer->GenMuonPt(ntuple, mu);
                             if (genPt > 0)
                                 SF = rc.kScaleFromGenMC(mu.charge, mu.Pt, mu.eta, mu.phi, mu.trackerLayers, genPt, rndm[0], s=0, m=0);
                             else
