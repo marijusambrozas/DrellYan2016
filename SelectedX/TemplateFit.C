@@ -41,8 +41,11 @@ using namespace RooFit;
 void E_Tfit(Int_t type);
 void Mu_Tfit(Int_t type);
 void E_QCDest_Tfit();
+void E_QCDest_MatrixMethod_Tfit();
 void E_WJETSest_Tfit();
+void E_WJETSest_MatrixMethod_Tfit();
 void Mu_WJETSest_Tfit(Int_t type);
+void Mu_WJETSest_MatrixMethod_Tfit();
 void Mu_WJETSest_Tfit_legacy();
 
 Double_t CompChiSquared(TH1D *h_data, THStack *s_MC);
@@ -75,28 +78,6 @@ void TemplateFit (TString WhichX = "", Int_t type = 2)
         cout << "Wrong type!" << endl;
         return;
     }
-    if (whichX.Contains("E"))
-    {
-        Xselected++;
-        if (whichX.Contains("EST"))
-        {
-            if (whichX.Contains("W") && whichX.Contains("JET"))
-            {
-                cout << "\n*******     E_WJETSest_Tfit()     *******" << endl;
-                E_WJETSest_Tfit();
-            }
-            else if (whichX.Contains("QCD"))
-            {
-                cout << "\n*******     E_QCDest_Tfit()     *******" << endl;
-                E_QCDest_Tfit();
-            }
-        }
-        else
-        {
-            cout << "\n*******      E_Tfit(" << type << ")      *******" << endl;
-            E_Tfit(type);
-        }
-    }
     if (whichX.Contains("MU"))
     {
         Xselected++;
@@ -104,8 +85,16 @@ void TemplateFit (TString WhichX = "", Int_t type = 2)
         {
             if (whichX.Contains("W") && whichX.Contains("JET"))
             {
-                cout << "\n*******     Mu_WJETSest_Tfit(" << type << ")     *******" << endl;
-                Mu_WJETSest_Tfit(type);
+                if (whichX.Contains("MATRIX") || whichX.Contains("MM"))
+                {
+                    cout << "\n*******     Mu_WJETSest_MatrixMethod_Tfit(" << type << ")     *******" << endl;
+                    Mu_WJETSest_MatrixMethod_Tfit();
+                }
+                else
+                {
+                    cout << "\n*******     Mu_WJETSest_Tfit(" << type << ")     *******" << endl;
+                    Mu_WJETSest_Tfit(type);
+                }
             }
         }
         else
@@ -114,6 +103,45 @@ void TemplateFit (TString WhichX = "", Int_t type = 2)
             Mu_Tfit(type);
         }
     }
+    else if (whichX.Contains("E"))
+    {
+        Xselected++;
+        if (whichX.Contains("EST"))
+        {
+            if (whichX.Contains("W") && whichX.Contains("JET"))
+            {
+                if (whichX.Contains("MATRIX") || whichX.Contains("MM"))
+                {
+                    cout << "\n*******     E_WJETSest_MatrixMethod_Tfit(" << type << ")     *******" << endl;
+                    E_WJETSest_MatrixMethod_Tfit();
+                }
+                else
+                {
+                    cout << "\n*******     E_WJETSest_Tfit()     *******" << endl;
+                    E_WJETSest_Tfit();
+                }
+            }
+            else if (whichX.Contains("QCD"))
+            {
+                if (whichX.Contains("MATRIX") || whichX.Contains("MM"))
+                {
+                    cout << "\n*******     E_QCDest_MatrixMethod_Tfit(" << type << ")     *******" << endl;
+                    E_QCDest_MatrixMethod_Tfit();
+                }
+                else
+                {
+                    cout << "\n*******     E_QCDest_Tfit()     *******" << endl;
+                    E_QCDest_Tfit();
+                }
+            }
+        }
+        else
+        {
+            cout << "\n*******      E_Tfit(" << type << ")      *******" << endl;
+            E_Tfit(type);
+        }
+    }
+
     if (Xselected == 0) cout << "Wrong arument!" << endl;
 
 } // End of HistDrawer()
@@ -6868,6 +6896,353 @@ void E_QCDest_Tfit()
 } // End of E_QCDest_TFit()
 
 
+void E_QCDest_MatrixMethod_Tfit()
+{
+    FileMgr Mgr;
+
+    TH1D *h_mass[_EndOf_Data_Special],    *h_massSS[_EndOf_Data_Special];
+
+    TFile *file = new TFile("/media/sf_DATA/FR/Electron/MatrixMethod_E.root", "READ");
+
+// ############################# SETUP ################################# //
+//----------------------------- MC bkg ------------------------------------
+
+    // Other MC
+    for (Process_t pr=_DY_10to50; pr<_EndOf_DoubleEG_Normal; pr=next(pr))
+    {
+        file->GetObject("h_mass_FF_TT_"  +Mgr.Procname[pr], h_mass  [pr]);
+        file->GetObject("h_massSS_FF_TT_"+Mgr.Procname[pr], h_massSS[pr]);
+
+//        removeNegativeBins(h_mass  [pr]);
+//        removeNegativeBins(h_massSS[pr]);
+        h_mass  [pr]->SetDirectory(0);
+        h_massSS[pr]->SetDirectory(0);
+
+        if (pr == _DY_10to50)
+        {
+            h_mass  [_DY_Full] = ((TH1D*)(h_mass  [pr]->Clone("h_mass_DY")));
+            h_massSS[_DY_Full] = ((TH1D*)(h_massSS[pr]->Clone("h_massSS_DY")));
+            h_mass  [_DY_Full]->SetDirectory(0);
+            h_massSS[_DY_Full]->SetDirectory(0);
+        }
+        else if (pr < _EndOf_DY_Normal)
+        {
+            h_mass  [_DY_Full]->Add(h_mass  [pr]);
+            h_massSS[_DY_Full]->Add(h_massSS[pr]);
+        }
+        else if (pr == _ttbar)
+        {
+            h_mass  [_ttbar_Full] = ((TH1D*)(h_mass  [pr]->Clone("h_mass_ttbar")));
+            h_massSS[_ttbar_Full] = ((TH1D*)(h_massSS[pr]->Clone("h_massSS_ttbar")));
+            h_mass  [_ttbar_Full]->SetDirectory(0);
+            h_massSS[_ttbar_Full]->SetDirectory(0);
+        }
+        else if (pr > _ttbar && pr < _EndOf_ttbar_Normal)
+        {
+            h_mass  [_ttbar_Full]->Add(h_mass  [pr]);
+            h_massSS[_ttbar_Full]->Add(h_massSS[pr]);
+        }
+        else if (pr == _WJets)
+        {
+            h_mass  [_WJets_Full] = ((TH1D*)(h_mass  [pr]->Clone("h_mass_WJets")));
+            h_massSS[_WJets_Full] = ((TH1D*)(h_massSS[pr]->Clone("h_massSS_WJets")));
+            h_mass  [_WJets_Full]->SetDirectory(0);
+            h_massSS[_WJets_Full]->SetDirectory(0);
+        }
+        else if (pr > _WJets && pr < _EndOf_WJets_Normal)
+        {
+            h_mass  [_WJets_Full]->Add(h_mass  [pr]);
+            h_massSS[_WJets_Full]->Add(h_massSS[pr]);
+        }
+        else if (pr == _QCDEMEnriched_20to30)
+        {
+            h_mass  [_QCDEMEnriched_Full] = ((TH1D*)(h_mass  [pr]->Clone("h_mass_QCD")));
+            h_massSS[_QCDEMEnriched_Full] = ((TH1D*)(h_massSS[pr]->Clone("h_massSS_QCD")));
+            h_mass  [_QCDEMEnriched_Full]->SetDirectory(0);
+            h_massSS[_QCDEMEnriched_Full]->SetDirectory(0);
+        }
+        else if (pr > _QCDEMEnriched_20to30 && pr < _EndOf_QCDEMEnriched_Normal)
+        {
+            h_mass  [_QCDEMEnriched_Full]->Add(h_mass  [pr]);
+            h_massSS[_QCDEMEnriched_Full]->Add(h_massSS[pr]);
+        }
+
+        else if (pr == _GJets_20to100)
+        {
+            h_mass  [_GJets_Full] = ((TH1D*)(h_mass  [pr]->Clone("h_mass_GJets")));
+            h_massSS[_GJets_Full] = ((TH1D*)(h_massSS[pr]->Clone("h_massSS_GJets")));
+            h_mass  [_GJets_Full]->SetDirectory(0);
+            h_massSS[_GJets_Full]->SetDirectory(0);
+        }
+        else if (pr > _GJets_20to100 && pr < _EndOf_GJets_Normal)
+        {
+            h_mass  [_GJets_Full]->Add(h_mass  [pr]);
+            h_massSS[_GJets_Full]->Add(h_massSS[pr]);
+        }
+
+        else if (pr == _DoubleEG_B)
+        {
+            h_mass  [_DoubleEG_Full] = ((TH1D*)(h_mass  [pr]->Clone("h_mass_Data")));
+            h_massSS[_DoubleEG_Full] = ((TH1D*)(h_massSS[pr]->Clone("h_massSS_Data")));
+            h_mass  [_DoubleEG_Full]->SetDirectory(0);
+            h_massSS[_DoubleEG_Full]->SetDirectory(0);
+        }
+        else if (pr > _DoubleEG_B && pr < _EndOf_DoubleEG_Normal)
+        {
+            h_mass  [_DoubleEG_Full]->Add(h_mass  [pr]);
+            h_massSS[_DoubleEG_Full]->Add(h_massSS[pr]);
+        }
+
+        if (pr == _DY_2000to3000) pr = _EndOf_DYTauTau_Normal; // next -- ttbar
+        if (pr == _WJets_ext2v5) pr = _EndOf_QCDMuEnriched_Normal; // next -- QCDEMEnriched
+    }
+
+// ######################## MODEL BUILDING ##########################
+
+    // Making data-driven QCD template from same-sign distributions
+    TH1D *h_QCD_est = ((TH1D*)(h_massSS[_DoubleEG_Full]->Clone("h_QCD_est")));
+    h_QCD_est->Add(h_massSS[_WJets_Full], -1);
+    h_QCD_est->Add(h_massSS[_ttbar_Full], -1);
+    h_QCD_est->Add(h_massSS[_DY_Full], -1);
+    h_QCD_est->Add(h_massSS[_tW], -1);
+    h_QCD_est->Add(h_massSS[_tbarW], -1);
+    h_QCD_est->Add(h_massSS[_WW], -1);
+    h_QCD_est->Add(h_massSS[_WZ], -1);
+    h_QCD_est->Add(h_massSS[_ZZ], -1);
+    removeNegativeBins(h_QCD_est);
+    TCanvas *c_test = new TCanvas("test", "QCD template", 800, 800);
+    h_QCD_est->Draw("hist");
+    c_test->SetLogx();
+    c_test->Update();
+
+    removeNegativeBins(h_mass[_WJets_Full]);
+    removeNegativeBins(h_mass[_GJets_Full]);
+    removeNegativeBins(h_mass[_DY_Full]);
+    removeNegativeBins(h_mass[_ttbar_Full]);
+    removeNegativeBins(h_mass[_tW]);
+    removeNegativeBins(h_mass[_tbarW]);
+    removeNegativeBins(h_mass[_WW]);
+    removeNegativeBins(h_mass[_WZ]);
+    removeNegativeBins(h_mass[_ZZ]);
+    removeNegativeBins(h_mass[_DoubleEG_Full]);
+
+    // Making RooDataHist
+    RooRealVar mass("mass", "m_{ee} [GeV]", 15, 3000);
+
+    RooDataHist *rh_mass_QCD   = new RooDataHist("rh_mass_QCD",   "RooHist_mass_QCD",   mass, h_QCD_est);
+    RooDataHist *rh_mass_WJets = new RooDataHist("rh_mass_WJets", "RooHist_mass_WJets", mass, h_mass[_WJets_Full]);
+    RooDataHist *rh_mass_DY    = new RooDataHist("rh_mass_DY",    "RooHist_mass_DY",    mass, h_mass[_DY_Full]);
+    RooDataHist *rh_mass_ttbar = new RooDataHist("rh_mass_ttbar", "RooHist_mass_ttbar", mass, h_mass[_ttbar_Full]);
+    RooDataHist *rh_mass_tW    = new RooDataHist("rh_mass_tW",    "RooHist_mass_tW",    mass, h_mass[_tW]);
+    RooDataHist *rh_mass_tbarW = new RooDataHist("rh_mass_tbarW", "RooHist_mass_tbarW", mass, h_mass[_tbarW]);
+    RooDataHist *rh_mass_WW    = new RooDataHist("rh_mass_WW",    "RooHist_mass_WW",    mass, h_mass[_WW]);
+    RooDataHist *rh_mass_WZ    = new RooDataHist("rh_mass_WZ",    "RooHist_mass_WZ",    mass, h_mass[_WZ]);
+    RooDataHist *rh_mass_ZZ    = new RooDataHist("rh_mass_ZZ",    "RooHist_mass_ZZ",    mass, h_mass[_ZZ]);
+    RooDataHist *rh_mass_data  = new RooDataHist("rh_mass_data",  "RooHist_mass_data",  mass, h_mass[_DoubleEG_Full]);
+
+    // Making RooHistPdf
+    RooHistPdf *pdf_mass_QCD   = new RooHistPdf("pdf_mass_QCD",   "QCD template",    mass, *rh_mass_QCD,   0);
+    RooHistPdf *pdf_mass_WJets = new RooHistPdf("pdf_mass_WJets", "W+Jets template", mass, *rh_mass_WJets, 0);
+    RooHistPdf *pdf_mass_DY    = new RooHistPdf("pdf_mass_DY",    "DY template",     mass, *rh_mass_DY,    0);
+    RooHistPdf *pdf_mass_ttbar = new RooHistPdf("pdf_mass_ttbar", "ttbar template",  mass, *rh_mass_ttbar, 0);
+    RooHistPdf *pdf_mass_tW    = new RooHistPdf("pdf_mass_tW",    "tW template",     mass, *rh_mass_tW,    0);
+    RooHistPdf *pdf_mass_tbarW = new RooHistPdf("pdf_mass_tbarW", "tbarW template",  mass, *rh_mass_tbarW, 0);
+    RooHistPdf *pdf_mass_WW    = new RooHistPdf("pdf_mass_WW",    "WW template",     mass, *rh_mass_WW,    0);
+    RooHistPdf *pdf_mass_WZ    = new RooHistPdf("pdf_mass_WZ",    "WZ template",     mass, *rh_mass_WZ,    0);
+    RooHistPdf *pdf_mass_ZZ    = new RooHistPdf("pdf_mass_ZZ",    "ZZ template",     mass, *rh_mass_ZZ,    0);
+
+    // Constraints for integrals
+    Double_t N_mass_QCD   = h_QCD_est->Integral() * 3;
+    Double_t N_mass_WJets = h_mass[_WJets_Full]->Integral();
+    Double_t N_mass_DY    = h_mass[_DY_Full]->Integral();
+    Double_t N_mass_ttbar = h_mass[_ttbar_Full]->Integral();
+    Double_t N_mass_tW    = h_mass[_tW]->Integral();
+    Double_t N_mass_tbarW = h_mass[_tbarW]->Integral();
+    Double_t N_mass_WW    = h_mass[_WW]->Integral();
+    Double_t N_mass_WZ    = h_mass[_WZ]->Integral();
+    Double_t N_mass_ZZ    = h_mass[_ZZ]->Integral();
+    cout << "# of same sign QCD events: " << h_QCD_est->Integral() << endl;
+    cout << "Expected # of opposite sign QCD events: ~" << N_mass_QCD << endl;
+
+    Double_t N_mass_total = N_mass_QCD   + N_mass_WJets + N_mass_DY +
+                            N_mass_ttbar + N_mass_tW    + N_mass_tbarW +
+                            N_mass_WW    + N_mass_WZ    + N_mass_ZZ;
+
+    Double_t Nnorm_mass_QCD   = N_mass_QCD   * h_mass[_DoubleEG_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_WJets = N_mass_WJets * h_mass[_DoubleEG_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_DY    = N_mass_DY    * h_mass[_DoubleEG_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_ttbar = N_mass_ttbar * h_mass[_DoubleEG_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_tW    = N_mass_tW    * h_mass[_DoubleEG_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_tbarW = N_mass_tbarW * h_mass[_DoubleEG_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_WW    = N_mass_WW    * h_mass[_DoubleEG_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_WZ    = N_mass_WZ    * h_mass[_DoubleEG_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_ZZ    = N_mass_ZZ    * h_mass[_DoubleEG_Full]->Integral() / N_mass_total;
+
+    // Fit constraints
+    RooRealVar n_mass_QCD  ("n_mass_QCD",   "n_mass_QCD",   Nnorm_mass_QCD,   Nnorm_mass_QCD   *0.5,  Nnorm_mass_QCD   *1.5);
+    RooRealVar n_mass_WJets("n_mass_WJets", "n_mass_WJets", Nnorm_mass_WJets, Nnorm_mass_WJets *0.5,  Nnorm_mass_WJets *1.5);
+    RooRealVar n_mass_DY   ("n_mass_DY",    "n_mass_DY",    Nnorm_mass_DY,    Nnorm_mass_DY    *0.8,  Nnorm_mass_DY    *1.2);
+    RooRealVar n_mass_ttbar("n_mass_ttbar", "n_mass_ttbar", Nnorm_mass_ttbar, Nnorm_mass_ttbar *0.8,  Nnorm_mass_ttbar *1.2);
+    RooRealVar n_mass_tW   ("n_mass_tW",    "n_mass_tW",    Nnorm_mass_tW,    Nnorm_mass_tW    *0.8,  Nnorm_mass_tW    *1.2);
+    RooRealVar n_mass_tbarW("n_mass_tbarW", "n_mass_tbarW", Nnorm_mass_tbarW, Nnorm_mass_tbarW *0.8,  Nnorm_mass_tbarW *1.2);
+    RooRealVar n_mass_WW   ("n_mass_WW",    "n_mass_WW",    Nnorm_mass_WW,    Nnorm_mass_WW    *0.8,  Nnorm_mass_WW    *1.2);
+    RooRealVar n_mass_WZ   ("n_mass_WZ",    "n_mass_WZ",    Nnorm_mass_WZ,    Nnorm_mass_WZ    *0.8,  Nnorm_mass_WZ    *1.2);
+    RooRealVar n_mass_ZZ   ("n_mass_ZZ",    "n_mass_ZZ",    Nnorm_mass_ZZ,    Nnorm_mass_ZZ    *0.8,  Nnorm_mass_ZZ    *1.2);
+
+    // Models
+    RooAddPdf model_mass("model_mass", "model_mass",
+                         RooArgList(*pdf_mass_QCD,   *pdf_mass_WJets, *pdf_mass_DY,
+                                    *pdf_mass_ttbar, *pdf_mass_tW,    *pdf_mass_tbarW,
+                                    *pdf_mass_WW,    *pdf_mass_WZ,    *pdf_mass_ZZ),
+                         RooArgList(n_mass_QCD,   n_mass_WJets, n_mass_DY,
+                                    n_mass_ttbar, n_mass_tW,    n_mass_tbarW,
+                                    n_mass_WW,    n_mass_WZ,    n_mass_ZZ));
+
+    // Fitting
+    RooFitResult* fit_mass = model_mass.fitTo(*rh_mass_data, Save());
+
+
+    /// DRAWING
+    cout << "\n----- FIT RESULT -----" << endl;
+    TCanvas *c_fit = new TCanvas("c_fit", "c_fit", 800, 800);
+    c_fit->cd();
+
+    //Top Pad
+    TPad *c1 = new TPad("padc1","padc1",0.01,0.01,0.99,0.99);
+    c1->Draw();
+    c1->cd();
+    c1->SetTopMargin(0.01);
+    c1->SetBottomMargin(0.35);
+    c1->SetRightMargin(0.03);
+    c1->SetLeftMargin(0.13);
+    c1->SetFillStyle(1);
+    c1->SetLogx();
+    c1->SetLogy();
+
+    // Main stack histogram
+    RooPlot *frame = mass.frame(Title(" "));
+    frame->GetYaxis()->SetRangeUser(1e-1, 2e5);
+    rh_mass_data->plotOn(frame, DataError(RooAbsData::SumW2));
+
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
+                                        "pdf_mass_tW,pdf_mass_tbarW,pdf_mass_ttbar,pdf_mass_DY"),
+                      LineColor(0), FillColor(kOrange), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
+                                        "pdf_mass_tW,pdf_mass_tbarW,pdf_mass_ttbar"),
+                      LineColor(0), FillColor(kCyan+2), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
+                                        "pdf_mass_tW,pdf_mass_tbarW"),
+                      LineColor(0), FillColor(kGreen-2), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
+                                        "pdf_mass_tW"),
+                      LineColor(0), FillColor(kGreen+2), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW"),
+                      LineColor(0), FillColor(kMagenta-5), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ"),
+                      LineColor(0), FillColor(kMagenta-2), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ"),
+                      LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets"),
+                      LineColor(0), FillColor(kRed-2), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD"),
+                      LineColor(0), FillColor(kRed+3), DrawOption("F"));
+
+    rh_mass_data->plotOn(frame, DataError(RooAbsData::SumW2));
+    frame->GetYaxis()->SetRangeUser(1e-1, 2e5);
+    frame->Draw();
+    fit_mass->Print();
+
+    // Legend
+    TLegend *legend = new TLegend(0.65, 0.8, 0.95, 0.97);
+    legend->SetFillColor(kWhite);
+    legend->SetNColumns(2);
+    legend->AddEntry(frame->nameOf(0), "Data", "LP");
+    legend->AddEntry(frame->nameOf(1), "DY", "F");
+    legend->AddEntry(frame->nameOf(2), "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "F");
+    legend->AddEntry(frame->nameOf(3), "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "F");
+    legend->AddEntry(frame->nameOf(4), "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "F");
+    legend->AddEntry(frame->nameOf(5), "#font[12]{#scale[1.1]{WW}}", "F");
+    legend->AddEntry(frame->nameOf(6), "#font[12]{#scale[1.1]{WZ}}", "F");
+    legend->AddEntry(frame->nameOf(7), "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "F");
+    legend->AddEntry(frame->nameOf(8), "#font[12]{#scale[1.1]{W}}+Jets", "F");
+    legend->AddEntry(frame->nameOf(9), "#font[12]{#scale[1.1]{QCD}}", "F");
+
+//    legend->SetNColumns(2);
+
+    legend->Draw();
+
+    frame->GetYaxis()->SetTitle("Number of entries");
+    frame->GetYaxis()->SetTitleOffset(1.5);
+    frame->GetXaxis()->SetLabelSize(0);
+
+    // Legend
+    legend->Draw();
+
+    // Bottom pad
+    TPad *c2 = new TPad("padc2","padc2",0.01,0.01,0.99,0.35);
+    c2->Draw();
+    c2->cd();
+    c2->SetTopMargin(0.05);
+    c2->SetBottomMargin(0.33);
+    c2->SetRightMargin(0.02);
+    c2->SetLeftMargin(0.12);
+    c2->SetFillStyle(0);
+    c2->SetLogx();
+    c2->SetGrid();
+
+    // Ratio plot
+    TH1D *h_mass_fit = ((TH1D*)(model_mass.createHistogram("h_mass_fit", mass)));
+    Double_t N_mass_data = h_mass[_DoubleEG_Full]->Integral();
+    Double_t N_mass_MC   = h_mass_fit->Integral();
+    h_mass_fit->Scale(N_mass_data/N_mass_MC); // Why is this necessary???
+    cout << "\nData integral: " << N_mass_data << endl;
+    cout << "MC integral: "     << h_mass_fit->Integral() << endl;
+    cout << "Data in 1st bin: " << h_mass[_DoubleEG_Full]->GetBinContent(1) << endl;
+    cout << "MC in 1st bin: "   << h_mass_fit->GetBinContent(1) << endl;
+
+    TH1D *h_mass_ratio = ((TH1D*)(h_mass[_DoubleEG_Full]->Clone("h_mass_ratio")));
+    h_mass[_DoubleEG_Full]->Sumw2(); h_mass_fit->Sumw2();
+    h_mass_ratio->Divide(h_mass[_DoubleEG_Full], h_mass_fit);
+    h_mass_ratio->SetTitle("");
+    h_mass_ratio->GetXaxis()->SetMoreLogLabels(1);
+    h_mass_ratio->GetXaxis()->SetNoExponent(1);
+    h_mass_ratio->GetXaxis()->SetTitle("m_{ee} [GeV]");
+    h_mass_ratio->GetXaxis()->SetTitleSize(0.17);
+    h_mass_ratio->GetXaxis()->SetLabelSize(0.125);
+    h_mass_ratio->GetXaxis()->SetTitleOffset(0.8);
+    h_mass_ratio->GetYaxis()->SetTitle("Data/MC");
+    h_mass_ratio->GetYaxis()->SetTitleSize(0.114);
+    h_mass_ratio->GetYaxis()->SetTitleOffset(0.48);
+    h_mass_ratio->GetYaxis()->SetLabelSize(0.11);
+    h_mass_ratio->GetYaxis()->SetTickLength(0.01);
+    h_mass_ratio->GetYaxis()->SetDecimals(1);
+    h_mass_ratio->SetMaximum(1.25);
+    h_mass_ratio->SetMinimum(0.75);
+    h_mass_ratio->GetYaxis()->SetNdivisions(5);
+    h_mass_ratio->SetLineWidth(1);
+    h_mass_ratio->SetLineColor(kBlack);
+    h_mass_ratio->SetMarkerStyle(kFullDotLarge);
+    h_mass_ratio->SetMarkerColor(kBlack);
+    h_mass_ratio->SetStats(kFALSE);
+
+    h_mass_ratio->Draw("E1P");
+
+    // Red line at Data/MC=1
+    TH1D *h_line = ((TH1D*)(h_mass[_DoubleEG_Full]->Clone("h_line")));
+    h_line->Reset("ICES");
+    for (Int_t i=1; i<=h_line->GetNbinsX(); i++)
+        h_line->SetBinContent(i, 1);
+    h_line->SetLineColor(kRed);
+    h_line->Draw("LSAME");
+
+    //Chi^2
+    RooAbsReal *chi2_mass = model_mass.createChi2(*rh_mass_data);
+    cout << "chi2: " << chi2_mass->getVal() << endl;
+    cout << "Normalized chi2: " << chi2_mass->getVal() / ((Double_t)h_mass[_DoubleEG_Full]->GetNbinsX()) << endl;
+
+} // End of E_QCDest_MatrixMethod_TFit()
+
+
 /// ################################################################################## ///
 /// ---------------------------- Electron W+Jets estimation ------------------------------ ///
 /// ################################################################################## ///
@@ -7266,6 +7641,398 @@ void E_WJETSest_Tfit()
     cout << "Normalized chi2: " << chi2_mass->getVal() / ((Double_t)h_data_mass->GetNbinsX()) << endl;
 
 } // End of E_WJETSest_TFit()
+
+
+void E_WJETSest_MatrixMethod_Tfit()
+{
+    FileMgr Mgr;
+
+    TH1D *h_mass_PF[_EndOf_Data_Special], *h_massSS_PF[_EndOf_Data_Special];
+    TH1D *h_mass_FP[_EndOf_Data_Special], *h_massSS_FP[_EndOf_Data_Special];
+    TH1D *h_mass[_EndOf_Data_Special],    *h_massSS[_EndOf_Data_Special];
+
+    TFile *file = new TFile("/media/sf_DATA/FR/Electron/MatrixMethod_E.root", "READ");
+
+// ############################# SETUP ################################# //
+//----------------------------- MC bkg ------------------------------------
+
+    // Other MC
+    for (Process_t pr=_DY_10to50; pr<_EndOf_DoubleEG_Normal; pr=next(pr))
+    {
+        file->GetObject("h_mass_PF_TT_"  +Mgr.Procname[pr], h_mass_PF  [pr]);
+        file->GetObject("h_mass_FP_TT_"  +Mgr.Procname[pr], h_mass_FP  [pr]);
+        file->GetObject("h_massSS_PF_TT_"+Mgr.Procname[pr], h_massSS_PF[pr]);
+        file->GetObject("h_massSS_FP_TT_"+Mgr.Procname[pr], h_massSS_FP[pr]);
+
+//        removeNegativeBins(h_mass_PF  [pr]);
+//        removeNegativeBins(h_mass_FP  [pr]);
+//        removeNegativeBins(h_massSS_PF[pr]);
+//        removeNegativeBins(h_massSS_FP[pr]);
+        h_mass_PF  [pr]->SetDirectory(0);
+        h_mass_FP  [pr]->SetDirectory(0);
+        h_massSS_PF[pr]->SetDirectory(0);
+        h_massSS_FP[pr]->SetDirectory(0);
+
+        h_mass  [pr] = (TH1D*)(h_mass_PF  [pr]->Clone("h_mass_"  +Mgr.Procname[pr]));
+        h_massSS[pr] = (TH1D*)(h_massSS_PF[pr]->Clone("h_massSS_"+Mgr.Procname[pr]));
+        h_mass  [pr]->Add(h_mass_FP  [pr]);
+        h_massSS[pr]->Add(h_massSS_FP[pr]);
+
+//        removeNegativeBins(h_mass  [pr]);
+//        removeNegativeBins(h_massSS[pr]);
+        h_mass  [pr]->SetDirectory(0);
+        h_massSS[pr]->SetDirectory(0);
+
+        if (pr == _DY_10to50)
+        {
+            h_mass  [_DY_Full] = ((TH1D*)(h_mass  [pr]->Clone("h_mass_DY")));
+            h_massSS[_DY_Full] = ((TH1D*)(h_massSS[pr]->Clone("h_massSS_DY")));
+            h_mass  [_DY_Full]->SetDirectory(0);
+            h_massSS[_DY_Full]->SetDirectory(0);
+        }
+        else if (pr < _EndOf_DY_Normal)
+        {
+            h_mass  [_DY_Full]->Add(h_mass  [pr]);
+            h_massSS[_DY_Full]->Add(h_massSS[pr]);
+        }
+        else if (pr == _ttbar)
+        {
+            h_mass  [_ttbar_Full] = ((TH1D*)(h_mass  [pr]->Clone("h_mass_ttbar")));
+            h_massSS[_ttbar_Full] = ((TH1D*)(h_massSS[pr]->Clone("h_massSS_ttbar")));
+            h_mass  [_ttbar_Full]->SetDirectory(0);
+            h_massSS[_ttbar_Full]->SetDirectory(0);
+        }
+        else if (pr > _ttbar && pr < _EndOf_ttbar_Normal)
+        {
+            h_mass  [_ttbar_Full]->Add(h_mass  [pr]);
+            h_massSS[_ttbar_Full]->Add(h_massSS[pr]);
+        }
+        else if (pr == _WJets)
+        {
+            h_mass  [_WJets_Full] = ((TH1D*)(h_mass  [pr]->Clone("h_mass_WJets")));
+            h_massSS[_WJets_Full] = ((TH1D*)(h_massSS[pr]->Clone("h_massSS_WJets")));
+            h_mass  [_WJets_Full]->SetDirectory(0);
+            h_massSS[_WJets_Full]->SetDirectory(0);
+        }
+        else if (pr > _WJets && pr < _EndOf_WJets_Normal)
+        {
+            h_mass  [_WJets_Full]->Add(h_mass  [pr]);
+            h_massSS[_WJets_Full]->Add(h_massSS[pr]);
+        }
+        else if (pr == _QCDEMEnriched_20to30)
+        {
+            h_mass  [_QCDEMEnriched_Full] = ((TH1D*)(h_mass  [pr]->Clone("h_mass_QCD")));
+            h_massSS[_QCDEMEnriched_Full] = ((TH1D*)(h_massSS[pr]->Clone("h_massSS_QCD")));
+            h_mass  [_QCDEMEnriched_Full]->SetDirectory(0);
+            h_massSS[_QCDEMEnriched_Full]->SetDirectory(0);
+        }
+        else if (pr > _QCDEMEnriched_20to30 && pr < _EndOf_QCDEMEnriched_Normal)
+        {
+            h_mass  [_QCDEMEnriched_Full]->Add(h_mass  [pr]);
+            h_massSS[_QCDEMEnriched_Full]->Add(h_massSS[pr]);
+        }
+
+        else if (pr == _GJets_20to100)
+        {
+            h_mass  [_GJets_Full] = ((TH1D*)(h_mass  [pr]->Clone("h_mass_GJets")));
+            h_massSS[_GJets_Full] = ((TH1D*)(h_massSS[pr]->Clone("h_massSS_GJets")));
+            h_mass  [_GJets_Full]->SetDirectory(0);
+            h_massSS[_GJets_Full]->SetDirectory(0);
+        }
+        else if (pr > _GJets_20to100 && pr < _EndOf_GJets_Normal)
+        {
+            h_mass  [_GJets_Full]->Add(h_mass  [pr]);
+            h_massSS[_GJets_Full]->Add(h_massSS[pr]);
+        }
+
+        else if (pr == _DoubleEG_B)
+        {
+            h_mass  [_DoubleEG_Full] = ((TH1D*)(h_mass  [pr]->Clone("h_mass_Data")));
+            h_massSS[_DoubleEG_Full] = ((TH1D*)(h_massSS[pr]->Clone("h_massSS_Data")));
+            h_mass  [_DoubleEG_Full]->SetDirectory(0);
+            h_massSS[_DoubleEG_Full]->SetDirectory(0);
+        }
+        else if (pr > _DoubleEG_B && pr < _EndOf_DoubleEG_Normal)
+        {
+            h_mass  [_DoubleEG_Full]->Add(h_mass  [pr]);
+            h_massSS[_DoubleEG_Full]->Add(h_massSS[pr]);
+        }
+
+        if (pr == _DY_2000to3000) pr = _EndOf_DYTauTau_Normal; // next -- ttbar
+        if (pr == _WJets_ext2v5) pr = _EndOf_QCDMuEnriched_Normal; // next -- QCDEMEnriched
+    }
+
+// ######################## MODEL BUILDING ##########################
+
+    // Making data-driven W+Jets template from same-sign distributions
+    TH1D *h_WJets_est = ((TH1D*)(h_massSS[_DoubleEG_Full]->Clone("h_WJets_est")));
+    h_WJets_est->Add(h_massSS[_ttbar_Full], -1);
+    h_WJets_est->Add(h_massSS[_DY_Full], -1);
+    h_WJets_est->Add(h_massSS[_tW], -1);
+    h_WJets_est->Add(h_massSS[_tbarW], -1);
+    h_WJets_est->Add(h_massSS[_WW], -1);
+    h_WJets_est->Add(h_massSS[_WZ], -1);
+    h_WJets_est->Add(h_massSS[_ZZ], -1);
+    removeNegativeBins(h_WJets_est);
+    THStack *s = new THStack("a","A");
+    s->Add(h_massSS[_WJets_Full]);
+    s->Add(h_massSS[_ttbar_Full]);
+    myRatioPlot_t *p = new myRatioPlot_t("asd", s, h_massSS[_DoubleEG_Full]);
+    p->SetPlots("mass", 0, 3000);
+//    p->Draw(0.1,1e4, 1);
+    TCanvas *c_test = new TCanvas("test", "WJets template", 800, 800);
+    h_WJets_est->Draw("hist");
+    c_test->SetLogx();
+    c_test->Update();
+
+    removeNegativeBins(h_mass[_QCDEMEnriched_Full]);
+    removeNegativeBins(h_mass[_GJets_Full]);
+    removeNegativeBins(h_mass[_DY_Full]);
+    removeNegativeBins(h_mass[_ttbar_Full]);
+    removeNegativeBins(h_mass[_tW]);
+    removeNegativeBins(h_mass[_tbarW]);
+    removeNegativeBins(h_mass[_WW]);
+    removeNegativeBins(h_mass[_WZ]);
+    removeNegativeBins(h_mass[_ZZ]);
+    removeNegativeBins(h_mass[_DoubleEG_Full]);
+
+    // Making RooDataHist
+    RooRealVar mass("mass", "m_{ee} [GeV]", 15, 3000);
+
+    RooDataHist *rh_mass_WJets = new RooDataHist("rh_mass_WJets", "RooHist_mass_WJets", mass, h_WJets_est);
+//    RooDataHist *rh_mass_QCD   = new RooDataHist("rh_mass_QCD",   "RooHist_mass_QCD",   mass, h_mass[_QCDEMEnriched_Full]);
+    RooDataHist *rh_mass_DY    = new RooDataHist("rh_mass_DY",    "RooHist_mass_DY",    mass, h_mass[_DY_Full]);
+    RooDataHist *rh_mass_ttbar = new RooDataHist("rh_mass_ttbar", "RooHist_mass_ttbar", mass, h_mass[_ttbar_Full]);
+    RooDataHist *rh_mass_tW    = new RooDataHist("rh_mass_tW",    "RooHist_mass_tW",    mass, h_mass[_tW]);
+    RooDataHist *rh_mass_tbarW = new RooDataHist("rh_mass_tbarW", "RooHist_mass_tbarW", mass, h_mass[_tbarW]);
+    RooDataHist *rh_mass_WW    = new RooDataHist("rh_mass_WW",    "RooHist_mass_WW",    mass, h_mass[_WW]);
+    RooDataHist *rh_mass_WZ    = new RooDataHist("rh_mass_WZ",    "RooHist_mass_WZ",    mass, h_mass[_WZ]);
+    RooDataHist *rh_mass_ZZ    = new RooDataHist("rh_mass_ZZ",    "RooHist_mass_ZZ",    mass, h_mass[_ZZ]);
+    RooDataHist *rh_mass_data  = new RooDataHist("rh_mass_data",  "RooHist_mass_data",  mass, h_mass[_DoubleEG_Full]);
+
+    // Making RooHistPdf
+    RooHistPdf *pdf_mass_WJets = new RooHistPdf("pdf_mass_WJets", "W+Jets template", mass, *rh_mass_WJets, 0);
+//    RooHistPdf *pdf_mass_QCD   = new RooHistPdf("pdf_mass_QCD",   "QCD template",    mass, *rh_mass_QCD,   0);
+    RooHistPdf *pdf_mass_DY    = new RooHistPdf("pdf_mass_DY",    "DY template",     mass, *rh_mass_DY,    0);
+    RooHistPdf *pdf_mass_ttbar = new RooHistPdf("pdf_mass_ttbar", "ttbar template",  mass, *rh_mass_ttbar, 0);
+    RooHistPdf *pdf_mass_tW    = new RooHistPdf("pdf_mass_tW",    "tW template",     mass, *rh_mass_tW,    0);
+    RooHistPdf *pdf_mass_tbarW = new RooHistPdf("pdf_mass_tbarW", "tbarW template",  mass, *rh_mass_tbarW, 0);
+    RooHistPdf *pdf_mass_WW    = new RooHistPdf("pdf_mass_WW",    "WW template",     mass, *rh_mass_WW,    0);
+    RooHistPdf *pdf_mass_WZ    = new RooHistPdf("pdf_mass_WZ",    "WZ template",     mass, *rh_mass_WZ,    0);
+    RooHistPdf *pdf_mass_ZZ    = new RooHistPdf("pdf_mass_ZZ",    "ZZ template",     mass, *rh_mass_ZZ,    0);
+
+    // Constraints for integrals
+    Double_t N_mass_WJets = h_WJets_est->Integral() * 3;
+//    Double_t N_mass_QCD   = h_mass[_QCDEMEnriched_Full]->Integral();
+    Double_t N_mass_DY    = h_mass[_DY_Full]->Integral();
+    Double_t N_mass_ttbar = h_mass[_ttbar_Full]->Integral();
+    Double_t N_mass_tW    = h_mass[_tW]->Integral();
+    Double_t N_mass_tbarW = h_mass[_tbarW]->Integral();
+    Double_t N_mass_WW    = h_mass[_WW]->Integral();
+    Double_t N_mass_WZ    = h_mass[_WZ]->Integral();
+    Double_t N_mass_ZZ    = h_mass[_ZZ]->Integral();
+    cout << "# of same sign W+Jets events: " << h_WJets_est->Integral() << endl;
+    cout << "Expected # of opposite sign W+Jets events: ~" << N_mass_WJets << endl;
+
+    Double_t N_mass_total = N_mass_WJets/* + N_mass_QCD*/   + N_mass_DY +
+                            N_mass_ttbar + N_mass_tW    + N_mass_tbarW +
+                            N_mass_WW    + N_mass_WZ    + N_mass_ZZ;
+
+    Double_t Nnorm_mass_WJets = N_mass_WJets * h_mass[_DoubleEG_Full]->Integral() / N_mass_total;
+//    Double_t Nnorm_mass_QCD   = N_mass_QCD   * h_mass[_DoubleEG_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_DY    = N_mass_DY    * h_mass[_DoubleEG_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_ttbar = N_mass_ttbar * h_mass[_DoubleEG_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_tW    = N_mass_tW    * h_mass[_DoubleEG_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_tbarW = N_mass_tbarW * h_mass[_DoubleEG_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_WW    = N_mass_WW    * h_mass[_DoubleEG_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_WZ    = N_mass_WZ    * h_mass[_DoubleEG_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_ZZ    = N_mass_ZZ    * h_mass[_DoubleEG_Full]->Integral() / N_mass_total;
+
+    // Fit constraints
+    RooRealVar n_mass_WJets("n_mass_WJets", "n_mass_WJets", Nnorm_mass_WJets, Nnorm_mass_WJets *0.5,  Nnorm_mass_WJets *1.5);
+//    RooRealVar n_mass_QCD  ("n_mass_QCD",   "n_mass_QCD",   Nnorm_mass_QCD,   Nnorm_mass_QCD   *0.5,  Nnorm_mass_QCD   *1.5);
+    RooRealVar n_mass_DY   ("n_mass_DY",    "n_mass_DY",    Nnorm_mass_DY,    Nnorm_mass_DY    *0.8,  Nnorm_mass_DY    *1.2);
+    RooRealVar n_mass_ttbar("n_mass_ttbar", "n_mass_ttbar", Nnorm_mass_ttbar, Nnorm_mass_ttbar *0.8,  Nnorm_mass_ttbar *1.2);
+    RooRealVar n_mass_tW   ("n_mass_tW",    "n_mass_tW",    Nnorm_mass_tW,    Nnorm_mass_tW    *0.8,  Nnorm_mass_tW    *1.2);
+    RooRealVar n_mass_tbarW("n_mass_tbarW", "n_mass_tbarW", Nnorm_mass_tbarW, Nnorm_mass_tbarW *0.8,  Nnorm_mass_tbarW *1.2);
+    RooRealVar n_mass_WW   ("n_mass_WW",    "n_mass_WW",    Nnorm_mass_WW,    Nnorm_mass_WW    *0.8,  Nnorm_mass_WW    *1.2);
+    RooRealVar n_mass_WZ   ("n_mass_WZ",    "n_mass_WZ",    Nnorm_mass_WZ,    Nnorm_mass_WZ    *0.8,  Nnorm_mass_WZ    *1.2);
+    RooRealVar n_mass_ZZ   ("n_mass_ZZ",    "n_mass_ZZ",    Nnorm_mass_ZZ,    Nnorm_mass_ZZ    *0.8,  Nnorm_mass_ZZ    *1.2);
+
+    // Models
+    RooAddPdf model_mass("model_mass", "model_mass",
+                         RooArgList(/**pdf_mass_QCD,*/   *pdf_mass_WJets, *pdf_mass_DY,
+                                    *pdf_mass_ttbar, *pdf_mass_tW,    *pdf_mass_tbarW,
+                                    *pdf_mass_WW,    *pdf_mass_WZ,    *pdf_mass_ZZ),
+                         RooArgList(/*n_mass_QCD,*/   n_mass_WJets, n_mass_DY,
+                                    n_mass_ttbar, n_mass_tW,    n_mass_tbarW,
+                                    n_mass_WW,    n_mass_WZ,    n_mass_ZZ));
+
+    // Fitting
+    RooFitResult* fit_mass = model_mass.fitTo(*rh_mass_data, Save());
+
+
+    /// DRAWING
+    cout << "\n----- FIT RESULT -----" << endl;
+    TCanvas *c_fit = new TCanvas("c_fit", "c_fit", 800, 800);
+    c_fit->cd();
+
+    //Top Pad
+    TPad *c1 = new TPad("padc1","padc1",0.01,0.01,0.99,0.99);
+    c1->Draw();
+    c1->cd();
+    c1->SetTopMargin(0.01);
+    c1->SetBottomMargin(0.35);
+    c1->SetRightMargin(0.03);
+    c1->SetLeftMargin(0.13);
+    c1->SetFillStyle(1);
+    c1->SetLogx();
+    c1->SetLogy();
+
+    // Main stack histogram
+    RooPlot *frame = mass.frame(Title(" "));
+    frame->GetYaxis()->SetRangeUser(1e-1, 2e5);
+    rh_mass_data->plotOn(frame, DataError(RooAbsData::SumW2));
+
+//    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
+//                                        "pdf_mass_tW,pdf_mass_tbarW,pdf_mass_ttbar,pdf_mass_DY"),
+//                      LineColor(0), FillColor(kOrange), DrawOption("F"));
+//    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
+//                                        "pdf_mass_tW,pdf_mass_tbarW,pdf_mass_ttbar"),
+//                      LineColor(0), FillColor(kCyan+2), DrawOption("F"));
+//    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
+//                                        "pdf_mass_tW,pdf_mass_tbarW"),
+//                      LineColor(0), FillColor(kGreen-2), DrawOption("F"));
+//    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
+//                                        "pdf_mass_tW"),
+//                      LineColor(0), FillColor(kGreen+2), DrawOption("F"));
+//    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW"),
+//                      LineColor(0), FillColor(kMagenta-5), DrawOption("F"));
+//    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ"),
+//                      LineColor(0), FillColor(kMagenta-2), DrawOption("F"));
+//    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ"),
+//                      LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
+//    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets"),
+//                      LineColor(0), FillColor(kRed-2), DrawOption("F"));
+//    model_mass.plotOn(frame, Components("pdf_mass_QCD"),
+//                      LineColor(0), FillColor(kRed+3), DrawOption("F"));
+
+    model_mass.plotOn(frame, Components("pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
+                                        "pdf_mass_tW,pdf_mass_tbarW,pdf_mass_ttbar,pdf_mass_DY"),
+                      LineColor(0), FillColor(kOrange), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
+                                        "pdf_mass_tW,pdf_mass_tbarW,pdf_mass_ttbar"),
+                      LineColor(0), FillColor(kCyan+2), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
+                                        "pdf_mass_tW,pdf_mass_tbarW"),
+                      LineColor(0), FillColor(kGreen-2), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
+                                        "pdf_mass_tW"),
+                      LineColor(0), FillColor(kGreen+2), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW"),
+                      LineColor(0), FillColor(kMagenta-5), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ"),
+                      LineColor(0), FillColor(kMagenta-2), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_WJets,pdf_mass_ZZ"),
+                      LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_WJets"),
+                      LineColor(0), FillColor(kRed-2), DrawOption("F"));
+
+    rh_mass_data->plotOn(frame, DataError(RooAbsData::SumW2));
+    frame->GetYaxis()->SetRangeUser(1e-1, 2e5);
+    frame->Draw();
+    fit_mass->Print();
+
+    // Legend
+    TLegend *legend = new TLegend(0.65, 0.8, 0.95, 0.97);
+    legend->SetFillColor(kWhite);
+    legend->SetNColumns(2);
+//    legend->SetLineColor(kWhite);
+    legend->AddEntry(frame->nameOf(0), "Data", "LP");
+    legend->AddEntry(frame->nameOf(1), "DY", "F");
+    legend->AddEntry(frame->nameOf(2), "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "F");
+    legend->AddEntry(frame->nameOf(3), "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "F");
+    legend->AddEntry(frame->nameOf(4), "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "F");
+    legend->AddEntry(frame->nameOf(5), "#font[12]{#scale[1.1]{WW}}", "F");
+    legend->AddEntry(frame->nameOf(6), "#font[12]{#scale[1.1]{WZ}}", "F");
+    legend->AddEntry(frame->nameOf(7), "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "F");
+    legend->AddEntry(frame->nameOf(8), "#font[12]{#scale[1.1]{W}}+Jets", "F");
+//    legend->AddEntry(frame->nameOf(9), "#font[12]{#scale[1.1]{QCD}}", "F");
+
+//    legend->SetNColumns(2);
+
+    legend->Draw();
+
+    frame->GetYaxis()->SetTitle("Number of entries");
+    frame->GetYaxis()->SetTitleOffset(1.5);
+    frame->GetXaxis()->SetLabelSize(0);
+
+    // Legend
+    legend->Draw();
+
+    // Bottom pad
+    TPad *c2 = new TPad("padc2","padc2",0.01,0.01,0.99,0.35);
+    c2->Draw();
+    c2->cd();
+    c2->SetTopMargin(0.05);
+    c2->SetBottomMargin(0.33);
+    c2->SetRightMargin(0.02);
+    c2->SetLeftMargin(0.12);
+    c2->SetFillStyle(0);
+    c2->SetLogx();
+    c2->SetGrid();
+
+    // Ratio plot
+    TH1D *h_mass_fit = ((TH1D*)(model_mass.createHistogram("h_mass_fit", mass)));
+    Double_t N_mass_data = h_mass[_DoubleEG_Full]->Integral();
+    Double_t N_mass_MC   = h_mass_fit->Integral();
+    h_mass_fit->Scale(N_mass_data/N_mass_MC); // Why is this necessary???
+    cout << "\nData integral: " << N_mass_data << endl;
+    cout << "MC integral: "     << h_mass_fit->Integral() << endl;
+    cout << "Data in 1st bin: " << h_mass[_DoubleEG_Full]->GetBinContent(1) << endl;
+    cout << "MC in 1st bin: "   << h_mass_fit->GetBinContent(1) << endl;
+
+    TH1D *h_mass_ratio = ((TH1D*)(h_mass[_DoubleEG_Full]->Clone("h_mass_ratio")));
+    h_mass[_DoubleEG_Full]->Sumw2(); h_mass_fit->Sumw2();
+    h_mass_ratio->Divide(h_mass[_DoubleEG_Full], h_mass_fit);
+    h_mass_ratio->SetTitle("");
+    h_mass_ratio->GetXaxis()->SetMoreLogLabels(1);
+    h_mass_ratio->GetXaxis()->SetNoExponent(1);
+    h_mass_ratio->GetXaxis()->SetTitle("m_{ee} [GeV]");
+    h_mass_ratio->GetXaxis()->SetTitleSize(0.17);
+    h_mass_ratio->GetXaxis()->SetLabelSize(0.125);
+    h_mass_ratio->GetXaxis()->SetTitleOffset(0.8);
+    h_mass_ratio->GetYaxis()->SetTitle("Data/MC");
+    h_mass_ratio->GetYaxis()->SetTitleSize(0.114);
+    h_mass_ratio->GetYaxis()->SetTitleOffset(0.48);
+    h_mass_ratio->GetYaxis()->SetLabelSize(0.11);
+    h_mass_ratio->GetYaxis()->SetTickLength(0.01);
+    h_mass_ratio->GetYaxis()->SetDecimals(1);
+    h_mass_ratio->SetMaximum(1.25);
+    h_mass_ratio->SetMinimum(0.75);
+    h_mass_ratio->GetYaxis()->SetNdivisions(5);
+    h_mass_ratio->SetLineWidth(1);
+    h_mass_ratio->SetLineColor(kBlack);
+    h_mass_ratio->SetMarkerStyle(kFullDotLarge);
+    h_mass_ratio->SetMarkerColor(kBlack);
+    h_mass_ratio->SetStats(kFALSE);
+
+    h_mass_ratio->Draw("E1P");
+
+    // Red line at Data/MC=1
+    TH1D *h_line = ((TH1D*)(h_mass[_DoubleEG_Full]->Clone("h_line")));
+    h_line->Reset("ICES");
+    for (Int_t i=1; i<=h_line->GetNbinsX(); i++)
+        h_line->SetBinContent(i, 1);
+    h_line->SetLineColor(kRed);
+    h_line->Draw("LSAME");
+
+    //Chi^2
+    RooAbsReal *chi2_mass = model_mass.createChi2(*rh_mass_data);
+    cout << "chi2: " << chi2_mass->getVal() << endl;
+    cout << "Normalized chi2: " << chi2_mass->getVal() / ((Double_t)h_mass[_DoubleEG_Full]->GetNbinsX()) << endl;
+
+} // End of E_WJETSest_MatrixMethod_TFit()
 
 
 /// ################################################################################## ///
@@ -7793,6 +8560,401 @@ void Mu_WJETSest_Tfit(Int_t type)
 //    c_FR_endcap->Update();
 
 } // End of Mu_WJETSest_TFit()
+
+
+void Mu_WJETSest_MatrixMethod_Tfit()
+{
+    FileMgr Mgr;
+
+    TH1D *h_mass_PF[_EndOf_Data_Special], *h_massSS_PF[_EndOf_Data_Special];
+    TH1D *h_mass_FP[_EndOf_Data_Special], *h_massSS_FP[_EndOf_Data_Special];
+    TH1D *h_mass[_EndOf_Data_Special],    *h_massSS[_EndOf_Data_Special];
+
+    TFile *file = new TFile("/media/sf_DATA/FR/Muon/MatrixMethod_Mu.root", "READ");
+
+// ############################# SETUP ################################# //
+//----------------------------- MC bkg ------------------------------------
+
+    // Other MC
+    Int_t stop = 0;
+    Process_t pr1 = _WW;
+    for (Process_t pr=_DY_10to50; pr<_EndOf_SingleMuon_Normal; pr=next(pr))
+    {
+        file->GetObject("h_mass_PF_TT_"  +Mgr.Procname[pr], h_mass_PF  [pr]);
+        file->GetObject("h_mass_FP_TT_"  +Mgr.Procname[pr], h_mass_FP  [pr]);
+        file->GetObject("h_massSS_PF_TT_"+Mgr.Procname[pr], h_massSS_PF[pr]);
+        file->GetObject("h_massSS_FP_TT_"+Mgr.Procname[pr], h_massSS_FP[pr]);
+
+//        removeNegativeBins(h_mass_PF  [pr]);
+//        removeNegativeBins(h_mass_FP  [pr]);
+//        removeNegativeBins(h_massSS_PF[pr]);
+//        removeNegativeBins(h_massSS_FP[pr]);
+        h_mass_PF  [pr]->SetDirectory(0);
+        h_mass_FP  [pr]->SetDirectory(0);
+        h_massSS_PF[pr]->SetDirectory(0);
+        h_massSS_FP[pr]->SetDirectory(0);
+
+        h_mass  [pr] = (TH1D*)(h_mass_PF  [pr]->Clone("h_mass_"  +Mgr.Procname[pr]));
+        h_massSS[pr] = (TH1D*)(h_massSS_PF[pr]->Clone("h_massSS_"+Mgr.Procname[pr]));
+        h_mass  [pr]->Add(h_mass_FP  [pr]);
+        h_massSS[pr]->Add(h_massSS_FP[pr]);
+
+//        removeNegativeBins(h_mass  [pr]);
+//        removeNegativeBins(h_massSS[pr]);
+        h_mass  [pr]->SetDirectory(0);
+        h_massSS[pr]->SetDirectory(0);
+
+        if (pr == _DY_10to50)
+        {
+            h_mass  [_DY_Full] = ((TH1D*)(h_mass  [pr]->Clone("h_mass_DY")));
+            h_massSS[_DY_Full] = ((TH1D*)(h_massSS[pr]->Clone("h_massSS_DY")));
+            h_mass  [_DY_Full]->SetDirectory(0);
+            h_massSS[_DY_Full]->SetDirectory(0);
+        }
+        else if (pr < _EndOf_DY_Normal)
+        {
+            h_mass  [_DY_Full]->Add(h_mass  [pr]);
+            h_massSS[_DY_Full]->Add(h_massSS[pr]);
+        }
+        else if (pr == _ttbar)
+        {
+            h_mass  [_ttbar_Full] = ((TH1D*)(h_mass  [pr]->Clone("h_mass_ttbar")));
+            h_massSS[_ttbar_Full] = ((TH1D*)(h_massSS[pr]->Clone("h_massSS_ttbar")));
+            h_mass  [_ttbar_Full]->SetDirectory(0);
+            h_massSS[_ttbar_Full]->SetDirectory(0);
+        }
+        else if (pr > _ttbar && pr < _EndOf_ttbar_Normal)
+        {
+            h_mass  [_ttbar_Full]->Add(h_mass  [pr]);
+            h_massSS[_ttbar_Full]->Add(h_massSS[pr]);
+        }
+        else if (pr == _WJets)
+        {
+            h_mass  [_WJets_Full] = ((TH1D*)(h_mass  [pr]->Clone("h_mass_WJets")));
+            h_massSS[_WJets_Full] = ((TH1D*)(h_massSS[pr]->Clone("h_massSS_WJets")));
+            h_mass  [_WJets_Full]->SetDirectory(0);
+            h_massSS[_WJets_Full]->SetDirectory(0);
+        }
+        else if (pr > _WJets && pr < _EndOf_WJets_Normal)
+        {
+            h_mass  [_WJets_Full]->Add(h_mass  [pr]);
+            h_massSS[_WJets_Full]->Add(h_massSS[pr]);
+        }
+        else if (pr == _QCDMuEnriched_15to20)
+        {
+            h_mass  [_QCDMuEnriched_Full] = ((TH1D*)(h_mass  [pr]->Clone("h_mass_QCD")));
+            h_massSS[_QCDMuEnriched_Full] = ((TH1D*)(h_massSS[pr]->Clone("h_massSS_QCD")));
+            h_mass  [_QCDMuEnriched_Full]->SetDirectory(0);
+            h_massSS[_QCDMuEnriched_Full]->SetDirectory(0);
+        }
+        else if (pr > _QCDMuEnriched_15to20 && pr < _EndOf_QCDMuEnriched_Normal)
+        {
+            h_mass  [_QCDMuEnriched_Full]->Add(h_mass  [pr]);
+            h_massSS[_QCDMuEnriched_Full]->Add(h_massSS[pr]);
+        }
+        else if (pr == _SingleMuon_B)
+        {
+            h_mass  [_SingleMuon_Full] = ((TH1D*)(h_mass  [pr]->Clone("h_mass_Data")));
+            h_massSS[_SingleMuon_Full] = ((TH1D*)(h_massSS[pr]->Clone("h_massSS_Data")));
+            h_mass  [_SingleMuon_Full]->SetDirectory(0);
+            h_massSS[_SingleMuon_Full]->SetDirectory(0);
+        }
+        else if (pr > _SingleMuon_B && pr < _EndOf_SingleMuon_Normal)
+        {
+            h_mass  [_SingleMuon_Full]->Add(h_mass  [pr]);
+            h_massSS[_SingleMuon_Full]->Add(h_massSS[pr]);
+        }
+
+        if (pr == _DY_2000to3000) pr = _EndOf_DYTauTau_Normal; // next -- ttbar
+        if (pr == _QCDMuEnriched_1000toInf) pr = _EndOf_DoubleEG_Normal; // next -- SingleMuon
+    }
+
+// ######################## MODEL BUILDING ##########################
+
+    // Making data-driven W+Jets template from same-sign distributions
+    TH1D *h_WJets_est = ((TH1D*)(h_massSS[_SingleMuon_Full]->Clone("h_WJets_est")));
+    h_WJets_est->Add(h_massSS[_ttbar_Full], -1);
+    h_WJets_est->Add(h_massSS[_DY_Full], -1);
+    h_WJets_est->Add(h_massSS[_tW], -1);
+    h_WJets_est->Add(h_massSS[_tbarW], -1);
+    h_WJets_est->Add(h_massSS[_WW], -1);
+    h_WJets_est->Add(h_massSS[_WZ], -1);
+    h_WJets_est->Add(h_massSS[_ZZ], -1);
+    h_WJets_est->Add(h_massSS[_QCDMuEnriched_Full], -1);
+    THStack *s = new THStack("a","A");
+    s->Add(h_massSS[_WJets_Full]);
+    s->Add(h_massSS[_ttbar_Full]);
+    s->Add(h_massSS[_QCDMuEnriched_Full]);
+    myRatioPlot_t *p = new myRatioPlot_t("asd", s, h_massSS[_SingleMuon_Full]);
+    p->SetPlots("mass", 0, 3000);
+//    p->Draw(0.1,1e4, 1);
+    TCanvas *c_test = new TCanvas("test", "WJets template", 800, 800);
+    h_WJets_est->Draw("hist");
+    c_test->SetLogx();
+    c_test->Update();
+
+    removeNegativeBins(h_WJets_est);
+    removeNegativeBins(h_mass[_QCDMuEnriched_Full]);
+    removeNegativeBins(h_mass[_DY_Full]);
+    removeNegativeBins(h_mass[_ttbar_Full]);
+    removeNegativeBins(h_mass[_tW]);
+    removeNegativeBins(h_mass[_tbarW]);
+    removeNegativeBins(h_mass[_WW]);
+    removeNegativeBins(h_mass[_WZ]);
+    removeNegativeBins(h_mass[_ZZ]);
+    removeNegativeBins(h_mass[_SingleMuon_Full]);
+
+    // Making RooDataHist
+    RooRealVar mass("mass", "m_{#mu#mu} [GeV]", 15, 3000);
+
+    RooDataHist *rh_mass_WJets = new RooDataHist("rh_mass_WJets", "RooHist_mass_WJets", mass, h_WJets_est);
+    RooDataHist *rh_mass_QCD   = new RooDataHist("rh_mass_QCD",   "RooHist_mass_QCD",   mass, h_mass[_QCDMuEnriched_Full]);
+    RooDataHist *rh_mass_DY    = new RooDataHist("rh_mass_DY",    "RooHist_mass_DY",    mass, h_mass[_DY_Full]);
+    RooDataHist *rh_mass_ttbar = new RooDataHist("rh_mass_ttbar", "RooHist_mass_ttbar", mass, h_mass[_ttbar_Full]);
+    RooDataHist *rh_mass_tW    = new RooDataHist("rh_mass_tW",    "RooHist_mass_tW",    mass, h_mass[_tW]);
+    RooDataHist *rh_mass_tbarW = new RooDataHist("rh_mass_tbarW", "RooHist_mass_tbarW", mass, h_mass[_tbarW]);
+    RooDataHist *rh_mass_WW    = new RooDataHist("rh_mass_WW",    "RooHist_mass_WW",    mass, h_mass[_WW]);
+    RooDataHist *rh_mass_WZ    = new RooDataHist("rh_mass_WZ",    "RooHist_mass_WZ",    mass, h_mass[_WZ]);
+    RooDataHist *rh_mass_ZZ    = new RooDataHist("rh_mass_ZZ",    "RooHist_mass_ZZ",    mass, h_mass[_ZZ]);
+    RooDataHist *rh_mass_data  = new RooDataHist("rh_mass_data",  "RooHist_mass_data",  mass, h_mass[_SingleMuon_Full]);
+
+    // Making RooHistPdf
+    RooHistPdf *pdf_mass_WJets = new RooHistPdf("pdf_mass_WJets", "W+Jets template", mass, *rh_mass_WJets, 0);
+    RooHistPdf *pdf_mass_QCD   = new RooHistPdf("pdf_mass_QCD",   "QCD template",    mass, *rh_mass_QCD,   0);
+    RooHistPdf *pdf_mass_DY    = new RooHistPdf("pdf_mass_DY",    "DY template",     mass, *rh_mass_DY,    0);
+    RooHistPdf *pdf_mass_ttbar = new RooHistPdf("pdf_mass_ttbar", "ttbar template",  mass, *rh_mass_ttbar, 0);
+    RooHistPdf *pdf_mass_tW    = new RooHistPdf("pdf_mass_tW",    "tW template",     mass, *rh_mass_tW,    0);
+    RooHistPdf *pdf_mass_tbarW = new RooHistPdf("pdf_mass_tbarW", "tbarW template",  mass, *rh_mass_tbarW, 0);
+    RooHistPdf *pdf_mass_WW    = new RooHistPdf("pdf_mass_WW",    "WW template",     mass, *rh_mass_WW,    0);
+    RooHistPdf *pdf_mass_WZ    = new RooHistPdf("pdf_mass_WZ",    "WZ template",     mass, *rh_mass_WZ,    0);
+    RooHistPdf *pdf_mass_ZZ    = new RooHistPdf("pdf_mass_ZZ",    "ZZ template",     mass, *rh_mass_ZZ,    0);
+
+    // Constraints for integrals
+    Double_t N_mass_WJets = h_WJets_est->Integral() * 3;
+    Double_t N_mass_QCD   = h_mass[_QCDMuEnriched_Full]->Integral();
+    Double_t N_mass_DY    = h_mass[_DY_Full]->Integral();
+    Double_t N_mass_ttbar = h_mass[_ttbar_Full]->Integral();
+    Double_t N_mass_tW    = h_mass[_tW]->Integral();
+    Double_t N_mass_tbarW = h_mass[_tbarW]->Integral();
+    Double_t N_mass_WW    = h_mass[_WW]->Integral();
+    Double_t N_mass_WZ    = h_mass[_WZ]->Integral();
+    Double_t N_mass_ZZ    = h_mass[_ZZ]->Integral();
+    cout << "# of same sign W+Jets events: " << h_WJets_est->Integral() << endl;
+    cout << "Expected # of opposite sign W+Jets events: ~" << N_mass_WJets << endl;
+
+    Double_t N_mass_total = N_mass_WJets + N_mass_QCD   + N_mass_DY +
+                            N_mass_ttbar + N_mass_tW    + N_mass_tbarW +
+                            N_mass_WW    + N_mass_WZ    + N_mass_ZZ;
+
+    Double_t Nnorm_mass_WJets = N_mass_WJets * h_mass[_SingleMuon_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_QCD   = N_mass_QCD   * h_mass[_SingleMuon_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_DY    = N_mass_DY    * h_mass[_SingleMuon_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_ttbar = N_mass_ttbar * h_mass[_SingleMuon_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_tW    = N_mass_tW    * h_mass[_SingleMuon_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_tbarW = N_mass_tbarW * h_mass[_SingleMuon_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_WW    = N_mass_WW    * h_mass[_SingleMuon_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_WZ    = N_mass_WZ    * h_mass[_SingleMuon_Full]->Integral() / N_mass_total;
+    Double_t Nnorm_mass_ZZ    = N_mass_ZZ    * h_mass[_SingleMuon_Full]->Integral() / N_mass_total;
+
+    // Fit constraints
+    RooRealVar n_mass_WJets("n_mass_WJets", "n_mass_WJets", Nnorm_mass_WJets, Nnorm_mass_WJets *0.5,  Nnorm_mass_WJets *1.5);
+    RooRealVar n_mass_QCD  ("n_mass_QCD",   "n_mass_QCD",   Nnorm_mass_QCD,   Nnorm_mass_QCD   *0.5,  Nnorm_mass_QCD   *1.5);
+    RooRealVar n_mass_DY   ("n_mass_DY",    "n_mass_DY",    Nnorm_mass_DY,    Nnorm_mass_DY    *0.8,  Nnorm_mass_DY    *1.2);
+    RooRealVar n_mass_ttbar("n_mass_ttbar", "n_mass_ttbar", Nnorm_mass_ttbar, Nnorm_mass_ttbar *0.8,  Nnorm_mass_ttbar *1.2);
+    RooRealVar n_mass_tW   ("n_mass_tW",    "n_mass_tW",    Nnorm_mass_tW,    Nnorm_mass_tW    *0.8,  Nnorm_mass_tW    *1.2);
+    RooRealVar n_mass_tbarW("n_mass_tbarW", "n_mass_tbarW", Nnorm_mass_tbarW, Nnorm_mass_tbarW *0.8,  Nnorm_mass_tbarW *1.2);
+    RooRealVar n_mass_WW   ("n_mass_WW",    "n_mass_WW",    Nnorm_mass_WW,    Nnorm_mass_WW    *0.8,  Nnorm_mass_WW    *1.2);
+    RooRealVar n_mass_WZ   ("n_mass_WZ",    "n_mass_WZ",    Nnorm_mass_WZ,    Nnorm_mass_WZ    *0.8,  Nnorm_mass_WZ    *1.2);
+    RooRealVar n_mass_ZZ   ("n_mass_ZZ",    "n_mass_ZZ",    Nnorm_mass_ZZ,    Nnorm_mass_ZZ    *0.8,  Nnorm_mass_ZZ    *1.2);
+
+    // Models
+    RooAddPdf model_mass("model_mass", "model_mass",
+                         RooArgList(*pdf_mass_QCD,   *pdf_mass_WJets, *pdf_mass_DY,
+                                    *pdf_mass_ttbar, *pdf_mass_tW,    *pdf_mass_tbarW,
+                                    *pdf_mass_WW,    *pdf_mass_WZ,    *pdf_mass_ZZ),
+                         RooArgList(n_mass_QCD,   n_mass_WJets, n_mass_DY,
+                                    n_mass_ttbar, n_mass_tW,    n_mass_tbarW,
+                                    n_mass_WW,    n_mass_WZ,    n_mass_ZZ));
+
+    // Fitting
+    RooFitResult* fit_mass = model_mass.fitTo(*rh_mass_data, Save());
+
+
+    /// DRAWING
+    cout << "\n----- FIT RESULT -----" << endl;
+    TCanvas *c_fit = new TCanvas("c_fit", "c_fit", 800, 800);
+    c_fit->cd();
+
+    //Top Pad
+    TPad *c1 = new TPad("padc1","padc1",0.01,0.01,0.99,0.99);
+    c1->Draw();
+    c1->cd();
+    c1->SetTopMargin(0.01);
+    c1->SetBottomMargin(0.35);
+    c1->SetRightMargin(0.03);
+    c1->SetLeftMargin(0.13);
+    c1->SetFillStyle(1);
+    c1->SetLogx();
+    c1->SetLogy();
+
+    // Main stack histogram
+    RooPlot *frame = mass.frame(Title(" "));
+    frame->GetYaxis()->SetRangeUser(1e-1, 2e5);
+    rh_mass_data->plotOn(frame, DataError(RooAbsData::SumW2));
+
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
+                                        "pdf_mass_tW,pdf_mass_tbarW,pdf_mass_ttbar,pdf_mass_DY"),
+                      LineColor(0), FillColor(kOrange), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
+                                        "pdf_mass_tW,pdf_mass_tbarW,pdf_mass_ttbar"),
+                      LineColor(0), FillColor(kCyan+2), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
+                                        "pdf_mass_tW,pdf_mass_tbarW"),
+                      LineColor(0), FillColor(kGreen-2), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW,"
+                                        "pdf_mass_tW"),
+                      LineColor(0), FillColor(kGreen+2), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ,pdf_mass_WW"),
+                      LineColor(0), FillColor(kMagenta-5), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ,pdf_mass_WZ"),
+                      LineColor(0), FillColor(kMagenta-2), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ZZ"),
+                      LineColor(0), FillColor(kMagenta-6), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets"),
+                      LineColor(0), FillColor(kRed-2), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD"),
+                      LineColor(0), FillColor(kRed+3), DrawOption("F"));
+/*
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ttbar,pdf_mass_DY"),
+                      LineColor(0), FillColor(kOrange), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets,pdf_mass_ttbar"),
+                      LineColor(0), FillColor(kCyan+2), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD,pdf_mass_WJets"),
+                      LineColor(0), FillColor(kRed-2), DrawOption("F"));
+    model_mass.plotOn(frame, Components("pdf_mass_QCD"),
+                      LineColor(0), FillColor(kRed+3), DrawOption("F"));
+*/
+
+    rh_mass_data->plotOn(frame, DataError(RooAbsData::SumW2));
+    frame->GetYaxis()->SetRangeUser(1e-1, 2e5);
+    frame->Draw();
+    fit_mass->Print();
+
+    // Legend
+    TLegend *legend = new TLegend(0.65, 0.8, 0.95, 0.97);
+    legend->SetFillColor(kWhite);
+    legend->SetNColumns(2);
+//    legend->SetLineColor(kWhite);
+    legend->AddEntry(frame->nameOf(0), "Data", "LP");
+    legend->AddEntry(frame->nameOf(1), "DY", "F");
+    legend->AddEntry(frame->nameOf(2), "#kern[0.2]{#font[12]{#scale[1.1]{t#bar{t}}}}", "F");
+    legend->AddEntry(frame->nameOf(3), "#kern[0.1]{#font[12]{#scale[1.1]{#bar{t}W}}}", "F");
+    legend->AddEntry(frame->nameOf(4), "#kern[0.1]{#font[12]{#scale[1.1]{tW}}}", "F");
+    legend->AddEntry(frame->nameOf(5), "#font[12]{#scale[1.1]{WW}}", "F");
+    legend->AddEntry(frame->nameOf(6), "#font[12]{#scale[1.1]{WZ}}", "F");
+    legend->AddEntry(frame->nameOf(7), "#kern[0.1]{#font[12]{#scale[1.1]{ZZ}}}", "F");
+    legend->AddEntry(frame->nameOf(8), "#font[12]{#scale[1.1]{W}}+Jets", "F");
+    legend->AddEntry(frame->nameOf(9), "#font[12]{#scale[1.1]{QCD}}", "F");
+
+//    legend->SetNColumns(2);
+
+    legend->Draw();
+
+    frame->GetYaxis()->SetTitle("Number of entries");
+    frame->GetYaxis()->SetTitleOffset(1.5);
+    frame->GetXaxis()->SetLabelSize(0);
+
+    // Legend
+    legend->Draw();
+
+    // Bottom pad
+    TPad *c2 = new TPad("padc2","padc2",0.01,0.01,0.99,0.35);
+    c2->Draw();
+    c2->cd();
+    c2->SetTopMargin(0.05);
+    c2->SetBottomMargin(0.33);
+    c2->SetRightMargin(0.02);
+    c2->SetLeftMargin(0.12);
+    c2->SetFillStyle(0);
+    c2->SetLogx();
+    c2->SetGrid();
+
+    // Ratio plot
+    TH1D *h_mass_fit = ((TH1D*)(model_mass.createHistogram("h_mass_fit", mass)));
+    Double_t N_mass_data = h_mass[_SingleMuon_Full]->Integral();
+    Double_t N_mass_MC   = h_mass_fit->Integral();
+    h_mass_fit->Scale(N_mass_data/N_mass_MC); // Why is this necessary???
+    cout << "\nData integral: " << N_mass_data << endl;
+    cout << "MC integral: "     << h_mass_fit->Integral() << endl;
+    cout << "Data in 1st bin: " << h_mass[_SingleMuon_Full]->GetBinContent(1) << endl;
+    cout << "MC in 1st bin: "   << h_mass_fit->GetBinContent(1) << endl;
+
+    TH1D *h_mass_ratio = ((TH1D*)(h_mass[_SingleMuon_Full]->Clone("h_mass_ratio")));
+    h_mass[_SingleMuon_Full]->Sumw2(); h_mass_fit->Sumw2();
+    h_mass_ratio->Divide(h_mass[_SingleMuon_Full], h_mass_fit);
+    h_mass_ratio->SetTitle("");
+    h_mass_ratio->GetXaxis()->SetMoreLogLabels(1);
+    h_mass_ratio->GetXaxis()->SetNoExponent(1);
+    h_mass_ratio->GetXaxis()->SetTitle("m_{#mu#mu} [GeV]");
+    h_mass_ratio->GetXaxis()->SetTitleSize(0.17);
+    h_mass_ratio->GetXaxis()->SetLabelSize(0.125);
+    h_mass_ratio->GetXaxis()->SetTitleOffset(0.8);
+    h_mass_ratio->GetYaxis()->SetTitle("Data/MC");
+    h_mass_ratio->GetYaxis()->SetTitleSize(0.114);
+    h_mass_ratio->GetYaxis()->SetTitleOffset(0.48);
+    h_mass_ratio->GetYaxis()->SetLabelSize(0.11);
+    h_mass_ratio->GetYaxis()->SetTickLength(0.01);
+    h_mass_ratio->GetYaxis()->SetDecimals(1);
+    h_mass_ratio->SetMaximum(1.25);
+    h_mass_ratio->SetMinimum(0.75);
+    h_mass_ratio->GetYaxis()->SetNdivisions(5);
+    h_mass_ratio->SetLineWidth(1);
+    h_mass_ratio->SetLineColor(kBlack);
+    h_mass_ratio->SetMarkerStyle(kFullDotLarge);
+    h_mass_ratio->SetMarkerColor(kBlack);
+    h_mass_ratio->SetStats(kFALSE);
+
+    h_mass_ratio->Draw("E1P");
+
+    // Red line at Data/MC=1
+    TH1D *h_line = ((TH1D*)(h_mass[_SingleMuon_Full]->Clone("h_line")));
+    h_line->Reset("ICES");
+    for (Int_t i=1; i<=h_line->GetNbinsX(); i++)
+        h_line->SetBinContent(i, 1);
+    h_line->SetLineColor(kRed);
+    h_line->Draw("LSAME");
+
+    //Chi^2
+    RooAbsReal *chi2_mass = model_mass.createChi2(*rh_mass_data);
+    cout << "chi2: " << chi2_mass->getVal() << endl;
+    cout << "Normalized chi2: " << chi2_mass->getVal() / ((Double_t)h_mass[_SingleMuon_Full]->GetNbinsX()) << endl;
+
+//    // Writing
+//    TFile *file_FR = new TFile("/media/sf_DATA/FR/Muon/FakeRate_muon.root", "RECREATE");
+//    if (file_FR->IsOpen()) cout << "File '/media/sf_DATA/FR/Muon/FakeRate_muon.root' has been created. Writing histograms.." << endl;
+//    file_FR->cd();
+//    h_FRratio_barrel->Write();
+//    h_FRratio_endcap->Write();
+//    h_FRtemplate_barrel->Write();
+//    h_FRtemplate_endcap->Write();
+//    cout << "Finished. Closing the file.." << endl;
+//    file_FR->Close();
+//    if (!file_FR->IsOpen()) cout << "File '/media/sf_DATA/FR/Muon/FakeRate_muon.root' has been closed successfully." << endl;
+//    else cout << "File did not close!" << endl;
+
+//    // Drawing
+//    TCanvas *c_FR_barrel = new TCanvas("c_FR_barrel", "c_FR_barrel", 800, 800);
+//    c_FR_barrel->cd();
+//    h_FRratio_barrel->Draw();
+//    h_FRtemplate_barrel->Draw("same");
+//    c_FR_barrel->Update();
+//    TCanvas *c_FR_endcap = new TCanvas("c_FR_endcap", "c_FR_endcap", 800, 800);
+//    c_FR_endcap->cd();
+//    h_FRratio_endcap->Draw();
+//    h_FRtemplate_endcap->Draw("same");
+//    c_FR_endcap->Update();
+
+} // End of Mu_WJETSest_MatrixMethod_TFit()
 
 
 void Mu_WJETSest_Tfit_legacy()

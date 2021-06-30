@@ -133,7 +133,8 @@ void MatrixMethod_ele (Bool_t DEBUG=kFALSE)
 
     // -- For QCD estimation from Fake Rate -- //
     analyzer->SetupFRvalues_ele(Dir+"FakeRate_electron.root", "subtract");
-    analyzer->SetupPRvalues_ele(Dir+"PromptRate_electron_alt.root", "subtract");
+//    analyzer->SetupPRvalues_ele(Dir+"PromptRate_electron.root", "subtract");
+    analyzer->SetupPRvalues_ele_alt(Dir+"PromptRate_electron_alt.root", "subtract");
 
     for (Process_t pr=_DY_10to50; pr<_EndOf_DoubleEG_Normal; pr=next(pr))
     {
@@ -371,10 +372,10 @@ void MatrixMethod_ele (Bool_t DEBUG=kFALSE)
 
             // -- efficiency weights -- //
             Double_t effweight = 1;
-            if (Mgr.isMC == kTRUE)
-            {
-                effweight = analyzer->EfficiencySF_EventWeight_electronFR(ele1_SF, ele2_SF, -1);
-            }
+//            if (Mgr.isMC == kTRUE)
+//            {
+//                effweight = analyzer->EfficiencySF_EventWeight_electronFR(ele1_SF, ele2_SF, -1);
+//            }
 
             // -- PVz weights -- //
             Double_t PVzWeight = 1;
@@ -396,19 +397,25 @@ void MatrixMethod_ele (Bool_t DEBUG=kFALSE)
             Double_t FR1=0, FR2=0, PR1=1, PR2=1;
             if (p_T->at(0) >= p_T->at(1))
             {
-                MatrixMethod_weights = analyzer->MatrixMethod_evtWeight_ele(p_T->at(0), etaSC->at(0), passMediumID->at(0), p_T->at(1), etaSC->at(1), passMediumID->at(1));
+                MatrixMethod_weights = analyzer->MatrixMethod_evtWeight_ele(p_T->at(0), etaSC->at(0), passMediumID->at(0),
+                                                                            p_T->at(1), etaSC->at(1), passMediumID->at(1), 1);
                 FR1 = analyzer->FakeRate_ele(p_T->at(0), etaSC->at(0));
                 FR2 = analyzer->FakeRate_ele(p_T->at(1), etaSC->at(1));
-                PR1 = analyzer->PromptRate_ele(p_T->at(0), etaSC->at(0));
-                PR2 = analyzer->PromptRate_ele(p_T->at(1), etaSC->at(1));
+//                PR1 = analyzer->PromptRate_ele(p_T->at(0), etaSC->at(0));
+//                PR2 = analyzer->PromptRate_ele(p_T->at(1), etaSC->at(1));
+                PR1 = analyzer->PromptRate_ele_alt(p_T->at(0), etaSC->at(0));
+                PR2 = analyzer->PromptRate_ele_alt(p_T->at(1), etaSC->at(1));
             }
             else
             {
-                MatrixMethod_weights = analyzer->MatrixMethod_evtWeight_ele(p_T->at(1), etaSC->at(1), passMediumID->at(1), p_T->at(0), etaSC->at(0), passMediumID->at(0));
+                MatrixMethod_weights = analyzer->MatrixMethod_evtWeight_ele(p_T->at(1), etaSC->at(1), passMediumID->at(1),
+                                                                            p_T->at(0), etaSC->at(0), passMediumID->at(0), 1);
                 FR1 = analyzer->FakeRate_ele(p_T->at(1), etaSC->at(1));
                 FR2 = analyzer->FakeRate_ele(p_T->at(0), etaSC->at(0));
-                PR1 = analyzer->PromptRate_ele(p_T->at(1), etaSC->at(1));
-                PR2 = analyzer->PromptRate_ele(p_T->at(0), etaSC->at(0));
+//                PR1 = analyzer->PromptRate_ele(p_T->at(1), etaSC->at(1));
+//                PR2 = analyzer->PromptRate_ele(p_T->at(0), etaSC->at(0));
+                PR1 = analyzer->PromptRate_ele_alt(p_T->at(1), etaSC->at(1));
+                PR2 = analyzer->PromptRate_ele_alt(p_T->at(0), etaSC->at(0));
             }
 
             // -- Normalization -- //
@@ -424,7 +431,8 @@ void MatrixMethod_ele (Bool_t DEBUG=kFALSE)
             h_mass_PF_TT->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[1] * PR1 * FR2);
             h_mass_FP_TT->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[2] * FR1 * PR2);
             h_mass_FF_TT->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[3] * FR1 * FR2);
-            if (charge->at(0) == charge->at(1))
+//            if (charge->at(0) == charge->at(1))
+            if (scPixCharge->at(0) == scPixCharge->at(1) && isGsfCtfScPixConsistent->at(0) && isGsfCtfScPixConsistent->at(1))
             {
                 h_massSS_PP->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[0]);
                 h_massSS_PF->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight * MatrixMethod_weights[1]);
@@ -510,7 +518,7 @@ void MatrixMethod_ele_MC (Bool_t DEBUG=kFALSE)
 
     TFile *f;
     TString Dir = "/media/sf_DATA/FR/Electron/";
-    TString Dir1 = "/media/sf_DownloadData/";
+    TString Dir1 = "/media/sf_DownloadData/Electron/";
     TString debug = "";
     if (DEBUG) debug = "_DEBUG";
 
@@ -559,9 +567,10 @@ void MatrixMethod_ele_MC (Bool_t DEBUG=kFALSE)
     }
     Int_t i_type = 0;
 
-    Process_t pr_first = _DY_10to50, pr_last = _EndOf_QCDEMEnriched_Normal;
-    if (DEBUG) pr_first = _ttbar, pr_last = _ttbar_700to1000;
-    for (Process_t pr=pr_first; pr<pr_last; pr=next(pr))
+    Process_t pr_first = _DY_10to50, pr_last = _QCDEMEnriched_300toInf;
+//    Process_t pr_first = _WJets, pr_last = _WJets_ext2v5;
+    if (DEBUG) pr_first = _ttbar, pr_last = _ttbar;
+    for (Process_t pr=pr_first; pr<=pr_last; pr=next(pr))
     {
         Mgr.SetProc(pr);
 
@@ -736,6 +745,7 @@ void MatrixMethod_ele_MC (Bool_t DEBUG=kFALSE)
         UInt_t nPassEle=0, nFailEle=0;
         UInt_t nSameSign=0;
         UInt_t nEle=0;
+        UInt_t nPF=0, nGood=0, nBad=0;
 
         myProgressBar_t bar(NEvents);
 
@@ -751,8 +761,8 @@ void MatrixMethod_ele_MC (Bool_t DEBUG=kFALSE)
 
             // pre-selection
             if (p_T->size() != 2) continue;
-//            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
-            if (p_T->at(0) < 25 || p_T->at(1) < 25) continue;
+            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
+            if (p_T->at(0) < 25 && p_T->at(1) < 25) continue;
             if (fabs(eta->at(0)) >= 2.4 || fabs(eta->at(1)) >= 2.4) continue;
             if (fabs(eta->at(0)) >= 1.4442 && fabs(eta->at(0)) <= 1.566) continue;
             if (fabs(eta->at(1)) >= 1.4442 && fabs(eta->at(1)) <= 1.566) continue;
@@ -841,16 +851,14 @@ void MatrixMethod_ele_MC (Bool_t DEBUG=kFALSE)
                 Double_t dPhi_sub = phi->at(1-i_lead) - genEle_phi->at(i_gen);
                 Double_t dR_sub = sqrt(dEta_sub*dEta_sub + dPhi_sub*dPhi_sub);
                 Double_t rel_dpT_sub = fabs(p_T->at(1-i_lead) - genEle_pT->at(i_gen)) / p_T->at(1-i_lead);
-                if (dR_lead < 0.3)
+                if (dR_lead < 0.4)
                 {
-                    if (genEle_isPrompt->at(i_gen) || genEle_isPromptFinalState->at(i_gen) || genEle_isTauDecayProduct->at(i_gen) ||
-                        genEle_isPromptTauDecayProduct->at(i_gen) || genEle_isDirectPromptTauDecayProductFinalState->at(i_gen) ||
-                        genEle_isHardProcess->at(i_gen) || genEle_fromHardProcessBeforeFSR->at(i_gen) || genEle_fromHardProcessFinalState->at(i_gen))
+                    if (genEle_isPrompt->at(i_gen) || genEle_isTauDecayProduct->at(i_gen))
                         veto_lead = 1;
                     if (rel_dpT_lead < 0.5)
                     {
                         matches_lead.push_back(i_gen);
-                        if (genEle_isLastCopy->at(i_gen) && (genEle_isPrompt->at(i_gen) || genEle_isPromptFinalState->at(i_gen)))
+                        if (genEle_isLastCopy->at(i_gen) && genEle_isPrompt->at(i_gen))
                         {
                             if (dR_lead < dRmin_lead || (dR_lead == dRmin_lead && rel_dpT_lead <= rel_dpTmin_lead))
                             {
@@ -861,16 +869,14 @@ void MatrixMethod_ele_MC (Bool_t DEBUG=kFALSE)
                         }
                     }
                 }
-                if (dR_sub < 0.3)
+                if (dR_sub < 0.4)
                 {
-                    if (genEle_isPrompt->at(i_gen) || genEle_isPromptFinalState->at(i_gen) || genEle_isTauDecayProduct->at(i_gen) ||
-                        genEle_isPromptTauDecayProduct->at(i_gen) || genEle_isDirectPromptTauDecayProductFinalState->at(i_gen) ||
-                        genEle_isHardProcess->at(i_gen) || genEle_fromHardProcessBeforeFSR->at(i_gen) || genEle_fromHardProcessFinalState->at(i_gen))
+                    if (genEle_isPrompt->at(i_gen) || genEle_isTauDecayProduct->at(i_gen))
                         veto_sub = 1;
                     if (rel_dpT_sub < 0.5)
                     {
                         matches_sub.push_back(i_gen);
-                        if (genEle_isLastCopy->at(i_gen) && (genEle_isPrompt->at(i_gen) || genEle_isPromptFinalState->at(i_gen)))
+                        if (genEle_isLastCopy->at(i_gen) && genEle_isPrompt->at(i_gen))
                         {
                             if (dR_sub < dRmin_sub || (dR_sub == dRmin_sub && rel_dpT_sub <= rel_dpTmin_sub))
                             {
@@ -912,9 +918,23 @@ void MatrixMethod_ele_MC (Bool_t DEBUG=kFALSE)
             if (i_bestmatch_lead >= 0 && i_bestmatch_sub >= 0)
                 h_mass_PP_true[i_type]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
             if (i_bestmatch_lead >= 0 && (i_bestmatch_sub < 0 && !veto_sub))
+            {
+                nPF++;
                 h_mass_PF_true[i_type]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                if (!(passMediumID->at(i_lead)) && passMediumID->at(1-i_lead))
+                    nBad++;
+                if (passMediumID->at(i_lead) && !(passMediumID->at(1-i_lead)))
+                    nGood++;
+            }
             if ((i_bestmatch_lead < 0 && !veto_lead) && i_bestmatch_sub >= 0)
+            {
+                nPF++;
                 h_mass_FP_true[i_type]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                if (passMediumID->at(i_lead) && !(passMediumID->at(1-i_lead)))
+                    nBad++;
+                if (!(passMediumID->at(i_lead)) && passMediumID->at(1-i_lead))
+                    nGood++;
+            }
             if ((i_bestmatch_lead < 0 && !veto_lead) && (i_bestmatch_sub < 0 && !veto_sub))
                 h_mass_FF_true[i_type]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
@@ -963,6 +983,12 @@ void MatrixMethod_ele_MC (Bool_t DEBUG=kFALSE)
         cout << "\t # passed electrons: " << nPassEle << endl;
         cout << "\t # failed electrons: " << nFailEle << endl;
 
+        if (i_type == 2)
+        {
+            cout << "WJets PF events: " << nPF << "\n   Good (prompt is tight, fake is not): " << nGood << endl;
+            cout << "   Bad (fake is tight, prompt is not): " << nBad << endl;
+        }
+
         f->cd();
         cout << "\tWriting into file...";
 
@@ -971,7 +997,7 @@ void MatrixMethod_ele_MC (Bool_t DEBUG=kFALSE)
         if (DEBUG == kTRUE && pr == _DY_10to50) break;
         if (pr == _DY_2000to3000) pr = _EndOf_DYTauTau_Normal; // next -- ttbar
         if (pr == _ttbar_1000toInf) pr = _EndOf_VVnST_Normal; // next -- WJets
-        if (pr == _EndOf_WJets_Normal) pr = _QCDEMEnriched_20to30; // next -- QCDEMEnriched
+        if (pr == _WJets_ext2v5) pr = _EndOf_QCDMuEnriched_Normal; // next -- QCDEMEnriched
 
         cout << "nSameSign = " << nSameSign << endl;
         cout << "===========================================================\n" << endl;
@@ -1018,6 +1044,7 @@ void MatrixMethod_mu (Bool_t DEBUG=kFALSE)
 
     TFile *f;
     TString Dir = "/media/sf_DATA/FR/Muon/";
+    TString Dir2 = "/media/sf_DownloadData/Muon/";
     TString debug = "";
     if (DEBUG) debug = "_DEBUG";
 
@@ -1033,7 +1060,8 @@ void MatrixMethod_mu (Bool_t DEBUG=kFALSE)
 
     // -- For QCD estimation from Fake Rate -- //
     analyzer->SetupFRvalues(Dir+"FakeRate_muon.root", "sigCtrl_template");
-    analyzer->SetupPRvalues(Dir+"PromptRate_muon_alt.root", "subtract", 1);
+    analyzer->SetupPRvalues(Dir+"PromptRate_muon_alt.root", "subtract", 1, "DOWN");
+//    analyzer->SetupPRvalues(Dir+"PromptRate_muon.root", "subtract", 0);
 
     for (Process_t pr=_DY_10to50; pr<_EndOf_SingleMuon_Normal; pr=next(pr))
     {
@@ -1044,7 +1072,7 @@ void MatrixMethod_mu (Bool_t DEBUG=kFALSE)
         cout << "Xsec: " << Mgr.Xsec[0] << endl;
         cout << "Wsum: " << Mgr.Wsum[0] << endl;
         cout << "Type: " << Mgr.Type << endl;
-        cout << "Directory: " << Dir << endl;
+        cout << "Directory: " << Dir2 << endl;
 
         TStopwatch totaltime;
         totaltime.Start();
@@ -1082,31 +1110,33 @@ void MatrixMethod_mu (Bool_t DEBUG=kFALSE)
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<double> *TRKiso = new std::vector<double>;
-        std::vector<string> *trig_name = new std::vector<string>;
-        std::vector<int> *trig_fired = new std::vector<int>;
-        std::vector<int> *trig_matched = new std::vector<int>;
-        std::vector<double> *trig_pT = new std::vector<double>;
+//        std::vector<string> *trig_name = new std::vector<string>;
+//        std::vector<int> *trig_fired = new std::vector<int>;
+//        std::vector<int> *trig_matched = new std::vector<int>;
+//        std::vector<double> *trig_pT = new std::vector<double>;
         std::vector<int> *prescale_factor = new std::vector<int>;
         Double_t MET_pT, MET_phi;
         Int_t nPU;
         Int_t nVTX;
         Double_t PVz;
         Double_t gen_weight, top_weight;
-        Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
+        Double_t prefiring_weight;
 
         TChain *chain = new TChain("FRTree");
-        chain->Add(Dir+"SelectedForPR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
-        if (DEBUG == kTRUE) cout << Dir+"SelectedForPR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+        chain->Add(Dir2+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+        if (DEBUG == kTRUE) cout << Dir2+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+//        chain->Add(Dir+"SelectedForBKGest_Mu_Triggerless_"+Mgr.Procname[Mgr.CurrentProc]+".root"); // Doesn't work as there are no tight-tight events
+//        if (DEBUG == kTRUE) cout << Dir+"SelectedForBKGest_Mu_Triggerless_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
 
         chain->SetBranchStatus("p_T", 1);
         chain->SetBranchStatus("eta", 1);
         chain->SetBranchStatus("phi", 1);
         chain->SetBranchStatus("relPFiso", 1);
         chain->SetBranchStatus("TRKiso", 1);
-        chain->SetBranchStatus("trig_name", 1);
-        chain->SetBranchStatus("trig_fired", 1);
-        chain->SetBranchStatus("trig_matched", 1);
-        chain->SetBranchStatus("trig_pT", 1);
+//        chain->SetBranchStatus("trig_name", 1);
+//        chain->SetBranchStatus("trig_fired", 1);
+//        chain->SetBranchStatus("trig_matched", 1);
+//        chain->SetBranchStatus("trig_pT", 1);
         chain->SetBranchStatus("prescale_factor", 1);
         chain->SetBranchStatus("nPU", 1);
         chain->SetBranchStatus("nVTX", 1);
@@ -1116,8 +1146,6 @@ void MatrixMethod_mu (Bool_t DEBUG=kFALSE)
         chain->SetBranchStatus("gen_weight", 1);
         chain->SetBranchStatus("top_weight", 1);
         chain->SetBranchStatus("prefiring_weight", 1);
-        chain->SetBranchStatus("prefiring_weight_up", 1);
-        chain->SetBranchStatus("prefiring_weight_down", 1);
 
         chain->SetBranchAddress("p_T", &p_T);
         chain->SetBranchAddress("eta", &eta);
@@ -1125,10 +1153,10 @@ void MatrixMethod_mu (Bool_t DEBUG=kFALSE)
         chain->SetBranchAddress("charge", &charge);
         chain->SetBranchAddress("relPFiso", &relPFiso);
         chain->SetBranchAddress("TRKiso", &TRKiso);
-        chain->SetBranchAddress("trig_name", &trig_name);
-        chain->SetBranchAddress("trig_fired", &trig_fired);
-        chain->SetBranchAddress("trig_matched", &trig_matched);
-        chain->SetBranchAddress("trig_pT", &trig_pT);
+//        chain->SetBranchAddress("trig_name", &trig_name);
+//        chain->SetBranchAddress("trig_fired", &trig_fired);
+//        chain->SetBranchAddress("trig_matched", &trig_matched);
+//        chain->SetBranchAddress("trig_pT", &trig_pT);
         chain->SetBranchAddress("prescale_factor", &prescale_factor);
         chain->SetBranchAddress("nPU", &nPU);
         chain->SetBranchAddress("nVTX", &nVTX);
@@ -1138,8 +1166,6 @@ void MatrixMethod_mu (Bool_t DEBUG=kFALSE)
         chain->SetBranchAddress("gen_weight", &gen_weight);
         chain->SetBranchAddress("top_weight", &top_weight);
         chain->SetBranchAddress("prefiring_weight", &prefiring_weight);
-        chain->SetBranchAddress("prefiring_weight_up", &prefiring_weight_up);
-        chain->SetBranchAddress("prefiring_weight_down", &prefiring_weight_down);
 
         Int_t NEvents = chain->GetEntries();
         cout << "\t[Sum of weights: " << Mgr.Wsum[0] << "]" << endl;
@@ -1165,7 +1191,9 @@ void MatrixMethod_mu (Bool_t DEBUG=kFALSE)
             // pre-selection
             if (p_T->size() != 2) continue;
 //            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
-            if (p_T->at(0) < 52 || p_T->at(1) < 52) continue;
+//            if (p_T->at(0) < 52 || p_T->at(1) < 52) continue;
+            if (p_T->at(0) < 52 && p_T->at(1) < 52) continue;
+            if (p_T->at(0) < 40 || p_T->at(1) < 40) continue;
             if (fabs(eta->at(0)) >= 2.4 || fabs(eta->at(1)) >= 2.4) continue;
 
             if (charge->at(0) == charge->at(1)) nSameSign++;
@@ -1343,12 +1371,13 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
     FileMgr Mgr;
 
     TFile *f;
-    TString Dir = "/media/sf_DATA/FR/Muon/";
+    TString Dir1 = "/media/sf_DATA/FR/Muon/";
+    TString Dir2 = "/media/sf_DownloadData/Muon/";
     TString debug = "";
     if (DEBUG) debug = "_DEBUG";
 
     // -- Output ROOTFile -- //
-    TString outName = Dir+"MatrixMethod_Mu_MC"+debug+".root";
+    TString outName = Dir1+"MatrixMethod_Mu_MC"+debug+".root";
     f = new TFile(outName, "RECREATE");
 
     DYAnalyzer *analyzer = new DYAnalyzer("Mu50");
@@ -1393,9 +1422,11 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
     }
     Int_t i_type = 0;
 
-    Process_t pr_first = _DY_10to50, pr_last = _EndOf_QCDMuEnriched_Normal;
-    if (DEBUG) pr_first = _ttbar, pr_last = _ttbar_700to1000;
-    for (Process_t pr=pr_first; pr<pr_last; pr=next(pr))
+//    Process_t pr_first = _DY_10to50, pr_last = _QCDMuEnriched_1000toInf;
+    Process_t pr_first = _WJets, pr_last = _WJets_ext2v5;
+    if (DEBUG) pr_first = _ttbar, pr_last = _ttbar;
+
+    for (Process_t pr=pr_first; pr<=pr_last; pr=next(pr))
     {
         Mgr.SetProc(pr);
 
@@ -1409,7 +1440,8 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
         cout << "Xsec: " << Mgr.Xsec[0] << endl;
         cout << "Wsum: " << Mgr.Wsum[0] << endl;
         cout << "Type: " << Mgr.Type << endl;
-        cout << "Directory: " << Dir << endl;
+        cout << "Data directory: " << Dir2 << endl;
+        cout << "Output directory: " << Dir1 << endl;
 
         TStopwatch totaltime;
         totaltime.Start();
@@ -1422,44 +1454,31 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
         // -- For PVz reweighting -- //
         analyzer->SetupPVzWeights(Mgr.isMC, "mumu", "./etc/PVzWeights.root");
 
-        Int_t nMuons;
         std::vector<double> *p_T = new std::vector<double>;
         std::vector<double> *eta = new std::vector<double>;
         std::vector<double> *phi = new std::vector<double>;
         std::vector<int> *charge = new std::vector<int>;
         std::vector<double> *relPFiso = new std::vector<double>;
         std::vector<double> *TRKiso = new std::vector<double>;
-        Int_t nGenMuons;
-        std::vector<double> *genMu_pT = new std::vector<double>;
-        std::vector<double> *genMu_eta = new std::vector<double>;
-        std::vector<double> *genMu_phi = new std::vector<double>;
-        std::vector<int> *genMu_charge = new std::vector<int>;
-        std::vector<int> *genMu_isPrompt = new std::vector<int>;
-        std::vector<int> *genMu_isPromptFinalState = new std::vector<int>;
-        std::vector<int> *genMu_isTauDecayProduct = new std::vector<int>;
-        std::vector<int> *genMu_isPromptTauDecayProduct = new std::vector<int>;
-        std::vector<int> *genMu_isDirectPromptTauDecayProductFinalState = new std::vector<int>;
-        std::vector<int> *genMu_isHardProcess = new std::vector<int>;
-        std::vector<int> *genMu_isLastCopy = new std::vector<int>;
-        std::vector<int> *genMu_isLastCopyBeforeFSR = new std::vector<int>;
-        std::vector<int> *genMu_isPromptDecayed = new std::vector<int>;
-        std::vector<int> *genMu_isDecayedLeptonHadron = new std::vector<int>;
-        std::vector<int> *genMu_fromHardProcessBeforeFSR = new std::vector<int>;
-        std::vector<int> *genMu_fromHardProcessDecayed = new std::vector<int>;
-        std::vector<int> *genMu_fromHardProcessFinalState = new std::vector<int>;
+        std::vector<double> *gen_pT = new std::vector<double>;
+        std::vector<double> *gen_eta = new std::vector<double>;
+        std::vector<double> *gen_phi = new std::vector<double>;
+        std::vector<int> *gen_ID = new std::vector<int>;
+        std::vector<int> *gen_isPrompt = new std::vector<int>;
+        std::vector<int> *gen_isTauDecayProduct = new std::vector<int>;
+        std::vector<int> *gen_isLastCopy = new std::vector<int>;
+        std::vector<int> *gen_isLastCopyBeforeFSR = new std::vector<int>;
         Double_t MET_pT, MET_phi;
         Int_t nPU;
         Int_t nVTX;
         Double_t PVz;
-//        Double_t evt_weight;
         Double_t gen_weight, top_weight;
-        Double_t prefiring_weight, prefiring_weight_up, prefiring_weight_down;
+        Double_t prefiring_weight;
 
         TChain *chain = new TChain("FRTree");
-        chain->Add(Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
-        if (DEBUG == kTRUE) cout << Dir+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
+        chain->Add(Dir2+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root");
+        if (DEBUG == kTRUE) cout << Dir2+"SelectedForFR_Mu_"+Mgr.Procname[Mgr.CurrentProc]+".root" << endl;
 
-        chain->SetBranchStatus("nMuons", 1);
         chain->SetBranchStatus("p_T", 1);
         chain->SetBranchStatus("eta", 1);
         chain->SetBranchStatus("phi", 1);
@@ -1473,28 +1492,15 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
         chain->SetBranchStatus("gen_weight", 1);
         chain->SetBranchStatus("top_weight", 1);
         chain->SetBranchStatus("prefiring_weight", 1);
-        chain->SetBranchStatus("prefiring_weight_up", 1);
-        chain->SetBranchStatus("prefiring_weight_down", 1);
-        chain->SetBranchStatus("nGenMuons", 1);
-        chain->SetBranchStatus("genMu_pT", 1);
-        chain->SetBranchStatus("genMu_eta", 1);
-        chain->SetBranchStatus("genMu_phi", 1);
-        chain->SetBranchStatus("genMu_charge", 1);
-        chain->SetBranchStatus("genMu_isPrompt", 1);
-        chain->SetBranchStatus("genMu_isPromptFinalState", 1);
-        chain->SetBranchStatus("genMu_isTauDecayProduct", 1);
-        chain->SetBranchStatus("genMu_isPromptTauDecayProduct", 1);
-        chain->SetBranchStatus("genMu_isDirectPromptTauDecayProductFinalState", 1);
-        chain->SetBranchStatus("genMu_isHardProcess", 1);
-        chain->SetBranchStatus("genMu_isLastCopy", 1);
-        chain->SetBranchStatus("genMu_isLastCopyBeforeFSR", 1);
-        chain->SetBranchStatus("genMu_isPromptDecayed", 1);
-        chain->SetBranchStatus("genMu_isDecayedLeptonHadron", 1);
-        chain->SetBranchStatus("genMu_fromHardProcessBeforeFSR", 1);
-        chain->SetBranchStatus("genMu_fromHardProcessDecayed", 1);
-        chain->SetBranchStatus("genMu_fromHardProcessFinalState", 1);
+        chain->SetBranchStatus("gen_pT", 1);
+        chain->SetBranchStatus("gen_eta", 1);
+        chain->SetBranchStatus("gen_phi", 1);
+        chain->SetBranchStatus("gen_ID", 1);
+        chain->SetBranchStatus("gen_isPrompt", 1);
+        chain->SetBranchStatus("gen_isTauDecayProduct", 1);
+        chain->SetBranchStatus("gen_isLastCopy", 1);
+        chain->SetBranchStatus("gen_isLastCopyBeforeFSR", 1);
 
-        chain->SetBranchAddress("nMuons", &nMuons);
         chain->SetBranchAddress("p_T", &p_T);
         chain->SetBranchAddress("eta", &eta);
         chain->SetBranchAddress("phi", &phi);
@@ -1509,25 +1515,14 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
         chain->SetBranchAddress("gen_weight", &gen_weight);
         chain->SetBranchAddress("top_weight", &top_weight);
         chain->SetBranchAddress("prefiring_weight", &prefiring_weight);
-        chain->SetBranchAddress("prefiring_weight_up", &prefiring_weight_up);
-        chain->SetBranchAddress("prefiring_weight_down", &prefiring_weight_down);
-        chain->SetBranchAddress("genMu_pT", &genMu_pT);
-        chain->SetBranchAddress("genMu_eta", &genMu_eta);
-        chain->SetBranchAddress("genMu_phi", &genMu_phi);
-        chain->SetBranchAddress("genMu_charge", &genMu_charge);
-        chain->SetBranchAddress("genMu_isPrompt", &genMu_isPrompt);
-        chain->SetBranchAddress("genMu_isPromptFinalState", &genMu_isPromptFinalState);
-        chain->SetBranchAddress("genMu_isTauDecayProduct", &genMu_isTauDecayProduct);
-        chain->SetBranchAddress("genMu_isPromptTauDecayProduct", &genMu_isPromptTauDecayProduct);
-        chain->SetBranchAddress("genMu_isDirectPromptTauDecayProductFinalState", &genMu_isDirectPromptTauDecayProductFinalState);
-        chain->SetBranchAddress("genMu_isHardProcess", &genMu_isHardProcess);
-        chain->SetBranchAddress("genMu_isLastCopy", &genMu_isLastCopy);
-        chain->SetBranchAddress("genMu_isLastCopyBeforeFSR", &genMu_isLastCopyBeforeFSR);
-        chain->SetBranchAddress("genMu_isPromptDecayed", &genMu_isPromptDecayed);
-        chain->SetBranchAddress("genMu_isDecayedLeptonHadron", &genMu_isDecayedLeptonHadron);
-        chain->SetBranchAddress("genMu_fromHardProcessBeforeFSR", &genMu_fromHardProcessBeforeFSR);
-        chain->SetBranchAddress("genMu_fromHardProcessDecayed", &genMu_fromHardProcessDecayed);
-        chain->SetBranchAddress("genMu_fromHardProcessFinalState", &genMu_fromHardProcessFinalState);
+        chain->SetBranchAddress("gen_pT", &gen_pT);
+        chain->SetBranchAddress("gen_eta", &gen_eta);
+        chain->SetBranchAddress("gen_phi", &gen_phi);
+        chain->SetBranchAddress("gen_ID", &gen_ID);
+        chain->SetBranchAddress("gen_isPrompt", &gen_isPrompt);
+        chain->SetBranchAddress("gen_isTauDecayProduct", &gen_isTauDecayProduct);
+        chain->SetBranchAddress("gen_isLastCopy", &gen_isLastCopy);
+        chain->SetBranchAddress("gen_isLastCopyBeforeFSR", &gen_isLastCopyBeforeFSR);
 
         Int_t NEvents = chain->GetEntries();
         if (DEBUG) NEvents = 1000;
@@ -1537,6 +1532,7 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
         UInt_t nPassMu=0, nFailMu=0;
         UInt_t nSameSign=0;
         UInt_t nMu=0;
+        UInt_t nPF=0, nGood=0, nBad=0;
 
         myProgressBar_t bar(NEvents);
 
@@ -1553,7 +1549,9 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
             // pre-selection
             if (p_T->size() != 2) continue;
 //            if (p_T->at(0) < 17 || p_T->at(1) < 17) continue;
-            if (p_T->at(0) < 52 || p_T->at(1) < 52) continue;
+//            if (p_T->at(0) < 52 || p_T->at(1) < 52) continue;
+            if (p_T->at(0) < 52 && p_T->at(1) < 52) continue;
+            if (p_T->at(0) < 40 || p_T->at(1) < 40) continue;
             if (fabs(eta->at(0)) >= 2.4 || fabs(eta->at(1)) >= 2.4) continue;
 
             if (charge->at(0) == charge->at(1)) {nSameSign++; continue;}
@@ -1612,36 +1610,36 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
             Int_t i_bestmatch_sub = -1;
             Int_t veto_lead = 0; // used to find fake leptons
             Int_t veto_sub = 0; // used to find fake leptons
-            if (DEBUG) cout << "  nGenMuons = " << genMu_pT->size() << endl;
-            for (UInt_t i_gen=0; i_gen<genMu_pT->size(); i_gen++)
+            if (DEBUG) cout << "  nGenParticles = " << gen_pT->size() << endl;
+            for (UInt_t i_gen=0; i_gen<gen_pT->size(); i_gen++)
             {
+                if (fabs(gen_ID->at(i_gen)) != 13) continue;
+                Int_t gen_charge = -gen_ID->at(i_gen)/fabs(gen_ID->at(i_gen));
                 if (DEBUG)
                 {
-                    cout << "   GenMuon" << i_gen << ":  p_T=" << genMu_pT->at(i_gen);
-                    cout << "  eta=" << genMu_eta->at(i_gen) << "  phi=" << genMu_phi->at(i_gen) << endl;
-                    cout << "    isPrompt=" << genMu_isPrompt->at(i_gen) << "  isLastCopy=" << genMu_isLastCopy->at(i_gen);
-                    cout << "  iLCbeforeFSR=" << genMu_isLastCopyBeforeFSR->at(i_gen) << endl;
-                }
+                    cout << "   GenMuon i_gen=" << i_gen << ":  charge=" <<  gen_charge;
+                    cout << "  p_T=" << gen_pT->at(i_gen) << "  eta=" << gen_eta->at(i_gen) << "  phi=" << gen_phi->at(i_gen) << endl;
+                    cout << "    isPrompt=" << gen_isPrompt->at(i_gen) << "  isLastCopy=" << gen_isLastCopy->at(i_gen);
+                    cout << "  iLCbeforeFSR=" << gen_isLastCopyBeforeFSR->at(i_gen) << endl;
+                }                
 
-                Double_t dEta_lead = eta->at(i_lead) - genMu_eta->at(i_gen);
-                Double_t dPhi_lead = phi->at(i_lead) - genMu_phi->at(i_gen);
+                Double_t dEta_lead = eta->at(i_lead) - gen_eta->at(i_gen);
+                Double_t dPhi_lead = phi->at(i_lead) - gen_phi->at(i_gen);
                 Double_t dR_lead = sqrt(dEta_lead*dEta_lead + dPhi_lead*dPhi_lead);
-                Double_t rel_dpT_lead = fabs(p_T->at(i_lead) - genMu_pT->at(i_gen)) / p_T->at(i_lead);
+                Double_t rel_dpT_lead = fabs(p_T->at(i_lead) - gen_pT->at(i_gen)) / p_T->at(i_lead);
 
-                Double_t dEta_sub = eta->at(1-i_lead) - genMu_eta->at(i_gen);
-                Double_t dPhi_sub = phi->at(1-i_lead) - genMu_phi->at(i_gen);
+                Double_t dEta_sub = eta->at(1-i_lead) - gen_eta->at(i_gen);
+                Double_t dPhi_sub = phi->at(1-i_lead) - gen_phi->at(i_gen);
                 Double_t dR_sub = sqrt(dEta_sub*dEta_sub + dPhi_sub*dPhi_sub);
-                Double_t rel_dpT_sub = fabs(p_T->at(1-i_lead) - genMu_pT->at(i_gen)) / p_T->at(1-i_lead);
-                if (dR_lead < 0.3)
+                Double_t rel_dpT_sub = fabs(p_T->at(1-i_lead) - gen_pT->at(i_gen)) / p_T->at(1-i_lead);
+                if (dR_lead < 0.4 && dR_lead < dR_sub)
                 {
-                    if (genMu_isPrompt->at(i_gen) || genMu_isPromptFinalState->at(i_gen) || genMu_isTauDecayProduct->at(i_gen) ||
-                        genMu_isPromptTauDecayProduct->at(i_gen) || genMu_isDirectPromptTauDecayProductFinalState->at(i_gen) ||
-                        genMu_isHardProcess->at(i_gen) || genMu_fromHardProcessBeforeFSR->at(i_gen) || genMu_fromHardProcessFinalState->at(i_gen))
+                    if (gen_isPrompt->at(i_gen) || gen_isTauDecayProduct->at(i_gen))
                         veto_lead = 1;
                     if (rel_dpT_lead < 0.5)
                     {
                         matches_lead.push_back(i_gen);
-                        if (genMu_isLastCopy->at(i_gen) && (genMu_isPrompt->at(i_gen) || genMu_isPromptFinalState->at(i_gen)))
+                        if (gen_isLastCopy->at(i_gen) && gen_isPrompt->at(i_gen) && gen_charge == charge->at(i_lead))
                         {
                             if (dR_lead < dRmin_lead || (dR_lead == dRmin_lead && rel_dpT_lead <= rel_dpTmin_lead))
                             {
@@ -1652,16 +1650,14 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
                         }
                     }
                 }
-                if (dR_sub < 0.3)
+                else if (dR_sub < 0.4)
                 {
-                    if (genMu_isPrompt->at(i_gen) || genMu_isPromptFinalState->at(i_gen) || genMu_isTauDecayProduct->at(i_gen) ||
-                        genMu_isPromptTauDecayProduct->at(i_gen) || genMu_isDirectPromptTauDecayProductFinalState->at(i_gen) ||
-                        genMu_isHardProcess->at(i_gen) || genMu_fromHardProcessBeforeFSR->at(i_gen) || genMu_fromHardProcessFinalState->at(i_gen))
+                    if (gen_isPrompt->at(i_gen) || gen_isTauDecayProduct->at(i_gen))
                         veto_sub = 1;
                     if (rel_dpT_sub < 0.5)
                     {
                         matches_sub.push_back(i_gen);
-                        if (genMu_isLastCopy->at(i_gen) && (genMu_isPrompt->at(i_gen) || genMu_isPromptFinalState->at(i_gen)))
+                        if (gen_isLastCopy->at(i_gen) && gen_isPrompt->at(i_gen) && gen_charge == charge->at(1-i_lead))
                         {
                             if (dR_sub < dRmin_sub || (dR_sub == dRmin_sub && rel_dpT_sub <= rel_dpTmin_sub))
                             {
@@ -1703,9 +1699,25 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
             if (i_bestmatch_lead >= 0 && i_bestmatch_sub >= 0)
                 h_mass_PP_true[i_type]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
             if (i_bestmatch_lead >= 0 && (i_bestmatch_sub < 0 && !veto_sub))
+            {
                 h_mass_PF_true[i_type]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                if (i_type == 2)
+                {
+                    nPF++;
+                    if (relPFiso->at(i_lead) >= 0.15 && relPFiso->at(1-i_lead) < 0.15) nBad++;
+                    else if (relPFiso->at(i_lead) < 0.15 && relPFiso->at(1-i_lead) >= 0.15) nGood++;
+                }
+            }
             if ((i_bestmatch_lead < 0 && !veto_lead) && i_bestmatch_sub >= 0)
+            {
                 h_mass_FP_true[i_type]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
+                if (i_type == 2)
+                {
+                    nPF++;
+                    if (relPFiso->at(i_lead) < 0.15 && relPFiso->at(1-i_lead) >= 0.15) nBad++;
+                    else if (relPFiso->at(i_lead) >= 0.15 && relPFiso->at(1-i_lead) < 0.15) nGood++;
+                }
+            }
             if ((i_bestmatch_lead < 0 && !veto_lead) && (i_bestmatch_sub < 0 && !veto_sub))
                 h_mass_FF_true[i_type]->Fill(mass, TotWeight * PUWeight * effweight * PVzWeight * L1weight * TopPtWeight);
 
@@ -1714,7 +1726,7 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
             Double_t FR1=0, FR2=0, PR1=1, PR2=1;
 
             MMweights = analyzer->MatrixMethod_MC(p_T->at(i_lead), eta->at(i_lead), relPFiso->at(i_lead),
-                                                  p_T->at(1-i_lead), eta->at(1-i_lead), relPFiso->at(1-i_lead), "ttbar", "ttbar");
+                                                  p_T->at(1-i_lead), eta->at(1-i_lead), relPFiso->at(1-i_lead), "DY", "QCD");
             FR1 = analyzer->FakeRate_MC(p_T->at(i_lead), eta->at(i_lead), "QCD");
             FR2 = analyzer->FakeRate_MC(p_T->at(1-i_lead), eta->at(1-i_lead), "QCD");
             PR1 = analyzer->PromptRate_MC(p_T->at(i_lead), eta->at(i_lead), "DY");
@@ -1753,6 +1765,12 @@ void MatrixMethod_mu_MC (Bool_t DEBUG=kFALSE)
         }
         cout << "\t # passed muons: " << nPassMu << endl;
         cout << "\t # failed muons: " << nFailMu << endl;
+
+        if (i_type == 2)
+        {
+            cout << "WJets PF events: " << nPF << "\n   Good (prompt is tight, fake is not): " << nGood << endl;
+            cout << "   Bad (fake is tight, prompt is not): " << nBad << endl;
+        }
 
         f->cd();
         cout << "\tWriting into file...";
