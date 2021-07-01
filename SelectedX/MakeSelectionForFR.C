@@ -1415,6 +1415,12 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
 
                     if (isPassEventSelection == kTRUE)
                     {
+                        if (Debug)
+                        {
+                            cout << "  SelectedMuonCollection size: " << SelectedMuonCollection.size() << endl;
+                            cout << "  Number of electrons : " << ntuple->Nelectrons << endl;
+                            cout << "  Number of jets: " << ntuple->Njets << endl;
+                        }
                         timesPassed++;
                         trig_fired->clear();
                         trig_matched->clear();
@@ -1520,7 +1526,11 @@ void MakeSelectionForFR_Mu (TString type, TString HLTname, Bool_t Debug)
                         Int_t triggered = 0;
                         std::vector<int> trig_index;
                         triggered = analyzer->FindTrigger(SelectedMuonCollection, ntuple, &trig_index, trig_fired, trig_matched);
-                        if (!triggered) continue;
+                        if (!triggered)
+                        {
+                            if (Debug) cout << "analyzer->FindTrigger did not find any triggers" << endl;
+                            continue;
+                        }
                         for (UInt_t i_tr=0; i_tr<trig_index.size(); i_tr++)
                             trig_pT->push_back(ntuple->HLT_trigPt[trig_index[i_tr]]);
 

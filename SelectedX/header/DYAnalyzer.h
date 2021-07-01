@@ -8808,28 +8808,28 @@ Int_t DYAnalyzer::FindTrigger(vector<Muon> MuonCollection, NtupleHandle *ntuple,
     for(Int_t i_mu=0; i_mu<(Int_t)MuonCollection.size(); i_mu++)
     {
         Muon mu = MuonCollection[i_mu];
-        if (mu.isTrigMatched(ntuple, "HLT_Muon17_v*", &trig_index))
+        if (mu.isTrigMatched(ntuple, "HLT_Mu17_v*", &trig_index))
         {
             triggered = 1;
             trig_indices->push_back(trig_index);
             trig_fired->push_back(17);
             trig_matched->push_back(i_mu);
         }
-        if (mu.isTrigMatched(ntuple, "HLT_Muon20_v*", &trig_index))
+        if (mu.isTrigMatched(ntuple, "HLT_Mu20_v*", &trig_index))
         {
             triggered = 1;
             trig_indices->push_back(trig_index);
             trig_fired->push_back(20);
             trig_matched->push_back(i_mu);
         }
-        if (mu.isTrigMatched(ntuple, "HLT_Muon27_v*", &trig_index))
+        if (mu.isTrigMatched(ntuple, "HLT_Mu27_v*", &trig_index))
         {
             triggered = 1;
             trig_indices->push_back(trig_index);
             trig_fired->push_back(27);
             trig_matched->push_back(i_mu);
         }
-        if (mu.isTrigMatched(ntuple, "HLT_Muon50_v*", &trig_index))
+        if (mu.isTrigMatched(ntuple, "HLT_Mu50_v*", &trig_index))
         {
             triggered = 1;
             trig_indices->push_back(trig_index);
