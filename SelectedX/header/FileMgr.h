@@ -2720,13 +2720,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         Location = "SinglePhoton_Run2016B/";
 //        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1318);
         NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1318);
-        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); //FullLocation.push_back(BaseLocation+Location);
-        //TEST
-        FullLocation.push_back("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v2.10.4/SinglePhoton/crab_SinglePhoton_Run2016B/201022_090619/0000/*.root");
-        Tag.push_back("SinglePhoton_B"); nEvents.push_back(53774727);
-        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1318);
-        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location);
-        FullLocation.push_back("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v2.10.4/SinglePhoton/crab_SinglePhoton_Run2016B/201022_090619/0001/*.root");
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _SinglePhoton_C)
     {
@@ -2737,9 +2731,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         Location = "SinglePhoton_Run2016C/";
 //        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(435);
         NtupleName.push_back("ntuple_data_"); nNtuples.push_back(435);
-        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); //FullLocation.push_back(BaseLocation+Location);
-        //TEST
-        FullLocation.push_back("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v2.10.4/SinglePhoton/crab_SinglePhoton_Run2016C/210105_143656/0000/*.root");
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _SinglePhoton_D)
     {
@@ -2750,9 +2742,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         Location = "SinglePhoton_Run2016D/";
 //        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(729);
         NtupleName.push_back("ntuple_data_"); nNtuples.push_back(729);
-        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); //FullLocation.push_back(BaseLocation+Location);
-        //TEST
-        FullLocation.push_back("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v2.10.4/SinglePhoton/crab_SinglePhoton_Run2016D/210105_143722/0000/*.root");
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _SinglePhoton_E)
     {
@@ -2763,9 +2753,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         Location = "SinglePhoton_Run2016E/";
 //        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(620);
         NtupleName.push_back("ntuple_data_"); nNtuples.push_back(620);
-        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); //FullLocation.push_back(BaseLocation+Location);
-        //TEST
-        FullLocation.push_back("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v2.10.4/SinglePhoton/crab_SinglePhoton_Run2016E/210105_143756/0000/*.root");
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _SinglePhoton_F)
     {
@@ -2776,9 +2764,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         Location = "SinglePhoton_Run2016F/";
 //        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(452);
         NtupleName.push_back("ntuple_data_"); nNtuples.push_back(452);
-        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); //FullLocation.push_back(BaseLocation+Location);
-        //TEST
-        FullLocation.push_back("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v2.10.4/SinglePhoton/crab_SinglePhoton_Run2016F/210105_143823/0000/*.root");
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
     else if (pr == _SinglePhoton_G)
     {
@@ -2789,13 +2775,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         Location = "SinglePhoton_Run2016G/";
 //        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1068);
         NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1068);
-        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); //FullLocation.push_back(BaseLocation+Location);
-        //TEST
-        FullLocation.push_back("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v2.10.4/SinglePhoton/crab_SinglePhoton_Run2016G/210105_143856/0000/*.root");
-        Tag.push_back("SinglePhoton_G"); nEvents.push_back(31866122);
-        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1068);
-        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location);
-        FullLocation.push_back("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v2.10.4/SinglePhoton/crab_SinglePhoton_Run2016G/210105_143856/0001/*.root");
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location);/FullLocation.push_back(BaseLocation+Location);
    }
     else if (pr == _SinglePhoton_H)
     {
@@ -2806,21 +2786,13 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         Location = "SinglePhoton_Run2016Hver2/";
 //        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1156);
         NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1156);
-        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); //FullLocation.push_back(BaseLocation+Location);
-        //TEST
-        FullLocation.push_back("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v2.10.4/SinglePhoton/crab_SinglePhoton_Run2016Hver2/210105_144022/0000/*.root");
-        Tag.push_back("SinglePhoton_Hver2"); nEvents.push_back(32767792);
-        NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1156);
-        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location);
-        FullLocation.push_back("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v2.10.4/SinglePhoton/crab_SinglePhoton_Run2016Hver2/210105_144022/0001/*.root");
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
 
         Tag.push_back("SinglePhoton_Hver3"); nEvents.push_back(866051);
         Location = "SinglePhoton_Run2016Hver3/";
 //        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(31);
         NtupleName.push_back("ntuple_data_"); nNtuples.push_back(31);
-        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); //FullLocation.push_back(BaseLocation+Location);
-        //TEST
-        FullLocation.push_back("root://cms-xrdr.sdfarm.kr:1094//xrd/store/user/mambroza/TEST_v2.10.4/SinglePhoton/crab_SinglePhoton_Run2016Hver3/210105_144049/0000/*.root");
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
     }
 
     else if (pr == _SinglePhoton_Full)
