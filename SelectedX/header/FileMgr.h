@@ -2775,7 +2775,7 @@ void FileMgr::SetProc (Process_t pr, Bool_t ClearOld)
         Location = "SinglePhoton_Run2016G/";
 //        NtupleName.push_back("ntuple_skim_"); nNtuples.push_back(1068);
         NtupleName.push_back("ntuple_data_"); nNtuples.push_back(1068);
-        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location);/FullLocation.push_back(BaseLocation+Location);
+        TreeName.push_back("recoTree/DYTree"); FileLocation.push_back(Location); FullLocation.push_back(BaseLocation+Location);
    }
     else if (pr == _SinglePhoton_H)
     {
