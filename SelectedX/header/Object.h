@@ -1364,7 +1364,7 @@ public:
                     if (HLT == "HLT_Mu17_v* || HLT_Mu20_v* || HLT_Mu27_v* || HLT_Mu50_v*")
                     {
                         if((hlt_trigName->at((unsigned int)k)) == "HLT_Mu17_v*" || (hlt_trigName->at((unsigned int)k)) == "HLT_Mu20_v*" ||
-                           (hlt_trigName->at((unsigned int)k)) == "HLT_Mu27_v*" || (hlt_trigName->at((unsigned int)k)) == "HLT_Mu50 _v*")
+                           (hlt_trigName->at((unsigned int)k)) == "HLT_Mu27_v*" || (hlt_trigName->at((unsigned int)k)) == "HLT_Mu50_v*")
                         {
                             Double_t Lepton_pT = this->Pt;
                             Double_t Lepton_eta = this->eta;
@@ -1425,7 +1425,7 @@ public:
                         if (HLT == "HLT_Mu17_v* || HLT_Mu20_v* || HLT_Mu27_v* || HLT_Mu50_v*")
                         {
                             if((hlt_trigName->at((unsigned int)k)) == "HLT_Mu17_v*" || (hlt_trigName->at((unsigned int)k)) == "HLT_Mu20_v*" ||
-                               (hlt_trigName->at((unsigned int)k)) == "HLT_Mu27_v*" || (hlt_trigName->at((unsigned int)k)) == "HLT_Mu50 _v*")
+                               (hlt_trigName->at((unsigned int)k)) == "HLT_Mu27_v*" || (hlt_trigName->at((unsigned int)k)) == "HLT_Mu50_v*")
                             {
                                 Double_t Lepton_pT = this->Pt;
                                 Double_t Lepton_eta = this->eta;

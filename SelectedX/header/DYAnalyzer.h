@@ -8834,6 +8834,7 @@ Int_t DYAnalyzer::FindTrigger(vector<Muon> MuonCollection, NtupleHandle *ntuple,
             triggered = 1;
             trig_indices->push_back(trig_index);
             trig_fired->push_back(50);
+            trig_matched->push_back(i_mu);
          }
     }
     return triggered;
